@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:32:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,56 +56,6 @@
 #include "dialog.hrc"
 
 // class SfxStyleDialog --------------------------------------------------
-
-#if SUP <= 372
-
-SfxStyleDialog::SfxStyleDialog
-(
-    Window* pParent,            // Parent
-    const ResId& rResId,        // ResId
-    SfxStyleSheetBase& rStyle,  // zu bearbeitendes StyleSheet
-    BOOL bFreeRes               // Flag Resourcen freigeben
-) :
-
-/*  [Beschreibung]
-
-    Konstruktor: Verwalten-TabPage zuf"ugen, ExampleSet vom Style setzen.
-*/
-
-    SfxTabDialog( pParent, rResId,
-                  rStyle.GetItemSet().Clone(),
-                  // auch ohne ParentSupport TRUE "ubergeben, aber erweitert
-                  // um den StandardButton zu unterdr"ucken
-                  rStyle.HasParentSupport() ? TRUE : 2 ),
-
-    pStyle( &rStyle )
-
-{
-    AddTabPage( ID_TABPAGE_MANAGESTYLES,
-                String( SfxResId( STR_TABPAGE_MANAGESTYLES ) ),
-                SfxManageStyleSheetPage::Create, 0, FALSE, 0 );
-
-    // bei neuer Vorlage immer die Verwaltungsseite als aktuelle
-    // Seite setzen
-
-    if( !rStyle.GetName().Len() )
-        SetCurPageId( ID_TABPAGE_MANAGESTYLES );
-    else
-    {
-        String sTxt( GetText() );
-        sTxt += DEFINE_CONST_UNICODE(": ");
-        sTxt += rStyle.GetName();
-        SetText( sTxt );
-    }
-    delete pExampleSet; // im SfxTabDialog::Ctor() schon angelegt
-    pExampleSet = &pStyle->GetItemSet();
-
-    if ( bFreeRes )
-        FreeResource();
-    GetCancelButton().SetClickHdl( LINK(this, SfxStyleDialog, CancelHdl) );
-}
-
-#endif
 
 SfxStyleDialog::SfxStyleDialog
 (
