@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:34:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:09:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbx.hxx>
 #include <comphelper/storagehelper.hxx>
-
+#include <svtools/asynclink.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -170,13 +170,16 @@ namespace css = ::com::sun::star;
 #pragma hdrstop
 #endif
 
+// wg. ViewFrame::Current
+#include "appdata.hxx"
+#include "app.hxx"
+#include "objface.hxx"
 #include "openflag.hxx"
 #include "objshimp.hxx"
 #include "viewsh.hxx"
 #include "objsh.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
-#include "loadenv.hxx"
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
 #include "newhdl.hxx"
@@ -193,14 +196,11 @@ namespace css = ::com::sun::star;
 #include "module.hxx"
 #include "msgpool.hxx"
 #include "topfrm.hxx"
-#include "urlframe.hxx"
 #include "viewimp.hxx"
 #include "sfxbasecontroller.hxx"
 #include "sfx.hrc"
 #include "view.hrc"
-#include "intfrm.hxx"
 #include "frmdescr.hxx"
-#include "appdata.hxx"
 #include "sfxuno.hxx"
 #include "progress.hxx"
 #include "workwin.hxx"
@@ -250,7 +250,6 @@ struct SfxViewFrame_Impl
     SfxObjectShell*     pImportShell;
     Window*             pFocusWin;
     SfxMacro*           pMacro;
-    SfxMenuBarManager*  pMenuBar;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     sal_Bool            bResizeInToOut:1;
@@ -883,12 +882,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( xNewObj.Is() )
                     {
                         //if( /*!bHandsOff &&*/ this != pView   )
-                        {
-                            pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
-                            pView->GetViewShell()->ReleaseMenuBar_Impl();
-                            pView->ReleaseObjectShell_Impl( bRestoreView );
-                        }
-
+                        pView->ReleaseObjectShell_Impl( bRestoreView );
                         pView->SetRestoreView_Impl( bRestoreView );
                         //if( pView != this || !xNewObj.Is() )
                         {
@@ -897,7 +891,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         }
                     }
 
-                    //DELETEZ( pView->pImp->pMenuBar );
                     pView->GetBindings().LEAVEREGISTRATIONS();
                     pView->GetDispatcher()->LockUI_Impl( sal_False );
                 }
@@ -1657,7 +1650,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
     pImp->pFrame->DocumentInserted( pObjSh );
-    pImp->pMenuBar = NULL;
     pImp->bInCtor = sal_True;
     pImp->pParentViewFrame = 0;
     pImp->bResizeInToOut = sal_True;
@@ -1815,7 +1807,7 @@ void SfxViewFrame::KillDispatcher_Impl()
 //------------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::Current()
 {
-    return SFX_APP() ? SFX_APP()->GetViewFrame() : NULL;
+    return SFX_APP() ? SFX_APP()->Get_Impl()->pViewFrame : NULL;
 }
 
 //--------------------------------------------------------------------
@@ -2222,7 +2214,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
                 css::uno::Reference< css::frame::XFrame > xFrame = GetFrame()->GetFrameInterface();
                 if ( xFrame->isActive() || !bPreview && ( !pCurrent || bGrabFocus ) )
                 {
-                    pSfxApp->SetViewFrame( this );
+                    SetViewFrame( this );
                     GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame >() );
                     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
                     Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
@@ -2637,60 +2629,6 @@ void SfxViewFrame::ExecView_Impl
 
     switch ( rReq.GetSlot() )
     {
-#ifdef BASIC_HACKS
-        case SID_HELP_STRING:
-        {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False );
-            if ( pItem )
-            {
-                sal_uInt16 nId = pItem->GetValue();
-                SfxModule *pMod = GetObjectShell()->GetModule();
-                SfxSlotPool* pPool = pMod ? pMod->GetSlotPool() : NULL;
-                if ( !pPool )
-                    pPool = &SFX_APP()->GetSlotPool();
-                rReq.SetReturnValue( SfxStringItem( SID_HELP_STRING, pPool->GetSlotHelpText_Impl( nId ) ) );
-            }
-            break;
-        }
-
-        case SID_METHODNAME:
-        {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False );
-            if ( pItem )
-            {
-                sal_uInt16 nId = pItem->GetValue();
-                SfxModule *pMod = GetObjectShell()->GetModule();
-                SfxSlotPool* pPool = pMod ? pMod->GetSlotPool() : NULL;
-                if ( !pPool )
-                    pPool = &SFX_APP()->GetSlotPool();
-                rReq.SetReturnValue( SfxStringItem( SID_METHODNAME, pPool->GetSlotName_Impl( nId ) ) );
-            }
-            break;
-        }
-
-        case SID_CONFIGITEMID:
-        {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False );
-            if ( pItem )
-            {
-                sal_uInt16 nId = pItem->GetValue();
-                SfxModule *pMod = GetObjectShell()->GetModule();
-/*
-                SfxSlotPool* pPool = pMod ? pMod->GetSlotPool() : NULL;
-                if ( !pPool )
-                    pPool = &SFX_APP()->GetSlotPool();
-                const SfxSlot *pSlot = pPool->GetSlot( nId );
-                sal_Bool bRet = pSlot ? pSlot->IsMode( SFX_SLOT_TOOLBOXCONFIG ) : sal_False;
- */
-                SFX_IMAGEMANAGER()->StartCustomize();
-                Image aImage = SFX_IMAGEMANAGER()->GetImageFromModule_Impl( nId, pMod );
-                sal_Bool bRet = aImage.GetSizePixel().Width() != 0;
-                rReq.SetReturnValue( SfxBoolItem( SID_CONFIGITEMID, bRet ) );
-            }
-            break;
-        }
-#endif
-
         case SID_TERMINATE_INPLACEACTIVATION :
         {
             SfxInPlaceClient* pClient = GetViewShell()->GetUIActiveClient();
@@ -3062,44 +3000,6 @@ void SfxViewFrame::SetFrame_Impl( SfxFrame *pFrame )
 SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
 {
     return GetFrame()->GetTopFrame()->GetCurrentViewFrame();
-}
-
-//-------------------------------------------------------------------------
-String SfxViewFrame::GetHelpFile_Impl()
-{
-    String aHelpFileName = GetObjectShell()->GetFactory().GetHelpFile();
-#ifndef TF_NEWDESKTOP
-    DBG_ASSERT( GetObjectShell(), "Kein Dokument!" );
-    Reference< XController >  xController = GetFrame()->GetController();
-    if ( 0 == aHelpFileName.Len() && xController.is() )
-    {
-        if ( GetFrame()->GetFrameInterface()->findFrame(
-                DEFINE_CONST_UNICODE( "StructureView" ), FrameSearchFlag::ALL ).is() )
-            aHelpFileName = DEFINE_CONST_UNICODE( "desktop.hlp" );
-        else
-        {
-            Reference< ::com::sun::star::beans::XPropertySet > xProp( xController, UNO_QUERY );
-            if ( xProp.is() )
-            {
-                try
-                {
-                    Any aAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "HelpFileName" ) );
-                    ::rtl::OUString sTemp ;
-                    aAny >>= sTemp ;
-                    aHelpFileName = String( sTemp );
-                    return aHelpFileName;
-                }
-                catch(...)
-                {
-                }
-            }
-
-            aHelpFileName = DEFINE_CONST_UNICODE( "schedule.hlp" );
-        }
-    }
-#endif
-
-    return aHelpFileName;
 }
 
 //-------------------------------------------------------------------------
@@ -3695,55 +3595,8 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_FORMATMENUSTATE :
                 {
-                    ResId           aResId(0, NULL);
-                    SfxShell*       pShell=0;
-                    SfxBindings*    pBindings=&GetBindings();
-
-                    for ( USHORT nIdx=0; (pShell=pBindings->GetDispatcher_Impl()->GetShell(nIdx)); nIdx++)
-                    {
-                        const SfxInterface *pIFace = pShell->GetInterface();
-
-                        // update Object-Menus
-                        if ( pIFace->GetObjectMenuCount() > 0 )
-                        {
-                            aResId = pIFace->GetObjectMenuResId(0);
-                            break;
-                        }
-                    }
-
-                    if ( aResId.GetId() > 0 && aResId.GetResMgr() )
-                    {
-                        String aObjMenuResString( String::CreateFromAscii( "private:resource/objectmenu?lib=" ));
-
-                        String aTmp;
-                        String aResourceStr = aResId.GetResMgr()->GetFileName();
-                        utl::LocalFileHelper::ConvertPhysicalNameToURL( aResourceStr, aTmp );
-
-                        sal_Int32 nIndex = aTmp.SearchBackward( sal_Unicode( '/' ));
-                        if (( nIndex != STRING_NOTFOUND ) && (( nIndex+1 ) < aTmp.Len() ))
-                        {
-                            aTmp.Erase( 0, (USHORT) nIndex+1 );
-                            nIndex = aTmp.SearchBackward( sal_Unicode( '.' ));
-                            if ( nIndex != STRING_NOTFOUND )
-                                aTmp.Erase( (USHORT) nIndex );
-                            String aSUPDStr( String::CreateFromInt32( SUPD ));
-                            nIndex = aTmp.SearchCharBackward( aSUPDStr.GetBuffer(), aSUPDStr.Len() );
-                            if (( nIndex != STRING_NOTFOUND ) &&
-                                (( nIndex+aSUPDStr.Len() ) < aTmp.Len() ))
-                            {
-                                nIndex += aSUPDStr.Len();
-                                aTmp.Erase( (USHORT) nIndex );
-                            }
-                        }
-
-                        aObjMenuResString += aTmp;
-                        aObjMenuResString += String::CreateFromAscii( "&id=" );
-                        aObjMenuResString += String::CreateFromInt32( aResId.GetId() );
-                        rSet.Put( SfxStringItem( nWhich, aObjMenuResString ) );
-                    }
-                    else
-                        rSet.DisableItem( nWhich );
-
+                    DBG_ERROR("Outdated slot!");
+                    rSet.DisableItem( nWhich );
                     break;
                 }
 
@@ -3892,129 +3745,6 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
     }
 }
 
-void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
-{
-    // Object-Bar-Id ermitteln
-    sal_uInt16 nSID = rReq.GetSlot();
-    sal_uInt16 nTbxID = 0;
-    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
-    BOOL bShow = sal_False;
-    /*
-    if ( nSID == SID_TOGGLE_MENUBAR )
-    {
-        SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
-        SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
-        if ( pTop )
-        {
-            bShow = pShowItem ? pShowItem->GetValue() : ( pTop->IsMenuBarOn_Impl() == FALSE ); //( pTop->GetMenuBar_Impl() == 0 );
-            pTop->SetMenuBarOn_Impl( bShow );
-            GetDispatcher()->Update_Impl(sal_True);
-        }
-    }
-    else
-    {
-        switch ( nSID )
-        {
-            case SID_TOGGLEFUNCTIONBAR:     nTbxID = SFX_OBJECTBAR_APPLICATION; break;
-            case SID_TOGGLEOBJECTBAR:       nTbxID = SFX_OBJECTBAR_OBJECT; break;
-            case SID_TOGGLETOOLBAR:         nTbxID = SFX_OBJECTBAR_TOOLS; break;
-            case SID_TOGGLEMACROBAR:        nTbxID = SFX_OBJECTBAR_MACRO; break;
-            case SID_TOGGLEOPTIONBAR:       nTbxID = SFX_OBJECTBAR_OPTIONS; break;
-            case SID_TOGGLECOMMONTASKBAR:   nTbxID = SFX_OBJECTBAR_COMMONTASK; break;
-            case SID_TOGGLENAVBAR:          nTbxID = SFX_OBJECTBAR_NAVIGATION; break;
-            //case SID_TOGGLERECORDINGBAR:  nTbxID = SFX_OBJECTBAR_RECORDING; break;
-            //case SID_TOGGLEFULLSCREENBAR: nTbxID = SFX_OBJECTBAR_FULLSCREEN; break;
-            default:
-                DBG_ERROR( "invalid ObjectBar`s SID" );
-        }
-
-        // Parameter auswerten
-        SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
-
-        // ausfuehren
-        bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
-        pTbxConfig->SetToolBoxPositionVisible(nTbxID, bShow);
-        GetBindings().Invalidate( nSID );
-
-        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-        while ( pViewFrame )
-        {
-            // update all "final" dispatchers
-            if ( !pViewFrame->GetActiveChildFrame_Impl() )
-                pViewFrame->GetDispatcher()->Update_Impl(sal_True);
-            pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
-        }
-    }*/
-
-    if ( !pShowItem )
-        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
-    rReq.Done();
-}
-
-//------------------------------------------------------------------------
-
-
-void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
-{
-    /*
-    SfxWhichIter aIter(rSet);
-    for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
-    {
-        SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
-        switch ( nSID )
-        {
-            case SID_TOGGLE_MENUBAR:
-            {
-                SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
-                SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
-                if ( pTop )
-                    rSet.Put( SfxBoolItem( nSID, pTop->IsMenuBarOn_Impl() ) );
-                else
-                    rSet.DisableItem( nSID );
-                break;
-            }
-
-            case SID_TOGGLEFUNCTIONBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_APPLICATION)));
-                break;
-
-            case SID_TOGGLEOBJECTBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_OBJECT)));
-                break;
-
-            case SID_TOGGLEOPTIONBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_OPTIONS)));
-                break;
-
-            case SID_TOGGLETOOLBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_TOOLS)));
-                break;
-
-            case SID_TOGGLEMACROBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_MACRO)));
-                break;
-
-            case SID_TOGGLECOMMONTASKBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_COMMONTASK)));
-                break;
-
-            case SID_TOGGLENAVBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_NAVIGATION)));
-                break;
-
-            default:
-                DBG_ERROR( "invalid ObjectBar`s SID" );
-        }
-    }*/
-}
-
 //--------------------------------------------------------------------
 SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
 {
@@ -4120,4 +3850,21 @@ BOOL SfxViewFrame::ClearEventFlag_Impl()
     }
     else
         return FALSE;
+}
+
+SfxViewFrame* SfxViewFrame::CreateViewFrame( SfxObjectShell& rDoc, sal_uInt16 nViewId, sal_Bool bHidden )
+{
+    SfxItemSet *pSet = rDoc.GetMedium()->GetItemSet();
+    if ( nViewId )
+        pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
+    if ( bHidden )
+        pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
+
+    SfxFrame *pFrame = SfxTopFrame::Create( &rDoc, 0, bHidden );
+    return pFrame->GetCurrentViewFrame();
+}
+
+void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
+{
+    SFX_APP()->SetViewFrame_Impl( pFrame );
 }
