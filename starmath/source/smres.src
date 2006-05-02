@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:14:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4108,13 +4108,6 @@ String RID_ERR_RIGHTEXPECTED
 {
     Text [ de ] = "'RIGHT' erwartet" ;
     Text [ en-US ] = "'RIGHT' expected" ;
-    Text [ x-comment ] = " ";
-};
-
-String RID_PLUGINTOOLBOX
-{
-    Text [ de ] = "PlugInleiste" ;
-    Text [ en-US ] = "Plug-in Bar" ;
     Text [ x-comment ] = " ";
 };
 
