@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-27 09:34:58 $
+#   last change: $Author: rt $ $Date: 2006-05-02 16:37:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,58 +45,53 @@ TARGET=dialog
 # --- Files --------------------------------------------------------------
 
 EXCEPTIONSFILES=\
-        $(SLO)$/filtergrouping.obj	\
-        $(SLO)$/filedlghelper.obj	\
-        $(SLO)$/mailmodel.obj		\
-        $(SLO)$/cfg.obj				\
-        $(SLO)$/partwnd.obj         \
-        $(SLO)$/templdlg.obj        \
-        $(SLO)$/itemconnect.obj     \
         $(SLO)$/acccfg.obj			\
-        $(SLO)$/recfloat.obj
+        $(SLO)$/cfg.obj				\
+        $(SLO)$/filedlghelper.obj	\
+        $(SLO)$/filtergrouping.obj	\
+        $(SLO)$/itemconnect.obj     \
+        $(SLO)$/mailmodel.obj		\
+        $(SLO)$/partwnd.obj         \
+                $(SLO)$/recfloat.obj \
+                $(SLO)$/templdlg.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-        $(SLO)$/macropg.obj         \
-        $(SLO)$/sfxdlg.obj          \
-        $(SLO)$/about.obj           \
-        $(SLO)$/alienwarn.obj       \
+                $(SLO)$/about.obj           \
+                $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/intro.obj			\
-        $(SLO)$/mailchildwin.obj	\
+                $(SLO)$/macropg.obj         \
         $(SLO)$/mailwindow.obj		\
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
         $(SLO)$/passwd.obj			\
+        $(SLO)$/printopt.obj		\
+                $(SLO)$/sfxdlg.obj          \
         $(SLO)$/sfxurl.obj			\
-        $(SLO)$/slotinfo.obj		\
         $(SLO)$/splitwin.obj		\
+                $(SLO)$/srchdlg.obj         \
         $(SLO)$/styfitem.obj		\
         $(SLO)$/styledlg.obj		\
         $(SLO)$/tabdlg.obj			\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj			\
-        $(SLO)$/printopt.obj		\
-        $(SLO)$/srchdlg.obj
+                $(SLO)$/versdlg.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
         recfloat.src		\
-        alienwarn.src       \
+                alienwarn.src       \
         cfg.src				\
         dialog.src			\
         dinfdlg.src			\
         dinfedt.src			\
-        dlgrun.src			\
-        eventdlg.src		\
         filedlghelper.src	\
         macropg.src			\
-        mail.src			\
         mailwindow.src		\
         mgetempl.src		\
         newstyle.src		\
