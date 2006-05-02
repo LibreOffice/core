@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:14:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,9 +207,6 @@
 #ifndef _SFXSIDS_HRC
 #include "sfxsids.hrc"
 #endif
-#ifndef _SFX_EXPLORER_HRC
-#include "explorer.hrc"
-#endif
 #ifndef _SFX_FILEDLGHELPER_HRC
 #include "filedlghelper.hrc"
 #endif
@@ -222,6 +219,8 @@
 #ifndef _SFX_FILEDLGIMPL_HXX
 #include "filedlgimpl.hxx"
 #endif
+
+#include <sfxlocal.hrc>
 
 //-----------------------------------------------------------------------------
 
