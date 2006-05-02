@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:33:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,7 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <tools/urlobj.hxx>
 
 #include <rtl/logfile.hxx>
 
@@ -217,7 +218,6 @@ using namespace ::vos;
 #include <svtools/syslocale.hxx>
 #endif
 
-#include "app.hxx"
 #include "sfxhelp.hxx"
 #include "sfxbasic.hxx"
 #include "docfilt.hxx"
@@ -226,22 +226,17 @@ using namespace ::vos;
 #include "sfxuno.hxx"
 #include "docfile.hxx"
 #include "progress.hxx"
-#include "loadenv.hxx"
 #include "openflag.hxx"
 #include "bastyp.hrc"
 #include "sfxresid.hxx"
 #include "doctempl.hxx"
 #include "frame.hxx"
 #include "dispatch.hxx"
-#include "urlframe.hxx"
 #include "topfrm.hxx"
-#include "plugwin.hxx"
 #include "helper.hxx"
 #include "fltlst.hxx"
 #include "request.hxx"
-#include "nfltdlg.hxx"
 #include "arrdecl.hxx"
-#include "appdata.hxx"
 #include "appuno.hxx"
 #include "viewfrm.hxx"
 
@@ -336,8 +331,8 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
     // Try to get the default filter. Dont fiorget to verify it.
     // May the set default filter does not exists any longer or
     // does not fit the given factory.
-    const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-    const SfxFilter* pFilter = rMatcher.GetFilter4FilterName(sDefaultFilter);
+    const SfxFilterMatcher aMatcher;
+    const SfxFilter* pFilter = aMatcher.GetFilter4FilterName(sDefaultFilter);
 
     if (
         (pFilter                                                                            ) &&
@@ -594,19 +589,18 @@ sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**
 //----------------------------------------------------------------
 sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 {
-    Window *pWindow = SFX_APP()->GetTopWindow();
     if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
     {
         // Hier k"onnte noch eine Nachinstallation angeboten werden
         String aText( SfxResId( STR_FILTER_NOT_INSTALLED ) );
         aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
-        QueryBox aQuery( pWindow, WB_YES_NO | WB_DEF_YES, aText );
+        QueryBox aQuery( NULL, WB_YES_NO | WB_DEF_YES, aText );
         short nRet = aQuery.Execute();
         if ( nRet == RET_YES )
         {
 #ifdef DBG_UTIL
             // Setup starten
-            InfoBox( pWindow, DEFINE_CONST_UNICODE("Hier soll jetzt das Setup starten!") ).Execute();
+            InfoBox( NULL, DEFINE_CONST_UNICODE("Hier soll jetzt das Setup starten!") ).Execute();
 #endif
             // Installation mu\s hier noch mitteilen, ob es geklappt hat, dann kann das
             // Filterflag gel"oscht werden
@@ -618,7 +612,7 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
     {
         String aText( SfxResId( STR_FILTER_CONSULT_SERVICE ) );
         aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
-        InfoBox ( pWindow, aText ).Execute();
+        InfoBox ( NULL, aText ).Execute();
         return sal_False;
     }
     else
@@ -1214,16 +1208,14 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                                      nFlags                  ,
                                      nClipboardId            ,
                                      sType                   ,
-                                     sType                   ,
                                      (USHORT)nDocumentIconId ,
                                      sMimeType               ,
-                                     NULL/*this*/            ,
                                      sUserData               ,
                                      sServiceName );
         }
         else
         {
-            pFilter->aName        = sFilterName;
+            pFilter->aFilterName  = sFilterName;
             pFilter->aWildCard    = WildCard(sExtension, ';');
             pFilter->nFormatType  = nFlags;
             pFilter->lFormat      = nClipboardId;
