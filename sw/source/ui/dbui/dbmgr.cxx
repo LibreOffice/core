@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:46:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <stdio.h>
 
 #include <com/sun/star/text/NotePrintMode.hpp>
-
+#include <sfx2/app.hxx>
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
@@ -1460,7 +1460,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
                 xTargetDocShell->DoInitNew( 0 );
-                SfxViewFrame* pTargetFrame = SFX_APP()->CreateViewFrame( *xTargetDocShell, 0, TRUE );
+                SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
 
                 SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
 
@@ -1567,7 +1567,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         if (xWorkDocSh->DoLoad(pWorkMed))
                         {
                             //create a view frame for the document
-                            SfxViewFrame* pWorkFrame = SFX_APP()->CreateViewFrame( *xWorkDocSh, 0, TRUE );
+                            SfxViewFrame* pWorkFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
                             //request the layout calculation
                             SwWrtShell& rWorkShell =
                                     static_cast< SwView* >(pWorkFrame->GetViewShell())->GetWrtShell();
@@ -3202,7 +3202,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTargetDocShell->DoInitNew( 0 );
-        SfxViewFrame* pTargetFrame = SFX_APP()->CreateViewFrame( *xTargetDocShell, 0, TRUE );
+        SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
 
         //the created window has to be located at the same position as the source window
         Window& rTargetWindow = pTargetFrame->GetFrame()->GetWindow();
