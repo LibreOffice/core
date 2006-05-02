@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:18:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -828,7 +828,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
         // "Letzte Version" vom SFx en/disablen lassen
-        SfxViewFrame* pSlideViewFrame = SFX_APP()->GetViewFrame();
+        SfxViewFrame* pSlideViewFrame = SfxViewFrame::Current();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
         if (pSlideViewFrame && pSlideViewFrame->ISA(SfxTopViewFrame))
