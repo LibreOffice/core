@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:14:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,8 +207,8 @@ void SdDLL::RegisterControllers()
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
     ::sd::AnimationChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::DrawViewShell::_GetInterfaceIdImpl(), pMod );
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::GraphicViewShell::_GetInterfaceIdImpl(), pMod );
+    ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::DrawViewShell::GetInterfaceId(), pMod );
+    ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::GraphicViewShell::GetInterfaceId(), pMod );
     ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
     //Sd3DChildWindow::RegisterChildWindow(0, pMod);
 /*
