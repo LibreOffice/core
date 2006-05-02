@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:37:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,8 @@
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
 #endif
+
+#include <sfx2/app.hxx>
 
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
@@ -524,7 +526,7 @@ namespace svx
         {
             ::rtl::OUString sSlotUnoName;
 
-            SfxSlotPool& rSlotPool = _rApplication.GetSlotPool( NULL );
+            SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
             const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
 
             const sal_Char* pAsciiUnoName = NULL;
