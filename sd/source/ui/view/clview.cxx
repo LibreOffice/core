@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:05:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,6 @@ void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
     DrawView::CompleteRedraw(pOutDev, rReg);
-
-    // Stets Demo-Output auf dem ganzen Fenster ausgeben
-    Rectangle aRect( Point(0, 0), pOutDev->GetOutputSize() );
-    SFX_APP()->SpoilDemoOutput(*pOutDev, aRect );
 }
 
 
