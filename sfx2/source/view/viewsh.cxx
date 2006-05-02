@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 09:52:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #pragma hdrstop
 #endif
 
+#include "app.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
 #include "sfxresid.hxx"
@@ -98,7 +99,6 @@
 #include "docfile.hxx"
 #include "dispatch.hxx"
 #include "arrdecl.hxx"
-#include "intfrm.hxx"
 #include "docfac.hxx"
 #include "view.hrc"
 #include "objuno.hxx"
@@ -107,10 +107,10 @@
 #include "topfrm.hxx"
 #include "mailmodelapi.hxx"
 #include "event.hxx"
-#include "appdata.hxx"
 #include "fcontnr.hxx"
 #include "ipclient.hxx"
 #include "workwin.hxx"
+#include "objface.hxx"
 
 // #110897#
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
@@ -519,7 +519,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* pClient )
 void SfxViewShell::UIDeactivated( SfxInPlaceClient* pClient )
 {
     if ( !pFrame->GetFrame()->IsClosing_Impl() ||
-        SFX_APP()->GetViewFrame() != pFrame )
+        SfxViewFrame::Current() != pFrame )
             pFrame->GetDispatcher()->Update_Impl( TRUE );
     pFrame->GetBindings().HidePopups(FALSE);
 
@@ -824,7 +824,10 @@ void SfxViewShell::SetWindow
     }
 
     if ( bHadFocus && pWindow )
-        SFX_APP()->GrabFocus( pWindow );
+        pWindow->GrabFocus();
+        //TODO/CLEANUP
+        //brauchen wir die Methode doch noch?!
+        //SFX_APP()->GrabFocus( pWindow );
 }
 
 //--------------------------------------------------------------------
@@ -876,12 +879,7 @@ SfxViewShell::SfxViewShell
         pImp->bPlugInsActive = pViewFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
     pImp->eScroll = SCROLLING_DEFAULT;
     pImp->nPrinterLocks = 0;
-    pImp->pMenuBarResId = 0;
-    pImp->pAccelResId = 0;
-    pImp->pAccel = 0;
-    pImp->pMenu = 0;
     pImp->bControllerSet = FALSE;
-    pImp->bOwnsMenu = TRUE;
     pImp->nFamily = 0xFFFF;                 // undefined, default set by TemplateDialog
     SetMargin( pViewFrame->GetMargin_Impl() );
 
@@ -911,7 +909,6 @@ SfxViewShell::~SfxViewShell()
         pImp->pController->release();
     }
 
-    delete pImp->pMenuBarResId;
     if (pImp->pAccExec)
     {
         delete pImp->pAccExec;
@@ -1585,38 +1582,6 @@ SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( BOOL bCreate ) const
     if ( !pIPClientList && bCreate )
         ( (SfxViewShell*) this )->pIPClientList = new SfxInPlaceClientList;
     return pIPClientList;
-}
-
-void SfxViewShell::ReleaseMenuBar_Impl()
-{
-    pImp->bOwnsMenu = FALSE;
-}
-
-SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
-{
-    // get the accelerators
-
-    Reference < XPropertySet > xPropSet( GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
-    if ( xPropSet.is() )
-    {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-
-        if ( xPropSet.is() )
-        {
-            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-            aValue >>= xLayoutManager;
-        }
-
-        if ( xLayoutManager.is() )
-        {
-            rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
-            Reference< ::com::sun::star::ui::XUIElement > xMenuBarElement( xLayoutManager->getElement( aMenuBarURL ));
-            if ( !xMenuBarElement.is() )
-                GetObjectShell()->CreateMenuBarManager_Impl( GetViewFrame() );
-        }
-    }
-
-    return NULL;
 }
 
 void SfxViewShell::SetController( SfxBaseController* pController )
