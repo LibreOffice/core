@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:47:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,8 @@
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include <misc.hrc> //CHINA001
+
+#include <vcl/svapp.hxx>
 
 //JP 14.01.99: Size Abpruefung
 #define NAVI_ENTRIES 20
