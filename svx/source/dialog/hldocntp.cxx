@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:13:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,7 +421,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
             if( bCreate )
             {
                 // current document
-                SfxViewFrame* pCurrentDocFrame = SFX_APP()->GetViewFrame();
+                SfxViewFrame* pCurrentDocFrame = SfxViewFrame::Current();
 
                 if ( aStrNewName != aEmptyStr )
                 {
@@ -470,7 +470,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     }
                 }
 
-                if ( maRbtEditNow.IsChecked() )
+                if ( maRbtEditNow.IsChecked() && pCurrentDocFrame )
                 {
                     pCurrentDocFrame->ToTop();
                 }
