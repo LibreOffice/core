@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:03:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 #include <sfx2/fcontnr.hxx>
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-
+#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -1566,7 +1566,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                        SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg( SFX_APP()->GetViewFrame(),
+                        SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg( SfxViewFrame::Current(),
                                                                                 GetDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
