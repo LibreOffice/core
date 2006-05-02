@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:08:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -962,7 +962,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 sal_Bool      bMasterCommand( aMasterCommand.getLength() > 0 );
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
-                SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
 
                 const SfxSlot* pSlot( 0 );
                 if ( bMasterCommand )
@@ -1000,7 +1000,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 
                         if ( pParentFrame )
                         {
-                            SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pParentFrame );
+                            SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pParentFrame );
                             const SfxSlot* pSlot( 0 );
                             if ( bMasterCommand )
                                 pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
@@ -1025,7 +1025,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                         return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
                 }
 
-                SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
                 if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
@@ -1058,7 +1058,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 
                         if ( pParentFrame )
                         {
-                            SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pParentFrame );
+                            SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pParentFrame );
                             const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
                             if ( pSlot )
                                 return pParentFrame->GetBindings().GetDispatch( pSlot, aURL, sal_False );
@@ -1072,7 +1072,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 REFERENCE< XMODEL > xModel = getModel();
                 if( xModel.is() && aURL.Mark.getLength() )
                 {
-                    SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
                     const SfxSlot* pSlot = rSlotPool.GetSlot( SID_JUMPTOMARK );
                     if( aURL.Main.getLength() && aURL.Main == xModel->getURL() && pSlot )
                         return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot, aURL) );
@@ -1385,7 +1385,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
     std::list< sal_Int16 > aGroupList;
     SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
-    SfxSlotPool*  pPool( &SFX_APP()->GetSlotPool( pViewFrame ));
+    SfxSlotPool*  pPool = &SfxSlotPool::GetSlotPool( pViewFrame );
 
     SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
     const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
@@ -1423,7 +1423,7 @@ throw (::com::sun::star::uno::RuntimeException)
         const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
-        SfxSlotPool*  pPool( &SFX_APP()->GetSlotPool( pViewFrame ));
+        SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
         rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
