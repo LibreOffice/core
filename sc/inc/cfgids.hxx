@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:25:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,8 @@
 #define SCCFG_SPELLCHECK        (SFX_ITEMTYPE_SC_BEGIN + 3)
 #define SCCFG_PRINT             (SFX_ITEMTYPE_SC_BEGIN + 4)
 #define SCCFG_STATUSBAR         (SFX_ITEMTYPE_SC_BEGIN + 5)
-#define SCCFG_ACCELERATOR       (SFX_ITEMTYPE_SC_BEGIN + 6)
-#define SCCFG_MENUBAR           (SFX_ITEMTYPE_SC_BEGIN + 7)
 #define SCCFG_INPUT             (SFX_ITEMTYPE_SC_BEGIN + 8)
 #define SCCFG_NAVIPI            (SFX_ITEMTYPE_SC_BEGIN + 9)
-#define SCCFG_PLUGINMENU        (SFX_ITEMTYPE_SC_BEGIN + 10)
 
 
 #endif
