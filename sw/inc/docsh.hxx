@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:46:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ public:
     SFX_DECL_OBJECTFACTORY();
     TYPEINFO();
 
-    static SfxInterface *_GetInterface() { return _GetInterfaceImpl(); }
+    static SfxInterface *_GetInterface() { return GetStaticInterface(); }
 
     //Das Doc wird fuer SO-Datenaustausch benoetigt!
     SwDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
