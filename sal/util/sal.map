@@ -538,3 +538,16 @@ UDK_3.4 {
         osl_setErrorReporting;
 } UDK_3.3;
 
+UDK_3.5 {
+    global:
+        rtl_arena_create;
+        rtl_arena_destroy;
+        rtl_arena_alloc;
+        rtl_arena_free;
+
+        rtl_cache_create;
+        rtl_cache_destroy;
+        rtl_cache_alloc;
+        rtl_cache_free;
+} UDK_3.4;
+
