@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-08 08:50:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,22 +462,26 @@ unsigned char * codeSnippet( unsigned char * code,
 }
 
 //==================================================================================================
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable( char * block )
+void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable( void * block )
 {
-    return reinterpret_cast<void **>( block ) + 2;
+    return static_cast<void **>( block ) + 2;
 }
 
 //==================================================================================================
-char * bridges::cpp_uno::shared::VtableFactory::createBlock(
-    sal_Int32 slotCount, void *** slots)
+sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
+    sal_Int32 slotCount)
 {
-    char * block = new char[ ( slotCount + 2 ) * sizeof( void * ) + slotCount * codeSnippetSize ];
+    return ( slotCount + 2 ) * sizeof( void * ) + slotCount * codeSnippetSize;
+}
 
-    *slots = mapBlockToVtable( block );
-    (*slots)[-2] = 0;
-    (*slots)[-1] = 0;
+//==================================================================================================
+void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock( void * block )
+{
+    void ** slots = mapBlockToVtable( block );
+    slots[-2] = 0;
+    slots[-1] = 0;
 
-    return block;
+    return slots;
 }
 
 //==================================================================================================
