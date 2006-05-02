@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:45:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -690,14 +690,11 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     m_pPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
     // generell
-    if( !SfxApplication::IsPlugin() )
-    {
-        InterpolateFixedBitmap( m_pPage1FB );
-        InterpolateFixedBitmap( m_pPage2FB );
-        InterpolateFixedBitmap( m_pPage3FB );
-        InterpolateFixedBitmap( m_pPage4FB );
-        InterpolateFixedBitmap( m_pPage5FB );
-    }
+    InterpolateFixedBitmap( m_pPage1FB );
+    InterpolateFixedBitmap( m_pPage2FB );
+    InterpolateFixedBitmap( m_pPage3FB );
+    InterpolateFixedBitmap( m_pPage4FB );
+    InterpolateFixedBitmap( m_pPage5FB );
 
     m_aLastPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
     m_aNextPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
