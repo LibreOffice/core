@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:29:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 
-    SfxViewFrame* pFrame = SFX_APP()->GetViewFrame();
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
 
     if (pFrame)
     {
