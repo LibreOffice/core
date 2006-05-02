@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:29:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,9 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
-#include "sfxtypes.hxx"
+// wg. nAutoPageID
 #include "appdata.hxx"
+#include "sfxtypes.hxx"
 #include "minarray.hxx"
 #include "tabdlg.hxx"
 #include "viewfrm.hxx"
