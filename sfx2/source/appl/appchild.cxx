@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appchild.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,6 @@
 #include "childwin.hxx"
 #include "arrdecl.hxx"
 #include "templdlg.hxx"
-//#include "ipfrm.hxx"
-//#include "ipenv.hxx"
 #include "request.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
@@ -61,46 +59,8 @@
 
 //=========================================================================
 
-ResId SfxApplication::GetCurrentObjectBar( USHORT nPosId ) const
 
-/*  [Beschreibung]
-
-    Mit dieser Methode kann die ResId der an der angegebenen Positions-Nummer
-    aktuell stehenden Symbol-Leiste erfragt werden. Als Positions-Nummern
-    k"onnen verwendet werden:
-
-        SFX_OBJECTBAR_APPLICATION
-        SFX_OBJECTBAR_OBJECT
-        SFX_OBJECTBAR_TOOLS
-        SFX_OBJECTBAR_MACRO
-        SFX_OBJECTBAR_FULLSCREEN
-        SFX_OBJECTBAR_RECORDING
-        SFX_OBJECTBAR_OPTIONS
-        SFX_OBJECTBAR_USERDEF1
-        SFX_OBJECTBAR_USERDEF2
-        SFX_OBJECTBAR_USERDEF3
-
-    Ist an der Position keine Symbol-Leiste vorhanden, dann wird eine ResId
-    mit einer Id von 0 und ohne ResManager zur"uckgegeben.
-
-
-    [Anmerkung]
-
-    Da intern keine fertige ResId verf"ugbar ist, mu\s leider eine Instanz
-    returnt werden.
-*/
-
-{
-    ResId aResId(0, 0);
-    SfxWorkWindow* pWork = GetWorkWindow_Impl(SfxViewFrame::Current());
-    if ( pWork )
-        pWork->GetObjectBar_Impl(nPosId, aResId);
-    return aResId;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::RegisterChildWindow( SfxModule *pMod, SfxChildWinFactory *pFact )
+void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFactory *pFact )
 {
     if ( pMod )
     {
@@ -127,7 +87,7 @@ void SfxApplication::RegisterChildWindow( SfxModule *pMod, SfxChildWinFactory *p
         SfxChildWinFactory, pFact, pAppData_Impl->pFactArr->Count() );
 }
 
-void SfxApplication::RegisterChildWindowContext( SfxModule *pMod, USHORT nId,
+void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nId,
         SfxChildWinContextFactory *pFact)
 {
     SfxChildWinFactArr_Impl *pFactories;
@@ -201,69 +161,12 @@ SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const
 }
 
 //--------------------------------------------------------------------
-#if SUPD<604
-void SfxApplication::SetChildWindow(USHORT nId, BOOL bOn)
-{
-    if ( pViewFrame )
-        pViewFrame->SetChildWindow( nId, bOn );
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::ToggleChildWindow(USHORT nId)
-{
-
-    if ( pViewFrame )
-        pViewFrame->ToggleChildWindow( nId );
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxApplication::HasChildWindow( USHORT nId )
-{
-    if ( pViewFrame )
-        return pViewFrame->HasChildWindow(nId);
-    else
-        return FALSE;
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxApplication::KnowsChildWindow( USHORT nId )
-{
-    if ( pViewFrame )
-        return pViewFrame->KnowsChildWindow(nId);
-    else
-        return FALSE;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::ShowChildWindow( USHORT nId, BOOL bVisible )
-{
-    if ( pViewFrame )
-        pViewFrame->ShowChildWindow(nId, bVisible);
-}
-
-//--------------------------------------------------------------------
-
-SfxChildWindow* SfxApplication::GetChildWindow(USHORT nId)
-{
-    if ( pViewFrame )
-        return pViewFrame->GetChildWindow(nId);
-    else
-        return NULL;
-}
-
-#endif
-
-//--------------------------------------------------------------------
 
 SfxTemplateDialog* SfxApplication::GetTemplateDialog()
 {
-    if ( pViewFrame )
+    if ( pAppData_Impl->pViewFrame )
     {
-        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
+        SfxChildWindow *pChild = pAppData_Impl->pViewFrame->GetChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
         return pChild ? (SfxTemplateDialog*) pChild->GetWindow() : 0;
     }
 
@@ -276,15 +179,9 @@ SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) co
 {
     if ( pFrame )
         return pFrame->GetFrame()->GetWorkWindow_Impl();
-    else if ( pViewFrame )
-        return pViewFrame->GetFrame()->GetWorkWindow_Impl();
+    else if ( pAppData_Impl->pViewFrame )
+        return pAppData_Impl->pViewFrame->GetFrame()->GetWorkWindow_Impl();
     else
         return NULL;
 }
 
-//--------------------------------------------------------------------
-
-SfxHelpPI* SfxApplication::GetHelpPI()
-{
-    return NULL;
-}
