@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:30:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
-
+#include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
 #include "cell.hxx"
