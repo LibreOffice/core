@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:34:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 17:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #endif
 
 #include <svtools/printwarningoptions.hxx>
+#include <svtools/eitem.hxx>
 
 #ifndef GCC
 #pragma hdrstop
@@ -77,10 +78,10 @@
 #include "docfile.hxx"
 #include "sfxtypes.hxx"
 #include "progress.hxx"
-#include "desrupt.hxx"
 #include "bindings.hxx"
 #include "sfxresid.hxx"
 #include "event.hxx"
+#include "request.hxx"
 
 #include "view.hrc"
 
@@ -136,6 +137,7 @@ public:
     void                    Delete( SfxPrintProgress* pAntiImpl ) { aDeleteLink.Call( pAntiImpl ); }
     SfxViewShell*           GetViewShell() const { return pViewShell; }
     BOOL                    SetPage( USHORT nPage, const String &rPage );
+    void                    CreateMonitor();
     virtual void            SFX_NOTIFY( SfxBroadcaster& rBC,
                                         const TypeId& rBCType,
                                         const SfxHint& rHint,
@@ -209,22 +211,28 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
     bOldFlag            ( TRUE ),
     bRestoreFlag        ( FALSE ),
     bAborted            ( FALSE ),
+    bShow               ( FALSE ),
+    pMonitor            ( 0 ),
     aDeleteLink         ( STATIC_LINK( this, SfxPrintProgress_Impl, DeleteHdl ) )
-
 {
-    Window* pParent =
-        pTheViewShell->GetWindow()->IsReallyVisible() ? pTheViewShell->GetWindow() : NULL;
-    pMonitor = new SfxPrintMonitor_Impl( pParent, pViewShell );
-    pMonitor->aDocName.SetText(
-        pViewShell->GetViewFrame()->GetObjectShell()->GetTitle( SFX_TITLE_MAXLEN_PRINTMONITOR ) );
-    pMonitor->aPrinter.SetText( pViewShell->GetPrinter()->GetName() );
-
-    // Stampit enable/dsiable cancel button
-    actualizePrintCancelState(pMonitor->aCancel, pViewShell->GetObjectShell());
-
-    pMonitor->aCancel.SetClickHdl( LINK( this, SfxPrintProgress_Impl, CancelHdl ) );
-
     StartListening( *pViewShell->GetObjectShell() );
+}
+
+void SfxPrintProgress_Impl::CreateMonitor()
+{
+    // mark monitor to been shown in first status indication
+    bShow = TRUE;
+    if ( !pMonitor )
+    {
+        Window* pParent = pViewShell->GetWindow();
+        pMonitor = new SfxPrintMonitor_Impl( pParent, pViewShell );
+        pMonitor->aDocName.SetText( pViewShell->GetObjectShell()->GetTitle( SFX_TITLE_MAXLEN_PRINTMONITOR ) );
+        pMonitor->aPrinter.SetText( pViewShell->GetPrinter()->GetName() );
+
+        // Stampit enable/dsiable cancel button
+        actualizePrintCancelState( pMonitor->aCancel, pViewShell->GetObjectShell() );
+        pMonitor->aCancel.SetClickHdl( LINK( this, SfxPrintProgress_Impl, CancelHdl ) );
+    }
 }
 
 //------------------------------------------------------------------------
@@ -293,22 +301,25 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
                  String(SfxResId(STR_PRINTING)), 1, FALSE ),
     pImp( new SfxPrintProgress_Impl( pViewSh, pViewSh->GetPrinter() ) )
 {
-    // Callback fuer Fehler und EndPrint setzen
-    pImp->pPrinter->SetEndPrintHdl(
-                LINK( this, SfxPrintProgress, EndPrintNotify ));
-    pImp->pPrinter->SetErrorHdl(
-                LINK( this, SfxPrintProgress, PrintErrorNotify ));
+    pImp->pPrinter->SetEndPrintHdl( LINK( this, SfxPrintProgress, EndPrintNotify ) );
+    pImp->pPrinter->SetErrorHdl( LINK( this, SfxPrintProgress, PrintErrorNotify ) );
     pImp->bCallbacks = TRUE;
 
-    //pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(TRUE);
-    pImp->bShow = bShow;
+    SfxObjectShell* pDoc = pViewSh->GetObjectShell();
+    SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, FALSE );
+    if ( pItem && pItem->GetValue() )
+        bShow = FALSE;
+
+    if ( bShow )
+        pImp->CreateMonitor();
+
     Lock();
     if ( !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
     {
         pImp->bRestoreFlag = TRUE;
-        pImp->bOldFlag = pViewSh->GetObjectShell()->IsEnableSetModified();
+        pImp->bOldFlag = pDoc->IsEnableSetModified();
         if ( pImp->bOldFlag )
-            pViewSh->GetObjectShell()->EnableSetModified( FALSE );
+            pDoc->EnableSetModified( FALSE );
     }
 }
 
@@ -347,15 +358,15 @@ SfxPrintProgress::~SfxPrintProgress()
 
 BOOL SfxPrintProgress::SetState( ULONG nVal, ULONG nNewRange )
 {
-#ifndef MAC
-    // auf dem MAC kommt einer vom Betriebssystem
     if ( pImp->bShow )
     {
         pImp->bShow = FALSE;
-        pImp->pMonitor->Show();
-        pImp->pMonitor->Update();
+        if ( pImp->pMonitor )
+        {
+            pImp->pMonitor->Show();
+            pImp->pMonitor->Update();
+        }
     }
-#endif
 
     return pImp->SetPage( (USHORT)nVal, GetStateText_Impl() ) &&
            SfxProgress::SetState( nVal, nNewRange );
