@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:52:16 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _OFF_APP_HXX
+#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
 
