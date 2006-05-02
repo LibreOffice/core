@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:49:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,7 +541,7 @@ SwXMailMerge::SwXMailMerge() :
     SwDocShell *pDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
     xDocSh = pDocShell;
     xDocSh->DoInitNew( 0 );
-    SfxViewFrame *pFrame = SFX_APP()->CreateViewFrame( *xDocSh, 0, TRUE );
+    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
     SwView *pView = (SwView*) pFrame->GetViewShell();
     pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
