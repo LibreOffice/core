@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:56:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
 #endif
+
+#include <sfx2/app.hxx>
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
