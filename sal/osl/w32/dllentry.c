@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 12:53:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,9 @@ extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
 extern oslMutex         g_CurrentDirectoryMutex;
 
-extern void SAL_CALL ___rtl_memory_init (void);
-extern void SAL_CALL ___rtl_memory_fini (void);
+extern void rtl_memory_fini (void);
+extern void rtl_cache_fini (void);
+extern void rtl_arena_fini (void);
 
 /*
 This is needed because DllMain is called after static constructors. A DLL's
@@ -181,9 +182,6 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 
-                /* initialize memory management */
-                ___rtl_memory_init();
-
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();
 
@@ -247,7 +245,9 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
             osl_destroyMutex( g_CurrentDirectoryMutex );
 
             /* finalize memory management */
-            ___rtl_memory_fini();
+            rtl_memory_fini();
+            rtl_cache_fini();
+            rtl_arena_fini();
             break;
     }
 
