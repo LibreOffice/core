@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:48:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,8 +204,6 @@ void ScDLL::Init()
 //REMOVE        ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
 
     ScDocShell::Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
-    ScDocShell::Factory().RegisterMenuBar( ScResId(SCCFG_MENUBAR) );
-    ScDocShell::Factory().RegisterAccel( ScResId(SCCFG_ACCELERATOR) );
 
     ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
                             //  erst nach ScGlobal::Init duerfen die App-Optionen
