@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:51:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 ScResId(RID_DRAW_OBJECTBAR) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_CHART) );
-    SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAW) );
+    //SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAW) );
 }
 
 TYPEINIT1( ScChartShell, ScDrawShell );
