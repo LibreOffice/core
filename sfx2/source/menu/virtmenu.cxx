@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:19:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,6 @@
 #include "sfxtypes.hxx"
 #include "arrdecl.hxx"
 #include "sfx.hrc"
-#include "appdata.hxx"
 #include "viewsh.hxx"
 #include "sfxpicklist.hxx"
 #include "macrconf.hxx"
@@ -1102,13 +1101,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         // HelpText on-demand
         if ( !bHelpInitialized )
         {
-            bHelpInitialized = TRUE;
-            SfxSlotPool &rSlotPool = SFX_SLOTPOOL();
-            for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
-            {
-                USHORT nId = pMenu->GetItemId(nPos);
-                pMenu->SetHelpText( nId, rSlotPool.GetSlotHelpText_Impl(nId) );
-            }
+            // TODO/CLEANUP: do we need help texts in context menus?
+            // old way with SlotInfo doesn't work anymore
         }
 
         // bis zum Deactivate die Statusupdates unterdr"ucken
@@ -1427,8 +1421,9 @@ void SfxVirtualMenu::InitializeHelp()
     for ( USHORT nPos = 0; nPos<pSVMenu->GetItemCount(); ++nPos )
     {
         USHORT nId = pSVMenu->GetItemId(nPos);
-        if ( !bHelpInitialized )
-            pSVMenu->SetHelpText( nId, rSlotPool.GetSlotHelpText_Impl( nId ) );
+        // TODO/CLEANUP: this code does nothing!
+//        if ( !bHelpInitialized )
+//            pSVMenu->SetHelpText( nId, rSlotPool.GetSlotHelpText_Impl( nId ) );
         SfxMenuControl &rCtrl = pItems[nPos];
         if ( nId && !rCtrl.GetId() )
         {
