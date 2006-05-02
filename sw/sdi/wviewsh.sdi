@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wviewsh.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:44:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,14 @@
  *
  ************************************************************************/
 
-interface WebTextInTable : Selection
+interface WebTextInTable
 [ uuid = "B47F0DE7-1E1F-11d1-89CA-008029E4B0B1" ]
 {
     import WebText;
         import WebTable;
 }
 
-interface WebListInTable : Selection
+interface WebListInTable
 [ uuid="B47F0DE8-1E1F-11d1-89CA-008029E4B0B1" ]
 {
     import WebText;
@@ -48,7 +48,7 @@ interface WebListInTable : Selection
         import WebTable;
 }
 
-interface WebListInText : Selection
+interface WebListInText
 [ uuid = "B47F0DE9-1E1F-11d1-89CA-008029E4B0B1"]
 {
     import WebList;
