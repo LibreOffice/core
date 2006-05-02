@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:06:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,7 @@
 #endif
 #include <svtools/extendedsecurityoptions.hxx>
 #include <svtools/docpasswdrequest.hxx>
+#include <vcl/svapp.hxx>
 
 #include <vos/mutex.hxx>
 
@@ -163,7 +164,6 @@
 #endif
 
 #include "app.hxx"
-#include "appdata.hxx"
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "docfile.hxx"
@@ -181,7 +181,6 @@
 #include "viewsh.hxx"
 #include "app.hrc"
 #include "topfrm.hxx"
-#include "appimp.hxx"
 #include "sfxuno.hxx"
 #include "objface.hxx"
 #include "filedlghelper.hxx"
@@ -666,32 +665,6 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
 }
 
 //--------------------------------------------------------------------
-
-void SfxApplication::NewFramesetExec_Impl( SfxRequest& rReq )
-{
-    DBG_MEMTEST();
-/*
-    // Factory-RegNo kann per Parameter angegeben sein
-    SfxErrorContext aEc(ERRCTX_SFX_NEWDOCDIRECT);
-
-    SfxFrameSetObjectShell *pDoc =
-                new SfxFrameSetObjectShell( SFX_CREATE_MODE_STANDARD );
-    SfxObjectShellRef xDoc(pDoc);
-    pDoc->Initialize( String() );
-    xDoc->SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-
-    SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem,
-                    SID_DOCFRAME, FALSE);
-    if ( pFrameItem && pFrameItem->GetFrame() )
-        pFrameItem->GetFrame()->InsertDocument( pDoc );
-    else
-        CreateView_Impl( rReq, pDoc, TRUE );
-
-    GetAppDispatcher_Impl()->Execute( SID_EDIT_FRAMESET );
- */
-}
-
-//--------------------------------------------------------------------
 SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxItemSet *pSet )
 {
     SfxObjectShellLock xDoc;
@@ -977,8 +950,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     else
     {
         SfxCallMode eMode = SFX_CALLMODE_SYNCHRON;
-        if ( IsPlugin() )
-            eMode = SFX_CALLMODE_ASYNCHRON;
 
         const SfxPoolItem *pRet=0;
         SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
