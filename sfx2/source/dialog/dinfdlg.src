@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 14:51:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,15 @@
 
 #include "sfx.hrc"
 #include "helpid.hrc"
+#include "sfxlocal.hrc"
 #include "dinfdlg.hrc"
-#include "dinfdlg_measures.hrc"
 
  // TP_DOCINFODESC --------------------------------------------------------
+String STR_SFX_NEWOFFICEDOC
+{
+    Text [ de ] = "%PRODUCTNAME Dokument" ;
+    Text [ en-US ] = "%PRODUCTNAME document" ;
+};
 
 TabPage TP_DOCINFODESC
 {
