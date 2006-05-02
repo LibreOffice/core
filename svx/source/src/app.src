@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:01:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,33 +127,6 @@ ImageList RID_DEFAULTIMAGELIST_LCH
 #define ACCK AcceleratorItem
 
  // die Acceleratoren
-
-ACC RID_DEFAULTACCEL
-{
-    ItemList =
-    {
-        AI_NEWDOC
-        AI_NEWDOCDIRECT
-        AI_OPENDOC
-        AI_SAVEDOC
-        AI_PRINTDOC
-        AI_QUITAPP
-        AI_CUT
-        AI_COPY
-        AI_PASTE
-        AI_DELETE
-        AI_SELECTALL
-        AI_SEARCH_DLG
-        AI_WIN_FULLSCREEN
-        AI_FOCUSURLBOX
-        AI_CLOSEWIN
-        ACC_CODE( SID_EXTENDEDHELP, KEY_F1, TRUE, FALSE, FALSE )
-        ACC_CODE( SID_BASICBREAK, KEY_Q, TRUE, TRUE, FALSE )
-        ACC_CODE( SID_VIEW_DATA_SOURCE_BROWSER, KEY_F4, FALSE, FALSE, FALSE )
-        ACC_CODE( SID_FM_GRABCONTROLFOCUS, KEY_F5, FALSE, TRUE, FALSE )
-        ACC_CODE( SID_HANGUL_HANJA_CONVERSION, KEY_F7, TRUE, TRUE, FALSE )
-    };
-};
 
 String RID_DESKTOP
 {
