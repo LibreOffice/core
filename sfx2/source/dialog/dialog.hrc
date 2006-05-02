@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:23:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,11 @@
 #define BMP_COLLAPSED                   ( RC_DIALOG_BEGIN + 18)
 #define BMP_EXPANDED                    ( RC_DIALOG_BEGIN + 19)
 #define TP_CONFIG_ACCEL                 ( RC_DIALOG_BEGIN + 20)
-#define TP_CONFIG_MENU                  ( RC_DIALOG_BEGIN + 21)
-#define TP_CONFIG_STATBAR               ( RC_DIALOG_BEGIN + 22)
-#define TP_CONFIG_OBJECTBAR             ( RC_DIALOG_BEGIN + 31)
-#define TP_CONFIG_EVENT                 ( RC_DIALOG_BEGIN + 32)
-#define DLG_CONFIG                      ( RC_DIALOG_BEGIN + 23)
+//#define TP_CONFIG_MENU                  ( RC_DIALOG_BEGIN + 21)
+//#define TP_CONFIG_STATBAR               ( RC_DIALOG_BEGIN + 22)
+//#define TP_CONFIG_OBJECTBAR             ( RC_DIALOG_BEGIN + 31)
+//#define TP_CONFIG_EVENT                 ( RC_DIALOG_BEGIN + 32)
+//#define DLG_CONFIG                      ( RC_DIALOG_BEGIN + 23)
 
 #define IBX_MNUCFG_ALREADY_INCLUDED     ( RC_DIALOG_BEGIN + 24)
 #define QBX_MNUCFG_UNDEFINED_FUNCTIONS  ( RC_DIALOG_BEGIN + 25)
@@ -132,23 +132,11 @@
 #define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )
 #define DLG_COMMENTS                    ( RC_DIALOG_BEGIN + 70 )
 
-#define DLG_RUN                         ( RC_DIALOG_BEGIN + 72 )
 #define RID_REGISTER_DLG                ( RC_DIALOG_BEGIN + 73 )
 #define DLG_PHONE_CONFIGURATION         ( RC_DIALOG_BEGIN + 74 )
 #define DLG_RECOGNIZER_ENGINEMODE       ( RC_DIALOG_BEGIN + 75 )
 #define MSG_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )
 #define DLG_RECOGNIZER_SPEAKER          ( RC_DIALOG_BEGIN + 77 )
-
-// mail
-//#define RID_MAIL_WINDOW                   ( RC_DIALOG_BEGIN + 78 )
-#define RID_ERRBOX_NO_SMTPSERVER        ( RC_DIALOG_BEGIN + 79 )
-#define RID_INFBOX_SEND_SUCCESS         ( RC_DIALOG_BEGIN + 80 )
-#define RID_ERRBOX_SEND_FAILED          ( RC_DIALOG_BEGIN + 81 )
-#define RID_STR_CLOSE_TITLE             ( RC_DIALOG_BEGIN + 82 )
-#define RID_STR_CLOSE_MESSAGE           ( RC_DIALOG_BEGIN + 83 )
-#define RID_STR_CLOSE_BTN_SEND          ( RC_DIALOG_BEGIN + 84 )
-#define RID_STR_CLOSE_BTN_REJECT        ( RC_DIALOG_BEGIN + 85 )
-#define RID_STR_CLOSE_BTN_BACKTOMSG     ( RC_DIALOG_BEGIN + 86 )
 
 #define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
 
@@ -160,7 +148,6 @@
 #define STR_TOOLBAR_SEPARATOR           ( RC_DIALOG_BEGIN + 93 )
 #define STR_TOOLBAR_SPACE               ( RC_DIALOG_BEGIN + 94 )
 
-#define STR_FUNCTION_ALREADY_IN_TOOLBOX ( RC_DIALOG_BEGIN + 95 )
 #define STR_BASICNAME                   ( RC_DIALOG_BEGIN + 96 )
 
 #define BMP_COLLAPSED_HC                ( RC_DIALOG_BEGIN + 97 )
