@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:00:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:32:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,8 @@
 #ifndef  _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
 #endif
+
+#include <vcl/svapp.hxx>
 
 #include "optgdlg.hrc"
 #include "optgdlg.hxx"
