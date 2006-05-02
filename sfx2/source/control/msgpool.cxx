@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:06:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,17 +43,18 @@
 #pragma hdrstop
 #endif
 
+// wg. pSlotPool
+#include "appdata.hxx"
 #include "msgpool.hxx"
 #include "minarray.hxx"
 #include "msg.hxx"
 #include "app.hxx"
 #include "objface.hxx"
-#include "idpool.hxx"
 #include "sfxtypes.hxx"
-#include "slotinfo.hxx"
 #include "macrconf.hxx"
 #include "sfxresid.hxx"
 #include "arrdecl.hxx"
+#include "module.hxx"
 
 #include "sfx.hrc"
 
@@ -84,8 +85,7 @@ DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8);
 //====================================================================
 
 SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
- : _pIdPool(0)
- , _pGroups(0)
+ : _pGroups(0)
  , _pTypes(0)
  , _pParentPool( pParent )
  , _pResMgr( pResManager )
@@ -114,7 +114,6 @@ SfxSlotPool::~SfxSlotPool()
             delete _pTypes->GetObject(n);
         delete _pTypes;
     }
-    delete _pIdPool;
 }
 
 //====================================================================
@@ -233,64 +232,6 @@ const SfxSlot* SfxSlotPool::GetSlot( USHORT nId )
     // Dann beim eventuell vorhandenen parent versuchen
     return _pParentPool ? _pParentPool->GetSlot( nId ) : 0;
 }
-
-//--------------------------------------------------------------------
-
-// returns the pool of unused ids for macros, menus etc.
-
-IdPool& SfxSlotPool::GetIdPool()
-{
-    DBG_MEMTEST();
-    DBG_ASSERT( _pInterfaces != 0 && _pInterfaces->Count(),
-                "no Interfaces registered" );
-
-    if ( !_pIdPool )
-    {
-        _pIdPool = new IdPool();
-
-        // create a set of all registered function-ids
-        BitSet aRegIds;
-        for ( USHORT nInterface = 0; nInterface < _pInterfaces->Count(); ++nInterface )
-        {
-            SfxInterface* pInterface = (*_pInterfaces)[nInterface];
-            for ( USHORT nFunc = 0; nFunc < pInterface->Count(); ++nFunc )
-                aRegIds |= (*pInterface)[nFunc]->GetGroupId();
-        }
-
-        //lock all registered ids
-        _pIdPool->Lock(aRegIds);
-    }
-
-    return *_pIdPool;
-}
-
-
-//--------------------------------------------------------------------
-
-// stores the id persistent to a stream (expand macros-names)
-
-void SfxSlotPool::StoreId( SvStream& rStream, USHORT nId )
-{
-    DBG_MEMTEST();
-    DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
-
-    rStream << nId;
-    //! later: write 0 and macro-lib/name
-}
-
-
-//--------------------------------------------------------------------
-
-// load a persistent id from a stream (assign id if a macro)
-
-void SfxSlotPool::LoadId( SvStream& rStream, USHORT &rId )
-{
-    DBG_MEMTEST();
-    DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
-
-    rStream >> (unsigned short&) rId;
-}
-
 
 //--------------------------------------------------------------------
 
@@ -441,79 +382,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
 // SlotName erfragen, gfs. mit HilfeText
 
-String SfxSlotPool::GetSlotName(USHORT nId, String *pHelpText) const
-{
-    // ist es eine Makro-SlotId?
-    if ( SfxMacroConfig::IsMacroSlot( nId ) )
-    {
-        const SfxMacroInfo *pMacro = SFX_APP()->GetMacroConfig()->GetMacroInfo(nId);
-        if ( pMacro )
-            return pMacro->GetMacroName();
-        else
-            return String();
-    }
-
-    // Zun"achst den eigenen ResManager testen, dann evtl. den des parent pools
-    ResId aResId( nId, _pResMgr );
-    aResId.SetRT( RSC_SFX_SLOT_INFO );
-    if( !Resource::GetResManager()->IsAvailable( aResId ) && _pParentPool )
-        aResId.SetResMgr( _pParentPool->_pResMgr );
-    if( Resource::GetResManager()->IsAvailable( aResId ) )
-    {
-        SfxSlotInfo aInfo(aResId);
-        if(pHelpText)
-            *pHelpText = aInfo.GetHelpText();
-        return aInfo.GetName();
-    }
-
-#ifdef DBG_UTIL
-    String aError(DEFINE_CONST_UNICODE("Slot ohne ConfigName: "));
-    aError += String::CreateFromInt32( nId );
-//  DBG_ERROR( aError );
-    return aError;
-#endif
-    return String();
-}
-
-
-//--------------------------------------------------------------------
-
 // SlotName erfragen, gfs. mit HilfeText
-
-String SfxSlotPool::GetSlotHelpText_Impl(USHORT nId) const
-{
-    String aHelpText;
-    GetSlotName_Impl( nId, &aHelpText );
-    return aHelpText;
-}
-
-//--------------------------------------------------------------------
-#ifdef STARBASIC
-
-
-// assignes a request-id for a specific macro
-
-USHORT SfxSlotPool::RegisterMacro( sbToken aToken )
-{
-    DBG_MEMTEST();
-    DBG_ASSERT( pInterfaces != 0, "no Interfaces registered" );
-    DBG_ASSERT( TRUE, "not implemented - call MI" );
-    return 0;
-}
-
-
-//--------------------------------------------------------------------
-
-// frees the request-id of a specific macro
-
-void SfxSlotPool::ReleaseMacro( sbToken aToken )
-{
-    DBG_MEMTEST();
-    DBG_ASSERT( pInterfaces != 0, "no Interfaces registered" );
-    DBG_ASSERT( TRUE, "not implemented - call MI" );
-}
-
-#endif
 
 //--------------------------------------------------------------------
 
@@ -538,19 +407,6 @@ SfxInterface* SfxSlotPool::NextInterface()
     return nInterface < _pInterfaces->Count() ? (*_pInterfaces)[nInterface] : 0;
 }
 
-//--------------------------------------------------------------------
-
-USHORT SfxSlotPool::RegisterSID( const String &rGroup, const String &rName )
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-void SfxSlotPool::ReleaseSID( const String &rGroup, const String &rName )
-{
-}
-
 const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
 {
     const SfxSlot *pSlot = NULL;
@@ -567,5 +423,13 @@ const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
     return pSlot;
 }
 
+SfxSlotPool& SfxSlotPool::GetSlotPool( SfxViewFrame *pFrame )
+{
+    SfxModule *pMod = SfxModule::GetActiveModule( pFrame );
+    if ( pMod && pMod->GetSlotPool() )
+        return *pMod->GetSlotPool();
+    else
+        return *SFX_APP()->Get_Impl()->pSlotPool;
+}
 
 
