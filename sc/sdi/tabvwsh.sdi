@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.sdi,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:15:21 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 
  // ===========================================================================
-interface TableOLEObject : Selection
+interface TableOLEObject
 [
     uuid ( "C04AA960-137B-11D3-B25B-006097DA68F3" )
 ]
@@ -52,7 +52,7 @@ interface TableOLEObject : Selection
 }
 
  //============================================================================
-interface Tables : Collection
+interface Tables
 [
     uuid = "5692EFC0-355B-11cf-89CB-008029E4B0B1" ;
 ]
@@ -68,7 +68,7 @@ interface Tables : Collection
 }
 
  // ===========================================================================
-interface BaseSelection : Selection
+interface BaseSelection
 [
     uuid = "02ABE040-137B-11D3-B25B-006097DA68F3" ;
 ]
@@ -233,14 +233,14 @@ interface TableEditView : View
  //     Pivot-Krempel
  //
 
-interface DataPilotTables : Collection
+interface DataPilotTables
 [
     uuid ( "86DB0400-4EE6-11d1-89CB-008029E4B0B1" )
 ]
 {
 }
 
-interface DataPilotTable : Selection
+interface DataPilotTable
 [
     uuid ( "E8DBA2C1-4C5E-11d1-89CB-008029E4B0B1" )
 ]
@@ -249,14 +249,14 @@ interface DataPilotTable : Selection
     [ HelpText = "" ; ]
 }
 
-interface DataPilotFields : Collection
+interface DataPilotFields
 [
     uuid ( "BA09AF20-4C70-11d1-89CB-008029E4B0B1" )
 ]
 {
 }
 
-interface DataPilotField : Object
+interface DataPilotField
 [
     uuid ( "D2C2C540-4C8B-11d1-89CB-008029E4B0B1" )
 ]
