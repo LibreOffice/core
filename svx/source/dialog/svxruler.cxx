@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:14:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 15:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
+
+#include <svtools/smplhint.hxx>
+
 #pragma hdrstop
 
 #define ITEMID_TABSTOP  0
