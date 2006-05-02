@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:40:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 12:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,42 +316,47 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
     }
     else
     {
+    vos::ORef<NameSpaceEntry> xEntry(new NameSpaceEntry());
+
         sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
-        ::vos::ORef<NameSpaceEntry> pEntry(new NameSpaceEntry);
         if( -1L == nColonPos )
         {
             // case: no ':' found -> default namespace
-            pEntry->sName = rAttrName;
+            xEntry->sPrefix = OUString();
+            xEntry->sName = rAttrName;
         }
         else
         {
             // normal case: ':' found -> get prefix/suffix
-            pEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
-            pEntry->sName = rAttrName.copy( nColonPos + 1L );
+            xEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
+            xEntry->sName = rAttrName.copy( nColonPos + 1L );
         }
 
         if( pPrefix )
-            *pPrefix = pEntry->sPrefix;
+            *pPrefix = xEntry->sPrefix;
         if( pLocalName )
-            *pLocalName = pEntry->sName;
+            *pLocalName = xEntry->sName;
 
-        NameSpaceHash::const_iterator aIter = aNameHash.find( pEntry->sPrefix );
+        NameSpaceHash::const_iterator aIter = aNameHash.find( xEntry->sPrefix );
         if ( aIter != aNameHash.end() )
         {
             // found: retrieve namespace key
-            nKey = pEntry->nKey = (*aIter).second->nKey;
+            nKey = xEntry->nKey = (*aIter).second->nKey;
             if ( pNamespace )
                 *pNamespace = (*aIter).second->sName;
         }
-        else if ( pEntry->sPrefix == sXMLNS )
+        else if ( xEntry->sPrefix == sXMLNS )
             // not found, but xmlns prefix: return xmlns 'namespace'
-            nKey = pEntry->nKey = XML_NAMESPACE_XMLNS;
+            nKey = xEntry->nKey = XML_NAMESPACE_XMLNS;
         else if( nColonPos == -1L )
             // not found, and no namespace: 'namespace' none
-            nKey = pEntry->nKey = XML_NAMESPACE_NONE;
+            nKey = xEntry->nKey = XML_NAMESPACE_NONE;
 
         if (bCache)
-            const_cast < NameSpaceHash* > ( &aNameCache )->operator[] ( rAttrName ) = pEntry;
+    {
+        typedef std::pair< const rtl::OUString, vos::ORef<NameSpaceEntry> > value_type;
+        (void) const_cast<NameSpaceHash*>(&aNameCache)->insert (value_type (rAttrName, xEntry));
+    }
     }
 
     return nKey;
