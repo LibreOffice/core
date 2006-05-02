@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:17:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@
 #include <svtools/asynclink.hxx>
 #include <sot/clsids.hxx>
 
+#include "app.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
 #include "event.hxx"
@@ -424,7 +425,7 @@ SfxObjectShell* SfxObjectShell::GetNext
 
 SfxObjectShell* SfxObjectShell::Current()
 {
-    SfxViewFrame *pFrame = SFX_APP()->GetViewFrame();
+    SfxViewFrame *pFrame = SfxViewFrame::Current();
     return pFrame ? pFrame->GetObjectShell() : 0;
 }
 
@@ -506,14 +507,14 @@ sal_uInt16 SfxObjectShell::PrepareClose
         {
             // minimierte restoren
             SfxFrame* pTop = pFrame->GetTopFrame();
-            pSfxApp->SetViewFrame( pTop->GetCurrentViewFrame() );
+            SfxViewFrame::SetViewFrame( pTop->GetCurrentViewFrame() );
             pFrame->GetFrame()->Appear();
 
             // fragen, ob gespeichert werden soll
-            /*HACK for plugin::destroy()*/
-            // Don't show SAVE dialog in plugin mode! We save our document in every way.
             short nRet = RET_YES;
-            if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
+            //TODO/CLEANUP
+            //brauchen wir UI=2 noch?
+            //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
             {
                 //initiate help agent to inform about "print modifies the document"
                 SfxStamp aStamp = GetDocInfo().GetPrinted();
