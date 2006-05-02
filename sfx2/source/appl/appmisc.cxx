@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:35:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,6 @@
 #include "arrdecl.hxx"
 #include "tbxctrl.hxx"
 #include "stbitem.hxx"
-#include "accitem.hxx"
 #include "mnuitem.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
@@ -125,7 +124,6 @@
 #include "dispatch.hxx"
 #include "workwin.hxx"
 #include "intro.hxx"
-#include "about.hxx"
 #include "fcontnr.hxx"
 #include "sfxlocal.hrc"
 #include "sfx.hrc"
@@ -136,7 +134,6 @@
 #include "topfrm.hxx"
 #include "openflag.hxx"
 #include "viewsh.hxx"
-#include "appimp.hxx"
 #include "objface.hxx"
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
@@ -199,19 +196,6 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 
 //--------------------------------------------------------------------
 
-SfxViewFrame* SfxApplication::CreateViewFrame(
-    SfxObjectShell& rDoc, sal_uInt16 nViewId, sal_Bool bHidden )
-{
-    SfxItemSet *pSet = rDoc.GetMedium()->GetItemSet();
-    if ( nViewId )
-        pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-    if ( bHidden )
-        pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
-
-    SfxFrame *pFrame = SfxTopFrame::Create( &rDoc, 0, bHidden );
-    return pFrame->GetCurrentViewFrame();
-}
-
 void SfxApplication::InitializeDisplayName_Impl()
 {
     SfxAppData_Impl* pAppData_Impl = Get_Impl();
@@ -245,120 +229,11 @@ void SfxApplication::InitializeDisplayName_Impl()
         aTitle += aVerId;
         aTitle += ']';
 #endif
-        if ( GetDemoKind() == SFX_DEMOKIND_DEMO )
-            aTitle += DEFINE_CONST_UNICODE(" (Demo Version)");
-
         Application::SetDisplayName( aTitle );
     }
 }
 
 //--------------------------------------------------------------------
-
-void SfxApplication::OpenClients()
-{
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::FillStatusBar( StatusBar& rBar )
-
-/*  [Beschreibung]
-
-    Diese virtuelle Factory-Methode wird vom SFx gerufen, um die
-    StatusBar f"ur das Applikationsfenster zu erzeugen. Im Ggs. zu
-    den anderen Standard-Controllern Menu, Accelerator und ToolBoxen
-    kann die Status-Zeile nur mit dieser Factory erzeugt werden,
-    da in der SV-Resource keine StatusBar-Items angegeben werden k"oennen.
-*/
-
-{
-    rBar.InsertItem( SID_EXPLORER_SELECTIONSIZE, 200, SIB_IN|SIB_LEFT|SIB_AUTOSIZE );
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::IntroSlide()
-
-/*  [Beschreibung]
-
-    Diese virtuelle Methode wird vom SFx gerufen, um die bei einem
-    Mehrbild-Intro das n"achte Bild anzuzeigen. Sie sollte w"ahrend
-    des Startups mehrmals gerufen werden, wenn l"angere Initialisierungen
-    ausgef"uhrt werden.
-*/
-
-{
-    if ( pImp->pIntro )
-        pImp->pIntro->Slide();
-}
-
-//--------------------------------------------------------------------
-
-PrinterDialog* SfxApplication::CreatePrinterDialog()
-
-/*  [Beschreibung]
-
-    Diese virtuelle Factory-Methode wird vom SFx gerufen, um einen
-    Applikations-spezifischen PrinterDialog zu erzeugen.
-
-    Die Default-Implementierung liefert einen 0-Pointer zur"uck.
-*/
-
-{
-    return 0;
-}
-//--------------------------------------------------------------------
-
-ModalDialog* SfxApplication::CreateAboutDialog()
-
-/*  [Beschreibung]
-
-    Diese virtuelle Factory-Methode wird vom SFx gerufen, um einen
-    Modul-spezifischen AboutDialog zu erzeugen.
-
-    Die Default-Implementierung erzeugt einen AboutDialog aus
-    der Resource 'ModalDialog RID_DEFAULTABOUT' und verwendet
-    zus"atzlich einen String RID_BUILDVERSION, f"ur die Update-Version
-    der Applikation. Letztere wird angezeigt, sobald der Anwender
-    eine spezielle, im Dialog definierte, Sequenz von Zeichen
-    eingibt (z.B. 'Ctrl' 's' 'f' 'x').
-*/
-
-{
-    // Buildversion suchen
-    ::rtl::OUString aDefault;
-    String          aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-
-    if ( aVerId.Len() == 0 )
-        DBG_ERROR( "No BUILDID in bootstrap file" );
-
-    String aVersion( '[' );
-    ( aVersion += aVerId ) += ']';
-
-    // About-Dialog suchen
-    ResId aDialogResId( RID_DEFAULTABOUT, pAppData_Impl->pLabelResMgr );
-    ResMgr* pResMgr = pAppData_Impl->pLabelResMgr->IsAvailable(
-                        aDialogResId.SetRT( RSC_MODALDIALOG ) )
-                    ? pAppData_Impl->pLabelResMgr
-                    : 0;
-    aDialogResId.SetResMgr( pResMgr );
-    if ( !Resource::GetResManager()->IsAvailable( aDialogResId ) )
-        DBG_ERROR( "No RID_DEFAULTABOUT in label-resource-dll" );
-
-    // About-Dialog anzeigen
-    AboutDialog* pDlg = new AboutDialog( 0, aDialogResId, aVersion );
-    return pDlg;
-}
-
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-#ifdef WNT
-extern String GetUserID();
-#endif
-
-//------------------------------------------------------------------------
-
 SfxProgress* SfxApplication::GetProgress() const
 
 /*  [Beschreibung]
@@ -375,19 +250,6 @@ SfxProgress* SfxApplication::GetProgress() const
 
 {
     return pAppData_Impl->pProgress;
-}
-
-//------------------------------------------------------------------------
-
-void SfxApplication::ToolboxExec_Impl( SfxRequest &rReq )
-{
-}
-
-//------------------------------------------------------------------------
-
-
-void SfxApplication::ToolboxState_Impl( SfxItemSet &rSet )
-{
 }
 
 //------------------------------------------------------------------------
@@ -474,42 +336,11 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 }
 
 
-Config* SfxApplication::GetFilterIni()
-{
-    if ( !pAppData_Impl->pFilterIni )
-    {
-        OStartupInfo aInfo;
-        ::rtl::OUString aApplicationName;
-        // get the path of the executable
-        if ( aInfo.getExecutableFile( aApplicationName ) == OStartupInfo::E_None )
-        {
-            // cut the name of the executable
-            ::rtl::OUString aIniFile = aApplicationName.copy( 0, aApplicationName.lastIndexOf( '/' ) );
-            // append the name of the filter ini
-            aIniFile += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/install.ini" ) );
-            // and create the Config instance
-            pAppData_Impl->pFilterIni = new Config( aIniFile );
-        }
-    }
-
-    return pAppData_Impl->pFilterIni;
-}
-
-
-SfxModule* SfxApplication::GetActiveModule( SfxViewFrame *pFrame ) const
-{
-    if ( !pFrame )
-        pFrame = SfxViewFrame::Current();
-    SfxObjectShell* pSh = 0;
-    if( pFrame ) pSh = pFrame->GetObjectShell();
-    return pSh ? pSh->GetModule() : 0;
-}
-
 SfxModule* SfxApplication::GetModule_Impl()
 {
-    SfxModule* pModule = GetActiveModule();
+    SfxModule* pModule = SfxModule::GetActiveModule();
     if ( !pModule )
-        pModule = GetActiveModule( SfxViewFrame::GetFirst( FALSE ) );
+        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( FALSE ) );
     if( pModule )
         return pModule;
     else
@@ -518,25 +349,6 @@ SfxModule* SfxApplication::GetModule_Impl()
         return NULL;
     }
 }
-
-
-SfxSlotPool& SfxApplication::GetSlotPool( SfxViewFrame *pFrame ) const
-{
-    SfxModule *pMod = GetActiveModule( pFrame );
-    if ( pMod && pMod->GetSlotPool() )
-        return *pMod->GetSlotPool();
-    else
-        return *pSlotPool;
-}
-
-
-ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon()
-{
-    if( pAppData_Impl->pTemplateCommon )
-        return pAppData_Impl->pTemplateCommon;
-    return NULL;
-}
-
 
 ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBindings )
 {
@@ -548,78 +360,18 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
         return ((SfxTemplateDialog*) pChild->GetWindow())->GetISfxTemplateCommon();
     return 0;
 }
-/*
-long Select_Impl( void* pHdl, void* pVoid )
-{
-    Menu* pMenu = (Menu*) pVoid;
-    String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
-    if( !aURL.Len() )
-        return 0;
 
-    SfxDispatcher* pDispatcher = ((SfxBindings*)pHdl)->GetDispatcher_Impl();
-    if ( ! pDispatcher )
-        return 0;
-    Reference<com::sun::star::frame::XFrame> xFrame( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface() );
-    if (! xFrame.is())
-    {
-        Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
-                Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-        xFrame = Reference < ::com::sun::star::frame::XFrame > ( xDesktop->getActiveFrame() );
-        if ( !xFrame.is() )
-            xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
-    }
-
-    URL aTargetURL;
-    aTargetURL.Complete = aURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-    xTrans->parseStrict( aTargetURL );
-
-    Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
-    Reference < ::com::sun::star::frame::XDispatch > xDisp;
-    if ( xProv.is() )
-    {
-        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-        else
-        {
-            ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii("_blank") );
-            ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
-
-            if ( pMenuAttributes )
-                aTargetFrame = pMenuAttributes->aTargetFrame;
-
-            xDisp = xProv->queryDispatch( aTargetURL, aTargetFrame , 0 );
-        }
-    }
-    if ( xDisp.is() )
-    {
-        xDisp->dispatch( aTargetURL, Sequence<PropertyValue>() );
-    }
-
-    return TRUE;
-}
-*/
-SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
-{
-/*
-    SfxViewFrame *pFrame = SfxViewFrame::Current();
-    if ( pFrame )
-        return pFrame->GetViewShell()->GetMenuBar_Impl();
-    else
-        return 0;
-*/
-    return 0;
-}
-
-SfxCancelManager *SfxApplication::GetCancelManager() const
+SfxCancelManager* SfxApplication::GetCancelManager() const
 {
     if ( !pAppData_Impl->pCancelMgr )
-    {
         pAppData_Impl->pCancelMgr = new SfxCancelManager;
-        pAppData_Impl->StartListening( *pAppData_Impl->pCancelMgr );
-    }
     return pAppData_Impl->pCancelMgr;
 }
 
+SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppData_Impl->pResMgr; }
+BOOL  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
+SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
+SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
+//SfxOptions&  SfxApplication::GetOptions() { return *pAppData_Impl->pOptions; }
+//const SfxOptions& SfxApplication::GetOptions() const { return *pAppData_Impl->pOptions; }
 
