@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:51:21 $
+ *  last change: $Author: rt $ $Date: 2006-05-02 16:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,7 @@
 #include "module.hxx"
 #include "dockwin.hxx"
 #include "dispatch.hxx"
-#include "appdata.hxx"
-#include <workwin.hxx>
+#include "workwin.hxx"
 
 static const sal_uInt16 nVersion = 2;
 
@@ -265,7 +264,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     }
 
     SfxDispatcher *pDisp = pBindings->GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
+    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
     if ( !pChild &&  pMod )
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
@@ -500,7 +499,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
     SfxChildWinFactory* pFact=0;
     SfxApplication *pApp = SFX_APP();
     SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
+    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
     if ( pMod )
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
@@ -855,5 +854,15 @@ void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::su
 sal_Bool SfxChildWindow::CanGetFocus() const
 {
     return !(pImp->pFact->aInfo.nFlags & SFX_CHILDWIN_CANTGETFOCUS);
+}
+
+void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, USHORT nId, SfxChildWinContextFactory* pFact)
+{
+    SFX_APP()->RegisterChildWindowContext_Impl( pMod, nId, pFact );
+}
+
+void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, SfxChildWinFactory* pFact)
+{
+    SFX_APP()->RegisterChildWindow_Impl( pMod, pFact );
 }
 
