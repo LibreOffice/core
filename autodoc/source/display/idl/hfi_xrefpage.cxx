@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_xrefpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:49:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,7 @@ HF_IdlXrefs::produce_Main( const String &        i_prefix,
 
     HF_TitleTable
         aTitle(CurOut());
+
     aTitle.Produce_Title( StreamLock(200)()
                           << C_sTitleStart
                           << i_prefix
