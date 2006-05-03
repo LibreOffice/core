@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_interface.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,11 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/idl/i_ce.hxx>
+#include <ary/idl/i_gate.hxx>
 #include <ary/idl/ik_function.hxx>
 #include <ary/idl/ik_interface.hxx>
+#include <ary/idl/ip_ce.hxx>
+#include <ary/idl/ip_type.hxx>
 #include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_linachain.hxx>
 #include <toolkit/hf_navi_sub.hxx>
@@ -123,10 +126,7 @@ HF_IdlInterface::Produce_byData( const client & i_ce ) const
         aNameChain(aTitle.Add_Row());
     aNameChain.Produce_CompleteChain(Env().CurPosition(), nameChainLinker);
 
-    aTitle.Produce_Title( StreamLock(200)() << C_sCePrefix_Interface
-                                         << " "
-                                         << i_ce.LocalName()
-                                         << c_str );
+    produce_Title(aTitle, C_sCePrefix_Interface, i_ce);
 
     produce_BaseHierarchy( aTitle.Add_Row(),
                            i_ce,
@@ -244,9 +244,24 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
     if (NOT (*pHelp).operator bool())
         return;
 
+    // Check for XInterface as only base:
+    ary::StdConstIterator<ary::idl::CommentedRelation> &
+        itTest = *pHelp;
+    ary::idl::Ce_id
+        nCe = Env().Gate().Types().Search_CeRelatedTo((*itTest).Type());
+    if (nCe.IsValid())
+    {
+        // KORR FUTURE
+        //   Rather check for id(!) of com::sun::star::uno::XInterface.
+        if (Env().Gate().Ces().Find_Ce(nCe).LocalName() == "XInterface")
+        {
+            ++itTest;
+            if (NOT itTest.operator bool())
+                return;
+        }
+    }
+
     // Write hierarchy:
-    HF_IdlBaseNode
-        aMyNode(i_ce, Env().Gate());
 
     HF_DocEntryList
         aDocList( o_screen );
@@ -254,7 +269,33 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
     Xml::Element &
         rBaseList = aDocList.Produce_Definition();
 
-    aMyNode.WriteBaseHierarchy(rBaseList, *this, i_ce.LocalName());
+// NEW
+    Write_BaseHierarchy(rBaseList, Env(), i_ce);
+//    csi::xml::Element &
+//        rPre = rBaseList
+//               >> *new csi::xml::AnElement("pre")
+//                   << new csi::html::StyleAttr("font-family:monospace;");
+//
+//    std::vector<uintt>
+//        aSetColumns;
+//    rPre
+//        >> *new csi::html::Strong
+//            << i_ce.LocalName();
+//    rPre
+//        << "\n";
+//    Write_BaseHierarchy( rPre,
+//                         Env(),
+//                         i_ce,
+//                         Env().Gate(),
+//                         aSetColumns );
+//
+//    rPre
+//        << "\n";
+// NEW
+
+//  HF_IdlBaseNode
+//      aMyNode(i_ce, Env().Gate());
+//  aMyNode.WriteBaseHierarchy(rBaseList, *this, i_ce.LocalName());
 
 
     // Write comments:
@@ -266,7 +307,10 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
                 2,
                 HF_SubTitleTable::sublevel_3 );
 
-    for ( ary::StdConstIterator<ary::idl::CommentedRelation> & it = *pHelp;
+    ary::Dyn_StdConstIterator<ary::idl::CommentedRelation>
+        pBases;
+    ary::idl::ifc_interface::attr::Get_Bases(pBases, i_ce);
+    for ( ary::StdConstIterator<ary::idl::CommentedRelation> & it = *pBases;
           it.operator bool();
           ++it )
     {
