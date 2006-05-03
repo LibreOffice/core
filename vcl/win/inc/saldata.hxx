@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:41:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,7 +228,8 @@ void ImplSalAcquireYieldMutex( ULONG nCount );
 LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 // \SV\WIN\SOURCE\APP\SALTIMER.CXX
-void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT nId, DWORD nTime );
+#define SALTIMERPROC_RECURSIVE 0xffffffff
+void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT_PTR nId, DWORD nTime );
 
 // \WIN\SOURCE\WINDOW\SALFRAME.CXX
 void SalTestMouseLeave();
