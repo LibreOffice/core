@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:47:56 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,31 @@ HF_IdlTag::Produce_byData( Xml::Element &              o_rTitle,
     Enter_TextOut(o_rText);
     i_rTag.DisplayAt( const_cast< HF_IdlTag& >(*this) );
     Leave_TextOut();
+}
+
+void
+HF_IdlTag::Produce_byData( Xml::Element &      o_rTitle,
+                           Xml::Element &      o_rText,
+                           const std::vector< csi::dsapi::DT_SeeAlsoAtTag* > &
+                                                i_seeAlsoVector ) const
+{
+    o_rTitle << "See also";
+    for ( std::vector< csi::dsapi::DT_SeeAlsoAtTag* >::const_iterator
+            it = i_seeAlsoVector.begin();
+          it != i_seeAlsoVector.end();
+          ++it )
+    {
+        if ( (*it)->Text().IsEmpty() )
+            continue;
+
+        if (it != i_seeAlsoVector.begin())
+        {
+            o_rText << ", ";
+        }
+        HF_IdlTypeText
+            aLinkText(Env(), o_rText, true, &aTextOut.ScopeGivingCe());
+        aLinkText.Produce_byData( (*it)->LinkText() );
+    }
 }
 
 void
