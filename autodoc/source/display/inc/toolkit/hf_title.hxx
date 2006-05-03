@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_title.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:56:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,11 @@ class HF_TitleTable : public HtmlMaker
 
     void                Produce_Title(
                             const char *        i_title );
+    void                Produce_Title(
+                            const char *        i_annotations,
+//                            const char *        i_label,
+                            const char *        i_title );
+
     /// @return a Html::TableCell reference.
     Xml::Element &      Add_Row();
 };
