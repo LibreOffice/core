@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_hierarchy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 #include <ary/idl/ip_ce.hxx>
 #include <ary/idl/ip_type.hxx>
 #include "hfi_interface.hxx"
+#include "hfi_typetext.hxx"
+#include "hi_env.hxx"
 
 
 
@@ -205,5 +207,99 @@ HF_IdlBaseNode::GatherBases( const CE &       i_rCe,
         nCountBases += nAddedBases;
         nPosition += nAddedBases;
         aBases.push_back( pBaseNode.Release() );
+    }   // end for
+}
+
+
+void
+Write_BaseHierarchy( csi::xml::Element &            o_rOut,
+                     HtmlEnvironment_Idl &          i_env,
+                     const ary::idl::CodeEntity &   i_ce )
+{
+    csi::xml::Element &
+        rPre = o_rOut
+               >> *new csi::xml::AnElement("pre")
+                   << new csi::html::StyleAttr("font-family:monospace;");
+
+    std::vector<uintt>
+        aSetColumns;
+    rPre
+        >> *new csi::html::Strong
+            << i_ce.LocalName();
+    rPre
+        << "\n";
+    Write_Bases( rPre,
+                 i_env,
+                 i_ce,
+                         aSetColumns );
+    rPre
+        << "\n";
+
+}
+
+
+void
+Write_Bases( csi::xml::Element &            o_out,
+             HtmlEnvironment_Idl &          i_env,
+             const ary::idl::CodeEntity &   i_rCe,
+             std::vector<uintt> &           io_setColumns )
+{
+    ary::Dyn_StdConstIterator<ary::idl::CommentedRelation>
+        aHelp;
+    ary::idl::ifc_interface::attr::Get_Bases(aHelp,i_rCe);
+
+    for ( ary::StdConstIterator<ary::idl::CommentedRelation> & it = *aHelp;
+          it.operator bool();
+          // NO INCREMENT HERE, see below
+        )
+    {
+        ary::idl::Type_id
+            nType = (*it).Type();
+        ++it;
+        bool
+            bThereComesMore = it.operator bool();
+
+        ary::idl::Ce_id
+            nCe = i_env.Gate().Types().Search_CeRelatedTo(nType);
+        if (nCe.IsValid())
+        {
+            // KORR FUTURE
+            //   Rather check for id(!) of com::sun::star::uno::XInterface.
+            if (i_env.Gate().Ces().Find_Ce(nCe).LocalName() == "XInterface")
+                continue;
+        }
+
+        for (uintt i = 0; i < io_setColumns.size(); ++i)
+        {
+            if (io_setColumns[i] == 1)
+                o_out << new csi::xml::XmlCode("&#x2503");
+            else
+                o_out << "  ";
+            o_out << " ";
+        }
+
+        if (bThereComesMore)
+            o_out << new csi::xml::XmlCode("&#x2523");
+        else
+            o_out << new csi::xml::XmlCode("&#x2517");
+        o_out << " ";
+
+        HF_IdlTypeText
+            aDisplay( i_env, o_out, true, i_env.CurPageCe());
+        aDisplay.Produce_byData(nType);
+        o_out << "\n";
+
+        if (nCe.IsValid())
+        {
+            io_setColumns.push_back(bThereComesMore ? 1 : 0);
+
+            const ary::idl::CodeEntity &
+                rCe = i_env.Gate().Ces().Find_Ce(nCe);
+            Write_Bases( o_out,
+                         i_env,
+                         rCe,
+                         io_setColumns );
+            io_setColumns.pop_back();
+        }
     }   // end for
 }

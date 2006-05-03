@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_hierarchy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:21 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@ namespace xml
 
 
 class HF_IdlInterface;
+class HtmlEnvironment_Idl;
+
 
 
 /** Represents a node in an pyramidic inheritance hierarchy which shall be
@@ -143,5 +145,20 @@ class HF_IdlBaseNode
     HF_IdlBaseNode *    pDerived;
 };
 
+void                Write_BaseHierarchy(
+                        csi::xml::Element & o_rOut,
+                        HtmlEnvironment_Idl &
+                                            i_env,
+                        const ary::idl::CodeEntity &
+                                            i_rCe );
+
+void                Write_Bases(
+                        csi::xml::Element & o_rOut,
+                        HtmlEnvironment_Idl &
+                                            i_env,
+                        const ary::idl::CodeEntity &
+                                            i_rCe,
+                        std::vector<uintt> &
+                                            io_setColumns );
 
 #endif
