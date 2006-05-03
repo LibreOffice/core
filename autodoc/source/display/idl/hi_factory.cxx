@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:51:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,19 +121,14 @@ HtmlFactory_Idl::produce_Bases( Xml::Element &   o_screen,
             rBaseList = aDocList.Produce_Definition()
                                 >> *new Xml::AnElement("pre")
                                     << new Xml::AnAttribute("style","font-family:monospace;");
+        rBaseList
+            >> *new Html::Strong
+                << i_ce.LocalName();
+        rBaseList
+            << "\n";
         recursive_ShowBases( rBaseList,
                              nBaseT,
                              nDepth );
-        csv_assert(nDepth > 0);
-        if (nDepth > 30)
-            nDepth = 30;
-        rBaseList
-            << (C_sSpace + 93 - 3*nDepth)
-            << "|\n"
-            << (C_sSpace + 93 - 3*nDepth)
-            << "+-"
-            >> *new Html::Bold
-                << i_ce.LocalName();
     }
 }
 
@@ -170,6 +165,34 @@ HtmlFactory_Idl::produce_Members( ce_list &           it_list,
         produce_ShortDoc(rSummaryRow, rCe);
 
         produce_MemberDetails(aDetails, rCe);
+    }
+}
+
+void
+HtmlFactory_Idl::produce_Title( HF_TitleTable &     o_title,
+                                const String &      i_label,
+                                const client &      i_ce ) const
+{
+    StreamLock
+        slAnnotations(200);
+    get_Annotations(slAnnotations(), i_ce);
+    StreamLock
+        slTitle(200);
+    slTitle() << i_label << " " << i_ce.LocalName();
+    o_title.Produce_Title( slAnnotations().c_str(),
+                           slTitle().c_str() );
+}
+
+void
+HtmlFactory_Idl::get_Annotations( StreamStr &         o_out,
+                                  const client &      i_ce ) const
+{
+    if (i_ce.Docu() != 0)
+    {
+        if (i_ce.Docu()->IsDeprecated())
+            o_out << "deprecated ";
+        if (NOT i_ce.Docu()->IsPublished())
+            o_out << "unpublished ";
     }
 }
 
@@ -234,51 +257,44 @@ HtmlFactory_Idl::recursive_ShowBases( Xml::Element &     o_screen,
                                       type_id            i_baseType,
                                       int &              io_nDepth ) const
 {
-    // go up:
+    // Show this base
+    ++io_nDepth;
     const ary::idl::CodeEntity *
         pCe = Env().Linker().Search_CeFromType(i_baseType);
-    if (pCe == 0)
-    {
-        HF_IdlTypeText
-            aText( Env(), o_screen, pCe != 0 );
-        aText.Produce_byData( i_baseType );
-        o_screen
-            << "\n";
-        ++io_nDepth;
-        return;
-    }
-    else
-    {
-        ary::idl::Type_id nBaseT = baseOf(*pCe);
-        if (nBaseT.IsValid())
-            recursive_ShowBases(o_screen,nBaseT,io_nDepth);
-        else
-        {
-            HF_IdlTypeText
-                aText( Env(), o_screen, true );
-            aText.Produce_byData(pCe->CeId());
-            o_screen
-                << "\n";
-            ++io_nDepth;
-            return;
-        }
-    }
 
-    // go back down:
     csv_assert(io_nDepth > 0);
     if (io_nDepth > 30)
         io_nDepth = 30;
     o_screen
         << (C_sSpace + 93 - 3*io_nDepth)
-        << "|\n"
-        << (C_sSpace + 93 - 3*io_nDepth)
-        << "+-";
+        << new csi::xml::XmlCode("&#x2517")
+        << " ";
+
+    if (pCe == 0)
+    {
+        HF_IdlTypeText
+            aText( Env(), o_screen, false );
+        aText.Produce_byData( i_baseType );
+        o_screen
+            << "\n";
+        --io_nDepth;
+        return;
+    }
+
     HF_IdlTypeText
         aBaseLink( Env(), o_screen, true );
     aBaseLink.Produce_byData(pCe->CeId());
     o_screen
         << "\n";
-    ++io_nDepth;
+
+    // Bases
+    ary::idl::Type_id
+        nBaseT = baseOf(*pCe);
+    if (nBaseT.IsValid())
+        recursive_ShowBases(o_screen,nBaseT,io_nDepth);
+
+    --io_nDepth;
+    return;
 }
 
 HtmlFactory_Idl::type_id
