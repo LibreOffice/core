@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-11 08:33:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5967,7 +5967,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             {
                 MSG aMsg;
                 if ( ! ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT, PM_NOREMOVE | PM_NOYIELD ) )
-                    SalTimerProc( 0, 0, 0, nCurTime );
+                    SalTimerProc( 0, 0, SALTIMERPROC_RECURSIVE, nCurTime );
             }
         }
     }
