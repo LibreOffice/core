@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:32:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:35:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1561,7 +1561,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     int nActiveCharPos = nCharPos[0];
-    while( nValid[0] && (nLevel > 1))
+    while( nValid[0] && (nLevel > 0))
     {
         // find best fallback level
         for( n = 0; n < nLevel; ++n )
