@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:17:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -746,7 +746,7 @@ void ImplSalYield( BOOL bWait )
     {
         pSalData->mnLastEventTime = aMsg.time;
         if( pSalData->mnNextTimerTime && pSalData->mnNextTimerTime < aMsg.time )
-            SalTimerProc( 0, 0, 0, aMsg.time );
+            SalTimerProc( 0, 0, SALTIMERPROC_RECURSIVE, aMsg.time );
     }
 }
 
