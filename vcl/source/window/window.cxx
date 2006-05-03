@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.230 $
+ *  $Revision: 1.231 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:35:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,10 +265,10 @@ WindowImpl::~WindowImpl()
 // -----------------------------------------------------------------------
 
 // helper method to allow inline constructor even for pWindow!=NULL case
-void ImplDelData::AttachToWindow( Window* pWindow )
+void ImplDelData::AttachToWindow( const Window* pWindow )
 {
     if( pWindow )
-        pWindow->ImplAddDel( this );
+        const_cast<Window*>(pWindow)->ImplAddDel( this );
 }
 
 // -----------------------------------------------------------------------
@@ -281,7 +281,7 @@ ImplDelData::~ImplDelData()
     if( !mbDel && mpWindow )
     {
         // the window still exists but we were not removed
-        mpWindow->ImplRemoveDel( this );
+        const_cast<Window*>(mpWindow)->ImplRemoveDel( this );
         mpWindow = NULL;
     }
 }
@@ -1665,7 +1665,7 @@ void Window::ImplCallInitShow()
 
 // -----------------------------------------------------------------------
 
-void Window::ImplAddDel( ImplDelData* pDel )
+void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
 {
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )
@@ -1678,7 +1678,7 @@ void Window::ImplAddDel( ImplDelData* pDel )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplRemoveDel( ImplDelData* pDel )
+void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
 {
     pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
     if ( mpWindowImpl->mpFirstDel == pDel )
@@ -4887,7 +4887,12 @@ void Window::GetFocus()
     }
 
     if ( HasFocus() && mpWindowImpl->mpLastFocusWindow && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
+    {
+        ImplDelData aDogtag( this );
         mpWindowImpl->mpLastFocusWindow->GrabFocus();
+        if( aDogtag.IsDelete() )
+            return;
+    }
 
     NotifyEvent aNEvt( EVENT_GETFOCUS, this );
     Notify( aNEvt );
@@ -6514,8 +6519,11 @@ Size Window::GetSizePixel() const
     // #i43257# trigger pending resize handler to assure correct window sizes
     if( mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
     {
+        ImplDelData aDogtag( this );
         mpWindowImpl->mpFrameData->maResizeTimer.Stop();
         mpWindowImpl->mpFrameData->maResizeTimer.GetTimeoutHdl().Call( NULL );
+        if( aDogtag.IsDelete() )
+            return Size(0,0);
     }
 
     return Size( mnOutWidth+mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder,
