@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:42:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void WinSalTimer::Stop()
 
 // -----------------------------------------------------------------------
 
-void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
+void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 {
     __try
     {
@@ -122,13 +122,15 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
         // Test for MouseLeave
         SalTestMouseLeave();
 
-        if ( pSVData->mpSalTimer && ! pSalData->mbInTimerProc )
+        bool bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
+        if ( pSVData->mpSalTimer && ! bRecursive )
         {
             // Try to aquire the mutex. If we don't get the mutex then we
             // try this a short time later again.
             if ( ImplSalYieldMutexTryToAcquire() )
             {
-                if ( pSVData->mpSalTimer && ! pSalData->mbInTimerProc )
+                bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
+                if ( pSVData->mpSalTimer && ! bRecursive )
                 {
                     pSalData->mbInTimerProc = TRUE;
                     pSVData->mpSalTimer->CallCallback();
