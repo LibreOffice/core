@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:25:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -755,6 +755,9 @@ SfxProgress* SfxProgress::GetActiveProgress
 */
 
 {
+    if ( !SfxApplication::Is_Impl() )
+        return 0;
+
     SfxProgress *pProgress = 0;
     if ( pDocSh )
         pProgress = pDocSh->GetProgress();
