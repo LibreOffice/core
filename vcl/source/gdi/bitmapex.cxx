@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:54:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -760,8 +760,8 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
     if( !rIStm.GetError() )
     {
         const ULONG nStmPos = rIStm.Tell();
-        UINT32      nMagic1;
-        UINT32      nMagic2;
+        UINT32      nMagic1 = 0;
+        UINT32      nMagic2 = 0;
 
         rIStm >> nMagic1 >> nMagic2;
 
@@ -773,7 +773,7 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
         }
         else
         {
-            BYTE bTransparent;
+            BYTE bTransparent = false;
 
             rIStm >> bTransparent;
 
