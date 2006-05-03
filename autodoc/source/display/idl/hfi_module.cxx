@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_module.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:43:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,8 +127,9 @@ HF_IdlModule::Produce_byData( const client & i_ce ) const
     if ( Env().CurPosition().Depth() > 0 )
     {
         aNameChain.Produce_CompleteChain_forModule(Env().CurPosition(), nameChainLinker);
-
-        aTitle.Produce_Title( StreamLock(200)()
+        StreamLock
+            sl(200);
+        aTitle.Produce_Title( sl()
                                 << C_sCePrefix_Module
                                   << " "
                                 << i_ce.LocalName()
