@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_title.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:35:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,13 +68,50 @@ HF_TitleTable::~HF_TitleTable()
 {
 }
 
-
 void
 HF_TitleTable::Produce_Title( const char * i_title )
 {
     Add_Row()
         << new Html::ClassAttr("title")
         << i_title;
+}
+
+void
+HF_TitleTable::Produce_Title( const char *        i_annotations,
+                              const char *        i_title )
+{
+    if (csv::no_str(i_annotations))
+    {
+        Produce_Title(i_title);
+        return;
+    }
+
+    Xml::Element &
+        rRow = Add_Row();
+    rRow
+        << new Html::ClassAttr("title");
+
+    Xml::Element &
+        rTable = rRow
+                    >> *new Html::Table()
+                        << new Html::ClassAttr("title-table")
+                        << new Html::WidthAttr("99%");
+    Xml::Element &
+        rInnerRow = rTable
+                        >> *new Html::TableRow;
+    rInnerRow
+        >> *new Html::TableCell
+            << new Html::WidthAttr("25%")
+            << new Html::ClassAttr("title2")
+            << i_annotations;
+    rInnerRow
+        >> *new Html::TableCell
+            << new Html::WidthAttr("50%")
+            << new Html::ClassAttr("title")
+            << i_title;
+    rInnerRow
+        >> *new Html::TableCell
+            << new Html::WidthAttr("*");
 }
 
 Xml::Element &
