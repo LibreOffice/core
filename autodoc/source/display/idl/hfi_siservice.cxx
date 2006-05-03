@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_siservice.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:46:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:54:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,8 @@ HF_IdlSglIfcService::Produce_byData( const client & i_ce ) const
         aNameChain(aTitle.Add_Row());
 
     aNameChain.Produce_CompleteChain(Env().CurPosition(), nameChainLinker);
-    aTitle.Produce_Title( StreamLock(200)() << C_sCePrefix_Service
-                                            << " "
-                                            << i_ce.LocalName()
-                                            << c_str );
+    produce_Title(aTitle, C_sCePrefix_Service, i_ce);
+
     HF_DocEntryList
         aTopList( aTitle.Add_Row() );
     aTopList.Produce_Term(C_sImplementedInterface);
