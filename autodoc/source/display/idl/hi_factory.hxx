@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_factory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:52:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ namespace ary
 class HtmlEnvironment_Idl;
 class LinkHelper;
 class HF_NaviSubRow;
+class HF_TitleTable;
 class HF_SubTitleTable;
 
 
@@ -114,6 +115,14 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
                             const String &      i_summaryLabel,
                             const String &      i_detailsTitle,
                             const String &      i_detailsLabel ) const;
+
+    void                produce_Title(
+                            HF_TitleTable &     o_title,
+                            const String &      i_label,
+                            const client &      i_ce ) const;
+    void                get_Annotations(
+                            StreamStr &         o_out,
+                            const client &      i_ce ) const;
 
     /// Writes complete docu in standard format.
     void                write_Docu(
