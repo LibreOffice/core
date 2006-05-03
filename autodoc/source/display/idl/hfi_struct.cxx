@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_struct.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:47:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,10 @@ HF_IdlStruct::Produce_byData( const client & i_ce ) const
     aNameChain.Produce_CompleteChain(Env().CurPosition(), nameChainLinker);
 
     // Title:
+    StreamLock
+        slAnnotations(200);
+    get_Annotations(slAnnotations(), i_ce);
+
     StreamLock rTitle(200);
     if (bIsTemplate)
         rTitle() << "template ";
@@ -140,7 +144,7 @@ HF_IdlStruct::Produce_byData( const client & i_ce ) const
             << pStruct->TemplateParameter()
             << ">";
     }
-    aTitle.Produce_Title( rTitle().c_str() );
+    aTitle.Produce_Title(slAnnotations().c_str(), rTitle().c_str());
 
     // Bases:
     produce_Bases( aTitle.Add_Row(),
