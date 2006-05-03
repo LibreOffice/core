@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:43:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
+#endif
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 #define protected public
@@ -339,6 +342,10 @@ void Timer::Start()
 
         if ( mnTimeout < pSVData->mnTimerPeriod )
             ImplStartTimer( pSVData, mnTimeout );
+    }
+    else if( !mpTimerData->mpSVTimer ) // TODO: remove when guilty found
+    {
+        DBG_ERROR( "Timer::Start() on a destroyed Timer!" );
     }
     else
     {
