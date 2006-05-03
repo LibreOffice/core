@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:32:23 $
+ *  last change: $Author: rt $ $Date: 2006-05-03 16:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ const char * const C_sStdStyle =
     ".dt            { font-weight:bold; }"CRLF
     ".namechain     { font-size:13pt; font-weight:bold;"CRLF
     "                 margin-top:3pt; margin-bottom:6pt; }"CRLF
+    ".title2        { font-size:13pt; font-style:italic; font-weight:bold; text-align:left; }"CRLF
     ;
 
 
@@ -176,6 +177,7 @@ const char * const C_sCssExplanations =
     "td.imdetail        Background table of method's detail description."CRLF
     "a.membertitle      Method name (as jump label) in method's detail"CRLF
     "                   description."CRLF
+    ".title2            smaller font prefixes to page titles"CRLF
     "*/"CRLF
     ;
 
@@ -221,6 +223,7 @@ const char * const C_sStdStyle_withDivFrame =
     "#adc-idlref .dt            { font-weight:bold; }"CRLF
     "#adc-idlref .namechain     { font-size:13pt; font-weight:bold;"CRLF
     "                             margin-top:3pt; margin-bottom:6pt; }"CRLF
+    "#adc-idlref .title2        { font-size:13pt; font-style:italic; font-weight:bold; text-align:left; }"CRLF
     ""CRLF
     "#adc-idlref table { empty-cells:show; }"CRLF
     ""CRLF
