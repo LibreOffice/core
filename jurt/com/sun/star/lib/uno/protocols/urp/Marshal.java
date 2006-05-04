@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:03:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 package com.sun.star.lib.uno.protocols.urp;
 
 import com.sun.star.lib.uno.environments.remote.ThreadId;
-import com.sun.star.lib.uno.typedesc.FieldDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
@@ -338,12 +337,9 @@ final class Marshal {
     private void writeStructValue(TypeDescription type, Object value) {
         IFieldDescription[] fields = type.getFieldDescriptions();
         for (int i = 0; i < fields.length; ++i) {
-            int index = ((FieldDescription) fields[i]).getTypeParameterIndex();
             try {
                 writeValue(
-                    (index < 0
-                     ? (TypeDescription) fields[i].getTypeDescription()
-                     : type.getTypeArgument(index)),
+                    (TypeDescription) fields[i].getTypeDescription(),
                     value == null ? null : fields[i].getField().get(value));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e.toString());
