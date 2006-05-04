@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:48:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
+#ifndef _UNTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
+#endif
 #include <math.h>
 
 #ifndef _EEITEM_HXX //autogen
@@ -1943,6 +1945,20 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
     return xDrawPage;
 }
 
+sal_Bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32 nInputSize )
+{
+    sal_uInt32 nOldPos = rInput.Tell();
+    char* pBuf = new char[ nInputSize ];
+    rInput.Read( pBuf, nInputSize );
+    ZCodec aZCodec( 0x8000, 0x8000 );
+    aZCodec.BeginCompression();
+    SvMemoryStream aSource( pBuf, nInputSize, STREAM_READ );
+    aZCodec.Decompress( aSource, rOutput );
+    sal_Bool bSuccess = aZCodec.EndCompression() != NULL;
+    delete[] pBuf;
+    rInput.Seek( nOldPos );
+    return bSuccess;
+}
 
 // --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
 SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
@@ -1990,44 +2006,24 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
         sal_uInt32 nLen = aHd.nRecLen - 4;
         if ( (INT32)nLen > 0 )
         {
-            char* pBuf = new char[ nLen ];
+            sal_Bool bSuccess = sal_False;
+
             rStCtrl.SeekRel( 4 );
-            rStCtrl.Read( pBuf, nLen );
-            SvMemoryStream* pDest = new SvMemoryStream;
-            ZCodec aZCodec( 0x8000, 0x8000 );
-            aZCodec.BeginCompression();
-            SvMemoryStream aSource( pBuf, nLen, STREAM_READ );
-            aZCodec.Decompress( aSource, *pDest );
-            delete[] pBuf;
 
-#ifdef DBG_EXTRACTOLEOBJECTS
+            ::utl::TempFile aTmpFile;
+            aTmpFile.EnableKillingFile( sal_True );
 
-            static sal_Int32    nCount;
-            String              aFileURLStr;
-
-            if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aFileURLStr ) )
+            if ( aTmpFile.IsValid() )
             {
-                INetURLObject   aURL( aFileURLStr );
-                String          aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbgole" ) ) );
-
-                aFileName.Append( String::CreateFromInt32( nCount++ ) );
-                aURL.SetName( aFileName );
-
-                SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_TRUNC | STREAM_WRITE );
-
-                if( pDbgOut )
-                {
-                    pDest->Seek( STREAM_SEEK_TO_END );
-                    pDbgOut->Write( pDest->GetData(), pDest->Tell() );
-                    pDest->Seek( STREAM_SEEK_TO_BEGIN );
-                    delete pDbgOut;
-                }
+                SvStream* pDest = ::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_TRUNC | STREAM_WRITE );
+                if ( pDest )
+                    bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
+                delete pDest;
             }
-#endif
-            //TODO/LATER: possible optimization - unpack on demand!
-            if ( aZCodec.EndCompression() )
+            if ( bSuccess )
             {
-                Storage* pObjStor = new Storage( *pDest, TRUE );
+                SvStream* pDest = ::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_READ );
+                Storage* pObjStor = pDest ? new Storage( *pDest, TRUE ) : NULL;
                 if ( pObjStor )
                 {
                     SotStorageRef xObjStor( new SotStorage( pObjStor ) );
@@ -2133,8 +2129,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                         }
                     }
                 }
+                delete pDest;
             }
-            delete pDest;
         }
     }
     rStCtrl.Seek( nOldPos );
