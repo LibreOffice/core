@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:11:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace dbaui
         ,SvxTextEncodingTable()
     {
         {
-            OLocalResourceAccess aCharsetStrings( RSC_CHARSETS, RSC_RESOURCE );
+            LocalResourceAccess aCharsetStrings( RSC_CHARSETS, RSC_RESOURCE );
             m_aSystemDisplayName = String( ResId( 1 ) );
         }
     }
