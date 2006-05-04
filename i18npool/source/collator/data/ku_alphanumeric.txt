@@ -1,0 +1,9 @@
+#
+# Collation rule for Kurdish alphanumeric
+#
+
+& C < ç <<< Ç 
+& E < ê <<< Ê 
+& I < î <<< Î
+& S < ş <<< Ş
+& U < û <<< Û
