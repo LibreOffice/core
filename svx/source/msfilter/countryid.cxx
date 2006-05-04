@@ -4,9 +4,9 @@
  *
  *  $RCSfile: countryid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:43:56 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,6 @@ struct CountryEntry
 };
 
 // ----------------------------------------------------------------------------
-
-// Dhivehi not yet implemented -> #i11530#
-#ifndef LANGUAGE_DHIVEHI
-#define LANGUAGE_DHIVEHI 0x0465
-#endif
 
 /** Table for Windows country ID <-> language type conversion.
 
@@ -156,7 +151,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_AUSTRALIA,            LANGUAGE_ENGLISH_AUS,                   true    },
     { COUNTRY_INDONESIA,            LANGUAGE_INDONESIAN                             },
     { COUNTRY_PHILIPPINES,          LANGUAGE_ENGLISH_PHILIPPINES,           true    },
-    { COUNTRY_NEW_ZEALAND,          LANGUAGE_USER_MAORI                             },
+    { COUNTRY_NEW_ZEALAND,          LANGUAGE_MAORI_NEW_ZEALAND                      },
     { COUNTRY_NEW_ZEALAND,          LANGUAGE_ENGLISH_NZ,                    true    },
     { COUNTRY_SINGAPORE,            LANGUAGE_CHINESE_SINGAPORE,             true    },
     { COUNTRY_THAILAND,             LANGUAGE_THAI                                   },
@@ -193,7 +188,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_COTE_D_IVOIRE,        LANGUAGE_FRENCH_COTE_D_IVOIRE,          true    },
     { COUNTRY_CAMEROON,             LANGUAGE_FRENCH_CAMEROON,               true    },
     { COUNTRY_ZAIRE,                LANGUAGE_FRENCH_ZAIRE,                  true    },
-    { COUNTRY_RWANDA,               LANGUAGE_USER_KINYARWANDA                       },
+    { COUNTRY_RWANDA,               LANGUAGE_KINYARWANDA_RWANDA                     },
     { COUNTRY_KENYA,                LANGUAGE_SWAHILI                                },
     { COUNTRY_REUNION,              LANGUAGE_FRENCH_REUNION,                true    },
     { COUNTRY_ZIMBABWE,             LANGUAGE_ENGLISH_ZIMBABWE,              true    },
