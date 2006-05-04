@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:40:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1614,8 +1614,8 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         VirtualDevice aVDev;
         MapMode aMapMode( MAP_100TH_MM );
         aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
-        Size aOutputSizePixel( aVDev.LogicToPixel( rSize, aMapMode ) );
-        Size aSizePixel( rBitmap.GetSizePixel() );
+        const Size aOutputSizePixel( aVDev.LogicToPixel( rSize, aMapMode ) );
+        const Size aSizePixel( rBitmap.GetSizePixel() );
         if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
         {
             aMapMode.SetScaleX( Fraction( aSizePixel.Width(), aOutputSizePixel.Width() ) );
@@ -1624,9 +1624,14 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         aVDev.SetMapMode( aMapMode );
         aVDev.SetOutputSizePixel( aSizePixel );
         aVDev.SetFillColor( Color( COL_BLACK ) );
-        PolyPolygon aClip( aClipPath.GetClipPath() );
+        const PolyPolygon aClip( aClipPath.GetClipPath() );
         aVDev.DrawPolyPolygon( aClip );
-        Bitmap aMask( aVDev.GetBitmap( rPos, rSize ).CreateMask( Color( COL_WHITE ) ) );
+        const Point aEmptyPoint;
+
+        // #i50672# Extract whole VDev content (to match size of rBitmap)
+        aVDev.EnableMapMode( FALSE );
+        Bitmap aMask( aVDev.GetBitmap( aEmptyPoint, aSizePixel ).CreateMask( Color( COL_WHITE ) ) );
+
         if ( aBmpEx.IsTransparent() )
         {
             if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
