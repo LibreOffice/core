@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:27:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,7 @@
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
+#include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
@@ -293,6 +294,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pNoteItemPool( NULL ),
         pShell( pDocShell ),
         pPrinter( NULL ),
+        pVirtualDevice_100th_mm( NULL ),
         pDrawLayer( NULL ),
         pColorTable( NULL ),
         pCondFormList( NULL ),
@@ -560,6 +562,7 @@ ScDocument::~ScDocument()
     delete pNoteEngine;
     delete pNoteItemPool;
     delete pChangeViewSettings;         // und weg damit
+    delete pVirtualDevice_100th_mm;
 
     delete pDPCollection;
 
