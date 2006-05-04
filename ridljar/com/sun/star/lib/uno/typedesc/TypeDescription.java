@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:17:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,11 +229,7 @@ public final class TypeDescription implements ITypeDescription {
     }
 
     public boolean hasTypeArguments() {
-        return typeArguments != null;
-    }
-
-    public TypeDescription getTypeArgument(int index) {
-        return typeArguments[index];
+        return hasTypeArguments;
     }
 
     // @see Object#toString
@@ -405,8 +401,9 @@ public final class TypeDescription implements ITypeDescription {
         this.zClass = zClass;
         this.superTypes = superTypes;
         this.componentType = componentType;
-        this.typeArguments = calculateTypeArguments();
-        this.fieldDescriptions = calculateFieldDescriptions();
+        TypeDescription[] args = calculateTypeArguments();
+        this.hasTypeArguments = args != null;
+        this.fieldDescriptions = calculateFieldDescriptions(args);
         // methodDescriptions must be initialized lazily, to avoid problems with
         // circular dependencies (a super-interface that has a sub-interface as
         // method parameter type; an interface that has a struct as method
@@ -579,7 +576,9 @@ public final class TypeDescription implements ITypeDescription {
         return args.toArray();
     }
 
-    private IFieldDescription[] calculateFieldDescriptions() {
+    private IFieldDescription[] calculateFieldDescriptions(
+        TypeDescription[] typeArguments)
+    {
         if (typeClass != TypeClass.STRUCT && typeClass != TypeClass.EXCEPTION) {
             return null;
         }
@@ -608,9 +607,12 @@ public final class TypeDescription implements ITypeDescription {
                     "Bad UNOTYPEINFO for " + zClass + ": " + e);
             }
             Type t = info.getUnoType();
+            int index = info.getTypeParameterIndex();
             descs[i + superCount] = new FieldDescription(
-                info.getName(), i + superCount, info.getTypeParameterIndex(),
-                (t == null
+                info.getName(), i + superCount,
+                (index >= 0
+                 ? typeArguments[index]
+                 : t == null
                  ? getTypeDescription(field.getType(), info)
                  : getDefinitely(t)),
                 field);
@@ -720,7 +722,7 @@ public final class TypeDescription implements ITypeDescription {
     private final Class zClass;
     private final TypeDescription[] superTypes;
     private final ITypeDescription componentType;
-    private final TypeDescription[] typeArguments;
+    private final boolean hasTypeArguments;
     private final IFieldDescription[] fieldDescriptions;
     private IMethodDescription[] methodDescriptions = null;
     private IMethodDescription[] superMethodDescriptions;
