@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:22:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,7 +290,7 @@ namespace pcr
                     DESCRIBE_EVENT( "awt",  "XMouseListener",               "mouseReleased",            MOUSERELEASED );
                     DESCRIBE_EVENT( "awt",  "XMouseListener",               "mouseExited",              MOUSEEXITED );
                     DESCRIBE_EVENT( "form", "XResetListener",               "approveReset",             APPROVERESETTED );
-                    DESCRIBE_EVENT( "form", "XResetListener",              "resetted",                 RESETTED );
+                    DESCRIBE_EVENT( "form", "XResetListener",               "resetted",                 RESETTED );
                     DESCRIBE_EVENT( "form", "XSubmitListener",              "approveSubmit",            SUBMITTED );
                     DESCRIBE_EVENT( "form", "XUpdateListener",              "approveUpdate",            BEFOREUPDATE );
                     DESCRIBE_EVENT( "form", "XUpdateListener",              "updated",                  AFTERUPDATE );
@@ -301,9 +301,9 @@ namespace pcr
                     DESCRIBE_EVENT( "form", "XLoadListener",                "unloaded",                 UNLOADED );
                     DESCRIBE_EVENT( "form", "XConfirmDeleteListener",       "confirmDelete",            CONFIRMDELETE );
                     DESCRIBE_EVENT( "sdb",  "XRowSetApproveListener",       "approveRowChange",         APPROVEROWCHANGE );
-                    DESCRIBE_EVENT( "sdb",  "XRowSetListener",              "rowChanged",               ROWCHANGE );
+                    DESCRIBE_EVENT( "sdbc", "XRowSetListener",              "rowChanged",               ROWCHANGE );
                     DESCRIBE_EVENT( "sdb",  "XRowSetApproveListener",       "approveCursorMove",        POSITIONING );
-                    DESCRIBE_EVENT( "sdb",  "XRowSetListener",              "cursorMoved",              POSITIONED );
+                    DESCRIBE_EVENT( "sdbc", "XRowSetListener",              "cursorMoved",              POSITIONED );
                     DESCRIBE_EVENT( "form", "XDatabaseParameterListener",   "approveParameter",         APPROVEPARAMETER );
                     DESCRIBE_EVENT( "sdb",  "XSQLErrorListener",            "errorOccured",             ERROROCCURED );
                     DESCRIBE_EVENT( "awt",  "XAdjustmentListener",          "adjustmentValueChanged",   ADJUSTMENTVALUECHANGED );
@@ -830,7 +830,7 @@ namespace pcr
                 ++event
             )
         {
-            // the script which is assigned to the current event (if any
+            // the script which is assigned to the current event (if any)
             ::rtl::OUString sAssignedMacroURL = lcl_getAssignedMacroURL( event->second, aAssignedEvents );
 
             pEventHolder->AddEvent( event->second.nId, event->second.sListenerMethodName, sAssignedMacroURL );
@@ -1010,9 +1010,12 @@ namespace pcr
             lcl_addListenerTypesFor_throw(
                 m_xComponent, xIntrospection, aListeners );
 
-            // --- control listeners
-            lcl_addListenerTypesFor_throw(
-                impl_getSecondaryComponentForEventInspection_throw(), xIntrospection, aListeners );
+            // --- "secondary component" (usually: "control" listeners)
+            {
+                Reference< XInterface > xSecondaryComponent( impl_getSecondaryComponentForEventInspection_throw() );
+                lcl_addListenerTypesFor_throw( xSecondaryComponent, xIntrospection, aListeners );
+                ::comphelper::disposeComponent( xSecondaryComponent );
+            }
 
             // now that they're disambiguated, copy these types into our member
             _out_rTypes.realloc( aListeners.size() );
@@ -1055,9 +1058,10 @@ namespace pcr
         Reference< XInterface > xReturn;
 
         // if it's a form, create a form controller for the additional events
-        Reference< XTabControllerModel > xComponentAsTCModel( m_xComponent, UNO_QUERY );
-        if ( xComponentAsTCModel.is() )
+        Reference< XForm > xComponentAsForm( m_xComponent, UNO_QUERY );
+        if ( xComponentAsForm.is() )
         {
+            Reference< XTabControllerModel > xComponentAsTCModel( m_xComponent, UNO_QUERY_THROW );
             Reference< XFormController > xController(
                 m_aContext.createComponent( (const rtl::OUString&)SERVICE_FORMCONTROLLER ), UNO_QUERY_THROW );
             xController->setModel( xComponentAsTCModel );
