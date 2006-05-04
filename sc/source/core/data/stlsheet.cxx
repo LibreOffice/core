@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:29:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 #include <svtools/itemset.hxx>
 #include <svtools/smplhint.hxx>
 #include "attrib.hxx"
+
+#include <vcl/svapp.hxx>    // GetSettings()
 
 #include "globstr.hrc"
 
@@ -176,14 +178,14 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     if ( pDoc && pDoc->IsLoadingDone() )
                     {
                         // Setzen von sinnvollen Default-Werten:
-                        SfxPrinter*     pPrinter = pDoc->GetPrinter();
-                        USHORT          nBinCount = pPrinter->GetPaperBinCount();
+                        // SfxPrinter*      pPrinter = pDoc->GetPrinter();
                         SvxPageItem     aPageItem( ATTR_PAGE );
                         // #50536# PaperBin auf Default lassen,
                         // nicht auf aktuelle Drucker-Einstellung umsetzen
-                        SvxSizeItem     aPaperSizeItem(
-                                            ATTR_PAGE_SIZE,
-                                            SvxPaperInfo::GetPaperSize(pPrinter) );
+                        // SvxSizeItem      aPaperSizeItem(ATTR_PAGE_SIZE,SvxPaperInfo::GetPaperSize(pPrinter) );
+
+                        SvxPaper        aDefaultPaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
+                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetPaperSize(aDefaultPaper) );
 
                         SvxSetItem      aHFSetItem(
                                             (const SvxSetItem&)
@@ -212,8 +214,8 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                         aBoxInfoItem.SetDist( TRUE );
                         aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
 
-                        aPageItem.SetLandscape( ORIENTATION_LANDSCAPE
-                                                == pPrinter->GetOrientation() );
+                        // aPageItem.SetLandscape( ORIENTATION_LANDSCAPE == pPrinter->GetOrientation() );
+                        aPageItem.SetLandscape( FALSE );
 
                         rHFSet.Put( aBoxInfoItem );
                         rHFSet.Put( aHFSizeItem );
