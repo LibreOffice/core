@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.231 $
+ *  $Revision: 1.232 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:37:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4453,7 +4453,7 @@ Window::~Window()
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
             DBG_ERROR( aTempStr.GetBuffer() );
-            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
         bError = FALSE;
@@ -4476,7 +4476,7 @@ Window::~Window()
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
             DBG_ERROR( aTempStr.GetBuffer() );
-            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstChild )
@@ -4493,7 +4493,7 @@ Window::~Window()
                     aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
-            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
@@ -4510,7 +4510,7 @@ Window::~Window()
                     aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
-            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
         Window* pMyParent = this;
@@ -4528,7 +4528,7 @@ Window::~Window()
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") still in TaskPanelList!";
             DBG_ERROR( aTempStr.GetBuffer() );
-            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
     }
 #endif
@@ -4585,7 +4585,7 @@ Window::~Window()
         aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
         aTempStr += ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
         DBG_ERROR( aTempStr.GetBuffer() );
-        GetpApp()->Abort( String() );   // abort in non-pro version, this must be fixed!
+        GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
 #endif
     }
 
@@ -8115,7 +8115,11 @@ const SystemEnvData* Window::GetSystemData() const
 
 void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow  )
 {
+    // be safe against re-entrance: first clear the old ref, then assign the new one
+    // #133706# / 2006-03-30 / frank.schoenheit@sun.com
+    mpWindowImpl->mxWindowPeer.clear();
     mpWindowImpl->mxWindowPeer = xPeer;
+
     mpWindowImpl->mpVCLXWindow = pVCLXWindow;
 }
 
