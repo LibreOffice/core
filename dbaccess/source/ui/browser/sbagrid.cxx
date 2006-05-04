@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:21:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1017,10 +1017,9 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 
                 if(!xField.is())
                     break;
-                ::std::vector<OTableRow*> vClipboardList;
-                OTableRow* pTableRow = new OTableRow(xField);
+                ::std::vector< ::boost::shared_ptr<OTableRow> > vClipboardList;
                 // send it to the clipboard
-                vClipboardList.push_back(pTableRow);
+                vClipboardList.push_back(::boost::shared_ptr<OTableRow>(new OTableRow(xField)));
                 OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
                 Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
 #if SUPD<631
