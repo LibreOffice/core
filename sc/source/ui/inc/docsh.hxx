@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:10:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,8 +143,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScPaintLockData*    pPaintLockData;
     ScJobSetup*         pOldJobSetup;
 
-    VirtualDevice*      pVirtualDevice_100th_mm;
-
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
     SC_DLLPRIVATE void          InitItems();
@@ -241,7 +239,7 @@ public:
     ScDocument*     GetDocument()   { return &aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
 
-    SfxPrinter*     GetPrinter();
+    SfxPrinter*     GetPrinter( BOOL bCreateIfNotExist = TRUE );
     USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
 
     void            UpdateFontList();
@@ -389,7 +387,7 @@ public:
     void            SetUpdateEnabled(BOOL bValue)
                         { bUpdateEnabled = bValue; }
 
-    VirtualDevice*  GetVirtualDevice_100th_mm();
+    OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
     static ScViewData* GetViewData();
     static SCTAB       GetCurTab();
