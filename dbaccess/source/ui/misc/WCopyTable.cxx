@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:23:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:45:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,8 +782,9 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
             // now only the settings are missing
             if(xColumns->hasByName(pField->GetName()))
             {
-                xColumns->getByName(pField->GetName()) >>= xColumn;
-                if(xColumn.is())
+                xColumn.set(xColumns->getByName(pField->GetName()),UNO_QUERY);
+                OSL_ENSURE(xColumn.is(),"OCopyTableWizard::appendColumns: Column is NULL!");
+                if ( xColumn.is() )
                     dbaui::setColumnUiProperties(xColumn,pField);
             }
             else
@@ -1202,3 +1203,4 @@ void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColum
     aMsg.Execute();
 }
 // -----------------------------------------------------------------------------
+
