@@ -25,7 +25,7 @@ void OutputError_Impl( HWND hw, DWORD ErrorCode )
         0,
         NULL
     );
-    MessageBoxA( hw, (LPCTSTR)sMessage, NULL, MB_OK | MB_ICONINFORMATION );
+    ::MessageBoxA( hw, (LPCTSTR)sMessage, NULL, MB_OK | MB_ICONINFORMATION );
     LocalFree( sMessage );
 }
 
@@ -46,8 +46,15 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
 
     // DEBUG
     EXCEPINFO myInfo;
-    return idispUnoObject->Invoke( id, IID_NULL,LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+    hr = idispUnoObject->Invoke( id, IID_NULL,LOCALE_USER_DEFAULT, DISPATCH_METHOD,
                     &dispparams, pResult, &myInfo, 0);
+
+    // for debugging purposes
+    // USES_CONVERSION;
+    // if ( !SUCCEEDED( hr ) )
+    //  ::MessageBox( NULL, OLE2A( myInfo.bstrDescription ), OLE2A( myInfo.bstrSource ), MB_OK | MB_ICONINFORMATION );
+
+    return hr;
 }
 
 HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
@@ -194,7 +201,9 @@ HRESULT CSOActiveX::Cleanup()
             long nInitInd = 0;
             CComVariant pFrameVariant( mpDispFrame );
             SafeArrayPutElement( pInitFrame, &nInitInd, &pFrameVariant );
-            hr = ExecuteFunc( pDispDocumentCloser, L"initialize", &CComVariant( pInitFrame ), 1, &dummyResult );
+            CComVariant aVarInitFrame;
+            aVarInitFrame.vt = VT_ARRAY | VT_VARIANT; aVarInitFrame.parray = pInitFrame;
+            hr = ExecuteFunc( pDispDocumentCloser, L"initialize", &aVarInitFrame, 1, &dummyResult );
             if( SUCCEEDED( hr ) )
             {
                 // the following call will let the closing happen
@@ -532,7 +541,9 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
         SafeArrayPutElement( pInitVals, &nInitInd, &CComVariant( pdispValueObj ) );
 
         // execute initialize()
-        hr = ExecuteFunc( mpInstanceLocker, L"initialize", &CComVariant( pInitVals ), 1, &dummyResult );
+        CComVariant aVarInitVals;
+        aVarInitVals.vt = VT_ARRAY | VT_VARIANT; aVarInitVals.parray = pInitVals;
+        hr = ExecuteFunc( mpInstanceLocker, L"initialize", &aVarInitVals, 1, &dummyResult );
         if( !SUCCEEDED( hr ) ) return hr;
     }
 
