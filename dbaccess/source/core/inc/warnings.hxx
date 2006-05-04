@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:54:59 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,14 @@
 #ifndef DBA_CORE_WARNINGS_HXX
 #define DBA_CORE_WARNINGS_HXX
 
+/** ==== begin UNO includes === **/
+#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+/** ==== end UNO includes === **/
 
 //.........................................................................
 namespace dbaccess
@@ -56,6 +61,34 @@ namespace dbaccess
         virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) = 0;
     };
 
+    //====================================================================
+    //= WarningsContainer
+    //====================================================================
+    /** helper class for implementing XWarningsSupplier, which mixes own warnings with
+        warnings obtained from an external instance
+    */
+    class WarningsContainer : public IWarningsContainer
+    {
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XWarningsSupplier >   m_xExternalWarnings;
+        ::com::sun::star::uno::Any                                                      m_aOwnWarnings;
+
+    public:
+        WarningsContainer() { }
+        WarningsContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XWarningsSupplier >& _rxExternalWarnings )
+            :m_xExternalWarnings( _rxExternalWarnings )
+        {
+        }
+
+        // IWarningsContainer
+        virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning);
+        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning);
+        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext);
+
+        // XWarningsSupplier
+        ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) const;
+        void SAL_CALL clearWarnings(  );
+    };
 
 //.........................................................................
 }   // namespace dbaccess
