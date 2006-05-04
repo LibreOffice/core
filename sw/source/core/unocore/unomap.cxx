@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:22:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 13:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1600,6 +1600,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_LOCK_UPDATES),        WID_DOC_LOCK_UPDATES,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_HAS_VALID_SIGNATURES),  WID_DOC_HAS_VALID_SIGNATURES, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY,   0},
                     { SW_PROP_NMID(UNO_NAME_BUILDID), WID_DOC_BUILDID, CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0},
+                    // --> OD 2006-03-21 #b6375613#
+                    { SW_PROP_NMID(UNO_NAME_APPLY_WORKAROUND_FOR_B6375613), WID_APPLY_WORKAROUND_FOR_B6375613, CPPU_E2T(CPPUTYPE_BOOLEAN), 0, 0},
+                    // <--
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
