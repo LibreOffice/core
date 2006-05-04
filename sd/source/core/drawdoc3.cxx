@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:25:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,9 +263,6 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
     {
         SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ, FALSE );
         pBookmarkDoc = OpenBookmarkDoc(*pMedium);
-        if ( !pBookmarkDoc )
-            // successfull created BookmarkDoc takes ownership of Medium
-            delete pMedium;
     }
     else if (xBookmarkDocShRef.Is())
     {
