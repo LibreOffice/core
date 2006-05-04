@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-06 16:43:34 $
+#   last change: $Author: rt $ $Date: 2006-05-04 09:24:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,9 @@ PACKAGE = connectivity$/tools
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
-JAVAFILES       = $(shell $(FIND) .$/*.java)
+# Do not use $/ with the $(FIND) command as for W32-4nt this leads to a backslash
+# in a posix command. In this special case use / instead of $/
+JAVAFILES       := $(shell $(FIND) ./*.java)
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
