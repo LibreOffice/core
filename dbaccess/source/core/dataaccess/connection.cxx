@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:28:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,6 +331,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_xORB(_rxORB)
             ,m_xMasterConnection(_rxMaster)
+            ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
             ,m_pTables(NULL)
             ,m_pViews(NULL)
             ,m_bSupportsViews(sal_False)
@@ -350,25 +351,14 @@ OConnection::OConnection(ODatabaseSource& _rDB
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
         setDelegation(xAgg,m_refCount);
         DBG_ASSERT(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
-        if (!m_xProxyConnection->queryAggregation(getCppuType( (Reference<XWarningsSupplier>*)0)).hasValue())
-        {
-            DBG_ERROR("OConnection::OConnection : the connection is assumed to be a warnings supplier ! Won't use it !");
-            // as we're the owner of the conn and don't want to use it -> dispose
-            Reference< XComponent > xConnComp;
-            ::comphelper::query_aggregation(m_xProxyConnection,xConnComp);
-            if (xConnComp.is())
-                xConnComp->dispose();
-
-            m_xMasterConnection = NULL;
-        }
     }
     catch(const Exception&)
     {
     }
+
     try
     {
-        m_pQueries = new OQueryContainer(Reference< XNameContainer >(_rDB.getQueryDefinitions( ),UNO_QUERY), this,_rxORB, this);
-        m_xQueries = m_pQueries;
+        m_xQueries = new OQueryContainer(Reference< XNameContainer >(_rDB.getQueryDefinitions( ),UNO_QUERY), this,_rxORB, &m_aWarnings);
 
         sal_Bool bCase = sal_True;
         Reference<XDatabaseMetaData> xMeta;
@@ -381,7 +371,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         {
         }
         Reference< XNameContainer > xDefNames(_rDB.getTables(),UNO_QUERY);
-        m_pTables = new OTableContainer(*this, m_aMutex,this, bCase, xDefNames,this,this);
+        m_pTables = new OTableContainer(*this, m_aMutex,this, bCase, xDefNames,this,&m_aWarnings);
 
         // check if we supports types
         if ( xMeta.is() )
@@ -411,7 +401,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             }
             if(m_bSupportsViews)
             {
-                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,this);
+                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,&m_aWarnings);
                 m_pViews->addContainerListener(m_pTables);
                 m_pTables->addContainerListener(m_pViews);
             }
@@ -435,65 +425,13 @@ OConnection::~OConnection()
 }
 
 
-// IWarningsContainer
-//------------------------------------------------------------------------------
-void OConnection::appendWarning(const SQLException& _rWarning)
-{
-    implConcatWarnings(m_aAdditionalWarnings, makeAny(_rWarning));
-}
-
-//------------------------------------------------------------------------------
-void OConnection::appendWarning(const SQLContext& _rContext)
-{
-    implConcatWarnings(m_aAdditionalWarnings, makeAny(_rContext));
-}
-
-//------------------------------------------------------------------------------
-void OConnection::appendWarning(const SQLWarning& _rWarning)
-{
-    implConcatWarnings(m_aAdditionalWarnings, makeAny(_rWarning));
-}
-
 // XWarningsSupplier
 //--------------------------------------------------------------------------
 Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    Reference<XWarningsSupplier> xWarnings;
-    ::comphelper::query_aggregation(m_xProxyConnection,xWarnings);
-    Any aReturn = xWarnings->getWarnings();
-    if (!m_aAdditionalWarnings.hasValue())
-        return aReturn;
-    else
-    {
-        // copy m_aAdditionalWarnings, and append the original warnings
-        Any aOverallWarnings(m_aAdditionalWarnings);
-        implConcatWarnings(aOverallWarnings, aReturn);
-        return aOverallWarnings;
-    }
-}
-
-//--------------------------------------------------------------------------
-void OConnection::implConcatWarnings(Any& _rChainLeft, const Any& _rChainRight)
-{
-    if (!_rChainLeft.hasValue())
-        _rChainLeft = _rChainRight;
-    else
-    {
-        // to travel the chain by reference (and not by value), we need the getValue ...
-        // looks like a hack, but the meaning of getValue is documented, and it's the only chance for reference-traveling ....
-
-        DBG_ASSERT(SQLExceptionInfo(_rChainLeft).isValid(), "OConnection::appendWarning: invalid warnings chain (this will crash)!");
-
-        const SQLException* pChainTravel = static_cast<const SQLException*>(_rChainLeft.getValue());
-        SQLExceptionIteratorHelper aReferenceIterHelper(pChainTravel);
-        while (aReferenceIterHelper.hasMoreElements())
-            pChainTravel = aReferenceIterHelper.next();
-
-        // reached the end of the chain, and pChainTravel points to the last element
-        const_cast<SQLException*>(pChainTravel)->NextException = _rChainRight;
-    }
+    return m_aWarnings.getWarnings();
 }
 
 //--------------------------------------------------------------------------
@@ -501,10 +439,7 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    Reference<XWarningsSupplier> xWarnings;
-    ::comphelper::query_aggregation(m_xProxyConnection,xWarnings);
-    xWarnings->clearWarnings();
-    m_aAdditionalWarnings.clear();
+    m_aWarnings.clearWarnings();
 }
 
 //--------------------------------------------------------------------------
