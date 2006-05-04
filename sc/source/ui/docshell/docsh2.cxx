@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:45:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,13 +131,14 @@ void ScDocShell::InitItems()
 {
     // AllItemSet fuer Controller mit benoetigten Items fuellen:
 
-    if ( pFontList )
-        delete pFontList;
+    // if ( pFontList )
+    //  delete pFontList;
 
     //  Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
 
-    pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+    // pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
+    //PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+    UpdateFontList();
 
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (pDrawLayer)
