@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:27:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,10 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <svtools/securityoptions.hxx>
 
+#include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
 
+#include "inputopt.hxx"
 #include "global.hxx"
 #include "table.hxx"
 #include "column.hxx"
@@ -174,9 +176,9 @@ void ScDocument::ImplDeleteOptions()
 
 //------------------------------------------------------------------------
 
-SfxPrinter* ScDocument::GetPrinter()
+SfxPrinter* ScDocument::GetPrinter(BOOL bCreateIfNotExist)
 {
-    if ( !pPrinter )
+    if ( !pPrinter && bCreateIfNotExist )
     {
         SfxItemSet* pSet =
             new SfxItemSet( *xPoolHelper->GetDocPool(),
@@ -198,6 +200,7 @@ SfxPrinter* ScDocument::GetPrinter()
         }
 
         pPrinter = new SfxPrinter( pSet );
+        pPrinter->SetMapMode( MAP_100TH_MM );
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
@@ -252,6 +255,35 @@ void ScDocument::SetPrintOptions()
             pPrinter->SetOptions( aOptSet );
         }
     }
+}
+
+//------------------------------------------------------------------------
+
+VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
+{
+    if (!pVirtualDevice_100th_mm)
+    {
+//      pVirtualDevice_100th_mm = new VirtualDevice;
+//      pVirtualDevice_100th_mm->SetMapMode( MAP_100TH_MM );
+
+        pVirtualDevice_100th_mm = new VirtualDevice( 1 );
+        pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
+        MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
+        aMapMode.SetMapUnit( MAP_100TH_MM );
+        pVirtualDevice_100th_mm->SetMapMode( aMapMode );
+    }
+    return pVirtualDevice_100th_mm;
+}
+
+OutputDevice* ScDocument::GetRefDevice()
+{
+    // Create printer like ref device, see Writer...
+    OutputDevice* pRefDevice = NULL;
+    if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+        pRefDevice = GetPrinter();
+    else
+        pRefDevice = GetVirtualDevice_100th_mm();
+    return pRefDevice;
 }
 
 //------------------------------------------------------------------------
