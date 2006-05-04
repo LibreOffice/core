@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:19:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,18 +334,6 @@ void lcl_SetDfltBoxAttr( SwTableBox& rBox, SvPtrarr &rBoxFmtArr, BYTE nId,
     }
     rBox.ChgFrmFmt( pNewBoxFmt );
 }
-
-/* --> #109161# */
-static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
-{
-    bool bResult = false;
-
-    if (SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState(which))
-        bResult = true;
-
-    return bResult;
-}
-/* <-- #109161# */
 
 SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
                                     USHORT nCols, BYTE nId )
@@ -743,22 +731,29 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
                                                     SwTableBoxStartNode );
             pSttNd->pStartOfSection = pTblNd;
 
-            /** #109161# If there is no adjust item in pTxtColl
-                 propagate any existing adjust item in pAttrSet to the
-                 newly created context node in the new cell.
-             */
             SwTxtNode * pTmpNd = new SwTxtNode( aIdx, pTxtColl );
 
-            const SfxPoolItem * pItem = NULL;
-
-            if (! lcl_IsItemSet(*pTmpNd, RES_PARATR_ADJUST) &&
-                pAttrSet != NULL &&
-                SFX_ITEM_SET == pAttrSet->GetItemState( RES_PARATR_ADJUST, TRUE,
-                                                        &pItem)
-                )
+            // --> FME 2006-04-13 #i60422# Propagate some more attributes.
+            // Adjustment was done for #109161#
+            const SfxPoolItem* pItem = NULL;
+            if ( NULL != pAttrSet )
             {
-                static_cast<SwCntntNode *>(pTmpNd)->SetAttr(*pItem);
+                static const USHORT aPropagateItems[] = {
+                    RES_PARATR_ADJUST,
+                    RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                    RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+                    RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE, 0 };
+
+                const USHORT* pIdx = aPropagateItems;
+                while ( *pIdx != 0 )
+                {
+                    if ( SFX_ITEM_SET != pTmpNd->GetSwAttrSet().GetItemState( *pIdx ) &&
+                         SFX_ITEM_SET == pAttrSet->GetItemState( *pIdx, TRUE, &pItem ) )
+                        static_cast<SwCntntNode *>(pTmpNd)->SetAttr(*pItem);
+                    ++pIdx;
+                }
             }
+            // <--
 
             new SwEndNode( aIdx, *pSttNd );
         }
