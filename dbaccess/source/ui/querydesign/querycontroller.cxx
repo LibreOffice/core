@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:44:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
+#endif
+#ifndef _DBAUI_LOCALRESACCESS_HXX_
+#include "localresaccess.hxx"
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -1532,7 +1535,7 @@ short OQueryController::saveModified()
         String sMessageText( ModuleRes( STR_QUERY_SAVEMODIFIED ) );
         String sObjectType;
         {
-            ::svt::OLocalResourceAccess aLocalRes( ModuleRes( RSC_QUERY_OBJECT_TYPE ), RSC_RESOURCE );
+            LocalResourceAccess aLocalRes( RSC_QUERY_OBJECT_TYPE, RSC_RESOURCE );
             sObjectType = String( ResId( m_bIndependent ? 3 : m_bCreateView ? 2 : 1 ) );
         }
         sMessageText.SearchAndReplace( String::CreateFromAscii( "$object$" ), sObjectType );
