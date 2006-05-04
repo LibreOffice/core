@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:29:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,7 @@ ImplMouseData::ImplMouseData()
     mnActionDelay               = 250;
     mnMenuDelay                 = 150;
     mnFollow                    = MOUSE_FOLLOW_MENU | MOUSE_FOLLOW_DDLIST;
+    mbNoWheelActionWithoutFocus = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -254,6 +255,7 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
     mnActionDelay               = rData.mnActionDelay;
     mnMenuDelay                 = rData.mnMenuDelay;
     mnFollow                    = rData.mnFollow;
+    mbNoWheelActionWithoutFocus = rData.mbNoWheelActionWithoutFocus;
 }
 
 // -----------------------------------------------------------------------
@@ -343,7 +345,8 @@ BOOL MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mpData->mnButtonRepeat        == rSet.mpData->mnButtonRepeat)         &&
          (mpData->mnActionDelay         == rSet.mpData->mnActionDelay)          &&
          (mpData->mnMenuDelay           == rSet.mpData->mnMenuDelay)            &&
-         (mpData->mnFollow              == rSet.mpData->mnFollow) )
+         (mpData->mnFollow              == rSet.mpData->mnFollow)               &&
+         (mpData->mbNoWheelActionWithoutFocus == rSet.mpData->mbNoWheelActionWithoutFocus) )
         return TRUE;
     else
         return FALSE;
