@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:49:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ void Impl_Font::AskConfig()
     mbConfigLookup = true;
 
     // prepare the FontSubst configuration lookup
-    const vcl::FontSubstConfigItem* pFontSubst = vcl::FontSubstConfigItem::get();
+    const vcl::FontSubstConfiguration* pFontSubst = vcl::FontSubstConfiguration::get();
 
     String      aShortName;
     String      aFamilyName;
@@ -185,7 +185,7 @@ void Impl_Font::AskConfig()
     FontWidth   eWidthType = WIDTH_DONTKNOW;
     String      aMapName = maFamilyName;
     ImplGetEnglishSearchFontName( aMapName );
-    vcl::FontSubstConfigItem::getMapName( aMapName,
+    vcl::FontSubstConfiguration::getMapName( aMapName,
         aShortName, aFamilyName, eWeight, eWidthType, nType );
 
     // lookup the font name in the configuration
@@ -706,21 +706,25 @@ void Font::Merge( const Font& rFont )
     {
         SetName( rFont.GetName() );
         SetStyleName( rFont.GetStyleName() );
-        SetFamily( rFont.GetFamily() );
         SetCharSet( GetCharSet() );
         SetLanguage( rFont.GetLanguage() );
         SetCJKContextLanguage( rFont.GetCJKContextLanguage() );
-        SetPitch( rFont.GetPitch() );
+        // don't use access methods here, might lead to AskConfig(), if DONTKNOW
+        SetFamily( rFont.mpImplFont->meFamily );
+        SetPitch( rFont.mpImplFont->mePitch );
     }
+
+    // don't use access methods here, might lead to AskConfig(), if DONTKNOW
+    if ( rFont.mpImplFont->meWeight != WEIGHT_DONTKNOW )
+        SetWeight( rFont.GetWeight() );
+    if ( rFont.mpImplFont->meItalic != ITALIC_DONTKNOW )
+        SetItalic( rFont.GetItalic() );
+    if ( rFont.mpImplFont->meWidthType != WIDTH_DONTKNOW )
+        SetWidthType( rFont.GetWidthType() );
+
 
     if ( rFont.GetSize().Height() )
         SetSize( rFont.GetSize() );
-    if ( rFont.GetWeight() != WEIGHT_DONTKNOW )
-        SetWeight( rFont.GetWeight() );
-    if ( rFont.GetWidthType() != WIDTH_DONTKNOW )
-        SetWidthType( rFont.GetWidthType() );
-    if ( rFont.GetItalic() != ITALIC_DONTKNOW )
-        SetItalic( rFont.GetItalic() );
     if ( rFont.GetUnderline() != UNDERLINE_DONTKNOW )
     {
         SetUnderline( rFont.GetUnderline() );
@@ -741,6 +745,20 @@ void Font::Merge( const Font& rFont )
     SetShadow( rFont.IsShadow() );
     SetRelief( rFont.GetRelief() );
 }
+
+void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
+{
+    // #i56788# Use members directly, don't risc config access.
+    rAttrs.maName = mpImplFont->maFamilyName;
+    rAttrs.maStyleName = mpImplFont->maStyleName;
+    rAttrs.meFamily = mpImplFont->meFamily;
+    rAttrs.mePitch = mpImplFont->mePitch;
+    rAttrs.meItalic = mpImplFont->meItalic;
+    rAttrs.meWeight = mpImplFont->meWeight;
+    rAttrs.meWidthType = WIDTH_DONTKNOW;
+    rAttrs.mbSymbolFlag= (mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL);
+}
+
 
 // -----------------------------------------------------------------------
 
