@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:36:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:38:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,7 @@ protected:
     */
     virtual ~ODefinitionContainer();
 public:
-    /** constructs the container.<BR>
-        after the construction of the object the creator has to call <code>initialize</code>.
+    /** constructs the container.
     */
     ODefinitionContainer(
           const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
@@ -208,10 +207,6 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(
         const ::rtl::OUString& _rName) = 0;
 
-    /** checks whether or not the configuration data the object is based on is readonly
-    */
-    sal_Bool    isReadOnly() const;
-
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
         @param      _rName              the object name
         @param      _bReadIfNeccessary  if sal_True, the object will be read from the configuration if not already done so
@@ -229,9 +224,6 @@ protected:
         @return                 sal_True if there already exists such an object
     */
     virtual sal_Bool checkExistence(const ::rtl::OUString& _rName);
-
-    /** get
-    */
 
     /** append a new object to the container. No plausibility checks are done, e.g. if the object is non-NULL or
         if the name is already used by another object or anything like this. This method is for derived classes
