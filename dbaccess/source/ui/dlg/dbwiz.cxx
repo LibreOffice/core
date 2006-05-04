@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:16:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
         static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory(m_pImpl->getORB());
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
         // open our own resource block, as the page titles are strings local to this block
-        OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+        LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
         pPage->SetText(String(ResId(nStringId)));
         defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
