@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:22:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-#define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 #define DBAUI_HTML_FONTSIZES    8       // wie Export, HTML-Options
 #define HTML_META_NONE          0
 #define HTML_META_AUTHOR        1
@@ -212,9 +211,10 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
                          const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                          const TColumnVector* pList,
-                         const OTypeInfoMap* _pInfoMap)
+                         const OTypeInfoMap* _pInfoMap,
+                         sal_Bool _bAutoIncrementEnabled)
     : HTMLParser(rIn)
-    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap)
+    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap,_bAutoIncrementEnabled)
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
@@ -324,34 +324,11 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl && !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
+                if ( m_bInTbl ) //&& !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
                     m_sTextToken += aToken;
                 break;
             case HTML_TABLEDATA_ON:
-                {
-                    m_bInTbl = TRUE;
-                    String *pValue = NULL;
-                    const HTMLOptions* pOptions = GetOptions();
-                    sal_Int16 nArrLen = pOptions->Count();
-                    for ( sal_Int16 i = 0; i < nArrLen; i++ )
-                    {
-                        const HTMLOption* pOption = (*pOptions)[i];
-                        switch( pOption->GetToken() )
-                        {
-                            case HTML_O_SDVAL:
-                            {
-                                m_sTextToken = pOption->GetString();
-                                m_bSDNum = sal_True;
-                            }
-                            break;
-                            case HTML_O_SDNUM:
-                            {
-                                //  pValue = new String( pOption->GetString() );
-                            }
-                            break;
-                        }
-                    }
-                }
+                fetchOptions();
                 break;
             case HTML_TABLEDATA_OFF:
                 {
@@ -365,7 +342,7 @@ void OHTMLReader::NextToken( int nToken )
                         showErrorDialog(e);
                     }
                     m_nColumnPos++;
-                    m_sTextToken.Erase();
+                    eraseTokens();
                     m_bSDNum = m_bInTbl = sal_False;
                 }
                 break;
@@ -409,41 +386,47 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TABLEDATA_ON:
             case HTML_TABLEHEADER_ON:
-                m_bInTbl = TRUE;
+                fetchOptions();
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if(m_bInTbl)
+                if ( m_bInTbl ) // && !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
                     m_sTextToken += aToken;
                 break;
             case HTML_TABLEDATA_OFF:
-                if(m_sTextToken.Len())
-                {
-                    sal_Int32 nColPos = m_vColumns[m_nColumnPos].first;
-                    if( nColPos != CONTAINER_ENTRY_NOTFOUND)
-                    {
-                        m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
-                        m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
-                    }
-                    m_sTextToken.Erase();
-                }
+                adjustFormat();
                 m_nColumnPos++;
-                m_bInTbl = sal_False;
+                m_bSDNum = m_bInTbl = sal_False;
                 break;
             case HTML_TABLEROW_OFF:
-                if(m_sTextToken.Len())
-                {
-                    sal_Int32 nColPos = m_vColumns[m_nColumnPos].first;
-                    if(nColPos != CONTAINER_ENTRY_NOTFOUND)
-                    {
-                        m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
-                        m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
-                    }
-                    m_sTextToken.Erase();
-                }
+                adjustFormat();
                 m_nColumnPos = 0;
                 m_nRows--;
                 break;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OHTMLReader::fetchOptions()
+{
+    m_bInTbl = TRUE;
+    const HTMLOptions* pOptions = GetOptions();
+    sal_Int16 nArrLen = pOptions->Count();
+    for ( sal_Int16 i = 0; i < nArrLen; i++ )
+    {
+        const HTMLOption* pOption = (*pOptions)[i];
+        switch( pOption->GetToken() )
+        {
+            case HTML_O_SDVAL:
+            {
+                m_sValToken = pOption->GetString();
+                //m_sTextToken = pOption->GetString();
+                m_bSDNum = sal_True;
+            }
+            break;
+            case HTML_O_SDNUM:
+                m_sNumToken = pOption->GetString();
+            break;
         }
     }
 }
@@ -475,12 +458,12 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken)
             break;
             case HTML_O_SDVAL:
             {
-                pValue = new String( pOption->GetString() );
+                //pValue = new String( pOption->GetString() );
             }
             break;
             case HTML_O_SDNUM:
             {
-                pValue = new String( pOption->GetString() );
+                //pValue = new String( pOption->GetString() );
             }
             break;
             case HTML_O_BGCOLOR:
