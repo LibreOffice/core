@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:17:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,9 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare )
 {
     return  (nStart == rCompare.nStart) &&
             (nEnd == rCompare.nEnd) &&
-            ( (pItem == rCompare.pItem) || (*pItem == *rCompare.pItem));
+            ( (pItem == rCompare.pItem) ||
+            ( pItem->Which() != rCompare.pItem->Which()) ||
+            (*pItem == *rCompare.pItem));
 }
 
 inline BOOL XEditAttribute::IsFeature()
