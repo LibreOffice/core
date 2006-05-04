@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:15:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ namespace svxform
 
     //====================================================================
 
-    DECLARE_STL_VECTOR( SvLBoxEntry*, ListBoxEntryArray );
+    typedef ::std::set< SvLBoxEntry* >  ListBoxEntrySet;
 
     //====================================================================
     //= OLocalExchange
@@ -145,6 +145,7 @@ namespace svxform
         inline  sal_Bool    isDragSource() const { return m_pTransferable && m_pTransferable->isDragging(); }
         inline  sal_Bool    isClipboardOwner() const { return m_pTransferable && m_pTransferable->isClipboardOwner(); }
         inline  sal_Bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
+        inline  void        clear() { if ( isDataExchangeActive() ) m_pTransferable->clear(); }
 
         void        setClipboardListener( const Link& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
 
@@ -167,7 +168,7 @@ namespace svxform
         DataFlavorExVector  m_aCurrentFormats;
 
     protected:
-        ListBoxEntryArray   m_aSelectedEntries;
+        ListBoxEntrySet     m_aSelectedEntries;
         ControlPaths        m_aControlPaths;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                             m_aHiddenControlModels;
@@ -195,6 +196,16 @@ namespace svxform
         void addSelectedEntry( SvLBoxEntry* _pEntry );
         void setFocusEntry( SvLBoxEntry* _pFocusEntry );
 
+        /** notifies the data transfer object that a certain entry has been removed from the owning tree
+
+            In case the removed entry is part of the transfer object's selection, the entry is removed from
+            the selection.
+
+            @param  _pEntry
+            @return the number of entries remaining in the selection.
+        */
+        size_t  onEntryRemoved( SvLBoxEntry* _pEntry );
+
         void setFormsRoot(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
@@ -213,7 +224,7 @@ namespace svxform
             // Aufrufer sicherstellen)
 
         SvLBoxEntry*                focused() const { return m_pFocusEntry; }
-        const ListBoxEntryArray&    selected() const { return m_aSelectedEntries; }
+        const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
