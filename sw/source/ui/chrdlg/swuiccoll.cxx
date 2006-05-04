@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:40:22 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
     const BOOL bEnable = pBox->IsChecked();
     aContextFT.Enable( bEnable );
     aUsedFT   .Enable( bEnable );
-    aTbLinks  .Enable( bEnable );
+    aTbLinks  .EnableList( bEnable != FALSE );
     aStyleFT  .Enable( bEnable );
     aStyleLB  .Enable( bEnable );
     aFilterLB .Enable( bEnable );
