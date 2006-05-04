@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:28:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 13:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,22 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2006-03-22 #b6375613#
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+using namespace ::com::sun::star;
+// <--
 
 #include <set>
 
@@ -740,6 +756,68 @@ BOOL SwLayHelper::CheckInsertPage()
     return FALSE;
 }
 
+// --> OD 2006-03-22 #b6375613#
+bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
+{
+    bool bHasTextFrmAnchoredObjs( false );
+
+    const SwSpzFrmFmts* pSpzFrmFmts = p_pTxtFrm->GetTxtNode()->GetDoc()->GetSpzFrmFmts();
+    for ( USHORT i = 0; i < pSpzFrmFmts->Count(); ++i )
+    {
+        SwFrmFmt *pFmt = (SwFrmFmt*)(*pSpzFrmFmts)[i];
+        const SwFmtAnchor &rAnch = pFmt->GetAnchor();
+        if ( rAnch.GetCntntAnchor() &&
+             ( rAnch.GetAnchorId() == FLY_AT_CNTNT ||
+               rAnch.GetAnchorId() == FLY_AUTO_CNTNT ) &&
+             rAnch.GetCntntAnchor()->nNode.GetIndex() ==
+                                        p_pTxtFrm->GetTxtNode()->GetIndex() )
+        {
+            bHasTextFrmAnchoredObjs = true;
+            break;
+        }
+    }
+
+    return bHasTextFrmAnchoredObjs;
+}
+
+void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
+{
+    SwTxtFrm* pFirstTextFrmOnNewPage = dynamic_cast<SwTxtFrm*>(p_pFirstFrmOnNewPage);
+    //
+    if ( pFirstTextFrmOnNewPage &&
+         !pFirstTextFrmOnNewPage->IsFollow() &&
+         pFirstTextFrmOnNewPage->GetTxt().Len() == 0 &&
+         lcl_HasTextFrmAnchoredObjs( pFirstTextFrmOnNewPage ) )
+    {
+        // apply page break before at this text frame to assure, that it doesn't flow backward.
+        const SvxBreak eBreak =
+                    pFirstTextFrmOnNewPage->GetAttrSet()->GetBreak().GetBreak();
+        if ( eBreak == SVX_BREAK_NONE )
+        {
+            pFirstTextFrmOnNewPage->GetTxtNode()->LockModify();
+            SwDoc* pDoc( pFirstTextFrmOnNewPage->GetTxtNode()->GetDoc() );
+            const SwPaM aTmpPaM( *(pFirstTextFrmOnNewPage->GetTxtNode()) );
+            pDoc->Insert( aTmpPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
+            pFirstTextFrmOnNewPage->GetTxtNode()->UnlockModify();
+
+            uno::Reference< document::XDocumentInfoSupplier > xDoc(
+                                        pDoc->GetDocShell()->GetBaseModel(),
+                                        uno::UNO_QUERY);
+            uno::Reference< beans::XPropertySet > xDocInfo(
+                                        xDoc->getDocumentInfo(),
+                                        uno::UNO_QUERY );
+            try
+            {
+                xDocInfo->setPropertyValue( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"), uno::makeAny( true ) );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+}
+// <--
+
 /*-----------------28.5.2001 11:31------------------
  * SwLayHelper::CheckInsert
  *  is the entry point for the _InsertCnt-function.
@@ -754,9 +832,9 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 {
     BOOL bRet = FALSE;
     BOOL bLongTab = FALSE;
-    ULONG nMaxRowPerPage;
+    ULONG nMaxRowPerPage( 0 );
     nNodeIndex -= nStartOfContent;
-    USHORT nRows;
+    USHORT nRows( 0 );
     if( rpFrm->IsTabFrm() )
     {
         //Inside a table counts every row as a paragraph
@@ -846,7 +924,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                 if( nOfst < STRING_LEN )
                 {
                     sal_Bool bSplit = sal_False;
-                    USHORT nRepeat;
+                    USHORT nRepeat( 0 );
                     if( !bLongTab && rpFrm->IsTxtFrm() &&
                         SW_LAYCACHE_IO_REC_PARA == nType &&
                         nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().Len() )
@@ -932,6 +1010,12 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
             SwPageFrm* pLastPage = rpPage;
             if( CheckInsertPage() )
             {
+                // --> OD 2006-03-21 #b6375613#
+                if ( pDoc->ApplyWorkaroundForB6375613() )
+                {
+                    lcl_ApplyWorkaroundForB6375613( rpFrm );
+                }
+                // <--
                 _CheckFlyCache( pLastPage );
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
