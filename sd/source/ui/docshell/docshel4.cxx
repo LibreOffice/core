@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:14:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,12 +241,22 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 
     pPrinter = pNewPrinter;
     bOwnPrinter = TRUE;
+    if ( pDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
+        UpdateFontList();
+    UpdateRefDevice();
+}
 
+void DrawDocShell::UpdateFontList()
+{
     delete pFontList;
-    pFontList = new FontList( GetPrinter(TRUE), Application::GetDefaultDevice(), FALSE );
+    OutputDevice* pRefDevice = NULL;
+    if ( pDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
+        pRefDevice = GetPrinter(TRUE);
+    else
+        pRefDevice = SD_MOD()->GetVirtualRefDevice();
+    pFontList = new FontList( pRefDevice, NULL, FALSE );
     SvxFontListItem aFontListItem( pFontList );
     PutItem( aFontListItem );
-    UpdateRefDevice();
 }
 
 /*************************************************************************
