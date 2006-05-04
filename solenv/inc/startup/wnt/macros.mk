@@ -2,21 +2,6 @@
 #
 
 # Execution environment configuration.
-# Grab the current setting of COMSPEC.
-#
-.IMPORT .IGNORE : COMSPEC
-
-.IF $(SHELL) == $(NULL)
-   .IF $(COMSPEC) == $(NULL)
-# SHELL has to be set in OOo build environment
-        .ERROR : ; @echo Forced error: Environment variable SHELL has to be set for OOo build!
-        SHELL_variable_needed
-   .ELSE
-      SHELL *:= $(COMSPEC)
-   .END
-.END
-
-GROUPSHELL *:= $(SHELL)
 
 # Standard C-language command names and flags
 CC         *:= cl		# C   compiler 
@@ -29,14 +14,19 @@ E *:= .exe	# Executables
 
 # Now set the remaining arguments depending on which SHELL we
 # are going to use.
-.IF $(SHELL) == $(COMSPEC)
+.IF $(USE_SHELL) == 4nt
+
+.IMPORT : COMSPEC
+
+SHELL *:= $(COMSPEC)
+
    SHELLFLAGS       *:= $(SWITCHAR)c
    GROUPFLAGS       *:= $(SHELLFLAGS)
    SHELLMETAS       *:= "<>|
    GROUPSUFFIX      *:= .bat
    DIVFILE          *=  $(TMPFILE:s,/,\,)
    RM               *=  del
-   RMFLAGS          *= /y
+   RMFLAGS          *= /y /E
    MV	            *=  rename
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
@@ -54,9 +44,9 @@ E *:= .exe	# Executables
 # This is hopefully not used. Only in: dmake/msdos/spawn.c  
 #  .MKSARGS         *:= yes
    DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}})
-   RM               *=  $(ROOTDIR)$/bin$/rm
+   RM               *=  $/bin$/rm
    RMFLAGS          *=  -f
-   MV	            *=  $(ROOTDIR)$/bin$/mv
+   MV	            *=  $/bin$/mv
    __.DIVSEP-sh-yes *:= \\\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR :=/
@@ -64,15 +54,27 @@ E *:= .exe	# Executables
 
 .ENDIF
 
-.IF "$(GUI)$(USE_SHELL)"=="WNT4nt"
+.IF $(USE_SHELL) == 4nt
+
 my4ver:=$(shell +echo %_4ver)
 
 .IF "$(my4ver:s/.//:s/,//)" >= "400"
-   RMFLAGS          +=/E
 .ELSE			# "$(my4ver:s/.//:s/,//)" >= "400"
-UNSUPPORTED_4nt_VERSION=TRUE
+.ERROR : ; @echo Forced error: 4NT version too old! Version 4.0 or newer is required.
+4NT_version_too_old
 .ENDIF			# "$(my4ver:s/.//:s/,//)" >= "400"
-.ENDIF			# "$(GUI)$(USE_SHELL)"=="WNT4nt"
+
+.ELSE # $(USE_SHELL) == 4nt
+
+.IF $(SHELL) == $(NULL)
+# SHELL has to be set in (non-4NT) OOobuild environment
+.ERROR : ; @echo Forced error: Environment variable SHELL has to be set for OOo build!
+SHELL_variable_needed
+.END
+
+.END # $(USE_SHELL) == 4nt
+
+GROUPSHELL *:= $(SHELL)
 
 # Does not respect case of filenames.
 .DIRCACHERESPCASE := no
