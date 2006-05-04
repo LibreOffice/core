@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableRowExchange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:42:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace dbaui
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    OTableRowExchange::OTableRowExchange(const ::std::vector<OTableRow*>& _rvTableRow)
+    OTableRowExchange::OTableRowExchange(const ::std::vector< ::boost::shared_ptr<OTableRow> >& _rvTableRow)
         : m_vTableRow(_rvTableRow)
     {
     }
@@ -58,11 +58,11 @@ namespace dbaui
     {
         if(nUserObjectId == SOT_FORMATSTR_ID_SBA_TABED)
         {
-            ::std::vector<OTableRow*>* pRows = reinterpret_cast< ::std::vector<OTableRow*>* >(pUserObject);
+            ::std::vector< ::boost::shared_ptr<OTableRow> >* pRows = reinterpret_cast< ::std::vector< ::boost::shared_ptr<OTableRow> >* >(pUserObject);
             if(pRows)
             {
                 (*rxOStm) << (sal_Int32)pRows->size(); // first stream the size
-                ::std::vector<OTableRow*>::const_iterator aIter = pRows->begin();
+                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
                 for(;aIter != pRows->end();++aIter)
                     (*rxOStm) << *(*aIter);
                 return sal_True;
@@ -73,7 +73,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void OTableRowExchange::AddSupportedFormats()
     {
-        if(m_vTableRow.size())
+        if ( !m_vTableRow.empty() )
             AddFormat(SOT_FORMATSTR_ID_SBA_TABED);
     }
     // -----------------------------------------------------------------------------
@@ -87,9 +87,6 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void OTableRowExchange::ObjectReleased()
     {
-        ::std::vector<OTableRow*>::iterator aIter = m_vTableRow.begin();
-        for(;aIter != m_vTableRow.end();++aIter)
-            delete *aIter;
         m_vTableRow.clear();
     }
     // -----------------------------------------------------------------------------
