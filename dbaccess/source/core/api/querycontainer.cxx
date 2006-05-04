@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:08:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,57 +176,55 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 {
     Reference< XContent> xNewObject;
     ::rtl::OUString sNewObjectName;
-    {
-        MutexGuard aGuard(m_aMutex);
-
-        OQueryDescriptor* pImpl = NULL;
-                comphelper::getImplementation(pImpl, Reference< XInterface >(_rxDesc.get()));
-        DBG_ASSERT(pImpl != NULL, "OQueryContainer::appendByDescriptor : can't fully handle this descriptor !");
-
-        // first clone this object's CommandDefinition part
-        if (!m_xCommandDefinitions.is())
-        {
-            DBG_ERROR("OQueryContainer::appendByDescriptor : have no CommandDefinition container anymore !");
-                // perhaps somebody modified the DataSource, so all connections were separated
-            throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to insert objects into containers of standalone connections (not belonging to a data source)."), *this);
-                // TODO : resource
-        }
-
-        Reference< XPropertySet > xCommandDefinitionPart(m_xORB->createInstance(SERVICE_SDB_QUERYDEFINITION), UNO_QUERY);
-        if (!xCommandDefinitionPart.is())
-        {
-            DBG_ERROR("OQueryContainer::appendByDescriptor : could not create a CommandDefinition object !");
-            throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to create an object supporting the com.sun.star.sdb.CommandDefinition service"), *this);
-                // TODO : resource
-        }
-
-        ::comphelper::copyProperties(_rxDesc, xCommandDefinitionPart);
-        // and insert it into the CommDef container
-        _rxDesc->getPropertyValue(PROPERTY_NAME) >>= sNewObjectName;
-        {
-            m_eDoingCurrently = INSERTING;
-            OAutoActionReset aAutoReset(this);
-            m_xCommandDefinitions->insertByName(sNewObjectName, makeAny(xCommandDefinitionPart));
-        }
-
-#if DBG_UTIL
-        // check if the object was really inserted
-        try
-        {
-            Reference< XPropertySet > xNewEl(m_xCommandDefinitions->getByName(sNewObjectName),UNO_QUERY);
-            DBG_ASSERT(xNewEl.get() == xCommandDefinitionPart.get(), "OQueryContainer::appendByDescriptor : the CommandDefinition container worked as it had a descriptor !");
-                // normally should not have changed after inserting
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("OQueryContainer::appendByDescriptor : could not find the just inserted CommandDefinition !");
-        }
-#endif
-        // TODO : the columns part of the descriptor has to be copied
-        xNewObject = implCreateWrapper(Reference< XContent>(xCommandDefinitionPart,UNO_QUERY));
-    }
 
     ClearableMutexGuard aGuard(m_aMutex);
+
+    OQueryDescriptor* pImpl = NULL;
+            comphelper::getImplementation(pImpl, Reference< XInterface >(_rxDesc.get()));
+    DBG_ASSERT(pImpl != NULL, "OQueryContainer::appendByDescriptor : can't fully handle this descriptor !");
+
+    // first clone this object's CommandDefinition part
+    if (!m_xCommandDefinitions.is())
+    {
+        DBG_ERROR("OQueryContainer::appendByDescriptor : have no CommandDefinition container anymore !");
+            // perhaps somebody modified the DataSource, so all connections were separated
+        throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to insert objects into containers of standalone connections (not belonging to a data source)."), *this);
+            // TODO : resource
+    }
+
+    Reference< XPropertySet > xCommandDefinitionPart(m_xORB->createInstance(SERVICE_SDB_QUERYDEFINITION), UNO_QUERY);
+    if (!xCommandDefinitionPart.is())
+    {
+        DBG_ERROR("OQueryContainer::appendByDescriptor : could not create a CommandDefinition object !");
+        throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to create an object supporting the com.sun.star.sdb.CommandDefinition service"), *this);
+            // TODO : resource
+    }
+
+    ::comphelper::copyProperties(_rxDesc, xCommandDefinitionPart);
+    // and insert it into the CommDef container
+    _rxDesc->getPropertyValue(PROPERTY_NAME) >>= sNewObjectName;
+    {
+        m_eDoingCurrently = INSERTING;
+        OAutoActionReset aAutoReset(this);
+        m_xCommandDefinitions->insertByName(sNewObjectName, makeAny(xCommandDefinitionPart));
+    }
+
+#if DBG_UTIL
+    // check if the object was really inserted
+    try
+    {
+        Reference< XPropertySet > xNewEl(m_xCommandDefinitions->getByName(sNewObjectName),UNO_QUERY);
+        DBG_ASSERT(xNewEl.get() == xCommandDefinitionPart.get(), "OQueryContainer::appendByDescriptor : the CommandDefinition container worked as it had a descriptor !");
+            // normally should not have changed after inserting
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("OQueryContainer::appendByDescriptor : could not find the just inserted CommandDefinition !");
+    }
+#endif
+    // TODO : the columns part of the descriptor has to be copied
+    xNewObject = implCreateWrapper(Reference< XContent>(xCommandDefinitionPart,UNO_QUERY));
+
     implAppend(sNewObjectName, xNewObject);
 
     notifyByName(aGuard,sNewObjectName,xNewObject,NULL,E_INSERTED);
