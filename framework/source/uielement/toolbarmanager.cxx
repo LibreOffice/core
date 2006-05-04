@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:20:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,6 +382,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
 ToolBarManager::~ToolBarManager()
 {
+    OSL_ASSERT( m_pToolBar == 0 );
+    OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
 
 void ToolBarManager::Destroy()
@@ -639,6 +641,10 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
 
     {
         ResetableGuard aGuard( m_aLock );
+
+        // stop timer to prevent timer events after dispose
+        m_aAsyncUpdateControllersTimer.Stop();
+
         RemoveControllers();
 
         if ( m_xDocImageManager.is() )
@@ -1984,6 +1990,8 @@ IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, pTimer )
 {
     // The guard must be in its own context as the we can get destroyed when our
     // own xInterface reference get destroyed!
+    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+
     ResetableGuard aGuard( m_aLock );
 
     if ( m_bDisposed )
