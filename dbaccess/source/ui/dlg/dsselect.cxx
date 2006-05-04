@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,7 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
     if (!aOdbcConfig.isLoaded())
     {
         // show an error message
-        OLocalResourceAccess aLocRes(DLG_DATASOURCE_SELECTION, RSC_MODALDIALOG);
+        LocalResourceAccess aLocRes(DLG_DATASOURCE_SELECTION, RSC_MODALDIALOG);
         String sError(ModuleRes(STR_COULDNOTLOAD_CONFIGLIB));
         sError.SearchAndReplaceAscii("#lib#", aOdbcConfig.getLibraryName());
         ErrorBox aDialog(this, WB_OK, sError);
