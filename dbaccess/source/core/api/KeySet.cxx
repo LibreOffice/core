@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:02:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -533,10 +533,8 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32((*_rInsertRow)[0].getAny()));
         OSL_ENSURE(m_aKeyIter != m_aKeyMap.end(),"New inserted row not found!");
         m_aKeyIter->second.second = 2;
-        connectivity::ORowVector< ORowSetValue >::iterator aIter = m_aKeyIter->second.first->begin();
-        OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-        for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
-            *aIter = (*_rInsertRow)[aPosIter->second.first];
+
+        copyRowValue(_rInsertRow,m_aKeyIter->second.first);
     }
 }
 // -------------------------------------------------------------------------
@@ -694,17 +692,26 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     if ( m_bInserted )
     {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
-        connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
-        OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-        for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
-            *aIter = (*_rInsertRow)[aPosIter->second.first];
 
+        copyRowValue(_rInsertRow,aKeyRow);
 
         OKeySetMatrix::iterator aKeyIter = m_aKeyMap.end();
         --aKeyIter;
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(aKeyIter->first + 1,OKeySetValue(aKeyRow,1))).first;
         // now we set the bookmark for this row
         (*_rInsertRow)[0] = makeAny((sal_Int32)m_aKeyIter->first);
+    }
+}
+// -----------------------------------------------------------------------------
+void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow)
+{
+    connectivity::ORowVector< ORowSetValue >::iterator aIter = _rKeyRow->begin();
+    OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
+    OColumnNamePos::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
+    for(;aPosIter != aPosEnd;++aPosIter,++aIter)
+    {
+        *aIter = (*_rInsertRow)[aPosIter->second.first];
+        aIter->setTypeKind(aPosIter->second.second.first);
     }
 }
 // -------------------------------------------------------------------------
