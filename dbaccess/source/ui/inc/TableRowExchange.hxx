@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableRowExchange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,16 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
+#include <boost/shared_ptr.hpp>
 
 namespace dbaui
 {
     class OTableRow;
     class OTableRowExchange : public TransferableHelper
     {
-        ::std::vector<OTableRow*> m_vTableRow;
+        ::std::vector< ::boost::shared_ptr<OTableRow> > m_vTableRow;
     public:
-        OTableRowExchange(const ::std::vector<OTableRow*>& _rvTableRow);
+        OTableRowExchange(const ::std::vector< ::boost::shared_ptr<OTableRow> >& _rvTableRow);
     protected:
         virtual void        AddSupportedFormats();
         virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
