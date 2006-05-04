@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:22:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,6 +731,8 @@ void SAL_CALL VCLXToolkit::disposing()
             xRef = pNewComp;
             pNewWindow->SetComponentInterface( xRef );
         }
+        DBG_ASSERT( pNewWindow->GetComponentInterface( FALSE ) == xRef,
+            "VCLXToolkit::createWindow: did #133706# resurge?" );
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
             pNewWindow->Show();
