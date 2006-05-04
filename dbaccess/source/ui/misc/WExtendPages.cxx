@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WExtendPages.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:10:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,8 @@ SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
                             m_pParent->GetFormatter(),
                             m_pParent->GetFactory(),
                             m_pParent->getDestVector(),
-                            m_pParent->getTypeInfo());
+                            m_pParent->getTypeInfo(),
+                            m_pParent->isAutoincrementEnabled());
 }
 //========================================================================
 SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
@@ -66,7 +67,8 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
                             m_pParent->GetFormatter(),
                             m_pParent->GetFactory(),
                             m_pParent->getDestVector(),
-                            m_pParent->getTypeInfo());
+                            m_pParent->getTypeInfo(),
+                            m_pParent->isAutoincrementEnabled());
 }
 //========================================================================
 OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent)
