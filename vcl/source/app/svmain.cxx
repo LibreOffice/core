@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:47:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,10 +371,10 @@ void DeInitVCL()
 
     if( pSVData->mpSettingsConfigItem )
         delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = NULL;
-    if( pSVData->maGDIData.mpDefFontConfig )
-        delete pSVData->maGDIData.mpDefFontConfig, pSVData->maGDIData.mpDefFontConfig = NULL;
-    if( pSVData->maGDIData.mpFontSubstConfig )
-        delete pSVData->maGDIData.mpFontSubstConfig, pSVData->maGDIData.mpFontSubstConfig = NULL;
+    if( pSVData->maGDIData.mpDefaultFontConfiguration )
+        delete pSVData->maGDIData.mpDefaultFontConfiguration, pSVData->maGDIData.mpDefaultFontConfiguration = NULL;
+    if( pSVData->maGDIData.mpFontSubstConfiguration )
+        delete pSVData->maGDIData.mpFontSubstConfiguration, pSVData->maGDIData.mpFontSubstConfiguration = NULL;
 
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
