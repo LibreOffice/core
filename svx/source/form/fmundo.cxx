@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:29:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -937,12 +937,10 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
             }
             else
             {
-
-                Any aRet;
-
+                Any aIgnoreReturn;
                 ::com::sun::star::uno::Sequence< sal_Int16 > aOutArgsIndex;
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aOutArgs;
-                xObjSh->CallXScript( sScriptCode,  aArguments, aRet,
+                xObjSh->CallXScript( sScriptCode,  aArguments, pSyncRet ? *pSyncRet : aIgnoreReturn,
                                     aOutArgsIndex, aOutArgs);
             }
 
