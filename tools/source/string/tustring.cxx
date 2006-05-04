@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tustring.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:38:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@ DBG_NAMEEX( ByteString );
 #define STRING          UniString
 #define STRINGDATA      UniStringData
 #define DBGCHECKSTRING  DbgCheckUniString
+#define STRING_TYPE     rtl_uString
+#define STRING_ACQUIRE  rtl_uString_acquire
+#define STRING_RELEASE  rtl_uString_release
+#define STRING_NEW      rtl_uString_new
 
 // -----------------------------------------------------------------------
 
