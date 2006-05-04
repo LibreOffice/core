@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:37:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // =======================================================================
 
-// Daten des Strings fuer einen NULL-String
-static STRINGDATA aImplEmptyStrData = { 1, 0, 0 };
-
-// =======================================================================
 
 static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2 )
 {
@@ -92,6 +88,7 @@ static sal_Int32 ImplStringCompareWithoutZero( const STRCODE* pStr1, const STRCO
     while ( nCount &&
             ((nRet = ((sal_Int32)*pStr1)-((sal_Int32)*pStr2)) == 0) )
 #else
+#error BLA
     while ( nCount &&
             ((nRet = ((sal_Int32)((unsigned STRCODE)*pStr1))-((sal_Int32)((unsigned STRCODE)*pStr2))) == 0) )
 #endif
@@ -236,40 +233,13 @@ static STRINGDATA* ImplAllocData( xub_StrLen nLen )
 
 // -----------------------------------------------------------------------
 
-static void _ImplDeleteData( STRINGDATA* pStrData )
-{
-    // alle referenzierten Strings koennen zur gleichen Zeit geloescht
-    // wurden sein, somit muss hier noch geprueft werden, ob ich
-    // der letzte gleichzeitig zerstoerte String bin
-    if ( !osl_decrementInterlockedCount(&pStrData->mnRefCount) )
-    {
-        DBG_ASSERT( aImplEmptyStrData.mnRefCount != 0, "String::ImplIncRefCount() - EmptyStr RefCount == 0" );
-        rtl_freeMemory( pStrData );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-inline void ImplDeleteData( STRINGDATA* pStrData )
-{
-    DBG_ASSERT( aImplEmptyStrData.mnRefCount != 0, "String::ImplIncRefCount() - EmptyStr RefCount == 0" );
-
-    // Ist der ReferenzCounter groesser 0
-    if ( pStrData->mnRefCount == 1 )
-        rtl_freeMemory( pStrData );
-    else
-        _ImplDeleteData( pStrData );
-}
-
-// -----------------------------------------------------------------------
-
 static STRINGDATA* _ImplCopyData( STRINGDATA* pData )
 {
     unsigned int    nSize       = sizeof(STRINGDATA)+(pData->mnLen*sizeof( STRCODE ));
     STRINGDATA*     pNewData    = (STRINGDATA*)rtl_allocateMemory( nSize );
     memcpy( pNewData, pData, nSize );
     pNewData->mnRefCount = 1;
-    _ImplDeleteData( pData );
+    STRING_RELEASE((STRING_TYPE *)pData);
     return pNewData;
 }
 
@@ -278,7 +248,6 @@ static STRINGDATA* _ImplCopyData( STRINGDATA* pData )
 inline void ImplCopyData( STRING* pString )
 {
     DBG_ASSERT( (pString->mpData->mnRefCount > 0), "String::ImplCopyData() - RefCount == 0" );
-    DBG_ASSERT( aImplEmptyStrData.mnRefCount != 0, "String::ImplIncRefCount() - EmptyStr RefCount == 0" );
 
     // ist es ein referenzierter String, dann die Daten abkoppeln
     if ( pString->mpData->mnRefCount != 1 )
@@ -311,13 +280,6 @@ inline STRCODE* ImplCopyStringData( STRING* pString, STRCODE* pStr )
 
 // -----------------------------------------------------------------------
 
-inline void ImplIncRefCount( STRINGDATA* pData )
-{
-    osl_incrementInterlockedCount( &pData->mnRefCount );
-}
-
-// -----------------------------------------------------------------------
-
 inline xub_StrLen ImplGetCopyLen( xub_StrLen nStrLen, xub_StrLen nCopyLen )
 {
     if ( (ULONG)nStrLen+nCopyLen > STRING_MAXLEN )
@@ -328,12 +290,11 @@ inline xub_StrLen ImplGetCopyLen( xub_StrLen nStrLen, xub_StrLen nCopyLen )
 // =======================================================================
 
 STRING::STRING()
+    : mpData(NULL)
 {
     DBG_CTOR( STRING, DBGCHECKSTRING );
 
-    // Leerer String
-    ImplIncRefCount( &aImplEmptyStrData );
-    mpData = &aImplEmptyStrData;
+    STRING_NEW((STRING_TYPE **)&mpData);
 }
 
 // -----------------------------------------------------------------------
@@ -345,13 +306,14 @@ STRING::STRING( const STRING& rStr )
 
     // Pointer auf die Daten des uebergebenen Strings setzen und
     // Referenzzaehler erhoehen
-    ImplIncRefCount( rStr.mpData );
+    STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
     mpData = rStr.mpData;
 }
 
 // -----------------------------------------------------------------------
 
 STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
+: mpData( NULL )
 {
     DBG_CTOR( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
@@ -373,7 +335,7 @@ STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
         // Reicht ein einfaches erhoehen des Referenzcounters
         if ( (nPos == 0) && (nLen == rStr.mpData->mnLen) )
         {
-            ImplIncRefCount( rStr.mpData );
+            STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
             mpData = rStr.mpData;
         }
         else
@@ -385,14 +347,14 @@ STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
     }
     else
     {
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
 }
 
 // -----------------------------------------------------------------------
 
 STRING::STRING( const STRCODE* pCharStr )
+    : mpData(NULL)
 {
     DBG_CTOR( STRING, DBGCHECKSTRING );
 
@@ -416,14 +378,14 @@ STRING::STRING( const STRCODE* pCharStr )
     }
     else
     {
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
 }
 
 // -----------------------------------------------------------------------
 
 STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
+: mpData(NULL)
 {
     DBG_CTOR( STRING, DBGCHECKSTRING );
     DBG_ASSERT( pCharStr, "String::String() - pCharStr is NULL" );
@@ -456,8 +418,7 @@ STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
     }
     else
     {
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
 }
 
@@ -480,7 +441,7 @@ STRING::~STRING()
     DBG_DTOR( STRING, DBGCHECKSTRING );
 
     // Daten loeschen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
 }
 
 // -----------------------------------------------------------------------
@@ -490,8 +451,8 @@ STRING& STRING::Assign( const STRING& rStr )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    ImplIncRefCount( rStr.mpData );
-    ImplDeleteData( mpData );
+    STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = rStr.mpData;
     return *this;
 }
@@ -508,9 +469,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
 
     if ( !nLen )
     {
-        ImplDeleteData( mpData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
     else
     {
@@ -520,7 +479,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
         else
         {
             // Alte Daten loeschen
-            ImplDeleteData( mpData );
+            STRING_RELEASE((STRING_TYPE *)mpData);
 
             // Daten initialisieren und String kopieren
             mpData = ImplAllocData( nLen );
@@ -556,9 +515,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
 
     if ( !nLen )
     {
-        ImplDeleteData( mpData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
     else
     {
@@ -568,7 +525,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
         else
         {
             // Alte Daten loeschen
-            ImplDeleteData( mpData );
+            STRING_RELEASE((STRING_TYPE *)mpData);
 
             // Daten initialisieren und String kopieren
             mpData = ImplAllocData( nLen );
@@ -587,7 +544,7 @@ STRING& STRING::Assign( STRCODE c )
     DBG_ASSERT( c, "String::Assign() - c is 0" );
 
     // Verwaltungsdaten anlegen und initialisieren
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = ImplAllocData( 1 );
     mpData->maStr[0] = c;
     return *this;
@@ -604,8 +561,8 @@ STRING& STRING::Append( const STRING& rStr )
     xub_StrLen nLen = mpData->mnLen;
     if ( !nLen )
     {
-        ImplIncRefCount( rStr.mpData );
-        ImplDeleteData( mpData );
+        STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = rStr.mpData;
     }
     else
@@ -624,7 +581,7 @@ STRING& STRING::Append( const STRING& rStr )
             memcpy( pNewData->maStr+nLen, rStr.mpData->maStr, nCopyLen*sizeof( STRCODE ) );
 
             // Alte Daten loeschen und Neue zuweisen
-            ImplDeleteData( mpData );
+            STRING_RELEASE((STRING_TYPE *)mpData);
             mpData = pNewData;
         }
     }
@@ -657,7 +614,7 @@ STRING& STRING::Append( const STRCODE* pCharStr )
         memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
 
@@ -702,7 +659,7 @@ STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
         memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
 
@@ -727,7 +684,7 @@ STRING& STRING::Append( STRCODE c )
         pNewData->maStr[nLen] = c;
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
 
@@ -774,7 +731,7 @@ STRING& STRING::Insert( const STRING& rStr, xub_StrLen nIndex )
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -820,7 +777,7 @@ STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -857,7 +814,7 @@ STRING& STRING::Insert( const STRCODE* pCharStr, xub_StrLen nIndex )
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -887,7 +844,7 @@ STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -948,7 +905,7 @@ STRING& STRING::Replace( xub_StrLen nIndex, xub_StrLen nCount, const STRING& rSt
             (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -980,15 +937,12 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
                 (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
     else
     {
-        // Leerer String
-        ImplDeleteData( mpData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
 
     return *this;
@@ -1012,7 +966,7 @@ STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
 
         // dann neuen String mit der neuen Laenge anlegen
         STRINGDATA* pNewData = ImplAllocData( nCount );
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
     else
@@ -1060,7 +1014,7 @@ STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
     while ( nCount );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -1138,9 +1092,7 @@ STRING& STRING::EraseAllChars( STRCODE c )
     {
         if ( nCount == mpData->mnLen )
         {
-            ImplDeleteData( mpData );
-            ImplIncRefCount( &aImplEmptyStrData );
-            mpData = &aImplEmptyStrData;
+            STRING_NEW((STRING_TYPE **)&mpData);
         }
         else
         {
@@ -1159,7 +1111,7 @@ STRING& STRING::EraseAllChars( STRCODE c )
             }
 
             // Alte Daten loeschen und Neue zuweisen
-            ImplDeleteData( mpData );
+            STRING_RELEASE((STRING_TYPE *)mpData);
             mpData = pNewData;
         }
     }
@@ -1332,7 +1284,7 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
         }
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
 
@@ -2192,16 +2144,14 @@ void STRING::ReleaseBufferAccess( xub_StrLen nLen )
 
     if ( !nLen )
     {
-        ImplDeleteData( mpData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
     // Bei mehr als 8 Zeichen unterschied, kuerzen wir den Buffer
     else if ( ((ULONG)nLen)+8 < mpData->mnLen )
     {
         STRINGDATA* pNewData = ImplAllocData( nLen );
         memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
     else
@@ -2214,13 +2164,14 @@ STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    // Vorhandene Daten loeschen und neue anlegen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     if ( nLen )
         mpData = ImplAllocData( nLen );
     else
-        mpData = &aImplEmptyStrData;
+    {
+        mpData = NULL;
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
 
-    // Pointer auf den angelegten Buffer zurueckgeben
     return mpData->maStr;
 }
