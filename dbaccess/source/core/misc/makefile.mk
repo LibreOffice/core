@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:35:28 $
+#   last change: $Author: rt $ $Date: 2006-05-04 08:39:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ SLOFILES=	\
         $(SLO)$/services.obj				\
         $(SLO)$/PropertyForward.obj				\
         $(SLO)$/ContainerMediator.obj			\
-        $(SLO)$/userinformation.obj
+        $(SLO)$/userinformation.obj             \
+        $(SLO)$/warnings.obj
 
 # --- Targets ----------------------------------
 
