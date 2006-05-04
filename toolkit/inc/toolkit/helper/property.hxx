@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:56:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,7 @@ namespace rtl {
 #define BASEPROPERTY_IMAGEPOSITION         113  // sal_Int16
 #define BASEPROPERTY_NATIVE_WIDGET_LOOK    114  // sal_Bool
 #define BASEPROPERTY_VERTICALALIGN         115  // VerticalAlignment
+#define BASEPROPERTY_WHEELWITHOUTFOCUS     116  // sal_Bool
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
