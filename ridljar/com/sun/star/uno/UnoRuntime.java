@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoRuntime.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:24:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,11 @@
 package com.sun.star.uno;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
+import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
 
 /**
@@ -185,28 +187,186 @@ public class UnoRuntime {
     }
 
     /**
-     * Tests if the given references represent facets of the same UNO object.
-     *
-     * <p>For UNO objects, it does not work to check object identity with
-     * <code>==</code> or <code>equals</code>, as there may for example be
-     * multiple Java proxies for the same UNO object, each proxy implementing
-     * different interfaces.</p>
-     *
-     * @param object1 a reference to any Java object representing (a facet of) a
-     * UNO object; may be <code>null</code>
-     * @param object2 a reference to any Java object representing (a facet of) a
-     * UNO object; may be <code>null</code>
-     * @return <code>true</code> if and only if <code>object1</code> and
-     * <code>object2</code> are both <code>null</code>, or both represent the
-     * same UNO object
-     * @see com.sun.star.uno.IQueryInterface#isSame
-     */
-    public static boolean areSame(Object object1, Object object2) {
-        return object1 == object2
-            || (object1 instanceof IQueryInterface
-                && ((IQueryInterface) object1).isSame(object2))
-            || (object2 instanceof IQueryInterface
-                && ((IQueryInterface) object2).isSame(object1));
+       Tests two UNO <code>ANY</code> values for equality.
+
+       <p>Two UNO values are <dfn>equal</dfn> if and only if they are of the
+       same UNO type&nbsp;<var>t</var>, and they meet the following condition,
+       depending on&nbsp;<var>t</var>:</p>
+       <ul>
+         <li>If <var>t</var> is a primitive type, then both values must denote
+         the same element of the set of values of&nbsp;<var>t</var>.</li>
+
+         <li>If <var>t</var> is a structured type, then both values must
+         recursively contain corresponding values that are equal.</li>
+
+         <li>If <var>t</var> is an interface type, then the two values must be
+         either both null references, or both references to the same UNO
+         object.</li>
+       </ul>
+
+       @param any1 a Java value representing a UNO <code>ANY</code> value.
+
+       @param any2 a Java value representing a UNO <code>ANY</code> value.
+
+       @return <code>true</code> if and only if the two arguments represent
+       equal UNO values.
+    */
+    public static boolean areSame(Object any1, Object any2) {
+        Any a1 = Any.complete(any1);
+        Any a2 = Any.complete(any2);
+        Type t = a1.getType();
+        if (!a2.getType().equals(t)) {
+            return false;
+        }
+        Object v1 = a1.getObject();
+        Object v2 = a2.getObject();
+        switch (t.getTypeClass().getValue()) {
+        case TypeClass.VOID_value:
+            return true;
+        case TypeClass.BOOLEAN_value:
+        case TypeClass.BYTE_value:
+        case TypeClass.SHORT_value:
+        case TypeClass.UNSIGNED_SHORT_value:
+        case TypeClass.LONG_value:
+        case TypeClass.UNSIGNED_LONG_value:
+        case TypeClass.HYPER_value:
+        case TypeClass.UNSIGNED_HYPER_value:
+        case TypeClass.FLOAT_value:
+        case TypeClass.DOUBLE_value:
+        case TypeClass.CHAR_value:
+        case TypeClass.STRING_value:
+        case TypeClass.TYPE_value:
+            return v1.equals(v2);
+        case TypeClass.SEQUENCE_value:
+            int n = Array.getLength(v1);
+            if (n != Array.getLength(v2)) {
+                return false;
+            }
+            for (int i = 0; i < n; ++i) {
+                // Recursively using areSame on Java values that are (boxed)
+                // elements of Java arrays representing UNO sequence values,
+                // instead of on Java values that are representations of UNO ANY
+                // values, works by chance:
+                if (!areSame(Array.get(v1, i), Array.get(v2, i))) {
+                    return false;
+                }
+            }
+            return true;
+        case TypeClass.ENUM_value:
+            return v1 == v2;
+        case TypeClass.STRUCT_value:
+        case TypeClass.EXCEPTION_value:
+            IFieldDescription[] fs;
+            try {
+                fs = TypeDescription.getTypeDescription(t).
+                    getFieldDescriptions();
+            } catch (ClassNotFoundException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            }
+            for (int i = 0; i< fs.length; ++i) {
+                Type ft = new Type(fs[i].getTypeDescription());
+                try {
+                    // Recursively using areSame on Java values that are (boxed)
+                    // fields of Java classes representing UNO struct or
+                    // exception values, instead of on Java values that are
+                    // representations of UNO ANY values, works by chance:
+                    if (!areSame(
+                            completeValue(ft, fs[i].getField().get(v1)),
+                            completeValue(ft, fs[i].getField().get(v2))))
+                    {
+                        return false;
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new java.lang.RuntimeException(e.toString());
+                }
+            }
+            return true;
+        case TypeClass.INTERFACE_value:
+            return v1 == v2
+                || (v1 instanceof IQueryInterface
+                    && ((IQueryInterface) v1).isSame(v2))
+                || (v2 instanceof IQueryInterface
+                    && ((IQueryInterface) v2).isSame(v1));
+        default:
+            throw new java.lang.RuntimeException(
+                "com.sun.star.uno.Any has bad com.sun.star.uno.TypeClass");
+        }
+    }
+
+    /**
+       Complete a UNO value (make sure it is no invalid <code>null</code>
+       value).
+
+       <p>This is useful for members of parameterized type of instantiated
+       polymorphic struct types, as <code>null</code> is a valid value there
+       (and only there, for all types except <code>ANY</code> and interface
+       types).</p>
+
+       @param type a non-void, non-exception UNO type.
+
+       @param value a Java value representing a UNO value of the given UNO type,
+       or <code>null</code>.
+
+       @return the given value, or the neutral value of the given type, if the
+       given value was an invalid <code>null</code> value.
+
+       @since UDK 3.2.3
+    */
+    public static final Object completeValue(Type type, Object value) {
+        if (value != null) {
+            return value;
+        }
+        switch (type.getTypeClass().getValue()) {
+        case TypeClass.BOOLEAN_value:
+            return Boolean.FALSE;
+        case TypeClass.BYTE_value:
+            return new Byte((byte) 0);
+        case TypeClass.SHORT_value:
+        case TypeClass.UNSIGNED_SHORT_value:
+            return new Short((short) 0);
+        case TypeClass.LONG_value:
+        case TypeClass.UNSIGNED_LONG_value:
+            return new Integer(0);
+        case TypeClass.HYPER_value:
+        case TypeClass.UNSIGNED_HYPER_value:
+            return new Long(0L);
+        case TypeClass.FLOAT_value:
+            return new Float(0.0f);
+        case TypeClass.DOUBLE_value:
+            return new Double(0.0);
+        case TypeClass.CHAR_value:
+            return new Character('\u0000');
+        case TypeClass.STRING_value:
+            return "";
+        case TypeClass.TYPE_value:
+            return Type.VOID;
+        case TypeClass.ANY_value:
+        case TypeClass.INTERFACE_value:
+            return null;
+        case TypeClass.SEQUENCE_value:
+            return Array.newInstance(type.getZClass().getComponentType(), 0);
+        case TypeClass.STRUCT_value:
+            try {
+                return type.getZClass().getConstructor(null).newInstance(null);
+            } catch (java.lang.RuntimeException e) {
+                throw e;
+            } catch (java.lang.Exception e) {
+                throw new java.lang.RuntimeException(e.toString());
+            }
+        case TypeClass.ENUM_value:
+            try {
+                return type.getZClass().getMethod("getDefault", null).invoke(
+                    null, null);
+            } catch (java.lang.RuntimeException e) {
+                throw e;
+            } catch (java.lang.Exception e) {
+                throw new java.lang.RuntimeException(e.toString());
+            }
+        default:
+            throw new IllegalArgumentException(
+                "com.sun.star.uno.UnoRuntime.completeValue called with bad"
+                + " com.sun.star.uno.Type");
+        }
     }
 
     /**
