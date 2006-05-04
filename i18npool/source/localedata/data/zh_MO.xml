@@ -58,19 +58,19 @@
 </FormatElement>
 <!-- Currency formats. Index range is 12-17. -->
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="medium" usage="CURRENCY" formatindex="12">
-<FormatCode>[$P-C04]#,##0;-[$P-C04]#,##0</FormatCode>
+<FormatCode>[$MOP$-1404]#,##0;-[$MOP$-1404]#,##0</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-<FormatCode>[$P-C04]#,##0.00;-[$P-C04]##0.00</FormatCode>
+<FormatCode>[$MOP$-1404]#,##0.00;-[$MOP$-1404]##0.00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-<FormatCode>[$P-C04]#,##0;[RED]-[$P-C04]#,##0</FormatCode>
+<FormatCode>[$MOP$-1404]#,##0;[RED]-[$MOP$-1404]#,##0</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="long" usage="CURRENCY" formatindex="15">
-<FormatCode>[$P-C04]#,##0.00;[RED]-[$P-C04]#,##0.00</FormatCode>
+<FormatCode>[$MOP$-1404]#,##0.00;[RED]-[$MOP$-1404]#,##0.00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
@@ -78,7 +78,7 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-<FormatCode>[$P-C04]#,##0.--;[RED]-[$P-C04]#,##0.--</FormatCode>
+<FormatCode>[$MOP$-1404]#,##0.--;[RED]-[$MOP$-1404]#,##0.--</FormatCode>
 <DefaultName/>
 </FormatElement>
 <!-- Date formats. Index range is 18-38. -->
@@ -243,6 +243,13 @@
 <LC_CALENDAR ref="zh_HK"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
+<CurrencyID>MOP</CurrencyID>
+<CurrencySymbol>MOP$</CurrencySymbol>
+<BankSymbol>MOP</BankSymbol>
+<CurrencyName>澳門元</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+<Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
 <CurrencyID>MoP</CurrencyID>
 <CurrencySymbol>P</CurrencySymbol>
 <BankSymbol>P</BankSymbol>
