@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnyConverter_Test.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:17:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
     Any anyLong; //
     Any anyFloat; //
     Any anyDouble; //
-    Any anyObj; //
     Any anyStr; //
     Any anyType; //
     Any anyArByte; //
@@ -92,7 +91,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         anyLong= new Any(new Type(Long.TYPE), aLong);
         anyFloat= new Any(new Type(Float.TYPE), aFloat);
         anyDouble= new Any(new Type(Double.TYPE), aDouble);
-        anyObj= new Any(new Type(Object.class) /* any */, aObj);
         anyStr= new Any(new Type(String.class), aStr);
         anyType= new Any(new Type(Type.class), aType);
         anyArByte= new Any(new Type(byte[].class), arByte);
@@ -138,8 +136,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         try { AnyConverter.toBoolean(anyDouble); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toBoolean(aObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toBoolean(anyObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toBoolean(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
@@ -197,8 +193,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toChar(aObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toChar(anyObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toChar(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toChar(anyStr); failed("");
@@ -250,8 +244,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         try { AnyConverter.toByte(anyDouble); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toByte(aObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toByte(anyObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toByte(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
@@ -319,8 +311,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toShort(aObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toShort(anyObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toShort(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toShort(anyStr); failed("");
@@ -387,8 +377,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         try { AnyConverter.toInt(anyDouble); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toInt(aObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toInt(anyObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toInt(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
@@ -462,8 +450,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toLong(aObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toLong(anyObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toLong(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toLong(anyStr); failed("");
@@ -519,8 +505,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         try { AnyConverter.toFloat(anyDouble); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toFloat(aObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toFloat(anyObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toFloat(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
@@ -579,8 +563,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toDouble(aObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toDouble(anyObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toDouble(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toDouble(anyStr); failed("");
@@ -604,8 +586,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         Type _type= new Type(XTypeProvider.class);
         Object val= AnyConverter.toObject(_type, aObj);
         assure("", UnoRuntime.areSame(val, aObj));
-        val= AnyConverter.toObject(_type, anyObj);
-        assure("", UnoRuntime.areSame(val, anyObj.getObject()));
         val= AnyConverter.toObject(
             _type, new Any( new Type(XTypeProvider.class), null));
         assure("", val == null);
@@ -699,8 +679,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toString(aObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toString(anyObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toString(aType); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toString(anyType); failed("");
@@ -757,8 +735,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toType(aObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toType(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toType(anyStr); failed("");
@@ -814,8 +790,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
         try { AnyConverter.toType(anyDouble); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toType(aObj); failed("");
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
-        try { AnyConverter.toType(anyObj); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         try { AnyConverter.toType(aStr); failed("");
         } catch (com.sun.star.lang.IllegalArgumentException ie) {}
@@ -894,7 +868,6 @@ public final class AnyConverter_Test extends ComplexTestCase {
 
     public void test_isObject() {
         assure("", AnyConverter.isObject(aObj));
-        assure("", AnyConverter.isObject(anyObj));
         assure("", AnyConverter.isObject( new Any( XInterface.class, null)));
         assure("", !AnyConverter.isObject(new Object()));
     }
