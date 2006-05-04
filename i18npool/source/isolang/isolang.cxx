@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:38:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_LITHUANIAN_CLASSIC,          "lt", "LT" },
     { LANGUAGE_CROATIAN,                    "hr", "HR" },   // Croatian in Croatia
     { LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA, "hr", "BA" },
-    { LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA,  "bs", "BA" },
+    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,        "bs", "BA" },
+//  { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_AND_HERZEGOVINA, "bs", "BA" },   // script codes not supported yet
     { LANGUAGE_SERBIAN_LATIN,               "sh", "YU" },   // Serbian Latin in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_Latn_CS instead, script codes not supported yet
     { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA, "sh", "BA" },
     { LANGUAGE_SERBIAN_CYRILLIC,            "sr", "YU" },   // Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_CS instead, sr_CS not supported by ICU 2.6 (3.4 does)
@@ -218,10 +219,10 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ARMENIAN,                    "hy", "AM" },
     { LANGUAGE_AZERI,                       "az", ""   },
     { LANGUAGE_AZERI_LATIN,                 "az", "AZ" },
-//  { LANGUAGE_AZERI_CYRILLIC,              "az", "AZ" },   // variant not supported
+//  { LANGUAGE_AZERI_CYRILLIC,              "az", "AZ" },   // script codes not supported yet
     { LANGUAGE_UZBEK,                       "uz", ""   },
     { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ" },
-//  { LANGUAGE_UZBEK_CYRILLIC,              "uz", "UZ" },   // variant not supported
+//  { LANGUAGE_UZBEK_CYRILLIC,              "uz", "UZ" },   // script codes not supported yet
     { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD" },
     { LANGUAGE_BENGALI,                     "bn", "IN" },
     { LANGUAGE_BURMESE,                     "my", "MM" },
@@ -320,7 +321,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SYRIAC,                     "syr", "TR" },   // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
     { LANGUAGE_SINHALESE_SRI_LANKA,         "si", "LK" },
     { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US" },
-    { LANGUAGE_INUKTITUT,                   "iu", "CA" },   // Kalaallisut (Inuktitut/Greenland) would be kl-GL
+    { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA" },
+//  { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,  "iu", "CA" },   // script codes not supported yet
 //  { LANGUAGE_ARABIC_SUDAN,                "ar", "SD" },   // unknown MS-LCID
 //  { LANGUAGE_SAMI_LAPPISH,               "smi", ""   },   // unknown ISO code, what's "Lapp"?
     { LANGUAGE_SAMI_INARI,                 "smn", "FI" },   // ISO/DIS 639-3 (!)
@@ -331,36 +333,51 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SAMI_SKOLT,                 "sms", "FI" },   // ISO/DIS 639-3 (!)
     { LANGUAGE_SAMI_SOUTHERN_NORWAY,       "sma", "NO" },   // ISO/DIS 639-3 (!)
     { LANGUAGE_SAMI_SOUTHERN_SWEDEN,       "sma", "SE" },   // ISO/DIS 639-3 (!)
-//  { LANGUAGE_FILIPINO,                    "",   "PH" },   // unknown ISO language code (not collective "phi"!)
+    { LANGUAGE_MAPUDUNGUN_CHILE,           "arn", "CL" },
+    { LANGUAGE_CORSICAN_FRANCE,             "co", "FR" },
+    { LANGUAGE_ALSATIAN_FRANCE,            "gsw", "FR" },   // in fact 'gsw' is Schwyzerduetsch (Swiss German), which is a dialect of Alemannic German, as is Alsatian. They aren't distinct languages and share this code.
+    { LANGUAGE_YAKUT_RUSSIA,               "sah", "RU" },
+    { LANGUAGE_MOHAWK_CANADA,              "moh", "CA" },
+    { LANGUAGE_BASHKIR_RUSSIA,              "ba", "RU" },
+    { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT" },
+    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF" },   // ISO/DIS 639-3 (!)
+    { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN" },
+    { LANGUAGE_FILIPINO,                   "fil", "PH" },
 //  { LANGUAGE_IBIBIO_NIGERIA,             "nic", "NG" },   // ISO "nic" is only a collective language code
-//  { LANGUAGE_YI,                          "ii", "CN" },   // not sure if Sichuan Yi was meant, other Yi are ISO collective "sit"
-//  { LANGUAGE_TAMAZIGHT_LATIN,            "ber", ""   },   // ISO "ber" only collective
-//  { LANGUAGE_TAMAZIGHT_ARABIC,           "ber", ""   },   // ISO "ber" only collective
-    { LANGUAGE_SORBIAN,                    "wen", ""   },   // old MS-LCID, not a real language
-    { LANGUAGE_LATIN,                       "la", ""   },
-    { LANGUAGE_USER_LATIN,                  "la", ""   },   // obsoleted
+    { LANGUAGE_YI,                          "ii", "CN" },
+//  { LANGUAGE_TAMAZIGHT_LATIN,            "ber", ""   },   // ISO "ber" only collective!
+//  { LANGUAGE_TAMAZIGHT_ARABIC,           "ber", ""   },   // ISO "ber" only collective!
+    { LANGUAGE_LATIN,                       "la", "VA" },
+    { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA" },
     { LANGUAGE_USER_ESPERANTO,              "eo", ""   },
     { LANGUAGE_USER_INTERLINGUA,            "ia", ""   },
     { LANGUAGE_MAORI_NEW_ZEALAND,           "mi", "NZ" },
-    { LANGUAGE_USER_MAORI,                  "mi", "NZ" },   // obsoleted
-    { LANGUAGE_USER_KINYARWANDA,            "rw", "RW" },
-    { LANGUAGE_USER_UPPER_SORBIAN,         "hsb", "DE" },
-    { LANGUAGE_USER_LOWER_SORBIAN,         "dsb", "DE" },
-    { LANGUAGE_USER_OCCITAN,                "oc", "FR" },
+    { LANGUAGE_OBSOLETE_USER_MAORI,         "mi", "NZ" },
+    { LANGUAGE_KINYARWANDA_RWANDA,          "rw", "RW" },
+    { LANGUAGE_OBSOLETE_USER_KINYARWANDA,   "rw", "RW" },
+    { LANGUAGE_UPPER_SORBIAN_GERMANY,      "hsb", "DE" },   // MS maps this to 'wen-DE', which is nonsense. 'wen' is a collective language code, 'WEN' is a SIL code, see http://www.ethnologue.com/14/show_iso639.asp?code=wen and http://www.ethnologue.com/14/show_language.asp?code=WEN
+    { LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN,"hsb", "DE" },
+    { LANGUAGE_LOWER_SORBIAN_GERMANY,      "dsb", "DE" },   // MS maps this to 'wee-DE', which is nonsense. 'WEE' is a SIL code, see http://www.ethnologue.com/14/show_language.asp?code=WEE
+    { LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN,"dsb", "DE" },
+    { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR" },
+    { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR" },
     { LANGUAGE_USER_KURDISH_TURKEY,         "ku", "TR" },
     { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY" },
     { LANGUAGE_USER_KURDISH_IRAQ,           "ku", "IQ" },
     { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR" },
     { LANGUAGE_USER_SARDINIAN,              "sc", "IT" },
-    { LANGUAGE_USER_BRETON,                 "br", "FR" },
-    { LANGUAGE_USER_KALAALLISUT,            "kl", "GL" },
+    { LANGUAGE_BRETON_FRANCE,               "br", "FR" },
+    { LANGUAGE_OBSOLETE_USER_BRETON,        "br", "FR" },
+    { LANGUAGE_KALAALLISUT_GREENLAND,       "kl", "GL" },
+    { LANGUAGE_OBSOLETE_USER_KALAALLISUT,   "kl", "GL" },
     { LANGUAGE_USER_SWAZI,                  "ss", "ZA" },
     { LANGUAGE_USER_NDEBELE_SOUTH,          "nr", "ZA" },
     { LANGUAGE_USER_TSWANA_BOTSWANA,        "tn", "BW" },
     { LANGUAGE_USER_MOORE,                 "mos", "BF" },
     { LANGUAGE_USER_BAMBARA,                "bm", "ML" },
     { LANGUAGE_USER_AKAN,                   "ak", "GH" },
-    { LANGUAGE_USER_LUXEMBOURGISH,          "lb", "LU" },
+    { LANGUAGE_LUXEMBOURGISH_LUXEMBOURG,    "lb", "LU" },
+    { LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH, "lb", "LU" },
     { LANGUAGE_USER_FRIULIAN,              "fur", "IT" },
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
