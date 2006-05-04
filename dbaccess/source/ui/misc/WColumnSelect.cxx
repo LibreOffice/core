@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:23:36 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,10 @@ void OWizColumnSelect::ActivatePage( )
     const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
 
     ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
-    for(;aIter != pDestColumns->end();++aIter)
+    ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
+    /*if ( m_pParent->isAutoincrementEnabled() && pDestColumns->size() > 1 )
+        ++aIter;*/
+    for(;aIter != aEnd;++aIter)
     {
         USHORT nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
         m_lbNewColumnNames.SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
@@ -373,7 +376,9 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                                                     ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-        DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
+        DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+        if ( aIter == m_pParent->m_mNameMapping.end() )
+            return; // do nothing
         const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
         ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
         if ( aSrcIter != pSrcColumns->end() )
@@ -383,6 +388,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
             USHORT nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
+            m_pParent->removeColumnNameFromNameMap(_sColumnName);
 
             _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, nPos),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
