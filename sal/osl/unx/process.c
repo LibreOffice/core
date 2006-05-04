@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:31:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 13:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,6 +582,7 @@ static void ChildStatusProc(void *pData)
 
         if ((pid > 0) && (i == 0))
         {
+            pid_t   child_pid;
             osl_acquireMutex(ChildListMutex);
 
             pdata->m_pProcImpl->m_pid = pid;
@@ -603,9 +604,24 @@ static void ChildStatusProc(void *pData)
 
             osl_setCondition(pdata->m_started);
 
-            if ((pid = waitpid(pid, &status, 0)) < 0)
+            do
+            {
+                child_pid = waitpid(pid, &status, 0);
+            } while ( 0 > child_pid && EINTR == errno );
+
+            if ( child_pid < 0)
+            {
                 OSL_TRACE("Failed to wait for child process, errno=%d (%s)\n", errno, strerror(errno));
-            else
+
+                /*
+                We got an other error than EINTR. Anyway we have to wake up the
+                waiting thread under any circumstances */
+
+                child_pid = pid;
+            }
+
+
+            if ( child_pid > 0 )
             {
                 oslProcessImpl* pChild;
 
@@ -616,7 +632,7 @@ static void ChildStatusProc(void *pData)
                 /* check if it is one of our child processes */
                 while (pChild != NULL)
                 {
-                    if (pChild->m_pid == pid)
+                    if (pChild->m_pid == child_pid)
                     {
                         if (WIFEXITED(status))
                             pChild->m_status = WEXITSTATUS(status);
