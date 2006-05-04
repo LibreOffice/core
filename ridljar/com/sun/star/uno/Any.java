@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:41:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2006-01-26 17:41:46 $
+ * @version     $Revision: 1.10 $ $ $Date: 2006-05-04 08:05:08 $
  */
 public class Any {
     /**
@@ -89,6 +89,24 @@ public class Any {
         }
         _type   = type;
         _object = object;
+    }
+
+    /**
+       Complete a UNO <code>ANY</code> (make sure it is wrapped up as an
+       <code>Any</code> instance).
+
+       @param any a Java value representing a UNO <code>ANY</code> value.
+
+       @return a complete Java value (that is, an <code>Any</code> instance)
+       representing the same UNO <code>ANY</code> value as the given argument.
+
+       @since UDK 3.2.3
+    */
+    public static final Any complete(Object any) {
+        return any instanceof Any
+            ? (Any) any
+            : new Any(
+                new Type(any == null ? XInterface.class : any.getClass()), any);
     }
 
     /**
