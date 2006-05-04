@@ -1,41 +1,60 @@
 #!/usr/bin/awk -f
 #
-# Utility to compare MS-LANGID definitions with those defined in ../../inc/i18npool/lang.hxx
+# Utility to compare MS-LANGID definitions with those defined in ../../inc/i18npool/lang.h
 # Run in i18npool/source/isolang
 #
 # outputs new #define LANGUAGE_... 0x... and also some commented out substrings
 # that were matched in already existing defines.
 #
-# Expects input from the saved page of
+# ATTENTION! The sed filter in the command line examples below assures that a
+# '|' border is drawn by html2text in data tables, and nowhere else, on which
+# this awk script relies. This script also heavily relies on the column layout
+# encountered. Should MS decide to change their layout or their CSS names
+# ("data..."), this would probably break. Should html2text decide that the last
+# border="..." attribute encountered wins instead of the first, this may break
+# also.
+#
+# sed -e 's/|/,/g; s/<TABLE/<table/g; /<table/\!b; s/\(<table[^>]*\)\(border\|BORDER\)="[0-9]*"/\1/g; s/\(<table\)\([^>]*\(class\|CLASS\)="data\)/\1 border="1"\2/g'
+#
+# After html2text best if file cleaned up to _only_ contain the table entries,
+# but not necessary, entries are filtered. Check output.
+#
+# Expects input from the saved page of one of
 #
 # (1)
 # http://www.microsoft.com/globaldev/reference/lcid-all.mspx
 # filtered through ``html2text -nobs ...'', generated table:
-# blank,name,hex,dec fields:
-#    |Afrikaans_-_South_Africa____________|0436|1078_|
-# Best if file cleaned up to _only_ contain the table entries, but not
-# necessary, entries are filtered. Check output.
+# blank,name,hex,dec,blank fields:
+#    |Afrikaans_-_South_Africa___|0436___|1078___|
 #
 # complete command line:
-# lynx -dump -source http://www.microsoft.com/globaldev/reference/lcid-all.mspx | html2text -nobs | awk -f lcid.awk >outfile
+# lynx -dump -source http://www.microsoft.com/globaldev/reference/lcid-all.mspx | sed -e 's/|/,/g; s/<TABLE/<table/g; /<table/\!b; s/\(<table[^>]*\)\(border\|BORDER\)="[0-9]*"/\1/g; s/\(<table\)\([^>]*\(class\|CLASS\)="data\)/\1 border="1"\2/g' | html2text -nobs -width 234 | awk -f lcid.awk >outfile
 #
 #
 # (2)
 # http://www.microsoft.com/globaldev/reference/winxp/xp-lcid.mspx
 # filtered through ``html2text -nobs ...'', generated table:
-# blank,name,hex,dec,inputlocales,collection fields:
-#    |Afrikaans                           |0436|1078 |0436:       |Basic     |
-# Best if file cleaned up to _only_ contain the table entries, but not
-# necessary, entries are filtered. Check output.
+# blank,name,hex,dec,inputlocales,collection,blank fields:
+#    |Afrikaans   |0436   |1078   |0436:00000409,   |Basic   |
 #
 # complete command line:
-# lynx -dump -source http://www.microsoft.com/globaldev/reference/winxp/xp-lcid.mspx | html2text -nobs | awk -f lcid.awk >outfile
+# lynx -dump -source http://www.microsoft.com/globaldev/reference/winxp/xp-lcid.mspx | sed -e 's/|/,/g; s/<TABLE/<table/g; /<table/\!b; s/\(<table[^>]*\)\(border\|BORDER\)="[0-9]*"/\1/g; s/\(<table\)\([^>]*\(class\|CLASS\)="data\)/\1 border="1"\2/g' | html2text -nobs -width 234 | awk -f lcid.awk >outfile
+#
+#
+# (3)
+# http://msdn.microsoft.com/library/en-us/intl/nls_238z.asp
+# filtered through ``html2text -nobs ...'', generated table:
+# blank,hex,locale,name,blank  fields:
+#   |0x0436___|af-ZA___|Afrikaans_(South_Africa)___|
+#
+# complete command line:
+# lynx -dump -source http://msdn.microsoft.com/library/en-us/intl/nls_238z.asp | sed -e 's/|/,/g; s/<TABLE/<table/g; /<table/\!b; s/\(<table[^>]*\)\(border\|BORDER\)="[0-9]*"/\1/g; s/\(<table\)\([^>]*\(class\|CLASS\)="data\)/\1 border="1"\2/g' | html2text -nobs -width 234 | awk -f lcid.awk >outfile
 #
 # Author: Eike Rathke <erack@sun.com>, <er@openoffice.org>
 #
 
 BEGIN {
-    while ((getline < "../../inc/i18npool/lang.hxx") > 0)
+    while ((getline < "../../inc/i18npool/lang.h") > 0)
     {
         if ($0 ~ /^#define[ ]*LANGUAGE_[_A-Za-z0-9]*[ ]*0x[0-9a-fA-F]/)
         {
@@ -49,43 +68,76 @@ BEGIN {
     filetype = 0
     lcid_all = 1
     xp_lcid  = 2
+    nls_238z = 3
+    filetypename[filetype] = "unknown"
+    filetypename[lcid_all] = "lcid_all"
+    filetypename[xp_lcid]  = "xp_lcid"
+    filetypename[nls_238z] = "nls_238z"
+    namefield[lcid_all] = 2
+    namefield[xp_lcid]  = 2
+    namefield[nls_238z] = 4
+    hexfield[lcid_all]  = 3
+    hexfield[xp_lcid]   = 3
+    hexfield[nls_238z]  = 2
+    locfield[lcid_all]  = 0
+    locfield[xp_lcid]   = 0
+    locfield[nls_238z]  = 3
 }
 
 (NF < 5) { next }
 
 !filetype {
     if (NF == 5)
-        filetype = lcid_all
+    {
+        if ($2 ~ /^0x/)
+            filetype = nls_238z
+        else if ($2 ~ /^Afrikaans/)
+            filetype = lcid_all
+    }
     else if (NF == 7)
         filetype = xp_lcid
-    else
+    if (!filetype)
         next
+    name = namefield[filetype]
+    hex = hexfield[filetype]
+    loc = locfield[filetype]
 }
 
-($3 !~ /^[0-9a-fA-F][0-9a-fA-F]*$/) { filtered[$3] = $0; next }
+{
+    gsub( /^[^:]*:/, "", $name)
+    gsub( /\..*/, "", $name)
+    gsub( /(^[ _]+)|([ _]+$)/, "", $hex)
+    gsub( /(^[ _]+)|([ _]+$)/, "", $name)
+    if (loc)
+        gsub( /(^[ _]+)|([ _]+$)/, "", $loc)
+}
+
+($hex ~ /^0x/) { $hex = substr( $hex, 3) }
+
+# if only 464 instead of 0464, make it match lang.h
+(length($hex) < 4) { $hex = "0" $hex }
+
+($hex !~ /^[0-9a-fA-F][0-9a-fA-F]*$/) { filtered[$hex] = $0; next }
 
 # all[HEX]=string
-{ all[toupper($3)] = $2 }
+{ all[toupper($hex)] = $name }
+
+(loc) { comment[toupper($hex)] = "  /* " $loc " */" }
 
 # new hex: newlang[HEX]=string
-!(toupper($3) in lang) { newlang[toupper($3)] = $2 }
+!(toupper($hex) in lang) { newlang[toupper($hex)] = $name }
 
 END {
     if (!filetype)
     {
-        print "No file type (lcid-all|xp-lcid) recognized." >>"/dev/stderr"
+        print "No file type recognized." >>"/dev/stderr"
         exit(1)
     }
-    else if (filetype == lcid_all)
-        print "// assuming lcid-all file"
-    else if (filetype == xp_lcid)
-        print "// assuming xp-lcid file"
-    else
-        print "// unknown file type"
+    print "// assuming " filetypename[filetype] " file"
     # every new language
     for (x in newlang)
     {
-        printf( "xxxxxxx LANGUAGE_%-26s 0x%s\n", newlang[x], x)
+        printf( "xxxxxxx LANGUAGE_%-26s 0x%s%s\n", newlang[x], x, comment[x])
         n = split(newlang[x],arr,/[^A-Za-z0-9]/)
         def = ""
         for (i=1; i<=n; ++i)
