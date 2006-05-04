@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:02:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,13 +527,18 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             Reference< XDocumentDataSource > xDocumentDataSource;
             xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
             xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
-
-            if ( bInteractive && xModel.is() )
+            if ( xModel.is() )
             {
                 ::rtl::OUString sURL = xModel->getURL();
-                bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
-                if ( sURL != xModel->getURL() )
-                    bDidLoadExisting = sal_True;
+                if ( bCreateNew )
+                    xModel->attachResource( sURL, aLoadArgs );
+
+                if ( bInteractive )
+                {
+                    bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
+                    if ( sURL != xModel->getURL() )
+                        bDidLoadExisting = sal_True;
+                }
             }
         }
     }
