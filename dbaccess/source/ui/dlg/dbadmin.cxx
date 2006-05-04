@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:29:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ void ODbAdminDialog::removeDetailPages()
 void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPage _pCreateFunc)
 {
     // open our own resource block, as the page titles are strings local to this block
-    OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+    LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
     AddTabPage(_nPageId, String(ResId(_nTextId)), _pCreateFunc, NULL);
     m_aCurrentDetailPages.push(_nPageId);
@@ -245,7 +245,7 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
         case DST_USERDEFINE9:
         case DST_USERDEFINE10:
             {
-                OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+                LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
                 String aTitle(ResId(STR_PAGETITLE_ADVANCED));
                 AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 0, sal_False, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
