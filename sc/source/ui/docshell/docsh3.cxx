@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:03:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:03:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,22 +385,16 @@ void ScDocShell::CalcOutputFactor()
                                             GetDefaultItem(ATTR_PATTERN);
 
     Font aDefFont;
-    Printer* pPrinter = GetPrinter();
-    if (pPrinter)
-    {
-        MapMode aOldMode = pPrinter->GetMapMode();
-        Font    aOldFont = pPrinter->GetFont();
+    OutputDevice* pRefDev = GetRefDevice();
+    MapMode aOldMode = pRefDev->GetMapMode();
+    Font    aOldFont = pRefDev->GetFont();
 
-        pPrinter->SetMapMode(MAP_PIXEL);
-        pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pPrinter);    // font color doesn't matter here
-        pPrinter->SetFont(aDefFont);
-        nPrinterWidth = pPrinter->PixelToLogic( Size( pPrinter->GetTextWidth(aTestString), 0 ),
-                                                    MAP_100TH_MM ).Width();
-        pPrinter->SetFont(aOldFont);
-        pPrinter->SetMapMode(aOldMode);
-    }
-    else
-        DBG_ERROR("kein Drucker ?!?!?");
+    pRefDev->SetMapMode(MAP_PIXEL);
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pRefDev); // font color doesn't matter here
+    pRefDev->SetFont(aDefFont);
+    nPrinterWidth = pRefDev->PixelToLogic( Size( pRefDev->GetTextWidth(aTestString), 0 ), MAP_100TH_MM ).Width();
+    pRefDev->SetFont(aOldFont);
+    pRefDev->SetMapMode(aOldMode);
 
     VirtualDevice aVirtWindow( *Application::GetDefaultDevice() );
     aVirtWindow.SetMapMode(MAP_PIXEL);
@@ -457,19 +451,25 @@ Printer* ScDocShell::GetDocumentPrinter()       // fuer OLE
     return aDocument.GetPrinter();
 }
 
-SfxPrinter* ScDocShell::GetPrinter()
+SfxPrinter* ScDocShell::GetPrinter(BOOL bCreateIfNotExist)
 {
-    return aDocument.GetPrinter();
+    return aDocument.GetPrinter(bCreateIfNotExist);
 }
 
 void ScDocShell::UpdateFontList()
 {
     delete pFontList;
-    pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
+    // pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
+    pFontList = new FontList( GetRefDevice(), NULL, FALSE );    // FALSE or TRUE???
     SvxFontListItem aFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 
     CalcOutputFactor();
+}
+
+OutputDevice* ScDocShell::GetRefDevice()
+{
+    return aDocument.GetRefDevice();
 }
 
 USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
@@ -481,12 +481,17 @@ USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
             aDocument.SetPrinter( pNewPrinter );
             aDocument.SetPrintOptions();
 
+            // MT: Use UpdateFontList: Will use Printer fonts only if needed!
+            /*
             delete pFontList;
             pFontList = new FontList( pNewPrinter, Application::GetDefaultDevice() );
             SvxFontListItem aFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST );
             PutItem( aFontListItem );
 
             CalcOutputFactor();
+            */
+            if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+                UpdateFontList();
 
             ScModule* pScMod = SC_MOD();
             SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
