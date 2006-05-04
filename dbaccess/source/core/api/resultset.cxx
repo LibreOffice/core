@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:15:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,8 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
                        sal_Bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
-           ,m_xAggregateAsResultSet(_xResultSet)
+           ,m_xDelegatorResultSet(_xResultSet)
+           ,m_aWarnings( Reference< XWarningsSupplier >( _xResultSet, UNO_QUERY ) )
            ,m_bIsBookmarkable(sal_False)
 {
     DBG_CTOR(OResultSet, NULL);
@@ -108,10 +109,11 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
     try
     {
         m_aStatement = _xStatement;
-        m_xAggregateAsRow = Reference< ::com::sun::star::sdbc::XRow >(m_xAggregateAsResultSet, UNO_QUERY);
-        m_xAggregateAsRowUpdate = Reference< ::com::sun::star::sdbc::XRowUpdate >(m_xAggregateAsResultSet, UNO_QUERY);
+        m_xDelegatorResultSetUpdate = m_xDelegatorResultSetUpdate.query( m_xDelegatorResultSet );
+        m_xDelegatorRow = m_xDelegatorRow.query( m_xDelegatorResultSet );
+        m_xDelegatorRowUpdate = m_xDelegatorRowUpdate.query( m_xDelegatorResultSet );
 
-        Reference< XPropertySet > xSet(m_xAggregateAsResultSet, UNO_QUERY);
+        Reference< XPropertySet > xSet(m_xDelegatorResultSet, UNO_QUERY);
         xSet->getPropertyValue(PROPERTY_RESULTSETTYPE) >>= m_nResultSetType;
         xSet->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY) >>= m_nResultSetConcurrency;
 
@@ -204,11 +206,11 @@ void OResultSet::disposing()
     m_pColumns->disposing();
 
     // close the pending result set
-    Reference< XCloseable > (m_xAggregateAsResultSet, UNO_QUERY)->close();
+    Reference< XCloseable > (m_xDelegatorResultSet, UNO_QUERY)->close();
 
-    m_xAggregateAsResultSet = NULL;
-    m_xAggregateAsRow = NULL;
-    m_xAggregateAsRowUpdate = NULL;
+    m_xDelegatorResultSet = NULL;
+    m_xDelegatorRow = NULL;
+    m_xDelegatorRowUpdate = NULL;
 
     m_aStatement = Reference< XInterface >();
 }
@@ -278,7 +280,7 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeExc
 sal_Bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
 {
     // set it for the driver result set
-    Reference< XPropertySet > xSet(m_xAggregateAsResultSet, UNO_QUERY);
+    Reference< XPropertySet > xSet(m_xDelegatorResultSet, UNO_QUERY);
     switch (nHandle)
     {
         case PROPERTY_ID_FETCHDIRECTION:
@@ -319,7 +321,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             OSL_ENSURE(aPropName.getLength(), "property not found?");
 
             // now read the value
-            rValue = Reference< XPropertySet >(m_xAggregateAsResultSet, UNO_QUERY)->getPropertyValue(aPropName);
+            rValue = Reference< XPropertySet >(m_xDelegatorResultSet, UNO_QUERY)->getPropertyValue(aPropName);
         }
     }
 }
@@ -330,8 +332,7 @@ Any OResultSet::getWarnings(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
-
-    return Reference< XWarningsSupplier >(m_xAggregateAsResultSet, UNO_QUERY)->getWarnings();
+    return m_aWarnings.getWarnings();
 }
 
 //------------------------------------------------------------------------------
@@ -339,8 +340,7 @@ void OResultSet::clearWarnings(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
-
-    Reference< XWarningsSupplier >(m_xAggregateAsResultSet, UNO_QUERY)->clearWarnings();
+    m_aWarnings.clearWarnings();
 }
 
 // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
@@ -350,7 +350,7 @@ Reference< XResultSetMetaData > OResultSet::getMetaData(void) throw( SQLExceptio
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return Reference< XResultSetMetaDataSupplier >(m_xAggregateAsResultSet, UNO_QUERY)->getMetaData();
+    return Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY)->getMetaData();
 }
 
 // ::com::sun::star::sdbc::XColumnLocate
@@ -360,7 +360,7 @@ sal_Int32 OResultSet::findColumn(const rtl::OUString& columnName) throw( SQLExce
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return Reference< XColumnLocate >(m_xAggregateAsResultSet, UNO_QUERY)->findColumn(columnName);
+    return Reference< XColumnLocate >(m_xDelegatorResultSet, UNO_QUERY)->findColumn(columnName);
 }
 
 //------------------------------------------------------------------------------
@@ -409,7 +409,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
     if (!m_pColumns->isInitialized())
     {
         // get the metadata
-        Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xAggregateAsResultSet, UNO_QUERY)->getMetaData();
+        Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY)->getMetaData();
         // do we have columns
         try
         {
@@ -419,7 +419,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
             {
                 // retrieve the name of the column
                 rtl::OUString aName = xMetaData->getColumnName(i + 1);
-                ODataColumn* pColumn = new ODataColumn(xMetaData, m_xAggregateAsRow, m_xAggregateAsRowUpdate, i + 1, xDBMetaData);
+                ODataColumn* pColumn = new ODataColumn(xMetaData, m_xDelegatorRow, m_xDelegatorRowUpdate, i + 1, xDBMetaData);
                 m_pColumns->append(aName, pColumn);
             }
         }
@@ -438,7 +438,7 @@ sal_Bool OResultSet::wasNull(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->wasNull();
+    return m_xDelegatorRow->wasNull();
 }
 //------------------------------------------------------------------------------
 rtl::OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -446,7 +446,7 @@ rtl::OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, 
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getString(columnIndex);
+    return m_xDelegatorRow->getString(columnIndex);
 }
 //------------------------------------------------------------------------------
 sal_Bool OResultSet::getBoolean(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -454,7 +454,7 @@ sal_Bool OResultSet::getBoolean(sal_Int32 columnIndex) throw( SQLException, Runt
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getBoolean(columnIndex);
+    return m_xDelegatorRow->getBoolean(columnIndex);
 }
 //------------------------------------------------------------------------------
 sal_Int8 OResultSet::getByte(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -462,7 +462,7 @@ sal_Int8 OResultSet::getByte(sal_Int32 columnIndex) throw( SQLException, Runtime
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getByte(columnIndex);
+    return m_xDelegatorRow->getByte(columnIndex);
 }
 //------------------------------------------------------------------------------
 sal_Int16 OResultSet::getShort(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -470,7 +470,7 @@ sal_Int16 OResultSet::getShort(sal_Int32 columnIndex) throw( SQLException, Runti
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getShort(columnIndex);
+    return m_xDelegatorRow->getShort(columnIndex);
 }
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getInt(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -478,7 +478,7 @@ sal_Int32 OResultSet::getInt(sal_Int32 columnIndex) throw( SQLException, Runtime
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getInt(columnIndex);
+    return m_xDelegatorRow->getInt(columnIndex);
 }
 //------------------------------------------------------------------------------
 sal_Int64 OResultSet::getLong(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -486,7 +486,7 @@ sal_Int64 OResultSet::getLong(sal_Int32 columnIndex) throw( SQLException, Runtim
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getLong(columnIndex);
+    return m_xDelegatorRow->getLong(columnIndex);
 }
 //------------------------------------------------------------------------------
 float OResultSet::getFloat(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -494,7 +494,7 @@ float OResultSet::getFloat(sal_Int32 columnIndex) throw( SQLException, RuntimeEx
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getFloat(columnIndex);
+    return m_xDelegatorRow->getFloat(columnIndex);
 }
 //------------------------------------------------------------------------------
 double OResultSet::getDouble(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -502,7 +502,7 @@ double OResultSet::getDouble(sal_Int32 columnIndex) throw( SQLException, Runtime
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getDouble(columnIndex);
+    return m_xDelegatorRow->getDouble(columnIndex);
 }
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -510,7 +510,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getBytes(columnIndex);
+    return m_xDelegatorRow->getBytes(columnIndex);
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::util::Date OResultSet::getDate(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -518,7 +518,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getDate(columnIndex);
+    return m_xDelegatorRow->getDate(columnIndex);
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::util::Time OResultSet::getTime(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -526,7 +526,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getTime(columnIndex);
+    return m_xDelegatorRow->getTime(columnIndex);
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::util::DateTime OResultSet::getTimestamp(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -534,7 +534,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getTimestamp(columnIndex);
+    return m_xDelegatorRow->getTimestamp(columnIndex);
 }
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -542,7 +542,7 @@ Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getBinaryStream(columnIndex);
+    return m_xDelegatorRow->getBinaryStream(columnIndex);
 }
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -550,7 +550,7 @@ Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getCharacterStream(columnIndex);
+    return m_xDelegatorRow->getCharacterStream(columnIndex);
 }
 //------------------------------------------------------------------------------
 Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException )
@@ -558,7 +558,7 @@ Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::st
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getObject(columnIndex, typeMap);
+    return m_xDelegatorRow->getObject(columnIndex, typeMap);
 }
 //------------------------------------------------------------------------------
 Reference< XRef >  OResultSet::getRef(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -566,7 +566,7 @@ Reference< XRef >  OResultSet::getRef(sal_Int32 columnIndex) throw( SQLException
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getRef(columnIndex);
+    return m_xDelegatorRow->getRef(columnIndex);
 }
 //------------------------------------------------------------------------------
 Reference< XBlob >  OResultSet::getBlob(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -574,7 +574,7 @@ Reference< XBlob >  OResultSet::getBlob(sal_Int32 columnIndex) throw( SQLExcepti
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getBlob(columnIndex);
+    return m_xDelegatorRow->getBlob(columnIndex);
 }
 //------------------------------------------------------------------------------
 Reference< XClob >  OResultSet::getClob(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -582,7 +582,7 @@ Reference< XClob >  OResultSet::getClob(sal_Int32 columnIndex) throw( SQLExcepti
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getClob(columnIndex);
+    return m_xDelegatorRow->getClob(columnIndex);
 }
 //------------------------------------------------------------------------------
 Reference< XArray >  OResultSet::getArray(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
@@ -590,7 +590,7 @@ Reference< XArray >  OResultSet::getArray(sal_Int32 columnIndex) throw( SQLExcep
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsRow->getArray(columnIndex);
+    return m_xDelegatorRow->getArray(columnIndex);
 }
 
 // ::com::sun::star::sdbc::XRowUpdate
@@ -602,7 +602,7 @@ void OResultSet::updateNull(sal_Int32 columnIndex) throw( SQLException, RuntimeE
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateNull(columnIndex);
+    m_xDelegatorRowUpdate->updateNull(columnIndex);
 }
 
 //------------------------------------------------------------------------------
@@ -613,7 +613,7 @@ void OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( SQLExce
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateBoolean(columnIndex, x);
+    m_xDelegatorRowUpdate->updateBoolean(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( SQLException, RuntimeException )
@@ -623,7 +623,7 @@ void OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( SQLExcepti
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateByte(columnIndex, x);
+    m_xDelegatorRowUpdate->updateByte(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( SQLException, RuntimeException )
@@ -633,7 +633,7 @@ void OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( SQLExcep
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateShort(columnIndex, x);
+    m_xDelegatorRowUpdate->updateShort(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( SQLException, RuntimeException )
@@ -643,7 +643,7 @@ void OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( SQLExcepti
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateInt(columnIndex, x);
+    m_xDelegatorRowUpdate->updateInt(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( SQLException, RuntimeException )
@@ -653,7 +653,7 @@ void OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( SQLExcept
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateLong(columnIndex, x);
+    m_xDelegatorRowUpdate->updateLong(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateFloat(sal_Int32 columnIndex, float x) throw( SQLException, RuntimeException )
@@ -663,7 +663,7 @@ void OResultSet::updateFloat(sal_Int32 columnIndex, float x) throw( SQLException
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateFloat(columnIndex, x);
+    m_xDelegatorRowUpdate->updateFloat(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLException, RuntimeException )
@@ -673,7 +673,7 @@ void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLExcepti
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateDouble(columnIndex, x);
+    m_xDelegatorRowUpdate->updateDouble(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateString(sal_Int32 columnIndex, const rtl::OUString& x) throw( SQLException, RuntimeException )
@@ -683,7 +683,7 @@ void OResultSet::updateString(sal_Int32 columnIndex, const rtl::OUString& x) thr
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateString(columnIndex, x);
+    m_xDelegatorRowUpdate->updateString(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x) throw( SQLException, RuntimeException )
@@ -693,7 +693,7 @@ void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& 
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateBytes(columnIndex, x);
+    m_xDelegatorRowUpdate->updateBytes(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util::Date& x) throw( SQLException, RuntimeException )
@@ -703,7 +703,7 @@ void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util:
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateDate(columnIndex, x);
+    m_xDelegatorRowUpdate->updateDate(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException )
@@ -713,7 +713,7 @@ void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util:
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateTime(columnIndex, x);
+    m_xDelegatorRowUpdate->updateTime(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException )
@@ -723,7 +723,7 @@ void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateTimestamp(columnIndex, x);
+    m_xDelegatorRowUpdate->updateTimestamp(columnIndex, x);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
@@ -733,7 +733,7 @@ void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::co
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateBinaryStream(columnIndex, x, length);
+    m_xDelegatorRowUpdate->updateBinaryStream(columnIndex, x, length);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
@@ -743,7 +743,7 @@ void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< :
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateCharacterStream(columnIndex, x, length);
+    m_xDelegatorRowUpdate->updateCharacterStream(columnIndex, x, length);
 }
 //------------------------------------------------------------------------------
 void OResultSet::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale) throw( SQLException, RuntimeException )
@@ -753,7 +753,7 @@ void OResultSet::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_In
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateNumericObject(columnIndex, x, scale);
+    m_xDelegatorRowUpdate->updateNumericObject(columnIndex, x, scale);
 }
 
 //------------------------------------------------------------------------------
@@ -764,7 +764,7 @@ void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x) throw( SQLExc
 
     checkReadOnly();
 
-    m_xAggregateAsRowUpdate->updateObject(columnIndex, x);
+    m_xDelegatorRowUpdate->updateObject(columnIndex, x);
 }
 
 // ::com::sun::star::sdbc::XResultSet
@@ -774,7 +774,7 @@ sal_Bool OResultSet::next(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->next();
+    return m_xDelegatorResultSet->next();
 }
 
 //------------------------------------------------------------------------------
@@ -783,7 +783,7 @@ sal_Bool OResultSet::isBeforeFirst(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->isBeforeFirst();
+    return m_xDelegatorResultSet->isBeforeFirst();
 }
 
 //------------------------------------------------------------------------------
@@ -792,7 +792,7 @@ sal_Bool OResultSet::isAfterLast(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->isAfterLast();
+    return m_xDelegatorResultSet->isAfterLast();
 }
 
 //------------------------------------------------------------------------------
@@ -801,7 +801,7 @@ sal_Bool OResultSet::isFirst(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->isFirst();
+    return m_xDelegatorResultSet->isFirst();
 }
 
 //------------------------------------------------------------------------------
@@ -810,7 +810,7 @@ sal_Bool OResultSet::isLast(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->isLast();
+    return m_xDelegatorResultSet->isLast();
 }
 
 //------------------------------------------------------------------------------
@@ -819,7 +819,7 @@ void OResultSet::beforeFirst(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    m_xAggregateAsResultSet->beforeFirst();
+    m_xDelegatorResultSet->beforeFirst();
 }
 
 //------------------------------------------------------------------------------
@@ -828,7 +828,7 @@ void OResultSet::afterLast(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    m_xAggregateAsResultSet->afterLast();
+    m_xDelegatorResultSet->afterLast();
 }
 
 //------------------------------------------------------------------------------
@@ -837,7 +837,7 @@ sal_Bool OResultSet::first(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->first();
+    return m_xDelegatorResultSet->first();
 }
 
 //------------------------------------------------------------------------------
@@ -846,7 +846,7 @@ sal_Bool OResultSet::last(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->last();
+    return m_xDelegatorResultSet->last();
 }
 
 //------------------------------------------------------------------------------
@@ -855,7 +855,7 @@ sal_Int32 OResultSet::getRow(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->getRow();
+    return m_xDelegatorResultSet->getRow();
 }
 
 //------------------------------------------------------------------------------
@@ -864,7 +864,7 @@ sal_Bool OResultSet::absolute(sal_Int32 row) throw( SQLException, RuntimeExcepti
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->absolute(row);
+    return m_xDelegatorResultSet->absolute(row);
 }
 
 //------------------------------------------------------------------------------
@@ -873,7 +873,7 @@ sal_Bool OResultSet::relative(sal_Int32 rows) throw( SQLException, RuntimeExcept
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->relative(rows);
+    return m_xDelegatorResultSet->relative(rows);
 }
 
 //------------------------------------------------------------------------------
@@ -882,7 +882,7 @@ sal_Bool OResultSet::previous(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->previous();
+    return m_xDelegatorResultSet->previous();
 }
 
 //------------------------------------------------------------------------------
@@ -891,7 +891,7 @@ void OResultSet::refreshRow(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    m_xAggregateAsResultSet->refreshRow();
+    m_xDelegatorResultSet->refreshRow();
 }
 
 //------------------------------------------------------------------------------
@@ -900,7 +900,7 @@ sal_Bool OResultSet::rowUpdated(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->rowUpdated();
+    return m_xDelegatorResultSet->rowUpdated();
 }
 
 //------------------------------------------------------------------------------
@@ -909,7 +909,7 @@ sal_Bool OResultSet::rowInserted(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->rowInserted();
+    return m_xDelegatorResultSet->rowInserted();
 }
 
 //------------------------------------------------------------------------------
@@ -918,7 +918,7 @@ sal_Bool OResultSet::rowDeleted(void) throw( SQLException, RuntimeException )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_xAggregateAsResultSet->rowDeleted();
+    return m_xDelegatorResultSet->rowDeleted();
 }
 
 //------------------------------------------------------------------------------
@@ -939,7 +939,7 @@ Any OResultSet::getBookmark(void) throw( SQLException, RuntimeException )
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->getBookmark();
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->getBookmark();
 }
 
 //------------------------------------------------------------------------------
@@ -950,7 +950,7 @@ sal_Bool OResultSet::moveToBookmark(const Any& bookmark) throw( SQLException, Ru
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->moveToBookmark(bookmark);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->moveToBookmark(bookmark);
 }
 
 //------------------------------------------------------------------------------
@@ -961,7 +961,7 @@ sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->moveRelativeToBookmark(bookmark, rows);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->moveRelativeToBookmark(bookmark, rows);
 }
 
 //------------------------------------------------------------------------------
@@ -972,7 +972,7 @@ sal_Int32 OResultSet::compareBookmarks(const Any& first, const Any& second) thro
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->compareBookmarks(first, second);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->compareBookmarks(first, second);
 }
 
 //------------------------------------------------------------------------------
@@ -983,7 +983,7 @@ sal_Bool OResultSet::hasOrderedBookmarks(void) throw( SQLException, RuntimeExcep
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->hasOrderedBookmarks();
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->hasOrderedBookmarks();
 }
 
 //------------------------------------------------------------------------------
@@ -994,7 +994,7 @@ sal_Int32 OResultSet::hashBookmark(const Any& bookmark) throw( SQLException, Run
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->hashBookmark(bookmark);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->hashBookmark(bookmark);
 }
 
 // ::com::sun::star::sdbc::XResultSetUpdate
@@ -1006,7 +1006,7 @@ void OResultSet::insertRow(void) throw( SQLException, RuntimeException )
 
     checkReadOnly();
 
-    Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->insertRow();
+    m_xDelegatorResultSetUpdate->insertRow();
 }
 
 //------------------------------------------------------------------------------
@@ -1017,7 +1017,7 @@ void OResultSet::updateRow(void) throw( SQLException, RuntimeException )
 
     checkReadOnly();
 
-    Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->updateRow();
+    m_xDelegatorResultSetUpdate->updateRow();
 }
 
 //------------------------------------------------------------------------------
@@ -1028,7 +1028,7 @@ void OResultSet::deleteRow(void) throw( SQLException, RuntimeException )
 
     checkReadOnly();
 
-    Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->deleteRow();
+    m_xDelegatorResultSetUpdate->deleteRow();
 }
 
 //------------------------------------------------------------------------------
@@ -1039,7 +1039,7 @@ void OResultSet::cancelRowUpdates(void) throw( SQLException, RuntimeException )
 
     checkReadOnly();
 
-    Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->cancelRowUpdates();
+    m_xDelegatorResultSetUpdate->cancelRowUpdates();
 }
 
 //------------------------------------------------------------------------------
@@ -1050,7 +1050,7 @@ void OResultSet::moveToInsertRow(void) throw( SQLException, RuntimeException )
 
     checkReadOnly();
 
-    Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->moveToInsertRow();
+    m_xDelegatorResultSetUpdate->moveToInsertRow();
 }
 
 //------------------------------------------------------------------------------
@@ -1061,19 +1061,23 @@ void OResultSet::moveToCurrentRow(void) throw( SQLException, RuntimeException )
 
     checkReadOnly();
 
-    Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->moveToCurrentRow();
+    m_xDelegatorResultSetUpdate->moveToCurrentRow();
 }
+
 // -----------------------------------------------------------------------------
-void OResultSet::checkReadOnly()
+void OResultSet::checkReadOnly() const
 {
-    if (isReadOnly())
-        throwFunctionSequenceException(*this);
+    if  (   ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
+        ||  !m_xDelegatorResultSetUpdate.is()
+        )
+        throwSQLException( "The result set is read-only.", SQL_GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
+
 // -----------------------------------------------------------------------------
-void OResultSet::checkBookmarkable()
+void OResultSet::checkBookmarkable() const
 {
-    if (!m_bIsBookmarkable)
-        throwFunctionSequenceException(*this);
+    if ( !m_bIsBookmarkable )
+        throwSQLException( "The result set does not have bookmark support.", SQL_GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
 // -----------------------------------------------------------------------------
 
