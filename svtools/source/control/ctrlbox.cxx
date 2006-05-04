@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,6 +269,7 @@ struct ImpLineListData
 DECLARE_LIST( ImpLineList, ImpLineListData* );
 
 // -----------------------------------------------------------------------
+
 inline const Color& LineListBox::GetPaintColor( void ) const
 {
     return maPaintCol;
@@ -590,7 +591,6 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         UpdateLineColors();
 }
-
 
 // ===================================================================
 // FontNameBox
@@ -1494,3 +1494,4 @@ void FontSizeBox::SetUserValue( long nNewValue, FieldUnit eInUnit )
 
     MetricBox::SetUserValue( nNewValue, eInUnit );
 }
+
