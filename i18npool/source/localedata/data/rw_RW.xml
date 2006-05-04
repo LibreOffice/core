@@ -183,19 +183,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>#.##0 [$F-621];-#.##0 [$F-621]</FormatCode>
+<FormatCode>#.##0 [$F-487];-#.##0 [$F-487]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>#.##0,00 [$F-621];-#.##0,00 [$F-621]</FormatCode>
+<FormatCode>#.##0,00 [$F-487];-#.##0,00 [$F-487]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>#.##0 [$F-621];[RED]-#.##0 [$F-621]</FormatCode>
+<FormatCode>#.##0 [$F-487];[RED]-#.##0 [$F-487]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>#.##0,00 [$F-621];[RED]-#.##0,00 [$F-621]</FormatCode>
+<FormatCode>#.##0,00 [$F-487];[RED]-#.##0,00 [$F-487]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -203,7 +203,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>#.##0,-- [$F-621];[RED]-#.##0,-- [$F-621]</FormatCode>
+<FormatCode>#.##0,-- [$F-487];[RED]-#.##0,-- [$F-487]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
