@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:01:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,7 +947,7 @@ namespace svxform
         }
 
         // die Liste der gedroppten Eintraege aus dem DragServer
-        ListBoxEntryArray aDropped = m_aControlExchange->selected();
+        const ListBoxEntrySet& aDropped = m_aControlExchange->selected();
         DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implAcceptDataTransfer: keine Eintraege !");
 
         sal_Bool bDropTargetIsComponent = IsFormComponentEntry( _pTargetEntry );
@@ -971,9 +971,12 @@ namespace svxform
             pLoop = GetParent(pLoop);
         }
 
-        for (size_t i=0; i<aDropped.size(); i++)
+        for (   ListBoxEntrySet::const_iterator dropped = aDropped.begin();
+                dropped != aDropped.end();
+                ++dropped
+            )
         {
-            SvLBoxEntry* pCurrent = aDropped[i];
+            SvLBoxEntry* pCurrent = *dropped;
             SvLBoxEntry* pCurrentParent = GetParent(pCurrent);
 
             // test for 0)
@@ -1183,7 +1186,7 @@ namespace svxform
         DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
         // die Liste der gedraggten Eintraege
-        const ListBoxEntryArray& aDropped = _rData.selected();
+        const ListBoxEntrySet& aDropped = _rData.selected();
         DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implExecuteDataTransfer: no entries!");
 
         // die Shell und das Model
@@ -1202,10 +1205,13 @@ namespace svxform
         LockSelectionHandling();
 
         // jetzt durch alle gedroppten Eintraege ...
-        for (size_t i=0; i<aDropped.size(); ++i)
+        for (   ListBoxEntrySet::const_iterator dropped = aDropped.begin();
+                dropped != aDropped.end();
+                ++dropped
+            )
         {
             // ein paar Daten zum aktuellen Element
-            SvLBoxEntry* pCurrent = aDropped[i];
+            SvLBoxEntry* pCurrent = *dropped;
             DBG_ASSERT(pCurrent != NULL, "NavigatorTree::implExecuteDataTransfer: ungueltiger Eintrag");
             DBG_ASSERT(GetParent(pCurrent) != NULL, "NavigatorTree::implExecuteDataTransfer: ungueltiger Eintrag");
                 // die Root darf nicht gedraggt werden
@@ -1296,7 +1302,7 @@ namespace svxform
 
             // dann bei mir selber bekanntgeben und neu selektieren
             SvLBoxEntry* pNew = Insert( pCurrentUserData, nIndex );
-            if ( ( 0 == i ) && pNew )
+            if ( ( aDropped.begin() == dropped ) && pNew )
             {
                 SvLBoxEntry* pParent = GetParent( pNew );
                 if ( pParent )
@@ -1379,10 +1385,18 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::ModelHasRemoved( SvListEntry* _pEntry )
     {
-        sal_uInt16 nPosition;
-        if ( m_aCutEntries.Seek_Entry( static_cast< SvLBoxEntry* >( _pEntry ), &nPosition ) )
+        SvLBoxEntry* pTypedEntry = static_cast< SvLBoxEntry* >( _pEntry );
+        if ( doingKeyboardCut() )
+            m_aCutEntries.erase( pTypedEntry );
+
+        if ( m_aControlExchange.isDataExchangeActive() )
         {
-            m_aCutEntries.Remove( nPosition );
+            if ( 0 == m_aControlExchange->onEntryRemoved( pTypedEntry ) )
+            {
+                // last of the entries which we put into the clipboard has been deleted from the tree.
+                // Give up the clipboard ownership.
+                m_aControlExchange.clear();
+            }
         }
     }
 
@@ -1401,7 +1415,7 @@ namespace svxform
                 SvLBoxEntry* pEntry = m_arrCurrentSelection[ (sal_uInt16)i ];
                 if ( pEntry )
                 {
-                    m_aCutEntries.Insert( pEntry );
+                    m_aCutEntries.insert( pEntry );
                     pEntry->SetFlags( pEntry->GetFlags() | SV_ENTRYFLAG_SEMITRANSPARENT );
                     InvalidateEntry( pEntry );
                 }
@@ -1694,16 +1708,20 @@ namespace svxform
         {
             if ( doingKeyboardCut() )
             {
-                for ( sal_Int32 i=0; i<m_aCutEntries.Count(); ++i )
+                for (   ListBoxEntrySet::const_iterator i = m_aCutEntries.begin();
+                        i != m_aCutEntries.end();
+                        ++i
+                    )
                 {
-                    SvLBoxEntry* pEntry = m_aCutEntries[ (sal_uInt16)i ];
-                    if ( pEntry )
-                    {
-                        pEntry->SetFlags( pEntry->GetFlags() & ~SV_ENTRYFLAG_SEMITRANSPARENT );
-                        InvalidateEntry( pEntry );
-                    }
+                    SvLBoxEntry* pEntry = *i;
+                    if ( !pEntry )
+                        continue;
+
+                    pEntry->SetFlags( pEntry->GetFlags() & ~SV_ENTRYFLAG_SEMITRANSPARENT );
+                    InvalidateEntry( pEntry );
                 }
-                m_aCutEntries.Remove( (USHORT)0, (USHORT)m_aCutEntries.Count() );
+                ListBoxEntrySet aEmpty;
+                m_aCutEntries.swap( aEmpty );
 
                 m_bKeyboardCut = sal_False;
             }
