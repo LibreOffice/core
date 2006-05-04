@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Any_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:41:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ import complexlib.ComplexTestCase;
 
 public final class Any_Test extends ComplexTestCase {
     public String[] getTestMethodNames() {
-        return new String[] { "testAnyAny" };
+        return new String[] { "testAnyAny", "testComplete" };
     }
 
     public void testAnyAny() {
@@ -50,5 +50,17 @@ public final class Any_Test extends ComplexTestCase {
             caught = true;
         }
         assure(caught);
+    }
+
+    public void testComplete() {
+        assure(Any.complete(Any.VOID) == Any.VOID);
+        assure(
+            Any.complete(new Integer(10)).equals(
+                new Any(Type.LONG, new Integer(10))));
+        assure(
+            Any.complete(null).equals(
+                new Any(new Type(XInterface.class), null)));
+        XInterface x = new XInterface() {};
+        assure(Any.complete(x).equals(new Any(new Type(XInterface.class), x)));
     }
 }
