@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:06:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,10 +568,7 @@ void DrawDocShell::UpdateTablePointers()
     PutItem( SvxDashListItem( pDoc->GetDashList() ) );
     PutItem( SvxLineEndListItem( pDoc->GetLineEndList() ) );
 
-    delete pFontList;
-    pFontList = new FontList( GetPrinter(TRUE), Application::GetDefaultDevice(), FALSE );
-    SvxFontListItem aFontListItem( pFontList );
-    PutItem( aFontListItem );
+    UpdateFontList();
 }
 
 /*************************************************************************
