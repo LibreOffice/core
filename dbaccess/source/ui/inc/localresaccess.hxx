@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:58:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,15 +49,15 @@ namespace dbaui
 //.........................................................................
 
 //=========================================================================
-//= OLocalResourceAccess
+//= LocalResourceAccess
 //=========================================================================
 /** helper class for acessing local resources
 */
 typedef ::svt::OLocalResourceAccess LRA_Base;
-class OLocalResourceAccess : protected LRA_Base
+class LocalResourceAccess : protected LRA_Base
 {
 public:
-    inline OLocalResourceAccess( sal_uInt16 _nId, RESOURCE_TYPE _rType )
+    inline LocalResourceAccess( sal_uInt16 _nId, RESOURCE_TYPE _rType )
         :LRA_Base( ModuleRes( _nId ), _rType )
     {
     }
