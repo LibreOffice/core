@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:34:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,6 +317,22 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
                                                 ::rtl::OUString::createFromAscii( "Name" ),
                                                 ::rtl::OUString() );
+                }
+
+                if ( bHasLocation )
+                {
+                    // Retrieve filter from media descriptor
+                    ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
+                    rtl::OUString aOrgFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" )),
+                                    ::rtl::OUString() );
+                    if ( aOrgFilterName == aFilterName )
+                    {
+                        // We should save the document in the original format. Therefore this
+                        // is not a storeTo operation. To support signing in this case, reset
+                        // bStoreTo flag.
+                        bStoreTo = false;
+                    }
                 }
             }
             else
