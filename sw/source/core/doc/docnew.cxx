@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:12:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 13:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,20 @@
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #endif
 
+// --> OD 2006-04-19 #b6375613#
+#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+using namespace ::com::sun::star;
+// <--
+
 using namespace ::com::sun::star::document;
 
 const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
@@ -364,6 +378,9 @@ SwDoc::SwDoc() :
 #ifndef PRODUCT
     bXMLExport =
 #endif
+    // --> OD 2006-03-21 #b6375613#
+    mbApplyWorkaroundForB6375613 =
+    // <--
 
     //
     // COMPATIBILITY FLAGS START
@@ -1170,5 +1187,44 @@ void SwDoc::UpdateLinks()
         }
     }
 
+}
+// <--
+// --> OD 2006-04-19 #b6375613#
+void SwDoc::SetApplyWorkaroundForB6375613( sal_Bool p_bApplyWorkaroundForB6375613 )
+{
+    if ( mbApplyWorkaroundForB6375613 != p_bApplyWorkaroundForB6375613 )
+    {
+        mbApplyWorkaroundForB6375613 = p_bApplyWorkaroundForB6375613;
+
+        uno::Reference< document::XDocumentInfoSupplier > xDoc(
+                                                GetDocShell()->GetBaseModel(),
+                                                uno::UNO_QUERY);
+        if ( xDoc.is() )
+        {
+            uno::Reference< beans::XPropertyContainer > xDocInfo(
+                                                        xDoc->getDocumentInfo(),
+                                                        uno::UNO_QUERY );
+            if ( xDocInfo.is() )
+            {
+                try
+                {
+                    if ( mbApplyWorkaroundForB6375613 )
+                    {
+                        xDocInfo->addProperty(
+                            rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"),
+                            beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::REMOVABLE,
+                            uno::makeAny( false ) );
+                    }
+                    else
+                    {
+                        xDocInfo->removeProperty( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied") );
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+        }
+    }
 }
 // <--
