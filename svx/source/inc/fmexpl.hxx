@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:16:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,7 +495,7 @@ namespace svxform
         // die Meta-Daten ueber meine aktuelle Selektion
         SvLBoxEntrySortedArray  m_arrCurrentSelection;
         // the entries which, in the view, are currently marked as "cut" (painted semi-transparent)
-        SvLBoxEntrySortedArray  m_aCutEntries;
+        ListBoxEntrySet         m_aCutEntries;
         // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
         ImageList           m_aNavigatorImages;
         ImageList           m_aNavigatorImagesHC;
