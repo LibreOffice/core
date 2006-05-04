@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:50:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,22 +179,8 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     //locale
     // <--
 
-    // Size and Margin
-    SvxPaper ePaper;
-    const ULONG nAppLanguage = GetAppLanguage();
-    switch ( nAppLanguage )
-    {
-        case LANGUAGE_ENGLISH_US:
-        case LANGUAGE_ENGLISH_CAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_SPANISH_MEXICAN:
-            ePaper = SvxPaper( SVX_PAPER_LETTER );
-            break;
-        default:
-            ePaper = SvxPaper( SVX_PAPER_A4 );
-    }
-
     SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
+    SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper( GetAppLanguage() );
     const Size aPhysSize = SvxPaperInfo::GetPaperSize( ePaper );
     aFrmSize.SetSize( aPhysSize );
 
