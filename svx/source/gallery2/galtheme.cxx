@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:17:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,7 +947,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
             }
             else
             {
-                if( aGfxLink.GetDataSize() )
+                if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 {
                     pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
                     bRet = ( pOStm->GetError() == ERRCODE_NONE );
