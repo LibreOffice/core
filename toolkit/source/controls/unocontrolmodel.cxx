@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:23:00 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,6 +424,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_REPEAT:
             case BASEPROPERTY_HARDLINEBREAKS:       aDefault <<= (sal_Bool) sal_False; break;
 
+            case BASEPROPERTY_WHEELWITHOUTFOCUS:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             case BASEPROPERTY_ENFORCE_FORMAT:
             case BASEPROPERTY_AUTOCOMPLETE:
