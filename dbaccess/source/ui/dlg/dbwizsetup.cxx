@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:36:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,7 +485,7 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
             break;
         case PAGE_DBSETUPWIZARD_USERDEFINED:
             {
-                OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+                LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
                 sRoadmapItem = String(ResId(STR_PAGETITLE_CONNECTION));
             }
             break;
@@ -816,14 +816,11 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
     {
         pPage->SetModifiedHandler(LINK( this, ODbTypeWizDialogSetup, ImplModifiedHdl ) );
     }
-    // register ourself as modified listener
+
     if ( pPage )
     {
         pPage->SetServiceFactory(m_pImpl->getORB());
         pPage->SetAdminDialog(this, this);
-
-        // open our own resource block, as the page titles are strings local to this block
-        OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
         defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WZB_FINISH : WZB_NEXT );
         enableButtons( WZB_FINISH, _nState == START_PAGE ? sal_False : sal_True);
