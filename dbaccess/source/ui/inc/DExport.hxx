@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:20:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Window;
+class SvNumberFormatter;
 namespace dbaui
 {
     class OFieldDescription;
@@ -119,7 +120,11 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
+        SvNumberFormatter*  m_pFormatter;
+
         String              m_sTextToken;       // Zellen Inhalt
+        String              m_sNumToken;        /// SDNUM value
+        String              m_sValToken;        /// SDVAL value
         TOTypeInfoSP        m_pTypeInfo;    // contains the default type
         const TColumnVector* m_pColumnList;
         const OTypeInfoMap* m_pInfoMap;
@@ -143,9 +148,12 @@ namespace dbaui
         virtual OWizTypeSelect* createPage(Window* _pParent)    = 0;
         void                    CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
         sal_Int32               CheckString(const String& aToken, sal_Int32 _nOldFormat);
+        void                    adjustFormat();
+        void                    eraseTokens();
         void                    insertValueIntoColumn();
         sal_Bool                createRowSet();
         void                    showErrorDialog(const ::com::sun::star::sdbc::SQLException& e);
+        void                    ensureFormatter();
 
         /** executeWizard calls a wizard to create/append data
             @param  _sTableName the tablename
@@ -170,8 +178,9 @@ namespace dbaui
                         const TPositions& _rColumnPositions,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                        const TColumnVector* rList = 0,
-                        const OTypeInfoMap* _pInfoMap = 0);
+                        const TColumnVector* rList,
+                        const OTypeInfoMap* _pInfoMap,
+                        sal_Bool _bAutoIncrementEnabled);
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
         virtual void release() = 0;
