@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:33:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@
 
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
+#endif
+
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #define _SVSTDARR_ULONGS
@@ -102,10 +106,9 @@ namespace svxform
                 if ( xClipBoard.is() )
                     xClipBoard->setContents( NULL, NULL );
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-                e;  // make compiler happy
-                DBG_ERROR( "OLocalExchange::clear: could not reset the clipboard!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
             m_bClipboardOwner = sal_False;
         }
@@ -219,7 +222,7 @@ namespace svxform
                 m_aCurrentFormats.push_back( aFlavor );
         }
 
-        if ( m_aSelectedEntries.size() )
+        if ( !m_aSelectedEntries.empty() )
         {
             if ( lcl_fillDataFlavorEx( OControlExchange::getFieldExchangeFormatId(), aFlavor ) )
                 m_aCurrentFormats.push_back( aFlavor );
@@ -227,9 +230,16 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
+    size_t OControlTransferData::onEntryRemoved( SvLBoxEntry* _pEntry )
+    {
+        m_aSelectedEntries.erase( _pEntry );
+        return m_aSelectedEntries.size();
+    }
+
+    //--------------------------------------------------------------------
     void OControlTransferData::addSelectedEntry( SvLBoxEntry* _pEntry )
     {
-        m_aSelectedEntries.push_back(_pEntry);
+        m_aSelectedEntries.insert( _pEntry );
     }
 
     //--------------------------------------------------------------------
@@ -255,11 +265,14 @@ namespace svxform
 
         m_aControlPaths.realloc(nEntryCount);
         ::com::sun::star::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
-        for (sal_Int32 i=0; i<nEntryCount; ++i)
+        for (   ListBoxEntrySet::const_iterator loop = m_aSelectedEntries.begin();
+                loop != m_aSelectedEntries.end();
+                ++loop, ++pAllPaths
+            )
         {
             // erst mal sammeln wir den Pfad in einem Array ein
             ::std::vector< sal_uInt32 > aCurrentPath;
-            SvLBoxEntry* pCurrentEntry = m_aSelectedEntries[i];
+            SvLBoxEntry* pCurrentEntry = *loop;
 
             SvLBoxEntry* pLoop = pCurrentEntry;
             while (pLoop != pRoot)
@@ -271,7 +284,7 @@ namespace svxform
             }
 
             // dann koennen wir ihn in die ::com::sun::star::uno::Sequence uebertragen
-            ::com::sun::star::uno::Sequence<sal_uInt32>& rCurrentPath = pAllPaths[i];
+            Sequence<sal_uInt32>& rCurrentPath = *pAllPaths;
             sal_Int32 nDepth = aCurrentPath.size();
 
             rCurrentPath.realloc(nDepth);
@@ -285,7 +298,8 @@ namespace svxform
     //------------------------------------------------------------------------
     void OControlTransferData::buildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
     {
-        m_aSelectedEntries.clear();
+        ListBoxEntrySet aEmpty;
+        m_aSelectedEntries.swap( aEmpty );
 
         sal_Int32 nControls = m_aControlPaths.getLength();
         const ::com::sun::star::uno::Sequence<sal_uInt32>* pPaths = m_aControlPaths.getConstArray();
@@ -297,7 +311,7 @@ namespace svxform
             for (sal_Int32 j=0; j<nThisPatLength; ++j)
                 pSearch = pTreeBox->GetEntry(pSearch, pThisPath[j]);
 
-            m_aSelectedEntries.push_back(pSearch);
+            m_aSelectedEntries.insert( pSearch );
         }
     }
 
@@ -338,7 +352,7 @@ namespace svxform
     //--------------------------------------------------------------------
     void OControlExchange::AddSupportedFormats()
     {
-        if (m_pFocusEntry && m_aSelectedEntries.size())
+        if (m_pFocusEntry && !m_aSelectedEntries.empty())
             AddFormat(getFieldExchangeFormatId());
 
         if (m_aControlPaths.getLength())
