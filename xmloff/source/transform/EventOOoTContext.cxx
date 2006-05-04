@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventOOoTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:16:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ XMLTransformerContext * XMLEventOOoTransformerContext::CreateChildContext(
                             const Reference< XAttributeList >& xAttrList )
 {
     if( m_bPersistent )
-        return XMLEventOOoTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
+        return XMLPersElemContentTContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
     else
         return XMLTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
 }
