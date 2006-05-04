@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,9 @@ namespace dbaui
                     const TPositions &_rColumnPositions,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                    const TColumnVector* rList = 0,
-                    const OTypeInfoMap* _pInfoMap = 0);
+                    const TColumnVector* rList,
+                    const OTypeInfoMap* _pInfoMap,
+                    sal_Bool _bAutoIncrementEnabled);
 
         virtual SvParserState   CallParser();// Basisklasse
         virtual void            release();
