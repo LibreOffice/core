@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:10:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,13 @@
  ************************************************************************/
 #ifndef _DBA_COREAPI_RESULTSET_HXX_
 #define _DBA_COREAPI_RESULTSET_HXX_
+
+#ifndef _DBA_COREAPI_COLUMN_HXX_
+#include "column.hxx"
+#endif
+#ifndef DBA_CORE_WARNINGS_HXX
+#include "warnings.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -74,6 +81,7 @@
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #endif
+
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
@@ -85,9 +93,6 @@
 #endif
 #ifndef _CPPUHELPER_COMPBASE11_HXX_
 #include <cppuhelper/compbase11.hxx>
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
-#include <column.hxx>
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
@@ -120,10 +125,12 @@ namespace dbaccess
     protected:
         ONoWeakStatement                m_aStatement;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  m_xAggregateAsResultSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >        m_xAggregateAsRow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >  m_xAggregateAsRowUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xDelegatorResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xDelegatorResultSetUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xDelegatorRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xDelegatorRowUpdate;
 
+        WarningsContainer           m_aWarnings;
         OColumns*                   m_pColumns;
         sal_Int32                   m_nResultSetType;
         sal_Int32                   m_nResultSetConcurrency;
@@ -268,9 +275,8 @@ namespace dbaccess
         virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     protected:
-        sal_Bool    isReadOnly() const {return m_nResultSetConcurrency == ::com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY;}
-        void checkReadOnly();
-        void checkBookmarkable();
+        void checkReadOnly() const;
+        void checkBookmarkable() const;
     };
 }
 #endif // _DBA_COREAPI_RESULTSET_HXX_
