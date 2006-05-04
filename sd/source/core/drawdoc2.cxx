@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:25:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,17 +499,16 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         /**********************************************************************
         * Default-Papiergroesse vom Drucker holen
         **********************************************************************/
-        SfxPrinter* pPrinter = NULL;
-        Size aDefSize(21000, 29700);   // A4-Hochformat
 
-        SdPage* pRefPage = 0;
+        SdPage* pRefPage = NULL;
 
         if( pRefDocument )
             SdPage* pRefHandout = pRefDocument->GetSdPage( 0, PK_HANDOUT );
 
+/*
         if(pDocSh)
         {
-            pPrinter = pDocSh->GetPrinter(TRUE);
+            SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
 
             if (pPrinter->IsValid())
             {
@@ -524,6 +523,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 }
             }
         }
+*/
+        // #i57181# Paper size depends on Language, like in Writer
+        SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
+        Size aDefSize( SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM) );
 
         /**********************************************************************
         * Handzettel-Seite einfuegen
@@ -592,7 +595,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 // Draw: stets Default-Groesse mit Raendern
                 pPage->SetSize(aDefSize);
 
-                if (pPrinter->IsValid())
+                SfxPrinter* pPrinter = pDocSh->GetPrinter(FALSE);
+                if (pPrinter && pPrinter->IsValid())
                 {
                     Size aOutSize(pPrinter->GetOutputSize());
                     Point aPageOffset(pPrinter->GetPageOffset());
@@ -613,8 +617,9 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             }
             else
             {
-                // Impress: stets Bildschirmformat
-                pPage->SetSize( Size(28000, 21000) );   // Bildschirmformat
+                // Impress: stets Bildschirmformat, quer
+                Size aSz( SvxPaperInfo::GetPaperSize(SVX_PAPER_SCREEN, MAP_100TH_MM) );
+                pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }
 
