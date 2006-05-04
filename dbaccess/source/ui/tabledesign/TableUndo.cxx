@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:43:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,15 +252,15 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
     DBG_CTOR(OTableEditorDelUndoAct,NULL);
     //////////////////////////////////////////////////////////////////////
     // DeletedRowList fuellen
-    ::std::vector<OTableRow*>* pOriginalRows = pOwner->GetRowList();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pOwner->GetRowList();
     long nIndex = pOwner->FirstSelectedRow();
-    OTableRow* pOriginalRow;
-    OTableRow* pNewRow;
+     ::boost::shared_ptr<OTableRow>  pOriginalRow;
+     ::boost::shared_ptr<OTableRow>  pNewRow;
 
     while( nIndex >= 0 )
     {
         pOriginalRow = (*pOriginalRows)[nIndex];
-        pNewRow = new OTableRow( *pOriginalRow, nIndex );
+        pNewRow.reset(new OTableRow( *pOriginalRow, nIndex ));
         m_aDeletedRows.push_back( pNewRow);
 
         nIndex = pOwner->NextSelectedRow();
@@ -271,12 +271,6 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
 OTableEditorDelUndoAct::~OTableEditorDelUndoAct()
 {
     DBG_DTOR(OTableEditorDelUndoAct,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // DeletedRowList loeschen
-    ::std::vector<OTableRow*>::iterator aIter = m_aDeletedRows.begin();
-    for(;aIter != m_aDeletedRows.end();++aIter)
-        delete *aIter;
-
     m_aDeletedRows.clear();
 }
 
@@ -286,14 +280,14 @@ void OTableEditorDelUndoAct::Undo()
     //////////////////////////////////////////////////////////////////////
     // Geloeschte Zeilen wieder einfuegen
     ULONG nPos;
-    ::std::vector<OTableRow*>::iterator aIter = m_aDeletedRows.begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
 
-    OTableRow* pNewOrigRow;
-    ::std::vector<OTableRow*>* pOriginalRows = pTabEdCtrl->GetRowList();
+     ::boost::shared_ptr<OTableRow>  pNewOrigRow;
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for(;aIter != m_aDeletedRows.end();++aIter)
     {
-        pNewOrigRow = new OTableRow( **aIter );
+        pNewOrigRow.reset(new OTableRow( **aIter ));
         nPos = (*aIter)->GetPos();
         pOriginalRows->insert( pOriginalRows->begin()+nPos,pNewOrigRow);
     }
@@ -308,13 +302,12 @@ void OTableEditorDelUndoAct::Redo()
     //////////////////////////////////////////////////////////////////////
     // Zeilen wieder loeschen
     ULONG nPos;
-    ::std::vector<OTableRow*>::iterator aIter = m_aDeletedRows.begin();
-    ::std::vector<OTableRow*>* pOriginalRows = pTabEdCtrl->GetRowList();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for(;aIter != m_aDeletedRows.end();++aIter)
     {
         nPos = (*aIter)->GetPos();
-        delete (*pOriginalRows)[ nPos];
         pOriginalRows->erase( pOriginalRows->begin()+nPos );
     }
 
@@ -329,7 +322,7 @@ void OTableEditorDelUndoAct::Redo()
 DBG_NAME(OTableEditorInsUndoAct);
 OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                                long nInsertPosition ,
-                                               const ::std::vector< OTableRow*>& _vInsertedRows)
+                                               const ::std::vector<  ::boost::shared_ptr<OTableRow> >& _vInsertedRows)
     :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
     ,m_nInsPos( nInsertPosition )
     ,m_vInsertedRows(_vInsertedRows)
@@ -341,12 +334,6 @@ OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
 OTableEditorInsUndoAct::~OTableEditorInsUndoAct()
 {
     DBG_DTOR(OTableEditorInsUndoAct,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // InsertedRowList loeschen
-    ::std::vector<OTableRow*>::iterator aIter = m_vInsertedRows.begin();
-    for(;aIter != m_vInsertedRows.end();++aIter)
-        delete *aIter;
-
     m_vInsertedRows.clear();
 }
 
@@ -355,10 +342,9 @@ void OTableEditorInsUndoAct::Undo()
 {
     //////////////////////////////////////////////////////////////////////
     // Eingefuegte Zeilen wieder loeschen
-    ::std::vector<OTableRow*>* pOriginalRows = pTabEdCtrl->GetRowList();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
     for( long i=(m_nInsPos+m_vInsertedRows.size()-1); i>(m_nInsPos-1); i-- )
     {
-        delete (*pOriginalRows)[i];
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
@@ -374,12 +360,12 @@ void OTableEditorInsUndoAct::Redo()
     //////////////////////////////////////////////////////////////////////
     // Zeilen wieder einfuegen
     long nInsertRow = m_nInsPos;
-    OTableRow* pRow;
-    ::std::vector<OTableRow*>::iterator aIter = m_vInsertedRows.begin();
-    ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
+     ::boost::shared_ptr<OTableRow>  pRow;
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vInsertedRows.begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     for(;aIter != m_vInsertedRows.end();++aIter)
     {
-        pRow = new OTableRow( **aIter );
+        pRow.reset(new OTableRow( **aIter ));
         pRowList->insert( pRowList->begin()+nInsertRow ,pRow );
         nInsertRow++;
     }
@@ -413,11 +399,10 @@ void OTableEditorInsNewUndoAct::Undo()
 {
     //////////////////////////////////////////////////////////////////////
     // Eingefuegte Zeilen wieder loeschen
-    ::std::vector<OTableRow*>* pOriginalRows = pTabEdCtrl->GetRowList();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for( long i=(m_nInsPos+m_nInsRows-1); i>(m_nInsPos-1); i-- )
     {
-        delete (*pOriginalRows)[i];
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
@@ -432,10 +417,10 @@ void OTableEditorInsNewUndoAct::Redo()
 {
     //////////////////////////////////////////////////////////////////////
     // Zeilen wieder einfuegen
-    ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
 
     for( long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
-        pRowList->insert( pRowList->begin()+i,new OTableRow() );
+        pRowList->insert( pRowList->begin()+i,::boost::shared_ptr<OTableRow>(new OTableRow()) );
 
     pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows, TRUE );
     pTabEdCtrl->InvalidateHandleColumn();
@@ -467,8 +452,8 @@ OPrimKeyUndoAct::~OPrimKeyUndoAct()
 //-------------------------------------------------------------------------
 void OPrimKeyUndoAct::Undo()
 {
-    ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
-    OTableRow* pRow = NULL;
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
+    ::boost::shared_ptr<OTableRow>  pRow;
     long nIndex;
 
     //////////////////////////////////////////////////////////////////////
@@ -496,25 +481,18 @@ void OPrimKeyUndoAct::Undo()
 //-------------------------------------------------------------------------
 void OPrimKeyUndoAct::Redo()
 {
-    ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
-    OTableRow* pRow = NULL;
+    ::std::vector< ::boost::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     long nIndex;
 
     //////////////////////////////////////////////////////////////////////
     // Die geloeschten Keys loeschen
     for( nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
-    {
-        pRow = (*pRowList)[nIndex];
-        pRow->SetPrimaryKey( FALSE );
-    }
+        (*pRowList)[nIndex]->SetPrimaryKey( FALSE );
 
     //////////////////////////////////////////////////////////////////////
     // Die eingefuegten Keys herstellen
     for( nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
-    {
-        pRow = (*pRowList)[nIndex];
-        pRow->SetPrimaryKey( TRUE );
-    }
+        (*pRowList)[nIndex]->SetPrimaryKey( TRUE );
 
     m_pEditorCtrl->InvalidateHandleColumn();
     OTableEditorUndoAct::Redo();
