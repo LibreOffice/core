@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1022,9 +1022,10 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 /* String-Class functions                                                  */
 /* ======================================================================= */
 
-#define IMPL_RTL_AQUIRE( pThis )                                        \
-{                                                                       \
-    osl_incrementInterlockedCount( &((pThis)->refCount) );              \
+#define IMPL_RTL_AQUIRE( pThis )                                \
+{                                                               \
+    if (pThis != &IMPL_RTL_EMPTYSTRING)                         \
+        osl_incrementInterlockedCount( &((pThis)->refCount) );  \
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1038,6 +1039,9 @@ void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
 
 void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
 {
+    if (pThis == &IMPL_RTL_EMPTYSTRING)
+        return;
+
     if ( pThis->refCount == 1 )
     {
         OSL_ENSURE( pThis != &IMPL_RTL_EMPTYSTRING, "static empty string: refCount < 1" );
