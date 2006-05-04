@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:36:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2141,7 +2141,6 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
         bUpdateEnabled  ( TRUE ), \
         pOldAutoDBRange ( NULL ), \
-        pVirtualDevice_100th_mm ( NULL ), \
         pModificator    ( NULL )
 
 //------------------------------------------------------------------
@@ -2230,8 +2229,6 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pPaintLockData;
 
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
-
-    delete pVirtualDevice_100th_mm;
 
     delete pOldAutoDBRange;
 
@@ -2393,15 +2390,6 @@ Window* ScDocShell::GetDialogParent()
         return Application::GetDefDialogParent();
 }
 
-VirtualDevice* ScDocShell::GetVirtualDevice_100th_mm()
-{
-    if (!pVirtualDevice_100th_mm)
-    {
-        pVirtualDevice_100th_mm = new VirtualDevice;
-        pVirtualDevice_100th_mm->SetMapMode( MAP_100TH_MM );
-    }
-    return pVirtualDevice_100th_mm;
-}
 
 // --- ScDocShellModificator ------------------------------------------
 
