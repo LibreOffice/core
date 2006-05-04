@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:25:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ DBG_NAME(OConnectionHelper)
         m_aET_Connection.ShowPrefix(DST_JDBC == m_eType );
         m_aPB_Connection.Show(sal_True);
 
-        OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
+        LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
 
         m_aPB_Connection.Show(bEnableBrowseButton);
 
@@ -401,7 +401,7 @@ DBG_NAME(OConnectionHelper)
                 }
                 else
                 {
-                    OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
+                    LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
                     String sError = String(ResId(STR_NO_ADABASE_DATASOURCES));
                     ErrorBox aBox(this, WB_OK, sError);
                     aBox.Execute();
