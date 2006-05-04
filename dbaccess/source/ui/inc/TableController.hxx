@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:35:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ namespace dbaui
     class OTableController : public OTableController_BASE
     {
     private:
-        ::std::vector<OTableRow*>   m_vRowList;
+        ::std::vector< ::boost::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aTypeInfoIndex;
 
@@ -143,7 +143,7 @@ namespace dbaui
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
-        inline ::std::vector<OTableRow*>*   getRows() { return &m_vRowList; }
+        inline ::std::vector< ::boost::shared_ptr<OTableRow> >* getRows() { return &m_vRowList; }
 
         /// returns the postion of the the first empty row
         sal_Int32                           getFirstEmptyRowPosition() const;
