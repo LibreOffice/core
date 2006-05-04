@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:28:03 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,9 +326,9 @@ void ScDocument::UpdateDrawPrinter()
         // use the printer even if IsValid is false
         // Application::GetDefaultDevice causes trouble with changing MapModes
 
-        OutputDevice* pRefDev = GetPrinter();
-        pRefDev->SetMapMode( MAP_100TH_MM );
-        pDrawLayer->SetRefDevice(pRefDev);
+//      OutputDevice* pRefDev = GetPrinter();
+//      pRefDev->SetMapMode( MAP_100TH_MM );
+        pDrawLayer->SetRefDevice(GetRefDevice());
     }
 }
 
