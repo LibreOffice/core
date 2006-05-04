@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strascii.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:36:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,9 +232,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
 
     if ( !nLen )
     {
-        ImplDeleteData( mpData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
     else
     {
@@ -244,7 +242,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
         else
         {
             // Alte Daten loeschen
-            ImplDeleteData( mpData );
+            STRING_RELEASE((STRING_TYPE *)mpData);
 
             // Daten initialisieren und String kopieren
             mpData = ImplAllocData( nLen );
@@ -280,9 +278,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 
     if ( !nLen )
     {
-        ImplDeleteData( mpData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        mpData = &aImplEmptyStrData;
+        STRING_NEW((STRING_TYPE **)&mpData);
     }
     else
     {
@@ -292,7 +288,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         else
         {
             // Alte Daten loeschen
-            ImplDeleteData( mpData );
+            STRING_RELEASE((STRING_TYPE *)mpData);
 
             // Daten initialisieren und String kopieren
             mpData = ImplAllocData( nLen );
@@ -327,7 +323,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
         ImplCopyAsciiStr( pNewData->maStr+mpData->mnLen, pAsciiStr, nCopyLen );
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
 
@@ -371,7 +367,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         ImplCopyAsciiStr( pNewData->maStr+mpData->mnLen, pAsciiStr, nCopyLen );
 
         // Alte Daten loeschen und Neue zuweisen
-        ImplDeleteData( mpData );
+        STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
 
@@ -409,7 +405,7 @@ UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
             (mpData->mnLen-nIndex)*sizeof( sal_Unicode ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
@@ -468,7 +464,7 @@ UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
             (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
-    ImplDeleteData( mpData );
+    STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
     return *this;
