@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:59:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
@@ -82,36 +85,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
 #define A2OU(x)     OUString::createFromAscii( x )
-
-//========================================================================
-//  list of languages for forbidden chars
-//========================================================================
-
-static const LanguageType aForbiddenCharLang[] =
-{
-    LANGUAGE_CHINESE_TRADITIONAL,
-    LANGUAGE_CHINESE_SIMPLIFIED,
-    LANGUAGE_JAPANESE,
-    LANGUAGE_KOREAN,
-    LANGUAGE_USER_KOREAN_NORTH
-};
-
-static const int nForbiddenCharLang = sizeof( aForbiddenCharLang ) / sizeof( aForbiddenCharLang[0] );
-
-
-static BOOL lcl_HasLanguage( const LanguageType *pLang, int nCount, LanguageType nLang )
-{
-    int i = -1;
-    if (pLang && nCount > 0)
-    {
-        for (i = 0;  i < nCount; ++i )
-        {
-            if (pLang[i] == nLang)
-                break;
-        }
-    }
-    return i >= 0  &&  i < nCount;
-}
 
 //========================================================================
 //  misc local helper functions
@@ -344,8 +317,7 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
                 if (!bInsert && (nLangList & LANG_LIST_CJK))
                     bInsert |= SCRIPTTYPE_ASIAN == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_FBD_CHARS))
-                    bInsert |= lcl_HasLanguage( aForbiddenCharLang,
-                                        nForbiddenCharLang, nLangType );
+                    bInsert |= MsLangId::hasForbiddenCharacters( nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_SPELL_AVAIL))
                     bInsert |= lcl_SeqHasLang( aSpellAvailLang, nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_HYPH_AVAIL))
@@ -429,7 +401,6 @@ void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
 
 LanguageType SvxLanguageBox::GetSelectLanguage() const
 {
-    LanguageType eType  = LanguageType(LANGUAGE_DONTKNOW);
     USHORT       nPos   = GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
