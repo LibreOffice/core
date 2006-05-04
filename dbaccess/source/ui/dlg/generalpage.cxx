@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:31:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ namespace dbaui
             Dialog* pDialog = reinterpret_cast<Dialog*>(m_pAdminDialog);
             if ( m_pAdminDialog )
             {
-                OLocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
+                LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
                 String sMessage = String(ResId(STR_PARENTTITLE));
                 sMessage.SearchAndReplaceAscii("#",sName);
                 m_pAdminDialog->setTitle(sMessage);
@@ -314,7 +314,7 @@ namespace dbaui
             String sMessage;
             if ( nResId )
             {
-                OLocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
+                LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
                 sMessage = String(ResId(nResId));
             }
             m_aSpecialMessage.SetText(sMessage);
