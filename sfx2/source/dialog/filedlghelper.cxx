@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:34:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,9 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+#ifndef _VOS_SECURITY_HXX_
+#include <vos/security.hxx>
 #endif
 
 #ifndef _SV_CVTGRF_HXX
@@ -2397,10 +2400,7 @@ static int impl_isFolder( const OUString& rPath )
 
         return 0;
     }
-    catch ( star::ucb::ContentCreationException const & )
-    {
-    }
-    catch ( star::ucb::InteractiveAugmentedIOException const & )
+    catch ( Exception const & )
     {
     }
 
@@ -2432,7 +2432,14 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
     else
     {
         INetURLObject aObjPathName( _rPath );
-        mpImp->displayFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
+        ::rtl::OUString sFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
+        if ( sFolder.getLength() == 0 )
+        {
+            // _rPath is not a valid path -> fallback to home directory
+            NAMESPACE_VOS( OSecurity ) aSecurity;
+            aSecurity.getHomeDir( sFolder );
+        }
+        mpImp->displayFolder( sFolder );
     }
 }
 
