@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:17:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,14 +264,18 @@ bool ContentInfo::operator==( const ContentInfo& rCompare ) const
             (eFamily == rCompare.eFamily ) &&
             (aParaAttribs == rCompare.aParaAttribs ) )
     {
-        USHORT n;
-        for( n = 0; n < aAttribs.Count(); n++ )
+        const USHORT nCount = aAttribs.Count();
+        if( nCount == rCompare.aAttribs.Count() )
         {
-            if( !(*aAttribs.GetObject(n) == *rCompare.aAttribs.GetObject(n)) )
-                return false;
-        }
+            USHORT n;
+            for( n = 0; n < nCount; n++ )
+            {
+                if( !(*aAttribs.GetObject(n) == *rCompare.aAttribs.GetObject(n)) )
+                    return false;
+            }
 
-        return true;
+            return true;
+        }
     }
 
     return false;
