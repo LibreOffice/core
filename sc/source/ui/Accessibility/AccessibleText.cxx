@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:30:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1377,7 +1377,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 #endif
         pEditEngine->EnableUndo( FALSE );
         if (pDocShell)
-            pEditEngine->SetRefDevice(pDocShell->GetVirtualDevice_100th_mm());
+            pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
             pEditEngine->SetRefMapMode( MAP_100TH_MM );
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
@@ -1634,7 +1634,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
 #endif
         mpEditEngine->EnableUndo( FALSE );
         if (mpDocSh)
-            mpEditEngine->SetRefDevice(mpDocSh->GetVirtualDevice_100th_mm());
+            mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());
         else
             mpEditEngine->SetRefMapMode( MAP_100TH_MM );
         mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
