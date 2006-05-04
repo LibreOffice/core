@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:52 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,7 @@ static const char* UIELEMENTTYPENAMES[] =
 
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
 static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
+static const char       RESOURCEURL_CUSTOM_ELEMENT[] = "custom_";
 
 static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL )
 {
@@ -223,21 +224,34 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
     UIElementDataHashMap& rUserElements = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::const_iterator pUserIter = rUserElements.begin();
 
+    OUString aCustomUrlPrefix( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_CUSTOM_ELEMENT ));
     while ( pUserIter != rUserElements.end() )
     {
-        UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
-        if ( pDataSettings )
+        sal_Int32 nIndex = pUserIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
+        if ( nIndex > RESOURCEURL_PREFIX_SIZE )
         {
-            // Retrieve user interface name from XPropertySet interface
-            rtl::OUString aUIName;
-            Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
-            if ( xPropSet.is() )
+            // Performance: Retrieve user interface name only for custom user interface elements.
+            // It's only used by them!
+            UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
+            if ( pDataSettings )
             {
-                Any a = xPropSet->getPropertyValue( m_aPropUIName );
-                a >>= aUIName;
-            }
+                // Retrieve user interface name from XPropertySet interface
+                rtl::OUString aUIName;
+                Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
+                if ( xPropSet.is() )
+                {
+                    Any a = xPropSet->getPropertyValue( m_aPropUIName );
+                    a >>= aUIName;
+                }
 
-            UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
+                UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
+                aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pUserIter->second.aResourceURL, aInfo ));
+            }
+        }
+        else
+        {
+            // The user interface name for standard user interface elements is stored in the WindowState.xcu file
+            UIElementInfo aInfo( pUserIter->second.aResourceURL, OUString() );
             aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pUserIter->second.aResourceURL, aInfo ));
         }
         ++pUserIter;
@@ -251,19 +265,31 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
         UIElementInfoHashMap::const_iterator pIterInfo = aUIElementInfoCollection.find( pDefIter->second.aResourceURL );
         if ( pIterInfo == aUIElementInfoCollection.end() )
         {
-            UIElementData* pDataSettings = impl_findUIElementData( pDefIter->second.aResourceURL, nElementType );
-            if ( pDataSettings )
+            sal_Int32 nIndex = pDefIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
+            if ( nIndex > RESOURCEURL_PREFIX_SIZE )
             {
-                // Retrieve user interface name from XPropertySet interface
-                rtl::OUString aUIName;
-                Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
-                if ( xPropSet.is() )
+                // Performance: Retrieve user interface name only for custom user interface elements.
+                // It's only used by them!
+                UIElementData* pDataSettings = impl_findUIElementData( pDefIter->second.aResourceURL, nElementType );
+                if ( pDataSettings )
                 {
-                    Any a = xPropSet->getPropertyValue( m_aPropUIName );
-                    a >>= aUIName;
-                }
+                    // Retrieve user interface name from XPropertySet interface
+                    rtl::OUString aUIName;
+                    Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
+                    if ( xPropSet.is() )
+                    {
+                        Any a = xPropSet->getPropertyValue( m_aPropUIName );
+                        a >>= aUIName;
+                    }
 
-                UIElementInfo aInfo( pDefIter->second.aResourceURL, aUIName );
+                    UIElementInfo aInfo( pDefIter->second.aResourceURL, aUIName );
+                    aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pDefIter->second.aResourceURL, aInfo ));
+                }
+            }
+            else
+            {
+                // The user interface name for standard user interface elements is stored in the WindowState.xcu file
+                UIElementInfo aInfo( pDefIter->second.aResourceURL, OUString() );
                 aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pDefIter->second.aResourceURL, aInfo ));
             }
         }
