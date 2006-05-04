@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:43:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 
 class ImplFontSelectData;
 class ImplWinFontEntry;
+class ImplFontNameCache;
 
 // -----------
 // - Defines -
@@ -154,6 +155,7 @@ public:
     RECT*                   mpNextClipRect;     // Naechstes ClipRegion-Rect
     BOOL                    mbFirstClipRect;    // Flag for first cliprect to insert
     LOGFONTA*               mpLogFont;          // LOG-Font which is currently selected (only W9x)
+    ImplFontNameCache*      mpFontNameCache;    // Cache font names from files in so/share/fonts
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
     BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
