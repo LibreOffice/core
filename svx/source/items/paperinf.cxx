@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:38:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,22 @@ SvxPaper SvxPaperInfo::GetPaper( const Size &rSize, MapUnit eUnit, BOOL bSloppy 
 SvxPaper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
 {
     return GetPaper_Impl( rSize, eUnit, bSloppy );
+}
+
+SvxPaper SvxPaperInfo::GetDefaultSvxPaper( LanguageType eLanguage )
+{
+    SvxPaper ePaper;
+    switch ( eLanguage )
+    {
+        case LANGUAGE_ENGLISH_US:
+        case LANGUAGE_ENGLISH_CAN:
+        case LANGUAGE_FRENCH_CANADIAN:
+            ePaper = SvxPaper( SVX_PAPER_LETTER );
+            break;
+        default:
+            ePaper = SvxPaper( SVX_PAPER_A4 );
+    }
+    return ePaper;
 }
 
 // -----------------------------------------------------------------------
