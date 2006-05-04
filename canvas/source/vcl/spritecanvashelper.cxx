@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:18:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,7 @@ namespace vclcanvas
 
             // flush to screen
             rOutDev.EnableMapMode( FALSE );
+            rOutDev.SetClipRegion();
             rOutDev.DrawOutDev( aEmptyPoint, aOutDevSize,
                                 aEmptyPoint, aOutDevSize,
                                 *maVDev );
@@ -595,16 +596,41 @@ namespace vclcanvas
                         Point(0, 0) );
     }
 
+    namespace
+    {
+        template< typename T > struct Adder
+        {
+            typedef void result_type;
+
+            Adder( T& rAdderTarget,
+                   T  nIncrement ) :
+                mpTarget( &rAdderTarget ),
+                mnIncrement( nIncrement )
+            {
+            }
+
+            void operator()() { *mpTarget += mnIncrement; }
+            void operator()( const ::canvas::Sprite::Reference& ) { *mpTarget += mnIncrement; }
+            void operator()( T nIncrement ) { *mpTarget += nIncrement; }
+
+            T* mpTarget;
+            T  mnIncrement;
+        };
+
+        template< typename T> Adder<T> makeAdder( T& rAdderTarget,
+                                                  T  nIncrement )
+        {
+            return Adder<T>(rAdderTarget, nIncrement);
+        }
+    }
+
     void SpriteCanvasHelper::renderSpriteCount( OutputDevice& rOutDev )
     {
         if( mpRedrawManager )
         {
             sal_Int32 nCount(0);
 
-            mpRedrawManager->forEachSprite( ::boost::bind(
-                                                ::std::plus<sal_Int32>(),
-                                                ::boost::ref(nCount),
-                                                1 ) );
+            mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
             ::rtl::OUString text(
                 ::rtl::OUString::valueOf(
                     // disambiguate overload...
@@ -633,8 +659,7 @@ namespace vclcanvas
 
             // accumulate pixel count for each sprite into fCount
             mpRedrawManager->forEachSprite( ::boost::bind(
-                                                ::std::plus<double>(),
-                                                ::boost::ref(nPixel),
+                                                makeAdder(nPixel,1.0),
                                                 ::boost::bind(
                                                     &calcNumPixel,
                                                     _1 ) ) );
