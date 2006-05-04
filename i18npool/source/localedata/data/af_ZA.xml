@@ -32,7 +32,7 @@
 </Markers>
 <TimeAM>vm.</TimeAM>
 <TimePM>nm.</TimePM>
-<MeasurementSystem>Metric</MeasurementSystem>
+<MeasurementSystem>metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT ref="en_ZA" replaceTo="[$R-436]"/>
 <LC_COLLATION ref="en_US"/>
