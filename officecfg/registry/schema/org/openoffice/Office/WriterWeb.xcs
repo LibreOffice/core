@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -940,7 +940,7 @@
 						<desc>Specifies if the table has a header</desc>
 						<label>Header</label>
 					</info>
-					<value>true</value>
+                                        <value>false</value>
 				</prop>
 				<prop oor:name="RepeatHeader" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
@@ -951,7 +951,7 @@
 						<desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
 						<label>Repeat header</label>
 					</info>
-					<value>true</value>
+                                        <value>false</value>
 				</prop>
 				<prop oor:name="Border" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
