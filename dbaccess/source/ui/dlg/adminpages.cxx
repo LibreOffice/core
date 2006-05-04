@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:28:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ DBG_NAME(OGenericAdministrationPage)
         if (!aEnumeration.isLoaded())
         {
             // show an error message
-            OLocalResourceAccess aLocRes( PAGE_GENERAL, RSC_TABPAGE );
+            LocalResourceAccess aLocRes( PAGE_GENERAL, RSC_TABPAGE );
             String sError(ResId(STR_COULDNOTLOAD_ODBCLIB));
             sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
             ErrorBox aDialog(this, WB_OK, sError);
