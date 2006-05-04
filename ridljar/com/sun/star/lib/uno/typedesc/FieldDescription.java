@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescription.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:16:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,19 +39,12 @@ import com.sun.star.uno.IFieldDescription;
 import com.sun.star.uno.ITypeDescription;
 import java.lang.reflect.Field;
 
-// Conceptually, this class would not be public, but would only be accessed
-// through its IFieldDescription interface.  However, since FieldDescription has
-// been extended with a type parameter index, it is no longer fully covered by
-// the deprecated IFieldDescription interface, and instead directly accessed by
-// code in com.sun.star.lib.uno.protocols.urp.
-public final class FieldDescription implements IFieldDescription {
+final class FieldDescription implements IFieldDescription {
     public FieldDescription(
-        String name, int index, int typeParameterIndex,
-        ITypeDescription typeDescription, Field field)
+        String name, int index, ITypeDescription typeDescription, Field field)
     {
         this.name = name;
         this.index = index;
-        this.typeParameterIndex = typeParameterIndex;
         this.typeDescription = typeDescription;
         this.field = field;
     }
@@ -76,10 +69,6 @@ public final class FieldDescription implements IFieldDescription {
         return index;
     }
 
-    public int getTypeParameterIndex() {
-        return typeParameterIndex;
-    }
-
     public ITypeDescription getTypeDescription() {
         return typeDescription;
     }
@@ -90,7 +79,6 @@ public final class FieldDescription implements IFieldDescription {
 
     private final String name;
     private final int index;
-    private final int typeParameterIndex;
     private final ITypeDescription typeDescription;
     private final Field field;
 }
