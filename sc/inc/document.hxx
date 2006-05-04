@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:24:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ class ScRecursionHelper;
 struct RowInfo;
 struct ScTableInfo;
 struct ScTabOpParam;
+class VirtualDevice;
 class ScAutoNameCache;
 
 namespace com { namespace sun { namespace star {
@@ -259,6 +260,7 @@ private:
     SfxItemPool*    pNoteItemPool; // SfxItemPool to be used if pDrawLayer not created.
     SfxObjectShell*     pShell;
     SfxPrinter*         pPrinter;
+    VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     XColorTable*        pColorTable;
     ScConditionalFormatList* pCondFormList;             // bedingte Formate
@@ -1337,8 +1339,11 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
     BOOL            HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab );
 
-    SfxPrinter*     GetPrinter();
+    SfxPrinter*     GetPrinter( BOOL bCreateIfNotExist = TRUE );
     void            SetPrinter( SfxPrinter* pNewPrinter );
+    VirtualDevice*  GetVirtualDevice_100th_mm();
+    OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
+
     void            EraseNonUsedSharedNames(USHORT nLevel);
     BOOL            GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                                         BOOL bInSel, const ScMarkData& rMark) const;
