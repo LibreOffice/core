@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:40:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4069,14 +4069,14 @@
 						<desc>Specifies if the table has a header.</desc>
 						<label>Header</label>
 					</info>
-					<value>true</value>
+                                        <value>false</value>
 				</prop>
 				<prop oor:name="RepeatHeader" oor:type="xs:boolean">
 					<info>
 						<desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header = True.</desc>
 						<label>Repeat header</label>
 					</info>
-					<value>true</value>
+                                        <value>false</value>
 				</prop>
 				<prop oor:name="Split" oor:type="xs:boolean">
 					<info>
@@ -6683,7 +6683,7 @@
 						<desc>Show the "resource persons" names ? </desc>
 					</info>
 				</prop>
-				
+
 				<prop oor:type="xs:string" oor:name="TemplateName">
 					<info>
 						<desc>The template's document property "title" </desc>
