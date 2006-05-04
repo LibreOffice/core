@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:53:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:26:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,11 +275,13 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "ValueMin",               VALUEMIN_DOUBLE,        double,         BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ValueStep",              VALUESTEP_DOUBLE,       double,         BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "VerticalAlign",          VERTICALALIGN,          VerticalAlignment, BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_DEP_PROP_3( "VisibleSize",             VISIBLESIZE,            sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_DEP_PROP_3 ( "VisibleSize",            VISIBLESIZE,            sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
 
             DECL_PROP_2     ( "Activated",              ACTIVATED,              sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Complete",               COMPLETE,               sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CurrentItemID",          CURRENTITEMID,          sal_Int16,      BOUND, MAYBEDEFAULT ),
+
+            DECL_PROP_2     ( "WheelWithoutFocus",      WHEELWITHOUTFOCUS,      sal_Bool,       BOUND, MAYBEDEFAULT ),
 
             };
             pPropertyInfos = aImplPropertyInfos;
