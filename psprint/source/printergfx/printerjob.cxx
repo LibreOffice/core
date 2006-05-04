@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 12:55:22 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,11 +340,7 @@ createSpoolDir ()
     }
 
     /* create a subdirectory in the tmp directory */
-#ifdef MACOSX
-    char* pName = macxp_tempnam( pTmpDir, "psp" );
-#else
     char* pName = tempnam (pTmpDir, "psp");
-#endif
     rtl::OUString aSubDir = rtl::OUString::createFromAscii (pName);
     rtl::OUString aUNCSubDir;
     osl::File::getFileURLFromSystemPath (aSubDir, aUNCSubDir);
@@ -590,7 +586,7 @@ PrinterJob::EndJob ()
             /* Get a temporary file name for the spool file.
              * This name must be free()ed later.
              */
-            spoolFileName = macxp_tempnam( NULL, "ooopj" );
+            spoolFileName = tempnam( NULL, "ooopj" );
             if ( spoolFileName == NULL )
                 return sal_False;
 
