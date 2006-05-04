@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:47:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,18 +157,14 @@ namespace dbaccess
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
-            @param          _rQueryFilter       restricts the visible tables by name
-            @param          _rQueryTypeFilter   restricts the visible tables by type
-            @param          _rxMasterQueries    the container for the "master objects", i.e. the objects implementing
-                                                the <type scope="com::sun::star::sdb">CommandDefinition</type> service
-                                                which this container's elements extend
+
             @param _pWarnings
                 specifies a warnings container (May be <NULL/>)
-                <p>Any errors which occur during the lifetime of the query container,
+
+                Any errors which occur during the lifetime of the query container,
                 which cannot be reported as exceptionts (for instance in methods where throwing an SQLException is
                 not allowed) will be appended to this container.</p>
                 <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
-                Usually, it's the same object as referenced by _rConnection</p>
         */
         OQueryContainer(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
