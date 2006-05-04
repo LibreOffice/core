@@ -4,9 +4,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:29:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,12 +375,10 @@ void ScPatternAttr::GetFont(
         rFont.SetName( pFontAttr->GetFamilyName() );
     if (rFont.GetStyleName() != pFontAttr->GetStyleName())
         rFont.SetStyleName( pFontAttr->GetStyleName() );
-    if (rFont.GetFamily() != pFontAttr->GetFamily())
-        rFont.SetFamily( pFontAttr->GetFamily() );
-    if (rFont.GetCharSet() != pFontAttr->GetCharSet())
-        rFont.SetCharSet( pFontAttr->GetCharSet() );
-    if (rFont.GetPitch() != pFontAttr->GetPitch())
-        rFont.SetPitch( pFontAttr->GetPitch() );
+
+    rFont.SetFamily( pFontAttr->GetFamily() );
+    rFont.SetCharSet( pFontAttr->GetCharSet() );
+    rFont.SetPitch( pFontAttr->GetPitch() );
 
     //  Groesse
 
@@ -477,29 +475,17 @@ void ScPatternAttr::GetFont(
     }
 
     //  set font effects
-
-    if (rFont.GetWeight() != eWeight)
-        rFont.SetWeight( eWeight );
-    if (rFont.GetItalic() != eItalic)
-        rFont.SetItalic( eItalic );
-    if (rFont.GetUnderline() != eUnder)
-        rFont.SetUnderline( eUnder );
-    if (rFont.IsWordLineMode() != bWordLine)
-        rFont.SetWordLineMode( bWordLine );
-    if (rFont.GetStrikeout() != eStrike)
-        rFont.SetStrikeout( eStrike );
-    if (rFont.IsOutline() != bOutline)
-        rFont.SetOutline( bOutline );
-    if (rFont.IsShadow() != bShadow)
-        rFont.SetShadow( bShadow );
-    if (rFont.GetEmphasisMark() != eEmphasis)
-        rFont.SetEmphasisMark( eEmphasis );
-    if (rFont.GetRelief() != eRelief)
-        rFont.SetRelief( eRelief );
-    if (rFont.GetColor() != aColor)
-        rFont.SetColor( aColor );
-    if (!rFont.IsTransparent())
-        rFont.SetTransparent( TRUE );
+    rFont.SetWeight( eWeight );
+    rFont.SetItalic( eItalic );
+    rFont.SetUnderline( eUnder );
+    rFont.SetWordLineMode( bWordLine );
+    rFont.SetStrikeout( eStrike );
+    rFont.SetOutline( bOutline );
+    rFont.SetShadow( bShadow );
+    rFont.SetEmphasisMark( eEmphasis );
+    rFont.SetRelief( eRelief );
+    rFont.SetColor( aColor );
+    rFont.SetTransparent( TRUE );
 }
 
 void ScPatternAttr::GetFont(
