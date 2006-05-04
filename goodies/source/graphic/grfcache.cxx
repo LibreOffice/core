@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:43:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,14 +689,24 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 
 void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
-    ImplGetCacheEntry( rObj )->GraphicObjectWasSwappedOut( rObj );
+    // notify cache that rObj is swapped out (and can thus be pruned
+    // from the cache)
+    GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
+
+    if( pEntry )
+        pEntry->GraphicObjectWasSwappedOut( rObj );
 }
 
 // -----------------------------------------------------------------------------
 
 BOOL GraphicCache::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
-    return( ImplGetCacheEntry( rObj )->FillSwappedGraphicObject( rObj, rSubstitute ) );
+    GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
+
+    if( !pEntry )
+        return FALSE;
+
+    return pEntry->FillSwappedGraphicObject( rObj, rSubstitute );
 }
 
 // -----------------------------------------------------------------------------
@@ -808,9 +818,12 @@ BOOL GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const
     //GraphicDisplayCacheEntry* pDisplayEntry = (GraphicDisplayCacheEntry*) ( (GraphicCache*) this )->maDisplayCache.First(); // -Wall removed ....
     BOOL                        bFound = FALSE;
 
-    for( long i = 0, nCount = maDisplayCache.Count(); !bFound && ( i < nCount ); i++ )
-        if( ( (GraphicDisplayCacheEntry*) maDisplayCache.GetObject( i ) )->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
-            bFound = TRUE;
+    if( pCacheEntry )
+    {
+        for( long i = 0, nCount = maDisplayCache.Count(); !bFound && ( i < nCount ); i++ )
+            if( ( (GraphicDisplayCacheEntry*) maDisplayCache.GetObject( i ) )->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
+                bFound = TRUE;
+    }
 
     return bFound;
 }
