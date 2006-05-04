@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:12:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 13:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,6 +495,15 @@ class SwDoc
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
+
+    // --> OD 2006-03-21 #b6375613#
+    // Document flag to trigger conversion, which applys the workaround for documents,
+    // which uses a certain layout defect in OOo 1.x to layout the documents.
+    // This conversion is performed, when the frames for the layout are created.
+    // Thus, this document flag has to be set after load a document and before
+    // creating the document view.
+    sal_Bool mbApplyWorkaroundForB6375613 : 1;
+    // <--
 
     //
     // COMPATIBILITY FLAGS START
@@ -2517,6 +2526,14 @@ public:
     // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
     // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     void UpdateLinks();
+    // <--
+
+    // --> OD 2006-03-21 #b6375613#
+    inline const sal_Bool ApplyWorkaroundForB6375613() const
+    {
+        return mbApplyWorkaroundForB6375613;
+    }
+    void SetApplyWorkaroundForB6375613( sal_Bool p_bApplyWorkaroundForB6375613 );
     // <--
 };
 
