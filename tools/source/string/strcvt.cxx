@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:37:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ static void ImplUpdateStringFromUniString( ByteString* pString,
     rtl_uString2String( (rtl_String **)(&pNewStringData),
                         pUniStr, nUniLen,
                         eTextEncoding, nCvtFlags );
-    ImplDeleteData( pString->mpData );
+    STRING_RELEASE((STRING_TYPE *)pString->mpData);
     pString->mpData = pNewStringData;
 }
 
@@ -578,16 +578,22 @@ sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBu
 // =======================================================================
 
 ByteString::ByteString( const rtl::OString& rStr )
+    : mpData(NULL)
 {
     DBG_CTOR( ByteString, DbgCheckByteString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing rtl::OString -> ByteString cut to zero length");
-    mpData = rStr.pData->length < STRING_MAXLEN
-        ? reinterpret_cast< ByteStringData * >(
-            const_cast< rtl::OString & >(rStr).pData)
-        : &aImplEmptyStrData;
-    ImplIncRefCount( mpData );
+
+    if (rStr.pData->length < STRING_MAXLEN)
+    {
+        mpData = reinterpret_cast< ByteStringData * >(const_cast< rtl::OString & >(rStr).pData);
+        STRING_ACQUIRE((STRING_TYPE *)mpData);
+    }
+    else
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -598,11 +604,17 @@ ByteString& ByteString::Assign( const rtl::OString& rStr )
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing rtl::OString -> ByteString cut to zero length");
-    ImplDeleteData( mpData );
-    mpData = rStr.pData->length < STRING_MAXLEN
-        ? reinterpret_cast< ByteStringData * >(
-            const_cast< rtl::OString & >(rStr).pData)
-        : &aImplEmptyStrData;
-    ImplIncRefCount( mpData );
+
+    if (rStr.pData->length < STRING_MAXLEN)
+    {
+        STRING_RELEASE((STRING_TYPE *)mpData);
+        mpData = reinterpret_cast< ByteStringData * >(const_cast< rtl::OString & >(rStr).pData);
+        STRING_ACQUIRE((STRING_TYPE *)mpData);
+    }
+    else
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+
     return *this;
 }
