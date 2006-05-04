@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.232 $
+ *  $Revision: 1.233 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:59:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,8 +339,6 @@ void Window::ImplInitAppFontData( Window* pWindow )
 
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
-    ImplInitFontList();
-
     String aTestText;
     aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
     aTestText.Append( Button::GetStandardText( BUTTON_CANCEL ) );
@@ -371,7 +369,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = vcl::DefaultFontConfigItem::get()->getUserInterfaceFont( rSettings.GetUILocale() );
+        String aConfigFont = vcl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
         {
