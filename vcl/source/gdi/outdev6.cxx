@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:07:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -965,8 +965,9 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             if( mbInitClipRegion )
                 ImplInitClipRegion();
 
-            bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                                          (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
+            if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
+                bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                                              (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
         }
 
         if( !bDrawn && pSubst )
