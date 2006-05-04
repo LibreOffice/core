@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:37:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,16 +120,23 @@ UniString::UniString( const char* pByteStr, xub_StrLen nLen,
 // =======================================================================
 
 UniString::UniString( const rtl::OUString& rStr )
+    : mpData(NULL)
 {
     DBG_CTOR( UniString, DbgCheckUniString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing rtl::OUString -> UniString cut to zero length");
-    mpData = rStr.pData->length < STRING_MAXLEN
-        ? reinterpret_cast< UniStringData * >(
-            const_cast< rtl::OUString & >(rStr).pData)
-        : &aImplEmptyStrData;
-    ImplIncRefCount( mpData );
+
+
+    if (rStr.pData->length < STRING_MAXLEN)
+    {
+        mpData = reinterpret_cast< UniStringData * >(const_cast< rtl::OUString & >(rStr).pData);
+        STRING_ACQUIRE((STRING_TYPE *)mpData);
+    }
+    else
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -140,12 +147,19 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing rtl::OUString -> UniString cut to zero length");
-    ImplDeleteData( mpData );
-    mpData = rStr.pData->length < STRING_MAXLEN
-        ? reinterpret_cast< UniStringData * >(
-            const_cast< rtl::OUString & >(rStr).pData)
-        : &aImplEmptyStrData;
-    ImplIncRefCount( mpData );
+
+
+    if (rStr.pData->length < STRING_MAXLEN)
+    {
+        STRING_RELEASE((STRING_TYPE *)mpData);
+        mpData = reinterpret_cast< UniStringData * >(const_cast< rtl::OUString & >(rStr).pData);
+        STRING_ACQUIRE((STRING_TYPE *)mpData);
+    }
+    else
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+
     return *this;
 }
 
@@ -181,13 +195,13 @@ UniString::UniString( const ResId& rResId )
     }
     else
     {
-        mpData = &aImplEmptyStrData;
-        ImplIncRefCount( mpData );
-        #if OSL_DEBUG_LEVEL > 0
+        STRING_NEW((STRING_TYPE **)&mpData);
+
+#if OSL_DEBUG_LEVEL > 0
         *this = UniString::CreateFromAscii( "<resource id " );
         Append( UniString::CreateFromInt32( rResId.GetId() ) );
         AppendAscii( " not found>" );
-        #endif
+#endif
     }
 
 
