@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:53:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@ GfxLink::GfxLink( const GfxLink& rGfxLink ) :
 GfxLink::GfxLink( BYTE* pBuf, sal_uInt32 nSize, GfxLinkType nType, BOOL bOwns ) :
     mpImpData( new ImpGfxLink )
 {
+    DBG_ASSERT( (pBuf != NULL && nSize) || (!bOwns && nSize == 0),
+                "GfxLink::GfxLink(): empty/NULL buffer given" );
+
     meType = nType;
     mnBufSize = nSize;
     mpSwap = NULL;
@@ -287,10 +290,13 @@ void GfxLink::SwapOut()
             delete mpSwap;
             mpSwap = NULL;
         }
-        else if( !( --mpBuf->mnRefCount ) )
-            delete mpBuf;
+        else
+        {
+            if( !( --mpBuf->mnRefCount ) )
+                delete mpBuf;
 
-        mpBuf = NULL;
+            mpBuf = NULL;
+        }
     }
 }
 
@@ -317,7 +323,7 @@ BOOL GfxLink::ExportNative( SvStream& rOStream ) const
     {
         if( IsSwappedOut() )
             mpSwap->WriteTo( rOStream );
-        else
+        else if( GetData() )
             rOStream.Write( GetData(), GetDataSize() );
     }
 
@@ -342,7 +348,7 @@ SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
     {
         if( rGfxLink.IsSwappedOut() )
             rGfxLink.mpSwap->WriteTo( rOStream );
-        else
+        else if( rGfxLink.GetData() )
             rOStream.Write( rGfxLink.GetData(), rGfxLink.GetDataSize() );
     }
 
