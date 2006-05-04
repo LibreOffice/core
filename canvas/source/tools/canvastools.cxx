@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:52:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,6 +288,9 @@ namespace canvas
                                                             const ::basegfx::B2DRange&          i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&      i_transformation )
         {
+            if( i_srcRect.isEmpty() )
+                return o_transform=i_transformation;
+
             // transform by given transformation
             ::basegfx::B2DRectangle aTransformedRect;
 
@@ -311,6 +314,9 @@ namespace canvas
                                                         const ::basegfx::B2DHomMatrix&  transformation )
         {
             outRect.reset();
+
+            if( inRect.isEmpty() )
+                return outRect;
 
             // transform all four extremal points of the rectangle,
             // take bounding rect of those.
@@ -346,6 +352,12 @@ namespace canvas
                                                           const ::basegfx::B2DRange&        srcRect,
                                                           const ::basegfx::B2DHomMatrix&    transformation )
         {
+            if( srcRect.isEmpty() ||
+                destRect.isEmpty() )
+            {
+                return o_transform=transformation;
+            }
+
             // transform inputRect by transformation
             ::basegfx::B2DRectangle aTransformedRect;
             calcTransformedRectBounds( aTransformedRect,
@@ -379,6 +391,9 @@ namespace canvas
                        const ::basegfx::B2DRange&       rTransformRect,
                        const ::basegfx::B2DHomMatrix&   rTransformation )
         {
+            if( rContainedRect.isEmpty() || rTransformRect.isEmpty() )
+                return false;
+
             ::basegfx::B2DPolygon aPoly(
                 ::basegfx::tools::createPolygonFromRect( rTransformRect ) );
             aPoly.transform( rTransformation );
@@ -492,6 +507,9 @@ namespace canvas
 
         ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange )
         {
+            if( rRange.isEmpty() )
+                return ::basegfx::B2IRange();
+
             const ::basegfx::B2IPoint aTopLeft( ::basegfx::fround( rRange.getMinX() ),
                                                 ::basegfx::fround( rRange.getMinY() ) );
             return ::basegfx::B2IRange( aTopLeft,
