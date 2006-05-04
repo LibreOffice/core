@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:58:22 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,8 @@ namespace canvas
             }
 
             const Sprite::Reference&    getSprite() const { return mpSprite; }
+
+            // #i61843# need to return by value here, to be used safely from bind
             ::basegfx::B2DRange         getUpdateArea() const { return maTrueUpdateArea; }
             bool                        needsUpdate() const { return mbNeedsUpdate; }
             bool                        isPureMove() const { return mbIsPureMove; }
