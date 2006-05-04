@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:13:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             sal_Bool        bRet = sal_False;
 
-            if( aGfxLink.GetDataSize() )
+            if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
             {
                 pStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
                 bRet = ( pStm->GetError() == 0 );
@@ -603,7 +603,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
             SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
-            if( aGfxLink.GetDataSize() )
+            if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
             else
             {
