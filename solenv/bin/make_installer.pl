@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: kz $ $Date: 2006-04-26 20:43:36 $
+#   last change: $Author: rt $ $Date: 2006-05-04 09:27:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1241,6 +1241,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                     {
                         $filesinpackage = installer::worker::prepare_linuxlinkfiles($filesinpackage);
                         $installer::globals::makelinuxlinkrpm = 1;
+                        if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::add_required_package = $packagename . "u"; }
                         if ( $installer::globals::patch ) { $installer::globals::call_epm = 0; }     # no packing of core module in patch
                         $shellscriptsfilename = ""; # shell scripts only need to be included into the link rpm
                         $run = 1;
