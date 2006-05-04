@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:29:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -104,8 +108,18 @@
 #include <algorithm>
 #endif
 
+#include <tools/stream.hxx>
+#include <rtl/bootstrap.hxx>
+
+
 #include <vector>
 #include <set>
+
+#ifndef INCLUDED_MAP
+#include <map>
+#define INCLUDED_MAP
+#endif
+
 
 static const int MAXFONTHEIGHT = 2048;
 
@@ -132,6 +146,107 @@ inline int IntTimes256FromFixed(FIXED f)
 // these variables can be static because they store system wide settings
 static bool bImplSalCourierScalable = false;
 static bool bImplSalCourierNew = false;
+
+
+// =======================================================================
+
+typedef std::map< String, String > FontNameMap;
+
+class ImplFontNameCache
+{
+private:
+    FontNameMap     aFontNames;
+    rtl::OUString   aCacheFileName;
+    String          aBaseURL;
+    BOOL            bModified;
+
+protected:
+    String  OptimizeURL( const String& rURL ) const;
+
+public:
+            ImplFontNameCache( const String& rCacheFileName, const String& rBaseURL );
+            ~ImplFontNameCache();
+
+    String  GetFontName( const String& rFontFileName ) const;
+    void    AddFontName( const String& rFontFileName, const String& rFontName );
+};
+
+ImplFontNameCache::ImplFontNameCache( const String& rFileNameURL, const String& rBaseURL ) : aBaseURL( rBaseURL )
+{
+    bModified = FALSE;
+    aBaseURL.ToLowerAscii();    // Windows only, no problem...
+
+    osl::FileBase::getSystemPathFromFileURL( rFileNameURL, aCacheFileName );
+
+    SvFileStream aCacheFile( aCacheFileName, STREAM_READ );
+    if ( aCacheFile.IsOpen() )
+    {
+        // read...
+        String aFontFileURL, aFontName;
+        do
+        {
+            aCacheFile.ReadByteString( aFontFileURL, RTL_TEXTENCODING_UTF8 );
+            aCacheFile.ReadByteString( aFontName, RTL_TEXTENCODING_UTF8 );
+            if ( aFontFileURL.Len() )
+                aFontNames.insert( FontNameMap::value_type(aFontFileURL,aFontName) );
+        }
+        while ( aFontFileURL.Len() );
+    }
+}
+
+ImplFontNameCache::~ImplFontNameCache()
+{
+    if ( bModified )
+    {
+        SvFileStream aCacheFile( aCacheFileName, STREAM_WRITE|STREAM_TRUNC );
+        if ( aCacheFile.IsWritable() )
+        {
+            FontNameMap::const_iterator aIter = aFontNames.begin();
+            while ( aIter != aFontNames.end() )
+            {
+                String aFontFileURL( (*aIter).first );
+                String aFontName( (*aIter).second );
+                aCacheFile.WriteByteString( aFontFileURL, RTL_TEXTENCODING_UTF8 );
+                aCacheFile.WriteByteString( aFontName, RTL_TEXTENCODING_UTF8 );
+                aIter++;
+            }
+            // EOF Marker
+            String aEmptyStr;
+            aCacheFile.WriteByteString( aEmptyStr, RTL_TEXTENCODING_UTF8 );
+            aCacheFile.WriteByteString( aEmptyStr, RTL_TEXTENCODING_UTF8 );
+        }
+    }
+}
+
+String ImplFontNameCache::OptimizeURL( const String& rURL ) const
+{
+    String aOptimizedFontFileURL( rURL );
+    aOptimizedFontFileURL.ToLowerAscii();   // Windows only, no problem...
+    if ( aOptimizedFontFileURL.CompareTo( aBaseURL, aBaseURL.Len() ) == COMPARE_EQUAL )
+        aOptimizedFontFileURL = aOptimizedFontFileURL.Copy( aBaseURL.Len() );
+    return aOptimizedFontFileURL;
+}
+
+String ImplFontNameCache::GetFontName( const String& rFontFileName ) const
+{
+    String aName;
+    FontNameMap::const_iterator it = aFontNames.find( OptimizeURL( rFontFileName ) );
+    if( it != aFontNames.end() )
+    {
+        aName = it->second;
+    }
+    return aName;
+}
+
+void ImplFontNameCache::AddFontName( const String& rFontFileName, const String& rFontName )
+{
+    DBG_ASSERT( rFontFileName.Len() && rFontName.Len(), "ImplFontNameCache::AddFontName - invalid data!" );
+    if ( rFontFileName.Len() && rFontName.Len() )
+    {
+        aFontNames.insert( FontNameMap::value_type( OptimizeURL( rFontFileName ),rFontName ) );
+        bModified = TRUE;
+    }
+}
 
 // =======================================================================
 
@@ -1795,6 +1910,7 @@ String ImplGetFontNameFromFile( SalData& rSalData, const String& rFontFileURL )
             aSkip['E'] = 2;
             aSkip['S'] = 1;
             aSkip[':'] = 0;
+            bInit = TRUE;
         }
 
         char        aBuffer[2048];
@@ -1849,11 +1965,21 @@ String ImplGetFontNameFromFile( SalData& rSalData, const String& rFontFileURL )
 bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     const String& rFontFileURL, const String& rFontName )
 {
+    RTL_LOGFILE_TRACE1( "WinSalGraphics::AddTempDevFont(): %s", rtl::OUStringToOString( rFontFileURL, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
     String aFontName( rFontName );
+
+    // Search Font Name in Cache
+     if( !aFontName.Len() && mpFontNameCache )
+        aFontName = mpFontNameCache->GetFontName( rFontFileURL );
 
     // Retrieve font name from font resource
      if( !aFontName.Len() )
+     {
         aFontName = ImplGetFontNameFromFile( *GetSalData(), rFontFileURL );
+        if ( mpFontNameCache && aFontName.Len() )
+            mpFontNameCache->AddFontName( rFontFileURL, aFontName );
+     }
 
     if ( !aFontName.Len() )
         return false;
@@ -1920,6 +2046,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         // only the font path of the user installation is needed
         ::rtl::OUString aPath;
         osl_getExecutableFile( &aPath.pData );
+        ::rtl::OUString aExecutableFile( aPath );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
         aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype") );
@@ -1931,6 +2058,16 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         {
             osl::DirectoryItem aDirItem;
             String aEmptyString;
+
+            ::rtl::OUString aBootStrap = aExecutableFile.copy( 0, aExecutableFile.lastIndexOf('/')+1 );
+            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
+            rtl::Bootstrap aBootstrap( aBootStrap );
+            ::rtl::OUString aUserPath;
+            aBootstrap.getFrom( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
+            aUserPath += String( RTL_CONSTASCII_USTRINGPARAM("/user/config/fontnames.dat") );
+            String aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
+            mpFontNameCache = new ImplFontNameCache( aUserPath, aBaseURL );
+
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
             {
                 osl::FileStatus aFileStatus( FileStatusMask_FileURL );
@@ -1938,6 +2075,9 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
                 if ( rcOSL == osl::FileBase::E_None )
                     AddTempDevFont( pFontList, aFileStatus.getFileURL(), aEmptyString );
             }
+
+            delete mpFontNameCache; // will write cache, if needed.
+            mpFontNameCache = NULL;
         }
     }
 
