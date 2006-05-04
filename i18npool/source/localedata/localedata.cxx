@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:29:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ static const struct {
         { "kl_GL",  lcl_DATA_EURO, "kl" },
         { "mk_MK",  lcl_DATA_EURO, "mk" },
         { "br_FR",  lcl_DATA_EURO, "br" },
+        { "la_VA",  lcl_DATA_EURO, "la" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -182,6 +183,7 @@ static const struct {
         { "bn_IN",  lcl_DATA_OTHERS, NULL },
         { "or_IN",  lcl_DATA_OTHERS, "or" },
         { "en_IN",  lcl_DATA_OTHERS, NULL },
+        { "ml_IN",  lcl_DATA_OTHERS, "ml" },
         { "bn_BD",  lcl_DATA_OTHERS, "bn" },
         { "th_TH",  lcl_DATA_OTHERS, "th" },
 
@@ -209,6 +211,8 @@ static const struct {
         { "ve_ZA",  lcl_DATA_OTHERS, "ve" },
         { "nr_ZA",  lcl_DATA_OTHERS, "nr" },
         { "ts_ZA",  lcl_DATA_OTHERS, "ts" },
+        { "ku_TR",  lcl_DATA_OTHERS, "ku" },
+        { "ak_GH",  lcl_DATA_OTHERS, "ak" },
 
 //      { "br_AE",  lcl_DATA, "br" },
 
