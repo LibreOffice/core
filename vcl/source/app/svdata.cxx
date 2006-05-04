@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:31:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,10 +187,10 @@ void ImplDeInitSVData()
     if( pSVData->mpDockingManager )
         delete pSVData->mpDockingManager;
 
-    if( pSVData->maGDIData.mpDefFontConfig )
-        delete pSVData->maGDIData.mpDefFontConfig;
-    if( pSVData->maGDIData.mpFontSubstConfig )
-        delete pSVData->maGDIData.mpFontSubstConfig;
+    if( pSVData->maGDIData.mpDefaultFontConfiguration )
+        delete pSVData->maGDIData.mpDefaultFontConfiguration;
+    if( pSVData->maGDIData.mpFontSubstConfiguration )
+        delete pSVData->maGDIData.mpFontSubstConfiguration;
 
     if ( pSVData->maAppData.mpMSFTempFileName )
     {
