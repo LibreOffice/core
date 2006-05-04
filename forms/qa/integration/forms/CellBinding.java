@@ -192,7 +192,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         verifyRadioStates( primaryRadio, secondaryRadio, (short)1, (short)0, "Radio button not properly un/checked according to the cell and ref value (1)." );
 
         setCellText( col, row, refValueB );
-        verifyRadioStates( primaryRadio, secondaryRadio, (short)0, (short)1, "Radio button not properly un/checked according to the cell and ref value (1)." );
+        verifyRadioStates( primaryRadio, secondaryRadio, (short)0, (short)1, "Radio button not properly un/checked according to the cell and ref value (2)." );
     }
 
     /* ------------------------------------------------------------------ */
