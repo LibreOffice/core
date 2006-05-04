@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:03:54 $
+#   last change: $Author: rt $ $Date: 2006-05-04 15:11:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/impgraph.obj	\
+                    $(SLO)$/fontcfg.obj		\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
                     $(SLO)$/impimagetree.obj		\
