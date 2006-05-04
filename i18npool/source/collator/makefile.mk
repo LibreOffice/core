@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-02 15:09:48 $
+#   last change: $Author: rt $ $Date: 2006-05-04 09:11:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,27 +42,32 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
 tempvar:=$(shell +cd data && ls *.txt)
 LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(tempvar) $(i:s/-/_/:s/_/ /:1)))
+rules_dependencies:=$(foreach,i,$(tempvar) data$/$i)
+
 .IF "$(GUI)"=="WNT"
 CFLAGSCXX+=-DLOCAL_RULE_LANGS="\"$(LOCAL_RULE_LANGS)\""
 .ELSE
 CFLAGSCXX+=-DLOCAL_RULE_LANGS='"$(LOCAL_RULE_LANGS)"'
 .ENDIF
+
+rules_obj = $(SLO)$/collator_unicode.obj
+
 SLOFILES=   \
         $(SLO)$/collatorImpl.obj \
         $(SLO)$/chaptercollator.obj \
-        $(SLO)$/collator_unicode.obj
+        $(rules_obj)
 
 APP1TARGET = gencoll_rule
 
 APP1OBJS   = $(OBJ)$/gencoll_rule.obj
+
+DEPOBJFILES = $(APP1OBJS)
 
 APP1STDLIBS = $(SALLIB) \
         $(ICUINLIB) \
@@ -72,3 +77,4 @@ APP1STDLIBS = $(SALLIB) \
 
 .INCLUDE :	target.mk
 
+$(rules_obj) : $(rules_dependencies)
