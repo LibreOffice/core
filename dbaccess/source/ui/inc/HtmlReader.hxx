@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:42:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ namespace dbaui
         sal_Int16           GetWidthPixel( const HTMLOption* pOption );
         rtl_TextEncoding    GetEncodingByMIME( const String& rMime );
         void                setTextEncoding();
+        void                fetchOptions();
         ~OHTMLReader();
     public:
         OHTMLReader(SvStream& rIn,
@@ -92,8 +93,9 @@ namespace dbaui
                     const TPositions &_rColumnPositions,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                    const TColumnVector* rList = 0,
-                    const OTypeInfoMap* _pInfoMap = 0);
+                    const TColumnVector* rList,
+                    const OTypeInfoMap* _pInfoMap,
+                    sal_Bool _bAutoIncrementEnabled);
 
         virtual     SvParserState CallParser();// Basisklasse
         virtual     void          release();
