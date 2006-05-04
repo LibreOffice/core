@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:06:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,6 @@ extern char *strdup(const char *);
 #       include <crt_externs.h>
 int  readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result );
 char *asctime_r( const struct tm *tm, char *buffer );
-char *macxp_tempnam( const char *tmpdir, const char *prefix );
 void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion, unsigned int *minorVersion, unsigned int *minorMinorVersion );
 #ifdef __cplusplus
 extern "C" {
@@ -383,6 +382,10 @@ int macxp_resolveAlias(char *path, int buflen);
 #ifdef __cplusplus
 }
 #endif
+#endif
+/* XCode < 2.1 (Mac OS X 10.3 Panther and earlier) does not have this in unistd.h (#i64769#) */
+#ifndef _SC_GETPW_R_SIZE_MAX
+#define _SC_GETPW_R_SIZE_MAX 71
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
