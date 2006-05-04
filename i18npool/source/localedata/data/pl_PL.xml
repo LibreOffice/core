@@ -27,7 +27,7 @@
     <Markers>
       <QuotationStart>‘</QuotationStart>
       <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationStart>„</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
     <TimeAM>AM</TimeAM>
