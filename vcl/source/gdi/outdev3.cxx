@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.217 $
+ *  $Revision: 1.218 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:32:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,10 @@
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
@@ -1064,14 +1068,17 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         MsLangId::convertLanguageToLocale( eLang, aLocale );
     }
 
-    DefaultFontConfigItem& rDefaults = *DefaultFontConfigItem::get();
+    DefaultFontConfiguration& rDefaults = *DefaultFontConfiguration::get();
     String aSearch = rDefaults.getUserInterfaceFont( aLocale ); // ensure a fallback
     String aDefault = rDefaults.getDefaultFont( aLocale, nType );
     if( aDefault.Len() )
         aSearch = aDefault;
 
     int nDefaultHeight = 12;
+
     Font aFont;
+    aFont.SetPitch( PITCH_VARIABLE );
+
     switch ( nType )
     {
         case DEFAULTFONT_SANS_UNICODE:
@@ -1108,6 +1115,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case DEFAULTFONT_CJK_SPREADSHEET:
         case DEFAULTFONT_CJK_HEADING:
         case DEFAULTFONT_CJK_DISPLAY:
+            aFont.SetFamily( FAMILY_SYSTEM );   // don't care, but don't use font subst config later...
             break;
 
         case DEFAULTFONT_CTL_TEXT:
@@ -1115,6 +1123,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case DEFAULTFONT_CTL_SPREADSHEET:
         case DEFAULTFONT_CTL_HEADING:
         case DEFAULTFONT_CTL_DISPLAY:
+            aFont.SetFamily( FAMILY_SYSTEM );   // don't care, but don't use font subst config later...
             break;
     }
 
@@ -1122,8 +1131,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     {
         aFont.SetHeight( nDefaultHeight );
         aFont.SetWeight( WEIGHT_NORMAL );
-        if ( aFont.GetPitch() == PITCH_DONTKNOW )
-            aFont.SetPitch ( PITCH_VARIABLE );
+
         if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
             aFont.SetCharSet( gsl_getSystemTextEncoding() );
 
@@ -1253,7 +1261,7 @@ String GetSubsFontName( const String& rName, ULONG nFlags )
       ||  aOrgName.EqualsAscii( "opensymbol" ) ) )
         return aName;
 
-    const FontNameAttr* pAttr = FontSubstConfigItem::get()->getSubstInfo( aOrgName );
+    const FontNameAttr* pAttr = FontSubstConfiguration::get()->getSubstInfo( aOrgName );
     if ( pAttr )
     {
         for( int i = 0; i < 3; i++ )
@@ -1642,7 +1650,7 @@ bool ImplDevFontListData::AddFontFace( ImplFontData* pNewData )
         // calc matching attributes if other entries are already initialized
 
         // MT: Perform05: Do lazy, quite expensive, not needed in start-up!
-        // const FontSubstConfigItem& rFontSubst = *FontSubstConfigItem::get();
+        // const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
         // InitMatchData( rFontSubst, maSearchName );
         // mbMatchData=true; // Somewhere else???
     }
@@ -1688,7 +1696,7 @@ bool ImplDevFontListData::AddFontFace( ImplFontData* pNewData )
 // -----------------------------------------------------------------------
 
 // get font attributes using the normalized font family name
-void ImplDevFontListData::InitMatchData( const vcl::FontSubstConfigItem& rFontSubst,
+void ImplDevFontListData::InitMatchData( const vcl::FontSubstConfiguration& rFontSubst,
     const String& rSearchName )
 {
     String aShortName;
@@ -2021,7 +2029,7 @@ void ImplDevFontList::InitMatchData() const
     mbMatchData = true;
 
     // calculate MatchData for all entries
-    const FontSubstConfigItem& rFontSubst = *FontSubstConfigItem::get();
+    const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
 
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )
@@ -2400,7 +2408,7 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
 {
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
-    const DefaultFontConfigItem& rDefaults = *DefaultFontConfigItem::get();
+    const DefaultFontConfiguration& rDefaults = *DefaultFontConfiguration::get();
     com::sun::star::lang::Locale aLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), OUString(), OUString() );
     String aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_SANS_UNICODE );
     ImplDevFontListData* pFoundData = ImplFindByTokenNames( aFontname );
@@ -2503,26 +2511,9 @@ ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const String& rFontName ) c
 
 // =======================================================================
 
-static inline ImplFontAttributes GetAttributesFromFont( const Font& rFont )
-{
-    ImplFontAttributes aFA;
-    aFA.maName      = rFont.GetName();
-    aFA.maStyleName = rFont.GetStyleName();
-    aFA.meFamily    = rFont.GetFamily();
-    aFA.meWidthType = WIDTH_DONTKNOW;
-    aFA.meWeight    = rFont.GetWeight();
-    aFA.meItalic    = rFont.GetItalic();
-    aFA.mePitch     = rFont.GetPitch();
-    aFA.mbSymbolFlag= (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL);
-    return aFA;
-}
-
-// -----------------------------------------------------------------------
-
 ImplFontSelectData::ImplFontSelectData( const Font& rFont,
     const String& rSearchName, const Size& rSize )
-:   ImplFontAttributes( GetAttributesFromFont(rFont) ),
-    maSearchName( rSearchName ),
+:   maSearchName( rSearchName ),
     mnWidth( rSize.Width() ),
     mnHeight( rSize.Height() ),
     mnOrientation( rFont.GetOrientation() ),
@@ -2533,6 +2524,8 @@ ImplFontSelectData::ImplFontSelectData( const Font& rFont,
     mpFontEntry( NULL )
 {
     maTargetName = maName;
+
+    rFont.GetFontAttributes( *this );
 
     // normalize orientation between 0 and 3600
     if( 3600 <= (unsigned)mnOrientation )
@@ -2836,8 +2829,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     FontWeight  eSearchWeight   = rFSD.meWeight;
     FontWidth   eSearchWidth    = rFSD.meWidthType;
     ULONG       nSearchType     = 0;
-    FontSubstConfigItem::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
-                                     eSearchWeight, eSearchWidth, nSearchType );
+    FontSubstConfiguration::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
+                                        eSearchWeight, eSearchWidth, nSearchType );
 
     // note: the search name was already translated to english (if possible)
 
@@ -2867,9 +2860,9 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     const FontNameAttr* pFontAttr = NULL;
     if( aSearchName.Len() )
     {
-        // get fallback info using FontSubstConfigItem and
+        // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
-        const FontSubstConfigItem& rFontSubst = *FontSubstConfigItem::get();
+        const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
         pFontAttr = rFontSubst.getSubstInfo( aSearchName );
         if ( !pFontAttr && (aSearchShortName != aSearchName) )
             pFontAttr = rFontSubst.getSubstInfo( aSearchShortName );
@@ -2889,7 +2882,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     if( rFSD.IsSymbolFont() )
     {
         com::sun::star::lang::Locale aDefaultLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), OUString(), OUString() );
-        aSearchName = DefaultFontConfigItem::get()->getDefaultFont( aDefaultLocale, DEFAULTFONT_SYMBOL );
+        aSearchName = DefaultFontConfiguration::get()->getDefaultFont( aDefaultLocale, DEFAULTFONT_SYMBOL );
         ImplDevFontListData* pFoundData = ImplFindByTokenNames( aSearchName );
         if( pFoundData )
             return pFoundData;
@@ -2910,8 +2903,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         ULONG       nTempType   = 0;
         FontWeight  eTempWeight = rFSD.meWeight;
         FontWidth   eTempWidth  = WIDTH_DONTKNOW;
-        FontSubstConfigItem::getMapName( aSearchName, aTempShortName, aTempFamilyName,
-                                         eTempWeight, eTempWidth, nTempType );
+        FontSubstConfiguration::getMapName( aSearchName, aTempShortName, aTempFamilyName,
+                                            eTempWeight, eTempWidth, nTempType );
 
         // use a shortend token name if available
         if( aTempShortName != aSearchName )
@@ -2923,9 +2916,9 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
 
         // use a font name from font fallback list to determine font attributes
 
-        // get fallback info using FontSubstConfigItem and
+        // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
-        const FontSubstConfigItem& rFontSubst = *FontSubstConfigItem::get();
+        const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
         const FontNameAttr* pTempFontAttr = rFontSubst.getSubstInfo( aSearchName );
         if ( !pTempFontAttr && (aTempShortName != aSearchName) )
             pTempFontAttr = rFontSubst.getSubstInfo( aTempShortName );
@@ -3282,11 +3275,8 @@ void OutputDevice::ImplInitFontList() const
     {
         if( mpGraphics || ImplGetGraphics() )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "OutputDevice::ImplInitFontList()" );
             mpGraphics->GetDevFontList( mpFontList );
-            if( !mpFontList->Count() )
-                // dummy mode, no fonts at all
-                // at least we should not crash or loop
-                return;
         }
     }
 }
