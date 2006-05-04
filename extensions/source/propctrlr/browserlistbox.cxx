@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:17:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
 #include <comphelper/asyncnotification.hxx>
@@ -166,8 +169,16 @@ namespace pcr
     class PropertyControlContext_Impl   :public PropertyControlContext_Impl_Base
                                         ,public ::comphelper::IEventProcessor
     {
+    public:
+        enum NotifcationMode
+        {
+            eSynchronously,
+            eAsynchronously
+        };
+
     private:
-        IControlContext*            m_pContext;
+        IControlContext*    m_pContext;
+        NotifcationMode     m_eMode;
 
     public:
         /** creates an instance
@@ -184,6 +195,13 @@ namespace pcr
         */
         void SAL_CALL dispose();
 
+        /** sets the notification mode, so that notifications recieved from the controls are
+            forwarded to our IControlContext either synchronously or asynchronously
+            @param  _eMode
+                the new notification mode
+        */
+        void setNotificationMode( NotifcationMode _eMode );
+
         virtual void SAL_CALL acquire() throw();
         virtual void SAL_CALL release() throw();
 
@@ -199,6 +217,14 @@ namespace pcr
         virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
     private:
+        /** processes the given event, i.e. notifies it to our IControlContext
+            @param  _rEvent
+                the event no notify
+            @precond
+                our mutex (well, the SolarMutex) is locked
+        */
+        void impl_processEvent_throw( const ::comphelper::AnyEvent& _rEvent );
+
         /** checks whether we're alive
 
             @throws DisposedException
@@ -221,6 +247,7 @@ namespace pcr
     //--------------------------------------------------------------------
     PropertyControlContext_Impl::PropertyControlContext_Impl( IControlContext& _rContextImpl )
         :m_pContext( &_rContextImpl )
+        ,m_eMode( eAsynchronously )
     {
     }
 
@@ -250,13 +277,27 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    void PropertyControlContext_Impl::setNotificationMode( NotifcationMode _eMode )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        m_eMode = _eMode;
+    }
+
+    //--------------------------------------------------------------------
     void PropertyControlContext_Impl::impl_notify_throw( const Reference< XPropertyControl >& _rxControl, ControlEventType _eType )
     {
         ::comphelper::AnyEventRef pEvent;
+
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
             impl_checkAlive_throw();
             pEvent = new ControlEvent( _rxControl, _eType );
+
+            if ( m_eMode == eSynchronously )
+            {
+                impl_processEvent_throw( *pEvent );
+                return;
+            }
         }
 
         SharedNotifier::getNotifier()->addEvent( pEvent, this );
@@ -302,6 +343,21 @@ namespace pcr
         if ( impl_isDisposed_nothrow() )
             return;
 
+        try
+        {
+            impl_processEvent_throw( _rEvent );
+        }
+        catch( const Exception& )
+        {
+            // can't handle otherwise, since our caller (the notification thread) does not allow
+            // for exceptions (it could itself abort only)
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void PropertyControlContext_Impl::impl_processEvent_throw( const ::comphelper::AnyEvent& _rEvent )
+    {
         const ControlEvent& rControlEvent = static_cast< const ControlEvent& >( _rEvent );
         switch ( rControlEvent.eType )
         {
@@ -385,7 +441,20 @@ namespace pcr
     void OBrowserListBox::CommitModified( )
     {
         if ( IsModified() && m_xActiveControl.is() )
-            m_xActiveControl->notifyModifiedValue();
+        {
+            // for the time of this commit, notify all events synchronously
+            // #i63814# / 2006-03-31 / frank.schoenheit@sun.com
+            m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eSynchronously );
+            try
+            {
+                m_xActiveControl->notifyModifiedValue();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eAsynchronously );
+        }
     }
 
     //------------------------------------------------------------------
