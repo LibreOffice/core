@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:38:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,15 +605,20 @@ long SpinField::Notify( NotifyEvent& rNEvt )
     {
         if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
         {
-            const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
+            if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
             {
-                if ( pData->GetDelta() < 0L )
-                    Down();
-                else
-                    Up();
-                nDone = 1;
+                const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
+                if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
+                {
+                    if ( pData->GetDelta() < 0L )
+                        Down();
+                    else
+                        Up();
+                    nDone = 1;
+                }
             }
+            else
+                nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
 
