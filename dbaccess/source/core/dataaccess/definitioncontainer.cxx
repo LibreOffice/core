@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:05:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,12 +425,6 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
             aIter->second = Documents::mapped_type();
         }
     }
-}
-
-//--------------------------------------------------------------------------
-sal_Bool ODefinitionContainer::isReadOnly() const
-{
-    return sal_False;
 }
 
 //--------------------------------------------------------------------------
