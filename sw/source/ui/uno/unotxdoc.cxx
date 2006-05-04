@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:25:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2153,6 +2153,15 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         case WID_DOC_BUILDID:
             aValue >>= maBuildId;
         break;
+        // --> OD 2006-03-21 #b6375613#
+        case WID_APPLY_WORKAROUND_FOR_B6375613:
+        {
+            sal_Bool bApplyWorkaroundForB6375613( false );
+            aValue >>= bApplyWorkaroundForB6375613;
+            pDocShell->GetDoc()->SetApplyWorkaroundForB6375613( bApplyWorkaroundForB6375613 );
+        }
+        break;
+        // <--
 
         default:
         {
@@ -2298,6 +2307,13 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_HAS_VALID_SIGNATURES:
             aAny <<= hasValidSignatures();
         break;
+        // --> OD 2006-03-21 #b6375613#
+        case WID_APPLY_WORKAROUND_FOR_B6375613:
+        {
+            aAny <<= pDocShell->GetDoc()->ApplyWorkaroundForB6375613();
+        }
+        break;
+        // <--
 
         default:
         {
