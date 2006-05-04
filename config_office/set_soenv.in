@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.102 $
-# Date:        $Date: 2006-05-04 08:44:18 $
+# Version:     $Revision: 1.103 $
+# Date:        $Date: 2006-05-04 09:25:34 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -771,20 +771,13 @@ $USR_DT               = $USR.$ds."dt";
 $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
 
 # Generate alternate output file for sh?
-if ('@USE_SHELL@' eq "tcsh")
-{  $outfile_sh = $outfile.".sh";
-}
-else
-{  undef $outfile_sh;
-}
-
-# Generate output file for 4nt?
-if ("@USE_SHELL@" eq "4nt")
-{  $outfile_bat = $outfile;
-   $outfile_bat =~ s/set$/bat/i;
-}
-else
-{  undef $outfile_bat;
+$outfile_sh = $outfile.".sh";
+if ("@USE_SHELL@" eq "4nt") {
+    # Generate output file for 4nt?
+    $outfile_bat = $outfile;
+    $outfile_bat =~ s/set$/bat/i;
+} else {
+    undef $outfile_bat;
 }
 
 if ($STLPORT4 ne $no_stl) {
@@ -1383,11 +1376,9 @@ print "done\n";
 open( OUT, ">$outfile" ) ||
    die "Cannot open $outfile: $!\n";
 
-if(defined($outfile_sh))
-{  # Create sh environment file
-   open( OUT_SH, ">$outfile_sh" ) ||
-   die "Cannot open $outfile_sh: $!\n";
-}
+# Create sh environment file
+open( OUT_SH, ">$outfile_sh" ) ||
+  die "Cannot open $outfile_sh: $!\n";
 
 if(defined($outfile_bat))
 {  # Create bat environment file
@@ -1402,7 +1393,7 @@ if(defined($outfile_bat))
 #
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
-CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" ) if defined($outfile_sh);
+CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
 CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
@@ -1814,33 +1805,26 @@ if ( $platform =~ m/cygwin/ )
 {
    # these variables marked with "j" are used with cygwin only
    ToFile( "ILIB",              $ILIB,              "j" );
-   
+
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
    ToFile( "LS",                $WIN_LS,            "e" );
    ToFile( "GNUCOPY",           $WIN_GNUCOPY,       "e" );
    ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
 }
+# $perlpre is only used for the following three variables
+# and only set for 4nt.
+my $perlpre = "";
 if (( $platform =~ m/cygwin/ ) and ( '@USE_SHELL@' eq "4nt" )) {
-  my ($tempstring);
-  $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."deliver.pl");
-  if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
-  ToFile( "set DELIVER=$tempstring", $empty, "x" );
-  $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."mkout.pl");
-  if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
-  ToFile( "set MKOUT=$tempstring", $empty, "x" );
-  $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."zipdep.pl");
-  if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
-  ToFile( "set ZIPDEP=$tempstring", $empty, "x" );
-
-  ToFile( "HOME",              "   ",          "e" );
-} else {
-  ToFile( "DELIVER",           "deliver.pl",       "e" );
-  ToFile( "MKOUT",             "mkout.pl",         "e" );
-  ToFile( "ZIPDEP",            "zipdep.pl",         "e" );
-  ToFile( "GCCINSTLIB",        "gccinstlib.pl",    "e" );
+   ToFile( "HOME",              "   ",          "e" );
+   $perlpre = "perl ".${SOLARENV}.${BIN}.${ds};
 }
-ToFile( "USE_SHELL",         '@USE_SHELL@',         "e" );
+ToFile( "DELIVER",       $perlpre."deliver.pl",     "e" );
+ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
+ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
+
+ToFile( "GCCINSTLIB",            "gccinstlib.pl",   "e" );
+ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
 if ($SYSTEM_PYTHON eq "NO")
 {
   if ( $platform =~ m/cygwin/ ) {
@@ -1874,8 +1858,8 @@ if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
   ToFile( "\@unset INCLUDE LIB", $empty, "x");
   ToFile( "check for correct dmake.", $empty, "c");
   ToFile( '@if "%@SEARCH[dmake]" == "" ( @echo dmake not build or missing! Invalid build environment! ^ unset SOLARENV ^ cancel )', $empty, "x");
-ToFile( '@dmake -V > dmakecheck.out', $empty, "x");
-ToFile( '@ffind /Tcygwin /C /B dmakecheck.out && ( @echo Found cygwin build dmake! Invalid! ^ unset SOLARENV ^ cancel )', $empty, "x");
+  ToFile( '@dmake -V > dmakecheck.out', $empty, "x");
+  ToFile( '@ffind /Tcygwin /C /B dmakecheck.out && ( @echo Found cygwin build dmake! Invalid! ^ unset SOLARENV ^ cancel )', $empty, "x");
   ToFile( "  ", $empty, "x");
 }
 
@@ -1885,7 +1869,7 @@ if ( $platform =~ m/cygwin/ and '@USE_SHELL@' ne "4nt" ) {
     # Invalidate build environment.
     ToFile( "WORK_STAMP", "_invalid_", "e" );
     # Don't test the dmake version if this file is sourced by bootstrap
-    ToFile( "bash -c 'if test -n \"\$_ISBOOTSTRAP_\" || (dmake.exe -V | grep -e \"-cygwin\\|OS := cygwin\" > /dev/null ); then true; else echo -e \"\\n\\nERROR: Not a cygwin build dmake or dmake missing, please check!\\n\\n\" ; sleep 5; false ; fi' || exit 1", $empty, "x");
+    ToFile( "bash -c 'if test -n \"\$_ISBOOTSTRAP_\" || (dmake.exe -V | grep -e \"-cygwin\\|OS := cygwin\" > /dev/null ); then true; else echo -e \"\\n\\nERROR: Not a cygwin build dmake or dmake missing, please check!\\n\\n\" ; sleep 5; false ; fi' || exit 1", $empty, "y");
     # Restore valid environment if test was successful.
     ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
     ToFile( "", $empty, "n");
@@ -1902,10 +1886,10 @@ ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
 # Writing unset variables you might not need to file.
 # 
 print OUT $unsetvars;
-if(defined($outfile_sh))
-{  print OUT_SH "export $exportvars $newline";
-   print OUT_SH "unset $unsetvarssh $newline";
-}
+
+print OUT_SH "export $exportvars$newline";
+print OUT_SH "unset $unsetvarssh$newline";
+
 if(defined($outfile_bat))
 {  print OUT_BAT $unsetvarsbat;
 }
@@ -1916,9 +1900,9 @@ if(defined($outfile_bat))
 #---------------------------
 #
 close( OUT ) || print "Can't close $outfile: $!";
-if( defined($outfile_sh))
-{  close( OUT_SH ) || print "Can't close $outfile_sh: $!";
-}
+
+close( OUT_SH ) || print "Can't close $outfile_sh: $!";
+
 if( defined($outfile_bat))
 {  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
 }
@@ -1939,13 +1923,12 @@ $tmp = $SRC_ROOT.$ds.$outfile;
 if (rename( $outfile, $tmp ) ne 1)
 {  `mv -f $outfile $tmp`;
 }
-if(defined($outfile_sh))
-{
-    $tmp = $SRC_ROOT.$ds.$outfile_sh;
-    if (rename( $outfile_sh, $tmp ) ne 1)
-    {  `mv -f $outfile_sh $tmp`;
-    }
+
+$tmp = $SRC_ROOT.$ds.$outfile_sh;
+if (rename( $outfile_sh, $tmp ) ne 1)
+{  `mv -f $outfile_sh $tmp`;
 }
+
 if(defined($outfile_bat))
 {
     $tmp = $SRC_ROOT.$ds.$outfile_bat;
@@ -1978,7 +1961,7 @@ if ( $Warning ne "" )
 
 print "*$newline* USAGE: $newline";
 print "* Source $outfile (in tcsh)";
-print " or $outfile.sh (in sh)" if defined($outfile_sh);
+print " or $outfile.sh (in sh)";
 print "$newline";
 print "* in order to set up the build-environment variables.$newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
@@ -2092,45 +2075,63 @@ sub CreateFileHeader
    print { $filehandle } $newline;
 }
 #---------------------------------------------------------
-# Function name: ToFile 
+# Function name: ToFile
 # Description:   Writes the environment variable in the
-#                output file. 
+#                output file.
 # Arguments:     1. Name of environment variable (string)
 #                2. Value of environment variable (string)
-#                3. e - env. var, a - alias, c - comment
+#                3. e - env. var
+#                   a - alias
+#                   c - comment
+#                   n - newline
 #                   j - env. var in DOS style (WINNT only)
+#                   x - raw, write as is to OUT_BAT
+#                   y - raw, write as is to OUT and OUT_SH
 # Return value:  void
 #---------------------------------------------------------
-sub ToFile 
-{  if ( $_[ 2 ] eq "e" ) 
-   {  # Write an environment variable to file.
-      if (defined $_[ 1 ] && $_[ 1 ] ne "" )
-      {  printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
-         print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";  # to tcsh file
-         if(defined($outfile_sh))
-         {  print OUT_SH "$_[ 0 ]=\"$_[ 1 ]\"$newline";    # to sh file
-            $exportvars .= " $_[ 0 ]";                     # add to export list for sh file
+sub ToFile {
+   if ( $_[ 2 ] eq "e" ) {
+      # Write an environment variable to file.
+      if (defined $_[ 1 ] && $_[ 1 ] ne "" ) {
+         my $envvar = $_[ 1 ];
+         my $envvarbash = $envvar;
+         if ("@USE_SHELL@" eq "4nt" ) {
+             # expand the variables
+             $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
+             # Some variables need to be translated
+             $win_format_var = WinFormat( $envvar );
+             # The excluded variables are translated by cygwin
+             if ( $_[ 0 ] !~ /^PATH$|^TMP$|^TEMP$|^TMPDIR$|^HOME$/i ) {
+                 $envvar = $win_format_var;
+             }
+             # Tcsh needs backslashes quoted
+             $envvar =~ s/\\/\\\\/g;
+             # Bash needs backslashes quoted twice
+             $envvarbash = $envvar;
+             $envvarbash =~ s/\\\\/\\\\\\\\/g;
          }
-         if(defined($outfile_bat))
-         {   $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
-             print OUT_BAT "$set $_[ 0 ]=$win_format_var $newline";
+         printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
+         print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
+         print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
+         $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
+         if(defined($outfile_bat)) {
+             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
+             print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
          }
-      }
-      else
-      {  printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
+      } else {
+         printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
          $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
-         if(defined($outfile_bat))
-         {  $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
+         if(defined($outfile_bat)) {
+             $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
          }
       }
    }
    elsif ( $_[ 2 ] eq "a" ) 
    {  # Write an alias to file.
-      print "The $_[ 0 ] is set to: $_[ 1 ]\n";     # to stdout
-      print OUT "$_[ 0 ] $_[ 1 ] $newline";         # to tcsh file
-      print OUT_SH "$_[ 0 ]=$_[ 1 ] $newline" if defined($outfile_sh); # to sh file
+      print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
+      print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
+      print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
       if(defined($outfile_bat)) # create the correct 4nt alias format
       {  my $aliastmp = $_[ 1 ];
          $aliastmp =~ s/\$/\%/g;
@@ -2142,69 +2143,67 @@ sub ToFile
    elsif ( $_[ 2 ] eq "c" ) 
    {  # Write a comment to file.
       print "$newline";
-      print "$comment $newline";
-      print "$comment $_[ 0 ] $newline"; 
-      print "$comment $newline";     
+      print "$comment$newline";
+      print "$comment $_[ 0 ]$newline";
+      print "$comment$newline";
       print OUT "$newline";
-      print OUT "$comment $newline";
-      print OUT "$comment $_[ 0 ] $newline"; 
-      print OUT "$comment $newline";     
-      if(defined($outfile_sh))
-      {
-          print OUT_SH "$newline";
-          print OUT_SH "$comment $newline";
-          print OUT_SH "$comment $_[ 0 ] $newline"; 
-          print OUT_SH "$comment $newline";     
-      }
-      if(defined($outfile_bat))
-      {
+      print OUT "$comment$newline";
+      print OUT "$comment $_[ 0 ]$newline";
+      print OUT "$comment$newline";
+      print OUT_SH "$newline";
+      print OUT_SH "$comment$newline";
+      print OUT_SH "$comment $_[ 0 ]$newline";
+      print OUT_SH "$comment$newline";
+      if(defined($outfile_bat)) {
           print OUT_BAT "$newline";
-          print OUT_BAT "$comment4nt $newline";
-          print OUT_BAT "$comment4nt $_[ 0 ] $newline"; 
-          print OUT_BAT "$comment4nt $newline";     
+          print OUT_BAT "$comment4nt$newline";
+          print OUT_BAT "$comment4nt $_[ 0 ]$newline";
+          print OUT_BAT "$comment4nt$newline";
       }
    }
-   elsif ( $_[ 2 ] eq "n" ) 
+   elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
-      print OUT_SH "$newline" if defined($outfile_sh);
+      print OUT_SH "$newline";
       print OUT_BAT "$newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "x" )
    {
       #Write first argument as is, and nothing else
-      print OUT "$_[ 0 ] $newline";
-      print OUT_SH "$_[ 0 ] $newline" if defined($outfile_sh);
-      print OUT_BAT "$_[ 0 ] $newline" if defined($outfile_bat);
+      print OUT_BAT "$_[ 0 ]$newline" if defined($outfile_bat);
    }
-   elsif ( $_[ 2 ] eq "j" )
+   elsif ( $_[ 2 ] eq "y" )
    {
-      if ((defined $_[ 1 ]) and ( $platform =~ m/cygwin/ )) 
-      {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
+      #Write first argument as is, and nothing else
+      print OUT "$_[ 0 ]$newline";
+      print OUT_SH "$_[ 0 ]$newline";
+   }
+   elsif ( $_[ 2 ] eq "j" ) {
+      if ((defined $_[ 1 ]) and ( $platform =~ m/cygwin/ )) {
+         printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
          $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
          $win_format_var =~ s/\\/\\\\/g;
-         print OUT "$setenv $_[ 0 ] \"$win_format_var\" $newline";
-         if(defined($outfile_sh))
-         {  # bash needs one layer of escaping more
-            $win_format_var =~ s/\\\\/\\\\\\\\/g;
-            print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline";    # to sh file
-            $exportvars .= " $_[ 0 ]";                     # add to export list for sh file
-         }
-         if (defined($outfile_bat))
-         {
+         print OUT "$setenv $_[ 0 ] \"$win_format_var\"$newline";
+
+         # bash needs one layer of escaping more
+         $win_format_var =~ s/\\\\/\\\\\\\\/g;
+         print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline"; # to sh file
+         $exportvars .= " $_[ 0 ]";                          # add to export list for sh file
+
+         if (defined($outfile_bat)) {
              $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
-             print OUT_BAT "$set $_[ 0 ]=$win_format_var $newline";
+             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
+             print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
          }
       }
       else
       {
-          print "Type \"j\" only intended for Windows! $newline"; 
-          print "use \"e\" to set and unset variables. $newline"; 
+          print "Type \"j\" only intended for Windows!$newline";
+          print "use \"e\" to set and unset variables.$newline";
       }
    }
    else 
-   {  print "Unknown type! $newline"; 
+   {  print "Unknown type!$newline";
    }
 }
 #----------------------------------------------------------
@@ -2270,53 +2269,58 @@ sub WinFormat
 		   $split_var[0] =~ s/^-//; # split deletes the "-" from all but the first element
            foreach $d1 ( @split_var )
            {
-			   $d1 = "-".$d1;
+               $d1 = "-".$d1;
                if ( $d1 =~ /^(-\w)[\'\"]?((?:\/[\w\.~ ]+)+)[\'\"]?/ )
-			   # This regex: option -> $1, filename without quotes -> $2
+               # This regex: option -> $1, filename without quotes -> $2
                {
                    $d1_prefix = $1;
-				   $d1_fname = $2;
-				   if ( $d1_fname =~ / / )
-				   {
-					   chomp( $d1_fname = qx{cygpath -d "$d1_fname"} ); # Use DOS 8.3 style to avoid quoting
-				   }                                        # ! This fails when $d1 doesn't exist!
-				   else
-				   {
-					   chomp( $d1_fname = qx{cygpath -w "$d1_fname"} ); # Use "normal" filenames
-				   }
+                   $d1_fname = $2;
+                   if ( $d1_fname =~ / / ) {
+                       # Use DOS 8.3 style to avoid quoting
+                       chomp( $d1_fname = qx{cygpath -d "$d1_fname"} );
+                   }   # ! This fails when $d1 doesn't exist!
+                   else {
+                       chomp( $d1_fname = qx{cygpath -w "$d1_fname"} ); # Use "normal" filenames
+                   }
                    $d1 = $d1_prefix.$d1_fname;
                }
-			   else
-			   {   # relative paths here
-				   # Do nothing.
-			   }
+               else
+               {   # relative paths here
+                   # Do nothing.
+               }
            }
            $variable = join(' ',@split_var);
        }
        elsif ( $variable eq ";" ) {}
-       else
-       {
+       else {
            # Normal paths
+
+           # One special case is if "perl " is prepended.
+           $variable =~ /^(perl\s+)?(.*)$/;
+           my $perlpre = $1;
+           if ( !defined($perlpre) ) { $perlpre = ""; }
+           $variable = $2;
+
            @split_var = split(/;/,$variable);
-           foreach $d1 ( @split_var )
-           {
-               if ( $d1 =~ /(?:^\/[\w\.~ ]+)+/ )
-               {
-				   if ( $d1 =~ / / )
-				   {
-					   chomp( $d1 = qx{cygpath -d "$d1"} ); # Use DOS 8.3 style to avoid quoting
-				   }                                        # ! This fails when $d1 doesn't exist!
-				   else
-				   {
-					   chomp( $d1 = qx{cygpath -w "$d1"} ); # Use "normal" filenames
-				   }
+           foreach $d1 ( @split_var ) {
+               if ( $d1 =~ /(?:^\/[\w\.~ ]+)+/ ) {
+                   if ( $d1 =~ / / ) {
+                       chomp( $d1 = qx{cygpath -d "$d1"} ); # Use DOS 8.3 style to avoid quoting
+                   }                                        # ! This fails when $d1 doesn't exist!
+                   else {
+                       chomp( $d1 = qx{cygpath -w "$d1"} ); # Use "normal" filenames
+                   }
                }
-			   else
-			   {   # relative paths here
-				   # Do nothing.
-			   }
+               else {
+                   # relative paths here
+                   # Do nothing.
+               }
            }
-           $variable = join(';',@split_var);
+           $variable = $perlpre.join(';',@split_var);
+           if ( ($perlpre ne "") && ($^O eq "cygwin")) {
+               # Cygwin's perl needs quoted backslashes
+               $variable =~ s#\\#\\\\#g;
+           }
        }
        $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
    return $variable;
