@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:53:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1437,6 +1437,22 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_WHEELWITHOUTFOCUS:
+            {
+                sal_Bool bWheelOnHover( sal_True );
+                if ( Value >>= bWheelOnHover )
+                {
+                    AllSettings aSettings = pWindow->GetSettings();
+                    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+
+                    aMouseSettings.SetNoWheelActionWithoutFocus( !bWheelOnHover );
+                    aSettings.SetMouseSettings( aMouseSettings );
+
+                    pWindow->SetSettings( aSettings, TRUE );
+                }
+            }
+            break;
+
             case BASEPROPERTY_NATIVE_WIDGET_LOOK:
             {
                 sal_Bool bEnable( sal_True );
@@ -1827,13 +1843,21 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_WHEELWITHOUTFOCUS:
+            {
+                sal_Bool bWheelOnHover = !GetWindow()->GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus();
+                aProp <<= bWheelOnHover;
+            }
+            break;
+
             case BASEPROPERTY_NATIVE_WIDGET_LOOK:
                 aProp <<= (sal_Bool) GetWindow()->IsNativeWidgetEnabled();
-            break;
+                break;
 
             case BASEPROPERTY_ENABLED:
                 aProp <<= (sal_Bool) GetWindow()->IsEnabled();
-            break;
+                break;
+
             case BASEPROPERTY_TEXT:
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
