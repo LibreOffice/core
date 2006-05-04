@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,16 +73,27 @@
 
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
 {
+#ifdef MACOSX
+    const char *pValue = getenv( "TMPDIR" );
+
+    /* If TMPDIR environment variable is not set, use "/tmp" instead
+       of P_tmpdir because its value is "/var/tmp" and it is not
+       deleted on system start up */
+    if ( !pValue )
+        pValue = "/tmp";
+#else
+
     const char *pValue = getenv( "TEMP" );
 
     if ( !pValue )
     {
         pValue = getenv( "TMP" );
-#if defined(SOLARIS) || defined (LINUX) || defined (FREEBSD) || defined (MACOSX)
+#if defined(SOLARIS) || defined (LINUX) || defined (FREEBSD)
         if ( !pValue )
             pValue = P_tmpdir;
 #endif
     }
+#endif /* MACOSX */
 
     if ( pValue )
     {
