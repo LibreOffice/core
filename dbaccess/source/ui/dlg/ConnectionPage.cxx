@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:16:11 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ namespace dbaui
         OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
         sal_Bool bShowUser = sal_True;
-        OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
+        LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         switch( m_eType )
         {
             case DST_DBASE:
