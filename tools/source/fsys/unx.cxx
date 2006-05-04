@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:18:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,6 +579,14 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bAccessRemovableDevice )
 
 const char *TempDirImpl( char *pBuf )
 {
+#ifdef MACOSX
+    // On Mac OS X, use only TMPDIR environment variable
+    const char *pValue = getenv( "TMPDIR" );
+
+    // P_tmpdir is /var/tmp on Mac OS X, and it is not cleaned up on system
+    // startup
+    strcpy( pBuf, "/tmp" );
+#else
     const char *pValue = getenv( "TEMP" );
     if ( !pValue )
         pValue = getenv( "TMP" );
@@ -589,6 +597,8 @@ const char *TempDirImpl( char *pBuf )
         strcpy( pBuf, P_tmpdir );
         // hart auf "/tmp"  sollte wohl nur im Notfall verwendet werden
         //strcpy( pBuf, "/tmp" );
+#endif /* MACOSX */
+
     return pBuf;
 }
 
