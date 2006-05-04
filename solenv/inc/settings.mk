@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.188 $
+#   $Revision: 1.189 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 14:01:40 $
+#   last change: $Author: rt $ $Date: 2006-05-04 09:24:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,6 @@ MKFILENAME:=SETTINGS.MK
 .IF 400<=200
 dmake_test_version:
     @+echo dmake version too old!
-    force_dmake_to_error
-.ENDIF
-
-.IF "$(UNSUPPORTED_4nt_VERSION)"=="TRUE"
-unsupported_4nt_version:
-    @+echo 4NT version too old!
     force_dmake_to_error
 .ENDIF
 
@@ -675,13 +669,8 @@ COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 OUTCXX=$(OUT)$/cxx
 
 .IF "$(PACKAGE)"!=""
-IDLPACKAGE=$(PACKAGE)
-.IF "$(GUI)"=="UNX"
-IDLPACKAGENAME:=$(shell, +echo $(IDLPACKAGE) | $(SED) 's/\\/\//g' )
-.ENDIF			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="WNT"
-IDLPACKAGENAME:=$(shell, +echo $(IDLPACKAGE) | $(SED) s/\\/\//g )
-.ENDIF			# "$(GUI)"=="WNT"
+IDLPACKAGE:=$(PACKAGE)
+IDLPACKAGENAME:=$(IDLPACKAGE:sX\X/X)
 .ELSE
 IDLPACKAGE=$(PRJNAME)
 IDLPACKAGENAME=$(PRJNAME)
