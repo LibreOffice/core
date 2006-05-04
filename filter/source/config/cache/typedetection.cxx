@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:22:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,9 @@ namespace css = ::com::sun::star;
 
 //_______________________________________________
 // definitions
+
+// Use this switch to change the behaviour of preselection DocumentService ... (see using for further informations)
+#define IGNORE_NON_URLMATCHING_TYPES_FOR_PRESELECTION_DOCUMENTSERVICE
 
 /*-----------------------------------------------
     03.07.2003 11:25
@@ -633,14 +636,20 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
     {
         FlatDetectionInfo& rInfo = *pIt;
 
-        // match preslection the URL?
-        // NO  -> ignore it
-        // YES -> use it
+        /*
+            #i60158#
+            Preselection by DocumentService ...
+            How many filters (and corresponding types) must be checked ?
+            All or only the list of filters/types, which match to the given URL too ?
+            There is no final decision about this currently. So we make it "configurable" .-)
+        */
+        #ifdef IGNORE_NON_URLMATCHING_TYPES_FOR_PRESELECTION_DOCUMENTSERVICE
         if (
             (!rInfo.bMatchByExtension) &&
             (!rInfo.bMatchByPattern  )
            )
            continue;
+        #endif
 
         rInfo.bPreselectedAsType            = sal_False;
         rInfo.bPreselectedByFilter          = sal_False;
@@ -756,7 +765,24 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
                 // of using the flat type directly.
                 // Here the list of task ID's, which wasrelated to these lines of code:
                 // #i47159#, #i43404#, #i46494#
-                return sFlatType;
+
+                // a flat detected type without the chance for a deep detection ... but preselected by the user
+                // explicitly (means preselected as type or filter ... not as documentservice!)
+                // should be accepted. So the user can overrule our detection.
+                if (
+                    (aFlatTypeInfo.bPreselectedAsType  ) ||
+                    (aFlatTypeInfo.bPreselectedByFilter)
+                   )
+                    return sFlatType;
+
+                // flat detected types without any registered deep detection service and not
+                // preselected by the user can be used as LAST CHANCE in case no other type could
+                // be detected. Of course only the first type without deep detector can be used.
+                // Further ones has to be ignored.
+                if (rLastChance.getLength() < 1)
+                    rLastChance = sFlatType;
+
+                continue;
             }
 
             // dont forget to add every real asked deep detection service here.
