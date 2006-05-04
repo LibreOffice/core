@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:48:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -956,7 +956,10 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                   (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
                   (rNEvt.GetWindow() == mpImplWin) )
         {
-            nDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+            if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
+                nDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+            else
+                nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
 
