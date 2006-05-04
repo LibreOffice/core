@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:38:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2555,6 +2555,14 @@ BOOL SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
     DBG_ASSERT( pImp, "-SvTreeListBox::IsContextMenuHandlingEnabled(): No implementation!" );
 
     return pImp->bContextMenuHandling;
+}
+
+void SvTreeListBox::EnableList( bool _bEnable )
+{
+    // call base class method
+    Window::Enable( _bEnable != false );
+    // then paint immediately
+    Paint( Rectangle( Point(), GetSizePixel() ) );
 }
 
 ::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
