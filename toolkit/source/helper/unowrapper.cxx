@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:24:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,8 +323,6 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     if ( pWindow )
     {
         Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
-        OSL_ENSURE( pTopWindowChild || !pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD ),
-            "UnoWrapper::WindowDestroyed: system child which is no system window?" );
         while ( pTopWindowChild )
         {
             OSL_ENSURE( pTopWindowChild->GetParent() == pWindow, "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
