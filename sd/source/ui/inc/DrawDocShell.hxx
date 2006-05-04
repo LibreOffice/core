@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:06:40 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 14:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@ public:
 
     SfxPrinter*             GetPrinter(BOOL bCreate);
     void                    SetPrinter(SfxPrinter *pNewPrinter);
+    void                    UpdateFontList();
 
     //BOOL                    IsUIActive() { return bUIActive; }
     BOOL                    IsInDestruction() const { return bInDestruction; }
