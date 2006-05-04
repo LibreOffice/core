@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:07:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:09:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -895,11 +895,17 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                                 if ( ( aFill.getFillType() == SvtGraphicFill::fillSolid ) && ( aFill.getFillRule() == SvtGraphicFill::fillEvenOdd ) )
                                 {
-                                    PolyPolygon aPath;
-                                    aFill.getPath( aPath );
+                                    double fTransparency = aFill.getTransparency();
+                                    if ( fTransparency == 0.0 )
+                                    {
+                                        PolyPolygon aPath;
+                                        aFill.getPath( aPath );
 
-                                    bSkipSequence = sal_True;
-                                    rWriter.DrawPolyPolygon( aPath );
+                                        bSkipSequence = sal_True;
+                                        rWriter.DrawPolyPolygon( aPath );
+                                    }
+                                    else if ( fTransparency == 1.0 )
+                                        bSkipSequence = sal_True;
                                 }
                             }
                             if ( bSkipSequence )
