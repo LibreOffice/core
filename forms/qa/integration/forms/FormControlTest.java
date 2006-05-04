@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormControlTest.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:46:52 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private void createSampleDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+
         m_document = DocumentHelper.blankTextDocument( m_orb );
         m_formLayer = new FormLayer( m_document );
 
