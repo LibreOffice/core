@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:39:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -945,6 +945,9 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
     BYTE                cR0, cG0, cB0, cR1, cG1, cB1;
     BOOL                bRet = FALSE;
 
+    DBG_ASSERT( aBmp.GetSizePixel() == rBmpEx.GetSizePixel(),
+                "GraphicManager::ImplCreateScaled(): bmp size inconsistent" );
+
     if( pAcc )
     {
         aOutBmp = Bitmap( Size( nDstW, nDstH ), 24 );
@@ -1130,6 +1133,9 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
 
         if( rBmpEx.IsAlpha() )
         {
+            DBG_ASSERT( rBmpEx.GetAlpha().GetSizePixel() == rBmpEx.GetSizePixel(),
+                        "GraphicManager::ImplCreateScaled(): alpha mask size inconsistent" );
+
             AlphaMask   aAlpha( rBmpEx.GetAlpha() );
             AlphaMask   aOutAlpha;
 
@@ -1207,6 +1213,9 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
         }
         else
         {
+            DBG_ASSERT( rBmpEx.GetMask().GetSizePixel() == rBmpEx.GetSizePixel(),
+                        "GraphicManager::ImplCreateScaled(): mask size inconsistent" );
+
             Bitmap  aMsk( rBmpEx.GetMask() );
             Bitmap  aOutMsk;
 
