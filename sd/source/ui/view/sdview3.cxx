@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:41:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -951,8 +951,6 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
                     pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
                 }
-                else
-                    delete pMedium;
 
                 xDocShRef->DoClose();
                 xDocShRef.Clear();
