@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:13:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:50:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
     }
     else
     {
-        OTableRow* pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
+         ::boost::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
         OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
         if ( pFieldDescr )
             GetDescWin()->GrabFocus();
@@ -395,7 +395,7 @@ void OTableDesignView::setReadOnly(sal_Bool _bReadOnly)
 void OTableDesignView::reSync()
 {
     GetEditorCtrl()->DeactivateCell();
-    OTableRow* pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
+     ::boost::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
     OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
     if ( pFieldDescr )
         GetDescWin()->DisplayData(pFieldDescr);
