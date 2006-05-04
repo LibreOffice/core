@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:23:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-#define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 DBG_NAME(ORTFReader);
 // ==========================================================================
 // ORTFReader
@@ -148,9 +147,10 @@ ORTFReader::ORTFReader(SvStream& rIn,
                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                        const TColumnVector* pList,
-                       const OTypeInfoMap* _pInfoMap)
+                       const OTypeInfoMap* _pInfoMap,
+                       sal_Bool _bAutoIncrementEnabled)
    :SvRTFParser(rIn)
-   ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap)
+   ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap,_bAutoIncrementEnabled)
 {
     DBG_CTOR(ORTFReader,NULL);
 }
@@ -231,7 +231,10 @@ void ORTFReader::NextToken( int nToken )
                 break;
             case RTF_INTBL:
                 if(m_bInTbl)
-                    m_sTextToken.Erase();
+                {
+                    eraseTokens();
+                }
+
                 m_bInTbl = TRUE; // jetzt befinden wir uns in einer Tabellenbeschreibung
                 break;
             case RTF_TEXTTOKEN:
@@ -251,7 +254,7 @@ void ORTFReader::NextToken( int nToken )
                         showErrorDialog(e);
                     }
                     m_nColumnPos++;
-                    m_sTextToken.Erase();
+                    eraseTokens();
                 }
                 break;
             case RTF_ROW:
@@ -297,30 +300,11 @@ void ORTFReader::NextToken( int nToken )
                     m_sTextToken += aToken;
                 break;
             case RTF_CELL:
-                if(m_sTextToken.Len())
-                {
-                    sal_Int32 nColPos = m_vColumns[m_nColumnPos].first;
-                    if(nColPos != CONTAINER_ENTRY_NOTFOUND)
-                    {
-                        m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
-                        m_vColumnSize[nColPos] = ::std::max<sal_Int32>(m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
-                    }
-
-                    m_sTextToken.Erase();
-                }
+                adjustFormat();
                 m_nColumnPos++;
                 break;
             case RTF_ROW:
-                if(m_sTextToken.Len())
-                {
-                    sal_Int32 nColPos = m_vColumns[m_nColumnPos].first;
-                    if(nColPos != CONTAINER_ENTRY_NOTFOUND)
-                    {
-                        m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
-                        m_vColumnSize[nColPos] = ::std::max<sal_Int32>(m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
-                    }
-                    m_sTextToken.Erase();
-                }
+                adjustFormat();
                 m_nColumnPos = 0;
                 m_nRows--;
                 break;
