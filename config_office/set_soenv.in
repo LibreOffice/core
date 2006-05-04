@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.101 $
-# Date:        $Date: 2006-04-27 07:47:03 $
+# Version:     $Revision: 1.102 $
+# Date:        $Date: 2006-05-04 08:44:18 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -398,7 +398,7 @@ elsif ( $platform =~ m/linux-gnu/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
-      $outfile        = "LinuxAMDEnv.Set";
+      $outfile        = "LinuxX86-64Env.Set";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $CVER           = "C341";
