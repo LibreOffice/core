@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 11:38:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
 #endif
+#ifndef DBA_CORE_WARNINGS_HXX
+#include "warning.hxx"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -115,15 +118,14 @@ class OConnection           :public ::comphelper::OBaseMutex
                             ,public OSubComponent
                             ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base
-                            ,public IWarningsContainer
                             ,public IRefreshListener
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
                             m_xMasterTables; // just to avoid the recreation of the catalog
     OWeakRefArray           m_aStatements;
-    OQueryContainer*        m_pQueries;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xQueries;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                            m_xQueries;
     OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
@@ -134,7 +136,7 @@ protected:
 
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
-    ::com::sun::star::uno::Any  m_aAdditionalWarnings;  // own warnings (appended to the ones got by the master connection)
+    WarningsContainer           m_aWarnings;
     sal_Bool                    m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
     sal_Bool                    m_bSupportsUsers;
     sal_Bool                    m_bSupportsGroups;
@@ -220,15 +222,8 @@ public:
 
     // IRefreshListener
     virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
-protected:
-    // IWarningsContainer
-    virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning);
-    virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning);
-    virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext);
 
 protected:
-    static void implConcatWarnings(::com::sun::star::uno::Any& _rChainLeft, const ::com::sun::star::uno::Any& _rChainRight);
-
     inline  void checkDisposed() throw (::com::sun::star::lang::DisposedException)
     {
         if ( rBHelper.bDisposed || !m_xConnection.is() )
