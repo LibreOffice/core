@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:25:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,17 @@ InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
 void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent) throw (RuntimeException)
 {
     if ( m_xControl.is() )
+    {
         m_xControl->createPeer( _rxToolkit, _rxParent );
+
+        // #i63103# - form controls should only react on the mouse wheel when they're focused
+        Reference< XVclWindowPeer > xVclWindowPeer( getPeer(), UNO_QUERY );
+        if ( xVclWindowPeer.is() )
+            xVclWindowPeer->setProperty(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
+                makeAny( (sal_Bool)sal_False )
+            );
+    }
 }
 
 //------------------------------------------------------------------------------
