@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:02:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,13 @@ namespace dbaccess
         ::rtl::OUString getComposedTableName( const ::rtl::OUString& _sCatalog,
                                               const ::rtl::OUString& _sSchema,
                                               const ::rtl::OUString& _sTable);
+
+        /** copies the values from the insert row into the key row
+        *
+        * \param _rInsertRow the row which was inserted
+        * \param _rKeyRow The current key row of the row set.
+        */
+        void copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
