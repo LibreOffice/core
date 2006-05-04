@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:08:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 09:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -676,8 +676,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     case RES_POOLCOLL_TABLE_HDLN:
         {
             SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
-            if( !IsHTMLMode() )
-                SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
