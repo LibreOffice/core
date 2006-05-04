@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:43 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
  */
+// MT: Should be const, but doesn't work because of #i64835#
 static rtl_uString aImplEmpty_rtl_uString =
 {
     1,      /* sal_Int32    refCount;   */
