@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:53:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1178,7 +1178,7 @@ ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 SfxPrinter* __EXPORT ScTabViewShell::GetPrinter( BOOL bCreate )
 {
     //  Drucker ist immer da (wird fuer die FontListe schon beim Starten angelegt)
-    return GetViewData()->GetDocShell()->GetPrinter();
+    return GetViewData()->GetDocShell()->GetPrinter(bCreate);
 }
 
 USHORT __EXPORT ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags )
