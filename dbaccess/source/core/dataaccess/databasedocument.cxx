@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:18:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
     {
         return sal_False;
     }
-    if ( m_pImpl->m_pDBContext )
+    if ( m_pImpl->m_pDBContext && m_pImpl->m_sRealFileURL.getLength() )
     {
         m_pImpl->m_pDBContext->registerPrivate(m_pImpl->m_sRealFileURL,m_pImpl);
         m_pImpl->setModified(sal_False);
