@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:52:39 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 15:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,8 +424,7 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
 
 SfxPrinter* __EXPORT ScPreviewShell::GetPrinter( BOOL bCreate )
 {
-    //  Drucker ist immer da (wird fuer die FontListe schon beim Starten angelegt)
-    return pDocShell->GetPrinter();
+    return pDocShell->GetPrinter(bCreate);
 }
 
 USHORT __EXPORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags )
