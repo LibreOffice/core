@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:20:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@ namespace dbaui
             NONE
         };
 
-        ::std::vector<OTableRow*>   m_aUndoList;
-        ::std::vector<OTableRow*>*  m_pRowList;
+        ::std::vector< ::boost::shared_ptr<OTableRow> > m_aUndoList;
+        ::std::vector< ::boost::shared_ptr<OTableRow> >*    m_pRowList;
 
         EEditMode                   eEditMode;
 
@@ -80,7 +80,7 @@ namespace dbaui
         Edit*                       pDescrCell;
         OTableFieldDescWin*         pDescrWin;          // properties of one column
 
-        OTableRow*                  pActRow;
+         ::boost::shared_ptr<OTableRow> pActRow;
 
         ULONG                       nIndexEvent;
         ULONG                       nCutEvent;
@@ -174,9 +174,9 @@ namespace dbaui
 
         virtual OTableDesignView* GetView() const;
 
-        ::std::vector<OTableRow*>* GetRowList(){ return m_pRowList; }
+        ::std::vector< ::boost::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
-        OTableRow*      GetActRow(){ return pActRow; }
+         ::boost::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
         void            CellModified( long nRow, sal_uInt16 nColId );
         void            SetReadOnly( BOOL bRead=TRUE );
 
