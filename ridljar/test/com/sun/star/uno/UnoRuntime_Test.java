@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoRuntime_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:28:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 08:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package com.sun.star.uno;
 
+import com.sun.star.beans.Optional;
 import complexlib.ComplexTestCase;
 
 public final class UnoRuntime_Test extends ComplexTestCase {
@@ -45,7 +46,7 @@ public final class UnoRuntime_Test extends ComplexTestCase {
     public String[] getTestMethodNames() {
         return new String[] {
             "test_generateOid", "test_queryInterface", "test_areSame",
-            "test_currentContext" };
+            "test_completeValue", "test_currentContext" };
     }
 
     public void test_generateOid() {
@@ -84,13 +85,50 @@ public final class UnoRuntime_Test extends ComplexTestCase {
     }
 
     public void test_areSame() {
-        // Test if two independent instances are not the same:
-        assure("Test1", !UnoRuntime.areSame(new Test1(), new Test2()));
-
-        // Test if a delegator object is the same as its creator:
+        assure(
+            UnoRuntime.areSame(
+                new Any(Type.UNSIGNED_LONG, new Integer(3)),
+                new Any(Type.UNSIGNED_LONG, new Integer(3))));
+        assure(
+            !UnoRuntime.areSame(
+                new Any(Type.UNSIGNED_LONG, new Integer(3)), new Integer(3)));
+        assure(!UnoRuntime.areSame(new int[] { 1 }, new int[] { 1, 2 }));
+        assure(
+            UnoRuntime.areSame(
+                TypeClass.UNSIGNED_LONG,
+                new Any(new Type(TypeClass.class), TypeClass.UNSIGNED_LONG)));
+        assure(
+            UnoRuntime.areSame(
+                new Any(
+                    new Type("com.sun.star.beans.Optional<unsigned long>"),
+                    new Optional()),
+                new Any(
+                    new Type("com.sun.star.beans.Optional<unsigned long>"),
+                    new Optional(false, new Integer(0)))));
+        assure(!UnoRuntime.areSame(new Test1(), new Test2()));
         Test2 test2 = new Test2();
-        Ifc ifc = (Ifc) UnoRuntime.queryInterface(Ifc.class, test2);
-        assure("Test2", UnoRuntime.areSame(ifc, test2));
+        assure(
+            "Test2",
+            UnoRuntime.areSame(
+                UnoRuntime.queryInterface(Ifc.class, test2), test2));
+    }
+
+    public void test_completeValue() {
+        assure(
+            UnoRuntime.completeValue(Type.UNSIGNED_LONG, null).equals(
+                new Integer(0)));
+        Object v = UnoRuntime.completeValue(
+            new Type("[][]unsigned long"), null);
+        assure(v instanceof int[][]);
+        assure(((int[][]) v).length == 0);
+        assure(
+            UnoRuntime.completeValue(new Type(TypeClass.class), null) ==
+            TypeClass.VOID);
+        v = UnoRuntime.completeValue(
+            new Type("com.sun.star.beans.Optional<unsigned long>"), null);
+        assure(v instanceof Optional);
+        assure(!((Optional) v).IsPresent);
+        assure(((Optional) v).Value == null);
     }
 
     public void test_currentContext() throws InterruptedException {
@@ -112,7 +150,7 @@ public final class UnoRuntime_Test extends ComplexTestCase {
 
     private static class Test1 {}
 
-    private static class Test2 implements IQueryInterface {
+    private static class Test2 implements XInterface, IQueryInterface {
         public String getOid() {
             return null;
         }
@@ -132,7 +170,7 @@ public final class UnoRuntime_Test extends ComplexTestCase {
 
     private static class Test3 implements Ifc {}
 
-    private static class Test4 implements IQueryInterface {
+    private static class Test4 implements XInterface, IQueryInterface {
         public String getOid() {
             return null;
         }
