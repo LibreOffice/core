@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:34:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,9 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         eTransparent    ( !rMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( FALSE )
 {
+    DBG_ASSERT( !rMask || rBmp.GetSizePixel() == rMask.GetSizePixel(),
+                "BitmapEx::BitmapEx(): size mismatch for bitmap and mask." );
+
     // #105489# Ensure a mask is exactly one bit deep
     if( !!aMask && aMask.GetBitCount() != 1 )
     {
@@ -154,6 +157,8 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         eTransparent    ( !rAlphaMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( !rAlphaMask ? FALSE : TRUE )
 {
+    DBG_ASSERT( !rAlphaMask || rBmp.GetSizePixel() == rAlphaMask.GetSizePixel(),
+                "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
 }
 
 // ------------------------------------------------------------------
@@ -166,6 +171,9 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
         bAlpha              ( FALSE )
 {
     aMask = aBitmap.CreateMask( aTransparentColor );
+
+    DBG_ASSERT( rBmp.GetSizePixel() == aMask.GetSizePixel(),
+                "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
 }
 
 // ------------------------------------------------------------------
@@ -308,6 +316,9 @@ BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
         {
             aRet.aMask.CombineSimple( aRet.aBitmap, BMP_COMBINE_OR );
             aRet.aBitmap.Erase( ( BMP_COLOR_MONOCHROME_BLACK == eColorMode ) ? COL_BLACK : COL_WHITE );
+
+            DBG_ASSERT( aRet.aBitmap.GetSizePixel() == aRet.aMask.GetSizePixel(),
+                        "BitmapEx::GetColorTransformedBitmapEx(): size mismatch for bitmap and alpha mask." );
         }
     }
 
@@ -429,6 +440,9 @@ BOOL BitmapEx::Scale( const double& rScaleX, const double& rScaleY, ULONG nScale
             aMask.Scale( rScaleX, rScaleY, BMP_SCALE_FAST );
 
         aBitmapSize = aBitmap.GetSizePixel();
+
+        DBG_ASSERT( !aMask || aBitmap.GetSizePixel() == aMask.GetSizePixel(),
+                    "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
     }
 
     return bRet;
@@ -490,6 +504,9 @@ BOOL BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
         }
 
         aBitmapSize = aBitmap.GetSizePixel();
+
+        DBG_ASSERT( !aMask || aBitmap.GetSizePixel() == aMask.GetSizePixel(),
+                    "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask." );
     }
 
     return bRet;
@@ -509,6 +526,9 @@ BOOL BitmapEx::Crop( const Rectangle& rRectPixel )
             aMask.Crop( rRectPixel );
 
         aBitmapSize = aBitmap.GetSizePixel();
+
+        DBG_ASSERT( !aMask || aBitmap.GetSizePixel() == aMask.GetSizePixel(),
+                    "BitmapEx::Crop(): size mismatch for bitmap and alpha mask." );
     }
 
     return bRet;
@@ -545,6 +565,9 @@ BOOL BitmapEx::Expand( ULONG nDX, ULONG nDY, const Color* pInitColor, BOOL bExpa
         }
 
         aBitmapSize = aBitmap.GetSizePixel();
+
+        DBG_ASSERT( !aMask || aBitmap.GetSizePixel() == aMask.GetSizePixel(),
+                    "BitmapEx::Expand(): size mismatch for bitmap and alpha mask." );
     }
 
     return bRet;
