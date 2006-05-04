@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:17:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-04 07:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
                 SvStream*   pOStm = aMedium.GetOutStream();
 
-                if( pOStm && aGfxLink.GetDataSize() )
+                if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 {
                     pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
                     aMedium.Commit();
