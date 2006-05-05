@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleFrameSelector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:15:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,10 @@ Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
             pStateSetHelper->AddState(aStandardStates[nState++]);
         }
         if(mpFrameSel->IsEnabled())
+        {
             pStateSetHelper->AddState(AccessibleStateType::ENABLED);
+            pStateSetHelper->AddState(AccessibleStateType::SENSITIVE);
+        }
 
         sal_Bool bIsParent = meBorder == FRAMEBORDER_NONE;
         if(mpFrameSel->HasFocus() &&
