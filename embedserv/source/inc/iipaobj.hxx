@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iipaobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include "stdafx.h"
 #include <oleidl.h>
 
+#include <osl/interlck.h>
+#include <rtl/ref.hxx>
 class EmbedDocument_Impl;
 class DocumentHolder;
 
@@ -48,7 +50,7 @@ class CIIAObj
 
 public:
 
-    CIIAObj(EmbedDocument_Impl *,DocumentHolder *);
+    CIIAObj( DocumentHolder * );
     ~CIIAObj();
 
     /* IUnknown methods */
@@ -69,9 +71,8 @@ public:
 
 private:
 
-    ULONG               m_cRef;
-    EmbedDocument_Impl *m_pEmbDoc;
-    DocumentHolder     *m_pDocHolder;
+    oslInterlockedCount                 m_refCount;
+    ::rtl::Reference< DocumentHolder >  m_rDocHolder;
 };
 
 
