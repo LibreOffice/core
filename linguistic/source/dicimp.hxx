@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:50:36 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
+#endif
+
 #include "misc.hxx"
 
 
@@ -60,7 +64,7 @@
 
 #define DIC_MAX_ENTRIES     2000
 
-int             GetDicVersion( const sal_Char *pVerStr );
+int             ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg );
 const String    GetDicExtension();
 
 ///////////////////////////////////////////////////////////////////////////
