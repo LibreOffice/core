@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
+#include <rtl/ref.hxx>
+#include "embeddocaccess.hxx"
+
 
 class StatusChangeListenerContainer;
 class EmbedDocument_Impl;
@@ -68,8 +71,13 @@ class Interceptor
 {
 public:
 
-    Interceptor(EmbedDocument_Impl* pOLEInterface,DocumentHolder* pDocH);
+    Interceptor(
+        const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess,
+        DocumentHolder* pDocH );
+
     ~Interceptor();
+
+    void DisconnectDocHolder();
 
     void generateFeatureStateEvent();
 
@@ -183,8 +191,11 @@ private:
 
     osl::Mutex   m_aMutex;
 
-    EmbedDocument_Impl*   m_pOLEInterface;
+    ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOleAccess;
+
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > m_xDocHLocker;
     DocumentHolder*       m_pDocH;
+
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;
 
