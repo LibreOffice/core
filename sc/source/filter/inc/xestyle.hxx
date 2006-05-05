@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:31:06 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,10 @@
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
 ============================================================================ */
+
+const sal_uInt16 EXC_ID_FONTLIST    = 0x8031;   /// For internal use only.
+const sal_uInt16 EXC_ID_FORMATLIST  = 0x801E;   /// For internal use only.
+const sal_uInt16 EXC_ID_XFLIST      = 0x8043;   /// For internal use only.
 
 // PALETTE record - color information =========================================
 
