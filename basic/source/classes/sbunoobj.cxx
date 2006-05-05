@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:30:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2421,6 +2421,10 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                         pRes = new SbxVariable( SbxVARIANT );
                         unoToSbxValue( pRes, aAny );
                     }
+                }
+                catch( NoSuchElementException& e )
+                {
+                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e ) );
                 }
                 catch( BasicErrorException& e0 )
                 {
