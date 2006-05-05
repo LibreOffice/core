@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:47:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,16 +90,7 @@ SV_IMPL_OBJARR(ActDicArray, ActDic);
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define BUFSIZE              256
-#define VERS2_NOLANGUAGE    1024
-
-static sal_Char         aBuf[ BUFSIZE ];
-
-
-// forward dedclarations
-
-static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
-                             sal_Char* pWordBuf);
+static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg );
 
 static void AddInternal( Reference< XDictionary > &rDic,
                          const OUString& rNew );
@@ -372,7 +363,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         USHORT  nLang = LANGUAGE_NONE;
         BOOL    bNeg  = FALSE;
 
-        if(!::IsVers2OrNewer( aURL, nLang, bNeg, aBuf ))
+        if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
             // Wenn kein
             xub_StrLen nPos  = aURL.Search('.');
@@ -940,8 +931,7 @@ static void AddUserData( const Reference< XDictionary > &rDic )
 
 #pragma optimize("ge",off)
 
-static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
-                             sal_Char* pWordBuf)
+static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
 {
     if (rFileURL.Len() == 0)
         return FALSE;
@@ -958,36 +948,11 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
     // get stream to be used
     SfxMedium aMedium( rFileURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
     SvStream *pStream = aMedium.GetInStream();
-    if (!pStream || pStream->GetError())
-        return FALSE;
 
-    // Header einlesen
-    USHORT      nLen;
-    sal_Char    nTmp;
-
-    *pStream >> nLen;
-    if( nLen >= BUFSIZE )
-        return FALSE;
-    pStream->Read( pWordBuf, nLen);
-    *( pWordBuf + nLen ) = 0;
-    // Version 2.0 oder Version 5.0 ?
-    int nDicVersion = GetDicVersion( pWordBuf );
-    if (2 == nDicVersion ||
-        5 == nDicVersion ||
-        6 == nDicVersion)
-    {
-        // Sprache des Dictionaries
-        *pStream >> nLng;
-
-        if ( VERS2_NOLANGUAGE == nLng )
-            nLng = LANGUAGE_NONE;
-
-        // Negativ-Flag
-        *pStream >> nTmp;
-        bNeg = (BOOL)nTmp;
-
+    int nDicVersion = ReadDicVersion (pStream, nLng, bNeg);
+    if (2 == nDicVersion || nDicVersion >= 5)
         return TRUE;
-    }
+
     return FALSE;
 }
 
