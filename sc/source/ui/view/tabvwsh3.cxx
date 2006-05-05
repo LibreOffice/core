@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:53:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,10 +156,19 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )         // OK aus Dialog
                 {
-                    String aPrintStr = GET_STRING( SID_CHANGE_PRINTAREA );
-                    String aRowStr   = GET_STRING( FN_PARAM_2 );
-                    String aColStr   = GET_STRING( FN_PARAM_3 );
-                    BOOL   bEntire   = GET_BOOL( FN_PARAM_4 );
+                    String aPrintStr;
+                    String aRowStr;
+                    String aColStr;
+                    BOOL bEntire = FALSE;
+                    const SfxPoolItem* pItem;
+                    if ( pReqArgs->GetItemState( SID_CHANGE_PRINTAREA, TRUE, &pItem ) == SFX_ITEM_SET )
+                        aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    if ( pReqArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
+                        aRowStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    if ( pReqArgs->GetItemState( FN_PARAM_3, TRUE, &pItem ) == SFX_ITEM_SET )
+                        aColStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    if ( pReqArgs->GetItemState( FN_PARAM_4, TRUE, &pItem ) == SFX_ITEM_SET )
+                        bEntire = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                     SetPrintRanges( bEntire, &aPrintStr, &aColStr, &aRowStr, FALSE );
 
@@ -174,7 +183,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 BOOL bAdd = ( nSlot == SID_ADD_PRINTAREA );
                 if ( pReqArgs )
                 {
-                    String aPrintStr = GET_STRING( SID_DEFINE_PRINTAREA );
+                    String aPrintStr;
+                    const SfxPoolItem* pItem;
+                    if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, TRUE, &pItem ) == SFX_ITEM_SET )
+                        aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     SetPrintRanges( FALSE, &aPrintStr, NULL, NULL, bAdd );
                 }
                 else
