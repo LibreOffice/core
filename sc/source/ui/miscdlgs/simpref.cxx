@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:14:00 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,8 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         pDoc            ( ptrViewData->GetDocument() ),
         bRefInputMode   ( FALSE ),
         bAutoReOpen     ( TRUE ),
-        bCloseOnButtonUp( FALSE )
+        bCloseOnButtonUp( FALSE ),
+        bSingleCell     ( FALSE )
 {
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
@@ -143,9 +144,15 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
             RefInputStart( &aEdAssign );
 
         theCurArea = rRef;
-
         String aRefStr;
-        theCurArea.Format( aRefStr, ABS_DREF3D, pDoc );
+        if ( bSingleCell )
+        {
+            ScAddress aAdr = rRef.aStart;
+            aAdr.Format( aRefStr, SCA_ABS_3D, pDoc );
+        }
+        else
+            theCurArea.Format( aRefStr, ABS_DREF3D, pDoc );
+
         aEdAssign.SetRefString( aRefStr );
 
         aChangeHdl.Call( &aRefStr );
@@ -203,6 +210,11 @@ void ScSimpleRefDlg::SetUnoLinks( const Link& rDone, const Link& rAbort,
 void ScSimpleRefDlg::SetFlags( BOOL bSetCloseOnButtonUp )
 {
     bCloseOnButtonUp = bSetCloseOnButtonUp;
+}
+
+void ScSimpleRefDlg::SetSingleCell( BOOL bFlag )
+{
+    bSingleCell = bFlag;
 }
 
 void ScSimpleRefDlg::StartRefInput()
