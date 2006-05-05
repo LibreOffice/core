@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,16 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
+
+#include <rtl/ref.hxx>
+
+#include "embeddocaccess.hxx"
 
 class EmbedDocument_Impl;
 class Interceptor;
@@ -74,15 +81,18 @@ class DocumentHolder :
                         ::com::sun::star::ui::XDockingAreaAcceptor>
 {
 private:
+    ::osl::Mutex                m_aMutex;
+
     BOOL                        m_bAllowInPlace;
     LPOLEINPLACESITE            m_pIOleIPSite;
     LPOLEINPLACEFRAME           m_pIOleIPFrame;
     LPOLEINPLACEUIWINDOW        m_pIOleIPUIWindow;
     winwrap::CHatchWin*         m_pCHatchWin;
 
-    EmbedDocument_Impl*         m_pOLEInterface;
+    ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOleAccess;
+
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterceptor > m_xInterceptorLocker;
     Interceptor*                m_pInterceptor;
-    CIIAObj*                    m_pImpIOleIPActiveObject;
 
     ::com::sun::star::uno::Reference<
     ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
@@ -120,6 +130,11 @@ private:
     ::com::sun::star::frame::XFrame > DocumentFrame();
 
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
+        CreateNewInterceptor();
+
+    void ClearInterceptorInternally();
+
 public:
 
 
@@ -139,7 +154,7 @@ public:
     DocumentHolder(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-        EmbedDocument_Impl *pOLEInterface);
+        const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess );
 
     ~DocumentHolder();
 
