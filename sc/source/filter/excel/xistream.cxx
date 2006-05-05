@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:04:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,19 +348,17 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
         {
             sal_uInt16 nVersion;
             rStrm >> nVersion;
-            // #i23425# #i44031# there are some *really* broken documents out there...
-            if( nVersion < EXC_BOF_BIFF3 )
-                eBiff = EXC_BIFF2;
-            else if( (EXC_BOF_BIFF3 <= nVersion) && (nVersion < EXC_BOF_BIFF4) )
-                eBiff = EXC_BIFF3;
-            else if( (EXC_BOF_BIFF4 <= nVersion) && (nVersion < EXC_BOF_BIFF5) )
-                eBiff = EXC_BIFF4;
-            else if( (EXC_BOF_BIFF5 <= nVersion) && (nVersion < EXC_BOF_BIFF8) )
-                eBiff = EXC_BIFF5;
-            else if( EXC_BOF_BIFF8 <= nVersion )
-                eBiff = EXC_BIFF8;
-            else
-                DBG_ERROR1( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
+            // #i23425# #i44031# #i62752# there are some *really* broken documents out there...
+            switch( nVersion & 0xFF00 )
+            {
+                case 0:             eBiff = EXC_BIFF5;  break;  // #i44031# #i62752#
+                case EXC_BOF_BIFF2: eBiff = EXC_BIFF2;  break;
+                case EXC_BOF_BIFF3: eBiff = EXC_BIFF3;  break;
+                case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
+                case EXC_BOF_BIFF5: eBiff = EXC_BIFF5;  break;
+                case EXC_BOF_BIFF8: eBiff = EXC_BIFF8;  break;
+                default:    DBG_ERROR1( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
+            }
         }
         break;
     }
