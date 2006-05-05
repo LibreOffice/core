@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:01:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@ static char* strListBasicKeyWords[] = {
     "binary",
     "boolean",
     "byref",
+    "byte",
     "byval",
     "call",
     "case",
