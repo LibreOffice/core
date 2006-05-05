@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:48:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bSingleLineIf =
     bExplicit = FALSE;
     bClassModule = FALSE;
+    bVBASupportOn = FALSE;
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
         eDefTypes[ i ] = SbxVARIANT;    // Kein expliziter Defaulttyp
@@ -695,6 +696,13 @@ void SbiParser::Implements()
     }
 }
 
+void SbiParser::EnableCompatibility()
+{
+    if( !bCompatible )
+        AddConstants();
+    bCompatible = TRUE;
+}
+
 // OPTION
 
 void SbiParser::Option()
@@ -729,15 +737,25 @@ void SbiParser::Option()
                 default:;
             } // Fall thru!
         case COMPATIBLE:
-            if( !bCompatible )
-                AddConstants();
-            bCompatible = TRUE;
+            EnableCompatibility();
             break;
 
         case CLASSMODULE:
             bClassModule = TRUE;
             break;
-
+        case VBASUPPORT:
+            if( Next() == NUMBER )
+            {
+                if ( nVal == 1 || nVal == 0 )
+                {
+                    bVBASupportOn = ( nVal == 1 );
+                    if ( bVBASupportOn )
+                        EnableCompatibility();
+                    break;
+                }
+            }
+            Error( SbERR_EXPECTED, "0/1" );
+            break;
         default:
             Error( SbERR_BAD_OPTION, eCurTok );
     }
