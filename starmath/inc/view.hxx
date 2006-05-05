@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:01:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 07:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,11 +173,9 @@ class SmCmdBoxWindow : public SfxDockingWindow
 {
     SmEditWindow        aEdit;
     SmEditController    aController;
-    Timer               aGrabTimer;
     BOOL                bExiting;
 
 protected :
-    DECL_LINK(UpdateTimeoutHdl, Timer *);
 
     // Window
     virtual void    GetFocus();
@@ -202,14 +200,6 @@ public:
 
     SmEditWindow *GetEditWindow() { return (&aEdit); }
     SmViewShell  *GetView();
-
-    void RestartFocusTimer ()
-    {
-        aGrabTimer.SetTimeout (100);
-        aGrabTimer.Start ();
-    }
-
-    void Grab ();
 };
 
 /**************************************************************************/
@@ -235,12 +225,6 @@ public:
         return (((SmCmdBoxWindow *)pWindow)->GetEditWindow());
     }
 
-    void RestartFocusTimer ()
-    {
-        ((SmCmdBoxWindow *)pWindow)->RestartFocusTimer ();
-    }
-
-    void Grab ();
 };
 
 /**************************************************************************/
@@ -282,6 +266,9 @@ protected:
     virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
     virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
                               USHORT     nDiffFlags = SFX_PRINTER_ALL);
+
+    BOOL        Insert( SfxMedium& rMedium );
+    BOOL        InsertFrom(SfxMedium &rMedium);
 
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
