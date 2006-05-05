@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:29:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1069,18 +1069,15 @@ Window* Window::GetLabeledBy() const
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
 
-/* #105538# OJ approved by PL
-    WinBits nFrameStyle = pFrameWindow->GetStyle();
-    if( ! ( nFrameStyle & WB_DIALOGCONTROL )
-        || ( nFrameStyle & WB_NODIALOGCONTROL )
-        )
-        return NULL;
-*/
     if ( mpWindowImpl->mpRealParent )
         pWindow = mpWindowImpl->mpRealParent->GetParentLabeledBy( this );
 
     if( pWindow )
         return pWindow;
+
+    // #i62723#, #104191# checkboxes and radiobuttons are not supposed to have labels
+    if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
+        return NULL;
 
     if( ! ( GetType() == WINDOW_FIXEDTEXT       ||
             GetType() == WINDOW_FIXEDLINE       ||
