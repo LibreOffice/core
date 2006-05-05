@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:51:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:38:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3541,7 +3541,18 @@ RTLFUNC(RGB)
     ULONG nRed   = rPar.Get(1)->GetInteger() & 0xFF;
     ULONG nGreen = rPar.Get(2)->GetInteger() & 0xFF;
     ULONG nBlue  = rPar.Get(3)->GetInteger() & 0xFF;
-    ULONG nRGB   = (nRed << 16) | (nGreen << 8) | nBlue;
+    ULONG nRGB;
+
+    SbiInstance* pInst = pINST;
+    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+    if( bCompatibility )
+    {
+        nRGB   = (nBlue << 16) | (nGreen << 8) | nRed;
+    }
+    else
+    {
+        nRGB   = (nRed << 16) | (nGreen << 8) | nBlue;
+    }
     rPar.Get(0)->PutLong( nRGB );
 }
 
