@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:51:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ public:
     // will be set when UI theme was changed
     static  BOOL        bThemeChanged;
     static  BOOL        bNeedPixmapPaint;
+    static  BOOL        bGlobalNeedPixmapPaint;
 
     // native widget methods
     virtual BOOL        IsNativeControlSupported( ControlType nType, ControlPart nPart );
@@ -90,6 +91,12 @@ public:
     virtual BOOL            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void            EndSetClipRegion();
 
+    // some themes set the background pixmap of our window EVERY time
+    // a control is painted; but presentation effects need
+    // the background set to None; workaround: set the background
+    // before copyBits
+    virtual void            copyBits( const SalTwoRect* pPosAry,
+                                      SalGraphics* pSrcGraphics );
 
 protected:
     typedef std::list< Rectangle > clipList;
