@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,5 +103,6 @@ public:
 #define SBIMG_COMPARETEXT   0x0002  // OPTION COMPARE TEXT ist aktiv
 #define SBIMG_INITCODE      0x0004  // Init-Code vorhanden
 #define SBIMG_CLASSMODULE   0x0008  // OPTION ClassModule is active
+#define SBIMG_VBASUPPORT    0x0020  // OPTION VBASupport is 1
 
 #endif

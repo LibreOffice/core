@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ class SbiParser : public SbiTokenizer
     void StmntBlock( SbiToken );    // Statement-Block abarbeiten
     void DefType( BOOL bPrivate );  // Parse type declaration
     void DefEnum( BOOL bPrivate );  // Parse enum declaration
-
+    void EnableCompatibility();
 public:
     SbxArrayRef   rTypeArray;       // das Type-Array
     SbxArrayRef   rEnumArray;       // Enum types
@@ -94,6 +94,7 @@ public:
     BOOL          bText;            // OPTION COMPARE TEXT
     BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
     BOOL          bClassModule;     // TRUE: OPTION ClassModule
+    BOOL          bVBASupportOn;        // TRUE: OPTION VBASupport 1 otherwise default False
     IfaceVector   aIfaceVector;     // Holds all interfaces implemented by a class module
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
