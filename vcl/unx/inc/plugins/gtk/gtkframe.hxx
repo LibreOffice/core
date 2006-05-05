@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:03:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 11:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <postx.h>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/accessibility/XAccessible.hdl>
 
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
@@ -356,7 +359,20 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 
     virtual void                SetBackgroundBitmap( SalBitmap* );
+
+    static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessible( bool bCreate = true );
+
+    static AtkRole              GetAtkRole( GtkWindow* window );
 };
 
+
+#define OOO_TYPE_FIXED ooo_fixed_get_type()
+
+extern "C" {
+
+GType ooo_fixed_get_type( void );
+
+} // extern "C"
 
 #endif //_VCL_GTKFRAME_HXX
