@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:41:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,13 +510,23 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
     // at the newly created text node.
     const bool bIsCounted( IsCounted() );
     // <--
+    // --> OD 2006-04-26 #i64660#
+    // Method <_MakeNewTxtNode(..)> may modify <GetLevel()> attribute of <this>.
+    // Thus, remember its value before calling this method and set this value
+    // at the newly created text node, if needed.
+    const int nLevel( GetLevel() );
+    // <--
 
     SwTxtNode* pNode = _MakeNewTxtNode( rPos.nNode, FALSE, nSplitPos==nTxtLen );
 
     // --> OD 2005-10-19 #126009#
     // improvement: first set level of new node
-    if (GetNumRule() != NULL && GetNumRule() == pNode->GetNumRule())
-        pNode->SetLevel(GetLevel());
+    if ( GetNumRule() != NULL && GetNumRule() == pNode->GetNumRule() )
+    {
+        // --> OD 2006-04-26 #i64660#
+        pNode->SetLevel( nLevel );
+        // <--
+    }
     // <--
     pNode->SetRestart(IsRestart());
     pNode->SetStart(GetStart());
@@ -3323,19 +3333,6 @@ bool SwTxtNode::IsNotifiable() const
     return aResult;
 }
 
-bool SwTxtNode::IsContinuous() const
-{
-    bool aResult = false;
-
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    SwNumRule * pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
-    if (pRule)
-        aResult = pRule->IsContinusNum() ? true : false;
-
-    return aResult;
-}
-
 void SwTxtNode::SetCounted(bool _bCounted)
 {
     // --> OD 2005-10-19 #126009#
@@ -3347,16 +3344,20 @@ void SwTxtNode::SetCounted(bool _bCounted)
     // --> OD 2005-11-02 #i51089 - TUNING#
     if ( bInvalidate && GetNum() )
     {
-        mpNodeNum->InvalidateMe();
-        // --> OD 2005-10-19 #126009# - invalidation of children and not counted
-        // parent needed.
-        mpNodeNum->InvalidateChildren();
-        mpNodeNum->InvalidateNotCountedParent();
+        // --> OD 2006-04-26 #i64010# - invalidation and notification of
+        // complete numbering tree needed.
+        mpNodeNum->InvalidateAndNotifyTree();
+//        mpNodeNum->InvalidateMe();
+//        // --> OD 2005-10-19 #126009# - invalidation of children and not counted
+//        // parent needed.
+//        mpNodeNum->InvalidateChildren();
+//        mpNodeNum->InvalidateNotCountedParent();
+//        // <--
+//        // --> OD 2005-10-20 #126009# - notification of not counted parent needed.
+//        mpNodeNum->NotifyNotCountedParentSiblings();
+//        // <--
+//        mpNodeNum->NotifyInvalidSiblings();
         // <--
-        // --> OD 2005-10-20 #126009# - notification of not counted parent needed.
-        mpNodeNum->NotifyNotCountedParentSiblings();
-        // <--
-        mpNodeNum->NotifyInvalidSiblings();
     }
     // <--
 }
