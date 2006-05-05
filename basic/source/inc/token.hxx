@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:37:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ enum SbiToken {
     DATATYPE1,
     TINTEGER = DATATYPE1,
     TLONG, TSINGLE, TDOUBLE, TCURRENCY, TDATE, TSTRING, TOBJECT,
-    _ERROR_, TBOOLEAN, TVARIANT,
-    DATATYPE2 = TVARIANT,
+    _ERROR_, TBOOLEAN, TVARIANT, TBYTE,
+    DATATYPE2 = TBYTE,
 
     EACH, ELSE, ELSEIF, END, ERASE, EXIT,
     FOR, FUNCTION,
