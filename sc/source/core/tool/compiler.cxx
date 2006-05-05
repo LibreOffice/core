@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:30:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3182,7 +3182,6 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
 ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
-    SCsTAB nTab;
     SCTAB nPosTab = aPos.Tab();     // _after_ incremented!
     SCTAB nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
     BOOL bIsRel = FALSE;
@@ -3210,14 +3209,12 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                 SingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
                 {
-                    nTab = rRef.nRelTab + nOldPosTab;
-                    if ( nTab < 0 )
-                        nTab += pDoc->GetTableCount();  // was a wrap
+                    rRef.nTab = rRef.nRelTab + nOldPosTab;
+                    if ( rRef.nTab < 0 )
+                        rRef.nTab += pDoc->GetTableCount();  // was a wrap
                 }
-                else
-                    nTab = rRef.nTab;
-                if ( nTable <= nTab )
-                    rRef.nTab = nTab + 1;
+                if (nTable <= rRef.nTab)
+                    ++rRef.nTab;
                 rRef.nRelTab = rRef.nTab - nPosTab;
             }
             else
@@ -3229,14 +3226,12 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                     SingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
                     {
-                        nTab = rRef.nRelTab + nOldPosTab;
-                        if ( nTab < 0 )
-                            nTab += pDoc->GetTableCount();  // was a wrap
+                        rRef.nTab = rRef.nRelTab + nOldPosTab;
+                        if ( rRef.nTab < 0 )
+                            rRef.nTab += pDoc->GetTableCount();  // was a wrap
                     }
-                    else
-                        nTab = rRef.nTab;
-                    if ( nTable <= nTab )
-                        rRef.nTab = nTab + 1;
+                    if (nTable <= rRef.nTab)
+                        ++rRef.nTab;
                     rRef.nRelTab = rRef.nTab - nPosTab;
                 }
                 else
@@ -3263,14 +3258,12 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                 {   // of names only adjust absolute references
                     if ( rRef1.IsTabRel() )
                     {
-                        nTab = rRef1.nRelTab + nOldPosTab;
-                        if ( nTab < 0 )
-                            nTab += pDoc->GetTableCount();  // was a wrap
+                        rRef1.nTab = rRef1.nRelTab + nOldPosTab;
+                        if ( rRef1.nTab < 0 )
+                            rRef1.nTab += pDoc->GetTableCount();  // was a wrap
                     }
-                    else
-                        nTab = rRef1.nTab;
-                    if ( nTable <= nTab )
-                        rRef1.nTab = nTab + 1;
+                    if (nTable <= rRef1.nTab)
+                        ++rRef1.nTab;
                     rRef1.nRelTab = rRef1.nTab - nPosTab;
                 }
                 if ( t->GetType() == svDoubleRef )
@@ -3280,14 +3273,12 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                     {   // of names only adjust absolute references
                         if ( rRef2.IsTabRel() )
                         {
-                            nTab = rRef2.nRelTab + nOldPosTab;
-                            if ( nTab < 0 )
-                                nTab += pDoc->GetTableCount();  // was a wrap
+                            rRef2.nTab = rRef2.nRelTab + nOldPosTab;
+                            if ( rRef2.nTab < 0 )
+                                rRef2.nTab += pDoc->GetTableCount();  // was a wrap
                         }
-                        else
-                            nTab = rRef2.nTab;
-                        if ( nTable <= nTab )
-                            rRef2.nTab = nTab + 1;
+                        if (nTable <= rRef2.nTab)
+                            ++rRef2.nTab;
                         rRef2.nRelTab = rRef2.nTab - nPosTab;
                     }
                 }
@@ -3330,7 +3321,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsNam
             {   // of names only adjust absolute references
                 SingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
-                    nTab = rRef.nRelTab + nOldPosTab;
+                    nTab = rRef.nTab = rRef.nRelTab + nOldPosTab;
                 else
                     nTab = rRef.nTab;
                 if ( nTable < nTab )
@@ -3373,7 +3364,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsNam
                 {   // of names only adjust absolute references
                     SingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
-                        nTab = rRef.nRelTab + nOldPosTab;
+                        nTab = rRef.nTab = rRef.nRelTab + nOldPosTab;
                     else
                         nTab = rRef.nTab;
                     if ( nTable < nTab )
@@ -3417,7 +3408,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsNam
                 if ( !(rRef1.IsRelName() && rRef1.IsTabRel()) )
                 {   // of names only adjust absolute references
                     if ( rRef1.IsTabRel() )
-                        nTab = rRef1.nRelTab + nOldPosTab;
+                        nTab = rRef1.nTab = rRef1.nRelTab + nOldPosTab;
                     else
                         nTab = rRef1.nTab;
                     if ( nTable < nTab )
@@ -3458,7 +3449,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsNam
                     if ( !(rRef2.IsRelName() && rRef2.IsTabRel()) )
                     {   // of names only adjust absolute references
                         if ( rRef2.IsTabRel() )
-                            nTab = rRef2.nRelTab + nOldPosTab;
+                            nTab = rRef2.nTab = rRef2.nRelTab + nOldPosTab;
                         else
                             nTab = rRef2.nTab;
                         if ( nTable < nTab )
