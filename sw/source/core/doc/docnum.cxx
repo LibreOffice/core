@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:50:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,9 +947,18 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
 
     if( !nChgFmtLevel )         // es wurde nichts veraendert?
     {
+        // --> OD 2006-04-27 #i64311#
+        const bool bInvalidateNumRule( pOld->IsContinusNum() != rRule.IsContinusNum() );
+        // <--
         pOld->CheckCharFmts( &rDoc );
         pOld->SetContinusNum( rRule.IsContinusNum() );
         pOld->SetRuleType( rRule.GetRuleType() );
+        // --> OD 2006-04-27 #i64311#
+        if ( bInvalidateNumRule )
+        {
+            pOld->SetInvalidRule(TRUE);
+        }
+        // <--
         return ;
     }
 
