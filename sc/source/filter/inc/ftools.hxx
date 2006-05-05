@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,6 +398,9 @@ typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
 typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
+typedef ::std::vector< sal_Int64 >                  ScfInt64Vec;
+typedef ::std::vector< sal_uInt64 >                 ScfUInt64Vec;
+typedef ::std::vector< String >                     ScfStringVec;
 
 // ----------------------------------------------------------------------------
 
