@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:59:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 07:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,6 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                         const SfxHint& rHint, const TypeId& rHintType);
 
-    void        RestartFocusTimer ();
-
     BOOL        WriteAsMathType3( SfxMedium& );
 
     virtual void        Draw(OutputDevice *pDevice,
@@ -172,7 +170,6 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual void        OnDocumentPrinterChanged( Printer * );
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL        Load( SfxMedium& rMedium );
-    BOOL                Insert( SfxMedium& rMedium );
             void        ImplSave(  SvStorageStreamRef xStrm  );
     virtual BOOL        Save();
     virtual BOOL        SaveAs( SfxMedium& rMedium );
@@ -184,12 +181,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
     BOOL                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
-    void                ArrangeFormula();
 
     virtual BOOL        ConvertFrom(SfxMedium &rMedium);
-            BOOL        InsertFrom(SfxMedium &rMedium);
-
-    void                UpdateText();
 
 public:
     TYPEINFO();
@@ -202,6 +195,8 @@ public:
     void        LoadSymbols();
     void        SaveSymbols();
 
+    void        ArrangeFormula();
+
     //Zugriff fuer die View. Diese Zugriffe sind nur fuer den nicht OLE-Fall!
     //und fuer die Kommunikation mit dem SFX!
     //Alle internen Verwendungen des Printers sollten ausschlieslich uber
@@ -213,6 +208,7 @@ public:
     const String &GetTitle() const;
     const String &GetComment() const;
 
+    void        UpdateText();
     void        SetText(const String& rBuffer);
     String&     GetText() { return (aText); }
     void        SetFormat(SmFormat& rFormat);
