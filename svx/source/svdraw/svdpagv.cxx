@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:12:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,22 @@ void SdrUnoControlRec::adjustControlVisibility( bool _bForce )
         bool bIsObjectLayerVisible = rView.GetVisibleLayers().IsSet( nObjectLayer );
 
         if ( _bForce || ( bIsObjectLayerVisible != bVisible ) )
+        {
             xControlWindow->setVisible( bIsObjectLayerVisible );
+            // --> OD 2006-04-20 #b63101#
+            // Because <xControlWindow->setVisible(..)> doesn't notify its
+            // listeners, if the peer of <xControlWindow> doesn't exist, it has
+            // to be assured that the status of this instance is aligned.
+            // As figured out with FS, cws aw024 already solves this problem.
+            if ( bIsObjectLayerVisible != bVisible )
+            {
+                DBG_ASSERT( !xControl->getPeer().is(), "SdrUnoControlRec::adjustControlVisibility: should only happen when there is no peer!" );
+                ::com::sun::star::lang::EventObject aSource;
+                bIsObjectLayerVisible ? windowShown( aSource )
+                                      : windowHidden( aSource );
+            }
+            // <--
+        }
     }
 
 }
