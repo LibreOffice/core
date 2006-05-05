@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:11:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1111,6 +1111,8 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
                     nMaxPos = Max( nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos );
             }
             *pTIFF >> nOffset;
+            if ( pTIFF->IsEof() )
+                nOffset = 0;
 
             nMaxPos = Max( pTIFF->Tell(), nMaxPos );
             if ( !nOffset )
@@ -1180,6 +1182,8 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
                         break;
                 }
                 *pTIFF >> nNextIfd;
+                if ( pTIFF->IsEof() )
+                    nNextIfd = 0;
             }
             if ( bStatus )
             {
