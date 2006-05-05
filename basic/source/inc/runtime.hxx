@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:51:03 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,6 +467,8 @@ class SbiRuntime
     void StepDCREATE_REDIMP(USHORT,USHORT), StepDCREATE_IMPL(USHORT,USHORT,BOOL);
     void StepFIND_CM( USHORT, USHORT );
 public:
+    USHORT      GetImageFlag( USHORT n ) const;
+    USHORT      GetBase();
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
     SbiRuntime* pNext;               // Stack-Chain
 
@@ -488,6 +490,8 @@ public:
     SbxArray* GetParams();
 
     SbxBase* FindElementExtern( const String& rName );
+    static bool isVBAEnabled();
+
 };
 
 inline void checkArithmeticOverflow( double d )
