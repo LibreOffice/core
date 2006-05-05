@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:08:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -910,7 +910,7 @@ bool operator==( const XclExpFontData& rLeft, const XclExpFontData& rRight )
 // ============================================================================
 
 XclExpFont::XclExpFont( const XclExpRoot& rRoot, const XclExpFontData& rFontData ) :
-    XclExpRecord( EXC_ID_FONT, 14 ),
+    XclExpRecord( EXC_ID2_FONT, 14 ),
     XclExpRoot( rRoot ),
     maData( rFontData ),
     mnHash( rFontData.GetHash() )
@@ -1278,7 +1278,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXcl
     else
         aExpStr.Assign( rFormatStr );
 
-    rStrm.StartRecord( EXC_ID_FORMAT, 2 + aExpStr.GetSize() );
+    rStrm.StartRecord( EXC_ID4_FORMAT, 2 + aExpStr.GetSize() );
     rStrm << nXclNumFmt << aExpStr;
     rStrm.EndRecord();
 }
@@ -1802,7 +1802,7 @@ bool XclExpXF::Equals( const XclExpXF& rCmpXF ) const
 
 void XclExpXF::InitDefault()
 {
-    SetRecHeader( EXC_ID_XF, (GetBiff() == EXC_BIFF8) ? 20 : 16 );
+    SetRecHeader( EXC_ID5_XF, (GetBiff() == EXC_BIFF8) ? 20 : 16 );
     mpItemSet = 0;
     mnScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
     mnXclFont = mnXclNumFmt = 0;
