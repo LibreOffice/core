@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:59:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,7 @@ namespace accessibility
             pStateSet->AddState( AccessibleStateType::VISIBLE );
             pStateSet->AddState( AccessibleStateType::SHOWING );
             pStateSet->AddState( AccessibleStateType::ENABLED );
+            pStateSet->AddState( AccessibleStateType::SENSITIVE );
         }
         catch( const uno::Exception& ) {}
     }
