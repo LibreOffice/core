@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:55:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,16 +400,16 @@ void PageObjectViewObjectContact::PaintSelectionIndicator (
 {
     if (GetPageDescriptor().IsSelected())
     {
-        //        Rectangle aSelectionFrame (GetModelBoundingBox());
-
         const Color aOldFillColor (rDevice.GetFillColor());
         const Color aOldLineColor (rDevice.GetLineColor());
 
+        // Determine colors for the frame and the background and mix them to
+        // obtain a third color that is used for an antialiasing effect.
         svtools::ColorConfig aColorConfig;
         Color aFrameColor (
             rDevice.GetSettings().GetStyleSettings().GetMenuHighlightColor());
         Color aBackgroundColor (
-            Application::GetSettings().GetStyleSettings().GetWindowColor());
+            rDevice.GetSettings().GetStyleSettings().GetWindowColor());
         Color aCornerColor (aFrameColor);
         aCornerColor.Merge (aBackgroundColor, 128);
 
@@ -489,16 +489,16 @@ void PageObjectViewObjectContact::PaintMouseOverEffect (
     OutputDevice& rDevice,
     bool bVisible) const
 {
+    ULONG nPreviousDrawMode = rDevice.GetDrawMode();
     rDevice.SetDrawMode (DRAWMODE_DEFAULT);
-    Rectangle aInner (//rDevice.LogicToPixel(GetModelBoundingBox()));
-        GetPreviewPixelBox(rDevice));
+    Rectangle aInner (GetPreviewPixelBox(rDevice));
     rDevice.EnableMapMode (FALSE);
 
     svtools::ColorConfig aColorConfig;
     Color aSelectionColor (
         rDevice.GetSettings().GetStyleSettings().GetMenuHighlightColor());
     Color aBackgroundColor (
-        Application::GetSettings().GetStyleSettings().GetWindowColor());
+        rDevice.GetSettings().GetStyleSettings().GetWindowColor());
     Color aFrameColor (bVisible ? aSelectionColor : aBackgroundColor);
     Color aCornerColor (aBackgroundColor);
 
@@ -537,6 +537,7 @@ void PageObjectViewObjectContact::PaintMouseOverEffect (
     rDevice.DrawPixel (aCorner, aCornerColor);
 
     rDevice.EnableMapMode (TRUE);
+    rDevice.SetDrawMode(nPreviousDrawMode);
 }
 
 
@@ -593,7 +594,7 @@ void PageObjectViewObjectContact::PaintFadeEffectIndicator (
         Rectangle aIndicatorBox (GetFadeEffectIndicatorArea (pDevice));
 
         USHORT nIconId (BMP_FADE_EFFECT_INDICATOR);
-        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
+        if (pDevice->GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
             nIconId = BMP_FADE_EFFECT_INDICATOR_H;
 
         pDevice->DrawImage (
