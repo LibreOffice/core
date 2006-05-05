@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:48:35 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { TYPEOF,   "TypeOf" },
     { UNTIL,    "Until" },
     { TVARIANT, "Variant" },
+    { VBASUPPORT,   "VbaSupport" },
     { WEND,     "Wend" },
     { WHILE,    "While" },
     { WITH,     "With" },
