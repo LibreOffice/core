@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 15:58:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
 #ifndef _SVDOPAGE_HXX
 #include "svdopage.hxx"
 #endif
@@ -126,6 +129,7 @@
 #include "svdograf.hxx"
 #include "unoapi.hxx"
 #include "svdomeas.hxx"
+#include <svdpagv.hxx>
 
 #include <tools/shl.hxx>    //
 #include "dialmgr.hxx"      // not nice, we need our own resources some day
@@ -2488,7 +2492,20 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObject;
                     uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObject)->GetObjRef() );
                     if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                    {
+                        const SdrPageView* pPageView = pModel->GetPaintingPageView();
+                        if ( pPageView )
+                        {
+                            SdrView* pView = (SdrView*)&(pPageView->GetView());
+                            if ( pView->ISA( SdrPaintView ) )
+                            {
+                                SdrPaintView* pPaintView = (SdrPaintView*)pView;
+                                pPaintView->DoConnect( &aObj );
+                            }
+                        }
+
                         return makeAny( aObj.GetObjRef()->getComponent() );
+                    }
                 }
 
                 break;
