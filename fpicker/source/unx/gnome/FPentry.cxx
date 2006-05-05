@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPentry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:34:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,8 +158,7 @@ void* SAL_CALL component_getFactory(
     {
             if (
                  /* crude gtkplug check */ !g_type_from_name( "GdkDisplay" ) ||
-                 /* old version */ !( gtk_major_version >= 2 && gtk_minor_version >= 4 ) ||
-                 /* #i42429# */ Application::GetSettings().GetMiscSettings().GetEnableATToolSupport()
+                 /* old version */ !( gtk_major_version >= 2 && gtk_minor_version >= 4 )
                )
             {
                     return 0;
