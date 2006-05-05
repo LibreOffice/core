@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:02:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLCONST_HXX
 #define SC_XLCONST_HXX
 
@@ -183,6 +184,10 @@ const sal_uInt16 EXC_ID_PASSWORD            = 0x0013;
 // (0x0019) WINDOWPROTECT -----------------------------------------------------
 
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
+
+// (0x0042) CODEPAGE ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CODEPAGE            = 0x0042;
 
 // (0x0081) WSBOOL ------------------------------------------------------------
 
