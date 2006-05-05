@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:05:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,17 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
+#endif
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 
 namespace scf {
@@ -55,7 +64,67 @@ namespace dump {
 const sal_Unicode SCF_UTF8_BOM          = 0xFEFF;
 const xub_StrLen SCF_DUMP_INDENT        = 2;
 const sal_Unicode SCF_DUMP_BINDOT       = '.';
+const sal_Unicode SCF_DUMP_CFG_LISTSEP  = ',';
+const sal_Unicode SCF_DUMP_CFG_QUOTE    = '\'';
+const sal_Unicode SCF_DUMP_LISTSEP      = '\n';
+const sal_Unicode SCF_DUMP_ITEMSEP      = '=';
 const sal_Size SCF_DUMP_BYTESPERLINE    = 16;
+const sal_Size SCF_DUMP_MAXARRAY        = 16;
+
+// ============================================================================
+// ============================================================================
+
+ItemFormat::ItemFormat() :
+    meDataType( DATATYPE_VOID ),
+    meFmtType( FORMATTYPE_NONE )
+{
+}
+
+void ItemFormat::Set( DataType eDataType, FormatType eFmtType, const String& rItemName )
+{
+    meDataType = eDataType;
+    meFmtType = eFmtType;
+    maItemName = rItemName;
+    maItemNameUtf8 = StringHelper::ConvertToUtf8( rItemName );
+    maListName.Erase();
+}
+
+void ItemFormat::Set( DataType eDataType, FormatType eFmtType, const String& rItemName, const String& rListName )
+{
+    Set( eDataType, eFmtType, rItemName );
+    maListName = rListName;
+}
+
+void ItemFormat::Parse( const String& rFormatStr )
+{
+    ScfStringVec aFormatVec;
+    StringHelper::ConvertStringToStringList( aFormatVec, rFormatStr, false );
+    Parse( aFormatVec );
+}
+
+void ItemFormat::Parse( const ScfStringVec& rFormatVec )
+{
+    Set( DATATYPE_VOID, FORMATTYPE_NONE, String::EmptyString() );
+
+    ScfStringVec::const_iterator aIt = rFormatVec.begin(), aEnd = rFormatVec.end();
+    String aDataType, aFmtType;
+    if( aIt != aEnd ) aDataType = *aIt++;
+    if( aIt != aEnd ) aFmtType = *aIt++;
+    if( aIt != aEnd ) maItemName = *aIt++;
+    if( aIt != aEnd ) maListName = *aIt++;
+
+    meDataType = StringHelper::ConvertToDataType( aDataType );
+    meFmtType = StringHelper::ConvertToFormatType( aFmtType );
+    maItemNameUtf8 = StringHelper::ConvertToUtf8( maItemName );
+
+    if( meFmtType == FORMATTYPE_NONE )
+    {
+        if( aFmtType.EqualsAscii( "unused" ) )
+            Set( meDataType, FORMATTYPE_HEX, CREATE_STRING( SCF_DUMP_UNUSED ) );
+        else if( aFmtType.EqualsAscii( "unknown" ) )
+            Set( meDataType, FORMATTYPE_HEX, CREATE_STRING( SCF_DUMP_UNKNOWN ) );
+    }
+}
 
 // ============================================================================
 // ============================================================================
@@ -65,30 +134,6 @@ void StringHelper::AppendString( String& rStr, const String& rData, xub_StrLen n
     if( rData.Len() < nWidth )
         rStr.Expand( rStr.Len() + nWidth - rData.Len(), ' ' );
     rStr.Append( rData );
-}
-
-void StringHelper::AppendToken( String& rStr, const String& rToken, sal_Unicode cSep )
-{
-    if( (rStr.Len() > 0) && (rToken.Len() > 0) )
-        rStr.Append( cSep );
-    rStr.Append( rToken );
-}
-
-void StringHelper::TrimString( String& rStr )
-{
-    xub_StrLen nPos = 0;
-    while( (nPos < rStr.Len()) && ((rStr.GetChar( nPos ) == ' ') || (rStr.GetChar( nPos ) == '\t')) )
-        ++nPos;
-    rStr.Erase( 0, nPos );
-    nPos = rStr.Len();
-    while( (nPos > 0) && ((rStr.GetChar( nPos - 1 ) == ' ') || (rStr.GetChar( nPos - 1 ) == '\t')) )
-        --nPos;
-    rStr.Erase( nPos + 1 );
-}
-
-ByteString StringHelper::ConvertToUtf8( const String& rStr )
-{
-    return ByteString( rStr, RTL_TEXTENCODING_UTF8 );
 }
 
 // append decimal -------------------------------------------------------------
@@ -125,7 +170,14 @@ void StringHelper::AppendDec( String& rStr, sal_Int32 nData, xub_StrLen nWidth )
 
 void StringHelper::AppendDec( String& rStr, sal_uInt64 nData, xub_StrLen nWidth )
 {
-    AppendString( rStr, String::CreateFromInt64( static_cast< sal_Int64 >( nData ) ), nWidth );
+    /*  Values greater than biggest signed 64bit integer will change to
+        negative when converting to sal_Int64. Therefore, the trailing digit
+        will be written separately. */
+    String aData;
+    if( nData > 9 )
+        aData.Append( String::CreateFromInt64( static_cast< sal_Int64 >( nData / 10 ) ) );
+    aData.Append( static_cast< sal_Unicode >( '0' + (nData % 10) ) );
+    AppendString( rStr, aData, nWidth );
 }
 
 void StringHelper::AppendDec( String& rStr, sal_Int64 nData, xub_StrLen nWidth )
@@ -246,6 +298,8 @@ void StringHelper::AppendShortHex( String& rStr, sal_Int64 nData, bool bPrefix )
     AppendShortHex( rStr, static_cast< sal_uInt64 >( nData ), bPrefix );
 }
 
+// append binary --------------------------------------------------------------
+
 void StringHelper::AppendBin( String& rStr, sal_uInt8 nData, bool bDots )
 {
     for( sal_uInt8 nMask = 0x80; nMask != 0; (nMask >>= 1) &= 0x7F )
@@ -255,8 +309,6 @@ void StringHelper::AppendBin( String& rStr, sal_uInt8 nData, bool bDots )
             rStr.Append( SCF_DUMP_BINDOT );
     }
 }
-
-// append binary --------------------------------------------------------------
 
 void StringHelper::AppendBin( String& rStr, sal_Int8 nData, bool bDots )
 {
@@ -311,31 +363,40 @@ void StringHelper::AppendBin( String& rStr, double fData, bool bDots )
     AppendBin( rStr, pnData[ 1 ], bDots );
 }
 
+// append formatted value -----------------------------------------------------
+
+void StringHelper::AppendBool( String& rStr, bool bData )
+{
+    rStr.AppendAscii( bData ? "true" : "false" );
+}
+
 // encoded text output --------------------------------------------------------
 
-void StringHelper::AppendCChar( String& rStr, sal_Unicode cChar )
+void StringHelper::AppendCChar( String& rStr, sal_Unicode cChar, bool bPrefix )
 {
     static const String saXPrefix = CREATE_STRING( "\\x" );
     static const String saUPrefix = CREATE_STRING( "\\u" );
     if( cChar > 0x00FF )
     {
-        rStr.Append( saUPrefix );
+        if( bPrefix )
+            rStr.Append( saUPrefix );
         AppendHex( rStr, static_cast< sal_uInt16 >( cChar ), false );
     }
     else
     {
-        rStr.Append( saXPrefix );
+        if( bPrefix )
+            rStr.Append( saXPrefix );
         AppendHex( rStr, static_cast< sal_uInt8 >( cChar ), false );
     }
 }
 
-void StringHelper::AppendEncChar( String& rStr, sal_Unicode cChar, xub_StrLen nCount )
+void StringHelper::AppendEncChar( String& rStr, sal_Unicode cChar, xub_StrLen nCount, bool bPrefix )
 {
     if( cChar < 0x0020 )
     {
         // C-style hex code
         String aCode;
-        AppendCChar( aCode, cChar );
+        AppendCChar( aCode, cChar, bPrefix );
         for( xub_StrLen nIdx = 0; nIdx < nCount; ++nIdx )
             rStr.Append( aCode );
     }
@@ -345,7 +406,7 @@ void StringHelper::AppendEncChar( String& rStr, sal_Unicode cChar, xub_StrLen nC
         rStr.Expand( rStr.Len() + nCount, cChar );
 }
 
-void StringHelper::AppendEncString( String& rStr, const String& rData )
+void StringHelper::AppendEncString( String& rStr, const String& rData, bool bPrefix )
 {
     xub_StrLen nBeg = 0;
     xub_StrLen nIdx = 0;
@@ -365,7 +426,7 @@ void StringHelper::AppendEncString( String& rStr, const String& rData )
         // append characters to be encoded
         while( (nIdx < nEnd) && (rData.GetChar( nIdx ) < 0x20) )
         {
-            AppendCChar( rStr, rData.GetChar( nIdx ) );
+            AppendCChar( rStr, rData.GetChar( nIdx ), bPrefix );
             ++nIdx;
         }
         // adjust limits
@@ -373,7 +434,158 @@ void StringHelper::AppendEncString( String& rStr, const String& rData )
     }
 }
 
-// string to value conversion -------------------------------------------------
+// token list -----------------------------------------------------------------
+
+void StringHelper::AppendToken( String& rStr, const String& rToken, sal_Unicode cSep )
+{
+    if( (rStr.Len() > 0) && (rToken.Len() > 0) )
+        rStr.Append( cSep );
+    rStr.Append( rToken );
+}
+
+void StringHelper::AppendToken( String& rStr, sal_Int64 nToken, sal_Unicode cSep )
+{
+    String aToken;
+    AppendDec( aToken, nToken );
+    AppendToken( rStr, aToken, cSep );
+}
+
+void StringHelper::PrependToken( String& rStr, const String& rToken, sal_Unicode cSep )
+{
+    String aRet = rToken;
+    AppendToken( aRet, rStr, cSep );
+    rStr = aRet;
+}
+
+void StringHelper::PrependToken( String& rStr, sal_Int64 nToken, sal_Unicode cSep )
+{
+    String aToken;
+    AppendDec( aToken, nToken );
+    PrependToken( rStr, aToken, cSep );
+}
+
+void StringHelper::AppendIndex( String& rStr, const String& rIdx )
+{
+    rStr.Append( '[' ).Append( rIdx ).Append( ']' );
+}
+
+void StringHelper::AppendIndex( String& rStr, sal_Int64 nIdx )
+{
+    String aToken;
+    AppendDec( aToken, nIdx );
+    AppendIndex( rStr, aToken );
+}
+
+void StringHelper::AppendIndexedText( String& rStr, const String& rData, const String& rIdx )
+{
+    rStr.Append( rData );
+    AppendIndex( rStr, rIdx );
+}
+
+void StringHelper::AppendIndexedText( String& rStr, const String& rData, sal_Int64 nIdx )
+{
+    rStr.Append( rData );
+    AppendIndex( rStr, nIdx );
+}
+
+String StringHelper::GetToken( const String& rData, xub_StrLen& rnPos, sal_Unicode cSep )
+{
+    String aToken = rData.GetToken( 0, cSep, rnPos );
+    TrimSpaces( aToken );
+    return aToken;
+}
+
+// quoting and trimming -------------------------------------------------------
+
+void StringHelper::Enclose( String& rStr, sal_Unicode cOpen, sal_Unicode cClose )
+{
+    rStr.Insert( cOpen, 0 ).Append( cClose ? cClose : cOpen );
+}
+
+void StringHelper::TrimSpaces( String& rStr )
+{
+    xub_StrLen nPos = 0;
+    while( (nPos < rStr.Len()) && ((rStr.GetChar( nPos ) == ' ') || (rStr.GetChar( nPos ) == '\t')) )
+        ++nPos;
+    rStr.Erase( 0, nPos );
+    nPos = rStr.Len();
+    while( (nPos > 0) && ((rStr.GetChar( nPos - 1 ) == ' ') || (rStr.GetChar( nPos - 1 ) == '\t')) )
+        --nPos;
+    rStr.Erase( nPos + 1 );
+}
+
+void StringHelper::TrimQuotes( String& rStr )
+{
+    xub_StrLen nPos = 0;
+    while( nPos < rStr.Len() )
+    {
+        // trim quotes
+        if( (nPos < rStr.Len()) && (rStr.GetChar( nPos ) == SCF_DUMP_CFG_QUOTE) )
+        {
+            rStr.Erase( nPos, 1 );
+            while( (nPos < rStr.Len()) && ((rStr.GetChar( nPos ) != SCF_DUMP_CFG_QUOTE) ||
+                    ((nPos + 1 < rStr.Len()) && (rStr.GetChar( nPos + 1 ) == SCF_DUMP_CFG_QUOTE))) )
+                ++nPos;
+            if( (nPos < rStr.Len()) && (rStr.GetChar( nPos ) == SCF_DUMP_CFG_QUOTE) )
+                rStr.Erase( nPos, 1 );
+        }
+        // look for separator
+        while( (nPos < rStr.Len()) && (rStr.GetChar( nPos ) != SCF_DUMP_CFG_LISTSEP) )
+            ++nPos;
+        if( (nPos < rStr.Len()) && (rStr.GetChar( nPos ) == SCF_DUMP_CFG_LISTSEP) )
+            rStr.SetChar( nPos, SCF_DUMP_LISTSEP );
+        ++nPos;
+    }
+}
+
+// string conversion ----------------------------------------------------------
+
+ByteString StringHelper::ConvertToUtf8( const String& rStr )
+{
+    return ByteString( rStr, RTL_TEXTENCODING_UTF8 );
+}
+
+DataType StringHelper::ConvertToDataType( const String& rStr )
+{
+    DataType eType = DATATYPE_VOID;
+    if( rStr.EqualsAscii( "int8" ) )
+        eType = DATATYPE_INT8;
+    else if( rStr.EqualsAscii( "uint8" ) )
+        eType = DATATYPE_UINT8;
+    else if( rStr.EqualsAscii( "int16" ) )
+        eType = DATATYPE_INT16;
+    else if( rStr.EqualsAscii( "uint16" ) )
+        eType = DATATYPE_UINT16;
+    else if( rStr.EqualsAscii( "int32" ) )
+        eType = DATATYPE_INT32;
+    else if( rStr.EqualsAscii( "uint32" ) )
+        eType = DATATYPE_UINT32;
+    else if( rStr.EqualsAscii( "int64" ) )
+        eType = DATATYPE_INT64;
+    else if( rStr.EqualsAscii( "uint64" ) )
+        eType = DATATYPE_UINT64;
+    else if( rStr.EqualsAscii( "float" ) )
+        eType = DATATYPE_FLOAT;
+    else if( rStr.EqualsAscii( "double" ) )
+        eType = DATATYPE_DOUBLE;
+    return eType;
+}
+
+FormatType StringHelper::ConvertToFormatType( const String& rStr )
+{
+    FormatType eType = FORMATTYPE_NONE;
+    if( rStr.EqualsAscii( "dec" ) )
+        eType = FORMATTYPE_DEC;
+    else if( rStr.EqualsAscii( "hex" ) )
+        eType = FORMATTYPE_HEX;
+    else if( rStr.EqualsAscii( "bin" ) )
+        eType = FORMATTYPE_BIN;
+    else if( rStr.EqualsAscii( "fix" ) )
+        eType = FORMATTYPE_FIX;
+    else if( rStr.EqualsAscii( "bool" ) )
+        eType = FORMATTYPE_BOOL;
+    return eType;
+}
 
 bool StringHelper::ConvertFromDec( sal_Int64& rnData, const String& rData )
 {
@@ -424,6 +636,14 @@ bool StringHelper::ConvertStringToInt( sal_Int64& rnData, const String& rData )
     return ConvertFromDec( rnData, rData );
 }
 
+bool StringHelper::ConvertStringToDouble( double& rfData, const String& rData )
+{
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    sal_Int32 nSize = 0;
+    rfData = rtl::math::stringToDouble( rData, '.', '\0', &eStatus, &nSize );
+    return (eStatus == rtl_math_ConversionStatus_Ok) && (nSize == static_cast< sal_Int32 >( rData.Len() ));
+}
+
 bool StringHelper::ConvertStringToBool( const String& rData )
 {
     if( rData.EqualsIgnoreCaseAscii( "true" ) )
@@ -432,6 +652,33 @@ bool StringHelper::ConvertStringToBool( const String& rData )
         return false;
     sal_Int64 nData;
     return ConvertStringToInt( nData, rData ) && (nData != 0);
+}
+
+void StringHelper::ConvertStringToStringList( ScfStringVec& rVec, const String& rData, bool bIgnoreEmpty )
+{
+    rVec.clear();
+    xub_StrLen nTokenCnt = rData.GetTokenCount( SCF_DUMP_LISTSEP );
+    xub_StrLen nPos = 0;
+    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+    {
+        String aToken = GetToken( rData, nPos, SCF_DUMP_LISTSEP );
+        if( !bIgnoreEmpty || (aToken.Len() > 0) )
+            rVec.push_back( aToken );
+    }
+}
+
+void StringHelper::ConvertStringToIntList( ScfInt64Vec& rVec, const String& rData, bool bIgnoreEmpty )
+{
+    rVec.clear();
+    xub_StrLen nTokenCnt = rData.GetTokenCount( SCF_DUMP_LISTSEP );
+    xub_StrLen nPos = 0;
+    sal_Int64 nData;
+    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+    {
+        bool bOk = ConvertStringToInt( nData, GetToken( rData, nPos, SCF_DUMP_LISTSEP ) );
+        if( !bIgnoreEmpty || bOk )
+            rVec.push_back( bOk ? nData : 0 );
+    }
 }
 
 // ============================================================================
@@ -444,7 +691,11 @@ Base::~Base()
 // ============================================================================
 // ============================================================================
 
-void ConfigBase::ReadConfigBlock( SvStream& rStrm )
+ConfigItemBase::~ConfigItemBase()
+{
+}
+
+void ConfigItemBase::ReadConfigBlock( SvStream& rStrm )
 {
     // first line must be "begin" item
     sal_Size nOldPos = rStrm.Tell();
@@ -454,13 +705,21 @@ void ConfigBase::ReadConfigBlock( SvStream& rStrm )
         rStrm.Seek( nOldPos );
 }
 
-void ConfigBase::ReadConfigBlockContents( SvStream& rStrm )
+void ConfigItemBase::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
+{
+}
+
+void ConfigItemBase::ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData )
+{
+}
+
+void ConfigItemBase::ReadConfigBlockContents( SvStream& rStrm )
 {
     bool bLoop = true;
     while( bLoop && !rStrm.IsEof() )
     {
-        String aItem, aData;
-        switch( ReadConfigLine( rStrm, aItem, aData ) )
+        String aKey, aData;
+        switch( ReadConfigLine( rStrm, aKey, aData ) )
         {
             case LINETYPE_BEGIN:
                 IgnoreConfigBlockContents( rStrm );     // ignore unknown embedded block
@@ -469,15 +728,15 @@ void ConfigBase::ReadConfigBlockContents( SvStream& rStrm )
                 bLoop = false;
             break;
             case LINETYPE_DATA:
-                ProcessConfigItem( rStrm, aItem, aData );
+                ProcessConfigItem( rStrm, aKey, aData );
             break;
             default:
-                DBG_ERRORFILE( "scf::dump::ConfigBase::ReadConfigBlockContents - unknown config line type" );
+                DBG_ERRORFILE( "scf::dump::ConfigItemBase::ReadConfigBlockContents - unknown config line type" );
         }
     }
 }
 
-void ConfigBase::IgnoreConfigBlockContents( SvStream& rStrm )
+void ConfigItemBase::IgnoreConfigBlockContents( SvStream& rStrm )
 {
     bool bLoop = true;
     while( bLoop && !rStrm.IsEof() )
@@ -495,14 +754,14 @@ void ConfigBase::IgnoreConfigBlockContents( SvStream& rStrm )
     }
 }
 
-ConfigBase::LineType ConfigBase::ReadConfigLine( SvStream& rStrm, String& rKey, String& rData ) const
+ConfigItemBase::LineType ConfigItemBase::ReadConfigLine( SvStream& rStrm, String& rKey, String& rData ) const
 {
     String aLine;
     while( !rStrm.IsEof() && (aLine.Len() == 0) )
     {
         rStrm.ReadByteStringLine( aLine, RTL_TEXTENCODING_UTF8 );
         aLine.EraseLeadingChars( SCF_UTF8_BOM );
-        TrimString( aLine );
+        StringHelper::TrimSpaces( aLine );
         if( aLine.Len() > 0 )
         {
             // ignore comments (starting with hash or semicolon)
@@ -523,9 +782,10 @@ ConfigBase::LineType ConfigBase::ReadConfigLine( SvStream& rStrm, String& rKey, 
         else
         {
             rKey = aLine.Copy( 0, nEqPos );
-            TrimString( rKey );
+            StringHelper::TrimSpaces( rKey );
             rData = aLine.Copy( nEqPos + 1 );
-            TrimString( rData );
+            StringHelper::TrimSpaces( rData );
+            StringHelper::TrimQuotes( rData );
         }
 
         if( rKey.Len() > 0 )
@@ -544,171 +804,574 @@ ConfigBase::LineType ConfigBase::ReadConfigLine( SvStream& rStrm, String& rKey, 
     return eResult;
 }
 
-ConfigBase::LineType ConfigBase::ReadConfigLine( SvStream& rStrm ) const
+ConfigItemBase::LineType ConfigItemBase::ReadConfigLine( SvStream& rStrm ) const
 {
-    String aItem, aData;
-    return ReadConfigLine( rStrm, aItem, aData );
+    String aKey, aData;
+    return ReadConfigLine( rStrm, aKey, aData );
+}
+
+void ConfigItemBase::ProcessConfigItem( SvStream& rStrm, const String& rKey, const String& rData )
+{
+    sal_Int64 nKey;
+    if( StringHelper::ConvertStringToInt( nKey, rKey ) )
+        ImplProcessConfigItemInt( rStrm, nKey, rData );
+    else
+        ImplProcessConfigItemStr( rStrm, rKey, rData );
 }
 
 // ============================================================================
 
-NameListBase::NameListBase()
+NameListBase::~NameListBase()
 {
 }
 
-void NameListBase::SetName( NameListKey nKey, const String& rName )
+void NameListBase::SetName( sal_Int64 nKey, const String& rName )
 {
     maMap[ nKey ] = rName;
 }
 
-void NameListBase::ProcessConfigItem( SvStream& rStrm, const String& rKey, const String& rData )
+void NameListBase::IncludeList( NameListRef xList )
 {
-    sal_Int64 nKey;
-    if( ConvertStringToInt( nKey, rKey ) )
-        SetName( static_cast< NameListKey >( nKey ), rData );
+    if( xList.is() )
+    {
+        for( const_iterator aIt = xList->begin(), aEnd = xList->end(); aIt != aEnd; ++aIt )
+            maMap[ aIt->first ] = aIt->second;
+        ImplIncludeList( *xList );
+    }
+}
+
+bool NameListBase::ImplIsValid() const
+{
+    return true;
+}
+
+void NameListBase::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
+{
+    if( rKey.EqualsAscii( "include" ) )
+        Include( rData );
+    else if( rKey.EqualsAscii( "exclude" ) )
+        Exclude( rData );
+    else
+        ConfigItemBase::ImplProcessConfigItemStr( rStrm, rKey, rData );
+}
+
+void NameListBase::ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData )
+{
+    SetName( nKey, rData );
+}
+
+const String* NameListBase::FindName( sal_Int64 nKey ) const
+{
+    const_iterator aIt = maMap.find( nKey );
+    return (aIt == end()) ? 0 : &aIt->second;
+}
+
+void NameListBase::Include( const String& rListKeys )
+{
+    ScfStringVec aVec;
+    StringHelper::ConvertStringToStringList( aVec, rListKeys, true );
+    for( ScfStringVec::const_iterator aIt = aVec.begin(), aEnd = aVec.end(); aIt != aEnd; ++aIt )
+        IncludeList( mrCoreData.GetNameList( *aIt ) );
+}
+
+void NameListBase::Exclude( const String& rKeys )
+{
+    ScfInt64Vec aVec;
+    StringHelper::ConvertStringToIntList( aVec, rKeys, true );
+    for( ScfInt64Vec::const_iterator aIt = aVec.begin(), aEnd = aVec.end(); aIt != aEnd; ++aIt )
+        maMap.erase( *aIt );
 }
 
 // ============================================================================
 
-ConstList::ConstList() :
-    maDefName( SCF_DUMP_ERR_NONAME )
+ConstList::ConstList( const ConfigCoreData& rCoreData ) :
+    NameListBase( rCoreData ),
+    maDefName( SCF_DUMP_ERR_NONAME ),
+    mbQuoteNames( false )
 {
 }
 
-void ConstList::ProcessConfigItem( SvStream& rStrm, const String& rKey, const String& rData )
+void ConstList::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
 {
     if( rKey.EqualsAscii( "default" ) )
         SetDefaultName( rData );
+    else if( rKey.EqualsAscii( "quote-names" ) )
+        SetQuoteNames( StringHelper::ConvertStringToBool( rData ) );
     else
-        NameListBase::ProcessConfigItem( rStrm, rKey, rData );
+        NameListBase::ImplProcessConfigItemStr( rStrm, rKey, rData );
 }
 
-String ConstList::ImplGetName( NameListKey nKey ) const
+String ConstList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
 {
-    StringMap::const_iterator aIt = maMap.find( nKey );
-    return (aIt == maMap.end()) ? maDefName : aIt->second;
+    const String* pName = FindName( nKey );
+    String aName = pName ? *pName : maDefName;
+    if( mbQuoteNames )
+        StringHelper::Enclose( aName, '\'' );
+    return aName;
+}
+
+void ConstList::ImplIncludeList( const NameListBase& rList )
+{
+    if( const ConstList* pConstList = dynamic_cast< const ConstList* >( &rList ) )
+    {
+        maDefName = pConstList->maDefName;
+        mbQuoteNames = pConstList->mbQuoteNames;
+    }
 }
 
 // ============================================================================
 
-FlagsList::FlagsList() :
+MultiList::MultiList( const ConfigCoreData& rCoreData ) :
+    ConstList( rCoreData ),
+    mbIgnoreEmpty( true )
+{
+}
+
+void MultiList::InsertNames( sal_Int64 nStartKey, const ScfStringVec& rNames )
+{
+    sal_Int64 nKey = nStartKey;
+    for( ScfStringVec::const_iterator aIt = rNames.begin(), aEnd = rNames.end(); aIt != aEnd; ++aIt, ++nKey )
+        if( !mbIgnoreEmpty || (aIt->Len() > 0) )
+            SetName( nKey, *aIt );
+}
+
+void MultiList::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
+{
+    if( rKey.EqualsAscii( "ignore-empty" ) )
+        mbIgnoreEmpty = StringHelper::ConvertStringToBool( rData );
+    else
+        ConstList::ImplProcessConfigItemStr( rStrm, rKey, rData );
+}
+
+void MultiList::ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData )
+{
+    ScfStringVec aNames;
+    StringHelper::ConvertStringToStringList( aNames, rData, false );
+    InsertNames( nKey, aNames );
+}
+
+// ============================================================================
+
+FlagsList::FlagsList( const ConfigCoreData& rCoreData ) :
+    NameListBase( rCoreData ),
     mnIgnore( 0 )
 {
 }
 
-void FlagsList::ProcessConfigItem( SvStream& rStrm, const String& rKey, const String& rData )
+void FlagsList::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
 {
     if( rKey.EqualsAscii( "ignore" ) )
     {
         sal_Int64 nIgnore;
-        if( ConvertStringToInt( nIgnore, rData ) )
+        if( StringHelper::ConvertStringToInt( nIgnore, rData ) )
             SetIgnoreFlags( nIgnore );
     }
     else
-        NameListBase::ProcessConfigItem( rStrm, rKey, rData );
+        NameListBase::ImplProcessConfigItemStr( rStrm, rKey, rData );
 }
 
-String FlagsList::ImplGetName( NameListKey nKey ) const
+String FlagsList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
 {
-    NameListKey nFlags = nKey;
+    sal_Int64 nFlags = nKey;
     ::set_flag( nFlags, mnIgnore, false );
-    NameListKey nFound = 0;
+    sal_Int64 nFound = 0;
     String aName;
     // add known flags
-    for( StringMap::const_iterator aIt = maMap.begin(), aEnd = maMap.end(); aIt != aEnd; ++aIt )
+    for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
     {
-        if( ::get_flag( nFlags, aIt->first ) )
-            AppendToken( aName, aIt->second );
-        ::set_flag( nFound, aIt->first );
+        sal_Int64 nMask = aIt->first;
+        if( ::get_flag( nFlags, nMask ) )
+            StringHelper::AppendToken( aName, aIt->second );
+        ::set_flag( nFound, nMask );
     }
     // add unknown flags
     ::set_flag( nFlags, nFound, false );
     if( nFlags != 0 )
     {
-        String aUnknown( '?' );
-        AppendShortHex( aUnknown, nFlags, true );
-        AppendToken( aName, aUnknown );
+        String aUnknown = CREATE_STRING( SCF_DUMP_UNKNOWN );
+        aUnknown.Append( SCF_DUMP_ITEMSEP );
+        StringHelper::AppendShortHex( aUnknown, nFlags, true );
+        StringHelper::Enclose( aUnknown, '(', ')' );
+        StringHelper::AppendToken( aName, aUnknown );
     }
     return aName;
 }
 
+void FlagsList::ImplIncludeList( const NameListBase& rList )
+{
+    if( const FlagsList* pFlagsList = dynamic_cast< const FlagsList* >( &rList ) )
+        mnIgnore = pFlagsList->mnIgnore;
+}
+
 // ============================================================================
 
-Config::Config( const String& rFullName )
+CombiList::CombiList( const ConfigCoreData& rCoreData ) :
+    FlagsList( rCoreData )
 {
-    Construct( rFullName );
 }
 
-Config::Config( const sal_Char* pcEnvVar, const String& rFileName )
+void CombiList::ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData )
 {
-    Construct( pcEnvVar, rFileName );
+    if( (nKey & (nKey - 1)) != 0 )  // more than a single bit set?
+        maFmtMap[ nKey ].Parse( rData );
+    else
+        FlagsList::ImplProcessConfigItemInt( rStrm, nKey, rData );
 }
 
-bool Config::Construct( const String& rFullName )
+String CombiList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
 {
-    SvFileStream aStrm( rFullName, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
-    bool bLoaded = aStrm.IsOpen();
-    if( bLoaded )
-        ReadConfigBlockContents( aStrm );
-    return bLoaded;
-}
-
-bool Config::Construct( const sal_Char* pcEnvVar, const String& rFileName )
-{
-    bool bLoaded = false;
-
-    // first try environment variable
-    if( pcEnvVar )
-        if( const sal_Char* pcVarFileName = ::getenv( pcEnvVar ) )
-            bLoaded = Construct( String::CreateFromAscii( pcVarFileName ) );
-
-    // if no success, try HOME
-    if( !bLoaded )
+    sal_Int64 nFlags = nKey;
+    sal_Int64 nFound = 0;
+    String aName;
+    // add known flag fields
+    for( ItemFormatMap::const_iterator aIt = maFmtMap.begin(), aEnd = maFmtMap.end(); aIt != aEnd; ++aIt )
     {
-        if( const sal_Char* pcHome = ::getenv( "HOME" ) )
+        sal_Int64 nMask = aIt->first;
+        if( nMask != 0 )
         {
-            String aFullName = String::CreateFromAscii( pcHome );
-            aFullName.EraseTrailingChars( SAL_PATHDELIMITER );
-            aFullName.Append( SAL_PATHDELIMITER ).Append( rFileName );
-            bLoaded = Construct( aFullName );
+            const ItemFormat& rItemFmt = aIt->second;
+
+            sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nFlags );
+            sal_uInt64 nUMask = static_cast< sal_uInt64 >( nMask );
+            while( (nUMask & 1) == 0 ) { nUFlags >>= 1; nUMask >>= 1; }
+
+            String aItem = rItemFmt.maItemName;
+
+            if( (nUMask & (nUMask + 1)) == 0 )  // all bits in one block
+            {
+                sal_uInt64 nUValue = nUFlags & nUMask;
+                sal_Int64 nSValue = static_cast< sal_Int64 >( nUValue );
+                if( ::get_flag< sal_uInt64 >( nUValue, (nUMask + 1) >> 1 ) )
+                    ::set_flag( nSValue, static_cast< sal_Int64 >( ~nUMask ) );
+
+                String aValue;
+                switch( rItemFmt.meDataType )
+                {
+                    case DATATYPE_INT8:     StringHelper::AppendValue( aValue, static_cast< sal_Int8 >( nSValue ), rItemFmt.meFmtType );    break;
+                    case DATATYPE_UINT8:    StringHelper::AppendValue( aValue, static_cast< sal_uInt8 >( nUValue ), rItemFmt.meFmtType );   break;
+                    case DATATYPE_INT16:    StringHelper::AppendValue( aValue, static_cast< sal_Int16 >( nSValue ), rItemFmt.meFmtType );   break;
+                    case DATATYPE_UINT16:   StringHelper::AppendValue( aValue, static_cast< sal_uInt16 >( nUValue ), rItemFmt.meFmtType );  break;
+                    case DATATYPE_INT32:    StringHelper::AppendValue( aValue, static_cast< sal_Int32 >( nSValue ), rItemFmt.meFmtType );   break;
+                    case DATATYPE_UINT32:   StringHelper::AppendValue( aValue, static_cast< sal_uInt32 >( nUValue ), rItemFmt.meFmtType );  break;
+                    case DATATYPE_INT64:    StringHelper::AppendValue( aValue, nSValue, rItemFmt.meFmtType );                               break;
+                    case DATATYPE_UINT64:   StringHelper::AppendValue( aValue, nUValue, rItemFmt.meFmtType );                               break;
+                    case DATATYPE_FLOAT:    StringHelper::AppendValue( aValue, static_cast< float >( nSValue ), rItemFmt.meFmtType );       break;
+                    case DATATYPE_DOUBLE:   StringHelper::AppendValue( aValue, static_cast< double >( nSValue ), rItemFmt.meFmtType );      break;
+                    default:;
+                }
+                StringHelper::AppendToken( aItem, aValue, SCF_DUMP_ITEMSEP );
+                if( rItemFmt.maListName.Len() > 0 )
+                {
+                    String aName = rCfg.GetName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
+                    StringHelper::AppendToken( aItem, aName, SCF_DUMP_ITEMSEP );
+                }
+            }
+            else
+            {
+                String aValue;
+                StringHelper::AppendShortHex( aValue, nFlags & nMask );
+                StringHelper::AppendToken( aItem, aValue, SCF_DUMP_ITEMSEP );
+            }
+            StringHelper::Enclose( aItem, '(', ')' );
+            StringHelper::AppendToken( aName, aItem );
+            ::set_flag( nFound, nMask );
         }
     }
-
-    return bLoaded;
+    ::set_flag( nFlags, nFound, false );
+    StringHelper::AppendToken( aName, FlagsList::ImplGetName( rCfg, nFlags ) );
+    return aName;
 }
 
-bool Config::GetBoolOption( const sal_Char* pcKey, bool bDefault ) const
+void CombiList::ImplIncludeList( const NameListBase& rList )
 {
-    ConfigDataMap::const_iterator aIt = maConfigData.find( String::CreateFromAscii( pcKey ) );
-    return (aIt == maConfigData.end()) ? bDefault : ConvertStringToBool( aIt->second );
+    if( const CombiList* pCombiList = dynamic_cast< const CombiList* >( &rList ) )
+        maFmtMap = pCombiList->maFmtMap;
+    FlagsList::ImplIncludeList( rList );
 }
 
-bool Config::IsDumperEnabled() const
+// ============================================================================
+
+UnitConverter::UnitConverter( const ConfigCoreData& rCoreData ) :
+    NameListBase( rCoreData ),
+    mfFactor( 1.0 )
 {
-    return GetBoolOption( "enable-dumper", true );
 }
 
-NameListRef Config::GetNameList( const sal_Char* pcMapName ) const
+String UnitConverter::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
+{
+    String aValue;
+    StringHelper::AppendDec( aValue, mfFactor * nKey );
+    aValue.Append( maUnitName );
+    return aValue;
+}
+
+void UnitConverter::ImplIncludeList( const NameListBase& rList )
+{
+}
+
+// ============================================================================
+// ============================================================================
+
+ConfigCoreData::ConfigCoreData( const String& rFileName )
+{
+    Construct( rFileName );
+}
+
+ConfigCoreData::~ConfigCoreData()
+{
+}
+
+void ConfigCoreData::Construct( const String& rFileName )
+{
+    SvFileStream aStrm( rFileName, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
+    mbLoaded = aStrm.IsOpen();
+    if( mbLoaded )
+        ReadConfigBlockContents( aStrm );
+}
+
+void ConfigCoreData::SetOption( const String& rKey, const String& rData )
+{
+    maConfigData[ rKey ] = rData;
+}
+
+const String* ConfigCoreData::GetOption( const String& rKey ) const
+{
+    ConfigDataMap::const_iterator aIt = maConfigData.find( rKey );
+    return (aIt == maConfigData.end()) ? 0 : &aIt->second;
+}
+
+void ConfigCoreData::SetNameList( const String& rListName, NameListRef xList )
+{
+    if( rListName.Len() > 0 )
+        maNameLists[ rListName ] = xList;
+}
+
+void ConfigCoreData::EraseNameList( const String& rListName )
+{
+    maNameLists.erase( rListName );
+}
+
+NameListRef ConfigCoreData::GetNameList( const String& rListName ) const
 {
     NameListRef xList;
-    String aMapName = String::CreateFromAscii( pcMapName );
-    NameListMap::const_iterator aIt = maNameLists.find( aMapName );
+    NameListMap::const_iterator aIt = maNameLists.find( rListName );
     if( aIt != maNameLists.end() )
         xList = aIt->second;
     return xList;
 }
 
-void Config::ProcessConfigItem( SvStream& rStrm, const String& rKey, const String& rData )
+bool ConfigCoreData::ImplIsValid() const
+{
+    return mbLoaded;
+}
+
+void ConfigCoreData::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
 {
     if( rKey.EqualsAscii( "constlist" ) )
         ReadNameList< ConstList >( rStrm, rData );
+    else if( rKey.EqualsAscii( "multilist" ) )
+        ReadNameList< MultiList >( rStrm, rData );
     else if( rKey.EqualsAscii( "flagslist" ) )
         ReadNameList< FlagsList >( rStrm, rData );
+    else if( rKey.EqualsAscii( "combilist" ) )
+        ReadNameList< CombiList >( rStrm, rData );
+    else if( rKey.EqualsAscii( "shortlist" ) )
+        CreateShortList( rData );
+    else if( rKey.EqualsAscii( "unitconverter" ) )
+        CreateUnitConverter( rData );
     else
         maConfigData[ rKey ] = rData;
 }
 
+void ConfigCoreData::CreateShortList( const String& rData )
+{
+    ScfStringVec aDataVec;
+    StringHelper::ConvertStringToStringList( aDataVec, rData, false );
+    if( aDataVec.size() >= 3 )
+    {
+        sal_Int64 nStartKey;
+        if( StringHelper::ConvertStringToInt( nStartKey, aDataVec[ 1 ] ) )
+        {
+            ScfRef< MultiList > xList = CreateNameList< MultiList >( aDataVec[ 0 ] );
+            if( xList.is() )
+            {
+                aDataVec.erase( aDataVec.begin(), aDataVec.begin() + 2 );
+                xList->InsertNames( nStartKey, aDataVec );
+            }
+        }
+    }
+}
+
+void ConfigCoreData::CreateUnitConverter( const String& rData )
+{
+    ScfStringVec aDataVec;
+    StringHelper::ConvertStringToStringList( aDataVec, rData, false );
+    if( aDataVec.size() >= 3 )
+    {
+        String aFactor = aDataVec[ 1 ];
+        bool bRecip = (aFactor.Len() > 0) && (aFactor.GetChar( 0 ) == '/');
+        if( bRecip )
+            aFactor.Erase( 0, 1 );
+        double fFactor;
+        if( StringHelper::ConvertStringToDouble( fFactor, aFactor ) && (fFactor != 0.0) )
+        {
+            ScfRef< UnitConverter > xList = CreateNameList< UnitConverter >( aDataVec[ 0 ] );
+            if( xList.is() )
+            {
+                xList->SetFactor( bRecip ? (1.0 / fFactor) : fFactor );
+                xList->SetUnitName( aDataVec[ 2 ] );
+            }
+        }
+    }
+}
+
 // ============================================================================
+
+Config::Config( const Config& rParent )
+{
+    Construct( rParent );
+}
+
+Config::Config( const String& rFileName )
+{
+    Construct( rFileName );
+}
+
+Config::Config( const sal_Char* pcEnvVar )
+{
+    Construct( pcEnvVar );
+}
+
+Config::~Config()
+{
+}
+
+void Config::Construct( const Config& rParent )
+{
+    *this = rParent;
+}
+
+void Config::Construct( const String& rFileName )
+{
+    mxCoreData.reset( new ConfigCoreData( rFileName ) );
+}
+
+void Config::Construct( const sal_Char* pcEnvVar )
+{
+    if( pcEnvVar )
+        if( const sal_Char* pcFileName = ::getenv( pcEnvVar ) )
+            Construct( String::CreateFromAscii( pcFileName ) );
+}
+
+const String& Config::GetStringOption( const sal_Char* pcKey, const String& rDefault ) const
+{
+    const String* pData = ImplGetOption( String::CreateFromAscii( pcKey ) );
+    return pData ? *pData : rDefault;
+}
+
+bool Config::GetBoolOption( const sal_Char* pcKey, bool bDefault ) const
+{
+    const String* pData = ImplGetOption( String::CreateFromAscii( pcKey ) );
+    return pData ? StringHelper::ConvertStringToBool( *pData ) : bDefault;
+}
+
+bool Config::IsDumperEnabled() const
+{
+    return GetBoolOption( "enable-dumper", false );
+}
+
+bool Config::IsImportEnabled() const
+{
+    return GetBoolOption( "enable-import", true );
+}
+
+bool Config::IsExtractStorage() const
+{
+    return GetBoolOption( "extract-storage-streams", false );
+}
+
+void Config::SetNameList( const String& rListName, NameListRef xList )
+{
+    mxCoreData->SetNameList( rListName, xList );
+}
+
+void Config::SetNameList( const sal_Char* pcListName, NameListRef xList )
+{
+    SetNameList( String::CreateFromAscii( pcListName ), xList );
+}
+
+void Config::EraseNameList( const String& rListName )
+{
+    mxCoreData->EraseNameList( rListName );
+}
+
+void Config::EraseNameList( const sal_Char* pcListName )
+{
+    EraseNameList( String::CreateFromAscii( pcListName ) );
+}
+
+NameListRef Config::GetNameList( const String& rListName ) const
+{
+    return ImplGetNameList( rListName );
+}
+
+NameListRef Config::GetNameList( const sal_Char* pcListName ) const
+{
+    return GetNameList( String::CreateFromAscii( pcListName ) );
+}
+
+bool Config::ImplIsValid() const
+{
+    return IsValid( mxCoreData );
+}
+
+const String* Config::ImplGetOption( const String& rKey ) const
+{
+    return mxCoreData->GetOption( rKey );
+}
+
+NameListRef Config::ImplGetNameList( const String& rListName ) const
+{
+    return mxCoreData->GetNameList( rListName );
+}
+
+// ============================================================================
+// ============================================================================
+
+CoreData::CoreData( SfxMedium& rMedium, SfxObjectShell* pDocShell ) :
+    mrMedium( rMedium ),
+    mpDocShell( pDocShell )
+{
+}
+
+SvStream& CoreData::GetCoreStream()
+{
+    return *mrMedium.GetInStream();
+}
+
+bool CoreData::ImplIsValid() const
+{
+    return mrMedium.GetInStream() != 0;
+}
+
+// ============================================================================
+// ============================================================================
+
+bool Input::ImplIsValid() const
+{
+    return true;
+}
+
+Input& operator>>( Input& rIn, sal_Int64& rnData )
+{
+    return rIn >> *reinterpret_cast< double* >( &rnData );
+}
+
+Input& operator>>( Input& rIn, sal_uInt64& rnData )
+{
+    return rIn >> *reinterpret_cast< double* >( &rnData );
+}
+
 // ============================================================================
 
 SvStreamInput::SvStreamInput( SvStream& rStrm ) :
@@ -772,7 +1435,10 @@ SvStreamInput& SvStreamInput::operator>>( double& rfData )     { mrStrm >> rfDat
 
 Output::Output( SvStream& rStrm ) :
     mrStrm( rStrm ),
-    mnCol( 0 )
+    mnCol( 0 ),
+    mnItemLevel( 0 ),
+    mnMultiLevel( 0 ),
+    mnLastItem( 0 )
 {
     WriteChar( SCF_UTF8_BOM );
     WriteAscii( "OpenOffice.org generic file dumper v1.0" );
@@ -782,10 +1448,28 @@ Output::Output( SvStream& rStrm ) :
 
 // ----------------------------------------------------------------------------
 
+void Output::NewLine()
+{
+    if( maLine.Len() > 0 )
+    {
+        mrStrm << maPrefixUtf8.GetBuffer() << maIndent.GetBuffer();
+        mrStrm << StringHelper::ConvertToUtf8( maLine ).GetBuffer() << '\n';
+        maLine.Erase();
+        mnCol = 0;
+        mnLastItem = 0;
+    }
+}
+
+void Output::EmptyLine( size_t nCount )
+{
+    for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
+        mrStrm << maPrefixUtf8.GetBuffer() << '\n';
+}
+
 void Output::SetPrefix( const String& rPrefix )
 {
     maPrefix = rPrefix;
-    maPrefixUtf8 = ConvertToUtf8( rPrefix );
+    maPrefixUtf8 = StringHelper::ConvertToUtf8( rPrefix );
 }
 
 void Output::IncIndent()
@@ -799,15 +1483,41 @@ void Output::DecIndent()
         maIndent.Erase( 0, SCF_DUMP_INDENT );
 }
 
-void Output::StartTable( size_t nColCount,
-        xub_StrLen nWidth1, xub_StrLen nWidth2, xub_StrLen nWidth3, xub_StrLen nWidth4 )
+void Output::ResetIndent()
+{
+    maIndent.Erase();
+}
+
+void Output::StartTable( xub_StrLen nW1 )
+{
+    StartTable( 1, &nW1 );
+}
+
+void Output::StartTable( xub_StrLen nW1, xub_StrLen nW2 )
+{
+    xub_StrLen pnColWidths[ 2 ];
+    pnColWidths[ 0 ] = nW1;
+    pnColWidths[ 1 ] = nW2;
+    StartTable( 2, pnColWidths );
+}
+
+void Output::StartTable( xub_StrLen nW1, xub_StrLen nW2, xub_StrLen nW3 )
+{
+    xub_StrLen pnColWidths[ 3 ];
+    pnColWidths[ 0 ] = nW1;
+    pnColWidths[ 1 ] = nW2;
+    pnColWidths[ 2 ] = nW3;
+    StartTable( 3, pnColWidths );
+}
+
+void Output::StartTable( xub_StrLen nW1, xub_StrLen nW2, xub_StrLen nW3, xub_StrLen nW4 )
 {
     xub_StrLen pnColWidths[ 4 ];
-    pnColWidths[ 0 ] = nWidth1;
-    pnColWidths[ 1 ] = nWidth2;
-    pnColWidths[ 2 ] = nWidth3;
-    pnColWidths[ 3 ] = nWidth4;
-    StartTable( ::std::min< size_t >( nColCount, 4 ), pnColWidths );
+    pnColWidths[ 0 ] = nW1;
+    pnColWidths[ 1 ] = nW2;
+    pnColWidths[ 2 ] = nW3;
+    pnColWidths[ 3 ] = nW4;
+    StartTable( 4, pnColWidths );
 }
 
 void Output::StartTable( size_t nColCount, const xub_StrLen* pnColWidths )
@@ -833,6 +1543,8 @@ void Output::Tab( size_t nCol )
         maLine.Erase( (nColPos == 0) ? 0 : (nColPos - 1) );
         maLine.Expand( nColPos, ' ' );
     }
+    else
+        WriteChar( ' ', 2 );
 }
 
 void Output::EndTable()
@@ -840,28 +1552,78 @@ void Output::EndTable()
     maColPos.clear();
 }
 
-void Output::NewLine()
+void Output::StartItem( const sal_Char* pcName )
 {
-    if( maLine.Len() > 0 )
+    if( mnItemLevel == 0 )
     {
-        mrStrm << maPrefixUtf8.GetBuffer() << maIndent.GetBuffer();
-        mrStrm << ConvertToUtf8( maLine ).GetBuffer() << '\n';
-        maLine.Erase();
-        mnCol = 0;
+        if( (mnMultiLevel > 0) && (maLine.Len() > 0) )
+            Tab();
+        if( pcName )
+        {
+            WriteItemName( pcName );
+            WriteChar( SCF_DUMP_ITEMSEP );
+        }
+    }
+    ++mnItemLevel;
+    mnLastItem = maLine.Len();
+}
+
+void Output::ContItem()
+{
+    if( mnItemLevel > 0 )
+    {
+        WriteChar( SCF_DUMP_ITEMSEP );
+        mnLastItem = maLine.Len();
     }
 }
 
-void Output::EmptyLine( sal_Int32 nCount )
+void Output::EndItem()
 {
-    for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-        mrStrm << maPrefixUtf8.GetBuffer() << '\n';
+    if( mnItemLevel > 0 )
+    {
+        maLastItem = maLine.Copy( mnLastItem );
+        if( (maLastItem.Len() == 0) && (mnLastItem > 0) && (maLine.GetChar( mnLastItem - 1 ) == SCF_DUMP_ITEMSEP) )
+            maLine.Erase( mnLastItem - 1 );
+        --mnItemLevel;
+    }
+    if( mnItemLevel == 0 )
+    {
+        if( mnMultiLevel == 0 )
+            NewLine();
+    }
+    else
+        ContItem();
 }
 
-// strings --------------------------------------------------------------------
+void Output::StartMultiItems()
+{
+    ++mnMultiLevel;
+}
+
+void Output::EndMultiItems()
+{
+    if( mnMultiLevel > 0 )
+        --mnMultiLevel;
+    if( mnMultiLevel == 0 )
+        NewLine();
+}
+
+void Output::StartIndexedItems( size_t nStart )
+{
+    maIndexes.push_back( nStart );
+}
+
+void Output::EndIndexedItems()
+{
+    if( !maIndexes.empty() )
+        maIndexes.pop_back();
+}
+
+// ----------------------------------------------------------------------------
 
 void Output::WriteChar( sal_Unicode cChar, xub_StrLen nCount )
 {
-    AppendEncChar( maLine, cChar, nCount );
+    StringHelper::AppendEncChar( maLine, cChar, nCount );
 }
 
 void Output::WriteAscii( const sal_Char* pcStr )
@@ -872,41 +1634,87 @@ void Output::WriteAscii( const sal_Char* pcStr )
 
 void Output::WriteString( const String& rStr )
 {
-    AppendEncString( maLine, rStr );
+    StringHelper::AppendEncString( maLine, rStr );
 }
 
-// ============================================================================
-// ============================================================================
-
-void BaseObject::Construct( ConfigRef xConfig, OutputRef xOut )
+void Output::WriteArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
 {
-    mxConfig = xConfig;
-    mxOut = xOut;
-    mnItemLevel = 0;
-    mnMultiLevel = 0;
-}
-
-void BaseObject::Construct( const BaseObject& rParent )
-{
-    Construct( rParent.mxConfig, rParent.mxOut );
-}
-
-void BaseObject::Construct( ConfigRef xConfig, const String& rFileName )
-{
-    if( xConfig.is() && xConfig->IsDumperEnabled() )
+    const sal_uInt8* pnEnd = pnData ? (pnData + nSize) : 0;
+    for( const sal_uInt8* pnByte = pnData; pnByte < pnEnd; ++pnByte )
     {
-        mxOwnStrm.reset( new SvFileStream( rFileName, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC ) );
-        if( mxOwnStrm->GetError() == SVSTREAM_OK )
-            Construct( xConfig, OutputRef( new Output( *mxOwnStrm ) ) );
+        if( pnByte > pnData )
+            WriteChar( cSep );
+        WriteHex( *pnByte, false );
     }
 }
 
-bool BaseObject::IsValid() const
+void Output::WriteBool( bool bData )
 {
-    return ImplIsValid();
+    StringHelper::AppendBool( maLine, bData );
 }
 
-void BaseObject::Dump()
+void Output::WriteColor( const Color& rColor )
+{
+    WriteChar( 'a' );
+    WriteDec( rColor.GetTransparency() );
+    WriteAscii( ",r" );
+    WriteDec( rColor.GetRed() );
+    WriteAscii( ",g" );
+    WriteDec( rColor.GetGreen() );
+    WriteAscii( ",b" );
+    WriteDec( rColor.GetBlue() );
+}
+
+// ----------------------------------------------------------------------------
+
+bool Output::ImplIsValid() const
+{
+    return true;
+}
+
+void Output::WriteItemName( const sal_Char* pcName )
+{
+    WriteAscii( pcName );
+    if( !maIndexes.empty() )
+    {
+        String aIdxList;
+        for( SizeVec::const_iterator aIt = maIndexes.begin(), aEnd = maIndexes.end(); aIt != aEnd; ++aIt )
+            StringHelper::AppendToken( aIdxList, static_cast< sal_Int64 >( *aIt ) );
+        StringHelper::AppendIndex( maLine, aIdxList );
+        ++maIndexes.back();
+    }
+}
+
+// ============================================================================
+// ============================================================================
+
+ObjectBase::~ObjectBase()
+{
+}
+
+void ObjectBase::Construct( ConfigRef xConfig, CoreDataRef xCore, OutputRef xOut )
+{
+    mxConfig = xConfig;
+    mxCore = xCore;
+    mxOut = xOut;
+}
+
+void ObjectBase::Construct( const ObjectBase& rParent )
+{
+    Construct( rParent.mxConfig, rParent.mxCore, rParent.mxOut );
+}
+
+SfxMedium& ObjectBase::GetCoreMedium() const
+{
+    return Core().GetMedium();
+}
+
+SvStream& ObjectBase::GetCoreStream() const
+{
+    return *Core().GetMedium().GetInStream();
+}
+
+void ObjectBase::Dump()
 {
     if( IsValid() )
     {
@@ -916,101 +1724,67 @@ void BaseObject::Dump()
     }
 }
 
-void BaseObject::DumpHeader()
+bool ObjectBase::ImplIsValid() const
 {
-    if( IsValid() )
-        ImplDumpHeader();
+    return IsValid( mxConfig ) && IsValid( mxCore ) && IsValid( mxOut );
 }
 
-void BaseObject::DumpFooter()
+ConfigRef ObjectBase::ImplReconstructConfig()
 {
-    if( IsValid() )
-        ImplDumpFooter();
+    return mxConfig;
 }
 
-void BaseObject::StartItem( const sal_Char* pcName )
+OutputRef ObjectBase::ImplReconstructOutput()
 {
-    if( mnItemLevel == 0 )
-    {
-        if( (mnMultiLevel > 0) && !mxOut->IsEmpty() )
-            mxOut->WriteChar( ' ', 2 );
-        mxOut->WriteAscii( pcName );
-        mxOut->WriteChar( '=' );
-    }
-    ++mnItemLevel;
+    return mxOut;
 }
 
-void BaseObject::EndItem()
-{
-    if( mnItemLevel > 0 )
-        --mnItemLevel;
-    if( mnItemLevel == 0 )
-    {
-        if( mnMultiLevel == 0 )
-            mxOut->NewLine();
-    }
-    else
-        mxOut->WriteChar( '=' );
-}
-
-void BaseObject::StartMultiItems()
-{
-    ++mnMultiLevel;
-}
-
-void BaseObject::EndMultiItems()
-{
-    if( mnMultiLevel > 0 )
-        --mnMultiLevel;
-    if( mnMultiLevel == 0 )
-        mxOut->NewLine();
-}
-
-bool BaseObject::ImplIsValid() const
-{
-    return mxConfig.is() && mxConfig->IsDumperEnabled() && mxOut.is();
-}
-
-void BaseObject::ImplDumpHeader()
+void ObjectBase::ImplDumpHeader()
 {
 }
 
-void BaseObject::ImplDumpBody()
+void ObjectBase::ImplDumpBody()
 {
 }
 
-void BaseObject::ImplDumpFooter()
+void ObjectBase::ImplDumpFooter()
 {
 }
 
-void BaseObject::WriteEmptyItem( const sal_Char* pcName )
+void ObjectBase::ReconstructConfig()
 {
-    ItemGuard aItem( *this, pcName );
+    mxConfig = ImplReconstructConfig();
 }
 
-void BaseObject::WriteInfoItem( const sal_Char* pcName, const sal_Char* pcData )
+void ObjectBase::ReconstructOutput()
 {
-    ItemGuard aItem( *this, pcName );
+    mxOut = ImplReconstructOutput();
+}
+
+void ObjectBase::WriteEmptyItem( const sal_Char* pcName )
+{
+    ItemGuard aItem( *mxOut, pcName );
+}
+
+void ObjectBase::WriteInfoItem( const sal_Char* pcName, const sal_Char* pcData )
+{
+    ItemGuard aItem( *mxOut, pcName );
     mxOut->WriteAscii( pcData );
 }
 
-void BaseObject::WriteInfoItem( const sal_Char* pcName, const String& rData )
+void ObjectBase::WriteInfoItem( const sal_Char* pcName, const String& rData )
 {
-    ItemGuard aItem( *this, pcName );
+    ItemGuard aItem( *mxOut, pcName );
     mxOut->WriteString( rData );
 }
 
-void BaseObject::WriteStringItem( const sal_Char* pcName, const String& rData )
+void ObjectBase::WriteStringItem( const sal_Char* pcName, const String& rData )
 {
-    ItemGuard aItem( *this, pcName );
-    bool bCutStr = rData.Len() > 80;
-    mxOut->WriteChar( '\'' );
-    if( bCutStr )
-        mxOut->WriteString( String( rData, 0, 80 ) );
-    else
-        mxOut->WriteString( rData );
-    mxOut->WriteChar( '\'' );
-    if( bCutStr )
+    ItemGuard aItem( *mxOut, pcName );
+    String aValue = rData.Copy( 0, 80 );
+    StringHelper::Enclose( aValue, '\'' );
+    mxOut->WriteString( aValue );
+    if( rData.Len() > 80 )
     {
         mxOut->WriteAscii( " (cut,len=" );
         mxOut->WriteDec( static_cast< sal_Int32 >( rData.Len() ) );
@@ -1018,50 +1792,94 @@ void BaseObject::WriteStringItem( const sal_Char* pcName, const String& rData )
     }
 }
 
+void ObjectBase::WriteArrayItem( const sal_Char* pcName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
+{
+    ItemGuard aItem( *mxOut, pcName );
+    mxOut->WriteArray( pnData, nSize, cSep );
+}
+
+void ObjectBase::WriteBoolItem( const sal_Char* pcName, bool bData )
+{
+    ItemGuard aItem( *mxOut, pcName );
+    mxOut->WriteBool( bData );
+}
+
+void ObjectBase::WriteColorItem( const sal_Char* pcName, const Color& rColor )
+{
+    ItemGuard aItem( *mxOut, pcName );
+    WriteHexItem( pcName, rColor.GetColor() );
+    mxOut->WriteColor( rColor );
+}
+
 // ============================================================================
 
-InputObject::InputObject( const BaseObject& rParent, InputRef xIn )
-{
-    Construct( rParent, xIn );
-}
-
-InputObject::~InputObject()
+InputObjectBase::~InputObjectBase()
 {
 }
 
-void InputObject::Construct( const BaseObject& rParent, InputRef xIn )
+void InputObjectBase::Construct( const ObjectBase& rParent, InputRef xIn )
 {
-    BaseObject::Construct( rParent );
+    ObjectBase::Construct( rParent );
     mxIn = xIn;
 }
 
-bool InputObject::ImplIsValid() const
+void InputObjectBase::Construct( InputObjectBase& rParent )
 {
-    return mxIn.is() && BaseObject::ImplIsValid();
+    Construct( rParent, rParent.mxIn );
 }
 
-void InputObject::ImplDumpBody()
+bool InputObjectBase::ImplIsValid() const
+{
+    return IsValid( mxIn ) && ObjectBase::ImplIsValid();
+}
+
+InputRef InputObjectBase::ImplReconstructInput()
+{
+    return mxIn;
+}
+
+void InputObjectBase::ImplDumpBody()
 {
     DumpBinaryStream();
 }
 
-void InputObject::DumpBinary( sal_Size nSize, bool bShowOffset )
+void InputObjectBase::ReconstructInput()
+{
+    mxIn = ImplReconstructInput();
+}
+
+void InputObjectBase::SkipBlock( sal_Size nSize, bool bShowSize )
+{
+    sal_Size nEndPos = ::std::min( mxIn->Tell() + nSize, mxIn->Size() );
+    if( mxIn->Tell() < nEndPos )
+    {
+        if( bShowSize )
+            WriteDecItem( "skipped-data-size", static_cast< sal_uInt64 >( nEndPos - mxIn->Tell() ) );
+        mxIn->Seek( nEndPos );
+    }
+}
+
+void InputObjectBase::DumpRawBinary( sal_Size nSize, bool bShowOffset )
 {
     Output& rOut = Out();
-    TableGuard aTabGuard( rOut, 4,
+    TableGuard aTabGuard( rOut,
         bShowOffset ? 12 : 0,
         3 * SCF_DUMP_BYTESPERLINE / 2 + 1,
         3 * SCF_DUMP_BYTESPERLINE / 2 + 1,
         SCF_DUMP_BYTESPERLINE / 2 + 1 );
 
     sal_Size nEndPos = ::std::min( mxIn->Tell() + nSize, mxIn->Size() );
-    while( mxIn->Tell() < nEndPos )
+
+    sal_Size nMaxDumpSize = Cfg().GetIntOption( "max-binary-size", STREAM_SEEK_TO_END );
+    sal_Size nDumpEnd = ::std::min( mxIn->Tell() + nMaxDumpSize, nEndPos );
+
+    while( mxIn->Tell() < nDumpEnd )
     {
         rOut.WriteHex( static_cast< sal_uInt32 >( mxIn->Tell() ) );
         rOut.Tab();
 
         sal_uInt8 pnLineData[ SCF_DUMP_BYTESPERLINE ];
-        sal_Size nLineSize = ::std::min( nSize - mxIn->Tell(), SCF_DUMP_BYTESPERLINE );
+        sal_Size nLineSize = ::std::min( nDumpEnd - mxIn->Tell(), SCF_DUMP_BYTESPERLINE );
         mxIn->Read( pnLineData, nLineSize );
 
         const sal_uInt8* pnByte = 0;
@@ -1081,19 +1899,46 @@ void InputObject::DumpBinary( sal_Size nSize, bool bShowOffset )
         }
         rOut.NewLine();
     }
+
+    // skip undumped data
+    SkipBlock( nEndPos - mxIn->Tell() );
 }
 
-void InputObject::DumpBinaryStream( bool bShowOffset )
+void InputObjectBase::DumpBinary( const sal_Char* pcName, sal_Size nSize, bool bShowOffset )
+{
+    WriteEmptyItem( pcName );
+    IndentGuard aIndGuard( Out() );
+    DumpRawBinary( nSize, bShowOffset );
+}
+
+void InputObjectBase::DumpArray( const sal_Char* pcName, sal_Size nSize, sal_Unicode cSep )
+{
+    sal_Size nDumpSize = ::std::min( nSize, mxIn->Size() - mxIn->Tell() );
+    if( nDumpSize > SCF_DUMP_MAXARRAY )
+    {
+        DumpBinary( pcName, nSize, false );
+    }
+    else if( nDumpSize > 1 )
+    {
+        sal_uInt8 pnData[ SCF_DUMP_MAXARRAY ];
+        mxIn->Read( pnData, nDumpSize );
+        WriteArrayItem( pcName, pnData, nDumpSize, cSep );
+    }
+    else if( nDumpSize == 1 )
+        DumpHex< sal_uInt8 >( pcName );
+}
+
+void InputObjectBase::DumpBinaryStream( bool bShowOffset )
 {
     mxIn->Seek( STREAM_SEEK_TO_BEGIN );
-    DumpBinary( mxIn->Size(), bShowOffset );
+    DumpRawBinary( mxIn->Size(), bShowOffset );
     Out().EmptyLine();
 }
 
-void InputObject::DumpTextStream( rtl_TextEncoding eEnc, bool bShowLines )
+void InputObjectBase::DumpTextStream( rtl_TextEncoding eEnc, bool bShowLines )
 {
     Output& rOut = Out();
-    TableGuard aTabGuard( rOut, 1, bShowLines ? 8 : 0 );
+    TableGuard aTabGuard( rOut, bShowLines ? 8 : 0 );
 
     mxIn->Seek( STREAM_SEEK_TO_BEGIN );
 
@@ -1110,88 +1955,112 @@ void InputObject::DumpTextStream( rtl_TextEncoding eEnc, bool bShowLines )
     rOut.EmptyLine();
 }
 
+void InputObjectBase::DumpItem( const ItemFormat& rItemFmt )
+{
+    switch( rItemFmt.meDataType )
+    {
+        case DATATYPE_INT8:    DumpValue< sal_Int8 >( rItemFmt );   break;
+        case DATATYPE_UINT8:   DumpValue< sal_uInt8 >( rItemFmt );  break;
+        case DATATYPE_INT16:   DumpValue< sal_Int16 >( rItemFmt );  break;
+        case DATATYPE_UINT16:  DumpValue< sal_uInt16 >( rItemFmt ); break;
+        case DATATYPE_INT32:   DumpValue< sal_Int32 >( rItemFmt );  break;
+        case DATATYPE_UINT32:  DumpValue< sal_uInt32 >( rItemFmt ); break;
+        case DATATYPE_INT64:   DumpValue< sal_Int64 >( rItemFmt );  break;
+        case DATATYPE_UINT64:  DumpValue< sal_uInt64 >( rItemFmt ); break;
+        case DATATYPE_FLOAT:   DumpValue< float >( rItemFmt );      break;
+        case DATATYPE_DOUBLE:  DumpValue< double >( rItemFmt );     break;
+    }
+}
+
 // ============================================================================
 // ============================================================================
+
+namespace {
+
+String lclGetFullName( const String& rPath, const String& rName )
+{
+    return String( rPath ).Append( '/' ).Append( rName );
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
 
 OleStorageObject::OleStorageObject( const OleStorageObject& rParentStrg, const String& rStrgName )
 {
     Construct( rParentStrg, rStrgName );
 }
 
-OleStorageObject::OleStorageObject( const BaseObject& rParent, SotStorageRef xRootStrg )
+OleStorageObject::OleStorageObject( const ObjectBase& rParent, SotStorageRef xRootStrg )
 {
     Construct( rParent, xRootStrg, String::EmptyString() );
 }
 
-OleStorageObject::OleStorageObject( const BaseObject& rParent, SvStream& rRootStrm )
+OleStorageObject::OleStorageObject( const ObjectBase& rParent, SvStream& rRootStrm )
 {
     Construct( rParent, rRootStrm );
+}
+
+OleStorageObject::OleStorageObject( const ObjectBase& rParent )
+{
+    Construct( rParent );
 }
 
 OleStorageObject::~OleStorageObject()
 {
 }
 
-void OleStorageObject::Construct( const BaseObject& rParent, SotStorageRef xStrg, const String& rParentPath )
+void OleStorageObject::Construct( const ObjectBase& rParent, SotStorageRef xStrg, const String& rPath )
 {
-    BaseObject::Construct( rParent );
+    ObjectBase::Construct( rParent );
 
     if( xStrg.Is() && (xStrg->GetError() == ERRCODE_NONE) )
     {
         mxStrg = xStrg;
-        maStrgName = xStrg->GetName();
-        maFullPath.Assign( rParentPath ).Append( '/' ).Append( maStrgName );
+        maPath = rPath;
+        maName = xStrg->GetName();
     }
 }
 
 void OleStorageObject::Construct( const OleStorageObject& rParentStrg, const String& rStrgName )
 {
     SotStorageRef xStrg = ScfTools::OpenStorageRead( rParentStrg.mxStrg, rStrgName );
-    Construct( rParentStrg, xStrg, rParentStrg.maFullPath );
+    Construct( rParentStrg, xStrg, rParentStrg.GetFullName() );
 }
 
-void OleStorageObject::Construct( const BaseObject& rParent, SvStream& rRootStrm )
+void OleStorageObject::Construct( const ObjectBase& rParent, SvStream& rRootStrm )
 {
     SotStorageRef xRootStrg( new SotStorage( rRootStrm ) );
     Construct( rParent, xRootStrg, String::EmptyString() );
 }
 
+void OleStorageObject::Construct( const ObjectBase& rParent )
+{
+    if( rParent.IsValid() )
+        Construct( rParent, rParent.GetCoreStream() );
+}
+
+String OleStorageObject::GetFullName() const
+{
+    return lclGetFullName( maPath, maName );
+}
+
 bool OleStorageObject::ImplIsValid() const
 {
-    return mxStrg.Is() && BaseObject::ImplIsValid();
+    return mxStrg.Is() && ObjectBase::ImplIsValid();
 }
 
 void OleStorageObject::ImplDumpHeader()
 {
     Output& rOut = Out();
+    rOut.ResetIndent();
     rOut.WriteChar( '+', 2 );
     rOut.WriteChar( '=', 76 );
     rOut.NewLine();
     {
         PrefixGuard aPreGuard( rOut, CREATE_STRING( "||" ) );
-        rOut.WriteAscii( "STORAGE-BEGIN" );
-        rOut.NewLine();
-
-        IndentGuard aIndGuard( rOut );
-        WriteStringItem( "storage-name", maStrgName );
-        WriteStringItem( "full-path", maFullPath );
-
-        // directory
-        SvStorageInfoList aInfoList;
-        mxStrg->FillInfoList( &aInfoList );
-        WriteDecItem< sal_uInt32 >( "directory-size", aInfoList.Count() );
-
-        IndentGuard aDirIndGuard( rOut );
-        for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
-        {
-            MultiItemsGuard aMultiGuard( *this );
-            SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
-            const sal_Char* pcType = rInfo.IsStream() ? "stream " :
-                (rInfo.IsStorage() ? "storage" : "unknown");
-            WriteInfoItem( "type", pcType );
-            WriteStringItem( "name", rInfo.GetName() );
-        }
-
+        WriteEmptyItem( "STORAGE-BEGIN" );
+        DumpStorageInfo( true );
         rOut.EmptyLine();
     }
     rOut.EmptyLine();
@@ -1200,21 +2069,153 @@ void OleStorageObject::ImplDumpHeader()
 void OleStorageObject::ImplDumpFooter()
 {
     Output& rOut = Out();
+    rOut.ResetIndent();
     {
         PrefixGuard aPreGuard( rOut, CREATE_STRING( "||" ) );
         rOut.EmptyLine();
-        {
-            IndentGuard aIndGuard( rOut );
-            WriteStringItem( "storage-name", maStrgName );
-            WriteStringItem( "full-path", maFullPath );
-        }
-        rOut.WriteAscii( "STORAGE-END" );
-        rOut.NewLine();
+        DumpStorageInfo( false );
+        WriteEmptyItem( "STORAGE-END" );
     }
     rOut.WriteChar( '+', 2 );
     rOut.WriteChar( '=', 76 );
     rOut.NewLine();
     rOut.EmptyLine();
+}
+
+void OleStorageObject::DumpStorageInfo( bool bExtended )
+{
+    IndentGuard aIndGuard( Out() );
+    WriteStringItem( "storage-name", maName );
+    WriteStringItem( "full-path", GetFullName() );
+
+    // directory
+    if( bExtended )
+    {
+        SvStorageInfoList aInfoList;
+        mxStrg->FillInfoList( &aInfoList );
+        WriteDecItem( "directory-size", static_cast< sal_uInt32 >( aInfoList.Count() ) );
+
+        IndentGuard aDirIndGuard( Out() );
+        for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
+        {
+            MultiItemsGuard aMultiGuard( Out() );
+            TableGuard aTabGuard( Out(), 14 );
+            SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
+            const sal_Char* pcType = rInfo.IsStream() ? "stream" :
+                (rInfo.IsStorage() ? "storage" : "unknown");
+            WriteInfoItem( "type", pcType );
+            WriteStringItem( "name", rInfo.GetName() );
+        }
+    }
+}
+
+// ============================================================================
+// ============================================================================
+
+StreamObjectBase::~StreamObjectBase()
+{
+}
+
+void StreamObjectBase::Construct( const ObjectBase& rParent, SvStream& rStrm,
+        const String& rPath, const String& rStrmName, InputRef xIn )
+{
+    mpStrm = &rStrm;
+    maPath = rPath;
+    maName = rStrmName;
+    InputObjectBase::Construct( rParent, xIn );
+}
+
+void StreamObjectBase::Construct( const ObjectBase& rParent,
+        SvStream& rStrm, const String& rPath, const String& rStrmName )
+{
+    InputRef xIn( new SvStreamInput( rStrm ) );
+    Construct( rParent, rStrm, rPath, rStrmName, xIn );
+}
+
+void StreamObjectBase::Construct( const ObjectBase& rParent, SvStream& rStrm )
+{
+    Construct( rParent, rStrm, String::EmptyString(), String::EmptyString() );
+}
+
+String StreamObjectBase::GetFullName() const
+{
+    return lclGetFullName( maPath, maName );
+}
+
+sal_Size StreamObjectBase::GetStreamSize() const
+{
+    sal_Size nPos = mpStrm->Tell();
+    mpStrm->Seek( STREAM_SEEK_TO_END );
+    sal_Size nSize = mpStrm->Tell();
+    mpStrm->Seek( nPos );
+    return nSize;
+}
+
+bool StreamObjectBase::ImplIsValid() const
+{
+    return mpStrm && InputObjectBase::ImplIsValid();
+}
+
+void StreamObjectBase::ImplDumpHeader()
+{
+    Output& rOut = Out();
+    rOut.ResetIndent();
+    rOut.WriteChar( '+' );
+    rOut.WriteChar( '-', 77 );
+    rOut.NewLine();
+    {
+        PrefixGuard aPreGuard( rOut, CREATE_STRING( "|" ) );
+        WriteEmptyItem( "STREAM-BEGIN" );
+        DumpStreamInfo( true );
+        rOut.EmptyLine();
+    }
+    rOut.EmptyLine();
+}
+
+void StreamObjectBase::ImplDumpFooter()
+{
+    Output& rOut = Out();
+    rOut.ResetIndent();
+    {
+        PrefixGuard aPreGuard( rOut, CREATE_STRING( "|" ) );
+        rOut.EmptyLine();
+        DumpStreamInfo( false );
+        WriteEmptyItem( "STREAM-END" );
+    }
+    rOut.WriteChar( '+' );
+    rOut.WriteChar( '-', 77 );
+    rOut.NewLine();
+    rOut.EmptyLine();
+}
+
+void StreamObjectBase::ImplDumpExtendedHeader()
+{
+    WriteDecItem( "stream-size", static_cast< sal_uInt64 >( GetStreamSize() ) );
+}
+
+void StreamObjectBase::DumpStreamInfo( bool bExtended )
+{
+    IndentGuard aIndGuard( Out() );
+    WriteStringItem( "stream-name", maName );
+    WriteStringItem( "full-path", GetFullName() );
+    if( bExtended )
+        ImplDumpExtendedHeader();
+}
+
+// ============================================================================
+
+SvStreamObject::SvStreamObject( const ObjectBase& rParent, SvStream& rStrm )
+{
+    Construct( rParent, rStrm );
+}
+
+SvStreamObject::~SvStreamObject()
+{
+}
+
+void SvStreamObject::Construct( const ObjectBase& rParent, SvStream& rStrm )
+{
+    StreamObjectBase::Construct( rParent, rStrm );
 }
 
 // ============================================================================
@@ -1231,60 +2232,169 @@ OleStreamObject::~OleStreamObject()
 void OleStreamObject::Construct( const OleStorageObject& rParentStrg, const String& rStrmName )
 {
     mxStrm = ScfTools::OpenStorageStreamRead( rParentStrg.GetStorage(), rStrmName );
-    if( mxStrm.Is() )
-    {
-        InputRef xIn( new SvStreamInput( *mxStrm ) );
-        InputObject::Construct( rParentStrg, xIn );
-
-        maStrmName = rStrmName;
-        maFullPath.Assign( rParentStrg.GetFullPath() ).Append( '/' ).Append( rStrmName );
-    }
+    if( mxStrm.Is() && (mxStrm->GetError() == SVSTREAM_OK) )
+        StreamObjectBase::Construct( rParentStrg, *mxStrm, rParentStrg.GetFullName(), rStrmName );
 }
 
 bool OleStreamObject::ImplIsValid() const
 {
-    return mxStrm.Is() && InputObject::ImplIsValid();
+    return mxStrm.Is() && StreamObjectBase::ImplIsValid();
 }
 
-void OleStreamObject::ImplDumpHeader()
+// ============================================================================
+
+WrappedStreamObject::WrappedStreamObject( const ObjectBase& rParent, SvStream& rStrm )
 {
-    Output& rOut = Out();
-    rOut.WriteChar( '+' );
-    rOut.WriteChar( '-', 77 );
-    rOut.NewLine();
-    {
-        PrefixGuard aPreGuard( rOut, CREATE_STRING( "|" ) );
-        rOut.WriteAscii( "STREAM-BEGIN" );
-        rOut.NewLine();
-
-        IndentGuard aIndGuard( rOut );
-        WriteStringItem( "stream-name", maStrmName );
-        WriteStringItem( "full-path", maFullPath );
-        WriteDecItem< sal_uInt32 >( "stream-size", In().Size() );
-
-        rOut.EmptyLine();
-    }
-    rOut.EmptyLine();
+    Construct( rParent, rStrm );
 }
 
-void OleStreamObject::ImplDumpFooter()
+WrappedStreamObject::WrappedStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName )
 {
-    Output& rOut = Out();
+    Construct( rParentStrg, rStrmName );
+}
+
+WrappedStreamObject::~WrappedStreamObject()
+{
+}
+
+void WrappedStreamObject::Construct( const ObjectBase& rParent, StreamObjectRef xStrmObj )
+{
+    mxStrmObj = xStrmObj;
+    if( IsValid( mxStrmObj ) )
+        StreamObjectBase::Construct( rParent, mxStrmObj->GetStream(),
+            mxStrmObj->GetStreamPath(), mxStrmObj->GetStreamName() );
+}
+
+void WrappedStreamObject::Construct( const ObjectBase& rParent, SvStream& rStrm )
+{
+    StreamObjectRef xStrmObj( new SvStreamObject( rParent, rStrm ) );
+    Construct( rParent, xStrmObj );
+}
+
+void WrappedStreamObject::Construct( const OleStorageObject& rParentStrg, const String& rStrmName )
+{
+    StreamObjectRef xStrmObj( new OleStreamObject( rParentStrg, rStrmName ) );
+    Construct( rParentStrg, xStrmObj );
+}
+
+bool WrappedStreamObject::ImplIsValid() const
+{
+    return IsValid( mxStrmObj ) && StreamObjectBase::ImplIsValid();
+}
+
+// ============================================================================
+// ============================================================================
+
+DumperBase::~DumperBase()
+{
+}
+
+void DumperBase::Construct( ConfigRef xConfig, CoreDataRef xCore )
+{
+    if( IsValid( xConfig ) && IsValid( xCore ) )
     {
-        PrefixGuard aPreGuard( rOut, CREATE_STRING( "|" ) );
-        rOut.EmptyLine();
+        if( xConfig->IsExtractStorage() )
+            ExtractStorage( xCore->GetMedium() );
+
+        if( xConfig->IsDumperEnabled() )
         {
-            IndentGuard aIndGuard( rOut );
-            WriteStringItem( "stream-name", maStrmName );
-            WriteStringItem( "full-path", maFullPath );
+            String aOutName = xCore->GetMedium().GetPhysicalName();
+            aOutName.AppendAscii( ".txt" );
+            mxOutStrm.reset( new SvFileStream( aOutName, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC ) );
+            if( mxOutStrm->GetError() == SVSTREAM_OK )
+                ObjectBase::Construct( xConfig, xCore, OutputRef( new Output( *mxOutStrm ) ) );
         }
-        rOut.WriteAscii( "STREAM-END" );
-        rOut.NewLine();
     }
-    rOut.WriteChar( '+' );
-    rOut.WriteChar( '-', 77 );
-    rOut.NewLine();
-    rOut.EmptyLine();
+}
+
+void DumperBase::Construct( ConfigRef xConfig, SfxMedium& rMedium, SfxObjectShell* pDocShell )
+{
+    CoreDataRef xCore( new CoreData( rMedium, pDocShell ) );
+    Construct( xConfig, xCore );
+}
+
+bool DumperBase::IsImportEnabled() const
+{
+    return !IsValid() || Cfg().IsImportEnabled();
+}
+
+void DumperBase::ExtractStorage( SfxMedium& rMedium )
+{
+    if( SvStream* pInStrm = rMedium.GetInStream() )
+    {
+        ::rtl::OUString aOUPathName;
+        if( ::osl::FileBase::getFileURLFromSystemPath( rMedium.GetPhysicalName(), aOUPathName ) == ::osl::FileBase::E_None )
+        {
+            String aFullName = aOUPathName;
+            xub_StrLen nSepPos = aFullName.SearchBackward( '/' );
+            xub_StrLen nNamePos = (nSepPos == STRING_NOTFOUND) ? 0 : (nSepPos + 1);
+            String aDirName = aFullName.Copy( nNamePos );
+            aDirName.SearchAndReplaceAll( '.', '_' );
+            aDirName.AppendAscii( "_ext" );
+            aFullName.Erase( nNamePos ).Append( aDirName );
+
+            SotStorageRef xRootStrg( new SotStorage( *pInStrm ) );
+            ExtractStorage( xRootStrg, aFullName );
+        }
+    }
+}
+
+void DumperBase::ExtractStorage( SotStorageRef xStrg, const String& rDirName )
+{
+    if( xStrg.Is() && (xStrg->GetError() == ERRCODE_NONE) )
+    {
+        // create directory in file system
+        ::osl::FileBase::RC eRes = ::osl::Directory::create( rDirName );
+        if( (eRes == ::osl::FileBase::E_None) || (eRes == ::osl::FileBase::E_EXIST) )
+        {
+            // process children of the storage
+            SvStorageInfoList aInfoList;
+            xStrg->FillInfoList( &aInfoList );
+            for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
+            {
+                SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
+
+                // encode all characters < 0x20
+                String aSubName;
+                StringHelper::AppendEncString( aSubName, rInfo.GetName(), false );
+
+                // replace all characters reserved in file system
+                static const sal_Unicode spcReserved[] = { '/', '\\', ':', '*', '?', '<', '>', '|', 0 };
+                xub_StrLen nPos = 0;
+                while( (nPos = aSubName.SearchChar( spcReserved, nPos )) != STRING_NOTFOUND )
+                    aSubName.SetChar( nPos, '_' );
+
+                // build full path
+                String aFullName = rDirName;
+                aFullName.Append( '/' ).Append( aSubName );
+
+                // handle storages and streams
+                if( rInfo.IsStorage() )
+                {
+                    SotStorageRef xSubStrg = ScfTools::OpenStorageRead( xStrg, rInfo.GetName() );
+                    ExtractStorage( xSubStrg, aFullName );
+                }
+                else if( rInfo.IsStream() )
+                {
+                    SotStorageStreamRef xSubStrm = ScfTools::OpenStorageStreamRead( xStrg, rInfo.GetName() );
+                    ExtractStream( xSubStrm, aFullName );
+                }
+            }
+        }
+    }
+}
+
+void DumperBase::ExtractStream( SotStorageStreamRef xInStrm, const String& rFileName )
+{
+    if( xInStrm.Is() && (xInStrm->GetError() == SVSTREAM_OK) )
+    {
+        SvFileStream aOutStrm( rFileName, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
+        if( aOutStrm.IsOpen() )
+        {
+            xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
+            aOutStrm << *xInStrm;
+        }
+    }
 }
 
 // ============================================================================
