@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 12:55:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 
 #ifndef __SUBFONT_H
@@ -379,9 +383,13 @@ GlyphSet::GetCharSetName (sal_Int32 nGlyphSetID)
 {
     if (meBaseType == fonttype::TrueType)
     {
-        return maBaseName
-              + (mbVertical ? OString ("VSet") : OString ("HSet") )
-              + OString::valueOf (nGlyphSetID);
+        OStringBuffer aSetName( maBaseName.getLength() + 32 );
+        aSetName.append( maBaseName );
+        aSetName.append( "FID" );
+        aSetName.append( mnFontID );
+        aSetName.append( mbVertical ? "VCSet" : "HCSet" );
+        aSetName.append( nGlyphSetID );
+        return aSetName.makeStringAndClear();
     }
     else
     /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
@@ -395,9 +403,13 @@ GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
 {
     if (meBaseType == fonttype::TrueType)
     {
-        return maBaseName
-              + (mbVertical ? OString ("VGSet") : OString ("HGSet") )
-              + OString::valueOf (nGlyphSetID);
+        OStringBuffer aSetName( maBaseName.getLength() + 32 );
+        aSetName.append( maBaseName );
+        aSetName.append( "FID" );
+        aSetName.append( mnFontID );
+        aSetName.append( mbVertical ? "VGSet" : "HGSet" );
+        aSetName.append( nGlyphSetID );
+        return aSetName.makeStringAndClear();
     }
     else
     /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
