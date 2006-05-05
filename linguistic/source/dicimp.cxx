@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:47:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,27 +86,131 @@ using namespace linguistic;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define BUFSIZE              256
+#define BUFSIZE             4096
 #define VERS2_NOLANGUAGE    1024
+
+#define MAX_HEADER_LENGTH 16
 
 static const sal_Char*      pDicExt     = "dic";
 static const sal_Char*      pVerStr2    = "WBSWG2";
 static const sal_Char*      pVerStr5    = "WBSWG5";
 static const sal_Char*      pVerStr6    = "WBSWG6";
+static const sal_Char*      pVerOOo7    = "OOoUserDict1";
 
-int GetDicVersion( const sal_Char *pVerStr )
+static sal_Bool getTag(const ByteString &rLine,
+        const sal_Char *pTagName, ByteString &rTagValue)
 {
-    if (pVerStr)
-    {
-        if (0 == strcmp( pVerStr, pVerStr6 ))
-            return 6;
-        if (0 == strcmp( pVerStr, pVerStr5 ))
-            return 5;
-        if (0 == strcmp( pVerStr, pVerStr2 ))
-            return 2;
-    }
-    return -1;
+    xub_StrLen nPos = rLine.Search( pTagName );
+    if (nPos == STRING_NOTFOUND)
+        return FALSE;
+
+    rTagValue = rLine.Copy( nPos + strlen( pTagName ) ).EraseLeadingAndTrailingChars();
+    return TRUE;
 }
+
+
+int ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
+{
+    // Sniff the header
+    int nDicVersion;
+    sal_Char pMagicHeader[MAX_HEADER_LENGTH];
+
+    nLng = LANGUAGE_NONE;
+    bNeg = FALSE;
+
+    if (!pStream || pStream->GetError())
+        return -1;
+
+    sal_Size nSniffPos = pStream->Tell();
+    static int nVerOOo7Len = strlen( pVerOOo7 );
+    pMagicHeader[ nVerOOo7Len ] = '\0';
+    if ((pStream->Read((void *) pMagicHeader, nVerOOo7Len) == nVerOOo7Len) &&
+        !strcmp(pMagicHeader, pVerOOo7))
+    {
+        sal_Bool bSuccess;
+        ByteString aLine;
+
+        nDicVersion = 7;
+
+        // 1st skip magic / header line
+        pStream->ReadLine(aLine);
+
+        // 2nd line: language all | en-US | pt-BR ...
+        while ((bSuccess = pStream->ReadLine(aLine)))
+        {
+            ByteString aTagValue;
+
+            if (aLine.GetChar(0) == '#') // skip comments
+                continue;
+
+            // lang: field
+            if (getTag(aLine, "lang: ", aTagValue))
+            {
+                if (aTagValue == "<none>")
+                    nLng = LANGUAGE_NONE;
+                else
+                    nLng = ConvertIsoByteStringToLanguage(aTagValue);
+            }
+
+            // type: negative / positive
+            if (getTag(aLine, "type: ", aTagValue))
+            {
+                if (aTagValue == "negative")
+                    bNeg = TRUE;
+                else
+                    bNeg = FALSE;
+            }
+
+            if (aLine.Search ("---") != STRING_NOTFOUND) // end of header
+                break;
+        }
+        if (!bSuccess)
+            return pStream->GetError();
+    }
+    else
+    {
+        USHORT nLen;
+
+        pStream->Seek (nSniffPos );
+
+        *pStream >> nLen;
+        if (nLen >= MAX_HEADER_LENGTH)
+            return -1;
+
+        pStream->Read(pMagicHeader, nLen);
+        pMagicHeader[nLen] = '\0';
+
+        // Check version magic
+        if (0 == strcmp( pMagicHeader, pVerStr6 ))
+            nDicVersion = 6;
+        else if (0 == strcmp( pMagicHeader, pVerStr5 ))
+            nDicVersion = 5;
+        else if (0 == strcmp( pMagicHeader, pVerStr2 ))
+            nDicVersion = 2;
+        else
+            nDicVersion = -1;
+
+        if (2 == nDicVersion ||
+            5 == nDicVersion ||
+            6 == nDicVersion)
+        {
+            // The language of the dictionary
+            *pStream >> nLng;
+
+            if (VERS2_NOLANGUAGE == nLng)
+                nLng = LANGUAGE_NONE;
+
+            // Negative Flag
+            sal_Char nTmp;
+            *pStream >> nTmp;
+            bNeg = (BOOL)nTmp;
+        }
+    }
+
+    return nDicVersion;
+}
+
+
 
 const String GetDicExtension()
 {
@@ -193,49 +297,26 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
         return nErr;
 
     // Header einlesen
-    BOOL    bSkip = FALSE;
-    USHORT  nLen;
-
-    *pStream >> nLen;
-    if ((nErr = pStream->GetError()))
-        return nErr;
-
-    sal_Char aWordBuf[ BUFSIZE ];
     BOOL bNegativ;
-
-    if (nLen >= BUFSIZE)
-        return nErr;
-    pStream->Read(aWordBuf, nLen);
+    USHORT nLang;
+    nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
     if ((nErr = pStream->GetError()))
         return nErr;
-    *(aWordBuf + nLen) = 0;
+    nLanguage = nLang;
 
-    nDicVersion = GetDicVersion( aWordBuf );
+    eDicType = bNegativ ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
 
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    if (6 == nDicVersion)
+    if (nDicVersion >= 6)
         eEnc = RTL_TEXTENCODING_UTF8;
+    nCount = 0;
 
     if (6 == nDicVersion ||
         5 == nDicVersion ||
         2 == nDicVersion)
     {
-        bSkip = TRUE;
-        // Sprache des Dictionaries
-        *pStream >> nLanguage;
-        if ((nErr = pStream->GetError()))
-            return nErr;
-
-        if ( VERS2_NOLANGUAGE == nLanguage )
-            nLanguage = LANGUAGE_NONE;
-
-        // Negativ-Flag
-        sal_Char nTmp;
-        *pStream >> nTmp;
-        if ((nErr = pStream->GetError()))
-            return nErr;
-        bNegativ = (BOOL) nTmp;
-        eDicType = bNegativ ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
+        USHORT  nLen;
+        sal_Char aWordBuf[ BUFSIZE ];
 
         // Das erste Wort einlesen
         if (!pStream->IsEof())
@@ -251,43 +332,58 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
                 *(aWordBuf + nLen) = 0;
             }
         }
-    }
 
-    nCount = 0;
-
-    while(!pStream->IsEof())
-    {
-        // Aus dem File einlesen
-        // Einfuegen ins Woerterbuch ohne Konvertierung
-        if(*aWordBuf)
+        while(!pStream->IsEof())
         {
-            ByteString aDummy( aWordBuf );
-            String aText( aDummy, eEnc );
-            Reference< XDictionaryEntry > xEntry =
-                    new DicEntry( aText, bNegativ );
-            addEntry_Impl( xEntry , TRUE ); //! don't launch events here
-        }
+            // Aus dem File einlesen
+            // Einfuegen ins Woerterbuch ohne Konvertierung
+            if(*aWordBuf)
+            {
+                ByteString aDummy( aWordBuf );
+                String aText( aDummy, eEnc );
+                Reference< XDictionaryEntry > xEntry =
+                        new DicEntry( aText, bNegativ );
+                addEntry_Impl( xEntry , TRUE ); //! don't launch events here
+            }
 
-        *pStream >> nLen;
-        if (pStream->IsEof())   // #75082# GPF in online-spelling
-            break;
-        if ((nErr = pStream->GetError()))
-            return nErr;
-#ifdef LINGU_EXCEPTIONS
-        if ( nLen >= BUFSIZE )
-            throw  io::IOException() ;
-//          break;  // Woerterbuch defekt?
-#endif
 
-        if( nLen < BUFSIZE )
-        {
-            pStream->Read(aWordBuf, nLen);
+
+            *pStream >> nLen;
+            if (pStream->IsEof())   // #75082# GPF in online-spelling
+                break;
             if ((nErr = pStream->GetError()))
                 return nErr;
+#ifdef LINGU_EXCEPTIONS
+            if (nLen >= BUFSIZE)
+                throw  io::IOException() ;
+#endif
+
+            if (nLen < BUFSIZE)
+            {
+                pStream->Read(aWordBuf, nLen);
+                if ((nErr = pStream->GetError()))
+                    return nErr;
+            }
+            else
+                return SVSTREAM_READ_ERROR;
+            *(aWordBuf + nLen) = 0;
         }
-        else
-            return SVSTREAM_READ_ERROR;
-        *(aWordBuf + nLen) = 0;
+    }
+    else if (7 == nDicVersion)
+    {
+        sal_Bool bSuccess;
+        ByteString aLine;
+
+        // remaining lines - stock strings (a [==] b)
+        while ((bSuccess = pStream->ReadLine(aLine)))
+        {
+            if (aLine.GetChar(0) == '#') // skip comments
+                continue;
+            rtl::OUString aText = rtl::OStringToOUString (aLine, RTL_TEXTENCODING_UTF8);
+            Reference< XDictionaryEntry > xEntry =
+                    new DicEntry( aText, eDicType == DictionaryType_NEGATIVE );
+            addEntry_Impl( xEntry , TRUE ); //! don't launch events here
+        }
     }
 
     DBG_ASSERT(isSorted(), "lng : dictionary is not sorted");
@@ -299,6 +395,21 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     return pStream->GetError();
 }
+
+
+static ByteString formatForSave(
+        const Reference< XDictionaryEntry > &xEntry, rtl_TextEncoding eEnc )
+{
+   ByteString aStr(xEntry->getDictionaryWord().getStr(), eEnc);
+
+   if (xEntry->isNegative())
+   {
+       aStr += "==";
+       aStr += ByteString(xEntry->getReplacementText().getStr(), eEnc);
+   }
+   return aStr;
+}
+
 
 ULONG DictionaryNeo::saveEntries(const OUString &rURL)
 {
@@ -317,54 +428,89 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
     if (!pStream)
         return nErr;
 
-    sal_Char aWordBuf[BUFSIZE];
-
-    // write version
-    const sal_Char *pVerStr = NULL;
-    if (6 == nDicVersion)
-        pVerStr = pVerStr6;
-    else
-        pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
-    strcpy( aWordBuf, pVerStr );    // #100211# - checked
-    USHORT nLen = strlen( aWordBuf );
-    *pStream << nLen;
-    if ((nErr = pStream->GetError()))
-        return nErr;
-    pStream->Write(aWordBuf, nLen);
-    if ((nErr = pStream->GetError()))
-        return nErr;
-
-    *pStream << nLanguage;
-    if ((nErr = pStream->GetError()))
-        return nErr;
-    *pStream << (sal_Char) (eDicType == DictionaryType_NEGATIVE ? TRUE : FALSE);
-    if ((nErr = pStream->GetError()))
-        return nErr;
-
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    if (6 == nDicVersion)
+    if (nDicVersion >= 6)
         eEnc = RTL_TEXTENCODING_UTF8;
 
-    const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-    for (INT32 i = 0;  i < nCount;  i++)
+    if (nDicVersion == 7)
     {
-        BOOL    bIsNegativEntry = pEntry[i]->isNegative();
+        pStream->WriteLine(ByteString (pVerOOo7));
+        if ((nErr = pStream->GetError()))
+            return nErr;
 
-        ByteString  aTmp1 ( pEntry[i]->getDictionaryWord().getStr(),  eEnc ),
-                    aTmp2 ( pEntry[i]->getReplacementText().getStr(), eEnc );
-        if (bIsNegativEntry)
-            aTmp1 += "==";
-        xub_StrLen  nLen1 = aTmp1.Len(),
-                    nLen2 = aTmp2.Len();
-        if ((nLen = nLen1) < BUFSIZE)
+        if (nLanguage == LANGUAGE_NONE)
+            pStream->WriteLine(ByteString("lang: <none>"));
+        else
         {
-            strncpy( aWordBuf, aTmp1.GetBuffer(), nLen1 );
-            if (bIsNegativEntry  &&  (nLen = nLen1 + nLen2) < BUFSIZE)
-                strncpy( aWordBuf + nLen1, aTmp2.GetBuffer(), nLen2);
+            ByteString aLine("lang: ");
+            aLine += ConvertLanguageToIsoByteString( nLanguage );
+            pStream->WriteLine( aLine );
+        }
+        if ((nErr = pStream->GetError()))
+            return nErr;
+
+        if (eDicType == DictionaryType_POSITIVE)
+            pStream->WriteLine(ByteString("type: positive"));
+        else
+            pStream->WriteLine(ByteString("type: negative"));
+        if ((nErr = pStream->GetError()))
+            return nErr;
+
+        pStream->WriteLine(ByteString("---"));
+        if ((nErr = pStream->GetError()))
+            return nErr;
+
+        const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+        for (INT32 i = 0;  i < nCount;  i++)
+        {
+            ByteString aOutStr = formatForSave(pEntry[i], eEnc);
+            pStream->WriteLine (aOutStr);
+            if ((nErr = pStream->GetError()))
+                return nErr;
+        }
+    }
+    else
+    {
+        sal_Char aWordBuf[BUFSIZE];
+
+        // write version
+        const sal_Char *pVerStr = NULL;
+        if (6 == nDicVersion)
+            pVerStr = pVerStr6;
+        else
+            pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
+        strcpy( aWordBuf, pVerStr );    // #100211# - checked
+        USHORT nLen = strlen( aWordBuf );
+        *pStream << nLen;
+        if ((nErr = pStream->GetError()))
+            return nErr;
+        pStream->Write(aWordBuf, nLen);
+        if ((nErr = pStream->GetError()))
+            return nErr;
+
+        *pStream << nLanguage;
+        if ((nErr = pStream->GetError()))
+            return nErr;
+        *pStream << (sal_Char) (eDicType == DictionaryType_NEGATIVE ? TRUE : FALSE);
+        if ((nErr = pStream->GetError()))
+            return nErr;
+
+        const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+        for (INT32 i = 0;  i < nCount;  i++)
+        {
+            ByteString aOutStr = formatForSave(pEntry[i], eEnc);
+
+            // the old format would fail (mis-calculation of nLen) and write
+            // uninitialized junk for combined len >= BUFSIZE - we truncate
+            // silently here, but BUFSIZE is large anyway.
+            nLen = aOutStr.Len();
+            if (nLen >= BUFSIZE)
+                nLen = BUFSIZE - 1;
+
             *pStream << nLen;
             if ((nErr = pStream->GetError()))
                 return nErr;
-            pStream->Write(aWordBuf, nLen);
+            pStream->Write(aOutStr.GetBuffer(), nLen);
             if ((nErr = pStream->GetError()))
                 return nErr;
         }
