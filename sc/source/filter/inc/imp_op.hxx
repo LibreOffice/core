@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:07:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,12 +180,17 @@ protected:
                                                 //  Abschneiden von Zellen fuehrt
 
     // Record-Funktionen
-    void                    Dimensions( void );             // 0x00
+    sal_uInt16              ReadXFIndex( bool bBiff2 );
+
+    void                    ReadDimensions();
+    void                    ReadBlank();
+    void                    ReadInteger();
+    void                    ReadNumber();
+    void                    ReadLabel();
+    void                    ReadBoolErr();
+    void                    ReadRk();
+
     void                    Window1();
-    void                    Blank25( void );                // 0x01
-    void                    Integer( void );                // 0x02
-    void                    Number25( void );               // 0x03
-    void                    Boolerr25( void );              // 0x05
     void                    Formula25( void );              // 0x06     -> excform.cxx
     void                    RecString( void );              // 0x07, 0x0207
     void                    Row25( void );                  // 0x08
@@ -209,7 +214,6 @@ protected:
     void                    Builtinfmtcnt( void );          // 0x56
     void                    Obj( void );                    // 0x5D
     void                    Colinfo( void );                // 0x7D
-    void                    Rk( void );                     // 0x7E
     void                    Wsbool( void );                 // 0x81
     void                    Boundsheet( void );             // 0x85
     void                    Country( void );                // 0x8C
@@ -222,10 +226,6 @@ protected:
     void                    Rstring( void );                // 0xD6
     void                    Olesize( void );                // 0xDE
     void                    ReadUsesElfs();                 // 0x0160
-    void                    Blank34( void );                // 0x0201
-    void                    Number34( void );               // 0x0203
-    void                    Label( void );                  // 0x0204
-    void                    Boolerr34( void );              // 0x0205
     void                    Formula3( void );               // 0x0206       -> excform.cxx
                                                             // 0x0207 -> 0x07
     void                    Row34( void );                  // 0x0208
