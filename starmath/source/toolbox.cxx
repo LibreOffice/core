@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:13:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,13 @@ SmToolBoxWindow::~SmToolBoxWindow()
 }
 
 
+SmViewShell * SmToolBoxWindow::GetView()
+{
+    SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
+    return PTR_CAST(SmViewShell, pView);
+}
+
+
 const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContrast )
 {
     // creates the image list via its resource id and stores that
@@ -304,7 +311,7 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
 
     if (bSetPos)
     {
-        SmViewShell *pView = SmGetActiveView();
+        SmViewShell *pView = GetView();
         DBG_ASSERT( pView, "view shell missing" );
         Point aPos( 50, 75 );
         if (pView)
@@ -324,7 +331,7 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
 
 BOOL SmToolBoxWindow::Close()
 {
-    SmViewShell *pViewSh = SmGetActiveView();
+    SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_TOOLBOX, SFX_CALLMODE_STANDARD,
@@ -400,7 +407,7 @@ IMPL_LINK_INLINE_END( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
 
 IMPL_LINK_INLINE_START( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 {
-    SmViewShell *pViewSh = SmGetActiveView();
+    SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTCOMMAND, SFX_CALLMODE_STANDARD,
