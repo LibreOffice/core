@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:47:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,8 +329,10 @@ namespace sdr
                 maPreRenderDevice.SetMapMode(pOriginalOutDev->GetMapMode());
             }
 
+            // Use draw mode and style settings of the original device.
             // #i29186#
             maPreRenderDevice.SetDrawMode(pOriginalOutDev->GetDrawMode());
+             maPreRenderDevice.SetSettings(pOriginalOutDev->GetSettings());
 
             // replace values at rDisplayInfo for rendering to PreRenderDevice
             pOriginalExtOutDev->SetOutDev(&maPreRenderDevice);
