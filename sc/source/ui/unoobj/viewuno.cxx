@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:57 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1887,6 +1887,7 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
     {
         String aInitVal, aTitle;
         BOOL bCloseOnButtonUp = FALSE;
+        BOOL bSingleCell = FALSE;
 
         rtl::OUString aStrVal;
         const beans::PropertyValue* pPropArray = aArguments.getConstArray();
@@ -1908,9 +1909,11 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
                 if ( rProp.Value >>= aStrVal )
                     aInitVal = String( aStrVal );
             }
+            else if (aPropName.EqualsAscii( SC_UNONAME_SINGLECELL ))
+                bSingleCell = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         }
 
-        pViewSh->StartSimpleRefDialog( aTitle, aInitVal, bCloseOnButtonUp );
+        pViewSh->StartSimpleRefDialog( aTitle, aInitVal, bCloseOnButtonUp, bSingleCell );
     }
 }
 
