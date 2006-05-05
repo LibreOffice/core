@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.203 $
+ *  $Revision: 1.204 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:29:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2593,7 +2593,13 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                                  pFrame->GetStackingWindow() == aChild )
                             )
                         {
-                            bClosePopups = false;
+                            // #i63638# check that pointer is inside window, not
+                            // only inside stacking window
+                            if( root_x >= pFrame->maGeometry.nX && root_x < pFrame->maGeometry.nX+pFrame->maGeometry.nWidth &&
+                                root_y >= pFrame->maGeometry.nY && root_y < pFrame->maGeometry.nX+pFrame->maGeometry.nHeight )
+                            {
+                                bClosePopups = false;
+                            }
                             break;
                         }
                     }
