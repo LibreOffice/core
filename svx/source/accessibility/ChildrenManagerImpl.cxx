@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:20:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -537,34 +537,45 @@ void ChildrenManagerImpl::AddAccessibleShape (std::auto_ptr<AccessibleShape> pSh
 
 void ChildrenManagerImpl::ClearAccessibleShapeList (void)
 {
+    // Copy the list of (visible) shapes to local lists and clear the
+    // originals.
+    ChildDescriptorListType aLocalVisibleChildren;
+    aLocalVisibleChildren.swap(maVisibleChildren);
+    AccessibleShapeList aLocalAccessibleShapes;
+    aLocalAccessibleShapes.swap(maAccessibleShapes);
+
+    // Tell the listeners that all children are gone.
+    mrContext.CommitChange (
+        AccessibleEventId::INVALIDATE_ALL_CHILDREN,
+        uno::Any(),
+        uno::Any());
+
+    // There are no accessible shapes left so the index assigned to new
+    // accessible shapes can be reset.
+    mnNewNameIndex = 1;
+
+    // Now the objects in the local lists can be safely disposed without
+    // having problems with callers that want to update their child lists.
+
     // Clear the list of visible accessible objects.  Objects not created on
     // demand for XShapes are treated below.
-    ChildDescriptorListType::iterator I,aEnd = maVisibleChildren.end();
-    for (I=maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::iterator I,aEnd = aLocalVisibleChildren.end();
+    for (I=aLocalVisibleChildren.begin(); I != aEnd; ++I)
         if ( I->mxAccessibleShape.is() && I->mxShape.is() )
-            I->disposeAccessibleObject(mrContext);
-
-    maVisibleChildren.clear ();
-
+        {
+            ::comphelper::disposeComponent(I->mxAccessibleShape);
+            I->mxAccessibleShape = NULL;
+        }
 
     // Dispose all objects in the accessible shape list.
-    AccessibleShapeList::iterator J,aEnd2 = maAccessibleShapes.end();
-    for (J=maAccessibleShapes.begin(); J != aEnd2; ++J)
+    AccessibleShapeList::iterator J,aEnd2 = aLocalAccessibleShapes.end();
+    for (J=aLocalAccessibleShapes.begin(); J != aEnd2; ++J)
         if (J->is())
         {
-            mrContext.CommitChange (
-                AccessibleEventId::CHILD,
-                uno::Any(),
-                uno::makeAny (*J));
-
             // Dispose the object.
             ::comphelper::disposeComponent(*J);
+            *J = NULL;
         }
-    maAccessibleShapes.clear ();
-
-    // Now that no accessible shapes remain we can reset the index assigned
-    // to new accessible shapes.
-    mnNewNameIndex = 1;
 }
 
 
