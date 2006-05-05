@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resids.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:19:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,9 @@
 #define RID_PD_DEL_AREA    34
 #define RID_FL_VALUE       35
 #define RID_CB_VALUE       36
-#define RID_PB_NEW_VALUE   37
-#define RID_PB_DEL_VALUE   38
+#define RID_PB_SELECT_FILE 37
+#define RID_PB_NEW_VALUE   38
+#define RID_PB_DEL_VALUE   39
 
 // ProfileOptions
 #define RID_TP_PRO         40
