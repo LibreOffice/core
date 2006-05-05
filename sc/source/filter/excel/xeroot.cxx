@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:01:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,9 +240,9 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
     switch( nRecId )
     {
         case EXC_ID_PALETTE:        xRec = mrExpData.mxPalette;     break;
-        case EXC_ID_FONT:           xRec = mrExpData.mxFontBfr;     break;
-        case EXC_ID_FORMAT:         xRec = mrExpData.mxNumFmtBfr;   break;
-        case EXC_ID_XF:             xRec = mrExpData.mxXFBfr;       break;
+        case EXC_ID_FONTLIST:       xRec = mrExpData.mxFontBfr;     break;
+        case EXC_ID_FORMATLIST:     xRec = mrExpData.mxNumFmtBfr;   break;
+        case EXC_ID_XFLIST:         xRec = mrExpData.mxXFBfr;       break;
         case EXC_ID_SST:            xRec = mrExpData.mxSst;         break;
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
