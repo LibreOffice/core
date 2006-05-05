@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,10 +147,10 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const String* pNewCon
         ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
-            ScRangeName aNewRanges( *pNames );
             sal_uInt16 nPos = 0;
-            if (aNewRanges.SearchName( aName, nPos ))
+            if (pNames->SearchName( aName, nPos ))
             {
+                ScRangeName* pNewRanges = new ScRangeName( *pNames );
                 ScRangeData* pOld = (*pNames)[nPos];
 
                 String aInsName(pOld->GetName());
@@ -171,16 +171,19 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const String* pNewCon
                                                     aPos, nType, sal_True );
                 pNew->SetIndex( pOld->GetIndex() );
 
-                aNewRanges.AtFree( nPos );
-                if ( aNewRanges.Insert(pNew) )
+                pNewRanges->AtFree( nPos );
+                if ( pNewRanges->Insert(pNew) )
                 {
                     ScDocFunc aFunc(*pDocShell);
-                    aFunc.ModifyRangeNames( aNewRanges, sal_True );
+                    aFunc.SetNewRangeNames( pNewRanges, sal_True );
 
                     aName = aInsName;   //! broadcast?
                 }
                 else
+                {
                     delete pNew;        //! uno::Exception/Fehler oder so
+                    delete pNewRanges;
+                }
             }
         }
     }
@@ -451,17 +454,20 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
         USHORT nIndex = 0;
         if (pNames && !pNames->SearchName(aNameStr, nIndex))
         {
-            ScRangeName aNewRanges( *pNames );
+            ScRangeName* pNewRanges = new ScRangeName( *pNames );
             ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
                                                 aPos, nNewType, sal_True );
-            if ( aNewRanges.Insert(pNew) )
+            if ( pNewRanges->Insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);
-                aFunc.ModifyRangeNames( aNewRanges, sal_True );
+                aFunc.SetNewRangeNames( pNewRanges, sal_True );
                 bDone = TRUE;
             }
             else
+            {
                 delete pNew;
+                delete pNewRanges;
+            }
         }
     }
 
@@ -511,10 +517,10 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
             if (pNames->SearchName( aString, nPos ))
                 if ( lcl_UserVisibleName((*pNames)[nPos]) )
                 {
-                    ScRangeName aNewRanges(*pNames);
-                    aNewRanges.AtFree(nPos);
+                    ScRangeName* pNewRanges = new ScRangeName(*pNames);
+                    pNewRanges->AtFree(nPos);
                     ScDocFunc aFunc(*pDocShell);
-                    aFunc.ModifyRangeNames( aNewRanges, sal_True );
+                    aFunc.SetNewRangeNames( pNewRanges, sal_True );
                     bDone = TRUE;
                 }
         }
