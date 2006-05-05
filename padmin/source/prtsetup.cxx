@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:28:44 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:05:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,11 +166,14 @@ RTSDialog::~RTSDialog()
 String RTSDialog::getPaperSize()
 {
     String aRet;
-    const PPDKey* pKey = m_aJobData.m_pParser->getKey( String::CreateFromAscii( "PageSize" ) );
-    if( pKey )
+    if( m_aJobData.m_pParser )
     {
-        const PPDValue* pValue = m_aJobData.m_aContext.getValue( pKey );
-        aRet = pValue->m_aOption;
+        const PPDKey* pKey = m_aJobData.m_pParser->getKey( String::CreateFromAscii( "PageSize" ) );
+        if( pKey )
+        {
+            const PPDValue* pValue = m_aJobData.m_aContext.getValue( pKey );
+            aRet = pValue->m_aOption;
+        }
     }
     return aRet;
 }
@@ -318,8 +321,11 @@ void RTSPaperPage::update()
         ? LSCAPE_STRING : PORTRAIT_STRING );
 
     // duplex
-    if( (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
+    if( m_pParent->m_aJobData.m_pParser &&
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
+    {
         m_pParent->insertAllPPDValues( m_aDuplexBox, pKey );
+    }
     else
     {
         m_aDuplexText.Enable( FALSE );
@@ -327,8 +333,11 @@ void RTSPaperPage::update()
     }
 
     // paper
-    if( (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )) )
+    if( m_pParent->m_aJobData.m_pParser &&
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )) )
+    {
         m_pParent->insertAllPPDValues( m_aPaperBox, pKey );
+    }
     else
     {
         m_aPaperText.Enable( FALSE );
@@ -336,8 +345,11 @@ void RTSPaperPage::update()
     }
 
     // input slots
-    if( (pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) )) )
+    if( m_pParent->m_aJobData.m_pParser &&
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) )) )
+    {
         m_pParent->insertAllPPDValues( m_aSlotBox, pKey );
+    }
     else
     {
         m_aSlotText.Enable( FALSE );
@@ -351,11 +363,20 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
 {
     const PPDKey* pKey = NULL;
     if( pBox == &m_aPaperBox )
-        pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+    {
+        if( m_pParent->m_aJobData.m_pParser )
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+    }
     else if( pBox == &m_aDuplexBox )
-        pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+    {
+        if( m_pParent->m_aJobData.m_pParser )
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+    }
     else if( pBox == &m_aSlotBox )
-        pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+    {
+        if( m_pParent->m_aJobData.m_pParser )
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+    }
     else if( pBox == &m_aOrientBox )
     {
         m_pParent->m_aJobData.m_eOrientation = m_aOrientBox.GetSelectEntry().Equals( LSCAPE_STRING ) ? orientation::Landscape : orientation::Portrait;
@@ -420,19 +441,22 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
     m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ).AppendAscii( " Bit" ) );
 
     // fill ppd boxes
-    for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
+    if( m_pParent->m_aJobData.m_pParser )
     {
-        const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
-        if( pKey->isUIKey()                                 &&
-            ! pKey->getKey().EqualsAscii( "PageSize" )      &&
-            ! pKey->getKey().EqualsAscii( "InputSlot" )     &&
-            ! pKey->getKey().EqualsAscii( "PageRegion" )    &&
-            ! pKey->getKey().EqualsAscii( "Duplex" )
-            )
+        for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
         {
-            USHORT nPos =
-                m_aPPDKeyBox.InsertEntry( pKey->getUITranslation().Len() ? pKey->getUITranslation() : pKey->getKey() );
-            m_aPPDKeyBox.SetEntryData( nPos, (void*)pKey );
+            const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
+            if( pKey->isUIKey()                                 &&
+                ! pKey->getKey().EqualsAscii( "PageSize" )      &&
+                ! pKey->getKey().EqualsAscii( "InputSlot" )     &&
+                ! pKey->getKey().EqualsAscii( "PageRegion" )    &&
+                ! pKey->getKey().EqualsAscii( "Duplex" )
+                )
+            {
+                USHORT nPos =
+                    m_aPPDKeyBox.InsertEntry( pKey->getUITranslation().Len() ? pKey->getUITranslation() : pKey->getKey() );
+                m_aPPDKeyBox.SetEntryData( nPos, (void*)pKey );
+            }
         }
     }
 }
@@ -538,17 +562,20 @@ RTSOtherPage::~RTSOtherPage()
 
 void RTSOtherPage::initValues()
 {
-    int nMarginLeft;
-    int nMarginTop;
-    int nMarginRight;
-    int nMarginBottom;
+    int nMarginLeft = 0;
+    int nMarginTop = 0;
+    int nMarginRight = 0;
+    int nMarginBottom = 0;
 
-    m_pParent->m_aJobData.m_pParser->
-        getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
-                    nMarginLeft,
-                    nMarginRight,
-                    nMarginTop,
-                    nMarginBottom );
+    if( m_pParent->m_aJobData.m_pParser )
+    {
+        m_pParent->m_aJobData.m_pParser->
+            getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
+                        nMarginLeft,
+                        nMarginRight,
+                        nMarginTop,
+                        nMarginBottom );
+    }
 
     nMarginLeft     += m_pParent->m_aJobData.m_nLeftMarginAdjust;
     nMarginRight    += m_pParent->m_aJobData.m_nRightMarginAdjust;
@@ -571,12 +598,15 @@ void RTSOtherPage::save()
     int nMarginRight = 0;
     int nMarginBottom = 0;
 
-    m_pParent->m_aJobData.m_pParser->
-        getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
-                    nMarginLeft,
-                    nMarginRight,
-                    nMarginTop,
-                    nMarginBottom );
+    if( m_pParent->m_aJobData.m_pParser )
+    {
+        m_pParent->m_aJobData.m_pParser->
+            getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
+                        nMarginLeft,
+                        nMarginRight,
+                        nMarginTop,
+                        nMarginBottom );
+    }
 
     m_pParent->m_aJobData.m_nLeftMarginAdjust   = m_aLeftLB.GetValue( FUNIT_POINT ) - nMarginLeft;
     m_pParent->m_aJobData.m_nRightMarginAdjust  = m_aRightLB.GetValue( FUNIT_POINT ) - nMarginRight;
