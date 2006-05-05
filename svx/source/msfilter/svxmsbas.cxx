@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:30:38 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,10 +375,16 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         const char cLineEnd = bMac ? '\x0D' : '\x0A';
                         const String sAttribute(String::CreateFromAscii(
                             bAsComment ? "Rem Attribute" : "Attribute"));
-                        while (STRING_NOTFOUND != (nBegin = pStr->Search(sAttribute)))
+                        nBegin = 0;
+                        while (STRING_NOTFOUND != (nBegin = pStr->Search(sAttribute, nBegin)))
                         {
                             if ((nBegin) && pStr->GetChar(nBegin-1) != cLineEnd)
+                            {
+                                // npower #i63766# Need to skip instances of Attribute
+                                // that are NOT Attribute statements
+                                nBegin += sAttribute.Len();
                                 continue;
+                            }
                             xub_StrLen nEnd = pStr->Search(cLineEnd ,nBegin);
                             // DR #i26521# catch STRING_NOTFOUND, will loop endless otherwise
                             if( nEnd == STRING_NOTFOUND )
