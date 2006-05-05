@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:51:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -737,6 +737,8 @@ throw ( RuntimeException )
                     // Checkmark
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, TRUE );
                     m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, bCheckmark );
+                    m_pVCLMenu->SetItemBits( pMenuItemHandler->nItemId,
+                                             m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId ) | MIB_CHECKABLE );
                 }
                 else if ( Event.State >>= aItemText )
                 {
