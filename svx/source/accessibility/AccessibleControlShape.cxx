@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,6 +885,7 @@ void AccessibleControlShape::initializeComposedState()
     // we need to reset some states of the composed set, because they either do not apply
     // for controls in alive mode, or are in the responsibility of the UNO-control, anyway
     pComposedStates->RemoveState( AccessibleStateType::ENABLED );       // this is controlled by the UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::SENSITIVE );     // this is controlled by the UNO-control
     pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );     // this is controlled by the UNO-control
     pComposedStates->RemoveState( AccessibleStateType::SELECTABLE );    // this does not hold for an alive UNO-control
 #if OSL_DEBUG_LEVEL > 0
