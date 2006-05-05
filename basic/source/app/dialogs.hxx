@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:15:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,7 @@ public:
 DECLARE_LIST( StringList, String * );
 #define C_KEY_ALLE          CByteString("All")
 #define C_KEY_AKTUELL       CByteString("Current")
+#define C_KEY_TYPE          CByteString("Type")
 #define C_KEY_DELETE        CByteString("Deleted Groups")
 
 class GenericOptions : public TabPage
@@ -246,8 +247,14 @@ class GenericOptions : public TabPage
 
     FixedLine aFlValue;
     ComboBox aCbValue;
+    PushButton aPbSelectPath;
     PushButton aPbNewValue;
     PushButton aPbDelValue;
+
+    int nMoveButtons;
+    BOOL bShowSelectPath;
+    AutoTimer aMoveTimer;
+    DECL_LINK( MoveButtons, AutoTimer* );
 
     Config &aConf;
     ByteString aLastGroupName;
@@ -257,9 +264,12 @@ class GenericOptions : public TabPage
     StringList* GetAllGroups();
     void LoadData();
 
+    void ShowSelectPath( const String aType );
+
     DECL_LINK( LoadGroup, ComboBox* );
     DECL_LINK( DelGroup, Button* );
     DECL_LINK( NewGroup, Button* );
+    DECL_LINK( SelectPath, Button* );
     DECL_LINK( DelValue, Button* );
     DECL_LINK( NewValue, Button* );
     DECL_LINK( CheckButtonsHdl, ComboBox* );
