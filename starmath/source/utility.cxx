@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:06:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:03:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,11 @@
 #include "smdll.hxx"
 
 
+// return pointer to active SmViewShell, if this is not possible
+// return 0 instead.
+//!! Since this method is based on the current focus it is somewhat
+//!! unreliable and may return unexpected 0 pointers!
 SmViewShell * SmGetActiveView()
-    // return pointer to active SmViewShell, if this is not possible
-    // return 0 instead.
 {
     SfxViewShell *pView = SfxViewShell::Current();
     return PTR_CAST(SmViewShell, pView);
