@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:55:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,8 @@ bool FtFontFile::Map()
         mnFileSize = aStat.st_size;
         mpFileMap = (const unsigned char*)
             mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
+        if( mpFileMap == MAP_FAILED )
+            mpFileMap = NULL;
         close( nFile );
 #elif defined(WNT)
         void* pFileDesc = ::CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
