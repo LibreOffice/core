@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:21:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,10 +391,15 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             aNewValue <<= accessibility::AccessibleStateType::ENABLED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            aNewValue <<= accessibility::AccessibleStateType::SENSITIVE;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_DISABLED:
         {
+            aOldValue <<= accessibility::AccessibleStateType::SENSITIVE;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+
             aOldValue <<= accessibility::AccessibleStateType::ENABLED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
@@ -510,7 +515,10 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         }
 
         if ( pWindow->IsEnabled() )
+        {
             rStateSet.AddState( accessibility::AccessibleStateType::ENABLED );
+            rStateSet.AddState( accessibility::AccessibleStateType::SENSITIVE );
+        }
 
         if ( pWindow->HasChildPathFocus() &&
              ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
