@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:49:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,8 +613,13 @@ GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
 
 , aFlValue( this, ResId( RID_FL_VALUE ) )
 , aCbValue( this, ResId( RID_CB_VALUE ) )
+
+, aPbSelectPath( this, ResId( RID_PB_SELECT_FILE ) )
 , aPbNewValue( this, ResId( RID_PB_NEW_VALUE ) )
 , aPbDelValue( this, ResId( RID_PB_DEL_VALUE ) )
+
+, nMoveButtons( 0 )
+, bShowSelectPath( FALSE )
 {
     FreeResource();
     LoadData();
@@ -627,12 +632,16 @@ GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
     aPbNewArea.SetClickHdl( LINK( this, GenericOptions, NewGroup ) );
     aPbDelArea.SetClickHdl( LINK( this, GenericOptions, DelGroup ) );
 
+    aPbSelectPath.SetClickHdl( LINK( this, GenericOptions, SelectPath ) );
     aPbNewValue.SetClickHdl( LINK( this, GenericOptions, NewValue ) );
     aPbDelValue.SetClickHdl( LINK( this, GenericOptions, DelValue ) );
 
     aCbArea.SetModifyHdl( LINK( this, GenericOptions, CheckButtonsHdl ) );
     aCbValue.SetModifyHdl( LINK( this, GenericOptions, CheckButtonsHdl ) );
     aCbValue.SetSelectHdl( LINK( this, GenericOptions, CheckButtonsHdl ) );
+
+    aMoveTimer.SetTimeout( 60 );
+    aMoveTimer.SetTimeoutHdl( LINK( this, GenericOptions, MoveButtons ) );
 }
 
 GenericOptions::~GenericOptions()
@@ -671,6 +680,52 @@ void GenericOptions::LoadData()
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
+void GenericOptions::ShowSelectPath( const String aType )
+{
+    Point aNPos = aPbNewValue.GetPosPixel();
+    Point aDPos = aPbDelValue.GetPosPixel();
+    USHORT nDelta = aDPos.Y() - aNPos.Y();
+    if ( aType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
+    {   // Show Path button
+        nMoveButtons += nDelta;
+        aMoveTimer.Start();
+        bShowSelectPath = TRUE;
+        aPbSelectPath.Enable( TRUE );
+    }
+    else if ( !aType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
+    {   // Hide Path button
+        nMoveButtons -= nDelta;
+        aMoveTimer.Start();
+        bShowSelectPath = FALSE;
+        aPbSelectPath.Enable( FALSE );
+    }
+}
+
+IMPL_LINK( GenericOptions, MoveButtons, AutoTimer*, aTimer )
+{
+    if ( nMoveButtons == 0 )
+    {
+        aTimer->Stop();
+//        aPbSelectPath.Enable( bShowSelectPath );
+        return 0;
+    }
+
+    int nStep = (nMoveButtons > 0) ? 2 : -2;
+    if ( nMoveButtons <= 1 && nMoveButtons >= -1 )
+        nStep = nMoveButtons;
+
+    nMoveButtons -= nStep ;
+
+    Point aPos;
+
+    aPos = aPbNewValue.GetPosPixel();
+    aPos.Y() += nStep;
+    aPbNewValue.SetPosPixel( aPos );
+
+    aPos = aPbDelValue.GetPosPixel();
+    aPos.Y() += nStep;
+    aPbDelValue.SetPosPixel( aPos );
+}
 
 String GenericOptions::ReadKey( const ByteString &aGroup, const ByteString &aKey )
 {
@@ -682,6 +737,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
 {
     String aCurrentValue;
     String aAllValues;
+    String aType;
 
     if ( aLastGroupName.Len() )
     {   // Werte zwischenspeichern?
@@ -708,6 +764,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
     ByteString aGroupName = ByteString( aCbArea.GetText(), RTL_TEXTENCODING_UTF8 );
     aCurrentValue = ReadKey( aGroupName, C_KEY_AKTUELL );
     aAllValues = ReadKey( aGroupName, C_KEY_ALLE );
+    aType = ReadKey( aGroupName, C_KEY_TYPE );
 
     xub_StrLen i;
     for ( i=0 ; i < aAllValues.GetTokenCount() ; i++ )
@@ -719,6 +776,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
     aLastGroupName = aGroupName;
     CheckButtons( aCbArea, aPbNewArea, aPbDelArea );
     CheckButtons( aCbValue, aPbNewValue, aPbDelValue );
+    ShowSelectPath( aType );
     return 0;
 }
 
@@ -745,6 +803,22 @@ IMPL_LINK( GenericOptions, NewGroup, Button*, EMPTYARG )
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 
     return 0;
+}
+
+IMPL_LINK( GenericOptions, SelectPath, Button*, EMPTYARG )
+{
+    PathDialog aPD( this );
+    aPD.SetPath( aCbValue.GetText() );
+    if ( aPD.Execute() )
+    {
+        aCbValue.SetText( aPD.GetPath() );
+        CheckButtons( aCbValue, aPbNewValue, aPbDelValue );
+        if ( aPbNewValue.IsEnabled() )
+        {
+            LINK( this, GenericOptions, NewValue ).Call( NULL );
+        }
+    }
+    return 1;
 }
 
 IMPL_LINK( GenericOptions, DelValue, Button*, EMPTYARG )
