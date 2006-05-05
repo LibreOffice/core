@@ -3,10 +3,9 @@
 
 
 
-CIIAObj::CIIAObj(EmbedDocument_Impl *pEmbDoc,DocumentHolder* pDocHolder)
-    : m_cRef(0),
-      m_pEmbDoc(pEmbDoc),
-      m_pDocHolder(pDocHolder)
+CIIAObj::CIIAObj(DocumentHolder* pDocHolder)
+    : m_refCount( 0L ),
+      m_rDocHolder( pDocHolder )
 {
 }
 
@@ -40,17 +39,17 @@ STDMETHODIMP CIIAObj::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 
 STDMETHODIMP_(ULONG) CIIAObj::AddRef(void)
 {
-    ++m_cRef;
-    return m_pEmbDoc->AddRef();
+    return osl_incrementInterlockedCount( &m_refCount);
 }
 
 STDMETHODIMP_(ULONG) CIIAObj::Release(void)
 {
-    --m_cRef;
-    return m_pEmbDoc->Release();
+    sal_Int32 nCount = osl_decrementInterlockedCount( &m_refCount);
+    if ( nCount == 0 )
+        delete this;
+
+    return nCount;
 }
-
-
 
 /* IOleInPlaceActiveObject methods*/
 
@@ -84,7 +83,10 @@ STDMETHODIMP CIIAObj::ResizeBorder(
 {
     if(!bFrame) return NOERROR;
 
-    return m_pDocHolder->SetContRects(pRect);
+    if ( !m_rDocHolder.is() )
+        return E_FAIL;
+
+    return m_rDocHolder->SetContRects(pRect);
 }
 
 
