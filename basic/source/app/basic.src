@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:21:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -964,20 +964,27 @@ TabPage RID_TP_GENERIC {
             Pos = MAP_APPFONT( 8, 48 );
             Size = MAP_APPFONT( 176, 44 );
             TabStop = TRUE;
-        };
+    };
+    PushButton RID_PB_SELECT_FILE {
+            Pos = MAP_APPFONT( 188, 48 );
+            Size = MAP_APPFONT( 40, 12 );
+            Text [ de ] = "Pfad ...";
+            TabStop = TRUE;
+            Text[ en-US ] = "Path ...";
+    };
     PushButton RID_PB_NEW_VALUE {
             Pos = MAP_APPFONT( 188, 48 );
             Size = MAP_APPFONT( 40, 12 );
             Text [ de ] = "Neu";
             TabStop = TRUE;
-        Text[ en-US ] = "New";
+            Text[ en-US ] = "New";
     };
     PushButton RID_PB_DEL_VALUE {
             Pos = MAP_APPFONT( 188, 64 );
             Size = MAP_APPFONT( 40, 12 );
             Text [ de ] = "Löschen";
             TabStop = TRUE;
-        Text[ en-US ] = "Delete";
+            Text[ en-US ] = "Delete";
     };
 };
 
