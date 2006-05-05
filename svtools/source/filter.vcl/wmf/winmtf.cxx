@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:48:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1253,7 +1253,17 @@ void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const P
     Point       aEnd( ImplMap( rEnd ) );
 
     if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_ARC ), maLineStyle.aLineInfo ) );
+    {
+        if ( aStart == aEnd )
+        {   // SJ: #i53768# if start & end is identical, then we have to draw a full ellipse
+            Point aCenter( aRect.Center() );
+            Size  aRad( aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
+
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+        }
+        else
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_ARC ), maLineStyle.aLineInfo ) );
+    }
     else
         mpGDIMetaFile->AddAction( new MetaArcAction( aRect, aStart, aEnd ) );
 
