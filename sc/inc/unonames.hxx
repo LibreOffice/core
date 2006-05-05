@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:19:05 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,6 +556,7 @@
 #define SC_UNONAME_INITVAL          "InitialValue"
 #define SC_UNONAME_TITLE            "Title"
 #define SC_UNONAME_CLOSEONUP        "CloseOnMouseRelease"
+#define SC_UNONAME_SINGLECELL       "SingleCellMode"
 
 //  XRenderable
 #define SC_UNONAME_PAGESIZE         "PageSize"
