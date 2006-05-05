@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:31:53 $
+#   last change: $Author: rt $ $Date: 2006-05-05 08:06:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,4 +100,18 @@ $(MISC)$/xfilter.pl : filter.pl
        +$(COPY) filter.pl $(MISC)$/xfilter.pl
        +attrib  -r $(MISC)$/xfilter.pl
 .ENDIF
+
+
+
+.IF "$(GUI)"=="UNX"
+INIFILE=$(BIN)$/.testtoolrc
+.ELIF "$(GUI)"=="WNT"
+INIFILE=$(BIN)$/testtool.ini
+.END
+
+$(INIFILE): testtool.ini
+        +-$(COPY) $< $@
+
+ALLTAR: \
+        $(INIFILE)
 
