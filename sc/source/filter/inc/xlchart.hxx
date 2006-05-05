@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:01:48 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,6 +539,16 @@ const sal_uInt16 EXC_CHSERGROUP_NONE            = 0xFFFF;   /// For internal use
 
 const sal_uInt16 EXC_ID_CHSERPARENT             = 0x104A;
 
+// (0x104B) CHSERTRENDLINE ----------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHSERTRENDLINE          = 0x104B;
+
+const sal_uInt8 EXC_CHSERTREND_POLYNOMIAL       = 0;    /// If order is 1, trend line is linear.
+const sal_uInt8 EXC_CHSERTREND_EXPONENTIAL      = 1;
+const sal_uInt8 EXC_CHSERTREND_LOGARITHMIC      = 2;
+const sal_uInt8 EXC_CHSERTREND_POWER            = 3;
+const sal_uInt8 EXC_CHSERTREND_MOVING_AVG       = 4;
+
 // (0x104E) CHFORMAT ----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHFORMAT                = 0x104E;
@@ -597,9 +607,9 @@ const sal_uInt16 EXC_ID_CHESCHERFORMAT          = 0x1066;
 
 const sal_uInt16 EXC_ID8_CHPIVOTREF             = 0x0858;
 const sal_uInt16 EXC_ID_CHPIVOTREF              = 0x1048;
-const sal_uInt16 EXC_ID_CHSERTRENDLINE          = 0x104B;
 const sal_uInt16 EXC_ID_CHFORMATRUNS            = 0x1050;
 const sal_uInt16 EXC_ID_CHSERERRORBAR           = 0x105B;
+const sal_uInt16 EXC_ID_CHPLOTGROWTH            = 0x1064;
 const sal_uInt16 EXC_ID_CHUNKNOWN               = 0xFFFF;
 
 // ============================================================================
