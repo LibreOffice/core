@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:25:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,9 @@
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABPAGEWINDOW_HXX_
 #include <toolkit/awt/vclxaccessibletabpagewindow.hxx>
 #endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEFIXEDTEXT_HXX_
+#include <toolkit/awt/vclxaccessiblefixedtext.hxx>
+#endif
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
 #endif
@@ -133,11 +136,14 @@
 #include <toolkit/helper/solarrelease.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
+
 
 //#define SYNCHRON_NOTIFICATION
     // define this for notifying mouse events synchronously when they happen
@@ -924,9 +930,9 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
+uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xContext;
+    uno::Reference< accessibility::XAccessibleContext > xContext;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -935,12 +941,12 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
         if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
+            uno::Reference< accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
             if ( xAcc.is() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xCont( xAcc->getAccessibleContext() );
-                if ( pWindow->GetType() == WINDOW_MENUBARWINDOW
-                     || ( xCont.is() && xCont->getAccessibleRole() == ::com::sun::star::accessibility::AccessibleRole::POPUP_MENU ) )
+                uno::Reference< accessibility::XAccessibleContext > xCont( xAcc->getAccessibleContext() );
+                if ( pWindow->GetType() == WINDOW_MENUBARWINDOW ||
+                     ( xCont.is() && xCont->getAccessibleRole() == accessibility::AccessibleRole::POPUP_MENU ) )
                 {
                     xContext = xCont;
                 }
@@ -948,19 +954,23 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         else if ( nType == WINDOW_STATUSBAR )
         {
-            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
+            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
         }
         else if ( nType == WINDOW_TABCONTROL )
         {
-            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
+            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
         }
         else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
         {
-            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabPageWindow( this );
+            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleTabPageWindow( this );
+        }
+        else if ( nType == WINDOW_HELPTEXTWINDOW )
+        {
+            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( this );
         }
         else
         {
-            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
         }
     }
 
