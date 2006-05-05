@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:37:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,7 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
     bEof = bAs = FALSE;
     eCurTok = NIL;
     ePush = NIL;
-    bEos = bKeywords = TRUE;
+    bEos = bKeywords = bErrorIsSymbol = TRUE;
     if( !nToken )
         for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ ) {}
 }
@@ -603,7 +603,7 @@ special:
     {
         if( bAs )
             bAs = FALSE;
-        else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 )
+        else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != _ERROR_) )
             eCurTok = SYMBOL;
     }
 
