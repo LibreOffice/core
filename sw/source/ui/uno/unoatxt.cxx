@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:19:56 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,15 +305,16 @@ Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     {
         sal_Unicode cChar = aGroupName[nPos];
         if( ((cChar >= 'A') && (cChar <= 'Z')) ||
-                ((cChar >= 'a') && (cChar <= 'z')) ||
-                    ((cChar >= '0') && (cChar <= '9')) ||
-                        (cChar == '_') ||
-                    cChar == 0x20 )
+            ((cChar >= 'a') && (cChar <= 'z')) ||
+            ((cChar >= '0') && (cChar <= '9')) ||
+            (cChar == '_') ||
+            (cChar == 0x20) ||
+            (cChar == GLOS_DELIM) )
         {
             continue;
         }
         IllegalArgumentException aIllegal;
-        aIllegal.Message = C2U("group name must not contain non-ASCII characters");
+        aIllegal.Message = C2U("group name must contain a-z, A-z, '_', ' ' only");
         throw aIllegal;
     }
     String sGroup(aGroupName);
@@ -633,15 +634,21 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
     if( !pGlossaries )
         throw uno::RuntimeException();
 
-    // check value after delimiter...
-    OUString aNewSuffix (rName.copy ( 1 + rName.lastIndexOf ( GLOS_DELIM ) ) );
-    OUString aOldSuffix (sName.copy ( 1 + sName.lastIndexOf ( GLOS_DELIM ) ) );
+    sal_Int32 nNewDelimPos = rName.lastIndexOf( GLOS_DELIM );
+    sal_Int32 nOldDelimPos = sName.lastIndexOf( GLOS_DELIM );
+
+    OUString aNewSuffix;
+    if (nNewDelimPos > -1)
+        aNewSuffix = rName.copy( nNewDelimPos + 1 );
+    OUString aOldSuffix;
+    if (nOldDelimPos > -1)
+        aOldSuffix = sName.copy( nOldDelimPos + 1 );
 
     sal_Int32 nNewNumeric = aNewSuffix.toInt32();
     sal_Int32 nOldNumeric = aOldSuffix.toInt32();
 
-    OUString aNewPrefix (rName.copy ( 0, rName.lastIndexOf ( GLOS_DELIM ) ) );
-    OUString aOldPrefix (sName.copy ( 0, sName.lastIndexOf ( GLOS_DELIM ) ) );
+    OUString aNewPrefix( (nNewDelimPos > 1) ? rName.copy( 0, nNewDelimPos ) : rName );
+    OUString aOldPrefix( (nOldDelimPos > 1) ? sName.copy( 0, nOldDelimPos ) : sName );
 
     if ( sName == rName ||
        ( nNewNumeric == nOldNumeric && aNewPrefix == aOldPrefix ) )
