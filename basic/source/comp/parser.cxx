@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,9 @@ BOOL SbiParser::Parse()
 
     EnableErrors();
 
+    bErrorIsSymbol = false;
     Peek();
+    bErrorIsSymbol = true;
     // Dateiende?
     if( IsEof() )
     {
@@ -484,36 +486,65 @@ void SbiParser::Symbol()
 
     bool bEQ = ( Peek() == EQ );
     RecursiveMode eRecMode = ( bEQ ? PREVENT_CALL : FORCE_CALL );
-    aVar.Gen( eRecMode );
-    if( !bEQ )
+    bool bSpecialMidHandling = false;
+    SbiSymDef* pDef = aVar.GetRealVar();
+    if( bEQ && pDef && pDef->GetScope() == SbRTL )
     {
-        aGen.Gen( _GET );
-    }
-    else
-    {
-        // Dann muss es eine Zuweisung sein. Was anderes gibts nicht!
-        if( !aVar.IsLvalue() )
-            Error( SbERR_LVALUE_EXPECTED );
-        TestToken( EQ );
-        SbiExpression aExpr( this );
-        aExpr.Gen();
-        SbiOpcode eOp = _PUT;
-        SbiSymDef* pDef = aVar.GetRealVar();
-        if( pDef )
+        String aRtlName = pDef->GetName();
+        if( aRtlName.EqualsIgnoreCaseAscii("Mid") )
         {
-            if( pDef->GetConstDef() )
-                Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
-            if( pDef->GetType() == SbxOBJECT )
+            SbiExprNode* pExprNode = aVar.GetExprNode();
+            // SbiNodeType eNodeType;
+            if( pExprNode && pExprNode->GetNodeType() == SbxVARVAL )
             {
-                eOp = _SET;
-                if( pDef->GetTypeId() )
+                SbiExprList* pPar = pExprNode->GetParameters();
+                short nParCount = pPar ? pPar->GetSize() : 0;
+                if( nParCount == 2 || nParCount == 3 )
                 {
-                    aGen.Gen( _SETCLASS, pDef->GetTypeId() );
-                    return;
+                    if( nParCount == 2 )
+                        pPar->addExpression( new SbiExpression( this, -1, SbxLONG ) );
+
+                    TestToken( EQ );
+                    pPar->addExpression( new SbiExpression( this ) );
+
+                    bSpecialMidHandling = true;
                 }
             }
         }
-        aGen.Gen( eOp );
+    }
+    aVar.Gen( eRecMode );
+    if( !bSpecialMidHandling )
+    {
+        if( !bEQ )
+        {
+            aGen.Gen( _GET );
+        }
+        else
+        {
+            // Dann muss es eine Zuweisung sein. Was anderes gibts nicht!
+            if( !aVar.IsLvalue() )
+                Error( SbERR_LVALUE_EXPECTED );
+            TestToken( EQ );
+            SbiExpression aExpr( this );
+            aExpr.Gen();
+            SbiOpcode eOp = _PUT;
+            // SbiSymDef* pDef = aVar.GetRealVar();
+            if( pDef )
+            {
+                if( pDef->GetConstDef() )
+                    Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+                if( pDef->GetType() == SbxOBJECT )
+                {
+                    eOp = _SET;
+                    if( pDef->GetTypeId() )
+                    {
+                        aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+                        return;
+                    }
+                }
+            }
+            aGen.Gen( eOp );
+        }
     }
 }
 
