@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:21:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,20 +365,25 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
 sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 {
-    ASSERT( !pPortion, "SwTxtPortion::Hyphenate: another portion, another planet..." );
+    Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
+
+    ASSERT( !pPortion, "SwTxtPortion::CreateHyphen(): another portion, another planet..." )
+    ASSERT( xHyphWord.is(), "SwTxtPortion::CreateHyphen(): You are lucky! The code is robust here." )
+
     if( rInf.IsHyphForbud() ||
         pPortion || // robust
+        !xHyphWord.is() || // more robust
         // Mehrzeilige Felder duerfen nicht interaktiv getrennt werden.
         ( rInf.IsInterHyph() && InFldGrp() ) )
         return sal_False;
 
-    Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
     SwHyphPortion *pHyphPor;
     xub_StrLen nPorEnd;
     SwTxtSizeInfo aInf( rInf );
 
     // first case: hyphenated word has alternative spelling
-    if ( xHyphWord.is() && xHyphWord->isAlternativeSpelling() ) {
+    if ( xHyphWord->isAlternativeSpelling() )
+    {
         SvxAlternativeSpelling aAltSpell;
         aAltSpell = SvxGetAltSpelling( xHyphWord );
         ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
@@ -401,7 +406,9 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         pHyphPor->SetLen( aAltTxt.Len() + 1 );
         (SwPosSize&)(*pHyphPor) = pHyphPor->GetTxtSize( rInf );
         pHyphPor->SetLen( aAltSpell.nChangedLength + nTmpLen );
-    } else {
+    }
+    else
+    {
         // second case: no alternative spelling
         SwHyphPortion aHyphPor;
         aHyphPor.SetLen( 1 );
