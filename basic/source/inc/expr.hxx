@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:47:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@ public:
     SbiExprNode* GetRealNode();     // letzter Knoten in x.y.z
     short GetDepth();               // Tiefe eines Baumes berechnen
     const String& GetString()       { return aStrVal; }
+    SbiExprList* GetParameters()    { return aVar.pPar; }
 
     void Optimize();                // Baumabgleich
 
@@ -226,6 +227,7 @@ public:
     void  Gen();                    // Code-Erzeugung
     // Setzen einer Funktionsdefinition zum Abgleich der Parameter
     void SetProc( SbiProcDef* p )   { pProc = p; }
+    void addExpression( SbiExpression* pExpr );
 };
 
 class SbiParameters : public SbiExprList {
