@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:10:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 13:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
@@ -149,7 +152,8 @@ int ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
                 if (aTagValue == "<none>")
                     nLng = LANGUAGE_NONE;
                 else
-                    nLng = ConvertIsoByteStringToLanguage(aTagValue);
+                    nLng = MsLangId::convertIsoStringToLanguage(OUString(aTagValue.GetBuffer(),
+                                aTagValue.Len(), RTL_TEXTENCODING_ASCII_US));
             }
 
             // type: negative / positive
@@ -443,7 +447,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
         else
         {
             ByteString aLine("lang: ");
-            aLine += ConvertLanguageToIsoByteString( nLanguage );
+            aLine += ByteString( String( MsLangId::convertLanguageToIsoString( nLanguage ) ), eEnc);
             pStream->WriteLine( aLine );
         }
         if ((nErr = pStream->GetError()))
