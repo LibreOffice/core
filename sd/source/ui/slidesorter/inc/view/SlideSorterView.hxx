@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:25:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,8 @@ public:
         PreModelChange() and then PostModelChange().
     */
     void HandleModelChange (void);
+
+    void HandleDrawModeChange (void);
 
     virtual void Resize (void);
     virtual void CompleteRedraw (
