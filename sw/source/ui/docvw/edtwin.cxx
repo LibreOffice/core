@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:44:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:08:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,7 +838,7 @@ void SwEditWin::StopInsFrm()
  --------------------------------------------------------------------*/
 
 
-BOOL SwEditWin::IsInputSequenceChecking( const String &rText, const SwPaM& rCrsr ) const
+BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
 {
     SwBreakIt *pBreakIt = SwBreakIt::Get();
     uno::Reference < i18n::XBreakIterator > xBI = pBreakIt->GetBreakIter();
@@ -876,7 +876,7 @@ void SwEditWin::FlushInBuffer()
         SwWrtShell& rSh = rView.GetWrtShell();
         SwCheckIt aCheckIt;
         uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = aCheckIt.xCheck;
-        if (IsInputSequenceChecking( aInBuffer, *rSh.GetCrsr() ) && xISC.is())
+        if (IsInputSequenceCheckingRequired( aInBuffer, *rSh.GetCrsr() ) && xISC.is())
         {
             //
             // apply (Thai) input sequence checking/correction
