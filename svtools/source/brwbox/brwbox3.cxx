@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,10 @@ void BrowseBox::FillAccessibleStateSet(
             if ( GetUpdateMode() )
                 rStateSet.AddState( AccessibleStateType::EDITABLE );
             if ( IsEnabled() )
+            {
                 rStateSet.AddState( AccessibleStateType::ENABLED );
+                rStateSet.AddState( AccessibleStateType::SENSITIVE );
+            }
             if ( IsReallyVisible() )
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( eObjType == ::svt::BBTYPE_TABLE )
