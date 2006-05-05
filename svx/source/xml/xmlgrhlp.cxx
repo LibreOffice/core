@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:50:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include <tools/debug.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/metaact.hxx>
 
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
@@ -624,7 +625,35 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 {
                     pStream->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStream->SetCompressMode( COMPRESSMODE_ZBITMAP );
-                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStream );
+
+                    // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                    GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
+                    if ( ( rMtf.GetActionCount() >= 1 ) && ( rMtf.FirstAction()->GetType() == META_EPS_ACTION ) )
+                    {
+                        if ( rMtf.GetActionCount() >= 2 )
+                        {
+                            const MetaAction* pAct = ( (const MetaAction*)rMtf.GetAction( 1 ) );
+                            if ( pAct->GetType() == META_COMMENT_ACTION )
+                            {
+                                ByteString aComment( (const sal_Char*)"EPSReplacementGraphic" );
+                                const MetaCommentAction* pComment = ( (const MetaCommentAction*)rMtf.GetAction( 1 ) );
+                                if ( pComment->GetComment() == aComment )
+                                {
+                                    sal_uInt32  nSize = pComment->GetDataSize();
+                                    const BYTE* pData = pComment->GetData();
+                                    if ( nSize && pData )
+                                        pStream->Write( pData, nSize );
+                                }
+                            }
+                        }
+                        const MetaEPSAction* pAct = ( (const MetaEPSAction*)rMtf.FirstAction() );
+                        const GfxLink&       rLink = pAct->GetLink();
+
+                        pStream->Write( rLink.GetData(), rLink.GetDataSize() );
+                    }
+                    else
+                        rMtf.Write( *pStream );
+
                     bRet = ( pStream->GetError() == 0 );
                 }
             }
@@ -719,7 +748,14 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                             aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
                     }
                     else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
-                        aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                    {
+                        // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                        GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
+                        if ( ( rMtf.GetActionCount() >= 1 ) && ( rMtf.FirstAction()->GetType() == META_EPS_ACTION ) )
+                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) );
+                        else
+                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                    }
                 }
 
                 if( mbDirect && aStreamName.Len() )
