@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:46:09 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,17 +139,15 @@ extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 
 DocumentHolder::DocumentHolder(
     const uno::Reference<lang::XMultiServiceFactory >& xFactory,
-    EmbedDocument_Impl *pOLEInterface)
+    const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess )
     :
     m_bAllowInPlace(true),
     m_pIOleIPSite(0),
     m_pIOleIPFrame(0),
     m_pIOleIPUIWindow(0),
     m_pCHatchWin(0),
-    m_pOLEInterface(pOLEInterface),
+    m_xOleAccess( xOleAccess ),
     m_pInterceptor(0),
-    // will be released
-    m_pImpIOleIPActiveObject(new CIIAObj(pOLEInterface,this)),
     m_xFactory( xFactory ),
     m_bOnDeactivate(false),
     m_hWndxWinParent(NULL),
@@ -180,6 +178,8 @@ DocumentHolder::~DocumentHolder()
         FreeOffice();
 
     delete m_pCHatchWin;
+
+    ClearInterceptorInternally();
 }
 
 
@@ -430,8 +430,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         uno::Reference<frame::XDispatchProviderInterception>
             xDPI(m_xFrame,uno::UNO_QUERY);
         if(xDPI.is())
-            xDPI->registerDispatchProviderInterceptor(
-                m_pInterceptor = new Interceptor(m_pOLEInterface,this));
+            xDPI->registerDispatchProviderInterceptor( CreateNewInterceptor() );
 
         uno::Reference<beans::XPropertySet> xPS(m_xFrame,uno::UNO_QUERY);
         if( xPS.is() )
@@ -526,7 +525,12 @@ HRESULT DocumentHolder::InPlaceActivate(
     GetDocumentBorder( &m_aBorder );
     SetObjectRects( &rcPos, &rcClip );
 
-    m_pOLEInterface->ShowObject();
+    if ( m_xOleAccess.is() )
+    {
+        LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
+        if ( aDocLock.m_pEmbedDocument )
+            aDocLock.m_pEmbedDocument->ShowObject();
+    }
 
     // setTitle(m_aDocumentNamePart);
     if (fIncludeUI)
@@ -570,7 +574,13 @@ void DocumentHolder::InPlaceDeactivate(void)
     if(m_pIOleIPUIWindow) m_pIOleIPUIWindow->Release(); m_pIOleIPUIWindow = 0;
     if(m_pIOleIPSite) m_pIOleIPSite->Release(); m_pIOleIPSite = 0;
 
-    m_pOLEInterface->SaveObject();
+    if ( m_xOleAccess.is() )
+    {
+        LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
+        if ( aDocLock.m_pEmbedDocument )
+            aDocLock.m_pEmbedDocument->SaveObject();
+    }
+
     return;
 }
 
@@ -588,14 +598,15 @@ HRESULT DocumentHolder::UIActivate()
     //3.  Set the active object
 
     OLECHAR starOffice[] = {'S','t','a','r','O','f','f','i','c','e',0};
+    CComPtr< IOleInPlaceActiveObject > pObj = new CIIAObj( this );
 
     if (NULL!=m_pIOleIPFrame)
         m_pIOleIPFrame->SetActiveObject(
-            m_pImpIOleIPActiveObject,starOffice);
+            pObj, starOffice );
 
     if (NULL!=m_pIOleIPUIWindow)
         m_pIOleIPUIWindow->SetActiveObject(
-            m_pImpIOleIPActiveObject,starOffice);
+            pObj, starOffice );
 
     //4.  Create the shared menu.
     InPlaceMenuCreate();
@@ -849,16 +860,39 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
         uno::Reference<frame::XDispatchProviderInterception>
             xDPI(m_xFrame,uno::UNO_QUERY);
         if(xDPI.is())
-            xDPI->registerDispatchProviderInterceptor(
-                m_pInterceptor = new Interceptor(m_pOLEInterface,this));
+            xDPI->registerDispatchProviderInterceptor( CreateNewInterceptor() );
     }
 
     return m_xFrame;
 }
 
 
+uno::Reference< frame::XDispatchProviderInterceptor > DocumentHolder::CreateNewInterceptor()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    ClearInterceptorInternally();
+
+    uno::Reference< frame::XDispatchProviderInterceptor > xInterceptor( m_pInterceptor = new Interceptor( m_xOleAccess, this ) );
+    m_xInterceptorLocker = xInterceptor;
+    return xInterceptor;
+}
+
+void DocumentHolder::ClearInterceptorInternally()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    uno::Reference< frame::XDispatchProviderInterceptor > xInterceptor( m_xInterceptorLocker );
+    if ( xInterceptor.is() && m_pInterceptor )
+        m_pInterceptor->DisconnectDocHolder();
+
+    m_xInterceptorLocker = uno::Reference< frame::XDispatchProviderInterceptor >();
+    m_pInterceptor = 0;
+}
+
 void DocumentHolder::ClearInterceptor()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_xInterceptorLocker = uno::Reference< frame::XDispatchProviderInterceptor >();
     m_pInterceptor = 0;
 }
 
@@ -932,7 +966,12 @@ void DocumentHolder::show()
 
 void DocumentHolder::resizeWin( const SIZEL& rNewSize )
 {
-    if ( m_xFrame.is() && m_pOLEInterface )
+    LockedEmbedDocument_Impl aDocLock;
+
+    if ( m_xOleAccess.is() )
+        aDocLock = m_xOleAccess->GetEmbedDocument();
+
+    if ( m_xFrame.is() && aDocLock.m_pEmbedDocument )
     {
         uno::Reference< awt::XWindow > xWindow(
             m_xFrame->getContainerWindow(), uno::UNO_QUERY );
@@ -1055,7 +1094,19 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
     m_aDocumentNamePart = aDocumentName;
 
     if(m_pInterceptor)
-        m_pInterceptor->generateFeatureStateEvent();
+    {
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+        Interceptor* pTmpInter = NULL;
+        uno::Reference< frame::XDispatchProviderInterceptor > xLock( m_xInterceptorLocker );
+        if ( xLock.is() && m_pInterceptor )
+            pTmpInter = m_pInterceptor;
+
+        aGuard.clear();
+
+        if ( pTmpInter )
+            pTmpInter->generateFeatureStateEvent();
+    }
 }
 
 
@@ -1498,8 +1549,12 @@ DocumentHolder::notifyTermination(
 void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
-    if(m_pOLEInterface)
-        m_pOLEInterface->notify();
+    if ( m_xOleAccess.is() )
+    {
+        LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
+        if ( aDocLock.m_pEmbedDocument )
+            aDocLock.m_pEmbedDocument->notify();
+    }
 }
 
 
