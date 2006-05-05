@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:20 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ void SmDocShell::ArrangeFormula()
     if (!pOutDev)
         DBG_ERROR("!! SmDocShell::ArrangeFormula: reference device missing !!");
 
-    // falls naetig ein anderes OutputDevice holen fuer das formatiert wird
+    // falls nötig ein anderes OutputDevice holen für das formatiert wird
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();
@@ -916,57 +916,6 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 }
 
 
-
-BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::InsertFrom" );
-
-    BOOL        bSuccess = FALSE;
-    SvStream   *pStream = rMedium.GetInStream();
-    String      aTemp = aText;
-
-    if (pStream)
-    {
-        const String& rFltName = rMedium.GetFilter()->GetFilterName();
-        if ( rFltName.EqualsAscii(MATHML_XML) )
-        {
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
-            bSuccess = 0 == aEquation.Import(rMedium);
-        }
-        else
-        {
-            //bSuccess = ImportSM20File( pStream );
-        }
-    }
-
-    if( bSuccess )
-    {
-        SmViewShell *pView = SmGetActiveView();
-        SmEditWindow *pEditWin = pView ? pView->GetEditWindow() : 0;
-
-        if (pEditWin)
-            pEditWin->InsertText( aText );
-        else
-        {
-            DBG_ERROR( "EditWindow missing" );
-            aTemp += aText;
-            aText  = aTemp;
-        }
-
-        Parse();
-        SetModified(TRUE);
-        if (pView)
-        {
-            SfxBindings &rBnd = pView->GetViewFrame()->GetBindings();
-            rBnd.Invalidate(SID_GAPHIC_SM);
-            rBnd.Invalidate(SID_TEXT);
-        }
-    }
-
-    return bSuccess;
-}
-
 BOOL SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::InitNew" );
@@ -1013,57 +962,7 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-
-
-BOOL SmDocShell::Insert( SfxMedium& rMedium )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Insert" );
-
-    String aTemp = aText;
-    BOOL bRet = FALSE, bChkOldVersion = TRUE;
-
-    uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( xNameAccess.is() && xNameAccess->getElementNames().getLength() )
-    {
-        if ( xNameAccess->hasByName( C2S( "content.xml" ) ) || xNameAccess->hasByName( C2S( "Content.xml" ) ))
-        {
-            bChkOldVersion = FALSE;
-            // is this a fabulous math package ?
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
-            bRet = 0 == aEquation.Import(rMedium);
-        }
-    }
-
-    if( bRet )
-    {
-        SmViewShell *pView = SmGetActiveView();
-        SmEditWindow *pEditWin = pView ? pView->GetEditWindow() : 0;
-
-        if (pEditWin)
-            pEditWin->InsertText( aText );
-        else
-        {
-            DBG_ERROR( "EditWindow missing" );
-            aTemp += aText;
-            aText  = aTemp;
-        }
-
-        Parse();
-        SetModified(TRUE);
-        if (pView)
-        {
-            SfxBindings &rBnd = pView->GetViewFrame()->GetBindings();
-            rBnd.Invalidate(SID_GAPHIC_SM);
-            rBnd.Invalidate(SID_TEXT);
-        }
-    }
-    return bRet;
-}
-
 //------------------------------------------------------------------
-
 
 BOOL SmDocShell::Save()
 {
@@ -1175,10 +1074,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Execute" );
 
-    SfxBindings *pBindings  = NULL;
-    SmViewShell *pViewSh    = SmGetActiveView();
-    if (pViewSh)
-        pBindings = &pViewSh->GetViewFrame()->GetBindings();
     switch (rReq.GetSlot())
     {
         case SID_TEXTMODE:
@@ -1205,62 +1100,12 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-        case SID_SYMBOLS_CATALOGUE:
-        {
-            // get device used to retrieve the FontList
-            OutputDevice *pDev = GetPrinter();
-            if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
-            DBG_ASSERT (pDev, "device for font list missing" );
-
-            SmModule *pp = SM_MOD1();
-            SmSymbolDialog(NULL, pDev, pp->GetSymSetManager()).Execute();
-            RestartFocusTimer();
-        }
-        break;
-
-        case SID_TOOLBOX:
-        {
-            SmViewShell *pView = SmGetActiveView();
-            if (pView)
-            {
-                pView->GetViewFrame()->ToggleChildWindow(
-                        SmToolBoxWrapper::GetChildWindowId() );
-            }
-        }
-        break;
-
-        case SID_INSERT_FORMULA:
-        {
-            SfxMedium *pMedium = SFX_APP()->
-                    InsertDocumentDialog( 0, GetFactory().GetFactoryName() );
-
-            if (pMedium != NULL)
-            {
-                if (pMedium->IsStorage())
-                    Insert(*pMedium);
-                else
-                    InsertFrom(*pMedium);
-                delete pMedium;
-
-                UpdateText();
-                ArrangeFormula();
-                Repaint();
-                // Fenster anpassen, neuzeichnen, ModifyCount erhoehen,...
-                if (pBindings)
-                    pBindings->Invalidate(SID_GAPHIC_SM);
-            }
-            RestartFocusTimer();
-            rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), TRUE));
-        }
-        break;
-
         case SID_LOADSYMBOLS:
-        LoadSymbols();
+            LoadSymbols();
         break;
 
         case SID_SAVESYMBOLS:
-        SaveSymbols();
+            SaveSymbols();
         break;
 
         case SID_FONT:
@@ -1289,7 +1134,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 Repaint();
             }
             delete pFontTypeDialog;
-            RestartFocusTimer();
         }
         break;
 
@@ -1314,7 +1158,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 Repaint();
             }
             delete pFontSizeDialog;
-            RestartFocusTimer();
         }
         break;
 
@@ -1339,7 +1182,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 Repaint();
             }
             delete pDistanceDialog;
-            RestartFocusTimer();
         }
         break;
 
@@ -1369,7 +1211,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 Repaint();
             }
             delete pAlignDialog;
-            RestartFocusTimer();
         }
         break;
 
@@ -1381,54 +1222,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
             if (GetText() != rItem.GetValue())
             {
                 SetText(rItem.GetValue());
-            }
-        }
-        break;
-
-        case SID_COPYOBJECT:
-        {
-            //TODO/LATER: does not work because of UNO Tunneling - will be fixed later
-            Reference< datatransfer::XTransferable > xTrans( GetModel(), uno::UNO_QUERY );
-            if( xTrans.is() )
-            {
-                Reference< lang::XUnoTunnel> xTnnl( xTrans, uno::UNO_QUERY);
-                if( xTnnl.is() )
-                {
-                    TransferableHelper* pTrans = (TransferableHelper*)
-                        xTnnl->getSomething(
-                                TransferableHelper::getUnoTunnelId() );
-                    if( pTrans )
-                        pTrans->CopyToClipboard( pViewSh
-                                            ? pViewSh->GetEditWindow() : 0 );
-                }
-            }
-        }
-        break;
-
-        case SID_PASTEOBJECT:
-        {
-            TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(pViewSh ? pViewSh->GetEditWindow(): 0) );
-            uno::Reference < io::XInputStream > xStrm;
-            SotFormatStringId nId;
-            if( aData.GetTransferable().is() &&
-                ( aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
-                  (aData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
-                   aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))) &&
-                aData.GetInputStream( nId, xStrm ) && xStrm.is() )
-            {
-                try
-                {
-                    uno::Reference < embed::XStorage > xStorage =
-                            ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
-                    uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
-                    SfxMedium aMedium( xStorage, String() );
-                    Insert( aMedium );
-                    UpdateText();
-                }
-                catch (uno::Exception &)
-                {
-                    DBG_ERROR( "SmDocShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
-                }
             }
         }
         break;
@@ -1493,22 +1286,6 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
-            }
-            break;
-
-        case SID_TOOLBOX:
-            {
-                BOOL bState = FALSE;
-                SmViewShell *pView = SmGetActiveView();
-                if (pView)
-                {
-                    SfxChildWindow *pChildWnd = pView->GetViewFrame()->
-                            GetChildWindow( SmToolBoxWrapper::GetChildWindowId() );
-
-                    if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
-                        bState = TRUE;
-                }
-                rSet.Put(SfxBoolItem(SID_TOOLBOX, bState));
             }
             break;
 
@@ -1590,7 +1367,6 @@ SfxUndoManager *SmDocShell::GetUndoManager()
 }
 
 
-
 void SmDocShell::SaveSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
@@ -1598,23 +1374,6 @@ void SmDocShell::SaveSymbols()
     SmModule *pp = SM_MOD1();
     pp->GetSymSetManager().Save();
 }
-
-
-
-void SmDocShell::RestartFocusTimer()
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::RestartFocusTimer" );
-
-    SmCmdBoxWrapper *pWrapper = NULL;
-    SmViewShell *pView = SmGetActiveView();
-    if (pView)
-        pWrapper = (SmCmdBoxWrapper *) pView->GetViewFrame()->
-                GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
-
-    if (pWrapper)
-        pWrapper->RestartFocusTimer();
-}
-
 
 
 void SmDocShell::Draw(OutputDevice *pDevice,
@@ -1674,21 +1433,21 @@ void SmDocShell::UIActivate (BOOL bActivate)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::UIActivate" );
 
+    SmViewShell *pViewSh = SmGetActiveView();
     if (bActivate)
     {
         SfxObjectShell::UIActivate (bActivate);
         SmCmdBoxWrapper *pWrapper = NULL;
-        SmViewShell *pView = SmGetActiveView();
-        if (pView)
-            pWrapper = (SmCmdBoxWrapper *)pView->GetViewFrame()->
+        if (pViewSh)
+            pWrapper = (SmCmdBoxWrapper *)pViewSh->GetViewFrame()->
                     GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
 
-        if (pWrapper)
-            pWrapper->Grab ();
+        SmEditWindow *pEditWin = pWrapper ? pWrapper->GetEditWindow() : 0;
+        if (pEditWin)
+            pEditWin->GrabFocus();
     }
     else
     {
-        SmViewShell *pViewSh = SmGetActiveView();
         if (pViewSh)
         {
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
