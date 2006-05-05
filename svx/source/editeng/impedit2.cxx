@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:44:12 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1589,13 +1589,11 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     return aNewSel;
 }
 
-sal_Bool ImpEditEngine::IsInputSequenceChecking( sal_Unicode nChar, const EditSelection& rCurSel ) const
+sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const
 {
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     if (!pCTLOptions)
         pCTLOptions = new SvtCTLOptions;
-
-    rtl::OUString aTxt( nChar );
 
     // get the index that really is first
     USHORT nFirstPos = rCurSel.Min().GetIndex();
@@ -1607,7 +1605,7 @@ sal_Bool ImpEditEngine::IsInputSequenceChecking( sal_Unicode nChar, const EditSe
         pCTLOptions->IsCTLFontEnabled() &&
         pCTLOptions->IsCTLSequenceChecking() &&
         nFirstPos != 0 && /* first char needs not to be checked */
-        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( aTxt, 0 );
+        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rtl::OUString( nChar ), 0 );
 
     return bIsSequenceChecking;
 }
@@ -2453,7 +2451,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
     if ( aPaM.GetNode()->Len() < MAXCHARSINPARA )
     {
-        if (bIsUserInput && IsInputSequenceChecking( c, rCurSel ))
+        if (bIsUserInput && IsInputSequenceCheckingRequired( c, rCurSel ))
         {
             uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = ImplGetInputSequenceChecker();
             if (!pCTLOptions)
