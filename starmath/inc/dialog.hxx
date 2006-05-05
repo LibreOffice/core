@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:32:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 07:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,7 @@ class SmSymbolDialog : public ModalDialog
     PushButton      aCloseBtn;
     PushButton      aEditBtn;
 
+    SmViewShell        &rViewSh;
     SmSymSetManager    &rSymSetMgr;
     const SmSymSet     *pSymSet;
 
@@ -441,7 +442,7 @@ class SmSymbolDialog : public ModalDialog
 
 public:
     SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
-            SmSymSetManager &rSymSetMgr, BOOL bFreeRes = TRUE);
+            SmSymSetManager &rSymSetMgr, SmViewShell &rViewShell, BOOL bFreeRes = TRUE);
     virtual ~SmSymbolDialog();
 
     BOOL    SelectSymbolSet(const XubString &rSymbolSetName);
