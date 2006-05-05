@@ -1,0 +1,325 @@
+#!/usr/bin/perl -w
+
+use File::Copy;
+
+my $output_format = 'u';
+
+sub reg_get_value($)
+{
+    # it is believed that the registry moves keys around
+    # depending on OS version, this will de-mangle that
+    my $key = shift;
+    my $fhandle;
+    my $value;
+
+    open ($fhandle, "/proc/registry/$key") || return;
+    # reg keys have 0x00 0x5c at the end
+    $value = (split /\0/, <$fhandle>)[0];
+    close ($fhandle);
+
+    chomp ($value);
+    $value =~ s|\r\n||;
+#    print "Value '$value' at '$key'\n";
+
+    return $value;
+}
+
+sub reg_find_key($)
+{
+    # it is believed that the registry moves keys around
+    # depending on OS version, this will de-mangle that
+    my $key = shift;
+    $key =~ s| |\\ |;
+    $key = `cd /proc/registry/ ; ls $key`;
+
+    return $key;
+}
+
+sub print_syntax()
+{
+    print "oowintool [option] ...\n";
+    print " encoding options\n";  
+    print "   -w   - windows form\n";
+    print "   -u   - unix form (default)\n";
+    print " commands:\n";
+    print "   --msvc-ver              - dump version of MSVC eg. 6.0\n";
+    print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
+    print "   --msvc-copy-instmsi <dest> - copy instmsia.exe, insmsiw.exe into <dest>\n";
+    print "   --msvc-productdir       - dump productdir\n";
+    print "   --msvs-productdir       - dump productdir\n";
+    print "   --dotnetsdk-dir         - dump .Net SDK path\n";
+    print "   --csc-compilerdir       - dump .Net SDK compiler path\n";
+    print "   --psdk-home             - dump psdk install dir\n";
+    print "   --jdk-home              - dump the jdk install dir\n";
+    print "   --nsis-dir              - dump NSIS path\n";
+    print "   --help                  - this message\n";
+}
+
+sub cygpath($$$)
+{
+    my ($path, $input_format, $format) = @_;
+
+    # Strip trailing path separators
+    if ($input_format eq 'u') {
+	$path =~ s|/*\s*$||;
+    } else {
+	$path =~ s|\\*\s*$||;
+    }
+
+    # 'Unterminated quoted string errors' from 'ash' when 
+    # forking cygpath  so - reimplement cygpath in perl [ gack ]
+    if ($format eq 'u' && $input_format eq 'w') {
+	$path =~ s|\\|/|g;
+	$path =~ s|([a-zA-Z]):/|/cygdrive/$1/|g;
+    }
+    elsif ($format eq 'w' && $input_format eq 'u') {
+	$path =~ s|/cygdrive/([a-zA-Z])/|/$1/|g;
+	$path =~ s|/|\\|g;
+    }
+
+    return $path;
+}
+
+sub print_path($$)
+{
+    my ($path, $unix) = @_;
+
+    $path = cygpath ($path, $unix, $output_format);
+    
+    print $path;
+}
+
+sub print_psdk_home()
+{
+    my $value;
+    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
+    if (!defined $value)
+    {
+        $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
+        $value = reg_get_value ($key);
+    }
+    defined $value || die "psdk not found";
+
+    print cygpath ($value, 'w', $output_format);
+}
+
+my %msvc6 = (
+    'ver' => '6.0',
+    'key' => 'Microsoft/VisualStudio/6.0/Setup/Microsoft Visual C++/ProductDir',
+);
+my %msvc_net_2002 = (
+    'ver' => '7.0',
+    'key' => 'Microsoft/VisualStudio/7.0/Setup/VC/ProductDir',
+    'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
+    'dll_path' => '../Visual Studio .NET Professional - English', # testme ...
+    'dll_suffix' => '70'
+);
+my %msvs_net_2002 = (
+    'ver' => '7.0',
+    'key' => 'Microsoft/VisualStudio/7.0/Setup/VS/ProductDir',
+    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
+    'dll_path' => 'Visual Studio .NET Professional - English', # testme ...
+    'dll_suffix' => '70'
+);
+my %msvc_net_2003 = (
+    'ver' => '7.1',
+    'key' => 'Microsoft/VisualStudio/7.1/Setup/VC/ProductDir',
+    'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
+    'dll_path' => '../SDK/v1.1/Bin',
+    'dll_suffix' => '71'
+);
+my %msvs_net_2003 = (
+    'ver' => '7.1',
+    'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
+    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
+    'dll_path' => 'Visual Studio .NET Professional 2003 - English', # testme ...
+    'dll_suffix' => '71'
+);
+my %msvs_net_2003_ea = (
+    'ver' => '7.1',
+    'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
+    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
+    'dll_path' => 'Visual Studio .NET Enterprise Architect 2003 - English', # testme ...
+    'dll_suffix' => '71'
+);
+
+sub find_msvs()
+{
+    my @ms_versions = ( \%msvs_net_2003_ea, \%msvs_net_2003, \%msvs_net_2002, \%msvc6 );
+
+    for $ver (@ms_versions)
+    {
+	my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
+	if (defined $install && $install ne '') {
+	    $ver->{'product_dir'} = $install;
+	    return $ver;
+	}
+    }
+    die "Can't find MS Visual Studio / VC++";
+}
+
+sub find_msvc()
+{
+    my @ms_versions = ( \%msvc_net_2003, \%msvc_net_2002, \%msvc6 );
+
+    for $ver (@ms_versions)
+    {
+	my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
+	if (defined $install && $install ne '') {
+	    $ver->{'product_dir'} = $install;
+	    return $ver;
+	}
+    }
+    die "Can't find MS Visual Studio / VC++";
+}
+
+sub print_msvc_ver()
+{
+    my $ver = find_msvc();
+    print $ver->{'ver'};
+}
+
+sub print_msvc_product_dir()
+{
+    my $ver = find_msvc();
+    print cygpath ($ver->{'product_dir'}, 'w', $output_format);
+}
+
+sub print_msvs_productdir()
+{
+    my $ver = find_msvs();
+    print cygpath ($ver->{'product_dir'}, 'w', $output_format);
+}
+
+sub print_csc_compiler_dir()
+{
+    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot");
+    $dir .= "v1.1.4322"; # lame-but ...
+    print cygpath ($dir, 'w', $output_format);
+}
+
+sub print_dotnetsdk_dir()
+{
+    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv1.1");
+    print cygpath ($dir, 'w', $output_format);
+}
+
+sub print_jdk_dir()
+{
+    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.4/JavaHome");
+    print cygpath($dir, 'w', $output_format); 
+}
+
+sub print_nsis_dir()
+{
+    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/NSIS/@");
+    print cygpath ($dir, 'w', $output_format);
+}
+
+sub copy_dll($$$)
+{
+    my ($src, $fname, $dest) = @_;
+
+    -f "$src/$fname" || die "can't find $src";
+    -d $dest || die "no directory $dest";
+
+    copy ("$src/$fname", $dest) || die "copy failed: $!";
+    chmod (0755, "$dest/$fname") || die "failed to set dll executable: $!";
+}
+
+sub msvc_find_version($)
+{
+    my $checkpath = shift;
+    my $ver = find_msvc();
+    my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
+		  $ver->{$checkpath});
+    -d $srcdir && return $ver;
+    $ver = find_msvs();
+    $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
+		  $ver->{$checkpath});
+    -d $srcdir && return $ver;
+    return "";
+}
+
+sub msvc_copy_dlls($)
+{
+    my $dest = shift;
+    my $ver = msvc_find_version('dll_path');
+    defined $ver || return;
+    my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
+		  $ver->{'dll_path'});
+
+    copy_dll ($srcdir, "msvcp" . $ver->{'dll_suffix'} . ".dll",
+	      $dest . $ver->{'dll_suffix'});
+    copy_dll ($srcdir, "msvcr" . $ver->{'dll_suffix'} . ".dll",
+	      $dest . $ver->{'dll_suffix'});
+}
+
+sub msvc_copy_instmsi($)
+{
+    my $dest = shift;
+    my $ver = msvc_find_version('instmsi_path');
+    defined $ver || return;
+    my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
+		  $ver->{'instmsi_path'});
+
+    copy_dll ($srcdir, "instmsia.exe",
+	      $dest);
+    copy_dll ($srcdir, "instmsiw.exe",
+	      $dest);
+}
+
+if (!@ARGV) {
+    print_syntax();
+    exit 1;
+}
+
+my @commands = ();
+my $opt;
+while (@ARGV) {
+    $opt = shift @ARGV;
+    
+    if ($opt eq '-w' || $opt eq '-u') {
+	$output_format = substr($opt, 1, 1);
+    } else {
+	push @commands, $opt;
+    }
+}
+
+while (@commands) {
+    $opt = shift @commands;
+
+    if (0) {
+    } elsif ($opt eq '--msvc-ver') {
+	print_msvc_ver();
+    } elsif ($opt eq '--msvc-copy-dlls') {
+	my $dest = shift @commands;
+	defined $dest || die "copy-dlls requires a destination directory";
+	msvc_copy_dlls( $dest );
+    } elsif ($opt eq '--msvc-copy-instmsi') {
+	my $dest = shift @commands;
+	defined $dest || die "copy-instmsi requires a destination directory";
+	msvc_copy_instmsi( $dest );
+    } elsif ($opt eq '--msvs-productdir') {
+	print_msvs_productdir();
+    } elsif ($opt eq '--msvc-productdir') {
+	print_msvc_product_dir();
+    } elsif ($opt eq '--dotnetsdk-dir') {
+	print_dotnetsdk_dir();
+    } elsif ($opt eq '--csc-compilerdir') {
+	print_csc_compiler_dir();
+    } elsif ($opt eq '--psdk-home') {
+	print_psdk_home();
+    } elsif ($opt eq '--jdk-home') {
+	print_jdk_dir();
+    } elsif ($opt eq '--nsis-dir') {
+	print_nsis_dir();
+    } elsif ($opt eq '--help' || $opt eq '/?') {
+	print_syntax();
+    } else {
+	print "Unknown option '$opt'\n";
+	print_syntax();
+	exit 1;
+    }
+}
+
