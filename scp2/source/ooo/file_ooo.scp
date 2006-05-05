@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:15:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,7 +566,7 @@ STD_FILTER_FILE( gid_File_Filter_Ira, ira)
 
 STD_FILTER_FILE( gid_File_Filter_Itg, itg)
 
-STD_FILTER_FILE( gid_File_Filter_Iti, iti)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
