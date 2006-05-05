@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:37:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <com/sun/star/uno/SEQUENCE.h>
 #endif
 
+#include "embeddocaccess.hxx"
 #include "docholder.hxx"
 
 typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
@@ -58,7 +59,6 @@ typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterat
 
 class GDIMetaFile;
 class CIIAObj;
-
 
 class EmbedDocument_Impl
     : public IPersistStorage,
@@ -182,6 +182,8 @@ protected:
 
     AdviseSinkHashMap                   m_aAdviseHashMap;
     DWORD                               m_nAdviseNum;
+
+    ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOwnAccess;
 };
 
 #endif //_EMBEDDOC_HXX_
