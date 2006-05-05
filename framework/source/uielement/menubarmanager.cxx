@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:55:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,7 +548,6 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const ::com::sun::star::uno::Sequenc
 MenuBarManager::~MenuBarManager()
 {
     DBG_ASSERT( OWeakObject::m_refCount == 0, "Who wants to delete an object with refcount > 0!" );
-    Destroy();
 }
 
 void MenuBarManager::Destroy()
@@ -613,6 +612,12 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
         }
         m_xDocImageManager.clear();
         m_xModuleImageManager.clear();
+        m_xGlobalAcceleratorManager.clear();
+        m_xModuleAcceleratorManager.clear();
+        m_xDocAcceleratorManager.clear();
+        m_xUICommandLabels.clear();
+        m_xPopupMenuControllerRegistration.clear();
+        mxServiceFactory.clear();
     }
 }
 
