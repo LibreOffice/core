@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:00:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 07:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ protected:
     DECL_LINK( CategoryClickHdl, ToolBox* );
     DECL_LINK( CmdSelectHdl, ToolBox* );
 
+    SmViewShell * GetView();
     const ImageList * GetImageList( USHORT nResId, BOOL bHighContrast );
 
 public:
