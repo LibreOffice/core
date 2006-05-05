@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:10:34 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,42 @@ static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         return RenderAsPNGThroughGS(pBuf, nBytesRead, rSize, rGraphic);
 }
 
+// this method adds a replacement action containing the original wmf or tiff replacement,
+// so the original eps can be written when storing to ODF.
+void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
+                                sal_uInt32 nPosWMF, sal_uInt32 nSizeWMF, sal_uInt32 nPosTIFF, sal_uInt32 nSizeTIFF )
+{
+    if ( nSizeWMF || nSizeTIFF )
+    {
+        SvMemoryStream aReplacement( nSizeWMF + nSizeTIFF + 28 );
+        sal_uInt32 nMagic = 0xc6d3d0c5;
+        sal_uInt32 nPPos = 28 + nSizeWMF + nSizeTIFF;
+        sal_uInt32 nWPos = nSizeWMF ? 28 : 0;
+        sal_uInt32 nTPos = nSizeTIFF ? 28 + nSizeWMF : 0;
+
+        aReplacement << nMagic << nPPos << nPSSize
+                     << nWPos << nSizeWMF
+                     << nTPos << nSizeTIFF;
+        if ( nSizeWMF )
+        {
+            sal_uInt8* pBuf = new sal_uInt8[ nSizeWMF ];
+            rStrm.Seek( nOrigPos + nPosWMF );
+            rStrm.Read( pBuf, nSizeWMF );
+            aReplacement.Write( pBuf, nSizeWMF );
+            delete[] pBuf;
+        }
+        if ( nSizeTIFF )
+        {
+            sal_uInt8* pBuf = new sal_uInt8[ nSizeTIFF ];
+            rStrm.Seek( nOrigPos + nPosTIFF );
+            rStrm.Read( pBuf, nSizeTIFF );
+            aReplacement.Write( pBuf, nSizeTIFF );
+            delete[] pBuf;
+        }
+        ByteString aComment( (const sal_Char*)"EPSReplacementGraphic" );
+        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const BYTE*)aReplacement.GetData(), aReplacement.Tell() ) ) );
+    }
+}
 
 //there is no preview -> make a red box
 void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
@@ -431,39 +467,43 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
     sal_Bool    bRetValue = sal_False;
     sal_Bool    bHasPreview = sal_False;
     sal_Bool    bGraphicLinkCreated = sal_False;
-    sal_uInt32  nSignature, nPSStreamPos, nPSSize, nSize, nPos;
+    sal_uInt32  nSignature, nPSStreamPos, nPSSize;
+    sal_uInt32  nSizeWMF = 0;
+    sal_uInt32  nPosWMF = 0;
+    sal_uInt32  nSizeTIFF = 0;
+    sal_uInt32  nPosTIFF = 0;
     sal_uInt32  nOrigPos = nPSStreamPos = rStream.Tell();
     sal_uInt16  nOldFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStream >> nSignature;
     if ( nSignature == 0xc6d3d0c5 )
     {
-        rStream >> nPSStreamPos >> nPSSize >> nPos >> nSize;
+        rStream >> nPSStreamPos >> nPSSize >> nPosWMF >> nSizeWMF;
 
         // first we try to get the metafile grafix
 
-        if ( nSize )
+        if ( nSizeWMF )
         {
-            if ( nPos != 0 )
+            if ( nPosWMF != 0 )
             {
-                rStream.Seek( nOrigPos + nPos );
+                rStream.Seek( nOrigPos + nPosWMF );
                 if ( GraphicConverter::Import( rStream, aGraphic, CVT_WMF ) == ERRCODE_NONE )
                     bHasPreview = bRetValue = TRUE;
             }
         }
         else
         {
-            rStream >> nPos >> nSize;
+            rStream >> nPosTIFF >> nSizeTIFF;
 
             // else we have to get the tiff grafix
 
-            if ( ( nPos != 0 ) && ( nSize != 0 ) )
+            if ( nPosTIFF && nSizeTIFF )
             {
-                rStream.Seek( nOrigPos + nPos );
+                rStream.Seek( nOrigPos + nPosTIFF );
                 if ( GraphicConverter::Import( rStream, aGraphic, CVT_TIF ) == ERRCODE_NONE )
                 {
                     MakeAsMeta(aGraphic);
-                    rStream.Seek( nOrigPos + nPos );
+                    rStream.Seek( nOrigPos + nPosTIFF );
                     bHasPreview = bRetValue = TRUE;
                 }
             }
@@ -632,6 +672,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 
                         aMtf.AddAction( (MetaAction*)( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
                                                                           aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
+                        CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
                         aMtf.WindStart();
                         aMtf.SetPrefMapMode( MAP_POINT );
                         aMtf.SetPrefSize( Size( nWidth, nHeight ) );
