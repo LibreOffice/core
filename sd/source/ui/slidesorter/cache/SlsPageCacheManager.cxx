@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:48:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,14 @@ public:
 
 
 
+class PageCacheManager::Deleter
+{
+public:
+    void operator() (PageCacheManager* pObject) { delete pObject; }
+};
+
+
+
 //===== PageCacheManager ====================================================
 
 ::boost::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
@@ -180,7 +188,9 @@ public:
     pInstance = mpInstance.lock();
     if (pInstance.get() == NULL)
     {
-        pInstance.reset(new PageCacheManager());
+        pInstance = ::boost::shared_ptr<PageCacheManager>(
+            new PageCacheManager(),
+            PageCacheManager::Deleter());
         mpInstance = pInstance;
     }
 
@@ -367,6 +377,22 @@ void PageCacheManager::InvalidatePreviewBitmap (
                 iCache->mpCache->InvalidateBitmap(pKey);
         }
     }
+}
+
+
+
+
+void PageCacheManager::InvalidateAllCaches (void)
+{
+    // Iterate over all caches that are currently in use and invalidate
+    // them.
+    PageCacheContainer::iterator iCache;
+    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
+        iCache->second->InvalidateCache();
+
+    // Remove all recently used caches, there is not much sense in storing
+    // invalidated and unused caches.
+    mpRecentlyUsedPageCaches->clear();
 }
 
 
