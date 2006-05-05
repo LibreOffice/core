@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:47:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3555,8 +3555,14 @@ BOOL ScDocFunc::SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi
 
 BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
 {
+    return SetNewRangeNames( new ScRangeName( rNewRanges ), bApi );
+}
+
+BOOL ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, BOOL bApi )     // takes ownership of pNewRanges
+{
     ScDocShellModificator aModificator( rDocShell );
 
+    DBG_ASSERT( pNewRanges, "pNewRanges is 0" );
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
 
@@ -3564,7 +3570,7 @@ BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
     {
         ScRangeName* pOld = pDoc->GetRangeName();
         ScRangeName* pUndoRanges = new ScRangeName(*pOld);
-        ScRangeName* pRedoRanges = new ScRangeName(rNewRanges);
+        ScRangeName* pRedoRanges = new ScRangeName(*pNewRanges);
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoRangeNames( &rDocShell, pUndoRanges, pRedoRanges ) );
     }
@@ -3576,7 +3582,7 @@ BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
 
     if ( bCompile )
         pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
-    pDoc->SetRangeName( new ScRangeName( rNewRanges ) );
+    pDoc->SetRangeName( pNewRanges );       // takes ownership
     if ( bCompile )
         pDoc->CompileNameFormula( FALSE );  // CompileFormulaString
 
