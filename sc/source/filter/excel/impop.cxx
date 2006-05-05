@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:00:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,21 +207,193 @@ ImportExcel::~ImportExcel( void )
 }
 
 
-void ImportExcel::Dimensions( void )
+sal_uInt16 ImportExcel::ReadXFIndex( bool bBiff2 )
+{
+    sal_uInt16 nXFIdx = 0;
+    if( bBiff2 )
+    {
+        sal_uInt8 nXFIdx2;
+        maStrm >> nXFIdx2;
+        maStrm.Ignore( 2 );
+        nXFIdx = nXFIdx2 & 0x3F;
+        if( nXFIdx == 63 )
+            nXFIdx = nIxfeIndex;
+    }
+    else
+        aIn >> nXFIdx;
+    return nXFIdx;
+}
+
+void ImportExcel::ReadDimensions()
 {
     XclRange aXclUsedArea( ScAddress::UNINITIALIZED );
-    maStrm >> aXclUsedArea;
-    if( (aXclUsedArea.GetColCount() > 1) && (aXclUsedArea.GetRowCount() > 1) )
+    if( (maStrm.GetRecId() == EXC_ID2_DIMENSIONS) || (GetBiff() <= EXC_BIFF5) )
     {
-        // Excel stores first unused row/column index
-        --aXclUsedArea.maLast.mnCol;
-        --aXclUsedArea.maLast.mnRow;
-        // create the Calc range
-        SCTAB nScTab = GetCurrScTab();
-        ScRange& rScUsedArea = GetExtDocOptions().GetOrCreateTabSettings( nScTab ).maUsedArea;
-        GetAddressConverter().ConvertRange( rScUsedArea, aXclUsedArea, nScTab, nScTab, false );
-        // if any error occurs in ConvertRange(), rScUsedArea keeps untouched
+        maStrm >> aXclUsedArea;
+        if( (aXclUsedArea.GetColCount() > 1) && (aXclUsedArea.GetRowCount() > 1) )
+        {
+            // Excel stores first unused row/column index
+            --aXclUsedArea.maLast.mnCol;
+            --aXclUsedArea.maLast.mnRow;
+            // create the Calc range
+            SCTAB nScTab = GetCurrScTab();
+            ScRange& rScUsedArea = GetExtDocOptions().GetOrCreateTabSettings( nScTab ).maUsedArea;
+            GetAddressConverter().ConvertRange( rScUsedArea, aXclUsedArea, nScTab, nScTab, false );
+            // if any error occurs in ConvertRange(), rScUsedArea keeps untouched
+        }
     }
+    else
+    {
+        sal_uInt32 nXclRow1, nXclRow2;
+        maStrm >> nXclRow1 >> nXclRow2 >> aXclUsedArea.maFirst.mnCol >> aXclUsedArea.maLast.mnCol;
+        if( (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
+            (nXclRow1 <= static_cast< sal_uInt32 >( GetScMaxPos().Row() )) )
+        {
+            // Excel stores first unused row/column index
+            --nXclRow2;
+            --aXclUsedArea.maLast.mnCol;
+            // convert row indexes to 16-bit values
+            aXclUsedArea.maFirst.mnRow = static_cast< sal_uInt16 >( nXclRow1 );
+            aXclUsedArea.maLast.mnRow = limit_cast< sal_uInt16 >( nXclRow2, aXclUsedArea.maFirst.mnRow, SAL_MAX_UINT16 );
+            // create the Calc range
+            SCTAB nScTab = GetCurrScTab();
+            ScRange& rScUsedArea = GetExtDocOptions().GetOrCreateTabSettings( nScTab ).maUsedArea;
+            GetAddressConverter().ConvertRange( rScUsedArea, aXclUsedArea, nScTab, nScTab, false );
+            // if any error occurs in ConvertRange(), rScUsedArea keeps untouched
+        }
+    }
+}
+
+void ImportExcel::ReadBlank()
+{
+    XclAddress aXclPos;
+    aIn >> aXclPos;
+
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+    {
+        sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_BLANK );
+
+        pColRowBuff->Used( aScPos );
+        GetXFRangeBuffer().SetBlankXF( aScPos, nXFIdx );
+    }
+
+    pLastFormCell = NULL;
+}
+
+void ImportExcel::ReadInteger()
+{
+    XclAddress aXclPos;
+    maStrm >> aXclPos;
+
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+    {
+        sal_uInt16 nXFIdx = ReadXFIndex( true );
+        sal_uInt16 nValue;
+        maStrm >> nValue;
+
+        pColRowBuff->Used( aScPos );
+        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+        GetDoc().PutCell( aScPos, new ScValueCell( nValue ) );
+    }
+
+    pLastFormCell = NULL;
+}
+
+void ImportExcel::ReadNumber()
+{
+    XclAddress aXclPos;
+    maStrm >> aXclPos;
+
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+    {
+        sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_NUMBER );
+        double fValue;
+        maStrm >> fValue;
+
+        pColRowBuff->Used( aScPos );
+        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+        GetDoc().PutCell( aScPos, new ScValueCell( fValue ) );
+    }
+
+    pLastFormCell = NULL;
+}
+
+void ImportExcel::ReadLabel()
+{
+    XclAddress aXclPos;
+    maStrm >> aXclPos;
+
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+    {
+        /*  Record ID   BIFF    XF type     String type
+            0x0004      2-7     3 byte      8-bit length, byte string
+            0x0004      8       3 byte      16-bit length, unicode string
+            0x0204      2-7     2 byte      16-bit length, byte string
+            0x0204      8       2 byte      16-bit length, unicode string */
+        bool bBiff2 = maStrm.GetRecId() == EXC_ID2_LABEL;
+        sal_uInt16 nXFIdx = ReadXFIndex( bBiff2 );
+        XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
+        XclImpString aString( maStrm, nFlags );
+
+        pColRowBuff->Used( aScPos );
+        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIdx ) )
+            GetDoc().PutCell( aScPos, pCell );
+    }
+
+    pLastFormCell = NULL;
+}
+
+void ImportExcel::ReadBoolErr()
+{
+    XclAddress aXclPos;
+    maStrm >> aXclPos;
+
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+    {
+        sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_BOOLERR );
+        sal_uInt8 nValue, nType;
+        maStrm >> nValue >> nType;
+
+        pColRowBuff->Used( aScPos );
+        if( nType == EXC_BOOLERR_BOOL )
+            GetXFRangeBuffer().SetBoolXF( aScPos, nXFIdx );
+        else
+            GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+
+        double fValue;
+        const ScTokenArray* pScTokArr = ErrorToFormula( nType, nValue, fValue );
+        ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pScTokArr );
+        pCell->SetDouble( fValue );
+        GetDoc().PutCell( aScPos, pCell );
+    }
+
+    pLastFormCell = NULL;
+}
+
+void ImportExcel::ReadRk()
+{
+    XclAddress aXclPos;
+    maStrm >> aXclPos;
+
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+    {
+        sal_uInt16 nXFIdx = ReadXFIndex( false );
+        sal_Int32 nRk;
+        maStrm >> nRk;
+
+        pColRowBuff->Used( aScPos );
+        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+        GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRk ) ) );
+    }
+
+    pLastFormCell = NULL;
 }
 
 
@@ -231,145 +403,13 @@ void ImportExcel::Window1()
 }
 
 
-void ImportExcel::Blank25( void )
-{
-    XclAddress aXclPos;
-    sal_uInt16 nXF;
-
-    aIn >> aXclPos;
-
-    if( GetBiff() == EXC_BIFF2 )
-    {
-        sal_uInt8 nXFData;
-        aIn >> nXFData;
-        nXF = nXFData & 0x3F;
-        if( nXF == 63 ) nXF = nIxfeIndex;
-    }
-    else
-        aIn >> nXF;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        pColRowBuff->Used( aScPos );
-        GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Integer( void )
-{
-    XclAddress aXclPos;
-    UINT16 nInt;
-    sal_uInt8 nXFData;
-
-    aIn >> aXclPos >> nXFData;
-    aIn.Ignore( 2 );
-    aIn >> nInt;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        sal_uInt16 nXF = nXFData & 0x3F;
-        if( nXF == 63 ) nXF = nIxfeIndex;
-        GetXFRangeBuffer().SetXF( aScPos, nXF );
-        pColRowBuff->Used( aScPos );
-        GetDoc().PutCell( aScPos, new ScValueCell( nInt ) );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Number25( void )
-{
-    XclAddress aXclPos;
-    UINT16 nXF;
-    double fValue;
-
-    aIn >> aXclPos;
-
-    if( GetBiff() == EXC_BIFF2 )
-    {
-        sal_uInt8 nXFData;
-        aIn >> nXFData;
-        aIn.Ignore( 2 );
-        nXF = nXFData & 0x3F;
-        if( nXF == 63 ) nXF = nIxfeIndex;
-    }
-    else
-        aIn >> nXF;
-
-    aIn >> fValue;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        GetXFRangeBuffer().SetXF( aScPos, nXF );
-        pColRowBuff->Used( aScPos );
-        GetDoc().PutCell( aScPos, new ScValueCell( fValue ) );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Boolerr25( void )
-{
-    XclAddress aXclPos;
-    UINT16  nXF;
-    BYTE    bErrOrVal, nError;
-
-    aIn >> aXclPos;
-
-    if( GetBiff() == EXC_BIFF2 )
-    {// nur fuer BIFF2
-        BYTE nAttr0, nAttr1, nAttr2;
-
-        aIn >> nAttr0 >> nAttr1 >> nAttr2;
-
-        nXF = nAttr0 & 0x3F;
-        if( nXF == 63 )
-            // IXFE-record stand davor
-            nXF = nIxfeIndex;
-    }
-    else
-        aIn >> nXF;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        double              fVal;
-        const ScTokenArray  *pErgebnis;
-
-        aIn >> nError >> bErrOrVal;
-
-        // Simulation ueber Formelzelle!
-        pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
-        ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pErgebnis );
-        pCell->SetDouble( fVal );
-        GetDoc().PutCell( aScPos, pCell );
-
-        pColRowBuff->Used( aScPos );
-
-        if( bErrOrVal )     // !=0 -> Error
-            GetXFRangeBuffer().SetXF( aScPos, nXF );
-        else                // ==0 -> Boolean
-            GetXFRangeBuffer().SetBoolXF( aScPos, nXF );
-    }
-
-    pLastFormCell = NULL;
-}
 
 
 void ImportExcel::RecString( void )
 {
     if( pLastFormCell )
     {
-        pLastFormCell->SetString( aIn.ReadByteString( GetBiff() != Biff2 ) );
-
+        pLastFormCell->SetString( aIn.ReadByteString( GetBiff() != EXC_BIFF2 ) );
         pLastFormCell = NULL;
     }
 }
@@ -684,26 +724,6 @@ void ImportExcel::Colinfo( void )
 }
 
 
-void ImportExcel::Rk( void )
-{
-    XclAddress aXclPos;
-    UINT16  nXF;
-    INT32  nRkNum;
-
-    aIn >> aXclPos >> nXF >> nRkNum;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        GetXFRangeBuffer().SetXF( aScPos, nXF );
-        pColRowBuff->Used( aScPos );
-        GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) ) );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
 void ImportExcel::Wsbool( void )
 {
     UINT16 nFlags;
@@ -935,114 +955,6 @@ void ImportExcel::Olesize( void )
     SCTAB nScTab = GetCurrScTab();
     ScRange& rOleSize = GetExtDocOptions().GetDocSettings().maOleSize;
     GetAddressConverter().ConvertRange( rOleSize, aXclOleSize, nScTab, nScTab, false );
-}
-
-
-void ImportExcel::Blank34( void )
-{
-    XclAddress aXclPos;
-    UINT16  nXF;
-
-    aIn >> aXclPos >> nXF;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        pColRowBuff->Used( aScPos );
-        GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Number34( void )
-{
-    XclAddress aXclPos;
-    UINT16  nXF;
-    double  fValue;
-
-    aIn >> aXclPos >> nXF >> fValue;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        GetXFRangeBuffer().SetXF( aScPos, nXF );
-        pColRowBuff->Used( aScPos );
-        GetDoc().PutCell( aScPos, new ScValueCell( fValue ) );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Label( void )
-{
-    XclAddress aXclPos;
-    sal_uInt16 nXFIndex;
-    maStrm >> aXclPos;
-
-    if( GetBiff() == EXC_BIFF2 )
-    {
-        sal_uInt8 nAttr0, nAttr1, nAttr2;
-        maStrm >> nAttr0 >> nAttr1 >> nAttr2;
-
-        nXFIndex = nAttr0 & 0x3F;
-        if( nXFIndex == 63 )
-            nXFIndex = nIxfeIndex;
-    }
-    else
-        maStrm >> nXFIndex;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        GetXFRangeBuffer().SetXF( aScPos, nXFIndex );
-        pColRowBuff->Used( aScPos );
-
-        XclStrFlags nFlags = (GetBiff() == EXC_BIFF2) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
-        XclImpString aString( maStrm, nFlags );
-        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIndex ) )
-            GetDoc().PutCell( aScPos, pCell );
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Boolerr34( void )
-{
-    XclAddress aXclPos;
-    UINT16 nXF;
-    BYTE bErrOrVal, nError;
-
-    aIn >> aXclPos >> nXF;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        double              fVal;
-        const ScTokenArray* pErgebnis;
-
-        aIn >> nError >> bErrOrVal;
-
-        // Simulation ueber Formelzelle!
-        pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
-
-        ScFormulaCell* pZelle = new ScFormulaCell( GetDocPtr(), aScPos, pErgebnis );
-
-        pZelle->SetDouble( fVal );
-
-        GetDoc().PutCell( aScPos, pZelle );
-        pColRowBuff->Used( aScPos );
-
-        if( bErrOrVal )     // !=0 -> Error
-            GetXFRangeBuffer().SetXF( aScPos, nXF );
-        else                // ==0 -> Boolean
-            GetXFRangeBuffer().SetBoolXF( aScPos, nXF );
-    }
-
-    pLastFormCell = NULL;
 }
 
 
