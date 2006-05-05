@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,10 +399,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
 
     // ButtonStyle malen
     // avoid 3D borders
+    Color aSelectionTextColor( COL_TRANSPARENT );
     if( bHigh )
-        DrawSelectionBackground( aRect, 1, TRUE, FALSE, FALSE );
+        DrawSelectionBackground( aRect, 1, TRUE, FALSE, FALSE, &aSelectionTextColor );
     else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
-        DrawSelectionBackground( aRect, 0, TRUE, FALSE, FALSE );
+        DrawSelectionBackground( aRect, 0, TRUE, FALSE, FALSE, &aSelectionTextColor );
 
     // Wenn kein Platz, dann brauchen wir auch nichts ausgeben
     if ( aRect.GetWidth() < 1 )
@@ -513,10 +514,17 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     // Text ausgebeben
     if ( pItem->maOutText.Len() )
     {
+        if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
+        {
+            pDev->Push( PUSH_TEXTCOLOR );
+            pDev->SetTextColor( aSelectionTextColor );
+        }
         if ( IsEnabled() )
             pDev->DrawText( Point( nTxtPos, nTxtPosY ), pItem->maOutText );
         else
             pDev->DrawCtrlText( Point( nTxtPos, nTxtPosY ), pItem->maOutText, 0, STRING_LEN, TEXT_DRAW_DISABLE );
+        if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
+            pDev->Pop();
     }
 
     // Wenn Image vorhanden, Position berechnen und ausgeben
