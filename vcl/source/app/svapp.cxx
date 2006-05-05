@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:59:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -875,7 +875,7 @@ void Application::ImplCallEventListeners( ULONG nEvent, Window *pWin, void* pDat
 
 // -----------------------------------------------------------------------
 
-void Application::ImplCallEventListeners( VclWindowEvent* pEvent )
+void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1235,7 +1235,7 @@ long    Application::GetTopWindowCount()
 {
     long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    Window *pWin = pSVData->maWinData.mpFirstFrame;
+    Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1251,7 +1251,7 @@ Window* Application::GetTopWindow( long nIndex )
 {
     long nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    Window *pWin = pSVData->maWinData.mpFirstFrame;
+    Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1882,10 +1882,12 @@ BOOL Application::IsAccessibilityEnabled()
 
 BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
 {
-    BOOL bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
+    BOOL bRet = true;
 
-// There is no GUI to re-enable accessibility on Unix ..
+// Disable Java bridge on UNIX
 #ifndef UNX
+    bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
+
     if( !bRet && bShowCancel && !rCancelled )
     {
         // disable accessibility if the user chooses to continue
@@ -1895,7 +1897,7 @@ BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
         aSettings.SetMiscSettings( aMisc );
         Application::SetSettings( aSettings );
     }
-#endif
+#endif // !UNX
 
     return bRet;
 }
