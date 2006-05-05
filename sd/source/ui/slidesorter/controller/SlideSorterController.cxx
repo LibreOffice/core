@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:06:58 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsFontProvider.hxx"
 #include "cache/SlsPageCache.hxx"
+#include "cache/SlsPageCacheManager.hxx"
 // other
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
@@ -641,6 +642,19 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
         else if (pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED)
         {
+            // Invalidate the preview cache.
+            cache::PageCacheManager::Instance()->InvalidateAllCaches();
+
+            // Update the draw mode.
+            ULONG nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+                : ViewShell::OUTPUT_DRAWMODE_COLOR);
+            rShell.GetFrameView()->SetDrawMode(nDrawMode);
+            ::sd::Window* pActiveWindow = GetViewShell().GetActiveWindow();
+            if (pActiveWindow != NULL)
+                pActiveWindow->SetDrawMode(nDrawMode);
+            mrView.HandleDrawModeChange();
+
             // When the system font has changed a layout has to be done.
             mrView.Resize();
             FontProvider::Instance().Invalidate();
