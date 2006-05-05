@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:30:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,11 +96,14 @@ SwNumberTreeNode * SwNodeNum::Copy() const
 
 void SwNodeNum::RemoveChild(SwNumberTreeNode * _pChild)
 {
-    SwNodeNum * pChild = static_cast<SwNodeNum*>(_pChild);
-
-    pChild->SetNumRule(NULL);
-
+    // --> OD 2006-04-21 #i64311#
+    // remove child before resetting numbering rule of child.
     SwNumberTreeNode::RemoveChild(_pChild);
+
+    SwNodeNum * pChild = static_cast<SwNodeNum*>(_pChild);
+    pChild->SetNumRule(NULL);
+    // <--
+
 }
 
 bool SwNodeNum::IsNotifiable() const
@@ -117,8 +120,20 @@ bool SwNodeNum::IsContinuous() const
 {
     bool aResult = false;
 
-    if (mpTxtNode)
-        aResult = mpTxtNode->IsContinuous();
+    // --> OD 2006-04-21 #i64311#
+    if ( mpNumRule )
+    {
+        aResult = mpNumRule->IsContinusNum();
+    }
+    else if ( mpParent )
+    {
+        aResult = mpParent->IsContinuous();
+    }
+    else
+    {
+        ASSERT( false, "<SwNodeNum::IsContinuous()> - OD debug" );
+    }
+    // <--
 
     return aResult;
 }
@@ -146,6 +161,43 @@ bool SwNodeNum::IsCounted() const
 
     return aResult;
 }
+
+// --> OD 2006-04-26 #i64010#
+bool SwNodeNum::HasCountedChildren() const
+{
+    bool bResult = false;
+
+    tSwNumberTreeChildren::iterator aIt;
+
+    for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+    {
+        SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
+        ASSERT( pChild,
+                "<SwNodeNum::HasCountedChildren()> - unexcepted type of child -> please inform OD" );
+        if ( pChild &&
+             ( pChild->IsCountedForNumbering() ||
+               pChild->HasCountedChildren() ) )
+        {
+            bResult = true;
+
+            break;
+        }
+    }
+
+    return bResult;
+}
+// <--
+// --> OD 2006-04-26 #i64010#
+bool SwNodeNum::IsCountedForNumbering() const
+{
+    return IsCounted() &&
+           ( IsPhantom() ||                 // phantoms
+             !GetTxtNode() ||               // root node
+             GetTxtNode()->HasNumber() ||   // text node
+             GetTxtNode()->HasBullet() );   // text node
+}
+// <--
+
 
 void SwNodeNum::NotifyNode()
 {
@@ -217,8 +269,17 @@ bool SwNodeNum::IsCountPhantoms() const
 {
     bool bResult = true;
 
-    if (mpNumRule)
-        bResult = mpNumRule->IsCountPhantoms();
+    // --> OD 2006-04-21 #i64311#
+    // phantoms aren't counted in consecutive numbering rules
+    if ( mpNumRule )
+        bResult = !mpNumRule->IsContinusNum() &&
+                  mpNumRule->IsCountPhantoms();
+    else
+    {
+        ASSERT( false,
+                "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
+    }
+    // <--
 
     return bResult;
 }
@@ -241,7 +302,10 @@ SwNumberTreeNode::tSwNumTreeNumber SwNodeNum::GetStart() const
 
         if (pRule)
         {
-            int nLevel = GetLevel();
+            // --> OD 2006-04-24 #i64311#
+            // consider root number tree node
+            int nLevel = GetParent() ? GetLevel() : 1;
+            // <--
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
