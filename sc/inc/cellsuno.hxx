@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:24:14 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -591,7 +591,7 @@ class ScCellRangesObj : public ScCellRangesBase,
 private:
     ScNamedEntryArr_Impl    aNamedEntries;
 
-    ScCellRangeObj*         GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScCellRangeObj*         GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
