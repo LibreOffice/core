@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:11:18 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,12 +370,17 @@ protected:
     tSwNumberTreeChildren::iterator
     GetIterator(const SwNumberTreeNode * pChild) const;
 
-    bool HasCountedChildren() const;
+    // --> OD 2006-04-26 #i64010# - made pure virtual
+    virtual bool HasCountedChildren() const = 0;
+    // <--
 
     // --> OD 2005-10-27 #126009#
     bool HasPhantomCountedParent() const;
     // <--
 
+    // --> OD 2006-04-26 #i64010#
+    virtual bool IsCountedForNumbering() const = 0;
+    // <--
 public:
     SwNumberTreeNode();
     SwNumberTreeNode(const SwNumberTreeNode & rNode);
@@ -671,7 +676,7 @@ public:
     */
     inline void InvalidateNotCountedParent()
     {
-        if ( GetParent() && !GetParent()->IsCounted() )
+        if ( GetParent() && !GetParent()->IsCountedForNumbering() )
         {
             GetParent()->InvalidateMe();
         }
@@ -685,12 +690,26 @@ public:
     */
     inline void NotifyNotCountedParentSiblings()
     {
-        if ( GetParent() && !GetParent()->IsCounted() )
+        if ( GetParent() && !GetParent()->IsCountedForNumbering() )
         {
             GetParent()->NotifyInvalidSiblings();
         }
     }
 
+    /** Invalidation and notification of complete numbering tree
+
+        OD 2006-04-26 #i64010#
+        Usage: on <IsCounted()> state change its needed to invalidate the
+               complete numbering tree due to wide influence of this change.
+    */
+    inline void InvalidateAndNotifyTree()
+    {
+        if ( GetRoot() )
+        {
+            GetRoot()->InvalidateTree();
+            GetRoot()->Notify();
+        }
+    }
     /**
        Print this subtree.
 
