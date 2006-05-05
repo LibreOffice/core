@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:48:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,12 @@ namespace comphelper
         const Reference< XAccessible >& _rxKey, sal_Bool _bCreate )
     {
         Reference< XAccessible > xValue;
+
+        if( !_rxKey.is() )
+        {
+            // fprintf( stderr, "It was this path that was crashing stuff\n" );
+            return xValue;
+        }
 
         // do we have this child in the cahce?
         AccessibleMap::const_iterator aPos = m_aChildrenMap.find( _rxKey );
