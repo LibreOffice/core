@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:53:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,10 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#include "intercept.hxx"
-#ifndef _EMBEDDOC_HXX_
-#include "embeddoc.hxx"
-#endif
-#ifndef _DOCHOLDER_HXX_
-#include "docholder.hxx"
-#endif
+
+#include <embeddoc.hxx>
+#include <docholder.hxx>
+#include <intercept.hxx>
 
 using namespace ::com::sun::star;
 
@@ -137,9 +134,10 @@ void SAL_CALL Interceptor::dispose()
 
 
 Interceptor::Interceptor(
-    EmbedDocument_Impl* pOLEInterface,
+    const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess,
     DocumentHolder* pDocH)
-    : m_pOLEInterface(pOLEInterface),
+    : m_xOleAccess( xOleAccess ),
+      m_xDocHLocker( static_cast< ::cppu::OWeakObject* >( pDocH ) ),
       m_pDocH(pDocH),
       m_pStatCL(0),
       m_pDisposeEventListeners(0)
@@ -165,10 +163,26 @@ Interceptor::~Interceptor()
     if(m_pStatCL)
         delete m_pStatCL;
 
-    m_pDocH->ClearInterceptor();
+    DocumentHolder* pTmpDocH = NULL;
+    uno::Reference< uno::XInterface > xLock;
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        xLock = m_xDocHLocker.get();
+        if ( xLock.is() )
+            pTmpDocH = m_pDocH;
+    }
+
+    if ( pTmpDocH )
+        pTmpDocH->ClearInterceptor();
 }
 
-
+void Interceptor::DisconnectDocHolder()
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    m_xDocHLocker = uno::Reference< uno::XInterface >();
+    m_pDocH = NULL;
+    m_xOleAccess = NULL;
+}
 
 //XDispatch
 void SAL_CALL
@@ -178,13 +192,25 @@ Interceptor::dispatch(
     beans::PropertyValue >& Arguments )
     throw (uno::RuntimeException)
 {
-    if(m_pOLEInterface)
-        if(URL.Complete == m_aInterceptedURL[0])
-            m_pOLEInterface->SaveObject();
-        else if(URL.Complete == m_aInterceptedURL[2] ||
-                URL.Complete == m_aInterceptedURL[3] ||
-                URL.Complete == m_aInterceptedURL[4])
-            m_pOLEInterface->Close(1);
+    ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > xOleAccess;
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        xOleAccess = m_xOleAccess;
+    }
+
+    if ( xOleAccess.is() )
+    {
+        LockedEmbedDocument_Impl aDocLock = xOleAccess->GetEmbedDocument();
+        if ( aDocLock.m_pEmbedDocument )
+        {
+            if(URL.Complete == m_aInterceptedURL[0])
+                aDocLock.m_pEmbedDocument->SaveObject();
+            else if(URL.Complete == m_aInterceptedURL[2] ||
+                    URL.Complete == m_aInterceptedURL[3] ||
+                    URL.Complete == m_aInterceptedURL[4])
+                aDocLock.m_pEmbedDocument->Close(1);
+        }
+    }
 }
 
 
@@ -192,6 +218,19 @@ void Interceptor::generateFeatureStateEvent()
 {
     if(m_pStatCL)
     {
+        DocumentHolder* pTmpDocH = NULL;
+        uno::Reference< uno::XInterface > xLock;
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            xLock = m_xDocHLocker.get();
+            if ( xLock.is() )
+                pTmpDocH = m_pDocH;
+        }
+
+        ::rtl::OUString aTitle;
+        if ( pTmpDocH )
+            aTitle = pTmpDocH->getTitle();
+
         for(int i = 0; i < IUL; ++i)
         {
             if( i == 1 )
@@ -216,7 +255,7 @@ void Interceptor::generateFeatureStateEvent()
                     RTL_CONSTASCII_USTRINGPARAM("Update"));
                 aStateEvent.State <<= (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
-                                       m_pDocH->getTitle());
+                                       aTitle);
 
             }
             else
@@ -226,7 +265,7 @@ void Interceptor::generateFeatureStateEvent()
                     RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
                 aStateEvent.State <<= (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
-                                       m_pDocH->getTitle());
+                                       aTitle);
 
             }
 
@@ -257,6 +296,19 @@ Interceptor::addStatusListener(
 
     if(URL.Complete == m_aInterceptedURL[0])
     {   // Save
+        DocumentHolder* pTmpDocH = NULL;
+        uno::Reference< uno::XInterface > xLock;
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            xLock = m_xDocHLocker.get();
+            if ( xLock.is() )
+                pTmpDocH = m_pDocH;
+        }
+
+        ::rtl::OUString aTitle;
+        if ( pTmpDocH )
+            aTitle = pTmpDocH->getTitle();
+
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
         aStateEvent.FeatureDescriptor = rtl::OUString(
@@ -265,7 +317,7 @@ Interceptor::addStatusListener(
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
-                               m_pDocH->getTitle());
+                               aTitle );
         Control->statusChanged(aStateEvent);
 
         {
@@ -284,6 +336,19 @@ Interceptor::addStatusListener(
        URL.Complete == m_aInterceptedURL[++i] ||
        URL.Complete == m_aInterceptedURL[++i] )
     {   // Close and return
+        DocumentHolder* pTmpDocH = NULL;
+        uno::Reference< uno::XInterface > xLock;
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            xLock = m_xDocHLocker.get();
+            if ( xLock.is() )
+                pTmpDocH = m_pDocH;
+        }
+
+        ::rtl::OUString aTitle;
+        if ( pTmpDocH )
+            aTitle = pTmpDocH->getTitle();
+
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
         aStateEvent.FeatureDescriptor = rtl::OUString(
@@ -292,7 +357,7 @@ Interceptor::addStatusListener(
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
-                               m_pDocH->getTitle());
+                               aTitle );
         Control->statusChanged(aStateEvent);
 
 
