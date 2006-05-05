@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:06:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1552,6 +1552,9 @@ void ScInterpreter::ScType()
             {
                 switch ( GetCellType( pCell ) )
                 {
+                    case CELLTYPE_NOTE :
+                        nType = 1;      // empty cell is value (0)
+                        break;
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
                         nType = 2;
@@ -2354,9 +2357,67 @@ void ScInterpreter::ScT()
 
 void ScInterpreter::ScValue()
 {
-    String aInputString = GetString();
-    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+    String aInputString;
     double fVal;
+
+    switch ( GetStackType() )
+    {
+        case svDouble:
+            PushDouble( PopDouble() );
+            return;
+            break;
+
+        case svSingleRef:
+        case svDoubleRef:
+            {
+                ScAddress aAdr;
+                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                {
+                    PushInt(0);
+                    return;
+                }
+                ScBaseCell* pCell = GetCell( aAdr );
+                if ( pCell && pCell->HasStringData() )
+                    GetCellString( aInputString, pCell );
+                else if ( pCell && pCell->HasValueData() )
+                {
+                    PushDouble( GetCellValue(aAdr, pCell) );
+                    return;
+                }
+                else
+                {
+                    PushDouble(0.0);
+                    return;
+                }
+            }
+            break;
+        case svMatrix:
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
+                        aInputString);
+                switch (nType)
+                {
+                    case SC_MATVAL_EMPTY:
+                        fVal = 0.0;
+                        // fallthru
+                    case SC_MATVAL_VALUE:
+                        PushDouble( fVal);
+                        return;
+                        break;
+                    case SC_MATVAL_STRING:
+                        // evaluated below
+                        break;
+                    default:
+                        SetIllegalArgument();
+                }
+            }
+            break;
+        default:
+            aInputString = GetString();
+            break;
+    }
+
+    sal_uInt32 nFIndex = 0;     // 0 for default locale
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
         PushDouble(fVal);
     else
