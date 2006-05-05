@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:48:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,11 @@ public:
         SdDrawDocument* pDocument,
         const SdrPage* pPage);
 
-    /** The destructor, like the constructor is, should be private.  It can
-        not because the shared_ptr<> implementation does not allow this.
+    /** Invalidate all the caches that are currently in use and destroy
+        those that are not.  This is used for example when the high contrast
+        mode is turned on or off.
     */
-    ~PageCacheManager (void);
+    void InvalidateAllCaches (void);
 
 private:
     /** Singleton instance of the cache manager.  Note that this is a weak
@@ -137,6 +138,10 @@ private:
     const sal_uInt32 mnMaximalRecentlyCacheCount;
 
     PageCacheManager (void);
+    ~PageCacheManager (void);
+
+    class Deleter;
+    friend class Deleter;
 
     ::boost::shared_ptr<Cache> GetRecentlyUsedCache(
         SdDrawDocument* pDocument,
