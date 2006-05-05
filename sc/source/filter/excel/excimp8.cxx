@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:59:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,29 +317,6 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
     }
 }
 
-
-void ImportExcel8::Dimensions( void )
-{
-    sal_uInt32 nXclRow1, nXclRow2;
-    XclRange aXclUsedArea( ScAddress::UNINITIALIZED );
-    maStrm >> nXclRow1 >> nXclRow2 >> aXclUsedArea.maFirst.mnCol >> aXclUsedArea.maLast.mnCol;
-
-    if( (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
-        (nXclRow1 <= static_cast< sal_uInt32 >( GetScMaxPos().Row() )) )
-    {
-        // Excel stores first unused row/column index
-        --nXclRow2;
-        --aXclUsedArea.maLast.mnCol;
-        // convert row indexes to 16-bit values
-        aXclUsedArea.maFirst.mnRow = static_cast< sal_uInt16 >( nXclRow1 );
-        aXclUsedArea.maLast.mnRow = limit_cast< sal_uInt16 >( nXclRow2, aXclUsedArea.maFirst.mnRow, SAL_MAX_UINT16 );
-        // create the Calc range
-        SCTAB nScTab = GetCurrScTab();
-        ScRange& rScUsedArea = GetExtDocOptions().GetOrCreateTabSettings( nScTab ).maUsedArea;
-        GetAddressConverter().ConvertRange( rScUsedArea, aXclUsedArea, nScTab, nScTab, false );
-        // if any error occurs in ConvertRange(), rScUsedArea keeps untouched
-    }
-}
 
 void ImportExcel8::ReadBasic( void )
 {
