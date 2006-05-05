@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:22:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,15 @@
 #endif
 #ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _SWCLI_HXX
+#include <swcli.hxx>
+#endif
+#ifndef _SWVIEW_HXX
+#include <view.hxx>
 #endif
 #ifndef _NDINDEX_HXX //autogen
 #include <ndindex.hxx>
@@ -3060,6 +3069,22 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
         uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
         {
+            if ( pDoc->GetDocShell() )
+            {
+                SwWrtShell *pSh = pDoc->GetDocShell()->GetWrtShell();
+                if ( pSh )
+                {
+                    SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( xIP, (Window *)&pSh->GetView().GetEditWin() );
+                    if ( !pClient )
+                    {
+                        pClient = new SwOleClient( &pSh->GetView(),
+                                                    &pSh->GetView().GetEditWin(),
+                                                    pOleNode->GetOLEObj().GetObject() );
+                        pSh->CalcAndSetScale( pOleNode->GetOLEObj().GetObject() );
+                    }
+                }
+            }
+
             xRet = uno::Reference < lang::XComponent >( xIP->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
