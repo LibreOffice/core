@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 15:04:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:06:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
 #include "controller/SlideSorterController.hxx"
+#include "controller/SlsPageObjectFactory.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -292,6 +293,25 @@ void SlideSorterView::HandleModelChange (void)
 {
     PreModelChange ();
     PostModelChange();
+}
+
+
+
+
+void SlideSorterView::HandleDrawModeChange (void)
+{
+    UpdatePageBorders();
+
+    // Replace the preview cache with a new and empty one.  The
+    // PreviewRenderer that is used by the cache is replaced by this as
+    // well.
+    mpPreviewCache.reset();
+    GetPreviewCache()->InvalidateCache(true);
+    mrModel.SetPageObjectFactory(
+        ::std::auto_ptr<controller::PageObjectFactory>(
+            new controller::PageObjectFactory(GetPreviewCache())));
+
+    RequestRepaint();
 }
 
 
