@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:47:08 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:11:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,6 +751,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
             if( pRt->pNext )
                 pRt->pNext->block();
             pINST->pRun = pRt;
+            if ( SbiRuntime ::isVBAEnabled() )
+                pINST->EnableCompatibility( TRUE );
             while( pRt->Step() ) {}
             if( pRt->pNext )
                 pRt->pNext->unblock();
