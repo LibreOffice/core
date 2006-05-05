@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:29:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1113,6 +1113,10 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             }
         }
     }
+    // reset original text
+    // i63141 before calling GetCharRect(..) with formatting!
+    if ( bRestoreString )
+        pNode->aText = aOldTxt;
     if( pNode->GetWrong() )
     {
         if( bFresh )
@@ -1130,13 +1134,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             // information about end of repaint area
             Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
 
-            SwTxtFrm* pStartFrm = this;
-
-            while( pStartFrm->HasFollow() &&
-                   nChgStart >= pStartFrm->GetFollow()->GetOfst() )
-                pStartFrm = pStartFrm->GetFollow();
-
-            SwTxtFrm *pEndFrm = pStartFrm;
+            SwTxtFrm *pEndFrm = this;
 
             while( pEndFrm->HasFollow() &&
                    nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
@@ -1160,6 +1158,19 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             SwRect aTmp;
             aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
             GetCharRect( aTmp, aPos, &aTmpState );
+
+            // i63141: GetCharRect(..) could cause a formatting,
+            // during the formatting SwTxtFrms could be joined, deleted, created...
+            // => we have to reinit pStartFrm and pEndFrm after the formatting
+            SwTxtFrm* pStartFrm = this;
+            while( pStartFrm->HasFollow() &&
+                   nChgStart >= pStartFrm->GetFollow()->GetOfst() )
+                pStartFrm = pStartFrm->GetFollow();
+            pEndFrm = pStartFrm;
+            while( pEndFrm->HasFollow() &&
+                   nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
+                pEndFrm = pEndFrm->GetFollow();
+
             // information about start of repaint area
             Sw2LinesPos* pSt2Pos = aTmpState.p2Lines;
             if ( pSt2Pos )
@@ -1231,10 +1242,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
     }
     else
         pNode->SetWrongDirty( FALSE );
-
-    // reset original text
-    if ( bRestoreString )
-        pNode->aText = aOldTxt;
 
     if( bAddAutoCmpl )
         pNode->SetAutoCompleteWordDirty( FALSE );
