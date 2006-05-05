@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:42:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,7 +946,8 @@ void SbiRuntime::StepEMPTY()
 void SbiRuntime::StepERROR()
 {
     SbxVariableRef refCode = PopVar();
-    ULONG n = refCode->GetLong();
-    Error( n );
+    USHORT n = refCode->GetUShort();
+    SbError nError = StarBASIC::GetSfxFromVBError( n );
+    Error( nError );
 }
 
