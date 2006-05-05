@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:52:49 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,6 +346,8 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         DBG_ERRORFILE( "SvxImportMSVBasic::ImportCode_Impl - unknown module type" );
                         break;
                 }
+                static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
+                modeTypeComment = modeTypeComment + sVBAOption;
 
                 String sModule(sBasicModule); //#i52606# no need to split Macros in 64KB blocks any more!
                 String sTemp;
