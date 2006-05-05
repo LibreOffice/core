@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 14:58:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2181,12 +2181,30 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+
+        // SJ: If AutoGrowWidthItem is set, SetTransformation will lead to the wrong SnapRect
+        // because NbcAdjustTextFrameWidthAndHeight() is called (text is set later and center alignment
+        // is the default setting, so the top left reference point that is used by the caption point is
+        // no longer correct) There are two ways to solve this problem, temporarily disabling the
+        // autogrowwith as we are doing here or to apply the CaptionPoint after setting text
+        sal_Bool bIsAutoGrowWidth = sal_False;
+        if ( xProps.is() )
+        {
+            uno::Any aAny( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TextAutoGrowWidth") ) ) );
+            aAny >>= bIsAutoGrowWidth;
+
+            if ( bIsAutoGrowWidth )
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TextAutoGrowWidth")), uno::makeAny( sal_False ) );
+        }
+
         // set pos, size, shear and rotate
         SetTransformation();
-
-        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
         if( xProps.is() )
             xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint")), uno::makeAny( maCaptionPoint ) );
+
+        if ( bIsAutoGrowWidth )
+            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TextAutoGrowWidth")), uno::makeAny( sal_True ) );
 
         if(mnRadius)
         {
