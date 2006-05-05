@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ void SbiCodeGen::Save()
     // OPTION EXPLICIT-Flag uebernehmen
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
+    if( pParser->bVBASupportOn )
+        p->SetFlag( SBIMG_VBASUPPORT );
 
     int nIfaceCount = 0;
     if( pParser->bClassModule )
