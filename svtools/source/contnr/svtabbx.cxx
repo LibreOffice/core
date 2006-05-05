@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:37:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:24:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1206,7 +1206,10 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             if ( IsActive() )
                 _rStateSet.AddState( AccessibleStateType::ACTIVE );
             if ( IsEnabled() )
+            {
                 _rStateSet.AddState( AccessibleStateType::ENABLED );
+                _rStateSet.AddState( AccessibleStateType::SENSITIVE );
+            }
             if ( IsReallyVisible() )
                 _rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( _eType == ::svt::BBTYPE_TABLE )
