@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:33:51 $
+#   last change: $Author: rt $ $Date: 2006-05-05 08:02:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ EXCEPTIONSFILES =   \
         $(SLO)$/accessibility.obj \
         $(SLO)$/document.obj \
         $(SLO)$/mathml.obj \
+        $(SLO)$/view.obj \
         $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj \
         $(SLO)$/smdetect.obj \
