@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:35:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ const sal_uInt32 EXC_CF_FONT_ESCAPEM        = 0x00000001;   /// Font escapement 
 // (0x01B2) DVAL --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_DVAL                = 0x01B2;
+
 const sal_uInt32 EXC_DVAL_NOOBJ             = 0xFFFFFFFF;
 
 // (0x01BE) DV ----------------------------------------------------------------
