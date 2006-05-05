@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,9 +101,10 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
             case _ERROR_:
             case TBOOLEAN:
             case TVARIANT:
+            case TBYTE:
                 if( rDef.IsNew() )
                     Error( SbERR_SYNTAX );
-                eType = SbxDataType( eTok - TINTEGER + SbxINTEGER );
+                eType = (eTok==TBYTE) ? SbxBYTE : SbxDataType( eTok - TINTEGER + SbxINTEGER );
                 if( eType == SbxSTRING )
                 {
                     // STRING*n ?
