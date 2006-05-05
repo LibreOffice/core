@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:21:03 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,7 @@ public:
 
     BOOL            SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi );
 
+    BOOL            SetNewRangeNames( ScRangeName* pNewRanges, BOOL bApi );     // takes ownership of pNewRanges
     BOOL            ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi );
 
     BOOL            CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi );
