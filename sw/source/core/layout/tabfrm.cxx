@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:37:21 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2419,12 +2419,16 @@ void SwTabFrm::MakeAll()
                             // --> OD 2005-03-30 #i43913# - lock follow table
                             // to avoid its formatting during the format of
                             // its content.
+                            const bool bOldJoinLock =  GetFollow()->IsJoinLocked();
                             GetFollow()->LockJoin();
                             // <--
                             ::lcl_CalcLayout((SwLayoutFrm*)GetFollow()->Lower(),
                                 (GetFollow()->GetUpper()->Frm().*fnRect->fnGetBottom)() );
                             // --> OD 2005-03-30 #i43913#
-                            GetFollow()->UnlockJoin();
+                            // --> FME 2006-04-05 #i63632# Do not unlock the
+                            // follow if it wasn't locked before.
+                            if ( !bOldJoinLock )
+                                GetFollow()->UnlockJoin();
                             // <--
 
                             if ( !GetFollow()->GetFollow() )
