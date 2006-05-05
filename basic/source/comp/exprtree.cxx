@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:01:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,6 +777,16 @@ SbiExpression* SbiExprList::Get( short n )
         p = p->pNext;
     return p;
 }
+
+void SbiExprList::addExpression( SbiExpression* pExpr )
+{
+    SbiExpression* p = pFirst;
+    while( p && p->pNext )
+        p = p->pNext;
+
+    p->pNext = pExpr;
+}
+
 
 /***************************************************************************
 |*
