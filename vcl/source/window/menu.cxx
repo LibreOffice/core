@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:34:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -2156,6 +2157,51 @@ void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::st
     mxAccessible = rxAccessible;
 }
 
+long Menu::ImplGetNativeCheckAndRadioHeight( Window* pWin, long& rCheckHeight, long& rRadioHeight ) const
+{
+    rCheckHeight = rRadioHeight = 0;
+
+    if( ! bIsMenuBar )
+    {
+        ImplControlValue aVal;
+        Region aNativeBounds;
+        Region aNativeContent;
+        Point tmp( 0, 0 );
+        Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+        if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
+        {
+            if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                              ControlPart(PART_MENU_ITEM_CHECK_MARK),
+                                              aCtrlRegion,
+                                              ControlState(CTRL_STATE_ENABLED),
+                                              aVal,
+                                              OUString(),
+                                              aNativeBounds,
+                                              aNativeContent )
+            )
+            {
+                rCheckHeight = aNativeBounds.GetBoundRect().GetHeight();
+            }
+        }
+        if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
+        {
+            if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                              ControlPart(PART_MENU_ITEM_RADIO_MARK),
+                                              aCtrlRegion,
+                                              ControlState(CTRL_STATE_ENABLED),
+                                              aVal,
+                                              OUString(),
+                                              aNativeBounds,
+                                              aNativeContent )
+            )
+            {
+                rRadioHeight = aNativeBounds.GetBoundRect().GetHeight();
+            }
+        }
+    }
+    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
+}
+
 Size Menu::ImplCalcSize( Window* pWin )
 {
     // | Checked| Image| Text| Accel/Popup|
@@ -2164,10 +2210,15 @@ Size Menu::ImplCalcSize( Window* pWin )
     long nFontHeight = pWin->GetTextHeight();
     long nExtra = nFontHeight/4;
 
+
     Size aSz;
     Size aMaxImgSz;
     long nMaxWidth = 0;
     long nMinMenuItemHeight = nFontHeight;
+    long nCheckHeight = 0, nRadioHeight = 0;
+    long nMax = ImplGetNativeCheckAndRadioHeight( pWin, nCheckHeight, nRadioHeight );
+    if( nMax > nMinMenuItemHeight )
+        nMinMenuItemHeight = nMax;
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
@@ -2274,7 +2325,13 @@ Size Menu::ImplCalcSize( Window* pWin )
     {
         USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
-        nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
+        // non-NWF case has an implicit little extra space around
+        // the symbol; NWF case has not, so image pos needs to
+        // be distinct in this case
+        if( nMax > 0 ) // NWF case
+            nImagePos = (USHORT)(nCheckPos + nMax + nExtra );
+        else // non NWF case
+            nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
         nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
         if ( aMaxImgSz.Width() )
             nTextPos += gfxExtra;
@@ -2333,6 +2390,9 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
     // Fuer Symbole: nFontHeight x nFontHeight
     long nFontHeight = pWin->GetTextHeight();
     long nExtra = nFontHeight/4;
+
+    long nCheckHeight = 0, nRadioHeight = 0;
+    long nMax = ImplGetNativeCheckAndRadioHeight( pWin, nCheckHeight, nRadioHeight );
 
     DecorationView aDecoView( pWin );
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
@@ -2456,28 +2516,63 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // CheckMark
-                if ( !bLayout && !bIsMenuBar && pData->bChecked )
+                if ( !bLayout && !bIsMenuBar &&
+                     ( pData->bChecked  || ( pData->nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) ) ) )
                 {
-                    Rectangle aRect;
-                    SymbolType eSymbol;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nExtra/2;
-                    aTmpPos.Y() += pData->aSz.Height() / 2;
-                    if ( pData->nBits & MIB_RADIOCHECK )
+                    if ( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                         (pData->nBits & MIB_RADIOCHECK)
+                                                         ? PART_MENU_ITEM_CHECK_MARK
+                                                         : PART_MENU_ITEM_RADIO_MARK ) )
                     {
+                        ControlPart nPart = ((pData->nBits & MIB_RADIOCHECK)
+                                             ? PART_MENU_ITEM_RADIO_MARK
+                                             : PART_MENU_ITEM_CHECK_MARK);
+
+                        ControlState nState = 0;
+
+                        if ( pData->bChecked )
+                            nState |= CTRL_STATE_PRESSED;
+
+                        if ( pData->bEnabled )
+                            nState |= CTRL_STATE_ENABLED;
+
+                        if ( bHighlighted )
+                            nState |= CTRL_STATE_SELECTED;
+
                         aTmpPos.X() = aPos.X() + nCheckPos;
-                        eSymbol = SYMBOL_RADIOCHECKMARK;
-                        aTmpPos.Y() -= nFontHeight/4;
-                        aRect = Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) );
+                        aTmpPos.Y() = aPos.Y() + nCheckPos;
+
+                        long nCtrlHeight = (pData->nBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                        Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
+                        pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
+                                                 Region( aCheckRect ),
+                                                 nState,
+                                                 ImplControlValue(),
+                                                 OUString() );
                     }
-                    else
+                    else if ( pData->bChecked ) // by default do nothing for unchecked items
                     {
-                        aTmpPos.X() = aPos.X() + nCheckPos;
-                        eSymbol = SYMBOL_CHECKMARK;
-                        aTmpPos.Y() -= nFontHeight/4;
-                        aRect = Rectangle( aTmpPos, Size( (nFontHeight*25)/40, nFontHeight/2 ) );
+                        Rectangle aRect;
+                        SymbolType eSymbol;
+                        aTmpPos.Y() = aPos.Y();
+                        aTmpPos.Y() += nExtra/2;
+                        aTmpPos.Y() += pData->aSz.Height() / 2;
+                        if ( pData->nBits & MIB_RADIOCHECK )
+                        {
+                            aTmpPos.X() = aPos.X() + nCheckPos;
+                            eSymbol = SYMBOL_RADIOCHECKMARK;
+                            aTmpPos.Y() -= nFontHeight/4;
+                            aRect = Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) );
+                        }
+                        else
+                        {
+                            aTmpPos.X() = aPos.X() + nCheckPos;
+                            eSymbol = SYMBOL_CHECKMARK;
+                            aTmpPos.Y() -= nFontHeight/4;
+                            aRect = Rectangle( aTmpPos, Size( (nFontHeight*25)/40, nFontHeight/2 ) );
+                        }
+                        aDecoView.DrawSymbol( aRect, eSymbol, pWin->GetTextColor(), nSymbolStyle );
                     }
-                    aDecoView.DrawSymbol( aRect, eSymbol, pWin->GetTextColor(), nSymbolStyle );
                 }
 
                 // SubMenu?
