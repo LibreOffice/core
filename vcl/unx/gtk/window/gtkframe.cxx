@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:40:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,6 +506,15 @@ void GtkSalFrame::InitCommon()
 
     SetIcon(1);
     m_nWorkArea = pDisp->getWMAdaptor()->getCurrentWorkArea();
+
+    /* #i64117# gtk sets a nice background pixmap
+    *  but we actually don't really want that, so save
+    *  some time on the Xserver as well as prevent
+    *  some paint issues
+    */
+    XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
+                                GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                                m_hBackgroundPixmap );
 }
 
 /*  Sadly gtk_window_set_accept_focus exists only since gtk 2.4
@@ -690,7 +699,6 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
     m_nStyle = SAL_FRAME_STYLE_CHILD;
     InitCommon();
-    // #i41820#
     int x_ret, y_ret;
     unsigned int w, h, bw, d;
     XLIB_Window aRoot;
@@ -1718,10 +1726,14 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
         {
             bContinueDispatch = false;
             gtk_window_resize( m_pWindow, pEvent->xconfigure.width, pEvent->xconfigure.height );
-            //#i41820#
-            maGeometry.nWidth  = pEvent->xconfigure.width;
-            maGeometry.nHeight = pEvent->xconfigure.height;
-            setMinMaxSize();
+            if( maGeometry.nWidth != pEvent->xconfigure.width ||
+                maGeometry.nHeight != pEvent->xconfigure.height )
+            {
+                maGeometry.nWidth  = pEvent->xconfigure.width;
+                maGeometry.nHeight = pEvent->xconfigure.height;
+                setMinMaxSize();
+                getDisplay()->SendInternalEvent( this, NULL, SALEVENT_RESIZE );
+            }
         }
         else if( m_pForeignTopLevel && pEvent->xconfigure.window == m_aForeignTopLevelWindow )
         {
@@ -2279,6 +2291,21 @@ void GtkSalFrame::signalStyleSet( GtkWidget* pWidget, GtkStyle* pPrevious, gpoin
         // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
+
+    /* #i64117# gtk sets a nice background pixmap
+    *  but we actually don't really want that, so save
+    *  some time on the Xserver as well as prevent
+    *  some paint issues
+    */
+    GdkWindow* pWin = GTK_WIDGET(pThis->getWindow())->window;
+    if( pWin )
+    {
+        XLIB_Window aWin = GDK_WINDOW_XWINDOW(pWin);
+        if( aWin != None )
+            XSetWindowBackgroundPixmap( pThis->getDisplay()->GetDisplay(),
+                                        aWin,
+                                        pThis->m_hBackgroundPixmap );
+    }
 
     if( ! pThis->m_pParent )
     {
