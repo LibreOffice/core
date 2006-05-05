@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:03:56 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1614,7 +1614,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
     {
         DBG_ASSERT( meBiff == EXC_BIFF8, "XclExpFmlaCompImpl::ConvertRefData - NLRs only for BIFF8" );
         // Calc does not support absolute reference mode in natural language references
-        ::set_flag( rXclPos.mnCol, EXC_TOK_EXT_NATREL );
+        ::set_flag( rXclPos.mnCol, EXC_TOK_NLR_REL );
     }
     else
     {
@@ -1657,8 +1657,8 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
         DBG_ASSERT( aRefData.IsColRel() != aRefData.IsRowRel(),
             "XclExpFmlaCompImpl::ProcessCellRef - broken natural language reference" );
         // create tExtended token for natural language reference
-        sal_uInt8 nSubId = aRefData.IsColRel() ? EXC_TOK_EXT_COLV : EXC_TOK_EXT_ROWV;
-        AppendOpTokenId( EXC_TOKID_EXTENDED, nExpClass, rTokData.mnSpaces );
+        sal_uInt8 nSubId = aRefData.IsColRel() ? EXC_TOK_NLR_COLV : EXC_TOK_NLR_ROWV;
+        AppendOpTokenId( EXC_TOKID_NLR, nExpClass, rTokData.mnSpaces );
         Append( nSubId );
         AppendAddress( aXclPos );
     }
