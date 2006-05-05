@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:31:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,10 +303,34 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
         {
             SwNumberTreeNode * pPred = (*aIt)->GetPred();
 
-            if (pPred)
-                nTmpNumber = pPred->GetNumber() + 1;
+            // --> OD 2006-04-21 #i64311#
+            // correct consideration of phantoms
+            // correct consideration of restart at a number tree node
+            if ( pPred )
+            {
+                if ( !(*aIt)->IsCounted() )
+                    nTmpNumber = pPred->GetNumber();
+                else
+                {
+                    if ( (*aIt)->IsRestart() )
+                        nTmpNumber = (*aIt)->GetStart();
+                    else
+                        nTmpNumber = pPred->GetNumber( pPred->GetParent() != (*aIt)->GetParent() ) + 1;
+                }
+            }
             else
-                nTmpNumber = GetStart();
+            {
+                if ( !(*aIt)->IsCounted() )
+                    nTmpNumber = GetStart() - 1;
+                else
+                {
+                    if ( (*aIt)->IsRestart() )
+                        nTmpNumber = (*aIt)->GetStart();
+                    else
+                       nTmpNumber = GetStart();
+                }
+            }
+            // <--
 
             (*aIt)->mnNumber = nTmpNumber;
         }
@@ -752,6 +776,8 @@ SwNumberTreeNode::tSwNumTreeNumber SwNumberTreeNode::GetStart() const
 
 bool SwNumberTreeNode::IsCountPhantoms() const
 {
+    ASSERT( false,
+            "<SwNumberTreeNode::IsCountPhantoms()> should not be called - this is a serious defect - please inform OD" );
     return true;
 }
 
@@ -802,25 +828,6 @@ bool SwNumberTreeNode::IsCounted() const
             ( IsCountPhantoms() && HasCountedChildren() );
 }
 
-bool SwNumberTreeNode::HasCountedChildren() const
-{
-    bool bResult = false;
-
-    tSwNumberTreeChildren::iterator aIt;
-
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
-    {
-        if ((*aIt)->IsCounted() || (*aIt)->HasCountedChildren())
-        {
-            bResult = true;
-
-            break;
-        }
-    }
-
-    return bResult;
-}
-
 // --> OD 2005-10-27 #126009#
 bool SwNumberTreeNode::HasPhantomCountedParent() const
 {
@@ -850,6 +857,8 @@ bool SwNumberTreeNode::HasPhantomCountedParent() const
 // <--
 bool SwNumberTreeNode::IsContinuous() const
 {
+    ASSERT( false,
+            "<SwNumberTreeNode::IsContinuous()> should not be called - this is a serious defect - please inform OD" );
     return false;
 }
 
@@ -1152,8 +1161,13 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred() const
         tSwNumberTreeChildren::iterator aIt =
             mpParent->GetIterator(this);
 
-        if (aIt == mpParent->mChildren.begin())
-            pResult = mpParent;
+        if ( aIt == mpParent->mChildren.begin() )
+        {
+            // --> OD 2006-04-24 #i64311#
+            // root node is no valid predecessor
+            pResult = mpParent->GetParent() ? mpParent : NULL;
+            // <--
+        }
         else
         {
             aIt--;
