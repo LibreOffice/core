@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:46:55 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1684,6 +1684,12 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
             SfxViewShell* pViewSh = pViewFrm->GetViewShell();
             if ( pViewSh && pViewSh->ISA( ScTabViewShell ) )
                 ((ScTabViewShell*)pViewSh)->SetCurRefDlgId( nCurRefDlgId );
+            else
+            {
+                // no ScTabViewShell - possible for example from a Basic macro
+                bVis = FALSE;
+                nCurRefDlgId = 0;   // don't set nCurRefDlgId if no dialog is created
+            }
 
             pViewFrm->SetChildWindow( nId, bVis );
         }
