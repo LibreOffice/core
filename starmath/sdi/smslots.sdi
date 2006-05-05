@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smslots.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:38:03 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,17 +73,7 @@ interface FormulaDocument : OfficeDocument
     [
         StateMethod = GetState ;
     ]
-    SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_AUTO_REDRAW //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_TOOLBOX //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -96,11 +86,6 @@ interface FormulaDocument : OfficeDocument
     ]
     //idlpp kein Menuepunkt , also keine Texte
     SID_SAVESYMBOLS //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_INSERT_FORMULA //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -144,18 +129,6 @@ interface FormulaDocument : OfficeDocument
     ]
     //idlpp kein Menueeintrag , also keine Texte
         SID_GAPHIC_SM //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    //idlpp kein Menueeintrag , also keine Texte
-    SID_COPYOBJECT //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    //idlpp kein Menueeintrag , also keine Texte
-    SID_PASTEOBJECT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -258,6 +231,18 @@ interface FormulaView : View
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+        //idlpp kein Menueeintrag , also keine Texte
+        SID_COPYOBJECT //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
+        //idlpp kein Menueeintrag , also keine Texte
+        SID_PASTEOBJECT //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
     SID_CUT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -295,6 +280,12 @@ interface FormulaView : View
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+        SID_INSERT_FORMULA //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+                Export = FALSE ;
+        ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_ATTR_ZOOM //idlpp ole : no , status : no
     [
@@ -325,6 +316,16 @@ interface FormulaView : View
         ExecMethod = NoExec ;
         StateMethod = NoState ;
     ]
+        SID_TOOLBOX //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
+        SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
 }
 
 shell SmViewShell : SfxViewShell
