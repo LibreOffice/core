@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:28:29 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,11 @@ protected:
 
     void SetNumRule(SwNumRule * pRule);
     SwNumRule * GetNumRule() const;
+
+    // --> OD 2006-04-26 #i64010#
+    virtual bool HasCountedChildren() const;
+    virtual bool IsCountedForNumbering() const;
+    // <--
 
 public:
     SwNodeNum();
