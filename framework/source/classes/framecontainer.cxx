@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:10:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,8 @@ FrameContainer::FrameContainer()
 FrameContainer::~FrameContainer()
 {
     // Don't forget to free memory!
-    clear();
+    m_aContainer.clear();
+    m_xActiveFrame.clear();
 }
 
 /**-***************************************************************************************************************
