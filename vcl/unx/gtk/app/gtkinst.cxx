@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:32:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,15 @@
 #include <salobj.h>
 #include <plugins/gtk/gtkframe.hxx>
 #include <plugins/gtk/gtkobject.hxx>
+#include <plugins/gtk/atkbridge.hxx>
 
 #include <rtl/strbuf.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
+
+#include <dlfcn.h>
 
 GtkHookedYieldMutex::GtkHookedYieldMutex()
 {
@@ -140,29 +143,6 @@ extern "C"
 #endif
             return NULL;
         }
-        /*  #i47797# as long as we do not have a working atk bridge
-         *  prevent atk from interfering with the java accessibility bridge
-         */
-        #if ! defined HAVE_ATK_ACCESSIBILITY_BRIDGE
-        const char* pGtkModules = getenv( "GTK_MODULES" );
-        if( pGtkModules )
-        {
-            rtl::OString aModules( pGtkModules );
-            rtl::OStringBuffer aModulesOut( aModules.getLength() + 11 );
-            aModulesOut.append( "GTK_MODULES=" );
-            sal_Int32 nIndex = 0;
-            while( nIndex >= 0 )
-            {
-                rtl::OString aToken = aModules.getToken( 0, ':', nIndex );
-                if( aToken.equals( "gail" ) ||
-                    aToken.equals( "atk-bridge" ) )
-                    continue;
-                aModulesOut.append( ':' );
-                aModulesOut.append( aToken );
-            }
-            putenv( strdup( aModulesOut.getStr() ) );
-        }
-        #endif
 
         GtkYieldMutex *pYieldMutex;
 
@@ -188,6 +168,22 @@ extern "C"
         pSalData->pInstance_ = pInstance;
         pSalData->Init();
         pSalData->initNWF();
+
+        const char* pGtkModules = getenv( "GTK_MODULES" );
+        if( pGtkModules )
+        {
+            rtl::OString aModules( pGtkModules );
+            sal_Int32 nIndex = 0;
+            while( nIndex >= 0 )
+            {
+                rtl::OString aToken = aModules.getToken( 0, ':', nIndex );
+                if( aToken.equals( "gail" ) || aToken.equals( "atk-bridge" ) )
+                {
+                    InitAtkBridge();
+                    break;
+                }
+            }
+        }
 
         return pInstance;
     }
