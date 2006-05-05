@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:26:52 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ SlideSorterViewShell::SlideSorterViewShell (
     pWindow->SetUseDropScroll (false);
     // Change the winbits so that the active window accepts the focus.
     pWindow->SetStyle ((pWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
-    pWindow->Show();
+    pWindow->Hide();
 
 
     SetPool( &GetDoc()->GetPool() );
@@ -267,6 +267,8 @@ void SlideSorterViewShell::CreateModelViewController (void)
         CreateView());
     DBG_ASSERT (mpSlideSorterView.get()!=NULL,
         "Can not create view for slide browser");
+
+    mpView = mpSlideSorterView.get();
 
     mpSlideSorterController
         = ::std::auto_ptr<controller::SlideSorterController>(
