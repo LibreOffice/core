@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:04:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1701,7 +1701,7 @@ IntervalInfo* getIntervalInfo( const String& rStringCode )
 {
     IntervalInfo* pInfo = NULL;
     INT16 i = 0;
-    while( (pInfo = pIntervalTable + i) != NULL )
+    while( (pInfo = pIntervalTable + i)->mpStringCode != NULL )
     {
         if( rStringCode.EqualsIgnoreCaseAscii( pInfo->mpStringCode ) )
             break;
