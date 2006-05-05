@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:01:32 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,7 +575,6 @@ public:
     USHORT          GetPosInParent() const { return nPosInParent; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
-    BOOL            IsTopmostApplicationMenu();
 };
 
 // To get the transparent mouse-over look, the closer is actually a toolbox
@@ -1109,6 +1108,13 @@ void Menu::RequestHelp( const HelpEvent& rHEvt )
 void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
 {
     VclMenuEvent aEvent( this, nEvent, nPos );
+
+    // This is needed by atk accessibility bridge
+    if ( nEvent == VCLEVENT_MENU_HIGHLIGHT )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->mpApp->ImplCallEventListeners( &aEvent );
+    }
 
     if ( !maEventListeners.empty() )
         maEventListeners.Call( &aEvent );
@@ -2976,7 +2982,20 @@ BOOL Menu::GetSystemMenuData( SystemMenuData* pData ) const
         return FALSE;
 }
 
+bool Menu::IsHighlighted( USHORT nItemPos ) const
+{
+    bool bRet = false;
 
+    if( pWindow )
+    {
+        if( bIsMenuBar )
+            bRet = ( nItemPos == static_cast< MenuBarWindow * > (pWindow)->GetHighlightedItem() );
+        else
+            bRet = ( nItemPos == static_cast< MenuFloatingWindow * > (pWindow)->GetHighlightedItem() );
+    }
+
+    return bRet;
+}
 
 // -----------
 // - MenuBar -
@@ -4498,9 +4517,11 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             else
             {
                 StopExecute();
-                MenuFloatingWindow* pFloat = ((PopupMenu*)pMenu->pStartedFrom)->ImplGetFloatingWindow();
+                PopupMenu* pPopupMenu = (PopupMenu*)pMenu->pStartedFrom;
+                MenuFloatingWindow* pFloat = pPopupMenu->ImplGetFloatingWindow();
                 pFloat->GrabFocus();
                 pFloat->KillActivePopup();
+                pPopupMenu->pStartedFrom->ImplCallHighlight(pFloat->nHighlightedItem);
             }
         }
         break;
@@ -4714,16 +4735,10 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
-    if ( pMenu )
+    if ( pMenu && !pMenu->pStartedFrom )
         xAcc = pMenu->GetAccessible();
 
     return xAcc;
-}
-
-
-BOOL MenuFloatingWindow::IsTopmostApplicationMenu()
-{
-    return (!pMenu->pStartedFrom) ? TRUE : FALSE;
 }
 
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
