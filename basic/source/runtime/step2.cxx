@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:04:37 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include "opcodes.hxx"
 
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 using namespace com::sun::star::container;
@@ -449,50 +450,78 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                 {
                     Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
                     Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
-
-                    // Haben wir Index-Access?
-                    if( xIndexAccess.is() )
+                    if ( !SbiRuntime::isVBAEnabled() )
                     {
-                        UINT32 nParamCount = (UINT32)pPar->Count() - 1;
-                        if( nParamCount != 1 )
+                        // Haben wir Index-Access?
+                        if( xIndexAccess.is() )
                         {
-                            StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                            return pElem;
-                        }
+                            UINT32 nParamCount = (UINT32)pPar->Count() - 1;
+                            if( nParamCount != 1 )
+                            {
+                                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                                return pElem;
+                            }
 
-                        // Index holen
-                        INT32 nIndex = pPar->Get( 1 )->GetLong();
-                        Reference< XInterface > xRet;
-                        try
-                        {
-                            Any aAny = xIndexAccess->getByIndex( nIndex );
-                            TypeClass eType = aAny.getValueType().getTypeClass();
-                            if( eType == TypeClass_INTERFACE )
-                                xRet = *(Reference< XInterface >*)aAny.getValue();
-                        }
-                        catch (IndexOutOfBoundsException& e1)
-                        {
-                            // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
-                            StarBASIC::Error( SbERR_OUT_OF_RANGE );
-                        }
+                            // Index holen
+                            INT32 nIndex = pPar->Get( 1 )->GetLong();
+                            Reference< XInterface > xRet;
+                            try
+                            {
+                                Any aAny = xIndexAccess->getByIndex( nIndex );
+                                TypeClass eType = aAny.getValueType().getTypeClass();
+                                if( eType == TypeClass_INTERFACE )
+                                    xRet = *(Reference< XInterface >*)aAny.getValue();
+                            }
+                            catch (IndexOutOfBoundsException& e1)
+                            {
+                                // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
+                                StarBASIC::Error( SbERR_OUT_OF_RANGE );
+                            }
 
-                        // #57847 Immer neue Variable anlegen, sonst Fehler
-                        // durch PutObject(NULL) bei ReadOnly-Properties.
-                        pElem = new SbxVariable( SbxVARIANT );
-                        if( xRet.is() )
-                        {
-                            aAny <<= xRet;
+                            // #57847 Immer neue Variable anlegen, sonst Fehler
+                            // durch PutObject(NULL) bei ReadOnly-Properties.
+                            pElem = new SbxVariable( SbxVARIANT );
+                            if( xRet.is() )
+                            {
+                                aAny <<= xRet;
 
-                            // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
-                            String aName;
-                            SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
-                            pElem->PutObject( xWrapper );
-                        }
-                        else
-                        {
-                            pElem->PutObject( NULL );
+                                // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
+                                String aName;
+                                SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
+                                pElem->PutObject( xWrapper );
+                            }
+                            else
+                            {
+                                pElem->PutObject( NULL );
+                            }
                         }
                     }
+                    else
+                    {
+                        rtl::OUString sDefaultMethod;
+
+                        Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
+
+                        if ( xDfltMethod.is() )
+                            sDefaultMethod = xDfltMethod->getName();
+                        else if( xIndexAccess.is() )
+                            sDefaultMethod = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getByIndex" ) );
+
+                        if ( sDefaultMethod.getLength() )
+                        {
+                            SbxVariable* pMeth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                            SbxVariableRef refTemp = pMeth;
+                            if ( refTemp )
+                            {
+                                pMeth->SetParameters( pPar );
+                                SbxVariable* pNew = new SbxMethod( *(SbxMethod*)pMeth );
+                                pElem = pNew;
+                            }
+
+                        }
+                    }
+
+
                 }
 
                 // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
