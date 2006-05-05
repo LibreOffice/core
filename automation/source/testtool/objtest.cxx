@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:15:58 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,10 +510,28 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "501" );  // WinXP
 #elif defined SOLARIS && defined SPARC
     abGP.Append( "01" );  // Solaris SPARC
+#elif defined SCO
+    abGP.Append( "02" );  // SCO UNIX
+#elif defined LINUX && defined INTEL
+    abGP.Append( "03" );  // Linux
+#elif defined AIX
+    abGP.Append( "04" );
 #elif defined SOLARIS && defined INTEL
     abGP.Append( "05" );  // Solaris x86
-#elif defined LINUX
-    abGP.Append( "03" );  // Linux
+#elif defined IRIX
+    abGP.Append( "06" );
+#elif defined HPUX
+    abGP.Append( "07" );
+#elif defined FREEBSD
+    abGP.Append( "08" );
+#elif defined MACOSX
+    abGP.Append( "12" );
+#elif defined LINUX && defined PPC
+    abGP.Append( "13" );
+#elif defined NETBSD
+    abGP.Append( "14" );
+#else
+#error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
     GETSET( aGP, "Current", abGP );
 }
@@ -2835,7 +2853,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.22 $
+    // search $Revision: 1.23 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
