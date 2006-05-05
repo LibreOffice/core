@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 15:36:14 $
+#   last change: $Author: rt $ $Date: 2006-05-05 11:01:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -358,8 +358,10 @@ PKGCONFIG_MODULES=gtk+-2.0 gthread-2.0
 LIB4TARGET=$(SLB)$/igtk_plug_
 LIB4FILES=\
             $(SLB)$/gtkapp.lib\
+            $(SLB)$/gtka11y.lib \
             $(SLB)$/gtkgdi.lib\
             $(SLB)$/gtkwin.lib
+
 SHL4TARGET=vclplug_gtk$(UPD)$(DLLPOSTFIX)
 SHL4IMPLIB=igtk_plug_
 SHL4LIBS=$(LIB4TARGET)
