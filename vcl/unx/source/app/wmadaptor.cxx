@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:08:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,6 +378,37 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         {
             if( aRealType == XA_STRING )
                 m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM( "ReflectionX Windows" ) );
+            XFree( pProperty );
+        }
+    }
+    if( m_aWMName.Len() == 0 )
+    {
+        Atom aTTAPlatform = XInternAtom( m_pDisplay, "TTA_CLIENT_PLATFORM", True );
+        if( aTTAPlatform != None &&
+            XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                aTTAPlatform,
+                                0, 32,
+                                False,
+                                XA_STRING,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0 )
+        {
+            if( aRealType == XA_STRING )
+            {
+                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("Tarantella" ) );
+                // #i62319# pretend that AlwaysOnTop works since
+                // the alwaysontop workaround in salframe.cxx results
+                // in a raise/lower loop on a Windows tarantella client
+                // FIXME: this property contains an identification string that
+                // in theory should be good enough to recognize running on a
+                // Windows client; however this string does not seem to be
+                // documented as well as the property itself.
+                m_bEnableAlwaysOnTopWorks = true;
+            }
             XFree( pProperty );
         }
     }
@@ -1012,13 +1043,52 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
         aWMLocale = pLang ? pLang : "C";
     }
 
+    static bool bTrustXmb = true;
+    #ifdef SOLARIS
+    /* #i64273# there are some weird cases when using IIIMP on Solaris
+    *  where for unknown reasons XmbTextListToTextProperty results in
+    *  garbage. Test one string once to ensure safety.
+    *
+    *  FIXME: This must be a bug in xiiimp.so.2 somewhere. However
+    *  it was not possible to recreate this in a small sample program.
+    *  This reeks of memory corruption somehow.
+    */
+    static bool bOnce = true;
+    if( bOnce )
+    {
+        bOnce = false;
+        XTextProperty aTestProp = { NULL, None, 0, 0 };
+        const char *pText = "trustme";
+        XmbTextListToTextProperty( m_pDisplay,
+                                   &const_cast<char*>(pText),
+                                   1,
+                                   XStdICCTextStyle,
+                                   &aTestProp );
+        bTrustXmb = (aTestProp.nitems == 7)                     &&
+                    (aTestProp.value != NULL )                  &&
+                    (strncmp( (char*)aTestProp.value, pText, 7 ) == 0) &&
+                    (aTestProp.encoding == XA_STRING);
+        if( aTestProp.value )
+            XFree( aTestProp.value );
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "%s\n",
+                 bTrustXmb ?
+                 "XmbTextListToTextProperty seems to work" :
+                 "XmbTextListToTextProperty does not seem to work" );
+        #endif
+    }
+    #endif
+
     char* pT = const_cast<char*>(aTitle.GetBuffer());
     XTextProperty aProp = { NULL, None, 0, 0 };
-    XmbTextListToTextProperty( m_pDisplay,
-                               &pT,
-                               1,
-                               XStdICCTextStyle,
-                               &aProp );
+    if( bTrustXmb )
+    {
+        XmbTextListToTextProperty( m_pDisplay,
+                                   &pT,
+                                   1,
+                                   XStdICCTextStyle,
+                                   &aProp );
+    }
 
     unsigned char* pData    = aProp.nitems ? aProp.value : (unsigned char*)aTitle.GetBuffer();
     Atom nType              = aProp.nitems ? aProp.encoding : XA_STRING;
