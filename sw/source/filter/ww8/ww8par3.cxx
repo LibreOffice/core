@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:21:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -876,9 +876,6 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         rNumFmt.SetSuffix( sPostfix );
         rNumFmt.SetIncludeUpperLevels( nUpperLevel );
     }
-
-    if( 0 < aLVL.nDxaLeft1 )
-        aLVL.nDxaLeft1 = aLVL.nDxaLeft1 * -1;
 
     if (eAdj == SVX_ADJUST_RIGHT)
     {
