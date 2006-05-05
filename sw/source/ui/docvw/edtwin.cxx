@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:08:54 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1912,18 +1912,45 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             }
                             // <- #i23725#
                             // --> OD 2006-01-31 #b6341339#, #i58776#
-                            // In this situation method <SwEditShell::NumOrNoNum(..)>
+                            // --> OD 2006-04-21 #i63540#
+                            // revise fix for issues b6341339 and i58776:
+                            // If the cursor is in an empty paragraph, which has
+                            // a numbering, but not the oultine numbering, and
+                            // there is no selection, the numbering has to be
+                            // deleted on key <Backspace>.
+                            // Otherwise method <SwEditShell::NumOrNoNum(..)>
                             // should only change the <IsCounted()> state of
                             // the current paragraph depending of the key.
                             // On <backspace> it is set to <false>,
                             // on <shift-backspace> it is set to <true>.
-                            // No switching on or off of the numbering at the
-                            // current paragraph is intended here.
                             // Thus, assure that method <SwEditShell::NumOrNum(..)>
                             // is only called for the intended purpose.
-                            if ( !bDone &&
-                                 ( ( !rSh.IsNoNum() && bOnlyBackspaceKey ) ||
-                                   ( rSh.IsNoNum() && !bOnlyBackspaceKey ) ) &&
+                            bool bCallNumOrNoNum( false );
+                            {
+                                if ( !bDone )
+                                {
+                                    if ( bOnlyBackspaceKey && !rSh.IsNoNum() )
+                                    {
+                                        bCallNumOrNoNum = true;
+                                    }
+                                    else if ( !bOnlyBackspaceKey && rSh.IsNoNum() )
+                                    {
+                                        bCallNumOrNoNum = true;
+                                    }
+                                    else if ( bOnlyBackspaceKey &&
+                                              rSh.IsSttPara() && rSh.IsEndPara() &&
+                                              !rSh.HasSelection() )
+                                    {
+                                        const SwNumRule* pCurrNumRule( rSh.GetCurNumRule() );
+                                        if ( pCurrNumRule &&
+                                             pCurrNumRule != rSh.GetOutlineNumRule() )
+                                        {
+                                            bCallNumOrNoNum = true;
+                                        }
+                                    }
+                                }
+                            }
+                            if ( bCallNumOrNoNum &&
                                  rSh.NumOrNoNum( !bOnlyBackspaceKey, TRUE ) )
                             {
                                 eKeyState = KS_NumOrNoNum;
