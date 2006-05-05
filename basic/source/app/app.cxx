@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:02:23 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,6 +396,7 @@ void BasicApp::Main( )
             if ( aDefIniPath.Exists() )
             {
                 aDefIniPath.CopyTo( aIniPath, FSYS_ACTION_COPYFILE );
+                FileStat::SetReadOnlyFlag( aIniPath, FALSE );
             }
         }
     }
