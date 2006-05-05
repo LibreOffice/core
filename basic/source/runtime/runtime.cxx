@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:36:16 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,14 @@
 // Makro MEMBER()
 #include <macfix.hxx>
 
+bool SbiRuntime::isVBAEnabled()
+{
+    bool result = false;
+    SbiInstance* pInst = pINST;
+    if ( pInst && pINST->pRun )
+        result = pInst->pRun->GetImageFlag( SBIMG_VBASUPPORT );
+    return result;
+}
 
 // #91147 Global reschedule flag
 static BOOL bStaticGlobalEnableReschedule = TRUE;
@@ -1116,4 +1124,13 @@ void SbiRuntime::DllCall
         Error( nErr );
     PushVar( pRes );
 }
-
+USHORT
+SbiRuntime::GetImageFlag( USHORT n ) const
+{
+    return pImg->GetFlag( n );
+}
+USHORT
+SbiRuntime::GetBase()
+{
+    return pImg->GetBase();
+}
