@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:21:10 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:31:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,9 +642,12 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case SID_SELECTALL:
         {
             SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-            ULONG nParaCount = pOutliner->GetParagraphCount();
-            if (nParaCount > 0)
-                pOLV->SelectRange(0L, USHORT(nParaCount) );
+            if(pOutliner)
+            {
+                ULONG nParaCount = pOutliner->GetParagraphCount();
+                if (nParaCount > 0)
+                    pOLV->SelectRange(0L, USHORT(nParaCount) );
+            }
         }
         break;
 
