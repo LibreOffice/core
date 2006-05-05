@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:40:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,9 +230,9 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     }
 
     // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
-    aRecList.AppendRecord( CreateRecord( EXC_ID_FONT ) );
-    aRecList.AppendRecord( CreateRecord( EXC_ID_FORMAT ) );
-    aRecList.AppendRecord( CreateRecord( EXC_ID_XF ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_FONTLIST ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_FORMATLIST ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_XFLIST ) );
     aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
 
     if( GetBiff() <= EXC_BIFF5 )
@@ -336,7 +336,7 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     // GUTS (count & size of outline icons)
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_GUTS ) );
     // DEFROWHEIGHT, created by the cell table
-    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_DEFROWHEIGHT ) );
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID2_DEFROWHEIGHT ) );
 
     // COUNTRY - in BIFF5/7 in every worksheet
     if( eBiff <= EXC_BIFF5 )
