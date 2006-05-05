@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:39:02 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@ const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
 
 // (0x001E, 0x041E) FORMAT ----------------------------------------------------
 
-const sal_uInt16 EXC_ID_FORMAT              = 0x041E;
+const sal_uInt16 EXC_ID2_FORMAT             = 0x001E;
+const sal_uInt16 EXC_ID4_FORMAT             = 0x041E;
 
 const sal_uInt16 EXC_FORMAT_OFFSET5         = 164;
 const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
@@ -100,7 +101,6 @@ const sal_uInt16 EXC_FORMAT_NOTFOUND        = 0xFFFF;
 
 // (0x0031) FONT --------------------------------------------------------------
 
-const sal_uInt16 EXC_ID_FONT                = 0x0031;
 const sal_uInt16 EXC_ID2_FONT               = 0x0031;
 const sal_uInt16 EXC_ID3_FONT               = 0x0231;
 
@@ -162,7 +162,7 @@ const sal_uInt16 EXC_FONTESC_SUB            = 0x02;
 const sal_uInt16 EXC_ID2_XF                 = 0x0043;
 const sal_uInt16 EXC_ID3_XF                 = 0x0243;
 const sal_uInt16 EXC_ID4_XF                 = 0x0443;
-const sal_uInt16 EXC_ID_XF                  = 0x00E0;
+const sal_uInt16 EXC_ID5_XF                 = 0x00E0;
 
 const sal_uInt32 EXC_XF_MAXCOUNT            = 4050;     /// Maximum number of all XF records.
 const sal_uInt32 EXC_XF_MAXSTYLECOUNT       = 1536;     /// Arbitrary maximum number of style XFs.
