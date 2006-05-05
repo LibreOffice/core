@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:46:25 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ AccessibleContextBase::AccessibleContextBase (
     if (pStateSet != NULL)
     {
         pStateSet->AddState (AccessibleStateType::ENABLED);
+        pStateSet->AddState (AccessibleStateType::SENSITIVE);
         pStateSet->AddState (AccessibleStateType::SHOWING);
         pStateSet->AddState (AccessibleStateType::VISIBLE);
         pStateSet->AddState (AccessibleStateType::FOCUSABLE);
