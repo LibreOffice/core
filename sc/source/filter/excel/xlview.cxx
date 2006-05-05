@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:53:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,11 @@ XclDocViewData::XclDocViewData() :
     mnWinY( 0 ),
     mnWinWidth( 0 ),
     mnWinHeight( 0 ),
-    mnFlags( 0 ),
+    mnFlags( EXC_WIN1_HOR_SCROLLBAR | EXC_WIN1_VER_SCROLLBAR | EXC_WIN1_TABBAR ),
     mnDisplXclTab( 0 ),
     mnFirstVisXclTab( 0 ),
-    mnXclSelectCnt( 0 ),
-    mnTabBarWidth( 0 )
+    mnXclSelectCnt( 1 ),
+    mnTabBarWidth( 600 )
 {
 }
 
