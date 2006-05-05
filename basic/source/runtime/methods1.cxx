@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:38:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,6 +590,17 @@ RTLFUNC(FreeLibrary)
     ByteString aByteDLLName( rPar.Get(1)->GetString(), gsl_getSystemTextEncoding() );
     pINST->GetDllMgr()->FreeDll( aByteDLLName );
 }
+bool IsBaseIndexOne()
+{
+    bool result = false;
+    if ( pINST && pINST->pRun )
+    {
+        USHORT res = pINST->pRun->GetBase();
+        if ( res )
+            result = true;
+    }
+    return result;
+}
 
 RTLFUNC(Array)
 {
@@ -597,10 +608,18 @@ RTLFUNC(Array)
     USHORT nArraySize = rPar.Count() - 1;
 
     // Option Base zunaechst ignorieren (kennt leider nur der Compiler)
+    bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
     if( nArraySize )
-        pArray->AddDim( 0, nArraySize-1 );
+    {
+        if ( bIncIndex )
+            pArray->AddDim( 1, nArraySize );
+        else
+            pArray->AddDim( 0, nArraySize-1 );
+    }
     else
+    {
         pArray->unoAddDim( 0, -1 );
+    }
 
     // Parameter ins Array uebernehmen
     for( short i = 0 ; i < nArraySize ; i++ )
@@ -608,7 +627,10 @@ RTLFUNC(Array)
         SbxVariable* pVar = rPar.Get(i+1);
         SbxVariable* pNew = new SbxVariable( *pVar );
         pNew->SetFlag( SBX_WRITE );
-        pArray->Put( pNew, &i );
+        short index = i;
+        if ( bIncIndex )
+            ++index;
+        pArray->Put( pNew, &index );
     }
 
     // Array zurueckliefern
