@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:02:17 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ const sal_uInt8 EXC_TOKID_PERCENT           = 0x14;     /// Percent sign.
 const sal_uInt8 EXC_TOKID_PAREN             = 0x15;     /// Parentheses.
 const sal_uInt8 EXC_TOKID_MISSARG           = 0x16;     /// Missing argument.
 const sal_uInt8 EXC_TOKID_STR               = 0x17;     /// String constant.
-const sal_uInt8 EXC_TOKID_EXTENDED          = 0x18;     /// Natural language reference (NLR).
+const sal_uInt8 EXC_TOKID_NLR               = 0x18;     /// Natural language reference (NLR).
 const sal_uInt8 EXC_TOKID_ATTR              = 0x19;     /// Special attribute.
 const sal_uInt8 EXC_TOKID_SHEET             = 0x1A;     /// Start of a sheet reference (BIFF2-BIFF4).
 const sal_uInt8 EXC_TOKID_ENDSHEET          = 0x1B;     /// End of a sheet reference (BIFF2-BIFF4).
@@ -153,22 +153,31 @@ const sal_uInt8 EXC_TOK_ATTR_SPACE_SP_CLOSE = 0x04;     /// Spaces before closin
 const sal_uInt8 EXC_TOK_ATTR_SPACE_BR_CLOSE = 0x05;     /// Line breaks before closing parenthesis.
 const sal_uInt8 EXC_TOK_ATTR_SPACE_SP_PRE   = 0x06;     /// Spaces before formula (BIFF3).
 
+const sal_uInt16 EXC_TOK_FUNCVAR_CMD        = 0x8000;   /// Macro command.
+const sal_uInt16 EXC_TOK_FUNCVAR_INDEXMASK  = 0x7FFF;   /// Mask for function/command index.
+const sal_uInt8 EXC_TOK_FUNCVAR_PROMPT      = 0x80;     /// User prompt for macro commands.
+const sal_uInt8 EXC_TOK_FUNCVAR_COUNTMASK   = 0x7F;     /// Mask for parameter count.
+
 const sal_uInt16 EXC_TOK_REF_COLREL         = 0x4000;   /// True = Column is relative.
 const sal_uInt16 EXC_TOK_REF_ROWREL         = 0x8000;   /// True = Row is relative.
 
-const sal_uInt8 EXC_TOK_EXT_ERR             = 0x01;     /// NLR: Invalid/deleted.
-const sal_uInt8 EXC_TOK_EXT_ROW             = 0x02;     /// NLR: Row index.
-const sal_uInt8 EXC_TOK_EXT_COL             = 0x03;     /// NLR: Column index.
-const sal_uInt8 EXC_TOK_EXT_ROWV            = 0x06;     /// NLR: Value in row.
-const sal_uInt8 EXC_TOK_EXT_COLV            = 0x07;     /// NLR: Value in column.
-const sal_uInt8 EXC_TOK_EXT_RANGE           = 0x0A;     /// NLR: Range.
-const sal_uInt8 EXC_TOK_EXT_SRANGE          = 0x0B;     /// Stacked NLR: Range.
-const sal_uInt8 EXC_TOK_EXT_SROW            = 0x0C;     /// Stacked NLR: Row index.
-const sal_uInt8 EXC_TOK_EXT_SCOL            = 0x0D;     /// Stacked NLR: Column index.
-const sal_uInt8 EXC_TOK_EXT_SROWV           = 0x0E;     /// Stacked NLR: Value in row.
-const sal_uInt8 EXC_TOK_EXT_SCOLV           = 0x0F;     /// Stacked NLR: Value in column.
-const sal_uInt8 EXC_TOK_EXT_RANGEERR        = 0x10;     /// NLR: Invalid/deleted range.
-const sal_uInt16 EXC_TOK_EXT_NATREL         = 0x8000;   /// True = Natural language ref is relative.
+const sal_uInt8 EXC_TOK_NLR_ERR             = 0x01;     /// NLR: Invalid/deleted.
+const sal_uInt8 EXC_TOK_NLR_ROWR            = 0x02;     /// NLR: Row index.
+const sal_uInt8 EXC_TOK_NLR_COLR            = 0x03;     /// NLR: Column index.
+const sal_uInt8 EXC_TOK_NLR_ROWV            = 0x06;     /// NLR: Value in row.
+const sal_uInt8 EXC_TOK_NLR_COLV            = 0x07;     /// NLR: Value in column.
+const sal_uInt8 EXC_TOK_NLR_RANGE           = 0x0A;     /// NLR: Range.
+const sal_uInt8 EXC_TOK_NLR_SRANGE          = 0x0B;     /// Stacked NLR: Range.
+const sal_uInt8 EXC_TOK_NLR_SROWR           = 0x0C;     /// Stacked NLR: Row index.
+const sal_uInt8 EXC_TOK_NLR_SCOLR           = 0x0D;     /// Stacked NLR: Column index.
+const sal_uInt8 EXC_TOK_NLR_SROWV           = 0x0E;     /// Stacked NLR: Value in row.
+const sal_uInt8 EXC_TOK_NLR_SCOLV           = 0x0F;     /// Stacked NLR: Value in column.
+const sal_uInt8 EXC_TOK_NLR_RANGEERR        = 0x10;     /// NLR: Invalid/deleted range.
+const sal_uInt8 EXC_TOK_NLR_SXNAME          = 0x1D;     /// NLR: Pivot table name.
+const sal_uInt16 EXC_TOK_NLR_REL            = 0x8000;   /// True = Natural language ref is relative.
+
+const sal_uInt32 EXC_TOK_NLR_ADDREL         = 0x80000000;   /// NLR relative (in appended data).
+const sal_uInt32 EXC_TOK_NLR_ADDMASK        = 0x3FFFFFFF;   /// Mask for number of appended ranges.
 
 // Function data ==============================================================
 
