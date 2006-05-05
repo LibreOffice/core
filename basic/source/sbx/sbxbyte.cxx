@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxbyte.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:46:31 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ void ImpPutByte( SbxValues* p, BYTE n )
         case SbxLPSTR:
             if( !p->pString )
                 p->pString = new XubString;
-            *p->pString = (USHORT)n;
+            ImpCvtNum( (double) n, 0, *p->pString );
             break;
         case SbxOBJECT:
         {
