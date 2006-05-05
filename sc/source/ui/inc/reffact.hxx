@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:46:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                         const Link& rChange );
         void            SetFlags( BOOL bCloseOnButtonUp );
+        void            SetSingleCell( BOOL bSingleCell );
         static void     SetAutoReOpen(BOOL bFlag);
 
         void            StartRefInput();
