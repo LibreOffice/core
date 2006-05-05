@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:24:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -631,8 +631,6 @@ public:
     SwNodeNum::tSwNumTreeNumber GetStart() const;
 
     bool IsNotifiable() const;
-
-    bool IsContinuous() const;
 
     void SetCounted(bool _bCounted);
     bool IsCounted() const;
