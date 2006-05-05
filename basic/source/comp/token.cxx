@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { BINARY,   "Binary" },
     { TBOOLEAN, "Boolean" },
     { BYREF,    "ByRef", },
+    { TBYTE,    "Byte", },
     { BYVAL,    "ByVal", },
     { CALL,     "Call" },
     { CASE,     "Case" },
@@ -607,9 +608,15 @@ special:
     }
 
     // CLASSMODULE, PROPERTY, GET, ENUM token only visible in compatible mode
-    if( !bCompatible )
+    SbiToken eTok = tp->t;
+    if( bCompatible )
     {
-        SbiToken eTok = tp->t;
+        // #129904 Suppress system
+        if( eTok == STOP && aSym.CompareIgnoreCaseToAscii( "system" ) == COMPARE_EQUAL )
+            eCurTok = SYMBOL;
+    }
+    else
+    {
         if( eTok == CLASSMODULE ||
             eTok == IMPLEMENTS ||
             eTok == PARAMARRAY ||
