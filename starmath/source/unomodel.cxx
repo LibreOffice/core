@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:20:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1001,7 +1001,15 @@ void SAL_CALL SmModel::render(
         rSelection >>= xModel;
         if (xModel == pDocSh->GetModel())
         {
-            SmViewShell *pView = SmGetActiveView();
+            //!! when called via API we may not have an active view
+            //!! thus we go and look for a view that can be used.
+            const TypeId aTypeId = TYPE( SmViewShell );
+            SfxViewShell* pViewSh = SfxViewShell::GetFirst( &aTypeId );
+            while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
+                pViewSh = SfxViewShell::GetNext( *pViewSh, &aTypeId );
+            SmViewShell *pView = PTR_CAST( SmViewShell, pViewSh );
+            DBG_ASSERT( pView, "SmModel::render : no SmViewShell found" );
+
             if (pView)
             {
                 SmPrinterAccess aPrinterAccess( *pDocSh );
