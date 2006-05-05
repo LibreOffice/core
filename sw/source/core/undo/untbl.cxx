@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:21:04 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,7 +711,9 @@ void SwUndoTblToTxt::Redo( SwUndoIter& rUndoIter )
     SwCntntNode* pCNd = aSaveIdx.GetNode().GetCntntNode();
     if( !pCNd && 0 == ( pCNd = rDoc.GetNodes().GoNext( &aSaveIdx ) ) &&
         0 == ( pCNd = rDoc.GetNodes().GoPrevious( &aSaveIdx )) )
+    {
         ASSERT( FALSE, "wo steht denn nun der TextNode" );
+    }
 
     pPam->GetPoint()->nNode = aSaveIdx;
     pPam->GetPoint()->nContent.Assign( pCNd, 0 );
@@ -1618,18 +1620,13 @@ SwTableLine* lcl_FindTableLine( const SwTable& rTable,
                                 const SwTableBox& rBox )
 {
     SwTableLine* pRet = NULL;
-
-    if( rBox.GetUpper()->GetUpper() != NULL )
-    {
-        pRet = rBox.GetUpper()->GetUpper()->
-            GetTabLines()[ 0 ];
-    }
-    else
-    {
-        const SwTableLine* pLine = rBox.GetUpper();
-        USHORT nLineNo = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
-        pRet = rTable.GetTabLines()[nLineNo - 1];
-    }
+    // i63949: For nested cells we have to take nLineNo - 1, too, not 0!
+    const SwTableLines &rTableLines = ( rBox.GetUpper()->GetUpper() != NULL ) ?
+                                  rBox.GetUpper()->GetUpper()->GetTabLines()
+                                : rTable.GetTabLines();
+    const SwTableLine* pLine = rBox.GetUpper();
+    USHORT nLineNo = rTableLines.C40_GETPOS( SwTableLine, pLine );
+    pRet = rTableLines[nLineNo - 1];
 
     return pRet;
 }
