@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:49:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,7 @@ enum SbiToken {
     JS_GT, JS_GE, JS_LSHIFT, JS_RSHIFT, JS_RSHIFT_Z,
     JS_PLUS, JS_MINUS, JS_MUL, JS_DIV, JS_MOD, JS_LOG_NOT, JS_BIT_NOT,
     JS_INC, JS_DEC, JS_LPAREN, JS_RPAREN, JS_LINDEX, JS_RINDEX
+    , VBASUPPORT
 };
 
 #ifdef SbiTokenSHAREDTMPUNDEF
