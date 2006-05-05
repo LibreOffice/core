@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:59:30 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     {
         ::scf::xls::dump::Dumper aDumper( rMedium, pDocument->GetDocumentShell() );
         aDumper.Dump();
+        if( !aDumper.IsImportEnabled() )
+            return ERRCODE_ABORT;
     }
 #endif
 
