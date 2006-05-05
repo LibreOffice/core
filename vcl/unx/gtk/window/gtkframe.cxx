@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:03:16 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 11:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include <floatwin.hxx>
 #include <salprn.h>
 #include <svapp.hxx>
+#include <window.hxx>
 
 #include <prex.h>
 #include <X11/Xatom.h>
@@ -59,6 +60,11 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif
+
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+
+using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
 
@@ -405,11 +411,47 @@ GtkSalFrame::~GtkSalFrame()
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
     if( m_pWindow )
+    {
+        g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", NULL );
         gtk_widget_destroy( GTK_WIDGET(m_pWindow) );
+    }
     if( m_pForeignParent )
         g_object_unref( G_OBJECT(m_pForeignParent) );
     if( m_pForeignTopLevel )
         g_object_unref(G_OBJECT( m_pForeignTopLevel) );
+}
+
+/*
+ * Always use a sub-class of GtkFixed we can tag for a11y. This allows us to
+ * utilize GAIL for the toplevel window and toolkit implementation incl.
+ * key event listener support ..
+ */
+
+GType
+ooo_fixed_get_type()
+{
+    static GType type = 0;
+
+    if (!type) {
+        static const GTypeInfo tinfo =
+        {
+            sizeof (GtkFixedClass),
+            (GBaseInitFunc) NULL,      /* base init */
+            (GBaseFinalizeFunc) NULL,  /* base finalize */
+            (GClassInitFunc) NULL,     /* class init */
+            (GClassFinalizeFunc) NULL, /* class finalize */
+            NULL,                      /* class data */
+            sizeof (GtkFixed),         /* instance size */
+            0,                         /* nb preallocs */
+            (GInstanceInitFunc) NULL,  /* instance init */
+            NULL                       /* value table */
+        };
+
+        type = g_type_register_static( GTK_TYPE_FIXED, "OOoFixed",
+                                       &tinfo, (GTypeFlags) 0);
+    }
+
+    return type;
 }
 
 void GtkSalFrame::InitCommon()
@@ -459,7 +501,7 @@ void GtkSalFrame::InitCommon()
 
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
-    m_pFixedContainer = GTK_FIXED(gtk_fixed_new());
+    m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), NULL ));
     gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pFixedContainer) );
     gtk_widget_show( GTK_WIDGET(m_pFixedContainer) );
 
@@ -590,6 +632,102 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     }
 }
 
+GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
+{
+    return (GtkSalFrame *) g_object_get_data( G_OBJECT( pWindow ), "SalFrame" );
+}
+
+AtkRole
+GtkSalFrame::GetAtkRole( GtkWindow* window )
+{
+    static AtkRole aDefaultRole = ATK_ROLE_INVALID;
+
+    // Special role for sub-menu and combo-box popups that are exposed directly
+    // by their parents already.
+    if( aDefaultRole == ATK_ROLE_INVALID )
+        aDefaultRole = atk_role_register( "redundant object" );
+
+    AtkRole role = aDefaultRole;
+
+    GtkSalFrame * pFrame = getFromWindow( window );
+    if( pFrame )
+    {
+        Window *pWindow = static_cast <Window *> (pFrame->GetInstance());
+        if( pWindow )
+        {
+            // Determine the appropriate role for the GtkWindow
+            switch( pWindow->GetAccessibleRole() )
+            {
+                case accessibility::AccessibleRole::ALERT:
+                    role = ATK_ROLE_ALERT;
+                    break;
+
+                case accessibility::AccessibleRole::DIALOG:
+                    role = ATK_ROLE_DIALOG;
+                    break;
+
+                case accessibility::AccessibleRole::FRAME:
+                    role = ATK_ROLE_FRAME;
+                    break;
+
+                // Ignore window objects for sub-menus, which are exposed
+                // as children of their parent menu
+                case accessibility::AccessibleRole::WINDOW:
+                {
+                    Window *pChild = pWindow->GetChild( 0 );
+                    if( pChild )
+                    {
+                        uno::Reference< accessibility::XAccessible > xAccessible( pChild->GetAccessible( true ) );
+                        if( xAccessible.is() )
+                            role = ATK_ROLE_WINDOW;
+                    }
+                }
+                break;
+
+                default:
+                {
+                    Window *pChild = pWindow->GetChild( 0 );
+                    if( pChild )
+                    {
+                        if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )
+                        {
+                            role = ATK_ROLE_TOOL_TIP;
+                            pChild->SetAccessibleRole( accessibility::AccessibleRole::LABEL );
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    return role;
+}
+
+
+// FIXME: rename as appropriate
+uno::Reference< accessibility::XAccessible >
+GtkSalFrame::getAccessible( bool bCreate )
+{
+    // Yes - this is a hack - but: this abstraction seems totally useless to me
+    Window *pWindow = static_cast<Window *>(GetInstance());
+
+    g_return_val_if_fail( pWindow != NULL, NULL );
+
+    // skip the border window accessible
+    if( pWindow->GetType() == WINDOW_BORDERWINDOW )
+    {
+        pWindow = pWindow->GetAccessibleChildWindow( 0 );
+        g_return_val_if_fail( pWindow != NULL, NULL );
+    }
+    // replace the top-level role Dialog with something more appropriate ..
+    else if( pWindow->GetAccessibleRole() == accessibility::AccessibleRole::ALERT ||
+             pWindow->GetAccessibleRole() == accessibility::AccessibleRole::DIALOG )
+        pWindow->SetAccessibleRole(accessibility::AccessibleRole::OPTION_PANE);
+
+    return pWindow->GetAccessible( bCreate );
+}
+
 void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
 {
     if( nStyle & SAL_FRAME_STYLE_DEFAULT ) // ensure default style
@@ -599,6 +737,8 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     }
 
     m_pWindow = GTK_WINDOW( gtk_widget_new( GTK_TYPE_WINDOW, "type", ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL, "visible", FALSE, NULL ) );
+    g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
+
     m_pParent = static_cast<GtkSalFrame*>(pParent);
     m_pForeignParent = NULL;
     m_aForeignParentWindow = None;
