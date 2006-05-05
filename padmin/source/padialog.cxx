@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:41:01 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:04:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,9 +500,11 @@ void PADialog::PrintTestPage()
     aPrintText.appendAscii( ": " );
     aPrintText.append( sPrinter );
     aPrintText.appendAscii( "\n: " );
-    aPrintText.append( pPrintParser->getPrinterName() );
+    if( pPrintParser )
+        aPrintText.append( pPrintParser->getPrinterName() );
     aPrintText.appendAscii( "\n: " );
-    INetURLObject aDriverPath( pPrintParser->getFilename(), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+    INetURLObject aDriverPath( pPrintParser ? pPrintParser->getFilename() : String( RTL_CONSTASCII_USTRINGPARAM( "<undef>" ) ),
+                               INET_PROT_FILE, INetURLObject::ENCODE_ALL );
     aPrintText.append( aDriverPath.GetName() );
     aPrintText.appendAscii( "\n: " );
     aPrintText.append( aInfo.m_aCommand );
