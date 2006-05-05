@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:29:41 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1463,29 +1463,32 @@ Window* Application::GetDefDialogParent()
 
         // current focus frame
         Window *pWin = NULL;
-        if( pWin = pSVData->maWinData.mpFocusWin )
+        if( (pWin = pSVData->maWinData.mpFocusWin) != NULL )
         {
             while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
                 pWin = pWin->mpWindowImpl->mpParent;
 
-            // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
-            if( !pWin->mpWindowImpl )
+            if( (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
             {
-                DBG_ERROR( "Window hierarchy corrupted!" );
-                pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
-                return NULL;
-            }
+                // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
+                if( !pWin->mpWindowImpl )
+                {
+                    DBG_ERROR( "Window hierarchy corrupted!" );
+                    pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
+                    return NULL;
+                }
 
-            // MAV: before the implementation has used only decorated windows,
-            //      but it is not true in case of ActiveX or plugin scenario,
-            //      so this check is commented out
-            // if( pWin->mpWindowImpl->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
-                return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
-            // else
-            //    return NULL;
+                // MAV: before the implementation has used only decorated windows,
+                //      but it is not true in case of ActiveX or plugin scenario,
+                //      so this check is commented out
+                // if( pWin->mpWindowImpl->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
+                    return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
+                // else
+                //    return NULL;
+            }
         }
         // last active application frame
-        else if( pWin = pSVData->maWinData.mpActiveApplicationFrame )
+        if( pWin = pSVData->maWinData.mpActiveApplicationFrame )
         {
             return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
@@ -1495,7 +1498,10 @@ Window* Application::GetDefDialogParent()
             pWin = pSVData->maWinData.mpFirstFrame;
             while( pWin )
             {
-                if( pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
+                if( pWin->ImplGetWindow()->IsTopWindow() &&
+                    pWin->mpWindowImpl->mbReallyVisible &&
+                    (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0
+                )
                 {
                     while( pWin->mpWindowImpl->mpParent )
                         pWin = pWin->mpWindowImpl->mpParent;
