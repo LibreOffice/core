@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:21:45 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,6 +337,8 @@ bool PrintFontManager::initFontconfig()
                                                     FC_FILE,
                                                     FC_OUTLINE,
                                                     FC_INDEX,
+                                                    FC_EMBEDDED_BITMAP,
+                                                    FC_ANTIALIAS,
                                                     (void *) NULL );
     FcPattern* pPattern = rWrapper.FcPatternCreate();
     FcFontSet* pFSet = rWrapper.FcFontList( pConfig, pPattern, pOSet );
@@ -357,32 +359,16 @@ bool PrintFontManager::initFontconfig()
             int nCollectionEntry = -1;
             FcBool outline = false, embitmap = true, antialias = true;
 
-            FcResult eFileRes   = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FILE, 0, &file );
-            FcResult eFamilyRes = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FAMILY, 0, &family );
-            FcResult eStyleRes  = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_STYLE, 0, &style );
-            FcResult eSlantRes  = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SLANT, 0, &slant );
-            FcResult eWeightRes = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_WEIGHT, 0, &weight );
-            FcResult eSpacRes   = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SPACING, 0, &spacing );
-            FcResult eOutRes    = rWrapper.FcPatternGetBool( pFSet->fonts[i], FC_OUTLINE, 0, &outline );
-            FcResult eIndexRes = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry );
-
-            FcResult eEmbeddedBitmap = FcResultNoMatch;
-            FcResult eAntialias = FcResultNoMatch;
-
-            if (eFamilyRes == FcResultMatch)
-            {
-                FcPattern *pMatch = rWrapper.FcPatternCreate();
-                rWrapper.FcPatternAddString(pMatch, FC_FAMILY, family);
-                rWrapper.FcConfigSubstitute( NULL, pMatch, FcMatchPattern );
-                FcResult eResult;
-                if (FcPattern* pResult = rWrapper.FcFontSetMatch( NULL, &pFSet, 1, pMatch, &eResult ))
-                {
-                    eEmbeddedBitmap = rWrapper.FcPatternGetBool( pResult, FC_EMBEDDED_BITMAP, 0, &embitmap );
-                    eAntialias = rWrapper.FcPatternGetBool( pResult, FC_ANTIALIAS, 0, &antialias );
-                    rWrapper.FcPatternDestroy(pResult);
-                }
-                rWrapper.FcPatternDestroy(pMatch);
-               }
+            FcResult eFileRes         = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FILE, 0, &file );
+            FcResult eFamilyRes       = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FAMILY, 0, &family );
+            FcResult eStyleRes        = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_STYLE, 0, &style );
+            FcResult eSlantRes        = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SLANT, 0, &slant );
+            FcResult eWeightRes       = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_WEIGHT, 0, &weight );
+            FcResult eSpacRes         = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SPACING, 0, &spacing );
+            FcResult eOutRes          = rWrapper.FcPatternGetBool( pFSet->fonts[i], FC_OUTLINE, 0, &outline );
+            FcResult eIndexRes        = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry );
+            FcResult eEmbeddedBitmap  = rWrapper.FcPatternGetBool( pFSet->fonts[i], FC_EMBEDDED_BITMAP, 0, &embitmap );
+            FcResult eAntialias       = rWrapper.FcPatternGetBool( pFSet->fonts[i], FC_ANTIALIAS, 0, &antialias );
 
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eOutRes != FcResultMatch )
                 continue;
