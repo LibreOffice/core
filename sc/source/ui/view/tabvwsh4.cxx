@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:04:36 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1377,7 +1377,7 @@ IMPL_LINK( ScTabViewShell, SimpleRefChange, String*, pResult )
 }
 
 void ScTabViewShell::StartSimpleRefDialog(
-            const String& rTitle, const String& rInitVal, BOOL bCloseOnButtonUp )
+            const String& rTitle, const String& rInitVal, BOOL bCloseOnButtonUp, BOOL bSingleCell )
 {
     SfxViewFrame* pViewFrm = GetViewFrame();
 
@@ -1404,6 +1404,7 @@ void ScTabViewShell::StartSimpleRefDialog(
                            LINK( this, ScTabViewShell, SimpleRefChange ) );
         pWnd->SetRefString( rInitVal );
         pWnd->SetFlags( bCloseOnButtonUp );
+        pWnd->SetSingleCell( bSingleCell );
         pWnd->SetAutoReOpen( FALSE );
         Window* pWin = pWnd->GetWindow();
         pWin->SetText( rTitle );
