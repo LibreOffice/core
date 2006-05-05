@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:06:46 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ class ImportExcel8 : public ImportExcel
 
         void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
-        void                    Dimensions( void );             // 0x0200
 
         virtual void            EndSheet( void );
         virtual void            PostDocLoad( void );
