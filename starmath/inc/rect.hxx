@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:59:26 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 07:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef RECT_HXX
 #define RECT_HXX
 
-#include <new.h>
+#include <new>
 
 
 #ifndef _GEN_HXX //autogen
