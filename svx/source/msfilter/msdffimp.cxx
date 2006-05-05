@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:14:51 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2416,8 +2416,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DSkewAmount ) || IsProperty( DFF_Prop_c3DSkewAngle ) )
         {
             const rtl::OUString sExtrusionSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-            double fSkewAmount = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount );
-            double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle )) / 65536.0;
+            double fSkewAmount = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 );
+            double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, -135 * 65536 )) / 65536.0;
 
             EnhancedCustomShapeParameterPair aSkewPair;
             aSkewPair.First.Value <<= fSkewAmount;
