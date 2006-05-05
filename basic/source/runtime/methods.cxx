@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:38:28 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,7 +645,11 @@ void implStepRenameUCB( const String& aSource, const String& aDest )
     {
         try
         {
-            xSFI->move( getFullPath( aSource ), getFullPath( aDest ) );
+            String aDestFullPath = getFullPath( aDest );
+            if( xSFI->exists( aDestFullPath ) )
+                StarBASIC::Error( SbERR_FILE_EXISTS );
+            else
+                xSFI->move( getFullPath( aSource ), aDestFullPath );
         }
         catch( Exception & )
         {
@@ -1256,14 +1260,58 @@ RTLFUNC(Mid)
         {
             nStartPos--;
             USHORT nLen = 0xffff;
+            bool bWriteNoLenParam = false;
             if ( nArgCount == 3 || bWrite )
-                nLen = (USHORT)(rPar.Get(3)->GetLong() );
+            {
+                INT32 n = rPar.Get(3)->GetLong();
+                if( bWrite && n == -1 )
+                    bWriteNoLenParam = true;
+                nLen = (USHORT)n;
+            }
             String aResultStr;
             if ( bWrite )
             {
-                aResultStr = aArgStr;
-                aResultStr.Erase( nStartPos, nLen );
-                aResultStr.Insert(rPar.Get(4)->GetString(),0,nLen,nStartPos);
+                SbiInstance* pInst = pINST;
+                bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+                if( bCompatibility )
+                {
+                    USHORT nArgLen = aArgStr.Len();
+                    if( nStartPos + 1 > nArgLen )
+                    {
+                        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                        return;
+                    }
+
+                    String aReplaceStr = rPar.Get(4)->GetString();
+                    USHORT nReplaceStrLen = aReplaceStr.Len();
+                    USHORT nReplaceLen;
+                    if( bWriteNoLenParam )
+                    {
+                        nReplaceLen = nReplaceStrLen;
+                    }
+                    else
+                    {
+                        nReplaceLen = nLen;
+                        if( nReplaceLen > nReplaceStrLen )
+                            nReplaceLen = nReplaceStrLen;
+                    }
+
+                    USHORT nReplaceEndPos = nStartPos + nReplaceLen;
+                    if( nReplaceEndPos > nArgLen )
+                        nReplaceLen -= (nReplaceEndPos - nArgLen);
+
+                    aResultStr = aArgStr;
+                    USHORT nErase = nReplaceLen;
+                    aResultStr.Erase( nStartPos, nErase );
+                    aResultStr.Insert( aReplaceStr, 0, nReplaceLen, nStartPos );
+                }
+                else
+                {
+                    aResultStr = aArgStr;
+                    aResultStr.Erase( nStartPos, nLen );
+                    aResultStr.Insert(rPar.Get(4)->GetString(),0,nLen,nStartPos);
+                }
+
                 rPar.Get(1)->PutString( aResultStr );
             }
             else
