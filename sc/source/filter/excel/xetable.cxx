@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:46:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 // ============================================================================
 
 XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const String& rResult ) :
-    XclExpRecord( EXC_ID_STRING ),
+    XclExpRecord( EXC_ID3_STRING ),
     mxResult( XclExpStringHelper::CreateString( rRoot, rResult ) )
 {
     DBG_ASSERT( (rRoot.GetBiff() <= EXC_BIFF5) || (mxResult->Len() > 0),
@@ -148,7 +148,7 @@ void XclExpRangeFmlaBase::WriteRangeAddress( XclExpStream& rStrm ) const
 // Array formulas =============================================================
 
 XclExpArray::XclExpArray( XclExpTokenArrayRef xTokArr, const ScRange& rScRange ) :
-    XclExpRangeFmlaBase( EXC_ID_ARRAY, 14 + xTokArr->GetSize(), rScRange ),
+    XclExpRangeFmlaBase( EXC_ID3_ARRAY, 14 + xTokArr->GetSize(), rScRange ),
     mxTokArr( xTokArr )
 {
 }
@@ -275,7 +275,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
 
 XclExpTableop::XclExpTableop( const ScAddress& rScPos,
         const XclMultipleOpRefs& rRefs, sal_uInt8 nScMode ) :
-    XclExpRangeFmlaBase( EXC_ID_TABLEOP, 16, rScPos ),
+    XclExpRangeFmlaBase( EXC_ID3_TABLEOP, 16, rScPos ),
     mnLastAppXclCol( static_cast< sal_uInt16 >( rScPos.Col() ) ),
     mnColInpXclCol( static_cast< sal_uInt16 >( rRefs.maColFirstScPos.Col() ) ),
     mnColInpXclRow( static_cast< sal_uInt16 >( rRefs.maColFirstScPos.Row() ) ),
@@ -609,7 +609,7 @@ XclExpNumberCell::XclExpNumberCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, double fValue ) :
     // #i41210# always use latin script for number cells - may look wrong for special number formats...
-    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID3_NUMBER, 8, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mfValue( fValue )
 {
 }
@@ -627,7 +627,7 @@ XclExpBooleanCell::XclExpBooleanCell(
         const XclExpRoot rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
     // #i41210# always use latin script for boolean cells
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mbValue( bValue )
 {
 }
@@ -645,7 +645,7 @@ XclExpErrorCell::XclExpErrorCell(
         const XclExpRoot rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
     // #i41210# always use latin script for error cells
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
+    XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mnErrCode( nErrCode )
 {
 }
@@ -662,7 +662,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell, 256, 256 )
 XclExpLabelCell::XclExpLabelCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, const ScStringCell& rCell ) :
-    XclExpSingleCellBase( EXC_ID_LABEL, 0, rXclPos, nForcedXFId )
+    XclExpSingleCellBase( EXC_ID3_LABEL, 0, rXclPos, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
     XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, EXC_STR_DEFAULT, nMaxLen );
@@ -673,7 +673,7 @@ XclExpLabelCell::XclExpLabelCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
         const ScEditCell& rCell, XclExpHyperlinkHelper& rLinkHelper ) :
-    XclExpSingleCellBase( EXC_ID_LABEL, 0, rXclPos, nForcedXFId )
+    XclExpSingleCellBase( EXC_ID3_LABEL, 0, rXclPos, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
     XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen );
@@ -756,7 +756,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         XclExpArrayBuffer& rArrayBfr,
         XclExpShrfmlaBuffer& rShrfmlaBfr,
         XclExpTableopBuffer& rTableopBfr ) :
-    XclExpSingleCellBase( EXC_ID_FORMULA, 0, rXclPos, nForcedXFId ),
+    XclExpSingleCellBase( EXC_ID2_FORMULA, 0, rXclPos, nForcedXFId ),
     mrScFmlaCell( const_cast< ScFormulaCell& >( rScFmlaCell ) )
 {
     // *** Find result number format overwriting cell number format *** -------
@@ -1088,7 +1088,7 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell, 256, 256 )
 
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
-    XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
+    XclExpMultiCellBase( EXC_ID3_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
     DBG_ASSERT( rXFId.mnCount > 0, "XclExpBlankCell::XclExpBlankCell - invalid count" );
     AppendXFId( rXFId );
@@ -1097,7 +1097,7 @@ XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXF
 XclExpBlankCell::XclExpBlankCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos, sal_uInt16 nLastXclCol,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId ) :
-    XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
+    XclExpMultiCellBase( EXC_ID3_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
     DBG_ASSERT( rXclPos.mnCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
     // #i46627# use default script type instead of ApiScriptType::WEAK
@@ -1267,8 +1267,8 @@ XclExpDimensions::XclExpDimensions( const XclExpRoot& rRoot ) :
         case EXC_BIFF2: SetRecHeader( EXC_ID2_DIMENSIONS, 8 );  break;
         case EXC_BIFF3:
         case EXC_BIFF4:
-        case EXC_BIFF5: SetRecHeader( EXC_ID_DIMENSIONS, 10 );  break;
-        case EXC_BIFF8: SetRecHeader( EXC_ID_DIMENSIONS, 14 );  break;
+        case EXC_BIFF5: SetRecHeader( EXC_ID3_DIMENSIONS, 10 ); break;
+        case EXC_BIFF8: SetRecHeader( EXC_ID3_DIMENSIONS, 14 ); break;
         default:        DBG_ERROR_BIFF();
     }
 }
@@ -1508,7 +1508,7 @@ bool operator<( const XclExpDefaultRowData& rLeft, const XclExpDefaultRowData& r
 // ----------------------------------------------------------------------------
 
 XclExpDefrowheight::XclExpDefrowheight() :
-    XclExpRecord( EXC_ID_DEFROWHEIGHT, 4 )
+    XclExpRecord( EXC_ID3_DEFROWHEIGHT, 4 )
 {
 }
 
@@ -1527,7 +1527,7 @@ void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
 
 XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
         XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty ) :
-    XclExpRecord( EXC_ID_ROW, 16 ),
+    XclExpRecord( EXC_ID3_ROW, 16 ),
     XclExpRoot( rRoot ),
     mnXclRow( nXclRow ),
     mnHeight( 0 ),
@@ -2212,7 +2212,7 @@ XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
     XclExpRecordRef xRec;
     switch( nRecId )
     {
-        case EXC_ID_DEFROWHEIGHT:   xRec = mxDefrowheight;  break;
+        case EXC_ID2_DEFROWHEIGHT:  xRec = mxDefrowheight;  break;
         case EXC_ID_GUTS:           xRec = mxGuts;          break;
         case EXC_ID_NOTE:           xRec = mxNoteList;      break;
         case EXC_ID_MERGEDCELLS:    xRec = mxMergedcells;   break;
