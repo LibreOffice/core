@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:36:50 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2528,8 +2528,6 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 {
     ScUnoGuard aGuard;
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();      // from derived class
-
     sal_Int32 nCount(aPropertyNames.getLength());
     sal_Int32 nValues(aValues.getLength());
     if (nCount != nValues)
@@ -2537,18 +2535,47 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 
     if ( pDocShell && nCount )
     {
-        SfxItemPropertySet aPropSet( pPropertyMap );
+        const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();      // from derived class
+        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const uno::Any* pValues = aValues.getConstArray();
+
+        const SfxItemPropertyMap** pMapArray = new const SfxItemPropertyMap*[nCount];
+
+        sal_Int32 i;
+        for(i = 0; i < nCount; i++)
+        {
+            // first loop: find all properties in map, but handle only CellStyle
+            // (CellStyle must be set before any other cell properties)
+
+            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( pPropertyMap, pNames[i] );
+            pMapArray[i] = pMap;
+            if (pMap)
+            {
+                pPropertyMap = pMap + 1;    // continue searching at the next entry
+
+                if ( pMap->nWID == SC_WID_UNO_CELLSTYL )
+                {
+                    try
+                    {
+                        SetOnePropertyValue( pMap, pValues[i] );
+                    }
+                    catch ( lang::IllegalArgumentException& )
+                    {
+                        DBG_ERROR("exception when setting cell style");     // not supposed to happen
+                    }
+                }
+            }
+        }
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScPatternAttr* pOldPattern = NULL;
         ScPatternAttr* pNewPattern = NULL;
 
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
-        const uno::Any* pValues = aValues.getConstArray();
-        const SfxItemPropertyMap* pMap = pPropertyMap;
-        for(sal_Int32 i = 0; i < nCount; i++)
+        for(i = 0; i < nCount; i++)
         {
-            pMap = SfxItemPropertyMap::GetByName( pPropertyMap, pNames[i] );
+            // second loop: handle other properties
+
+            const SfxItemPropertyMap* pMap = pMapArray[i];
             if ( pMap )
             {
                 if ( IsScItemWid( pMap->nWID ) )    // can be handled by SfxItemPropertySet
@@ -2571,16 +2598,12 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
                     if ( nSecondItem )
                         pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nSecondItem ) );
                 }
-                else
+                else if ( pMap->nWID != SC_WID_UNO_CELLSTYL )   // CellStyle is handled above
                 {
                     //  call virtual method to set a single property
                     SetOnePropertyValue( pMap, pValues[i] );
                 }
-
-                pMap++;
             }
-            else
-                pMap = pPropertyMap;
         }
 
         if ( pNewPattern && aRanges.Count() )
@@ -2591,6 +2614,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 
         delete pNewPattern;
         delete pOldPattern;
+        delete[] pMapArray;
     }
 }
 
@@ -2658,12 +2682,12 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                                     const uno::Sequence< uno::Any >& aValues )
                                     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
+    ScUnoGuard aGuard;
+
     sal_Int32 nCount(aPropertyNames.getLength());
     sal_Int32 nValues(aValues.getLength());
     if (nCount != nValues)
         throw lang::IllegalArgumentException();
-
-    ScUnoGuard aGuard;
 
     if ( pDocShell && nCount )
     {
@@ -2671,21 +2695,47 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         beans::SetPropertyTolerantFailed* pReturns = aReturns.getArray();
 
         const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();      // from derived class
+        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const uno::Any* pValues = aValues.getConstArray();
 
-        SfxItemPropertySet aPropSet( pPropertyMap );
+        const SfxItemPropertyMap** pMapArray = new const SfxItemPropertyMap*[nCount];
+
+        sal_Int32 i;
+        for(i = 0; i < nCount; i++)
+        {
+            // first loop: find all properties in map, but handle only CellStyle
+            // (CellStyle must be set before any other cell properties)
+
+            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetTolerantByName( pPropertyMap, pNames[i] );
+            pMapArray[i] = pMap;
+            if (pMap)
+            {
+                pPropertyMap = pMap + 1;    // continue searching at the next entry
+
+                if ( pMap->nWID == SC_WID_UNO_CELLSTYL )
+                {
+                    try
+                    {
+                        SetOnePropertyValue( pMap, pValues[i] );
+                    }
+                    catch ( lang::IllegalArgumentException& )
+                    {
+                        DBG_ERROR("exception when setting cell style");     // not supposed to happen
+                    }
+                }
+            }
+        }
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScPatternAttr* pOldPattern = NULL;
         ScPatternAttr* pNewPattern = NULL;
 
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
-        const uno::Any* pValues = aValues.getConstArray();
-        const SfxItemPropertyMap* pMap = pPropertyMap;
         sal_Int32 nFailed(0);
-        for(sal_Int32 i = 0; i < nCount; i++)
+        for(i = 0; i < nCount; i++)
         {
-            pPropertyMap = pMap;
-            pMap = SfxItemPropertyMap::GetTolerantByName( pPropertyMap, pNames[i] );
+            // second loop: handle other properties
+
+            const SfxItemPropertyMap* pMap = pMapArray[i];
             if ( pMap && ((pMap->nFlags & beans::PropertyAttribute::READONLY) == 0))
             {
                 if ( IsScItemWid( pMap->nWID ) )    // can be handled by SfxItemPropertySet
@@ -2716,7 +2766,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                         pReturns[nFailed++].Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
                     }
                 }
-                else
+                else if ( pMap->nWID != SC_WID_UNO_CELLSTYL )   // CellStyle is handled above
                 {
                     //  call virtual method to set a single property
                     try
@@ -2729,8 +2779,6 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                         pReturns[nFailed++].Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
                     }
                 }
-
-                pMap++;
             }
             else
             {
@@ -2739,7 +2787,6 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                     pReturns[nFailed++].Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
                 else
                     pReturns[nFailed++].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
-                pMap = pPropertyMap;
             }
         }
 
@@ -2751,6 +2798,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
 
         delete pNewPattern;
         delete pOldPattern;
+        delete[] pMapArray;
 
         aReturns.realloc(nFailed);
 
@@ -4123,11 +4171,11 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangesObj::getImplementationId()
 
 // XCellRanges
 
-ScCellRangeObj* ScCellRangesObj::GetObjectByIndex_Impl(USHORT nIndex) const
+ScCellRangeObj* ScCellRangesObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
-    if ( pDocSh && nIndex < rRanges.Count() )
+    if ( pDocSh && nIndex >= 0 && nIndex < rRanges.Count() )
     {
         ScRange aRange(*rRanges.GetObject(nIndex));
         if ( aRange.aStart == aRange.aEnd )
@@ -4151,7 +4199,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
         table::CellRangeAddress aRangeAddress;
         uno::Sequence<table::CellRangeAddress> aSeq(nCount);
         table::CellRangeAddress* pAry = aSeq.getArray();
-        for (USHORT i=0; i<nCount; i++)
+        for (sal_uInt32 i=0; i<nCount; i++)
         {
             ScUnoConversion::FillApiRange( aRangeAddress, *rRanges.GetObject(i) );
             pAry[i] = aRangeAddress;
@@ -4622,7 +4670,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl((USHORT)nIndex));
+    uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl(nIndex));
     if (xRange.is())
         return uno::makeAny(xRange);
     else
