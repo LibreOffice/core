@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:37:24 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
+#include <com/sun/star/script/ArrayWrapper.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
@@ -467,6 +468,86 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     }
     return eRetType;
 }
+void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
+static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, sal_Bool bIsZeroIndex )
+{
+    Type aType = aValue.getValueType();
+    TypeClass eTypeClass = aType.getTypeClass();
+
+    sal_Int32 indicesIndex = indices.getLength() -1;
+    sal_Int32 dimCopy = dimension;
+
+    if ( eTypeClass == TypeClass_SEQUENCE )
+    {
+        Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( aType );
+        Reference< XIdlArray > xIdlArray = xIdlTargetClass->getArray();
+        sal_Int32 nLen = xIdlArray->getLen( aValue );
+        for ( sal_Int32 index = 0; index < nLen; ++index )
+        {
+            Any aElementAny = xIdlArray->get( aValue, (UINT32)index );
+            // This detects the dimension were currently processing
+            if ( dimCopy == dimension )
+            {
+                ++dimCopy;
+                if ( sizes.getLength() < dimCopy )
+                {
+                    sizes.realloc( sizes.getLength() + 1 );
+                    sizes[ sizes.getLength() - 1 ] = nLen;
+                    indices.realloc( indices.getLength() + 1 );
+                    indicesIndex = indices.getLength() - 1;
+                }
+            }
+
+            if ( bIsZeroIndex )
+                indices[ dimCopy - 1 ] = index;
+            else
+                indices[ dimCopy - 1] = index + 1;
+
+            implSequenceToMultiDimArray( pArray, indices, sizes, aElementAny, dimCopy, bIsZeroIndex );
+        }
+
+    }
+    else
+    {
+        if ( indices.getLength() < 1 )
+        {
+            // Should never ever get here ( indices.getLength()
+            // should equal number of dimensions in the array )
+            // And that should at least be 1 !
+            // #QUESTION is there a better error?
+            StarBASIC::Error( SbERR_INVALID_OBJECT );
+            return;
+        }
+
+        if ( !pArray )
+        {
+            SbxDataType eSbxElementType = unoToSbxType( aValue.getValueTypeClass() );
+            pArray = new SbxDimArray( eSbxElementType );
+            sal_Int32 nIndexLen = indices.getLength();
+
+            // Dimension the array
+            for ( sal_Int32 index = 0; index < nIndexLen; ++index )
+            {
+                if ( bIsZeroIndex )
+                    pArray->unoAddDim32( 0, sizes[ index ] - 1);
+                else
+                    pArray->unoAddDim32( 1, sizes[ index ] );
+
+            }
+        }
+
+        if ( pArray )
+        {
+            SbxDataType eSbxElementType = unoToSbxType( aValue.getValueTypeClass() );
+            SbxVariableRef xVar = new SbxVariable( eSbxElementType );
+            unoToSbxValue( (SbxVariable*)xVar, aValue );
+
+            sal_Int32* pIndices = indices.getArray();
+            pArray->Put32(  (SbxVariable*)xVar, pIndices );
+
+        }
+    }
+}
 
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 {
@@ -499,47 +580,68 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             }
         }
         break;
-
         // Interfaces und Structs muessen in ein SbUnoObject gewrappt werden
         case TypeClass_INTERFACE:
         case TypeClass_STRUCT:
         {
             if( eTypeClass == TypeClass_STRUCT )
             {
-                SbiInstance* pInst = pINST;
-                if( pInst && pInst->IsCompatibility() )
+                ArrayWrapper aWrap;
+                if ( (aValue >>= aWrap) )
                 {
-                    oleautomation::Date aDate;
-                    if( (aValue >>= aDate) )
+                    SbxDimArray* pArray = NULL;
+                    Sequence< sal_Int32 > indices;
+                    Sequence< sal_Int32 > sizes;
+                    sal_Int32 dimension = 0;
+                    implSequenceToMultiDimArray( pArray, indices, sizes, aWrap.Array, dimension, aWrap.IsZeroIndex );
+                    if ( pArray )
                     {
-                        pVar->PutDate( aDate.Value );
-                        break;
+                        SbxDimArrayRef xArray = pArray;
+                        USHORT nFlags = pVar->GetFlags();
+                        pVar->ResetFlag( SBX_FIXED );
+                        pVar->PutObject( (SbxDimArray*)xArray );
+                        pVar->SetFlags( nFlags );
                     }
                     else
+                        pVar->PutEmpty();
+                    break;
+                }
+                else
+                {
+                    SbiInstance* pInst = pINST;
+                    if( pInst && pInst->IsCompatibility() )
                     {
-                        oleautomation::Decimal aDecimal;
-                        if( (aValue >>= aDecimal) )
+                        oleautomation::Date aDate;
+                        if( (aValue >>= aDate) )
                         {
-                            pVar->PutDecimal( aDecimal );
+                            pVar->PutDate( aDate.Value );
                             break;
                         }
                         else
                         {
-                            oleautomation::Currency aCurrency;
-                            if( (aValue >>= aCurrency) )
+                            oleautomation::Decimal aDecimal;
+                            if( (aValue >>= aDecimal) )
                             {
-                                sal_Int64 nValue64 = aCurrency.Value;
-                                SbxINT64 aInt64;
-                                aInt64.nHigh = nValue64 >> 32;
-                                aInt64.nLow = (UINT32)( nValue64 & 0xffffffff );
-                                pVar->PutCurrency( aInt64 );
+                                pVar->PutDecimal( aDecimal );
                                 break;
+                            }
+                            else
+                            {
+                                oleautomation::Currency aCurrency;
+                                if( (aValue >>= aCurrency) )
+                                {
+                                    sal_Int64 nValue64 = aCurrency.Value;
+                                    SbxINT64 aInt64;
+                                    aInt64.nHigh = nValue64 >> 32;
+                                    aInt64.nLow = (UINT32)( nValue64 & 0xffffffff );
+                                    pVar->PutCurrency( aInt64 );
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
-
             // SbUnoObject instanzieren
             String aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
