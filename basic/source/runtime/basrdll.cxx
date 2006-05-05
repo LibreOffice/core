@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basrdll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:51:27 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,8 @@ BasicResId::BasicResId( USHORT nId ):
 BasicDLL::BasicDLL()
 {
      *(BasicDLL**)GetAppData(SHL_BASIC) = this;
-    pResMgr = NULL;
+    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
     bDebugMode = FALSE;
     bBreakEnabled = TRUE;
 }
