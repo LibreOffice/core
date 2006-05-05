@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:37:13 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,9 +217,10 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_guid( *guid )
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
+, m_xOwnAccess( new EmbeddedDocumentInstanceAccess_Impl( this ) )
 //, m_bLoadedFromFile( sal_False )
 {
-    m_pDocHolder = new DocumentHolder( xFactory,this );
+    m_pDocHolder = new DocumentHolder( xFactory, m_xOwnAccess );
     m_pDocHolder->acquire();
 }
 
@@ -380,8 +381,12 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
 
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
-    sal_Int32 nCount = --m_refCount;
+    // if there is a time when the last reference is destructed, that means that only internal pointers are alive
+    // after the following call either the refcount is increased or the pointers are empty
+    if ( m_refCount == 1 )
+        m_xOwnAccess->ClearEmbedDocument();
+
+    sal_Int32 nCount = osl_decrementInterlockedCount( &m_refCount );
     if ( nCount == 0 )
     {
         delete this;
@@ -936,5 +941,25 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     wcsncpy( *ppszFileName, m_aFileName.getStr(), m_aFileName.getLength() + 1 );
 
     return m_aFileName.getLength() ? S_OK : S_FALSE;
+}
+
+
+// ===============================================
+
+LockedEmbedDocument_Impl EmbeddedDocumentInstanceAccess_Impl::GetEmbedDocument()
+{
+    LockedEmbedDocument_Impl aResult;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    aResult.m_pLocker = static_cast< IPersistStorage* >( m_pEmbedDocument );
+    aResult.m_pEmbedDocument = m_pEmbedDocument;
+
+    return aResult;
+}
+
+void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_pEmbedDocument = NULL;
 }
 
