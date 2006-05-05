@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:23:00 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,10 @@ Reference< XAccessibleStateSet > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibl
         if ( mpParent->IsActive() )
             pStateSet->AddState( AccessibleStateType::ACTIVE );
         if ( mpParent->IsEnabled() )
+        {
             pStateSet->AddState( AccessibleStateType::ENABLED );
+            pStateSet->AddState( AccessibleStateType::SENSITIVE );
+        }
         if ( mpParent->IsReallyVisible() )
             pStateSet->AddState( AccessibleStateType::VISIBLE );
     }
@@ -483,7 +486,10 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetAcc:
         if ( m_pParent->getCharSetControl()->IsActive() )
             pStateSet->AddState( AccessibleStateType::ACTIVE );
         if ( m_pParent->getCharSetControl()->IsEnabled() )
+        {
             pStateSet->AddState( AccessibleStateType::ENABLED );
+            pStateSet->AddState( AccessibleStateType::SENSITIVE );
+        }
         if ( m_pParent->getCharSetControl()->IsReallyVisible() )
             pStateSet->AddState( AccessibleStateType::VISIBLE );
 
