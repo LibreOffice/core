@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:07 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1531,11 +1531,9 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, pButton )
         XubString   aText ('%');
         aText += pSym->GetName();
 
-        SmViewShell *pViewSh = SmGetActiveView();
-        if (pViewSh)
-            pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-                    SID_INSERTTEXT, SFX_CALLMODE_STANDARD,
-                    new SfxStringItem(SID_INSERTTEXT, aText), 0L);
+        rViewSh.GetViewFrame()->GetDispatcher()->Execute(
+                SID_INSERTTEXT, SFX_CALLMODE_STANDARD,
+                new SfxStringItem(SID_INSERTTEXT, aText), 0L);
     }
 
     return 0;
@@ -1553,7 +1551,7 @@ IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 
 
 SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
-        SmSymSetManager &rMgr, BOOL bFreeRes) :
+        SmSymSetManager &rMgr, SmViewShell &rViewShell, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMBOLDIALOG)),
     aSymbolSetText      (this, ResId(1)),
     aSymbolSets         (this, ResId(1)),
@@ -1564,6 +1562,7 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
     aEditBtn            (this, ResId(1)),
     aGetBtn             (this, ResId(2)),
     rSymSetMgr          (rMgr),
+    rViewSh             (rViewShell),
     pFontListDev        (pFntListDevice)
 {
     if (bFreeRes)
