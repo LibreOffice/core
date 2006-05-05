@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:27:42 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,8 +220,6 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
     static void         signalDestroy( GtkObject*, gpointer );
 
-    GtkSalDisplay*  getDisplay();
-    GdkDisplay*     getGdkDisplay();
     void            Center();
     void            SetDefaultSize();
     void            setAutoLock( bool bLock );
@@ -263,6 +261,8 @@ public:
     bool Dispatch( const XEvent* pEvent );
     void grabPointer( BOOL bGrab, BOOL bOwnerEvents = FALSE );
 
+    GtkSalDisplay*  getDisplay();
+    GdkDisplay*     getGdkDisplay();
     GtkWindow*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }
@@ -271,6 +271,7 @@ public:
     GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
     GdkVisibilityState getVisibilityState() const
     { return m_nVisibility; }
+    Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
 
     virtual ~GtkSalFrame();
 
