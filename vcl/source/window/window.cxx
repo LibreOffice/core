@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.233 $
+ *  $Revision: 1.234 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:13:15 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -8178,7 +8178,7 @@ void Window::ImplCallActivateListeners( Window *pOld )
             //           additionally the gallery is not dockable anymore, so 100759 canot occur
             if ( ImplGetParent() ) /* && mpWindowImpl->mpFrameWindow == ImplGetParent()->mpWindowImpl->mpFrameWindow ) */
                 ImplGetParent()->ImplCallActivateListeners( pOld );
-            else
+            else if( (mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
             {
                 // top level frame reached: store hint for DefModalDialogParent
                 ImplGetSVData()->maWinData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
@@ -9045,15 +9045,23 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
 {
+    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, NULL );
+}
+
+void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly, Color* pSelectionTextColor )
+{
     if( rRect.IsEmpty() )
         return;
 
+    const StyleSettings& rStyles = GetSettings().GetStyleSettings();
+
+
     // colors used for item highlighting
-    Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetHighlightColor() );
+    Color aSelectionBorderCol( rStyles.GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
 
-    BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
-    BOOL bBright = ( GetSettings().GetStyleSettings().GetFaceColor() == Color( COL_WHITE ) );
+    BOOL bDark = rStyles.GetFaceColor().IsDark();
+    BOOL bBright = ( rStyles.GetFaceColor() == Color( COL_WHITE ) );
 
     int c1 = aSelectionBorderCol.GetLuminance();
     int c2 = GetDisplayBackground().GetColor().GetLuminance();
@@ -9127,9 +9135,23 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     }
 
     if( bDark && bDrawExtBorderOnly )
+    {
         SetFillColor();
+        if( pSelectionTextColor )
+            *pSelectionTextColor = rStyles.GetHighlightTextColor();
+    }
     else
+    {
         SetFillColor( aSelectionFillCol );
+        if( pSelectionTextColor )
+        {
+            Color aTextColor = IsControlBackground() ? GetControlForeground() : rStyles.GetButtonTextColor();
+            Color aHLTextColor = rStyles.GetHighlightTextColor();
+            int nTextDiff = abs(aSelectionFillCol.GetLuminance() - aTextColor.GetLuminance());
+            int nHLDiff = abs(aSelectionFillCol.GetLuminance() - aHLTextColor.GetLuminance());
+            *pSelectionTextColor = (nHLDiff >= nTextDiff) ? aHLTextColor : aTextColor;
+        }
+    }
 
 
     if( bDark )
