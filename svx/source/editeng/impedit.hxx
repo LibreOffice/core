@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:48:33 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 08:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,7 +990,7 @@ public:
                                 const Font *pFont,  USHORT nFontWhichId );
 
     // returns true if input sequence checking should be applied
-    sal_Bool            IsInputSequenceChecking( sal_Unicode nChar, const EditSelection& rCurSel ) const;
+    sal_Bool            IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;
 
     //find the next error within the given selection - forward only!
     ::com::sun::star::uno::Reference<
