@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:53:47 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 10:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,6 @@ PreviewRenderer::PreviewRenderer (OutputDevice* pTemplate)
       maFrameColor (svtools::ColorConfig().GetColorValue(
           svtools::DOCBOUNDARIES).nColor)
 {
-    // Create a virtual device when not already present and
-    // initialize it.
-    mpPreviewDevice->SetDrawMode (DRAWMODE_DEFAULT);
-
     if (pTemplate != NULL)
     {
         mpPreviewDevice->SetDigitLanguage (pTemplate->GetDigitLanguage());
@@ -235,6 +231,7 @@ bool PreviewRenderer::Initialize (
         mpPreviewDevice->SetDrawMode (bUseContrast
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
+        mpPreviewDevice->SetSettings(Application::GetSettings());
 
         // Tell the view to show the given page.
         SdPage* pNonConstPage = const_cast<SdPage*>(pPage);
