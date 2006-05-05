@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:39:19 $
+ *  last change: $Author: rt $ $Date: 2006-05-05 09:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,29 +50,33 @@ const sal_uInt8 EXC_OUTLINE_COUNT           = EXC_OUTLINE_MAX + 1;
 // (0x0000, 0x0200) DIMENSIONS ------------------------------------------------
 
 const sal_uInt16 EXC_ID2_DIMENSIONS         = 0x0000;
-const sal_uInt16 EXC_ID_DIMENSIONS          = 0x0200;
+const sal_uInt16 EXC_ID3_DIMENSIONS         = 0x0200;
 
 // (0x0001, 0x0201) BLANK -----------------------------------------------------
 
 const sal_uInt16 EXC_ID2_BLANK              = 0x0001;
-const sal_uInt16 EXC_ID_BLANK               = 0x0201;
+const sal_uInt16 EXC_ID3_BLANK              = 0x0201;
+
+// (0x0002) INTEGER -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID2_INTEGER            = 0x0002;
 
 // (0x0003, 0x0203) NUMBER ----------------------------------------------------
 
 const sal_uInt16 EXC_ID2_NUMBER             = 0x0003;
-const sal_uInt16 EXC_ID_NUMBER              = 0x0203;
+const sal_uInt16 EXC_ID3_NUMBER             = 0x0203;
 
 // (0x0004, 0x0204) LABEL -----------------------------------------------------
 
 const sal_uInt16 EXC_ID2_LABEL              = 0x0004;
-const sal_uInt16 EXC_ID_LABEL               = 0x0204;
+const sal_uInt16 EXC_ID3_LABEL              = 0x0204;
 
 const sal_uInt8 EXC_LABEL_MAXLEN            = 0xFF;
 
 // (0x0005, 0x0205) BOOLERR ---------------------------------------------------
 
 const sal_uInt16 EXC_ID2_BOOLERR            = 0x0005;
-const sal_uInt16 EXC_ID_BOOLERR             = 0x0205;
+const sal_uInt16 EXC_ID3_BOOLERR            = 0x0205;
 
 const sal_uInt8 EXC_BOOLERR_BOOL            = 0x00;
 const sal_uInt8 EXC_BOOLERR_ERROR           = 0x01;
@@ -82,7 +86,6 @@ const sal_uInt8 EXC_BOOLERR_ERROR           = 0x01;
 const sal_uInt16 EXC_ID2_FORMULA            = 0x0006;
 const sal_uInt16 EXC_ID3_FORMULA            = 0x0206;
 const sal_uInt16 EXC_ID4_FORMULA            = 0x0406;
-const sal_uInt16 EXC_ID_FORMULA             = 0x0006;
 
 const sal_uInt16 EXC_FORMULA_RECALC_ALWAYS  = 0x0001;
 const sal_uInt16 EXC_FORMULA_RECALC_ONLOAD  = 0x0002;
@@ -97,12 +100,12 @@ const sal_uInt8 EXC_FORMULA_RES_EMPTY       = 0x03;     /// Result is empty cell
 // (0x0007, 0x0207) STRING ----------------------------------------------------
 
 const sal_uInt16 EXC_ID2_STRING             = 0x0007;
-const sal_uInt16 EXC_ID_STRING              = 0x0207;
+const sal_uInt16 EXC_ID3_STRING             = 0x0207;
 
 // (0x0008, 0x0208) ROW -------------------------------------------------------
 
 const sal_uInt16 EXC_ID2_ROW                = 0x0008;
-const sal_uInt16 EXC_ID_ROW                 = 0x0208;
+const sal_uInt16 EXC_ID3_ROW                = 0x0208;
 
 const sal_uInt16 EXC_ROW_COLLAPSED          = 0x0010;
 const sal_uInt16 EXC_ROW_HIDDEN             = 0x0020;
@@ -120,7 +123,7 @@ const sal_uInt16 EXC_ROW_ROWBLOCKSIZE       = 32;       /// Number of rows in a 
 // (0x0021, 0x0221) ARRAY -----------------------------------------------------
 
 const sal_uInt16 EXC_ID2_ARRAY              = 0x0021;
-const sal_uInt16 EXC_ID_ARRAY               = 0x0221;
+const sal_uInt16 EXC_ID3_ARRAY              = 0x0221;
 
 const sal_uInt16 EXC_ARRAY_RECALC_ALWAYS    = 0x0001;
 const sal_uInt16 EXC_ARRAY_RECALC_ONLOAD    = 0x0002;
@@ -129,7 +132,7 @@ const sal_uInt16 EXC_ARRAY_DEFAULTFLAGS     = EXC_ARRAY_RECALC_ONLOAD;
 // (0x0025, 0x0225) DEFAULTROWHEIGHT ------------------------------------------
 
 const sal_uInt16 EXC_ID2_DEFROWHEIGHT       = 0x0025;
-const sal_uInt16 EXC_ID_DEFROWHEIGHT        = 0x0225;
+const sal_uInt16 EXC_ID3_DEFROWHEIGHT       = 0x0225;
 
 const sal_uInt16 EXC_DEFROW_UNSYNCED        = 0x0001;
 const sal_uInt16 EXC_DEFROW_HIDDEN          = 0x0002;
@@ -142,7 +145,7 @@ const sal_uInt16 EXC_DEFROW_DEFAULTHEIGHT   = 255;
 // (0x0036, 0x0236) TABLEOP ---------------------------------------------------
 
 const sal_uInt16 EXC_ID2_TABLEOP            = 0x0036;
-const sal_uInt16 EXC_ID_TABLEOP             = 0x0236;
+const sal_uInt16 EXC_ID3_TABLEOP            = 0x0236;
 
 const sal_uInt16 EXC_TABLEOP_RECALC_ALWAYS  = 0x0001;
 const sal_uInt16 EXC_TABLEOP_RECALC_ONLOAD  = 0x0002;
