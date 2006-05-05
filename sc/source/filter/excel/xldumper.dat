@@ -1,267 +1,460 @@
 ﻿
-# enable entire dumper (default=on)
+# Enable entire dumper (default=off). If dumper is disabled, no output into
+# a text file is done. This option does not affect the options 'enable-import'
+# and 'extract-storage-streams'.
 #   0=off, 1=on
-enable-dumper=1
+enable-dumper=0
 
-# show total stream position of the record (default=on)
+# Enable import after dumping (default=on). Disabling this option allows
+# to dump a file without loading it. This option is independent from the
+# 'enable-dumper' option.
+#   0=off, 1=on
+enable-import=1
+
+# Extract storage streams to file system (default=off). This option is
+# independent from the 'enable-dumper' option.
+#   0=off, 1=on
+extract-storage-streams=0
+
+# Maximum size of binary data blocks (default=infinite).
+max-binary-size=0x0200
+
+# ----------------------------------------------------------------------------
+
+# Show total stream position of the record (default=on).
 #   0=off, 1=on
 show-record-pos=1
 
-# show total record size in bytes (including CONTINUE records, if enabled,
-# see 'merge-continue-record' option) (default=on)
+# Show total record size in bytes (including CONTINUE records, if enabled,
+# see 'merge-continue-record' option) (default=on).
 #   0=off, 1=on
 show-record-size=1
 
-# show record identifier (default=on)
+# Show record identifier (default=on).
 #   0=off, 1=on
 show-record-id=1
 
-# show record name, if known (default=on)
+# Show record name, if known (default=on).
 #   0=off, 1=on
 show-record-name=1
 
-# show record contents (default=on)
+# Show record contents (default=on).
 #   0=off, 1=on
 show-record-body=1
 
-# merge CONTINUE records with leading record (default=on)
+# Shows unknown records or unknown trailing data as binary dump (default=on).
+#   0=off, 1=on
+show-trailing-unknown=1
+
+# Merge CONTINUE records with leading record (default=on).
 #   0=off - show CONTINUE records separately (hex dump)
 #   1=on  - show contents of leading record together with following CONTINUE
 merge-continue-record=1
 
 # name maps ==================================================================
+#
+# List of constants
+# -----------------
+# Defines names for specific values.
+#
+# constlist = <LISTNAME>
+# begin
+#   default = <constname>                   (default=?err:no-name)
+#   include = <LISTNAME>[,<LISTNAME>...]
+#   exclude = <value>[,<value>...]
+#   quote-names = 0|1|false|true            (default=0)
+#   <value> = <constname>
+# end
+#
+# List of multiple contants per line
+# ----------------------------------
+# Defines names for contiguous ranges of values.
+#
+# multilist = <LISTNAME>
+# begin
+#   default = <constname>                   (default=?err:no-name)
+#   ignore-empty = 0|1|false|true           (default=1)
+#   include = <LISTNAME>[,<LISTNAME>...]
+#   exclude = <value>[,<value>...]
+#   <firstvalue> = <constname>[,<constname>...]
+# end
+#
+# List of multiple contants, shortened format
+# -------------------------------------------
+# Defines names for a contiguous range of values. The entire list definition
+# is given in a single text line.
+#
+# shortlist = <LISTNAME>,<firstvalue>,<constname>[,<constname>...]
+#
+# List of flags
+# -------------
+# Defines names for single bits in a bit field.
+#
+# flagslist = <LISTNAME>
+# begin
+#   ignore = <bitfield>                     (default=0)
+#   include = <LISTNAME>[,<LISTNAME>...]
+#   exclude = <bitfield>[,<bitfield>...]
+#   <bitmask> = <constname>
+# end
+#
+# List of flags and values in a bitfield
+# --------------------------------------
+# Defines names for single bits and for embedded values in a bit field.
+#
+# combilist = <LISTNAME>
+# begin
+#   ignore = <bitfield>                     (default=0)
+#   include = <LISTNAME>[,<LISTNAME>...]
+#   exclude = <bitmask>[,<bitmask>...]
+#   <bitmask> = <constname>
+#   <bitfield> = <datatype>,<dataformat>,<constname>[,<LISTNAME>]
+# end
+#
+# Unit converter
+# --------------
+# Converts values and appends a unit name.
+#
+# unitconverter = <LISTNAME>,[/]<factor>,<unitname>
 
-constlist=RECORDS
+# common ---------------------------------------------------------------------
+
+unitconverter=CONV-INCH-TO-CM,2.54,cm
+unitconverter=CONV-TWIP-TO-PT,/20,pt
+unitconverter=CONV-COLWIDTH,/256,chars
+
+shortlist=BIFF,0,biff2,biff3,biff4,biff5,biff8
+
+constlist=BOOLEAN
 begin
-  0x0000=DIMENSIONS
-  0x0001=BLANK
-  0x0002=INTEGER
-  0x0003=NUMBER
-  0x0004=LABEL
-  0x0005=BOOLERR
-  0x0006=FORMULA
-  0x0007=STRING
-  0x0008=ROW
-  0x0009=BOF
-  0x000A=EOF
-  0x000B=INDEX
-  0x000C=CALCCOUNT
-  0x000D=CALCMODE
-  0x000E=PRECISION
-  0x000F=REFMODE
-  0x0010=DELTA
-  0x0011=ITERATION
-  0x0012=PROTECT
-  0x0013=PASSWORD
-  0x0014=HEADER
-  0x0015=FOOTER
-  0x0016=EXTERNCOUNT
-  0x0017=EXTERNSHEET
-  0x0018=NAME
-  0x0019=WINDOWPROTECT
-  0x001A=VERTICALPAGEBREAKS
-  0x001B=HORIZONTALPAGEBREAKS
-  0x001C=NOTE
-  0x001D=SELECTION
-  0x001E=FORMAT
-  0x001F=FORMATCOUNT
-  0x0020=COLUMNDEFAULT
-  0x0021=ARRAY
-  0x0022=1904
-  0x0023=EXTERNNAME
-  0x0024=COLWIDTH
-  0x0025=DEFAULTROWHEIGHT
-  0x0026=LEFTMARGIN
-  0x0027=RIGHTMARGIN
-  0x0028=TOPMARGIN
-  0x0029=BOTTOMMARGIN
-  0x002A=PRINTHEADERS
-  0x002B=PRINTGRIDLINES
-  0x002F=FILEPASS
-  0x0031=FONT
-  0x0033=PRINTSIZE
-  0x0035=INFOOPTS
-  0x0036=TABLE
-  0x0038=WNDESK
-  0x003A=BEGINPREF
-  0x003B=ENDPREF
-  0x003C=CONTINUE
-  0x003D=WINDOW1
-  0x003E=WINDOW2
-  0x0040=BACKUP
-  0x0041=PANE
-  0x0042=CODEPAGE
-  0x0043=XF
-  0x0044=IXFE
-  0x0045=EFONT
-  0x0046=SHOWSCROLL
-  0x0047=SHOWFORMULA
-  0x0048=STATUSBAR
-  0x0049=SHORTMENUS
-  0x004A=DDEENABLED
-  0x004B=AUTODEC
-  0x004C=MENUKEY
-  0x004D=PLS|ZOOM
-  0x004E=MENUUND
-  0x004F=MOVESEL
-  0x0050=DCON
-  0x0051=DCONREF
-  0x0052=DCONNAME
-  0x0055=DEFCOLWIDTH
-  0x0056=BUILTINFMTCNT
-  0x0058=TOOLBAR
-  0x0059=XCT
-  0x005A=CRN
-  0x005B=FILESHARING
-  0x005C=WRITEACCESS
-  0x005D=OBJ
-  0x005E=UNCALCED
-  0x005F=SAFERECALC
-  0x0060=TEMPLATE
-  0x0063=OBJPROTECT
-  0x007D=COLINFO
-  0x007E=RK
-  0x007F=IMDATA
-  0x0080=GUTS
-  0x0081=WSBOOL
-  0x0082=GRIDSET
-  0x0083=HCENTER
-  0x0084=VCENTER
-  0x0085=BOUNDSHEET
-  0x0086=WRITEPROT
-  0x0087=ADDIN
-  0x0088=EDG
-  0x0089=PUB
-  0x008A=NOTEOFF
-  0x008B=LH
-  0x008C=COUNTRY
-  0x008D=HIDEOBJ
-  0x008E=SHEETSOFFSET
-  0x008F=SHEETHEADER
-  0x0090=SORT
-  0x0091=SUB
-  0x0092=PALETTE
-  0x0093=STYLE
-  0x0094=LHRECORD
-  0x0095=LHNGRAPH
-  0x0096=SOUND
-  0x0098=LPR
-  0x0099=STANDARDWIDTH
-  0x009A=FNGROUPNAME
-  0x009B=FILTERMODE
-  0x009C=FNGROUPCOUNT
-  0x009D=AUTOFILTERINFO
-  0x009E=AUTOFILTER
-  0x00A0=SCL
-  0x00A1=SETUP
-  0x00A3=PROJEXTSHEET
-  0x00A8=DRAGDROP
-  0x00A9=COORDLIST
-  0x00AB=GCW
-  0x00AE=SCENMAN
-  0x00AF=SCENARIO
-  0x00B0=SXVIEW
-  0x00B1=SXVD
-  0x00B2=SXVI
-  0x00B4=SXIVD
-  0x00B5=SXLI
-  0x00B6=SXPI
-  0x00B8=DOCROUTE
-  0x00B9=RECIPNAME
-  0x00BC=SHRFMLA
-  0x00BD=MULRK
-  0x00BE=MULBLANK
-  0x00C1=MMS
-  0x00C2=ADDMENU
-  0x00C3=DELMENU
-  0x00C5=SXDI
-  0x00C6=SXDB
-  0x00C7=SXFIELD
-  0x00C8=SXINDEXLIST
-  0x00C9=SXDOUBLE
-  0x00CA=SXBOOLEAN
-  0x00CB=SXERROR
-  0x00CC=SXINTEGER
-  0x00CD=SXSTRING
-  0x00CE=SXDATETIME
-  0x00CF=SXEMPTY
-  0x00D0=SXTBL
-  0x00D1=SXTBRGITEM
-  0x00D2=SXTBPG
-  0x00D3=OBPROJ
-  0x00D5=SXIDSTM
-  0x00D6=RSTRING
-  0x00D7=DBCELL
-  0x00D8=SXNUMGROUP
-  0x00D9=SXGROUPINFO
-  0x00DA=BOOKBOOL
-  0x00DB=REVERT
-  0x00DC=SXEXT|PARAMQRY
-  0x00DD=SCENPROTECT
-  0x00DE=OLESIZE
-  0x00DF=UDDESC
-  0x00E0=XF
-  0x00E1=INTERFACEHDR
-  0x00E2=INTERFACEEND
-  0x00E3=SXVS
-  0x00E5=CELLMERGING
-  0x00E9=BITMAP
-  0x00EB=MSODRAWINGGROUP
-  0x00EC=MSODRAWING
-  0x00ED=MSODRAWINGSELECTION
-  0x00EF=PHONETIC
-  0x00F0=SXRULE
-  0x00F1=SXEX
-  0x00F2=SXFILT
-  0x00F6=SXNAME
-  0x00F7=SXSELECT
-  0x00F8=SXPAIR
-  0x00F9=SXFMLA
-  0x00FB=SXFORMAT
-  0x00FC=SST
-  0x00FD=LABELSST
-  0x00FF=EXTSST
-  0x0100=SXVDEX
-  0x0103=SXFORMULA
-  0x0122=SXDBEX
-  0x0137=CHTRINSERT
-  0x0138=CHTRINFO
-  0x013B=CHTRCELLCONTENT
-  0x013D=TABID
-  0x0140=CHTRMOVERANGE
-  0x014D=CHTRINSERTTAB
-  0x015F=LABELRANGES
-  0x0160=USESELFS
-  0x0162=XL5MODIFY
-  0x0196=CHTRHEADER
-  0x01A9=USERBVIEW
-  0x01AA=USERSVIEWBEGIN
-  0x01AB=USERSVIEWEND
-  0x01AD=QSI
-  0x01AE=SUPBOOK
-  0x01AF=PROT4REV
-  0x0161=DSF
-  0x01B0=CONDFMT
-  0x01B1=CF
-  0x01B2=DVAL
-  0x01B5=DCONBIN
-  0x01B6=TXO
-  0x01B7=REFRESHALL
-  0x01B8=HLINK
-  0x01BA=CODENAME
-  0x01BB=SXFDBTYPE
-  0x01BC=PROT4REVPASS
-  0x01BE=DV
-  0x0200=DIMENSIONS
-  0x0201=BLANK
-  0x0203=NUMBER
-  0x0204=LABEL
-  0x0205=BOOLERR
-  0x0206=FORMULA
-  0x0207=STRING
-  0x0208=ROW
-  0x0209=BOF
-  0x020B=INDEX
+  0=FALSE
+  default=TRUE
+end
+
+constlist=ERRORCODES
+begin
+  0x00=#NULL!
+  0x07=#DIV/0!
+  0x0F=#VALUE!
+  0x17=#REF!
+  0x1D=#NAME?
+  0x24=#NUM!
+  0x2A=#N/A
+end
+
+combilist=RK-FLAGS
+begin
+  0x00000001=div-100
+  0x00000002=integer
+  0xFFFFFFFC=int32,dec,value
+end
+
+multilist=EGA-COLORS
+begin
+  0=ega-black,ega-white,ega-red,ega-green,ega-blue,ega-yellow,ega-magenta,ega-cyan
+end
+
+constlist=COLORS-BIFF2
+begin
+  include=EGA-COLORS
+  default=''
+  24=sys-window-text
+  25=sys-window-bg
+  0x7FFF=sys-window-text
+end
+
+constlist=COLORS-BIFF5
+begin
+  include=EGA-COLORS
+  default=''
+  64=sys-window-text
+  65=sys-window-bg
+  67=sys-button-face
+  77=sys-window-text-chart
+  78=sys-window-bg-chart
+  79=auto-border-chart
+  80=sys-tooltip-bg
+  81=sys-tooltip-text
+  0x7FFF=sys-window-text
+end
+
+multilist=BORDERSTYLES-BIFF3
+begin
+  0=none,thin,medium,dash,dot,thick,double,hair
+end
+
+multilist=BORDERSTYLES-BIFF8
+begin
+  include=BORDERSTYLES-BIFF3
+  8=medium-dash,thin-dash-dot,medium-dash-dot,thin-dash-dot-dot,medium-dash-dot-dot,slant-dash-dot
+end
+
+multilist=FILLPATTERNS-BIFF3
+begin
+  0=no-fill,solid-fill,50%-grey,75%-grey,25%-grey
+  5=hor-stripe,ver-stripe,rev-diag-stripe,diag-stripe,diag-crosshatch
+  10=thick-diag-crosshatch,thin-hor-stripe,thin-ver-stripe,thin-rev-diag-stripe,thin-diag-stripe
+  15=thin-hor-crosshatch,thin-diag-crosshatch,12.5%-grey,6.25%-grey
+end
+
+multilist=BUILTIN-FORMATS
+begin
+  quote-names=1
+  0=General,0,0.00,'#,##0','#,##0.00'
+  5='"$"#,##0_);\("$"#,##0\)','"$"#,##0_);[Red]\("$"#,##0\)','"$"#,##0.00_);\("$"#,##0.00\)','"$"#,##0.00_);[Red]\("$"#,##0.00\)',0%
+  10=0.00%,0.00E+00,# ?/?,# ??/??,M/D/YYYY
+  15=D-MMM-YY,D-MMM,MMM-YY,h:mm AM/PM,h:mm:ss AM/PM
+  20=h:mm,h:mm:ss,M/D/YYYY h:mm,General,General
+  25=General,General,M/D/YYYY,M/D/YYYY,M/D/YYYY
+  30=M/D/YYYY,M/D/YYYY,h:mm:ss,h:mm:ss,h:mm:ss
+  35=h:mm:ss,M/D/YYYY,'#,##0_);(#,##0)','#,##0_);[Red](#,##0)','#,##0.00_);(#,##0.00)'
+  40='#,##0.00_);[Red](#,##0.00)'
+  41='_(* #,##0_);_(* \(#,##0\);_(* "-"_);_(@_)'
+  42='_("$"* #,##0_);_("$"* \(#,##0\);_("$"* "-"_);_(@_)'
+  43='_(* #,##0.00_);_(* \(#,##0.00\);_(* "-"??_);_(@_)'
+  44='_("$"* #,##0.00_);_("$"* \(#,##0.00\);_("$"* "-"??_);_(@_)'
+  45=mm:ss,[h]:mm:ss,mm:ss.0,##0.0E+0,@
+  50=M/D/YYYY,M/D/YYYY,M/D/YYYY,M/D/YYYY,M/D/YYYY
+  55=M/D/YYYY,M/D/YYYY,M/D/YYYY,M/D/YYYY,0
+  60=0.00,'#,##0','#,##0.00','$#,##0_);($#,##0)','$#,##0_);[Red]($#,##0)'
+  65='$#,##0.00_);($#,##0.00)','$#,##0.00_);[Red]($#,##0.00)',0%,0.00%,# ?/?
+  70=# ??/??,M/D/YYYY,M/D/YYYY,D-MMM-YY,D-MMM
+  75=MMM-YY,h:mm,h:mm:ss,M/D/YYYY h:mm,mm:ss
+  80=[h]:mm:ss,mm:ss.0
+end
+
+constlist=CONSTVALUE-TYPE
+begin
+  0=empty
+  1=number
+  2=string
+  4=boolean
+  16=error
+end
+
+constlist=CODEPAGES
+begin
+  367=ascii
+  437=ibm-437-us
+  720=ibm-720-arabic
+  737=ibm-737-greek
+  775=ibm-775-baltic
+  850=ibm-850-latin-1
+  852=ibm-852-latin-2-central european
+  855=ibm-855-cyrillic
+  857=ibm-857-turkish
+  858=ibm-858-multilingual-latin-1-with-euro
+  860=ibm-860-portuguese
+  861=ibm-861-icelandic
+  862=ibm-862-hebrew
+  863=ibm-863-canadian-french
+  864=ibm-864-arabic
+  865=ibm-865-nordic
+  866=ibm-866-cyrillic-russian
+  869=ibm-869-greek-modern
+  874=win-874-thai
+  932=win-932-japanese-shift-jis
+  936=win-936-chinese-simplified-gbk
+  949=win-949-korean-wansung
+  950=win-950-chinese-traditional-big5
+  1200=utf-16
+  1250=win-1250-latin-2-central-european
+  1251=win-1251-cyrillic
+  1252=win-1252-latin-1
+  1253=win-1253-greek
+  1254=win-1254-turkish
+  1255=win-1255-hebrew
+  1256=win-1256-arabic
+  1257=win-1257-baltic
+  1258=win-1258-vietnamese
+  1361=win-1361-korean-johab
+  10000=apple-roman
+  32768=apple-roman
+  32769=win-1252-latin-1
+end
+
+# formulas -------------------------------------------------------------------
+
+multilist=BASETOKENS-BIFF2
+begin
+  0x01=tExp,tTbl,tAdd,tSub,tMul,tDiv,tPower
+  0x08=tConcat,tLT,tLE,tEQ,tGE,tGT,tNE,tIsect
+  0x10=tList,tRange,tUplus,tUminus,tPercent,tParen,tMissArg,tStr
+  0x19=tAttr,tSheet,tEndSheet,tErr,tBool,tInt,tNum
+end
+
+constlist=BASETOKENS-BIFF5
+begin
+  include=BASETOKENS-BIFF2
+  exclude=0x1A,0x1B
+end
+
+constlist=BASETOKENS-BIFF8
+begin
+  include=BASETOKENS-BIFF5
+  0x18=tNlr
+end
+
+constlist=TOKENCLASSES
+begin
+  0x20=R
+  0x40=V
+  0x60=A
+end
+
+multilist=CLASSTOKENS-BIFF2
+begin
+  0x00=tArray,tFunc,tFuncVar,tName,tRef,tArea,tMemArea,tMemErr
+  0x08=tMemNoMem,tMemFunc,tRefErr,tAreaErr,tRefN,tAreaN,tMemAreaN,tMemNoMemN
+  0x18=tFuncCE
+end
+
+constlist=CLASSTOKENS-BIFF4
+begin
+  include=CLASSTOKENS-BIFF2
+  exclude=0x18
+end
+
+multilist=CLASSTOKENS-BIFF5
+begin
+  include=CLASSTOKENS-BIFF4
+  0x19=tNameX,tRef3d,tArea3d,tRefErr3d,tAreaErr3d
+end
+
+multilist=FUNCTIONNAMES
+begin
+  0=COUNT,IF,ISNA,ISERROR,SUM,AVERAGE,MIN,MAX,ROW,COLUMN
+  10=NA,NPV,STDEV,DOLLAR,FIXED,SIN,COS,TAN,ATAN,PI
+  20=SQRT,EXP,LN,LOG10,ABS,INT,SIGN,ROUND,LOOKUP,INDEX
+  30=REPT,MID,LEN,VALUE,TRUE,FALSE,AND,OR,NOT,MOD
+  40=DCOUNT,DSUM,DAVERAGE,DMIN,DMAX,DSTDEV,VAR,DVAR,TEXT,LINEST
+  50=TREND,LOGEST,GROWTH,GOTO,HALT,RETURN,PV,FV,NPER,PMT
+  60=RATE,MIRR,IRR,RAND,MATCH,DATE,TIME,DAY,MONTH,YEAR
+  70=WEEKDAY,HOUR,MINUTE,SECOND,NOW,AREAS,ROWS,COLUMNS,OFFSET,ABSREF
+  80=RELREF,ARGUMENT,SEARCH,TRANSPOSE,ERROR,STEP,TYPE,ECHO,SET.NAME,CALLER
+  90=DEREF,WINDOWS,SERIES,DOCUMENTS,ACTIVE.CELL,SELECTION,RESULT,ATAN2,ASIN,ACOS
+  100=CHOOSE,HLOOKUP,VLOOKUP,LINKS,INPUT,ISREF,GET.FORMULA,GET.NAME,SET.VALUE,LOG
+  110=EXEC,CHAR,LOWER,UPPER,PROPER,LEFT,RIGHT,EXACT,TRIM,REPLACE
+  120=SUBSTITUTE,CODE,NAMES,DIRECTORY,FIND,CELL,ISERR,ISTEXT,ISNUMBER,ISBLANK
+  130=T,N,FOPEN,FCLOSE,FSIZE,FREADLN,FREAD,FWRITELN,FWRITE,FPOS
+  140=DATEVALUE,TIMEVALUE,SLN,SYD,DDB,GET.DEF,REFTEXT,TEXTREF,INDIRECT,REGISTER
+  150=CALL,ADD.BAR,ADD.MENU,ADD.COMMAND,ENABLE.COMMAND,CHECK.COMMAND,RENAME.COMMAND,SHOW.BAR,DELETE.MENU,DELETE.COMMAND
+  160=GET.CHART.ITEM,DIALOG.BOX,CLEAN,MDETERM,MINVERSE,MMULT,FILES,IPMT,PPMT,COUNTA
+  170=CANCEL.KEY,FOR,WHILE,BREAK,NEXT,INITIATE,REQUEST,POKE,EXECUTE,TERMINATE
+  180=RESTART,HELP,GET.BAR,PRODUCT,FACT,GET.CELL,GET.WORKSPACE,GET.WINDOW,GET.DOCUMENT,DPRODUCT
+  190=ISNONTEXT,GET.NOTE,NOTE,STDEVP,VARP,DSTDDEVP,DVARP,TRUNC,ISLOGICAL,DBCOUNTA
+  200=DELETE.BAR,UNREGISTER,,USDOLLAR,FINDB,SEARCHB,REPLACEB,LEFTB,RIGHTB
+  210=MIDB,LENB,ROUNDUP,ROUNDDOWN,ASC,DBSC,RANK,,,ADDRESS
+  220=DAYS360,TODAY,VDB,ELSE,ELSE.IF,END.IF,FOR.CELL,MEDIAN,SUMPRODUCT,SINH
+  230=COSH,TANH,ASINH,ACOSH,ATANH,DGET,CREATE.OBJECT,VOLATILE,LAST.ERROR,CUSTOM.UNDO
+  240=CUSTOM.REPEAT,FORMULA.CONVERT,GET.LINK.INFO,TEXT.BOX,INFO,GROUP,GET.OBJECT,DB,PAUSE,
+  250=,RESUME,FREQUENCY,ADD.TOOLBAR,DELETE.TOOLBAR,EXTERN.CALL,RESET.TOOLBAR,EVALUATE,GET.TOOLBAR,GET.TOOL
+  260=SPELLING.CHECK,ERROR.TYPE,APP.TITLE,WINDOW.TITLE,SAVE.TOOLBAR,ENABLE.TOOL,PRESS.TOOL,REGISTER.ID,GET.WORKBOOK,AVEDEV
+  270=BETADIST,GAMMALN,BETAINV,BINOMDIST,CHIDIST,CHIINV,COMBIN,CONFIDENCE,CRITBINOM,EVEN
+  280=EXPONDIST,FDIST,FINV,FISHER,FISHERINV,FLOOR,GAMMADIST,GAMMAINV,CEILING,HYPGEOMDIST
+  290=LOGNORMDIST,LOGINV,NEGBINOMDIST,NORMDIST,NORMSDIST,NORMINV,NORMSINV,STANDARDIZE,ODD,PERMUT
+  300=POISSON,TDIST,WEIBULL,SUMXMY2,SUMX2MY2,SUMX2PY2,CHITEST,CORREL,COVAR,FORECAST
+  310=FTEST,INTERCEPT,PEARSON,RSQ,STEYX,SLOPE,TTEST,PROB,DEVSQ,GEOMEAN
+  320=HARMEAN,SUMSQ,KURT,SKEW,ZTEST,LARGE,SMALL,QUARTILE,PERCENTILE,PERCENTRANK
+  330=MODE,TRIMMEAN,TINV,,MOVIE.COMMAND,GET.MOVIE,CONCATENATE,POWER,PIVOT.ADD.DATA,GET.PIVOT.TABLE
+  340=GET.PIVOT.FIELD,GET.PIVOT.ITEM,RADIANS,DEGREES,SUBTOTAL,SUMIF,COUNTIF,COUNTBLANK,SCENARIO.GET,OPTIONS.LISTS.GET
+  350=ISPMT,DATEDIF,DATESTRING,NUMBERSTRING,ROMAN,OPEN.DIALOG,SAVE.DIALOG,VIEW.GET,GETPIVOTDATA,HYPERLINK
+  360=PHONETIC,AVERAGEA,MAXA,MINA,STDEVPA,VARPA,STDEVA,VARA,BAHTTEXT,THAIDAYOFWEEK
+  370=THAIDIGIT,THAIMONTHOFYEAR,THAINUMSOUND,THAINUMSTRING,THAISTRINGLENGTH,ISTHAIDIGIT,ROUNDBAHTDOWN,ROUNDBAHTUP,THAIYEAR,RTD
+  380=ISHYPERLINK
+end
+
+combilist=PARAMCOUNT
+begin
+  0x7F=uint8,dec,count
+  0x80=prompt
+end
+
+combilist=REFRELFLAGS
+begin
+  0x3FFF=uint16,dec,value
+  0x4000=col-rel
+  0x8000=row-rel
+end
+
+multilist=NLRTYPES
+begin
+  0x00=,tNlrErr,tNlrRowR,tNlrColR,,,tNlrRowV,tNlrColV
+  0x08=,,tNlrRange,tNlrSRange,tNlrSRowR,tNlrSColR,tNlrSRowV,tNlrSColV
+  0x10=tNlrRangeErr,,,,,,,
+  0x18=,,,,,tNlrSxName,,
+end
+
+combilist=NLRADDFLAGS
+begin
+  0x3FFFFFFF=uint32,dec,count
+  0x80000000=rel
+end
+
+flagslist=ATTRTYPES
+begin
+  0x01=volatile
+  0x02=if
+  0x04=choose
+  0x08=skip
+  0x10=sum
+  0x20=assign
+  0x40=space
+end
+
+multilist=ATTRSPACETYPES
+begin
+  0=space-before-token,cr-before-token,space-before-open,cr-before-open,space-before-close,cr-before-close,leading-space
+end
+
+# record names ---------------------------------------------------------------
+
+multilist=RECORD-NAMES-BIFF2
+begin
+  # worksheet records
+  0x0000=DIMENSIONS,BLANK,INTEGER,NUMBER,LABEL,BOOLERR,FORMULA,STRING
+  0x0008=ROW,BOF,EOF,INDEX,CALCCOUNT,CALCMODE,PRECISION,REFMODE
+  0x0010=DELTA,ITERATION,PROTECT,PASSWORD,HEADER,FOOTER,EXTERNCOUNT,EXTERNSHEET
+  0x0018=NAME,WINDOWPROTECT,VERTICALPAGEBREAKS,HORIZONTALPAGEBREAKS,NOTE,SELECTION,FORMAT,BUILTINFMTCOUNT
+  0x0020=COLUMNDEFAULT,ARRAY,DATEMODE,EXTERNNAME,COLWIDTH,DEFAULTROWHEIGHT,LEFTMARGIN,RIGHTMARGIN
+  0x0028=TOPMARGIN,BOTTOMMARGIN,PRINTHEADERS,PRINTGRIDLINES,,,,FILEPASS
+  0x0030=,FONT,FONT2,PRINTSIZE,,INFOOPTS,TABLE,TABLE2
+  0x0038=WNDESK,,BEGINPREF,ENDPREF,CONTINUE,WINDOW1,WINDOW2,
+  0x0040=BACKUP,PANE,CODEPAGE,XF,IXFE,EFONT,SHOWSCROLL,SHOWFORMULA
+  0x0048=STATUSBAR,SHORTMENUS,DDEENABLED,AUTODEC,MENUKEY,PLS|ZOOM,MENUUND,MOVESEL
+  0x0050=DCON,DCONREF,DCONNAME,,,DEFCOLWIDTH,,
+  # worksheet records new in BIFF3, but supported in BIFF2 streams
+  0x0200=DIMENSIONS,BLANK,,NUMBER,LABEL,BOOLERR,,
+  0x027E=RK
+  # BIFF5 style BOFF
+  0x0809=BOF
+  # chart records
+  0x1000=,CHUNITS,CHCHART,CHSERIES,CHSOURCELINK,,CHDATAFORMAT,CHLINEFORMAT
+  0x1008=,CHMARKERFORMAT,CHAREAFORMAT,CHPIEFORMAT,CHATTACHEDLABEL,CHSTRING,,
+  0x1010=,,,,CHCHARTFORMAT,CHLEGEND,CHSERIESLIST,CHBAR
+  0x1018=CHLINE,CHPIE,CHAREA,CHSCATTER,CHCHARTLINE,CHAXIS,CHTICK,CHVALUERANGE
+  0x1020=CHLABELRANGE,CHAXISLINE,CHFORMATLINK,,CHDEFAULTTEXT,CHTEXT,CHFONT,CHOBJECTLINK
+  0x1028=,,,,,CHARROW,,CHARROWHEAD
+  0x1030=,,CHFRAME,CHBEGIN,CHEND,CHPLOTAREA,CHCHARTSIZE,CHRELPOSITION
+  0x1038=CHARROWRELPOS,,CHCHART3D,,,,,
+end
+
+multilist=RECORD-NAMES-BIFF3
+begin
+  include=RECORD-NAMES-BIFF2
+  # worksheet records
+  exclude=0x0006,0x0007,0x0008,0x0009,0x000B,0x0018,0x0021,0x0023,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043
+  0x0050=,,,,,,BUILTINFMTCOUNT,
+  0x0058=TOOLBAR,XCT,CRN,FILESHARING,WRITEACCESS,OBJ,UNCALCED,SAFERECALC
+  0x0060=TEMPLATE,INTL,,OBJPROTECT,,,,
+  0x0068=,,,,,,,
+  0x0070=,,,,,,,
+  0x0078=,,,,,COLINFO,,IMDATA
+  0x0080=GUTS,WSBOOL,GRIDSET,HCENTER,VCENTER,,WRITEPROT,ADDIN
+  0x0088=EDG,PUB,NOTEOFF,LH,COUNTRY,HIDEOBJ,,
+  0x0090=SORT,SUB,PALETTE,,LHRECORD,LHNGRAPH,,
+  0x0200=,,,,,,FORMULA,STRING
+  0x0208=ROW,BOF,,INDEX,,,,
   0x0218=NAME
   0x0221=ARRAY
   0x0223=EXTERNNAME
@@ -270,101 +463,155 @@ begin
   0x0236=TABLE
   0x023E=WINDOW2
   0x0243=XF
-  0x027E=RK
   0x0293=STYLE
+  # chart records
+  0x103C=CHPICFORMAT
+end
+
+multilist=RECORD-NAMES-BIFF4
+begin
+  include=RECORD-NAMES-BIFF3
+  # worksheet/workbook records
+  exclude=0x0206,0x0209,0x001E,0x0243
+  0x0085=BOUNDSHEET
+  0x0088=,,,,,,SHEETSOFFSET,SHEETHEADER
+  0x0090=,,,,,SOUND,SYNC
+  0x0098=LPR,STANDARDWIDTH,FNGROUPNAME,,FNGROUPCOUNT,,,
+  0x00A0=SCL,SETUP,FNPROTO,PROJEXTSHEET,,,,
+  0x00A8=DRAGDROP,COORDLIST,,GCW,,,,
   0x0406=FORMULA
   0x0409=BOF
   0x041E=FORMAT
   0x0443=XF
   0x04BC=SHRFMLA
-  0x0800=SCREENTIP
-  0x0803=WEBQRYSETTINGS
-  0x0804=WEBQRYTABLES
-  0x0809=BOF
-  0x0862=SHEETLAYOUT
-  0x0867=SHEETPROTECTION
-  0x1001=CHUNITS
-  0x1002=CHCHART
-  0x1003=CHSERIES
-  0x1004=CHSOURCELINK
-  0x1006=CHDATAFORMAT
-  0x1007=CHLINEFORMAT
-  0x1009=CHMARKERFORMAT
-  0x100A=CHAREAFORMAT
-  0x100B=CHPIEFORMAT
-  0x100C=CHATTACHEDLABEL
-  0x100D=CHSTRING
-  0x1014=CHCHARTFORMAT
-  0x1015=CHLEGEND
-  0x1016=CHSERIESLIST
-  0x1017=CHBAR
-  0x1018=CHLINE
-  0x1019=CHPIE
-  0x101A=CHAREA
-  0x101B=CHSCATTER
-  0x101C=CHCHARTLINE
-  0x101D=CHAXIS
-  0x101E=CHTICK
-  0x101F=CHVALUERANGE
-  0x1020=CHLABELRANGE
-  0x1021=CHAXISLINE
-  0x1022=CHFORMATLINK
-  0x1024=CHDEFAULTTEXT
-  0x1025=CHTEXT
-  0x1026=CHFONT
-  0x1027=CHOBJECTLINK
-  0x102D=CHARROW
-  0x102F=CHARROWHEAD
-  0x1032=CHFRAME
-  0x1033=CHBEGIN
-  0x1034=CHEND
-  0x1035=CHPLOTAREA
-  0x1036=CHCHARTSIZE
-  0x1037=CHRELPOSITION
-  0x1038=CHARROWRELPOS
-  0x103A=CHCHART3D
-  0x103B=CHMULTILINK
-  0x103C=CHPICFORMAT
-  0x103D=CHDROPBAR
-  0x103E=CHRADARLINE
-  0x103F=CHSURFACE
-  0x1040=CHRADARAREA
-  0x1041=CHAXESSET
-  0x1043=CHLEGENDENTRY
-  0x1044=CHPROPERTIES
-  0x1045=CHSERGROUP
-  0x1046=CHUSEDAXESSETS
-  0x1048=CHPIVOTREF
-  0x104A=CHSERPARENT
-  0x104B=CHSERTRENDLINE
-  0x104E=CHFORMAT
-  0x104F=CHPOS
-  0x1050=CHFORMATRUNS
-  0x1051=CHSOURCELINK
-  0x105B=CHSERERRORBAR
-  0x105D=CHSERIESFORMAT
-  0x105F=CH3DDATAFORMAT
-  0x1060=CHFONTBASE
-  0x1061=CHPIEEXT
-  0x1062=CHEXTRANGE
-  0x1063=CHDATATABLE
-  0x1064=CHPLOTGROWTH
-  0x1065=CHSERINDEX
-  0x1066=CHESCHERFORMAT
-  0x1067=CHPIEEXTSETT
+  # chart records
+  0x1038=,,,CHMULTILINK,,CHDROPBAR,CHRADARLINE,CHSURFACE
 end
 
-# BOF record -----------------------------------------------------------------
+multilist=RECORD-NAMES-BIFF5
+begin
+  include=RECORD-NAMES-BIFF4
+  # worksheet/workbook records
+  exclude=0x0406,0x0409,0x0218,0x0223,0x0231,0x0443
+  0x0006=FORMULA
+  0x0018=NAME
+  0x0023=EXTERNNAME
+  0x0031=FONT
+  0x0098=,,,FILTERMODE,,AUTOFILTERINFO,AUTOFILTER,
+  0x00A8=,,,,,,SCENMAN,SCENARIO
+  0x00B0=SXVIEW,SXVD,SXVI,,SXIVD,SXLI,SXPI,
+  0x00B8=DOCROUTE,RECIPNAME,,,SHRFMLA,MULRK,MULBLANK,
+  0x00C0=,MMS,ADDMENU,DELMENU,,SXDI,SXDB,SXFIELD
+  0x00C8=SXINDEXLIST,SXDOUBLE,SXBOOLEAN,SXERROR,SXINTEGER,SXSTRING,SXDATETIME,SXEMPTY
+  0x00D0=SXTBL,SXTBRGITEM,SXTBPG,OBPROJ,,SXIDSTM,RSTRING,DBCELL
+  0x00D8=SXNUMGROUP,SXGROUPINFO,BOOKBOOL,REVERT,SXEXT|PARAMQRY,SCENPROTECT,OLESIZE,UDDESC
+  0x00E0=XF,INTERFACEHDR,INTERFACEEND,SXVS,,,,
+  # chart records
+  exclude=0x1004,0x102D,0x102F,0x1036,0x1037,0x1038,0x103B
+  0x1040=CHRADARAREA,CHAXESSET,,CHLEGENDENTRY,CHPROPERTIES,CHSERGROUP,CHUSEDAXESSETS,
+  0x1048=CHPIVOTREF,,CHSERPARENT,CHSERTRENDLINE,,,CHFORMAT,CHPOS
+  0x1050=CHFORMATRUNS,CHSOURCELINK,,,,,,
+  0x1058=,,,CHSERERRORBAR,,CHSERIESFORMAT,,
+end
+
+multilist=RECORD-NAMES-BIFF8
+begin
+  include=RECORD-NAMES-BIFF5
+  # worksheet/workbook records
+  0x00E0=,,,,,CELLMERGING,,
+  0x00E8=,BITMAP,,MSODRAWINGGROUP,MSODRAWING,MSODRAWINGSELECTION,,PHONETIC
+  0x00F0=SXRULE,SXEX,SXFILT,,,,SXNAME,SXSELECT
+  0x00F8=SXPAIR,SXFMLA,,SXFORMAT,SST,LABELSST,,EXTSST
+  0x0100=SXVDEX,,,SXFORMULA,,,,
+  0x0120=,,SXDBEX,,,,,
+  0x0130=,,,,,,,CHTRINSERT
+  0x0138=CHTRINFO,,,CHTRCELLCONTENT,,TABID,,
+  0x0140=CHTRMOVERANGE,,,,,,,
+  0x0148=,,,,,CHTRINSERTTAB,,
+  0x0158=,,,,,,,LABELRANGES
+  0x0160=USESELFS,DSF,XL5MODIFY,,,,,
+  0x0190=,,,,,,CHTRHEADER,
+  0x01A8=,USERBVIEW,USERSVIEWBEGIN,USERSVIEWEND,,QSI,SUPBOOK,PROT4REV
+  0x01B0=CONDFMT,CF,DVAL,,,DCONBIN,TXO,REFRESHALL
+  0x01B8=HLINK,NLRDELNAME,CODENAME,SXFDBTYPE,PROT4REVPASS,,DV,
+  0x0800=SCREENTIP,,,WEBQRYSETTINGS,WEBQRYTABLES,,,
+  0x0860=,,SHEETLAYOUT,,,,,SHEETPROTECTION
+  # chart records
+  0x1058=,,,,,,,CH3DDATAFORMAT
+  0x1060=CHFONTBASE,CHPIEEXT,CHEXTRANGE,CHDATATABLE,CHPLOTGROWTH,CHSERINDEX,CHESCHERFORMAT,CHPIEEXTSETT
+end
+
+constlist=SIMPLE-RECORDS-BIFF2
+begin
+  0x000C=uint16,dec,max-iterations
+  0x000D=int16,dec,calc-mode,CALCMODE
+  0x000E=uint16,bool,calc-precise
+  0x000F=uint16,dec,ref-mode,REFMODE
+  0x0010=double,dec,epsilon
+  0x0011=uint16,bool,iterate-recursive
+  0x0012=uint16,bool,workbook-protected
+  0x0013=uint16,hex,password-hash
+  0x0016=uint16,dec,externsheets
+  0x0019=uint16,bool,window-protected
+  0x001F=uint16,dec,builtin-fmt-count
+  0x0022=uint16,dec,null-date,DATEMODE
+  0x0025=uint16,hex,rowheight-flags,DEFROWHEIGHT-FLAGS
+  0x0026=double,dec,left-margin,CONV-INCH-TO-CM
+  0x0027=double,dec,right-margin,CONV-INCH-TO-CM
+  0x0028=double,dec,top-margin,CONV-INCH-TO-CM
+  0x0029=double,dec,bottom-margin,CONV-INCH-TO-CM
+  0x002A=uint16,bool,print-sheet-headers
+  0x002B=uint16,bool,print-gridlines
+  0x0040=uint16,bool,backup-on-save
+  0x0044=uint16,dec,xf-idx
+  0x0045=uint16,dec,font-color-idx,COLORS
+  0x0055=uint16,dec,default-col-width
+  0x0056=uint16,dec,builtin-fmt-count
+  0x005E=uint16,unused
+  0x005F=uint16,bool,recalc-on-save
+  0x0063=uint16,bool,objects-protected
+  0x0082=uint16,bool,print-gridlines-changed
+  0x0083=uint16,bool,horizontal-centered
+  0x0084=uint16,bool,vertical-centered
+  0x008D=uint16,dec,object-mode,HIDEOBJ
+  0x0099=uint16,dec,standard-col-width,CONV-COLWIDTH
+  0x009C=uint16,dec,func-group-count
+  0x00DA=uint16,bool,strip-cached-values
+  0x00DD=uint16,bool,scenarios-protected
+  0x0160=uint16,bool,use-nat-lang-refs
+  0x0161=uint16,bool,double-stream
+  0x01AF=uint16,bool,revlog-protected
+  0x01B7=uint16,bool,refresh-all
+  0x01BC=uint16,hex,password-hash
+  0x100B=uint16,dec,extrusion,CHPIEFORMAT
+  0x101A=uint16,hex,flags,CHAREA-FLAGS
+  0x1021=uint16,dec,axisline-id,CHAXISLINE-ID
+  0x1024=uint16,dec,text-idx
+  0x1026=uint16,dec,font-idx,FONTNAMES
+  0x1045=uint16,dec,group-idx
+  0x1046=uint16,dec,used-axessets
+  0x104A=uint16,dec,series-idx
+  0x104E=uint16,dec,fmt-idx,FORMATS
+  0x1065=uint16,dec,series-idx
+end
+
+constlist=SIMPLE-RECORDS-BIFF8
+begin
+  include=SIMPLE-RECORDS-BIFF2
+  0x00E1=uint16,dec,codepage,CODEPAGES
+end
+
+# BOF ------------------------------------------------------------------------
 
 constlist=BOF-BIFFTYPE
 begin
   0x0000=from-id
-  0x0007=BIFF2
-  0x0200=BIFF2
-  0x0300=BIFF3
-  0x0400=BIFF4
-  0x0500=BIFF5
-  0x0600=BIFF8
+  0x0007=biff2
+  0x0200=biff2
+  0x0300=biff3
+  0x0400=biff4
+  0x0500=biff5
+  0x0600=biff8
 end
 
 constlist=BOF-SHEETTYPE
@@ -377,7 +624,7 @@ begin
   0x0100=workspace
 end
 
-flagslist=BOF-HISTORY
+flagslist=BOF-HISTORY-FLAGS
 begin
   0x00000001=windows
   0x00000002=risc
@@ -387,6 +634,377 @@ begin
   0x00000020=beta-any
   0x00000100=risc-any
   # missing mac here?
+end
+
+# CALCMODE -------------------------------------------------------------------
+
+shortlist=CALCMODE,-1,automatic-no-table,manual,automatic
+
+# CH3DDATAFORMAT -------------------------------------------------------------
+
+shortlist=CH3DDATAFORMAT-BASE,0,rectangular,circular
+shortlist=CH3DDATAFORMAT-TOP,0,straight,sharp,trunc
+
+# CHAREA ---------------------------------------------------------------------
+
+flagslist=CHAREA-FLAGS
+begin
+  0x0001=stacked
+  0x0002=percent
+  0x0004=shadow
+end
+
+# CHAREAFORMAT ---------------------------------------------------------------
+
+flagslist=CHAREAFORMAT-FLAGS
+begin
+  0x0001=auto
+  0x0002=swap-negative
+end
+
+# CHAXISLINE -----------------------------------------------------------------
+
+shortlist=CHAXISLINE-ID,0,axisline,major-grid,minor-grid,wall
+
+# CHFRAME --------------------------------------------------------------------
+
+constlist=CHFRAME-FORMAT
+begin
+  0=standard
+  4=shadow
+end
+
+flagslist=CHFRAME-FLAGS
+begin
+  0x0001=auto-size
+  0x0002=auto-pos
+end
+
+# CHLINEFORMAT ---------------------------------------------------------------
+
+shortlist=CHLINEFORMAT-LINETYPE,0,solid,dash,dot,dash-dot,dash-dot-dot,none,25%-pattern,50%-pattern,75%-pattern
+shortlist=CHLINEFORMAT-LINEWEIGHT,-1,hair,thin,medium,thick
+
+flagslist=CHLINEFORMAT-FLAGS
+begin
+  0x0001=auto
+  0x0004=axis-enabled
+end
+
+# CHPIEFORMAT ----------------------------------------------------------------
+
+unitconverter=CHPIEFORMAT,1,%
+
+# CHSERERRORBAR --------------------------------------------------------------
+
+shortlist=CHSERERRORBAR-TYPE,1,x-plus,x-minus,y-plus,y-minus
+shortlist=CHSERERRORBAR-SOURCE,1,percent,fixed,std-deviation,custom,std-error
+
+# CHSERIES -------------------------------------------------------------------
+
+shortlist=CHSERIES-TYPE,0,date,numeric,sequence,text
+
+# CHSERTRENDLINE -------------------------------------------------------------
+
+shortlist=CHSERTRENDLINE-TYPE,0,poynomial,exponential,logarithmic,power,moving-average
+
+# CHSOURCELINK ---------------------------------------------------------------
+
+shortlist=CHSOURCELINK-TARGET,0,title,values,category,bubbles
+shortlist=CHSOURCELINK-TYPE,0,default,constant,sheet-link
+
+flagslist=CHSOURCELINK-FLAGS
+begin
+  0x0001=custom-numfmt
+end
+
+# CHSTRING -------------------------------------------------------------------
+
+shortlist=CHSTRING-TYPE,0,text,category-default,value-default,x-prefix,x-postfix,y-prefix,y-postfix,comment
+
+# DATEMODE -------------------------------------------------------------------
+
+shortlist=DATEMODE,0,1899-12-31,1904-01-01
+
+# DEFROWHEIGHT ---------------------------------------------------------------
+
+combilist=DEFROWHEIGHT-FLAGS-BIFF2
+begin
+  0x7FFF=uint16,dec,row-height,CONV-TWIP-TO-PT
+  0x8000=unchanged
+end
+
+flagslist=DEFROWHEIGHT-FLAGS-BIFF3
+begin
+  0x0001=unsynced
+  0x0002=hidden
+  0x0004=add-space-above
+  0x0008=add-space-below
+end
+
+# FONT -----------------------------------------------------------------------
+
+flagslist=FONT-FLAGS
+begin
+  0x0001=bold
+  0x0002=italic
+  0x0004=underline
+  0x0008=strikeout
+end
+
+constlist=FONT-WEIGHT
+begin
+  400=normal
+  700=bold
+end
+
+multilist=FONT-UNDERLINE
+begin
+  0x00=none,single,double
+  0x21=single-acc,double-acc
+end
+
+constlist=FONT-CHARSET
+begin
+  0=win-1252-latin-1
+  1=system-default
+  2=symbol
+  77=apple-roman
+  128=win-932-japanese-shift-jis
+  129=win-949-korean-hangul
+  130=win-1361-korean-johab
+  134=win-936-chinese-simplified-gbk
+  136=win-950-chinese-traditional-big5
+  161=win-1253-greek
+  162=win-1254-turkish
+  163=win-1258-vietnamese
+  177=win-1255-hebrew
+  178=win-1256-arabic
+  186=win-1257-baltic
+  204=win-1251-cyrillic
+  222=win-874-thai
+  238=win-1250-latin-2-central-european
+  255=ibm-850-latin-1
+end
+
+shortlist=FONT-ESCAPEMENT,0,none,superscript,subscript
+shortlist=FONT-FAMILY,0,none,roman,swiss,modern,script,decorative
+
+# FORMULA --------------------------------------------------------------------
+
+flagslist=FORMULA-FLAGS-BIFF2
+begin
+  0x0001=recalc-always
+end
+
+flagslist=FORMULA-FLAGS-BIFF3
+begin
+  include=FORMULA-FLAGS-BIFF2
+  0x0002=recalc-onload
+end
+
+flagslist=FORMULA-FLAGS-BIFF5
+begin
+  include=FORMULA-FLAGS-BIFF3
+  0x0008=shared-fmla
+end
+
+shortlist=FORMULA-RESULTTYPE,0,string,boolean,error,empty
+
+# HIDEOBJ --------------------------------------------------------------------
+
+shortlist=HIDEOBJ,0,show,placeholder,hide
+
+# REFMODE --------------------------------------------------------------------
+
+shortlist=REFMODE,0,R1C1,A1
+
+# XF -------------------------------------------------------------------------
+
+shortlist=XF-HORALIGN,0,general,left,center,right,fill,block,center-across-sel,distribute
+shortlist=XF-VERALIGN,0,top,center,bottom,justify,distribute
+shortlist=XF-ORIENTATION,0,horizontal,stacked,90°-ccw,90°-cw
+shortlist=XF-TEXTDIRECTION,0,context,left-to-right,right-to-left
+
+flagslist=XF-PROTECTION-FLAGS
+begin
+  0x01=locked
+  0x02=formula-hidden
+  0x04=style-xf
+end
+
+flagslist=XF-USEDATTRIBS-FLAGS
+begin
+  0x04=format
+  0x08=font
+  0x10=alignment
+  0x20=border
+  0x40=area
+  0x80=protection
+end
+
+combilist=XF-STYLEFLAGS-BIFF2
+begin
+  0x07=uint8,dec,hor-align,XF-HORALIGN
+  0x08=left-border
+  0x10=right-border
+  0x20=top-border
+  0x40=bottom-border
+  0x80=fill
+end
+
+combilist=XF-TYPEFLAGS-BIFF2
+begin
+  0x3F=uint8,dec,fmt-idx,FORMATS
+  0x40=locked
+  0x80=formula-hidden
+end
+
+flagslist=XF-TYPEFLAGS-BIFF3
+begin
+  include=XF-PROTECTION-FLAGS
+end
+
+combilist=XF-TYPEFLAGS-BIFF4
+begin
+  include=XF-TYPEFLAGS-BIFF3
+  0xFFF0=uint16,dec,parent-xf-idx
+end
+
+combilist=XF-ALIGNMENT-BIFF3
+begin
+  0x0007=uint8,dec,hor-align,XF-HORALIGN
+  0x0008=text-wrap
+  0xFFF0=uint16,dec,parent-xf-idx
+end
+
+combilist=XF-ALIGNMENT-BIFF4
+begin
+  0x07=uint8,dec,hor-align,XF-HORALIGN
+  0x08=text-wrap
+  0x30=uint8,dec,ver-align,XF-VERALIGN
+  0xC0=uint8,dec,orientation,XF-ORIENTATION
+end
+
+combilist=XF-ALIGNMENT-BIFF5
+begin
+  0x07=uint8,dec,hor-align,XF-HORALIGN
+  0x08=text-wrap
+  0x70=uint8,dec,ver-align,XF-VERALIGN
+end
+
+combilist=XF-ORIENTATTRIBS-BIFF5
+begin
+  include=XF-USEDATTRIBS-FLAGS
+  0x03=uint8,dec,orientation,XF-ORIENTATION
+end
+
+constlist=XF-ROTATION-BIFF8
+begin
+  default=''
+  255=stacked
+end
+
+combilist=XF-TEXTFLAGS-BIFF8
+begin
+  0x0F=uint8,dec,indent
+  0x10=shrink-to-fit
+  0xC0=uint8,dec,text-dir,XF-TEXTDIRECTION
+end
+
+combilist=XF-FILL-BIFF3
+begin
+  0x003F=uint8,dec,fill-pattern,FILLPATTERNS
+  0x07C0=uint8,dec,fg-color-idx,COLORS
+  0xF800=uint8,dec,bg-color-idx,COLORS
+end
+
+combilist=XF-BORDER-BIFF3
+begin
+  0x00000007=uint8,dec,top-style,BORDERSTYLES
+  0x000000F8=uint8,dec,top-color,COLORS
+  0x00000700=uint8,dec,left-style,BORDERSTYLES
+  0x0000F800=uint8,dec,left-color,COLORS
+  0x00070000=uint8,dec,bottom-style,BORDERSTYLES
+  0x00F80000=uint8,dec,bottom-color,COLORS
+  0x07000000=uint8,dec,right-style,BORDERSTYLES
+  0xF8000000=uint8,dec,right-color,COLORS
+end
+
+combilist=XF-FILL-BIFF5
+begin
+  0x0000007F=uint8,dec,fg-color-idx,COLORS
+  0x00003F80=uint8,dec,bg-color-idx,COLORS
+  0x003F0000=uint8,dec,fill-pattern,FILLPATTERNS
+  0x01C00000=uint8,dec,bottom-style,BORDERSTYLES
+  0xFE000000=uint8,dec,bottom-color,COLORS
+end
+
+combilist=XF-BORDER-BIFF5
+begin
+  0x00000007=uint8,dec,top-style,BORDERSTYLES
+  0x00000038=uint8,dec,left-style,BORDERSTYLES
+  0x000001C0=uint8,dec,right-style,BORDERSTYLES
+  0x0000FE00=uint8,dec,top-color,COLORS
+  0x007F0000=uint8,dec,left-color,COLORS
+  0x3F800000=uint8,dec,right-color,COLORS
+end
+
+combilist=XF-BORDERSTYLE-BIFF8
+begin
+  0x000F=uint8,dec,left-style,BORDERSTYLES
+  0x00F0=uint8,dec,right-style,BORDERSTYLES
+  0x0F00=uint8,dec,top-style,BORDERSTYLES
+  0xF000=uint8,dec,bottom-style,BORDERSTYLES
+end
+
+combilist=XF-BORDERCOLOR1-BIFF8
+begin
+  0x007F=uint8,dec,left-color,COLORS
+  0x3F80=uint8,dec,right-color,COLORS
+  0x4000=diag-tl-to-br
+  0x8000=diag-bl-to-tr
+end
+
+combilist=XF-BORDERCOLOR2-BIFF8
+begin
+  0x0000007F=uint8,dec,top-color,COLORS
+  0x00003F80=uint8,dec,bottom-color,COLORS
+  0x001FC000=uint8,dec,diag-color,COLORS
+  0x01E00000=uint8,dec,diag-style,BORDERSTYLES
+  0xFC000000=uint8,dec,fill-pattern,FILLPATTERNS
+end
+
+combilist=XF-FILLCOLOR-BIFF8
+begin
+  0x007F=uint8,dec,fg-color-idx,COLORS
+  0x3F80=uint8,dec,bg-color-idx,COLORS
+end
+
+# BIFF2 XF index field -------------------------------------------------------
+
+constlist=XFINDEX-BIFF2
+begin
+  default=''
+  63=from-ixfe
+end
+
+combilist=CELL-XFINDEX-BIFF2
+begin
+  0x3F=uint8,dec,xf-idx,XFINDEX-BIFF2
+  0x40=locked
+  0x80=formula-hidden
+end
+
+combilist=CELL-XFFORMAT-BIFF2
+begin
+  0x3F=uint8,dec,fmt-idx,FORMATS
+  0xC0=uint8,dec,font-idx,FONTNAMES
+end
+
+flagslist=CELL-XFSTYLE-BIFF2
+begin
+  include=XF-STYLEFLAGS-BIFF2
 end
 
 # ============================================================================
