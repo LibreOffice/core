@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 08:41:49 $
+#   last change: $Author: rt $ $Date: 2006-05-05 10:15:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ IDLFILES=\
     JavaScript.idl\
     ScriptEvent.idl\
     ScriptEventDescriptor.idl\
+    ArrayWrapper.idl\
     XAllListener.idl\
     XAllListenerAdapterService.idl\
     XDebugging.idl\
@@ -86,6 +87,7 @@ IDLFILES=\
     XStarBasicLibraryInfo.idl\
     XScriptEventsSupplier.idl\
     XScriptEventsAttacher.idl\
+    XDefaultMethod.idl\
 
 # ------------------------------------------------------------------
 
