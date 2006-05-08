@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:12:46 $
+#   last change: $Author: hr $ $Date: 2006-05-08 15:19:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,12 @@ SLOFILES=			\
                     $(SLO)$/logoimagestatusbarcontroller.obj \
                     $(SLO)$/logotextstatusbarcontroller.obj \
                     $(SLO)$/newmenucontroller.obj           \
-                    $(SLO)$/simpletextstatusbarcontroller.obj
+                    $(SLO)$/simpletextstatusbarcontroller.obj\
+                    $(SLO)$/complextoolbarcontroller.obj     \
+                    $(SLO)$/comboboxtoolbarcontroller.obj    \
+                    $(SLO)$/imagebuttontoolbarcontroller.obj \
+                    $(SLO)$/togglebuttontoolbarcontroller.obj \
+                    $(SLO)$/buttontoolbarcontroller.obj
 
 # --- Targets ------------------------------------------------------
 
