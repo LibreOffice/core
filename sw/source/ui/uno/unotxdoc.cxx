@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:12:22 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2710,17 +2710,17 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
 {
     // check for view shell first...
     const TypeId aTypeId = TYPE(SwView);
-    SfxViewShell* pView = SfxViewShell::GetFirst(&aTypeId);
+    SfxViewShell* pView = SfxViewShell::GetFirst(&aTypeId, sal_False);
     while(pView && pView->GetObjectShell() != pDocShell)
-        pView = SfxViewShell::GetNext(*pView, &aTypeId);
+        pView = SfxViewShell::GetNext(*pView, &aTypeId, sal_False);
     // ...if that is not available check for page pre view shell
     // in order to allow for PDF export of page preview
     if(!pView)
     {
         const TypeId aPageViewTypeId = TYPE(SwPagePreView);
-        pView= SfxViewShell::GetFirst(&aPageViewTypeId);
+        pView= SfxViewShell::GetFirst(&aPageViewTypeId, sal_False);
         while(pView && pView->GetObjectShell() != pDocShell)
-            pView = SfxViewShell::GetNext(*pView, &aPageViewTypeId);
+            pView = SfxViewShell::GetNext(*pView, &aPageViewTypeId, sal_False);
     }
     DBG_ASSERT( pView, "view shell missing" );
 /*    if(pCurrentShell->GetObjectShell() != pDocShell)
@@ -2736,7 +2736,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
         pView = SfxViewShell::GetNext(*pView );
     }*/
 
-    return static_cast<SwView*>(pView);
+    return pView;
 }
 
 /* -----------------------------23.08.02 16:00--------------------------------
