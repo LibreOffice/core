@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 15:58:03 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,11 +490,13 @@ void SwRTFParser::SetFlysInDoc()
         CalculateFlySize( pFlySave->aFlySet, pFlySave->nSttNd,
                           pFlySave->nPageWidth );
 
+                // THIS >>>>>
         // if the section only contains one Node and this has a
         // border or backgorund, then put it to the frame
         // Not in our own RTF-Format!
+                // <<<<< DOES NOT MAKE SENSE TO ME (flr)
         // #102781#. Added support for transparent frames.
-        if( pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex() &&
+        if( pSttNd->GetIndex() + 1 != pSttNd->EndOfSectionIndex() &&
             !bSwPageDesc )
         {
             SwTxtNode* _pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]
