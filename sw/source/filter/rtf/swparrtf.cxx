@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:57:56 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,6 +283,20 @@
 #ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
 #endif
+
+#ifndef _SVX_XLNWTIT_HXX
+#include <svx/xlnwtit.hxx>
+#endif
+
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
+#endif
+
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
+#endif
+
+#include <tools/stream.hxx>
 
 // einige Hilfs-Funktionen
 // char
@@ -1303,6 +1317,42 @@ void SwRTFParser::ReadShpRslt()
     SkipToken(-1);
 }
 
+void SwRTFParser::ReadShpTxt(String& s)
+{
+  int nToken;
+  int level=1;
+  s.AppendAscii("{\\rtf");
+  while (level>0 && IsParserWorking())
+    {
+      nToken = GetNextToken();
+      switch(nToken)
+    {
+    case RTF_SN:
+    case RTF_SV:
+      SkipGroup();
+      break;
+    case RTF_TEXTTOKEN:
+      s.Append(aToken);
+      break;
+    case '{':
+      level++;
+      s.Append(String::CreateFromAscii("{"));
+      break;
+    case '}':
+      level--;
+      s.Append(String::CreateFromAscii("}"));
+      break;
+    default:
+      s.Append(aToken);
+      if (bTokenHasValue) {
+        s.Append(String::CreateFromInt64(nTokenValue));
+      }
+      s.Append(String::CreateFromAscii(" "));
+      break;
+    }
+    }
+  SkipToken(-1);
+}
 
 /*
  * #127429#. Very basic support for the "Buchhalternase".
@@ -1474,6 +1524,13 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int nZOrder)
         SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet);
 }
 
+Point rotate(Point p, Point m)
+{
+  Point _p(p-m);
+  return Point(_p.Y(), -_p.X())+m;
+}
+
+
 void SwRTFParser::ReadShapeObject()
 {
     int nToken;
@@ -1487,6 +1544,12 @@ void SwRTFParser::ReadShapeObject()
     bool bGrfValid=false;
     bool fFilled=true;
     Color fillColor(255, 255, 255);
+    bool fLine=true;
+    int lineWidth=9525/360;
+    String shpTxt;
+    bool bshpTxt=false;
+    int txflTextFlow=0;
+
 
     while (level>0 && IsParserWorking())
     {
@@ -1528,11 +1591,22 @@ void SwRTFParser::ReadShapeObject()
                     {
                         fFilled=aToken.ToInt32();
 
+                    } else if (sn.EqualsAscii("fLine"))
+                    {
+                            fLine=aToken.ToInt32();
+                    } else if (sn.EqualsAscii("lineWidth"))
+                    {
+                            lineWidth=aToken.ToInt32()/360;
+
                     } else if (sn.EqualsAscii("fillColor"))
                     {
                         sal_uInt32 nColor=aToken.ToInt32();
                         fillColor=Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
-                    }
+                    }else if (sn.EqualsAscii("txflTextFlow"))
+                      {
+                        txflTextFlow=aToken.ToInt32();
+                      }
+
                 }
                 break;
             case RTF_PICT:
@@ -1547,6 +1621,11 @@ void SwRTFParser::ReadShapeObject()
                     ReadShpRslt();
                 }
                 break;
+                     case RTF_SHPTXT:
+               ReadShpTxt(shpTxt);
+               bshpTxt=true;
+               break;
+
             default:
                 break;
         }
@@ -1555,15 +1634,23 @@ void SwRTFParser::ReadShapeObject()
 
     switch(shapeType)
     {
+        case 202: /* Text Box */
     case 1: /* Rectangle */
         {
             Rectangle aRect(aPointLeftTop, aPointRightBottom);
 
+          if (txflTextFlow==2) {
+            Point a(rotate(aRect.TopLeft(), aRect.Center()));
+            Point b(rotate(aRect.BottomRight(), aRect.Center()));
+            aRect=Rectangle(a, b);
+          }
+
+
             SdrRectObj* pStroke = new SdrRectObj(aRect);
             pStroke->SetSnapRect(aRect);
-
-            pDoc->GetOrCreateDrawModel();
-            SfxItemSet aSet(pDoc->GetDrawModel()->GetItemPool());
+            pDoc->GetOrCreateDrawModel(); // create model
+            InsertShpObject(pStroke, this->nZOrder++);
+            SfxItemSet aSet(pStroke->GetMergedItemSet());
             if (fFilled)
             {
                 aSet.Put(XFillStyleItem(XFILL_SOLID));
@@ -1573,15 +1660,31 @@ void SwRTFParser::ReadShapeObject()
             {
                 aSet.Put(XFillStyleItem(XFILL_NONE));
             }
-            /*
-            aSet.Put(XLineStyleItem(XLINE_NONE));
-            aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
-            aSet.Put(SdrTextAutoGrowHeightItem(false));
-            aSet.Put(SdrTextAutoGrowWidthItem(false));
-            */
-            pStroke->SetMergedItemSet(aSet);
+            if (!fLine) {
+              aSet.Put(XLineStyleItem(XLINE_NONE));
+            } else {
+              aSet.Put( XLineWidthItem( lineWidth/2 ) ); // lineWidth are in 1000th mm, seems that XLineWidthItem expects 1/2 the line width
+            }
 
-            InsertShpObject(pStroke, this->nZOrder++);
+            pStroke->SetMergedItemSet(aSet);
+            if (bshpTxt) {
+              SdrOutliner& rOutliner=pDoc->GetDrawModel()->GetDrawOutliner(pStroke);
+              rOutliner.Clear();
+              ByteString bs(shpTxt, RTL_TEXTENCODING_ASCII_US);
+              SvMemoryStream aStream((sal_Char*)bs.GetBuffer(), bs.Len(), STREAM_READ);
+              rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
+              OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
+              pStroke->NbcSetOutlinerParaObject(pParaObject);
+              //delete pParaObject;
+              rOutliner.Clear();
+            }
+            if (txflTextFlow==2) {
+              long nAngle = 90;
+              double a = nAngle*100*nPi180;
+              pStroke->Rotate(pStroke->GetCurrentBoundRect().Center(), nAngle*100, sin(a), cos(a) );
+
+            }
+
         }
         break;
     case 20: /* Line */
@@ -1594,6 +1697,14 @@ void SwRTFParser::ReadShapeObject()
             //pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
+            SfxItemSet aSet(pStroke->GetMergedItemSet());
+            if (!fLine) {
+              aSet.Put(XLineStyleItem(XLINE_NONE));
+            } else {
+              aSet.Put( XLineWidthItem( lineWidth/2 ) ); // lineWidth are in 1000th mm, seems that XLineWidthItem expects 1/2 the line width
+            }
+
+            pStroke->SetMergedItemSet(aSet);
         }
         break;
     case 75 : /* Picture */
