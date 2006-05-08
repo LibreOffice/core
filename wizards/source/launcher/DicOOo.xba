@@ -36,7 +36,7 @@ else
     else
     	&apos;creates default file in user directory
     	Open ThePath &amp; &quot;/DicOOo.lst&quot; for output as #1
-    		print #1,convertFromURL(DefPath &amp; &quot;/DicOOo.lst&quot;)
+    		print #1,convertFromURL(DefPath &amp; &quot;/DicOOo.sxw&quot;)
     	close #1
     endif    
 endif
