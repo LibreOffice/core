@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:22:43 $
+#   last change: $Author: hr $ $Date: 2006-05-08 15:19:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,8 @@ SHL2LIBS=       $(LIB2TARGET)
 SHL2STDLIBS=    \
                 $(FWILIB)							\
                 $(VCLLIB)                           \
-                $(SVLLIB)							\
+                $(SVLLIB)                           \
+                $(SVTOOLLIB)						\
                 $(UNOTOOLSLIB)                      \
                 $(TOOLSLIB)							\
                 $(COMPHELPERLIB)					\
@@ -313,10 +314,15 @@ SHL4OBJS=       \
                 $(SLO)$/wakeupthread.obj               \
                 $(SLO)$/sessionlistener.obj         \
                 $(SLO)$/newmenucontroller.obj          \
-                $(SLO)$/logoimagestatusbarcontroller.obj \
-                $(SLO)$/logotextstatusbarcontroller.obj \
-                $(SLO)$/globalsettings.obj          \
-                $(SLO)$/simpletextstatusbarcontroller.obj
+                $(SLO)$/logoimagestatusbarcontroller.obj  \
+                $(SLO)$/logotextstatusbarcontroller.obj   \
+                $(SLO)$/globalsettings.obj                \
+                $(SLO)$/simpletextstatusbarcontroller.obj \
+                $(SLO)$/complextoolbarcontroller.obj      \
+                $(SLO)$/comboboxtoolbarcontroller.obj     \
+                $(SLO)$/imagebuttontoolbarcontroller.obj  \
+                $(SLO)$/togglebuttontoolbarcontroller.obj \
+                $(SLO)$/buttontoolbarcontroller.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
