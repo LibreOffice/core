@@ -1,0 +1,300 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: togglebuttontoolbarcontroller.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:19:32 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_UIELEMENT_TOGGLEBUTTONTOOLBARCONTROLLER_HXX
+#include "uielement/togglebuttontoolbarcontroller.hxx"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  my own includes
+//_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
+#include <classes/addonsoptions.hxx>
+#endif
+#ifndef __FRAMEWORK_TOOLBAR_HXX_
+#include "uielement/toolbar.hxx"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLNOTIFICATIONLISTENER_HPP_
+#include <com/sun/star/frame/XControlNotificationListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
+#include "com/sun/star/util/XMacroExpander.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include "com/sun/star/uno/XComponentContext.hpp"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include "com/sun/star/beans/XPropertySet.hpp"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
+
+#include <rtl/uri.hxx>
+#include <vos/mutex.hxx>
+#include <comphelper/processfactory.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/mnemonic.hxx>
+#include <vcl/window.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/bitmap.hxx>
+#include <svtools/filter.hxx>
+#include <svtools/miscopt.hxx>
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
+
+namespace framework
+{
+
+// ------------------------------------------------------------------
+
+ToggleButtonToolbarController::ToggleButtonToolbarController(
+    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XFrame >&               rFrame,
+    ToolBar*                                 pToolbar,
+    USHORT                                   nID,
+    Style                                    eStyle,
+    const OUString&                          aCommand ) :
+    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand ),
+    m_eStyle( eStyle )
+{
+    if ( eStyle == STYLE_DROPDOWNBUTTON )
+        m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWNONLY | m_pToolbar->GetItemBits( m_nID ) );
+    else if ( eStyle == STYLE_TOGGLE_DROPDOWNBUTTON )
+        m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
+}
+
+// ------------------------------------------------------------------
+
+ToggleButtonToolbarController::~ToggleButtonToolbarController()
+{
+}
+
+// ------------------------------------------------------------------
+
+void SAL_CALL ToggleButtonToolbarController::dispose()
+throw ( RuntimeException )
+{
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    ComplexToolbarController::dispose();
+}
+
+// ------------------------------------------------------------------
+
+void SAL_CALL ToggleButtonToolbarController::execute( sal_Int16 KeyModifier )
+throw ( RuntimeException )
+{
+    Reference< XDispatch >       xDispatch;
+    Reference< XURLTransformer > xURLTransformer;
+    OUString                     aCommandURL;
+    OUString                     aSelectedText;
+    ::com::sun::star::util::URL  aTargetURL;
+
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        if ( m_bDisposed )
+            throw DisposedException();
+
+        if ( m_bInitialized &&
+             m_xFrame.is() &&
+             m_xServiceManager.is() &&
+             m_aCommandURL.getLength() )
+        {
+            xURLTransformer = m_xURLTransformer;
+            xDispatch = getDispatchFromCommand( m_aCommandURL );
+            aCommandURL = m_aCommandURL;
+            aTargetURL = getInitializedURL();
+            aSelectedText = m_aCurrentSelection;
+        }
+    }
+
+    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
+    {
+        Sequence<PropertyValue>   aArgs( 2 );
+
+        // Add key modifier to argument list
+        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+        aArgs[0].Value <<= KeyModifier;
+        aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+        aArgs[1].Value <<= aSelectedText;
+
+        // Execute dispatch asynchronously
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+        pExecuteInfo->xDispatch     = xDispatch;
+        pExecuteInfo->aTargetURL    = aTargetURL;
+        pExecuteInfo->aArgs         = aArgs;
+        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
+    }
+}
+
+// ------------------------------------------------------------------
+
+uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference< awt::XWindow > xWindow;
+
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    if (( m_eStyle == STYLE_DROPDOWNBUTTON ) ||
+        ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
+    {
+        // create popup menu
+        PopupMenu aPopup;
+
+        for ( sal_uInt32 i = 0; i < m_aDropdownMenuList.size(); i++ )
+        {
+            rtl::OUString aLabel( m_aDropdownMenuList[i] );
+            aPopup.InsertItem( sal_uInt16( i+1 ), aLabel );
+            if ( aLabel == m_aCurrentSelection )
+                aPopup.CheckItem( sal_uInt16( i+1 ), sal_True );
+            else
+                aPopup.CheckItem( sal_uInt16( i+1 ), sal_False );
+        }
+
+        aPopup.SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
+        aPopup.Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
+    }
+
+    return xWindow;
+}
+
+// ------------------------------------------------------------------
+
+void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+{
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    if (( m_eStyle == STYLE_DROPDOWNBUTTON ) ||
+        ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
+    {
+        if ( rControlCommand.Command.equalsAsciiL( "SetList", 7 ))
+        {
+            for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+            {
+                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
+                {
+                    Sequence< OUString > aList;
+                    m_aDropdownMenuList.clear();
+
+                    rControlCommand.Arguments[i].Value >>= aList;
+                    for ( sal_Int32 j = 0; j < aList.getLength(); j++ )
+                        m_aDropdownMenuList.push_back( aList[j] );
+
+                    // send notification
+                    uno::Sequence< beans::NamedValue > aInfo( 1 );
+                    aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ));
+                    aInfo[0].Value <<= aList;
+                    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListChanged" )),
+                                getDispatchFromCommand( m_aCommandURL ),
+                                aInfo );
+
+                    break;
+                }
+            }
+        }
+        else if ( rControlCommand.Command.equalsAsciiL( "CheckItemPos", 12 ))
+        {
+            for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+            {
+                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+                {
+                    sal_Int32 nPos( -1 );
+
+                    rControlCommand.Arguments[i].Value >>= nPos;
+                    if ( nPos >= 0 && nPos < m_aDropdownMenuList.size() )
+                    {
+                        m_aCurrentSelection = m_aDropdownMenuList[nPos];
+                        m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
+
+                        // send notification
+                        uno::Sequence< beans::NamedValue > aInfo( 1 );
+                        aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemChecked" ));
+                        aInfo[0].Value <<= nPos;
+                        addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pos" )),
+                                    getDispatchFromCommand( m_aCommandURL ),
+                                    aInfo );
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
+IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_uInt16 nItemId = pMenu->GetCurItemId();
+    if ( nItemId > 0 && nItemId <= m_aDropdownMenuList.size() )
+    {
+        m_aCurrentSelection = m_aDropdownMenuList[nItemId-1];
+        m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
+
+        execute( 0 );
+    }
+    return 0;
+}
+
+} // namespace
