@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:32:50 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_MACROEXECUTIONMODE();
         static const ::rtl::OUString& PROP_MEDIATYPE();
         static const ::rtl::OUString& PROP_MINIMIZED();
+        static const ::rtl::OUString& PROP_NOAUTOSAVE();
         static const ::rtl::OUString& PROP_OPENNEWVIEW();
         static const ::rtl::OUString& PROP_OUTPUTSTREAM();
         static const ::rtl::OUString& PROP_PASSWORD();
