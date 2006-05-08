@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:46:22 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,6 +367,11 @@ void SwRTFParser::ReadTable( int nToken )
                 }
                 else
                 {
+                  //
+                  if (nSize<=2*aRow.mnBrdDist) {
+                    aRow.mnRightRowPad=0;
+                    aRow.mbUseRightRowPad=TRUE;
+                  }
                     SetRowBorder((SfxItemSet&)pBoxFmt->GetAttrSet(), aRow);
                     aBoxFmts.Insert( pBoxFmt, aBoxFmts.Count() );
                     pBoxFmt = pDoc->MakeTableBoxFmt();
