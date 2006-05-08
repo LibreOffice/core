@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:34:11 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,24 +169,6 @@ SFX_IMPL_XTYPEPROVIDER_6( SfxDocumentInfoObject, ::com::sun::star::document::XDo
 }
 */
 
-struct OUStringHashCode
-{
-    size_t operator()( const ::rtl::OUString& sString ) const
-    {
-        return sString.hashCode();
-    }
-};
-
-struct SfxExtendedItemPropertyMap : public SfxItemPropertyMap
-{
-    ::com::sun::star::uno::Any aValue;
-};
-
-typedef ::std::hash_map< ::rtl::OUString                    ,
-                         SfxExtendedItemPropertyMap         ,
-                         OUStringHashCode                   ,
-                         ::std::equal_to< ::rtl::OUString > > TDynamicProps;
-
 class MixedPropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
     private:
@@ -328,7 +310,6 @@ struct SfxDocumentInfoObject_Impl
     SfxObjectShell*                     _pObjSh;
     ::osl::Mutex                        _aMutex;
     ::cppu::OInterfaceContainerHelper   _aDisposeContainer;
-    TDynamicProps                       _lDynamicProps;
 
     SfxDocumentInfoObject_Impl( SfxObjectShell* pObjSh )
         : _pObjSh( pObjSh )
@@ -408,7 +389,7 @@ void SAL_CALL  SfxDocumentInfoObject::removeEventListener(const ::com::sun::star
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo(aDocInfoPropertyMap_Impl, &(_pImp->_lDynamicProps));
+    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo(aDocInfoPropertyMap_Impl, &(_pInfo->GetDynamicProps_Impl()));
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo(
         static_cast< ::com::sun::star::beans::XPropertySetInfo* >(pInfo),
         ::com::sun::star::uno::UNO_QUERY_THROW);
@@ -430,8 +411,9 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
     else
     // dynamic prop!
     {
-        TDynamicProps::iterator pProp = _pImp->_lDynamicProps.find(aPropertyName);
-        if ( pProp != _pImp->_lDynamicProps.end() )
+        TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
+        TDynamicProps::iterator pProp = rDynamicProps.find(aPropertyName);
+        if ( pProp != rDynamicProps.end() )
         {
             SfxExtendedItemPropertyMap& rExtMap = pProp->second;
             if (( rExtMap.nFlags & ::com::sun::star::beans::PropertyAttribute::READONLY ) != ::com::sun::star::beans::PropertyAttribute::READONLY )
@@ -460,8 +442,9 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
     else
     // dynamic prop!
     {
-        TDynamicProps::iterator pProp = _pImp->_lDynamicProps.find(aPropertyName);
-        if ( pProp != _pImp->_lDynamicProps.end() )
+        TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
+        TDynamicProps::iterator pProp = rDynamicProps.find(aPropertyName);
+        if ( pProp != rDynamicProps.end() )
         {
             SfxExtendedItemPropertyMap& rExtMap = pProp->second;
             return rExtMap.aValue;
@@ -542,7 +525,8 @@ void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&         
     sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
 
     // clash with "dynamic" properties ?
-    sal_Bool bDynamicProp = (_pImp->_lDynamicProps.find(sName) != _pImp->_lDynamicProps.end());
+    TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
+    sal_Bool bDynamicProp = (rDynamicProps.find(sName) != rDynamicProps.end());
 
     if ( bFixProp || bDynamicProp )
     {
@@ -618,7 +602,7 @@ void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&         
         }
     }
 
-    _pImp->_lDynamicProps[sName] = aProp;
+    rDynamicProps[sName] = aProp;
     // no objsh if we are used from a StandaloneDocInfo!
     if (_pImp->_pObjSh)
         _pImp->_pObjSh->FlushDocInfo();
@@ -646,8 +630,9 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
     }
 
     // clash with "dynamic" properties ?
-    TDynamicProps::iterator pDynamicProp = _pImp->_lDynamicProps.find(sName);
-    sal_Bool                bDynamicProp = ( pDynamicProp != _pImp->_lDynamicProps.end() );
+    TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
+    TDynamicProps::iterator pDynamicProp = rDynamicProps.find(sName);
+    sal_Bool                bDynamicProp = ( pDynamicProp != rDynamicProps.end() );
     if ( bDynamicProp )
     {
         SfxExtendedItemPropertyMap& rProp = pDynamicProp->second;
@@ -664,7 +649,7 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
         }
 
         // found and removeable -> do it
-        _pImp->_lDynamicProps.erase(pDynamicProp);
+        rDynamicProps.erase(pDynamicProp);
         // no objsh if we are used from a StandaloneDocInfo!
         if (_pImp->_pObjSh)
             _pImp->_pObjSh->FlushDocInfo();
