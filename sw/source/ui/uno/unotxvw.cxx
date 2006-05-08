@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:26:05 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,13 +168,19 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#include <svx/editview.hxx>
+#include <sfx2/docfile.hxx>
+
+#include "swdtflvr.hxx"
+
+using ::com::sun::star::util::URL;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace rtl;
 using comphelper::HelperBaseNoState;
@@ -307,7 +313,7 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
 
     long nIndex = aBaseTypes.getLength();
     aBaseTypes.realloc(
-        aBaseTypes.getLength() + 7 );
+        aBaseTypes.getLength() + 8 );
 
     uno::Type* pBaseTypes = aBaseTypes.getArray();
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XSelectionSupplier  >*)0);
@@ -317,6 +323,7 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XViewSettingsSupplier   >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XRubySelection  >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XPropertySet  >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<datatransfer::XTransferableSupplier >*)0);
     return aBaseTypes;
 }
 /* -----------------------------18.05.00 10:18--------------------------------
@@ -388,6 +395,11 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     else if(aType == ::getCppuType((Reference<XPropertySet>*)0))
     {
         Reference<XPropertySet> xRet = this;
+        aRet.setValue(&xRet, aType);
+    }
+    else if(aType == ::getCppuType((Reference<datatransfer::XTransferableSupplier   >*)0))
+    {
+        Reference<datatransfer::XTransferableSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
     else
@@ -2242,6 +2254,56 @@ SwPaM*  SwXTextViewCursor::GetPaM()
     SwDoc* pDoc = pView->GetDocShell()->GetDoc();
     SwWrtShell& rSh = pView->GetWrtShell();
     return rSh.GetCrsr();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL SwXTextView::getTransferable(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    //force immediat shell update
+    GetView()->StopShellTimer();
+    SwWrtShell& rSh = GetView()->GetWrtShell();
+    if ( GetView()->GetShellMode() == SEL_DRAWTEXT )
+    {
+        SdrView *pSdrView = rSh.GetDrawView();
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        return pOLV->GetEditView().GetTransferable();
+    }
+    else
+    {
+        SwTransferable* pTransfer = new SwTransferable( rSh );
+        const BOOL bLockedView = rSh.IsViewLocked();
+        rSh.LockView( TRUE );    //lock visible section
+        pTransfer->PrepareForCopy();
+        rSh.LockView( bLockedView );
+        return Reference< ::com::sun::star::datatransfer::XTransferable >( pTransfer );
+    }
+
+    return Reference< ::com::sun::star::datatransfer::XTransferable >();
+}
+
+void SAL_CALL SwXTextView::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException)
+{
+    //force immediat shell update
+    GetView()->StopShellTimer();
+    SwWrtShell& rSh = GetView()->GetWrtShell();
+    if ( GetView()->GetShellMode() == SEL_DRAWTEXT )
+    {
+        SdrView *pSdrView = rSh.GetDrawView();
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), FALSE );
+    }
+    else
+    {
+        TransferableDataHelper aDataHelper( xTrans );
+        if ( SwTransferable::IsPaste( rSh, aDataHelper ) )
+        {
+            SwTransferable::Paste( rSh, aDataHelper );
+            if( rSh.IsFrmSelected() || rSh.IsObjSelected() )
+                rSh.EnterSelFrmMode();
+            GetView()->AttrChangedNotify( &rSh );
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 
