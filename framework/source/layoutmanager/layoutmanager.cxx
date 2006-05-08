@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:54:35 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:18:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -958,7 +958,7 @@ void LayoutManager::implts_createAddonsToolBars()
     aPropSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationData" ));
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aAddonToolBarName( aAddonsToolBarStaticName + OUString::valueOf( sal_Int32( i )));
+        OUString aAddonToolBarName( aAddonsToolBarStaticName + m_pAddonOptions->GetAddonsToolbarResourceName(i) );
         aAddonToolBarData = m_pAddonOptions->GetAddonsToolBarPart( i );
         aPropSeq[1].Value = makeAny( aAddonToolBarData );
 
