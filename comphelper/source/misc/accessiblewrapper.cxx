@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:48:48 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,13 +231,19 @@ namespace comphelper
                 implTranslateChildEventValue( _rEvent.NewValue, _rTranslatedEvent.NewValue );
                 break;
 
-            case AccessibleEventId::ACTION_CHANGED:
-            case AccessibleEventId::CARET_CHANGED:
-            case AccessibleEventId::DESCRIPTION_CHANGED:
-            case AccessibleEventId::HYPERTEXT_CHANGED:
             case AccessibleEventId::NAME_CHANGED:
-            case AccessibleEventId::SELECTION_CHANGED:
+            case AccessibleEventId::DESCRIPTION_CHANGED:
+            case AccessibleEventId::ACTION_CHANGED:
             case AccessibleEventId::STATE_CHANGED:
+            case AccessibleEventId::BOUNDRECT_CHANGED:
+            case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            case AccessibleEventId::SELECTION_CHANGED:
+            case AccessibleEventId::VISIBLE_DATA_CHANGED:
+            case AccessibleEventId::VALUE_CHANGED:
+            case AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
+            case AccessibleEventId::CARET_CHANGED:
+            case AccessibleEventId::TEXT_CHANGED:
+            case AccessibleEventId::HYPERTEXT_CHANGED:
             case AccessibleEventId::TABLE_CAPTION_CHANGED:
             case AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
             case AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
@@ -245,12 +251,10 @@ namespace comphelper
             case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
             case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
             case AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            case AccessibleEventId::TEXT_CHANGED:
-            case AccessibleEventId::VALUE_CHANGED:
-            case AccessibleEventId::VISIBLE_DATA_CHANGED:
-            case AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
-            case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-            case AccessibleEventId::BOUNDRECT_CHANGED:
+            // --> PB 2006-03-21 #130798# EventId TEXT_SELECTION_CHANGED was missed
+            // these Ids are also missed: SUB_WINDOW_OF_RELATION_CHANGED & TEXT_ATTRIBUTE_CHANGED
+            case AccessibleEventId::TEXT_SELECTION_CHANGED:
+            // <--
                 // nothing to translate
                 break;
 
