@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-05-05 08:11:05 $
+dnl * Date: $Date: 2006-05-08 15:56:36 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.164 $ )
+AC_REVISION( $Revision: 1.165 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -428,7 +428,7 @@ AC_ARG_WITH(nmake-path,
 [  --with-nmake-path       For MS Visual Toolkit compiler users, please supply
                           the path pointing to the nmake.exe. The Platform SDK
                           provides one in the Win64 directory, usually something
-                          like: /cygdrive/c/Programme/Microsoft SDK/Bin/Win64"
+                          like: "/cygdrive/c/Programme/Microsoft SDK/Bin/Win64"
  
                           Usage: --with-nmake-path=<absolute path to nmake.exe>
 ],,)
@@ -4039,6 +4039,21 @@ dnl Windows builds - attempt to auto-copy required dlls into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
        ./oowintool --msvc-copy-dlls ../external/msvcp
+fi
+
+dnl ===================================================================
+dnl Windows builds need gdiplus.dll in external/gdiplus/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for gdiplus.dll])
+   if test -x ../external/gdiplus/gdiplus.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([gdiplus.dll is missing in external/gdiplus/.
+Get it from the Microsoft site and put it into external/gdiplus.
+You may have to search Microsoft's website. Last time it was seen at:
+<http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>.])
+   fi
 fi
 
 dnl ===================================================================
