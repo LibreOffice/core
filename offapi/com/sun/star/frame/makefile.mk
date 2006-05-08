@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:29:49 $
+#   last change: $Author: hr $ $Date: 2006-05-08 15:22:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ IDLFILES=\
     Components.idl\
     ContentHandler.idl\
     ContentHandlerFactory.idl\
+    ControlCommand.idl\
+    ControlEvent.idl\
     Controller.idl\
     Desktop.idl\
     DesktopTask.idl\
@@ -101,6 +103,7 @@ IDLFILES=\
     XComponentRegistry.idl\
     XConfigManager.idl\
     XController.idl\
+    XControlNotificationListener.idl\
     XControllerBorder.idl\
     XDesktop.idl\
     XDesktopTask.idl\
