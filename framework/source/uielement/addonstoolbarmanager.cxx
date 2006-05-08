@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:24:48 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:18:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,18 @@
 #endif
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <classes/addonsoptions.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
+#include <uielement/comboboxtoolbarcontroller.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_IMAGEBUTTONTOOLBARCONTROLLER_HXX
+#include <uielement/imagebuttontoolbarcontroller.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_TOGGLEBUTTONTOOLBARCONTROLLER_HXX
+#include <uielement/togglebuttontoolbarcontroller.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX_
+#include <uielement/buttontoolbarcontroller.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -301,6 +313,8 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         rtl::OUString   aImageId;
         rtl::OUString   aContext;
         rtl::OUString   aTarget;
+        rtl::OUString   aControlType;
+        sal_Int32       nWidth( 0 );
 
         const Sequence< PropertyValue >& rSeq = rAddonToolbar[n];
 
@@ -318,6 +332,10 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 rSeq[nIndex].Value >>= aContext;
             else if ( aValueName.equalsAsciiL( "Target", 6 ))
                 rSeq[nIndex].Value >>= aTarget;
+            else if ( aValueName.equalsAsciiL( "ControlType", 11 ))
+                rSeq[nIndex].Value >>= aControlType;
+            else if ( aValueName.equalsAsciiL( "Width", 5 ))
+                rSeq[nIndex].Value >>= nWidth;
             nIndex++;
         }
 
@@ -398,8 +416,24 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 }
                 else
                 {
-                    svt::ToolboxController* pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
-                    xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+                    ::cppu::OWeakObject* pController = 0;
+
+                    if ( aControlType.equalsAsciiL( "Button", 6 ))
+                        pController = new ButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
+                    else if ( aControlType.equalsAsciiL( "Combobox", 8 ))
+                        pController = new ComboboxToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
+                    else if ( aControlType.equalsAsciiL( "ImageButton", 11 ))
+                        pController = new ImageButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
+                    else if ( aControlType.equalsAsciiL( "DropdownButton", 14 ))
+                        pController = new ToggleButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId,
+                                                                         ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, aURL );
+                    else if ( aControlType.equalsAsciiL( "ToggleDropdownButton", 20 ))
+                        pController = new ToggleButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId,
+                                                                         ToggleButtonToolbarController::STYLE_TOGGLE_DROPDOWNBUTTON, aURL );
+                    else
+                        pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
+
+                    xController = Reference< XStatusListener >( pController, UNO_QUERY );
                 }
 
                 m_aControllerVector.push_back( xController );
