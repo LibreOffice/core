@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:18:18 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,6 +270,7 @@ static const String sComponentContext = String::CreateFromAscii( "ComponentConte
 static const String sDocumentBaseURL = String::CreateFromAscii( "DocumentBaseURL" );
 static const String sHierarchicalDocumentName = String::CreateFromAscii( "HierarchicalDocumentName" );
 static const String sCopyStreamIfPossible = String::CreateFromAscii( "CopyStreamIfPossible" );
+static const String sNoAutoSave     = String::CreateFromAscii( "NoAutoSave" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -877,6 +878,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_COPY_STREAM_IF_POSSIBLE, bVal ) );
                 }
+                else if ( aName == sNoAutoSave )
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for NoAutoSave" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
+                }
 #ifdef DBG_UTIL
                 else
                     --nFoundArgs;
@@ -1058,6 +1067,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_NOAUTOSAVE ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1182,6 +1193,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_DOC_HIERARCHICALNAME )
                         continue;
                     if ( nId == SID_COPY_STREAM_IF_POSSIBLE )
+                        continue;
+                    if ( nId == SID_NOAUTOSAVE )
                         continue;
 
                     // used only internally
@@ -1515,6 +1528,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = sCopyStreamIfPossible;
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
+            if ( rSet.GetItemState( SID_NOAUTOSAVE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sNoAutoSave;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+
         }
     }
 
