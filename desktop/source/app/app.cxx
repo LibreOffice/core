@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:12:48 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1282,14 +1282,13 @@ USHORT Desktop::Exception(USHORT nError)
     // save all modified documents ... if it's allowed doing so.
     sal_Bool bRestart                           = sal_False;
     sal_Bool bAllowRecoveryAndSessionManagement = (
-                                                    ( !pArgs->IsNoRestore() ) &&
-                                                    ( !pArgs->IsHeadless()  ) &&
-                                                    ( !pArgs->IsServer()    )
+                                                    ( !pArgs->IsNoRestore()                    ) && // some use cases of office must work without recovery
+                                                    ( !pArgs->IsHeadless()                     ) &&
+                                                    ( !pArgs->IsServer()                       ) &&
+                                                    (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery cant work without UI ... but UI layer seams to be the reason for this crash
+                                                    ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
-    if (
-        ( bAllowRecoveryAndSessionManagement ) &&
-        (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY )
-       )
+    if ( bAllowRecoveryAndSessionManagement )
         bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
