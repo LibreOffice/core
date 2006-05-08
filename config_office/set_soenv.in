@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.103 $
-# Date:        $Date: 2006-05-04 09:25:34 $
+# Version:     $Revision: 1.104 $
+# Date:        $Date: 2006-05-08 15:55:43 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1149,7 +1149,6 @@ elsif ($platform =~ m/cygwin/)
        my $expandedPATH = $PATH;
        $expandedPATH =~ s/(\$\w+)/$1/eeg;
        foreach my $pathentry (split($ps,$noldPATH)) {
-           print($pathentry."\n");
            if ( ! ( $expandedPATH =~ /(?:$ps|\A)(?:$pathentry)(?:$ps|\Z)/ ) ) {
                $PATH .= $ps.$pathentry;
                $expandedPATH .= $ps.$pathentry;
@@ -2209,7 +2208,7 @@ sub ToFile {
 #----------------------------------------------------------
 # Function name: PosixFormat
 # Description:   Format variables to Posix Style Format. Should only be used 
-#                with DOS-style path variables
+#                with DOS-style path variables.
 # Arguments:     1. Variable (string)
 # Return value:  Reformatted String
 #----------------------------------------------------------
@@ -2231,10 +2230,13 @@ sub PosixFormat
 
 	   # Search for posix path :path with space: and replace with short dos path
 	   while ( $variable =~ /(?::|\A)[\'\"]?([^:]+ [^:]+)[\'\"]?(?::|\Z)/ ) {
-		 $d1 = $1 ;
-		 chomp( $d2 = qx{cygpath -d "$d1"} ) || die( "Path with space: $1 propably doesn't exist!" );
-		 chomp( $d2 = qx{cygpath -u "$d2"} ) ;
-		 $variable =~ s/\Q$d1\E/$d2/ ;
+               $d1 = $1 ;
+               if ( $d1 =~ m/"$/ ) { die( "A part of $variable is enclosed in quotes, fix this!"); }
+               chomp( $d2 = qx{cygpath -d "$d1"} ) || die( "Path with space: $1 propably doesn't exist!" );
+               # Be arefull with \s
+               $d2 =~ s/\\/\\\\/g;
+               chomp( $d2 = qx{cygpath -u "$d2"} ) ;
+               $variable =~ s/\Q$d1\E/$d2/ ;
 	   }
    }
    return $variable;
