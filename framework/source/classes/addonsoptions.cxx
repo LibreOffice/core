@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:07:39 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,12 @@
 #include <rtl/uri.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
 
 #include <hash_map>
 #include <algorithm>
+#include <vector>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -117,6 +120,8 @@ using namespace ::com::sun::star::lang  ;
 #define PROPERTYNAME_IMAGEIDENTIFIER                    ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER
 #define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_PROPERTYNAME_CONTEXT
 #define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_PROPERTYNAME_SUBMENU
+#define PROPERTYNAME_CONTROLTYPE                        ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE
+#define PROPERTYNAME_WIDTH                              ADDONSMENUITEM_PROPERTYNAME_WIDTH
 
 #define PROPERTYNAME_IMAGESMALL                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmall" ))
 #define PROPERTYNAME_IMAGEBIG                           OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBig" ))
@@ -131,13 +136,24 @@ using namespace ::com::sun::star::lang  ;
 #define PRIVATE_IMAGE_URL                               OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
 
 // The following order is mandatory. Please add properties at the end!
+#define INDEX_URL             0
+#define INDEX_TITLE           1
+#define INDEX_IMAGEIDENTIFIER 2
+#define INDEX_TARGET          3
+#define INDEX_CONTEXT         4
+#define INDEX_SUBMENU         5
+#define INDEX_CONTROLTYPE     6
+#define INDEX_WIDTH           7
+#define PROPERTYCOUNT_INDEX   8
+
+// The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_MENUITEM                          6
 #define OFFSET_MENUITEM_URL                             0
 #define OFFSET_MENUITEM_TITLE                           1
 #define OFFSET_MENUITEM_IMAGEIDENTIFIER                 2
 #define OFFSET_MENUITEM_TARGET                          3
-#define OFFSET_MENUITEM_SUBMENU                         4
-#define OFFSET_MENUITEM_CONTEXT                         5
+#define OFFSET_MENUITEM_CONTEXT                         4
+#define OFFSET_MENUITEM_SUBMENU                         5
 
 // The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_POPUPMENU                         4
@@ -147,12 +163,14 @@ using namespace ::com::sun::star::lang  ;
 #define OFFSET_POPUPMENU_URL                            3   // Used for property set
 
 // The following order is mandatory. Please add properties at the end!
-#define PROPERTYCOUNT_TOOLBARITEM                       5
+#define PROPERTYCOUNT_TOOLBARITEM                       7
 #define OFFSET_TOOLBARITEM_URL                          0
 #define OFFSET_TOOLBARITEM_TITLE                        1
 #define OFFSET_TOOLBARITEM_IMAGEIDENTIFIER              2
 #define OFFSET_TOOLBARITEM_TARGET                       3
 #define OFFSET_TOOLBARITEM_CONTEXT                      4
+#define OFFSET_TOOLBARITEM_CONTROLTYPE                  5
+#define OFFSET_TOOLBARITEM_WIDTH                        6
 
 // The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_IMAGES                            8
@@ -254,8 +272,9 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
+        const ::rtl::OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
-        Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
+        Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const;
 
         void                                            ReadConfigurationData();
 
@@ -278,6 +297,11 @@ class AddonsOptions_Impl : public ConfigItem
             Image   aImageBig;
             Image   aImageSmallHC;
             Image   aImageBigHC;
+
+            Image   aImageSmallNoScale;
+            Image   aImageBigNoScale;
+            Image   aImageSmallHCNoScale;
+            Image   aImageBigHCNoScale;
         };
 
         typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
@@ -305,7 +329,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         sal_Bool             ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
         sal_Bool             ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
-        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars );
+        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< rtl::OUString >& rAddonOfficeToolBarResNames );
         sal_Bool             ReadToolBarItemSet( const rtl::OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
         sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         sal_Bool             ReadImages( ImageManager& aImageManager );
@@ -317,7 +341,7 @@ class AddonsOptions_Impl : public ConfigItem
         sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
-        Image                ReadImageFromURL( ImageSize nImageSize, const OUString& aURL );
+        void                 ReadImageFromURL( ImageSize nImageSize, const OUString& aURL, Image& aImage, Image& aNoScaleImage );
         sal_Bool             HasAssociatedImages( const OUString& aURL );
         void                 SubstituteVariables( OUString& aURL );
 
@@ -339,7 +363,7 @@ class AddonsOptions_Impl : public ConfigItem
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
 
         sal_Int32                                           m_nRootAddonPopupMenuId;
-        OUString                                            m_aPropNames[PROPERTYCOUNT_MENUITEM];
+        OUString                                            m_aPropNames[PROPERTYCOUNT_INDEX];
         OUString                                            m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
         OUString                                            m_aEmpty;
         OUString                                            m_aPathDelimiter;
@@ -349,6 +373,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< Sequence< PropertyValue > >               m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >               m_aCachedMenuBarPartProperties;
         AddonToolBars                                       m_aCachedToolBarPartProperties;
+        std::vector< rtl::OUString >                        m_aCachedToolBarPartResourceNames;
         Sequence< Sequence< PropertyValue > >               m_aCachedHelpMenuProperties;
         Reference< com::sun::star::util::XMacroExpander >   m_xMacroExpander;
         ImageManager                                        m_aImageManager;
@@ -372,22 +397,24 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPrivateImageURL( PRIVATE_IMAGE_URL )
 {
     // initialize array with fixed property names
-    m_aPropNames[ OFFSET_MENUITEM_URL               ] = PROPERTYNAME_URL;
-    m_aPropNames[ OFFSET_MENUITEM_TITLE             ] = PROPERTYNAME_TITLE;
-    m_aPropNames[ OFFSET_MENUITEM_TARGET            ] = PROPERTYNAME_TARGET;
-    m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER   ] = PROPERTYNAME_IMAGEIDENTIFIER;
-    m_aPropNames[ OFFSET_MENUITEM_CONTEXT           ] = PROPERTYNAME_CONTEXT;
-    m_aPropNames[ OFFSET_MENUITEM_SUBMENU           ] = PROPERTYNAME_SUBMENU;   // Submenu set!
+    m_aPropNames[ INDEX_URL             ] = PROPERTYNAME_URL;
+    m_aPropNames[ INDEX_TITLE           ] = PROPERTYNAME_TITLE;
+    m_aPropNames[ INDEX_TARGET          ] = PROPERTYNAME_TARGET;
+    m_aPropNames[ INDEX_IMAGEIDENTIFIER ] = PROPERTYNAME_IMAGEIDENTIFIER;
+    m_aPropNames[ INDEX_CONTEXT         ] = PROPERTYNAME_CONTEXT;
+    m_aPropNames[ INDEX_SUBMENU         ] = PROPERTYNAME_SUBMENU; // Submenu set!
+    m_aPropNames[ INDEX_CONTROLTYPE     ] = PROPERTYNAME_CONTROLTYPE;
+    m_aPropNames[ INDEX_WIDTH           ] = PROPERTYNAME_WIDTH;
 
     // initialize array with fixed images property names
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALL             ] = PROPERTYNAME_IMAGESMALL;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIG               ] = PROPERTYNAME_IMAGEBIG;
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC           ] = PROPERTYNAME_IMAGESMALLHC;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC             ] = PROPERTYNAME_IMAGEBIGHC;
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL         ] = PROPERTYNAME_IMAGESMALL_URL;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL           ] = PROPERTYNAME_IMAGEBIG_URL;
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL       ] = PROPERTYNAME_IMAGESMALLHC_URL;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL         ] = PROPERTYNAME_IMAGEBIGHC_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL         ] = PROPERTYNAME_IMAGESMALL;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG           ] = PROPERTYNAME_IMAGEBIG;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC       ] = PROPERTYNAME_IMAGESMALLHC;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC         ] = PROPERTYNAME_IMAGEBIGHC;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL     ] = PROPERTYNAME_IMAGESMALL_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL       ] = PROPERTYNAME_IMAGEBIG_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL   ] = PROPERTYNAME_IMAGESMALLHC_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL     ] = PROPERTYNAME_IMAGEBIGHC_URL;
 
     Reference< XComponentContext > xContext;
     Reference< com::sun::star::beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
@@ -427,11 +454,12 @@ void AddonsOptions_Impl::ReadConfigurationData()
     m_aCachedMenuBarPartProperties = Sequence< Sequence< PropertyValue > >();
     m_aCachedToolBarPartProperties = AddonToolBars();
     m_aCachedHelpMenuProperties = Sequence< Sequence< PropertyValue > >();
+    m_aCachedToolBarPartResourceNames.clear();
     m_aImageManager = ImageManager();
 
     ReadAddonMenuSet( m_aCachedMenuProperties );
     ReadOfficeMenuBarSet( m_aCachedMenuBarPartProperties );
-    ReadOfficeToolBarSet( m_aCachedToolBarPartProperties );
+    ReadOfficeToolBarSet( m_aCachedToolBarPartProperties, m_aCachedToolBarPartResourceNames );
     ReadOfficeHelpSet( m_aCachedHelpMenuProperties );
     ReadImages( m_aImageManager );
 }
@@ -506,6 +534,17 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBa
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+const ::rtl::OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
+{
+    if ( nIndex >= 0 && nIndex < m_aCachedToolBarPartResourceNames.size() )
+        return m_aCachedToolBarPartResourceNames[nIndex];
+    else
+        return rtl::OUString();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMenu  () const
 {
     return m_aCachedHelpMenuProperties;
@@ -514,7 +553,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMe
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const
+Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const
 {
     Image aImage;
 
@@ -522,9 +561,19 @@ Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool b
     if ( pIter != m_aImageManager.end() )
     {
         if ( !bHiContrast  )
-            aImage = ( bBig ? pIter->second.aImageBig : pIter->second.aImageSmall );
+        {
+            if ( bNoScale )
+                aImage = ( bBig ? pIter->second.aImageBigNoScale : pIter->second.aImageSmallNoScale );
+            if ( !aImage )
+                aImage = ( bBig ? pIter->second.aImageBig : pIter->second.aImageSmall );
+        }
         else
-            aImage = ( bBig ? pIter->second.aImageBigHC : pIter->second.aImageSmallHC );
+        {
+            if ( bNoScale )
+                aImage = ( bBig ? pIter->second.aImageBigHCNoScale : pIter->second.aImageSmallHCNoScale );
+            if ( !aImage )
+                aImage = ( bBig ? pIter->second.aImageBigHC : pIter->second.aImageSmallHC );
+        }
     }
 
     return aImage;
@@ -545,12 +594,12 @@ sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue
     Sequence< PropertyValue > aMenuItem( PROPERTYCOUNT_MENUITEM );
 
     // Init the property value sequence
-    aMenuItem[ OFFSET_MENUITEM_URL              ].Name = m_aPropNames[ OFFSET_MENUITEM_URL              ];
-    aMenuItem[ OFFSET_MENUITEM_TITLE            ].Name = m_aPropNames[ OFFSET_MENUITEM_TITLE            ];
-    aMenuItem[ OFFSET_MENUITEM_TARGET           ].Name = m_aPropNames[ OFFSET_MENUITEM_TARGET           ];
-    aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Name = m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ];
-    aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Name = m_aPropNames[ OFFSET_MENUITEM_CONTEXT          ];
-    aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Name = m_aPropNames[ OFFSET_MENUITEM_SUBMENU          ];  // Submenu set!
+    aMenuItem[ OFFSET_MENUITEM_URL              ].Name = m_aPropNames[ INDEX_URL            ];
+    aMenuItem[ OFFSET_MENUITEM_TITLE            ].Name = m_aPropNames[ INDEX_TITLE          ];
+    aMenuItem[ OFFSET_MENUITEM_TARGET           ].Name = m_aPropNames[ INDEX_TARGET         ];
+    aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Name = m_aPropNames[ INDEX_IMAGEIDENTIFIER];
+    aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Name = m_aPropNames[ INDEX_CONTEXT        ];
+    aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Name = m_aPropNames[ INDEX_SUBMENU        ];  // Submenu set!
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
@@ -584,12 +633,12 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
     Sequence< PropertyValue > aMenuItem( PROPERTYCOUNT_MENUITEM );
 
     // Init the property value sequence
-    aMenuItem[ OFFSET_MENUITEM_URL              ].Name = m_aPropNames[ OFFSET_MENUITEM_URL              ];
-    aMenuItem[ OFFSET_MENUITEM_TITLE            ].Name = m_aPropNames[ OFFSET_MENUITEM_TITLE            ];
-    aMenuItem[ OFFSET_MENUITEM_TARGET           ].Name = m_aPropNames[ OFFSET_MENUITEM_TARGET           ];
-    aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Name = m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ];
-    aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Name = m_aPropNames[ OFFSET_MENUITEM_CONTEXT          ];
-    aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Name = m_aPropNames[ OFFSET_MENUITEM_SUBMENU          ];  // Submenu set!
+    aMenuItem[ OFFSET_MENUITEM_URL              ].Name = m_aPropNames[ INDEX_URL            ];
+    aMenuItem[ OFFSET_MENUITEM_TITLE            ].Name = m_aPropNames[ INDEX_TITLE          ];
+    aMenuItem[ OFFSET_MENUITEM_TARGET           ].Name = m_aPropNames[ INDEX_TARGET         ];
+    aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Name = m_aPropNames[ INDEX_IMAGEIDENTIFIER];
+    aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Name = m_aPropNames[ INDEX_CONTEXT        ];
+    aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Name = m_aPropNames[ INDEX_SUBMENU        ];  // Submenu set!
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
@@ -623,10 +672,10 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
     Sequence< PropertyValue > aPopupMenu( PROPERTYCOUNT_POPUPMENU );
 
     // Init the property value sequence
-    aPopupMenu[ OFFSET_POPUPMENU_TITLE      ].Name = m_aPropNames[ OFFSET_MENUITEM_TITLE    ];
-    aPopupMenu[ OFFSET_POPUPMENU_CONTEXT    ].Name = m_aPropNames[ OFFSET_MENUITEM_CONTEXT  ];
-    aPopupMenu[ OFFSET_POPUPMENU_SUBMENU    ].Name = m_aPropNames[ OFFSET_MENUITEM_SUBMENU  ];
-    aPopupMenu[ OFFSET_POPUPMENU_URL        ].Name = m_aPropNames[ OFFSET_MENUITEM_URL      ];
+    aPopupMenu[ OFFSET_POPUPMENU_TITLE      ].Name = m_aPropNames[ INDEX_TITLE  ];
+    aPopupMenu[ OFFSET_POPUPMENU_CONTEXT    ].Name = m_aPropNames[ INDEX_CONTEXT];
+    aPopupMenu[ OFFSET_POPUPMENU_SUBMENU    ].Name = m_aPropNames[ INDEX_SUBMENU];
+    aPopupMenu[ OFFSET_POPUPMENU_URL        ].Name = m_aPropNames[ INDEX_URL    ];
 
     StringToIndexMap aTitleToIndexMap;
 
@@ -667,7 +716,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars )
+sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< rtl::OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
     OUString                aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
@@ -680,6 +729,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeTo
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         OUString aToolBarItemNode( aAddonToolBarNode + aAddonToolBarNodeSeq[n] );
+        rAddonOfficeToolBarResNames.push_back( aAddonToolBarNodeSeq[n] );
         rAddonOfficeToolBars.push_back( m_aEmptyAddonToolBar );
         ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBars[n] );
     }
@@ -700,11 +750,13 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarIte
     Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
 
     // Init the property value sequence
-    aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Name = m_aPropNames[ OFFSET_MENUITEM_URL              ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Name = m_aPropNames[ OFFSET_MENUITEM_TITLE            ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Name = m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Name = m_aPropNames[ OFFSET_MENUITEM_TARGET           ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Name = m_aPropNames[ OFFSET_MENUITEM_CONTEXT          ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Name = m_aPropNames[ INDEX_URL            ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Name = m_aPropNames[ INDEX_TITLE          ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Name = m_aPropNames[ INDEX_IMAGEIDENTIFIER];
+    aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Name = m_aPropNames[ INDEX_TARGET         ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Name = m_aPropNames[ INDEX_CONTEXT        ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Name = m_aPropNames[ INDEX_CONTROLTYPE    ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_WIDTH              ].Name = m_aPropNames[ INDEX_WIDTH          ];
 
     sal_uInt32 nCount = aAddonToolBarItemSetNodeSeq.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
@@ -720,7 +772,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarIte
                 InsertToolBarSeparator( rAddonOfficeToolBarSeq );
             }
 
-            // Successfully read a menu item, append to our list
+            // Successfully read a toolbar item, append to our list
             sal_uInt32 nCount = rAddonOfficeToolBarSeq.getLength();
             rAddonOfficeToolBarSeq.realloc( nCount+1 );
             rAddonOfficeToolBarSeq[nCount] = aToolBarItem;
@@ -737,11 +789,11 @@ void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyVal
 {
     Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
 
-    aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Name = m_aPropNames[ OFFSET_MENUITEM_URL              ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Name = m_aPropNames[ OFFSET_MENUITEM_TITLE            ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Name = m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Name = m_aPropNames[ OFFSET_MENUITEM_TARGET           ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Name = m_aPropNames[ OFFSET_MENUITEM_CONTEXT          ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Name = m_aPropNames[ INDEX_URL            ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Name = m_aPropNames[ INDEX_TITLE          ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Name = m_aPropNames[ INDEX_IMAGEIDENTIFIER];
+    aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Name = m_aPropNames[ INDEX_TARGET         ];
+    aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Name = m_aPropNames[ INDEX_CONTEXT        ];
 
     aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= SEPARATOR_URL;
     aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= m_aEmpty;
@@ -778,7 +830,7 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
         // Create sequence for data access
         OUStringBuffer aBuf( aImagesItemNode );
         aBuf.append( m_aPathDelimiter );
-        aBuf.append( m_aPropNames[ OFFSET_MENUITEM_URL ] );
+        aBuf.append( m_aPropNames[ INDEX_URL ] );
         aAddonImageItemNodePropNames[0] = aBuf.makeStringAndClear();
 
         Sequence< Any > aAddonImageItemNodeValues = GetProperties( aAddonImageItemNodePropNames );
@@ -840,7 +892,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
     {
         aMenuItem[ OFFSET_MENUITEM_TITLE ].Value <<= aStrValue;
 
-        OUString aRootSubMenuName( aAddonMenuItemTreeNode + m_aPropNames[ OFFSET_MENUITEM_SUBMENU ] );
+        OUString aRootSubMenuName( aAddonMenuItemTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
         Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
         if ( aRootSubMenuNodeNames.getLength() > 0 && !bIgnoreSubMenu )
         {
@@ -915,7 +967,7 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
     {
         aPopupMenu[ OFFSET_POPUPMENU_TITLE ].Value <<= aStrValue;
 
-        OUString aRootSubMenuName( aAddonPopupMenuTreeNode + m_aPropNames[ OFFSET_MENUITEM_SUBMENU ] );
+        OUString aRootSubMenuName( aAddonPopupMenuTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
         Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
         if ( aRootSubMenuNodeNames.getLength() > 0 )
         {
@@ -982,6 +1034,8 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
             aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= m_aEmpty;
             aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= m_aEmpty;
             aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= m_aEmpty;
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value <<= m_aEmpty;
+            aToolBarItem[ OFFSET_TOOLBARITEM_WIDTH              ].Value <<= sal_Int32( 0 );
 
             bResult = sal_True;
         }
@@ -996,9 +1050,15 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
 
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;
             aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= aTitle;
-            aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TARGET          ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TARGET      ];
             aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= aImageId;
-            aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTEXT         ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTEXT     ];
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value <<= aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_CONTROLTYPE ];
+
+            // Configuration uses hyper for long. Therefore transform into sal_Int32
+            sal_Int64 nValue( 0 );
+            aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_WIDTH ] >>= nValue;
+            aToolBarItem[ OFFSET_TOOLBARITEM_WIDTH              ].Value <<= sal_Int32( nValue );
 
             bResult = sal_True;
         }
@@ -1067,33 +1127,46 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Image AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString& aImageURL )
+void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString& aImageURL, Image& aImage, Image& aImageNoScale )
 {
-    Image aImage;
-
     SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
     {
-        BitmapEx aBitmapEx;
+        // Use graphic class to also support more graphic formats (bmp,png,...)
+        Graphic aGraphic;
 
-        *pStream >> aBitmapEx;
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        pGF->ImportGraphic( aGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW );
+
+        BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 
         const Size aSize = ( nImageSize == IMGSIZE_SMALL ) ? aImageSizeSmall : aImageSizeBig; // Sizes used for menu/toolbox images
-        if ( aBitmapEx.GetSizePixel() != aSize )
-            aBitmapEx.Scale( aSize, BMP_SCALE_INTERPOLATE );
 
-        if( !aBitmapEx.IsTransparent() )
+        Size aBmpSize = aBitmapEx.GetSizePixel();
+        if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
-            aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
-        }
+            if( !aBitmapEx.IsTransparent() )
+                aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
 
-        aImage = Image( aBitmapEx );
+            // A non-scaled bitmap can have a flexible width, but must have a defined height!
+            Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
+            if ( aBmpSize != aNoScaleSize )
+            {
+                BitmapEx aNoScaleBmp( aBitmapEx );
+                aNoScaleBmp.Scale( aNoScaleSize, BMP_SCALE_INTERPOLATE );
+            }
+            else
+                aImageNoScale = Image( aBitmapEx );
+
+            if ( aBmpSize != aSize )
+                aBitmapEx.Scale( aSize, BMP_SCALE_INTERPOLATE );
+
+            aImage = Image( aBitmapEx );
+        }
     }
 
     delete pStream;
-
-    return aImage;
 }
 
 //*****************************************************************************************************************
@@ -1121,23 +1194,29 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
         aFileURL.appendAscii( aExtArray[i] );
         aFileURL.appendAscii( pBmpExt );
 
-        Image aImage = ReadImageFromURL( ((i==0)||(i==2)) ? IMGSIZE_SMALL : IMGSIZE_BIG, aFileURL.makeStringAndClear() );
+        Image aImage;
+        Image aImageNoScale;
+        ReadImageFromURL( ((i==0)||(i==2)) ? IMGSIZE_SMALL : IMGSIZE_BIG, aFileURL.makeStringAndClear(), aImage, aImageNoScale );
         if ( !!aImage )
         {
             bImageFound = true;
             switch ( i )
             {
                 case 0:
-                    aImageEntry.aImageSmall     = aImage;
+                    aImageEntry.aImageSmall          = aImage;
+                    aImageEntry.aImageSmallNoScale   = aImageNoScale;
                     break;
                 case 1:
-                    aImageEntry.aImageBig       = aImage;
+                    aImageEntry.aImageBig            = aImage;
+                    aImageEntry.aImageBigNoScale     = aImageNoScale;
                     break;
                 case 2:
-                    aImageEntry.aImageSmallHC   = aImage;
+                    aImageEntry.aImageSmallHC        = aImage;
+                    aImageEntry.aImageSmallHCNoScale = aImageNoScale;
                     break;
                 case 3:
-                    aImageEntry.aImageBigHC     = aImage;
+                    aImageEntry.aImageBigHC          = aImage;
+                    aImageEntry.aImageBigHCNoScale   = aImageNoScale;
                     break;
             }
         }
@@ -1196,22 +1275,37 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
 
             if ( aImageURL.getLength() > 0 )
             {
+                Image aImage;
+                Image aImageNoScale;
+
                 SubstituteVariables( aImageURL );
-                aImage = ReadImageFromURL( ((i==OFFSET_IMAGES_SMALL_URL)||(i==OFFSET_IMAGES_SMALLHC_URL)) ? IMGSIZE_SMALL : IMGSIZE_BIG,
-                                            aImageURL );
+                ReadImageFromURL( ((i==OFFSET_IMAGES_SMALL_URL)||(i==OFFSET_IMAGES_SMALLHC_URL)) ? IMGSIZE_SMALL : IMGSIZE_BIG,
+                                  aImageURL, aImage, aImageNoScale );
                 if ( !!aImage )
                 {
                     if ( !pEntry )
                         pEntry = new ImageEntry;
 
                     if ( i == OFFSET_IMAGES_SMALL_URL && !pEntry->aImageSmall )
+                    {
                         pEntry->aImageSmall = aImage;
+                        pEntry->aImageSmallNoScale = aImageNoScale;
+                    }
                     else if ( i == OFFSET_IMAGES_BIG_URL && !pEntry->aImageBig )
+                    {
                         pEntry->aImageBig = aImage;
+                        pEntry->aImageBigNoScale = aImageNoScale;
+                    }
                     else if ( i == OFFSET_IMAGES_SMALLHC_URL && !pEntry->aImageSmallHC )
+                    {
                         pEntry->aImageSmallHC = aImage;
+                        pEntry->aImageSmallHCNoScale = aImageNoScale;
+                    }
                     else if ( !pEntry->aImageBigHC )
+                    {
                         pEntry->aImageBigHC = aImage;
+                        pEntry->aImageBigHCNoScale = aImageNoScale;
+                    }
                 }
             }
         }
@@ -1260,12 +1354,12 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_URL            ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_TITLE          ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_TARGET         ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_SUBMENU        ] );
-    lResult[5] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_CONTEXT        ] );
+    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL              ] );
+    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE            ] );
+    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER  ] );
+    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET           ] );
+    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU          ] );
+    lResult[5] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT          ] );
 
     return lResult;
 }
@@ -1279,9 +1373,9 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
     Sequence< OUString > lResult( PROPERTYCOUNT_POPUPMENU-1 );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_TITLE      ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_CONTEXT    ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_SUBMENU    ] );
+    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE    ] );
+    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT  ] );
+    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU  ] );
 
     return lResult;
 }
@@ -1294,11 +1388,13 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUSt
     Sequence< OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_URL            ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_TITLE          ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_IMAGEIDENTIFIER] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_TARGET         ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ OFFSET_MENUITEM_CONTEXT        ] );
+    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL            ] );
+    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE          ] );
+    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER] );
+    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET         ] );
+    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT        ] );
+    lResult[5] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTROLTYPE    ] );
+    lResult[6] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_WIDTH          ] );
 
     return lResult;
 }
@@ -1424,6 +1520,15 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+const ::rtl::OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetAddonsToolbarResourceName( nIndex );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -1433,10 +1538,18 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const
+Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetImageFromURL( aURL, bBig, bHiContrast );
+    return m_pDataContainer->GetImageFromURL( aURL, bBig, bHiContrast, bNoScale );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const
+{
+    return GetImageFromURL( aURL, bBig, bHiContrast, sal_False );
 }
 
 //*****************************************************************************************************************
