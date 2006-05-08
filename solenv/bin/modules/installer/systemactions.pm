@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2006-04-26 20:43:49 $
+#   last change: $Author: hr $ $Date: 2006-05-08 15:29:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -162,11 +162,26 @@ sub create_directories
     }
     else
     {
-        if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $path = $path . $installer::globals::product . "_languagepack" . $installer::globals::separator; }
-        elsif ( $installer::globals::patch ) { $path = $path . $installer::globals::product . "_patch" . $installer::globals::separator; }
-        else { $path = $path . $installer::globals::product . $installer::globals::separator; }
+        my $localproductname = $installer::globals::product;
+        my $localproductsubdir = "";
+
+        if ( $installer::globals::product =~ /^\s*(.+?)\_\_(.+?)\s*$/ )
+        {
+            $localproductname = $1;
+            $localproductsubdir = $2;
+        }
+
+        if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $path = $path . $localproductname . "_languagepack" . $installer::globals::separator; }
+        elsif ( $installer::globals::patch ) { $path = $path . $localproductname . "_patch" . $installer::globals::separator; }
+        else { $path = $path . $localproductname . $installer::globals::separator; }
 
         create_directory($path);
+
+        if ( $localproductsubdir )
+        {
+            $path = $path . $localproductsubdir . $installer::globals::separator;
+            create_directory($path);
+        }
 
         $path = $path . $installer::globals::installertypedir . $installer::globals::separator;
         create_directory($path);
