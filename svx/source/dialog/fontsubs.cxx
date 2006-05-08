@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:23:22 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& rSet )
         String aTmpStr1(pSubs->sFont);
         String aTmpStr2(pSubs->sReplaceBy);
         SvLBoxEntry* pEntry = CreateEntry(aTmpStr1, aTmpStr2);
-        aCheckLB.GetModel()->Insert(pEntry);
+        aCheckLB.InsertEntry(pEntry);
         aCheckLB.CheckEntry(pEntry, 0, pSubs->bReplaceAlways);
         aCheckLB.CheckEntry(pEntry, 1, pSubs->bReplaceOnScreenOnly);
     }
@@ -348,7 +348,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
                     String sFont2 = aFont2CB.GetText();
 
                     pEntry = CreateEntry(sFont1, sFont2);
-                    aCheckLB.GetModel()->Insert(pEntry);
+                    aCheckLB.InsertEntry(pEntry);
                 }
                 aCheckLB.SelectAll(FALSE);
                 aCheckLB.Select(pEntry);
@@ -364,7 +364,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
                     {
                         SvLBoxEntry* pDelEntry = pEntry;
                         pEntry = aCheckLB.NextSelected(pEntry);
-                        aCheckLB.GetModel()->Remove(pDelEntry);
+                        aCheckLB.RemoveEntry(pDelEntry);
                     }
                 }
             }
