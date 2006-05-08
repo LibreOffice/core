@@ -74,6 +74,8 @@ mkdir: %_DEST%\pck%_EXT%
 
 ..\dbghelp\dbghelp.dll %_DEST%\bin%_EXT%\dbghelp.dll
 
+..\gdiplus\gdiplus.dll %_DEST%\bin%_EXT%\gdiplus.dll
+
 ..\msvcp70\msvcp70.dll %_DEST%\bin%_EXT%\msvcp70.dll
 ..\msvcp70\msvcr70.dll %_DEST%\bin%_EXT%\msvcr70.dll
 
