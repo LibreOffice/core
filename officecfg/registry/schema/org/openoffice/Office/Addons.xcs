@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:02 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,18 @@
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
 				<info>
-					<desc>An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
+					<desc>A property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
 				</info>
+			</prop>
+			<prop oor:name="ControlType" oor:type="xs:string">
+			    <info>
+					<desc>A property to define the control type of the toolbar item. An will be interpreted as OpenOffice.org default toggle button.</desc>
+			    </info>
+			</prop>
+			<prop oor:name="Width" oor:type="xs:long">
+			    <info>
+					<desc>A property to define the size of a toolbar item. This property works only ControlTypes which can have a dynamic size (e.g. comboboxes, edit fields, spin fields)</desc>
+			    </info>
 			</prop>
 		</group>
 		<group oor:name="UserDefinedImages">
@@ -223,15 +233,3 @@
 		</group>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
