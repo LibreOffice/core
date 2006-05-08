@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:48:21 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,6 +571,12 @@ void EditView::Cut()
     DBG_CHKTHIS( EditView, 0 );
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, sal_True );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > EditView::GetTransferable()
+{
+    uno::Reference< datatransfer::XTransferable > xData = GetEditEngine()->pImpEditEngine->CreateTransferable( pImpEditView->GetEditSelection() );
+    return xData;
 }
 
 void EditView::Copy()
