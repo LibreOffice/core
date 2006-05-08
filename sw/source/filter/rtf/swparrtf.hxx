@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 15:58:35 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,6 +397,7 @@ class SwRTFParser : public SvxRTFParser
     void ReadListTable();
     USHORT ReadRevTbl();
     void ReadShpRslt();
+    void ReadShpTxt(String &shpTxt);
     void ReadDrawingObject();
     void InsertShpObject(SdrObject* pStroke, int nZOrder);
     void ReadShapeObject();
