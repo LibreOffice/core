@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 14:20:07 $
+#   last change: $Author: rt $ $Date: 2006-05-08 12:41:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -220,29 +220,6 @@ sub start_build_server
         do_broadcast($tempdir, $prjname, $prj, $platform, $prjdep);
         push @targetdirs, $tempdir;
     }
-    sleep 5;
-    @targetlines = ();
-    if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq "4nt" ) {
-        push( @targetlines, "RMRECURSIVEFLAGS=/sxyz\n" );
-    } else {
-        push( @targetlines, "RMRECURSIVEFLAGS=-rf\n" );
-    }
-    push( @targetlines, "\ngenerated_target :\n");  # to be included into the makefile.mk
-    my @depdirs = @targetdirs;
-    foreach my $i (@targetdirs) {
-        $i =~ s/.*?([\w-]+)$/\.\.\$\/$1/;
-        push( @targetlines, "\t+\$(RM) \$(RMRECURSIVEFLAGS) $i\n"); # to be included into the makefile.mk
-    }
-    push( @targetlines, "\n" );
-    $target = "cleanup";
-    $tempdir = $miscpath . $packager::globals::separator . $target;
-    $tempdir = packager::files::create_unique_directory ($tempdir);
-    generate_makefile($tempdir, $makefilepath, $prjroot, $target, \@targetlines);
-    $prjdep = join ";", @depdirs;
-    $prjdep =~ s/\$\//\\/g;
-    $prjdep =~ s/\//\\/g;
-    $prjdep =~ s/\.\.[\.\\]+/$prjname\\/g;
-    do_broadcast($tempdir, $prjname, $prj, $platform, $prjdep);
 }
 
 ##############################################################
