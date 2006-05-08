@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:05:59 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -923,7 +923,7 @@ void ScAcceptChgDlg::UpdateView()
                 BOOL bTestFlag=bHasFilterEntry;
                 bHasFilterEntry=FALSE;
                 if(Expand(pChanges,pScChangeAction,pParent,!bTestFlag)&&!bTestFlag)
-                    pTheView->GetModel()->Remove(pParent);
+                    pTheView->RemoveEntry(pParent);
             }
         }
 
@@ -1525,7 +1525,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
             {
                 BOOL bTheTestFlag=TRUE;
                 pEntry->EnableChildsOnDemand(FALSE);
-                pTheView->GetModel()->Remove(pTheView->FirstChild(pEntry));
+                pTheView->RemoveEntry(pTheView->FirstChild(pEntry));
 
                 SvLBoxEntry* pParent=NULL;
                 SvLBoxEntry* pOriginal=NULL;
@@ -1638,7 +1638,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,ULONG nStartAction,
                     BOOL bTestFlag=bHasFilterEntry;
                     bHasFilterEntry=FALSE;
                     if(Expand(pChanges,pScChangeAction,pParent,!bTestFlag)&&!bTestFlag)
-                        pTheView->GetModel()->Remove(pParent);
+                        pTheView->RemoveEntry(pParent);
                 }
             }
 
@@ -1702,7 +1702,7 @@ void ScAcceptChgDlg::RemoveEntrys(ULONG nStartAction,ULONG nEndAction)
         if(bRemove)
         {
             //delete pEntryData;
-            pTheView->GetModel()->Remove(pEntry);
+            pTheView->RemoveEntry(pEntry);
         }
         pEntry=pPrevEntry;
     }
@@ -1738,7 +1738,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, ULONG nStartAction,U
         if(bRemove)
         {
             nPos=pEntry->GetChildListPos();
-            pTheView->GetModel()->Remove(pEntry);
+            pTheView->RemoveEntry(pEntry);
 
             if(pLastEntry==NULL) pLastEntry=pTheView->First();
             if(pLastEntry!=NULL)
