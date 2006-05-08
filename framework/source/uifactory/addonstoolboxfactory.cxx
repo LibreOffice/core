@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolboxfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:50 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,19 +179,34 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
     sal_Int32 nCount( 0 );
     for ( sal_uInt32 i = 0; i < (sal_uInt32)rPropSeqSeq.getLength(); i++ )
     {
+        sal_Bool    bIsButton( sal_True );
+        sal_Bool    bIsCorrectContext( sal_False );
+        sal_uInt32  nPropChecked( 0 );
+
         const Sequence< PropertyValue >& rPropSeq = rPropSeqSeq[i];
         for ( sal_uInt32 j = 0; j < (sal_uInt32)rPropSeq.getLength(); j++ )
         {
-            if ( rPropSeq[j].Name.equalsAscii( "Context" ))
+            if ( rPropSeq[j].Name.equalsAsciiL( "Context", 7 ))
             {
                 OUString aContextList;
                 if ( rPropSeq[j].Value >>= aContextList )
-                {
-                    if ( IsCorrectContext( rModel, aContextList ))
-                        return sal_True;
-                }
+                    bIsCorrectContext = IsCorrectContext( rModel, aContextList );
+                nPropChecked++;
             }
+            else if ( rPropSeq[j].Name.equalsAsciiL( "URL", 3 ))
+            {
+                OUString aURL;
+                rPropSeq[j].Value >>= aURL;
+                bIsButton = !aURL.equalsAsciiL( "private:separator", 17 );
+                nPropChecked++;
+            }
+
+            if ( nPropChecked == 2 )
+                break;
         }
+
+        if ( bIsButton && bIsCorrectContext )
+            return sal_True;
     }
 
     return sal_False;
