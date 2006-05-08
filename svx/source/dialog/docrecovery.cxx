@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:48:50 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,7 +784,6 @@ SaveDialog::SaveDialog(Window*       pParent,
     , m_aDescrFT     ( this   , ResId  ( FT_SAVE_DESCR               ) )
     , m_aFileListFT  ( this   , ResId  ( FT_SAVE_FILELIST            ) )
     , m_aFileListLB  ( this   , ResId  ( LB_SAVE_FILELIST            ) )
-    , m_aLaunchAutoCB( this   , ResId  ( CB_SAVE_LAUNCHAUTO          ) )
     , m_aBottomFL    ( this   , ResId  ( FL_SAVE_BOTTOM              ) )
     , m_aOkBtn       ( this   , ResId  ( BT_SAVE_OK                  ) )
     , m_pCore        ( pCore                                           )
@@ -853,16 +852,10 @@ short SaveDialog::execute()
         m_nResult = pProgress->Execute();
         delete pProgress;
     }
-
     // if "CANCEL" => return "CANCEL"
-    // if "OK"     => return OK or(!) OK_AUTOLUNCH, which depends from the AutpLunchCB ...
-    if (
-        (m_nResult == DLG_RET_OK    ) &&
-        (m_aLaunchAutoCB.IsChecked())
-       )
-    {
+    // if "OK"     => "AUTOLUNCH" always !
+    if (m_nResult == DLG_RET_OK)
         m_nResult = DLG_RET_OK_AUTOLUNCH;
-    }
 
     return m_nResult;
 }
