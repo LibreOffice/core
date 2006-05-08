@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:55:27 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,7 +449,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         if(xComponentLoader.is())
         {
             uno::Any aAny;
-            uno::Sequence<beans::PropertyValue> aSeq(3);
+            uno::Sequence<beans::PropertyValue> aSeq(4);
 
             aAny <<= uno::Reference<uno::XInterface>(
                 GetDocument(),uno::UNO_QUERY);
@@ -472,6 +472,14 @@ HRESULT DocumentHolder::InPlaceActivate(
             aSeq[2] = beans::PropertyValue(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("PluginMode")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+
+            aAny <<= (sal_Bool) sal_True;
+            aSeq[3] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("NoAutoSave")),
                 -1,
                 aAny,
                 beans::PropertyState_DIRECT_VALUE);
@@ -912,7 +920,7 @@ void DocumentHolder::show()
 
         if(xComponentLoader.is())
         {
-            uno::Sequence<beans::PropertyValue> aSeq(2);
+            uno::Sequence<beans::PropertyValue> aSeq(3);
 
             uno::Any aAny;
             aAny <<= uno::Reference<uno::XInterface>(
@@ -931,6 +939,15 @@ void DocumentHolder::show()
                 -1,
                 aAny,
                 beans::PropertyState_DIRECT_VALUE);
+
+            aAny <<= (sal_Bool) sal_True;
+            aSeq[2] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("NoAutoSave")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+
 
             xComponentLoader->loadComponentFromURL(
                 rtl::OUString(
