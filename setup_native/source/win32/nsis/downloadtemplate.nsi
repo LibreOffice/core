@@ -25,7 +25,7 @@ Function .onInit
   showhelp:
     MessageBox MB_OK|MB_ICONINFORMATION \
     "DOWNLOADNAMEPLACEHOLDER options: $\n $\n \
-    /S : Silent information $\n \
+    /S : Silent installation $\n \
     /D=<path> : NSIS installation directory (must be the last option!) $\n \
     /EXTRACTONLY=ON : NSIS only extracts the PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER installation set $\n \
     /INSTALLLOCATION=<path> : PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER installation directory $\n \
@@ -267,10 +267,23 @@ Section -Post
   IfSilent onPostSilent onPostNoSilent
 
   onPostSilent:
-    ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE /qr -ignore_running"
-    RMDir /r $INSTDIR
-    RMDir $INSTDIR
-  GoTo onPostDone
+    Push $1
+    Push "/POSTREMOVE="
+    Call GetOptions
+    Pop $2
+    ;MessageBox MB_OK "POSTREMOVE: $2"
+
+    StrCmp $2 "ON" postremovesilent nopostremovesilent
+    nopostremovesilent:
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running"
+      Quit
+      GoTo onPostDone
+    postremovesilent:
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running"
+      RMDir /r $INSTDIR
+      RMDir $INSTDIR
+      Quit
+      GoTo onPostDone
 
   onPostNoSilent:
     Push $1
