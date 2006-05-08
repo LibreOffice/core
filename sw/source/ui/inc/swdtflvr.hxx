@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:09 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ public:
     // copy - methods and helper methods for the copy
     int  Cut();
     int  Copy( BOOL bIsCut = FALSE );
+    int  PrepareForCopy( BOOL bIsCut = FALSE );
     int  CalculateAndCopy();                // special for Calculator
     int  CopyGlossary( SwTextBlocks& rGlossary, const String& rStr );
 
