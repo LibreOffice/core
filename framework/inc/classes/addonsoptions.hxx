@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:02:07 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@
 #define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageIdentifier"   ))
 #define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Context"           ))
 #define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Submenu"           ))
+#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlType"       ))
+#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"             ))
 
 #define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
 
@@ -235,6 +237,19 @@ class AddonsOptions
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************//**
+            @short      Gets a unique toolbar resource name of an single addon
+            @descr      -
+
+            @seealso    -
+
+            @return     A complete
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+
+        const ::rtl::OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+
+        /*-****************************************************************************************************//**
             @short      Gets the Add-On help menu part of all addon components registered
             @descr      -
 
@@ -258,8 +273,9 @@ class AddonsOptions
             @onerror    An empty image
         *//*-*****************************************************************************************************/
 
-        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
+        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const;
 
+        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
