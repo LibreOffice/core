@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:24:19 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,25 +60,25 @@
   <node oor:name="DefaultFonts">
     <node oor:name="en" oor:op="replace">
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Albany;Arial;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Albany;Arial;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Albany;Arial;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Albany;Arial;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland;Courier New;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Cumberland;Courier New;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Albany;Arial;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Albany;Arial;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Albany;Arial;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Albany;Arial;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Thorndale;Times New Roman;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Thorndale;Times New Roman;DejaVu Serif;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
         <value>HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho;HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -105,13 +105,13 @@
         <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
-        <value>Albany;Arial;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Albany;Arial;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
       </prop>
       <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
-        <value>Thorndale;Times New Roman;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Thorndale;DejaVu Serif;Times New Roman;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="SYMBOL" oor:type="xs:string" oor:op="replace">
         <value>StarSymbol;OpenSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol</value>
@@ -120,14 +120,11 @@
         <value>Cumberland;Courier New;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland;Courier New;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Cumberland;Courier New;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Bitstream Vera Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;DejaVu Sans;Bitstream Vera Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
       </prop>
-    </node>
-
-    <node oor:name="vi" oor:op="replace">
     </node>
 
     <node oor:name="cs" oor:op="replace">
@@ -433,10 +430,10 @@
         <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Cordia New;CordiaUPC;Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Tahoma;Angsana New;OONaksit;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
         <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
@@ -444,28 +441,28 @@
     </node>
     <node oor:name="ja" oor:op="replace">
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>HG 明朝L Sun;HG MinchoL Sun;HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;MS P 明朝;TLP明朝;LX明朝;IPA P明朝;東風明朝;Kochi Mincho;さざなみ明朝;Mincho;Serif</value>
+        <value>HG 明朝L Sun;HG MinchoL Sun;HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;ＭＳ　Ｐ明朝;TLP明朝;LX明朝;IPA P明朝;東風明朝;Kochi Mincho;さざなみ明朝;Mincho;Serif</value>
       </prop>
        <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Gothic;MS 明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS P 明朝;HG Mincho Light J;MS ゴシック;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS P ゴシック;Andale Sans UI</value>
+        <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;ＭＳ　Ｐゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Gothic;ＭＳ　明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;ＭＳ　Ｐ明朝;HG Mincho Light J;ＭＳ　ゴシック;HG Gothic J;HG Gothic B;HG Gothic;Gothic;ＭＳ　Ｐゴシック;Andale Sans UI</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG-GothicB;HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;MS ゴシック;MS P ゴシック;HG Gothic;HG Gothic B;Gothic;Andale Sans UI</value>
+        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG-GothicB;HG Mincho Light J;ＭＳ　Ｐゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;ＭＳ　ゴシック;ＭＳ　Ｐゴシック;HG Gothic;HG Gothic B;Gothic;Andale Sans UI</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
         <value>Andale;Arial</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;MS P ゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Andale Sans UI;Kochi Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic</value>
+        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;ＭＳ　Ｐゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Andale Sans UI;Kochi Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;Andale Sans UI;MS P ゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Kochi Gothic;MS PGothic;Gothic</value>
+        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;Andale Sans UI;ＭＳ　Ｐゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Kochi Gothic;MS PGothic;Gothic</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>HG ゴシックB Sun;HG-GothicB Sun;HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;Gothic</value>
+        <value>HG ゴシックB Sun;HG-GothicB Sun;HG Mincho Light J;ＭＳ　Ｐゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;Gothic</value>
        </prop>
        <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>HG ゴシックB Sun;HG-GothicB Sun;HG ゴシックB;HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;Gothic</value>
+        <value>HG ゴシックB Sun;HG-GothicB Sun;HG ゴシックB;HG Mincho Light J;ＭＳ　Ｐゴシック;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;Gothic</value>
        </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG-GothicB;Andale Sans UI;HG Mincho Light J;標準;TLPゴシック;LXゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;Gothic;Gnu-Unifont</value>
@@ -845,6 +842,43 @@
         <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
+
+    <node oor:name="ak-GH" oor:op="replace">
+    <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;SansSerif;Andale Sans UI;Tahoma</value>
+    </prop>
+    <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Tahoma</value>
+    </prop>
+    <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>FreeMono;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+    </prop>
+    <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;SansSerif;Andale Sans UI;Tahoma</value>
+    </prop>
+    <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Tahoma</value>
+    </prop>
+    <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Gentium;Aboriginal Serif;FreeSerif;Luxi Serif;Times New Roman;Times;Lucida Serif;Lucida Bright;Serif</value>
+    </prop>
+    <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Tahoma</value>
+    </prop>
+    <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value> Gentium;Aboriginal Serif;FreeSerif;Luxi Serif;Times New Roman;Times;Lucida Serif;Lucida Bright;Serif</value>
+    </prop>
+    <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>FreeMono;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+    </prop>
+    <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>FreeMono;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+    </prop>
+    <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Tahoma</value>
+    </prop>
+    </node>
+
     <node oor:name="af" oor:op="replace">
     </node>
     <node oor:name="nr" oor:op="replace">
@@ -864,6 +898,10 @@
     <node oor:name="xh" oor:op="replace">
     </node>
     <node oor:name="zu" oor:op="replace">
+    </node>
+    <node oor:name="vi" oor:op="replace">
+    </node>
+    <node oor:name="rw" oor:op="replace">
     </node>
   </node>
   <node oor:name="FontSubstitutions">
@@ -1065,7 +1103,7 @@
       </node>
       <node oor:name="arialnarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1271,7 +1309,38 @@
           <value>Normal,Serif</value>
         </prop>
       </node>
-      <node oor:name="blackadder" oor:op="replace">
+      <node oor:name="bitstreamverasans" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>dejavusans</value>
+        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType">
+          <value>Default,SansSerif</value>
+        </prop>
+      </node>
+      <node oor:name="bitstreamveraserif" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>dejavuserif</value>
+        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType">
+          <value>Default,Serif</value>
+        </prop>
+      </node>
+      <node oor:name="bitstreamveramono" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>dejavumono</value>
+        </prop>
+        <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType">
+      <value>Standard,Fixed,Typewriter</value>
+        </prop>
+      </node>
+       <node oor:name="blackadder" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;comicsansms;kidprint;</value>
         </prop>
@@ -1983,6 +2052,53 @@
           <value>Italic,Script</value>
         </prop>
       </node>
+      <node oor:name="dejavusans" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>bitstreamverasans</value>
+        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType">
+          <value>Default,SansSerif</value>
+        </prop>
+      </node>
+      <node oor:name="dejavuserif" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>bitstreamveraserif</value>
+        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType">
+          <value>Default,Serif</value>
+        </prop>
+      </node>
+      <node oor:name="dejavumono" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>bitstreamveramono</value>
+        </prop>
+        <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType">
+          <value>Default,Fixed,Typewriter</value>
+        </prop>
+      </node>
+      <node oor:name="dejavusanscondensed" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>arialnarrow</value>
+        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Condensed</value></prop>
+        <prop oor:name="FontType"><value>SansSerif</value></prop>
+      </node>
+      <!-- node oor:name="dejavuserifcondensed" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>???</value>
+        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Condensed</value></prop>
+        <prop oor:name="FontType"><value>Serif</value></prop>
+      </node -->
       <node oor:name="din" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
