@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:19:46 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -813,7 +813,6 @@ USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     USHORT nAutoFmt = HasRedlineAutoFmt() ? REDLINE_FORM_AUTOFMT : 0;
-    SvLBoxTreeList* pModel = pTable->GetModel();
     SwRedlineDataParent *pParent = aRedlineParents[nStart];
     const SwRedline& rRedln = pSh->GetRedline(nStart);
 
@@ -827,7 +826,7 @@ USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
         {
             pNext = (SwRedlineDataChildPtr)pBackupData->pNext;
             if (pBackupData->pTLBChild)
-                pModel->Remove(pBackupData->pTLBChild);
+                pTable->RemoveEntry(pBackupData->pTLBChild);
 
             aRedlineChilds.DeleteAndDestroy(aRedlineChilds.GetPos(pBackupData), 1);
             pBackupData = pNext;
@@ -898,7 +897,7 @@ void SwRedlineAcceptDlg::InsertChilds(SwRedlineDataParent *pParent, const SwRedl
             if (pParent->pTLBParent)
             {
                 pTable->SetEntryText(sAutoFormat, aUsedSeqNo[nPos]->pTLBParent, 0);
-                pTable->GetModel()->Remove(pParent->pTLBParent);
+                pTable->RemoveEntry(pParent->pTLBParent);
                 pParent->pTLBParent = 0;
             }
             return;
@@ -951,7 +950,7 @@ void SwRedlineAcceptDlg::InsertChilds(SwRedlineDataParent *pParent, const SwRedl
 
     if (!bValidTree && pParent->pTLBParent)
     {
-        pTable->GetModel()->Remove(pParent->pTLBParent);
+        pTable->RemoveEntry(pParent->pTLBParent);
         pParent->pTLBParent = 0;
         if (nAutoFmt)
             aUsedSeqNo.Remove(pParent);
@@ -1026,7 +1025,7 @@ void SwRedlineAcceptDlg::RemoveParents(USHORT nStart, USHORT nEnd)
     // TLB von hinten abraeumen
     long nIdx = (long)aLBoxArr.Count() - 1L;
     while (nIdx >= 0)
-        pModel->Remove(aLBoxArr[nIdx--]);
+        pTable->RemoveEntry(aLBoxArr[nIdx--]);
 
     pTable->SetSelectHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
     pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
