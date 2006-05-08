@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:17:45 $
+#   last change: $Author: hr $ $Date: 2006-05-08 15:35:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -229,12 +229,16 @@ else
 fi
 export PATH
 
+
 # execute soffice binary
-"$sd_prog/$sd_binary" "$@"
+"$sd_prog/$sd_binary" "$@" &
+trap 'kill -9 $!' TERM
+wait $!
 
 while [ $? -eq 79 ]
 do
-    "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS""
+    "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
+    wait $!
 done
 
 exit
