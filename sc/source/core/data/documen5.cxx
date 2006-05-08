@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:20:29 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,10 +458,23 @@ SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
                 uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 if ( xIPObj.is() )
                 {
-                    // TODO/LATER: probably it should be handled somehow in future
-//REMOVE                        if (bForModify)
-//REMOVE                            aIPObj->SetModified( TRUE );
-                    return SchDLL::GetChartData( xIPObj );
+                    // load object before setting modified
+                    SchMemChart* pMemChart = SchDLL::GetChartData( xIPObj );
+                    if (bForModify)
+                    {
+                        try
+                        {
+                            uno::Reference< util::XModifiable> xModif =
+                                uno::Reference< util::XModifiable>(
+                                        xIPObj->getComponent(),
+                                        uno::UNO_QUERY_THROW);
+                            xModif->setModified( sal_True);
+                        }
+                        catch( uno::Exception& )
+                        {
+                        }
+                    }
+                    return pMemChart;
                 }
             }
             pObject = aIter.Next();
