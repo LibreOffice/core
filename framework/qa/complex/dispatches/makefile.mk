@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 00:55:50 $
+#   last change: $Author: hr $ $Date: 2006-05-08 14:43:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
 #
 #*************************************************************************
 PRJ = ..$/..$/..
-TARGET  = CheckXDispatchInformationProvider
+TARGET  = checkdispatchapi
 PRJNAME = $(TARGET)
 PACKAGE = complex$/dispatches
 
@@ -45,8 +45,10 @@ PACKAGE = complex$/dispatches
 
 JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
                   OOoRunner.jar mysql.jar
-JAVAFILES       = CheckXDispatchInformationProvider.java
+JAVAFILES       = checkdispatchapi.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+
+SUBDIRS=helper
 
 #----- make a jar from compiled files ------------------------------
 
