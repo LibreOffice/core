@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:15:24 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,8 +309,7 @@ void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
     pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
 
     pEntry->SetUserData( (void*)_nType );
-
-    aCheckLB.GetModel()->Insert( pEntry );
+    aCheckLB.InsertEntry( pEntry );
 }
 
 SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
