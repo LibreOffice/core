@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:24:18 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,139 +216,8 @@ void SvTabListBox::SetTab( USHORT nTab,long nValue,MapUnit eMapUnit )
     }
 }
 
-#if SUPD < 375
-
-SvLBoxEntry* SvTabListBox::InsertEntry(const XubString& rStr,SvLBoxEntry* pParent,ULONG nPos,USHORT nCol )
-{
-    XubString aStr;
-    if( nCol != 0xffff )
-    {
-        while( nCol )
-        {
-            aStr += '\t';
-            nCol--;
-        }
-    }
-    aStr += rStr;
-    XubString aFirstStr( aStr );
-    USHORT nEnd = aFirstStr.Search( '\t' );
-    if( nEnd != STRING_NOTFOUND )
-    {
-        aFirstStr.Cut( nEnd );
-        aCurEntry = aStr;
-        aCurEntry.Erase( 0, ++nEnd );
-    }
-    else
-        aCurEntry.Erase();
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, FALSE, nPos );
-}
-
-SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr,
-    const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
-    SvLBoxEntry* pParent,ULONG nPos,USHORT nCol )
-{
-    XubString aStr;
-    if( nCol != 0xffff )
-    {
-        while( nCol )
-        {
-            aStr += '\t';
-            nCol--;
-        }
-    }
-    aStr += rStr;
-    XubString aFirstStr( aStr );
-    USHORT nEnd = aFirstStr.Search( '\t' );
-    if( nEnd != STRING_NOTFOUND )
-    {
-        aFirstStr.Cut( nEnd );
-        aCurEntry = aStr;
-        aCurEntry.Erase( 0, ++nEnd );
-    }
-    else
-        aCurEntry.Erase();
-
-    return SvTreeListBox::InsertEntry(
-        aFirstStr,
-        rExpandedEntryBmp, rCollapsedEntryBmp,
-        pParent, FALSE, nPos );
-}
-
-
-SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr, ULONG nPos,
-    USHORT nCol )
-{
-    return InsertEntry( rStr,0,nPos, nCol );
-}
-
-SvLBoxEntry* SvTabListBox::InsertEntry(const XubString& rStr,SvLBoxEntry* pParent,ULONG nPos,USHORT nCol,
-    void* pUser )
-{
-    XubString aStr;
-    if( nCol != 0xffff )
-    {
-        while( nCol )
-        {
-            aStr += '\t';
-            nCol--;
-        }
-    }
-    aStr += rStr;
-    XubString aFirstStr( aStr );
-    USHORT nEnd = aFirstStr.Search( '\t' );
-    if( nEnd != STRING_NOTFOUND )
-    {
-        aFirstStr.Cut( nEnd );
-        aCurEntry = aStr;
-        aCurEntry.Erase( 0, ++nEnd );
-    }
-    else
-        aCurEntry.Erase();
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, FALSE, nPos, pUser );
-}
-
-SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr,
-    const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
-    SvLBoxEntry* pParent,ULONG nPos,USHORT nCol, void* pUser )
-{
-    XubString aStr;
-    if( nCol != 0xffff )
-    {
-        while( nCol )
-        {
-            aStr += '\t';
-            nCol--;
-        }
-    }
-    aStr += rStr;
-    XubString aFirstStr( aStr );
-    USHORT nEnd = aFirstStr.Search( '\t' );
-    if( nEnd != STRING_NOTFOUND )
-    {
-        aFirstStr.Cut( nEnd );
-        aCurEntry = aStr;
-        aCurEntry.Erase( 0, ++nEnd );
-    }
-    else
-        aCurEntry.Erase();
-
-    return SvTreeListBox::InsertEntry(
-        aFirstStr,
-        rExpandedEntryBmp, rCollapsedEntryBmp,
-        pParent, FALSE, nPos, pUser );
-}
-
-
-SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr, ULONG nPos,
-    USHORT nCol, void* pUser )
-{
-    return InsertEntry( rStr,0,nPos, nCol, pUser );
-}
-
-#else
-
-SvLBoxEntry* SvTabListBox::InsertEntry(const XubString& rStr,SvLBoxEntry* pParent,ULONG nPos,USHORT nCol,
-    void* pUser )
+SvLBoxEntry* SvTabListBox::InsertEntry(
+    const XubString& rStr, SvLBoxEntry* pParent, ULONG nPos, USHORT nCol, void* pUser )
 {
     XubString aStr;
     if( nCol != 0xffff )
@@ -404,14 +273,11 @@ SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr,
         pParent, FALSE, nPos, pUser );
 }
 
-
 SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr, ULONG nPos,
     USHORT nCol, void* pUser )
 {
     return InsertEntry( rStr,0,nPos, nCol, pUser );
 }
-
-#endif
 
 String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry ) const
 {
@@ -772,6 +638,63 @@ sal_Bool SvHeaderTabListBox::IsItemChecked( SvLBoxEntry* pEntry, USHORT nCol ) c
 
 // -----------------------------------------------------------------------
 
+SvLBoxEntry* SvHeaderTabListBox::InsertEntry(
+    const XubString& rStr, ULONG nPos, USHORT nCol, void* pUserData )
+{
+    SvLBoxEntry* pEntry = SvTabListBox::InsertEntry( rStr, nPos, nCol, pUserData );
+    RecalculateAccessibleChildren();
+    return pEntry;
+}
+
+// -----------------------------------------------------------------------
+
+SvLBoxEntry* SvHeaderTabListBox::InsertEntry(
+    const XubString& rStr, SvLBoxEntry* pParent, ULONG nPos, USHORT nCol, void* pUserData )
+{
+    SvLBoxEntry* pEntry = SvTabListBox::InsertEntry( rStr, pParent, nPos, nCol, pUserData );
+    RecalculateAccessibleChildren();
+    return pEntry;
+}
+
+// -----------------------------------------------------------------------
+
+SvLBoxEntry* SvHeaderTabListBox::InsertEntry(
+    const XubString& rStr, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
+    SvLBoxEntry* pParent, ULONG nPos, USHORT nCol, void* pUserData )
+{
+    SvLBoxEntry* pEntry = SvTabListBox::InsertEntry(
+        rStr, rExpandedEntryBmp, rCollapsedEntryBmp, pParent, nPos, nCol, pUserData );
+    RecalculateAccessibleChildren();
+    return pEntry;
+}
+
+// -----------------------------------------------------------------------
+
+ULONG SvHeaderTabListBox::InsertEntry( SvLBoxEntry* pEntry, ULONG nRootPos )
+{
+    ULONG nPos = SvTabListBox::Insert( pEntry, nRootPos );
+    RecalculateAccessibleChildren();
+    return nPos;
+}
+
+// -----------------------------------------------------------------------
+
+void SvHeaderTabListBox::RemoveEntry( SvLBoxEntry* _pEntry )
+{
+    GetModel()->Remove( _pEntry );
+    m_aAccessibleChildren.clear();
+}
+
+// -----------------------------------------------------------------------
+
+void SvHeaderTabListBox::Clear()
+{
+    SvTabListBox::Clear();
+    m_aAccessibleChildren.clear();
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvHeaderTabListBox, ScrollHdl_Impl, SvTabListBox*, EMPTYARG )
 {
     m_pHeaderBar->SetOffset( -GetXOffset() );
@@ -798,6 +721,23 @@ IMPL_LINK( SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
+
+void SvHeaderTabListBox::RecalculateAccessibleChildren()
+{
+    if ( !m_aAccessibleChildren.empty() )
+    {
+        sal_uInt32 nCount = ( GetRowCount() + 1 ) * GetColumnCount();
+        if ( m_aAccessibleChildren.size() < nCount )
+            m_aAccessibleChildren.resize( nCount );
+        else
+        {
+            DBG_ASSERT( m_aAccessibleChildren.size() == nCount, "wrong children count" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 sal_Bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState )
 {
     sal_Bool bRet = sal_False;
