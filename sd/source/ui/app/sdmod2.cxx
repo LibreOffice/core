@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:19:25 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,14 +251,14 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     {
         const SvxFieldData* pField = pInfo->GetField().GetField();
         ::sd::DrawDocShell*     pDocShell = NULL;
+        SdDrawDocument* pDoc = 0;
 
         if( pInfo->GetOutliner() )
         {
             const SdrTextObj* pTextObj = static_cast< SdrOutliner* >( pInfo->GetOutliner() )->GetTextObj();
 
-            SdDrawDocument* pDoc = 0;
             if( pTextObj )
-                pDoc = dynamic_cast< SdDrawDocument* >( pDoc );
+                pDoc = dynamic_cast< SdDrawDocument* >( pTextObj->GetModel() );
 
             if( pDoc )
                 pDocShell = pDoc->GetDocSh();
@@ -324,15 +324,17 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 if(pBase)
                     pViewSh = pBase->GetMainViewShell();
             }
+            if( !pDoc && pViewSh )
+                pDoc = pViewSh->GetDoc();
 
             bool bMasterView;
             SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
-            if( pPage && pViewSh && !bMasterView )
+            if( pPage && pDoc && !bMasterView )
             {
                 int nPgNum;
 
-                if( pPage->GetPageKind() == PK_HANDOUT )
+                if( (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
                 {
                     nPgNum = pViewSh->GetPrintedHandoutPageNum();
                 }
@@ -340,7 +342,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 {
                     nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
                 }
-                aRepresentation = pViewSh->GetDoc()->CreatePageNumValue(nPgNum);
+                aRepresentation = pDoc->CreatePageNumValue(nPgNum);
             }
             else
             {
