@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actiontriggerhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:42:33 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,47 +36,39 @@
 #ifndef __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 #include <helper/actiontriggerhelper.hxx>
 #endif
-
 #ifndef __FRAMEWORK_CLASSES_ACTIONTRIGGERSEPARATORPROPERTYSET_HXX_
 #include <classes/actiontriggerseparatorpropertyset.hxx>
 #endif
-
 #ifndef __FRAMEWORK_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX_
 #include <classes/rootactiontriggercontainer.hxx>
 #endif
-
 #ifndef __FRAMEWORK_CLASSES_IMAGEWRAPPER_HXX_
 #include <classes/imagewrapper.hxx>
 #endif
-
+#ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
+#include <classes/addonsoptions.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
 #endif
-
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -154,6 +146,10 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
     Reference< XIndexAccess > xIndexAccess( xActionTriggerContainer, UNO_QUERY );
     if ( xIndexAccess.is() )
     {
+        AddonsOptions aAddonOptions;
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bHiContrast = rSettings.GetMenuColor().IsDark();
+
         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 
         for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )
@@ -255,6 +251,13 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                     if ( !!aImage )
                                         pSubMenu->SetItemImage( nNewItemId, aImage );
                                 }
+                            }
+                            else
+                            {
+                                // Support add-on images for context menu interceptors
+                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, sal_False, bHiContrast, sal_True );
+                                if ( !!aImage )
+                                    pSubMenu->SetItemImage( nNewItemId, aImage );
                             }
 
                             if ( xSubContainer.is() )
