@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:13:17 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLESUPPLIER_HPP_
+#include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx> // helper for implementations
 #endif
@@ -112,6 +115,7 @@ class SwXTextView :
     public ::com::sun::star::text::XRubySelection,
     public ::com::sun::star::view::XViewSettingsSupplier,
     public ::com::sun::star::beans::XPropertySet,
+    public ::com::sun::star::datatransfer::XTransferableSupplier,
     public SfxBaseController
 {
     SelectionChangeListenerArr aSelChangedListeners;
@@ -182,6 +186,10 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XTransferableSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
 
     void                    NotifySelChanged();
     void                    NotifyDBChanged();
