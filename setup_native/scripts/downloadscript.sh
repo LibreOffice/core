@@ -6,6 +6,12 @@ UNPACKDIR=/var/tmp/unpack_PRODUCTNAMEPLACEHOLDER
 diskSpaceRequired=DISCSPACEPLACEHOLDER
 checksum=CHECKSUMPLACEHOLDER
 
+EXTRACTONLY="no"
+if [ "$1" = "-x" ]
+then
+    EXTRACTONLY=yes
+fi
+
 # Determining current platform
 
 platform=`uname -s`
@@ -69,10 +75,13 @@ $tail_prog +$linenum $0 | (cd $UNPACKDIR; tar xf -)
 
 echo "All files have been successfully unpacked."
 
-if [ -f $UNPACKDIR/setup ]
+if [ "$EXTRACTONLY" != "yes" ]
 then
-    chmod 775 $UNPACKDIR/setup
-    $UNPACKDIR/setup
+  if [ -f $UNPACKDIR/setup ]
+  then
+      chmod 775 $UNPACKDIR/setup
+      $UNPACKDIR/setup
+  fi
 fi
 
 exit 0
