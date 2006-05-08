@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:20:26 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 15:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,7 +524,7 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 
         // exit gracefully and join
         pOfficeIPCThread->join();
-        delete pGlobalOfficeIPCThread;
+        delete pOfficeIPCThread;
 
 
     }
