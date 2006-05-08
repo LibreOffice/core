@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:24:20 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:43:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1733,6 +1733,14 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     aCacheLock.unlock();
 
+    ::comphelper::MediaDescriptor lDescriptor(xDocument->getArgs());
+
+    // check if this document must be ignored for recovery !
+    // Some use cases dont wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
+    sal_Bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_NOAUTOSAVE(), (sal_Bool)(sal_False));
+    if (bNoAutoSave)
+        return;
+
     // Check if doc is well known on the desktop. Otherwhise ignore it!
     // Other frames mostly are used from external programs - e.g. the bean ...
     css::uno::Reference< css::frame::XController > xController = xDocument->getCurrentController();
@@ -1778,7 +1786,6 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // and save an information about the real used filter by this document.
     // We save this document with DefaultFilter ... and load it with the RealFilter.
     implts_specifyDefaultFilterAndExtension(aNew);
-    ::comphelper::MediaDescriptor lDescriptor(xDocument->getArgs());
     aNew.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME()  , ::rtl::OUString());
 
     // Further we must know, if this document base on a template.
@@ -2099,6 +2106,34 @@ void AutoRecovery::implts_prepareSessionShutdown()
 }
 
 //-----------------------------------------------
+/* TODO WORKAROUND:
+
+        #i64599#
+
+        Normaly the MediaDescriptor argument NoAutoSave indicates,
+        that a document must be ignored for AutoSave and Recovery.
+        But sometimes XModel->getArgs() does not contained this information
+        if implts_registerDocument() was called.
+        So we have to check a second time, if this property is set ....
+        Best place doing so is to check it immeditaly before saving
+        and supressingd saving the document then.
+        Of course removing the corresponding cache entry isnt an option.
+        Because it would disturb iteration over the cache !
+        So we ignore such documents only ...
+        Hopefully next time they are not inserted in our cache.
+*/
+sal_Bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo& rInfo)
+{
+    if (! rInfo.Document.is())
+        return sal_True;
+
+    ::comphelper::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
+    sal_Bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_NOAUTOSAVE(), (sal_Bool)(sal_False));
+
+    return bNoAutoSave;
+}
+
+//-----------------------------------------------
 AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAllowUserIdleLoop,
                                                        const DispatchParams* pParams           )
 {
@@ -2151,6 +2186,10 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo aInfo = *pIt;
+
+        // WORKAROUND ... see comment of this method
+        if (lc_checkIfSaveForbiddenByArguments(aInfo))
+            continue;
 
         // already auto saved during this session :-)
         // This state must be reseted for all documents
