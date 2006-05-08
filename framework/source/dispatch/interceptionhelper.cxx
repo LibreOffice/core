@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interceptionhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:20:09 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,10 +297,57 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 /*-----------------------------------------------------------------------------
     31.03.2003 10:31
 -----------------------------------------------------------------------------*/
+#define FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
 void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("InterceptionHelper::disposing()", "unexpected situation")
+    #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+
+    // check calli ... we accept such disposing call's only from our onwer frame.
+    css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
+    if (aEvent.Source != xOwner)
+        return;
+
+    // Because every interceptor hold at least one reference to us ... and we destruct this list
+    // of interception objects ... we should hold ourself alive .-)
+    css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
+
+    // We need a full copy of all currently registered interceptor objects.
+    // Otherwhise we cant iterate over this vector without the risk, that our iterator will be invalid.
+    // Because this vetor will be influenced by every deregistered interceptor.
+    InterceptionHelper::InterceptorList aCopy = m_lInterceptionRegs;
+
+    aReadLock.unlock();
+    // <- SAFE
+
+    InterceptionHelper::InterceptorList::iterator pIt;
+    for (  pIt  = aCopy.begin();
+           pIt != aCopy.end()  ;
+         ++pIt                 )
+    {
+        InterceptionHelper::InterceptorInfo& rInfo = *pIt;
+        if (rInfo.xInterceptor.is())
+        {
+            css::uno::Reference< css::frame::XDispatchProviderInterceptor > xInterceptor(rInfo.xInterceptor, css::uno::UNO_QUERY_THROW);
+            releaseDispatchProviderInterceptor(xInterceptor);
+            rInfo.xInterceptor.clear();
+        }
+    }
+
+    aCopy.clear();
+
+    #if OSL_DEBUG_LEVEL > 0
+    // SAFE ->
+    aReadLock.lock();
+    if (m_lInterceptionRegs.size() > 0)
+        OSL_ENSURE(sal_False, "There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
+    aReadLock.unlock();
+    // <- SAFE
+    #endif // ODL_DEBUG_LEVEL>0
+
+    #endif // FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
 }
 
 } // namespace framework
