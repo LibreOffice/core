@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:19:47 $
+ *  last change: $Author: hr $ $Date: 2006-05-08 14:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1871,6 +1871,12 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // set "end of live" for our property set helper
     impl_disablePropertySet();
 
+    // interception/dispatch chain must be destructed explicitly
+    // Otherwhise some dispatches and/or interception objects wont die.
+    css::uno::Reference< css::lang::XEventListener > xDispatchHelper(m_xDispatchHelper, css::uno::UNO_QUERY_THROW);
+    xDispatchHelper->disposing(aEvent);
+    xDispatchHelper.clear();
+
     // Disable this instance for further work.
     // This will wait for all current running ones ...
     // and reject all further requests!
@@ -1939,16 +1945,16 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
         => You see: Order of calling operations is important!!!
      */
     m_aChildFrameContainer.clear();
-    m_xFramesHelper = NULL;
+    m_xFramesHelper.clear();
 
     // Release some other references.
     // This calls should be easy ... I hope it :-)
-    m_xDispatchHelper           = NULL;
-    m_xFactory                  = NULL;
-    m_xDropTargetListener       = NULL;
-    m_xDispatchRecorderSupplier = NULL;
-    m_xLayoutManager            = NULL;
-    m_xIndicatorFactoryHelper   = NULL;
+    m_xDispatchHelper.clear();
+    m_xFactory.clear();
+    m_xDropTargetListener.clear();
+    m_xDispatchRecorderSupplier.clear();
+    m_xLayoutManager.clear();
+    m_xIndicatorFactoryHelper.clear();
 
     // It's important to set default values here!
     // If may be later somewhere change the disposed-behaviour of this implementation
