@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:09:14 $
+#   last change: $Author: hr $ $Date: 2006-05-08 15:28:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -359,13 +359,24 @@ sub determine_ship_directory
     if ( $installer::globals::is_unix_multi ) { $languagestring = $installer::globals::unixmultipath; }
 
     my $productstring = $installer::globals::product;
+    my $productsubdir = "";
+
+    if ( $productstring =~ /^\s*(.+?)\_\_(.+?)\s*$/ )
+    {
+        $productstring = $1;
+        $productsubdir = $2;
+    }
+
     if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $productstring = $productstring . "_languagepack"; }
     if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
                 $installer::globals::productextension . $installer::globals::separator .
-                $productstring . $installer::globals::separator .
-                $installer::globals::installertypedir . $installer::globals::separator .
+                $productstring . $installer::globals::separator;
+
+    if ( $productsubdir ) { $destdir = $destdir . $productsubdir . $installer::globals::separator; }
+
+    $destdir = $destdir . $installer::globals::installertypedir . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
 
