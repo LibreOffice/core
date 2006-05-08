@@ -182,7 +182,7 @@
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Ą Ć Ę Ł Ń Ó Ś Ź Ż</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A Ą B C Ć D E Ę F-L Ł M N Ń O Ó P-S Ś T-Z Ź Ż</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
