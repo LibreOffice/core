@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:08:27 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 10:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,10 +580,10 @@ void BackendImpl::unorc_verify_init(
                 xCmdEnv, false /* no throw */ ))
         {
             OUString line;
-            if (readLine( &line, OUSTR("PKG_UNO_JAVA_CLASSPATH="), ucb_content,
+            if (readLine( &line, OUSTR("UNO_JAVA_CLASSPATH="), ucb_content,
                           RTL_TEXTENCODING_UTF8 ))
             {
-                sal_Int32 index = sizeof ("PKG_UNO_JAVA_CLASSPATH=") - 1;
+                sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0) {
@@ -595,14 +595,14 @@ void BackendImpl::unorc_verify_init(
                         }
                         else
                             OSL_ENSURE(
-                                0, "### invalid PKG_UNO_JAVA_CLASSPATH entry!");
+                                0, "### invalid UNO_JAVA_CLASSPATH entry!" );
                     }
                 }
                 while (index >= 0);
             }
-            if (readLine( &line, OUSTR("PKG_UNO_TYPES="), ucb_content,
+            if (readLine( &line, OUSTR("UNO_TYPES="), ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 index = sizeof ("PKG_UNO_TYPES=") - 1;
+                sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0) {
@@ -615,14 +615,14 @@ void BackendImpl::unorc_verify_init(
                             m_rdb_typelibs.push_back( token );
                         }
                         else
-                            OSL_ENSURE( 0, "### invalid PKG_UNO_TYPES entry!" );
+                            OSL_ENSURE( 0, "### invalid UNO_TYPES entry!" );
                     }
                 }
                 while (index >= 0);
             }
-            if (readLine( &line, OUSTR("PKG_UNO_SERVICES="), ucb_content,
+            if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 start = sizeof ("PKG_UNO_SERVICES=?$ORIGIN/") - 1;
+                sal_Int32 start = sizeof ("UNO_SERVICES=?$ORIGIN/") - 1;
                 sal_Int32 sep = line.indexOf( ' ', start );
                 OSL_ASSERT( sep > 0 );
                 m_commonRDB = line.copy( start, sep - start );
@@ -633,10 +633,10 @@ void BackendImpl::unorc_verify_init(
                     &ucb_content,
                     makeURL( getCachePath(), getPlatformString() + OUSTR("rc")),
                     xCmdEnv, false /* no throw */ )) {
-                if (readLine( &line, OUSTR("PKG_UNO_SERVICES="), ucb_content,
+                if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
                               RTL_TEXTENCODING_UTF8 )) {
                     m_nativeRDB = line.copy(
-                        sizeof ("PKG_UNO_SERVICES=?$ORIGIN/") - 1 );
+                        sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
                 }
             }
         }
@@ -654,8 +654,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         return;
 
     ::rtl::OStringBuffer buf;
-    // UNO_USER_PACKAGES_CACHE, UNO_SHARED_PACKAGES_CACHE
-    // have to be resolved locally:
+    // UNO_USER_PACKAGES_CACHE, UNO_SHARED_PACKAGES_CACHE have to be resolved
+    // locally:
     if (m_eContext == CONTEXT_USER) {
         buf.append( RTL_CONSTASCII_STRINGPARAM(
                         "UNO_USER_PACKAGES_CACHE=$ORIGIN/../..") );
@@ -672,7 +672,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     {
         t_stringlist::const_iterator iPos( m_jar_typelibs.begin() );
         t_stringlist::const_iterator const iEnd( m_jar_typelibs.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("PKG_UNO_JAVA_CLASSPATH=") );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_JAVA_CLASSPATH=") );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
             const ::rtl::OString item(
@@ -688,7 +688,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     {
         t_stringlist::const_iterator iPos( m_rdb_typelibs.begin() );
         t_stringlist::const_iterator const iEnd( m_rdb_typelibs.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("PKG_UNO_TYPES=") );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_TYPES=") );
         while (iPos != iEnd) {
             buf.append( '?' );
             // encoded ASCII file-urls:
@@ -703,19 +703,18 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     }
     if (m_commonRDB.getLength() > 0 || m_nativeRDB.getLength() > 0)
     {
-        buf.append( RTL_CONSTASCII_STRINGPARAM("PKG_UNO_SERVICES=?$ORIGIN/") );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
         buf.append( ::rtl::OUStringToOString(
                         m_commonRDB, RTL_TEXTENCODING_ASCII_US ) );
         if (m_nativeRDB.getLength() > 0)
         {
             buf.append( RTL_CONSTASCII_STRINGPARAM(
-                            " ${$ORIGIN/${_OS}_${_ARCH}rc:PKG_UNO_SERVICES}") );
+                            " ${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}") );
             buf.append(LF);
 
             // write native rc:
             ::rtl::OStringBuffer buf2;
-            buf2.append( RTL_CONSTASCII_STRINGPARAM(
-                             "PKG_UNO_SERVICES=?$ORIGIN/") );
+            buf2.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
             buf2.append( ::rtl::OUStringToOString(
                              m_nativeRDB, RTL_TEXTENCODING_ASCII_US ) );
             buf2.append(LF);
