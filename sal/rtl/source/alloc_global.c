@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_global.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:12:23 $
+ *  last change: $Author: rt $ $Date: 2006-05-09 07:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ void * SAL_CALL rtl_reallocateMemory (void * p, sal_Size n)
         if (p != 0)
         {
             void *   p_old = p;
-            sal_Size n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0];
+            sal_Size n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0] - RTL_MEMALIGN;
 
             p = rtl_allocateMemory (n);
             if (p != 0)
