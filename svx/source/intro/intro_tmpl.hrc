@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:03:46 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 15:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ ItemList = \
     < "Daniel Boelzle" ; > ; \
     < "Marco Boerries" ; > ; \
     < "Oliver Bolte" ; > ; \
+    < "Berit Bonde" ; > ; \
     < "Alexander Bootman" ; > ; \
     < "Csaba Borbola" ; > ; \
     < "Gregor Bornemann" ; > ; \
@@ -157,6 +158,7 @@ ItemList = \
     < "Christina L. Carr" ; > ; \
     < "Daniel Carrera" ; > ; \
     < "Centre for Development of Advanced Computing" ; > ; \
+    < "Ales Cernosek" ; > ; \
     < "Goerkem Cetin" ; > ; \
     < "Peter Chabada" ; > ; \
     < "David Chan" ; > ; \
@@ -164,6 +166,7 @@ ItemList = \
     < "Colin Charles" ; > ; \
     < "Kimmy Chen" ; > ; \
     < "Robert Chen" ; > ; \
+    < "Yu Aaron Cheng" ; > ; \
     < "Allan B. Christensen" ; > ; \
     < "Steen Christensen" ; > ; \
     < "Marco Ciampa" ; > ; \
@@ -214,6 +217,7 @@ ItemList = \
     < "Herbert Duerr" ; > ; \
     < "Oliver-Rainer Duesterhoeft" ; > ; \
     < "Marc Durdin" ; > ; \
+    < "Dolores Eccles" ; > ; \
     < "Craig Eddy" ; > ; \
     < "Florian Effenberger" ; > ; \
     < "Aleksander Ehrlich" ; > ; \
@@ -310,9 +314,10 @@ ItemList = \
     < "Sven Herzberg" ; > ; \
     < "Uwe Heth" ; > ; \
     < "Bernd Hilgenberg" ; > ; \
+    < "Michelle Hills" ; > ; \
     < "Kazunari Hirano" ; > ; \
     < "Samual W. Hiser" ; > ; \
-    < "Ivo Hinkelmann" ; > ; \
+      < "Ivo Hinkelmann" ; > ; \
     < "Eric Hoch" ; > ; \
     < "Lutz Hoeger" ; > ; \
     < "Michael Hoennig" ; > ; \
@@ -351,6 +356,7 @@ ItemList = \
     < "Michael Irion" ; > ; \
     < "Naoyuki Ishimura" ; > ; \
     < "Baurzhan Ismagulov" ; > ; \
+    < "Fumihiko Iwabuchi" ; > ; \
     < "Issendis Alain Curt" ; > ; \
     < "Pavel Janik" ; > ; \
     < "Sven Jacobi" ; > ; \
@@ -383,11 +389,13 @@ ItemList = \
     < "Ossama Khayat" ; > ; \
     < "Ilja Ketris" ; > ; \
     < "Hermann Kienlein" ; > ; \
+    < "Aijin Kim" ; > ; \
     < "Jeongkyu Kim" ; > ; \
     < "Bevis Robert Wearing King" ; > ; \
     < "Bo Kiersgaard" ; > ; \
     < "Robert Kinsella" ; > ; \
     < "Lazsio Kishalmi" ; > ; \
+    < "Sven Klawitter" ; > ; \
     < "Halfdan Holger Knudsen" ; > ; \
     < "Rune Tendal Kock" ; > ; \
     < "Branislav Klocok" ; > ; \
@@ -723,6 +731,7 @@ ItemList = \
     < "Irina Stamatoiu" ; > ; \
     < "Joseph James John Stanford" ; > ; \
     < "Frank Stecher" ; > ; \
+    < "Boris Steiner" ; > ; \
     < "Jason Stewart" ; > ; \
     < "Arthit Suriyawongkul" ; > ; \
     < "Erik William Strack" ; > ; \
@@ -742,11 +751,13 @@ ItemList = \
     < "E. A. Tacao" ; > ; \
     < "Munzir Taha" ; > ; \
     < "Hidetoshi Tajima" ; > ; \
+    < "Kazuhiro Hatake Takabatake " ; > ; \
     < "Taigo Takeda" ; > ; \
     < "Christina Taliaferro" ; > ; \
     < "Makoto Takizawa" ; > ; \
     < "Masaki Tamakoshi" ; > ; \
     < "Alberto Di Taranto" ; > ; \
+    < "Michal Touzin" ; > ; \
     < "Stefan Taxhet" ; > ; \
     < "Techmaprojekt Sp. z.o.o." ; > ; \
     < "Erwin Tenhumberg" ; > ; \
@@ -847,7 +858,9 @@ ItemList = \
     < "Aidas Zandaris" ; > ; \
     < "Ernedin Zajko" ; > ; \
     < "Kurt Zenker" ; > ; \
+    < "Joy Zhang" ; > ; \
     < "Lei Phill Zhang" ; > ; \
+    < "May Zhang" ; > ; \
     < "Thorsten Ziehm" ; > ; \
     < "Jan Zitniak" ; > ; \
     < "Stefan Zimmermann" ; > ; \
@@ -1130,57 +1143,44 @@ ItemList = \
     < "Martina Waller" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "Globalization Management" ; 8 ; > ; \
+    < "GLOBALIZATION" ; 8 ; > ; \
     < "" ; > ; \
-    < "Susanne Andersson" ; > ; \
-    < "Dimitrios Dalossis" ; > ; \
+    < "Management" ; 8 ; > ; \
+    < "" ; > ; \
     < "Tom Garland" ; > ; \
-    < "Bing-Meng Hong" ; > ; \
-    < "Ramesh Krishnamagaru" ; > ; \
+    < "Michelle Hills" ; > ; \
     < "Shinobu Matsuzuka" ; > ; \
-    < "Kazutoshi Nimura" ; > ; \
-    < "Scott Ng" ; > ; \
-    < "Akira Ohsone" ; > ; \
-    < "Shripad Patki" ; > ; \
-    < "Tomonori Shioda" ; > ; \
-    < "Steve Swales" ; > ; \
-    < "Christina Taliaferro" ; > ; \
-    < "Tomas Vesely" ; > ; \
+    < "" ; > ; \
+    < "PROGRAM MANAGEMENT" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Rafaella Braconi" ; > ; \
     < "" ; > ; \
     < "Engineering and Testing" ; 8 ; > ; \
     < "" ; > ; \
-    < "Simford Dong" ; > ; \
+    < "Ales Cernosek" ; > ; \
     < "Petr Dudacek" ; > ; \
-    < "Jan Firich" ; > ; \
     < "Karl Hong" ; > ; \
     < "Naoyuki Ishimura" ; > ; \
+    < "Aijin Kim" ; > ; \
     < "Ian McDonnell" ; > ; \
-    < "Ko-haw Nieh" ; > ; \
+    < "Kazuhiro Hatake Takabatake " ; > ; \
     < "Lei Phill Zhang" ; > ; \
+    < "May Zhang" ; > ; \
     < "" ; > ; \
-    < "Program Management" ; 8 ; > ; \
+    < "Translation Management" ; 8 ; > ; \
     < "" ; > ; \
-    < "Rafaella Braconi" ; > ; \
-    < "Young Joo Song" ; > ; \
-    < "Irina Stamatoiu" ; > ; \
-    < "" ; > ; \
-    < "Translation" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Magdy Samuel Abdel Koddous" ; > ; \
     < "Monica Badia" ; > ; \
-    < "Meadhbh Durnin" ; > ; \
-    < "Tim Foster" ; > ; \
-    < "Brigitte Le Grand" ; > ; \
     < "Sofia Nilsson" ; > ; \
     < "Kaoru Oguru" ; > ; \
-    < "Reiko Saito" ; > ; \
-    < "Polly Wang" ; > ; \
-    < "Shun-Min Serena Xiao" ; > ; \
+    < "Joy Zhang" ; > ; \
     < "" ; > ; \
-    < "Documentation" ; 8 ; > ; \
+    < "Documentation & Tools" ; 8 ; > ; \
     < "" ; > ; \
+    < "Yu Aaron Cheng" ; > ; \
+    < "Sven Klawitter" ; > ; \
     < "Hiroko Matano" ; > ; \
-    < "Michael Ryan" ; > ; \
+    < "Boris Steiner" ; > ; \
+    < "Michal Touzin" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
     < "MARKETING & OPERATIONS" ; 8 ; > ; \
