@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:51:27 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 15:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ protected:
     */
     void AssignMasterPageToSelectedSlides (SdPage* pMasterPage);
 
-    virtual void MasterPagesSelector::AssignMasterPageToPageList (
+    virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
         const ::std::vector<SdPage*>& rPageList);
 
