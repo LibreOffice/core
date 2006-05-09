@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: kz $ $Date: 2006-04-26 20:44:03 $
+#   last change: $Author: hr $ $Date: 2006-05-09 15:40:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -731,6 +731,12 @@ sub install_simple ($$$$$)
         my $unixrights = $onefile->{'UnixRights'};
         my $destination = $onefile->{'destination'};
         my $sourcepath = $onefile->{'sourcepath'};
+
+        # This is necessary to install SDK that includes files with $ in its name
+        # Otherwise, the following shell commands does not work and the file list
+        # is not correct
+        $destination =~ s/\$\$/\$/;
+        $sourcepath =~ s/\$\$/\$/;
 
         # printf "mv $sourcepath $destdir$destination\n";
         `$gnucp -af '$sourcepath' '$destdir$destination'`;
