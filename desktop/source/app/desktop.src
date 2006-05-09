@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:52:04 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 11:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ String STR_RECOVER_TITLE
 
 WarningBox STR_RECOVER_PREPARED
 {
-    Message [ de ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und kÃ¶nnen voraussichtlich beim nÃ¤chsten\nProgrammstart wiederhergestellt werden." ;
+    Message [ de ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
     Message [ en-US ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
     Message [ x-comment ] = " ";
 };
@@ -71,7 +71,7 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
 
 String STR_BOOTSTRAP_ERR_PATH_INVALID
 {
-    Text [ de ] = "Der Installationspfad ist ungÃ¼ltig." ;
+    Text [ de ] = "Der Installationspfad ist ungültig." ;
     Text [ en-US ] = "The installation path is invalid.";
 };
 
@@ -89,7 +89,7 @@ String STR_BOOTSTRAP_ERR_INTERNAL
 
 String STR_BOOTSTRAP_ERR_FILE_CORRUPT
 {
-    Text [ de ] = "Die Konfigurationsdatei \"$1\" ist beschÃ¤digt." ;
+    Text [ de ] = "Die Konfigurationsdatei \"$1\" ist beschädigt." ;
     Text [ en-US ] = "The configuration file \"$1\" is corrupt.";
 };
 
@@ -101,13 +101,13 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
 
 String STR_BOOTSTRAP_ERR_NO_SUPPORT
 {
-    Text [ de ] = "Die Konfigurationsdatei \"$1\" unterstÃ¼tzt nicht diese Version." ;
+    Text [ de ] = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version." ;
     Text [ en-US ] = "The configuration file \"$1\" does not support the current version.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SERVICE
 {
-    Text [ de ] = "Der Komponenten-Manager ist nicht verfÃ¼gbar." ;
+    Text [ de ] = "Der Komponenten-Manager ist nicht verfügbar." ;
     Text [ en-US ] = "The component manager is not available.";
 };
 
@@ -125,7 +125,7 @@ String STR_ASK_START_SETUP_REPAIR
 
 String STR_ASK_START_SETUP
 {
-    Text [ de ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu Ã¼berprÃ¼fen?" ;
+    Text [ de ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?" ;
     Text [ en-US ] = "Do you want to start the setup application to check your installation?";
 };
 
@@ -143,7 +143,7 @@ String STR_ASK_START_SETUP_MANUALLY
 
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
 {
-    Text [ de ] = "Die Starteinstellungen fÃ¼r den Zugriff auf die zentrale Konfiguration sind unvollstÃ¤ndig. " ;
+    Text [ de ] = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
     Text [ en-US ] = "The startup settings for accessing the central configuration are incomplete. ";
 };
 
@@ -155,7 +155,7 @@ String STR_CONFIG_ERR_CANNOT_CONNECT
 
 String STR_CONFIG_ERR_RIGHTS_MISSING
 {
-    Text [ de ] = "Aufgrund fehlender Zugriffsrechte kÃ¶nnen Sie nicht auf die zentrale Konfiguration zugreifen. " ;
+    Text [ de ] = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen. " ;
     Text [ en-US ] = "You cannot access the central configuration because of missing access rights. ";
 };
 
@@ -167,7 +167,7 @@ String STR_CONFIG_ERR_ACCESS_GENERAL
 
 String STR_CONFIG_ERR_NO_WRITE_ACCESS
 {
-    Text [ de ] = "Ihre geÃ¤nderten persÃ¶nlichen Einstellungen kÃ¶nnen aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
+    Text [ de ] = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
     Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
 
@@ -187,7 +187,7 @@ QueryBox QBX_USERDATALOCKED
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Eine andere Instanz von %PRODUCTNAME greift auf Ihre persÃ¶nlichen Einstellungen zu oder hat diese nicht wieder freigegeben.\nDer gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren persÃ¶nlichen Einstellungen fÃ¼hren. Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom Benutzer '$u' beendet wird.\n\nMÃ¶chten Sie wirklich fortfahren?";
+    Message [ de ] = "Eine andere Instanz von %PRODUCTNAME greift auf Ihre persönlichen Einstellungen zu oder hat diese nicht wieder freigegeben.\nDer gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren persönlichen Einstellungen führen. Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom Benutzer '$u' beendet wird.\n\nMöchten Sie wirklich fortfahren?";
     Message [ en-US ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
 };
 
