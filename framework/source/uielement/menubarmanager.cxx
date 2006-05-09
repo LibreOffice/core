@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:55:02 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 10:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -830,49 +830,55 @@ void MenuBarManager::RemoveListener()
 {
     ResetableGuard aGuard( m_aLock );
 
-    // #110897#
-    // Reference< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-    Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-
-    std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    // Check service manager reference. Remove listener can be called due
+    // to a disposing call from the frame and therefore we already removed
+    // our listeners and release the service manager reference!
+    Reference< XMultiServiceFactory > xServiceManager = getServiceFactory();
+    if ( xServiceManager.is() )
     {
-        MenuItemHandler* pItemHandler = *p;
-        if ( pItemHandler->xMenuItemDispatch.is() )
-        {
-            URL aTargetURL;
-            aTargetURL.Complete = pItemHandler->aMenuItemURL;
-            xTrans->parseStrict( aTargetURL );
+        Reference< XURLTransformer > xTrans( xServiceManager->createInstance(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
 
-            pItemHandler->xMenuItemDispatch->removeStatusListener(
-                static_cast< XStatusListener* >( this ), aTargetURL );
-        }
-
-        pItemHandler->xMenuItemDispatch.clear();
-        if ( pItemHandler->xPopupMenu.is() )
+        std::vector< MenuItemHandler* >::iterator p;
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
         {
+            MenuItemHandler* pItemHandler = *p;
+            if ( pItemHandler->xMenuItemDispatch.is() )
             {
-                // Remove popup menu from menu structure
-                OGuard  aGuard( Application::GetSolarMutex() );
-                m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, 0 );
+                URL aTargetURL;
+                aTargetURL.Complete = pItemHandler->aMenuItemURL;
+                xTrans->parseStrict( aTargetURL );
+
+                pItemHandler->xMenuItemDispatch->removeStatusListener(
+                    static_cast< XStatusListener* >( this ), aTargetURL );
             }
 
-            Reference< com::sun::star::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
-            if ( xEventListener.is() )
+            pItemHandler->xMenuItemDispatch.clear();
+            if ( pItemHandler->xPopupMenu.is() )
             {
-                EventObject aEventObject;
-                aEventObject.Source = (OWeakObject *)this;
-                xEventListener->disposing( aEventObject );
+                {
+                    // Remove popup menu from menu structure
+                    OGuard  aGuard( Application::GetSolarMutex() );
+                    m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, 0 );
+                }
+
+                Reference< com::sun::star::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
+                if ( xEventListener.is() )
+                {
+                    EventObject aEventObject;
+                    aEventObject.Source = (OWeakObject *)this;
+                    xEventListener->disposing( aEventObject );
+                }
+
+                // Release references to destroy controller and popup menu
+                pItemHandler->xPopupMenuController.clear();
+                pItemHandler->xPopupMenu.clear();
             }
 
-            // Release references to destroy controller and popup menu
-            pItemHandler->xPopupMenuController.clear();
-            pItemHandler->xPopupMenu.clear();
+            Reference< XComponent > xComponent( pItemHandler->xSubMenuManager, UNO_QUERY );
+            if ( xComponent.is() )
+                xComponent->dispose();
         }
-
-        Reference< XComponent > xComponent( pItemHandler->xSubMenuManager, UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
     }
 
     try
@@ -899,7 +905,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
     {
         MenuItemHandler* pMenuItemHandler = *p;
         if ( pMenuItemHandler->xMenuItemDispatch.is() &&
-                pMenuItemHandler->xMenuItemDispatch == Source.Source )
+             pMenuItemHandler->xMenuItemDispatch == Source.Source )
         {
             // disposing called from menu item dispatcher, remove listener
             pMenuItemDisposing = pMenuItemHandler;
@@ -913,29 +919,34 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
         URL aTargetURL;
         aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
 
-        // #110897#
-        // Reference< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-        Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-        xTrans->parseStrict( aTargetURL );
-
-        pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
-            static_cast< XStatusListener* >( this ), aTargetURL );
-        pMenuItemDisposing->xMenuItemDispatch = Reference< XDispatch >();
-        if ( pMenuItemDisposing->xPopupMenu.is() )
+        // Check reference of service manager before we use it. Reference could
+        // be cleared due to RemoveListener call!
+        Reference< XMultiServiceFactory > xServiceManager( getServiceFactory() );
+        if ( xServiceManager.is() )
         {
-            Reference< com::sun::star::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
-            if ( xEventListener.is() )
-                xEventListener->disposing( Source );
+            Reference< XURLTransformer > xTrans( xServiceManager->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+            xTrans->parseStrict( aTargetURL );
 
+            pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
+                static_cast< XStatusListener* >( this ), aTargetURL );
+            pMenuItemDisposing->xMenuItemDispatch = Reference< XDispatch >();
+            if ( pMenuItemDisposing->xPopupMenu.is() )
             {
-                // Remove popup menu from menu structure as we release our reference to
-                // the controller.
-                OGuard  aGuard( Application::GetSolarMutex() );
-                m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, 0 );
-            }
+                Reference< com::sun::star::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
+                if ( xEventListener.is() )
+                    xEventListener->disposing( Source );
 
-            pMenuItemDisposing->xPopupMenuController.clear();
-            pMenuItemDisposing->xPopupMenu.clear();
+                {
+                    // Remove popup menu from menu structure as we release our reference to
+                    // the controller.
+                    OGuard  aGuard( Application::GetSolarMutex() );
+                    m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, 0 );
+                }
+
+                pMenuItemDisposing->xPopupMenuController.clear();
+                pMenuItemDisposing->xPopupMenu.clear();
+            }
         }
         return;
     }
