@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:11:42 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 10:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -897,6 +897,15 @@ File gid_File_Lib_Gcc2_Uno
     Dir = gid_Dir_Program;
 End
 
+#endif
+
+#ifdef WNT
+File gid_File_Lib_Gdiplus
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "gdiplus.dll";
+End
 #endif
 
 File gid_File_Lib_Go
