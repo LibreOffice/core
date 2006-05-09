@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 10:23:58 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 10:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -693,7 +693,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Types
     Section = "Bootstrap";
     Order = 7;
     Key = "UNO_TYPES";
-    Value = "$ORIGIN/types.rdb ${$PKG_SharedUnoFile:PKG_UNO_TYPES} ${$PKG_UserUnoFile:PKG_UNO_TYPES}";
+    Value = "$ORIGIN/types.rdb ${$PKG_SharedUnoFile:UNO_TYPES} ${$PKG_UserUnoFile:UNO_TYPES}";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Services
@@ -702,7 +702,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Services
     Section = "Bootstrap";
     Order = 8;
     Key = "UNO_SERVICES";
-    Value = "${$PKG_UserUnoFile:PKG_UNO_SERVICES} ${$PKG_SharedUnoFile:PKG_UNO_SERVICES} $ORIGIN/services.rdb";
+    Value = "${$PKG_UserUnoFile:UNO_SERVICES} ${$PKG_SharedUnoFile:UNO_SERVICES} $ORIGIN/services.rdb";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Java_Component_Path
@@ -796,8 +796,8 @@ ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
     Section = "Bootstrap";
     Order = 7;
     Key = "UNO_JAVA_JFW_CLASSPATH_URLS";
-    Value = "${${$ORIGIN/$UNO_SETTINGS:PKG_UserUnoFile}:PKG_UNO_JAVA_CLASSPATH}";
-    ValueList1  = "${${$ORIGIN/$UNO_SETTINGS:PKG_SharedUnoFile}:PKG_UNO_JAVA_CLASSPATH}";
+    Value = "${${$ORIGIN/$UNO_SETTINGS:PKG_UserUnoFile}:UNO_JAVA_CLASSPATH}";
+    ValueList1  = "${${$ORIGIN/$UNO_SETTINGS:PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH}";
     ValueList2  = "$ORIGIN/classes/jurt.jar $ORIGIN/classes/ridl.jar";
     ValueList3  = "$ORIGIN/classes/java_uno.jar";
 #ifndef GCJ
