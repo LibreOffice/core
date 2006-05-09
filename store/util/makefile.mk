@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:52:09 $
+#   last change: $Author: hr $ $Date: 2006-05-09 15:41:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ SHL1STDLIBS+= 	-lsupc++
 .IF "$(CCNUMVER)"<="000399999999"
 SHL1STDLIBS+=	-lsupc++
 .ENDIF # CCNUMVER
-.ELSE
+.ELIF "$(CCNUMVER)"<="000400000999"
 SHL1STDLIBS+= 	-lsupc++ -lgcc_s
 .ENDIF
 .ENDIF
