@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:30:57 $
+ *  last change: $Author: hr $ $Date: 2006-05-09 15:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
         osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
 
+        rtl_uString_release(workDir);
         result = sal_True;
     }
     return result;
