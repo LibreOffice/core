@@ -39,6 +39,7 @@ hi       0  1081
 hi-IN    0  1081   # hindi
 pa-IN    0  1094   # Punjabi
 ta-IN    0  1097   # Tamil
+as-IN    0  1101   # Assamese
 ar    1256  1025
 ar-SA 1256  1025
 he    1255  1037
@@ -94,6 +95,14 @@ st       0  1072   # Southern Sotho
 ve       0  1075   # Venda
 ga       0  2108   # Irish
 mk    1251  1071   # Macedonian
+te-IN    0  1098
+ml-IN    0  1100
+mr-IN    0  1102
+ur-IN    0  2080
+or-IN    0  1096
+ku       0  1574
+tg       0  1064
+ti-ER    0  1139
 gl    1252  1110   # Galician
 kn       0  1099   # Kannada
 ms       0  1086   # Malay (Malaysian)
