@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:11:32 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 10:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     sal_Int32 nResult;
     if (bSetParams)
     {
-        pStream->next_in   = (unsigned char*) sInBuffer.getConstArray();
+        pStream->next_in   = (unsigned char*) sInBuffer.getConstArray() + nOffset;
         pStream->next_out  = (unsigned char*) rBuffer.getArray()+nNewOffset;
         pStream->avail_in  = nLength;
         pStream->avail_out = nNewLength;
@@ -151,7 +151,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     }
     else
     {
-        pStream->next_in   = (unsigned char*) sInBuffer.getConstArray();
+        pStream->next_in   = (unsigned char*) sInBuffer.getConstArray() + nOffset;
         pStream->next_out  = (unsigned char*) rBuffer.getArray()+nNewOffset;
         pStream->avail_in  = nLength;
         pStream->avail_out = nNewLength;
