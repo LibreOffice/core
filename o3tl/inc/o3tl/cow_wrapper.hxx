@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cow_wrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-03-28 23:22:28 $
+ *  last change: $Author: thb $ $Date: 2006-05-11 11:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,16 +300,16 @@ void cow_wrapper_client::queryUnmodified() const
     };
 
 
-    template<class A, class B, class P> inline bool operator==( const cow_wrapper<A,P>& a,
-                                                                const cow_wrapper<B,P>& b )
+    template<class T, class P> inline bool operator==( const cow_wrapper<T,P>& a,
+                                                       const cow_wrapper<T,P>& b )
     {
-        return *a == *b;
+        return a.same_object(b) ? true : *a == *b;
     }
 
-    template<class A, class B, class P> inline bool operator!=( const cow_wrapper<A,P>& a,
-                                                                const cow_wrapper<B,P>& b )
+    template<class T, class P> inline bool operator!=( const cow_wrapper<T,P>& a,
+                                                       const cow_wrapper<T,P>& b )
     {
-        return *a != *b;
+        return a.same_object(b) ? false : *a != *b;
     }
 
     template<class A, class B, class P> inline bool operator<( const cow_wrapper<A,P>& a,
