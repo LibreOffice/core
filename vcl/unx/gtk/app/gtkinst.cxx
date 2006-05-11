@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:59:46 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ extern "C"
 
 GtkInstance::~GtkInstance()
 {
+    DeInitAtkBridge();
 }
 
 SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
