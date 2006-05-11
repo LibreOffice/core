@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:02:51 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 10:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 BOOL GtkSalGraphics::bThemeChanged = TRUE;
 BOOL GtkSalGraphics::bNeedPixmapPaint = FALSE;
 BOOL GtkSalGraphics::bGlobalNeedPixmapPaint = FALSE;
+BOOL GtkSalGraphics::bToolbarGripWorkaround = FALSE;
 
 GtkSalGraphics::~GtkSalGraphics()
 {
@@ -670,7 +671,8 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
         nType != CTRL_SCROLLBAR &&
         nType != CTRL_SPINBOX &&
         nType != CTRL_TAB_ITEM &&
-        nType != CTRL_TAB_PANE
+        nType != CTRL_TAB_PANE &&
+        ! (bToolbarGripWorkaround && nType == CTRL_TOOLBAR && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
         )
     {
         // make pixmap a little larger since some themes draw decoration
@@ -3124,9 +3126,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
         const gchar* pThemeName = g_value_get_string( &aValue );
         if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
+        {
             bNeedPixmapPaint = true;
+            bToolbarGripWorkaround = true;
+        }
         else
+        {
             bNeedPixmapPaint = bGlobalNeedPixmapPaint;
+            bToolbarGripWorkaround = false;
+        }
         // clean up
         g_value_unset( &aValue );
     }
