@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:39:41 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,6 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
     for ( USHORT i = 0; m_pHistory && i < m_pHistory->Count(); ++i )
         delete m_pHistory->GetObject(i);
     delete m_pHistory;
-
-    if ( m_xIntercepted.is() )
-        m_xIntercepted->releaseDispatchProviderInterceptor( (XDispatchProviderInterceptor*)this );
 }
 
 // -----------------------------------------------------------------------
