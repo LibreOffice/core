@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:58:25 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 
 #include <window.hxx>
 #include <menu.hxx>
+#include <toolbox.hxx>
 
 #include "atkwrapper.hxx"
 #include "atkutil.hxx"
@@ -310,17 +311,19 @@ void DocumentFocusListener::attachRecursive(
 
     // If not already done, add the broadcaster to the list and attach as listener.
     if( xBroadcaster.is() && m_aRefList.insert(xBroadcaster).second )
+    {
         xBroadcaster->addEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-    if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
-    {
-        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-        for( n = 0; n < nmax; n++ )
+        if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
         {
-            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+            for( n = 0; n < nmax; n++ )
+            {
+                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
 
-            if( xChild.is() )
-                attachRecursive(xChild);
+                if( xChild.is() )
+                    attachRecursive(xChild);
+            }
         }
     }
 }
@@ -360,23 +363,25 @@ void DocumentFocusListener::detachRecursive(
     const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
 ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
-    {
-        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-        for( n = 0; n < nmax; n++ )
-        {
-            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
-
-            if( xChild.is() )
-                detachRecursive(xChild);
-        }
-    }
-
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
         uno::Reference< accessibility::XAccessibleEventBroadcaster >(xContext, uno::UNO_QUERY);
 
     if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
+    {
         xBroadcaster->removeEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+
+        if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
+        {
+            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+            for( n = 0; n < nmax; n++ )
+            {
+                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+
+                if( xChild.is() )
+                    detachRecursive(xChild);
+            }
+        }
+    }
 }
 
 /*****************************************************************************/
@@ -402,6 +407,56 @@ static void handle_tabpage_activated(Window *pWindow)
 
 /*****************************************************************************/
 
+/*
+ * toolbar items in gtk are widgets, so we need to simulate focus events for those
+ */
+
+static void notify_toolbox_item_focus(ToolBox *pToolBox)
+{
+    uno::Reference< accessibility::XAccessible > xAccessible =
+        pToolBox->GetAccessible();
+
+    if( ! xAccessible.is() )
+        return;
+
+    uno::Reference< accessibility::XAccessibleContext > xContext =
+        xAccessible->getAccessibleContext();
+
+    if( ! xContext.is() )
+        return;
+
+    sal_Int32 nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
+    if( nPos != TOOLBOX_ITEM_NOTFOUND )
+        atk_wrapper_focus_tracker_notify_when_idle( xContext->getAccessibleChild( nPos ) );
+}
+
+static void handle_toolbox_highlight(Window *pWindow)
+{
+    ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
+
+    // Make sure either the toolbox or its parent toolbox has the focus
+    if ( ! pToolBox->HasFocus() )
+    {
+        ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
+        if ( ! pToolBoxParent || ! pToolBoxParent->HasFocus() )
+            return;
+    }
+
+    notify_toolbox_item_focus(pToolBox);
+}
+
+static void handle_toolbox_highlightoff(Window *pWindow)
+{
+    ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
+    ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
+
+    // Notify when leaving sub toolboxes
+    if( pToolBoxParent && pToolBoxParent->HasFocus() )
+        notify_toolbox_item_focus( pToolBoxParent );
+}
+
+/*****************************************************************************/
+
 static std::set< Window * > g_aWindowList;
 
 static void handle_get_focus(::VclWindowEvent const * pEvent)
@@ -413,6 +468,10 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
 
     // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
     if( ! pWindow || !pWindow->IsVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
+        return;
+
+    // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
+    if( pWindow->GetType() == WINDOW_TOOLBOX )
         return;
 
     if( pWindow->GetType() == WINDOW_TABCONTROL )
@@ -443,8 +502,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
  * need to add listeners to the children instead of re-using the tabpage stuff
  */
     if( xStateSet->contains(accessibility::AccessibleStateType::FOCUSED) &&
-        ( pWindow->GetType() != WINDOW_TREELISTBOX ) &&
-        ( pWindow->GetType() != WINDOW_TOOLBOX ) )
+        ( pWindow->GetType() != WINDOW_TREELISTBOX ) )
     {
         atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
     }
@@ -496,10 +554,6 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 {
     switch (pEvent->GetId())
     {
-    case VCLEVENT_OBJECT_DYING:
-//        fprintf(stderr, "got VCLEVENT_OBJECT_DYING for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
-        break;
     case VCLEVENT_WINDOW_SHOW:
 //        fprintf(stderr, "got VCLEVENT_WINDOW_SHOW for %p\n",
 //            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
@@ -541,7 +595,15 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         handle_menu_highlighted(static_cast< ::VclMenuEvent const * >(pEvent));
         break;
 
-//    case VCLEVENT_TOOLBOX_HIGHLIGHT: - does not work due missing XAccessibleSelection support
+    case VCLEVENT_TOOLBOX_HIGHLIGHT:
+        handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+        break;
+
+    case VCLEVENT_OBJECT_DYING:
+    case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
+        handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+        break;
+
     case VCLEVENT_TABPAGE_ACTIVATE:
         handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;

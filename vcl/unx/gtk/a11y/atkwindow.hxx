@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:59:01 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,5 +41,6 @@
 #define OOO_TYPE_WINDOW_WRAPPER ooo_window_wrapper_get_type()
 
 GType ooo_window_wrapper_get_type (void);
+void restore_gail_window_vtable (void);
 
 #endif

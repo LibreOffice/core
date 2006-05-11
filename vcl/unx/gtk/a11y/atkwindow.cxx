@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:58:53 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 
 extern "C" {
 
-static void (* window_real_initialize) (AtkObject *obj, gpointer data);
-static G_CONST_RETURN gchar* (* window_real_get_name) (AtkObject *accessible);
+static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
+static G_CONST_RETURN gchar* (* window_real_get_name) (AtkObject *accessible) = NULL;
 
 static gint
 ooo_window_wrapper_clear_focus(gpointer)
@@ -106,7 +106,7 @@ ooo_window_wrapper_real_get_name(AtkObject *accessible)
 /*****************************************************************************/
 
 static void
-ooo_window_wrapper_class_init (AtkObjectClass *klass)
+ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 {
     AtkObjectClass *atk_class;
     gpointer data;
@@ -167,3 +167,21 @@ ooo_window_wrapper_get_type (void)
 
     return type;
 }
+
+void restore_gail_window_vtable (void)
+{
+    AtkObjectClass *atk_class;
+    gpointer data;
+
+    GType type = g_type_from_name( "GailWindow" );
+
+    if( type == G_TYPE_INVALID )
+        return;
+
+    data = g_type_class_peek( type );
+    atk_class = ATK_OBJECT_CLASS (data);
+
+    atk_class->initialize = window_real_initialize;
+    atk_class->get_name = window_real_get_name;
+}
+
