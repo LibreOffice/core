@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:25:36 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,12 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
     DBG_CHKTHIS(VCLXAccessibleComponent,0);
 
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #122218# */ )
+
+        /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
+         * might have been destroyed by the previous VCLEventListener (if no AT tool
+         * is running), e.g. sub-toolbars in impress.
+         */
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #122218# */ && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
