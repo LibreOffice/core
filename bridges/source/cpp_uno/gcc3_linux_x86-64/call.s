@@ -58,13 +58,12 @@ privateSnippetExecutor:
 .LSCIE1:
 	.long	0x0
 	.byte	0x1
-	.string	"zP"
+	.string	"zR"
 	.uleb128 0x1
 	.sleb128 -8
 	.byte	0x10
-	.uleb128 0x9
-	.byte	0x0
-	.quad	__gxx_personality_v0
+	.uleb128 0x1
+	.byte	0x1b
 	.byte	0xc
 	.uleb128 0x7
 	.uleb128 0x8
@@ -76,8 +75,8 @@ privateSnippetExecutor:
 	.long	.LEFDE1-.LASFDE1
 .LASFDE1:
 	.long	.LASFDE1-.Lframe1
-	.quad	.LFB3
-	.quad	.LFE3-.LFB3
+	.long	.LFB3-.
+	.long	.LFE3-.LFB3
 	.uleb128 0x0
 	.byte	0x4
 	.long	.LCFI0-.LFB3
