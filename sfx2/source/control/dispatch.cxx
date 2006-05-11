@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:27:56 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1681,7 +1681,8 @@ void SfxDispatcher::SetMenu_Impl()
                     if ( xLayoutManager.is() )
                     {
                         rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
-                        xLayoutManager->createElement( aMenuBarURL );
+                        if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
+                            xLayoutManager->createElement( aMenuBarURL );
                     }
                 }
             }
