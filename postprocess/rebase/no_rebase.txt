@@ -7,3 +7,4 @@ policy.1.0.cli_ure.dll
 policy.1.0.cli_cppuhelper.dll
 policy.1.0.cli_basetypes.dll
 unicows.dll
+gdiplus.dll
