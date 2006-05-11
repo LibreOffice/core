@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkbridge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:53:26 $
+ *  last change: $Author: hr $ $Date: 2006-05-11 13:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <dlfcn.h>
 #endif
 
-void InitAtkBridge(void)
+bool InitAtkBridge(void)
 {
     unsigned int major, minor, micro;
 
@@ -54,13 +54,13 @@ void InitAtkBridge(void)
     if( sscanf( atk_get_toolkit_version(), "%u.%u.%u", &major, &minor, &micro) < 3 )
     {
         g_warning( "unable to parse gail version number" );
-        return;
+        return false;
     }
 
     if( ( (major << 16) | (minor << 8) | micro ) < ( (1 << 16) | 8 << 8 | 6 ) )
     {
         g_warning( "libgail >= 1.8.6 required for accessibility support" );
-        return;
+        return false;
     }
 
     /* get at-spi version by checking the libspi.so version number  */
@@ -68,17 +68,17 @@ void InitAtkBridge(void)
 
     /* libspi should be mapped by loading libatk-bridge.so already */
     void * sym = dlsym( RTLD_DEFAULT, "spi_accessible_new" );
-    g_return_if_fail( sym != NULL );
+    g_return_val_if_fail( sym != NULL, false );
 
     Dl_info dl_info;
     int ret = dladdr( sym, &dl_info );
-    g_return_if_fail( ret != 0 );
+    g_return_val_if_fail( ret != 0, false );
 
     char path[PATH_MAX];
     if( NULL == realpath(dl_info.dli_fname, path) )
     {
         perror( "unable to resolve libspi.so.0" );
-        return;
+        return false;
     }
 
     const char * cp = strrchr(path, '/');
@@ -90,13 +90,13 @@ void InitAtkBridge(void)
     if( sscanf( cp, "libspi.so.%u.%u.%u", &major, &minor, &micro) < 3 )
     {
         g_warning( "unable to parse at-spi version number: %s", cp );
-        return;
+        return false;
     }
 
     if( ( (major << 16) | (minor << 8) | micro ) < ( 10 << 8 | 6 ) )
     {
         g_warning( "at-spi >= 1.7 required for accessibility support" );
-        return;
+        return false;
     }
 
 #endif // ! ( defined AIX || defined HPUX )
@@ -109,7 +109,25 @@ void InitAtkBridge(void)
 
     /* Register AtkObject wrapper factory */
     AtkRegistry * registry = atk_get_default_registry();
-    if( registry)
+    if( registry )
         atk_registry_set_factory_type( registry, OOO_TYPE_FIXED, OOO_TYPE_WRAPPER_FACTORY );
+
+    return true;
+}
+
+void DeInitAtkBridge()
+{
+    restore_gail_window_vtable();
+
+    /* shutdown atk-bridge Gtk+ module here, otherwise it is done in an atexit handler
+     * where the VCL Gtk+ plugin might already be unloaded
+     */
+
+#if ! ( defined AIX || defined HPUX ) // these have no dl* functions
+    void (* shutdown) ( void ) =  (void (*) (void)) dlsym( RTLD_DEFAULT, "gnome_accessibility_module_shutdown");
+
+    if( shutdown )
+        shutdown();
+#endif // ! ( defined AIX || defined HPUX )
 }
 
