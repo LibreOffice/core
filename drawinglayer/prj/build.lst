@@ -3,4 +3,7 @@ fx	drawinglayer						usr1	-	all	fx_mkout NULL
 fx	drawinglayer\inc					get		-	all	fx_inc NULL
 fx	drawinglayer\prj					get		-	all	fx_prj NULL
 fx	drawinglayer\source\primitive		nmake	-	all	fx_primitive NULL
-fx	drawinglayer\util					nmake	-	all	fx_util fx_primitive NULL
+fx	drawinglayer\source\primitive3d		nmake	-	all	fx_primitive3d NULL
+fx	drawinglayer\source\animation		nmake	-	all	fx_animation NULL
+fx	drawinglayer\source\geometry		nmake	-	all	fx_geometry NULL
+fx	drawinglayer\util					nmake	-	all	fx_util fx_primitive fx_primitive3d fx_animation fx_geometry NULL
