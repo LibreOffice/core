@@ -7,10 +7,9 @@
 
 # Product       List_of_platforms                                                   List_of_languages   Target
 
-OpenOffice      unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi4,unxlngi5,unxlngi6,unxsols4,wntmsci10   en-US   openoffice
-OpenOffice_wJRE wntmsci10.pro,wntmsci10                                                                                                        en-US   openofficewithjre
-OpenOffice_Dev  unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi4,unxlngi5,unxlngi6,unxsols4,wntmsci10   en-US   openofficedev
-OpenOfficeLanguagepack   unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro   de|es|fr|it|nl|sv|pt-BR|zh-CN|zh-TW|ko|ja|ru|pl|hu|tr   ooolanguagepack
-OpenOfficeLanguagepack   unxlngi6,unxsols4,wntmsci10                                    de   ooolanguagepack
+OpenOffice      unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro   en-US|en_US_th|de|es|fr|it|sv|pt-BR|nl|hu|pl|ru|ja|ko|zh-CN|zh-TW   openoffice
+OpenOffice_wJRE unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro                             en-US|de|es|fr|it|sv|pt-BR|nl|hu|pl|ru|ja|ko|zh-CN|zh-TW   openofficewithjre
+OpenOffice_Dev                                                                                   en-US   openofficedev
+OpenOfficeLanguagepack   unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro   en-US|af|as-IN|be-BY|bg|bs|ca|cs|cy|da|de|el|en-GB|en-ZA|es|et|fa|fi|fr|gu-IN|he|hi-IN|hr|hu|it|ja|km|ko|ku|lt|mk|ml-IN|mr-IN|nb|nl|nn|ns|or-IN|pa-IN|pl|pt-BR|ru|rw|sh-YU|sk|sl|sr-CS|st|sv|sw-TZ|ta-IN|te-IN|tg|th|ti-ER|tr|ur-IN|vi|xh|zh-CN|zh-TW|zu   ooolanguagepack
 URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US  ure
 OpenOffice_SDK  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US  sdkoo
