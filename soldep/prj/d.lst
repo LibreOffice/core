@@ -8,7 +8,7 @@ hedabu: ..\inc\sdtresid.hxx %_DEST%\inc%_EXT%\soldep\sdtresid.hxx
 ..\%__SRC%\lib\libsoldep?????.so %_DEST%\lib%_EXT%\libsoldep?????.so
 ..\%__SRC%\slb\*.a %_DEST%\lib%_EXT%\*.a
 
-..\perl.mk  %_DEST%\inc%_EXT%\soldep\perl.mk
+..\util\perl.mk  %_DEST%\inc%_EXT%\soldep\perl.mk
 
 hedabu: ..\inc\soldep.hxx %_DEST%\inc%_EXT%\soldep\soldep.hxx
 hedabu: ..\inc\soldlg.hxx %_DEST%\inc%_EXT%\soldep\soldlg.hxx
