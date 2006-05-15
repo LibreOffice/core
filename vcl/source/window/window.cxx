@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.234 $
+ *  $Revision: 1.235 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:02:16 $
+ *  last change: $Author: vg $ $Date: 2006-05-15 09:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6309,16 +6309,20 @@ void Window::SetParent( Window* pNewParent )
 void Window::Show( BOOL bVisible, USHORT nFlags )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    BOOL bRealVisibilityChanged = FALSE;
 
     if ( mpWindowImpl->mbVisible == bVisible )
         return;
 
-    mpWindowImpl->mbVisible = bVisible != 0;
+    ImplDelData aDogTag( this );
+
+    BOOL bRealVisibilityChanged = FALSE;
+    mpWindowImpl->mbVisible = (bVisible != 0);
 
     if ( !bVisible )
     {
         ImplHideAllOverlaps();
+        if( aDogTag.IsDelete() )
+            return;
 
         if ( mpWindowImpl->mpBorderWindow )
         {
@@ -6353,6 +6357,9 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
                     ImplInitWinClipRegion();
                 aInvRegion = mpWindowImpl->maWinClipRegion;
             }
+
+            if( aDogTag.IsDelete() )
+                return;
 
             bRealVisibilityChanged = mpWindowImpl->mbReallyVisible;
             ImplResetReallyVisible();
@@ -6451,6 +6458,8 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mpWindowImpl->mbPaintFrame = TRUE;
             BOOL bNoActivate = nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE);
             mpWindowImpl->mpFrame->Show( TRUE, bNoActivate );
+            if( aDogTag.IsDelete() )
+                return;
 
             // Query the correct size of the window, if we are waiting for
             // a system resize
@@ -6463,6 +6472,9 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             }
         }
 
+        if( aDogTag.IsDelete() )
+            return;
+
 #ifdef DBG_UTIL
         if ( IsDialog() || (GetType() == WINDOW_TABPAGE) || (GetType() == WINDOW_DOCKINGWINDOW) )
         {
@@ -6473,7 +6485,9 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
         ImplShowAllOverlaps();
     }
 
-    // Hintergrund-Sicherung zuruecksetzen
+    if( aDogTag.IsDelete() )
+        return;
+    // invalidate all saved backgrounds
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
         ImplInvalidateAllOverlapBackgrounds();
 
@@ -6484,6 +6498,8 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
         ImplCallEventListeners( mpWindowImpl->mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, NULL );
+    if( aDogTag.IsDelete() )
+        return;
 
     // #107575#, if a floating windows is shown that grabs the focus, we have to notify the toolkit about it
     // ImplGrabFocus() is not called in this case
