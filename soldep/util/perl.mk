@@ -2,9 +2,9 @@
 #
 #   $RCSfile: perl.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-26 12:27:13 $
+#   last change: $Author: obo $ $Date: 2006-05-15 09:57:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,30 +61,30 @@
 #*************************************************************************
 
 .IF "$(GUI)"=="WNT"
-SOLARINC+=-I$(BUILD_TOOLS)$/perl$/lib$/core
-PERL_LIB=$(BUILD_TOOLS)$/perl$/lib$/core$/perl58.lib
+SOLARINC+=-I$(BUILD_TOOLS)$/..$/perl$/lib$/core
+PERL_LIB=$(BUILD_TOOLS)$/..$/perl$/lib$/core$/perl58.lib
 .ELSE
 .IF "$(OS)$(CPU)" == "LINUXI"
-SOLARINC+=-I$(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE
+SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE
 PERL_LIB=	-lcrypt \
-            $(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE$/libperl.a \
-            $(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/i686-linux$/auto/DynaLoader/DynaLoader.a
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE$/libperl.a \
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/auto/DynaLoader/DynaLoader.a
 .ELSE
 .IF "$(OS)$(CPU)" == "SOLARISS"
-SOLARINC+=-I$(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE
+SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE
 PERL_LIB=	-lsocket \
             -lnsl \
             -ldl \
-            $(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE$/libperl.a \
-            $(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/auto/DynaLoader/DynaLoader.a
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE$/libperl.a \
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/auto/DynaLoader/DynaLoader.a
 .ELSE
 .IF "$(OS)$(CPU)" == "SOLARISI"
-SOLARINC+=-I$(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE
+SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE
 PERL_LIB=	-lsocket \
             -lnsl \
             -ldl \
-            $(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/libperl.a \
-            $(BUILD_TOOLS)$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/auto/DynaLoader/DynaLoader.a
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/libperl.a \
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/auto/DynaLoader/DynaLoader.a
 .ENDIF 
 .ENDIF 
 .ENDIF 
