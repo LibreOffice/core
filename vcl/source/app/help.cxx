@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:31:24 $
+ *  last change: $Author: vg $ $Date: 2006-05-15 09:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,12 +444,14 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
 
 void HelpTextWindow::ImplShow()
 {
+    ImplDelData aDogTag( this );
     if ( maStatusText.Len() )
     {
         ImplSVData* pSVData = ImplGetSVData();
         pSVData->mpApp->ShowHelpStatusText( maStatusText );
     }
     Show( TRUE, SHOW_NOACTIVATE );
+    if( !aDogTag.IsDelete() )
     Update();
 }
 
@@ -535,14 +537,14 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
 {
     if ( pTimer == &maShowTimer )
     {
-        ImplShow();
         if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
         {
-            // Auto-Hide nicht bei einem Tip-Fenster (ShowTip)
+            // start auto-hide-timer for non-ShowTip windows
             ImplSVData* pSVData = ImplGetSVData();
             if ( this == pSVData->maHelpData.mpHelpWin )
                 maHideTimer.Start();
         }
+        ImplShow();
     }
     else
     {
