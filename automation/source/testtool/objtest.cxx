@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:10:46 $
+ *  last change: $Author: vg $ $Date: 2006-05-15 09:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,6 +530,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "13" );
 #elif defined NETBSD
     abGP.Append( "14" );
+#elif defined LINUX && defined X86_64
+    abGP.Append( "15" );  // Linux x86-64
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
@@ -2853,7 +2855,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.23 $
+    // search $Revision: 1.24 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
