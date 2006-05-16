@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:27:44 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 08:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2113,7 +2113,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                                                                 pStyleSheet->GetName() );
 
                         ScPrintFunc( pViewData->GetDocShell(),
-                                     pViewData->GetViewShell()->GetPrinter(),
+                                     pViewData->GetViewShell()->GetPrinter(TRUE),
                                      pViewData->GetTabNo() ).UpdatePages();
 
                         rBindings.Invalidate( SID_STATUS_PAGESTYLE );
