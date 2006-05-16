@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:33 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 08:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,7 +738,7 @@ USHORT ScTabView::CalcZoom( SvxZoomType eType, USHORT nOldZoom )
                     if ( pStyleSheet )
                     {
                         ScPrintFunc aPrintFunc( aViewData.GetDocShell(),
-                                                aViewData.GetViewShell()->GetPrinter(),
+                                                aViewData.GetViewShell()->GetPrinter(TRUE),
                                                 nCurTab );
 
                         Size aPageSize = aPrintFunc.GetDataSize();
