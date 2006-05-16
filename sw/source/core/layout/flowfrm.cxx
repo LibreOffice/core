@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:07:10 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 16:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ void SwFlowFrm::CheckKeep()
 |*
 |*************************************************************************/
 
-BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck ) const
+BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep ) const
 {
     // 1. The keep attribute is ignored inside footnotes
     // 2. For compatibility reasons, the keep attribute is
@@ -243,10 +243,13 @@ BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck ) const
     // 3. If bBreakCheck is set to true, this function only checks
     //    if there are any break after attributes set at rAttrs
     //    or break before attributes set for the next content (or next table)
-    BOOL bKeep = bBreakCheck ||
+    BOOL bKeep = bCheckIfLastRowShouldKeep ||
                  (  !rThis.IsInFtn() &&
                     ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
                     rAttrs.GetKeep().GetValue() );
+
+    ASSERT( !bCheckIfLastRowShouldKeep || rThis.IsTabFrm(),
+            "IsKeep with bCheckIfLastRowShouldKeep should only be used for tabfrms" )
 
     // Ignore keep attribute if there are break situations:
     if ( bKeep )
@@ -267,29 +270,53 @@ BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck ) const
             if( 0 != (pNxt = rThis.FindNextCnt()) &&
                 (!pFollow || pNxt != pFollow->GetFrm()))
             {
-                const SwAttrSet* pSet = NULL;
-
-                if ( pNxt->IsInTab() )
+                // --> FME 2006-05-15 #135914#
+                // The last row of a table only keeps with the next content
+                // it they are in the same section:
+                if ( bCheckIfLastRowShouldKeep )
                 {
-                    SwTabFrm* pTab = pNxt->FindTabFrm();
-                    if ( ! rThis.IsInTab() || rThis.FindTabFrm() != pTab )
-                        pSet = &pTab->GetFmt()->GetAttrSet();
-                }
+                    const SwSection* pThisSection = 0;
+                    const SwSection* pNextSection = 0;
+                    const SwSectionFrm* pThisSectionFrm = rThis.FindSctFrm();
+                    const SwSectionFrm* pNextSectionFrm = pNxt->FindSctFrm();
 
-                if ( ! pSet )
-                    pSet = pNxt->GetAttrSet();
+                    if ( pThisSectionFrm )
+                        pThisSection = pThisSectionFrm->GetSection();
 
-                ASSERT( pSet, "No AttrSet to check keep attribute" )
+                    if ( pNextSectionFrm )
+                        pNextSection = pNextSectionFrm->GetSection();
 
-                if ( pSet->GetPageDesc().GetPageDesc() )
-                    bKeep = FALSE;
-                else switch ( pSet->GetBreak().GetBreak() )
-                {
-                    case SVX_BREAK_COLUMN_BEFORE:
-                    case SVX_BREAK_COLUMN_BOTH:
-                    case SVX_BREAK_PAGE_BEFORE:
-                    case SVX_BREAK_PAGE_BOTH:
+                    if ( pThisSection != pNextSection )
                         bKeep = FALSE;
+                }
+                // <--
+
+                if ( bKeep )
+                {
+                    const SwAttrSet* pSet = NULL;
+
+                    if ( pNxt->IsInTab() )
+                    {
+                        SwTabFrm* pTab = pNxt->FindTabFrm();
+                        if ( ! rThis.IsInTab() || rThis.FindTabFrm() != pTab )
+                            pSet = &pTab->GetFmt()->GetAttrSet();
+                    }
+
+                    if ( ! pSet )
+                        pSet = pNxt->GetAttrSet();
+
+                    ASSERT( pSet, "No AttrSet to check keep attribute" )
+
+                    if ( pSet->GetPageDesc().GetPageDesc() )
+                        bKeep = FALSE;
+                    else switch ( pSet->GetBreak().GetBreak() )
+                    {
+                        case SVX_BREAK_COLUMN_BEFORE:
+                        case SVX_BREAK_COLUMN_BOTH:
+                        case SVX_BREAK_PAGE_BEFORE:
+                        case SVX_BREAK_PAGE_BOTH:
+                            bKeep = FALSE;
+                    }
                 }
             }
         }
