@@ -183,9 +183,9 @@ public final class PluginFactoryImpl extends PluginFactory
     String ext= ".txt";
     String mimeType = null;
     ConverterInfo ci = this.getConverterInfo();
-    Enumeration enum = ci.getDeviceMime();
-    while (enum.hasMoreElements()) {
-        mimeType= (String) enum.nextElement();
+    Enumeration enumerate = ci.getDeviceMime();
+    while (enumerate.hasMoreElements()) {
+        mimeType= (String) enumerate.nextElement();
     }
     try {
         props.load(is);
