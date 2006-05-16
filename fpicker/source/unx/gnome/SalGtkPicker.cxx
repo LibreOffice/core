@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:35:50 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 08:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,15 +82,22 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
 {
     rtl::OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
         RTL_TEXTENCODING_UTF8 );
+
     INetURLObject aURL(sURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
-        rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
-            osl_getThreadTextEncoding());
-        INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
-        aCurrentURL.SetHost(aURL.GetHost());
-        sURL = aCurrentURL.getExternalURL();
+
+        if ( pEncodedFileName )
+        {
+            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
+                osl_getThreadTextEncoding());
+            INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
+            aCurrentURL.SetHost(aURL.GetHost());
+            sURL = aCurrentURL.getExternalURL();
+        }
+        else
+            sURL = rtl::OUString();
     }
     return sURL;
 }
