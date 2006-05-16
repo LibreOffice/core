@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:52:26 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 08:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -623,7 +623,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             if ( pDoc->RemovePageStyleInUse( pStyleSheet->GetName() ) )
                             {
-                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(), nCurTab ).UpdatePages();
+                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(TRUE), nCurTab ).UpdatePages();
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
                             }
@@ -650,7 +650,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                     if ( aOldName != aStyleName )
                                     {
                                         pDoc->SetPageStyle( nTab, aStyleName );
-                                        ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(), nTab ).UpdatePages();
+                                        ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(TRUE), nTab ).UpdatePages();
                                         if( !pUndoAction )
                                             pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
                                         pUndoAction->AddSheetAction( nTab, aOldName );
@@ -695,7 +695,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // wenn in Verwendung -> Update
                             if ( bUsed )
-                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(), nInTab ).UpdatePages();
+                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(TRUE), nInTab ).UpdatePages();
 
                             aNewData.InitFromStyle( pStyleSheet );
                             bAddUndo = TRUE;
