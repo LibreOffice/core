@@ -127,8 +127,8 @@ public class ConvertData {
      *           <code>Vector</code> of <code>Document</code> objects.
      */
     public Enumeration getDocumentEnumeration() {
-        Enumeration enum = v.elements();
-        return (enum);
+        Enumeration enumerate = v.elements();
+        return (enumerate);
     }
 
 
