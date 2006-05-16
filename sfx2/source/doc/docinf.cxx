@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:53:34 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 16:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,38 +229,34 @@ public:
 
 private:
     String              ImplLoadString8( SvStream& rStrm ) const;
-    String              ImplLoadString16( SvStream& rStrm, bool bSizeInBytes ) const;
+    String              ImplLoadString16( SvStream& rStrm ) const;
     void                ImplSaveString8( SvStream& rStrm, const String& rValue ) const;
-    void                ImplSaveString16( SvStream& rStrm, const String& rValue, bool bSizeInBytes ) const;
+    void                ImplSaveString16( SvStream& rStrm, const String& rValue ) const;
 };
 
 // ----------------------------------------------------------------------------
 
 String SfxOleStringHelper::LoadString8( SvStream& rStrm ) const
 {
-    // size field contains buffer size in bytes -> pass true to ImplLoadString16
-    return IsUnicode() ? ImplLoadString16( rStrm, true ) : ImplLoadString8( rStrm );
+    return IsUnicode() ? ImplLoadString16( rStrm ) : ImplLoadString8( rStrm );
 }
 
 void SfxOleStringHelper::SaveString8( SvStream& rStrm, const String& rValue ) const
 {
     if( IsUnicode() )
-        // size field contains buffer size in bytes -> pass true to ImplSaveString16
-        ImplSaveString16( rStrm, rValue, true );
+        ImplSaveString16( rStrm, rValue );
     else
         ImplSaveString8( rStrm, rValue );
 }
 
 String SfxOleStringHelper::LoadString16( SvStream& rStrm ) const
 {
-    // size field contains character count -> pass false to ImplLoadString16
-    return ImplLoadString16( rStrm, false );
+    return ImplLoadString16( rStrm );
 }
 
 void SfxOleStringHelper::SaveString16( SvStream& rStrm, const String& rValue ) const
 {
-    // size field contains character count -> pass false to ImplSaveString16
-    ImplSaveString16( rStrm, rValue, false );
+    ImplSaveString16( rStrm, rValue );
 }
 
 String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
@@ -281,15 +277,12 @@ String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     return aValue;
 }
 
-String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm, bool bSizeInBytes ) const
+String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
 {
     String aValue;
     // read size field (signed 32-bit), may be buffer size or character count
     sal_Int32 nSize;
     rStrm >> nSize;
-    // if size field contains buffer size (in bytes), calculate character count
-    if( bSizeInBytes )
-        nSize /= 2;
     // size field includes trailing NUL character
     if( nSize > 0 )
     {
@@ -324,18 +317,17 @@ void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const String& rValue 
     rStrm << sal_uInt8( 0 );
 }
 
-void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const String& rValue, bool bSizeInBytes ) const
+void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const String& rValue ) const
 {
     // write size field (including trailing NUL character)
-    sal_Int32 nCharCount = static_cast< sal_Int32 >( rValue.Len() + 1 );
-    sal_Int32 nSize = bSizeInBytes ? (2 * nCharCount) : nCharCount;
+    sal_Int32 nSize = static_cast< sal_Int32 >( rValue.Len() + 1 );
     rStrm << nSize;
     // write character array with trailing NUL character
     for( xub_StrLen nIdx = 0; nIdx < rValue.Len(); ++nIdx )
         rStrm << static_cast< sal_uInt16 >( rValue.GetChar( nIdx ) );
     rStrm << sal_uInt16( 0 );
     // stream is always padded to 32-bit boundary, add 2 bytes on odd character count
-    if( (nCharCount & 1) == 1 )
+    if( (nSize & 1) == 1 )
         rStrm << sal_uInt16( 0 );
 }
 
