@@ -155,14 +155,14 @@ public final class DocumentDeserializerImpl
      */
     public Document deserialize() throws ConvertException, IOException {
     log("\nFound the XSLT deserializer");
-    Enumeration enum = cd.getDocumentEnumeration();
+    Enumeration enumerate = cd.getDocumentEnumeration();
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
     GenericOfficeDocument doc = null;
     ByteArrayOutputStream baos =null;
     GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
-    while (enum.hasMoreElements()) {
-         docOut = (DOMDocument) enum.nextElement();
+    while (enumerate.hasMoreElements()) {
+         docOut = (DOMDocument) enumerate.nextElement();
     }
     domDoc = docOut.getContentDOM();
     try{
