@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:22:29 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 15:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -674,7 +674,7 @@
                 </prop>
                  <prop oor:name="ExcludedNodes">
                     <value>
-                        org.openoffice.Office.Linguistic/ServiceManagerManager
+                        org.openoffice.Office.Linguistic/ServiceManager
                     </value>
                 </prop>
             </node>
