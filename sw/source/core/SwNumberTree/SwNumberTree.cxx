@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:13:54 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 08:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,9 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
             if ( pPred )
             {
                 if ( !(*aIt)->IsCounted() )
-                    nTmpNumber = pPred->GetNumber();
+                    // --> OD 2006-05-12 #i65284#
+                    nTmpNumber = pPred->GetNumber( pPred->GetParent() != (*aIt)->GetParent() );
+                    // <--
                 else
                 {
                     if ( (*aIt)->IsRestart() )
