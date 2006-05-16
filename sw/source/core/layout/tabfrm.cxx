@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:40:53 $
+ *  last change: $Author: vg $ $Date: 2006-05-16 16:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2178,7 +2178,8 @@ void SwTabFrm::MakeAll()
                     // 3. We did not already cut off the last row
                     // 4. There is not break after attribute set at the table
                     // 5. There is no break before attribute set behind the table
-                    // 6. The last table row wants to keep with its next.
+                    // 6. There is no section change behind the table (see IsKeep)
+                    // 7. The last table row wants to keep with its next.
                     const SwRowFrm* pLastRow = static_cast<const SwRowFrm*>(GetLastLower());
                     if ( pLastRow && IsKeep( pAttrs->GetAttrSet(), true ) &&
                          pLastRow->ShouldRowKeepWithNext() )
