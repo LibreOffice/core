@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GenericModelTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:06:27 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,10 @@ import com.sun.star.form.XBoundComponent;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XResultSetUpdate;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
@@ -136,9 +138,9 @@ import util.utils;
 * @see ifc.container._XChild
 */
 public class GenericModelTest extends TestCase {
-    private XTextDocument m_xTextDoc;
-    private Object m_dbSrc = null;
-    private DBTools.DataSourceInfo m_srcInf = null;
+    private static XTextDocument m_xTextDoc;
+    private static Object m_dbSrc = null;
+    private static DBTools.DataSourceInfo m_srcInf = null;
     /**
      * This is the name of the Data Base which the test uses: "APITestDatabase"
      */
@@ -146,13 +148,13 @@ public class GenericModelTest extends TestCase {
     protected final static String m_TestDB = "TestDB";
     private DBTools m_dbTools = null;
 
-    private boolean m_ConnectionColsed = false;
+    private static boolean m_ConnectionColsed = false;
 
     /**
      * descibes the kind of the shape which should be created.
      * Example: m_kindOfshape=DateFiled
      */
-    public String m_kindOfControl = null;
+    public static String m_kindOfControl = null;
 
     /**
      * If your object needs some special propery values you can specify them with this
@@ -163,7 +165,7 @@ public class GenericModelTest extends TestCase {
      * myProp.Value = "My special Value";
      * m_propertiesToSet.add(myProp);
      */
-    public ArrayList m_propertiesToSet = new ArrayList();
+    public static ArrayList m_propertiesToSet = new ArrayList();
 
     /**
      * This variable contains the name of the property which should be changed while
@@ -173,7 +175,7 @@ public class GenericModelTest extends TestCase {
      * @see ifc.form._XUpdateBroadcaster.UpdateChecker
      * @see ifc.form._XUpdateBroadcaster
      */
-    public String m_ChangePropertyName = null;
+    public static String m_ChangePropertyName = null;
     /**
      * This variable contains the value the property should be set while
      * interface <CODE>com::sun::star::form::XUpdateBroadcaster</CODE> is tested.
@@ -184,28 +186,28 @@ public class GenericModelTest extends TestCase {
      * <CODE>ValueChanger</CODE> is unable to change the value. In this case the value
      * of this variable was used.
      */
-    public Object m_ChangePropertyValue = null;
+    public static Object m_ChangePropertyValue = null;
 
     /**
      * This variable contains the implelemtation name of the object.
      */
-    public String m_ObjectName = null;
+    public static String m_ObjectName = null;
 
     /**
      * For local implementaions of <CODE>Checker</CODE> this variable contains the
      * <CODE>FormLoader</CODE>
      */
-    protected XLoadable m_XFormLoader = null;
+    protected static XLoadable m_XFormLoader = null;
     /**
      * For local implementaions of <CODE>Checker</CODE> this variable contains the
      * <CODE>XPropertySet</CODE>
      */
-    protected XPropertySet m_XPS = null;
+    protected static XPropertySet m_XPS = null;
     /**
      * For local implementaions of <CODE>Checker</CODE> this variable contains the
      * <CODE>Control</CODE>
      */
-    protected XInterface m_XCtrl = null;
+    protected static XInterface m_XCtrl = null;
     /**
      * The insterface test of <CODE>ifc.form._DataWareControlModel</CODE> expects an
      * object relation <CODE>'LC'</CODE>. This is a <CODE>XControlModel</CODE> of a shape.
@@ -213,7 +215,12 @@ public class GenericModelTest extends TestCase {
      * f.e. "FixedText"
      * @see ifc.form._DataAwareControlModel
      */
-    protected String m_LCShape_Type = null;
+    protected static String m_LCShape_Type = null;
+    /**
+     * If this variable is true some more debug info was logged. It was setted by the parameter variable
+     * <code>debug_is_active</code>
+     */
+    protected static boolean debug = false;
 
     /**
      * Creates Writer document where controls are placed.
@@ -224,6 +231,7 @@ public class GenericModelTest extends TestCase {
         log.println("creating a textdocument");
         m_xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
         m_ConnectionColsed = false;
+        debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
     }
 
     /**
@@ -249,27 +257,65 @@ public class GenericModelTest extends TestCase {
                                                                  m_xTextDoc)))
                                                      .getByName("Standard"));
 
+            if (debug){
+                if (myForm == null){
+                    log.println("ERROR: could not get 'Standard' from drawpage!");
+                }
+                log.println("the draw page contains folowing elemtens:");
+                String[] elements = FormTools.getForms(WriterTools.getDrawPage(m_xTextDoc)).getElementNames();
+                for (int i = 0; i< elements.length; i++){
+                    log.println("Element[" + i + "] :" + elements[i]);
+                }
+
+            }
+
             XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface(
                                             XPropertySet.class, myForm);
             XConnection connection = (XConnection) AnyConverter.toObject(
                                  new Type(XConnection.class),
                                  xSetProp.getPropertyValue("ActiveConnection"));
+            if (debug && connection == null){
+                log.println("ERROR: could not get property 'ActiveConnection' from the XForm");
+            }
+
             connection.close();
         } catch (Exception e) {
-            log.println("Can't close the connection");
+            log.println("ERROR: Can't close the connection: " + e.toString());
         }
 
         log.println("closing data source...");
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
                                         XCloseable.class, m_dbSrc);
+            if ( closer == null )
+            {
+                XDocumentDataSource dataSource = (XDocumentDataSource)UnoRuntime.queryInterface(
+                    XDocumentDataSource.class, m_dbSrc);
+                if ( dataSource != null )
+                    closer = (XCloseable) UnoRuntime.queryInterface(
+                        XCloseable.class, dataSource.getDatabaseDocument() );
+            }
+            if (debug && closer==null){
+                log.println("ERROR: couldn't get 'XCloseable' from DataSource");
+            }
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close data source");
+            log.println("ERROR: couldn't close data source: " + e.toString());
         } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close data source");
+            log.println("ERROR: couldn't close data source: " + e.toString());
+        } catch (Exception e) {
+            log.println("ERROR: couldn't close data source: " + e.toString());
         }
 
+        log.println("disposing data source...");
+        try {
+            XComponent dataSourceComp = (XComponent)UnoRuntime.queryInterface(
+                XComponent.class, m_dbSrc);
+            dataSourceComp.dispose();
+        }
+        catch (Exception e) {
+            log.println("couldn't dispose the data source");
+        }
 
         log.println("closing document...");
 
@@ -278,9 +324,11 @@ public class GenericModelTest extends TestCase {
                                         XCloseable.class, m_xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
+            log.println("ERROR: couldn't close document: " + e.toString());
         } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
+            log.println("ERROR: couldn't close document: " + e.toString());
+        } catch (Exception e) {
+            log.println("ERROR: couldn't close document: " + e.toString());
         }
 
         log.println("revoking data source...");
@@ -288,18 +336,7 @@ public class GenericModelTest extends TestCase {
             m_dbTools.revokeDB(m_dbSourceName);
         } catch (com.sun.star.container.NoSuchElementException e){
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Error while object test cleaning up :");
-        }
-        log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, m_xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
+            log.println("ERROR: Error while object test cleaning up: " + e.toString());
         }
 
         m_ConnectionColsed = true;
