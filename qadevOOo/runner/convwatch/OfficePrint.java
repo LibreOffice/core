@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficePrint.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:21:16 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ public class OfficePrint {
     /**
      * shows the FilterName and MediaType from the given XComponent
      */
-    static void showDocumentType( XComponent _aDoc )
+    static String getDocumentType( XComponent _aDoc )
         {
             XModel xModel = (XModel) UnoRuntime.queryInterface( XModel.class, _aDoc);
             PropertyValue[] aArgs = xModel.getArgs();
@@ -130,9 +130,17 @@ public class OfficePrint {
                 if (aValue.Name.equals("FilterName") ||
                     aValue.Name.equals("MediaType"))
                 {
-                    GlobalLogWriter.get().println("  Property: '" + aValue.Name + "' := '" + aValue.Value + "'");
+                    String sNameValue = "'" + aValue.Name + "' := '" + aValue.Value + "'";
+                    return sNameValue;
                 }
             }
+            return "";
+        }
+
+    static void showDocumentType( XComponent _aDoc )
+        {
+            String sNameValue = getDocumentType(_aDoc);
+            GlobalLogWriter.get().println("  Property: '" + sNameValue);
         }
     /**
      * load a OpenOffice.org document from a given URL (_sInputURL)
@@ -212,6 +220,7 @@ public class OfficePrint {
                     {
                         GlobalLogWriter.get().println(" done.");
                         showDocumentType(aDoc);
+                        _aGTA.setDocumentType(getDocumentType(aDoc));
                     }
                     else
                     {
