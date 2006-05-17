@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXAutoTextEntry.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:43:29 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,7 @@ import lib.TestParameters;
 import util.DefaultDsc;
 import util.InstCreator;
 import util.SOfficeFactory;
-
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XAutoTextContainer;
 import com.sun.star.text.XAutoTextEntry;
@@ -59,6 +56,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 
 /**
  * Test for object which is represented by service
@@ -88,10 +86,11 @@ public class SwXAutoTextEntry extends TestCase {
     XAutoTextGroup oGroup;
 
     /**
-    * Creates text document.
-    */
+     * Creates text document.
+     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
+        SOfficeFactory SOF = SOfficeFactory.getFactory( msf );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -102,8 +101,8 @@ public class SwXAutoTextEntry extends TestCase {
     }
 
     /**
-    *  Removes added element from AutoTextGroup
-    */
+     *  Removes added element from AutoTextGroup
+     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         try {
             if ( oGroup.hasByName("NewEntryName") ) {
@@ -120,22 +119,22 @@ public class SwXAutoTextEntry extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Creates an instance of the service
-    * <code>com.sun.star.text.AutoTextContainer</code>, then selects a non-empty
-    * group from the given container using <code>XIndexAccess</code> interface,
-    * and inserts some text entry to this group. Then entry passed as test
-    * component.<p>
-    *     Object relations created :
-    * <ul>
-    *  <li><code>'XTEXTINFO'</code> for
-    *    {@link ifc.text._XText} : creates tables 6x4</li>
-    *  <li><code>'TEXTDOC'</code> for
-    *    {@link ifc.text._XAutoTextEntry} : text document</li>
-    * </ul>
-    */
+     * Creating a Testenvironment for the interfaces to be tested.
+     * Creates an instance of the service
+     * <code>com.sun.star.text.AutoTextContainer</code>, then selects the 'mytexts'
+     * group from the given container using <code>XNameAccess</code> interface,
+     * and inserts some text entry to this group. Then entry passed as test
+     * component.<p>
+     *     Object relations created :
+     * <ul>
+     *  <li><code>'XTEXTINFO'</code> for
+     *    {@link ifc.text._XText} : creates tables 6x4</li>
+     *  <li><code>'TEXTDOC'</code> for
+     *    {@link ifc.text._XAutoTextEntry} : text document</li>
+     * </ul>
+     */
     protected synchronized TestEnvironment createTestEnvironment
-        (TestParameters Param, PrintWriter log) {
+            (TestParameters Param, PrintWriter log) {
 
         XAutoTextEntry oEntry = null;
         XAutoTextContainer oContainer;
@@ -147,61 +146,34 @@ public class SwXAutoTextEntry extends TestCase {
         try {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
             Object oInst = myMSF.createInstance
-                ("com.sun.star.text.AutoTextContainer");
+                    ("com.sun.star.text.AutoTextContainer");
             oContainer = (XAutoTextContainer)
-                UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
+            UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create AutoTextContainer", e);
         }
 
-        XIndexAccess oContIndex = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oContainer);
-        try {
-            oObj = (XInterface) AnyConverter.toObject(
-                        new Type(XInterface.class),oContIndex.getByIndex(n));
-            XIndexAccess oObjCount = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oObj);
-            nCount = oObjCount.getCount();
-            while (nCount < 1) {
-                oObj = (XInterface) oContIndex.getByIndex(n++);
-                oObjCount = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, oObj);
-                nCount = oObjCount.getCount();
-            }
+        XNameAccess oContNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oContainer);
+
+        String contNames[] = oContNames.getElementNames();
+        for (int i =0; i < contNames.length; i++){
+            log.println("ContainerNames[ "+ i + "]: " + contNames[i]);
+        }
+
+        try{
+            oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName("mytexts"));
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get AutoTextGroup", e);
         }
 
         oGroup = (XAutoTextGroup) UnoRuntime.queryInterface
-            (XAutoTextGroup.class, oObj);
+                (XAutoTextGroup.class, oObj);
         String[] oENames = oGroup.getElementNames();
         for (int i=0; i<oENames.length; i++) {
             log.println("AutoTextEntryNames[" + i + "]: " + oENames[i]);
         }
-
-        // Some Debug info
-        XNameAccess dObj = null;
-        log.println("Some debugging info:");
-        for ( n=0; n < oContIndex.getCount(); n++ ) {
-            try {
-                dObj = (XNameAccess) AnyConverter.toObject(
-                        new Type(XNameAccess.class),oContIndex.getByIndex(n));
-            } catch ( com.sun.star.uno.Exception e ) {
-                e.printStackTrace(log);
-            }
-            XNamed namedGroup = (XNamed) UnoRuntime.queryInterface
-                (XNamed.class, dObj);
-            log.println(" " + namedGroup.getName() + ":");
-            String[] eNames = dObj.getElementNames();
-            for (int i=0; i<eNames.length; i++) {
-                log.print(eNames[i] + ", ");
-            }
-            log.println();
-        }
-        log.println("=======================================");
-
 
         XText oText = xTextDoc.getText();
         oText.insertString(oText.getStart(), "New AutoText", true);
@@ -214,7 +186,7 @@ public class SwXAutoTextEntry extends TestCase {
             log.println("Adding new element 'NewEntryName' to group...");
             oGroup.insertNewByName("NewEntryName", "NewEntryTitle", oTextRange);
             oEntry = (XAutoTextEntry) AnyConverter.toObject(
-                new Type(XAutoTextEntry.class),oGroup.getByName("NewEntryName"));
+                    new Type(XAutoTextEntry.class),oGroup.getByName("NewEntryName"));
         } catch ( com.sun.star.container.ElementExistException e ) {
             e.printStackTrace(log);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
@@ -239,7 +211,7 @@ public class SwXAutoTextEntry extends TestCase {
 
         // adding relation for XText
         DefaultDsc tDsc = new DefaultDsc("com.sun.star.text.XTextContent",
-                                            "com.sun.star.text.TextField.DateTime");
+                "com.sun.star.text.TextField.DateTime");
         log.println( "    adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xTextDoc, tDsc ) );
 
