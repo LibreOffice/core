@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:20:39 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ package convwatch;
 import convwatch.FileHelper;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.RandomAccessFile;
 import convwatch.GraphicalTestArguments;
 import helper.ProcessHandler;
 import convwatch.StringHelper;
@@ -147,7 +148,7 @@ public class MSOfficePrint
             }
             else
             {
-                GlobalLogWriter.get().println("No MSOfficeDocument format found.");
+                GlobalLogWriter.get().println("No Microsoft Office document format found.");
 // TODO: use a better Exception!!!
                 throw new ConvWatchCancelException/*WrongSuffixException*/("No MS office document format found.");
             }
@@ -198,21 +199,29 @@ public class MSOfficePrint
             }
             else if (sDocumentSuffix.toLowerCase().equals(".xml"))
             {
+// TODO: Open XML File and check if we need excel or word
+                String sOfficeType = getOfficeType(_sInputFile);
+
                 // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
-                if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
+                // if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
+                if (sOfficeType.equals("excel"))
                 {
                     aStartCommand = createExcelPrintHelper();
                 }
-                else
+                else if (sOfficeType.equals("word"))
                 {
                     aStartCommand = createWordPrintHelper();
+                }
+                else
+                {
+                    return;
                 }
             }
             else
             {
-                GlobalLogWriter.get().println("No MSOfficeDocument format found.");
+                GlobalLogWriter.get().println("No Microsoft Office document format found.");
 // TODO: use a better Exception!!!
-                throw new ConvWatchCancelException/*WrongSuffixException*/("No MS office document format found.");
+                throw new ConvWatchCancelException/*WrongSuffixException*/("No Mircosoft Office document format found.");
             }
 
             if (aStartCommand.isEmpty() == false)
@@ -233,9 +242,15 @@ public class MSOfficePrint
 
                 realStartCommand(aStartCommand);
             }
-            _aGTA.getPerformance().readWordValuesFromFile("c:\\temp\\wordloadtimes.txt");
+            String sUserDir = System.getProperty("user.home");
+            String fs = System.getProperty("file.separator");
+            if (! sUserDir.endsWith(fs))
+            {
+                sUserDir = sUserDir + fs;
+            }
+            _aGTA.getPerformance().readWordValuesFromFile(sUserDir + "msofficeloadtimes.txt");
             OfficePrint.createInfoFile(_sPrintFilename, _aGTA, "msoffice");
-            OfficePrint.waitInSeconds(2, "Give word/excel some time to print.");
+            OfficePrint.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
 
     public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
@@ -371,7 +386,7 @@ public class MSOfficePrint
             out.write( "$Word->Quit();                                                                               " + ls );
 
             out.write( "local *FILE;" + ls);
-            out.write( "if (open(FILE, \">c:/temp/wordloadtimes.txt\"))" + ls);
+            out.write( "if (open(FILE, \">$ENV{HOME}/msofficeloadtimes.txt\"))" + ls);
             out.write( "{" + ls);
             out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
             out.write( "   print FILE \"WordVersion=$sVersion\\n\";" + ls);
@@ -580,7 +595,18 @@ public class MSOfficePrint
             out.write( "                    });                                                                                          " + ls );
             out.write( "# Close worksheets without store changes" + ls );
             out.write( "# $Book->Close({SaveChanges => 0});                                                           " + ls );
-            out.write( "$Excel->Quit                                                                                                     " + ls );
+            out.write( "my $sVersion = $Excel->Application->Version();"+ls);
+            out.write( "$Excel->Quit();                                                                                                     " + ls );
+            out.write( "local *FILE;" + ls);
+            out.write( "if (open(FILE, \">$ENV{HOME}/msofficeloadtimes.txt\"))" + ls);
+            out.write( "{" + ls);
+            out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
+            out.write( "   print FILE \"ExcelVersion=$sVersion\\n\";" + ls);
+//            out.write( "   print FILE \"WordStartTime=$stopWordTime\\n\";" + ls);
+//            out.write( "   print FILE \"WordLoadTime=$stopLoadWordTime\\n\";" + ls);
+//            out.write( "   print FILE \"WordPrintTime=$stopPrintWordTime\\n\";" + ls);
+            out.write( "   close(FILE);" + ls);
+            out.write( "}" + ls);
             out.close();
 
             aList.add("perl");
@@ -670,7 +696,7 @@ public class MSOfficePrint
             out.write( "              1);                                                                                                " + ls );
             out.write( "# Close worksheets without store changes" + ls );
             out.write( "# $Book->Close({SaveChanges => 0}); " + ls );
-            out.write( "$Excel->Quit                                                                                                     " + ls );
+            out.write( "$Excel->Quit();                                                                                                     " + ls );
             out.close();
 
             aList.add("perl");
@@ -750,7 +776,9 @@ public class MSOfficePrint
             out.write( "   $PowerPoint->{'Visible'} = 1;                                                                                       " + ls );
             out.write( "   my $Presentation = $PowerPoint->Presentations->Add;                                                                 " + ls );
             out.write( "   my $Presentation = $PowerPoint->Presentations->Open( $ARGV[0] );                                                    " + ls );
-            out.write( "   $Presentation->PrintOptions->{ActivePrinter} = $ARGV[1];                                                            " + ls );
+            out.write( "# we can't change active printer in powerpoint                                                            " + ls );
+            out.write( "#   $Presentation->PrintOptions->{ActivePrinter} = $ARGV[1]; " + ls );
+            out.write( "   print \"Active printer is: \" . $Presentation->PrintOptions->{ActivePrinter} . \"\\n\"; " + ls );
             out.write( "   $Presentation->PrintOptions->{PrintInBackground} = 0;                                                               " + ls );
             out.write( "   # PrintColorType = 1 means print in color and PrintColorType = 2 means print in gray                                " + ls );
             out.write( "   $Presentation->PrintOptions->{PrintColorType} = 1;                                                                  " + ls );
@@ -758,12 +786,94 @@ public class MSOfficePrint
             out.write( "   $Presentation->PrintOut({PrintToFile => $ARGV[2]});                                                                 " + ls );
             out.write( "   sleep 5;                                                                                                            " + ls );
             out.write( "   print \"Presentation has been printed\\n\";                                                                            " + ls );
-            out.write( "$PowerPoint->Quit                                                                                                      " + ls );
+            out.write( "my $sVersion = $Presentation->Application->Version();"+ls);
+            out.write( "   $PowerPoint->Quit(); " + ls );
+
+            out.write( "local *FILE;" + ls);
+            out.write( "if (open(FILE, \">$ENV{HOME}/msofficeloadtimes.txt\"))" + ls);
+            out.write( "{" + ls);
+            out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
+            out.write( "   print FILE \"PowerPointVersion=$sVersion\\n\";" + ls);
+//            out.write( "   print FILE \"WordStartTime=$stopWordTime\\n\";" + ls);
+//            out.write( "   print FILE \"WordLoadTime=$stopLoadWordTime\\n\";" + ls);
+//            out.write( "   print FILE \"WordPrintTime=$stopPrintWordTime\\n\";" + ls);
+            out.write( "   close(FILE);" + ls);
+            out.write( "}" + ls);
             out.close();
 
             aList.add("perl");
             aList.add(sName);
             return aList;
+        }
+
+    /**
+       @param _sFilename a name to a ms office xml file
+       @return 'word' or 'excel' or '' if type not known
+    */
+    public String getOfficeType(String _sFilename)
+        {
+            File aFile = new File(_sFilename);
+            if (! aFile.exists())
+            {
+                GlobalLogWriter.get().println("couldn't find file " + _sFilename);
+                return "";
+            }
+            RandomAccessFile aReader = null;
+            String sOfficeType = "";
+            try
+            {
+                aReader = new RandomAccessFile(aFile,"r");
+                String aLine = "";
+                while (aLine != null)
+                {
+                    aLine = aReader.readLine();
+                    if (aLine != null)
+                    {
+                        aLine = aLine.trim();
+                        if ( (! (aLine.length() < 2) ) &&
+                             (! aLine.startsWith("#")) &&
+                             (! aLine.startsWith(";")) )
+                        {
+                            int nIdx = aLine.indexOf("mso-application");
+                            if (nIdx > 0)
+                            {
+                                if (aLine.indexOf("Word.Document") > 0)
+                                {
+                                    sOfficeType = "word";
+                                }
+                                else if (aLine.indexOf("Excel") > 0)
+                                {
+                                    sOfficeType = "excel";
+                                }
+                                else
+                                {
+                                    GlobalLogWriter.get().println("Unknown/unsupported data file: " + aLine);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (java.io.FileNotFoundException fne)
+            {
+                System.out.println("couldn't open file " + _sFilename);
+                System.out.println("Message: " + fne.getMessage());
+            }
+            catch (java.io.IOException ie)
+            {
+                System.out.println("Exception while reading file " + _sFilename);
+                System.out.println("Message: " + ie.getMessage());
+            }
+            try
+            {
+                aReader.close();
+            }
+            catch (java.io.IOException ie)
+            {
+                System.out.println("Couldn't close file " + _sFilename);
+                System.out.println("Message: " + ie.getMessage());
+            }
+            return sOfficeType;
         }
 
 }
