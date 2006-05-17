@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 18:13:52 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapeDescriptor;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
@@ -119,7 +120,7 @@ public class SdUnoDrawView extends TestCase {
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println("disposing impress documents");
+        log.println("disposing draw documents");
         util.DesktopTools.closeDoc(xDrawDoc);
         util.DesktopTools.closeDoc(xSecondDrawDoc);
     }
@@ -159,7 +160,7 @@ public class SdUnoDrawView extends TestCase {
     * @see com.sun.star.frame.XModel
     * @see com.sun.star.drawing.DrawingDocumentDrawView
     */
-    protected synchronized TestEnvironment createTestEnvironment
+    public synchronized lib.TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 
         log.println( "creating a test environment" );
@@ -169,7 +170,7 @@ public class SdUnoDrawView extends TestCase {
                                     (XMultiServiceFactory)Param.getMSF());
 
         try {
-            log.println( "creating two impress documents" );
+            log.println( "creating two draw documents" );
             xDrawDoc = SOF.createDrawDoc(null);
             shortWait();
             xSecondDrawDoc = SOF.createDrawDoc(null);
@@ -235,46 +236,9 @@ public class SdUnoDrawView extends TestCase {
             tEnv.addObjRelation("XWindow.AnotherWindow",anotherWindow);
         }
 
-        Object oShapeCol1 = null;
-        Object oShapeCol2 = null;
-        try {
-            oShapeCol1 = ((XMultiServiceFactory)Param.getMSF()).
-                createInstance("com.sun.star.drawing.ShapeCollection");
-            oShapeCol2 = ((XMultiServiceFactory)Param.getMSF()).
-                createInstance("com.sun.star.drawing.ShapeCollection");
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't create instance"));
-        }
-
-        XShapes xShapes1 = (XShapes)
-            UnoRuntime.queryInterface(XShapes.class, oShapeCol1);
-        XShapes xShapes2 = (XShapes)
-            UnoRuntime.queryInterface(XShapes.class, oShapeCol2);
-        xShapes1.add(shape2);
-        xShapes1.add(shape3);
-        xShapes2.add(shape1);
-        shortWait();
-
 
         tEnv.addObjRelation("Selections", new Object[] {
-            oDrawPage, oShapeCol1, oShapeCol2});
-        tEnv.addObjRelation("Comparer", new Comparator() {
-            public int compare(Object o1, Object o2) {
-                XIndexAccess indAc1 = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, o1);
-                XIndexAccess indAc2 = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, o2);
-                if (indAc1 == null || indAc2 == null) return -1;
-                if (indAc1.getCount() == indAc2.getCount()) {
-                    return 0;
-                }
-                return 1;
-            }
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            } });
-
+            shape1, shape2, shape3});
 
 
         tEnv.addObjRelation("Pages", the_pages);
@@ -309,6 +273,23 @@ public class SdUnoDrawView extends TestCase {
         tEnv.addObjRelation("Modifiable",modify);
 
         tEnv.addObjRelation("XComponent.DisposeThis", xDrawDoc);
+
+        tEnv.addObjRelation("Comparer", new Comparator() {
+            public int compare(Object o1, Object o2) {
+                XIndexAccess indAc1 = (XIndexAccess)
+                    UnoRuntime.queryInterface(XIndexAccess.class, o1);
+                XIndexAccess indAc2 = (XIndexAccess)
+                    UnoRuntime.queryInterface(XIndexAccess.class, o2);
+                if (indAc1 == null || indAc2 == null) return -1;
+                if (indAc1.getCount() == indAc2.getCount()) {
+                    return 0;
+                }
+                return 1;
+            }
+            public boolean equals(Object obj) {
+                return compare(this, obj) == 0;
+            } });
+
 
         return tEnv;
 
