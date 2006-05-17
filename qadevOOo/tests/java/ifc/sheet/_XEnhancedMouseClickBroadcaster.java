@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XEnhancedMouseClickBroadcaster.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:47:57 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XEnhancedMouseClickBroadcaster;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 import lib.MultiMethodTest;
 import lib.StatusException;
@@ -64,6 +65,15 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
     protected boolean mousePressed = false;
     protected boolean mouseReleased = false;
     protected XEnhancedMouseClickHandler listener = new MyListener();
+    private XModel docModel = null;
+
+    public void before() {
+        docModel = (XModel) UnoRuntime.queryInterface(
+                XModel.class,tEnv.getObjRelation("FirstModel"));
+
+        //ensure that the first model is focused
+        docModel.getCurrentController().getFrame().getContainerWindow().setFocus();
+    }
 
     public void _addEnhancedMouseClickHandler() {
         oObj.addEnhancedMouseClickHandler(listener);
@@ -89,93 +99,129 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
     }
 
     protected boolean clickOnSheet() {
-        log.println("Trying to get AccessibleSpreadsheet");
-
+        log.println("try to open contex menu...");
         AccessibilityTools at = new AccessibilityTools();
-        XComponent xSheetDoc =
-            (XComponent) tEnv.getObjRelation("DOCUMENT");
-        XModel xModel =
-            (XModel) UnoRuntime.queryInterface(XModel.class, xSheetDoc);
-        XWindow xWindow =
-            at.getCurrentWindow((XMultiServiceFactory) tParam.getMSF(),
-                xModel);
+
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), docModel);
+
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
+        XInterface oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
-        XAccessibleComponent AccessibleSpreadsheet =
-            (XAccessibleComponent) UnoRuntime.queryInterface(XAccessibleComponent.class,
-                AccessibilityTools.SearchedContext);
+        XAccessibleComponent window = (XAccessibleComponent) UnoRuntime.queryInterface(
+                XAccessibleComponent.class, oObj);
 
-        log.println("Got " + utils.getImplName(AccessibleSpreadsheet));
+        Point point = window.getLocationOnScreen();
+        Rectangle rect = window.getBounds();
 
-        Object toolkit = null;
-
-        try {
-            toolkit =
-                ((XMultiServiceFactory) tParam.getMSF())
-                .createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
-
-        XExtendedToolkit tk =
-            (XExtendedToolkit) UnoRuntime.queryInterface(XExtendedToolkit.class,
-                toolkit);
-
-        XTopWindow tw = null;
-
-        int k = tk.getTopWindowCount();
-
-        for (int i = 0; i < k; i++) {
-            try {
-                XTopWindow tw_temp = tk.getTopWindow(i);
-                XAccessible xacc =
-                    (XAccessible) UnoRuntime.queryInterface(XAccessible.class,
-                        tw_temp);
-
-                if (xacc != null) {
-                    if (xacc.getAccessibleContext().getAccessibleName()
-                                .indexOf("d2") > 0) {
-                        tw = tw_temp;
-                    }
-
-                    ;
-                } else {
-                    log.println("\t unknown window");
-                }
-            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            }
-        }
-
-        if (tw == null) {
-            System.out.println("No TopWindow :-(");
-
-            return false;
-        }
-
-        tw.toFront();
-
-        Point point = AccessibleSpreadsheet.getLocationOnScreen();
-        Rectangle rect = AccessibleSpreadsheet.getBounds();
-
-        log.println(
-            "Clicking in the center of the AccessibleSpreadsheet");
-
+        log.println("klick mouse button...");
         try {
             Robot rob = new Robot();
-            int x = point.X + (rect.Width / 2);
-            int y = point.Y + (rect.Height / 2);
+            int x = point.X + (rect.Width / 2)+50;
+            int y = point.Y + (rect.Height / 2)+50;
             rob.mouseMove(x, y);
+            System.out.println("Press Button");
+            rob.mousePress(InputEvent.BUTTON3_MASK);
+            System.out.println("Release Button");
+            rob.mouseRelease(InputEvent.BUTTON3_MASK);
+            System.out.println("done");
+            shortWait();
+            System.out.println("Press Button");
             rob.mousePress(InputEvent.BUTTON1_MASK);
-            shortWait();
+            System.out.println("Release Button");
             rob.mouseRelease(InputEvent.BUTTON1_MASK);
-            shortWait();
+            System.out.println("done "+rob.getAutoDelay());
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }
+
+//        log.println("Trying to get AccessibleSpreadsheet");
+//
+//        AccessibilityTools at = new AccessibilityTools();
+//        XComponent xSheetDoc =
+//            (XComponent) tEnv.getObjRelation("DOCUMENT");
+//        XModel xModel =
+//            (XModel) UnoRuntime.queryInterface(XModel.class, xSheetDoc);
+//        XWindow xWindow =
+//            at.getCurrentWindow((XMultiServiceFactory) tParam.getMSF(),
+//                xModel);
+//        XAccessible xRoot = at.getAccessibleObject(xWindow);
+//
+//        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
+//
+//        XAccessibleComponent AccessibleSpreadsheet =
+//            (XAccessibleComponent) UnoRuntime.queryInterface(XAccessibleComponent.class,
+//                AccessibilityTools.SearchedContext);
+//
+//        log.println("Got " + utils.getImplName(AccessibleSpreadsheet));
+//
+//        Object toolkit = null;
+//
+//        try {
+//            toolkit =
+//                ((XMultiServiceFactory) tParam.getMSF())
+//                .createInstance("com.sun.star.awt.Toolkit");
+//        } catch (com.sun.star.uno.Exception e) {
+//            log.println("Couldn't get toolkit");
+//            e.printStackTrace(log);
+//            throw new StatusException("Couldn't get toolkit", e);
+//        }
+//
+//        XExtendedToolkit tk =
+//            (XExtendedToolkit) UnoRuntime.queryInterface(XExtendedToolkit.class,
+//                toolkit);
+//
+//        XTopWindow tw = null;
+//
+//        int k = tk.getTopWindowCount();
+//
+//        for (int i = 0; i < k; i++) {
+//            try {
+//                XTopWindow tw_temp = tk.getTopWindow(i);
+//                XAccessible xacc =
+//                    (XAccessible) UnoRuntime.queryInterface(XAccessible.class,
+//                        tw_temp);
+//
+//                if (xacc != null) {
+//                    if (xacc.getAccessibleContext().getAccessibleName()
+//                                .indexOf("d2") > 0) {
+//                        tw = tw_temp;
+//                    }
+//
+//                    ;
+//                } else {
+//                    log.println("\t unknown window");
+//                }
+//            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+//            }
+//        }
+//
+//        if (tw == null) {
+//            System.out.println("No TopWindow :-(");
+//
+//            return false;
+//        }
+//
+//        tw.toFront();
+//
+//        Point point = AccessibleSpreadsheet.getLocationOnScreen();
+//        Rectangle rect = AccessibleSpreadsheet.getBounds();
+//
+//        log.println(
+//            "Clicking in the center of the AccessibleSpreadsheet");
+//
+//        try {
+//            Robot rob = new Robot();
+//            int x = point.X + (rect.Width / 2);
+//            int y = point.Y + (rect.Height / 2);
+//            rob.mouseMove(x, y);
+//            rob.mousePress(InputEvent.BUTTON1_MASK);
+//            shortWait();
+//            rob.mouseRelease(InputEvent.BUTTON1_MASK);
+//            shortWait();
+//        } catch (java.awt.AWTException e) {
+//            log.println("couldn't press mouse button");
+//        }
 
         return true;
     }
