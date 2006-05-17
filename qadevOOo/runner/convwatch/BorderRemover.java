@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderRemover.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:09:11 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ import java.awt.image.RenderedImage;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 // -----------------------------------------------------------------------------
 class Rect
@@ -167,23 +168,41 @@ class BorderRemover
             RenderedImage aImage = createImage(m_aImage, aInnerRect);
 
             File aWriteFile = new File(_sFilenameTo);
+            // GlobalLogWriter.get().println("Hello World: File to: " + _sFilenameTo);
 
             Exception ex = null;
-            try {
+            try
+            {
                 Class imageIOClass = Class.forName("javax.imageio.ImageIO");
-                Method writeMethod = imageIOClass.getDeclaredMethod("write", new Class[]{java.awt.Image.class, java.lang.String.class, java.io.File.class});
-                writeMethod.invoke(imageIOClass, new Object[]{aImage, "jpg", aWriteFile});
+                // GlobalLogWriter.get().println("Hello World: get Class");
+
+                Method getWriterMIMETypesMethod = imageIOClass.getDeclaredMethod("getWriterMIMETypes", new Class[]{ });
+                // GlobalLogWriter.get().println("Hello World: get Methode");
+
+                Object aObj = getWriterMIMETypesMethod.invoke(imageIOClass, new Object[]{ });
+                String[] types = (String[])aObj;
+                // GlobalLogWriter.get().println("Hello World: types: " + Arrays.asList(types) );
+
+                Method writeMethod = imageIOClass.getDeclaredMethod("write", new Class[]{ java.awt.image.RenderedImage.class,
+                                                                                          java.lang.String.class,
+                                                                                          java.io.File.class});
+                // GlobalLogWriter.get().println("Hello World: get Methode");
+                writeMethod.invoke(imageIOClass, new Object[]{aImage, "image/jpeg", aWriteFile});
             }
             catch(java.lang.ClassNotFoundException e) {
+                e.printStackTrace();
                 ex = e;
             }
             catch(java.lang.NoSuchMethodException e) {
+                e.printStackTrace();
                 ex = e;
             }
             catch(java.lang.IllegalAccessException e) {
+                e.printStackTrace();
                 ex = e;
             }
             catch(java.lang.reflect.InvocationTargetException e) {
+                e.printStackTrace();
                 ex = e;
             }
 
