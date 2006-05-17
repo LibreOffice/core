@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatchStarter.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:17:01 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,6 +209,11 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             {
                 assure("Must quit", false);
             }
+            if (aGTA.cancelRequest())
+            {
+                return;
+            }
+
             initMember();
 
             String sBuildID = aGTA.getBuildID();
@@ -228,6 +233,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             File aInputPath = new File(m_sInputPath);
             if (aInputPath.isDirectory())
             {
+                // check a whole directory
                 String fs = System.getProperty("file.separator");
                 // a whole directory
                 FileFilter aFileFilter = aGTA.getFileFilter();
@@ -265,16 +271,21 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                         // NameHelper aNameContainer = new NameHelper(m_sOutputPath, sNewSubDir, FileHelper.getBasename(sEntry));
                         // aNameContainer.print();
 
-                        if (aGTA.checkIfUsable(sEntry))
+                        if (aGTA.checkIfUsableDocumentType(sEntry))
                         {
                             runGDCWithStatus(HTMLoutput, LISToutput, sEntry, sNewOutputPath, sNewReferencePath, sNewDiffPath, sNewSubDir);
+                        }
+                        if (aGTA.cancelRequest())
+                        {
+                            break;
                         }
                     }
                 }
             }
             else
             {
-                if (aGTA.checkIfUsable(m_sInputPath))
+                // check exact name
+                if (aGTA.checkIfUsableDocumentType(m_sInputPath))
                 {
                     runGDCWithStatus(HTMLoutput, LISToutput, m_sInputPath, m_sOutputPath, m_sReferencePath, m_sDiffPath, "");
                 }
@@ -318,7 +329,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             catch(ConvWatchCancelException e)
             {
                 assure(e.getMessage(), false, true);
-                sStatusRunThrough = "CANCELED, FAILED";
+                sStatusRunThrough = "CANCELLED, FAILED";
                 sStatusMessage = e.getMessage();
                 DB.reallyfailedFile(aGTA.getDBInfoString(), _sInputFile);
             }
