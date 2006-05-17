@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PerformanceContainer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:21:51 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,11 @@ public class PerformanceContainer /* extends *//* implements */ {
                         {
                             String sMSOfficeVersion = sLine.substring(13);
                             m_sMSOfficeVersion = "Excel:" + sMSOfficeVersion;
+                        }
+                        else if (sLine.startsWith("PowerPointVersion="))
+                        {
+                            String sMSOfficeVersion = sLine.substring(18);
+                            m_sMSOfficeVersion = "PowerPoint:" + sMSOfficeVersion;
                         }
                     }
                 }
