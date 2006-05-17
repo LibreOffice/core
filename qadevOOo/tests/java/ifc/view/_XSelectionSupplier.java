@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XSelectionSupplier.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:49:58 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,54 +35,69 @@
 
 package ifc.view;
 
+import com.sun.star.drawing.XShapeDescriptor;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.lang.EventObject;
+import com.sun.star.sheet.XCellAddressable;
+import com.sun.star.sheet.XCellRangeAddressable;
+import com.sun.star.table.CellAddress;
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.XSelectionChangeListener;
+import com.sun.star.view.XSelectionSupplier;
+import java.util.Comparator;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+import util.utils;
 
-import com.sun.star.lang.EventObject;
-import com.sun.star.view.XSelectionChangeListener;
-import com.sun.star.view.XSelectionSupplier;
 
 /**
-* Testing <code>com.sun.star.view.XSelectionSupplier</code>
-* interface methods :
-* <ul>
-*  <li><code> select()</code></li>
-*  <li><code> getSelection()</code></li>
-*  <li><code> addSelectionChangeListener()</code></li>
-*  <li><code> removeSelectionChangeListener()</code></li>
-* </ul>
-* This test needs the following object relations :
-* <ul>
-*  <li> <code>'Selections'</code> of type <code>Object[]</code> :
-*   the array of the instances which can be selected.</li>
-*  <li> <code>'Comparer'</code> of type <code>Comparator</code> :
-*   the interface for comparing of selected instances</li>
-* <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
-* @see com.sun.star.view.XSelectionSupplier
-*/
+ * Testing <code>com.sun.star.view.XSelectionSupplier</code>
+ * interface methods :
+ * <ul>
+ *  <li><code> select()</code></li>
+ *  <li><code> getSelection()</code></li>
+ *  <li><code> addSelectionChangeListener()</code></li>
+ *  <li><code> removeSelectionChangeListener()</code></li>
+ * </ul>
+ * This test needs the following object relations :
+ * <ul>
+ *  <li> <code>'Selections'</code> of type <code>Object[]</code> :
+ *   the array of the instances which can be selected.</li>
+ *  <li> <code>'Comparer'</code> of type <code>Comparator</code> :
+ *   the interface for comparing of selected instances</li>
+ * <ul> <p>
+ * Test is <b> NOT </b> multithread compilant. <p>
+ * @see com.sun.star.view.XSelectionSupplier
+ */
 public class _XSelectionSupplier extends MultiMethodTest {
 
     public XSelectionSupplier oObj = null;
     public boolean selectionChanged = false;
     Object[] selections = null;
+    Comparator ObjCompare = null;
 
     protected void before() {
         selections = (Object[])tEnv.getObjRelation("Selections");
         if (selections == null) {
             throw new StatusException(Status.failed(
-            "Couldn't get relation 'Selections'"));
+                    "Couldn't get relation 'Selections'"));
         }
 
+        ObjCompare = (Comparator)tEnv.getObjRelation("Comparer");
+    }
+
+    protected void after() {
+        disposeEnvironment();
     }
 
     /**
-    * Listener implementation which just set flag when listener
-    * method is called.
-    */
+     * Listener implementation which just set flag when listener
+     * method is called.
+     */
     public class MyChangeListener implements XSelectionChangeListener {
-        public void disposing ( EventObject oEvent ) {}
+        public void disposing( EventObject oEvent ) {}
         public void selectionChanged(EventObject ev) {
             log.println("listener called");
             selectionChanged = true;
@@ -93,10 +108,10 @@ public class _XSelectionSupplier extends MultiMethodTest {
     XSelectionChangeListener listener = new MyChangeListener();
 
     /**
-    * Test adds listener to the object, then selects first and
-    * then second instances to be sure that selection was changed.<p>
-    * Has <b>OK</b> status if selection lisener was called.
-    */
+     * Test adds listener to the object, then selects first and
+     * then second instances to be sure that selection was changed.<p>
+     * Has <b>OK</b> status if selection lisener was called.
+     */
     public void _addSelectionChangeListener(){
         boolean res = true;
         try {
@@ -114,9 +129,9 @@ public class _XSelectionSupplier extends MultiMethodTest {
     }
 
     /**
-    * Selects an instance from relation 'First'. <p>
-    * Has <b> OK </b> status if no exceptions were thrown. <p>
-    */
+     * Selects an instance from relation 'First'. <p>
+     * Has <b> OK </b> status if no exceptions were thrown. <p>
+     */
     public void _select() {
         boolean res  = true;
         boolean locRes = true;
@@ -129,7 +144,12 @@ public class _XSelectionSupplier extends MultiMethodTest {
                 log.println("select #" + i + ": " + locRes);
                 Object curSelection = oObj.getSelection();
                 if (locRes) {
-                    compRes = util.ValueComparer.equalValue(selections[i], curSelection);
+
+                    if (ObjCompare != null) {
+                        ObjCompare.compare(selections[i], curSelection);
+                    } else {
+                        compRes = util.ValueComparer.equalValue(selections[i], curSelection);
+                    }
                     log.println("selected object and current selection are equal: "+compRes);
                     if (!compRes) {
                         if ((selections[i]) instanceof Object[]){
@@ -156,15 +176,15 @@ public class _XSelectionSupplier extends MultiMethodTest {
     }
 
     /**
-    * Test removes listener, then selects first and
-    * then second instances to be sure that selection was changed.<p>
-    * Has <b>OK</b> status if selection lisener was not called.
-    * The following method tests are to be completed successfully before :
-    * <ul>
-    *  <li> <code> addSelectionChangeListener() </code> : to have
-    *   the listener added. </li>
-    * </ul>
-    */
+     * Test removes listener, then selects first and
+     * then second instances to be sure that selection was changed.<p>
+     * Has <b>OK</b> status if selection lisener was not called.
+     * The following method tests are to be completed successfully before :
+     * <ul>
+     *  <li> <code> addSelectionChangeListener() </code> : to have
+     *   the listener added. </li>
+     * </ul>
+     */
     public void _removeSelectionChangeListener() {
         boolean res = false;
         requiredMethod("addSelectionChangeListener()");
@@ -183,21 +203,20 @@ public class _XSelectionSupplier extends MultiMethodTest {
     }
 
     /**
-    * First test changes selection of the object : if nothing is
-    * currently selected or first instance ('First' relation) is
-    * selected then selects second instance; if second instance
-    * is currently selected then the first instance is selected. <p>
-    * Then <code>getSelection</code> is called and values set and
-    * get are compared. Comparison has some special cases. For
-    * example if selection is a Cell, then the values contained
-    * in cells are compared. <p>
-    * Has <b>OK</b> status if selection changed properly.
-    */
+     * First test changes selection of the object : if nothing is
+     * currently selected or first instance ('First' relation) is
+     * selected then selects second instance; if second instance
+     * is currently selected then the first instance is selected. <p>
+     * Then <code>getSelection</code> is called and values set and
+     * get are compared. Comparison has some special cases. For
+     * example if selection is a Cell, then the values contained
+     * in cells are compared. <p>
+     * Has <b>OK</b> status if selection changed properly.
+     */
     public void _getSelection() {
         requiredMethod("select()");
         tRes.tested("getSelection()", true);
     }
-
 
 }  // finish class _XSelectionSupplier
 
