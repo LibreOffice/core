@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 18:14:04 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package mod._sd;
 
+import com.sun.star.text.XTextRange;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -43,9 +44,16 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DesktopTools;
 import util.SOfficeFactory;
+import util.dbg;
 import util.utils;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
@@ -54,6 +62,8 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
@@ -157,6 +167,12 @@ public class SdUnoOutlineView extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
+        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
+            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
+        XDrawPages the_pages = oDPS.getDrawPages();
+        XIndexAccess oDPi = (XIndexAccess)
+            UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
+
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
@@ -199,6 +215,7 @@ public class SdUnoOutlineView extends TestCase {
                                 XWindow.class,aModel2.getCurrentController());
 
         oObj = aModel.getCurrentController();
+
 
         log.println( "creating a new environment for impress view object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
