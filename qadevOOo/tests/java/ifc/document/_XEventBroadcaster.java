@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XEventBroadcaster.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:28:08 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,14 +35,21 @@
 
 package ifc.document;
 
+import com.sun.star.beans.XPropertySet;
 import lib.MultiMethodTest;
 
 import com.sun.star.document.XEventBroadcaster;
 import com.sun.star.document.XEventListener;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
+import com.sun.star.uno.UnoRuntime;
+import lib.StatusException;
 
 public class _XEventBroadcaster extends MultiMethodTest {
 
     public XEventBroadcaster oObj;
+    protected static boolean listenerCalled=false;
+    private static XEventListener listener=null;
 
     public class MyEventListener implements XEventListener {
 
@@ -51,17 +58,36 @@ public class _XEventBroadcaster extends MultiMethodTest {
 
         public void notifyEvent(com.sun.star.document.EventObject eventObject) {
             System.out.println("EventObject "+eventObject.EventName);
+            listenerCalled = true;
         }
 
     }
 
-    public void addEventListener() {
-        XEventListener listener = new MyEventListener();
-        oObj.addEventListener(listener);
-        System.out.println("DONE");
+    private void switchFocus() {
+        XModel docModel = (XModel) UnoRuntime.queryInterface(
+                XModel.class,tEnv.getTestObject());
+        docModel.getCurrentController().getFrame().getContainerWindow().setFocus();
+        util.utils.shortWait(1000);
+        XController xc = (XController) UnoRuntime.queryInterface(XController.class,tEnv.getObjRelation("CONT2"));
+        xc.getFrame().getContainerWindow().setFocus();
     }
 
-    public void removeEventListener() {
+    public void _addEventListener() {
+        listener = new MyEventListener();
+        listenerCalled = false;
+        oObj.addEventListener(listener);
+        switchFocus();
+        util.utils.shortWait(1000);
+        tRes.tested("addEventListener()",listenerCalled);
+    }
+
+    public void _removeEventListener() {
+        requiredMethod("addEventListener()");
+        listenerCalled = false;
+        oObj.removeEventListener(listener);
+        switchFocus();
+        util.utils.shortWait(1000);
+        tRes.tested("removeEventListener()",!listenerCalled);
     }
 
 }
