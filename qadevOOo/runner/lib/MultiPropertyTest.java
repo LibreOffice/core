@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultiPropertyTest.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:22:27 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,9 @@ public class MultiPropertyTest extends MultiMethodTest {
                 Exception exception = null;
 
                 try {
+                    log.println("try to set:");
+                    log.println("old = " + toString(oldValue));
+                    log.println("new = " + toString(newValue));
                     oObj.setPropertyValue(propName, newValue);
                 } catch(IllegalArgumentException e) {
                     exception = e;
@@ -294,8 +297,8 @@ public class MultiPropertyTest extends MultiMethodTest {
                                 oldValue = AnyConverter.toObject
                                         (new Type(((Any)oldValue).getClass()),oldValue);
                             }
-                            log.println("old = " + toString(oldValue));
-                            log.println("new = " + toString(newValue));
+//                            log.println("old = " + toString(oldValue));
+//                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
                             log.println("NOTIFY: this property needs further investigations.");
@@ -324,8 +327,8 @@ public class MultiPropertyTest extends MultiMethodTest {
                                 oldValue = AnyConverter.toObject
                                         (new Type(((Any)oldValue).getClass()),oldValue);
                             }
-                            log.println("old = " + toString(oldValue));
-                            log.println("new = " + toString(newValue));
+//                            log.println("old = " + toString(oldValue));
+//                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
                             log.println("NOTIFY: this property needs further investigations.");
@@ -352,8 +355,8 @@ public class MultiPropertyTest extends MultiMethodTest {
                                 oldValue = AnyConverter.toObject
                                         (new Type(((Any)oldValue).getClass()),oldValue);
                             }
-                            log.println("old = " + toString(oldValue));
-                            log.println("new = " + toString(newValue));
+//                            log.println("old = " + toString(oldValue));
+//                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         } catch(com.sun.star.lang.IllegalArgumentException iae) {
                         }
