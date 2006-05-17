@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XAccessibleComponent.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:47 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                                                  XAccessibleContext.class,
                                                  children[i]);
 
+                boolean MightBeCovered = false;
                 boolean isShowing = xAc.getAccessibleStateSet()
                                        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
                 log.println("\tStateType containsPoint SHOWING: " +
@@ -253,17 +254,6 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
                     continue;
                 }
-
-                String pos = "(" + chBnd.X + "," + chBnd.Y + ")";
-
-                if (KnownBounds.contains(pos) && isShowing) {
-                    log.println(
-                            "Child is covered by another and can't be reached");
-
-                    continue;
-                }
-
-                KnownBounds.add(pos);
 
                 log.println("finding the point which lies on the component");
 
@@ -288,6 +278,17 @@ public class _XAccessibleComponent extends MultiMethodTest {
                 XAccessible xAcc = oObj.getAccessibleAtPoint(
                                            new Point(chBnd.X + curX,
                                                      chBnd.Y + curY));
+
+
+                Point p = new Point(chBnd.X + curX,chBnd.X + curX);
+
+                if (isCovered(p) && isShowing) {
+                    log.println(
+                            "Child might be covered by another and can't be reached");
+                    MightBeCovered = true;
+                }
+
+                KnownBounds.add(chBnd);
 
                 if (xAcc == null) {
                     log.println("The child not found at point (" +
@@ -343,7 +344,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                                             .getAccessibleName() + " - OK");
                         } else {
                             log.println(
-                                    "The children found is not the same - FAILED");
+                                    "The children found is not the same");
                             log.println("Expected: " + expName);
                             log.println("Description:  " + expDesc);
                             log.println("Found: " +
@@ -352,7 +353,13 @@ public class _XAccessibleComponent extends MultiMethodTest {
                             log.println("Description:  " +
                                         xAcc.getAccessibleContext()
                                             .getAccessibleDescription());
-                            result = false;
+                            if (MightBeCovered) {
+                                log.println("... Child is covered by another - OK");
+                            } else {
+                                log.println("... FAILED");
+                                result = false;
+                            }
+
                         }
                     }
                 }
@@ -612,5 +619,22 @@ public class _XAccessibleComponent extends MultiMethodTest {
         if (tEnv.getObjRelation("Destroy") != null) {
             disposeEnvironment();
         }
+    }
+
+    private boolean isCovered(Point p) {
+        int elements = KnownBounds.size();
+        boolean Covered = false;
+        for (int k=0;k<elements;k++) {
+            Rectangle known = (Rectangle) KnownBounds.get(k);
+            Covered = (known.X < p.X);
+            Covered &= (known.Y < p.Y);
+            Covered &= (p.Y < known.Y+known.Height);
+            Covered &= (p.X < known.X+known.Width);
+
+            if (Covered) {
+                break;
+            }
+        }
+        return Covered;
     }
 }
