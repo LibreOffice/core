@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatch.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:16:44 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ public class ConvWatch
      */
 
     StatusHelper[] createPostscriptStartCheck(GraphicalTestArguments _aGTA,
-                                              String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile, boolean _bUseBorderMove)
+                                              String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile)
         throws ConvWatchCancelException
         {
 //  TODO: some more checks
@@ -202,9 +202,12 @@ public class ConvWatch
             }
 
             a.setResolutionInDPI(_aGTA.getResolutionInDPI());
-            a.setBorderMove(_bUseBorderMove);
+            a.setBorderMove(_aGTA.getBorderMove());
+            a.setDocumentType(_aGTA.getDocumentType());
 
             StatusHelper[] aList = a.compare();
+
+            _aGTA.setBorderMove(a.getBorderMove());
             return aList;
         }
 
@@ -323,13 +326,13 @@ public class ConvWatch
         throws ConvWatchCancelException, ConvWatchException
         {
             ConvWatch a = new ConvWatch();
-            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, _aGTA.isBorderMove());
+            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile);
 
             boolean bResultIsOk = createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
 
             if (! bResultIsOk)
             {
-                throw new ConvWatchException("File compare failed with file " + _sAbsoluteInputFile );
+                throw new ConvWatchException("Graphical compare failed with file '" + _sAbsoluteInputFile + "'");
             }
             return bResultIsOk;
         }
@@ -341,7 +344,8 @@ public class ConvWatch
         throws ConvWatchCancelException, ConvWatchException
         {
             ConvWatch a = new ConvWatch();
-            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, false);
+            _aGTA.setBorderMove(TriState.FALSE);
+            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile);
 
             // Status
             boolean bResultIsOk = createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
@@ -386,11 +390,11 @@ public class ConvWatch
 
             if (bFoundAOldDiff == false)
             {
-                throw new ConvWatchCancelException("No old diff file found." );
+                throw new ConvWatchCancelException("No old difference file found." );
             }
             if (! bDiffIsOk)
             {
-                throw new ConvWatchException("File diff diff compare failed with file " + _sAbsoluteInputFile );
+                throw new ConvWatchException("Graphical difference compare failed with file '" + _sAbsoluteInputFile + "'");
             }
             return bDiffIsOk;
         }
