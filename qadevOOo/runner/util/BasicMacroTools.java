@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BasicMacroTools.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:31:21 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XLibraryContainer;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.*;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 
@@ -227,5 +228,47 @@ public class BasicMacroTools {
         } else {
             throw new Exception("Could not run Macro " + MacroName);
         }
+    }
+
+    /**
+     * Set the given <CODE>secureURL</CODE> as secure URL for marco execution.
+     * The macros of documents located in <CODE>secureURL</CODE> will be executed
+     * automatically.
+     * @param xMSF the XMultiServiceFactory
+     * @param secureURL the URL the documet is located
+     * @throws java.lang.Exception throws this exception on any error
+     */
+    public static void addSecureBasicMarcosURL(XMultiServiceFactory xMSF, String secureURL)
+        throws Exception {
+
+        secureURL = utils.getFullURL(secureURL);
+
+        // configure Office to allow to execute macos
+        PropertyValue[] ProvArgs = new PropertyValue [1];
+        PropertyValue Arg = new PropertyValue();
+        Arg.Name = "nodepath";
+        Arg.Value = "/org.openoffice.Office.Common/Security";
+        ProvArgs[0] = Arg;
+
+        Object oProvider = xMSF.createInstance("com.sun.star.configuration.ConfigurationProvider");
+
+
+        XMultiServiceFactory oProviderMSF = (XMultiServiceFactory)
+                        UnoRuntime.queryInterface(XMultiServiceFactory.class, oProvider);
+
+        Object oSecure = oProviderMSF.createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationUpdateAccess",
+            ProvArgs);
+
+        XPropertySet oSecureProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oSecure);
+
+        Object oScripting = oSecureProps.getPropertyValue("Scripting");
+        XPropertySet oScriptingSettings = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oScripting);
+
+        oScriptingSettings.setPropertyValue("SecureURL", new String[]{secureURL});
+        oScriptingSettings.setPropertyValue("OfficeBasic", new Integer(2));
+
+        XChangesBatch oSecureChange = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, oSecure);
+        oSecureChange.commitChanges();
     }
 }
