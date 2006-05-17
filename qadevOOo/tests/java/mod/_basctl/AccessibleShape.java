@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: AccessibleShape.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:34:51 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+
+package mod._basctl;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XDispatchHelper;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import java.io.PrintWriter;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.WriterTools;
+import util.utils;
+
+public class AccessibleShape extends TestCase {
+
+    XTextDocument xTextDoc = null;
+    XInterface oObj = null;
+    XWindow basicIDE = null;
+
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("Cleaning up");
+        DesktopTools.closeDoc(xTextDoc);
+        try {
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+            Object o = xMSF.createInstance("com.sun.star.frame.Desktop");
+            XDesktop xDesk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, o);
+            DesktopTools.closeDoc(xDesk.getCurrentFrame());
+        } catch (Exception e) {
+            log.println("Couldn't close IDE");
+        }
+    }
+
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        log.println( "creating a test environment" );
+        String aURL=utils.getFullTestURL("basDialog.odt");
+        xTextDoc = WriterTools.loadTextDoc(xMSF,aURL);
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XFrame xFrame = xModel.getCurrentController().getFrame();
+        XDispatchProvider xDPP = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
+
+        log.println( "opening the basic dialog editor" );
+        try {
+            Object o = xMSF.createInstance("com.sun.star.frame.DispatchHelper");
+            XDispatchHelper xDPH = (XDispatchHelper) UnoRuntime.queryInterface(XDispatchHelper.class, o);
+            PropertyValue[] aArgs = new PropertyValue[4];
+            aArgs[0] = new PropertyValue();
+            aArgs[0].Name = "Document";
+            aArgs[0].Value = aURL;
+            aArgs[1] = new PropertyValue();
+            aArgs[1].Name = "LibName";
+            aArgs[1].Value = "basctl";
+            aArgs[2] = new PropertyValue();
+            aArgs[2].Name = "Name";
+            aArgs[2].Value = "Dialog1";
+            aArgs[3] = new PropertyValue();
+            aArgs[3].Name = "Type";
+            aArgs[3].Value = "Dialog";
+            xDPH.executeDispatch(xDPP, ".uno:BasicIDEAppear", "", 0, aArgs);
+        } catch (Exception e) {
+            throw new StatusException("Couldn't open Basic Dialog",e);
+        }
+
+        utils.shortWait(3000);
+
+        try {
+            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                    ("com.sun.star.awt.Toolkit") ;
+        } catch (com.sun.star.uno.Exception e) {
+            log.println("Couldn't get toolkit");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get toolkit", e );
+        }
+
+
+        XExtendedToolkit tk = (XExtendedToolkit)
+        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+
+
+        AccessibilityTools at = new AccessibilityTools();
+
+        basicIDE = (XWindow)
+        UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+
+        XAccessible xRoot = at.getAccessibleObject(basicIDE);
+
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
+
+        // create test environment here
+        TestEnvironment tEnv = new TestEnvironment( oObj );
+
+        log.println("Implementation Name: " + utils.getImplName(oObj));
+
+        tEnv.addObjRelation("Destroy", Boolean.TRUE);
+
+        final XExtendedToolkit subtk = tk;
+
+        tEnv.addObjRelation("EventProducer",
+                new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                XWindow xWin = (XWindow) UnoRuntime.queryInterface(
+                                       XWindow.class, subtk.getActiveTopWindow());
+                Rectangle oldPosSize = xWin.getPosSize();
+                Rectangle newPosSize = new Rectangle();
+                newPosSize.Width = oldPosSize.Width/2;
+                newPosSize.Height = oldPosSize.Height/2;
+                newPosSize.X = oldPosSize.X + 20;
+                newPosSize.Y = oldPosSize.Y + 20;
+                xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
+                                newPosSize.Height, PosSize.POSSIZE);
+                utils.shortWait(1000);
+                xWin.setPosSize(oldPosSize.X, oldPosSize.Y, oldPosSize.Width,
+                                oldPosSize.Height, PosSize.POSSIZE);
+            }
+        });
+
+        return tEnv;
+    }
+
+
+
+}
