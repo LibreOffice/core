@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalDifferenceCheck.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:18:59 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ public class GraphicalDifferenceCheck
                 GlobalLogWriter.get().println("");
                 GlobalLogWriter.get().println("+##############################+");
                 GlobalLogWriter.get().println("##### THIS IS CONVWATCH    #####");
-                GlobalLogWriter.get().println("##### Debug Version 1.0014 #####");
+                GlobalLogWriter.get().println("##### Debug Version 1.0015 #####");
                 GlobalLogWriter.get().println("+##############################+");
                 GlobalLogWriter.get().println("");
             }
