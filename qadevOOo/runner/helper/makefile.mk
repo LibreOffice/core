@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:21:30 $
+#   last change: $Author: vg $ $Date: 2006-05-17 13:30:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,8 @@ JAVAFILES =	APIDescGetter.java      \
             OfficeProvider.java		\
             ComplexDescGetter.java  \
             InetTools.java          \
-            ProcessHandler.java	\
+            ProcessHandler.java	\			
+            ContextMenuInterceptor.java	\
             UnoProvider.java\
                         FileTools.java
 
