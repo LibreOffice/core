@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:37:27 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,6 +637,32 @@ public class UITools {
                                        + CheckBoxName + "' : " + e.toString());
         }
      }
+
+      /**
+       * returns the message of a Basic-MessageBox
+       * @return the message of a Basic-MessageBox
+       * @throws java.lang.Exception if something fail
+       */
+     public String getMsgBoxText()
+        throws java.lang.Exception
+     {
+        String cMessage = null;
+        try{
+            XAccessibleContext xMessage =mAT.getAccessibleObjectForRole(mXRoot,
+                                     AccessibleRole.LABEL);
+
+            XInterface xMessageInterface = (XInterface)
+                UnoRuntime.queryInterface(XInterface.class, xMessage);
+            cMessage += (getString(xMessageInterface));
+
+
+            return cMessage;
+         } catch (Exception e) {
+            throw new Exception("Could not get message from Basic-MessageBox: " + e.toString());
+        }
+     }
+
+
     /**
      * fetch the active window which is on the top of the X-desktop
      * @return the active window
