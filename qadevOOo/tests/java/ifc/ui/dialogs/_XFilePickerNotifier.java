@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XFilePickerNotifier.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:49:31 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,42 +51,30 @@ import com.sun.star.util.XCancellable;
 
 
 /**
-* Testing <code>com.sun.star.ui.XFilePickerNotifier</code>
-* interface methods :
-* <ul>
-*  <li><code> addFilePickerListener()</code></li>
-*  <li><code> removeFilePickerListener()</code></li>
-* </ul> <p>
-* The object must implement <code>XFilePicker</code>
-* interface to check if a listener was called. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
-* @see com.sun.star.ui.XFilePickerNotifier
-*/
+ * Testing <code>com.sun.star.ui.XFilePickerNotifier</code>
+ * interface methods :
+ * <ul>
+ *  <li><code> addFilePickerListener()</code></li>
+ *  <li><code> removeFilePickerListener()</code></li>
+ * </ul> <p>
+ * The object must implement <code>XFilePicker</code>
+ * interface to check if a listener was called. <p>
+ * Test is <b> NOT </b> multithread compilant. <p>
+ * @see com.sun.star.ui.XFilePickerNotifier
+ */
 public class _XFilePickerNotifier extends MultiMethodTest {
 
     public XFilePickerNotifier oObj = null;
     private XFilePicker fps = null ;
     private String dir1 = null,
-                   dir2 = null ;
+            dir2 = null ;
     ExecThread eThread = null;
 
 
-    public void after() {
-        XCancellable canc = (XCancellable) UnoRuntime.queryInterface(
-            XCancellable.class, tEnv.getTestObject());
-        shortWait();
-        if (canc != null) {
-            log.println("Cancelling Dialog");
-            canc.cancel();
-        } else {
-            this.disposeEnvironment();
-        }
-    }
-
     /**
-    * Listener implementation which sets a flag if some of its
-    * methods was called.
-    */
+     * Listener implementation which sets a flag if some of its
+     * methods was called.
+     */
     protected class TestListener implements XFilePickerListener {
         public boolean called = false ;
 
@@ -118,36 +106,34 @@ public class _XFilePickerNotifier extends MultiMethodTest {
     TestListener listener = new TestListener() ;
 
     /**
-    * Tries to query object for <code>XFilePicker</code> interface, and
-    * initializes two different URLs for changing file picker directory. <p>
-    * @throw StatusException If object doesn't support <code>XFilePicker</code>
-    * interface.
-    */
+     * Tries to query object for <code>XFilePicker</code> interface, and
+     * initializes two different URLs for changing file picker directory. <p>
+     * @throw StatusException If object doesn't support <code>XFilePicker</code>
+     * interface.
+     */
     public void before() {
         fps = (XFilePicker) UnoRuntime.queryInterface
-            (XFilePicker.class, oObj) ;
+                (XFilePicker.class, oObj) ;
 
         if (fps == null) {
             log.println("The object doesnt implement XFilePicker") ;
             throw new StatusException(Status.failed
-                ("The object doesnt implement XFilePicker"));
+                    ("The object doesnt implement XFilePicker"));
         }
+
+        XExecutableDialog exD = (XExecutableDialog) UnoRuntime.queryInterface(
+                XExecutableDialog.class, tEnv.getTestObject());
 
         dir1 = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
         dir2 = util.utils.getFullTestURL("");
-
-        XExecutableDialog exD = (XExecutableDialog) UnoRuntime.queryInterface(
-            XExecutableDialog.class, tEnv.getTestObject());
         eThread = new ExecThread(exD);
-        log.println("Starting Dialog");
-        eThread.start();
     }
 
     /**
-    * Adds a listener, then tries to change display directory and
-    * checks if the listener was called. <p>
-    * Has <b>OK</b> status if a listener method was called.
-    */
+     * Adds a listener, then tries to change display directory and
+     * checks if the listener was called. <p>
+     * Has <b>OK</b> status if a listener method was called.
+     */
     public void _addFilePickerListener() {
         oObj.addFilePickerListener(listener) ;
 
@@ -155,6 +141,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             log.println("***** Setting DisplayDirectory to " + dir1);
             fps.setDisplayDirectory(dir1) ;
             log.println("***** Getting: " + fps.getDisplayDirectory());
+            openDialog();
             log.println("***** Setting DisplayDirectory to " + dir2);
             fps.setDisplayDirectory(dir2) ;
             log.println("***** Getting: " + fps.getDisplayDirectory());
@@ -164,25 +151,25 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             e.printStackTrace(log) ;
         }
 
-        try {
-            Thread.sleep(5000) ;
-        } catch(InterruptedException e) {}
+        shortWait();
 
         if (!listener.called) {
             log.println("Listener wasn't called :-(");
         }
 
+        closeDialog();
+
         tRes.tested("addFilePickerListener()", listener.called) ;
     }
 
     /**
-    * Removes the listener and changes display directory. <p>
-    * Has <b>OK</b> status if the listener wasn't called. <p>
-    * The following method tests are to be completed successfully before :
-    * <ul>
-    *  <li> <code> addFilePickerListener </code> </li>
-    * </ul>
-    */
+     * Removes the listener and changes display directory. <p>
+     * Has <b>OK</b> status if the listener wasn't called. <p>
+     * The following method tests are to be completed successfully before :
+     * <ul>
+     *  <li> <code> addFilePickerListener </code> </li>
+     * </ul>
+     */
     public void _removeFilePickerListener() {
         requiredMethod("addFilePickerListener()") ;
 
@@ -192,23 +179,24 @@ public class _XFilePickerNotifier extends MultiMethodTest {
 
         try {
             fps.setDisplayDirectory(dir1) ;
+            openDialog();
             fps.setDisplayDirectory(dir2) ;
         } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("!!! Exception changing dir !!!") ;
             e.printStackTrace(log) ;
         }
 
-        try {
-            Thread.sleep(2000) ;
-        } catch(InterruptedException e) {}
+        shortWait();
+
+        closeDialog();
 
         tRes.tested("removeFilePickerListener()", !listener.called) ;
     }
 
     /**
-    * Calls <code>execute()</code> method in a separate thread.
-    * Necessary to check if this method works
-    */
+     * Calls <code>execute()</code> method in a separate thread.
+     * Necessary to check if this method works
+     */
     protected class ExecThread extends Thread {
 
         public short execRes = (short) 17 ;
@@ -219,22 +207,91 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         }
 
         public void run() {
-            execRes = Diag.execute();
-            System.out.println("HERE: "+execRes);
-            shortWait();
+            try {
+                execRes = Diag.execute();
+                System.out.println("HERE: "+execRes);
+            } catch (Exception e) {
+                log.println("Thread has been interrupted ...");
+            }
         }
     }
 
     /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
+     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
+     * reset</code> call.
+     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(2000) ;
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
+    }
+
+    private void closeDialog() {
+        XCancellable canc = (XCancellable) UnoRuntime.queryInterface(
+                XCancellable.class, tEnv.getTestObject());
+        if (canc != null) {
+            log.println("Cancelling Dialog");
+            canc.cancel();
+        } else {
+            this.disposeEnvironment();
+        }
+
+        long st = System.currentTimeMillis();
+        boolean toLong = false;
+
+        log.println("waiting for dialog to close");
+
+        while (eThread.isAlive() && !toLong) {
+            //wait for dialog to close
+            toLong = (System.currentTimeMillis()-st > 10000);
+        }
+
+        log.println("done");
+
+        try {
+            if (eThread.isAlive()) {
+                log.println("Interrupting Thread");
+                eThread.interrupt();
+                eThread.yield();
+            }
+        } catch (Exception e) {
+            // who cares ;-)
+        }
+
+        st = System.currentTimeMillis();
+        toLong = false;
+
+        log.println("waiting for interruption to work");
+
+        while (eThread.isAlive() && !toLong) {
+            //wait for dialog to close
+            toLong = (System.currentTimeMillis()-st > 10000);
+        }
+
+        log.println("DialogThread alive: "+eThread.isAlive());
+
+        log.println("done");
+
+    }
+
+    private void openDialog() {
+        log.println("Starting Dialog");
+        if (eThread.isAlive()) {
+            log.println("second interrupt");
+            eThread.interrupt();
+            eThread.yield();
+        }
+
+        XExecutableDialog exD = (XExecutableDialog) UnoRuntime.queryInterface(
+                XExecutableDialog.class, tEnv.getTestObject());
+
+        dir1 = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        dir2 = util.utils.getFullTestURL("");
+        eThread = new ExecThread(exD);
+
+        eThread.start();
     }
 }
 
