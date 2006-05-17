@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoPresView.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 18:14:16 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:39:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package mod._sd;
 
 import java.io.PrintWriter;
+import java.util.Comparator;
 
 import lib.StatusException;
 import lib.TestCase;
@@ -188,8 +189,11 @@ public class SdUnoPresView extends TestCase {
             oDrawPage = (XDrawPage) AnyConverter.toObject(
                     new Type(XDrawPage.class),oDPi.getByIndex(0));
             the_pages.insertNewByIndex(0);
-            secondDrawPage = (XDrawPage) AnyConverter.toObject(
-                    new Type(XDrawPage.class),oDPi.getByIndex(1));
+            the_pages.insertNewByIndex(0);
+            the_pages.insertNewByIndex(0);
+            the_pages.insertNewByIndex(0);
+           secondDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(3));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get DrawPage", e);
@@ -206,11 +210,14 @@ public class SdUnoPresView extends TestCase {
         XShapes oShapes = (XShapes)
             UnoRuntime.queryInterface(XShapes.class, oDrawPage);
         XShape shape1 = SOF.createShape(
-            xImpressDoc, 3000, 4500, 15000, 1000, "Ellipse");
-        XShape shape2 = SOF.createShape(
             xImpressDoc, 5000, 3500, 7500, 5000, "Rectangle");
         oShapes.add(shape1);
-        oShapes.add(shape2);
+
+        oShapes = (XShapes)
+            UnoRuntime.queryInterface(XShapes.class, secondDrawPage);
+        shape1 = SOF.createShape(
+            xImpressDoc, 3000, 4500, 15000, 1000, "Ellipse");
+        oShapes.add(shape1);
 
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xImpressDoc);
@@ -230,11 +237,30 @@ public class SdUnoPresView extends TestCase {
             tEnv.addObjRelation("XWindow.AnotherWindow",anotherWindow);
         }
 
+        tEnv.addObjRelation("Selections", new Object[] {
+            oDrawPage, secondDrawPage});
+
+        tEnv.addObjRelation("Comparer", new Comparator() {
+            public int compare(Object o1, Object o2) {
+                XIndexAccess indAc1 = (XIndexAccess)
+                    UnoRuntime.queryInterface(XIndexAccess.class, o1);
+                XIndexAccess indAc2 = (XIndexAccess)
+                    UnoRuntime.queryInterface(XIndexAccess.class, o2);
+                if (indAc1 == null || indAc2 == null) return -1;
+                if (indAc1.getCount() == indAc2.getCount()) {
+                    return 0;
+                }
+                return 1;
+            }
+            public boolean equals(Object obj) {
+                return compare(this, obj) == 0;
+            } });
+
         tEnv.addObjRelation("FirstPage", oDrawPage);
         tEnv.addObjRelation("SecondPage", secondDrawPage);
 
-        tEnv.addObjRelation("First", shape1);
-        tEnv.addObjRelation("Second", shape2);
+        //tEnv.addObjRelation("First", shape1);
+        //tEnv.addObjRelation("Second", shape2);
 
         tEnv.addObjRelation("Pages", the_pages);
 
