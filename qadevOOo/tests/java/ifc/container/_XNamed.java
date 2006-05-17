@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XNamed.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:23:28 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ public class _XNamed extends MultiMethodTest {
             NewName = "soffice|" + fileName + "!Sheet1.A2";
         } else if (testobjname.equals("SwXAutoTextGroup")) {
             //This avoids a GPF
-            NewName = "XNamed";
+            NewName = "XNamed*1";
         }
 
         boolean result = true;
