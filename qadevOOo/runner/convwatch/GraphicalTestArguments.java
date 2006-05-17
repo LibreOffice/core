@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:19:15 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,8 @@ public class GraphicalTestArguments
     boolean m_bDebugMode = false;
 
     String m_sLeaveOutNames = null;
+
+    String m_sDistinct = null;
 
     // CONSTRUCTOR
     private GraphicalTestArguments(){}
@@ -242,15 +244,23 @@ public class GraphicalTestArguments
             if (sWithBorderMove == null)
             {
                 sWithBorderMove = "";
+                // m_tWithBorderMove = TriState.UNSET;
+                m_tWithBorderMove = TriState.FALSE;
             }
             if (sWithBorderMove.toLowerCase().equals("yes") ||
                 sWithBorderMove.toLowerCase().equals("true"))
             {
-                m_bWithBorderMove = true;
+                m_tWithBorderMove = TriState.TRUE;
+            }
+            else if (sWithBorderMove.toLowerCase().equals("no") ||
+                     sWithBorderMove.toLowerCase().equals("false"))
+            {
+                m_tWithBorderMove = TriState.FALSE;
             }
             else
             {
-                m_bWithBorderMove = false;
+                m_tWithBorderMove = TriState.FALSE;
+                // m_tWithBorderMove = TriState.UNSET;
             }
 
             String sLeaveOutNames = (String)param.get(PropertyName.DOC_COMPARATOR_LEAVE_OUT_FILES);
@@ -265,9 +275,19 @@ public class GraphicalTestArguments
                 m_sDBInfoString = sDBInfoString;
             }
 
+            // DISTINCT ----------
+            String sDistinct = (String)param.get( "DISTINCT" );
+            if (sDistinct == null || sDistinct.length() == 0)
+            {
+                sDistinct = "";
+            }
+            else
+            {
+                m_sDistinct = sDistinct;
+            }
         }
 
-    public boolean checkIfUsable(String _sName)
+    public boolean checkIfUsableDocumentType(String _sName)
         {
             // @todo
             // check if the name is in the leave out list and then return 'false'
@@ -624,12 +644,29 @@ public class GraphicalTestArguments
             return m_sHTMLOutputPrefix;
         }
 
-    boolean m_bWithBorderMove = false;
-    public boolean isBorderMove()
+    TriState m_tWithBorderMove = TriState.UNSET;
+    // public TriState isBorderMove()
+    //     {
+    //         return m_tWithBorderMove;
+    //     }
+    public TriState getBorderMove()
         {
-            return m_bWithBorderMove;
+            return m_tWithBorderMove;
+        }
+    public void setBorderMove(TriState _tBorderMove)
+        {
+            m_tWithBorderMove = _tBorderMove;
         }
 
+    String m_sDocumentType = "";
+    public void setDocumentType(String _sName)
+        {
+            m_sDocumentType = _sName;
+        }
+    public String getDocumentType()
+        {
+            return m_sDocumentType;
+        }
 
     /*
       helper class for performance analyser features
@@ -666,6 +703,38 @@ public class GraphicalTestArguments
             }
 
             return m_sDBInfoString;
+        }
+
+    public boolean cancelRequest()
+        {
+            File aCancelFile = null;
+            String fs;
+            fs = System.getProperty("file.separator");
+            String sGDC_Dir;
+            if (OSHelper.isWindows())
+            {
+                sGDC_Dir = "C:\\temp";
+            }
+            else
+            {
+                sGDC_Dir = "/tmp";
+            }
+
+            if (m_sDistinct.length() > 0)
+            {
+                sGDC_Dir = sGDC_Dir + fs + m_sDistinct;
+            }
+
+            String sCancelFile = sGDC_Dir + fs + "cancel_compare.txt";
+            aCancelFile = new File(sCancelFile);
+
+            if (aCancelFile.exists())
+            {
+                GlobalLogWriter.get().println("ATTENTION: Found file: '" + sCancelFile + "'.");
+                GlobalLogWriter.get().println("User has canceled the program flow.");
+                return true;
+            }
+            return false;
         }
 
 }
