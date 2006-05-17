@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PRNCompare.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:21:36 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,8 @@ public class PRNCompare
     // String m_sOldDiff;
     int m_nMaxPages = 0;
     int m_nResolutionInDPI = 0;
-    boolean m_bUseBorderMove;
+    TriState m_tUseBorderMove;
+    String m_sDocumentType;
 
     public void setInputPath(String _sInputPath) { m_sInputPath = _sInputPath; }
 
@@ -161,7 +162,8 @@ public class PRNCompare
 
     public void setPostScriptFile(String _sPSFile){ m_sPostScriptFile = _sPSFile;}
 
-    public void setBorderMove(boolean _b) {m_bUseBorderMove = _b;}
+    public void setBorderMove(TriState _b) {m_tUseBorderMove = _b;}
+    public TriState getBorderMove() {return m_tUseBorderMove;}
     // public void setOldDiffPath(String _sOldDiff)
     //     {
     //         m_sOldDiff = _sOldDiff;
@@ -171,6 +173,11 @@ public class PRNCompare
 
     public void setResolutionInDPI(int _n) {m_nResolutionInDPI = _n;}
     int getResolutionInDPI() {return m_nResolutionInDPI;}
+
+    public void setDocumentType(String _sTypeName)
+        {
+            m_sDocumentType = _sTypeName;
+        }
 
     // -----------------------------------------------------------------------------
 
@@ -182,7 +189,7 @@ public class PRNCompare
             StatusHelper[] aList = createDiffs(m_sOutputPath,
                                                m_sOutputPath, m_sReferenceFile,
                                                m_sOutputPath, m_sPostScriptFile,
-                                               getMaxPages(), m_bUseBorderMove);
+                                               getMaxPages(), m_tUseBorderMove);
 
 //  TODO: Rename?
 
@@ -197,7 +204,7 @@ public class PRNCompare
             StatusHelper[] aList = createDiffs(m_sOutputPath,
                                                aRefList,
                                                aPSList,
-                                               getMaxPages(), m_bUseBorderMove);
+                                               getMaxPages(), m_tUseBorderMove);
 
             return aList;
         }
@@ -292,7 +299,7 @@ public class PRNCompare
      * m_sReferenceFile
      * m_sOutputPath
      */
-    public StatusHelper[] createDiffs(String _sOutputPath, String _sSourcePath1, String _sSourceFile1, String _sSourcePath2, String _sSourceFile2, int _nMaxDiffs, boolean _bUseBorderMove)
+    public StatusHelper[] createDiffs(String _sOutputPath, String _sSourcePath1, String _sSourceFile1, String _sSourcePath2, String _sSourceFile2, int _nMaxDiffs, TriState _tUseBorderMove)
         {
             if (_nMaxDiffs < 1)
             {
@@ -346,9 +353,18 @@ public class PRNCompare
                             aStatus.nDiffStatus = StatusHelper.DIFF_DIFFERENCES_FOUND;
                             aStatus.nPercent = nPercent;
 
+                            // GlobalLogWriter.get().println("Hello World:  Percent:= " + nPercent);
+                            // GlobalLogWriter.get().println("Hello World: TriState:= " + _tUseBorderMove.intValue());
+                            // GlobalLogWriter.get().println("Hello World:  DocType:= " + m_sDocumentType);
+
 // TODO: insert here the new BorderRemover if the percentage value is creater than 75%
-                            if (nPercent > 75 && _bUseBorderMove == true)
+                            if (nPercent > 75 &&
+                                ((_tUseBorderMove == TriState.TRUE ) ||
+                                 ((_tUseBorderMove == TriState.UNSET) &&
+                                  m_sDocumentType.indexOf("MS PowerPoint") > 0)))
                             {
+                                setBorderMove(TriState.TRUE);
+
                                 String sOld_BM_Gfx =  getJPEGName(_sSourcePath1, sS1Basename + ".BM", StringHelper.createValueString(i, 4));
                                 String sNew_BM_Gfx =  getJPEGName(_sSourcePath2, sS2Basename + ".BM", StringHelper.createValueString(i, 4));
                                 String sDiff_BM_Gfx_ = getJPEGName(_sOutputPath, sS1Basename + ".diff.BM", StringHelper.createValueString(i, 4));
@@ -383,7 +399,7 @@ public class PRNCompare
                                 }
                                 catch(java.io.IOException e)
                                 {
-                                    GlobalLogWriter.get().println("Exception caught. At border moveing" + e.getMessage());
+                                    GlobalLogWriter.get().println("Exception caught. At border remove: " + e.getMessage());
                                 }
                             }
 
@@ -407,7 +423,7 @@ public class PRNCompare
         }
 
 
-    public StatusHelper[] createDiffs(String _sOutputPath, String[] _aRefList, String[] _aPSList, int _nMaxDiffs, boolean _bUseBorderMove)
+    public StatusHelper[] createDiffs(String _sOutputPath, String[] _aRefList, String[] _aPSList, int _nMaxDiffs, TriState _tUseBorderMove)
         {
             if (_nMaxDiffs < 1)
             {
@@ -450,11 +466,19 @@ public class PRNCompare
                         try
                         {
                             int nPercent = estimateGfx(sOldGfx, sNewGfx, sDiffGfx);
+                            // GlobalLogWriter.get().println("Hello World:  Percent:= " + nPercent);
+                            // GlobalLogWriter.get().println("Hello World: TriState:= " + _tUseBorderMove.intValue());
+                            // GlobalLogWriter.get().println("Hello World:  DocType:= " + m_sDocumentType);
+
                             aStatus.nDiffStatus = StatusHelper.DIFF_DIFFERENCES_FOUND;
                             aStatus.nPercent = nPercent;
 
-                            if (nPercent > 75 && _bUseBorderMove == true)
+                            if (nPercent > 75 &&
+                                ((_tUseBorderMove == TriState.TRUE ) ||
+                                 ((_tUseBorderMove == TriState.UNSET) &&
+                                  m_sDocumentType.indexOf("MS PowerPoint") > 0)))
                             {
+                                _tUseBorderMove = TriState.TRUE;
 //  TODO: problem is here, that we have to create some new names.
 
                                 String sBasename1 = FileHelper.getBasename(sOldGfx);
@@ -499,7 +523,7 @@ public class PRNCompare
                                 }
                                 catch(java.io.IOException e)
                                 {
-                                    GlobalLogWriter.get().println("Exception caught. At border moveing" + e.getMessage());
+                                    GlobalLogWriter.get().println("Exception caught. At border remove: " + e.getMessage());
                                 }
                             }
                         }
