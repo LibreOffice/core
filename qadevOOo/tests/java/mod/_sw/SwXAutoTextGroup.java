@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXAutoTextGroup.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:43:42 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:40:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 package mod._sw;
 
+import com.sun.star.container.ElementExistException;
+import com.sun.star.container.XNameAccess;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -42,9 +44,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
-
-import com.sun.star.container.XElementAccess;
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XAutoTextContainer;
 import com.sun.star.text.XText;
@@ -53,6 +52,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import util.utils;
 
 
 /**
@@ -84,8 +84,8 @@ public class SwXAutoTextGroup extends TestCase {
     XTextDocument xTextDoc;
 
     /**
-    * Creates text document.
-    */
+     * Creates text document.
+     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
@@ -98,24 +98,24 @@ public class SwXAutoTextGroup extends TestCase {
     }
 
     /**
-    * Disposes text document.
-    */
+     * Disposes text document.
+     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Creates an instance of the service
-    * <code>com.sun.star.text.AutoTextContainer</code>, then selects
-    * non-empty group from the given container.<p>
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'TextRange'</code> for
-    *      {@link ifc.text._XAutoTextGroup} range of text</li>
-    * </ul>
-    */
+     * Creating a Testenvironment for the interfaces to be tested.
+     * Creates an instance of the service
+     * <code>com.sun.star.text.AutoTextContainer</code>, then creates a new
+     * group into the container.<p>
+     *     Object relations created :
+     * <ul>
+     *  <li> <code>'TextRange'</code> for
+     *      {@link ifc.text._XAutoTextGroup} range of text</li>
+     * </ul>
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
@@ -124,43 +124,51 @@ public class SwXAutoTextGroup extends TestCase {
         log.println( "creating a test environment" );
         try {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
-            Object oInst = myMSF.createInstance
-                ("com.sun.star.text.AutoTextContainer");
-            oContainer = (XAutoTextContainer)
-                UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
+            Object oInst = myMSF.createInstance("com.sun.star.text.AutoTextContainer");
+            oContainer = (XAutoTextContainer) UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create AutoTextContainer", e);
         }
+        String myGroupName="myNewGroup2*1";
 
-        XIndexAccess oContIndex = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oContainer);
+        XAutoTextContainer xATC = (XAutoTextContainer) UnoRuntime.queryInterface(XAutoTextContainer.class, oContainer);
 
-        //search for a non-empty AutoTextGroup
         try {
-            int n = 0;
-            int count = oContIndex.getCount();
-            oObj = (XInterface) AnyConverter.toObject(
-                    new Type(XInterface.class),oContIndex.getByIndex(n));
-            XElementAccess oElement = (XElementAccess)
-                UnoRuntime.queryInterface(XElementAccess.class, oObj);
-            while ( ( !oElement.hasElements() ) && ( n < count ) ) {
-                n++;
-                oObj = (XInterface) AnyConverter.toObject(
-                    new Type(XInterface.class),oContIndex.getByIndex(n));
-                oElement = (XElementAccess)
-                    UnoRuntime.queryInterface(XElementAccess.class, oObj);
-            }
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get AutoTextGroup", e);
-        } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get AutoTextGroup", e);
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get AutoTextGroup", e);
+            log.println("removing element with name '" + myGroupName + "'");
+            xATC.removeByName(myGroupName);
+        } catch (com.sun.star.container.NoSuchElementException e) {
         }
+
+        try {
+            log.println("adding element with name '" + myGroupName + "'");
+            xATC.insertNewByName(myGroupName);
+        } catch (ElementExistException ex) {
+            ex.printStackTrace(log);
+            throw new StatusException("could not insert '"+myGroupName+"' into container",ex);
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            ex.printStackTrace(log);
+            throw new StatusException("could not insert '"+myGroupName+"' into container",ex);
+        }
+
+
+        XNameAccess oContNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oContainer);
+
+        if (Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE)){
+            String contNames[] = oContNames.getElementNames();
+            for (int i =0; i < contNames.length; i++){
+                log.println("ContainerNames[ "+ i + "]: " + contNames[i]);
+            }
+        }
+
+        try{
+            oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName(myGroupName));
+        } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get AutoTextGroup '"+myGroupName + "'", e);
+        }
+
+        log.println("ImplementationName " + utils.getImplName(oObj));
 
         log.println( "creating a new environment for AutoTextGroup object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
