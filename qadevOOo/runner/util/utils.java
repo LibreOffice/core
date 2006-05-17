@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:40:45 $
+ *  last change: $Author: vg $ $Date: 2006-05-17 13:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,12 @@
 
 package util;
 
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.uno.XInterface;
 import java.lang.System;
 import java.util.StringTokenizer;
 import java.io.*;
@@ -277,6 +283,26 @@ public class utils {
             e.printStackTrace();
         }
         return settingPath;
+    }
+
+    public static void setOfficeSettingsValue(XMultiServiceFactory msf, String setting, String value){
+
+        String settingPath = null;
+        try {
+            Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
+            XPropertySet pthSettings = null;
+            try{
+                pthSettings = (XPropertySet) AnyConverter.toObject(
+                                    new Type(XPropertySet.class),settings);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                System.out.println("### couldn't get Office Settings");
+            }
+            pthSettings.setPropertyValue(setting, value);
+
+        } catch (Exception e) {
+            System.out.println("Couldn't set '" + setting +"' to value '" + value + "'");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -622,6 +648,20 @@ public class utils {
         return null;
     }
 
+    /** returns the path to the office binary folder
+     *
+     * @param msf The XMultiSeriveFactory
+     * @return the path to the office binrary or an empty string on any error
+     */
+    public static String getOfficeBinPath(XMultiServiceFactory msf) {
+        String sysBinDir = "";
+        try{
+            sysBinDir  = utils.getSystemURL(utils.expandMacro(msf, "$SYSBINDIR"));
+        } catch (java.lang.Exception e){}
+
+        return sysBinDir;
+    }
+
     /**
      * Get an array of all property names from the property set. With the include
      * and exclude parameters the properties can be filtered. <br>
@@ -780,6 +820,16 @@ public class utils {
         return originalString;
     }
 
+
+    /**
+     * expand macrofied strings like <CODE>${$ORIGIN/bootstrap.ini:UserInstallation}</CODE> or
+     * <CODE>$_OS</CODE>
+     * @param xMSF the MultiServiceFactory
+     * @param expand the string to expand
+     * @throws java.lang.Exception was thrown on any exception
+     * @return return the expanded string
+     * @see com.sun.star.util.theMacroExpander
+     */
     public static String expandMacro(XMultiServiceFactory xMSF, String expand) throws java.lang.Exception{
         try {
             XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
@@ -788,8 +838,89 @@ public class utils {
             return xME.expandMacros(expand);
         }
         catch(Exception e) {
-            throw new Exception("could not expand macro: " + e.toString());
+            throw new Exception("could not expand macro: " + e.toString(),e);
         }
 
     }
+
+    /**
+     * returns the platform of the office.<br>
+     * Since the runner and the office could run on different platform this function delivers the
+     * platform the office is running.
+     * @param xMSF the XMultiServiceFactory
+     * @return unxsols, unxsoli, unxlngi, wntmsci
+     */
+    public static String getOfficeOS(XMultiServiceFactory xMSF){
+        String platform = "unkown";
+
+        try {
+            String theOS= expandMacro(xMSF, "$_OS");
+
+            if (theOS.equals("Windows")) platform = "wntmsci";
+            else
+                if (theOS.equals("Linux")) platform = "unxlngi";
+            else{
+                if (theOS.equals("Solaris")){
+                    String theArch = expandMacro(xMSF, "$_ARCH");
+                    if (theArch.equals("SPARC")) platform = "unxsols";
+                    else
+                        if (theArch.equals("x86")) platform = "unxsoli";
+                }
+            }
+        } catch (Exception ex) {}
+        return platform;
+    }
+
+
+    /**
+     * dispatches given <CODE>URL</CODE> to the document <CODE>XComponent</CODE>
+     * @param xMSF the <CODE>XMultiServiceFactory</CODE>
+     * @param xDoc the document where to dispatch
+     * @param URL the <CODE>URL</CODE> to dispatch
+     * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
+     */
+    public static void dispatchURL(XMultiServiceFactory xMSF, XComponent xDoc, String URL)throws java.lang.Exception{
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+
+        XController xCont = aModel.getCurrentController();
+
+        dispatchURL(xMSF, xCont, URL);
+
+    }
+
+    /**
+     * dispatches given <CODE>URL</CODE> to the <CODE>XController</CODE>
+     * @param xMSF the <CODE>XMultiServiceFactory</CODE>
+     * @param xComp the <CODE>XController</CODE> to query for a XDispatchProvider
+     * @param URL the <CODE>URL</CODE> to dispatch
+     * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
+     */
+    public static void dispatchURL(XMultiServiceFactory xMSF, XController xCont, String URL)throws java.lang.Exception{
+        try {
+
+            XDispatchProvider xDispProv = (XDispatchProvider)
+                UnoRuntime.queryInterface( XDispatchProvider.class, xCont );
+
+            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
+                UnoRuntime.queryInterface(XURLTransformer.class, xMSF.createInstance("com.sun.star.util.URLTransformer"));
+
+            // Because it's an in/out parameter we must use an array of URL objects.
+            URL[] aParseURL = new URL[1];
+            aParseURL[0] = new URL();
+            aParseURL[0].Complete = URL;
+            xParser.parseStrict(aParseURL);
+
+            URL aURL = aParseURL[0];
+
+            XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
+            xDispatcher.dispatch( aURL, null );
+
+            utils.shortWait(3000);
+
+        } catch(Exception e) {
+            throw new Exception("ERROR: could not dispatch URL '" + URL + "': " + e.toString());
+        }
+    }
+
+
 }
