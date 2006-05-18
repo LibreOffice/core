@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:37:32 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 09:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,11 +341,14 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_SETINPUTCONTEXT     (WM_USER+144)
 // wParam == nFlags; lParam == 0
 #define SAL_MSG_ENDEXTTEXTINPUT     (WM_USER+145)
+// POSTTIMER-Message; wparam = 0, lParam == time
+#define SAL_MSG_POSTTIMER        (WM_USER+161)
 
 // SysChild-ToTop; wParam = 0; lParam = 0
 #define SALOBJ_MSG_TOTOP            (WM_USER+160)
 // POSTFOCUS-Message; wParam == bFocus; lParam == 0
 #define SALOBJ_MSG_POSTFOCUS        (WM_USER+161)
+
 
 // -----------------
 // - Helpfunctions -
