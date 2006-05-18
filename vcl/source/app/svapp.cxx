@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:51:27 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -701,15 +701,18 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
     Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
     if( ! pWindow )
         pWindow = ImplGetDefaultWindow();
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mbSettingsInit )
+    if( pWindow )
     {
-        pWindow->ImplGetFrame()->UpdateSettings( *pSVData->maAppData.mpSettings );
-        pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
-        pSVData->maAppData.mbSettingsInit = TRUE;
+        ImplSVData* pSVData = ImplGetSVData();
+        if ( !pSVData->maAppData.mbSettingsInit )
+        {
+            pWindow->ImplGetFrame()->UpdateSettings( *pSVData->maAppData.mpSettings );
+            pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
+            pSVData->maAppData.mbSettingsInit = TRUE;
+        }
+        pWindow->ImplGetFrame()->UpdateSettings( rSettings );
+        pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
     }
-    pWindow->ImplGetFrame()->UpdateSettings( rSettings );
-    pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -720,9 +723,13 @@ bool Application::ValidateSystemFont()
     if( ! pWindow )
         pWindow = ImplGetDefaultWindow();
 
-    AllSettings aSettings;
-    pWindow->ImplGetFrame()->UpdateSettings( aSettings );
-    return pWindow->ImplCheckUIFont( aSettings.GetStyleSettings().GetAppFont() );
+    if( pWindow )
+    {
+        AllSettings aSettings;
+        pWindow->ImplGetFrame()->UpdateSettings( aSettings );
+        return pWindow->ImplCheckUIFont( aSettings.GetStyleSettings().GetAppFont() );
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1116,7 +1123,8 @@ BOOL Application::PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = TRUE;
     rEventId = (ULONG)pSVEvent;
-    if ( ImplGetDefaultWindow()->ImplGetFrame()->PostEvent( pSVEvent ) )
+    Window* pDefWindow = ImplGetDefaultWindow();
+    if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
         return TRUE;
     else
     {
@@ -1137,7 +1145,8 @@ BOOL Application::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCall
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = TRUE;
     rEventId = (ULONG)pSVEvent;
-    if ( ImplGetDefaultWindow()->ImplGetFrame()->PostEvent( pSVEvent ) )
+    Window* pDefWindow = ImplGetDefaultWindow();
+    if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
         return TRUE;
     else
     {
