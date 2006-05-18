@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 15:18:25 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -810,9 +810,11 @@ BOOL Printer::Setup( Window* pWindow )
     JobSetup aJobSetup = maJobSetup;
     SalFrame* pFrame;
     if ( !pWindow )
-        pFrame = ImplGetDefaultWindow()->ImplGetFrame();
-    else
-        pFrame = pWindow->ImplGetFrame();
+        pWindow = ImplGetDefaultWindow();
+    if( !pWindow )
+        return FALSE;
+
+    pFrame = pWindow->ImplGetFrame();
     ImplReleaseGraphics();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode++;
