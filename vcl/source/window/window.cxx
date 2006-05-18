@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.235 $
+ *  $Revision: 1.236 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-15 09:55:33 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -9672,7 +9672,8 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& r
     if( ! mpWindowImpl->mbVisible )
     {
         Window* pTempParent = ImplGetDefaultWindow();
-        pTempParent->EnableChildTransparentMode();
+        if( pTempParent )
+            pTempParent->EnableChildTransparentMode();
         pRealParent = GetParent();
         SetParent( pTempParent );
         // trigger correct visibility flags for children
