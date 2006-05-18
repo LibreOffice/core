@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: hdu $ $Date: 2006-05-18 08:21:06 $
+ *  last change: $Author: hdu $ $Date: 2006-05-18 08:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,6 @@
 #else
     #define FTVERSION (1000*FREETYPE_MAJOR + 100*FREETYPE_MINOR + FREETYPE_PATCH)
 #endif
-#if FTVERSION >= 2200
-typedef const FT_Vector* FT_Vector_CPtr;
-#else // FTVERSION < 2200
-typedef FT_Vector* FT_Vector_CPtr;
-#endif
 
 #include <vector>
 
@@ -95,15 +90,21 @@ typedef FT_Vector* FT_Vector_CPtr;
     #define strncasecmp strnicmp
 #endif
 
+#include "freetype/internal/ftobjs.h"
+#include "freetype/internal/sfnt.h"
+#include "freetype/internal/ftstream.h"
+
 #include <svapp.hxx>
 #include <settings.hxx>
 #include <i18npool/lang.h>
 
-typedef const unsigned char* CPU8;
-inline sal_uInt16 NEXT_U16( CPU8& p ) { p+=2; return (p[-2]<<8)|p[-1]; }
-inline sal_Int16  NEXT_S16( CPU8& p ) { return (sal_Int16)NEXT_U16(p); }
-inline sal_uInt32 NEXT_U32( CPU8& p ) { p+=4; return (p[-4]<<24)|(p[-3]<<16)|(p[-2]<<8)|p[-1]; }
-//inline sal_Int32 NEXT_S32( U8*& p ) { return (sal_Int32)NEXT_U32(p); }
+#if defined( FT_NEXT_SHORT ) && !defined( NEXT_Short )
+// Account for differing versions of freetype...
+#define NEXT_Short( x )  FT_NEXT_SHORT( x )
+#define NEXT_UShort( x ) FT_NEXT_USHORT( x )
+#define NEXT_Long( x )   FT_NEXT_LONG( x )
+#define NEXT_ULong( x )  FT_NEXT_ULONG( x )
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -1817,15 +1818,15 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 
     // Apple New style kern table
     pBuffer = pKern;
-    nVersion = NEXT_U32( pBuffer );
-    nTableCnt = NEXT_U32( pBuffer );
+    nVersion = NEXT_ULong( pBuffer );
+    nTableCnt = NEXT_ULong( pBuffer );
     if ( nVersion == 0x00010000 )
     {
         for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
         {
-            ULONG  nLength  = NEXT_U32( pBuffer );
-            USHORT nCoverage   = NEXT_U16( pBuffer );
-            USHORT nTupleIndex = NEXT_U16( pBuffer );
+            ULONG  nLength  = NEXT_ULong( pBuffer );
+            USHORT nCoverage   = NEXT_UShort( pBuffer );
+            USHORT nTupleIndex = NEXT_UShort( pBuffer );
 
             // Get kerning type
             sal_Bool bKernVertical     = nCoverage & 0x8000;
@@ -1839,14 +1840,14 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
             {
                 case 0: // version 0, kerning format 0
                 {
-                    USHORT nPairs = NEXT_U16( pBuffer );
+                    USHORT nPairs = NEXT_UShort( pBuffer );
                     pBuffer += 6;   // skip search hints
                     aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
                     for( int i = 0; i < nPairs; ++i )
                     {
-                        aKernPair.mnChar1 = NEXT_U16( pBuffer );
-                        aKernPair.mnChar2 = NEXT_U16( pBuffer );
-                        /*long nUnscaledKern=*/ NEXT_S16( pBuffer );
+                        aKernPair.mnChar1 = NEXT_UShort( pBuffer );
+                        aKernPair.mnChar2 = NEXT_UShort( pBuffer );
+                        /*long nUnscaledKern=*/ NEXT_Short( pBuffer );
                         aKernGlyphVector.push_back( aKernPair );
                     }
                 }
@@ -1855,18 +1856,18 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 case 2: // version 0, kerning format 2
                 {
                     const FT_Byte* pSubTable = pBuffer;
-                    /*USHORT nRowWidth  =*/ NEXT_U16( pBuffer );
-                    USHORT nOfsLeft     = NEXT_U16( pBuffer );
-                    USHORT nOfsRight    = NEXT_U16( pBuffer );
-                    USHORT nOfsArray    = NEXT_U16( pBuffer );
+                    /*USHORT nRowWidth  =*/ NEXT_UShort( pBuffer );
+                    USHORT nOfsLeft     = NEXT_UShort( pBuffer );
+                    USHORT nOfsRight    = NEXT_UShort( pBuffer );
+                    USHORT nOfsArray    = NEXT_UShort( pBuffer );
 
                     const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                    USHORT nFirstLeft   = NEXT_U16( pTmp );
-                    USHORT nLastLeft    = NEXT_U16( pTmp ) + nFirstLeft - 1;
+                    USHORT nFirstLeft   = NEXT_UShort( pTmp );
+                    USHORT nLastLeft    = NEXT_UShort( pTmp ) + nFirstLeft - 1;
 
                     pTmp = pSubTable + nOfsRight;
-                    USHORT nFirstRight  = NEXT_U16( pTmp );
-                    USHORT nLastRight   = NEXT_U16( pTmp ) + nFirstRight - 1;
+                    USHORT nFirstRight  = NEXT_UShort( pTmp );
+                    USHORT nLastRight   = NEXT_UShort( pTmp ) + nFirstRight - 1;
 
                     ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
                     aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
@@ -1877,7 +1878,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                         aKernPair.mnChar1 = nLeft;
                         for( int nRight = 0; nRight < nLastRight; ++nRight )
                         {
-                            if( NEXT_S16( pTmp ) != 0 )
+                            if( NEXT_Short( pTmp ) != 0 )
                             {
                                 aKernPair.mnChar2 = nRight;
                                 aKernGlyphVector.push_back( aKernPair );
@@ -2073,7 +2074,7 @@ extern "C" {
 // TODO: wait till all compilers accept that calling conventions
 // for functions are the same independent of implementation constness,
 // then uncomment the const-tokens in the function interfaces below
-static int FT_move_to( FT_Vector_CPtr p0, void* vpPolyArgs )
+static int FT_move_to( FT_Vector* /*const*/ p0, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
 
@@ -2084,14 +2085,14 @@ static int FT_move_to( FT_Vector_CPtr p0, void* vpPolyArgs )
     return 0;
 }
 
-static int FT_line_to( FT_Vector_CPtr p1, void* vpPolyArgs )
+static int FT_line_to( FT_Vector* /*const*/ p1, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y, POLY_NORMAL );
     return 0;
 }
 
-static int FT_conic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, void* vpPolyArgs )
+static int FT_conic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
 
@@ -2108,7 +2109,7 @@ static int FT_conic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, void* vpPolyArgs )
     return 0;
 }
 
-static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3, void* vpPolyArgs )
+static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vector* /*const*/ p3, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y, POLY_CONTROL );
