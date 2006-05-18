@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:11:08 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:08:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,12 +356,13 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
 void DeInitVCL()
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mbDeInit = TRUE;
+
     ImplImageTree::cleanup();
 
     delete pExceptionHandler;
     pExceptionHandler = NULL;
-
-    ImplSVData* pSVData = ImplGetSVData();
 
     // Debug Daten zuruecksetzen
     DBGGUI_DEINIT();
