@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:44:31 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1305,13 +1305,13 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
                 pFont->m_aFontFile      = rFontFile;
                 pFont->m_aMetricFile    = aAfmFile;
 
-                if( rXLFDs.size() )
-                    getFontAttributesFromXLFD( pFont, rXLFDs );
-                else if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true ) )
+                if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true ) )
                 {
                     delete pFont;
                     pFont = NULL;
                 }
+                if( pFont && rXLFDs.size() )
+                    getFontAttributesFromXLFD( pFont, rXLFDs );
                 if( pFont )
                     rNewFonts.push_back( pFont );
                 break;
