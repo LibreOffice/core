@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:35:55 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
     const USHORT nCntScript = NEXT_UShort( pScriptHeader );
-    if( pGsubLimit <= pScriptHeader + 6 * nCntScript )
+    if( pGsubLimit < pScriptHeader + 6 * nCntScript )
         return false;
     for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
@@ -113,12 +113,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
-        if( pGsubLimit <= pScriptTable + 4 )
+        if( pGsubLimit < pScriptTable + 4 )
             return false;
         const USHORT nDefaultLangsysOfs = NEXT_UShort( pScriptTable );
         const USHORT nCntLangSystem     = NEXT_UShort( pScriptTable );
         USHORT nLangsysOffset = 0;
-        if( pGsubLimit <= pScriptTable + 6 * nCntLangSystem )
+        if( pGsubLimit < pScriptTable + 6 * nCntLangSystem )
             return false;
         for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
@@ -133,12 +133,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         if( (nDefaultLangsysOfs != 0) && (nDefaultLangsysOfs != nLangsysOffset) )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
-            if( pGsubLimit <= pLangSys + 6 )
+            if( pGsubLimit < pLangSys + 6 )
                 return false;
             /*const USHORT nLookupOrder   =*/ NEXT_UShort( pLangSys );
             const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
             const USHORT nCntFeature    = NEXT_UShort( pLangSys );
-            if( pGsubLimit <= pLangSys + 2 * nCntFeature )
+            if( pGsubLimit < pLangSys + 2 * nCntFeature )
                 return false;
             aFeatureIndexList.push_back( nReqFeatureIdx );
             for( USHORT i = 0; i < nCntFeature; ++i )
@@ -151,12 +151,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         if( nLangsysOffset != 0 )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
-            if( pGsubLimit <= pLangSys + 6 )
+            if( pGsubLimit < pLangSys + 6 )
                 return false;
             /*const USHORT nLookupOrder   =*/ NEXT_UShort( pLangSys );
             const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
             const USHORT nCntFeature    = NEXT_UShort( pLangSys );
-            if( pGsubLimit <= pLangSys + 2 * nCntFeature )
+            if( pGsubLimit < pLangSys + 2 * nCntFeature )
                 return false;
             aFeatureIndexList.push_back( nReqFeatureIdx );
             for( USHORT i = 0; i < nCntFeature; ++i )
@@ -175,10 +175,10 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
     // parse Feature Table
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
-    if( pGsubLimit <= pFeatureHeader + 2 )
+    if( pGsubLimit < pFeatureHeader + 2 )
           return false;
     const USHORT nCntFeature = NEXT_UShort( pFeatureHeader );
-    if( pGsubLimit <= pFeatureHeader + 6 * nCntFeature )
+    if( pGsubLimit < pFeatureHeader + 6 * nCntFeature )
           return false;
     for( USHORT nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
@@ -192,10 +192,10 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             continue;
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
-        if( pGsubLimit <= pFeatureTable + 2 )
+        if( pGsubLimit < pFeatureTable + 2 )
             return false;
         const USHORT nCntLookups = NEXT_UShort( pFeatureTable );
-        if( pGsubLimit <= pFeatureTable + 2 * nCntLookups )
+        if( pGsubLimit < pFeatureTable + 2 * nCntLookups )
             return false;
         for( USHORT i = 0; i < nCntLookups; ++i )
         {
@@ -208,10 +208,10 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
     // parse Lookup List
     const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
-    if( pGsubLimit <= pLookupHeader + 2 )
+    if( pGsubLimit < pLookupHeader + 2 )
         return false;
     const USHORT nCntLookupTable = NEXT_UShort( pLookupHeader );
-    if( pGsubLimit <= pLookupHeader + 2 * nCntLookupTable )
+    if( pGsubLimit < pLookupHeader + 2 * nCntLookupTable )
         return false;
     for( USHORT nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
     {
@@ -225,7 +225,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     {
         const USHORT nOfsLookupTable = *it;
         const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
-        if( pGsubLimit <= pLookupTable + 6 )
+        if( pGsubLimit < pLookupTable + 6 )
             return false;
         const USHORT eLookupType        = NEXT_UShort( pLookupTable );
         /*const USHORT eLookupFlag        =*/ NEXT_UShort( pLookupTable );
@@ -235,13 +235,13 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
             continue;
 
-        if( pGsubLimit <= pLookupTable + 2 * nCntLookupSubtable )
+        if( pGsubLimit < pLookupTable + 2 * nCntLookupSubtable )
             return false;
         for( USHORT nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
         {
             const USHORT nOfsSubLookupTable = NEXT_UShort( pLookupTable );
             const FT_Byte* pSubLookup = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
-            if( pGsubLimit <= pSubLookup + 6 )
+            if( pGsubLimit < pSubLookup + 6 )
                 return false;
             const USHORT nFmtSubstitution   = NEXT_UShort( pSubLookup );
             const USHORT nOfsCoverage       = NEXT_UShort( pSubLookup );
@@ -252,7 +252,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
             const FT_Byte* pCoverage    = pGsubBase
                 + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
-            if( pGsubLimit <= pCoverage + 4 )
+            if( pGsubLimit < pCoverage + 4 )
                 return false;
             const USHORT nFmtCoverage   = NEXT_UShort( pCoverage );
             switch( nFmtCoverage )
@@ -260,7 +260,8 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                 case 1:         // Coverage Format 1
                 {
                     const USHORT nCntGlyph = NEXT_UShort( pCoverage );
-                    if( pGsubLimit <= pCoverage + 2 * nCntGlyph )
+                    if( pGsubLimit < pCoverage + 2 * nCntGlyph )
+                        // TODO? nCntGlyph = (pGsubLimit - pCoverage) / 2;
                         return false;
                     aSubstVector.reserve( nCntGlyph );
                     for( USHORT i = 0; i < nCntGlyph; ++i )
@@ -274,7 +275,8 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                 case 2:         // Coverage Format 2
                 {
                     const USHORT nCntRange = NEXT_UShort( pCoverage );
-                    if( pGsubLimit <= pCoverage + 6 * nCntRange )
+                    if( pGsubLimit < pCoverage + 6 * nCntRange )
+                        // TODO? nCntGlyph = (pGsubLimit - pCoverage) / 6;
                         return false;
                     for( int i = nCntRange; --i >= 0; )
                     {
@@ -306,7 +308,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                     const USHORT nCntGlyph = NEXT_UShort( pSubLookup );
                     for( int i = nCntGlyph; (it != aSubstVector.end()) && (--i>=0); ++it )
                     {
-                        if( pGsubLimit <= pSubLookup + 2 )
+                        if( pGsubLimit < pSubLookup + 2 )
                             return false;
                         const USHORT nGlyphId = NEXT_UShort( pSubLookup );
                         (*it).second = nGlyphId;
