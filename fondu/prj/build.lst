@@ -1,2 +1,2 @@
-es      fondu :       solenv NULL
-es	fondu		nmake	-	u	es_fondu NULL
+fd      fondu :       solenv NULL
+fd	fondu		nmake	-	u	fd_fondu NULL
