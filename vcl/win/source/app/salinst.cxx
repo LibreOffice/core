@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:38:03 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 09:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,13 +741,6 @@ void ImplSalYield( BOOL bWait )
             bMsg = true;
         }
     }
-
-    if( bMsg )
-    {
-        pSalData->mnLastEventTime = aMsg.time;
-        if( pSalData->mnNextTimerTime && pSalData->mnNextTimerTime < aMsg.time )
-            SalTimerProc( 0, 0, SALTIMERPROC_RECURSIVE, aMsg.time );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -884,6 +877,9 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         case SAL_MSG_RELEASEDC:
             ReleaseDC( (HWND)wParam, (HDC)lParam );
             rDef = FALSE;
+            break;
+        case SAL_MSG_POSTTIMER:
+            SalTimerProc( 0, 0, SALTIMERPROC_RECURSIVE, lParam );
             break;
     }
 
