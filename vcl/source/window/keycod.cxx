@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:26:35 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ XubString KeyCode::GetName( Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
-    return pWindow->ImplGetFrame()->GetKeyName( GetFullCode() );
+    return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : XubString();
 }
 
 // -----------------------------------------------------------------------
@@ -148,7 +148,7 @@ XubString KeyCode::GetSymbolName( const XubString& rFontName, Window* pWindow ) 
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
-    return pWindow->ImplGetFrame()->GetSymbolKeyName( rFontName, GetFullCode() );
+    return pWindow ? pWindow->ImplGetFrame()->GetSymbolKeyName( rFontName, GetFullCode() ) : XubString();
 }
 
 // -----------------------------------------------------------------------
