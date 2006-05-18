@@ -56,7 +56,7 @@ MAXLINELENGTH	= 65530
 
 # Recipe execution configuration
    SHELL	 *:= $/bin$/sh
-   SHELLFLAGS	 *:= -c
+   SHELLFLAGS	 *:= -fc
    GROUPSHELL	 *:= $(SHELL)
    GROUPFLAGS	 *:=
    SHELLMETAS	 *:= |();&<>?*][$$:\\#`'"
