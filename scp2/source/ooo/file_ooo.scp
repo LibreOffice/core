@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:22:55 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 09:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2526,5 +2526,14 @@ File gid_File_Icns_Bundle
     Dir = gid_Dir_Bundle_Contents_Resources;
     Name = "osxicons.zip";
     Styles = (ARCHIVE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_Bin_Fondu
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "fondu";
+    Styles = (PACKED);
 End
 #endif
