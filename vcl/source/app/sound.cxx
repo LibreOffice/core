@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:42:15 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,10 @@ void Sound::Pause()
 void Sound::Beep( SoundType eType, Window* pWindow )
 {
     if( !pWindow )
-        ImplGetDefaultWindow()->ImplGetFrame()->Beep( eType );
+    {
+        Window* pDefWindow = ImplGetDefaultWindow();
+        pDefWindow->ImplGetFrame()->Beep( eType );
+    }
     else
         pWindow->ImplGetFrame()->Beep( eType );
 }
