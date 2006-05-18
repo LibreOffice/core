@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:52:50 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,7 +414,8 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
                 {
                     KeyCode mnKeyCode;
                     xub_Unicode mnUnicode = pData->aText.GetChar(n+1);
-                    if( (ImplGetDefaultWindow()->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
+                    Window* pDefWindow = ImplGetDefaultWindow();
+                    if( (pDefWindow && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
                         && aKeyCode.GetCode() == mnKeyCode.GetCode())
                         || (ascii && rI18nHelper.MatchMnemonic( pData->aText, ascii ) ) )
 
@@ -469,7 +470,8 @@ USHORT MenuItemList::GetItemCount( KeyCode aKeyCode ) const
                 KeyCode mnKeyCode;
                 // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
                 // so we have working shortcuts when ascii mnemonics are used
-                if( (ImplGetDefaultWindow()->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1), Application::GetSettings().GetUILanguage(), mnKeyCode )
+                Window* pDefWindow = ImplGetDefaultWindow();
+                if( (pDefWindow && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1), Application::GetSettings().GetUILanguage(), mnKeyCode )
                     && aKeyCode.GetCode() == mnKeyCode.GetCode())
                     || ( ascii && rI18nHelper.MatchMnemonic( pData->aText, ascii ) ) )
                     nItems++;
