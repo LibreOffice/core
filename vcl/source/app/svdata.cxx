@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:10:53 $
+ *  last change: $Author: vg $ $Date: 2006-05-18 10:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ Window* ImplGetDefaultWindow()
         // Test again because the thread who released the solar mutex could have called
         // the same method
 
-        if ( !pSVData->mpDefaultWin )
+        if ( !pSVData->mpDefaultWin && !pSVData->mbDeInit )
         {
             DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
             pSVData->mpDefaultWin = new WorkWindow( 0, WB_DEFAULTWIN );
