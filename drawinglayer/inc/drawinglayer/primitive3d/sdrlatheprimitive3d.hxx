@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:14 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,13 @@ namespace drawinglayer
     {
         class sdrLathePrimitive3D : public sdrPrimitive3D
         {
+        private:
+            // create slices
+            void impCreateSlices();
+
+            // geometry helper for slices
+            sliceVector                                 maSlices;
+
         protected:
             ::basegfx::B2DPolyPolygon                   maPolyPolygon;
             sal_uInt32                                  mnHorizontalSegments;
@@ -73,6 +80,9 @@ namespace drawinglayer
 
             //  create decomposition
             virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+
+            // get (evtl. create) slices
+            const sliceVector& getSlices() const;
 
         public:
             sdrLathePrimitive3D(

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:14 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ namespace drawinglayer
         typedef ::std::vector< slice > sliceVector;
 
         // helpers for creation
-        bool createLatheSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,
+        void createLatheSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,
             double fBackScale, double fDiagonal, double fRotation, sal_uInt32 nSteps,
             bool bCharacterMode, bool bCloseFront, bool bCloseBack);
         void createExtrudeSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,

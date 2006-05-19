@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:08 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,22 +73,11 @@ namespace drawinglayer
     {
         void sdrExtrudePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
-            if(maPolyPolygon.count())
+            // get slices
+            const sliceVector& rSliceVector = getSlices();
+
+            if(rSliceVector.size())
             {
-                ::basegfx::B2DPolyPolygon aCandidate(maPolyPolygon);
-                sliceVector aSliceVector;
-
-                if(getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine())
-                {
-                    // prepare the polygon
-                    aCandidate.removeDoublePoints();
-                    aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
-                    aCandidate = ::basegfx::tools::correctOutmostPolygon(aCandidate);
-
-                    // prepare slices as geometry
-                    createExtrudeSlices(aSliceVector, aCandidate, mfBackScale, mfDiagonal, mfDepth, mbCharacterMode, mbCloseFront, mbCloseBack);
-                }
-
                 // add fill
                 if(getSdrLFSAttribute().getFill())
                 {
@@ -104,7 +93,7 @@ namespace drawinglayer
 
                     if(bCreateTextureCoordiantesX || bCreateTextureCoordiantesY)
                     {
-                        const ::basegfx::B2DPolygon aFirstPolygon(aCandidate.getB2DPolygon(0L));
+                        const ::basegfx::B2DPolygon aFirstPolygon(maCorrectedPolyPolygon.getB2DPolygon(0L));
                         const double fFrontLength(::basegfx::tools::getLength(aFirstPolygon));
                         const double fFrontArea(::basegfx::tools::getArea(aFirstPolygon));
                         const double fSqrtFrontArea(sqrt(fFrontArea));
@@ -124,7 +113,7 @@ namespace drawinglayer
 
                     // create geometry
                     ::std::vector< ::basegfx::B3DPolyPolygon > aFill;
-                    extractPlanesFromSlice(aFill, aSliceVector,
+                    extractPlanesFromSlice(aFill, rSliceVector,
                         bCreateNormals, mbSmoothHorizontalNormals, mbSmoothNormals, mbSmoothLids, false,
                         0.5, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
 
@@ -216,7 +205,7 @@ namespace drawinglayer
                 if(getSdrLFSAttribute().getLine())
                 {
                     ::basegfx::B3DPolyPolygon aLine;
-                    extractLinesFromSlice(aLine, aSliceVector, false);
+                    extractLinesFromSlice(aLine, rSliceVector, false);
                     add3DPolyPolygonLinePrimitive(aLine, maTransform, rTarget, *maSdrLFSAttribute.getLine());
                 }
 
@@ -226,6 +215,30 @@ namespace drawinglayer
                     addShadowPrimitive3D(rTarget, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D());
                 }
             }
+        }
+
+        void sdrExtrudePrimitive3D::impCreateSlices()
+        {
+            maCorrectedPolyPolygon = maPolyPolygon;
+
+            // prepare the polygon
+            maCorrectedPolyPolygon.removeDoublePoints();
+            maCorrectedPolyPolygon = ::basegfx::tools::correctOrientations(maCorrectedPolyPolygon);
+            maCorrectedPolyPolygon = ::basegfx::tools::correctOutmostPolygon(maCorrectedPolyPolygon);
+
+            // prepare slices as geometry
+            createExtrudeSlices(maSlices, maCorrectedPolyPolygon, mfBackScale, mfDiagonal, mfDepth, mbCharacterMode, mbCloseFront, mbCloseBack);
+        }
+
+        const sliceVector& sdrExtrudePrimitive3D::getSlices() const
+        {
+            if(maPolyPolygon.count() && !maSlices.size() && (getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine()))
+            {
+                ::osl::Mutex m_mutex;
+                const_cast< sdrExtrudePrimitive3D& >(*this).impCreateSlices();
+            }
+
+            return maSlices;
         }
 
         sdrExtrudePrimitive3D::sdrExtrudePrimitive3D(
@@ -324,8 +337,13 @@ namespace drawinglayer
 
         ::basegfx::B3DRange sdrExtrudePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
-            // call parent, use decomposition
-            return sdrPrimitive3D::get3DRange(rViewInformation);
+            // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
+            // The parent implementation which uses the ranges of the breakdown would be more
+            // corrcet, but for historical reasons it is necessary to do the old method: To get
+            // the range of the non-transformed geometry and transform it then. This leads to different
+            // ranges where the new method is more correct, but the need to keep the old behaviour
+            // has priority here.
+            return get3DRangeFromSlices(getSlices(), rViewInformation);
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer

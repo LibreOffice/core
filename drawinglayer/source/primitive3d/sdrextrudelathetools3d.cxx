@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:08 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,29 +252,31 @@ namespace
 
             if(nPointCount)
             {
-                ::basegfx::B3DPoint aPrev(aSubA.getB3DPoint(nPointCount - 1L));
+                ::basegfx::B3DPoint aPrevA(aSubA.getB3DPoint(nPointCount - 1L));
                 ::basegfx::B3DPoint aCurrA(aSubA.getB3DPoint(0L));
                 const bool bClosed(aSubA.isClosed());
 
                 for(sal_uInt32 b(0L); b < nPointCount; b++)
                 {
                     const sal_uInt32 nIndNext((b + 1L) % nPointCount);
-                    const ::basegfx::B3DPoint aNext(aSubA.getB3DPoint(nIndNext));
+                    const ::basegfx::B3DPoint aNextA(aSubA.getB3DPoint(nIndNext));
                     const ::basegfx::B3DPoint aCurrB(aSubB.getB3DPoint(b));
 
                     // vector to back
                     ::basegfx::B3DVector aDepth(aCurrB - aCurrA);
                     aDepth.normalize();
 
-                    // vector to left
-                    ::basegfx::B3DVector aLeft(aPrev - aCurrA);
-
-                    if(!bClosed && 0L == b)
+                    if(aDepth.equalZero())
                     {
-                        // correct for non-closed lines
-                        aLeft = aCurrA - aNext;
+                        // no difference, try to get depth from next point
+                        const ::basegfx::B3DPoint aNextB(aSubB.getB3DPoint(nIndNext));
+                        aDepth = aNextB - aNextA;
+                        aDepth.normalize();
                     }
 
+                    // vector to left (correct for non-closed lines)
+                    const bool bFirstAndNotClosed(!bClosed && 0L == b);
+                    ::basegfx::B3DVector aLeft(bFirstAndNotClosed ? aCurrA - aNextA : aPrevA - aCurrA);
                     aLeft.normalize();
 
                     // create left normal
@@ -282,15 +284,9 @@ namespace
 
                     if(bSmoothHorizontalNormals)
                     {
-                        // vector to right
-                        ::basegfx::B3DVector aRight(aNext - aCurrA);
-
-                        if(!bClosed && b + 1L == nPointCount)
-                        {
-                            // correct for non-closed lines
-                            aRight = aCurrA - aPrev;
-                        }
-
+                        // vector to right (correct for non-closed lines)
+                        const bool bLastAndNotClosed(!bClosed && b + 1L == nPointCount);
+                        ::basegfx::B3DVector aRight(bLastAndNotClosed ? aCurrA - aPrevA : aNextA - aCurrA);
                         aRight.normalize();
 
                         // create right normal
@@ -312,8 +308,8 @@ namespace
                     }
 
                     // prepare next step
-                    aPrev = aCurrA;
-                    aCurrA = aNext;
+                    aPrevA = aCurrA;
+                    aCurrA = aNextA;
                 }
 
                 rPolA.setB3DPolygon(a, aSubA);
@@ -355,12 +351,10 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        bool createLatheSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,
+        void createLatheSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,
             double fBackScale, double fDiagonal, double fRotation, sal_uInt32 nSteps,
             bool bCharacterMode, bool bCloseFront, bool bCloseBack)
         {
-            bool bClosedRotation(false);
-
             if(::basegfx::fTools::equalZero(fRotation) || 0L == nSteps)
             {
                 // no rotation or no steps, just one plane
@@ -369,7 +363,7 @@ namespace drawinglayer
             else
             {
                 const bool bBackScale(!::basegfx::fTools::equal(fBackScale, 1.0));
-                bClosedRotation = (!bBackScale && ::basegfx::fTools::equal(fRotation, F_2PI));
+                const bool bClosedRotation(!bBackScale && ::basegfx::fTools::equal(fRotation, F_2PI));
                 ::basegfx::B2DPolyPolygon aFront(rSource);
                 ::basegfx::B2DPolyPolygon aBack(rSource);
                 ::basegfx::B3DHomMatrix aTransformBack;
@@ -441,8 +435,6 @@ namespace drawinglayer
                     rSliceVector.push_back(slice(aOuterBack, aTransformBack, SLICETYPE_BACKCAP));
                 }
             }
-
-            return bClosedRotation;
         }
 
         void createExtrudeSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,

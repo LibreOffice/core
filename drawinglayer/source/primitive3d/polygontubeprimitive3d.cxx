@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:07 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,19 +386,13 @@ namespace drawinglayer
                 // build transformation from unit vector to vector
                 ::basegfx::B3DHomMatrix aRetval;
 
-                // extract rot angles from vector, first in XY
-                const double fRotInXY(atan2(rVector.getY(), rVector.getX()));
+                // get applied rotations from angles in XY and in XZ (cartesian)
+                const double fRotInXY(atan2(rVector.getY(), rVector.getXZLength()));
+                const double fRotInXZ(atan2(-rVector.getZ(), rVector.getX()));
 
-                // now get rot in XZ. Use negative Z due to right-handed system. Use XYLength as
-                // X-Coordinate to get correct angle
-                const double fRotInXZ(atan2(-rVector.getZ(), rVector.getXYLength()));
-
-                // fill rotation. This will first rotate around Y, then around
-                // Z, that's why the angles needed to be extracted in that order
-                if(!::basegfx::fTools::equalZero(fRotInXY) || !::basegfx::fTools::equalZero(fRotInXZ))
-                {
-                    aRetval.rotate(0.0, fRotInXZ, fRotInXY);
-                }
+                // apply rotations. Rot around Z needs to be done first, so apply in two steps
+                aRetval.rotate(0.0, 0.0, fRotInXY);
+                aRetval.rotate(0.0, fRotInXZ, 0.0);
 
                 return aRetval;
             }

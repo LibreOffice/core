@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:14 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@
 #include <drawinglayer/primitive3d/sdrattribute3d.hxx>
 #endif
 
+#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
+#include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -72,6 +76,10 @@ namespace drawinglayer
             // Standard implementation for primitive3D which
             // will use maTransform as range and expand by evtl. line width / 2
             ::basegfx::B3DRange getStandard3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const;
+
+            // implementation for primitive3D which
+            // will use given slices and expand by evtl. line width / 2
+            ::basegfx::B3DRange get3DRangeFromSlices(const sliceVector& rSlices, const ::drawinglayer::geometry::viewInformation& rViewInformation) const;
 
         public:
             sdrPrimitive3D(

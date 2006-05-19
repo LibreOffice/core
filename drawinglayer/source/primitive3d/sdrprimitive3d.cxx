@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:08 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@
 #include <drawinglayer/primitive/sdrattribute.hxx>
 #endif
 
+#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -64,6 +68,34 @@ namespace drawinglayer
             }
 
             return aUnitRange;
+        }
+
+        ::basegfx::B3DRange sdrPrimitive3D::get3DRangeFromSlices(const sliceVector& rSlices, const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        {
+            ::basegfx::B3DRange aRetval;
+
+            if(rSlices.size())
+            {
+                for(sal_uInt32 a(0L); a < rSlices.size(); a++)
+                {
+                    aRetval.expand(::basegfx::tools::getRange(rSlices[a].getB3DPolyPolygon()));
+                }
+
+                aRetval.transform(getTransform());
+
+                if(maSdrLFSAttribute.getLine())
+                {
+                    const sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
+
+                    if(rLine.isVisible() && !::basegfx::fTools::equalZero(rLine.getWidth()))
+                    {
+                        // expand by hald LineWidth as tube radius
+                        aRetval.grow(rLine.getWidth() / 2.0);
+                    }
+                }
+            }
+
+            return aRetval;
         }
 
         sdrPrimitive3D::sdrPrimitive3D(

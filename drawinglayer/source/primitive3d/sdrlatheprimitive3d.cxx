@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:08 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,34 +69,13 @@ namespace drawinglayer
     {
         void sdrLathePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
-            if(maPolyPolygon.count())
+            // get slices
+            const sliceVector& rSliceVector = getSlices();
+
+            if(rSliceVector.size())
             {
-                ::basegfx::B2DPolyPolygon aCandidate(maPolyPolygon);
-                sliceVector aSliceVector;
-                bool bClosedRotation(false);
-
-                if(getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine())
-                {
-                    // prepare the polygon
-                    aCandidate = ::basegfx::tools::adaptiveSubdivideByDistance(aCandidate);
-                    aCandidate.removeDoublePoints();
-                    aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
-                    aCandidate = ::basegfx::tools::correctOutmostPolygon(aCandidate);
-
-                    // check edge count of first sub-polygon. If different, reSegment polyPolygon. This ensures
-                    // that for polyPolygons, the subPolys 1..n only get reSegmented when polygon 0L is different
-                    // at all (and not always)
-                    const ::basegfx::B2DPolygon aSubCandidate(aCandidate.getB2DPolygon(0L));
-                    const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1L : 0L));
-
-                    if(nSubEdgeCount != mnVerticalSegments)
-                    {
-                        aCandidate = ::basegfx::tools::reSegmentPolyPolygon(aCandidate, mnVerticalSegments);
-                    }
-
-                    // prepare slices as geometry
-                    bClosedRotation = createLatheSlices(aSliceVector, aCandidate, mfBackScale, mfDiagonal, mfRotation, mnHorizontalSegments, mbCharacterMode, mbCloseFront, mbCloseBack);
-                }
+                const bool bBackScale(!::basegfx::fTools::equal(mfBackScale, 1.0));
+                const bool bClosedRotation(!bBackScale && mnHorizontalSegments && ::basegfx::fTools::equal(mfRotation, F_2PI));
 
                 // add fill
                 if(getSdrLFSAttribute().getFill())
@@ -124,7 +103,7 @@ namespace drawinglayer
 
                     // create geometry
                     ::std::vector< ::basegfx::B3DPolyPolygon > aFill;
-                    extractPlanesFromSlice(aFill, aSliceVector,
+                    extractPlanesFromSlice(aFill, rSliceVector,
                         bCreateNormals, mbSmoothHorizontalNormals, mbSmoothNormals, mbSmoothLids, bClosedRotation,
                         0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
 
@@ -216,7 +195,7 @@ namespace drawinglayer
                 if(getSdrLFSAttribute().getLine())
                 {
                     ::basegfx::B3DPolyPolygon aLine;
-                    extractLinesFromSlice(aLine, aSliceVector, bClosedRotation);
+                    extractLinesFromSlice(aLine, rSliceVector, bClosedRotation);
                     add3DPolyPolygonLinePrimitive(aLine, maTransform, rTarget, *maSdrLFSAttribute.getLine());
                 }
 
@@ -226,6 +205,40 @@ namespace drawinglayer
                     addShadowPrimitive3D(rTarget, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D());
                 }
             }
+        }
+
+        void sdrLathePrimitive3D::impCreateSlices()
+        {
+            // prepare the polygon
+            ::basegfx::B2DPolyPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByDistance(maPolyPolygon));
+            aCandidate.removeDoublePoints();
+            aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
+            aCandidate = ::basegfx::tools::correctOutmostPolygon(aCandidate);
+
+            // check edge count of first sub-polygon. If different, reSegment polyPolygon. This ensures
+            // that for polyPolygons, the subPolys 1..n only get reSegmented when polygon 0L is different
+            // at all (and not always)
+            const ::basegfx::B2DPolygon aSubCandidate(aCandidate.getB2DPolygon(0L));
+            const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1L : 0L));
+
+            if(nSubEdgeCount != mnVerticalSegments)
+            {
+                aCandidate = ::basegfx::tools::reSegmentPolyPolygon(aCandidate, mnVerticalSegments);
+            }
+
+            // prepare slices as geometry
+            createLatheSlices(maSlices, aCandidate, mfBackScale, mfDiagonal, mfRotation, mnHorizontalSegments, mbCharacterMode, mbCloseFront, mbCloseBack);
+        }
+
+        const sliceVector& sdrLathePrimitive3D::getSlices() const
+        {
+            if(maPolyPolygon.count() && !maSlices.size() && (getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine()))
+            {
+                ::osl::Mutex m_mutex;
+                const_cast< sdrLathePrimitive3D& >(*this).impCreateSlices();
+            }
+
+            return maSlices;
         }
 
         sdrLathePrimitive3D::sdrLathePrimitive3D(
@@ -328,8 +341,13 @@ namespace drawinglayer
 
         ::basegfx::B3DRange sdrLathePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
-            // call parent, use decomposition
-            return sdrPrimitive3D::get3DRange(rViewInformation);
+            // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
+            // The parent implementation which uses the ranges of the breakdown would be more
+            // corrcet, but for historical reasons it is necessary to do the old method: To get
+            // the range of the non-transformed geometry and transform it then. This leads to different
+            // ranges where the new method is more correct, but the need to keep the old behaviour
+            // has priority here.
+            return get3DRangeFromSlices(getSlices(), rViewInformation);
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer

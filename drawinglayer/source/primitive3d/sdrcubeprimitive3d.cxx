@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrcubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:07 $
+ *  last change: $Author: aw $ $Date: 2006-05-19 09:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,12 @@ namespace drawinglayer
 
         ::basegfx::B3DRange sdrCubePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
-            // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
+            // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2.
+            // The parent implementation which uses the ranges of the breakdown would be more
+            // corrcet, but for historical reasons it is necessary to do the old method: To get
+            // the range of the non-transformed geometry and transform it then. This leads to different
+            // ranges where the new method is more correct, but the need to keep the old behaviour
+            // has priority here.
             return getStandard3DRange(rViewInformation);
         }
     } // end of namespace primitive
