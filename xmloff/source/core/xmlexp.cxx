@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:43:08 $
+ *  last change: $Author: vg $ $Date: 2006-05-22 10:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2018,19 +2018,24 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 {
     OUString sValue( rValue );
-    try
+    // #i65474# handling of fragment URLs ("#....") is undefined
+    // they are stored 'as is'
+    if(sValue.getLength() && sValue.getStr()[0] != '#')
     {
-        uno::Reference< uri::XUriReference > xUriRef = pImpl->mxUriReferenceFactory->parse( rValue );
-        if( xUriRef.is() && !xUriRef->isAbsolute() )
+        try
         {
-            //#i61943# relative URLs need special handling
-            INetURLObject aTemp( pImpl->msPackageURI );
-            bool bWasAbsolute = false;
-            sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DECODE_TO_IURI);
+            uno::Reference< uri::XUriReference > xUriRef = pImpl->mxUriReferenceFactory->parse( rValue );
+            if( xUriRef.is() && !xUriRef->isAbsolute() )
+            {
+                //#i61943# relative URLs need special handling
+                INetURLObject aTemp( pImpl->msPackageURI );
+                bool bWasAbsolute = false;
+                sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DECODE_TO_IURI);
+            }
         }
-    }
-    catch( uno::Exception& )
-    {
+        catch( uno::Exception& )
+        {
+        }
     }
     return URIHelper::simpleNormalizedMakeRelative(sOrigFileName, sValue);
 }
