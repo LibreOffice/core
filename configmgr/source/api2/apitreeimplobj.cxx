@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:09:38 $
+ *  last change: $Author: vg $ $Date: 2006-05-22 11:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,10 +624,12 @@ void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
     if (isAlive())
     {
         data::Accessor aSourceAccessor( getSourceData() );
-
-        osl::MutexGuard aLocalGuard(getDataLock());
         if (isAlive())
-            implDisposeNode(aSourceAccessor, aNode,pInstance);
+        {
+            osl::MutexGuard aLocalGuard(getDataLock());
+            if (isAlive())
+                implDisposeNode(aSourceAccessor, aNode,pInstance);
+        }
     }
 }
 //-------------------------------------------------------------------------
