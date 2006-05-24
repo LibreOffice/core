@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:05:24 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:35:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -56,16 +54,6 @@ SLOFILES= \
         $(SLO)$/AttributeList.obj \
         $(SLO)$/Base64Codec.obj \
         $(SLO)$/UnoRegister.obj
-
-# --- UNO stuff ---------------------------------------------------
-
-CPPUMAKERFLAGS=
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.packages.manifest.XManifestReader \
-    com.sun.star.packages.manifest.XManifestWriter
 
 # --- Targets ------------------------------------------------------
 
