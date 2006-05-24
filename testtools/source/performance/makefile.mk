@@ -2,45 +2,15 @@ PRJ=..$/..
 
 PRJNAME=testtools
 TARGET=performancetest
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
-
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(OUT)$/inc
-
-UNOTYPES= \
-        com.sun.star.uno.TypeClass		\
-        com.sun.star.uno.XAggregation		\
-        com.sun.star.uno.XWeak			\
-        com.sun.star.lang.XInitialization		\
-        com.sun.star.lang.XTypeProvider		\
-        com.sun.star.lang.XServiceInfo		\
-        com.sun.star.lang.XSingleServiceFactory	\
-        com.sun.star.lang.XMultiServiceFactory	\
-        com.sun.star.lang.XComponent		\
-        com.sun.star.lang.XMain			\
-        com.sun.star.loader.XImplementationLoader \
-        com.sun.star.registry.XRegistryKey	\
-        com.sun.star.bridge.XUnoUrlResolver	\
-        com.sun.star.container.XSet		\
-        com.sun.star.test.performance.XPerformanceTest \
-            com.sun.star.lang.XSingleComponentFactory	\
-            com.sun.star.uno.XComponentContext          
-
-# ---- test ----
 
 LIB1TARGET=$(SLB)$/perftest.lib
 LIB1OBJFILES= \
