@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:29:51 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 12:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,8 @@
 #ifdef ENABLE_CUPS
 #include <cups/cups.h>
 #include <cups/ppd.h>
-#else
+
+#else // !ENABLE_CUPS
 typedef void ppd_file_t;
 typedef void cups_dest_t;
 typedef void cups_option_t;
@@ -51,6 +52,13 @@ typedef void cups_option_t;
 #include <cupsmgr.hxx>
 
 #include <algorithm>
+
+// FIXME: SAL_MODULENAME_WITH_VERSION needs to be fixed on OS X
+#ifdef MACOSX
+#define CUPS_LIB_NAME "libcups.2.dylib"
+#else
+#define CUPS_LIB_NAME "libcups.so.2"
+#endif
 
 namespace psp
 {
@@ -153,11 +161,11 @@ CUPSWrapper::CUPSWrapper()
           m_bPPDThreadRunning( false )
 {
 #ifdef ENABLE_CUPS
-    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libcups.so.2" ) );
+    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( CUPS_LIB_NAME ) );
     m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( ! m_pLib )
     {
-        aLib = OUString( RTL_CONSTASCII_USTRINGPARAM( "libcups.so" ) );
+        aLib = OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "cups" ) ) );
         m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     }
 #endif
