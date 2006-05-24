@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:20:29 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:36:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
 # the following flag un-inlines function calls and disables optimisations
@@ -63,19 +61,6 @@ SLOFILES= \
 
 #		$(SLO)$/InteractionRequest.obj  \
 #		$(SLO)$/InteractionContinuation.obj
-
-# --- UNO stuff ---------------------------------------------------
-
-CPPUMAKERFLAGS=
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.packages.manifest.XManifestReader \
-    com.sun.star.packages.manifest.XManifestWriter \
-    com.sun.star.packages.zip.ZipEntry \
-    com.sun.star.packages.zip.ZipConstants \
-    com.sun.star.packages.zip.ZipException
 
 # --- Targets ------------------------------------------------------
 
