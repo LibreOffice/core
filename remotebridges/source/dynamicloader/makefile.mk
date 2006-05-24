@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:22:52 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:58:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..$/..
 PRJNAME=remotebridges
 TARGET = dynamicloader.uno
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 COMP1TYPELIST = dynamicloader
 
 # --- Settings -----------------------------------------------------
@@ -48,15 +47,9 @@ DLLPRE =
 
 # ------------------------------------------------------------------
 
+# use for types from COMP1TYPELIST 
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS += -C
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-
-# output directory (one dir for each project)
-UNOUCROUT=$(OUT)$/inc
-
-# adding to inludepath
-INCPRE+=$(UNOUCROUT)
 
 SLOFILES= \
     $(SLO)$/dynamicloader.obj
