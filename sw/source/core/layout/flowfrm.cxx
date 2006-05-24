@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-16 16:08:29 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 13:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,12 +462,16 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     SwLayoutFrm *pLay = pStart->GetUpper();
     if ( pLay->IsInFtn() )
         pLay = pLay->FindFtnFrm();
-    if( pLay )
+
+    // --> OD 2006-05-08 #i58846#
+    // <pPrepare( PREP_QUOVADIS )> only for frames in footnotes
+    if( pStart->IsInFtn() )
     {
         SwFrm* pTmp = pStart->GetIndPrev();
         if( pTmp )
             pTmp->Prepare( PREP_QUOVADIS );
     }
+    // <--
 
     //Nur fix auschneiden und zwar so, dass klare Verhaeltnisse bei den
     //Verlassenen herrschen. Die Pointer der ausgeschnittenen Kette zeigen
@@ -2190,9 +2194,11 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         //Natuerlich muessen Leereseiten geflissentlich uebersehen werden!
         const SwFrm *pFlow = &rThis;
         do
-        {   pFlow = pFlow->FindPrev();
-        } while ( pFlow && ( pFlow->FindPageFrm() == pOldPage ||
-                  !pFlow->IsInDocBody() ) );
+        {
+            pFlow = pFlow->FindPrev();
+        } while ( pFlow &&
+                  ( pFlow->FindPageFrm() == pOldPage ||
+                    !pFlow->IsInDocBody() ) );
         if ( pFlow )
         {
             long nDiff = pOldPage->GetPhyPageNum() - pFlow->GetPhyPageNum();
@@ -2203,45 +2209,20 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 if ( nDiff > 1 )
                 {
                     pNewUpper = rThis.GetLeaf( MAKEPAGE_NONE, FALSE );
-
-                    //
-                    // START OF HACK for #i14206#
-                    //
-
-                    // Get the bodyframe of the next page.
-                    // There was a loop in this situation:
-                    // Page 5: Section frame
-                    // Page 6: Empty body frame
-                    // Page 7: Tab frame with page break before.
-                    // Here, the tab frame moves to page 5. Therefore the
-                    // section frame on page 5 is invalidated. During further
-                    // formatting of the tab frame, it is moved to page 6
-                    // because of the page break. During formatting of
-                    // the section frame, the tab frame moves to page 7 again and so on.
-
-                    if ( pFlow->IsInSct() && SwFlowFrm::IsMoveBwdJump() && 2 == nDiff &&
-                         !((SwPageFrm*)pOldPage->GetPrev())->IsEmptyPage() &&
-                         pNewUpper && pNewUpper->IsPageBodyFrm() )
+                    // --> OD 2006-05-08 #i53139#
+                    // Now <pNewUpper> is a previous layout frame, which contains
+                    // content. But the new upper layout frame has to be the next one.
+                    // Thus, hack for issue i14206 no longer needed, but fix for issue 114442
+                    // --> OD 2006-05-17 #136024# - correct fix for i53139:
+                    // Check for wrong page description before using next new upper.
+                    SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
+                    if ( pNewNextUpper &&
+                         !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
                     {
-                        SwPageFrm* pNextPage = (SwPageFrm*)pNewUpper->GetUpper()->GetNext();
-                        if ( pNextPage )
-                        {
-                            SwFrm* pLayout = pNextPage->Lower();
-                            if ( pLayout && pLayout->IsHeaderFrm() )
-                                pLayout = pLayout->GetNext();
-
-                            if ( pLayout && pLayout->IsBodyFrm() && !((SwLayoutFrm*)pLayout)->Lower() )
-                            {
-                                pNewUpper = (SwLayoutFrm*)pLayout;
-                                SwFlowFrm::SetMoveBwdJump( FALSE );
-                                bCheckPageDescOfNextPage = true;
-                            }
-                        }
+                        pNewUpper = pNewNextUpper;
+                        bCheckPageDescOfNextPage = true;
                     }
-
-                    //
-                    // END OF HACK for #i14206#
-                    //
+                    // <--
 
                     bCheckPageDescs = TRUE;
                 }
@@ -2261,7 +2242,24 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                   ( ( !pNewUpper->IsColBodyFrm() ||
                       !pNewUpper->GetUpper()->GetPrev() ) &&
                     !pNewUpper->FindSctFrm()->GetPrev() ) ) )
+            {
                 pNewUpper = 0;
+            }
+            // --> OD 2006-05-08 #i53139#
+            else
+            {
+                // Now <pNewUpper> is a previous layout frame, which
+                // contains content. But the new upper layout frame
+                // has to be the next one.
+                // --> OD 2006-05-17 #136024# - correct fix for i53139
+                SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
+                if ( pNewNextUpper &&
+                     !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
+                {
+                    pNewUpper = pNewNextUpper;
+                }
+            }
+            // <--
         }
         else
         {
@@ -2288,7 +2286,21 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                         bGoOn = FALSE; // Hier gibt's Inhalt, wir akzeptieren diese
                         // nur, wenn GetLeaf() das MoveBwdJump-Flag gesetzt hat.
                         if( SwFlowFrm::IsMoveBwdJump() )
+                        {
                             pNewUpper = pColBody;
+                            // --> OD 2006-05-08 #i53139#
+                            // Now <pNewUpper> is a previous layout frame, which
+                            // contains content. But the new upper layout frame
+                            // has to be the next one.
+                            // --> OD 2006-05-17 #136024# - correct fix for i53139
+                            SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
+                            if ( pNewNextUpper &&
+                                 !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
+                            {
+                                pNewUpper = pNewNextUpper;
+                            }
+                            // <--
+                        }
                     }
                     else
                     {
