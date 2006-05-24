@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:08:45 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 13:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1233,6 +1233,37 @@ class ExtraFormatToPositionObjs
             if ( mpSectFrm->Lower() && mpSectFrm->Lower()->IsColumnFrm() &&
                  mpSectFrm->Lower()->GetNext() )
             {
+                // grow section till bottom of printing area of upper frame
+                SWRECTFN( mpSectFrm );
+                SwTwips nTopMargin = (mpSectFrm->*fnRect->fnGetTopMargin)();
+                Size aOldSectPrtSize( mpSectFrm->Prt().SSize() );
+                SwTwips nDiff = (mpSectFrm->Frm().*fnRect->fnBottomDist)(
+                                        (mpSectFrm->GetUpper()->*fnRect->fnGetPrtBottom)() );
+                (mpSectFrm->Frm().*fnRect->fnAddBottom)( nDiff );
+                (mpSectFrm->*fnRect->fnSetYMargins)( nTopMargin, 0 );
+                // --> OD 2006-05-08 #i59789#
+                // suppress formatting, if printing area of section is too narrow
+                if ( (mpSectFrm->Prt().*fnRect->fnGetHeight)() <= 0 )
+                {
+                    return;
+                }
+                // <--
+                mpSectFrm->ChgLowersProp( aOldSectPrtSize );
+
+                // format column frames and its body and footnote container
+                SwColumnFrm* pColFrm = static_cast<SwColumnFrm*>(mpSectFrm->Lower());
+                while ( pColFrm )
+                {
+                    pColFrm->Calc();
+                    pColFrm->Lower()->Calc();
+                    if ( pColFrm->Lower()->GetNext() )
+                    {
+                        pColFrm->Lower()->GetNext()->Calc();
+                    }
+
+                    pColFrm = static_cast<SwColumnFrm*>(pColFrm->GetNext());
+                }
+
                 // unlock position of lower floating screen objects for the extra format
                 SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
                 SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
@@ -1253,30 +1284,6 @@ class ExtraFormatToPositionObjs
 
                         }
                     }
-                }
-
-                // grow section till bottom of printing area of upper frame
-                SWRECTFN( mpSectFrm );
-                SwTwips nTopMargin = (mpSectFrm->*fnRect->fnGetTopMargin)();
-                Size aOldSectPrtSize( mpSectFrm->Prt().SSize() );
-                SwTwips nDiff = (mpSectFrm->Frm().*fnRect->fnBottomDist)(
-                                        (mpSectFrm->GetUpper()->*fnRect->fnGetPrtBottom)() );
-                (mpSectFrm->Frm().*fnRect->fnAddBottom)( nDiff );
-                (mpSectFrm->*fnRect->fnSetYMargins)( nTopMargin, 0 );
-                mpSectFrm->ChgLowersProp( aOldSectPrtSize );
-
-                // format column frames and its body and footnote container
-                SwColumnFrm* pColFrm = static_cast<SwColumnFrm*>(mpSectFrm->Lower());
-                while ( pColFrm )
-                {
-                    pColFrm->Calc();
-                    pColFrm->Lower()->Calc();
-                    if ( pColFrm->Lower()->GetNext() )
-                    {
-                        pColFrm->Lower()->GetNext()->Calc();
-                    }
-
-                    pColFrm = static_cast<SwColumnFrm*>(pColFrm->GetNext());
                 }
 
                 // format content - first with collecting its foot-/endnotes before content
@@ -1414,7 +1421,13 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             {
                 if( pFrm->IsColumnFrm() && pFrm->GetNext() )
                 {
-                    FormatWidthCols( *pAttr, nRemaining, MINLAY );
+                    // --> OD 2006-05-08 #i61435#
+                    // suppress formatting, if upper frame has height <= 0
+                    if ( (GetUpper()->Frm().*fnRect->fnGetHeight)() > 0 )
+                    {
+                        FormatWidthCols( *pAttr, nRemaining, MINLAY );
+                    }
+                    // <--
                     // --> OD 2006-01-04 #126020# - adjust check for empty section
                     // --> OD 2006-02-01 #130797# - correct fix #126020#
                     while( HasFollow() && !GetFollow()->ContainsCntnt() &&
