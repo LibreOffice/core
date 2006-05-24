@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:32:14 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:27:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..$/..
 PRJNAME=	scripting
 TARGET=		provider
 USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
 
@@ -46,8 +45,6 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
-
-.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES=\
         $(SLO)$/InvocationCtxProperties.obj\
