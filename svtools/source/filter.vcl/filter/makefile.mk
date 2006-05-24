@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:39:00 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:26:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,36 +43,6 @@ LIBTARGET=NO
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/svt.pmk
-
-# --- UNOTypes -----------------------------------------------------
-
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-UNOTYPES=	\
-            com.sun.star.svg.XSVGWriter							
-
-#			com.sun.star.beans.PropertyValue					\
-#			com.sun.star.beans.XPropertyAccess					\
-#			com.sun.star.beans.XPropertySetInfo					\
-#			com.sun.star.container.XHierarchicalNameAccess		\
-#			com.sun.star.container.XIndexAccess					\
-#			com.sun.star.container.XNameAccess					\
-#			com.sun.star.document.XViewDataSupplier				\
-#			com.sun.star.document.XExporter						\
-#			com.sun.star.frame.XModel							\
-#			com.sun.star.io.XActiveDataSource					\
-#			com.sun.star.io.XOutputStream						\
-#			com.sun.star.lang.XInitialization					\
-#			com.sun.star.lang.XMultiServiceFactory				\
-#			com.sun.star.lang.XServiceInfo						\
-#			com.sun.star.lang.XTypeProvider						\
-#			com.sun.star.ui.dialogs.XExecutableDialog			\
-#			com.sun.star.ui.dialogs.ExecutableDialogResults		\
-#			com.sun.star.uno.XAggregation						\
-#			com.sun.star.uno.XInterface							\
-#			com.sun.star.uno.XWeak								\
-#			com.sun.star.util.XChangesBatch						\
-#			com.sun.star.xml.sax.XDocumentHandler
 
 # --- Files --------------------------------------------------------
 
