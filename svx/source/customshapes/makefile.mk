@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 10:29:13 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:10:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,26 +51,6 @@ ENABLE_EXCEPTIONS=TRUE
 .IF ("$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC") || "$(OS)"=="MACOSX" || ("$(OS)"=="LINUX" && "$(CPU)"=="P") 
 NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
 .ENDIF
-
-UNOTYPES=	com.sun.star.uno.XWeak									\
-            com.sun.star.uno.XNamingService							\
-            com.sun.star.uno.XComponentContext						\
-            com.sun.star.uno.XAggregation							\
-            com.sun.star.lang.XServiceInfo							\
-            com.sun.star.lang.XSingleServiceFactory					\
-            com.sun.star.lang.XMultiServiceFactory					\
-            com.sun.star.lang.XSingleComponentFactory				\
-            com.sun.star.lang.XTypeProvider							\
-            com.sun.star.lang.XInitialization						\
-            com.sun.star.registry.XSimpleRegistry					\
-            com.sun.star.util.logging.XLogger						\
-            com.sun.star.util.logging.LogLevel						\
-            com.sun.star.util.XTextSearch							\
-            com.sun.star.util.SearchResult							\
-            com.sun.star.xml.sax.XDocumentHandler					\
-            com.sun.star.drawing.XCustomShapeEngine			\
-            com.sun.star.drawing.XCustomShapeHandle
-
 
 # --- Files -------------------------------------
 
