@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:48:29 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:13:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,28 @@ SDI0 SDI1 SDI2 SDI3 SDI4 SDI5 :
     @+dmake $(SDI$(TNR)TARGET) $(HIDSID$(TNR)PARTICLE) MULTI_SDI_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ELSE			# "$(MULTI_SDI_FLAG)" == ""
 
-.IF "$(make_srs_deps)"==""
-dttt:
-    echo $(TNR)------------
 
+#######################################################
+# instructions for ???
+# unroll begin
+
+.IF "$(make_srs_deps)"==""
+
+.IF "$(HIDSID$(TNR)PARTICLE)"!=""
+$(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET) $(MISC)$/$(SDI$(TNR)NAME).sid
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@.$(ROUT).tmp $@
+.IF "$(USE_SHELL)"=="4nt"
+    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
+.ELSE
+    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
+.ENDIF
+    @+-$(RM) $@
+    @+$(RENAME) $@.$(ROUT).tmp $@
+.ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
+
+.IF "$(SDI$(TNR)TARGET)"!=""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     @echo ------------------------------
     @echo Making: $@
@@ -78,25 +96,24 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI$(TNR)NAME).sid	\
     $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
-
-$(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET) $(MISC)$/$(SDI$(TNR)NAME).sid
-    @echo ------------------------------
-    @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
-.IF "$(USE_SHELL)"=="4nt"
-    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
-.ELSE
-    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
-.ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
-
+.ENDIF # "$(SDI$(TNR)TARGET)"!=""
 
 .ELSE			# "$(make_srs_deps)"==""
+.IF "$(SDI$(TNR)TARGET)"!=""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
     @+echo jetzt nicht...
+.ENDIF # "$(SDI$(TNR)TARGET)"!=""
+
+.IF "$(HIDSID$(TNR)PARTICLE)"!=""
 $(HIDSID$(TNR)PARTICLE):
     @+echo jetzt nicht...
+.ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
 .ENDIF			# "$(make_srs_deps)"==""
+
+
+# Instruction for ???
+# unroll end
+#######################################################
+
 .ENDIF			# "$(MULTI_SDI_FLAG)" == ""
 
