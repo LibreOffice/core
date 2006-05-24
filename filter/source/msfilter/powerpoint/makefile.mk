@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:45:34 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:13:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,36 +41,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE :  	svpre.mk
 .INCLUDE :  	settings.mk
-.INCLUDE :  	sv.mk
-
-# --- Types -------------------------------------
-
-UNOTYPES=	com.sun.star.uno.XWeak						\
-            com.sun.star.uno.XNamingService				\
-            com.sun.star.uno.XComponentContext			\
-            com.sun.star.uno.XAggregation				\
-            com.sun.star.lang.XServiceInfo				\
-            com.sun.star.lang.XSingleServiceFactory		\
-            com.sun.star.lang.XMultiServiceFactory		\
-            com.sun.star.lang.XSingleComponentFactory	\
-            com.sun.star.lang.XTypeProvider				\
-            com.sun.star.registry.XSimpleRegistry		\
-            com.sun.star.document.XFilter				\
-            com.sun.star.document.XImporter				\
-            com.sun.star.lang.XInitialization			\
-            com.sun.star.io.XInputStream				\
-            com.sun.star.xml.sax.XDocumentHandler		\
-            com.sun.star.xml.sax.InputSource			\
-            com.sun.star.xml.sax.XParser
 
 # --- Files -------------------------------------
-
-CXXFILES=	pptimporter.cxx								\
-            pptimporteruno.cxx							\
-            ppttoxml.cxx
-
 
 SLOFILES=	$(SLO)$/pptimporter.obj						\
             $(SLO)$/pptimporteruno.obj					\
@@ -97,3 +70,4 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
