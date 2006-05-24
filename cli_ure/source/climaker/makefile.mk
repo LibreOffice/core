@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:52:34 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:05:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,7 @@ ENABLE_EXCEPTIONS = TRUE
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
-UNOUCRDEP = $(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS =
 
 UNOTYPES = \
@@ -77,7 +76,8 @@ UNOTYPES = \
     com.sun.star.reflection.XCompoundTypeDescription		\
     com.sun.star.reflection.XEnumTypeDescription			\
     com.sun.star.reflection.XServiceTypeDescription2		\
-    com.sun.star.reflection.XSingletonTypeDescription2
+    com.sun.star.reflection.XSingletonTypeDescription2		\
+    com.sun.star.reflection.XStructTypeDescription
 
 CFLAGS +=-AI$(BIN)
 
