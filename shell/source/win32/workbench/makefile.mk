@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:12:19 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:05:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,8 @@ TARGETTYPE=		CUI
 
 
 # --- Settings -----------------------------------------------------
-#.INCLUDE :		$(PRJ)$/util$/makefile.pmk
 
 .INCLUDE :  settings.mk
-
-.INCLUDE : ..$/..$/cppumaker.mk
 
 # --- Files --------------------------------------------------------
 
