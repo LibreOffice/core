@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.168 $
+#   $Revision: 1.169 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-18 10:02:37 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:12:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1540,11 +1540,10 @@ DEF9TARGETN=$(MISC)$/$(DEF9NAME).def
 DEF9 ?= TNR!:=9
 .ENDIF
 
+# IZ65415 - catch obsolete macro. Can be removed later.
 .IF "$(SDINAME)"!=""
-.DIRCACHE=no
-SDITARGET=$(MISC)$/$(SDINAME).don
-HIDSIDPARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDINAME)_sid.hid
-SDI0 ?= TNR!:=
+.ERROR : ; @echo Forced error: SDINAME was used! Change your project to use SDIxNAME instead!
+NO_SDINAME_allowed
 .ENDIF
 
 .IF "$(SDI1NAME)"!=""
@@ -2071,7 +2070,11 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
     xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale $(XML_ISO_CODE) -g:dtd -d $@
 .ENDIF			# "$(XMLXULRES)"!=""
 
+.IF "$(MK_UNROLL)"!=""
+.INCLUDE : _tg_sdi.mk
+.ELSE
 .INCLUDE : tg_sdi.mk
+.ENDIF
 
 .IF "$(DEF1NAME)$(DEF2NAME)$(DEF3NAME)$(DEF4NAME)$(DEF5NAME)$(DEF6NAME)$(DEF7NAME)$(DEF8NAME)$(DEF9NAME)"!=""
 .IF "$(MK_UNROLL)"!=""
@@ -2206,7 +2209,11 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 # - HXX -
 # -------
 
+.IF "$(MK_UNROLL)"!=""
+.INCLUDE : _tg_hxx.mk
+.ELSE
 .INCLUDE : tg_hxx.mk
+.ENDIF
 
 
 # -------
