@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:13:36 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:31:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,25 +42,6 @@ TARGET=jscpp
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-UNOTYPES= \
-    com.sun.star.uno.Exception	\
-    com.sun.star.uno.XInterface	\
-    com.sun.star.uno.TypeClass	\
-    com.sun.star.awt.XControl	\
-    com.sun.star.lang.XMultiServiceFactory	\
-    com.sun.star.java.XJavaVM				
-
-
-
-CXXFILES=	\
-    sjapplet.cxx							\
-    sjapplet_impl.cxx 
-
-
-#.IF "$(GUI)"=="UNX"
-#CXXFILES += widget.cxx
-#.ENDIF
 
 SLOFILES=	\
     $(SLO)$/sjapplet.obj						\
