@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-02 16:10:01 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:22:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@ TARGET=sfxslots
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-SDINAME=$(TARGET)
-SDIEXPORT=sfx
-SIDHRCNAME=sfx.hrc
+SDI1NAME=$(TARGET)
+SDI1EXPORT=sfx
+#SIDHRCNAME=sfx.hrc unused???
 
 # --- Files --------------------------------------------------------
 
-SVSDIDEPEND= \
+SVSDI1DEPEND= \
         $(PRJ)$/inc$/sfxsids.hrc \
         sfx.sdi	\
         appslots.sdi \
