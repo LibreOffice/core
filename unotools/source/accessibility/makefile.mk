@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:41:05 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:01:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,17 +40,10 @@ TARGET=accessibility
 
 ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings common for the whole project -----
-
-#UNOTYPES=
-#.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
-
-# --- Types -------------------------------------
 
 # --- Files -------------------------------------
 
