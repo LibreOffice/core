@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:31:53 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:35:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,51 +41,29 @@ TARGETTYPE=CUI
 LIBTARGET=NO
 
 #USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files ---
 
 # CFLAGS+=-GR -DUNICODE -D_UNICODE
 CFLAGS+= -D_WIN32_DCOM
 
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/comprehensive
-INCPRE+=	$(OUT)$/inc$/comprehensive
-CPPUMAKERFLAGS += -C
-.ELSE
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
-.ENDIF
+INCPRE+=	-I$(ATL_INCLUDE)
 
-UNOTYPES= com.sun.star.lang.XInitialization \
-          com.sun.star.lang.XComponent	\
-          com.sun.star.datatransfer.dnd.XDropTarget \
-          com.sun.star.datatransfer.dnd.XDropTargetListener \
-          com.sun.star.datatransfer.dnd.DNDConstants		\
-          com.sun.star.datatransfer.dnd.XDragSource
-
-
-
-.IF "$(depend)" != ""
-
-.ENDIF # depend
-
-APP1NOSAL=TRUE
-
-APP1TARGET=	$(TARGET)
-APP1OBJS=	$(OBJ)$/dndTest.obj	\
+OBJFILES=	$(OBJ)$/dndTest.obj	\
         $(OBJ)$/atlwindow.obj \
         $(OBJ)$/targetlistener.obj \
         $(OBJ)$/sourcelistener.obj \
         $(OBJ)$/dataobject.obj
+        
+APP1NOSAL=TRUE
+
+APP1TARGET=	$(TARGET)
+APP1OBJS=$(OBJFILES)
 
 LIBCIMT=msvcrtd.lib
 
