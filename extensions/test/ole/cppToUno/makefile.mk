@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:51:28 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:35:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TARGETTYPE=CUI
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
