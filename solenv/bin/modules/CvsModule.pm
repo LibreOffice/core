@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2006-01-17 13:13:10 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:37:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ use Carp;
 use Cwd;
 use FileHandle;
 use File::Find;
+use File::Basename;
 use CwsConfig;
 
 my $config = CwsConfig::get_config();
@@ -247,7 +248,9 @@ sub checkout
             my $remote_rep = $self->cvs_remote_repository();
             $self->patch_root($mirror, $remote, $mirror_rep, $remote_rep, $dirs_ref);
         }
-        chdir($module);
+        my $module_dir = $module;
+        $module_dir = dirname($module) if ($module =~ /\\|\//);
+        chdir($module_dir);
         # FIXME We should add an option '-d' here to add directories which
         # have been added to the server but not yet synced to the mirror,
         # Unfortunately a bug in CVS prevents us from doing so.
