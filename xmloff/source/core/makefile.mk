@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:35:09 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:20:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 CDEFS+=-DCONV_STAR_FONTS
 
@@ -107,10 +105,6 @@ SVXLIGHTOBJFILES =	\
         $(OBJ)$/XMLEmbeddedObjectImportContext.obj \
         $(OBJ)$/XMLBase64ImportContext.obj
 
-CPPUMAKERFLAGS=
-
-UNOTYPES=\
-    com.sun.star.formula.SymbolDescriptor
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
