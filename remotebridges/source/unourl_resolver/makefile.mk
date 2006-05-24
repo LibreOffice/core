@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:24:04 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:59:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,37 +36,15 @@ PRJ=..$/..
 
 PRJNAME=remotebridges
 TARGET = uuresolver.uno
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = uuresolver
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 DLLPRE =
-.INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCROUT=$(OUT)$/inc$/uuresolver
-INCPRE+= $(UNOUCROUT)
-
-
-UNOTYPES= \
-        com.sun.star.uno.TypeClass		\
-        com.sun.star.lang.XTypeProvider		\
-        com.sun.star.lang.XServiceInfo		\
-        com.sun.star.lang.XSingleServiceFactory	\
-        com.sun.star.lang.XMultiServiceFactory	\
-        com.sun.star.lang.XComponent		\
-        com.sun.star.registry.XRegistryKey	\
-        com.sun.star.connection.XConnector	\
-        com.sun.star.bridge.XBridgeFactory	\
-        com.sun.star.bridge.XUnoUrlResolver	\
-        com.sun.star.uno.XAggregation		\
-        com.sun.star.uno.XWeak                  
 
 SLOFILES= \
         $(SLO)$/unourl_resolver.obj
