@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:27:55 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:34:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJNAME=dtrans
 TARGET=ftransl
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 USE_BOUNDCHK=
 
 .IF "$(USE_BOUNDCHK)"=="TR"
@@ -51,8 +50,6 @@ stoponerror=tr
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
-
-.INCLUDE : ..$/..$/cppumaker.mk
 
 SLOFILES=$(SLO)$/ftranslentry.obj \
          $(SLO)$/ftransl.obj
