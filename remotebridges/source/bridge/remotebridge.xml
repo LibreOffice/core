@@ -20,6 +20,7 @@
         <type>   com.sun.star.bridge.XInstanceProvider      </type>
         <type>   com.sun.star.bridge.XBridge                </type>
         <type>   com.sun.star.bridge.BridgeExistsException  </type>
+        <type>   com.sun.star.lang.DisposedException        </type>
         <type>   com.sun.star.lang.XMultiServiceFactory     </type>
         <type>   com.sun.star.lang.XSingleServiceFactory    </type>
         <type>   com.sun.star.lang.XInitialization          </type>
