@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:22:14 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 12:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,12 +56,6 @@
 #define PRINT_FILENAME  "psprint.conf"
 // the group of the global defaults
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
-
-#ifdef MACOSX
-// filename of CUPS config file
-#define MACXP_CUPS_CONF_FILENAME   "printers.conf"
-#define MACXP_CUPS_CONF_DIR        "/etc/cups/"
-#endif
 
 using namespace psp;
 using namespace rtl;
@@ -166,20 +160,6 @@ bool PrinterInfoManager::checkPrintersChanged()
         bChanged = m_pQueueInfo->hasChanged();
     if( bChanged )
     {
-#ifdef MACOSX
-        // For Mac OS X 10.2, the user may change print queues via the Print Center
-        // at any point.  Therefore, we need to completely requery the system
-        // for print queues when our watch file changes.
-        sal_Int32    applePrintSystem;
-
-        applePrintSystem = macxp_GetSystemPrintMethod();
-        if ( applePrintSystem == kApplePrintingCUPS )
-        {
-            m_aSystemPrintQueues.clear();
-            delete m_pQueueInfo;
-            m_pQueueInfo = new SystemQueueInfo();
-        }
-#endif
         initialize();
     }
 
@@ -190,18 +170,10 @@ bool PrinterInfoManager::checkPrintersChanged()
 
 void PrinterInfoManager::initialize()
 {
-#ifdef MACOSX
-    sal_Int32    applePrintSystem;
-#endif
     rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
     m_aPrinters.clear();
     m_aWatchFiles.clear();
     OUString aDefaultPrinter;
-
-#ifdef MACOSX
-    // Discover the print system to use on Mac OS X/Darwin
-    applePrintSystem = macxp_GetSystemPrintMethod();
-#endif
 
     // first initialize the global defaults
     // have to iterate over all possible files
@@ -216,7 +188,7 @@ void PrinterInfoManager::initialize()
     if( ! m_aGlobalDefaults.m_pParser )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Error: no SGENPRT available, shutting down psprint...\n" );
+        fprintf( stderr, "Error: no default PPD file SGENPRT available, shutting down psprint...\n" );
 #endif
         return;
     }
@@ -302,52 +274,6 @@ void PrinterInfoManager::initialize()
         }
     }
     fillFontSubstitutions( m_aGlobalDefaults );
-
-#ifdef MACOSX
-    // For Mac OS X 10.2 with CUPS printing, we also wish to be
-    // notified of queue/printer updates, but these don't necessarily
-    // happen when psprint.conf changes.  The user can change settings in
-    // the Print Center which should also make OOo update its queue list.
-    if ( applePrintSystem == kApplePrintingCUPS )
-    {
-        // /etc/cups/printers.conf gets modified every time the Print Center printer
-        // list is modified, so we want to watch this file too.
-        INetURLObject aCUPSDir( String(RTL_CONSTASCII_USTRINGPARAM(MACXP_CUPS_CONF_DIR)), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-        INetURLObject aCUPSConfFile( aCUPSDir );
-        aCUPSConfFile.Append( String(RTL_CONSTASCII_USTRINGPARAM(MACXP_CUPS_CONF_FILENAME)) );
-
-        // check directory validity
-        OUString aCUPSUniPath;
-        FileBase::getFileURLFromSystemPath( aCUPSDir.PathToFileName(), aCUPSUniPath );
-        Directory aTestDirectory( aCUPSUniPath );
-
-        // If aTestDirectory.open() returns E_None (0), then we are OK.
-        // If not, don't add the watch file because we can't get to it.
-        if( aTestDirectory.open() == FileBase::E_None )
-        {
-            aTestDirectory.close();
-
-            FileBase::getFileURLFromSystemPath( aCUPSConfFile.PathToFileName(), aCUPSUniPath );
-            FileStatus aTestStatus( FileStatusMask_All );
-            DirectoryItem aTestItem;
-
-            // setup WatchFile list
-            WatchFile aCUPSWatchFile;
-            aCUPSWatchFile.m_aFilePath = aCUPSUniPath;
-            if( ! DirectoryItem::get( aCUPSUniPath, aTestItem ) &&
-                ! aTestItem.getFileStatus( aTestStatus ) )
-            {
-                aCUPSWatchFile.m_aModified = aTestStatus.getModifyTime();
-            }
-            else
-            {
-                aCUPSWatchFile.m_aModified.Seconds = 0;
-                aCUPSWatchFile.m_aModified.Nanosec = 0;
-            }
-            m_aWatchFiles.push_back( aCUPSWatchFile );
-        }
-    }
-#endif
 
     // now collect all available printers
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
@@ -459,16 +385,6 @@ void PrinterInfoManager::initialize()
                          */
 #if defined SOLARIS || defined(IRIX)
                         aValue = "lp";
-#elif defined(MACOSX)
-                        if ( applePrintSystem == kApplePrintingCUPS )
-                            aValue = "lp";
-                        else if ( applePrintSystem == kApplePrintingPrintCenter )
-                            aValue = kApplePCPrintCommand;
-                        else
-                        {
-                            // Fallback case is kApplePrintingLPR
-                            aValue = "lpr";
-                        }
 #else
                         aValue = "lpr";
 #endif
@@ -634,124 +550,6 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aLocation        = *it;
         aPrinter.m_bModified                = false;
         aPrinter.m_aGroup                   = ByteString( aPrinterName, aEncoding ); //provide group name in case user makes this one permanent in padmin
-
-#ifdef MACOSX
-        // If we are using OS X 10.2 CUPS printing, we want to grab the PPD that this printer
-        // is associated with from /etc/cups/ppd (it's autocreated by the OS X printing system) and
-        // use those values instead of the ones generated in the merged defaults.  We want to make
-        // this system printer just like we assigned it a PPD in padmin.
-        if ( applePrintSystem == kApplePrintingCUPS )
-        {
-            aPrinter.m_aInfo.m_aFontSubstitutes.clear();
-            aPrinter.m_aInfo.m_aFontSubstitutions.clear();
-
-            // Printer's autogenerated PPD will be /etc/cups/ppd/<printername-from-lpstat>.ppd
-            aPrinter.m_aInfo.m_aDriverName      = String( *it );
-            aPrinter.m_aInfo.m_pParser          = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
-            aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
-
-            if( aPrinter.m_aInfo.m_pParser )
-            {
-                // merge the ppd context keys if the printer has the same keys and values
-                // it is mainly to select default paper sizes for new printers
-                for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
-                {
-                    const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
-                    const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
-                // If the default PPD has a certain key, attempt to get that same key in the Printer's PPD
-                    const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
-
-                    // The key usually merged is PageSize
-                    if( pDefKey && pPrinterKey )
-                    {
-                        // Key exists in both the Default PPD and the printer's specific PPD.
-                        if( pDefValue )
-                        {
-                            const PPDValue* pPrinterValue = pPrinterKey->getValue( pDefValue->m_aOption );
-                            // If the printer has a corresponding option for the key, use printer PPD's option
-                            if( pPrinterValue )
-                                aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
-                        }
-                        else
-                            aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, NULL );
-                    }
-                }
-
-                // Some CUPS PPDs on Mac OS X (Epson, HP) don't include the requisite
-                // PageSize information for the value.  We have to fudge it from the
-                // margin information.  Others (Canon BJC 8200) have the coordinates
-             // but not the "setpagedevice" stuff
-                const PPDKey* pPSizeKey = aPrinter.m_aInfo.m_pParser->getKey( String(RTL_CONSTASCII_USTRINGPARAM("PageSize")) );
-                if ( pPSizeKey )
-                {
-                    int           psIndex = 0;
-                    int           nNumValues = pPSizeKey->countValues();
-
-                    for ( psIndex = 0; psIndex < nNumValues; psIndex++ )
-                    {
-                        /*const*/ PPDValue*   pPSizeValue = (PPDValue*)pPSizeKey->getValue( psIndex );
-
-                        // Only take care of PPD values that are not formatted correctly.
-                        if (  pPSizeValue &&
-                              ( !(pPSizeValue->m_aValue.Len()) ||
-                              (pPSizeValue->m_aValue.Len() && (pPSizeValue->m_aValue.SearchAscii("setpagedevice")==STRING_NOTFOUND)) )
-                           )
-                        {
-                            // Deal with the two cases:  1) where there is a blank PageSize value and
-                            // 2) where there are simply the dimensions as the PageSize value
-                            if ( !pPSizeValue->m_aValue.Len() )
-                            {
-                                int     paperWidth;
-                                int     paperHeight;
-                                char    aWidth[ 32 ];
-                                char    aHeight[ 32 ];
-
-                                // Grab dimensions for this paper size from the "PaperDimension" key of the PPD
-                                aPrinter.m_aInfo.m_pParser->getPaperDimension( pPSizeValue->m_aOption, paperWidth, paperHeight );
-                                snprintf( aWidth, 32, "%d", paperWidth );
-                                snprintf( aHeight, 32, "%d", paperHeight );
-
-                                // Construct a suitable PageSize key value from the PaperDimension values for this paper size
-                                 pPSizeValue->m_aValue.AppendAscii( (const sal_Char*)"<</PageSize [" );
-                                pPSizeValue->m_aValue.AppendAscii( aWidth );
-                                 pPSizeValue->m_aValue.AppendAscii( " " );
-                                pPSizeValue->m_aValue.AppendAscii( aHeight );
-                                 pPSizeValue->m_aValue.AppendAscii( "] /ImagingBBox null>> setpagedevice" );
-                            }
-                            else
-                           {
-                                String  aBox( pPSizeValue->m_aValue );
-
-                                // The PageSize value was just the bounding box, add in the correct postscript
-                                pPSizeValue->m_aValue.AssignAscii( "" );
-                                 pPSizeValue->m_aValue.AppendAscii( "<</PageSize [" );
-                                pPSizeValue->m_aValue.Append( aBox );
-                                 pPSizeValue->m_aValue.AppendAscii( "] /ImagingBBox null>> setpagedevice" );
-                           }
-                        }
-                    }
-                }
-            }
-          else
-            {
-                ByteString  aBytePrinterName = ByteString( UniString(aPrinter.m_aInfo.m_aDriverName), RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "Could not get Printer PPD from /etc/cups/ppd for printer '%s'!  Using simple shared printer PPD...\n", aBytePrinterName.GetBuffer() );
-
-                // Some printers don't have the PPDs in /etc/cups/ppd (like Rendezvous-shared ones)
-                // so we have to simply use a stripped down shared printer PPD for them
-                aPrinter.m_aInfo.m_aDriverName    = String( RTL_CONSTASCII_USTRINGPARAM("MacShared") );
-                aPrinter.m_aInfo.m_pParser        = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
-                aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
-                if( !(aPrinter.m_aInfo.m_pParser) )
-                {
-                    fprintf( stderr, "Warning:  still couldn't load the PPD, MacShared.ppd may be missing.  Will use generic printer PPD.\n" );
-                    aPrinter.m_aInfo.m_aDriverName    = String( RTL_CONSTASCII_USTRINGPARAM("SGENPRT") );
-                    aPrinter.m_aInfo.m_pParser        = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
-                    aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
-                }
-            }
-        }
-#endif
 
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
@@ -1357,20 +1155,10 @@ struct SystemCommandParameters
 
 static const struct SystemCommandParameters aParms[] =
 {
-#if defined(LINUX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
     { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
     { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
     { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1 }
-#elif defined(MACOSX)
-    /* These elements correspond to the constants defined for Apple printing in
-     * printerinfomanager.hxx and are indexed by those constants.  ORDER IS IMPORTANT!!!
-    */
-    /* Apple LPR printing (kApplePrintingLPR) */
-    { "/usr/bin/lpc status", "lpr -P (PRINTER)", "", ":", 0 },
-    /* Apple CUPS printing (kApplePrintingCUPS) */
-    { "LANG=C;LC_ALL=C;export LANG LC_ALL;/usr/bin/lpstat -s", "lp -d (PRINTER)", "device for ", ": ", 1 },
-    /* Apple Print Center printing (kApplePrintingPrintCenter) */
-    { kApplePCQueueName, kApplePCPrintCommand, "", ":", 0 }
 #else
     { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1 },
     { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
@@ -1389,13 +1177,6 @@ void SystemQueueInfo::run()
     rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
     OUString aPrintCommand;
 
-#ifdef MACOSX
-    sal_Int32   applePrintSysType;
-
-    /* Get our OS specific printing scheme for MacOS X */
-    applePrintSysType = macxp_GetSystemPrintMethod();
-#endif
-
     /* Discover which command we can use to get a list of all printer queues */
     for( i = 0; i < sizeof(aParms)/sizeof(aParms[0]) && ! bSuccess; i++ )
     {
@@ -1408,215 +1189,58 @@ void SystemQueueInfo::run()
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
 #endif
-#ifdef MACOSX
-        /* For Mac OS X 10.1 Print Center printing, we only use the default queue.  We do not
-         * need to discover it.  So when it comes up in the list of possible queues,
-         * recognize it and declare success.
-         */
-        if ( applePrintSysType == kApplePrintingPrintCenter )
-        {
-            if ( strstr(aPrtQueueCmd.GetBuffer(), kApplePCQueueName) != NULL )
-                bSuccess = TRUE;
-#ifdef DEBUG
-            else
-                fprintf( stderr, "Ignoring print queue command \"%s\" because using 10.1 Print Center printing.\n", aParms[i].pQueueCommand );
-#endif
-        }
-        else
-#endif
-        {
-            aPrtQueueCmd += ByteString( " 2>/dev/null" );
-            if( (pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" )) )
-            {
-                while( fgets( pBuffer, 1024, pPipe ) )
-                    aLines.push_back( ByteString( pBuffer ) );
-                if( ! pclose( pPipe ) )
-                    bSuccess = true;
-            }
-        }
+    aPrtQueueCmd += ByteString( " 2>/dev/null" );
+    if( (pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" )) )
+    {
+        while( fgets( pBuffer, 1024, pPipe ) )
+            aLines.push_back( ByteString( pBuffer ) );
+        if( ! pclose( pPipe ) )
+            bSuccess = true;
+    }
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "%s\n", bSuccess ? "success" : "failed" );
 #endif
     }
 
-#ifdef MACOSX
-    /* Since we only print to the default printer for MacOS X 10.1,
-     * queue discovery serves no purpose.
+    /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing
      */
-    if ( applePrintSysType == kApplePrintingPrintCenter )
+    if( bSuccess )
     {
-        std::list< OUString > aSysPrintQueues;
+    std::list< OUString > aSysPrintQueues;
 
-        aSysPrintQueues.push_back( OUString::createFromAscii(kApplePCQueueName) );
-      #ifdef DEBUG
-        fprintf( stderr, "printerinfomanager.cxx: using Print Center default print queue.\n" );
-      #endif
-
-        MutexGuard aGuard( m_aMutex );
-        m_bChanged  = true;
-        m_aQueues   = aSysPrintQueues;
-        m_aCommand  = aPrintCommand;
-    }
-    else
-#endif  /* MACOSX */
+    while( aLines.begin() != aLines.end() )
     {
-        /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing
-         * and MacOS X 10.2/Darwin 6 CUPS printing.
-         */
-        if( bSuccess )
+        int nPos = 0, nAftPos;
+
+        ByteString aOutLine( aLines.front() );
+        aLines.pop_front();
+
+        for( i = 0; i < nForeTokenCount && nPos != STRING_NOTFOUND; i++ )
         {
-            std::list< OUString > aSysPrintQueues;
-
-            while( aLines.begin() != aLines.end() )
-            {
-                int nPos = 0, nAftPos;
-
-                ByteString aOutLine( aLines.front() );
-                aLines.pop_front();
-
-                for( i = 0; i < nForeTokenCount && nPos != STRING_NOTFOUND; i++ )
-                {
-                    nPos = aOutLine.Search( aForeToken, nPos );
-                    if( nPos != STRING_NOTFOUND && aOutLine.Len() >= nPos+aForeToken.Len() )
-                        nPos += aForeToken.Len();
-                }
-                if( nPos != STRING_NOTFOUND )
-                {
-                    nAftPos = aOutLine.Search( aAftToken, nPos );
-                    if( nAftPos != STRING_NOTFOUND )
-                    {
-                        OUString aSysQueue( String( aOutLine.Copy( nPos, nAftPos - nPos ), aEncoding ) );
-                        // do not insert duplicates (e.g. lpstat tends to produce such lines)
-                        std::list< OUString >::const_iterator it;
-                        for( it = aSysPrintQueues.begin(); it != aSysPrintQueues.end() && *it != aSysQueue; ++it )
-                            ;
-                        if( it == aSysPrintQueues.end() )
-                            aSysPrintQueues.push_back( aSysQueue );
-                    }
-                }
-            }
-
-            MutexGuard aGuard( m_aMutex );
-            m_bChanged  = true;
-            m_aQueues   = aSysPrintQueues;
-            m_aCommand  = aPrintCommand;
+        nPos = aOutLine.Search( aForeToken, nPos );
+        if( nPos != STRING_NOTFOUND && aOutLine.Len() >= nPos+aForeToken.Len() )
+          nPos += aForeToken.Len();
+        }
+        if( nPos != STRING_NOTFOUND )
+        {
+        nAftPos = aOutLine.Search( aAftToken, nPos );
+        if( nAftPos != STRING_NOTFOUND )
+        {
+            OUString aSysQueue( String( aOutLine.Copy( nPos, nAftPos - nPos ), aEncoding ) );
+            // do not insert duplicates (e.g. lpstat tends to produce such lines)
+            std::list< OUString >::const_iterator it;
+            for( it = aSysPrintQueues.begin(); it != aSysPrintQueues.end() && *it != aSysQueue; ++it )
+              ;
+            if( it == aSysPrintQueues.end() )
+              aSysPrintQueues.push_back( aSysQueue );
+        }
         }
     }
+
+    MutexGuard aGuard( m_aMutex );
+    m_bChanged  = true;
+    m_aQueues   = aSysPrintQueues;
+    m_aCommand  = aPrintCommand;
+    }
 }
-
-#ifdef MACOSX
-
-/* On Apple systems printing gets more complicated...
- * 1)  Darwin 5:     use straight lpr system, user has to configure lpr correctly
- * 2)  MacOS X 10.1: use /usr/sbin/Print which prints to default Print Center printer
- * 3)  MacOS X 10.2: use CUPS duo of lpstat/lp
- * 4)  Darwin 6:     Like MacOS X 10.2, use CUPS
- *
- * --- FIXME ---   We don't support printer choosing on MacOS X 10.1 at this time,
- *                 only printing to default Print Center printer.  The user can
- *                 change the default Print Center printer at any point however.
- */
-
-/*
- * macxp_GetSystemPrintMethod()
- *
- * Find out which printing system/OS we are using.
- *
- * Darwin 5 is the fallback case.  To check for 10.1 printing we try to see if
- * /usr/sbin/Print exists.  For 10.2/Darwin 6, we attempt to find lpstat.  Users
- * might also have installed CUPS on Darwin 5 or MacOS X 10.1, but we default to
- * Print Center (/usr/sbin/Print) printing on 10.1.
- *
- */
-sal_Int32 macxp_GetSystemPrintMethod( void )
-{
-     int            applePrintSysType;
-     int            err;
-     struct stat    status;
-
-     /* Attempt to find out which OS we are on... */
-     applePrintSysType = kApplePrintingLPR;
-
-     /* Check for MacOS X 10.1 first. */
-     err = stat( "/usr/sbin/Print", &status );
-     if ( err == 0 )
-     {
-          applePrintSysType = kApplePrintingPrintCenter;
-          #ifdef DEBUG
-               fprintf( stderr, "printerinfomanager.cxx:  found MacOS X 10.1-type printing system.\n" );
-          #endif
-     }
-     else
-     {
-          /* Test for MacOS X 10.2/Darwin6 or later CUPS printing */
-          err = stat( "/usr/bin/lpstat", &status );
-          if ( err == 0 )
-          {
-               applePrintSysType = kApplePrintingCUPS;
-               #ifdef DEBUG
-                    fprintf( stderr, "printerinfomanager.cxx:  found MacOS X 10.2-type CUPS-based printing system.\n" );
-               #endif
-          }
-     }
-
-     #ifdef DEBUG
-          if ( applePrintSysType == kApplePrintingLPR )
-               fprintf( stderr, "printerinfomanager.cxx:  falling back to Darwin5-type LPR printing system.\n" );
-     #endif
-
-     return( applePrintSysType );
-}
-
-#if 0
-/*
- * macxp_GetSystemPrintFormat()
- *
- * There are two ways to print:  using PostScript (PS) and using PDF.
- * Because MacOS X 10.2 CUPS printing has PDF converts built in for
- * almost every printer, it is very easy to print using PDF.  For 10.1,
- * extra steps must be taken to print with PDF, but it is still more
- * compatible.  For Darwin 5 and 6, we default to PS printing.
- *
- * The user may still wish to print PS to PS compatible printers and
- * therefore the environment variable OOO_PRINT_PS_DIRECTLY, if set,
- * forces OOo to NOT undergo the PS -> PDF translation by default.
- */
-sal_Int32 macxp_GetSystemPrintFormat( void )
-{
-     int            printFormat;
-     int            err;
-     struct stat    status;
-     sal_Char       *pPDFOverride = NULL;
-
-     printFormat = kApplePrintingUsePS;
-
-     /* Check for presence of OSAScript executable, which is
-      * believed to be MacOS X only (ie not present on Darwin).
-      */
-     err = stat( "/usr/bin/osascript", &status );
-     if ( err == 0 )
-     {
-         /* Check to see if the user wants to print PS anyway */
-          pPDFOverride = getenv( "OOO_PRINT_PS_DIRECTLY" );
-          if ( pPDFOverride == NULL )
-          {
-          /* Now we have to check for pstopdf or ps2pdf to make sure we can do the conversion */
-               err = stat( kApplePsToPdfLocation, &status );
-               if ( err != 0 )
-                   err = stat( kApplePS2PDFLocation, &status );
-
-               if ( err == 0 )
-               {
-                    printFormat = kApplePrintingUsePDF;
-                    #ifdef DEBUG
-                         fprintf( stderr, "printerinfomanager.cxx:  Will print in PDF format using PS->PDF coversion filters.\n" );
-                    #endif
-               }
-          }
-     }
-
-     return( printFormat );
-}
-#endif
-#endif
 
