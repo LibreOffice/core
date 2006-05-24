@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:25:40 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:26:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,15 @@ PRJ=..$/..
 
 PRJNAME=scripting
 TARGET=dlgprov
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 DLLPRE =
 
 # ------------------------------------------------------------------
-
-.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/dlgprov.obj \
