@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:30:09 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:53:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ PRJNAME= jvmfwk
 TARGET = plugin
 
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
 LIBTARGET=NO
 
@@ -54,10 +53,6 @@ DLLPRE =
 
 #.INCLUDE :  ..$/cppumaker.mk
 .IF "$(SOLAR_JAVA)"!=""
-
-UNOTYPES = \
-    com.sun.star.uno.TypeClass \
-    com.sun.star.uno.XInterface 
 
 SLOFILES= \
     $(SLO)$/sunversion.obj \
