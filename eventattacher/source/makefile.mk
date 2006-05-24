@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:58:46 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:56:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,39 +37,13 @@ PRJ=..
 PRJNAME=	eventattacher
 TARGET=		evtatt
 
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
-
-UNOTYPES= \
-        com.sun.star.registry.XRegistryKey	\
-        com.sun.star.lang.XServiceInfo	\
-        com.sun.star.lang.XInitialization	\
-        com.sun.star.lang.XTypeProvider	\
-        com.sun.star.lang.XMultiServiceFactory	\
-        com.sun.star.lang.XSingleServiceFactory	\
-        com.sun.star.lang.XSingleComponentFactory	\
-        com.sun.star.beans.XIntrospection	\
-        com.sun.star.beans.MethodConcept	\
-        com.sun.star.script.XEventAttacher	\
-        com.sun.star.script.XTypeConverter	\
-        com.sun.star.script.XInvocationAdapterFactory	\
-        com.sun.star.script.XInvocation	\
-        com.sun.star.script.XAllListener	\
-        com.sun.star.reflection.XIdlReflection	\
-        com.sun.star.uno.TypeClass	\
-        com.sun.star.uno.XInterface	\
-        com.sun.star.uno.XWeak	\
-        com.sun.star.uno.XComponentContext	\
-        com.sun.star.uno.XAggregation
-
 
 SLOFILES= \
         $(SLO)$/eventattacher.obj
