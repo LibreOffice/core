@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:53:03 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:28:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,48 +41,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-
-# --- Uno III Header -----------------------------------------------
-
-# Every source directory generates headers in a own output directory to
-# enable parallel building of the source directories within a project!
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-        com.sun.star.uno.TypeClass \
-        com.sun.star.uno.XInterface \
-        com.sun.star.lang.XMultiServiceFactory\
-        com.sun.star.drawing.XMasterPageTarget\
-        com.sun.star.drawing.FillStyle\
-        com.sun.star.drawing.XMasterPageTarget\
-        com.sun.star.drawing.PointSequence\
-        com.sun.star.drawing.CircleKind\
-        com.sun.star.drawing.PointSequenceSequence\
-        com.sun.star.drawing.LineStyle\
-        com.sun.star.drawing.LineDash\
-        com.sun.star.drawing.Hatch\
-        com.sun.star.drawing.MeasureTextVertPos\
-        com.sun.star.drawing.XMasterPagesSupplier\
-        com.sun.star.drawing.XDrawPage\
-        com.sun.star.drawing.XDrawPages\
-        com.sun.star.drawing.XDrawPagesSupplier\
-        com.sun.star.drawing.XShapeGrouper\
-        com.sun.star.drawing.PolyPolygonBezierCoords\
-        com.sun.star.drawing.FlagSequence\
-        com.sun.star.drawing.TextAdjust\
-        com.sun.star.frame.XModel\
-        com.sun.star.task.XStatusIndicator\
-        com.sun.star.beans.XPropertySet\
-        com.sun.star.awt.Gradient\
-        com.sun.star.awt.FontDescriptor\
-        com.sun.star.awt.FontSlant\
-        com.sun.star.awt.FontWeight\
-        com.sun.star.awt.FontUnderline\
-        com.sun.star.awt.XBitmap\
-        com.sun.star.awt.XPointer\
-        com.sun.star.text.XText\
-        com.sun.star.style.HorizontalAlignment
 
 # --- Files --------------------------------------------------------
 
