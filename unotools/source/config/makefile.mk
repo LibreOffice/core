@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:42:59 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:01:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,20 +39,6 @@ PRJNAME=unotools
 TARGET=config
 
 ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings common for the whole project -----
-
-#UNOTYPES=
-
-UNOTYPES+= com.sun.star.configuration.XTemplateContainer \
-            com.sun.star.util.XChangesListener  \
-            com.sun.star.util.XChangesNotifier  \
-            com.sun.star.util.XStringEscape     \
-            com.sun.star.util.XChangesBatch     \
-            com.sun.star.uno.XWeak              \
-            com.sun.star.uno.XAggregation
-
-.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
 
