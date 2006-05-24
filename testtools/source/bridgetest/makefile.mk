@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-26 17:40:37 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:36:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..$/..
 PRJNAME=testtools
 TARGET=bridgetest
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
@@ -57,29 +56,6 @@ GIVE_EXEC_RIGHTS=chmod +x
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
 .ENDIF
-
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(OUT)$/inc
-
-UNOTYPES= \
-        com.sun.star.uno.TypeClass		\
-        com.sun.star.uno.XAggregation		\
-        com.sun.star.uno.XWeak			\
-        com.sun.star.lang.XTypeProvider		\
-        com.sun.star.lang.XServiceInfo		\
-        com.sun.star.lang.XSingleServiceFactory	\
-        com.sun.star.lang.XMultiServiceFactory	\
-        com.sun.star.lang.XComponent		\
-        com.sun.star.lang.XMain			\
-        com.sun.star.loader.XImplementationLoader \
-        com.sun.star.registry.XRegistryKey	\
-        com.sun.star.container.XSet		\
-        com.sun.star.bridge.XUnoUrlResolver		\
-            com.sun.star.lang.XSingleComponentFactory	\
-        com.sun.star.uno.XComponentContext          
 
 SLOFILES = \
     $(SLO)$/bridgetest.obj \
