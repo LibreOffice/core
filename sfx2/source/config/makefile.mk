@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:02:40 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:31:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,21 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-# Every source directory generates headers in a own output directory to
-# enable parallel building of the source directories within a project!
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.lang.XMultiServiceFactory \
-        com.sun.star.beans.XPropertyChangeListener \
-        com.sun.star.uno.TypeClass \
-        com.sun.star.uno.XWeak \
-        com.sun.star.uno.XAggregation \
-        com.sun.star.lang.XTypeProvider \
-        com.sun.star.frame.XConfigManager \
-        com.sun.star.registry.XSimpleRegistry
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
