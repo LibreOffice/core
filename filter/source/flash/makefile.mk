@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:42:28 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:13:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJNAME=filter
 TARGET=flash
 
 ENABLE_EXCEPTIONS=TRUE
-#GEN_HID=TRUE
 
 # --- Settings ----------------------------------
 
@@ -47,30 +46,6 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
-# --- Types -------------------------------------
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.drawing.XDrawPagesSupplier						\
-    com.sun.star.container.XIndexAccess
-# --- Files -------------------------------------
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	impswfdialog.src				
@@ -130,3 +105,4 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
