@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:22:10 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:58:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,22 +37,13 @@ PRJ=..$/..
 
 PRJNAME=remotebridges
 TARGET = remotebridge.uno
-NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = remotebridge
-COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 DLLPRE =
 # ------------------------------------------------------------------
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCROUT=$(OUT)$/inc$/bridge
-INCPRE+= $(UNOUCROUT)
-
 
 SLOFILES= \
         $(SLO)$/remote_bridge.obj \
