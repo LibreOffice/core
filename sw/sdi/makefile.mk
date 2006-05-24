@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:38:35 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:18:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,13 +50,13 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 
-SDINAME=$(TARGET)
-SDIEXPORT=swriter
-SIDHRCNAME=swslots.hrc
+SDI1NAME=$(TARGET)
+SDI1EXPORT=swriter
+#SIDHRCNAME=swslots.hrc
 
 # --- Files --------------------------------------------------------
 
-SVSDIDEPEND= \
+SVSDI1DEPEND= \
         switems.sdi\
         swriter.sdi\
         _docsh.sdi\
