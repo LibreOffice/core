@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:12:29 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:15:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,11 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 # --- Files --------------------------------------------------------
 
 
-SDINAME=$(TARGET)
-SIDHRCNAME=SCSLOTS.HRC
-SDIEXPORT=scalc
+SDI1NAME=$(TARGET)
+#SIDHRCNAME=SCSLOTS.HRC
+SDI1EXPORT=scalc
 
-SVSDIDEPEND= \
+SVSDI1DEPEND= \
     scalc.sdi \
     app.sdi \
     auditsh.sdi \
