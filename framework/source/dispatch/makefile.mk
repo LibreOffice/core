@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:13:21 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:38:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,15 +37,11 @@ PRJ=..$/..
 PRJNAME=			framework
 TARGET=				fwk_dispatch
 USE_DEFFILE=		TRUE
-NO_BSYMBOLIC=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
-BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
 
 # --- defines ------------------------------------------------------
 
