@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:27:56 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 13:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,27 +485,34 @@ SwFrmNotify::~SwFrmNotify()
     if ( !pFrm->IsFlyFrm() && 0 != ( pFly = pFrm->ImplFindFlyFrm() ) )
     // <--
     {
-        const SwFmtFrmSize &rFrmSz = pFly->GetFmt()->GetFrmSize();
-
-        // This could be optimized. Basically the fly frame only has to
-        // be invalidated, if the first line of pFrm (if pFrm is a content
-        // frame, for other frame types its the print area) has changed its
-        // size and pFrm was responsible for the current width of pFly. On
-        // the other hand, this is only rarely used and re-calculation of
-        // the fly frame does not cause too much trouble. So we keep it this
-        // way:
-        if ( ATT_FIX_SIZE != rFrmSz.GetWidthSizeType() )
+        // --> OD 2006-05-08 #i61999#
+        // no invalidation of columned Writer fly frames, because automatic
+        // width doesn't make sense for such Writer fly frames.
+        if ( pFly->Lower() && !pFly->Lower()->IsColumnFrm() )
         {
-            // --> OD 2005-07-29 #i50668#, #i50998# - invalidation of position
-            // of as-character anchored fly frames not needed and can cause
-            // layout loops
-            if ( !pFly->ISA(SwFlyInCntFrm) )
+            const SwFmtFrmSize &rFrmSz = pFly->GetFmt()->GetFrmSize();
+
+            // This could be optimized. Basically the fly frame only has to
+            // be invalidated, if the first line of pFrm (if pFrm is a content
+            // frame, for other frame types its the print area) has changed its
+            // size and pFrm was responsible for the current width of pFly. On
+            // the other hand, this is only rarely used and re-calculation of
+            // the fly frame does not cause too much trouble. So we keep it this
+            // way:
+            if ( ATT_FIX_SIZE != rFrmSz.GetWidthSizeType() )
             {
-                pFly->InvalidatePos();
+                // --> OD 2005-07-29 #i50668#, #i50998# - invalidation of position
+                // of as-character anchored fly frames not needed and can cause
+                // layout loops
+                if ( !pFly->ISA(SwFlyInCntFrm) )
+                {
+                    pFly->InvalidatePos();
+                }
+                // <--
+                pFly->InvalidateSize();
             }
-            // <--
-            pFly->InvalidateSize();
         }
+        // <--
     }
 }
 
