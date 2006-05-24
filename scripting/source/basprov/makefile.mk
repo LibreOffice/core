@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:24:26 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:25:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,15 @@ PRJ=..$/..
 
 PRJNAME=scripting
 TARGET=basprov
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 DLLPRE =
 
 # ------------------------------------------------------------------
-
-.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/basprov.obj \
