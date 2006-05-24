@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:48:46 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 11:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1537,8 +1537,6 @@ namespace cppcanvas
                     tools::createTextLinesPolyPolygon(
                         0.0, nMaxPos - nMinPos,
                         maTextLineInfo ) );
-
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
                 return calcEffectTextBounds( ::basegfx::unotools::b2DRectangleFromRealRectangle2D(
                                                  xTextLayout->queryTextBounds() ),
