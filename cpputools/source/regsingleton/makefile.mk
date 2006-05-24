@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:38:15 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:30:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJNAME=cpputools
 TARGET=regsingleton
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -47,8 +46,7 @@ NO_BSYMBOLIC=TRUE
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
-UNOUCROUT = $(OUT)$/inc$/$(TARGET)
-INCPRE += $(UNOUCROUT)
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS+= -C
 
 UNOTYPES= \
