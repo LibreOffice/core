@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:37:23 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:30:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,7 @@ LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
-UNOUCROUT = $(OUT)$/inc$/$(TARGET)
-INCPRE += $(UNOUCROUT)
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS += -C
 
 UNIXTEXT= $(MISC)$/regcomp.sh
