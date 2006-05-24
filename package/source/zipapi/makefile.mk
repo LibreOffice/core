@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:16:13 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:36:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,12 @@
 PRJ=..$/..
 PRJNAME=package
 TARGET=zipapi
-AUTOSEG=true
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
 #CFLAGS+=/Ob0 /Od
@@ -62,20 +59,6 @@ SLOFILES= \
         $(SLO)$/ZipFile.obj			\
         $(SLO)$/ZipOutputStream.obj	\
         $(SLO)$/XUnbufferedStream.obj
-
-# --- UNO stuff ---------------------------------------------------
-
-CPPUMAKERFLAGS=
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.packages.zip.ZipConstants \
-    com.sun.star.packages.zip.ZipException \
-    com.sun.star.io.BufferSizeExceededException \
-    com.sun.star.io.XOutputStream \
-    com.sun.star.io.XInputStream \
-    com.sun.star.io.NotConnectedException
 
 # --- Targets ------------------------------------------------------
 
