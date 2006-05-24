@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:49:30 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:02:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,30 +40,10 @@ TARGET=streaming
 
 ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings common for the whole project -----
-
-#UNOTYPES=
-#.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
-
-# --- Types -------------------------------------
-
-
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-#UNOTYPES+= \
-#	com.sun.star.awt.FontDescriptor		\
-
 
 # --- Files -------------------------------------
 
