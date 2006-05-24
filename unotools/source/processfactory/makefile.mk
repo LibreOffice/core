@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:48:00 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:02:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,18 +47,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
-
-# --- Types -------------------------------------
-
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-#UNOTYPES+=	\
-#		com.sun.star.uno.TypeClass	\
-#		com.sun.star.lang.XMultiServiceFactory
 
 # --- Files -------------------------------------
 
