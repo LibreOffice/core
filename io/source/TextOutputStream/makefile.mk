@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:27:03 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:57:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,30 +38,11 @@ PRJ=..$/..
 PRJNAME=io
 TARGET = textoutstream.uno
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 DLLPRE =
 # ------------------------------------------------------------------
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCROUT=$(OUT)$/inc$/textoutputstream
-INCPRE+= $(UNOUCROUT)
-
-UNOTYPES=	com.sun.star.io.XTextOutputStream \
-        com.sun.star.io.XActiveDataSource \
-        com.sun.star.lang.XSingleServiceFactory \
-        com.sun.star.lang.XMultiServiceFactory \
-        com.sun.star.lang.XTypeProvider \
-        com.sun.star.lang.XSingleComponentFactory   \
-        com.sun.star.lang.XServiceInfo \
-        com.sun.star.uno.XComponentContext          \
-        com.sun.star.registry.XRegistryKey \
-        com.sun.star.uno.XAggregation \
-        com.sun.star.uno.XWeak 
 
 SLOFILES= \
     $(SLO)$/TextOutputStream.obj
