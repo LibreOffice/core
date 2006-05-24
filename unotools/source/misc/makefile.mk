@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-14 11:38:36 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:02:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,6 @@ PRJNAME=unotools
 TARGET=misc
 
 ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings common for the whole project -----
-
-#UNOTYPES=
-UNOTYPES+= com.sun.star.util.XAtomServer
-#.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
 
