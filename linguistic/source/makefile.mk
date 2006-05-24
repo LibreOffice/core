@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 13:50:15 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:07:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,47 +38,12 @@ PRJ=..
 PRJNAME=linguistic
 TARGET=lng
 ENABLE_EXCEPTIONS=TRUE
-#USE_DEFFILE=TRUE
 
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
-
-UNOTYPES=\
-    com.sun.star.linguistic2.ConversionDictionaryType\
-    com.sun.star.linguistic2.ConversionDirection\
-    com.sun.star.linguistic2.DictionaryEvent\
-    com.sun.star.linguistic2.DictionaryEventFlags\
-    com.sun.star.linguistic2.DictionaryListEvent\
-    com.sun.star.linguistic2.DictionaryListEventFlags\
-    com.sun.star.linguistic2.DictionaryType\
-    com.sun.star.linguistic2.LinguServiceEventFlags\
-    com.sun.star.linguistic2.SpellFailure\
-    com.sun.star.linguistic2.XConversionDictionary\
-    com.sun.star.linguistic2.XConversionDictionaryList\
-    com.sun.star.linguistic2.XDictionary\
-    com.sun.star.linguistic2.XDictionary1\
-    com.sun.star.linguistic2.XDictionaryEntry\
-    com.sun.star.linguistic2.XDictionaryEventListener\
-    com.sun.star.linguistic2.XDictionaryList\
-    com.sun.star.linguistic2.XDictionaryListEventListener\
-    com.sun.star.linguistic2.XHyphenatedWord\
-    com.sun.star.linguistic2.XHyphenator\
-    com.sun.star.linguistic2.XLinguServiceEventBroadcaster\
-    com.sun.star.linguistic2.XLinguServiceEventListener\
-    com.sun.star.linguistic2.XLinguServiceManager\
-    com.sun.star.linguistic2.XMeaning\
-    com.sun.star.linguistic2.XPossibleHyphens\
-    com.sun.star.linguistic2.XSearchableDictionaryList\
-    com.sun.star.linguistic2.XSpellAlternatives\
-    com.sun.star.linguistic2.XSpellChecker\
-    com.sun.star.linguistic2.XSpellChecker1\
-    com.sun.star.linguistic2.XSupportedLanguages\
-    com.sun.star.linguistic2.XSupportedLocales\
-    com.sun.star.linguistic2.XThesaurus
-
 
 EXCEPTIONSFILES= \
         $(SLO)$/convdic.obj\
@@ -157,16 +122,6 @@ DEF1DES     =Linguistic main DLL
 DEF1EXPORT1 = component_writeInfo
 DEF1EXPORT2 = component_getFactory
 DEF1EXPORT3 = component_getImplementationEnvironment
-.ELSE
-.IF "$(COM)"=="ICC"
-DEF1EXPORT1 = component_writeInfo
-DEF1EXPORT2 = component_getFactory
-DEF1EXPORT3 = component_getImplementationEnvironment
-.ELSE
-DEF1EXPORT1 = _component_writeInfo
-DEF1EXPORT2 = _component_getFactory
-DEF1EXPORT3 = _component_getImplementationEnvironment
-.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
