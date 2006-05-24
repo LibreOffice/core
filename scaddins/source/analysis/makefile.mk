@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:22:57 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:36:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,24 +58,30 @@ INCPRE+=$(UNOUCROUT)
 # --- Types -------------------------------------
 
 # comprehensive type info, so rdb needn't be installed
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS*=-C
 
 UNOTYPES=\
     com.sun.star.sheet.addin.XAnalysis \
     com.sun.star.lang.XComponent \
     com.sun.star.lang.XMultiServiceFactory \
+    com.sun.star.lang.XSingleComponentFactory \
     com.sun.star.lang.XSingleServiceFactory \
     com.sun.star.uno.TypeClass \
     com.sun.star.uno.XInterface \
     com.sun.star.registry.XImplementationRegistration \
+    com.sun.star.sheet.LocalizedName \
     com.sun.star.sheet.XAddIn \
+    com.sun.star.sheet.XCompatibilityNames \
     com.sun.star.lang.XServiceName \
     com.sun.star.lang.XServiceInfo \
     com.sun.star.lang.XTypeProvider \
     com.sun.star.uno.XWeak \
     com.sun.star.uno.XAggregation \
     com.sun.star.uno.XComponentContext \
-    com.sun.star.util.Date
+    com.sun.star.util.Date \
+    com.sun.star.util.XNumberFormatter \
+    com.sun.star.util.XNumberFormatTypes
 
 # --- Files -------------------------------------
 
