@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-02 15:39:01 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:43:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,35 +63,6 @@ ULINGULIB=libulingu.lib
 
 # --- Files --------------------------------------------------------
 
-UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
-
-UNOTYPES=\
-    com.sun.star.linguistic2.DictionaryEvent\
-    com.sun.star.linguistic2.DictionaryEventFlags\
-    com.sun.star.linguistic2.DictionaryListEvent\
-    com.sun.star.linguistic2.DictionaryListEventFlags\
-    com.sun.star.linguistic2.DictionaryType\
-    com.sun.star.linguistic2.LinguServiceEventFlags\
-    com.sun.star.linguistic2.SpellFailure\
-    com.sun.star.linguistic2.XDictionary\
-    com.sun.star.linguistic2.XDictionary1\
-    com.sun.star.linguistic2.XDictionaryEntry\
-    com.sun.star.linguistic2.XDictionaryEventListener\
-    com.sun.star.linguistic2.XDictionaryList\
-    com.sun.star.linguistic2.XDictionaryListEventListener\
-    com.sun.star.linguistic2.XHyphenatedWord\
-    com.sun.star.linguistic2.XHyphenator\
-    com.sun.star.linguistic2.XLinguServiceEventBroadcaster\
-    com.sun.star.linguistic2.XLinguServiceEventListener\
-    com.sun.star.linguistic2.XLinguServiceManager\
-    com.sun.star.linguistic2.XMeaning\
-    com.sun.star.linguistic2.XPossibleHyphens\
-    com.sun.star.linguistic2.XSearchableDictionaryList\
-    com.sun.star.linguistic2.XSpellAlternatives\
-    com.sun.star.linguistic2.XSpellChecker\
-    com.sun.star.linguistic2.XSupportedLocales\
-    com.sun.star.linguistic2.XThesaurus
 
 CXXFLAGS += -I..$/libhnj -I..$/..$/..$/lingutil
 CFLAGSCXX += -I..$/libhnj -I..$/..$/..$/lingutil
