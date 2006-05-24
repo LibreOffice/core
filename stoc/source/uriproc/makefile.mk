@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:18:57 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:53:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,23 +42,6 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: settings.mk
 
 DLLPRE = # no leading "lib" on .so files
-
-UNOTYPES = \
-    com.sun.star.lang.WrappedTargetRuntimeException \
-    com.sun.star.lang.XMultiComponentFactory \
-    com.sun.star.lang.XServiceInfo \
-    com.sun.star.uno.Exception \
-    com.sun.star.uno.RuntimeException \
-    com.sun.star.uno.XComponentContext \
-    com.sun.star.uno.XInterface \
-    com.sun.star.uri.RelativeUriExcessParentSegments \
-    com.sun.star.uri.UriReferenceFactory \
-    com.sun.star.uri.XExternalUriReferenceTranslator \
-    com.sun.star.uri.XUriReference \
-    com.sun.star.uri.XUriReferenceFactory \
-    com.sun.star.uri.XUriSchemeParser \
-    com.sun.star.uri.XVndSunStarPkgUrlReferenceFactory \
-    com.sun.star.uri.XVndSunStarScriptUrlReference
 
 SHL1TARGET = $(TARGET).uno
 SHL1OBJS = \
