@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:58:27 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:14:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@ PRJ=..$/..
 PRJNAME=			filter
 TARGET=				fl_xmlfilteradaptor
 
-NO_BSYMBOLIC=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
-BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
@@ -69,3 +67,4 @@ SHL1STDLIBS=	$(COMPHELPERLIB) \
                 $(SALLIB)	
 
 .INCLUDE :			target.mk
+
