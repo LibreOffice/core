@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:53:44 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:35:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,32 +47,7 @@ USE_DEFFILE=	TRUE
 
 .INCLUDE :  settings.mk
 
-# --- Files --------------------------------------------------------
-
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-
-CPPUMAKERFLAGS =
-
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/bootstrap
-INCPRE+=	$(OUT)$/inc$/bootstrap
-.ELSE
-.IF "$(COM)" == "MSC"
-CPPUMAKERFLAGS = -L
-.ENDIF
-UNOUCROUT=	$(OUT)$/inc$/light
-INCPRE+=	$(OUT)$/inc$/light
-.ENDIF
-
 # ------------------------------------------------------------------
-UNOTYPES= com.sun.star.uno.XComponentContext \
-      com.sun.star.lang.XSingleComponentFactory \
-     com.sun.star.lang.XMultiComponentFactory \
-    com.sun.star.lang.XServiceInfo \
-    com.sun.star.lang.XComponent \
-    com.sun.star.container.XHierarchicalNameAccess \
-    com.sun.star.registry.XSimpleRegistry
 
 APP1NOSAL=TRUE
 
@@ -84,8 +59,6 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)
-
-
 
 
 LIBCIMT=MSVCPRTD.lib
