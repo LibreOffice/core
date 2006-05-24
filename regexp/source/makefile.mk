@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:10:42 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:29:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,6 @@ LIBTARGET=NO
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
-
-UNOTYPES+= \
-    com.sun.star.i18n.TransliterationModules \
-    com.sun.star.i18n.XExtendedTransliteration \
-    com.sun.star.util.SearchFlags \
-    com.sun.star.util.SearchOptions
 
 EXCEPTIONSFILES= \
         $(SLO)$/reclass.obj
