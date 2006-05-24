@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:48:09 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:35:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,25 +38,15 @@ PRJ=..$/..
 PRJNAME=package
 TARGET=xstor
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(SLO)$/ocompinstream.obj\
-        $(SLO)$/oseekinstream.obj\
-        $(SLO)$/owriteablestream.obj\
-        $(SLO)$/xstorage.obj\
-        $(SLO)$/xfactory.obj\
-        $(SLO)$/disposelistener.obj\
-        $(SLO)$/switchpersistencestream.obj\
-        $(SLO)$/register.obj
-
-EXCEPTIONSFILES= \
         $(SLO)$/ocompinstream.obj\
         $(SLO)$/oseekinstream.obj\
         $(SLO)$/owriteablestream.obj\
@@ -77,7 +67,6 @@ SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(TARGET).def
 
 SHL1IMPLIB=i$(SHL1TARGET)
-SHL1LIBS=
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(SHL1TARGET).dxp
