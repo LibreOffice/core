@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.148 $
+#   $Revision: 1.149 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:47:12 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:36:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
     use Cwd qw (cwd);
     use File::Path;
     use File::Temp qw(tmpnam);
+    use File::Find;
 
     use lib ("$ENV{SOLARENV}/bin/modules");
 
@@ -78,7 +79,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.148 $ ';
+    $id_str = ' $Revision: 1.149 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -136,7 +137,7 @@
     $no_projects = 0;
     $only_dependent = 0;
     $build_from = '';
-    $build_from_opt = '';
+    $build_all_cont = '';
     $build_since = '';
     $dlv_switch = '';
     $child = 0;
@@ -180,6 +181,8 @@
     $chekoutmissing = 1; # chekout missing modules (links still will be broken anyway)
     $mkout = CorrectPath("$ENV{SOLARENV}/bin/mkout.pl");
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
+#    %weight_stored = ();
+    $grab_output = 1;
 
 ### main ###
 
@@ -231,8 +234,8 @@
         } else {
             print_error ("Cannot open file $cmd_file");
         };
-    } elsif ($show) {
-        select STDERR;
+#    } elsif ($show) {
+#        select STDOUT;
     };
 
     print $new_line;
@@ -340,6 +343,39 @@ sub store_weights {
 };
 
 #
+# This procedure implements complete in-depth weights search
+# it's working, but very slow, so switched off in favor of the
+# last (simplified) implementation...
+#
+#sub store_weights {
+#    my $deps_hash = shift;
+#    $weights_hash{$_} = {} foreach (keys %$deps_hash);
+#    foreach (keys %$deps_hash) {
+#        foreach my $module_deps_hash ($$deps_hash{$_}) {
+#            foreach my $dependency (keys %$module_deps_hash) {
+#                ${$weights_hash{$dependency}}{$_}++;
+#            };
+#        };
+#    };
+#    my $current_prj_preq = $$deps_hash{$CurrentPrj};
+#    foreach (keys %$current_prj_preq) {
+#        accumulate_weights($deps_hash, $_);
+#    };
+#};
+
+#sub accumulate_weights {
+#    my ($deps_hash, $module) = @_;
+#    my @prerequisites = keys %{$$deps_hash{$module}};
+#    my @is_prereq_for = keys %{$weights_hash{$module}};
+#    foreach my $prereq_module (@prerequisites) {
+##        next if (defined $weight_stored{$prereq_module});
+##        $weight_stored{$prereq_module}++;
+#        ${$weights_hash{$prereq_module}}{$_}++ foreach @is_prereq_for;
+#        accumulate_weights($deps_hash, $prereq_module);
+#    };
+#};
+
+#
 # Build everything that should be built
 #
 sub BuildAll {
@@ -347,14 +383,14 @@ sub BuildAll {
         my ($Prj, $PrjDir, $orig_prj);
         GetParentDeps( $CurrentPrj, \%global_deps_hash);
         modules_classify(keys %global_deps_hash);
+        store_weights(\%global_deps_hash);
         prepare_build_from(\%global_deps_hash) if ($build_from);
         prepare_incompatible_build(\%global_deps_hash) if ($incompatible);
-        if ($build_from_opt || $build_since) {
-            prepare_build_from_opt(\%global_deps_hash);
+        if ($build_all_cont || $build_since) {
+            prepare_build_all_cont(\%global_deps_hash);
         };
         $modules_number = scalar keys %global_deps_hash;
         initialize_html_info($_) foreach (keys %global_deps_hash);
-        store_weights(\%global_deps_hash);
         if ($QuantityToBuild) {
             build_multiprocessing();
             return;
@@ -448,7 +484,10 @@ sub dmake_dir {
             if (!-d $log_dir) {
                  system("$perl $mkout");
             };
-            $error_code = system ("$dmake >& $log_file");
+            $error_code = system ("$dmake > $log_file 2>&1");
+            if (!$grab_output && -f $log_file) {
+                system("cat $log_file");
+            };
         } else {
             $error_code = system ("$dmake");
         };
@@ -870,7 +909,7 @@ sub RemoveFromDependencies {
     $Dependencies = shift;
     foreach $Prj (keys %$Dependencies) {
         my $prj_deps_hash = $$Dependencies{$Prj};
-        delete $$prj_deps_hash{$ExclPrj} if defined $$prj_deps_hash{$ExclPrj};
+        delete $$prj_deps_hash{$ExclPrj} if (defined $$prj_deps_hash{$ExclPrj});
 #        foreach (keys %$prj_deps_hash) {print ("$_ ")};
 
 #        foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
@@ -987,14 +1026,16 @@ sub FindIndepPrj {
         if (scalar @candidates) {
             my $best_candidate = undef;
             my $weight = 0;
-            foreach my $candidate (@candidates) {
+            foreach my $candidate (sort @candidates) {
+#                if (defined $weights_hash{$candidate} && scalar keys %{$weights_hash{$candidate}} > $weight) {
                 if (defined $weights_hash{$candidate} && $weights_hash{$candidate} > $weight) {
                     $best_candidate = $candidate;
+#                    $weight = scalar keys %{$weights_hash{$candidate}};
                     $weight = $weights_hash{$candidate};
                 };
             };
             if (defined $best_candidate) {
-                delete $weights_hash{$best_candidate};
+#                delete $weights_hash{$best_candidate};
                 return $best_candidate;
             }
             my @sorted_candidates = sort(@candidates);
@@ -1087,7 +1128,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--dontchekoutmissingmodules]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path]] [--job|-j] [-- job_options] \n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--dontchekoutmissingmodules]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--job|-j] [-- job_options] \n";
     print STDERR "Example:    build --from sfx2\n";
     print STDERR "                     - build projects including current one from sfx2\n";
     print STDERR "Example:    build --all:sfx2\n";
@@ -1107,6 +1148,7 @@ sub usage {
     print STDERR "        --help       - print help info\n";
     print STDERR "        --ignore     - force tool to ignore errors\n";
     print STDERR "        --html       - generate html page with build status\n";
+    print STDERR "        --dontgraboutput - do not grab console output when generating html page\n";
     print STDERR "                       file named \$INPATH.build.html will be generated in \$SRC_ROOT\n";
     print STDERR "        --html_path  - html page path\n";
     print STDERR "        --dontchekoutmissingmodules - do not chekout missing modules when running prepape (links still will be broken)\n";
@@ -1131,7 +1173,7 @@ sub init_logging {
 # Get all options passed
 #
 sub get_options {
-    my $arg;
+    my ($arg, $dont_grab_output);
     init_logging();
     while ($arg = shift @ARGV) {
         $arg =~ /^-P$/            and $QuantityToBuild = shift @ARGV     and next;
@@ -1156,9 +1198,9 @@ sub get_options {
                                 and $build_from = shift @ARGV         and next;
 
         $arg =~ /^--all:(\S+)$/ and $BuildAllParents = 1
-                                and $build_from_opt = $1            and next;
+                                and $build_all_cont = $1            and next;
         $arg =~ /^-a:(\S+)$/ and $BuildAllParents = 1
-                                and $build_from_opt = $1            and next;
+                                and $build_all_cont = $1            and next;
         if ($arg =~ /^--from$/ || $arg =~ /^-f$/) {
                                     $BuildAllParents = 1;
                                     get_incomp_projects();
@@ -1178,6 +1220,7 @@ sub get_options {
         $arg =~ /^-h$/        and usage()                            and do_exit(0);
         $arg =~ /^--ignore$/        and $ignore = 1                            and next;
         $arg =~ /^--html$/        and $html = 1                            and next;
+        $arg =~ /^--dontgraboutput$/        and $dont_grab_output = 1      and next;
         $arg =~ /^--html_path$/ and $html_path = shift @ARGV  and next;
         $arg =~ /^-i$/        and $ignore = 1                            and next;
         $arg =~ /^--version$/   and do_exit(0);
@@ -1192,8 +1235,10 @@ sub get_options {
     };
     if (!$html) {
         print_error("\"--html_path\" switch is used only with \"--html\"") if ($html_path);
+        print_error("\"--dontgraboutput\" switch is used only with \"--html\"") if ($dont_grab_output);
     };
-    print_error('Switches --with_branches and --all collision') if ($build_from && $build_from_opt);
+    $grab_output = 0 if ($dont_grab_output);
+    print_error('Switches --with_branches and --all collision') if ($build_from && $build_all_cont);
     print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     print_error('Switches --with_branches and --since collision') if ($build_from && $build_since);
     if ($show) {
@@ -1707,7 +1752,7 @@ sub modules_classify {
 #
 sub provide_consistency {
     check_dir();
-    foreach $var_ref (\$build_from, \$build_from_opt, \$build_since) {
+    foreach $var_ref (\$build_from, \$build_all_cont, \$build_since) {
         if ($$var_ref) {
             return if (-d $StandDir.$$var_ref);
             $$var_ref .= '.lnk' and return if (-d $StandDir.$$var_ref.'.lnk');
@@ -1971,10 +2016,18 @@ sub retrieve_build_list {
         utime ($from_stat[9], $from_stat[9], $possible_build_lst);
         last;
     };
-    rmtree(CorrectPath($tmp_dir . '/' . $module), 0, 1);
+    my $temp_checkout_path = CorrectPath($tmp_dir . '/' . $module);
+    find(\&fix_permissions ,$temp_checkout_path);
+    rmtree($temp_checkout_path, 0, 1);
     select($old_fh);
     return undef if (!$success);
     return $possible_build_lst;
+};
+
+sub fix_permissions {
+     my $file = $File::Find::name;
+     return unless -f $file;
+     chmod '0664', $file;
 };
 
 #
@@ -1998,9 +2051,9 @@ sub prepare_incompatible_build {
     foreach (keys %incompatibles) {
         $$deps_hash{$_} = $incompatibles{$_};
     };
-    if ($build_from_opt) {
-        prepare_build_from_opt($deps_hash);
-        delete $$deps_hash{$build_from_opt};
+    if ($build_all_cont) {
+        prepare_build_all_cont($deps_hash);
+        delete $$deps_hash{$build_all_cont};
     };
     @modules_built = keys %$deps_hash;
     clear_delivered() if ($prepare);
@@ -2021,9 +2074,9 @@ sub prepare_incompatible_build {
         my $warning_string = 'Following modules are inconsistent/missing: ' . "@missing_modules";
         push(@warnings, $warning_string);
     };
-    if ($build_from_opt) {
-        $$deps_hash{$build_from_opt} = ();
-        $build_from_opt = '';
+    if ($build_all_cont) {
+        $$deps_hash{$build_all_cont} = ();
+        $build_all_cont = '';
     };
     if ($old_output_tree) {
         push(@warnings, 'Some module(s) contain old output tree(s)!');
@@ -2062,10 +2115,10 @@ sub prepare_build_from {
 # Removes projects which it is not necessary to build
 # with --all:prj_name or --since switch
 #
-sub prepare_build_from_opt {
+sub prepare_build_all_cont {
     my ($prj, $deps_hash, $border_prj);
     $deps_hash = shift;
-    $border_prj = $build_from_opt if ($build_from_opt);
+    $border_prj = $build_all_cont if ($build_all_cont);
     $border_prj = $build_since if ($build_since);
     while ($prj = PickPrjToBuild($deps_hash)) {
         $orig_prj = '';
@@ -2075,7 +2128,7 @@ sub prepare_build_from_opt {
             RemoveFromDependencies($prj, $deps_hash);
             next;
         } else {
-            if ($build_from_opt) {
+            if ($build_all_cont) {
                 $$deps_hash{$prj} = ();
             } else {
                 RemoveFromDependencies($prj, $deps_hash);
@@ -2110,8 +2163,8 @@ sub get_incomp_projects {
         } else {
             if ($option =~ /(:)/) {
                 $option = $`;
-                print_error("-from switch collision") if ($build_from_opt);
-                $build_from_opt = $';
+                print_error("-from switch collision") if ($build_all_cont);
+                $build_all_cont = $';
             };
             $incompatibles{$option}++;
         };
@@ -2374,6 +2427,9 @@ sub do_post_job {
                 print_error("Cannot create log directory $log_dir") if ($@);
             };
             $error_code = system ("$job > $log_file 2>&1");
+            if (!$grab_output && -f $log_file) {
+                system("cat $log_file");
+            };
         } else {
             $error_code = system ("$job");
         }
