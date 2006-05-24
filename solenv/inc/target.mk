@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.169 $
+#   $Revision: 1.170 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:12:42 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:15:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ INCPOST*=.
 .IF "$(PRE)"!=""
 ENVINCPRE+=-I$(PRE)$/inc
 .ENDIF			# "$(PRE)"!=""
+.IF "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
+UNOINCLUDES=$(SOLARINCDIR)$/offuh
+.ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 .IF "$(LOCAL_SOLENV)"!=""
 SOLARINC+=$(JDKINCS)
 SOLARINC+=$(ORCLINC)
@@ -58,9 +61,9 @@ SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
 .ENDIF "$(LOCAL_SOLENV)"!=""
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 .EXPORT : LIB
 # --- Compiler -----------------------------------------------------
@@ -1848,7 +1851,9 @@ TARGETDEPS+=$(EXCEPTIONSTARGET)
 .ENDIF
 
 # -Gc breaks the dependency chain and causes indefinite nummbers of $(CPPUMAKER)
+.IF "$(BOOTSTRAP_SERVICE)"!="TRUE"
 CPPUMAKERFLAGS*=-L
+.ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE"
 
 .IF "$(UNOTYPES)" != ""
 # makeing all in one
