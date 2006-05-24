@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:30:18 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:35:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,6 @@ stoponerror=tr
 .INCLUDE :  settings.mk
 
 .IF "$(TESTCB)"=="TRUE"
-
-.INCLUDE : ..$/..$/cppumaker.mk
 
 CFLAGS+=-D_WIN32_DCOM -EHsc -Ob0
 
