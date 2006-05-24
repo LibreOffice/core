@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:47:38 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:18:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..$/..$/..
 PRJNAME=desktop
 TARGET = migrationoo2.uno
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC = TRUE
 COMP1TYPELIST = migrationoo2
 
 # --- Settings -----------------------------------------------------
@@ -78,3 +77,4 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
+
