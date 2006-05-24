@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:53:11 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:06:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,17 +84,15 @@ LINKFLAGS += /delayload:cppuhelper3MSC.dll \
 
 UWINAPILIB=
 
-UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
-UNOUCRDEP = $(UNOUCRRDB)
-UNOUCROUT = $(OUT)$/inc
-INCPRE += $(OUT)$/inc
-
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS =
 UNOTYPES = \
     com.sun.star.lang.XSingleComponentFactory			\
     com.sun.star.loader.CannotActivateFactoryException 		\
+    com.sun.star.container.XHierarchicalNameAccess		\
     com.sun.star.registry.CannotRegisterImplementationException	\
-    com.sun.star.registry.XRegistryKey
+    com.sun.star.registry.XRegistryKey \
+    com.sun.star.registry.XSimpleRegistry
 
 CFLAGS += -clr -AI $(OUT)$/bin
 #see  Microsoft Knowledge Base Article - 814472 
