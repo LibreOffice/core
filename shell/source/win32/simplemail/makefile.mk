@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:07:33 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:05:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,12 @@ TARGET=smplmail
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-#.INCLUDE : ..$/cppumaker.mk
 
 SLOFILES=$(SLO)$/smplmailentry.obj\
          $(SLO)$/smplmailmsg.obj\
@@ -62,9 +59,6 @@ SHL1STDLIBS=$(CPPULIB)\
             $(SALLIB)\
             advapi32.lib
 
-SHL1LIBS=
-        
-SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
 
 SHL1OBJS=$(SLOFILES) 
