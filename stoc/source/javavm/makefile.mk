@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:00:33 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:48:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..$/..
 PRJNAME=stoc
 TARGET = javavm.uno
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC = TRUE
 COMP1TYPELIST = jen
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
