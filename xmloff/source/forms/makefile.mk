@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:14:30 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:20:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,21 +42,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-# UNO header files
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.form.binding.XBindableValue \
-    com.sun.star.form.binding.XListEntrySource \
-    com.sun.star.form.binding.XListEntrySink
 
 SLOFILES =	\
         $(SLO)$/officeforms.obj \
