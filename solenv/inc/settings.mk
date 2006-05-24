@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.189 $
+#   $Revision: 1.190 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 09:24:53 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:15:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,7 +1309,8 @@ CDEFS+= -DTF_NEWEX
 
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
-UNOUCROUT*=$(OUT)$/inc
+UNOUCROUT*=$(OUT)$/inc$/$(TARGET)
+INCPRE+=-I$(UNOUCROUT)
 UNOUCRRDB*=$(SOLARBINDIR)$/types.rdb
 
 # --- Compiler -----------------------------------------------------
