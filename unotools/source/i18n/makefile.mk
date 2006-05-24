@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:26:46 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:01:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,45 +40,10 @@ TARGET=i18n
 
 ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings common for the whole project -----
-
-#UNOTYPES=
-#.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
-
-# --- Types -------------------------------------
-
-
-UNOTYPES+= \
-    com.sun.star.i18n.CalendarDisplayIndex  \
-    com.sun.star.i18n.CalendarFieldIndex    \
-    com.sun.star.i18n.CollatorOptions       \
-    com.sun.star.i18n.KCharacterType        \
-    com.sun.star.i18n.KNumberFormatType     \
-    com.sun.star.i18n.KNumberFormatUsage    \
-    com.sun.star.i18n.KParseTokens          \
-    com.sun.star.i18n.KParseType            \
-    com.sun.star.i18n.LocaleItem            \
-    com.sun.star.i18n.XCalendar             \
-    com.sun.star.i18n.XExtendedCalendar     \
-    com.sun.star.i18n.XCharacterClassification \
-    com.sun.star.i18n.XCollator             \
-    com.sun.star.i18n.XExtendedTransliteration      \
-    com.sun.star.i18n.Currency          	\
-    com.sun.star.i18n.Currency2          	\
-    com.sun.star.i18n.XLocaleData           \
-    com.sun.star.i18n.XLocaleData2          \
-    com.sun.star.i18n.XNativeNumberSupplier	\
-    com.sun.star.i18n.XNumberFormatCode     \
-    com.sun.star.i18n.XTransliteration      \
-    com.sun.star.i18n.reservedWords         \
-    com.sun.star.util.SearchFlags           \
-    com.sun.star.util.XTextSearch
-
 
 # --- Files -------------------------------------
 
