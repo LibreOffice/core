@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:42:43 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:29:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,12 @@ PRJ=..
 PRJNAME=javaunohelper
 TARGET=juh
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 .IF "$(SOLAR_JAVA)"==""
 nojava:
@@ -60,14 +57,17 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc$/comprehensive
 INCPRE+=$(OUT)$/inc$/comprehensive
+NO_OFFUH=TRUE
 CPPUMAKERFLAGS+=-C
 
 UNOTYPES= \
+        com.sun.star.beans.NamedValue \
         com.sun.star.container.XHierarchicalNameAccess		\
         com.sun.star.loader.XImplementationLoader		\
         com.sun.star.registry.XRegistryKey			\
         com.sun.star.registry.XSimpleRegistry			\
         com.sun.star.beans.XPropertySet				\
+         com.sun.star.lang.DisposedException			\
         com.sun.star.lang.IllegalArgumentException		\
         com.sun.star.lang.XTypeProvider				\
         com.sun.star.lang.XServiceInfo				\
