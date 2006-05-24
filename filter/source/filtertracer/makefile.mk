@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:41:05 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:13:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,26 +43,6 @@ USE_DEFFILE=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk
-
-# --- Types -------------------------------------
-
-UNOTYPES=	com.sun.star.uno.XWeak						\
-            com.sun.star.uno.XNamingService				\
-            com.sun.star.uno.XComponentContext			\
-            com.sun.star.uno.XAggregation				\
-            com.sun.star.lang.XServiceInfo				\
-            com.sun.star.lang.XSingleServiceFactory		\
-            com.sun.star.lang.XMultiServiceFactory		\
-            com.sun.star.lang.XSingleComponentFactory	\
-            com.sun.star.lang.XTypeProvider				\
-            com.sun.star.lang.XInitialization			\
-            com.sun.star.registry.XSimpleRegistry		\
-            com.sun.star.util.logging.XLogger			\
-            com.sun.star.util.logging.LogLevel			\
-            com.sun.star.util.XTextSearch				\
-            com.sun.star.util.SearchResult				\
-            com.sun.star.xml.sax.XDocumentHandler
-
 
 # --- Files -------------------------------------
         
