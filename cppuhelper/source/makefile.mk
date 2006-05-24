@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 17:19:33 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:29:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..
 PRJNAME=cppuhelper
 TARGET=cppuhelper
 
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
@@ -51,67 +50,7 @@ UNIXVERSIONNAMES=UDK
 
 # --- Files --------------------------------------------------------
 
-#UNOUCRRDB=$(OUT)$/bin$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRDEP=$(UNOUCRRDB)
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(OUT)$/inc $(OUT)$/inc$/private
-
-CPPUMAKERFLAGS=
-
-UNOTYPES= \
-        com.sun.star.registry.XSimpleRegistry		\
-        com.sun.star.registry.XImplementationRegistration \
-        com.sun.star.container.XSet			\
-        com.sun.star.container.XNameAccess		\
-        com.sun.star.uno.XWeak 				\
-        com.sun.star.uno.XAggregation 			\
-        com.sun.star.uno.XComponentContext		\
-        com.sun.star.uno.XUnloadingPreference    	\
-        com.sun.star.uno.DeploymentException    	\
-        com.sun.star.uno.RuntimeException \
-        com.sun.star.lang.WrappedTargetRuntimeException \
-        com.sun.star.lang.DisposedException 		\
-        com.sun.star.lang.XMultiServiceFactory 		\
-        com.sun.star.lang.XSingleServiceFactory 	\
-        com.sun.star.lang.XMultiComponentFactory 	\
-        com.sun.star.lang.XSingleComponentFactory 	\
-        com.sun.star.lang.XServiceInfo 			\
-        com.sun.star.lang.XInitialization 		\
-        com.sun.star.lang.XEventListener 		\
-        com.sun.star.reflection.XIdlReflection 		\
-        com.sun.star.reflection.XIdlClass 		\
-        com.sun.star.reflection.XIdlClassProvider	\
-        com.sun.star.reflection.XIndirectTypeDescription	\
-        com.sun.star.reflection.XMethodParameter		\
-        com.sun.star.reflection.XInterfaceMemberTypeDescription	\
-        com.sun.star.reflection.XTypeDescription		\
-        com.sun.star.reflection.XEnumTypeDescription		\
-        com.sun.star.reflection.XArrayTypeDescription		\
-        com.sun.star.reflection.XInterfaceAttributeTypeDescription \
-        com.sun.star.reflection.XInterfaceMethodTypeDescription	\
-        com.sun.star.reflection.XInterfaceTypeDescription2	\
-        com.sun.star.reflection.XCompoundTypeDescription	\
-        com.sun.star.reflection.XStructTypeDescription \
-        com.sun.star.reflection.XUnionTypeDescription	\
-        com.sun.star.beans.XPropertySet 		\
-        com.sun.star.beans.XMultiPropertySet 		\
-        com.sun.star.beans.PropertyValue 		\
-        com.sun.star.beans.XFastPropertySet 		\
-        com.sun.star.beans.PropertyAttribute 		\
-        com.sun.star.container.XNameContainer \
-        com.sun.star.container.XHierarchicalNameAccess	\
-        com.sun.star.registry.XRegistryKey		\
-        com.sun.star.loader.XImplementationLoader	\
-        com.sun.star.lang.XTypeProvider			\
-        com.sun.star.lang.XComponent			\
-        com.sun.star.uno.XCurrentContext		\
-        com.sun.star.security.XAccessController		\
-        com.sun.star.security.RuntimePermission		\
-        com.sun.star.io.FilePermission			\
-        com.sun.star.io.IOException			\
-        com.sun.star.connection.SocketPermission	\
-        com.sun.star.util.XMacroExpander
+INCPRE+=$(OUT)$/inc$/private
 
 .IF "$(debug)" != ""
 # msvc++: no inlining for debugging
