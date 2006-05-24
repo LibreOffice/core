@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-05-08 15:56:36 $
+dnl * Date: $Date: 2006-05-24 12:03:52 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.165 $ )
+AC_REVISION( $Revision: 1.166 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -708,7 +708,7 @@ case "$build_os" in
 		;;
 	darwin*) # Mac OS X
 		test_x=no
-		test_cups=no
+		test_cups=yes
 		test_gtk=no
 		build_cairo=no
 		_os=Darwin
