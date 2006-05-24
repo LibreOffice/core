@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyForward.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:55:29 $
+ *  last change: $Author: vg $ $Date: 2006-05-24 11:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,12 +116,15 @@ void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt )
             if ( xFactory.is() )
             {
                 m_xDest = xFactory->createDataDescriptor();
-                ::comphelper::copyProperties(m_xSource,m_xDest);
-                m_bInInsert = sal_True;
-                Reference<XAppend> xAppend(m_xDestContainer,UNO_QUERY);
-                if ( xAppend.is() )
-                    xAppend->appendByDescriptor(m_xDest);
-                m_bInInsert = sal_False;
+                if ( m_xDest.is() )
+                {
+                    ::comphelper::copyProperties(m_xSource,m_xDest);
+                    m_bInInsert = sal_True;
+                    Reference<XAppend> xAppend(m_xDestContainer,UNO_QUERY);
+                    if ( xAppend.is() )
+                        xAppend->appendByDescriptor(m_xDest);
+                    m_bInInsert = sal_False;
+                }
             }
         }
         if ( m_xDest.is() )
