@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:11:16 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:20:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,12 @@ TARGET=svxslots
 
 .INCLUDE :  settings.mk
 
-SDINAME=$(TARGET)
-SDIEXPORT=svx
+SDI1NAME=$(TARGET)
+SDI1EXPORT=svx
 
 # --- Files --------------------------------------------------------
 
-SVSDIDEPEND= \
+SVSDI1DEPEND= \
         svxitems.sdi \
     fmslots.sdi \
     svx.sdi	\
