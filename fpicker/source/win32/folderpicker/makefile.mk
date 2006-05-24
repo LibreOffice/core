@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:50:54 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:54:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@ TARGET=fop
 #LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
-UNOUCROUT=$(OUT)$/inc$/fop
-INCPRE+=$(OUT)$/inc$/fop
 
 # --- Settings -----------------------------------------------------
 
