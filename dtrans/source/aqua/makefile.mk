@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:08:57 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:32:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ LIBTARGET=NO
 .IF "$(OS)"=="MACOSX" 
 .IF "$(GUIBASE)"=="aqua"
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 .ENDIF # "$(GUIBASE)"=="aqua"
 .ENDIF # "$(OS)"=="MACOSX" 
 USE_BOUNDCHK=
@@ -64,8 +63,6 @@ dummy:
 dummy:
     @echo "Nothing to build for GUIBASE $(GUIBASE)"
 .ELSE
-
-.INCLUDE : ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/aqua_service.obj	\
@@ -96,7 +93,8 @@ APP1STDLIBS= \
 # --- Targets ------------------------------------------------------
 
 ALL : ALLTAR
-    +deliver.pl
+# hjs - do *not* call deliver out of makefiles
+#	+deliver.pl
     +regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk
