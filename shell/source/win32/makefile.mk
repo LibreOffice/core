@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:57:53 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:05:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,12 @@ TARGET=syssh
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-#.INCLUDE : ..$/cppumaker.mk
 
 SLOFILES=$(SLO)$/SysShentry.obj\
          $(SLO)$/SysShExec.obj
