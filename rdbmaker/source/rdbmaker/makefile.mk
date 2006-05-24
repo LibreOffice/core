@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:04:59 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:15:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,48 +43,18 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-# --- Files --------------------------------------------------------
-UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
-
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc
-
-UNOTYPES= \
-        com.sun.star.lang.XMultiServiceFactory	\
-        com.sun.star.lang.XSingleServiceFactory	\
-        com.sun.star.container.XHierarchicalNameAccess	\
-        com.sun.star.beans.XPropertySet	\
-        com.sun.star.uno.XComponentContext	\
-        com.sun.star.reflection.XInterfaceTypeDescription	\
-        com.sun.star.reflection.XModuleTypeDescription	\
-        com.sun.star.reflection.XConstantTypeDescription	\
-        com.sun.star.reflection.XConstantsTypeDescription	\
-        com.sun.star.reflection.XInterfaceMemberTypeDescription	\
-        com.sun.star.reflection.XInterfaceMethodTypeDescription	\
-        com.sun.star.reflection.XInterfaceAttributeTypeDescription	\
-        com.sun.star.reflection.XCompoundTypeDescription	\
-        com.sun.star.reflection.XIndirectTypeDescription	\
-        com.sun.star.reflection.XEnumTypeDescription	\
-        com.sun.star.registry.XRegistryKey	\
-
-CXXFILES=	rdbmaker.cxx	\
-            rdboptions.cxx	\
-            typeblop.cxx	\
-            specialtypemanager.cxx	\
-            rdbtype.cxx
-
-APP1TARGET= $(TARGET)
-
-APP1OBJS=   $(OBJ)$/rdbmaker.obj	\
+OBJFILES=   $(OBJ)$/rdbmaker.obj	\
             $(OBJ)$/rdboptions.obj	\
             $(OBJ)$/typeblop.obj	\
             $(OBJ)$/specialtypemanager.obj	\
             $(OBJ)$/rdbtype.obj
+
+
+APP1TARGET= $(TARGET)
+
+APP1OBJS=   $(OBJFILES)
 
 APP1STDLIBS=\
             $(SALLIB) \
