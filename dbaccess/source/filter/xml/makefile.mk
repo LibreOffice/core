@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-24 08:29:53 $
+#   last change: $Author: vg $ $Date: 2006-05-24 14:12:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,32 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE :  	svpre.mk
 .INCLUDE :  	settings.mk
-.INCLUDE :  	sv.mk
 
-# --- Types -------------------------------------
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/xmlfilter.obj				\
