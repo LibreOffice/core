@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:56:43 $
+#   last change: $Author: vg $ $Date: 2006-05-24 13:47:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@ PRJ=..$/..
 
 PRJNAME=	stoc
 TARGET = invocation.uno
-NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = inv
 
