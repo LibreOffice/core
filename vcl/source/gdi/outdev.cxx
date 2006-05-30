@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 10:04:07 $
+ *  last change: $Author: vg $ $Date: 2006-05-30 07:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,8 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
 
 BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& rRegion, OutputDevice *pOutDev )
 {
+    // TODO(Q3): Change from static to plain method - everybody's
+    // calling it with pOutDev=this!
     DBG_TESTSOLARMUTEX();
 
     long                nX;
@@ -226,24 +228,42 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
     ImplRegionInfo      aInfo;
     BOOL                bRegionRect;
     BOOL                bClipRegion = TRUE;
+    const BOOL          bClipDeviceBounds( !pOutDev->GetPDFWriter()
+                                           && pOutDev->GetOutDevType() != OUTDEV_PRINTER );
 
     nRectCount = rRegion.GetRectCount();
     pGraphics->BeginSetClipRegion( nRectCount );
     bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-    while ( bRegionRect )
+    if( bClipDeviceBounds )
     {
-        // #i59315# Limit coordinates passed to sal layer to actual
-        // outdev dimensions - everything else bears the risk of
-        // overflowing internal coordinates (e.g. the 16 bit wire
-        // format of X11).
-        nX = ::std::max<long>(0,nX);
-        nY = ::std::max<long>(0,nY);
-        nWidth  = ::std::min<long>(pOutDev->GetOutputWidthPixel(), nWidth);
-        nHeight = ::std::min<long>(pOutDev->GetOutputHeightPixel(), nHeight);
-        if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
-            bClipRegion = FALSE;
-        DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
-        bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+        while ( bRegionRect )
+        {
+            // #i59315# Limit coordinates passed to sal layer to actual
+            // outdev dimensions - everything else bears the risk of
+            // overflowing internal coordinates (e.g. the 16 bit wire
+            // format of X11).
+            nX = ::std::max<long>(0,nX);
+            nY = ::std::max<long>(0,nY);
+            nWidth  = ::std::min<long>(pOutDev->GetOutputWidthPixel(), nWidth);
+            nHeight = ::std::min<long>(pOutDev->GetOutputHeightPixel(), nHeight);
+            if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
+                bClipRegion = FALSE;
+            DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
+            bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+        }
+    }
+    else
+    {
+        // #i65720# Actually, _don't_ clip anything on printer or PDF
+        // export, since output might be visible outside the specified
+        // device boundaries.
+        while ( bRegionRect )
+        {
+            if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
+                bClipRegion = FALSE;
+            DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
+            bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+        }
     }
     pGraphics->EndSetClipRegion();
     return bClipRegion;
