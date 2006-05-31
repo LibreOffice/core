@@ -1,0 +1,493 @@
+--- misc/build/vigra1.4.0/include/vigra/mathutil.hxx	Mon May 29 18:21:23 2006
++++ misc/vigra1.4.0/include/vigra/mathutil.hxx	Wed Dec 21 05:53:39 2005
+@@ -73,8 +73,6 @@
+ 
+ namespace vigra {
+ 
+-#ifndef __sun 
+-
+ /** \addtogroup MathFunctions Mathematical Functions
+ 
+     Useful mathematical functions and functors.
+@@ -109,23 +107,16 @@ double erf(T x)
+         return ans - 1.0;
+ }
+ 
+-#else
+-
+-using VIGRA_CSTD::erf;
+-
+-#endif
+-
+ // import functions into namespace vigra which VIGRA is going to overload
+ 
+ using VIGRA_CSTD::pow;  
+ using VIGRA_CSTD::floor;  
+ using VIGRA_CSTD::ceil;  
+-using std::abs;  
++using VIGRA_CSTD::abs;  
+ 
+ #define VIGRA_DEFINE_UNSIGNED_ABS(T) \
+     inline T abs(T t) { return t; }
+ 
+-VIGRA_DEFINE_UNSIGNED_ABS(bool)
+ VIGRA_DEFINE_UNSIGNED_ABS(unsigned char)
+ VIGRA_DEFINE_UNSIGNED_ABS(unsigned short)
+ VIGRA_DEFINE_UNSIGNED_ABS(unsigned int)
+@@ -358,25 +349,34 @@ T1 sign(T1 t1, T2 t2) 
+                : -abs(t1);
+ }
+ 
+-#define VIGRA_DEFINE_NORM(T) \
++#define VIGRA_DEFINE_NORM(T,NS)                                           \
+     inline NormTraits<T>::SquaredNormType squaredNorm(T t) { return sq(t); } \
+-    inline NormTraits<T>::NormType norm(T t) { return abs(t); }
++    inline NormTraits<T>::NormType norm(T t) { return NS::abs(t); }
+ 
+-VIGRA_DEFINE_NORM(bool)
+-VIGRA_DEFINE_NORM(signed char)
+-VIGRA_DEFINE_NORM(unsigned char)
+-VIGRA_DEFINE_NORM(short)
+-VIGRA_DEFINE_NORM(unsigned short)
+-VIGRA_DEFINE_NORM(int)
+-VIGRA_DEFINE_NORM(unsigned int)
+-VIGRA_DEFINE_NORM(long)
+-VIGRA_DEFINE_NORM(unsigned long)
+-VIGRA_DEFINE_NORM(float)
+-VIGRA_DEFINE_NORM(double)
+-VIGRA_DEFINE_NORM(long double)
++VIGRA_DEFINE_NORM(signed char,std)
++VIGRA_DEFINE_NORM(unsigned char,vigra)
++VIGRA_DEFINE_NORM(short,std)
++VIGRA_DEFINE_NORM(unsigned short,vigra)
++VIGRA_DEFINE_NORM(int,std)
++VIGRA_DEFINE_NORM(unsigned int,vigra)
++#if !defined(SOLARIS) || !defined(SUN) 
++ // there's no std::abs(long) for SunStudio/Solaris
++ VIGRA_DEFINE_NORM(long,std) 
++ VIGRA_DEFINE_NORM(unsigned long,vigra)
++#endif
+ 
+ #undef VIGRA_DEFINE_NORM
+ 
++#define VIGRA_DEFINE_FNORM(T)                                           \
++    inline NormTraits<T>::SquaredNormType squaredNorm(T t) { return sq(t); } \
++    inline NormTraits<T>::NormType norm(T t) { return fabs(t); }
++
++VIGRA_DEFINE_FNORM(float)
++VIGRA_DEFINE_FNORM(double)
++VIGRA_DEFINE_FNORM(long double)
++
++#undef VIGRA_DEFINE_FNORM
++
+ template <class T>
+ inline typename NormTraits<std::complex<T> >::SquaredNormType
+ squaredNorm(std::complex<T> const & t)
+--- misc/build/vigra1.4.0/include/vigra/array_vector.hxx	2005-12-21 05:53:30.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/array_vector.hxx	2006-05-30 10:30:17.000000000 +0200
+@@ -408,6 +408,8 @@ ArrayVector<T, Alloc>::insert(iterator p
+     return begin() + pos;
+ }
+ 
++#if !defined(SOLARIS) || !defined(SUN) 
++// SunStudio chokes on template template return type
+ template <class T, class Alloc>
+ template <class InputIterator>
+ typename ArrayVector<T, Alloc>::iterator
+@@ -443,6 +445,7 @@ ArrayVector<T, Alloc>::insert(iterator p
+     size_ = new_size;
+     return begin() + pos;
+ }
++#endif
+ 
+ template <class T, class Alloc>
+ typename ArrayVector<T, Alloc>::iterator
+--- misc/build/vigra1.4.0/include/vigra/basicimage.hxx	2005-12-21 05:53:30.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/basicimage.hxx	2006-05-30 11:39:49.000000000 +0200
+@@ -552,7 +552,11 @@ class BasicImage
+     typedef Alloc allocator_type;
+ 
+     typedef Alloc Allocator;
++#if !defined(SOLARIS) || !defined(SUN) 
+     typedef typename Alloc::template rebind<PIXELTYPE *>::other LineAllocator;
++#else
++    typedef std::allocator<PIXELTYPE*> LineAllocator;
++#endif
+ 
+         /** construct image of size 0x0
+         */
+@@ -569,7 +573,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {}
+ 
+         /** construct image of size width x height, use the specified allocator.
+@@ -579,7 +587,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {
+         vigra_precondition((width >= 0) && (height >= 0),
+              "BasicImage::BasicImage(int width, int height): "
+@@ -595,7 +607,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {
+         vigra_precondition((size.x >= 0) && (size.y >= 0),
+              "BasicImage::BasicImage(Diff2D size): "
+@@ -614,7 +630,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {
+         vigra_precondition((width >= 0) && (height >= 0),
+              "BasicImage::BasicImage(int width, int height, value_type const & ): "
+@@ -632,7 +652,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {
+         vigra_precondition((size.x >= 0) && (size.y >= 0),
+              "BasicImage::BasicImage(Diff2D const & size, value_type const & v): "
+@@ -650,7 +674,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {
+         vigra_precondition((width >= 0) && (height >= 0),
+              "BasicImage::BasicImage(int width, int height, const_pointer ): "
+@@ -667,7 +695,11 @@ class BasicImage
+       width_(0),
+       height_(0),
+       allocator_(alloc),
++#if !defined(SOLARIS) || !defined(SUN) 
+       pallocator_(alloc)
++#else
++      pallocator_()
++#endif
+     {
+         vigra_precondition((size.x >= 0) && (size.y >= 0),
+              "BasicImage::BasicImage(Diff2D const & size, const_pointer): "
+--- misc/build/vigra1.4.0/include/vigra/boundarytensor.hxx	2005-12-21 05:53:31.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/boundarytensor.hxx	2006-05-30 11:55:19.000000000 +0200
+@@ -71,8 +71,8 @@ initGaussianPolarFilters1(double std_dev
+     int radius = (int)(4.0*std_dev + 0.5);
+     std_dev *= 1.08179074376;
+     double f = 1.0 / VIGRA_CSTD::sqrt(2.0 * M_PI) / std_dev;  // norm
+-    double a = 0.558868151788 / VIGRA_CSTD::pow(std_dev, 5);
+-    double b = -2.04251639729 / VIGRA_CSTD::pow(std_dev, 3);
++    double a = 0.558868151788 / VIGRA_CSTD::pow(std_dev, 5.0);
++    double b = -2.04251639729 / VIGRA_CSTD::pow(std_dev, 3.0);
+     double sigma22 = -0.5 / std_dev / std_dev;
+ 
+ 
+@@ -175,7 +175,7 @@ initGaussianPolarFilters3(double std_dev
+     std_dev *= 1.15470053838;
+     double sigma22 = -0.5 / std_dev / std_dev;
+     double f = 1.0 / VIGRA_CSTD::sqrt(2.0 * M_PI) / std_dev;  // norm
+-    double a = 0.883887052922 / VIGRA_CSTD::pow(std_dev, 5);
++    double a = 0.883887052922 / VIGRA_CSTD::pow(std_dev, 5.0);
+ 
+     for(unsigned int i=0; i<k.size(); ++i)
+     {
+@@ -183,7 +183,7 @@ initGaussianPolarFilters3(double std_dev
+         k[i].setBorderTreatment(BORDER_TREATMENT_REFLECT);
+     }
+         
+-    double b = -1.3786348292 / VIGRA_CSTD::pow(std_dev, 3);
++    double b = -1.3786348292 / VIGRA_CSTD::pow(std_dev, 3.0);
+ 
+     int ix;
+     iterator c = k[0].center();
+--- misc/build/vigra1.4.0/include/vigra/fixedpoint.hxx	2005-12-21 05:53:34.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/fixedpoint.hxx	2006-05-30 10:51:49.000000000 +0200
+@@ -118,20 +118,18 @@ enum FixedPointNoShift { FPNoShift };
+ 
+ namespace detail {
+ 
+-template <bool MustRound>
++template <bool MustRound, int N>
+ struct FPAssignWithRound;
+ 
+-template <>
+-struct FPAssignWithRound<false>
++template <int N>
++struct FPAssignWithRound<false, N>
+ {
+-    template <int N>
+     static inline int exec(int v) { return v << (-N); }
+ };
+ 
+-template <>
+-struct FPAssignWithRound<true>
++template <int N>
++struct FPAssignWithRound<true, N>
+ {
+-    template <int N>
+     static inline int exec(int const v)
+     {
+         return (v + (1 << (N - 1))) >> (N);
+@@ -276,7 +274,7 @@ public:
+         */
+     template <unsigned Int2, unsigned Frac2>
+     FixedPoint(const FixedPoint<Int2, Frac2> &other)
+-    : value(detail::FPAssignWithRound<(Frac2 > FractionalBits)>::template exec<Frac2 - FractionalBits>(other.value))
++        : value(detail::FPAssignWithRound<(Frac2 > FractionalBits), Frac2 - FractionalBits>::exec(other.value))
+     {
+         VIGRA_STATIC_ASSERT((FixedPoint_overflow_error__More_than_31_bits_requested<(IntBits + FractionalBits)>));
+         VIGRA_STATIC_ASSERT((FixedPoint_assignment_error__Target_object_has_too_few_integer_bits<(IntBits >= Int2)>));
+@@ -321,7 +319,7 @@ public:
+     FixedPoint & operator=(const FixedPoint<Int2, Frac2> &other)
+     {
+         VIGRA_STATIC_ASSERT((FixedPoint_assignment_error__Target_object_has_too_few_integer_bits<(IntBits >= Int2)>));
+-        value = detail::FPAssignWithRound<(Frac2 > FractionalBits)>::template exec<Frac2 - FractionalBits>(other.value);
++        value = detail::FPAssignWithRound<(Frac2 > FractionalBits),Frac2 - FractionalBits>::exec(other.value);
+         return *this;
+     }
+ 
+@@ -373,7 +371,7 @@ public:
+     FixedPoint & operator+=(const FixedPoint<Int2, Frac2> &other)
+     {
+         VIGRA_STATIC_ASSERT((FixedPoint_assignment_error__Target_object_has_too_few_integer_bits<(IntBits >= Int2)>));
+-        value += detail::FPAssignWithRound<(Frac2 > FractionalBits)>::template exec<Frac2 - FractionalBits>(other.value);
++        value += detail::FPAssignWithRound<(Frac2 > FractionalBits),Frac2 - FractionalBits>::exec(other.value);
+         return *this;
+     }
+ 
+@@ -384,7 +382,7 @@ public:
+     FixedPoint & operator-=(const FixedPoint<Int2, Frac2> &other)
+     {
+         VIGRA_STATIC_ASSERT((FixedPoint_assignment_error__Target_object_has_too_few_integer_bits<(IntBits >= Int2)>));
+-        value -= detail::FPAssignWithRound<(Frac2 > FractionalBits)>::template exec<Frac2 - FractionalBits>(other.value);
++        value -= detail::FPAssignWithRound<(Frac2 > FractionalBits),Frac2 - FractionalBits>::exec(other.value);
+         return *this;
+     }
+     
+@@ -428,12 +426,12 @@ struct FixedPointCast<type> \
+     } \
+ };
+ 
+-VIGRA_FIXED_POINT_CAST(Int8);
+-VIGRA_FIXED_POINT_CAST(UInt8);
+-VIGRA_FIXED_POINT_CAST(Int16);
+-VIGRA_FIXED_POINT_CAST(UInt16);
+-VIGRA_FIXED_POINT_CAST(Int32);
+-VIGRA_FIXED_POINT_CAST(UInt32);
++VIGRA_FIXED_POINT_CAST(Int8)
++VIGRA_FIXED_POINT_CAST(UInt8)
++VIGRA_FIXED_POINT_CAST(Int16)
++VIGRA_FIXED_POINT_CAST(UInt16)
++VIGRA_FIXED_POINT_CAST(Int32)
++VIGRA_FIXED_POINT_CAST(UInt32)
+ 
+ #undef VIGRA_FIXED_POINT_CAST
+ 
+--- misc/build/vigra1.4.0/include/vigra/gaborfilter.hxx	2005-12-21 05:53:35.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/gaborfilter.hxx	2006-05-30 11:42:06.000000000 +0200
+@@ -289,7 +289,11 @@ inline double angularGaborSigma(int dire
+     Namespace: vigra
+ */
+ template <class ImageType, 
++#if !defined(SOLARIS) || !defined(SUN) 
+       class Alloc = typename ImageType::allocator_type::template rebind<ImageType>::other >
++#else
++      class Alloc = std::allocator<ImageType> >
++#endif
+ class GaborFilterFamily 
+ : public ImageArray<ImageType, Alloc>
+ {
+--- misc/build/vigra1.4.0/include/vigra/imagecontainer.hxx	2005-12-21 05:53:36.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/imagecontainer.hxx	2006-05-30 11:42:36.000000000 +0200
+@@ -70,7 +70,11 @@ namespace vigra {
+     Namespace: vigra
+ */
+ template <class ImageType, 
++#if !defined(SOLARIS) || !defined(SUN) 
+       class Alloc = typename ImageType::allocator_type::template rebind<ImageType>::other >
++#else
++      class Alloc = std::allocator<ImageType> >
++#endif
+ class ImageArray
+ {
+     Size2D imageSize_;
+--- misc/build/vigra1.4.0/include/vigra/orientedtensorfilters.hxx	2005-12-21 05:53:42.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx	2006-05-30 11:56:11.000000000 +0200
+@@ -434,7 +434,7 @@ class Sin6RingKernel
+         if(x == 0 && y == 0)
+             return weights_(radius_, radius_);
+         double d = dot(vectors_(x+radius_, y+radius_), v);
+-        return VIGRA_CSTD::pow(1.0 - d * d, 3) * weights_(x+radius_, y+radius_);
++        return VIGRA_CSTD::pow(1.0 - d * d, 3.0) * weights_(x+radius_, y+radius_);
+     }
+ };
+ 
+@@ -455,7 +455,7 @@ class Sin6Kernel
+         if(x == 0 && y == 0)
+             return weights_(radius_, radius_);
+         double d = dot(vectors_(x+radius_, y+radius_), v);
+-        return VIGRA_CSTD::pow(1.0 - d * d, 3) * weights_(x+radius_, y+radius_);
++        return VIGRA_CSTD::pow(1.0 - d * d, 3.0) * weights_(x+radius_, y+radius_);
+     }
+ };
+ 
+@@ -476,7 +476,7 @@ class Cos6RingKernel
+         if(x == 0 && y == 0)
+             return weights_(radius_, radius_);
+         double d = dot(vectors_(x+radius_, y+radius_), v);
+-        return (1.0 - VIGRA_CSTD::pow(1.0 - d * d, 3)) * weights_(x+radius_, y+radius_);
++        return (1.0 - VIGRA_CSTD::pow(1.0 - d * d, 3.0)) * weights_(x+radius_, y+radius_);
+     }
+ };
+ 
+@@ -497,7 +497,7 @@ class Cos6Kernel
+         if(x == 0 && y == 0)
+             return weights_(radius_, radius_);
+         double d = dot(vectors_(x+radius_, y+radius_), v);
+-        return (1.0 - VIGRA_CSTD::pow(1.0 - d * d, 3)) * weights_(x+radius_, y+radius_);
++        return (1.0 - VIGRA_CSTD::pow(1.0 - d * d, 3.0)) * weights_(x+radius_, y+radius_);
+     }
+ };
+ 
+--- misc/build/vigra1.4.0/include/vigra/recursiveconvolution.hxx	2005-12-21 05:53:42.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/recursiveconvolution.hxx	2006-05-30 11:52:32.000000000 +0200
+@@ -259,7 +259,7 @@ void recursiveFilterLine(SrcIterator is,
+     {    
+        // correction factors for b
+         double bright = b;
+-        double bleft = VIGRA_CSTD::pow(b, w);
++        double bleft = VIGRA_CSTD::pow(b, (double)w);
+ 
+         for(x=w-1; x>=0; --x, --is, --id)
+         {    
+--- misc/build/vigra1.4.0/include/vigra/rgbvalue.hxx	2005-12-21 05:53:43.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/rgbvalue.hxx	2006-05-30 11:00:44.000000000 +0200
+@@ -170,7 +170,9 @@ class RGBValue
+     RGBValue(value_type first, value_type second, value_type third)
+     : Base(first, second, third)
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+         /** Construct gray value
+@@ -178,7 +180,9 @@ class RGBValue
+     RGBValue(value_type gray)
+     : Base(gray, gray, gray)
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+         /** Construct from another sequence (must have length 3!)
+@@ -187,7 +191,9 @@ class RGBValue
+     RGBValue(Iterator i, Iterator end)
+     : Base(i[0], i[1], i[2])
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+         /** Default constructor (sets all components to 0)
+@@ -195,7 +201,10 @@ class RGBValue
+     RGBValue()
+     : Base(0, 0, 0)
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
++
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+ #if !defined(TEMPLATE_COPY_CONSTRUCTOR_BUG)
+@@ -203,7 +212,9 @@ class RGBValue
+     RGBValue(RGBValue const & r)
+     : Base(r)
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+     RGBValue & operator=(RGBValue const & r)
+@@ -222,7 +233,9 @@ class RGBValue
+            detail::RequiresExplicitCast<value_type>::cast(r[detail::SelectColorIndexRHS<IDX1, R, G, B>::res]),
+            detail::RequiresExplicitCast<value_type>::cast(r[detail::SelectColorIndexRHS<IDX2, R, G, B>::res]))
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+         /** Copy assignment.
+@@ -241,7 +254,9 @@ class RGBValue
+     RGBValue(TinyVector<value_type, 3> const & r)
+     : Base(r)
+     {
++#if !defined(SOLARIS) || !defined(SUN) 
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
++#endif
+     }
+ 
+         /** assign TinyVector.
+--- misc/build/vigra1.4.0/include/vigra/separableconvolution.hxx	2005-12-21 05:53:44.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/separableconvolution.hxx	2006-05-30 11:54:52.000000000 +0200
+@@ -1366,7 +1366,7 @@ void Kernel1D<ARITHTYPE>::normalize(valu
+             faculty *= i;
+         for(double x = left() + offset; k < kernel_.end(); ++x, ++k)
+         {
+-            sum += *k * VIGRA_CSTD::pow(-x, int(derivativeOrder)) / faculty;
++            sum += *k * VIGRA_CSTD::pow(-x, (double)derivativeOrder) / faculty;
+         }
+     }
+ 
+--- misc/build/vigra1.4.0/include/vigra/transformimage.hxx	2005-12-21 05:53:46.000000000 +0100
++++ misc/vigra1.4.0/include/vigra/transformimage.hxx	2006-05-30 11:57:44.000000000 +0200
+@@ -986,11 +986,11 @@ class BrightnessContrastFunctor
+     result_type operator()(argument_type const & v) const
+     {
+         promote_type v1 = (v - min_) / diff_;
+-        promote_type brighter = pow(v1, b_);
++        promote_type brighter = pow((promote_type)v1, b_);
+         promote_type v2 = 2.0 * brighter - one_;
+         promote_type contrasted = (v2 < zero_) ?
+-                                     -pow(-v2, c_) :
+-                                      pow(v2, c_);
++                                     -pow((promote_type)-v2, c_) :
++                                      pow((promote_type)v2, c_);
+         return result_type(0.5 * diff_ * (contrasted + one_) + min_);
+     }
