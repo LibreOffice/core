@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 09:49:44 $
+ *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ namespace
                                                std::min( bounds_.getMaxX()-1,
                                                          basegfx::fround( rfXLeft ))));
             const sal_Int32 nEndX  ( std::max( bounds_.getMinX(),
-                                               std::min( bounds_.getMaxX()-1,
+                                               std::min( bounds_.getMaxX(),
                                                          basegfx::fround( rfXRight ))));
 
             DestIterator currIter( begin_ + vigra::Diff2D(0,nY) );

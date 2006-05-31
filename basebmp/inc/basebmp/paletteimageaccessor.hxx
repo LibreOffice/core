@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 09:49:42 $
+ *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
