@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.172 $
+#   $Revision: 1.173 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 13:52:21 $
+#   last change: $Author: vg $ $Date: 2006-06-02 13:55:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
