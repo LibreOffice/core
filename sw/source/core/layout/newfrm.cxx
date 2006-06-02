@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:25:03 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,9 +352,9 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 #endif
 
-#ifndef PRODUCT
-USHORT SwFrm::nLastFrmId=0;
-#endif
+// --> OD 2006-05-10 #i65250#
+sal_uInt32 SwFrm::mnLastFrmId=0;
+// <--
 
 
 TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
