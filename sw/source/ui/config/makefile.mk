@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 06:43:28 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:50:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ SRC1FILES =	\
         redlopt.src
 
 SLOFILES =	\
+        $(EXCEPTIONSFILES) \
         $(SLO)$/barcfg.obj \
         $(SLO)$/caption.obj \
         $(SLO)$/cfgitems.obj \
