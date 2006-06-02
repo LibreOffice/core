@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testsax.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:58:55 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 13:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,11 +62,9 @@
 
 #include "factory.hxx"
 
-#ifdef _USE_NAMESPACE
 using namespace rtl;
 using namespace vos;
 using namespace usr;
-#endif
 
 
 #define BUILD_ERROR(expr, Message)\
