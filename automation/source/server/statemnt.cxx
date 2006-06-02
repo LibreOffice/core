@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:15:45 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,7 +614,7 @@ SlotStatusListener::SlotStatusListener()
 {}
 
 // XStatusListener
-void SAL_CALL SlotStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+void SAL_CALL SlotStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
 //    DBG_ERROR1("FeatureURL: %s", ByteString( String( Event.FeatureURL.Complete ), RTL_TEXTENCODING_UTF8 ).GetBuffer() )
 //    DBG_ERROR1("FeatureDescriptor: %s", ByteString( String( Event.FeatureDescriptor ), RTL_TEXTENCODING_UTF8 ).GetBuffer() )
@@ -624,7 +624,7 @@ void SAL_CALL SlotStatusListener::statusChanged( const ::com::sun::star::frame::
 }
 
 // XEventListener
-void SAL_CALL SlotStatusListener::disposing( const ::com::sun::star::lang::EventObject& )
+void SAL_CALL SlotStatusListener::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
     bDisposed = TRUE;
 }
