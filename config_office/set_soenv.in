@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.104 $
-# Date:        $Date: 2006-05-08 15:55:43 $
+# Version:     $Revision: 1.105 $
+# Date:        $Date: 2006-06-02 12:34:16 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -49,17 +49,17 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 #
 # Platform independent constant values.
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THTH", "SWTZ" );
-my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
+my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG, 
      $common_build, $MK_UNROLL, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
-     $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $USE_NEWCHARSET, $USE_NEW_RSC, $VCL, 
+     $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $VCL, 
      $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
-     $USE_NAMESPACE, $BUILD_SOSL, $LOCAL_SOLENV, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
+     $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
-      $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION, $BOTH,
-      $DEMO_ENV, $DYNAMIC_CRT, $SET_EXCEPTIONS, $emergency, $use_shl_versions, $CDPATHx, $JRELIBDIR,
+      $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION,
+      $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
 #
 #-------------------------------------------
@@ -173,8 +173,6 @@ chomp( $oldPATH );                  # cut off new line
 # Setting platform independent constant values.
 print "Setting platform independent values... ";
 # NB: Language options now set at 'ToFile' stage. 
-$NO_SRS_PATCH         = "true";
-$BIG_GOODIES          = "TRUE";
 $BMP_WRITES_FLAG      = "TRUE";
 $BUILD_SOSL_RELEASE   = "TRUE";
 $RSC_ONCE             = "TRUE";
@@ -196,12 +194,8 @@ $TF_SDBAPI            = "ist_da";
 $TF_UCB               = "ist_da";
 $UPDATER              = "YES";
 $BUILD_DELIVER        = "true";
-$USE_NEWCHARSET       = "TRUE";
-$USE_NEW_RSC          = "TRUE";
 $VCL                  = "TRUE";
-$USE_NAMESPACE        = "TRUE"; 
 $BUILD_SOSL           = "true";
-$LOCAL_SOLENV         = "true";
 $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
@@ -539,11 +533,8 @@ elsif ( $platform =~ m/cygwin/ )
       $GUIENV         = "WNT";
       $GVER           = "NT351";
       $OS             = "WNT";
-      $BOTH           = "TRUE";
-      $DEMO_ENV       = "FALSE";
       $DYNAMIC_CRT    = "TRUE";
       $SET_EXCEPTIONS = "TRUE";
-      $emergency      = "FALSE";
       $use_shl_versions = "TRUE";
       $MULTITHREAD_OBJ = "TRUE";
   if ( $MINGW eq "yes" )
@@ -1406,7 +1397,6 @@ ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "STLPORT4",          $STLPORT4,          "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
 ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
-ToFile( "LOCAL_SOLENV",      $LOCAL_SOLENV,      "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
 ToFile( "Empty",             $empty,             "n" );
 
@@ -1443,8 +1433,6 @@ ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
-ToFile( "NO_SRS_PATCH",      $NO_SRS_PATCH,      "e" );
-ToFile( "BIG_GOODIES",       $BIG_GOODIES,       "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "MK_UNROLL",         $MK_UNROLL,         "e" );
@@ -1461,10 +1449,7 @@ ToFile( "TF_SDBAPI",         $TF_SDBAPI,         "e" );
 ToFile( "TF_UCB",            $TF_UCB,            "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
 ToFile( "build_deliver",     $BUILD_DELIVER,     "e" );
-ToFile( "USE_NEWCHARSET",    $USE_NEWCHARSET,    "e" );
-ToFile( "USE_NEW_RSC",       $USE_NEW_RSC,       "e" );
 ToFile( "VCL",               $VCL,               "e" );
-ToFile( "USE_NAMESPACE",     $USE_NAMESPACE,     "e" );
 ToFile( "ENABLEUNICODE",     $ENABLEUNICODE,     "e" );
 ToFile( "NEW_JAR_PACK",      $NEW_JAR_PACK,      "e" );
 ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
@@ -1596,12 +1581,9 @@ ToFile( "GVERDIR",           $GVERDIR,           "e" );
 ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
 ToFile( "XPVERSION",         $XPVERSION,         "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
-ToFile( "BOTH",              $BOTH,              "e" );
 ToFile( "CDPATHx",           $CDPATHx,           "e" );
-ToFile( "DEMO_ENV",          $DEMO_ENV,          "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
-ToFile( "emergency",         $emergency,         "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "WRAPCMD",           $WRAPCMD,           "e" );
 #
