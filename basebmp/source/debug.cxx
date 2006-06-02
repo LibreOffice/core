@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,30 @@ namespace basebmp
         {
             switch( nScanlineFormat )
             {
+                case Format::ONE_BIT_MSB_GRAY:
+                    return "ONE_BIT_MSB_GRAY";
+                case Format::ONE_BIT_LSB_GRAY:
+                    return "ONE_BIT_LSB_GRAY";
                 case Format::ONE_BIT_MSB_PAL:
                     return "ONE_BIT_MSB_PAL";
-                case Format::EIGHT_BIT_TC_MASK:
-                    return "EIGHT_BIT_TC_MASK";
+                case Format::ONE_BIT_LSB_PAL:
+                    return "ONE_BIT_LSB_PAL";
+                case Format::TWO_BIT_MSB_PAL:
+                    return "TWO_BIT_MSB_PAL";
+                case Format::TWO_BIT_LSB_PAL:
+                    return "TWO_BIT_LSB_PAL";
+                case Format::FOUR_BIT_MSB_PAL:
+                    return "FOUR_BIT_MSB_PAL";
+                case Format::FOUR_BIT_LSB_PAL:
+                    return "FOUR_BIT_LSB_PAL";
+                case Format::EIGHT_BIT_PAL:
+                    return "EIGHT_BIT_PAL";
+                case Format::EIGHT_BIT_GRAY:
+                    return "EIGHT_BIT_GRAY";
+                case Format::SIXTEEN_BIT_TC_MASK:
+                    return "SIXTEEN_BIT_TC_MASK";
+                case Format::TWENTYFOUR_BIT_TC_MASK:
+                    return "TWENTYFOUR_BIT_TC_MASK";
                 case Format::THIRTYTWO_BIT_TC_MASK:
                     return "THIRTYTWO_BIT_TC_MASK";
                 default:
@@ -99,11 +119,12 @@ namespace basebmp
         const sal_Int32          nScanlineFormat( rDevice->getScanlineFormat() );
 
         rOutputStream
-            << "/* basebmp::BitmapDevice memory dump */" << std::endl
+            << "/* basebmp::BitmapDevice content dump */" << std::endl
             << "/* Width   = " << aSize.getX() << " */" << std::endl
             << "/* Height  = " << aSize.getY() << " */" << std::endl
             << "/* TopDown = " << bTopDown << " */" << std::endl
             << "/* Format  = " << getFormatString(nScanlineFormat) << " */" << std::endl
+            << "/* (dumped entries are already mapped RGBA color values) */" << std::endl
             << std::endl;
 
         rOutputStream << std::hex;

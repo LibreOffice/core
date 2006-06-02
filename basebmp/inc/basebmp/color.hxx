@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:11 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#include <vigra/mathutil.hxx>
 #include <math.h>
 
 namespace basebmp
@@ -67,9 +68,15 @@ public:
     sal_uInt32 getValue() const { return mnColor; }
     operator sal_uInt32() const { return mnColor; }
 
-    Color operator-( Color col ) const { return Color(getRed()-col.getRed(),
-                                                      getGreen()-col.getGreen(),
-                                                      getBlue()-col.getBlue()); }
+    Color operator-( Color col ) const { return Color(vigra::abs((int)getRed()-col.getRed()),
+                                                      vigra::abs((int)getGreen()-col.getGreen()),
+                                                      vigra::abs((int)getBlue()-col.getBlue())); }
+    Color operator*( sal_uInt8 n ) const { return Color(n*getRed()/SAL_MAX_UINT8,
+                                                        n*getGreen()/SAL_MAX_UINT8,
+                                                        n*getBlue()/SAL_MAX_UINT8); }
+    Color operator*( double n ) const { return Color((sal_uInt8)(n*getRed()+.5),
+                                                     (sal_uInt8)(n*getGreen()+.5),
+                                                     (sal_uInt8)(n*getBlue()+.5)); }
     double magnitude() const { return sqrt(getRed()*getRed()
                                            + getGreen()*getGreen()
                                            + getBlue()*getBlue()); }

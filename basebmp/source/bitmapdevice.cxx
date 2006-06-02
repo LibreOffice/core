@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:50:38 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,9 @@ namespace
                        pAlpha->maAccessor,
                        maBegin + vigra::Diff2D(rDstPoint.getX(),
                                                rDstPoint.getY()),
-                       maAccessor );
+                       ConstantColorBlendAccessorAdapter<DestAccessor,Color>(
+                           maAccessor,
+                           rSrcColor) );
         }
 
         virtual void drawMaskedColor_i(Color                        rSrcColor,
@@ -865,19 +867,16 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                DrawMode                     drawMode )
 {
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX()+1,rSrcSize.getY()+1 );
-    const basegfx::B2IVector& rDstSize( getSize() );
-    const basegfx::B2IRange   aDstBounds( 0,0,rDstSize.getX()+1,rDstSize.getY()+1 );
-
-    basegfx::B2IRange aSrcRange( rSrcRect );
-    basegfx::B2IRange aDestRange( rDstRect );
+    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    basegfx::B2IRange         aSrcRange( rSrcRect );
+    basegfx::B2IRange         aDestRange( rDstRect );
 
     if( clipAreaImpl( aDestRange,
                       aSrcRange,
-                      aDstBounds,
+                      mpImpl->maBounds,
                       aSrcBounds ))
     {
-        assertImageRange(aDestRange,aDstBounds);
+        assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
         if( isCompatibleBitmap( rSrcBitmap ) )
@@ -894,19 +893,16 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                const BitmapDeviceSharedPtr& rClip )
 {
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX()+1,rSrcSize.getY()+1 );
-    const basegfx::B2IVector& rDstSize( getSize() );
-    const basegfx::B2IRange   aDstBounds( 0,0,rDstSize.getX()+1,rDstSize.getY()+1 );
-
-    basegfx::B2IRange aSrcRange( rSrcRect );
-    basegfx::B2IRange aDestRange( rDstRect );
+    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    basegfx::B2IRange         aSrcRange( rSrcRect );
+    basegfx::B2IRange         aDestRange( rDstRect );
 
     if( clipAreaImpl( aDestRange,
                       aSrcRange,
-                      aDstBounds,
+                      mpImpl->maBounds,
                       aSrcBounds ))
     {
-        assertImageRange(aDestRange,aDstBounds);
+        assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
         if( isCompatibleBitmap( rSrcBitmap ) &&
@@ -927,19 +923,16 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
                                     const basegfx::B2IPoint&     rDstPoint )
 {
     const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
-    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX()+1,rSrcSize.getY()+1 );
-    const basegfx::B2IVector& rDstSize( getSize() );
-    const basegfx::B2IRange   aDstBounds( 0,0,rDstSize.getX()+1,rDstSize.getY()+1 );
-
-    basegfx::B2IRange aSrcRange( rSrcRect );
-    basegfx::B2IPoint aDestPoint( rDstPoint );
+    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    basegfx::B2IRange         aSrcRange( rSrcRect );
+    basegfx::B2IPoint         aDestPoint( rDstPoint );
 
     if( clipAreaImpl( aSrcRange,
                       aDestPoint,
                       aSrcBounds,
-                      aDstBounds ))
+                      mpImpl->maBounds ))
     {
-        assertImagePoint(aDestPoint,aDstBounds);
+        assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
         if( isCompatibleAlphaMask( rAlphaMask ) )
@@ -956,19 +949,16 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
                                     const BitmapDeviceSharedPtr& rClip )
 {
     const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
-    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX()+1,rSrcSize.getY()+1 );
-    const basegfx::B2IVector& rDstSize( getSize() );
-    const basegfx::B2IRange   aDstBounds( 0,0,rDstSize.getX()+1,rDstSize.getY()+1 );
-
-    basegfx::B2IRange aSrcRange( rSrcRect );
-    basegfx::B2IPoint aDestPoint( rDstPoint );
+    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    basegfx::B2IRange         aSrcRange( rSrcRect );
+    basegfx::B2IPoint         aDestPoint( rDstPoint );
 
     if( clipAreaImpl( aSrcRange,
                       aDestPoint,
                       aSrcBounds,
-                      aDstBounds ))
+                      mpImpl->maBounds ))
     {
-        assertImagePoint(aDestPoint,aDstBounds);
+        assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
         if( isCompatibleAlphaMask( rAlphaMask ) &&
@@ -992,19 +982,16 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX()+1,rSrcSize.getY()+1 );
-    const basegfx::B2IVector& rDstSize( getSize() );
-    const basegfx::B2IRange   aDstBounds( 0,0,rDstSize.getX()+1,rDstSize.getY()+1 );
-
-    basegfx::B2IRange aSrcRange( rSrcRect );
-    basegfx::B2IRange aDestRange( rDstRect );
+    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    basegfx::B2IRange         aSrcRange( rSrcRect );
+    basegfx::B2IRange         aDestRange( rDstRect );
 
     if( clipAreaImpl( aDestRange,
                       aSrcRange,
-                      aDstBounds,
+                      mpImpl->maBounds,
                       aSrcBounds ))
     {
-        assertImageRange(aDestRange,aDstBounds);
+        assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
         if( isCompatibleBitmap( rSrcBitmap ) &&
@@ -1029,19 +1016,16 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX()+1,rSrcSize.getY()+1 );
-    const basegfx::B2IVector& rDstSize( getSize() );
-    const basegfx::B2IRange   aDstBounds( 0,0,rDstSize.getX()+1,rDstSize.getY()+1 );
-
-    basegfx::B2IRange aSrcRange( rSrcRect );
-    basegfx::B2IRange aDestRange( rDstRect );
+    const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
+    basegfx::B2IRange         aSrcRange( rSrcRect );
+    basegfx::B2IRange         aDestRange( rDstRect );
 
     if( clipAreaImpl( aDestRange,
                       aSrcRange,
-                      aDstBounds,
+                      mpImpl->maBounds,
                       aSrcBounds ))
     {
-        assertImageRange(aDestRange,aDstBounds);
+        assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
         if( isCompatibleBitmap( rSrcBitmap ) &&
@@ -1076,9 +1060,9 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
 
     // HACK: 1bpp and 32bpp only, currently
     if( nScanlineFormat == Format::ONE_BIT_MSB_PAL
-        || nScanlineFormat == Format::ONE_BIT_MSB_TC_MASK )
+        || nScanlineFormat == Format::ONE_BIT_MSB_GRAY )
         nScanlineStride = (rSize.getX() + 7) >> 3;
-    else if( nScanlineFormat == Format::EIGHT_BIT_TC_MASK )
+    else if( nScanlineFormat == Format::EIGHT_BIT_GRAY )
         nScanlineStride = rSize.getX();
     else if( nScanlineFormat == Format::THIRTYTWO_BIT_TC_MASK )
         nScanlineStride = 4*rSize.getX();
@@ -1100,7 +1084,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
 
     switch( nScanlineFormat )
     {
-        case Format::ONE_BIT_MSB_TC_MASK:
+        case Format::ONE_BIT_MSB_GRAY:
         {
             return BitmapDeviceSharedPtr(
                 new OneBitMsbMaskRenderer(
@@ -1143,7 +1127,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                     pPal ));
         }
 
-        case Format::EIGHT_BIT_TC_MASK:
+        case Format::EIGHT_BIT_GRAY:
         {
             return BitmapDeviceSharedPtr(
                 new EightBitTrueColorRenderer(
@@ -1197,9 +1181,9 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
 
     // HACK: 1bpp and 32bpp only, currently
     if( nScanlineFormat == Format::ONE_BIT_MSB_PAL
-        || nScanlineFormat == Format::ONE_BIT_MSB_TC_MASK )
+        || nScanlineFormat == Format::ONE_BIT_MSB_GRAY )
         nScanlineStride = (rSize.getX() + 7) >> 3;
-    else if( nScanlineFormat == Format::EIGHT_BIT_TC_MASK )
+    else if( nScanlineFormat == Format::EIGHT_BIT_GRAY )
         nScanlineStride = rSize.getX();
     else if( nScanlineFormat == Format::THIRTYTWO_BIT_TC_MASK )
         nScanlineStride = 4*rSize.getX();
@@ -1214,7 +1198,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
 
     switch( nScanlineFormat )
     {
-        case Format::ONE_BIT_MSB_TC_MASK:
+        case Format::ONE_BIT_MSB_GRAY:
         {
             return BitmapDeviceSharedPtr(
                 new OneBitMsbMaskRenderer(
@@ -1253,7 +1237,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                     rPalette ));
         }
 
-        case Format::EIGHT_BIT_TC_MASK:
+        case Format::EIGHT_BIT_GRAY:
         {
             return BitmapDeviceSharedPtr(
                 new EightBitTrueColorRenderer(

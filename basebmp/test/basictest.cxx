@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:13 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          Format::EIGHT_BIT_TC_MASK );
+                                          Format::EIGHT_BIT_GRAY );
 
             const Color aCol4(0x01);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,58 @@ public:
     }
 };
 
+/** Accessor adapter that blends input value against fixed color value
+ */
+template< class WrappedAccessor,
+          typename ColorType > class ConstantColorBlendAccessorAdapter
+{
+private:
+    WrappedAccessor maWrappee;
+    ColorType       maBlendColor;
+
+public:
+    typedef typename WrappedAccessor::value_type value_type;
+
+    ConstantColorBlendAccessorAdapter() :
+        maWrappee(),
+        maBlendColor()
+    {}
+
+    ConstantColorBlendAccessorAdapter( WrappedAccessor acc,
+                                       ColorType       col ) :
+        maWrappee(acc),
+        maBlendColor(col)
+    {}
+
+    template< typename IteratorType > value_type operator()(IteratorType const& i) const
+    {
+        return maWrappee(i);
+    }
+    template< typename IteratorType, class Difference >
+    value_type operator()(IteratorType const& i, Difference const& diff) const
+    {
+        return maWrappee(i,diff);
+    }
+
+    template< typename V, typename IteratorType >
+    void set(V const& value, IteratorType const& i) const
+    {
+        maWrappee.set(
+            maBlendColor*value,
+            i );
+    }
+
+    template< typename V, typename IteratorType, class Difference >
+    void set(V const& value, IteratorType const& i, Difference const& diff) const
+    {
+        maWrappee.set(
+            maBlendColor*value,
+            i,
+            diff );
+    }
+};
+
+
 // Some common accessor wrappers
 // ------------------------------------------------------------
 
@@ -204,7 +256,7 @@ template< typename T > struct MaskFunctor
 // Faster mask (assuming mask accessor output is already either 0 or 1)
 template< typename T > struct FastMaskFunctor
 {
-    T operator()( T v, T m ) const
+    template< typename T1, typename T2> T operator()( T1 v, T2 m ) const
     {
         return m*v;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanlineformats.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 
 namespace basebmp { namespace Format
 {
-    static const sal_Int32 ONE_BIT_MSB_TC_MASK    = (sal_Int32)0x01;
-    static const sal_Int32 ONE_BIT_LSB_TC_MASK    = (sal_Int32)0x02;
+    static const sal_Int32 ONE_BIT_MSB_GRAY       = (sal_Int32)0x01;
+    static const sal_Int32 ONE_BIT_LSB_GRAY       = (sal_Int32)0x02;
     static const sal_Int32 ONE_BIT_MSB_PAL        = (sal_Int32)0x03;
     static const sal_Int32 ONE_BIT_LSB_PAL        = (sal_Int32)0x04;
     static const sal_Int32 TWO_BIT_MSB_PAL        = (sal_Int32)0x05;
@@ -79,7 +79,7 @@ namespace basebmp { namespace Format
     static const sal_Int32 FOUR_BIT_MSB_PAL       = (sal_Int32)0x07;
     static const sal_Int32 FOUR_BIT_LSB_PAL       = (sal_Int32)0x08;
     static const sal_Int32 EIGHT_BIT_PAL          = (sal_Int32)0x09;
-    static const sal_Int32 EIGHT_BIT_TC_MASK      = (sal_Int32)0x0A;
+    static const sal_Int32 EIGHT_BIT_GRAY         = (sal_Int32)0x0A;
     static const sal_Int32 SIXTEEN_BIT_TC_MASK    = (sal_Int32)0x0B;
     static const sal_Int32 TWENTYFOUR_BIT_TC_MASK = (sal_Int32)0x0C;
     static const sal_Int32 THIRTYTWO_BIT_TC_MASK  = (sal_Int32)0x0D;

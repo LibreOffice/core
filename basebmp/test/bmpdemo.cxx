@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
+#include <basebmp/debug.hxx>
 
 #include <rtl/bootstrap.hxx>
 
@@ -79,6 +80,8 @@
 
 #include <boost/static_assert.hpp>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
 
 using namespace ::com::sun::star;
 
@@ -998,10 +1001,10 @@ void TestWindow::Paint( const Rectangle& rRect )
         const basegfx::B2ISize aSize(10,10);
         basebmp::BitmapDeviceSharedPtr pBmp( basebmp::createBitmapDevice( aSize,
                                                                           true,
-                                                                          basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+                                                                          basebmp::Format::EIGHT_BIT_GRAY ));
         basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aSize,
                                                                              true,
-                                                                             basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+                                                                             basebmp::Format::ONE_BIT_MSB_PAL ));
         ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
             "m 0 0h5v10h5v-5h-10z" );
 
@@ -1014,14 +1017,20 @@ void TestWindow::Paint( const Rectangle& rRect )
             aCol,
             basebmp::DrawMode_PAINT );
 
-        const basegfx::B2IRange aSourceRect(0,0,11,11);
-        const basegfx::B2IRange aDestLeftTop(0,0,5,5);
+        const basegfx::B2IRange aSourceRect(0,0,10,10);
+        const basegfx::B2IPoint aOutPos(5,5);
+        const basebmp::Color    aCol2(0xF0F0F0F0);
         pDevice->clear(basebmp::Color(0));
-        pDevice->drawBitmap(
+        pDevice->drawMaskedColor(
+            aCol2,
             pBmp,
             aSourceRect,
-            aDestLeftTop,
-            basebmp::DrawMode_PAINT );
+            aOutPos );
+
+        std::ofstream output("32bpp_test.dump");
+        debugDump( pDevice, output );
+        std::ofstream output2("32bpp_bmp.dump");
+        debugDump( pBmp, output2 );
     }
 
     enum{ srcBitDepth=1, dstBitDepth=4 };
