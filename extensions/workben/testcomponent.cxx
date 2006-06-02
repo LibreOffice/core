@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:02:55 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 13:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,9 @@
 
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 
-#ifdef _USE_NAMESPACE
 using namespace rtl;
 using namespace vos;
 using namespace usr;
-#endif
 
 
 // Needed to switch on solaris threads
