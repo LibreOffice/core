@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 13:54:43 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2442,6 +2442,30 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         }
         // <--
     }
+
+    // --> OD 2006-05-10 #i65250#
+    // layout loop control for flowing content again and again moving
+    // backward under the same layout condition.
+    if ( pNewUpper && !IsFollow() &&
+         SwLayouter::MoveBwdSuppressed( *(pOldPage->GetFmt()->GetDoc()),
+                                        *this, *pNewUpper ) )
+    {
+        SwLayoutFrm* pNextNewUpper = pNewUpper->GetLeaf(
+                                    ( !rThis.IsSctFrm() && rThis.IsInSct() )
+                                    ? MAKEPAGE_NOSECTION
+                                    : MAKEPAGE_NONE,
+                                    TRUE );
+        if ( pNextNewUpper == rThis.GetUpper() ||
+             pNextNewUpper->GetType() != rThis.GetUpper()->GetType() )
+        {
+            pNewUpper = 0L;
+#if OSL_DEBUG_LEVEL > 1
+            ASSERT( false,
+                    "<SwFlowFrm::MoveBwd(..)> - layout loop control for layout action <Move Backward> applied!" );
+#endif
+        }
+    }
+    // <--
 
     if ( pNewUpper )
     {
