@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:33:52 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,7 @@
 
 #include <vos/object.hxx>
 
-
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // Object super class
