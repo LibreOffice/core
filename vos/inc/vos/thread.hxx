@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:05:07 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,10 @@
 
 extern void SAL_CALL _OThread_WorkerFunction(void* pthis);
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
-#if defined ( _USE_NAMESPACE ) && defined ( UNX )
+#if defined ( UNX )
 void SAL_CALL _cpp_OThread_WorkerFunction(void* pthis);
 #endif
 
@@ -225,12 +223,10 @@ protected:
     oslThread m_hThread;
     sal_Bool   m_bTerminating;
 
-#if defined ( _USE_NAMESPACE ) && defined ( WNT ) && !defined(GCC)
+#if defined ( WNT ) && !defined(GCC)
     friend static void ::_OThread_WorkerFunction(void* pthis);
-#elif defined ( _USE_NAMESPACE )
-    friend void _cpp_OThread_WorkerFunction(void* pthis);
 #else
-    friend void _OThread_WorkerFunction(void* pthis);
+    friend void _cpp_OThread_WorkerFunction(void* pthis);
 #endif
 
 
@@ -262,9 +258,7 @@ protected:
     oslThreadKey m_hKey;
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif // _VOS_THREAD_HXX_
 
