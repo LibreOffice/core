@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.171 $
+#   $Revision: 1.172 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:47:16 $
+#   last change: $Author: vg $ $Date: 2006-06-02 13:52:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,15 +54,10 @@ ENVINCPRE+=-I$(PRE)$/inc
 .IF "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 UNOINCLUDES=$(SOLARINCDIR)$/offuh
 .ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
-.IF "$(LOCAL_SOLENV)"!=""
 SOLARINC+=$(JDKINCS)
 SOLARINC+=$(ORCLINC)
 SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
-.ENDIF "$(LOCAL_SOLENV)"!=""
-# make sure INCLUDE isn't set
-INCLUDE:=
-.EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
 INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
@@ -277,11 +272,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell -+ls -1 $(JARDIR) | $(GREP) "^$i") $(SOLARBINDIR)$/$i $(JARDIR)$/$i))
 .ENDIF			# "$(JARFILES)"!=""
 .IF "$(EXTRAJARFILES)"!=""
-.IF "$(LOCAL_SOLENV)"!=""
 NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(COMMON_BUILD_TOOLS)$/$i)
-.ELSE			# "$(LOCAL_SOLENV)"!=""
-NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(SOLARENV)$/bin$/$i)
-.ENDIF			# "$(LOCAL_SOLENV)"!=""
 .ENDIF			# "$(EXTRAJARFILES)"!=""
 .IF "$(GENJAVACLASSFILES)"!=""
 NEWCLASS+=$(CLASSGENDIR)
