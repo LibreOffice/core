@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.190 $
+#   $Revision: 1.191 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:15:03 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:32:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -526,12 +526,6 @@ optimize=
 OPTIMIZE=
 .ENDIF
 
-.IF "$(USE_NEWCHARSET)"!=""
-.IF "$(USE_NEWCHARSET)"!="SRC510"
-NEWCHARSET=TRUE
-.ENDIF
-.ENDIF
-
 ######################################################
 #
 # sprachabh. einstellungen
@@ -920,12 +914,6 @@ CDEFS+=-DTIMELOG
 
 .IF "$(GUI)"=="UNX"
 CDEFS+=-DCVER=$(CVER)
-.ENDIF
-
-.IF "$(USE_NAMESPACE)"==""
-CDEFS+=-D_USE_NO_NAMESPACE
-.ELSE
-CDEFS+=-D_USE_NAMESPACE
 .ENDIF
 
 CDEFSCXX=
