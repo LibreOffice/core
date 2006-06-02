@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:09:51 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #include <vos/object.hxx>
 #include <vos/signal.hxx>
 
-#if defined ( _USE_NAMESPACE ) && !defined ( WNT )
+#if !defined ( WNT )
 
 oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo)
 {
@@ -58,9 +58,7 @@ static oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalI
     return ((oslSignalAction)pThis->signal(pInfo));
 }
 
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // Thread class

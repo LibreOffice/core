@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:10:30 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 #include <vos/object.hxx>
 #include <vos/stream.hxx>
 
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 //
