@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:21:31 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 09:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,7 +448,7 @@ void FontCache::read()
                     case fonttype::Type1:
                     {
                         int nTokLen = (nTokens > 19 ) ? nTokenPos[19]-nTokenPos[18]-1 : nLen - nTokenPos[18];
-                        static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aMetricFile = OString( pLine + nTokenPos[16], nTokLen );
+                        static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aMetricFile = OString( pLine + nTokenPos[18], nTokLen );
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aFontFile = aFile;
                         nStyleTokenNr++;
