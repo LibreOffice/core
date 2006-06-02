@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:04:15 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,10 @@
 
 extern oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
-#if defined ( _USE_NAMESPACE ) && !defined ( WNT )
+#if !defined ( WNT )
 oslSignalAction SAL_CALL _cpp_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
 #endif
 
@@ -107,20 +105,16 @@ protected:
 protected:
     oslSignalHandler m_hHandler;
 
-#if defined ( _USE_NAMESPACE ) && defined ( WNT )
+#if defined ( WNT )
     friend oslSignalAction SAL_CALL ::_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
-#elif defined ( _USE_NAMESPACE )
-    friend oslSignalAction SAL_CALL _cpp_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
 #else
-    friend oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
+    friend oslSignalAction SAL_CALL _cpp_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
 #endif
 
 
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif // _VOS_SIGNAL_HXX_
 
