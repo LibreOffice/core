@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:21:16 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 09:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,8 @@ class PrintFontManager
         std::hash_map< sal_Unicode, bool >      m_bVerticalSubstitutions;
 
         PrintFontMetrics() : m_bKernPairsQueried( false ) {}
+
+        bool isEmpty() const { return m_aMetrics.empty(); }
     };
 
     struct PrintFont
