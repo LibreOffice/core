@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:23:23 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:32:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.98 $$"
+LIBSMKREV!:="$$Revision: 1.99 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -153,16 +153,8 @@ SO2LIB=-lso$(OFFICEUPD)$(DLLPOSTFIX)
 TKTLIB=-ltkt$(OFFICEUPD)$(DLLPOSTFIX)
 SJLIB=-lj$(OFFICEUPD)$(DLLPOSTFIX)_g
 GOODIESLIB=-lgo$(OFFICEUPD)$(DLLPOSTFIX)
-CHANELLIB=-lcha$(OFFICEUPD)$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(OFFICEUPD)$(DLLPOSTFIX)
-.IF "$(BIG_GOODIES)"!=""
-HELPLIB=
-CHANELLIB=
-.ELSE
-HELPLIB=-lhlp$(OFFICEUPD)$(DLLPOSTFIX)
-CHANELLIB=-lcha$(OFFICEUPD)$(DLLPOSTFIX)
-.ENDIF
 BASICLIB=-lsb$(OFFICEUPD)$(DLLPOSTFIX)
 BASICLIGHTLIB=-lsbl$(OFFICEUPD)$(DLLPOSTFIX)
 SDBLIB=-lsdb$(OFFICEUPD)$(DLLPOSTFIX)
@@ -383,13 +375,6 @@ SVUNZIPDLL=$(LIBPRE) unzipdll.lib
 GOODIESLIB=$(LIBPRE) igo.lib
 MAILLIB=$(LIBPRE) mail.lib
 DOCMGRLIB=$(LIBPRE) docmgr.lib
-.IF "$(BIG_GOODIES)"!=""
-HELPLIB=
-CHANELLIB=
-.ELSE
-HELPLIB=$(LIBPRE) hlp.lib
-CHANELLIB=$(LIBPRE) ich.lib
-.ENDIF
 BASICLIB=$(LIBPRE) basic.lib
 BASICLIGHTLIB=$(LIBPRE) basicl.lib
 SO2LIB=$(LIBPRE) so2.lib
