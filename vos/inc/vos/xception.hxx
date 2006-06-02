@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xception.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:05:54 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,8 @@
 #pragma warning( disable : 4290 )
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 /* avoid clashes with <vos/exception.hxx> */
 #define OException OBaseException
@@ -85,9 +83,7 @@ public:
         { return *this; }
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif /* _XCEPTION_HXX_ */
 
