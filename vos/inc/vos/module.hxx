@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:00:02 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,8 @@
 #   include <osl/module.h>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 class OModule : public OObject
 {
@@ -88,9 +86,7 @@ protected:
     oslModule m_Module;
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif
 
