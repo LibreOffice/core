@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:04:31 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,8 @@
 #include <osl/time.h>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 /** Base data types
 */
@@ -1148,9 +1146,7 @@ public:
 
 
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif // _VOS_SOCKET_HXX_
 
