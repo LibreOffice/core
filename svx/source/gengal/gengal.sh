@@ -4,6 +4,14 @@
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
 #
+#   $RCSfile: gengal.sh,v $
+#
+#   $Revision: 1.4 $
+#
+#   last change: $Author: vg $ $Date: 2006-06-02 11:30:28 $
+#
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
 #
 #     GNU Lesser General Public License Version 2.1
 #     =============================================
@@ -62,63 +70,33 @@ fi
 sd_platform=`uname -s`
 case $sd_platform in
   AIX)
-    LIBPATH="$sd_prog":$LIBPATH
+    LIBPATH=${sd_prog}${LIBPATH+:${LIBPATH}}
     export LIBPATH
     ;;
 
   Darwin)
-    DYLD_LIBRARY_PATH="$sd_prog":$DYLD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=${sd_prog}${DYLD_LIBRARY_PATH+:${DYLD_LIBRARY_PATH}}
     export DYLD_LIBRARY_PATH
     ;;
 
   HP-UX)
-    SHLIB_PATH="$sd_prog":/usr/openwin/lib:$SHLIB_PATH
+    SHLIB_PATH=${sd_prog}:/usr/openwin/lib${SHLIB_PATH+:${SHLIB_PATH}}
     export SHLIB_PATH
     ;;
 
   IRIX*)
-    LD_LIBRARYN32_PATH=:"$sd_prog":$LD_LIBRARYN32_PATH
+    LD_LIBRARYN32_PATH=${sd_prog}${LD_LIBRARYN32_PATH+:${LD_LIBRARYN32_PATH}}
     export LD_LIBRARYN32_PATH
     ;;
 
   *)
-    LD_LIBRARY_PATH="$sd_prog":$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=${sd_prog}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
     export LD_LIBRARY_PATH
     ;;
 esac
 
-# extend the ld_library_path for java: javaldx checks the sofficerc for us
-if [ -x "$sd_prog/javaldx" ] ; then
-    java_ld_library_path=`"$sd_prog/javaldx"`
-    if [ "$java_ld_library_path" != "" ] ; then
-        case $sd_platform in
-            AIX)
-                LIBPATH=${java_ld_library_path}:${LIBPATH}
-                ;;
-            Darwin)
-                DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
-                ;;
-            HP-UX)
-                SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
-                ;;
-            IRIX*)
-                LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
-                ;;
-            *)
-                LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
-                ;;
-        esac
-    fi
-fi
-
 # misc. environment variables
-OPENOFFICE_MOZILLA_FIVE_HOME="$sd_inst/program"
-export OPENOFFICE_MOZILLA_FIVE_HOME
-
 unset XENVIRONMENT
-
-# uncomment line below to disable anti aliasing of fonts
-# SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 
 # set path so that other apps can be started just by name
 PATH="$sd_prog":$PATH
