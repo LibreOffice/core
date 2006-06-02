@@ -26,14 +26,12 @@ common
         wrapper_override_cc_wrapper
         *zipdep
         AWK
-		BIG_GOODIES
 		BIG_SVX
 		BIG_TOOLS
 		BISON_HAIRY
 		BISON_SIMPLE
 		BMP_WRITES_FLAG
 		bndchk
-		BOTH
 		BSCLIENT
 		BTARGET
 		BUILD_TOOLS
@@ -95,7 +93,6 @@ common
 		JDK_PATH
         L10N-framework
         L10N_framework
-		LOCAL_SOLENV
 		LOCALINI
 		MK_UNROLL
 		MKDIR
@@ -114,7 +111,6 @@ common
 		ODBCLIB
 		ODBCPATH
 		ODBCVER
-		OFFENV_PATH
 		OLD_CHAOS
 		OLD_CHAOS
 		PACKMS
@@ -189,10 +185,7 @@ common
 		UDKSTAMP
 		URD_ONLY
 		USE_MAPFILES
-		USE_NAMESPACE
-		USE_NEW_RSC
 		USE_NEW_SDK
-		USE_NEWCHARSET
 		USE_SHELL
 		use_cygcp
 		use_shl_versions
@@ -217,7 +210,6 @@ common
 		{
             SO_GEN_ERROR
             SO_GEN_ERROR2
-			NO_SRS_PATCH true
             CVS_HEAD SRC680
 		}
 		bsclient
