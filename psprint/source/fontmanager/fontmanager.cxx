@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:06:55 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 09:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2604,11 +2604,13 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const
 {
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 ) ||
+        ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
+        )
     {
         // might be a truetype font not analyzed or type1 without metrics read
         if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true );
+            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, false );
         else if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
@@ -3055,7 +3057,9 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
     if( ! pFont )
         return false;
 
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+        || ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
+        )
     {
         // might be a font not yet analyzed
         if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
@@ -3096,7 +3100,9 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
     if( ! pFont )
         return false;
 
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+        || ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
+        )
     {
         // might be a font not yet analyzed
         if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
