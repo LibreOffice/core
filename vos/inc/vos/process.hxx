@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:01:37 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,8 @@
 #   include <osl/process.h>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 class OProcess;
 
@@ -333,9 +331,7 @@ public:
 
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  // _VOS_PROCESS_HXX_
 
