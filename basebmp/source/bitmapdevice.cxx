@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1075,7 +1075,8 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
     sal_Int32  nScanlineStride(0);
 
     // HACK: 1bpp and 32bpp only, currently
-    if( nScanlineFormat == Format::ONE_BIT_MSB_PAL )
+    if( nScanlineFormat == Format::ONE_BIT_MSB_PAL
+        || nScanlineFormat == Format::ONE_BIT_MSB_TC_MASK )
         nScanlineStride = (rSize.getX() + 7) >> 3;
     else if( nScanlineFormat == Format::EIGHT_BIT_TC_MASK )
         nScanlineStride = rSize.getX();
@@ -1195,7 +1196,8 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
     sal_Int32  nScanlineStride(0);
 
     // HACK: 1bpp and 32bpp only, currently
-    if( nScanlineFormat == Format::ONE_BIT_MSB_PAL )
+    if( nScanlineFormat == Format::ONE_BIT_MSB_PAL
+        || nScanlineFormat == Format::ONE_BIT_MSB_TC_MASK )
         nScanlineStride = (rSize.getX() + 7) >> 3;
     else if( nScanlineFormat == Format::EIGHT_BIT_TC_MASK )
         nScanlineStride = rSize.getX();
