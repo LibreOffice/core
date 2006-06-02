@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.170 $
+#   $Revision: 1.171 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:15:26 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:47:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@ SOLARINC+=$(ORCLINC)
 SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
 .ENDIF "$(LOCAL_SOLENV)"!=""
+# make sure INCLUDE isn't set
+INCLUDE:=
+.EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
 INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
