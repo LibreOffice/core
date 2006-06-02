@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:03:58 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,8 @@
 #   include <osl/security.h>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 /** capsulate security informations for one user.
     A object of this class is used to execute a process with the rights an
@@ -131,9 +129,7 @@ protected:
     oslSecurity m_oslSecurity;
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  // _VOS_SECURITY_HXX_
 
