@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:50:23 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,12 @@ class SwAnchoredObject;
 #include <vector>
 class SwFrm;
 // <--
+// --> OD 2006-05-10 #i65250#
+#include <swtypes.hxx>
+#include <hash_map>
+class SwFlowFrm;
+class SwLayoutFrm;
+// <--
 
 #define LOOP_PAGE 1
 
@@ -77,6 +83,49 @@ class SwLayouter
     // --> OD 2005-01-12 #i40155# - data structure to collect frames, which are
     // marked not to wrap around objects.
     std::vector< const SwFrm* > maFrmsNotToWrap;
+    // <--
+
+public:
+    // --> OD 2006-05-10 #i65250#
+    // - data structure to collect moving backward layout information
+    struct tMoveBwdLayoutInfoKey
+    {
+        // frame ID of flow frame
+        sal_uInt32 mnFrmId;
+        // position of new upper frame
+        SwTwips mnNewUpperPosX;
+        SwTwips mnNewUpperPosY;
+        // size of new upper frame
+        SwTwips mnNewUpperWidth;
+        SwTwips mnNewUpperHeight;
+        // free space in new upper frame
+        SwTwips mnFreeSpaceInNewUpper;
+
+    };
+private:
+    struct fMoveBwdLayoutInfoKeyHash
+    {
+        size_t operator()( const tMoveBwdLayoutInfoKey& p_key ) const
+        {
+            return p_key.mnFrmId;
+        }
+    };
+    struct fMoveBwdLayoutInfoKeyEq
+    {
+        bool operator()( const tMoveBwdLayoutInfoKey& p_key1,
+                         const tMoveBwdLayoutInfoKey& p_key2 ) const
+        {
+            return p_key1.mnFrmId == p_key2.mnFrmId &&
+                   p_key1.mnNewUpperPosX == p_key2.mnNewUpperPosX &&
+                   p_key1.mnNewUpperPosY == p_key2.mnNewUpperPosY &&
+                   p_key1.mnNewUpperWidth == p_key2.mnNewUpperWidth &&
+                   p_key1.mnNewUpperHeight == p_key2.mnNewUpperHeight &&
+                   p_key1.mnFreeSpaceInNewUpper == p_key2.mnFreeSpaceInNewUpper;
+        }
+    };
+    std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
+                   fMoveBwdLayoutInfoKeyHash,
+                   fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
     // <--
 public:
     SwLayouter();
@@ -123,6 +172,12 @@ public:
                                     const SwFrm& _rFrm );
     static bool FrmNotToWrap( const SwDoc& _rDoc,
                               const SwFrm& _rFrm );
+    // <--
+    // --> OD 2006-05-10 #i65250#
+    static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
+                                   const SwFlowFrm& p_rFlowFrm,
+                                   const SwLayoutFrm& p_rNewUpperFrm );
+    static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
     // <--
 };
 
