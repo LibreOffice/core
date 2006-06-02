@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 14:09:29 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:29:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,12 @@ SCP1FILES += \
              module_gnome.par   \
              file_gnome.par
 .ENDIF
+
+.IF "$(ENABLE_KDE)" == "TRUE"
+SCP1FILES += \
+             module_kde.par     \
+             file_kde.par
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
@@ -253,6 +259,12 @@ SCP2FILES +=                           \
 SCP2FILES += \
              module_gnome.par   \
              file_gnome.par
+.ENDIF
+
+.IF "$(ENABLE_KDE)" == "TRUE"
+SCP2FILES += \
+             module_kde.par     \
+             file_kde.par
 .ENDIF
 .ENDIF
 
