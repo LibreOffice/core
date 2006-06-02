@@ -2,6 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: gengal.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-06-02 11:30:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,21 +246,6 @@ Reference< XMultiServiceFactory > CreateApplicationServiceManager()
 
 void GalApp::Main()
 {
-#ifdef TOO_SIMPLE_BY_HALF
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-        xMSF = cppu::createRegistryServiceFactory(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "gengal.rdb" ) ), sal_True );
-    ::comphelper::setProcessServiceFactory( xMSF );
-
-    // Without this no file access works ...
-    ucb::ContentProviderDataList aData;
-    ucb::ContentProviderData aFileProvider(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.FileContentProvider" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) ) );
-    aData.push_back( aFileProvider );
-    ucb::ContentBroker::initialize( xMSF, aData );
-#else
     Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
     Reference<XMultiServiceFactory> xMSF(xComponentContext->getServiceManager(), UNO_QUERY);
     if( !xMSF.is() )
@@ -274,9 +264,7 @@ void GalApp::Main()
     aArgs[5] <<= aEmpty;
 
     if (! ::ucb::ContentBroker::initialize( xMSF, aArgs ) )
-            fprintf( stderr, "Failed to init content broker\n" );
-#endif
-
+        fprintf( stderr, "Failed to init content broker\n" );
 
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
