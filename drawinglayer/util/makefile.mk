@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: aw $ $Date: 2006-05-12 11:42:54 $
+#   last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ LIB1FILES=\
     $(SLB)$/primitive.lib	\
     $(SLB)$/primitive3d.lib	\
     $(SLB)$/geometry.lib	\
+    $(SLB)$/processor.lib	\
     $(SLB)$/animation.lib
 
 SHL1TARGET= drawinglayer$(UPD)$(DLLPOSTFIX)

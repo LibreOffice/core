@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textureprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:09 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,10 @@ namespace drawinglayer
     namespace primitive
     {
         texturePrimitive3D::texturePrimitive3D(
-            const primitiveList& rPrimitiveList,
+            const primitiveVector& rPrimitiveVector,
             const ::basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
-        :   listPrimitive(rPrimitiveList),
+        :   vectorPrimitive(rPrimitiveVector),
             maTextureSize(rTextureSize),
             mbModulate(bModulate),
             mbFilter(bFilter)
@@ -60,7 +60,7 @@ namespace drawinglayer
 
         bool texturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
         {
-            if(listPrimitive::operator==(rPrimitive))
+            if(vectorPrimitive::operator==(rPrimitive))
             {
                 const texturePrimitive3D& rCompare = (texturePrimitive3D&)rPrimitive;
                 return (mbModulate == rCompare.mbModulate && mbFilter == rCompare.mbFilter);
@@ -77,20 +77,20 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void simpleTransparenceTexturePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void simpleTransparenceTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
             if(0.0 == mfTransparence)
             {
                 // no transparence used, so just add the content
-                rTarget.append(maPrimitiveList);
+                rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
             }
             else if(mfTransparence > 0.0 && mfTransparence < 1.0)
             {
                 // create transparenceTexturePrimitive3D with fixed transparence as replacement
                 const ::basegfx::BColor aGray(mfTransparence, mfTransparence, mfTransparence);
                 const fillGradientAttribute aFillGradient(GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
-                basePrimitive* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(aFillGradient, maPrimitiveList, maTextureSize);
-                rTarget.append(referencedPrimitive(*pNewTransparenceTexturePrimitive3D));
+                basePrimitive* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(aFillGradient, maPrimitiveVector, maTextureSize);
+                rTarget.push_back(referencedPrimitive(*pNewTransparenceTexturePrimitive3D));
             }
             else
             {
@@ -100,8 +100,8 @@ namespace drawinglayer
 
         simpleTransparenceTexturePrimitive3D::simpleTransparenceTexturePrimitive3D(
             double fTransparence,
-            const primitiveList& rPrimitiveList)
-        :   texturePrimitive3D(rPrimitiveList, ::basegfx::B2DVector(), false, false),
+            const primitiveVector& rPrimitiveVector)
+        :   texturePrimitive3D(rPrimitiveVector, ::basegfx::B2DVector(), false, false),
             mfTransparence(fTransparence)
         {
         }
@@ -121,11 +121,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* simpleTransparenceTexturePrimitive3D::createNewClone() const
-        {
-            return new simpleTransparenceTexturePrimitive3D(mfTransparence, maPrimitiveList);
-        }
-
         PrimitiveID simpleTransparenceTexturePrimitive3D::getID() const
         {
             return CreatePrimitiveID('S', 'T', 'X', '3');
@@ -139,18 +134,18 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void gradientTexturePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void gradientTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
-            rTarget.append(maPrimitiveList);
+            rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
         }
 
         gradientTexturePrimitive3D::gradientTexturePrimitive3D(
             const fillGradientAttribute& rGradient,
-            const primitiveList& rPrimitiveList,
+            const primitiveVector& rPrimitiveVector,
             const ::basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
-        :   texturePrimitive3D(rPrimitiveList, rTextureSize, bModulate, bFilter),
+        :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
             maGradient(rGradient)
         {
         }
@@ -170,11 +165,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* gradientTexturePrimitive3D::createNewClone() const
-        {
-            return new gradientTexturePrimitive3D(maGradient, maPrimitiveList, maTextureSize, mbModulate, mbFilter);
-        }
-
         PrimitiveID gradientTexturePrimitive3D::getID() const
         {
             return CreatePrimitiveID('G', 'R', 'X', '3');
@@ -188,17 +178,17 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void bitmapTexturePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void bitmapTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
-            rTarget.append(maPrimitiveList);
+            rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
         }
 
         bitmapTexturePrimitive3D::bitmapTexturePrimitive3D(
             const fillBitmapAttribute& rBitmap,
-            const primitiveList& rPrimitiveList,
+            const primitiveVector& rPrimitiveVector,
             const ::basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
-        :   texturePrimitive3D(rPrimitiveList, rTextureSize, bModulate, bFilter),
+        :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
             maBitmap(rBitmap)
         {
         }
@@ -218,11 +208,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* bitmapTexturePrimitive3D::createNewClone() const
-        {
-            return new bitmapTexturePrimitive3D(maBitmap, maPrimitiveList, maTextureSize, mbModulate, mbFilter);
-        }
-
         PrimitiveID bitmapTexturePrimitive3D::getID() const
         {
             return CreatePrimitiveID('B', 'M', 'X', '3');
@@ -238,9 +223,9 @@ namespace drawinglayer
     {
         transparenceTexturePrimitive3D::transparenceTexturePrimitive3D(
             const fillGradientAttribute& rGradient,
-            const primitiveList& rPrimitiveList,
+            const primitiveVector& rPrimitiveVector,
             const ::basegfx::B2DVector& rTextureSize)
-        :   gradientTexturePrimitive3D(rGradient, rPrimitiveList, rTextureSize, false, false)
+        :   gradientTexturePrimitive3D(rGradient, rPrimitiveVector, rTextureSize, false, false)
         {
         }
 
@@ -251,11 +236,6 @@ namespace drawinglayer
         bool transparenceTexturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
         {
             return (gradientTexturePrimitive3D::operator==(rPrimitive));
-        }
-
-        basePrimitive* transparenceTexturePrimitive3D::createNewClone() const
-        {
-            return new transparenceTexturePrimitive3D(maGradient, maPrimitiveList, maTextureSize);
         }
 
         PrimitiveID transparenceTexturePrimitive3D::getID() const

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-19 09:34:51 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,6 @@ namespace drawinglayer
             const ::basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
             const sdrLineFillShadowAttribute& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
             const sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
-
-            // version for 3D geometries, analog to 2d version (see above)
-            virtual void transform(const ::basegfx::B3DHomMatrix& rMatrix);
         };
     } // end of namespace overlay
 } // end of namespace drawinglayer

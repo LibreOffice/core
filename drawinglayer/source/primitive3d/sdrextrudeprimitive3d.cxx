@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-19 09:34:55 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void sdrExtrudePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void sdrExtrudePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
             // get slices
             const sliceVector& rSliceVector = getSlices();
@@ -321,15 +321,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* sdrExtrudePrimitive3D::createNewClone() const
-        {
-            return new sdrExtrudePrimitive3D(
-                maTransform, maTextureSize,
-                maSdrLFSAttribute, maSdr3DObjectAttribute,
-                maPolyPolygon, mfDepth, mfDiagonal, mfBackScale,
-                mbSmoothNormals, mbSmoothHorizontalNormals, mbSmoothLids, mbCharacterMode, mbCloseFront, mbCloseBack);
-        }
-
         PrimitiveID sdrExtrudePrimitive3D::getID() const
         {
             return CreatePrimitiveID('S', 'X', 'T', '3');
@@ -338,7 +329,7 @@ namespace drawinglayer
         ::basegfx::B3DRange sdrExtrudePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
-            // The parent implementation which uses the ranges of the breakdown would be more
+            // The parent implementation which uses the ranges of the decomposition would be more
             // corrcet, but for historical reasons it is necessary to do the old method: To get
             // the range of the non-transformed geometry and transform it then. This leads to different
             // ranges where the new method is more correct, but the need to keep the old behaviour

@@ -6,4 +6,5 @@ fx	drawinglayer\source\primitive		nmake	-	all	fx_primitive NULL
 fx	drawinglayer\source\primitive3d		nmake	-	all	fx_primitive3d NULL
 fx	drawinglayer\source\animation		nmake	-	all	fx_animation NULL
 fx	drawinglayer\source\geometry		nmake	-	all	fx_geometry NULL
-fx	drawinglayer\util					nmake	-	all	fx_util fx_primitive fx_primitive3d fx_animation fx_geometry NULL
+fx	drawinglayer\source\processor		nmake	-	all	fx_processor NULL
+fx	drawinglayer\util					nmake	-	all	fx_util fx_primitive fx_primitive3d fx_animation fx_geometry fx_processor NULL

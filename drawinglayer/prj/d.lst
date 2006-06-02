@@ -17,18 +17,15 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive
 ..\inc\drawinglayer\primitive\fillhatchprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\fillhatchprimitive.hxx
 ..\inc\drawinglayer\primitive\gridprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\gridprimitive.hxx
 ..\inc\drawinglayer\primitive\helplineprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\helplineprimitive.hxx
-..\inc\drawinglayer\primitive\listprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\listprimitive.hxx
+..\inc\drawinglayer\primitive\vectorprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\vectorprimitive.hxx
 ..\inc\drawinglayer\primitive\markerprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\markerprimitive.hxx
 ..\inc\drawinglayer\primitive\maskprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\maskprimitive.hxx
+..\inc\drawinglayer\primitive\transformprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\transformprimitive.hxx
 ..\inc\drawinglayer\primitive\metafileprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\metafileprimitive.hxx
 ..\inc\drawinglayer\primitive\modifiedcolorprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\modifiedcolorprimitive.hxx
 ..\inc\drawinglayer\primitive\polygonprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\polygonprimitive.hxx
 ..\inc\drawinglayer\primitive\polypolygonprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\polypolygonprimitive.hxx
 ..\inc\drawinglayer\primitive\primitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitive.hxx
-..\inc\drawinglayer\primitive\primitivedefines.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitivedefines.hxx
-..\inc\drawinglayer\primitive\primitivelist.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitivelist.hxx
-..\inc\drawinglayer\primitive\primitiveprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitiveprocessor.hxx
-..\inc\drawinglayer\primitive\referencedprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\referencedprimitive.hxx
 ..\inc\drawinglayer\primitive\sceneprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\sceneprimitive.hxx
 ..\inc\drawinglayer\primitive\sdrattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\sdrattribute.hxx
 ..\inc\drawinglayer\primitive\sdrfillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\sdrfillbitmapattribute.hxx
@@ -40,7 +37,6 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive
 ..\inc\drawinglayer\primitive\textprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\textprimitive.hxx
 ..\inc\drawinglayer\primitive\texture.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\texture.hxx
 ..\inc\drawinglayer\primitive\transparenceprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\transparenceprimitive.hxx
-..\inc\drawinglayer\primitive\vclprimitiveprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\vclprimitiveprocessor.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
 ..\inc\drawinglayer\primitive3d\materialattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\materialattribute3d.hxx
@@ -49,10 +45,10 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
 ..\inc\drawinglayer\primitive3d\polygonprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polygonprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\polygontubeprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polygontubeprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\polypolygonprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polypolygonprimitive3d.hxx
+..\inc\drawinglayer\primitive3d\transformprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\transformprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\shadowprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\shadowprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\textureprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\textureprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx
-..\inc\drawinglayer\primitive3d\primitiveprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\primitiveprocessor3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrdecompositiontools3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrdecompositiontools3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrextrudelathetools3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrextrudelathetools3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrprimitive3d.hxx
@@ -68,3 +64,8 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\animation
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\geometry
 ..\inc\drawinglayer\geometry\viewinformation.hxx %_DEST%\inc%_EXT%\drawinglayer\geometry\viewinformation.hxx
 ..\inc\drawinglayer\geometry\transformation3d.hxx %_DEST%\inc%_EXT%\drawinglayer\geometry\transformation3d.hxx
+
+mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor
+..\inc\drawinglayer\processor\processor.hxx %_DEST%\inc%_EXT%\drawinglayer\processor\processor.hxx
+..\inc\drawinglayer\processor\vclprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\processor\vclprocessor.hxx
+..\inc\drawinglayer\processor\processor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor\processor3d.hxx

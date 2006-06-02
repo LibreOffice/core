@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:06 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,12 +75,12 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void hatchTexturePrimitive3D::impCreateDecomposition(const primitiveList& rSource, primitiveList& rDest)
+        void hatchTexturePrimitive3D::impCreateDecomposition(const primitiveVector& rSource, primitiveVector& rDest)
         {
-            for(sal_uInt32 a(0L); a < rSource.count(); a++)
+            for(sal_uInt32 a(0L); a < rSource.size(); a++)
             {
                 // get reference
-                const referencedPrimitive& rCandidate = rSource.getReferencedPrimitive(a);
+                const referencedPrimitive& rCandidate = rSource[a];
 
                 // not all content is needed, remove transparencies and ModifiedColorPrimitives
                 switch(rCandidate.getID())
@@ -238,7 +238,7 @@ namespace drawinglayer
                                     for(a = 0L; a < nHatchLines; a++)
                                     {
                                         basePrimitive* pNew = new polygonHairlinePrimitive3D(a3DHatchLines.getB3DPolygon(a), aHatchColor);
-                                        rDest.append(referencedPrimitive(*pNew));
+                                        rDest.push_back(referencedPrimitive(*pNew));
                                     }
                                 }
                             }
@@ -247,7 +247,7 @@ namespace drawinglayer
                         if(maHatch.isFillBackground())
                         {
                             // add original primitive for background
-                            rDest.append(rCandidate);
+                            rDest.push_back(rCandidate);
                         }
 
                         break;
@@ -256,31 +256,31 @@ namespace drawinglayer
                     default:
                     {
                         // add to destination
-                        rDest.append(rCandidate);
+                        rDest.push_back(rCandidate);
                         break;
                     }
                 }
             }
         }
 
-        void hatchTexturePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void hatchTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
-            if(maPrimitiveList.count())
+            if(maPrimitiveVector.size())
             {
                 // create decomposition
-                primitiveList aNewPrimitiveList;
-                impCreateDecomposition(maPrimitiveList, aNewPrimitiveList);
-                rTarget.append(aNewPrimitiveList);
+                primitiveVector aNewPrimitiveVector;
+                impCreateDecomposition(maPrimitiveVector, aNewPrimitiveVector);
+                rTarget.insert(rTarget.end(), aNewPrimitiveVector.begin(), aNewPrimitiveVector.end());
             }
         }
 
         hatchTexturePrimitive3D::hatchTexturePrimitive3D(
             const fillHatchAttribute& rHatch,
-            const primitiveList& rPrimitiveList,
+            const primitiveVector& rPrimitiveVector,
             const ::basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
-        :   texturePrimitive3D(rPrimitiveList, rTextureSize, bModulate, bFilter),
+        :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
             maHatch(rHatch)
         {
         }
@@ -298,11 +298,6 @@ namespace drawinglayer
             }
 
             return false;
-        }
-
-        basePrimitive* hatchTexturePrimitive3D::createNewClone() const
-        {
-            return new hatchTexturePrimitive3D(maHatch, maPrimitiveList, maTextureSize, mbModulate, mbFilter);
         }
 
         PrimitiveID hatchTexturePrimitive3D::getID() const

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textureprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:15 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 #define _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_LISTPRIMITIVE_HXX
-#include <drawinglayer/primitive/listprimitive.hxx>
+#ifndef _DRAWINGLAYER_PRIMITIVE_VECTORPRIMITIVE_HXX
+#include <drawinglayer/primitive/vectorprimitive.hxx>
 #endif
 
 #ifndef _DRAWINGLAYER_PRIMITIVE_FILLATTRIBUTE_HXX
@@ -46,10 +46,6 @@
 
 #ifndef _DRAWINGLAYER_PRIMITIVE_FILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/primitive/fillbitmapattribute.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE_PRIMITIVELIST_HXX
-#include <drawinglayer/primitive/primitivelist.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -62,7 +58,7 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        class texturePrimitive3D : public listPrimitive
+        class texturePrimitive3D : public vectorPrimitive
         {
         protected:
             ::basegfx::B2DVector                        maTextureSize;
@@ -76,7 +72,7 @@ namespace drawinglayer
 
         public:
             texturePrimitive3D(
-                const primitiveList& rPrimitiveList,
+                const primitiveVector& rPrimitiveVector,
                 const ::basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -105,12 +101,12 @@ namespace drawinglayer
             double                                      mfTransparence;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
         public:
             simpleTransparenceTexturePrimitive3D(
                 double fTransparence,
-                const primitiveList& rPrimitiveList);
+                const primitiveVector& rPrimitiveVector);
             virtual ~simpleTransparenceTexturePrimitive3D();
 
             // get data
@@ -118,9 +114,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;
@@ -140,12 +133,12 @@ namespace drawinglayer
             fillGradientAttribute                       maGradient;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
         public:
             gradientTexturePrimitive3D(
                 const fillGradientAttribute& rGradient,
-                const primitiveList& rPrimitiveList,
+                const primitiveVector& rPrimitiveVector,
                 const ::basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -156,9 +149,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;
@@ -178,12 +168,12 @@ namespace drawinglayer
             fillBitmapAttribute                         maBitmap;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
         public:
             bitmapTexturePrimitive3D(
                 const fillBitmapAttribute& rBitmap,
-                const primitiveList& rPrimitiveList,
+                const primitiveVector& rPrimitiveVector,
                 const ::basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -194,9 +184,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;
@@ -215,15 +202,12 @@ namespace drawinglayer
         public:
             transparenceTexturePrimitive3D(
                 const fillGradientAttribute& rGradient,
-                const primitiveList& rPrimitiveList,
+                const primitiveVector& rPrimitiveVector,
                 const ::basegfx::B2DVector& rTextureSize);
             virtual ~transparenceTexturePrimitive3D();
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:09 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@ namespace drawinglayer
     {
         shadowPrimitive3D::shadowPrimitive3D(
             const ::basegfx::B2DHomMatrix& rShadowTransform, const ::basegfx::BColor& rShadowColor,
-            double fShadowTransparence, bool bShadow3D, const primitiveList& rPrimitiveList)
-        :   listPrimitive(rPrimitiveList),
+            double fShadowTransparence, bool bShadow3D, const primitiveVector& rPrimitiveVector)
+        :   vectorPrimitive(rPrimitiveVector),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),
             mfShadowTransparence(fShadowTransparence),
@@ -60,7 +60,7 @@ namespace drawinglayer
 
         bool shadowPrimitive3D::operator==(const basePrimitive& rPrimitive) const
         {
-            if(listPrimitive::operator==(rPrimitive))
+            if(vectorPrimitive::operator==(rPrimitive))
             {
                 const shadowPrimitive3D& rCompare = (shadowPrimitive3D&)rPrimitive;
                 return (maShadowTransform == rCompare.maShadowTransform
@@ -72,24 +72,9 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* shadowPrimitive3D::createNewClone() const
-        {
-            return new shadowPrimitive3D(maShadowTransform, maShadowColor, mfShadowTransparence, mbShadow3D, maPrimitiveList);
-        }
-
         PrimitiveID shadowPrimitive3D::getID() const
         {
             return CreatePrimitiveID('S', 'H', 'D', '3');
-        }
-
-        void shadowPrimitive3D::transform(const ::basegfx::B2DHomMatrix& rMatrix)
-        {
-            // call basePrimitive, not listPrimitive parent to not change the SubList
-            basePrimitive::transform(rMatrix);
-
-            // add tansform to local transform matrix. Applying to local sub-list is not necessary,
-            // this is done at decomposition or left to the renderer to allow evtl. less copying
-            maShadowTransform *= rMatrix;
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer

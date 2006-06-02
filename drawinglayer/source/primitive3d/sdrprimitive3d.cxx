@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-19 09:34:56 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,12 +127,6 @@ namespace drawinglayer
             }
 
             return false;
-        }
-
-        void sdrPrimitive3D::transform(const ::basegfx::B3DHomMatrix& rMatrix)
-        {
-            basePrimitive::transform(rMatrix);
-            maTransform *= rMatrix;
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:13 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,17 +78,11 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
 
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
-
             // id generator
             virtual PrimitiveID getID() const;
 
             // get 3Drange of primitive. Default implementation uses decomposition
             virtual ::basegfx::B3DRange get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const;
-
-            // version for 3D geometries, analog to 2d version (see above)
-            virtual void transform(const ::basegfx::B3DHomMatrix& rMatrix);
         };
     } // end of namespace primitive
 } // end of namespace drawinglayer
@@ -106,7 +100,7 @@ namespace drawinglayer
             strokeAttribute                             maStrokeAttribute;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
         public:
             polygonStrokePrimitive3D(const ::basegfx::B3DPolygon& rPolygon, const strokeAttribute& rStrokeAttribute);
@@ -119,14 +113,8 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
 
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
-
             // id generator
             virtual PrimitiveID getID() const;
-
-            // version for 3D geometries, analog to 2d version (see above)
-            virtual void transform(const ::basegfx::B3DHomMatrix& rMatrix);
         };
     } // end of namespace primitive
 } // end of namespace drawinglayer

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-19 09:34:50 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace drawinglayer
             unsigned                                    mbCloseBack : 1;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
             // get (evtl. create) slices
             const sliceVector& getSlices() const;
@@ -106,9 +106,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;

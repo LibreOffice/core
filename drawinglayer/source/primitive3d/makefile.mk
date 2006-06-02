@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2006-05-12 11:49:06 $
+#   last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,13 @@ SLOFILES= \
         $(SLO)$/materialattribute3d.obj		\
         $(SLO)$/sdrallattribute3d.obj		\
         $(SLO)$/sdrattribute3d.obj			\
-        $(SLO)$/primitiveprocessor3d.obj	\
         $(SLO)$/shadowprimitive3d.obj		\
         $(SLO)$/textureprimitive3d.obj		\
         $(SLO)$/hatchtextureprimitive3d.obj	\
         $(SLO)$/polygontubeprimitive3d.obj	\
         $(SLO)$/polygonprimitive3d.obj		\
         $(SLO)$/polypolygonprimitive3d.obj	\
+        $(SLO)$/transformprimitive3d.obj	\
         $(SLO)$/sdrdecompositiontools3d.obj	\
         $(SLO)$/sdrextrudelathetools3d.obj	\
         $(SLO)$/sdrprimitive3d.obj			\

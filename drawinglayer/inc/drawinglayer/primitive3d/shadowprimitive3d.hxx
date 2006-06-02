@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:15 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #define _DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_LISTPRIMITIVE_HXX
-#include <drawinglayer/primitive/listprimitive.hxx>
+#ifndef _DRAWINGLAYER_PRIMITIVE_VECTORPRIMITIVE_HXX
+#include <drawinglayer/primitive/vectorprimitive.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        class shadowPrimitive3D : public listPrimitive
+        class shadowPrimitive3D : public vectorPrimitive
         {
         protected:
             ::basegfx::B2DHomMatrix                     maShadowTransform;
@@ -67,7 +67,7 @@ namespace drawinglayer
         public:
             shadowPrimitive3D(
                 const ::basegfx::B2DHomMatrix& rShadowTransform, const ::basegfx::BColor& rShadowColor,
-                double fShadowTransparence, bool bShadow3D, const primitiveList& rPrimitiveList);
+                double fShadowTransparence, bool bShadow3D, const primitiveVector& rPrimitiveVector);
             virtual ~shadowPrimitive3D();
 
             // get data
@@ -79,14 +79,8 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
 
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
-
             // id generator
             virtual PrimitiveID getID() const;
-
-            // transformations for different aspects
-            virtual void transform(const ::basegfx::B2DHomMatrix& rMatrix);
         };
     } // end of namespace primitive
 } // end of namespace drawinglayer

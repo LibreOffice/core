@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-19 09:34:56 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,6 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_PRIMITIVELIST_HXX
-#include <drawinglayer/primitive/primitivelist.hxx>
-#endif
-
 #ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #endif
@@ -67,7 +63,7 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void sdrSpherePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void sdrSpherePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
             const ::basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
@@ -201,14 +197,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* sdrSpherePrimitive3D::createNewClone() const
-        {
-            return new sdrSpherePrimitive3D(
-                maTransform, maTextureSize,
-                maSdrLFSAttribute, maSdr3DObjectAttribute,
-                mnHorizontalSegments, mnVerticalSegments);
-        }
-
         PrimitiveID sdrSpherePrimitive3D::getID() const
         {
             return CreatePrimitiveID('S', 'S', 'P', '3');
@@ -217,7 +205,7 @@ namespace drawinglayer
         ::basegfx::B3DRange sdrSpherePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
-            // The parent implementation which uses the ranges of the breakdown would be more
+            // The parent implementation which uses the ranges of the decomposition would be more
             // corrcet, but for historical reasons it is necessary to do the old method: To get
             // the range of the non-transformed geometry and transform it then. This leads to different
             // ranges where the new method is more correct, but the need to keep the old behaviour

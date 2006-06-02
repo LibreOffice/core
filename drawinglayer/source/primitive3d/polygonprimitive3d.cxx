@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:06 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,6 @@
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_PRIMITIVELIST_HXX
-#include <drawinglayer/primitive/primitivelist.hxx>
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -82,11 +78,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* polygonHairlinePrimitive3D::createNewClone() const
-        {
-            return new polygonHairlinePrimitive3D(maPolygon, maBColor);
-        }
-
         PrimitiveID polygonHairlinePrimitive3D::getID() const
         {
             return CreatePrimitiveID('P', 'O', 'H', '3');
@@ -95,12 +86,6 @@ namespace drawinglayer
         ::basegfx::B3DRange polygonHairlinePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
             return ::basegfx::tools::getRange(maPolygon);
-        }
-
-        void polygonHairlinePrimitive3D::transform(const ::basegfx::B3DHomMatrix& rMatrix)
-        {
-            basePrimitive::transform(rMatrix);
-            maPolygon.transform(rMatrix);
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer
@@ -111,7 +96,7 @@ namespace drawinglayer
 {
     namespace primitive
     {
-        void polygonStrokePrimitive3D::decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void polygonStrokePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
         {
             if(maPolygon.count())
             {
@@ -138,7 +123,7 @@ namespace drawinglayer
                         polygonTubePrimitive3D* pNew = new polygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a),
                             maStrokeAttribute.getColor(),
                             fRadius, aLineJoin);
-                        rTarget.append(referencedPrimitive(*pNew));
+                        rTarget.push_back(referencedPrimitive(*pNew));
                     }
                 }
                 else
@@ -148,7 +133,7 @@ namespace drawinglayer
                     {
                         const ::basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
                         basePrimitive* pNew = new polygonHairlinePrimitive3D(aCandidate, maStrokeAttribute.getColor());
-                        rTarget.append(referencedPrimitive(*pNew));
+                        rTarget.push_back(referencedPrimitive(*pNew));
                     }
                 }
             }
@@ -177,20 +162,9 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* polygonStrokePrimitive3D::createNewClone() const
-        {
-            return new polygonStrokePrimitive3D(maPolygon, maStrokeAttribute);
-        }
-
         PrimitiveID polygonStrokePrimitive3D::getID() const
         {
             return CreatePrimitiveID('P', 'L', 'S', '3');
-        }
-
-        void polygonStrokePrimitive3D::transform(const ::basegfx::B3DHomMatrix& rMatrix)
-        {
-            basePrimitive::transform(rMatrix);
-            maPolygon.transform(rMatrix);
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer

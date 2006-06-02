@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:14 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ namespace drawinglayer
             sal_uInt32                                  mnVerticalSegments;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
         public:
             sdrSpherePrimitive3D(
@@ -69,9 +69,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;

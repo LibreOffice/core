@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:07 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,6 @@ namespace drawinglayer
             return false;
         }
 
-        basePrimitive* polyPolygonMaterialPrimitive3D::createNewClone() const
-        {
-            return new polyPolygonMaterialPrimitive3D(maPolyPolygon, maMaterial, mbDoubleSided);
-        }
-
         PrimitiveID polyPolygonMaterialPrimitive3D::getID() const
         {
             return CreatePrimitiveID('P', 'O', 'M', '3');
@@ -85,17 +80,6 @@ namespace drawinglayer
         ::basegfx::B3DRange polyPolygonMaterialPrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
         {
             return ::basegfx::tools::getRange(maPolyPolygon);
-        }
-
-        void polyPolygonMaterialPrimitive3D::transform(const ::basegfx::B3DHomMatrix& rMatrix)
-        {
-            basePrimitive::transform(rMatrix);
-            maPolyPolygon.transform(rMatrix);
-
-            if(maPolyPolygon.areNormalsUsed())
-            {
-                maPolyPolygon.transformNormals(rMatrix);
-            }
         }
     } // end of namespace primitive
 } // end of namespace drawinglayer

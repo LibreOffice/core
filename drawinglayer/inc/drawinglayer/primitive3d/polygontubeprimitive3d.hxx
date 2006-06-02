@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:45:13 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:57:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ namespace drawinglayer
             ::basegfx::tools::B2DLineJoin               maLineJoin;
 
             //  create decomposition
-            virtual void decompose(primitiveList& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
 
         public:
             polygonTubePrimitive3D(
@@ -82,9 +82,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const basePrimitive& rPrimitive) const;
-
-            // clone operator
-            virtual basePrimitive* createNewClone() const;
 
             // id generator
             virtual PrimitiveID getID() const;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrdecompositiontools3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:49:08 $
+ *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,6 @@
 
 #ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE_PRIMITIVELIST_HXX
-#include <drawinglayer/primitive/primitivelist.hxx>
 #endif
 
 #ifndef _DRAWINGLAYER_PRIMITIVE_SIMPLETRANSPARENCEPRIMITIVE_HXX
@@ -126,7 +122,7 @@ namespace drawinglayer
         void add3DPolyPolygonLinePrimitive(
             const ::basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const ::basegfx::B3DHomMatrix& rObjectTransform,
-            primitiveList& rTarget,
+            primitiveVector& rTarget,
             const sdrLineAttribute& rLine)
         {
             // prepare fully scaled polyPolygon
@@ -137,24 +133,24 @@ namespace drawinglayer
             const strokeAttribute aStrokeAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getDotDashArray(), rLine.getFullDotDashLen());
 
             // create primitives
-            primitiveList aNewPrimitiveList;
+            primitiveVector aNewPrimitiveVector;
 
             for(sal_uInt32 a(0L); a < aScaledPolyPolygon.count(); a++)
             {
                 basePrimitive* pNewLinePrimitive = new polygonStrokePrimitive3D(aScaledPolyPolygon.getB3DPolygon(a), aStrokeAttribute);
-                aNewPrimitiveList.append(referencedPrimitive(*pNewLinePrimitive));
+                aNewPrimitiveVector.push_back(referencedPrimitive(*pNewLinePrimitive));
             }
 
             if(0.0 != rLine.getTransparence())
             {
                 // create simpleTransparencePrimitive, add created fill primitives
-                basePrimitive* pNewSimpleTransparenceTexturePrimitive3D = new simpleTransparenceTexturePrimitive3D(rLine.getTransparence(), aNewPrimitiveList);
-                rTarget.append(referencedPrimitive(*pNewSimpleTransparenceTexturePrimitive3D));
+                basePrimitive* pNewSimpleTransparenceTexturePrimitive3D = new simpleTransparenceTexturePrimitive3D(rLine.getTransparence(), aNewPrimitiveVector);
+                rTarget.push_back(referencedPrimitive(*pNewSimpleTransparenceTexturePrimitive3D));
             }
             else
             {
                 // add to decomposition
-                rTarget.append(aNewPrimitiveList);
+                rTarget.insert(rTarget.end(), aNewPrimitiveVector.begin(), aNewPrimitiveVector.end());
             }
         }
 
@@ -162,7 +158,7 @@ namespace drawinglayer
             const ::std::vector< ::basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const ::basegfx::B3DHomMatrix& rObjectTransform,
             const ::basegfx::B2DVector& rTextureSize,
-            primitiveList& rTarget,
+            primitiveVector& rTarget,
             const sdr3DObjectAttribute& aSdr3DObjectAttribute,
             const sdrFillAttribute& rFill,
             const fillGradientAttribute* pFillGradient)
@@ -170,7 +166,7 @@ namespace drawinglayer
             if(r3DPolyPolygonVector.size())
             {
                 // create list of simple fill primitives
-                primitiveList aNewPrimitiveList;
+                primitiveVector aNewPrimitiveVector;
 
                 for(sal_uInt32 a(0L); a < r3DPolyPolygonVector.size(); a++)
                 {
@@ -187,7 +183,7 @@ namespace drawinglayer
                         aScaledPolyPolygon,
                         aSdr3DObjectAttribute.getMaterial(),
                         aSdr3DObjectAttribute.getDoubleSided());
-                    aNewPrimitiveList.append(referencedPrimitive(*pNewFillPrimitive));
+                    aNewPrimitiveVector.push_back(referencedPrimitive(*pNewFillPrimitive));
                 }
 
                 // look for and evtl. build texture sub-group primitive
@@ -199,64 +195,65 @@ namespace drawinglayer
 
                     if(rFill.isGradient())
                     {
-                        // create gradientTexture3D with sublist, add to local aNewPrimitiveList
-                        pNewTexturePrimitive3D = new gradientTexturePrimitive3D(*rFill.getGradient(), aNewPrimitiveList, rTextureSize, bModulate, bFilter);
+                        // create gradientTexture3D with sublist, add to local aNewPrimitiveVector
+                        pNewTexturePrimitive3D = new gradientTexturePrimitive3D(*rFill.getGradient(), aNewPrimitiveVector, rTextureSize, bModulate, bFilter);
                     }
                     else if(rFill.isHatch())
                     {
-                        // create hatchTexture3D with sublist, add to local aNewPrimitiveList
-                        pNewTexturePrimitive3D = new hatchTexturePrimitive3D(*rFill.getHatch(), aNewPrimitiveList, rTextureSize, bModulate, bFilter);
+                        // create hatchTexture3D with sublist, add to local aNewPrimitiveVector
+                        pNewTexturePrimitive3D = new hatchTexturePrimitive3D(*rFill.getHatch(), aNewPrimitiveVector, rTextureSize, bModulate, bFilter);
                     }
                     else // if(rFill.isBitmap())
                     {
-                        // create bitmapTexture3D with sublist, add to local aNewPrimitiveList
+                        // create bitmapTexture3D with sublist, add to local aNewPrimitiveVector
                         ::basegfx::B2DRange aTexRange(0.0, 0.0, rTextureSize.getX(), rTextureSize.getY());
-                        pNewTexturePrimitive3D = new bitmapTexturePrimitive3D(rFill.getBitmap()->getFillBitmapAttribute(aTexRange), aNewPrimitiveList, rTextureSize, bModulate, bFilter);
+                        pNewTexturePrimitive3D = new bitmapTexturePrimitive3D(rFill.getBitmap()->getFillBitmapAttribute(aTexRange), aNewPrimitiveVector, rTextureSize, bModulate, bFilter);
                     }
 
-                    // exchange aNewPrimitiveList content with texture group
-                    aNewPrimitiveList.clear();
-                    aNewPrimitiveList.append(referencedPrimitive(*pNewTexturePrimitive3D));
+                    // exchange aNewPrimitiveVector content with texture group
+                    aNewPrimitiveVector.clear();
+                    aNewPrimitiveVector.push_back(referencedPrimitive(*pNewTexturePrimitive3D));
 
                     if(::com::sun::star::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {
                         // use modified color primitive to force textures to gray
-                        basePrimitive* pModifiedColor = new modifiedColorPrimitive(::basegfx::BColor(), aNewPrimitiveList, 0.0, COLORMODIFY_GRAY);
-                        aNewPrimitiveList.clear();
-                        aNewPrimitiveList.append(referencedPrimitive(*pModifiedColor));
+                        const ::basegfx::BColorModifier aBColorModifier(::basegfx::BColor(), 0.0, ::basegfx::BCOLORMODIFYMODE_GRAY);
+                        basePrimitive* pModifiedColor = new modifiedColorPrimitive(aNewPrimitiveVector, aBColorModifier);
+                        aNewPrimitiveVector.clear();
+                        aNewPrimitiveVector.push_back(referencedPrimitive(*pModifiedColor));
                     }
                 }
 
                 if(0.0 != rFill.getTransparence())
                 {
                     // create simpleTransparenceTexturePrimitive3D with sublist and append
-                    basePrimitive* pNewSimpleTransparenceTexturePrimitive3D = new simpleTransparenceTexturePrimitive3D(rFill.getTransparence(), aNewPrimitiveList);
-                    rTarget.append(referencedPrimitive(*pNewSimpleTransparenceTexturePrimitive3D));
+                    basePrimitive* pNewSimpleTransparenceTexturePrimitive3D = new simpleTransparenceTexturePrimitive3D(rFill.getTransparence(), aNewPrimitiveVector);
+                    rTarget.push_back(referencedPrimitive(*pNewSimpleTransparenceTexturePrimitive3D));
                 }
                 else if(pFillGradient)
                 {
                     // create transparenceTexture3D with sublist and append
-                    basePrimitive* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(*pFillGradient, aNewPrimitiveList, rTextureSize);
-                    rTarget.append(referencedPrimitive(*pNewTransparenceTexturePrimitive3D));
+                    basePrimitive* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(*pFillGradient, aNewPrimitiveVector, rTextureSize);
+                    rTarget.push_back(referencedPrimitive(*pNewTransparenceTexturePrimitive3D));
                 }
                 else
                 {
                     // append list
-                    rTarget.append(aNewPrimitiveList);
+                    rTarget.insert(rTarget.end(), aNewPrimitiveVector.begin(), aNewPrimitiveVector.end());
                 }
             }
         }
 
         void addShadowPrimitive3D(
-            primitiveList& rTarget,
+            primitiveVector& rTarget,
             const sdrShadowAttribute& rShadow,
             bool bShadow3D)
         {
             // create Shadow primitives. Need to be added in front, should use already created primitives
-            if(rTarget.count() && !::basegfx::fTools::moreOrEqual(rShadow.getTransparence(), 1.0))
+            if(rTarget.size() && !::basegfx::fTools::moreOrEqual(rShadow.getTransparence(), 1.0))
             {
                 // prepare new list for shadow geometry
-                primitiveList aNewList;
+                primitiveVector aNewList;
 
                 // prepare shadow offset
                 ::basegfx::B2DHomMatrix aShadowOffset;
@@ -264,10 +261,10 @@ namespace drawinglayer
                 aShadowOffset.set(1, 2, rShadow.getOffset().getY());
 
                 // create shadow primitive and add primitives
-                primitiveList aShadowPrimitiveList(rTarget);
-                shadowPrimitive3D* pNewShadow3D = new shadowPrimitive3D(aShadowOffset, rShadow.getColor(), rShadow.getTransparence(), bShadow3D, aShadowPrimitiveList);
+                primitiveVector aShadowPrimitiveVector(rTarget);
+                shadowPrimitive3D* pNewShadow3D = new shadowPrimitive3D(aShadowOffset, rShadow.getColor(), rShadow.getTransparence(), bShadow3D, aShadowPrimitiveVector);
                 rTarget.clear();
-                rTarget.append(referencedPrimitive(*pNewShadow3D));
+                rTarget.push_back(referencedPrimitive(*pNewShadow3D));
             }
         }
     } // end of namespace primitive
