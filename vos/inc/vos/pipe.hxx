@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:01:19 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,8 @@
 #endif
 
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
-
 
 class OStreamPipe;
 
@@ -278,10 +275,7 @@ public:
     virtual sal_Bool SAL_CALL isEof() const;
 };
 
-
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif // _VOS_PIPE_HXX_
 
