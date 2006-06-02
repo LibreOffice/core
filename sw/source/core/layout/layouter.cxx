@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:35:40 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,3 +521,71 @@ void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
         }
     }
 }
+
+// --> OD 2006-05-10 #i65250#
+bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
+                                    const SwFlowFrm& p_rFlowFrm,
+                                    const SwLayoutFrm& p_rNewUpperFrm )
+{
+    bool bMoveBwdSuppressed( false );
+
+    if ( !p_rDoc.GetLayouter() )
+    {
+        const_cast<SwDoc&>(p_rDoc).SetLayouter( new SwLayouter() );
+    }
+
+    // create hash map key
+    tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo;
+    aMoveBwdLayoutInfo.mnFrmId = p_rFlowFrm.GetFrm()->GetFrmId();
+    aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrm.Frm().Pos().X();
+    aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrm.Frm().Pos().Y();
+    aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrm.Frm().Width();
+    aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrm.Frm().Height();
+    SWRECTFN( (&p_rNewUpperFrm) )
+    const SwFrm* pLastLower( p_rNewUpperFrm.Lower() );
+    while ( pLastLower && pLastLower->GetNext() )
+    {
+        pLastLower = pLastLower->GetNext();
+    }
+    aMoveBwdLayoutInfo.mnFreeSpaceInNewUpper =
+            pLastLower
+            ? (pLastLower->Frm().*fnRect->fnBottomDist)( (p_rNewUpperFrm.*fnRect->fnGetPrtBottom)() )
+            : (p_rNewUpperFrm.Frm().*fnRect->fnGetHeight)();
+
+    // check for moving backward suppress threshold
+    const sal_uInt16 cMoveBwdCountSuppressThreshold = 20;
+    if ( ++const_cast<SwDoc&>(p_rDoc).GetLayouter()->maMoveBwdLayoutInfo[ aMoveBwdLayoutInfo ] >
+                                                cMoveBwdCountSuppressThreshold )
+    {
+        bMoveBwdSuppressed = true;
+    }
+
+    return bMoveBwdSuppressed;
+}
+
+void SwLayouter::ClearMoveBwdLayoutInfo( const SwDoc& _rDoc )
+{
+    if ( _rDoc.GetLayouter() )
+    {
+        // Checking content of <maMoveBwdLayoutInfo
+        {
+            sal_uInt64 nMaxSize( const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.max_size() );
+            sal_uInt64 nSize( const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.size() );
+            sal_uInt64 nBucketCount( const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.bucket_count() );
+
+            std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16, fMoveBwdLayoutInfoKeyHash, fMoveBwdLayoutInfoKeyEq >::const_iterator
+                aIter = const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.begin();
+            std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16, fMoveBwdLayoutInfoKeyHash, fMoveBwdLayoutInfoKeyEq >::const_iterator
+                aIterEnd = const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.end();
+            sal_uInt64 nCounter( 0 );
+            for ( ; aIter != aIterEnd; ++aIter )
+            {
+                tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo = (*aIter).first;
+                sal_uInt16 nCount = (*aIter).second;
+                ++nCounter;
+            }
+        }
+        const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.clear();
+    }
+}
+// <--
