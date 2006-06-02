@@ -1,0 +1,9 @@
+[ComponentDescriptor]
+ImplementationName=com.sun.star.comp.configuration.backend.KDEBackend
+ComponentName=kdebe1.uno.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[Data]
+SupportedComponents=org.openoffice.VCL;org.openoffice.Inet;org.openoffice.Office.Common
+[SupportedServices]
+com.sun.star.configuration.backend.KDEBackend
+com.sun.star.configuration.backend.PlatformBackend
