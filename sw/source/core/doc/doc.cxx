@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:18:49 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,6 +775,9 @@ void SwDoc::SetModified()
     SwLayouter::ClearMovedFwdFrms( *this );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
     SwLayouter::ClearFrmsNotToWrap( *this );
+    // <--
+    // --> OD 2006-05-10 #i65250#
+    SwLayouter::ClearMoveBwdLayoutInfo( *this );
     // <--
     // dem Link wird der Status returnt, wie die Flags waren und werden
     //  Bit 0:  -> alter Zustand
