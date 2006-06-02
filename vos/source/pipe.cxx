@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:08:26 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,7 @@
 #include <vos/pipe.hxx>
 #include <vos/diagnose.hxx>
 
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Pipe
