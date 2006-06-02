@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,8 @@
 #ifndef INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
 #define INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
 
-#include "metafunctions.hxx"
+#include <basebmp/metafunctions.hxx>
+#include <basebmp/accessor.hxx>
 
 #include <vigra/numerictraits.hxx>
 #include <vigra/mathutil.hxx>
@@ -103,9 +104,9 @@ public:
     {}
 
     PaletteImageAccessor( const value_type* pPalette,
-                          data_type         entries ) :
+                          data_type         numEntries ) :
         palette(pPalette),
-        num_entries(entries)
+        num_entries(numEntries)
     {}
 
     template< class Iterator >
@@ -134,6 +135,29 @@ public:
                 vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
             diff );
     }
+};
+
+
+/// Retrieve raw pixel data accessor for given Accessor type
+template< class Accessor > struct rawAccessor
+{
+    // generic case: both accessors are the same
+    typedef Accessor type;
+};
+
+template< typename ValueType > struct RawAccessor : public StandardAccessor< ValueType >
+{
+    RawAccessor() {}
+    template< typename DataType > explicit RawAccessor(
+        const PaletteImageAccessor< ValueType, DataType >& a ) {}
+};
+
+// specialization for PaletteImageAccessor, to provide the
+// corresponding StandardAccessor to the pixel index values
+template< typename ValueType, typename DataType >
+struct rawAccessor< PaletteImageAccessor< ValueType, DataType > >
+{
+    typedef RawAccessor< ValueType > type;
 };
 
 } // namespace basebmp

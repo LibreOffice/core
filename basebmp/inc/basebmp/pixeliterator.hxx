@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pixeliterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef INCLUDED_BASEBMP_PIXELITERATOR_HXX
 #define INCLUDED_BASEBMP_PIXELITERATOR_HXX
 
-#include "metafunctions.hxx"
-#include "stridedarrayiterator.hxx"
+#include <basebmp/metafunctions.hxx>
+#include <basebmp/stridedarrayiterator.hxx>
 
 #include <boost/static_assert.hpp>
 #include <vigra/metaprogramming.hxx>

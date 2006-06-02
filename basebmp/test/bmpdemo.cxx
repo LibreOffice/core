@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:13 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,13 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygonrasterconverter.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 
@@ -992,17 +995,33 @@ class TestWindow : public Dialog
 void TestWindow::Paint( const Rectangle& rRect )
 {
     {
-        const basegfx::B2ISize aSize(11,11);
+        const basegfx::B2ISize aSize(10,10);
+        basebmp::BitmapDeviceSharedPtr pBmp( basebmp::createBitmapDevice( aSize,
+                                                                          true,
+                                                                          basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
         basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aSize,
                                                                              true,
                                                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
+            "m 0 0h5v10h5v-5h-10z" );
 
-        const basegfx::B2IPoint aPt1(1,1);
-        const basegfx::B2IPoint aPt2(1,9);
-        const basebmp::Color aCol(0);
-        pDevice->clear( aCol );
-        const basebmp::Color aCol2(0xFFFFFFFF);
-        pDevice->drawLine( aPt1, aPt2, aCol2, basebmp::DrawMode_PAINT );
+        basegfx::B2DPolyPolygon aPoly;
+        basegfx::tools::importFromSvgD( aPoly, aSvg );
+        const basebmp::Color aCol(0xFFFFFFFF);
+        pBmp->clear(basebmp::Color(0));
+        pBmp->fillPolyPolygon(
+            aPoly,
+            aCol,
+            basebmp::DrawMode_PAINT );
+
+        const basegfx::B2IRange aSourceRect(0,0,11,11);
+        const basegfx::B2IRange aDestLeftTop(0,0,5,5);
+        pDevice->clear(basebmp::Color(0));
+        pDevice->drawBitmap(
+            pBmp,
+            aSourceRect,
+            aDestLeftTop,
+            basebmp::DrawMode_PAINT );
     }
 
     enum{ srcBitDepth=1, dstBitDepth=4 };

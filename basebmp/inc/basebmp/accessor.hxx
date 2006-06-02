@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:11 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef INCLUDED_BASEBMP_ACCESSOR_HXX
 #define INCLUDED_BASEBMP_ACCESSOR_HXX
 
+#include <vigra/numerictraits.hxx>
+
 namespace basebmp
 {
 
@@ -43,7 +45,6 @@ template<typename ValueType> class StandardAccessor
 {
 public:
     typedef ValueType value_type;
-    typedef ValueType data_type;
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const { return i.get(); }

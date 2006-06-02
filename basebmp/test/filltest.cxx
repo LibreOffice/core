@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filltest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:13 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/debug.hxx>
+#include "tools.hxx"
 
 #include <iostream>
 #include <fstream>
@@ -65,19 +66,6 @@ class FillTest : public CppUnit::TestFixture
 private:
     BitmapDeviceSharedPtr mpDevice1bpp;
     BitmapDeviceSharedPtr mpDevice32bpp;
-
-    int countPixel( const BitmapDeviceSharedPtr& rDevice,
-                    Color                        checkColor ) const
-    {
-        int count(0);
-        const basegfx::B2ISize& rSize( rDevice->getSize() );
-        for( sal_Int32 y=0; y<rSize.getY(); ++y )
-            for( sal_Int32 x=0; x<rSize.getX(); ++x )
-                if( rDevice->getPixel( basegfx::B2IPoint(x,y) ) == checkColor )
-                    ++count;
-
-        return count;
-    }
 
     void implTestRectFill(const BitmapDeviceSharedPtr& rDevice)
     {
@@ -170,9 +158,6 @@ private:
         const basegfx::B2IPoint aPt4(5,10);
         CPPUNIT_ASSERT_MESSAGE("bottom-middle pixel set",
                                rDevice->getPixel(aPt4) == aCol);
-
-        std::ofstream output("32bpp_test.dump");
-        debugDump( rDevice, output );
     }
 
     void implTestClipping(const BitmapDeviceSharedPtr& rDevice)
@@ -247,6 +232,12 @@ public:
         implTestClipping( mpDevice32bpp );
     }
 
+    void testCornerCases()
+    {
+        implTestCornerCases( mpDevice1bpp );
+        implTestCornerCases( mpDevice32bpp );
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -254,6 +245,7 @@ public:
     CPPUNIT_TEST_SUITE(FillTest);
     CPPUNIT_TEST(testRectFill);
     CPPUNIT_TEST(testClipping);
+    CPPUNIT_TEST(testCornerCases);
     CPPUNIT_TEST_SUITE_END();
 };
 

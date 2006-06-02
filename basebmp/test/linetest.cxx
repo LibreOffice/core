@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linetest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:13 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/debug.hxx>
+#include "tools.hxx"
 
 #include <iostream>
 #include <fstream>
@@ -62,19 +63,6 @@ class LineTest : public CppUnit::TestFixture
 private:
     BitmapDeviceSharedPtr mpDevice1bpp;
     BitmapDeviceSharedPtr mpDevice32bpp;
-
-    int countPixel( const BitmapDeviceSharedPtr& rDevice,
-                    Color                        checkColor ) const
-    {
-        int count(0);
-        const basegfx::B2ISize& rSize( rDevice->getSize() );
-        for( sal_Int32 y=0; y<rSize.getY(); ++y )
-            for( sal_Int32 x=0; x<rSize.getX(); ++x )
-                if( rDevice->getPixel( basegfx::B2IPoint(x,y) ) == checkColor )
-                    ++count;
-
-        return count;
-    }
 
     void implTestBasicDiagonalLines(const BitmapDeviceSharedPtr& rDevice)
     {

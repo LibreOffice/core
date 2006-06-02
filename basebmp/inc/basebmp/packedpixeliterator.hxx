@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX
 #define INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX
 
-#include "metafunctions.hxx"
-#include "stridedarrayiterator.hxx"
+#include <basebmp/metafunctions.hxx>
+#include <basebmp/stridedarrayiterator.hxx>
 
 #include <boost/static_assert.hpp>
 #include <vigra/metaprogramming.hxx>
@@ -47,14 +47,14 @@ namespace basebmp
 {
 
 /// Get bitmask for data at given intra-word position, for given bit depth
-template< typename data_type, int bits_per_pixel, bool MsbFirst, typename difference_type > inline data_type get_mask( difference_type d )
+template< typename value_type, int bits_per_pixel, bool MsbFirst, typename difference_type > inline value_type get_mask( difference_type d )
 {
     BOOST_STATIC_ASSERT(bits_per_pixel > 0);
-    BOOST_STATIC_ASSERT(sizeof(data_type)*8 % bits_per_pixel == 0);
-    BOOST_STATIC_ASSERT(sizeof(data_type)*8 / bits_per_pixel > 1);
-    BOOST_STATIC_ASSERT(vigra::TypeTraits<data_type>::isPOD::asBool);
+    BOOST_STATIC_ASSERT(sizeof(value_type)*8 % bits_per_pixel == 0);
+    BOOST_STATIC_ASSERT(sizeof(value_type)*8 / bits_per_pixel > 1);
+    BOOST_STATIC_ASSERT(vigra::TypeTraits<value_type>::isPOD::asBool);
 
-    const unsigned int nIntraWordPositions( sizeof(data_type)*8 / bits_per_pixel );
+    const unsigned int nIntraWordPositions( sizeof(value_type)*8 / bits_per_pixel );
 
     //      create bits_per_pixel 1s      shift to intra-word position
     return ((~(~0 << bits_per_pixel)) << bits_per_pixel*(MsbFirst ?
@@ -69,26 +69,24 @@ template< int num_intraword_positions, int bits_per_pixel, bool MsbFirst, typena
                            remainder);
 }
 
-template< typename Datatype,
-          typename Valuetype,
+template< typename Valuetype,
           int      bits_per_pixel,
           bool     MsbFirst > class PackedPixelColumnIterator
 {
 public:
     // no reference, no index_reference type here
-    typedef Datatype                                    data_type;
     typedef Valuetype                                   value_type;
     typedef int                                         difference_type;
     typedef image_traverser_tag                         iterator_category;
 
-    typedef typename remove_const<data_type>::type      mask_type;
-    typedef data_type*                                  pointer;
-    typedef StridedArrayIterator< data_type >           MoveY;
+    typedef typename remove_const<value_type>::type     mask_type;
+    typedef value_type*                                 pointer;
+    typedef StridedArrayIterator< value_type >          MoveY;
 
     enum {
-        /** The number of pixel within a single data_type value
+        /** The number of pixel within a single value_type value
          */
-        num_intraword_positions=sizeof(data_type)*8/bits_per_pixel,
+        num_intraword_positions=sizeof(value_type)*8/bits_per_pixel,
         /** Bit mask for one pixel (least significant bits)
          */
         bit_mask=~(~0 << bits_per_pixel)
@@ -122,13 +120,13 @@ private:
 public:
     PackedPixelColumnIterator() :
         y(0),
-        mask_( get_mask<data_type, bits_per_pixel, MsbFirst, difference_type>(0) ),
+        mask_( get_mask<value_type, bits_per_pixel, MsbFirst, difference_type>(0) ),
         shift_( get_shift<num_intraword_positions, bits_per_pixel, MsbFirst, difference_type>(0) )
     {}
 
     PackedPixelColumnIterator( const MoveY& base, difference_type remainder ) :
         y(base),
-        mask_( get_mask<data_type, bits_per_pixel, MsbFirst>(remainder) ),
+        mask_( get_mask<value_type, bits_per_pixel, MsbFirst>(remainder) ),
         shift_( get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder) )
     {}
 
@@ -221,14 +219,14 @@ public:
 
     value_type get() const
     {
-        // TODO(Q3): use traits to get unsigned type for data_type (if
+        // TODO(Q3): use traits to get unsigned type for value_type (if
         // not already)
         return static_cast<unsigned int>(*y() & mask_) >> shift_;
     }
 
     value_type get(difference_type d) const
     {
-        // TODO(Q3): use traits to get unsigned type for data_type (if
+        // TODO(Q3): use traits to get unsigned type for value_type (if
         // not already)
         return static_cast<unsigned int>(*y(d) & mask_) >> shift_;
     }
@@ -246,25 +244,23 @@ public:
     }
 };
 
-template< typename Datatype,
-          typename Valuetype,
+template< typename Valuetype,
           int      bits_per_pixel,
           bool     MsbFirst > class PackedPixelRowIterator
 {
 public:
     // no reference, no index_reference type here
-    typedef Datatype                                    data_type;
     typedef Valuetype                                   value_type;
     typedef int                                         difference_type;
     typedef image_traverser_tag                         iterator_category;
 
-    typedef typename remove_const<data_type>::type      mask_type;
-    typedef data_type*                                  pointer;
+    typedef typename remove_const<value_type>::type     mask_type;
+    typedef value_type*                                 pointer;
 
     enum {
-        /** The number of pixel within a single data_type value
+        /** The number of pixel within a single value_type value
          */
-        num_intraword_positions=sizeof(data_type)*8/bits_per_pixel,
+        num_intraword_positions=sizeof(value_type)*8/bits_per_pixel,
         /** Bit mask for one pixel (least significant bits)
          */
         bit_mask=~(~0 << bits_per_pixel)
@@ -277,7 +273,7 @@ private:
 
     void update_mask()
     {
-        mask_ = get_mask<data_type, bits_per_pixel, MsbFirst>(remainder_);
+        mask_ = get_mask<value_type, bits_per_pixel, MsbFirst>(remainder_);
     }
 
     void inc()
@@ -290,7 +286,7 @@ private:
 
         const mask_type shifted_mask(
             MsbFirst ?
-            // TODO(Q3): use traits to get unsigned type for data_type
+            // TODO(Q3): use traits to get unsigned type for value_type
             // (if not already)
             static_cast<unsigned int>(mask_) >> bits_per_pixel :
             mask_ << bits_per_pixel );
@@ -321,7 +317,7 @@ private:
         const mask_type shifted_mask(
             MsbFirst ?
             mask_ << bits_per_pixel :
-            // TODO(Q3): use traits to get unsigned type for data_type
+            // TODO(Q3): use traits to get unsigned type for value_type
             // (if not already)
             static_cast<unsigned int>(mask_) >> bits_per_pixel );
 
@@ -346,7 +342,7 @@ private:
 public:
     PackedPixelRowIterator() :
         data_(0),
-        mask_( get_mask<data_type, bits_per_pixel, MsbFirst, difference_type>(0) ),
+        mask_( get_mask<value_type, bits_per_pixel, MsbFirst, difference_type>(0) ),
         remainder_(0)
     {}
 
@@ -466,7 +462,7 @@ public:
 
     value_type get() const
     {
-        // TODO(Q3): use traits to get unsigned type for data_type (if
+        // TODO(Q3): use traits to get unsigned type for value_type (if
         // not already)
         return static_cast<unsigned int>(*data_ & mask_) >>
             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder_);
@@ -496,34 +492,36 @@ public:
     }
 };
 
-template< typename Datatype,
-          typename Valuetype,
+/** 2D image iterator for packed pixel formats
+
+    This iterator can be used for image formats that pack more than
+    one pixel into an machine data type (like one bit per pixel, eight
+    of which packed into one char)
+ */
+template< typename Valuetype,
           int      bits_per_pixel,
           bool     MsbFirst > class PackedPixelIterator
 {
 public:
     // no reference, no index_reference type here
-    typedef Datatype                                    data_type;
     typedef Valuetype                                   value_type;
     typedef vigra::Diff2D                               difference_type;
     typedef image_traverser_tag                         iterator_category;
-    typedef PackedPixelRowIterator<data_type,
-                                   value_type,
+    typedef PackedPixelRowIterator<value_type,
                                    bits_per_pixel,
                                    MsbFirst>            row_iterator;
-    typedef PackedPixelColumnIterator<data_type,
-                                      value_type,
+    typedef PackedPixelColumnIterator<value_type,
                                       bits_per_pixel,
                                       MsbFirst>         column_iterator;
 
-    typedef data_type*                                  pointer;
+    typedef value_type*                                 pointer;
     typedef int                                         MoveX;
-    typedef StridedArrayIterator< data_type >           MoveY;
+    typedef StridedArrayIterator< value_type >          MoveY;
 
     enum {
-        /** The number of pixel within a single data_type value
+        /** The number of pixel within a single value_type value
          */
-        num_intraword_positions=sizeof(data_type)*8/bits_per_pixel,
+        num_intraword_positions=sizeof(value_type)*8/bits_per_pixel,
         /** Bit mask for one pixel (least significant bits)
          */
         bit_mask=~(~0 << bits_per_pixel)
@@ -621,17 +619,17 @@ public:
     {
         const int remainder( x % num_intraword_positions );
 
-        // TODO(Q3): use traits to get unsigned type for data_type (if
+        // TODO(Q3): use traits to get unsigned type for value_type (if
         // not already)
         value_type nTmp0( *current() );
         unsigned int nTmp1(static_cast<unsigned int>(*current() &
-                                                     get_mask<data_type, bits_per_pixel, MsbFirst>(remainder)));
+                                                     get_mask<value_type, bits_per_pixel, MsbFirst>(remainder)));
         unsigned int nTmp2( (static_cast<unsigned int>(*current() &
-                                                       get_mask<data_type, bits_per_pixel, MsbFirst>(remainder))
+                                                       get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
                              >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder)));
 
         return (static_cast<unsigned int>(*current() &
-                                          get_mask<data_type, bits_per_pixel, MsbFirst>(remainder))
+                                          get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
 
@@ -639,17 +637,17 @@ public:
     {
         const int remainder( x(d.x) % num_intraword_positions );
 
-        // TODO(Q3): use traits to get unsigned type for data_type (if
+        // TODO(Q3): use traits to get unsigned type for value_type (if
         // not already)
         return (static_cast<unsigned int>(*current(d.x,d.y) &
-                                          get_mask<data_type, bits_per_pixel, MsbFirst>(remainder))
+                                          get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
 
     void set( value_type v ) const
     {
         const int remainder( x % num_intraword_positions );
-        const int mask( get_mask<data_type, bits_per_pixel, MsbFirst>(remainder) );
+        const int mask( get_mask<value_type, bits_per_pixel, MsbFirst>(remainder) );
         const value_type pixel_value(
             (v <<
              get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder))
@@ -661,7 +659,7 @@ public:
     void set( value_type v, difference_type const & d ) const
     {
         const int remainder( (x + d.x) % num_intraword_positions );
-        const int mask( get_mask<data_type, bits_per_pixel, MsbFirst>(remainder) );
+        const int mask( get_mask<value_type, bits_per_pixel, MsbFirst>(remainder) );
         const value_type pixel_value(
             (v <<
              get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder))

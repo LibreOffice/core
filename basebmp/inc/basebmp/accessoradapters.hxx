@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:11 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 #ifndef INCLUDED_BASEBMP_ACCESSORADAPTERS_HXX
 #define INCLUDED_BASEBMP_ACCESSORADAPTERS_HXX
 
-#include "metafunctions.hxx"
-#include "packedpixeliterator.hxx"
-#include "paletteimageaccessor.hxx"
+#include <basebmp/metafunctions.hxx>
+#include <basebmp/packedpixeliterator.hxx>
+#include <basebmp/paletteimageaccessor.hxx>
 
 namespace basebmp
 {
@@ -230,16 +230,14 @@ template< class WrappedAccessor,
           class Iterator > struct maskedAccessor< WrappedAccessor,
                                                   MaskAccessor,
                                                   Iterator,
-                                                  PackedPixelIterator< typename MaskAccessor::data_type,
-                                                                       typename MaskAccessor::value_type,
+                                                  PackedPixelIterator< typename MaskAccessor::value_type,
                                                                        1,
                                                                        true > >
 {
     typedef BinaryInputAccessorAdapter< WrappedAccessor,
                                         MaskAccessor,
                                         Iterator,
-                                        PackedPixelIterator< typename MaskAccessor::data_type,
-                                                             typename MaskAccessor::value_type,
+                                        PackedPixelIterator< typename MaskAccessor::value_type,
                                                              1,
                                                              true >,
                                         FastMaskFunctor< typename WrappedAccessor::value_type > >
@@ -250,16 +248,14 @@ template< class WrappedAccessor,
           class Iterator > struct maskedAccessor< WrappedAccessor,
                                                   MaskAccessor,
                                                   Iterator,
-                                                  PackedPixelIterator< typename MaskAccessor::data_type,
-                                                                       typename MaskAccessor::value_type,
+                                                  PackedPixelIterator< typename MaskAccessor::value_type,
                                                                        1,
                                                                        false > >
 {
     typedef BinaryInputAccessorAdapter< WrappedAccessor,
                                         MaskAccessor,
                                         Iterator,
-                                        PackedPixelIterator< typename MaskAccessor::data_type,
-                                                             typename MaskAccessor::value_type,
+                                        PackedPixelIterator< typename MaskAccessor::value_type,
                                                              1,
                                                              false >,
                                         FastMaskFunctor< typename WrappedAccessor::value_type > >

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:11 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 #ifndef INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
 #define INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
 
+#ifndef _BGFX_TOOLS_RECTCLIPTOOLS_HXX
 #include <basegfx/tools/rectcliptools.hxx>
+#endif
 
 namespace basebmp
 {
