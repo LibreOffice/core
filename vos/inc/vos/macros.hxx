@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:59:47 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,25 +157,13 @@
 #endif
 
 // def. for arbitrary namespace
-#ifdef _USE_NAMESPACE
-#   define VOS_NAMESPACE(class_name, name_space) name_space::class_name
-#else
-#   define VOS_NAMESPACE(class_name, name_space) class_name
-#endif
+#define VOS_NAMESPACE(class_name, name_space) name_space::class_name
 
 // sal_Int16 def. for namespace vos
-#ifdef _USE_NAMESPACE
-#   define NAMESPACE_VOS(class_name) vos::class_name
-#else
-#   define NAMESPACE_VOS(class_name) class_name
-#endif
+#define NAMESPACE_VOS(class_name) vos::class_name
 
 // sal_Int16 def. for namespace std
-#ifdef _USE_NAMESPACE
-#   define NAMESPACE_STD(class_name) std::class_name
-#else
-#   define NAMESPACE_STD(class_name) class_name
-#endif
+#define NAMESPACE_STD(class_name) std::class_name
 
 #endif //_VOS_MACROS_HXX_
 

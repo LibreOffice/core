@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:58:10 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,8 @@
 #   include <vos/object.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
-
 
 /** ICondition
 
@@ -147,9 +144,7 @@ protected:
 
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  // _VOS_CONDITN_HXX_
 

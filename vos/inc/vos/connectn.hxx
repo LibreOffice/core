@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:58:26 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,8 @@
 #   include <rtl/ustring.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 //---------------------------------------------------------------------------
 /** abstract connection class
  */
@@ -125,9 +123,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getDestination() = 0;
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif // _VOS_CONNECTN_HXX_
 
