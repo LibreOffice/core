@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 08:38:13 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:51:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@ DISABLE_MOZ_EXECUTABLE=TRUE
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
-CFLAGS:=-isystem $(SYSBASE)/usr/include
+# hmm... rather gcc specific switches...
+CFLAGS:=-isystem $(SYSBASE)/usr/include -B$(SYSBASE)/usr/lib
 LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -LX11
 SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/usr/X11R6/lib
 .EXPORT : CFLAGS LDFLAGS
