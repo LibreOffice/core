@@ -4,9 +4,9 @@
  *
  *  $RCSfile: istream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:59:34 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,8 @@
 #   include <vos/types.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 /** Interface for a stream of data, on that you can read and write blocks of bytes.
 */
@@ -78,9 +76,7 @@ public:
     virtual sal_Bool SAL_CALL isEof() const = 0;
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  // _VOS_ISTREAM_HXX_
 
