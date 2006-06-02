@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontitem.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:42:54 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,10 @@
 #endif
 
 class SvXMLUnitConverter;
-#ifdef _USE_NAMESPACE
 namespace rtl
 {
-#endif
     class OUString;
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 // class SvxFontItem -----------------------------------------------------
 
