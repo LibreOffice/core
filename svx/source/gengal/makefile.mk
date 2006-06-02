@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:52:28 $
+#   last change: $Author: vg $ $Date: 2006-06-02 11:30:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,9 @@ APP1TARGET= $(TARGET)
 .ELSE			# .IF "$(GUI)"=="WNT"
 APP1TARGET= $(TARGET).bin
 .ENDIF			# .IF "$(GUI)"=="WNT"
-APP1OBJS=	$(OBJFILES)
+
+APP1OBJS=   $(OBJFILES)
+
 APP1STDLIBS=$(TOOLSLIB) 		\
             $(OSLLIB)			\
             $(ONELIB)			\
@@ -82,35 +84,18 @@ APP1STDLIBS=$(TOOLSLIB) 		\
 APP1DEF=	$(MISC)$/$(TARGET).def
 .ENDIF
 
-
 .IF "$(COM)"=="GCC"
 ADDOPTFILES=$(OBJ)$/gengal.obj
 add_cflagscxx="-frtti -fexceptions"
 .ENDIF
-
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
 ALLTAR : \
-    $(SCRIPTFILES) \
-    $(BIN)$/gengal.rdb 
+    $(SCRIPTFILES)
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
     +@tr -d "\015" < $(@:f:+".sh") > $@
-
-$(BIN)$/gengal.rdb : makefile.mk $(UNOUCRRDB)
-    rm -f $@
-    $(GNUCOPY) $(UNOUCRRDB) $@
-    +cd $(BIN) && \
-        regcomp -register -r gengal.rdb \
-            -c i18nsearch.uno$(DLLPOST) \
-            -c i18npool.uno$(DLLPOST) \
-            -c configmgr2.uno$(DLLPOST) \
-            -c servicemgr.uno$(DLLPOST) \
-            -c $(DLLPRE)fwl$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
-            -c $(DLLPRE)ucpfile1$(DLLPOST) \
-            -c $(DLLPRE)fileacc$(DLLPOST) \
-            -c $(DLLPRE)ucb1$(DLLPOST)
 
