@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 16:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <vigra/mathutil.hxx>
 
 #include <algorithm>
-
+#include <functional>
 
 namespace basebmp
 {
@@ -109,6 +109,8 @@ public:
         num_entries(numEntries)
     {}
 
+    data_type lookup(value_type const& v) const { return find_best_match(v); }
+
     template< class Iterator >
     value_type operator()(Iterator const& i) const { return toCol(palette[i.get()]); }
     value_type operator()(data_type const* i) const { return toCol(palette[*i]); }
@@ -138,6 +140,8 @@ public:
 };
 
 
+//-----------------------------------------------------------------------------
+
 /// Retrieve raw pixel data accessor for given Accessor type
 template< class Accessor > struct rawAccessor
 {
@@ -158,6 +162,35 @@ template< typename ValueType, typename DataType >
 struct rawAccessor< PaletteImageAccessor< ValueType, DataType > >
 {
     typedef RawAccessor< ValueType > type;
+};
+
+
+//-----------------------------------------------------------------------------
+
+/// Retrieve stand-alone color lookup function for given Accessor type
+template< class Accessor > struct colorLookup
+{
+    // generic case: accessor has no lookup functionality
+    typedef std::project2nd< Accessor, typename Accessor::value_type > type;
+};
+
+/** Lookup index value for given Color value in PaletteImageAccessor
+ */
+template< class Accessor > struct ColorLookup
+{
+    typename Accessor::data_type operator()( const Accessor&               acc,
+                                             typename Accessor::value_type v )
+    {
+        return acc.lookup(v);
+    }
+};
+
+// specialization for PaletteImageAccessor, to provide the
+// corresponding ColorLookup functor
+template< typename ValueType, typename DataType >
+struct colorLookup< PaletteImageAccessor< ValueType, DataType > >
+{
+    typedef ColorLookup< PaletteImageAccessor< ValueType, DataType > > type;
 };
 
 } // namespace basebmp

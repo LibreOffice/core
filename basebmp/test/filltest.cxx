@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filltest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:15 $
+ *  last change: $Author: thb $ $Date: 2006-06-02 16:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
@@ -100,7 +102,8 @@ private:
     {
         rDevice->clear(Color(0));
 
-        const basegfx::B2DRange aEmpty(0,0,0,11);
+        const basegfx::B2DRange aEmpty1(0,0,0,11);
+        const basegfx::B2DRange aEmpty2(0,0,11,0);
         const basegfx::B2DRange aVertLineLeft(0,0,1,11);
         const basegfx::B2DRange aVertLineRight(10,0,11,11);
         const basegfx::B2DRange aHorzLineTop(0,0,11,1);
@@ -109,7 +112,15 @@ private:
         const Color aCol(0xFFFFFFFF);
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
-                basegfx::tools::createPolygonFromRect( aEmpty )),
+                basegfx::tools::createPolygonFromRect( aEmpty1 )),
+            aCol,
+            DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
+                               countPixel( rDevice, aCol ) == 0);
+
+        rDevice->fillPolyPolygon(
+            basegfx::B2DPolyPolygon(
+                basegfx::tools::createPolygonFromRect( aEmpty2 )),
             aCol,
             DrawMode_PAINT );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
@@ -158,6 +169,18 @@ private:
         const basegfx::B2IPoint aPt4(5,10);
         CPPUNIT_ASSERT_MESSAGE("bottom-middle pixel set",
                                rDevice->getPixel(aPt4) == aCol);
+
+        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
+            "m 0 0l7 7h-1z" );
+
+        basegfx::B2DPolyPolygon aPoly;
+        basegfx::tools::importFromSvgD( aPoly, aSvg );
+        rDevice->fillPolyPolygon(
+            aPoly,
+            aCol,
+            DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 43",
+                               countPixel( rDevice, aCol ) == 43);
     }
 
     void implTestClipping(const BitmapDeviceSharedPtr& rDevice)
