@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 14:20:36 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,7 @@
 #include <vos/diagnose.hxx>
 //#include <osl/tools.h>
 
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
 
 
 VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OSocketAddr, vos),
