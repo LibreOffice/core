@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:33:29 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,8 @@
 #   include <vos/macros.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 namespace vos
 {
-#endif
 
 // ***************************************
 // Object super class
@@ -201,9 +199,7 @@ public: \
     VOS_NAMESPACE(OObject, vos)* class_name::createObject(const VOS_NAMESPACE(OCreateParam, vos)& rParam) \
         { return new class_name(rParam); }
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif // _VOS_OBJECT_HXX_
 
