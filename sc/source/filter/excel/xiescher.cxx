@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:27:03 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include <stdio.h>
 
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
