@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbecdef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:34:51 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,22 +71,18 @@ static uno::Reference<uno::XInterface> SAL_CALL createGconfBackend(const uno::Re
 
         if (xCurrentContext.is())
         {
-#ifndef ENABLE_LOCKDOWN
             uno::Any aValue = xCurrentContext->getValueByName(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "system.desktop-environment" ) ) );
 
             rtl::OUString aDesktopEnvironment;
             if ( (aValue >>= aDesktopEnvironment) && (aDesktopEnvironment.equalsAscii("GNOME")) )
             {
-#endif // ! ENABLE_LOCKDOWN
                 // ORBit-2 versions < 2.8 cause a deadlock with the gtk+ VCL plugin
                 if ( (orbit_major_version >= 2) && (orbit_minor_version >= 8) )
                 {
                     return * GconfBackend::createInstance(xContext);
                 }
-#ifndef ENABLE_LOCKDOWN
             }
-#endif // ! ENABLE_LOCKDOWN
         }
 
         return uno::Reference<uno::XInterface>();
