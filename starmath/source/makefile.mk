@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-05 08:02:02 $
+#   last change: $Author: vg $ $Date: 2006-06-02 12:46:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ SLO2FILES =  \
         $(SLO)$/detreg.obj
 
 SLOFILES = \
+    $(SLO)$/smdetect.obj \
     $(SLO1FILES) \
     $(SLO2FILES)
 
