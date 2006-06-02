@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:10:44 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 
 
-#if defined ( _USE_NAMESPACE ) && !defined ( WNT )
+#if !defined ( WNT )
 
 void _OThread_WorkerFunction(void* pthis)
 {
@@ -71,10 +71,7 @@ void SAL_CALL _OThread_WorkerFunction(void* pthis)
     }
 }
 
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
