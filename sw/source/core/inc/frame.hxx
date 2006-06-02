@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:05:27 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,12 +294,11 @@ class SwFrm: public SwClient
     //Cache fuer (Umrandungs-)Attribute.
     static SwCache *pCache;
 
-#ifndef PRODUCT
-    //Nur zu Debugging Zwecken! eindeutige Nummerierung aller Frames,
-    //verwaltet in den CToren.
-    static USHORT nLastFrmId;
-    const  USHORT nFrmId;
-#endif
+    // --> OD 2006-05-10 #i65250#
+    // frame ID is now in general available - used for layout loop control
+    static sal_uInt32 mnLastFrmId;
+    const  sal_uInt32 mnFrmId;
+    // <--
 
     SwLayoutFrm *pUpper;
     SwFrm       *pNext;
@@ -927,10 +926,10 @@ public:
     inline BOOL IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 
-#ifndef PRODUCT
-    inline USHORT GetFrmId() const { return nFrmId; }
-    inline USHORT GetLastFrmId() const { return nLastFrmId; }
-#endif
+    // --> OD 2006-05-10 #i65250#
+    inline sal_uInt32 GetFrmId() const { return mnFrmId; }
+    inline sal_uInt32 GetLastFrmId() const { return mnLastFrmId; }
+    // <--
 };
 
 inline BOOL SwFrm::IsInDocBody() const
