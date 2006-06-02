@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:13:24 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 12:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,16 +219,16 @@ SwFrm::SwFrm( SwModify *pMod ) :
     pPrev( 0 ),
     pNext( 0 ),
     pUpper( 0 ),
-    pDrawObjs( 0 )
-#ifndef PRODUCT
-    , nFrmId( SwFrm::nLastFrmId++ )
-#endif
+    pDrawObjs( 0 ),
+    // --> OD 2006-05-10 #i65250#
+    mnFrmId( SwFrm::mnLastFrmId++ )
+    // <--
 {
 #ifndef PRODUCT
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
 #if OSL_DEBUG_LEVEL > 1
     static USHORT nStopAt = USHRT_MAX;
-    if ( nFrmId == nStopAt )
+    if ( GetFrmId() == nStopAt )
     {
         int bla = 5;
     }
