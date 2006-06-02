@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testresource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:03:47 $
+ *  last change: $Author: vg $ $Date: 2006-06-02 13:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,9 @@
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 
-#ifdef _USE_NAMESPACE
 using namespace rtl;
 using namespace vos;
 using namespace usr;
-#endif
 
 class MyApp : public Application
 {
