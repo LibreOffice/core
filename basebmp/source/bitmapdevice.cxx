@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 16:14:23 $
+ *  last change: $Author: thb $ $Date: 2006-06-06 11:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "basebmp/accessoradapters.hxx"
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/linerenderer.hxx"
-#include "basebmp/copyimage.hxx"
 
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
@@ -62,6 +61,7 @@
 #include <vigra/basicimage.hxx>
 #include <vigra/imageiterator.hxx>
 #include <vigra/resizeimage.hxx>
+#include "vigra/copyimage.hxx"
 
 
 namespace basebmp
@@ -479,16 +479,16 @@ namespace
             boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
             OSL_ASSERT( pAlpha );
 
-            copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+            vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
                                                        rSrcRect.getMinY()),
-                       pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
+                              pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
                                                        rSrcRect.getMaxY()),
-                       pAlpha->maAccessor,
-                       maBegin + vigra::Diff2D(rDstPoint.getX(),
+                              pAlpha->maAccessor,
+                              maBegin + vigra::Diff2D(rDstPoint.getX(),
                                                rDstPoint.getY()),
-                       ConstantColorBlendAccessorAdapter<DestAccessor,Color>(
-                           maAccessor,
-                           rSrcColor) );
+                              ConstantColorBlendAccessorAdapter<DestAccessor,Color>(
+                                  maAccessor,
+                                  rSrcColor) );
         }
 
         virtual void drawMaskedColor_i(Color                        rSrcColor,
@@ -903,6 +903,9 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                DrawMode                     drawMode,
                                const BitmapDeviceSharedPtr& rClip )
 {
+#if 1
+    drawBitmap(rSrcBitmap, rSrcRect, rDstRect, drawMode);
+#else
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
     const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
     basegfx::B2IRange         aSrcRange( rSrcRect );
@@ -926,6 +929,7 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
             OSL_ENSURE( false, "Generic output not yet implemented!" );
         }
     }
+#endif
 }
 
 void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
@@ -959,6 +963,9 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
                                     const basegfx::B2IPoint&     rDstPoint,
                                     const BitmapDeviceSharedPtr& rClip )
 {
+#if 1
+    drawMaskedColor(rSrcColor, rAlphaMask, rSrcRect, rDstPoint);
+#else
     const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
     const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
     basegfx::B2IRange         aSrcRange( rSrcRect );
@@ -982,6 +989,7 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
             OSL_ENSURE( false, "Generic output not yet implemented!" );
         }
     }
+#endif
 }
 
 void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
