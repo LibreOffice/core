@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2006-06-07 09:21:55 $
+ *  last change: $Author: hdu $ $Date: 2006-06-07 10:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,9 @@ public:
     Color operator-( Color col ) const { return Color(vigra::abs((int)getRed()-col.getRed()),
                                                       vigra::abs((int)getGreen()-col.getGreen()),
                                                       vigra::abs((int)getBlue()-col.getBlue())); }
-    Color operator*( sal_uInt8 n ) const { return Color(((sal_uInt32)n*getRed())/255,
-                                                        ((sal_uInt32)n*getGreen())/255,
-                                                        ((sal_uInt32)n*getBlue())/255); }
+    Color operator*( sal_uInt8 n ) const { return Color(((sal_uInt32)n*getRed())/SAL_MAX_UINT8,
+                                                        ((sal_uInt32)n*getGreen())/SAL_MAX_UINT8,
+                                                        ((sal_uInt32)n*getBlue())/SAL_MAX_UINT8); }
     Color operator*( double n ) const { return Color((sal_uInt8)(n*getRed()+.5),
                                                      (sal_uInt8)(n*getGreen()+.5),
                                                      (sal_uInt8)(n*getBlue()+.5)); }
