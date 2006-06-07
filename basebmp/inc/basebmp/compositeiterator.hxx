@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compositeiterator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
+ *  last change: $Author: thb $ $Date: 2006-06-08 00:01:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,6 +343,23 @@ public:
         x(this->maIter1.x,this->maIter2.x),
         y(this->maIter1.y,this->maIter2.y)
     {}
+
+    CompositeIterator2D( const CompositeIterator2D& rOld ) :
+        base_type(rOld),
+        x(this->maIter1.x,this->maIter2.x),
+        y(this->maIter1.y,this->maIter2.y)
+    {}
+
+    CompositeIterator2D& operator=( const CompositeIterator2D& rNew )
+    {
+        this->maIter1 = rNew.maIter1;
+        this->maIter2 = rNew.maIter2;
+
+        x = MoveX(this->maIter1.x,
+                  this->maIter2.x);
+        y = MoveY(this->maIter1.y,
+                  this->maIter2.y);
+    }
 
     row_iterator rowIterator() const
     {

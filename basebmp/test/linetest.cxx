@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linetest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:15 $
+ *  last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ public:
     void testBasicVerticalLines()
     {
         implTestBasicVerticalLines( mpDevice1bpp );
-        //implTestBasicVerticalLines( mpDevice32bpp );
+        implTestBasicVerticalLines( mpDevice32bpp );
     }
 
     // test pixel rounding (should always tend towards start point of

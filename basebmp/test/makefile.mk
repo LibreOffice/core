@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: thb $ $Date: 2006-06-02 08:36:15 $
+#   last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ CFLAGS += -fno-inline
 SHL1OBJS=  \
     $(SLO)$/basictest.obj		\
     $(SLO)$/bmptest.obj		    \
+    $(SLO)$/cliptest.obj		\
     $(SLO)$/filltest.obj		\
     $(SLO)$/linetest.obj		\
     $(SLO)$/masktest.obj		\

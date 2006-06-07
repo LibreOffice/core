@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapdevice.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-08 00:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,16 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                           sal_Int32                        nScanlineFormat,
                                           const RawMemorySharedArray&      rMem,
                                           const PaletteMemorySharedVector& rPalette );
+
+
+/** Factory method to clone a BitmapDevice from a given prototype.
+
+    All attributes (like scanline format and top-down state) are
+    copied, only the size can be varied. Note that the prototype's
+    bitmap content is <em>not</em> copied, only a palette (if any).
+ */
+BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&        rSize,
+                                         const BitmapDeviceSharedPtr&     rProto );
 
 }
 

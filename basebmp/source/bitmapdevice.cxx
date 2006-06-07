@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
+ *  last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,9 +866,11 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint& rPt1,
     basegfx::B2DPoint aPt2( rPt2 );
 
     if( basegfx::tools::liangBarskyClip2D(aPt1,aPt2,mpImpl->maFloatBounds) )
+    {
         drawLine_i( aPt1, aPt2,
                     lineColor,
                     drawMode );
+    }
 }
 
 void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
@@ -877,9 +879,6 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
                              DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip )
 {
-#if 1
-    drawLine( rPt1, rPt2, lineColor, drawMode );
-#else
     basegfx::B2DPoint aPt1( rPt1 );
     basegfx::B2DPoint aPt2( rPt2 );
 
@@ -893,7 +892,6 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
         else
             OSL_ENSURE( false, "Generic output not yet implemented!" );
     }
-#endif
 }
 
 void BitmapDevice::drawPolygon( const basegfx::B2DPolygon& rPoly,
@@ -916,9 +914,6 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
                                 DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip )
 {
-#if 1
-    drawPolygon( rPoly, lineColor, drawMode );
-#else
     basegfx::B2DPolyPolygon aPoly(
         basegfx::tools::clipPolygonOnRange( rPoly,
                                             mpImpl->maFloatBounds,
@@ -931,7 +926,6 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
                 drawPolygon_i( aPoly.getB2DPolygon(i), lineColor, drawMode, rClip );
             else
                 OSL_ENSURE( false, "Generic output not yet implemented!" );
-#endif
 }
 
 void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
@@ -946,14 +940,10 @@ void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                                     DrawMode                       drawMode,
                                     const BitmapDeviceSharedPtr&   rClip )
 {
-#if 1
-    fillPolyPolygon( rPoly, fillColor, drawMode );
-#else
     if( isCompatibleClipMask( rClip ) )
         fillPolyPolygon_i( rPoly, fillColor, drawMode, mpImpl->maBounds, rClip );
     else
         OSL_ENSURE( false, "Generic output not yet implemented!" );
-#endif
 }
 
 
@@ -1122,9 +1112,6 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                DrawMode                     drawMode,
                                const BitmapDeviceSharedPtr& rClip )
 {
-#if 1
-    drawBitmap(rSrcBitmap, rSrcRect, rDstRect, drawMode);
-#else
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
     const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
     basegfx::B2IRange         aSrcRange( rSrcRect );
@@ -1148,7 +1135,6 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
             OSL_ENSURE( false, "Generic output not yet implemented!" );
         }
     }
-#endif
 }
 
 void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
@@ -1182,9 +1168,6 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                     const basegfx::B2IPoint&     rDstPoint,
                                     const BitmapDeviceSharedPtr& rClip )
 {
-#if 1
-    drawMaskedColor(aSrcColor, rAlphaMask, rSrcRect, rDstPoint);
-#else
     const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
     const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
     basegfx::B2IRange         aSrcRange( rSrcRect );
@@ -1201,14 +1184,13 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         if( isCompatibleAlphaMask( rAlphaMask ) &&
             isCompatibleClipMask( rClip ) )
         {
-            drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
+            drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
         }
         else
         {
             OSL_ENSURE( false, "Generic output not yet implemented!" );
         }
     }
-#endif
 }
 
 void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -1217,9 +1199,6 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                      const basegfx::B2IRange&     rDstRect,
                                      DrawMode                     drawMode )
 {
-#if 1
-    drawMaskedBitmap(rSrcBitmap, rMask, rSrcRect, rDstRect, drawMode);
-#else
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
@@ -1245,7 +1224,6 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
             OSL_ENSURE( false, "Generic output not yet implemented!" );
         }
     }
-#endif
 }
 
 void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -1447,6 +1425,16 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    nScanlineFormat,
                                    rMem,
                                    rPalette );
+}
+
+BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&        rSize,
+                                         const BitmapDeviceSharedPtr&     rProto )
+{
+    return createBitmapDeviceImpl( rSize,
+                                   rProto->isTopDown(),
+                                   rProto->getScanlineFormat(),
+                                   boost::shared_array< sal_uInt8 >(),
+                                   rProto->getPalette() );
 }
 
 } // namespace basebmp

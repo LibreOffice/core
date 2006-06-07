@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
+ *  last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -999,43 +999,46 @@ void TestWindow::Paint( const Rectangle& rRect )
 {
     {
         const basegfx::B2ISize aSize(10,10);
-        basebmp::BitmapDeviceSharedPtr pBmp( basebmp::createBitmapDevice( aSize,
-                                                                          true,
-                                                                          basebmp::Format::EIGHT_BIT_GRAY ));
         basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aSize,
                                                                              true,
-                                                                             basebmp::Format::ONE_BIT_MSB_PAL ));
+                                                                             basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+        basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aSize,
+                                                                           true,
+                                                                           basebmp::Format::ONE_BIT_MSB_GRAY ));
         ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
-            "m 0 0h5v10h5v-5h-10z" );
-
+            "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
-        const basebmp::Color aCol(0xFFFFFFFF);
-        pBmp->clear(basebmp::Color(0));
-
-        const basegfx::B2IPoint aPt(3,3);
-        const basebmp::Color aCol4(0x01);
-        pBmp->setPixel( aPt, aCol4, basebmp::DrawMode_PAINT );
-
-        pBmp->fillPolyPolygon(
-            aPoly,
-            aCol,
+        pMask->clear(basebmp::Color(0xFFFFFFFF));
+        pMask->drawPolygon(
+            aPoly.getB2DPolygon(0),
+            basebmp::Color(0),
             basebmp::DrawMode_PAINT );
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
-        const basegfx::B2IPoint aOutPos(5,5);
-        const basebmp::Color    aCol2(0xF0F0F0F0);
-        pDevice->clear(basebmp::Color(0));
-        pDevice->drawMaskedColor(
-            aCol2,
-            pBmp,
-            aSourceRect,
-            aOutPos );
+        basebmp::BitmapDeviceSharedPtr pBmp( basebmp::cloneBitmapDevice(
+                                                 basegfx::B2IVector(3,3),
+                                                 pDevice ));
+        basebmp::Color aCol1(0);
+        basebmp::Color aCol2(0xFFFFFFFF);
+        pBmp->clear(aCol1);
+        pBmp->setPixel(basegfx::B2IPoint(0,0),aCol2,basebmp::DrawMode_PAINT);
+        pBmp->setPixel(basegfx::B2IPoint(1,1),aCol2,basebmp::DrawMode_PAINT);
+        pBmp->setPixel(basegfx::B2IPoint(2,2),aCol2,basebmp::DrawMode_PAINT);
+
+        pDevice->clear(aCol1);
+        pDevice->drawBitmap(pBmp,
+                            basegfx::B2IRange(0,0,3,3),
+                            basegfx::B2IRange(2,2,7,7),
+//                            basegfx::B2IRange(-1,-1,5,5),
+                            basebmp::DrawMode_PAINT,
+                            pMask);
 
         std::ofstream output("32bpp_test.dump");
         debugDump( pDevice, output );
         std::ofstream output2("32bpp_bmp.dump");
         debugDump( pBmp, output2 );
+        std::ofstream output3("clipmask.dump");
+        debugDump( pMask, output3 );
     }
 
     enum{ srcBitDepth=1, dstBitDepth=4 };
