@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ namespace basebmp
         for( int y=0; y<aSize.getY(); ++y )
         {
             for( int x=0; x<aSize.getX(); ++x )
-                rOutputStream << std::setw(8) << (sal_uInt32)rDevice->getPixel( basegfx::B2IPoint(x,y) ) << " ";
+                rOutputStream << std::setw(8) << (sal_uInt32)rDevice->getPixel( basegfx::B2IPoint(x,y) ).toInt32() << " ";
             rOutputStream << std::endl;
         }
     }

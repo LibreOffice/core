@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stridedarrayiterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,30 +59,30 @@ public:
                      reinterpret_cast<T*>(rSrc.current_)+offset))
     {}
 
-    void operator++() {current_ += stride_; }
-    void operator++(int) {current_ += stride_; }
-    void operator--() {current_ -= stride_; }
-    void operator--(int) {current_ -= stride_; }
+    void operator++()       { current_ += stride_; }
+    void operator++(int)    {current_ += stride_; }
+    void operator--()       {current_ -= stride_; }
+    void operator--(int)    {current_ -= stride_; }
     void operator+=(int dy) {current_ += dy*stride_; }
     void operator-=(int dy) {current_ -= dy*stride_; }
 
     bool operator==(StridedArrayIterator const & rhs) const
-    { return (current_ == rhs.current_); }
+    { return current_ == rhs.current_; }
 
     bool operator!=(StridedArrayIterator const & rhs) const
-    { return (current_ != rhs.current_); }
+    { return current_ != rhs.current_; }
 
     bool operator<(StridedArrayIterator const & rhs) const
-    { return (current_ < rhs.current_); }
+    { return current_ < rhs.current_; }
 
     bool operator<=(StridedArrayIterator const & rhs) const
-    { return (current_ <= rhs.current_); }
+    { return current_ <= rhs.current_; }
 
     bool operator>(StridedArrayIterator const & rhs) const
-    { return (current_ > rhs.current_); }
+    { return current_ > rhs.current_; }
 
     bool operator>=(StridedArrayIterator const & rhs) const
-    { return (current_ >= rhs.current_); }
+    { return current_ >= rhs.current_; }
 
     int operator-(StridedArrayIterator const & rhs) const
     { return (current_ - rhs.current_) / stride_; }
@@ -93,6 +93,7 @@ public:
     T* operator()(int d) const
     { return reinterpret_cast<T*>(current_ + d*stride_); }
 
+private:
     int            stride_;
     internal_type* current_;
 };

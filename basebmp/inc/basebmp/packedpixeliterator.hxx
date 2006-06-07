@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <basebmp/metafunctions.hxx>
 #include <basebmp/stridedarrayiterator.hxx>
+#include <basebmp/nonstandarditerator.hxx>
 
 #include <boost/static_assert.hpp>
 #include <vigra/metaprogramming.hxx>
@@ -71,7 +72,7 @@ template< int num_intraword_positions, int bits_per_pixel, bool MsbFirst, typena
 
 template< typename Valuetype,
           int      bits_per_pixel,
-          bool     MsbFirst > class PackedPixelColumnIterator
+          bool     MsbFirst > class PackedPixelColumnIterator : public NonStandardIterator
 {
 public:
     // no reference, no index_reference type here
@@ -246,7 +247,7 @@ public:
 
 template< typename Valuetype,
           int      bits_per_pixel,
-          bool     MsbFirst > class PackedPixelRowIterator
+          bool     MsbFirst > class PackedPixelRowIterator : public NonStandardIterator
 {
 public:
     // no reference, no index_reference type here
@@ -500,7 +501,7 @@ public:
  */
 template< typename Valuetype,
           int      bits_per_pixel,
-          bool     MsbFirst > class PackedPixelIterator
+          bool     MsbFirst > class PackedPixelIterator : public NonStandardIterator
 {
 public:
     // no reference, no index_reference type here

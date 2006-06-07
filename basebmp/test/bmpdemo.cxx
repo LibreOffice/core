@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1012,6 +1012,11 @@ void TestWindow::Paint( const Rectangle& rRect )
         basegfx::tools::importFromSvgD( aPoly, aSvg );
         const basebmp::Color aCol(0xFFFFFFFF);
         pBmp->clear(basebmp::Color(0));
+
+        const basegfx::B2IPoint aPt(3,3);
+        const basebmp::Color aCol4(0x01);
+        pBmp->setPixel( aPt, aCol4, basebmp::DrawMode_PAINT );
+
         pBmp->fillPolyPolygon(
             aPoly,
             aCol,

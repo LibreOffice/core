@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,11 +43,20 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
+#include <basebmp/debug.hxx>
+#include "tools.hxx"
+
+#include <iostream>
+#include <fstream>
 
 using namespace ::basebmp;
 
 namespace
 {
+/*
+  std::ofstream output("32bpp_test.dump");
+  debugDump( mpDevice32bpp, output );
+*/
 
 class BasicTest : public CppUnit::TestFixture
 {
@@ -100,23 +109,27 @@ public:
         const basegfx::B2IPoint aPt5(100000,100000);
         pDevice->setPixel( aPt5, aCol3, DrawMode_PAINT );
 
-        // 8bpp
+        // 8bit alpha
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
                                           Format::EIGHT_BIT_GRAY );
 
-            const Color aCol4(0x01);
+            const Color aCol4(0x010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+
+            std::ofstream output("32bpp_test.dump");
+            debugDump( pDevice, output );
+
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #4",
                                    pDevice->getPixel(aPt) == aCol4);
 
-            const Color aCol5(0x0F);
+            const Color aCol5(0x0F0F0F);
             pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #5",
                                    pDevice->getPixel(aPt2) == aCol5);
 
-            const Color aCol6(0xFF);
+            const Color aCol6(0xFFFFFF);
             pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #6",
                                    pDevice->getPixel(aPt3) == aCol6);

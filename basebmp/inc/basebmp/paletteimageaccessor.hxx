@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 16:14:23 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,10 +149,10 @@ template< class Accessor > struct rawAccessor
     typedef Accessor type;
 };
 
-template< typename ValueType > struct RawAccessor : public StandardAccessor< ValueType >
+template< typename DataType > struct RawAccessor : public StandardAccessor< DataType >
 {
     RawAccessor() {}
-    template< typename DataType > explicit RawAccessor(
+    template< typename ValueType > explicit RawAccessor(
         const PaletteImageAccessor< ValueType, DataType >& a ) {}
 };
 
@@ -161,7 +161,7 @@ template< typename ValueType > struct RawAccessor : public StandardAccessor< Val
 template< typename ValueType, typename DataType >
 struct rawAccessor< PaletteImageAccessor< ValueType, DataType > >
 {
-    typedef RawAccessor< ValueType > type;
+    typedef RawAccessor< DataType > type;
 };
 
 

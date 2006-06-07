@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pixeliterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include <basebmp/metafunctions.hxx>
 #include <basebmp/stridedarrayiterator.hxx>
 
-#include <boost/static_assert.hpp>
 #include <vigra/metaprogramming.hxx>
 #include <vigra/diff2d.hxx>
 
@@ -51,6 +50,7 @@ template< typename Valuetype > class PixelColumnIterator
 public:
     typedef Valuetype                           value_type;
     typedef Valuetype&                          reference;
+    typedef reference                           index_reference;
     typedef Valuetype*                          pointer;
     typedef int                                 difference_type;
     typedef image_traverser_tag                 iterator_category;
@@ -216,6 +216,7 @@ template< typename Valuetype > class PixelIterator
 public:
     typedef Valuetype                          value_type;
     typedef Valuetype&                         reference;
+    typedef reference                          index_reference;
     typedef Valuetype*                         pointer;
     typedef vigra::Diff2D                      difference_type;
     typedef image_traverser_tag                iterator_category;
@@ -241,7 +242,7 @@ private:
 
     pointer current(int dx, int dy) const
     {
-        return y(dy) + x+dy;
+        return y(dy) + x+dx;
     }
 
 public:
