@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 13:57:25 $
+ *  last change: $Author: hdu $ $Date: 2006-06-07 09:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@ public:
     void setGreen( sal_uInt8 nGreen ) { mnColor |= nGreen << 8; mnColor &= ~((sal_uInt32)nGreen << 8); }
     void setBlue( sal_uInt8 nBlue ) { mnColor |= nBlue; mnColor &= ~(sal_uInt32)nBlue; }
 
-    sal_uInt8 getRed() const   { return (mnColor & 0x00FF0000U) >> 16; }
-    sal_uInt8 getGreen() const { return (mnColor & 0x0000FF00U) >> 8; }
-    sal_uInt8 getBlue() const  { return mnColor & 0x000000FFU; }
+    sal_uInt8 getRed() const   { return 0xFF & (mnColor >> 16); }
+    sal_uInt8 getGreen() const { return 0xFF & (mnColor >> 8); }
+    sal_uInt8 getBlue() const  { return 0xFF & mnColor; }
 
     sal_uInt32 getValue() const { return mnColor; }
     operator sal_uInt32() const { return mnColor; }
@@ -71,9 +71,9 @@ public:
     Color operator-( Color col ) const { return Color(vigra::abs((int)getRed()-col.getRed()),
                                                       vigra::abs((int)getGreen()-col.getGreen()),
                                                       vigra::abs((int)getBlue()-col.getBlue())); }
-    Color operator*( sal_uInt8 n ) const { return Color(n*getRed()/SAL_MAX_UINT8,
-                                                        n*getGreen()/SAL_MAX_UINT8,
-                                                        n*getBlue()/SAL_MAX_UINT8); }
+    Color operator*( sal_uInt8 n ) const { return Color(((sal_uInt32)n*getRed())/255,
+                                                        ((sal_uInt32)n*getGreen())/255,
+                                                        ((sal_uInt32)n*getBlue())/255); }
     Color operator*( double n ) const { return Color((sal_uInt8)(n*getRed()+.5),
                                                      (sal_uInt8)(n*getGreen()+.5),
                                                      (sal_uInt8)(n*getBlue()+.5)); }
