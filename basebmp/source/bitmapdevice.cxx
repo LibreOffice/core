@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
+ *  last change: $Author: thb $ $Date: 2006-06-08 13:14:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -832,6 +832,9 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
                              DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip )
 {
+    if( !rClip )
+        setPixel(rPt,lineColor,drawMode);
+
     if( mpImpl->maBounds.isInside(rPt) )
     {
         if( isCompatibleClipMask( rClip ) )
@@ -879,6 +882,9 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
                              DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip )
 {
+    if( !rClip )
+        drawLine(rPt1,rPt2,lineColor,drawMode);
+
     basegfx::B2DPoint aPt1( rPt1 );
     basegfx::B2DPoint aPt2( rPt2 );
 
@@ -914,6 +920,9 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
                                 DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip )
 {
+    if( !rClip )
+        drawPolygon(rPoly,lineColor,drawMode);
+
     basegfx::B2DPolyPolygon aPoly(
         basegfx::tools::clipPolygonOnRange( rPoly,
                                             mpImpl->maFloatBounds,
@@ -940,6 +949,9 @@ void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                                     DrawMode                       drawMode,
                                     const BitmapDeviceSharedPtr&   rClip )
 {
+    if( !rClip )
+        fillPolyPolygon(rPoly,fillColor,drawMode);
+
     if( isCompatibleClipMask( rClip ) )
         fillPolyPolygon_i( rPoly, fillColor, drawMode, mpImpl->maBounds, rClip );
     else
@@ -1112,6 +1124,9 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                DrawMode                     drawMode,
                                const BitmapDeviceSharedPtr& rClip )
 {
+    if( !rClip )
+        drawBitmap(rSrcBitmap,rSrcRect,rDstRect,drawMode);
+
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
     const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
     basegfx::B2IRange         aSrcRange( rSrcRect );
@@ -1168,6 +1183,9 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                     const basegfx::B2IPoint&     rDstPoint,
                                     const BitmapDeviceSharedPtr& rClip )
 {
+    if( !rClip )
+        drawMaskedColor(aSrcColor,rAlphaMask,rSrcRect,rDstPoint);
+
     const basegfx::B2IVector& rSrcSize( rAlphaMask->getSize() );
     const basegfx::B2IRange   aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
     basegfx::B2IRange         aSrcRange( rSrcRect );
@@ -1233,6 +1251,9 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                      DrawMode                     drawMode,
                                      const BitmapDeviceSharedPtr& rClip )
 {
+    if( !rClip )
+        drawMaskedBitmap(rSrcBitmap,rMask,rSrcRect,rDstRect,drawMode);
+
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
