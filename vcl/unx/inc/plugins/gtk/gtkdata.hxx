@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:51:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ class GtkSalDisplay : public SalDisplay
 {
     GdkDisplay*                     m_pGdkDisplay;
     GdkCursor                      *m_aCursors[ POINTER_COUNT ];
+    bool                            m_bStartupCompleted;
     GdkCursor* getFromXPM( const char *pBitmap, const char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
 public:
@@ -85,6 +86,7 @@ public:
     inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
     inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
     inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
+    void startupNotificationCompleted() { m_bStartupCompleted = true; }
 };
 
 
