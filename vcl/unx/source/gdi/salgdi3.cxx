@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:57:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,6 +800,14 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     aGCVal.clip_mask = None;
     GC tmpGC = XCreateGC( pDisplay, aSrcPixmap, GCForeground | GCClipMask, &aGCVal );
     XDrawPoint( pDisplay, aSrcPixmap, tmpGC, 0, 0 );
+
+      XRenderColor aRenderColor = { 0, 0, 0, 0xffff };
+#ifdef XRENDER_LINK
+     XRenderFillRectangle( pDisplay, PictOpAdd, aSrcPicture, &aRenderColor, 0, 0, 1, 1 );
+#else
+     (*aX11GlyphPeer.pXRenderFillRectangle)( pDisplay, PictOpAdd, aSrcPicture, &aRenderColor, 0, 0, 1, 1 );
+#endif
+
     XFreeGC( pDisplay, tmpGC );
 
     // notify xrender of target drawable
