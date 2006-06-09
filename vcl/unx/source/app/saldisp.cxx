@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:27:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1653,7 +1653,7 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 nKey = KEY_HELP;
                 break;
             case XK_Menu:
-                nKey = KEY_F10;
+                nKey = KEY_CONTEXTMENU;
                 break;
 /*
             case XK_Break:
