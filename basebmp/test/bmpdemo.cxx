@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
+ *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
 
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygonrasterconverter.hxx>
@@ -995,9 +996,143 @@ class TestWindow : public Dialog
         virtual void Paint( const Rectangle& rRect );
 };
 
+
+static basegfx::B2IPoint project( const basegfx::B2IPoint& rPoint )
+{
+    const double angle_x = M_PI / 6.0;
+    const double angle_z = M_PI / 6.0;
+
+    // transform planar coordinates to 3d
+    double x = rPoint.getX();
+    double y = rPoint.getY();
+    //double z = 0;
+
+    // rotate around X axis
+    double x1 = x;
+    double y1 = y * cos( angle_x );
+    double z1 = y * sin( angle_x );
+
+    // rotate around Z axis
+    double x2 = x1 * cos( angle_z ) + y1 * sin( angle_z );
+    //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
+    double z2 = z1;
+
+    return basegfx::B2IPoint( (sal_Int32)x2, (sal_Int32)z2 );
+}
+
+static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp::Color& rTo )
+{
+    basebmp::Color aColor;
+    UINT8 nDiff;
+    // approach red
+    if( rFrom.getRed() < rTo.getRed() )
+    {
+        nDiff = rTo.getRed() - rFrom.getRed();
+        aColor.setRed( rFrom.getRed() + ( nDiff < 10 ? nDiff : 10 ) );
+    }
+    else if( rFrom.getRed() > rTo.getRed() )
+    {
+        nDiff = rFrom.getRed() - rTo.getRed();
+        aColor.setRed( rFrom.getRed() - ( nDiff < 10 ? nDiff : 10 ) );
+    }
+    else
+        aColor.setRed( rFrom.getRed() );
+
+    // approach Green
+    if( rFrom.getGreen() < rTo.getGreen() )
+    {
+        nDiff = rTo.getGreen() - rFrom.getGreen();
+        aColor.setGreen( rFrom.getGreen() + ( nDiff < 10 ? nDiff : 10 ) );
+    }
+    else if( rFrom.getGreen() > rTo.getGreen() )
+    {
+        nDiff = rFrom.getGreen() - rTo.getGreen();
+        aColor.setGreen( rFrom.getGreen() - ( nDiff < 10 ? nDiff : 10 ) );
+    }
+    else
+        aColor.setGreen( rFrom.getGreen() );
+
+    // approach blue
+    if( rFrom.getBlue() < rTo.getBlue() )
+    {
+        nDiff = rTo.getBlue() - rFrom.getBlue();
+        aColor.setBlue( rFrom.getBlue() + ( nDiff < 10 ? nDiff : 10 ) );
+    }
+    else if( rFrom.getBlue() > rTo.getBlue() )
+    {
+        nDiff = rFrom.getBlue() - rTo.getBlue();
+        aColor.setBlue( rFrom.getBlue() - ( nDiff < 10 ? nDiff : 10 ) );
+    }
+    else
+        aColor.setBlue( rFrom.getBlue() );
+
+    return aColor;
+}
+
+#define DELTA 5.0
+
+
+
 void TestWindow::Paint( const Rectangle& rRect )
 {
     {
+        basegfx::B2ISize aTestSize(500,500);
+        basebmp::BitmapDeviceSharedPtr pDevice2( basebmp::createBitmapDevice( aTestSize,
+                                                                              true,
+                                                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+        pDevice2->clear(basebmp::Color(0));
+
+        basegfx::B2IPoint aCenter( aTestSize.getX()/2,
+                                   aTestSize.getY()/2 );
+        basegfx::B2IPoint aP1( aTestSize.getX()/48, 0), aP2( aTestSize.getX()/40, 0 ), aPoint;
+
+        double sind = sin( DELTA*M_PI/180.0 );
+        double cosd = cos( DELTA*M_PI/180.0 );
+        double factor = 1 + (DELTA/1000.0);
+        int n=0;
+        basebmp::Color aLineColor( 0, 0, 0 );
+        basebmp::Color aApproachColor( 0, 0, 200 );
+        while ( aP2.getX() < aCenter.getX() && n++ < 680 )
+        {
+            aLineColor = approachColor( aLineColor, aApproachColor );
+
+            // switch aproach color
+            if( aApproachColor == aLineColor )
+            {
+                if( aApproachColor.getRed() )
+                    aApproachColor = basebmp::Color( 0, 0, 200 );
+                else if( aApproachColor.getGreen() )
+                    aApproachColor = basebmp::Color( 200, 0, 0 );
+                else
+                    aApproachColor = basebmp::Color( 0, 200, 0 );
+            }
+
+            basegfx::B2DPolygon aPoly;
+            aPoly.append( basegfx::B2DPoint(project( aP1 ) + aCenter) );
+            aPoly.append( basegfx::B2DPoint(project( aP2 ) + aCenter) );
+            pDevice2->drawPolygon(
+                aPoly,
+                basebmp::Color(0xFFFFFFFF),
+                basebmp::DrawMode_PAINT);
+            pDevice2->fillPolyPolygon(
+                basegfx::tools::createAreaGeometryForPolygon(
+                    aPoly,
+                    n/3,
+                    basegfx::tools::B2DLINEJOIN_NONE),
+                aLineColor,
+                basebmp::DrawMode_PAINT);
+
+            aPoint.setX( (int)((((double)aP1.getX())*cosd - ((double)aP1.getY())*sind)*factor) );
+            aPoint.setY( (int)((((double)aP1.getY())*cosd + ((double)aP1.getX())*sind)*factor) );
+            aP1 = aPoint;
+            aPoint.setX( (int)((((double)aP2.getX())*cosd - ((double)aP2.getY())*sind)*factor) );
+            aPoint.setY( (int)((((double)aP2.getY())*cosd + ((double)aP2.getX())*sind)*factor) );
+            aP2 = aPoint;
+        }
+
+        std::ofstream output4("svptest.dump");
+        debugDump( pDevice2, output4 );
+
         const basegfx::B2ISize aSize(10,10);
         basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aSize,
                                                                              true,

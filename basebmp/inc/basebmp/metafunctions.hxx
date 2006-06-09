@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metafunctions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:12 $
+ *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef INCLUDED_BASEBMP_METAFUNCTIONS_HXX
 #define INCLUDED_BASEBMP_METAFUNCTIONS_HXX
+
+#include <vigra/metaprogramming.hxx>
+#include <vigra/numerictraits.hxx>
 
 namespace basebmp
 {
@@ -73,6 +76,48 @@ inline bool is_negative( int x )
     // force logic shift (result for signed shift right is undefined)
     return static_cast<unsigned int>(x) >> (sizeof(int)*8-1);
 }
+
+/// Results in VigraTrueType, if T is of integer type and scalar
+template< typename T, typename trueCase, typename falseCase >
+struct ifScalarIntegral
+{
+    typedef
+    typename vigra::If<
+        typename vigra::NumericTraits< T >::isIntegral,
+        typename vigra::If<
+            typename vigra::NumericTraits< T >::isScalar,
+            trueCase,
+            falseCase >::type,
+        falseCase >::type type;
+};
+
+/// Results in VigraTrueType, if T is of non-integer type and scalar
+template< typename T, typename trueCase, typename falseCase >
+struct ifScalarNonIntegral
+{
+    typedef
+    typename vigra::If<
+        typename vigra::NumericTraits< T >::isIntegral,
+        falseCase,
+        typename vigra::If<
+            typename vigra::NumericTraits< T >::isScalar,
+            trueCase,
+            falseCase >::type >::type type;
+};
+
+/// Results in VigraTrueType, if both T1 and T2 are of integer type and scalar
+template< typename T1, typename T2, typename trueCase, typename falseCase >
+struct ifBothScalarIntegral
+{
+    typedef
+    typename ifScalarIntegral<
+        T1,
+        typename ifScalarIntegral<
+            T2,
+            trueCase,
+            falseCase >::type,
+        falseCase >::type type;
+};
 
 } // namespace basebmp
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
+ *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#include <basebmp/accessoradapters.hxx>
 #include <vigra/mathutil.hxx>
 #include <math.h>
 
@@ -73,6 +74,7 @@ public:
 
     sal_uInt32 toInt32() const { return mnColor; }
 
+    Color operator&( sal_uInt32 nMask ) const { return Color(mnColor & nMask); }
     Color operator^( Color col ) const { return Color(col.getRed()^getRed(),
                                                       col.getGreen()^getGreen(),
                                                       col.getBlue()^getBlue()); }
@@ -100,6 +102,69 @@ public:
                                            + getBlue()*getBlue()); }
 };
 
+struct ColorBitmaskOutputMaskFunctor
+{
+    Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
+    {
+        return Color(v1.toInt32()*(sal_uInt8)(1-m) + v2.toInt32()*m);
+    }
+};
+
+/// Specialized output mask functor for Color value type
+template<> struct outputMaskFunctorSelector< Color, sal_uInt8, FastMask >
+{
+    typedef ColorBitmaskOutputMaskFunctor type;
+};
+
+struct ColorBlendFunctor
+{
+    Color operator()( sal_uInt8 alpha,
+                      Color     v1,
+                      Color     v2 ) const
+    {
+        const sal_uInt8 invAlpha(0xFF-alpha);
+        return Color(((sal_uInt32)invAlpha*v1.getRed() + alpha*v2.getRed())/0xFF,
+                     ((sal_uInt32)invAlpha*v1.getGreen() + alpha*v2.getGreen())/0xFF,
+                     ((sal_uInt32)invAlpha*v1.getBlue() + alpha*v2.getBlue())/0xFF);
+    }
+};
+
+/// Specialized metafunction to select blend functor for Color value types
+template<> struct blendFunctorSelector<Color, sal_uInt8>
+{
+    typedef ColorBlendFunctor type;
+};
+
 } // namespace basebmp
+
+namespace vigra
+{
+
+template<>
+struct NumericTraits<basebmp::Color>
+{
+    typedef basebmp::Color Type;
+    typedef basebmp::Color Promote;
+    typedef basebmp::Color RealPromote;
+    typedef std::complex<basebmp::Color> ComplexPromote;
+    typedef sal_uInt8 ValueType;
+
+    typedef VigraTrueType  isIntegral;
+    typedef VigraFalseType isScalar;
+    typedef VigraTrueType  isSigned;
+    typedef VigraTrueType  isOrdered;
+    typedef VigraFalseType isComplex;
+
+    static Type zero() { return Type(); }
+    static Type one() { return Type(0x01010101); }
+    static Type nonZero() { return Type(0x01010101); }
+
+    static Promote toPromote(const Type& v) { return v; }
+    static RealPromote toRealPromote(const Type& v) { return v; }
+    static Type fromPromote(const Promote& v) { return v; }
+    static Type fromRealPromote(const RealPromote& v) { return v; }
+};
+
+} // namespace vigra
 
 #endif /* INCLUDED_BASEBMP_COLOR_HXX */

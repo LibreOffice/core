@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-08 16:39:02 $
+ *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,13 @@ namespace
                                         MaskAccessor,
                                         DestIterator,
                                         MaskIterator>::type MaskedXorAccessor;
+        typedef ConstantColorBlendAccessorAdapter<
+            DestAccessor,
+            typename AlphaMaskAccessor::value_type>         ColorBlendAccessor;
+        typedef typename maskedAccessor<ColorBlendAccessor,
+                                        MaskAccessor,
+                                        DestIterator,
+                                        MaskIterator>::type MaskedColorBlendAcc;
         typedef typename maskedAccessor<RawXorAccessor,
                                         MaskAccessor,
                                         DestIterator,
@@ -263,6 +270,7 @@ namespace
         XorAccessor           maXorAccessor;
         RawXorAccessor        maRawXorAccessor;
         MaskedAccessor        maMaskedAccessor;
+        MaskedColorBlendAcc   maMaskedColorBlendAccessor;
         MaskedXorAccessor     maMaskedXorAccessor;
         RawMaskedAccessor     maRawMaskedAccessor;
         RawMaskedXorAccessor  maRawMaskedXorAccessor;
@@ -289,6 +297,8 @@ namespace
             maXorAccessor( accessor ),
             maRawXorAccessor( maRawAccessor ),
             maMaskedAccessor( accessor ),
+            maMaskedColorBlendAccessor(
+                ColorBlendAccessor(accessor) ),
             maMaskedXorAccessor( maXorAccessor ),
             maRawMaskedAccessor( maRawAccessor ),
             maRawMaskedXorAccessor( maRawXorAccessor ),
@@ -675,39 +685,26 @@ namespace
                                maRawMaskedAccessor);
         }
 
-        template< typename Range, typename Accessor >
-        void implDrawMaskedColor(Color                        rSrcColor,
-                                 const BitmapDeviceSharedPtr& rAlphaMask,
-                                 const basegfx::B2IRange&     rSrcRect,
-                                 const basegfx::B2IPoint&     rDstPoint,
-                                 const Range&                 range,
-                                 const Accessor&              acc)
-        {
-            boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
-            OSL_ASSERT( pAlpha );
-
-            vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                       rSrcRect.getMinY()),
-                              pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                       rSrcRect.getMaxY()),
-                              pAlpha->maAccessor,
-                              range.first + vigra::Diff2D(rDstPoint.getX(),
-                                                          rDstPoint.getY()),
-                              ConstantColorBlendAccessorAdapter<
-                                Accessor,
-                                typename DestAccessor::value_type>(
-                                  acc,
-                                  maFromColorConverter(rSrcColor)) );
-        }
-
         virtual void drawMaskedColor_i(Color                        aSrcColor,
                                        const BitmapDeviceSharedPtr& rAlphaMask,
                                        const basegfx::B2IRange&     rSrcRect,
                                        const basegfx::B2IPoint&     rDstPoint )
         {
-            implDrawMaskedColor(aSrcColor, rAlphaMask, rSrcRect, rDstPoint,
-                                std::make_pair(maBegin,maEnd),
-                                maAccessor);
+            boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
+            OSL_ASSERT( pAlpha );
+
+            vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                              rSrcRect.getMinY()),
+                              pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
+                                                              rSrcRect.getMaxY()),
+                              pAlpha->maAccessor,
+                              maBegin + vigra::Diff2D(rDstPoint.getX(),
+                                                      rDstPoint.getY()),
+                              ConstantColorBlendAccessorAdapter<
+                                DestAccessor,
+                                typename AlphaMaskAccessor::value_type>(
+                                  maAccessor,
+                                  maFromColorConverter(aSrcColor)) );
         }
 
         virtual void drawMaskedColor_i(Color                        aSrcColor,
@@ -716,9 +713,28 @@ namespace
                                        const basegfx::B2IPoint&     rDstPoint,
                                        const BitmapDeviceSharedPtr& rClip )
         {
-            implDrawMaskedColor(aSrcColor, rAlphaMask, rSrcRect, rDstPoint,
-                                getMaskedRange(rClip),
-                                maMaskedAccessor);
+#if 0
+            boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
+            OSL_ASSERT( pAlpha );
+
+            const vigra::pair<composite_iterator_type,
+                              composite_iterator_type> aRange( getMaskedRange(rClip) );
+            maMaskedColorBlendAccessor.setColor( maFromColorConverter(aSrcColor) );
+
+            vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                              rSrcRect.getMinY()),
+                              pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
+                                                              rSrcRect.getMaxY()),
+                              pAlpha->maAccessor,
+                              aRange.first + vigra::Diff2D(rDstPoint.getX(),
+                                                           rDstPoint.getY()),
+                              maMaskedColorBlendAccessor );
+#else
+        drawMaskedColor_i(aSrcColor,
+                          rAlphaMask,
+                          rSrcRect,
+                          rDstPoint );
+#endif
         }
 
         // must work with *this == rSrcBitmap!

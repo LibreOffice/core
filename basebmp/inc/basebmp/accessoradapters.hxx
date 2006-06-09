@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:34 $
+ *  last change: $Author: thb $ $Date: 2006-06-09 04:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,17 +225,56 @@ public:
     }
 };
 
+
+/// Traits template, to determine alpha blending between two values
+template< typename ValueType, typename AlphaType > struct BlendFunctor
+{
+    ValueType operator()( AlphaType alpha,
+                          ValueType v1,
+                          ValueType v2 ) const
+    {
+        const typename vigra::NumericTraits<AlphaType>::RealPromote fAlpha(
+            vigra::NumericTraits<AlphaType>::toRealPromote(alpha));
+        return (vigra::NumericTraits<AlphaType>::one()-fAlpha)*v1 + fAlpha*v2;
+    }
+};
+
+template< typename ValueType, typename AlphaType > struct IntegerBlendFunctor
+{
+    ValueType operator()( AlphaType alpha,
+                          ValueType v1,
+                          ValueType v2 ) const
+    {
+        return (vigra::NumericTraits<AlphaType>::toPromote(
+                    vigra::NumericTraits<AlphaType>::max()-alpha)*v1 + alpha*v2) /
+            vigra::NumericTraits<AlphaType>::max();
+    }
+};
+
+/// Metafunction to select blend functor from value and alpha type
+template< typename ValueType, typename AlphaType > struct blendFunctorSelector : public
+    ifScalarIntegral< AlphaType,
+                      IntegerBlendFunctor< ValueType, AlphaType >,
+                      BlendFunctor< ValueType, AlphaType > >
+{
+};
+
 /** Accessor adapter that blends input value against fixed color value
 
     Used to blend an alpha mask 'through' a fixed color value into the
     destination.
  */
 template< class WrappedAccessor,
-          typename ColorType > class ConstantColorBlendAccessorAdapter
+          typename AlphaType > class ConstantColorBlendAccessorAdapter
 {
+public:
+    typedef AlphaType                            alpha_type;
+    typedef typename WrappedAccessor::value_type value_type;
+
 private:
-    WrappedAccessor maWrappee;
-    ColorType       maBlendColor;
+    typename blendFunctorSelector< value_type, alpha_type >::type maFunctor;
+    WrappedAccessor                                               maWrappee;
+    value_type                                                    maBlendColor;
 
     // TODO(Q3): Merge with
     // BinarySetterFunctionAccessorAdapter. Problem there: how to
@@ -243,18 +282,26 @@ private:
     // fixed color
 
 public:
-    typedef typename WrappedAccessor::value_type value_type;
-
     ConstantColorBlendAccessorAdapter() :
+        maFunctor(),
         maWrappee(),
         maBlendColor()
     {}
 
+    explicit ConstantColorBlendAccessorAdapter( WrappedAccessor acc ) :
+        maFunctor(),
+        maWrappee(acc),
+        maBlendColor()
+    {}
+
     ConstantColorBlendAccessorAdapter( WrappedAccessor acc,
-                                       ColorType       col ) :
+                                       value_type      col ) :
+        maFunctor(),
         maWrappee(acc),
         maBlendColor(col)
     {}
+
+    void setColor( value_type col ) { maBlendColor=col; }
 
     template< typename IteratorType > value_type operator()(IteratorType const& i) const
     {
@@ -270,7 +317,10 @@ public:
     void set(V const& value, IteratorType const& i) const
     {
         maWrappee.set(
-            maBlendColor*value,
+            maFunctor(
+                vigra::detail::RequiresExplicitCast<alpha_type>::cast(value),
+                maWrappee(i),
+                maBlendColor),
             i );
     }
 
@@ -278,7 +328,10 @@ public:
     void set(V const& value, IteratorType const& i, Difference const& diff) const
     {
         maWrappee.set(
-            maBlendColor*value,
+            maFunctor(
+                vigra::detail::RequiresExplicitCast<alpha_type>::cast(value),
+                maWrappee(i,diff),
+                maBlendColor),
             i,
             diff );
     }
@@ -300,62 +353,99 @@ template< class WrappedAccessor > struct xorAccessor
         type;
 };
 
-// Mask
-template< typename T > struct InputMaskFunctor
+
+// Masking functors for binary input
+//--------------------------------------------------------
+
+template< typename T, typename M > struct GenericInputMaskFunctor
 {
     /** Mask v with state of m
 
         @return v, if m != 0, and vigra::NumericTraits<T>::zero
         otherwise.
      */
-    template< typename M> T operator()( T v, M m ) const
+    T operator()( T v, M m ) const
+    {
+        return m == 0 ? vigra::NumericTraits<T>::zero : v;
+    }
+};
+
+template< typename T, typename M > struct IntegerInputMaskFunctor
+{
+    /** Mask v with state of m
+
+        @return v, if m != 0, and vigra::NumericTraits<T>::zero
+        otherwise.
+     */
+    T operator()( T v, M m ) const
     {
         // TODO(Q3): use traits to get unsigned type for T (if
         // not already)
-
-        // TODO(F3): use specialization for float types (which need
-        // branching, instead of the bit fiddling used here)
 
         // mask will be 0, iff m == 0, and 1 otherwise
         const T mask( static_cast<unsigned int>(m | -m) >> (sizeof(unsigned int)*8 - 1) );
         return v*mask;
     }
 };
-// Faster mask (assuming mask accessor output is already either 0 or 1)
-template< typename T > struct FastInputMaskFunctor
+
+template< typename T, typename M > struct FastIntegerInputMaskFunctor
 {
-    template<typename M> T operator()( T v, M m ) const
+    T operator()( T v, M m ) const
     {
         return v*m;
     }
 };
 
-template< typename T > struct OutputMaskFunctor
+
+// Masking functors for TernarySetterFunctionAccessorAdapter
+//-----------------------------------------------------------
+
+template< typename T, typename M > struct GenericOutputMaskFunctor
+{
+    /// Ternary mask operation - selects v1 for m == 0, v2 otherwise
+    T operator()( T v1, M m, T v2 ) const
+    {
+        return m == 0 ? v1 : v2;
+    }
+};
+
+template< typename T, typename M > struct IntegerOutputMaskFunctor
 {
     /** Mask v with state of m
 
         @return v2, if m != 0, v1 otherwise.
      */
-    template< typename M > T operator()( T v1, M m, T v2 ) const
+    T operator()( T v1, M m, T v2 ) const
     {
-        // TODO(Q3): use traits to get unsigned type for T (if
-        // not unsigned already)
-
-        // TODO(F3): use specialization for float types (which need
-        // branching, instead of the bit fiddling used here)
-
         // mask will be 0, iff m == 0, and 1 otherwise
         const T mask( static_cast<unsigned int>(m | -m) >> (sizeof(unsigned int)*8 - 1) );
         return v1*(M)(1-mask) + v2*mask;
     }
 };
-// Faster mask (assuming mask accessor output is already either 0 or 1)
-template< typename T > struct FastOutputMaskFunctor
+
+template< typename T, typename M > struct FastIntegerOutputMaskFunctor
 {
-    template< typename M> T operator()( T v1, M m, T v2 ) const
+    T operator()( T v1, M m, T v2 ) const
     {
         return v1*(M)(1-m) + v2*m;
     }
+};
+
+struct FastMask;
+struct NoFastMask;
+
+/// Metafunction to select output mask functor from iterator and mask value type
+template< typename T, typename M, typename DUMMY > struct outputMaskFunctorSelector : public
+    ifBothScalarIntegral< T, M,
+                          IntegerOutputMaskFunctor< T, M >,
+                          GenericOutputMaskFunctor< T, M > >
+{
+};
+template< typename T, typename M > struct outputMaskFunctorSelector< T, M, FastMask > : public
+    ifBothScalarIntegral< T, M,
+                          FastIntegerOutputMaskFunctor< T, M >,
+                          GenericOutputMaskFunctor< T, M > >
+{
 };
 
 // Chosen function crucially depends on iterator - we can choose the
@@ -365,12 +455,15 @@ template< class WrappedAccessor,
           class Iterator,
           class MaskIterator > struct maskedAccessor
 {
-    typedef TernarySetterFunctionAccessorAdapter< WrappedAccessor,
-                                                  MaskAccessor,
-                                                  Iterator,
-                                                  MaskIterator,
-                                                  OutputMaskFunctor<
-        typename WrappedAccessor::value_type > >
+    typedef TernarySetterFunctionAccessorAdapter<
+        WrappedAccessor,
+        MaskAccessor,
+        Iterator,
+        MaskIterator,
+        typename outputMaskFunctorSelector<
+            typename WrappedAccessor::value_type,
+            typename MaskAccessor::value_type,
+            NoFastMask>::type >
         type;
 };
 // partial specialization, to use fast 1bpp mask function for
@@ -384,13 +477,18 @@ template< class WrappedAccessor,
                                                                        1,
                                                                        true > >
 {
-    typedef TernarySetterFunctionAccessorAdapter< WrappedAccessor,
-                                                  MaskAccessor,
-                                                  Iterator,
-                                                  PackedPixelIterator< typename MaskAccessor::value_type,
-                                                                       1,
-                                                                       true >,
-                                                  FastOutputMaskFunctor< typename WrappedAccessor::value_type > >
+    typedef TernarySetterFunctionAccessorAdapter<
+        WrappedAccessor,
+        MaskAccessor,
+        Iterator,
+        PackedPixelIterator<
+            typename MaskAccessor::value_type,
+            1,
+            true >,
+        typename outputMaskFunctorSelector<
+            typename WrappedAccessor::value_type,
+            typename MaskAccessor::value_type,
+            FastMask>::type >
         type;
 };
 
@@ -403,14 +501,19 @@ template< class WrappedAccessor,
                                                                        1,
                                                                        false > >
 {
-    typedef TernarySetterFunctionAccessorAdapter< WrappedAccessor,
-                                                  MaskAccessor,
-                                                  Iterator,
-                                                  PackedPixelIterator< typename MaskAccessor::value_type,
-                                                                       1,
-                                                                       false >,
-                                                  FastOutputMaskFunctor< typename WrappedAccessor::value_type > >
-    type;
+    typedef TernarySetterFunctionAccessorAdapter<
+        WrappedAccessor,
+        MaskAccessor,
+        Iterator,
+        PackedPixelIterator<
+            typename MaskAccessor::value_type,
+            1,
+            false >,
+        typename outputMaskFunctorSelector<
+            typename WrappedAccessor::value_type,
+            typename MaskAccessor::value_type,
+            FastMask>::type >
+        type;
 };
 
 } // namespace basebmp
