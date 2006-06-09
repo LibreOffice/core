@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-15 09:55:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,6 +548,7 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
     }
     else
     {
+        DBG_ASSERT( pTimer == &maHideTimer, "HelpTextWindow::TimerHdl with bad Timer" );
           ImplDestroyHelpWindow();
     }
 
