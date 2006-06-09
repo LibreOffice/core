@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.236 $
+ *  $Revision: 1.237 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:09:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4214,7 +4214,8 @@ void Window::ImplGrabFocus( USHORT nFlags )
                 NotifyEvent aNEvt( EVENT_GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) )
                     GetFocus();
-                ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDelete()) ? pOldFocusWindow : NULL );
+                if( !aDogTag.IsDelete() )
+                    ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDelete()) ? pOldFocusWindow : NULL );
                 if( !aDogTag.IsDelete() )
                 {
                     mpWindowImpl->mnGetFocusFlags = 0;
@@ -8167,7 +8168,11 @@ void Window::ImplCallDeactivateListeners( Window *pNew )
     // no deactivation if the the newly activated window is my child
     if ( !pNew || !ImplIsChild( pNew ) )
     {
+        ImplDelData aDogtag( this );
         ImplCallEventListeners( VCLEVENT_WINDOW_DEACTIVATE );
+        if( aDogtag.IsDelete() )
+            return;
+
         // #100759#, avoid walking the wrong frame's hierarchy
         //           eg, undocked docking windows (ImplDockFloatWin)
         if ( ImplGetParent() && mpWindowImpl->mpFrameWindow == ImplGetParent()->mpWindowImpl->mpFrameWindow )
@@ -8182,7 +8187,11 @@ void Window::ImplCallActivateListeners( Window *pOld )
     // no activation if the the old active window is my child
     if ( !pOld || !ImplIsChild( pOld ) )
     {
+        ImplDelData aDogtag( this );
         ImplCallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
+        if( aDogtag.IsDelete() )
+            return;
+
         // #106298# revoke the change for 105369, because this change
         //          disabled the activate event for the parent,
         //          if the parent is a compound control
@@ -9003,7 +9012,7 @@ BOOL Window::IsAccessibilityEventsSuppressed( BOOL bTraverseParentPath )
     else
     {
         Window *pParent = this;
-        while ( pParent )
+        while ( pParent && pParent->mpWindowImpl)
         {
             if( pParent->mpWindowImpl->mbSuppressAccessibilityEvents )
                 return TRUE;
