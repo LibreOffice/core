@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 12:02:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:16:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -651,22 +651,28 @@ bool PrinterInfoManager::writePrinterConfig()
             // check if file is writable
             if( files.find( it->second.m_aFile ) == files.end() )
             {
+                bool bInsertToNewFile = false;
                 // maybe it is simply not inserted yet
                 if( rofiles.find( it->second.m_aFile ) == rofiles.end() )
                 {
                     if( checkWriteability( it->second.m_aFile ) )
                         files[ it->second.m_aFile ] = new Config( it->second.m_aFile );
                     else
-                    {
-                        rofiles[ it->second.m_aFile ] = 1;
-                        // update alternate file list
-                        // the remove operation ensures singularity of each alternate
-                        it->second.m_aAlternateFiles.remove( it->second.m_aFile );
-                        it->second.m_aAlternateFiles.remove( files.begin()->first );
-                        it->second.m_aAlternateFiles.push_front( it->second.m_aFile );
-                        // update file
-                        it->second.m_aFile = files.begin()->first;
-                    }
+                        bInsertToNewFile = true;
+                }
+                else
+                    bInsertToNewFile = true;
+                // original file is read only, insert printer in a new writeable file
+                if( bInsertToNewFile )
+                {
+                    rofiles[ it->second.m_aFile ] = 1;
+                    // update alternate file list
+                    // the remove operation ensures uniqueness of each alternate
+                    it->second.m_aAlternateFiles.remove( it->second.m_aFile );
+                    it->second.m_aAlternateFiles.remove( files.begin()->first );
+                    it->second.m_aAlternateFiles.push_front( it->second.m_aFile );
+                    // update file
+                    it->second.m_aFile = files.begin()->first;
                 }
             }
         }
