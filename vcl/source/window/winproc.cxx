@@ -4,10 +4,6 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.106 $
- *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:39:49 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -370,28 +366,25 @@ static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
         }
     }
 
-    CommandEvent        aCEvt( aPos, nEvt, bMouse, pData );
-    NotifyEvent         aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
-    ImplDelData         aDelData;
-    BOOL                bPreNotify;
-    pChild->ImplAddDel( &aDelData );
-    if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
+    CommandEvent    aCEvt( aPos, nEvt, bMouse, pData );
+    NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
+    ImplDelData     aDelData( pChild );
+    BOOL            bPreNotify = (ImplCallPreNotify( aNCmdEvt ) != 0);
+    if ( aDelData.IsDelete() )
+        return FALSE;
+    if ( !bPreNotify )
     {
-        bPreNotify = FALSE;
-
         pChild->ImplGetWindowImpl()->mbCommand = FALSE;
         pChild->Command( aCEvt );
 
-        if( !aDelData.IsDelete() )
-            pChild->ImplNotifyKeyMouseCommandEventListeners( aNCmdEvt );
+        if( aDelData.IsDelete() )
+            return FALSE;
+        pChild->ImplNotifyKeyMouseCommandEventListeners( aNCmdEvt );
+        if ( aDelData.IsDelete() )
+            return FALSE;
+        if ( pChild->ImplGetWindowImpl()->mbCommand )
+            return TRUE;
     }
-    else
-        bPreNotify = TRUE;
-    if ( aDelData.IsDelete() )
-        return FALSE;
-    pChild->ImplRemoveDel( &aDelData );
-    if ( !bPreNotify && pChild->ImplGetWindowImpl()->mbCommand )
-        return TRUE;
 
     return FALSE;
 }
@@ -472,15 +465,12 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         pWinFrameData->mbMouseIn = FALSE;
         if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
         {
-            ImplDelData aDelData;
-            pWindow->ImplAddDel( &aDelData );
+            ImplDelData aDelData( pWindow );
 
             ImplDestroyHelpWindow();
 
             if ( aDelData.IsDelete() )
                 return 1; // pWindow is dead now - avoid crash! (#122045#)
-            else
-                pWindow->ImplRemoveDel( &aDelData );
         }
     }
     else
@@ -850,13 +840,18 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                      (pChild->GetSettings().GetMouseSettings().GetOptions() & MOUSE_OPTION_AUTOFOCUS) )
                     pChild->ToTop( TOTOP_NOGRABFOCUS );
 
-                // Wenn Hilfe-Fenster im MouseMove angezeigt/gehidet wird,
-                // wird danach nicht mehr der HelpRequest-Handler gerufen
-                Window* pOldHelpTextWin = pSVData->maHelpData.mpHelpWin;
-                pChild->ImplGetWindowImpl()->mbMouseMove = FALSE;
-                pChild->MouseMove( aMEvt );
-                if ( pOldHelpTextWin != pSVData->maHelpData.mpHelpWin )
+                if( aDelData.IsDelete() )
                     bCallHelpRequest = FALSE;
+                else
+                {
+                    // if the MouseMove handler changes the help window's visibility
+                    // the HelpRequest handler should not be called anymore
+                    Window* pOldHelpTextWin = pSVData->maHelpData.mpHelpWin;
+                    pChild->ImplGetWindowImpl()->mbMouseMove = FALSE;
+                    pChild->MouseMove( aMEvt );
+                    if ( pOldHelpTextWin != pSVData->maHelpData.mpHelpWin )
+                        bCallHelpRequest = FALSE;
+                }
             }
         }
         else if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
@@ -1179,14 +1174,12 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     ImplDelData aDelData;
     KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
-    BOOL        bPreNotify;
+    BOOL        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
     long        nRet = 1;
 
     pChild->ImplAddDel( &aDelData );
-    if ( !ImplCallPreNotify( aNEvt ) && !aDelData.IsDelete() )
+    if ( !bPreNotify && !aDelData.IsDelete() )
     {
-         bPreNotify = FALSE;
-
         if ( nSVEvent == EVENT_KEYINPUT )
         {
             pChild->ImplGetWindowImpl()->mbKeyInput = FALSE;
@@ -1201,8 +1194,6 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         if( !aDelData.IsDelete() )
             aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
-    else
-        bPreNotify = TRUE;
 
     if ( aDelData.IsDelete() )
         return 1;
@@ -1294,16 +1285,15 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         pChild = pWindow->GetParent();
 
         // call handler
-        ImplDelData aDelData;
+        ImplDelData aDelData( pChild );
         KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
-        BOOL        bPreNotify;
+        BOOL        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
+        if ( aDelData.IsDelete() )
+            return 1;
 
-        pChild->ImplAddDel( &aDelData );
-        if ( !ImplCallPreNotify( aNEvt ) && !aDelData.IsDelete() )
+        if ( !bPreNotify )
         {
-            bPreNotify = FALSE;
-
             if ( nSVEvent == EVENT_KEYINPUT )
             {
                 pChild->ImplGetWindowImpl()->mbKeyInput = FALSE;
@@ -1317,14 +1307,9 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
             // #82968#
             if( !aDelData.IsDelete() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
+            if ( aDelData.IsDelete() )
+                return 1;
         }
-        else
-            bPreNotify = TRUE;
-
-        if ( aDelData.IsDelete() )
-            return 1;
-
-        pChild->ImplRemoveDel( &aDelData );
 
         if( bPreNotify || !pChild->ImplGetWindowImpl()->mbKeyInput )
             nRet = 1;
@@ -1525,39 +1510,38 @@ static BOOL ImplCallWheelCommand( Window* pWindow, const Point& rPos,
     Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
     CommandEvent        aCEvt( aCmdMousePos, COMMAND_WHEEL, TRUE, pWheelData );
     NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
-    ImplDelData         aDelData;
-    BOOL                bPreNotify;
-    pWindow->ImplAddDel( &aDelData );
-    if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
-    {
-        bPreNotify = FALSE;
-
-        pWindow->ImplGetWindowImpl()->mbCommand = FALSE;
-        pWindow->Command( aCEvt );
-    }
-    else
-        bPreNotify = TRUE;
+    ImplDelData         aDelData( pWindow );
+    BOOL                bPreNotify = (ImplCallPreNotify( aNCmdEvt ) != 0);
     if ( aDelData.IsDelete() )
         return FALSE;
-    pWindow->ImplRemoveDel( &aDelData );
-    if ( !bPreNotify && pWindow->ImplGetWindowImpl()->mbCommand )
-        return TRUE;
+    if ( !bPreNotify )
+    {
+        pWindow->ImplGetWindowImpl()->mbCommand = FALSE;
+        pWindow->Command( aCEvt );
+        if ( aDelData.IsDelete() )
+            return FALSE;
+        if ( pWindow->ImplGetWindowImpl()->mbCommand )
+            return TRUE;
+    }
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-long ImplHandleWheelEvent( Window* pWindow,
-                           long nX, long nY, ULONG nMsgTime,
-                           long nDelta, long nNotchDelta,
-                           ULONG nScrollLines, USHORT nCode, BOOL bHorz )
+static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    USHORT      nMode;
+    ImplDelData aDogTag( pWindow );
 
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maWinData.mpAutoScrollWin )
+        pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
     if ( pSVData->maHelpData.mpHelpWin )
         ImplDestroyHelpWindow();
+    if( aDogTag.IsDelete() )
+        return 0;
 
+    USHORT nMode;
+    USHORT nCode = rEvt.mnCode;
     if ( nCode & KEY_MOD1 )
         nMode = COMMAND_WHEEL_ZOOM;
     else if ( nCode & KEY_SHIFT )
@@ -1565,8 +1549,8 @@ long ImplHandleWheelEvent( Window* pWindow,
     else
         nMode = COMMAND_WHEEL_SCROLL;
 
-    Point               aMousePos( nX, nY );
-    CommandWheelData    aWheelData( nDelta, nNotchDelta, nScrollLines, nMode, nCode, bHorz );
+    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, rEvt.mbHorz );
+    Point               aMousePos( rEvt.mnX, rEvt.mnY );
     BOOL                bRet = TRUE;
 
     // first check any floating window ( eg. drop down listboxes)
@@ -2420,21 +2404,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             break;
 
         case SALEVENT_WHEELMOUSE:
-            {
-            ImplSVData* pSVData = ImplGetSVData();
-
-            if ( pSVData->maWinData.mpAutoScrollWin )
-                pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
-
-            SalWheelMouseEvent* pWheelEvt = (SalWheelMouseEvent*)pEvent;
-            nRet = ImplHandleWheelEvent( pWindow,
-                                         pWheelEvt->mnX, pWheelEvt->mnY,
-                                         pWheelEvt->mnTime,
-                                         pWheelEvt->mnDelta,
-                                         pWheelEvt->mnNotchDelta,
-                                         pWheelEvt->mnScrollLines,
-                                         pWheelEvt->mnCode, pWheelEvt->mbHorz );
-            }
+            nRet = ImplHandleWheelEvent( pWindow, *(const SalWheelMouseEvent*)pEvent);
             break;
 
         case SALEVENT_PAINT:
