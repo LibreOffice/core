@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:39:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,12 +710,30 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
             cChar = GetMirroredChar( cChar );
         int nGlyphIndex = cChar | GF_ISCHAR;
 
-        // request fallback glyph if necessary
+        // check if the font supports the char
         if( !mrFont.HasUnicodeChar( cChar ) )
         {
-            rArgs.NeedFallback( nCharPos, bRightToLeft );
-            if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
-                nGlyphIndex = 0; // drop NotDef fallback glyphs
+            // try to replace the failing char using the same font
+            const char* pApproxUTF8 = GetAutofallback( cChar );
+            cChar = 0;
+            if( pApproxUTF8 )
+            {
+                String aApproxStr( pApproxUTF8, RTL_TEXTENCODING_UTF8 );
+                if( aApproxStr.Len() == 1 )
+                {
+                    // TODO: support Autofallback for len>1
+                    sal_Unicode cApprox = aApproxStr.GetChar( 0 );
+                    if( mrFont.HasUnicodeChar( cApprox ) )
+                        nGlyphIndex = (cChar = cApprox) | GF_ISCHAR;
+                }
+            }
+            // request fallback glyph if necessary
+            if( !cChar )
+            {
+                rArgs.NeedFallback( nCharPos, bRightToLeft );
+                if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
+                    nGlyphIndex = 0; // drop NotDef fallback glyphs
+            }
         }
 
         sal_Int32 nPhysGlyphWidth, nLogGlyphWidth;
