@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:47:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,12 @@
  ************************************************************************/
 
 #include <stddef.h>
+
+/* Solaris 8 has no C99 stdint.h, and Solaris generally seems not to miss it for
+   SIZE_MAX: */
+#if !defined __SUNPRO_C
+#include <stdint.h>
+#endif
 
 #include "system.h"
 
