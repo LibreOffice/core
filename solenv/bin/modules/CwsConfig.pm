@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CwsConfig.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-10 15:59:30 $
+#   last change: $Author: hr $ $Date: 2006-06-09 12:16:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -383,9 +383,26 @@ sub read_config
             }
         }
         defined $config{$section} || croak("ERROR: unknown / no section '$section'\n");
-        if ( m/(\w[\w\d]*)=(.*)\s*/ ) {
-            $config{$section}->{$1} = $2;
-    #       print "Set '$1' to '$2'\n";
+        if ( m/(\w[\w\d]*)=(.*)/ ) {
+            my $var = $1;
+            my $val = $2;
+            # New style value strings may be surrounded by quotes
+            if ( $val =~ s/\s*(['"])(.*)\1\s*$/$2/ ) {
+                my $quote = $1;
+                # If and only if the value string is surrounded by quotes we
+                # can expect that \" or \' are escaped characters. In an unquoted
+                # old style value string they could mean exactly what is standing there
+                #
+                # Actually the RE above works without quoting the quote character
+                # (either " or ') inside the value string but users will probably
+                # expect that they need to be escaped if quotes are used.
+                #
+                # This is still not completly correct for all thinkable situations but
+                # should be good enough for all practical use cases.
+                $val =~ s/\\($quote)/$1/g;
+            }
+            $config{$section}->{$var} = $val;
+            # print "Set '$var' to '$val'\n";
         }
     }
     close ($fhandle) || croak("ERROR: Failed to close: $!");
