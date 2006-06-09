@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 12:03:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _RTL_STRBUF_HXX_
 #include <rtl/strbuf.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -311,35 +314,36 @@ removeSpoolDir (const rtl::OUString& rSpoolDir)
     system (pSystem);
 }
 
-/* creates a spool directory using the environment TMPDIR, or the
-   standard P_tmpdir definition (/tmp for Linux and /var/tmp for Solaris)
-   leads to a directory like "/tmp/pspXXXXXX" */
+/* creates a spool directory with a "pidgin random" value based on
+   current system time */
 rtl::OUString
 createSpoolDir ()
 {
-    /* get a tmp directory */
-    static char* pTmpDir = NULL;
-    if (pTmpDir == NULL)
+    TimeValue aCur;
+    osl_getSystemTime( &aCur );
+    sal_Int32 nRand = aCur.Seconds ^ (aCur.Nanosec/1000);
+
+    rtl::OUString aTmpDir;
+    osl_getTempDirURL( &aTmpDir.pData );
+
+    do
     {
-        if (! existsTmpDir(pTmpDir = getenv("TMPDIR")))
-            if (! existsTmpDir(pTmpDir = P_tmpdir))
-                pTmpDir = "/tmp";
-    }
-
-    /* create a subdirectory in the tmp directory */
-    char* pName = tempnam (pTmpDir, "psp");
-    rtl::OUString aSubDir = rtl::OUString::createFromAscii (pName);
-    rtl::OUString aUNCSubDir;
-    osl::File::getFileURLFromSystemPath (aSubDir, aUNCSubDir);
-    free (pName);
-
-    /* create directory with attributes */
-    osl::Directory::create (aUNCSubDir);
-    osl::File::setAttributes (aUNCSubDir, osl_File_Attribute_OwnWrite
-                              | osl_File_Attribute_OwnRead
-                              | osl_File_Attribute_OwnExe );
-
-    return aUNCSubDir;
+        rtl::OUStringBuffer aDir( aTmpDir.getLength() + 16 );
+        aDir.append( aTmpDir );
+        aDir.appendAscii( "/psp" );
+        aDir.append(nRand);
+        rtl::OUString aResult = aDir.makeStringAndClear();
+        if( osl::Directory::create( aResult ) == osl::FileBase::E_None )
+        {
+            osl::File::setAttributes( aResult,
+                                        osl_File_Attribute_OwnWrite
+                                      | osl_File_Attribute_OwnRead
+                                      | osl_File_Attribute_OwnExe );
+            return aResult;
+        }
+        nRand++;
+    } while( nRand );
+    return rtl::OUString();
 }
 
 } // namespace psp
