@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 11:01:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ static USHORT GetKeyCode( guint keyval )
             case GDK_KP_Equal:
             case GDK_equal:         nCode = KEY_EQUAL;      break;
             case GDK_Find:          nCode = KEY_FIND;       break;
-            case GDK_Menu:          nCode = KEY_MENU;       break;
+            case GDK_Menu:          nCode = KEY_CONTEXTMENU;break;
             case GDK_Help:          nCode = KEY_HELP;       break;
             case GDK_Undo:          nCode = KEY_UNDO;       break;
             case GDK_Redo:          nCode = KEY_REPEAT;     break;
@@ -1142,6 +1142,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
         {
             SessionManagerClient::open(); // will simply return after the first time
             initClientId();
+            getDisplay()->startupNotificationCompleted();
 
             if( m_bDefaultPos )
                 Center();
