@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:35:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,91 @@ sal_Unicode GetMirroredChar( sal_Unicode nChar )
 {
     nChar = (sal_Unicode)u_charMirror( nChar );
     return nChar;
+}
+
+// -----------------------------------------------------------------------
+
+// Get simple approximations for unicodes
+const char* GetAutofallback( sal_Unicode nChar )
+{
+    const char* pStr = NULL;
+    switch( nChar )
+    {
+        case 0x01C0:
+        case 0x2223:
+        case 0x2758:
+            pStr = "|"; break;
+        case 0x02DC:
+            pStr = "~"; break;
+        case 0x037E:
+            pStr = ";"; break;
+        case 0x2000:
+        case 0x2001:
+        case 0x2002:
+        case 0x2003:
+        case 0x2004:
+        case 0x2005:
+        case 0x2006:
+        case 0x2007:
+        case 0x2008:
+        case 0x2009:
+        case 0x200A:
+        case 0x202F:
+            pStr = " "; break;
+        case 0x2010:
+        case 0x2011:
+        case 0x2012:
+        case 0x2013:
+        case 0x2014:
+            pStr = "-"; break;
+        case 0x2015:
+            pStr = "--"; break;
+        case 0x2016:
+            pStr = "||"; break;
+        case 0x2017:
+            pStr = "_"; break;
+        case 0x2018:
+        case 0x2019:
+        case 0x201B:
+            pStr = "\'"; break;
+        case 0x201A:
+            pStr = ","; break;
+        case 0x201C:
+        case 0x201D:
+        case 0x201E:
+        case 0x201F:
+        case 0x2033:
+            pStr = "\""; break;
+        case 0x2039:
+            pStr = "<"; break;
+        case 0x203A:
+            pStr = ">"; break;
+        case 0x203C:
+            pStr = "!!"; break;
+        case 0x203D:
+            pStr = "?"; break;
+        case 0x2044:
+        case 0x2215:
+            pStr = "/"; break;
+        case 0x2048:
+            pStr = "?!"; break;
+        case 0x2049:
+            pStr = "!?"; break;
+        case 0x2216:
+            pStr = "\\"; break;
+        case 0x2217:
+            pStr = "*"; break;
+        case 0x2236:
+            pStr = ":"; break;
+        case 0x2264:
+            pStr = "<="; break;
+        case 0x2265:
+            pStr = "<="; break;
+        case 0x2303:
+            pStr = "^"; break;
+    }
+
+    return pStr;
 }
 
 // -----------------------------------------------------------------------
