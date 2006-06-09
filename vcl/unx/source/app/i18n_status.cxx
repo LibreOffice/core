@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:08:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ class XIMStatusWindow : public StatusWindow
 
     DECL_LINK( DelayedShowHdl, void* );
 public:
-    XIMStatusWindow();
+    XIMStatusWindow( bool bOn );
     virtual ~XIMStatusWindow();
 
     virtual void setPosition( SalFrame* );
@@ -132,7 +132,7 @@ public:
 
 }
 
-XIMStatusWindow::XIMStatusWindow() :
+XIMStatusWindow::XIMStatusWindow( bool bOn ) :
         StatusWindow( WB_BORDER | WB_SYSTEMFLOATWIN | WB_TOOLTIPWIN ),
         m_aStatusText( this, 0 ),
         m_pLastParent( NULL ),
@@ -140,7 +140,7 @@ XIMStatusWindow::XIMStatusWindow() :
         m_bDelayedShow( false ),
         m_eDelayedReason( I18NStatus::contextmap ),
         m_nDelayedEvent( 0 ),
-        m_bOn( true )
+        m_bOn( bOn )
 {
     layout();
 }
@@ -575,7 +575,7 @@ void I18NStatus::setParent( SalFrame* pParent )
             m_pStatusWindow = new IIIMPStatusWindow( pParent,
                                                      getStatusWindowMode() );
         else
-            m_pStatusWindow = new XIMStatusWindow();
+            m_pStatusWindow = new XIMStatusWindow( getStatusWindowMode() );
         setStatusText( m_aCurrentIM );
     }
     m_pStatusWindow->setPosition( m_pParent );
