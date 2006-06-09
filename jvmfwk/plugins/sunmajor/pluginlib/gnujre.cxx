@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:13:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:31:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,8 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 char const* const* GnuInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#ifdef X86_64
-          "/lib64/libgcj.so.7",
-          "/lib64/libgcj.so.6"
-#else
-          "/lib/libgcj.so.7",
-          "/lib/libgcj.so.6"
-#endif
+          "/libgcj.so.7",
+          "/libgcj.so.6"
     };
     *size = sizeof(ar) / sizeof (char*);
     return ar;
@@ -87,7 +82,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     OUString sVersionProperty(
         RTL_CONSTASCII_USTRINGPARAM("java.version"));
     OUString sHomeProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.home"));
+        RTL_CONSTASCII_USTRINGPARAM("gnu.classpath.home.url"));
     OUString sAccessProperty(
         RTL_CONSTASCII_USTRINGPARAM("javax.accessibility.assistive_technologies"));
 
@@ -111,19 +106,8 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         }
         else if (!bHome && sHomeProperty.equals(i->first))
         {
-           OUString fileURL;
-           if (osl_getFileURLFromSystemPath(i->second.pData,& fileURL.pData) ==
-               osl_File_E_None)
-           {
-               //make sure that the drive letter have all the same case
-               //otherwise file:///c:/jre and file:///C:/jre produce two
-               //different objects!!!
-               if (makeDriveLetterSame( & fileURL))
-               {
-                   m_sHome = fileURL;
-                   bHome = true;
-               }
-           }
+            m_sHome = i->second;
+            bHome = true;
         }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {
@@ -166,7 +150,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 
     if (!bRt)
     {
-        m_sHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr"));
+        m_sHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib"));
         for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
         {
             //Construct an absolute path to the possible runtime
