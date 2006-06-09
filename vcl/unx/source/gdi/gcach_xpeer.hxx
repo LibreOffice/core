@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:05:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ public:
     Picture     (*pXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*);
     void        (*pXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
     void        (*pXRenderFreePicture)(Display*,Picture);
+    void        (*pXRenderFillRectangle)(Display*,int,Picture,_Xconst XRenderColor*,int,int,unsigned int,unsigned int);
 #endif
 };
 
