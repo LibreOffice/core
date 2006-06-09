@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.173 $
+#   $Revision: 1.174 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 13:55:03 $
+#   last change: $Author: hr $ $Date: 2006-06-09 12:27:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@ SOLARINC+=$(JDKINCS)
 SOLARINC+=$(ORCLINC)
 SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
+# make sure INCLUDE isn't set
+INCLUDE:=
+.EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
 INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
