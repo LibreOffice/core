@@ -1,4 +1,4 @@
-vc	vcl	:	BOOST:boost NAS:nas FREETYPE:freetype psprint rsc sot ucbhelper unotools rvpapi icu i18npool unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx SNDFILE:sndfile PORTAUDIO:portaudio transex3 SO:officenames NULL
+vc	vcl	:	BOOST:boost NAS:nas FREETYPE:freetype psprint rsc sot ucbhelper unotools icu i18npool unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx SNDFILE:sndfile PORTAUDIO:portaudio transex3 SO:officenames NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\source\glyphs						nmake	-	all	vc_glyphs NULL
 vc	vcl\source\app							nmake	-	all	vc_app NULL
