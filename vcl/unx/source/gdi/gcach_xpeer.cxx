@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:04:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,11 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     pFunc=osl_getSymbol(pRenderLib, freePicFuncName.pData);
     if( !pFunc ) return;
     pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
+
+    OUString fillRectangleFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFillRectangle"));
+    pFunc=osl_getSymbol(pRenderLib, fillRectangleFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderFillRectangle           = (void(*)(Display*,int,Picture,_Xconst XRenderColor*,int,int,unsigned int,unsigned int))pFunc;
 #endif
 
     // needed to initialize libXrender internals, we already know its there
