@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:58:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,7 @@ char            *argv[];
 
                 case 'D':                       /* Define symbol        */
 #if HOST != SYS_UNIX
-                    zap_uc(ap);                 /* Force define to U.C. */
+/*                   zap_uc(ap);                 /* Force define to U.C. */
 #endif
                     /*
                      * If the option is just "-Dfoo", make it -Dfoo=1
@@ -326,7 +326,7 @@ char            *argv[];
 
                 case 'U':                       /* Undefine symbol      */
 #if HOST != SYS_UNIX
-                    zap_uc(ap);
+/*                    zap_uc(ap);*/
 #endif
                     if (defendel(ap, TRUE) == NULL)
                         cwarn("\"%s\" wasn't defined", ap);
