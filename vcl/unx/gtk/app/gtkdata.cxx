@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:32:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-09 12:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@ using namespace vcl_sal;
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol )
             : SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ), aCol ),
-              m_pGdkDisplay( pDisplay )
+              m_pGdkDisplay( pDisplay ),
+              m_bStartupCompleted( false )
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
@@ -101,6 +102,8 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol 
 
 GtkSalDisplay::~GtkSalDisplay()
 {
+    if( !m_bStartupCompleted )
+        gdk_notify_startup_complete();
     doDestruct();
 
     for(int i = 0; i < POINTER_COUNT; i++)
