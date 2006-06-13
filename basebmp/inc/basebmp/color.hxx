@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
+ *  last change: $Author: hdu $ $Date: 2006-06-13 13:06:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,24 @@ struct ColorBitmaskOutputMaskFunctor
 {
     Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
     {
+#if 0 //#####
         return Color(v1.toInt32()*(sal_uInt8)(1-m) + v2.toInt32()*m);
+#else //#####
+        static const int nAlphaDiv = 255; // 256 would be much faster and good enough...
+        int nR = v1.getRed();
+        int nS = v2.getRed();
+        nR = nS + (((nR - nS) * m) / nAlphaDiv);
+
+        int nG = v1.getGreen();
+        nS = v2.getGreen();
+        nG = nS + (((nG - nS) * m) / nAlphaDiv);
+
+        int nB = v1.getBlue();
+        nS = v2.getBlue();
+        nB = nS + (((nB - nS) * m) / nAlphaDiv);
+
+        return Color( nR, nG, nB );
+#endif //#####
     }
 };
 
