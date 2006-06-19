@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:24:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,8 +267,10 @@ Result normalizePrefix(
         return GeneralFailure;
     }
     try {
-        bool ok
-            = (css::uno::Reference< css::ucb::XCommandProcessor >(
+        #if OSL_DEBUG_LEVEL > 0
+        bool ok =
+        #endif
+            (css::uno::Reference< css::ucb::XCommandProcessor >(
                    content, css::uno::UNO_QUERY_THROW)->execute(
                        css::ucb::Command(
                            rtl::OUString(
@@ -299,13 +301,16 @@ rtl::OUString normalize(
     // normalize as long a prefix of the given URL as possible (i.e., normalize
     // all the existing directories within the path):
     rtl::OUString normalized;
-    sal_Int32 i = uriReference.indexOf('#');
-    normalized = i == -1 ? uriReference : uriReference.copy(0, i);
+    sal_Int32 n = uriReference.indexOf('#');
+    normalized = n == -1 ? uriReference : uriReference.copy(0, n);
     switch (normalizePrefix(broker, normalized, &normalized)) {
     case Success:
-        return i == -1 ? normalized : normalized + uriReference.copy(i);
+        return n == -1 ? normalized : normalized + uriReference.copy(n);
     case GeneralFailure:
         return uriReference;
+    case SpecificFailure:
+    default:
+        break;
     }
     css::uno::Reference< css::uri::XUriReference > ref(
         uriFactory->parse(uriReference));
