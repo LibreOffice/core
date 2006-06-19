@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:31:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void TabPage::Paint( const Rectangle& rRect )
+void TabPage::Paint( const Rectangle& )
 {
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
