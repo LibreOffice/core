@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:09:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,15 +69,13 @@
 #include "valueimp.hxx"
 
 #define _SV_VALUESET_CXX
-#define private public
-
 #include <valueset.hxx>
 
 // ------------
 // - ValueSet -
 // ------------
 
-void ValueSet::ImplInit( WinBits nWinStyle )
+void ValueSet::ImplInit()
 {
     // Size aWinSize        = GetSizePixel();
     mpItemList          = new ValueItemList;
@@ -123,7 +121,7 @@ ValueSet::ValueSet( Window* pParent, WinBits nWinStyle ) :
     maVirDev( *this ),
     maColor( COL_TRANSPARENT )
 {
-    ImplInit( nWinStyle );
+    ImplInit();
 }
 
 // -----------------------------------------------------------------------
@@ -133,7 +131,7 @@ ValueSet::ValueSet( Window* pParent, const ResId& rResId ) :
     maVirDev( *this ),
     maColor( COL_TRANSPARENT )
 {
-    ImplInit( rResId.aWinBits );
+    ImplInit();
 }
 
 // -----------------------------------------------------------------------
@@ -622,7 +620,6 @@ void ValueSet::Format()
         for ( ULONG i = 0; i < nItemCount; i++ )
         {
             ValueSetItem*   pItem = mpItemList->GetObject( i );
-            BOOL            bFireEvent = FALSE;
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
@@ -1289,7 +1286,7 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ValueSet,ImplTimerHdl, Timer*, pTimer )
+IMPL_LINK( ValueSet,ImplTimerHdl, Timer*, EMPTYARG )
 {
     ImplTracking( GetPointerPosPixel(), TRUE );
     return 0;
@@ -1676,7 +1673,7 @@ void ValueSet::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void ValueSet::Paint( const Rectangle& rRect )
+void ValueSet::Paint( const Rectangle& )
 {
     if ( GetStyle() & WB_FLATVALUESET )
     {
@@ -2181,14 +2178,14 @@ void ValueSet::SetFirstLine( USHORT nNewLine )
 
 void ValueSet::SelectItem( USHORT nItemId )
 {
-    USHORT nPos = 0;
+    USHORT nItemPos = 0;
 
     if ( nItemId )
     {
-        nPos = GetItemPos( nItemId );
-        if ( nPos == VALUESET_ITEM_NOTFOUND )
+        nItemPos = GetItemPos( nItemId );
+        if ( nItemPos == VALUESET_ITEM_NOTFOUND )
             return;
-        if ( mpItemList->GetObject( nPos )->meType == VALUESETITEM_SPACE )
+        if ( mpItemList->GetObject( nItemPos )->meType == VALUESETITEM_SPACE )
             return;
     }
 
@@ -2209,7 +2206,7 @@ void ValueSet::SelectItem( USHORT nItemId )
         // Gegebenenfalls in den sichtbaren Bereich scrollen
         if ( mbScroll && nItemId )
         {
-            USHORT nNewLine = (USHORT)(nPos / mnCols);
+            USHORT nNewLine = (USHORT)(nItemPos / mnCols);
             if ( nNewLine < mnFirstLine )
             {
                 mnFirstLine = nNewLine;
@@ -2260,26 +2257,23 @@ void ValueSet::SelectItem( USHORT nItemId )
             }
 
             // focus event (select)
-            if (mnSelItemId >= 0)
+            const USHORT nPos = GetItemPos( mnSelItemId );
+
+            ValueSetItem* pItem;
+            if( nPos != VALUESET_ITEM_NOTFOUND )
+                pItem = mpItemList->GetObject(nPos);
+            else
+                pItem = mpNoneItem;
+
+            ValueItemAcc* pItemAcc = NULL;
+            if (pItem != NULL)
+                pItemAcc = ValueItemAcc::getImplementation(pItem->GetAccessible() );
+
+            if( pItemAcc )
             {
-                const USHORT nPos = GetItemPos( mnSelItemId );
-
-                ValueSetItem* pItem;
-                if( nPos != VALUESET_ITEM_NOTFOUND )
-                    pItem = mpItemList->GetObject(nPos);
-                else
-                    pItem = mpNoneItem;
-
-                ValueItemAcc* pItemAcc = NULL;
-                if (pItem != NULL)
-                    pItemAcc = ValueItemAcc::getImplementation(pItem->GetAccessible() );
-
-                if( pItemAcc )
-                {
-                    ::com::sun::star::uno::Any aOldAny, aNewAny;
-                    aNewAny <<= pItem->GetAccessible();
-                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-                }
+                ::com::sun::star::uno::Any aOldAny, aNewAny;
+                aNewAny <<= pItem->GetAccessible();
+                ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
             }
 
             // selection event
