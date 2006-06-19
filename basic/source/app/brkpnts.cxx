@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:14:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 #include "ttstrhlp.hxx"
 #endif
 
-#include <brkpnts.hxx>
+#include "brkpnts.hxx"
 #include "basic.hrc"
 #include "resids.hrc"
 
@@ -83,8 +83,9 @@ ImageList* BreakpointWindow::pImages = NULL;
 BreakpointWindow::BreakpointWindow( Window *pParent )
 : Window( pParent )
 , nCurYOffset( 0 )
-, pModule( NULL )
 , nMarkerPos( MARKER_NOMARKER )
+, pModule( NULL )
+, bErrorMarker( FALSE )
 {
     if ( !pImages )
         pImages = new ImageList( ResId( RID_IMGLST_LAYOUT ) );
@@ -332,7 +333,6 @@ Breakpoint* BreakpointWindow::FindBreakpoint( const Point& rMousePos )
 
 void BreakpointWindow::ToggleBreakpoint( USHORT nLine )
 {
-    BOOL bNewBreakPoint = FALSE;
     Breakpoint* pBrk = FindBreakpoint( nLine );
     if ( pBrk ) // entfernen
     {
@@ -402,8 +402,9 @@ void BreakpointWindow::SetMarkerPos( USHORT nLine, BOOL bError )
 }
 
 
-void BreakpointWindow::Scroll( long nHorzScroll, long nVertScroll )
+void BreakpointWindow::Scroll( long nHorzScroll, long nVertScroll, USHORT nFlags )
 {
+    (void) nFlags; /* avoid warning about unused parameter */
     nCurYOffset -= nVertScroll;
     Window::Scroll( nHorzScroll, nVertScroll );
 }
