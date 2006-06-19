@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopracc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:12:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //------------------------------------------------------------------------
 //
@@ -103,7 +101,7 @@ uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText() t
   return uno::Reference< text::XText > ();
 }
 
-uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryAggregation( const uno::Type & ) throw(uno::RuntimeException)
 {
   // TODO (empty?)
   return uno::Any();
