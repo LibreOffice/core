@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:54:01 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:14:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ARCH_FLAGS*=
 
 CC= gcc
 CXX= g++
-CFLAGS= -w -c $(INCLUDE)
+CFLAGS=-c $(INCLUDE)
 CDEFS+= -D_PTHREADS -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
 CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSCXX=$(ARCH_FLAGS)
@@ -83,10 +83,11 @@ CFLAGSOPT=-O2
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
-# Enable all warnings
-CFLAGSWALL=-Wall
-# Set the default warn level
-CFLAGSDFLTWARN=-w
+
+CFLAGSWARNCC=-w
+CFLAGSWALLCC=-Wall
+CFLAGSWERRCC=-Werror
+
 # exception flags
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
