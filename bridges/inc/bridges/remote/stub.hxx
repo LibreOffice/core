@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stub.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:13:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,13 @@
 
 namespace bridges_remote {
 
+extern "C" typedef void SAL_CALL AcquireUno2RemoteStub( remote_Interface *pThis );
+AcquireUno2RemoteStub acquireUno2RemoteStub;
+
+extern "C" typedef void SAL_CALL FreeUno2RemoteStub(
+    uno_ExtEnvironment * environment, void * stub);
+FreeUno2RemoteStub freeUno2RemoteStub;
+
 class Uno2RemoteStub :
     public remote_Interface
 {
@@ -49,15 +56,6 @@ public:
                     uno_Environment *pEnvUno,
                     uno_Environment *pEnvRemote );
     ~Uno2RemoteStub();
-
-    static void SAL_CALL thisAcquire( remote_Interface *pThis );
-    static void SAL_CALL thisRelease( remote_Interface *pThis );
-    static void SAL_CALL thisDispatch( remote_Interface * pUnoI,
-                              typelib_TypeDescription * pMemberType,
-                              void * pReturn,
-                              void * pArgs[],
-                              uno_Any ** ppException );
-    static void SAL_CALL thisFree( uno_ExtEnvironment * pEnvRemote, void *pThis );
 
 public:
     ::rtl::OUString m_sOid;
