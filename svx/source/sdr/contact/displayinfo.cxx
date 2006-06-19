@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:02:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,8 @@ namespace sdr
         DisplayInfo::DisplayInfo(SdrPageView* pPageView)
         :   mpPageView(pPageView),
             mpProcessedPage(0L),
-            // init layer info with all bits set to draw everything on default
-            maProcessLayers(sal_True),
             mpLastDisplayInfo(0L),
+            maProcessLayers(sal_True), // init layer info with all bits set to draw everything on default
             mpOutputDevice(0L),
             mpExtOutputDevice(0L),
             mpPaintInfoRec(0L),
