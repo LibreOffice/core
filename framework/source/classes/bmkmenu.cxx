@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:08:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ USHORT BmkMenu_Impl::GetMID()
 // ------------------------------------------------------------------------
 
 BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot ) :
-    m_xFrame( xFrame ), m_nType( nType )
+    m_nType( nType ), m_xFrame( xFrame )
 {
     _pImp = new BmkMenu_Impl( pRoot );
     Initialize();
