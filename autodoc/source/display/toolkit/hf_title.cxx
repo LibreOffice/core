@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_title.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:58:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,8 @@ HF_SubTitleTable::HF_SubTitleTable( Xml::Element &      o_rOut,
 
     if (i_nColumns > 1)
     {
-        String sColumns = StreamLock(20)() << i_nColumns << c_str;
+        StreamLock sl(20);
+        String sColumns = sl() << i_nColumns << c_str;
         rCell
             << new Xml::AnAttribute(C_sColSpan, sColumns);
     }
