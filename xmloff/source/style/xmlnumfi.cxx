@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:59:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ struct SvXMLNumFmtEntry
 };
 
 typedef SvXMLNumFmtEntry* SvXMLNumFmtEntryPtr;
-SV_DECL_PTRARR_DEL( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr, 4, 4 )
 
 struct SvXMLEmbeddedElement
 {
@@ -94,7 +94,7 @@ struct SvXMLEmbeddedElement
 };
 
 typedef SvXMLEmbeddedElement* SvXMLEmbeddedElementPtr;
-SV_DECL_PTRARR_SORT_DEL( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr, 0, 4 );
+SV_DECL_PTRARR_SORT_DEL( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr, 0, 4 )
 
 //-------------------------------------------------------------------------
 
@@ -662,13 +662,13 @@ SvXMLNumFmtMapContext::~SvXMLNumFmtMapContext()
 
 SvXMLImportContext* SvXMLNumFmtMapContext::CreateChildContext(
                                     USHORT nPrfx, const rtl::OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+                                    const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
     return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
-void SvXMLNumFmtMapContext::Characters( const rtl::OUString& rChars )
+void SvXMLNumFmtMapContext::Characters( const rtl::OUString& )
 {
 }
 
@@ -709,13 +709,13 @@ SvXMLNumFmtPropContext::~SvXMLNumFmtPropContext()
 
 SvXMLImportContext* SvXMLNumFmtPropContext::CreateChildContext(
                                     USHORT nPrfx, const rtl::OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+                                    const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
     return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
-void SvXMLNumFmtPropContext::Characters( const rtl::OUString& rChars )
+void SvXMLNumFmtPropContext::Characters( const rtl::OUString& )
 {
 }
 
@@ -762,7 +762,7 @@ SvXMLNumFmtEmbeddedTextContext::~SvXMLNumFmtEmbeddedTextContext()
 
 SvXMLImportContext* SvXMLNumFmtEmbeddedTextContext::CreateChildContext(
                                     USHORT nPrfx, const rtl::OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+                                    const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
     return new SvXMLImportContext( GetImport(), nPrfx, rLName );
@@ -1198,7 +1198,7 @@ void SvXMLNumFmtElementContext::EndElement()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const SvtSysLocale& rSysLoc, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const SvtSysLocale&, BOOL bLong )
 {
     // TODO: merge system information and defaults into i18n locale data
 #if 0
@@ -1208,7 +1208,7 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const SvtSysLocale& rSysLoc, BOOL
 #endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const SvtSysLocale& rSysLoc, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const SvtSysLocale&, BOOL bLong )
 {
     // TODO: merge system information and defaults into i18n locale data
 #if 0
@@ -1224,7 +1224,7 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const SvtSysLocale& rSysLoc, BO
 #endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const SvtSysLocale& rSysLoc, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const SvtSysLocale&, BOOL bLong )
 {
     // TODO: merge system information and defaults into i18n locale data
 #if 0
@@ -1240,7 +1240,7 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const SvtSysLocale& rSysLoc,
 #endif
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const SvtSysLocale& rSysLoc, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const SvtSysLocale&, BOOL bLong )
 {
     // TODO: merge system information and defaults into i18n locale data
 #if 0
@@ -1256,7 +1256,7 @@ sal_Bool SvXMLNumFmtDefaults::IsSystemLongEra( const SvtSysLocale& rSysLoc, BOOL
     return IsSystemLongYear( rSysLoc, bLong );      // no separate setting
 }
 
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const SvtSysLocale& rSysLoc, BOOL bLong )
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const SvtSysLocale&, BOOL bLong )
 {
     // TODO: merge system information and defaults into i18n locale data
 #if 0
@@ -1568,7 +1568,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( com::sun::star::uno::Reference
         return nKey;
 }
 
-void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
+void SvXMLNumFormatContext::CreateAndInsert(sal_Bool /*bOverwrite*/)
 {
     if (!(nKey > -1))
         CreateAndInsert(pData->GetNumberFormatter());
@@ -1656,8 +1656,8 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             xub_StrLen  nErrPos = 0;
-            short       nType   = 0;
-            sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, nType, nIndex, nFormatLang );
+            short       l_nType = 0;
+            sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, nFormatLang );
             if ( !bOk && nErrPos == 0 && aFormatStr != String(sFormat) )
             {
                 //  if the string was modified by PutEntry, look for an existing format
@@ -2117,11 +2117,11 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     rtl::OUString rApplyName = aMyConditions[nIndex].sMapName;
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
-    sal_uInt32 nKey = pData->GetKeyForName( rApplyName );
+    sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
     OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
-    if ( pFormatter && nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
+    if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
             rCondition.copy( 0, nValLen ) == sValue )
     {
         //! test for valid conditions
@@ -2157,7 +2157,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
             aConditions.append( (sal_Unicode) ']' );
         }
 
-        const SvNumberformat* pFormat = pFormatter->GetEntry(nKey);
+        const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);
         if ( pFormat )
             aConditions.append( OUString( pFormat->GetFormatstring() ) );
 
