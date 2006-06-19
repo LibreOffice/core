@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:54:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,43 +141,38 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     enum XMLTokenEnum eLevelAttrName,
     const sal_Char** pLevelStylePropMap,
     const sal_Bool* pAllowedTokenTypes,
-    sal_Bool bT ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rPropertySet(rPropSet),
-        sStyleName(),
-        nOutlineLevel(1),   // all indices have level 1 (0 is for header)
-        bStyleNameOK(sal_False),
-        bOutlineLevelOK(sal_False),
-        eOutlineLevelAttrName(eLevelAttrName),
-        pOutlineLevelNameMap(pLevelNameMap),
-        pOutlineLevelStylePropMap(pLevelStylePropMap),
-        pAllowedTokenTypesMap(pAllowedTokenTypes),
-        sTokenEntryNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenEntryNumber)),
-        sTokenEntryText(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenEntryText)),
-        sTokenTabStop(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenTabStop)),
-        sTokenText(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenText)),
-        sTokenPageNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenPageNumber)),
-        sTokenChapterInfo(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenChapterInfo)),
-        sTokenHyperlinkStart(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_TokenHyperlinkStart)),
-        sTokenHyperlinkEnd(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_TokenHyperlinkEnd)),
-        sTokenBibliographyDataField(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_TokenBibliographyDataField)),
-        sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat")),
-        sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
-        sTabStopRightAligned(RTL_CONSTASCII_USTRINGPARAM(
-            "TabStopRightAligned")),
-        sTabStopPosition(RTL_CONSTASCII_USTRINGPARAM("TabStopPosition")),
-        sTabStopFillCharacter(RTL_CONSTASCII_USTRINGPARAM(
-            "TabStopFillCharacter")),
-        sCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM("CharacterStyleName")),
-        sTokenType(RTL_CONSTASCII_USTRINGPARAM("TokenType")),
-        sText(RTL_CONSTASCII_USTRINGPARAM("Text")),
-        sBibliographyDataField(RTL_CONSTASCII_USTRINGPARAM(
-            "BibliographyDataField")),
-        sChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat")),
-        bTOC( bT )
+    sal_Bool bT )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   pOutlineLevelNameMap(pLevelNameMap)
+,   eOutlineLevelAttrName(eLevelAttrName)
+,   pOutlineLevelStylePropMap(pLevelStylePropMap)
+,   pAllowedTokenTypesMap(pAllowedTokenTypes)
+,   nOutlineLevel(1)    // all indices have level 1 (0 is for header)
+,   bStyleNameOK(sal_False)
+,   bOutlineLevelOK(sal_False)
+,   bTOC( bT )
+,   rPropertySet(rPropSet)
+,   sTokenEntryNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenEntryNumber))
+,   sTokenEntryText(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenEntryText))
+,   sTokenTabStop(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenTabStop))
+,   sTokenText(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenText))
+,   sTokenPageNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenPageNumber))
+,   sTokenChapterInfo(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenChapterInfo))
+,   sTokenHyperlinkStart(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenHyperlinkStart))
+,   sTokenHyperlinkEnd(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenHyperlinkEnd))
+,   sTokenBibliographyDataField(RTL_CONSTASCII_USTRINGPARAM(sAPI_TokenBibliographyDataField))
+
+,   sCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM("CharacterStyleName"))
+,   sTokenType(RTL_CONSTASCII_USTRINGPARAM("TokenType"))
+,   sText(RTL_CONSTASCII_USTRINGPARAM("Text"))
+,   sTabStopRightAligned(RTL_CONSTASCII_USTRINGPARAM("TabStopRightAligned"))
+,   sTabStopPosition(RTL_CONSTASCII_USTRINGPARAM("TabStopPosition"))
+,   sTabStopFillCharacter(RTL_CONSTASCII_USTRINGPARAM("TabStopFillCharacter"))
+,   sBibliographyDataField(RTL_CONSTASCII_USTRINGPARAM("BibliographyDataField"))
+,   sChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat"))
+
+,   sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat"))
+,   sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel"))
 {
     DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (NULL != pLevelNameMap))
                 || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (NULL == pLevelNameMap)),
