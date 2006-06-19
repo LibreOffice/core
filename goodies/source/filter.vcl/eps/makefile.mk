@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:45:33 $
+#   last change: $Author: hr $ $Date: 2006-06-19 21:43:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ SRS1NAME=$(TARGET)
 SRC1FILES =	dlgeps.src \
             epsstr.src
 
+EXCEPTIONSFILES=$(SLO)$/eps.obj
 SLOFILES =	$(SLO)$/eps.obj \
             $(SLO)$/dlgeps.obj
 
