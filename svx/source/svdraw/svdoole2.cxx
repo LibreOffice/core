@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:52:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ SdrEmbeddedObjectStateListener_Impl::SdrEmbeddedObjectStateListener_Impl( SdrOle
 {
 }
 
-void SAL_CALL SdrEmbeddedObjectStateListener_Impl::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrEmbeddedObjectStateListener_Impl::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -148,7 +148,7 @@ void SdrEmbeddedObjectStateListener_Impl::Release()
     release();
 }
 
-void SAL_CALL SdrEmbeddedObjectStateListener_Impl::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrEmbeddedObjectStateListener_Impl::stateChanged( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
@@ -161,7 +161,7 @@ void SAL_CALL SdrEmbeddedObjectStateListener_Impl::stateChanged( const ::com::su
     }
 }
 
-void SAL_CALL SdrEmbeddedObjectStateListener_Impl::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrEmbeddedObjectStateListener_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(mpObj);
 }
@@ -200,8 +200,8 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 
 // -----------------------------------------------------------------------------
 
-void SdrEmbedObjectLink::DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
+                                const ::com::sun::star::uno::Any & /*rValue*/ )
 {
     if ( !pObj->UpdateLinkURL_Impl() )
     {
@@ -1175,7 +1175,7 @@ sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& r
     return bOk;
 }
 
-void SdrOle2Obj::PaintGraphic_Impl( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec, sal_Bool bActive ) const
+void SdrOle2Obj::PaintGraphic_Impl( XOutputDevice& rOut, const SdrPaintInfoRec& /*rInfoRec*/, sal_Bool bActive ) const
 {
     OutputDevice* pOutDev = rOut.GetOutDev();
     OSL_ENSURE( pOutDev, "The device must be provided!\n" );
@@ -1629,6 +1629,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             }
 
             sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
+            (void)nMiscStatus;
             //TODO/LATER: wait until ResizeOnPrinterChange is defined
             //if ( nMiscStatus & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE )
             {
