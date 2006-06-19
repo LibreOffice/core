@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:06:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1480,7 +1480,7 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
             USHORT nToken;
             String aValue;
             sal_uInt32 nStt = nPos;
-            register sal_Unicode c = 0;
+            sal_Unicode cChar = 0;
 
             // Eigentlich sind hier nur ganz bestimmte Zeichen erlaubt.
             // Netscape achtet aber nur auf "=" und Leerzeichen (siehe
@@ -1488,8 +1488,8 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
             // lipparse/pa_mdl.c
 //          while( nPos < aToken.Len() &&
 //                  ( '-'==(c=aToken[nPos]) || isalnum(c) || '.'==c || '_'==c) )
-            while( nPos < aToken.Len() && '=' != (c=aToken.GetChar(nPos)) &&
-                   HTML_ISPRINTABLE(c) && !HTML_ISSPACE(c) )
+            while( nPos < aToken.Len() && '=' != (cChar=aToken.GetChar(nPos)) &&
+                   HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
                 nPos++;
 
             String sName( aToken.Copy( nStt, nPos-nStt ) );
@@ -1507,27 +1507,27 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
                               (!pNoConvertToken || nToken != *pNoConvertToken);
 
             while( nPos < aToken.Len() &&
-                   ( !HTML_ISPRINTABLE( (c=aToken.GetChar(nPos)) ) ||
-                     HTML_ISSPACE(c) ) )
+                   ( !HTML_ISPRINTABLE( (cChar=aToken.GetChar(nPos)) ) ||
+                     HTML_ISSPACE(cChar) ) )
                 nPos++;
 
             // hat die Option auch einen Wert?
-            if( nPos!=aToken.Len() && '='==c )
+            if( nPos!=aToken.Len() && '='==cChar )
             {
                 nPos++;
 
                 while( nPos < aToken.Len() &&
-                        ( !HTML_ISPRINTABLE( (c=aToken.GetChar(nPos)) ) ||
-                          ' '==c || '\t'==c || '\r'==c || '\n'==c ) )
+                        ( !HTML_ISPRINTABLE( (cChar=aToken.GetChar(nPos)) ) ||
+                          ' '==cChar || '\t'==cChar || '\r'==cChar || '\n'==cChar ) )
                     nPos++;
 
                 if( nPos != aToken.Len() )
                 {
                     sal_uInt32 nLen = 0UL;
                     nStt = nPos;
-                    if( ('"'==c) || ('\'')==c )
+                    if( ('"'==cChar) || ('\'')==cChar )
                     {
-                        sal_Unicode cEnd = c;
+                        sal_Unicode cEnd = cChar;
                         nPos++; nStt++;
                         BOOL bDone = FALSE;
                         BOOL bEscape = FALSE;
@@ -1535,8 +1535,8 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
                         {
                             BOOL bOldEscape = bEscape;
                             bEscape = FALSE;
-                            c = aToken.GetChar(nPos);
-                            switch( c )
+                            cChar = aToken.GetChar(nPos);
+                            switch( cChar )
                             {
                             case '\r':
                             case '\n':
@@ -1558,7 +1558,7 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
                                 break;
                             case '"':
                             case '\'':
-                                bDone = !bOldEscape && c==cEnd;
+                                bDone = !bOldEscape && cChar==cEnd;
                                 if( !bDone )
                                     nPos++, nLen++;
                                 break;
