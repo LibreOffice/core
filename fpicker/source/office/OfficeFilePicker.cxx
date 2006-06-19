@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 12:49:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -853,7 +853,7 @@ void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePicker
 }
 
 //------------------------------------------------------------------------------------
-void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePickerListener >& xListener ) throw ( RuntimeException )
+void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePickerListener >& ) throw ( RuntimeException )
 {
     checkAlive();
 
