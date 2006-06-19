@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:13:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-#include <sbxdef.hxx>
-#include <sbx.hxx>
 #include "runtime.hxx"
 #ifndef GCC
 #pragma hdrstop
@@ -85,8 +83,8 @@ SbxVariable* SbiRuntime::FindElement
             {
                 if( pElem->IsSet( SBX_PRIVATE ) )
                 {
-                    SbiInstance* pInst = pINST;
-                    if( pInst && pInst->IsCompatibility() && pObj != pElem->GetParent() )
+                    SbiInstance* pInst_ = pINST;
+                    if( pInst_ && pInst_->IsCompatibility() && pObj != pElem->GetParent() )
                         pElem = NULL;   // Found but in wrong module!
 
                     // Interfaces: Use SBX_EXTFOUND
@@ -189,10 +187,10 @@ SbxVariable* SbiRuntime::FindElement
 
             // Moegliche Reste vom letzten Aufruf der SbxMethod beseitigen
             // Vorher Schreiben freigeben, damit kein Error gesetzt wird.
-            USHORT nFlags = pElem->GetFlags();
+            USHORT nSavFlags = pElem->GetFlags();
             pElem->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
             pElem->SbxValue::Clear();
-            pElem->SetFlags( nFlags );
+            pElem->SetFlags( nSavFlags );
 
             // Erst nach dem Setzen anfassen, da z.B. LEFT()
             // den Unterschied zwischen Left$() und Left() kennen muss
@@ -322,7 +320,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, USHORT nOp1 )
             SbxInfo* pInfo = p->GetInfo();
             if( !pInfo )
             {
-                bool bError = true;
+                bool bError_ = true;
 
                 SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
                 if( pUnoMethod )
@@ -335,7 +333,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, USHORT nOp1 )
                         aUnoAny >>= xInvocation;
                         if( xInvocation.is() )  // TODO: if( xOLEAutomation.is() )
                         {
-                            bError = false;
+                            bError_ = false;
 
                             USHORT nCurPar = 1;
                             AutomationNamedArgsSbxArray* pArg =
@@ -353,7 +351,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, USHORT nOp1 )
                         }
                     }
                 }
-                if( bError )
+                if( bError_ )
                     Error( SbERR_NO_NAMED_ARGS );
             }
             else
@@ -467,10 +465,10 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             Reference< XInterface > xRet;
                             try
                             {
-                                Any aAny = xIndexAccess->getByIndex( nIndex );
-                                TypeClass eType = aAny.getValueType().getTypeClass();
+                                Any aAny2 = xIndexAccess->getByIndex( nIndex );
+                                TypeClass eType = aAny2.getValueType().getTypeClass();
                                 if( eType == TypeClass_INTERFACE )
-                                    xRet = *(Reference< XInterface >*)aAny.getValue();
+                                    xRet = *(Reference< XInterface >*)aAny2.getValue();
                             }
                             catch (IndexOutOfBoundsException& e1)
                             {
@@ -509,11 +507,11 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
                         if ( sDefaultMethod.getLength() )
                         {
-                            SbxVariable* pMeth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
-                            SbxVariableRef refTemp = pMeth;
+                            SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                            SbxVariableRef refTemp = meth;
                             if ( refTemp )
                             {
-                                pMeth->SetParameters( pPar );
+                                meth->SetParameters( pPar );
                                 SbxVariable* pNew = new SbxMethod( *(SbxMethod*)pMeth );
                                 pElem = pNew;
                             }
@@ -748,7 +746,7 @@ void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
     // Searches of the next STMNT instruction,
     // around the final column of this statement to set
 
-    nCol2 = -1;
+    nCol2 = 0xffff;
     USHORT n1, n2;
     const BYTE* p = pMod->FindNextStmnt( pCode, n1, n2 );
     if( p )
@@ -841,12 +839,12 @@ void SbiRuntime::StepCREATE( USHORT nOp1, USHORT nOp2 )
 
 void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
 {
-    StepDCREATE_IMPL( nOp1, nOp2, FALSE );
+    StepDCREATE_IMPL( nOp1, nOp2 );
 }
 
 void SbiRuntime::StepDCREATE_REDIMP( USHORT nOp1, USHORT nOp2 )
 {
-    StepDCREATE_IMPL( nOp1, nOp2, TRUE );
+    StepDCREATE_IMPL( nOp1, nOp2 );
 }
 
 
@@ -871,7 +869,7 @@ void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, s
 }
 
 // #56204 Objekt-Array kreieren (+StringID+StringID), DCREATE == Dim-Create
-void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
+void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2 )
 {
     SbxVariableRef refVar = PopVar();
 
@@ -893,11 +891,11 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
 
         // Dimensionen auswerten
         short nDims = pArray->GetDims();
-        UINT32 nTotalSize = 0;
+        INT32 nTotalSize = 0;
 
         // es muss ein eindimensionales Array sein
         INT32 nLower, nUpper, nSize;
-        UINT32 i;
+        INT32 i;
         for( i = 0 ; i < nDims ; i++ )
         {
             pArray->GetDim32( i+1, nLower, nUpper );
@@ -912,8 +910,8 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
         String aClass( pImg->GetString( nOp2 ) );
         for( i = 0 ; i < nTotalSize ; i++ )
         {
-            SbxObject *pObj = SbxBase::CreateObject( aClass );
-            if( !pObj )
+            SbxObject *pClassObj = SbxBase::CreateObject( aClass );
+            if( !pClassObj )
             {
                 Error( SbERR_INVALID_OBJECT );
                 break;
@@ -921,10 +919,10 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
             else
             {
                 String aName( pImg->GetString( nOp1 ) );
-                pObj->SetName( aName );
+                pClassObj->SetName( aName );
                 // Das Objekt muss BASIC rufen koennen
-                pObj->SetParent( &rBasic );
-                pArray->SbxArray::Put32( pObj, i );
+                pClassObj->SetParent( &rBasic );
+                pArray->SbxArray::Put32( pClassObj, i );
             }
         }
     }
@@ -1110,6 +1108,8 @@ void SbiRuntime::StepFIND_G( USHORT nOp1, USHORT nOp2 )
 
 void SbiRuntime::StepSTATIC( USHORT nOp1, USHORT nOp2 )
 {
+    (void)nOp1;
+    (void)nOp2;
     /* AB #40689, wird nicht mehr verwendet
     String aName( pImg->GetString( nOp1 ) );
     SbxDataType t = (SbxDataType) nOp2;
