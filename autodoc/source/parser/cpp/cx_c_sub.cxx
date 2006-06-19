@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_c_sub.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:18:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ Context_ConstNumeric::ReadCharChain(CharacterSource & io_rText)
 
     do {
         do {
-            cNext = tolower(io_rText.MoveOn());
+            cNext = static_cast<char>( tolower(io_rText.MoveOn()) );
         } while (cNext != 'e' AND isalnum(cNext) OR cNext == '.');
         if (cNext == 'e')
         {
