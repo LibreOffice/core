@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fstat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:16:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ BOOL FileStat::IsKind( DirEntryKind nKind ) const
 
 BOOL FileStat::HasReadOnlyFlag()
 {
-#if defined(WNT) || defined(OS2) || defined(UNX)
+#if defined WNT || defined UNX
     return TRUE;
 #else
     return FALSE;
@@ -187,37 +187,20 @@ BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
-#ifdef WNT
+#if defined WNT
     DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.GetBuffer() );
     return ULONG_MAX != nRes &&
            ( FILE_ATTRIBUTE_READONLY & nRes ) == FILE_ATTRIBUTE_READONLY;
-#endif
-
-#ifdef OS2
-    FILESTATUS3 aFileStat;
-    APIRET nRet = DosQueryPathInfo( (PSZ)aFPath.GetBuffer(), 1, &aFileStat, sizeof(aFileStat) );
-    switch ( nRet )
-    {
-        case NO_ERROR:
-            return FILE_READONLY == ( aFileStat.attrFile & FILE_READONLY );
-
-        case ERROR_SHARING_VIOLATION:
-            return ERRCODE_IO_LOCKVIOLATION;
-
-        default:
-            return ERRCODE_IO_NOTEXISTS;
-    }
-#endif
-
-#ifdef UNX
+#elif defined UNX
     /* could we stat the object? */
     struct stat aBuf;
     if (stat(aFPath.GetBuffer(), &aBuf))
         return FALSE;
     /* jupp, is writable for user? */
     return((aBuf.st_mode & S_IWUSR) != S_IWUSR);
-#endif
+#else
     return FALSE;
+#endif
 }
 
 /*************************************************************************
@@ -234,38 +217,14 @@ ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
 
-#ifdef WNT
+#if defined WNT
     DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.GetBuffer() );
     if ( ULONG_MAX != nRes )
         nRes = SetFileAttributes( (LPCTSTR) aFPath.GetBuffer(),
                     ( nRes & ~FILE_ATTRIBUTE_READONLY ) |
                     ( bRO ? FILE_ATTRIBUTE_READONLY : 0 ) );
     return ( ULONG_MAX == nRes ) ? ERRCODE_IO_UNKNOWN : 0;
-#endif
-
-#ifdef OS2
-    FILESTATUS3 aFileStat;
-    APIRET nRet = DosQueryPathInfo( (PSZ)aFPath.GetBuffer(), 1, &aFileStat, sizeof(aFileStat) );
-    if ( !nRet )
-    {
-        aFileStat.attrFile = ( aFileStat.attrFile & ~FILE_READONLY ) |
-                             ( bRO ? FILE_READONLY : 0 );
-        nRet = DosSetPathInfo( (PSZ)aFPath.GetBuffer(), 1, &aFileStat, sizeof(aFileStat), 0 );
-    }
-    switch ( nRet )
-    {
-        case NO_ERROR:
-            return ERRCODE_NONE;
-
-        case ERROR_SHARING_VIOLATION:
-            return ERRCODE_IO_LOCKVIOLATION;
-
-        default:
-            return ERRCODE_IO_NOTEXISTS;
-    }
-#endif
-
-#ifdef UNX
+#elif defined UNX
     /* first, stat the object to get permissions */
     struct stat aBuf;
     if (stat(aFPath.GetBuffer(), &aBuf))
@@ -294,8 +253,9 @@ ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
     }
     else
         return ERRCODE_NONE;
-#endif
+#else
     return ERRCODE_IO_NOTSUPPORTED;
+#endif
 }
 
 /*************************************************************************
@@ -306,7 +266,7 @@ ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
 |*    Letzte Aenderung
 |*
 *************************************************************************/
-#if defined(WIN) | defined(WNT) | defined(OS2)
+#if defined WNT
 
 void FileStat::SetDateTime( const String& rFileName,
                             const DateTime& rNewDateTime )
@@ -315,27 +275,6 @@ void FileStat::SetDateTime( const String& rFileName,
 
     Date aNewDate = rNewDateTime;
     Time aNewTime = rNewDateTime;
-#if defined(WIN)
-    unsigned date = 0;
-    unsigned time = 0;
-
-    date  = (unsigned) aNewDate.GetDay();
-    date |= (unsigned)(aNewDate.GetMonth() << 5);
-    date |= (unsigned)((aNewDate.GetYear() -  1980) << 9);
-    time  = (unsigned)(aNewTime.GetSec() / 2);
-    time |= (unsigned)(aNewTime.GetMin() << 5);
-    time |= (unsigned)(aNewTime.GetHour() << 11);
-
-
-    FILE* pFile = fopen( aFileName.GetBuffer(), "a" );
-
-    if ( pFile != NULL )
-    {
-        _dos_setftime( fileno(pFile), date, time );
-        fclose( pFile );
-    }
-
-#elif defined( WNT )
 
     TIME_ZONE_INFORMATION aTZI;
     DWORD dwTZI = GetTimeZoneInformation( &aTZI );
@@ -343,12 +282,12 @@ void FileStat::SetDateTime( const String& rFileName,
     if ( dwTZI != (DWORD)-1 && dwTZI != TIME_ZONE_ID_UNKNOWN )
     {
         // 1. Korrektur der Zeitzone
-        short nDiff = (short)aTZI.Bias;
+        LONG nDiff = aTZI.Bias;
         Time aOldTime = aNewTime; // alte Zeit merken
 
         // 2. evt. Korrektur Sommer-/Winterzeit
         if ( dwTZI == TIME_ZONE_ID_DAYLIGHT )
-            nDiff += (short)aTZI.DaylightBias;
+            nDiff += aTZI.DaylightBias;
 
         Time aDiff( abs( nDiff / 60 /*Min -> Std*/ ), 0 );
 
@@ -401,90 +340,5 @@ void FileStat::SetDateTime( const String& rFileName,
         SetFileTime( hFile, &aFileTime, &aFileTime, &aFileTime );
         CloseHandle( hFile );
     }
-
-#endif
-#ifdef OS2
-    // open file
-    ULONG nAction = FILE_EXISTED;
-    HFILE hFile = 0;
-    ULONG nFlags = OPEN_FLAGS_WRITE_THROUGH |
-                   OPEN_FLAGS_FAIL_ON_ERROR | OPEN_FLAGS_NO_CACHE   |
-                   OPEN_FLAGS_RANDOM        | OPEN_FLAGS_NOINHERIT  |
-                   OPEN_SHARE_DENYNONE      | OPEN_ACCESS_READWRITE;
-
-    APIRET nRet = DosOpen((PSZ)aFileName.GetBuffer(), &hFile, (PULONG)&nAction,
-                          0/*size*/, FILE_NORMAL,
-                          OPEN_ACTION_FAIL_IF_NEW | OPEN_ACTION_OPEN_IF_EXISTS,
-                          nFlags, 0/*ea*/);
-
-    if ( nRet == 0 )
-    {
-        FILESTATUS3 FileInfoBuffer;
-
-        nRet = DosQueryFileInfo(
-            hFile, 1, &FileInfoBuffer, sizeof(FileInfoBuffer));
-
-        if ( nRet == 0 )
-        {
-            FDATE aNewDate;
-            FTIME aNewTime;
-
-             // create date and time words
-            aNewDate.day     = rNewDateTime.GetDay();
-            aNewDate.month   = rNewDateTime.GetMonth();
-            aNewDate.year    = rNewDateTime.GetYear() - 1980;
-            aNewTime.twosecs = rNewDateTime.GetSec() / 2;
-            aNewTime.minutes = rNewDateTime.GetMin();
-            aNewTime.hours   = rNewDateTime.GetHour();
-
-            // set file date and time
-            FileInfoBuffer.fdateCreation   = aNewDate;
-            FileInfoBuffer.ftimeCreation   = aNewTime;
-            FileInfoBuffer.fdateLastAccess = aNewDate;
-            FileInfoBuffer.ftimeLastAccess = aNewTime;
-            FileInfoBuffer.fdateLastWrite  = aNewDate;
-            FileInfoBuffer.ftimeLastWrite  = aNewTime;
-
-            DosSetFileInfo(hFile, 1, &FileInfoBuffer, sizeof(FileInfoBuffer));
-        }
-        DosClose(hFile);
-    }
-#endif
 }
-
 #endif
-/*
-FileStatMembers *FileStat::GetAllMembers()
-{
-    FileStatMembers *members = new FileStatMembers;
-    members->nError = nError;
-    members->nKindFlags = nKindFlags;
-    members->nSize = nSize;
-    members->aCreator = aCreator;
-    members->aType = aType;
-    members->aDateCreated = aDateCreated.GetDate();
-    members->aTimeCreated = aTimeCreated.GetTime();
-    members->aDateAccessed = aDateAccessed.GetDate();
-    members->aTimeAccessed = aTimeAccessed.GetTime();
-    members->aDateModified = aDateModified.GetDate();
-    members->aTimeModified = aTimeModified.GetTime();
-    return members;
-}
-
-void FileStat::InitMembers(FileStatMembers *members)
-{
-    nError = members->nError;
-    members->nKindFlags = nKindFlags;
-    members->nSize = nSize;
-    members->aCreator = aCreator;
-    members->aType = aType;
-    aDateCreated.SetDate(members->aDateCreated);
-    aTimeCreated.SetTime(members->aTimeCreated);
-    aDateAccessed.SetDate(members->aDateAccessed);
-    aTimeAccessed.SetTime(members->aTimeAccessed);
-    aDateModified.SetDate(members->aDateModified);
-    aTimeModified.SetTime(members->aTimeModified);
-}
-*/
-
-
