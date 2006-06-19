@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgroup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:04:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace sdr
 
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
-        sal_Bool ViewContactOfGroup::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfGroup::ShouldPaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Do not paint groups themthelves only when they are empty
             if(!GetSdrObjGroup().GetSubList() || !GetSdrObjGroup().GetSubList()->GetObjCount())
@@ -84,7 +84,7 @@ namespace sdr
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
         // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfGroup::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfGroup::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Paint the object. If this is called, the group is empty.
             // Paint a replacement object.
