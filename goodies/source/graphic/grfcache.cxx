@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:49:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,7 +363,7 @@ void GraphicCacheEntry::TryToSwapIn()
 
 // -----------------------------------------------------------------------------
 
-void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
+void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*/ )
 {
     mbSwappedAll = TRUE;
 
@@ -468,7 +468,7 @@ public:
     void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
     const ::vos::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
 
-    BOOL                        Matches( OutputDevice* pOut, const Point& rPtPixel, const Size& rSzPixel,
+    BOOL                        Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
                                 {
                                     // #i46805# Additional match
@@ -489,7 +489,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-ULONG GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+ULONG GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& /*rPt*/, const Size& rSz,
                                                const GraphicObject& rObj, const GraphicAttr& rAttr )
 {
     const Graphic&      rGraphic = rObj.GetGraphic();
@@ -596,11 +596,11 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
 
         while( !bInserted && pEntry )
         {
-            const GraphicID& rID = pEntry->GetID();
+            const GraphicID& rEntryID = pEntry->GetID();
 
             if( pID )
             {
-                if( rID.GetIDString() == *pID )
+                if( rEntryID.GetIDString() == *pID )
                 {
                     pEntry->TryToSwapIn();
 
@@ -625,7 +625,7 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
                     }
                 }
             }
-            else if( rID == aID )
+            else if( rEntryID == aID )
             {
                 pEntry->AddGraphicObjectReference( rObj, rSubstitute );
                 bInserted = TRUE;
