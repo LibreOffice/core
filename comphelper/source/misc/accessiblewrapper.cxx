@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:56:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,11 +171,15 @@ namespace comphelper
             // see if we do cache children
             if ( !m_bTransientChildren )
             {
-#if OSL_DEBUG_LEVEL > 0
-                ::std::pair< AccessibleMap::iterator, bool > aPos =
-#endif
-                m_aChildrenMap.insert( AccessibleMap::value_type( _rxKey, xValue ) );
-                OSL_ENSURE( aPos.second, "OWrappedAccessibleChildrenManager::getAccessibleWrapperFor: element was already inserted!" );
+                if (!m_aChildrenMap.insert(
+                        AccessibleMap::value_type( _rxKey, xValue ) ).second)
+                {
+                    OSL_ENSURE(
+                        false,
+                        "OWrappedAccessibleChildrenManager::"
+                            "getAccessibleWrapperFor: element was already"
+                            " inserted!" );
+                }
 
                 // listen for disposals of inner children - this may happen when the inner context
                 // is the owner for the inner children (it will dispose these children, and of course
@@ -302,12 +306,11 @@ namespace comphelper
                 {
                     ::rtl::OUString sName = xContext->getAccessibleName();
                     ::rtl::OUString sDescription = xContext->getAccessibleDescription();
-                    sal_Int32 nPlaceYourBreakpointHere = 0;
+//                  sal_Int32 nPlaceYourBreakpointHere = 0;
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& /*e*/ )
             {
-                e;  // make compiler happy
                 // silent this, it's only diagnostics which failed
             }
         }
@@ -326,8 +329,8 @@ namespace comphelper
             const Reference< XAccessible >& _rxInnerAccessible, const Reference< XAccessible >& _rxParentAccessible )
         :OAccessibleWrapper_Base( )
         ,OComponentProxyAggregation( _rxORB, Reference< XComponent >( _rxInnerAccessible, UNO_QUERY ) )
-        ,m_xInnerAccessible( _rxInnerAccessible )
         ,m_xParentAccessible( _rxParentAccessible )
+        ,m_xInnerAccessible( _rxInnerAccessible )
     {
     }
 
@@ -422,7 +425,7 @@ namespace comphelper
         Reference< XComponent > xInnerComponent( m_xInnerContext, UNO_QUERY );
         OSL_ENSURE( xInnerComponent.is(), "OComponentProxyAggregation::aggregateProxy: accessible is no XComponent!" );
         if ( xInnerComponent.is() )
-            OComponentProxyAggregationHelper::aggregateProxyFor( xInnerComponent, _rRefCount, _rDelegator );
+            componentAggregateProxyFor( xInnerComponent, _rRefCount, _rDelegator );
 
         // add as event listener to the inner context, because we want to multiplex the AccessibleEvents
         osl_incrementInterlockedCount( &_rRefCount );
