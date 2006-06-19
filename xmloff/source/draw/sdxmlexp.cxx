@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:43:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -86,10 +85,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#ifndef _SDXMLEXP_HXX
-#include "sdxmlexp.hxx"
-#endif
-
 #ifndef _SDXMLEXP_IMPL_HXX
 #include "sdxmlexp_impl.hxx"
 #endif
@@ -104,6 +99,10 @@
 
 #ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
@@ -329,7 +328,7 @@ void ImpXMLEXPPageMasterInfo::SetName(const OUString& rStr)
     msName = rStr;
 }
 
-DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*);
+DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -523,7 +522,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*);
+DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -532,6 +531,10 @@ SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     sal_Bool bIsDraw, sal_uInt16 nExportFlags )
 :   SvXMLExport( xServiceFactory, MAP_CM, bIsDraw ? XML_DRAWING : XML_PRESENTATION, nExportFlags ),
+    mnDocMasterPageCount(0L),
+    mnDocDrawPageCount(0L),
+    mnShapeStyleInfoIndex(0L),
+    mnObjectCount(0L),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMasterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
@@ -540,10 +543,6 @@ SdXMLExport::SdXMLExport(
     mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
-    mnDocMasterPageCount(0L),
-    mnDocDrawPageCount(0L),
-    mnShapeStyleInfoIndex(0L),
-    mnObjectCount(0L),
     mbIsDraw(bIsDraw),
     mbFamilyGraphicUsed(FALSE),
     mbFamilyPresentationUsed(FALSE),
@@ -893,7 +892,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL ImpDefaultMapper::getPropertySetIn
     return mxSet->getPropertySetInfo();
 }
 
-void SAL_CALL ImpDefaultMapper::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImpDefaultMapper::setPropertyValue( const OUString& aPropertyName, const Any& /*aValue*/ ) throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     mxState->setPropertyToDefault( aPropertyName /*, aValue */ );
 }
@@ -904,10 +903,10 @@ Any SAL_CALL ImpDefaultMapper::getPropertyValue( const OUString& PropertyName ) 
 }
 
 // empty implementations
-void SAL_CALL ImpDefaultMapper::addPropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& xListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL ImpDefaultMapper::removePropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL ImpDefaultMapper::addVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL ImpDefaultMapper::removeVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL ImpDefaultMapper::addPropertyChangeListener( const OUString&, const Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL ImpDefaultMapper::removePropertyChangeListener( const OUString&, const Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL ImpDefaultMapper::addVetoableChangeListener( const OUString&, const Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL ImpDefaultMapper::removeVetoableChangeListener( const OUString&, const Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -2067,9 +2066,9 @@ void SdXMLExport::_ExportContent()
             }
 
             // write graphic objects on this page (if any)
-            Reference< drawing::XShapes > xShapes(xDrawPage, UNO_QUERY);
-            if(xShapes.is() && xShapes->getCount())
-                GetShapeExport()->exportShapes( xShapes );
+            Reference< drawing::XShapes > xExportShapes(xDrawPage, UNO_QUERY);
+            if(xExportShapes.is() && xExportShapes->getCount())
+                GetShapeExport()->exportShapes( xExportShapes );
 
             // write animations and presentation notes (ONLY if presentation)
             if(IsImpress())
@@ -2430,9 +2429,9 @@ void SdXMLExport::_ExportAutoStyles()
                 }
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
-                Reference< drawing::XShapes > xShapes(xMasterPage, UNO_QUERY);
-                if(xShapes.is() && xShapes->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xShapes );
+                Reference< drawing::XShapes > xMasterShapes(xMasterPage, UNO_QUERY);
+                if(xMasterShapes.is() && xMasterShapes->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xMasterShapes );
 
                 if(IsImpress())
                 {
@@ -2498,9 +2497,9 @@ void SdXMLExport::_ExportAutoStyles()
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
                 // prepare object infos
-                Reference< drawing::XShapes > xShapes(xDrawPage, UNO_QUERY);
-                if(xShapes.is() && xShapes->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xShapes );
+                Reference< drawing::XShapes > xDrawShapes(xDrawPage, UNO_QUERY);
+                if(xDrawShapes.is() && xDrawShapes->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xDrawShapes );
 
                 // prepare presentation notes page object infos (ONLY if presentation)
                 if(IsImpress())
@@ -2629,9 +2628,9 @@ void SdXMLExport::_ExportMasterStyles()
             exportFormsElement( xMasterPage );
 
             // write graphic objects on this master page (if any)
-            Reference< drawing::XShapes > xShapes(xMasterPage, UNO_QUERY);
-            if(xShapes.is() && xShapes->getCount())
-                GetShapeExport()->exportShapes( xShapes );
+            Reference< drawing::XShapes > xMasterShapes(xMasterPage, UNO_QUERY);
+            if(xMasterShapes.is() && xMasterShapes->getCount())
+                GetShapeExport()->exportShapes( xMasterShapes );
 
             // write presentation notes (ONLY if presentation)
             if(IsImpress())
@@ -2645,10 +2644,10 @@ void SdXMLExport::_ExportMasterStyles()
                         Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
                         if(xShapes.is())
                         {
-                            ImpXMLEXPPageMasterInfo* pInfo = mpNotesPageMasterUsageList->GetObject(nMPageId);
-                            if(pInfo)
+                            ImpXMLEXPPageMasterInfo* pMasterInfo = mpNotesPageMasterUsageList->GetObject(nMPageId);
+                            if(pMasterInfo)
                             {
-                                OUString sString = pInfo->GetName();
+                                OUString sString = pMasterInfo->GetName();
                                 AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString);
                             }
 
@@ -2680,8 +2679,10 @@ void SdXMLExport::exportFormsElement( Reference< XDrawPage > xDrawPage )
             GetFormExport()->exportForms( xDrawPage );
         }
 
-        sal_Bool bRet = GetFormExport()->seekPage( xDrawPage );
-        DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
+        if(! GetFormExport()->seekPage( xDrawPage ) )
+        {
+            DBG_ERROR( "OFormLayerXMLExport::seekPage failed!" );
+        }
     }
 }
 
