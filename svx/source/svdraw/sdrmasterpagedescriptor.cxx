@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:57:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ namespace sdr
     // this method is called form the destructor of the referenced page.
     // do all necessary action to forget the page. It is not necessary to call
     // RemovePageUser(), that is done form the destructor.
-    void MasterPageDescriptor::PageInDestruction(const SdrPage& rPage)
+    void MasterPageDescriptor::PageInDestruction(const SdrPage& /*rPage*/)
     {
         maOwnerPage.TRG_ClearMasterPage();
     }
@@ -145,9 +145,11 @@ namespace sdr
         // Here i will rely on old knowledge about the 0'st element of a masterpage
         // being the PageBackgroundObject. This will be removed again when that definition
         // will be changed.
+#ifdef DBG_UTIL
         const sal_uInt32 nMasterPageObjectCount(rMasterPage.GetObjCount());
         DBG_ASSERT(1 <= nMasterPageObjectCount,
             "MasterPageDescriptor::GetBackgroundObject(): MasterPageBackgroundObject missing (!)");
+#endif
         pRetval = rMasterPage.GetObj(0L);
 
         // Test if it's really what we need. There are known problems where
