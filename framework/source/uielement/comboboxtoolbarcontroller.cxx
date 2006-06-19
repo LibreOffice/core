@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comboboxtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 19:56:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,7 +313,7 @@ void ComboboxToolbarController::Modify()
                    aInfo );
 }
 
-void ComboboxToolbarController::KeyInput( const ::KeyEvent& rKEvt )
+void ComboboxToolbarController::KeyInput( const ::KeyEvent& )
 {
 }
 
