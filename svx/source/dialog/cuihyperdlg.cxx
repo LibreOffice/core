@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuihyperdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:52:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,10 @@
 //#                                                                      #
 //########################################################################
 
-SvxHlinkCtrl::SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
-: SfxControllerItem ( nId, rBindings ),
-  aRdOnlyForwarder  ( SID_READONLY_MODE, *this ),
-  aOnlineForwarder  ( SID_INTERNET_ONLINE , *this )
+SvxHlinkCtrl::SvxHlinkCtrl( USHORT _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
+: SfxControllerItem ( _nId, rBindings )
+  ,aOnlineForwarder  ( SID_INTERNET_ONLINE , *this )
+  ,aRdOnlyForwarder  ( SID_READONLY_MODE, *this )
 {
     pParent = pDlg;
 }
@@ -117,8 +117,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 :   IconChoiceDialog( pParent, SVX_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
     maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
     mpBindings      ( pBindings ),
-    mbIsHTMLDoc     ( sal_False ),
-    mbReadOnly      ( sal_False )
+    mbReadOnly      ( sal_False ),
+    mbIsHTMLDoc     ( sal_False )
 {
     mbGrabFocus = sal_True;
     // insert pages
