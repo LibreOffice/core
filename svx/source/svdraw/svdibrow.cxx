@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:28:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:38:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,15 +169,15 @@ public:
 public:
     ImpItemListRow()
     :   eState(SFX_ITEM_UNKNOWN),
+        nWhichId(0),
         pType(NULL),
         eItemType(ITEM_DONTKNOW),
-        nWhichId(0),
-        bComment(FALSE),
-        bIsNum(FALSE),
-        bCanNum(FALSE),
         nVal(0),
         nMin(0),
-        nMax(0)
+        nMax(0),
+        bComment(FALSE),
+        bIsNum(FALSE),
+        bCanNum(FALSE)
     {}
 
     XubString GetItemTypeStr() const;
@@ -211,6 +211,7 @@ XubString ImpItemListRow::GetItemTypeStr() const
         case ITEM_FONTHEIGHT:aStr.AppendAscii("FontHeight");break;
         case ITEM_FONTWIDTH :aStr.AppendAscii("FontWidth"); break;
         case ITEM_FIELD     :aStr.AppendAscii("Field");     break;
+        default: break;
     }
 
     return aStr;
@@ -377,7 +378,7 @@ BOOL __EXPORT _SdrItemBrowserControl::SeekRow(long nRow)
 String _SdrItemBrowserControl::GetCellText(long _nRow, USHORT _nColId) const
 {
     String sRet;
-    if ( _nRow >= 0 && _nRow < aList.Count() )
+    if ( _nRow >= 0 && _nRow < (sal_Int32)aList.Count() )
     {
         ImpItemListRow* pEntry = ImpGetEntry(_nRow);
         if ( pEntry )
@@ -516,13 +517,13 @@ void _SdrItemBrowserControl::SetDirty()
     aSetDirtyHdl.Call(this);
 }
 
-Rectangle _SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
+Rectangle _SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,sal_Int32 /*nIndex*/)
 {
     // no accessibility implementation required
     return Rectangle();
 }
 
-sal_Int32 _SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
+sal_Int32 _SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,const Point& /*_rPoint*/)
 {
     // no accessibility implementation required
     return -1;
@@ -1099,6 +1100,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             case ITEM_FLAG      : aEntry.bCanNum=TRUE; aEntry.nVal=((SfxFlagItem  &)rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=0xFFFF;     break;
                             case ITEM_FONTHEIGHT: aEntry.bCanNum=TRUE; aEntry.nVal=((SvxFontHeightItem&)rItem).GetHeight(); aEntry.nMin=0;                    break;
                             case ITEM_FONTWIDTH : aEntry.bCanNum=TRUE; aEntry.nVal=((SvxCharScaleWidthItem&)rItem).GetValue();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;
+                            default: break;
                         } // switch
                         if (aEntry.bIsNum) aEntry.bCanNum=TRUE;
                         FASTBOOL bGetPres=TRUE;
@@ -1230,7 +1232,7 @@ void SdrItemBrowser::Undirty()
     }
 }
 
-IMPL_LINK(SdrItemBrowser,IdleHdl,Timer*,aTimer)
+IMPL_LINK(SdrItemBrowser,IdleHdl,Timer*,EMPTYARG)
 {
     Undirty();
     return 0;
@@ -1345,6 +1347,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                     ((SvxCharScaleWidthItem*)pNewItem)->SetValue(nProp);
                 } break;
                 case ITEM_FIELD: break;
+                default: break;
             } // switch
             aNewSet.Put(*pNewItem);
             delete pNewItem;
@@ -1354,7 +1357,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
     return 0;
 }
 
-IMPL_LINK(SdrItemBrowser,SetDirtyHdl,_SdrItemBrowserControl*,pBrowse)
+IMPL_LINK(SdrItemBrowser,SetDirtyHdl,_SdrItemBrowserControl*,EMPTYARG)
 {
     SetDirty();
     return 0;
