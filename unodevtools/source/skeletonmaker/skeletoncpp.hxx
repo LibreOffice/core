@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncpp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:20:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,8 +146,7 @@ void generateSkeleton(ProgramOptions const & options,
 
 void generateCalcAddin(ProgramOptions const & options,
                        TypeManager const & manager,
-                       std::vector< rtl::OString > const & types,
-                       rtl::OString const & delegate);
+                       std::vector< rtl::OString > const & types);
 
 } }
 
