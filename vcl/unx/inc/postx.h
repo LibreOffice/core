@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postx.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:41:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #undef Window
 #undef BYTE
 #undef INT8
+#undef INT64
 #undef BOOL
 #undef Font
 #undef Cursor
@@ -56,8 +57,6 @@
 
 #undef Min
 #undef Max
-#undef class
-#undef new
 #undef DestroyAll
 #undef Success
 
