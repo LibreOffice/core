@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdispatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,8 +215,8 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
                 Can be SELF or CREATE only and are set only if sTargetFrameName isn't a special target
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch( /*IN*/ const css::util::URL&  aURL             ,
-                                                                                  /*IN*/ const ::rtl::OUString& sTargetFrameName ,
-                                                                                  /*IN*/       sal_Int32        nSearchFlags     ) throw(css::uno::RuntimeException)
+                                                                                  /*IN*/ const ::rtl::OUString& /*sTargetFrameName*/ ,
+                                                                                  /*IN*/       sal_Int32        /*nSearchFlags*/     ) throw(css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
@@ -502,8 +502,8 @@ void SAL_CALL JobDispatch::dispatch( /*IN*/ const css::util::URL&               
 /**
     @short  not supported
 */
-void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                              /*IN*/ const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException)
+void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >&,
+                                              /*IN*/ const css::util::URL&                                      ) throw(css::uno::RuntimeException)
 {
 }
 
@@ -511,8 +511,8 @@ void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< 
 /**
     @short  not supported
 */
-void SAL_CALL JobDispatch::removeStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                 /*IN*/ const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException)
+void SAL_CALL JobDispatch::removeStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >&,
+                                                 /*IN*/ const css::util::URL&                                          ) throw(css::uno::RuntimeException)
 {
 }
 
