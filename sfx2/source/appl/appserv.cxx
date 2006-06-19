@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:17:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,7 +397,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SAVEDOCS:
         {
             BOOL bOK = TRUE;
-            BOOL bDone = TRUE;
+            BOOL bTmpDone = TRUE;
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                   pObjSh;
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
@@ -407,7 +407,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     pObjSh->ExecuteSlot( aReq );
                     SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
-                    bDone = aReq.IsDone();
+                    bTmpDone = aReq.IsDone();
                     if ( !pItem || !pItem->GetValue() )
                         bOK = FALSE;
                 }
@@ -789,7 +789,7 @@ typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
-    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getSymbol( handleMod, aSymbol.pData );
+    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_choose_macro in basctl
     rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
@@ -810,7 +810,7 @@ void MacroOrganizer( INT16 nTabId )
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
-    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getSymbol( handleMod, aSymbol.pData );
+    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_macro_organizer in basctl
     pSymbol( nTabId );
@@ -828,7 +828,6 @@ ResMgr* SfxApplication::GetOffResManager_Impl()
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
         case SID_OPTIONS_TREEDIALOG:
@@ -871,7 +870,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             SfxUpdateDialog aUpdateDlg( GetTopWindow() );
             aUpdateDlg.Execute();
-            bDone = true;
             break;
         }
 
@@ -995,7 +993,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                             Reference< provider::XScript > xScript(
                                 xScriptProvider->getScript( scriptURL ), UNO_QUERY_THROW );
 
-                            Any aRet = xScript->invoke( args, outIndex, outArgs );
+                            xScript->invoke( args, outIndex, outArgs );
                         }
                         catch ( provider::ScriptFrameworkErrorException& se )
                         {
@@ -1025,19 +1023,16 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                          if ( bCaughtException )
                         {
-                            SfxAbstractDialogFactory* pFact =
-                                SfxAbstractDialogFactory::Create();
-
                             if ( pFact != NULL )
                             {
-                                VclAbstractDialog* pDlg =
+                                VclAbstractDialog* pScriptErrDlg =
                                     pFact->CreateScriptErrorDialog(
                                         NULL, aException );
 
-                                if ( pDlg != NULL )
+                                if ( pScriptErrDlg != NULL )
                                 {
-                                    pDlg->Execute();
-                                    delete pDlg;
+                                    pScriptErrDlg->Execute();
+                                    delete pScriptErrDlg;
                                 }
                             }
                            }
@@ -1104,8 +1099,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 SfxItemSet aSet(GetPool(), SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG);
                 const SfxPoolItem* pItem=NULL;
                 const SfxItemSet* pSet = rReq.GetArgs();
-                SfxItemPool* pPool = pSet ? pSet->GetPool() : NULL;
-                if ( pSet && pSet->GetItemState( pPool->GetWhich( SID_AUTO_CORRECT_DLG ), FALSE, &pItem ) == SFX_ITEM_SET )
+                SfxItemPool* pSetPool = pSet ? pSet->GetPool() : NULL;
+                if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), FALSE, &pItem ) == SFX_ITEM_SET )
                     aSet.Put( *pItem );
 
                   SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( ResId( RID_OFA_AUTOCORR_DLG ), NULL, &aSet, NULL );
