@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgname.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 16:18:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -100,7 +98,7 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
 /* -----------------------------27.02.2002 15:22------------------------------
 
  ---------------------------------------------------------------------------*/
-IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, pEdit)
+IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
 {
     if(aCheckNameHdl.IsSet())
         aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
