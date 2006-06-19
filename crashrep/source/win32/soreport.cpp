@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 13:01:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #define UNICODE
 #define WIN32_LEAN_AND_MEAN
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable:4917)
+#endif
 #include <windows.h>
 #include <windowsx.h>
 
@@ -52,6 +56,9 @@
 #define _RICHEDIT_VER   0x0200
 #include <richedit.h>
 
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #if _RICHEDIT_VER >= 0x0200
 #define RICHEDIT    TEXT("riched20.dll")
@@ -584,7 +591,6 @@ static size_t fcopy( FILE *fpin, FILE *fpout )
 
 static string GetModuleDirectory( HMODULE hModule )
 {
-    TCHAR   szBuffer[256] = TEXT("");
     TCHAR   szModuleName[MAX_PATH] = TEXT("");
     TCHAR   szDrive[_MAX_DRIVE];
     TCHAR   szDir[_MAX_DIR];
@@ -940,7 +946,7 @@ BOOL CALLBACK PreviewDialogProc(
                         TCHAR   output[2];
 
                         if ( (int)buf[i] >= 0x20 && (int)buf[i] <= 0x7F )
-                            output[0] = (int)buf[i];
+                            output[0] = (TCHAR)buf[i];
                         else
                             output[0] = '.';
                         output[1] = 0;
@@ -1025,7 +1031,7 @@ BOOL CALLBACK OptionsDialogProc(
         {
             TCHAR   szBuffer[1024] = TEXT("");
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong( hwndDlg, GWL_HINSTANCE );
-            HWND    hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
+            //HWND  hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
 
             pParams = (CrashReportParams *)lParam;
 
@@ -1144,7 +1150,7 @@ BOOL CALLBACK ReportDialogProc(
     HWND hwndDlg,
     UINT uMsg,
     WPARAM wParam,
-    LPARAM lParam
+    LPARAM
     )
 {
     switch ( uMsg )
@@ -1556,7 +1562,7 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
             sal_uInt8 *pBuffer = new sal_uInt8[nFileSize];
             size_t nBytesRead = fread( pBuffer, 1, nFileSize, fp );
 
-            if ( nBytesRead == nFileSize )
+            if ( sal::static_int_cast<long>(nBytesRead) == nFileSize )
             {
                 if ( 0 == stricmp( GetFileName(filename).c_str(), "soffice.bin" ) )
                     repatch_soffice_exe( pBuffer, nBytesRead );
@@ -2174,7 +2180,7 @@ static string get_script_string( const char *pFileName, const char *pKeyName )
                 string  keyname = line.substr( 0, iEqualSign );
                 keyname = trim_string( keyname );
 
-                string  value = line.substr( iEqualSign + 1, -1 );
+                string  value = line.substr( sal::static_int_cast<string::size_type>(iEqualSign + 1) );
                 value = trim_string( value );
 
                 if ( value.length() && '\"' == value[0] )
@@ -2510,7 +2516,7 @@ BOOL CALLBACK SendingStatusDialogProc(
         {
             TCHAR   szBuffer[1024] = TEXT("");
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong( hwndDlg, GWL_HINSTANCE );
-            HWND    hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
+            //HWND  hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
 
             pRequest = (RequestParams *)lParam;
 
@@ -2716,7 +2722,7 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
 
 //***************************************************************************
 
-int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
+int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR /*lpCmdLine*/, int )
 {
     int exitcode = -1;
     int argc = __argc;
