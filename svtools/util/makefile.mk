@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 16:05:07 $
+#   last change: $Author: hr $ $Date: 2006-06-19 21:29:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ LIB7FILES=	\
         $(SLB)$/svdde.lib \
         $(SLB)$/svhtml.lib     \
         $(SLB)$/svrtf.lib	\
-                $(SLB)$/heavyconfig.lib 	\
+        $(SLB)$/heavyconfig.lib 	\
         $(SLB)$/java.lib	
 
 LIB8TARGET= $(SLB)$/svl.lib
