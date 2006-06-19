@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:42:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,7 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
     sal_Int32 const k_NumUserLayers = 1;
 
     sal_Int32 nNumDefaultLayers = layers.getLength() - k_NumUserLayers;
-    sal_Int32 nCurrentLayer;
+    sal_Int32 nCurrentLayer( -1 );
     bool bDefaultRecoveryApproved = false;
 
     Logger logger(mContext);
