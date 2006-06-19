@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:16:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 //***************************************************************************
 
-void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
+void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) const
 {
     String aName;
     String aFilter;
@@ -181,7 +181,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
 
 //--------------------------------------------------------------------
 
-IMPL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     try
     {
@@ -208,7 +208,7 @@ Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
     return pURLBox;
 }
 
-IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
+IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, EMPTYARG )
 {
     SvtURLBox* pURLBox = GetURLBox();
     String aName( pURLBox->GetURL() );
@@ -219,7 +219,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
     return 1L;
 }
 
-IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, pVoid )
+IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, EMPTYARG )
 {
     SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );
