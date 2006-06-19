@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarywriter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:15:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ namespace configmgr
             }
             catch (uno::Exception& e)
             {
+                            (void)e;
                 OSL_ENSURE(false, rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
