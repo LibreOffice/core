@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:27:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,9 @@ namespace io_acceptor
     OAcceptor::OAcceptor( const Reference< XComponentContext > & xCtx )
         : m_pPipe( 0 )
         , m_pSocket( 0 )
+        , m_bInAccept( sal_False )
         , _xSMgr( xCtx->getServiceManager() )
         , _xCtx( xCtx )
-        , m_bInAccept( sal_False )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     }
@@ -183,7 +183,7 @@ namespace io_acceptor
                     catch( ... )
                     {
                         {
-                            MutexGuard guard( m_mutex );
+                            MutexGuard g( m_mutex );
                             delete m_pPipe;
                             m_pPipe = 0;
                         }
@@ -220,7 +220,7 @@ namespace io_acceptor
                     catch( ... )
                     {
                         {
-                            MutexGuard guard( m_mutex );
+                            MutexGuard g( m_mutex );
                             delete m_pSocket;
                             m_pSocket = 0;
                         }
@@ -366,7 +366,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
