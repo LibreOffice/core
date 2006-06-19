@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:57:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
-#include <rtl/ustring>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.hxx>
 
@@ -171,7 +170,6 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
     if (m_javaLoader.is())
         return m_javaLoader;
 
-    sal_Int32 size = 0;
     uno_Environment * pJava_environment = NULL;
     uno_Environment * pUno_environment = NULL;
     typelib_InterfaceTypeDescription * pType_XImplementationLoader = 0;
@@ -217,9 +215,9 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
 
         try
         {
-            jvmaccess::VirtualMachine::AttachGuard aGuard(
+            jvmaccess::VirtualMachine::AttachGuard aGuard2(
                 xVirtualMachine->getVirtualMachine());
-            JNIEnv * pJNIEnv = aGuard.getEnvironment();
+            JNIEnv * pJNIEnv = aGuard2.getEnvironment();
 
             // instantiate the java JavaLoader
             jclass jcClassLoader = pJNIEnv->FindClass("java/lang/ClassLoader");
@@ -474,7 +472,7 @@ extern "C"
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
