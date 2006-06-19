@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backendnotifier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:23:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ void SAL_CALL BackendChangeNotifier::componentDataChanged(const backenduno::Comp
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL BackendChangeNotifier::disposing( lang::EventObject const & rSource )
+void SAL_CALL BackendChangeNotifier::disposing( lang::EventObject const & /*rSource*/ )
 throw (uno::RuntimeException)
 {
     osl::MutexGuard aListGuard(m_aMutex);
