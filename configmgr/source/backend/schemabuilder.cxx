@@ -4,9 +4,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:33:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,19 +69,24 @@ namespace configmgr
 
         namespace SchemaAttribute = backenduno::SchemaAttribute;
 // -----------------------------------------------------------------------------
+//#if OSL_DEBUG_LEVEL > 0
+// currently not used in debug builds
+#if 0
         static void check_if_complete(MergedComponentData & md, SchemaBuilder::Context const & xContext)
         {
             uno::Reference< backenduno::XSchemaHandler >
                  test(new SchemaBuilder(xContext, OUString(),md,NULL));
         }
+#endif
 // -----------------------------------------------------------------------------
 
 SchemaBuilder::SchemaBuilder(Context const & xContext, const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider )
 : m_aData(rData)
-, m_aContext(xContext,static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
+, m_aContext(xContext)
+//, m_aContext(xContext,static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
 , m_aFactory()
 {
-
+    m_aContext = DataBuilderContext(xContext,static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider );
 }
 // -----------------------------------------------------------------------------
 
@@ -137,7 +142,7 @@ void SAL_CALL SchemaBuilder::endSchema(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
+void SAL_CALL SchemaBuilder::importComponent( const OUString& /*aName*/ )
         throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
@@ -540,8 +545,10 @@ namespace
 
              std::auto_ptr<INode> pTemplateInstance = aResult.extractDataAndClear();
              pTemplateInstance->setName(_aName);
-             ISubtree * pAddedTree = rParent.addChild(pTemplateInstance)->asISubtree();
-             OSL_ENSURE(pAddedTree, "Could not obtain added template instance");
+
+             // Add template instance - must be a tree as any template
+             OSL_VERIFY(
+        rParent.addChild(pTemplateInstance)->asISubtree() );
         }
     }
     // -----------------------------------------------------------------------------
