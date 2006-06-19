@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.237 $
+ *  $Revision: 1.238 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:19:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ using ::com::sun::star::awt::XTopWindow;
 
 // =======================================================================
 
-DBG_NAME( Window );
+DBG_NAME( Window )
 
 // =======================================================================
 
@@ -522,7 +522,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
             if( rSettings.GetStyleSettings().GetFaceColor().IsDark()
              || rSettings.GetStyleSettings().GetWindowColor().IsDark() )
             {
-                StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+                aStyleSettings = rSettings.GetStyleSettings();
                 aStyleSettings.SetHighContrastMode( TRUE );
                 rSettings.SetStyleSettings( aStyleSettings );
             }
@@ -542,7 +542,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
                 bUseImagesInMenus = bTmp;
         }
 
-        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+        aStyleSettings = rSettings.GetStyleSettings();
         aStyleSettings.SetUseImagesInMenus( bUseImagesInMenus );
         rSettings.SetStyleSettings( aStyleSettings );
     }
@@ -553,8 +553,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     // vorhanden ist
     if ( DbgIsBoldAppFont() )
     {
-        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-        Font aFont = aStyleSettings.GetAppFont();
+        aStyleSettings = rSettings.GetStyleSettings();
+        aFont = aStyleSettings.GetAppFont();
         aFont.SetWeight( WEIGHT_BOLD );
         aStyleSettings.SetAppFont( aFont );
         aFont = aStyleSettings.GetGroupFont();
@@ -606,7 +606,7 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSour
 
 // =======================================================================
 
-void Window::ImplInitData( WindowType nType )
+void Window::ImplInitWindowData( WindowType nType )
 {
     mpWindowImpl = new WindowImpl;
 
@@ -742,7 +742,7 @@ void Window::ImplInitData( WindowType nType )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
+void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& /*aSystemWorkWindowToken*/ )
 {
     ImplInit( pParent, nStyle, NULL );
 }
@@ -900,8 +900,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         if ( pRealParent && IsTopWindow() )
         {
             ImplWinData* pParentWinData = pRealParent->ImplGetWinData();
-            ImplWinData* pWinData = ImplGetWinData();
-
             pParentWinData->maTopWindowChildren.push_back( this );
         }
     }
@@ -1236,7 +1234,7 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplLoadRes( const ResId& rResId )
+void Window::ImplLoadRes( const ResId& /*rResId*/ )
 {
     // newer move this line after IncrementRes
     char* pRes = (char*)GetClassRes();
@@ -4280,7 +4278,7 @@ Window::Window( WindowType nType )
 {
     DBG_CTOR( Window, ImplDbgCheckWindow );
 
-    ImplInitData( nType );
+    ImplInitWindowData( nType );
 }
 
 // -----------------------------------------------------------------------
@@ -4289,7 +4287,7 @@ Window::Window( Window* pParent, WinBits nStyle )
 {
     DBG_CTOR( Window, ImplDbgCheckWindow );
 
-    ImplInitData( WINDOW_WINDOW );
+    ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, NULL );
 }
 
@@ -4299,7 +4297,7 @@ Window::Window( Window* pParent, const ResId& rResId )
 {
     DBG_CTOR( Window, ImplDbgCheckWindow );
 
-    ImplInitData( WINDOW_WINDOW );
+    ImplInitWindowData( WINDOW_WINDOW );
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle, NULL );
@@ -4352,10 +4350,10 @@ Window::~Window()
     }
 
     // shutdown drag and drop
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mpWindowImpl->mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xDnDComponent( mpWindowImpl->mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
 
-    if( xComponent.is() )
-        xComponent->dispose();
+    if( xDnDComponent.is() )
+        xDnDComponent->dispose();
 
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
     {
@@ -4410,7 +4408,7 @@ Window::~Window()
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
-        ImplDestroyHelpWindow( FALSE );
+        ImplDestroyHelpWindow();
 
     DBG_ASSERT( pSVData->maWinData.mpTrackWin != this,
                 "Window::~Window(): Window is in TrackingMode" );
@@ -4483,7 +4481,7 @@ Window::~Window()
             ByteString aTempStr( "Window (" );
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") with living Child(s) destroyed: ";
-            Window* pTempWin = mpWindowImpl->mpFirstChild;
+            pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
                 aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
@@ -4500,7 +4498,7 @@ Window::~Window()
             ByteString aTempStr( "Window (" );
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") with living SystemWindow(s) destroyed: ";
-            Window* pTempWin = mpWindowImpl->mpFirstOverlap;
+            pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
                 aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
@@ -5355,8 +5353,7 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
 
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpApp->ImplCallEventListeners( &aEvent );
+    ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
 
     if ( aDelData.IsDelete() )
         return;
@@ -5540,27 +5537,6 @@ BOOL Window::IsLocked( BOOL bChilds ) const
     }
 
     return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Window::IsUICaptured( BOOL bChilds ) const
-{
-    return Application::IsUICaptured();
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Window::IsUserActive( USHORT nTest, BOOL bChilds ) const
-{
-    return Application::IsUserActive( nTest );
-}
-
-// -----------------------------------------------------------------------
-
-ULONG Window::GetLastInputInterval() const
-{
-    return Application::GetLastInputInterval();
 }
 
 // -----------------------------------------------------------------------
@@ -5789,6 +5765,10 @@ long Window::GetCursorExtTextInputWidth() const
 }
 
 // -----------------------------------------------------------------------
+void Window::SetSettings( const AllSettings& rSettings )
+{
+    SetSettings( rSettings, FALSE );
+}
 
 void Window::SetSettings( const AllSettings& rSettings, BOOL bChild )
 {
@@ -6457,7 +6437,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mpWindowImpl->mbSuppressAccessibilityEvents = FALSE;
 
             mpWindowImpl->mbPaintFrame = TRUE;
-            BOOL bNoActivate = nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE);
+            BOOL bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? TRUE : FALSE;
             mpWindowImpl->mpFrame->Show( TRUE, bNoActivate );
             if( aDogTag.IsDelete() )
                 return;
@@ -8438,7 +8418,7 @@ Reference< XClipboard > Window::GetClipboard()
 
 // -----------------------------------------------------------------------
 
-Reference< XClipboard > Window::GetSelection()
+Reference< XClipboard > Window::GetPrimarySelection()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -8552,7 +8532,7 @@ USHORT Window::ImplGetAccessibleCandidateChildWindowCount( USHORT nFirstWindowTy
         if( pChild->ImplIsAccessibleCandidate() )
             nChildren++;
         else
-            nChildren += pChild->ImplGetAccessibleCandidateChildWindowCount( WINDOW_FIRSTCHILD );
+            nChildren = sal::static_int_cast<USHORT>(nChildren + pChild->ImplGetAccessibleCandidateChildWindowCount( WINDOW_FIRSTCHILD ));
         pChild = pChild->mpWindowImpl->mpNext;
     }
     return nChildren;
@@ -9672,8 +9652,9 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, OutputDevice* pTargetOutDev
     mnDPIY = nOldDPIY;
 }
 
-void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& rSize )
+void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /*rSize*/ )
 {
+    // FIXME: scaling: currently this is for pixel copying only
     GDIMetaFile aMF;
     Point       aPos  = pDev->LogicToPixel( rPos );
 
