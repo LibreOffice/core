@@ -4,9 +4,9 @@
  *
  *  $RCSfile: communi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:16:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,14 +307,13 @@ MultiCommunicationManager::~MultiCommunicationManager()
 
     // Alles weghauen, was nicht rechtzeitig auf die Bäume gekommen ist
     // Was bei StopCommunication übrig geblieben ist, da es sich asynchron austragen wollte
-    int i = ActiveLinks->Count();
-    while ( i )
+    USHORT i = ActiveLinks->Count();
+    while ( i-- )
     {
-        CommunicationLinkRef rTempLink = ActiveLinks->GetObject(i-1);
-        ActiveLinks->Remove( i-1 );
+        CommunicationLinkRef rTempLink = ActiveLinks->GetObject( i );
+        ActiveLinks->Remove( i );
         rTempLink->InvalidateManager();
         rTempLink->ReleaseReference();
-        i--;
     }
     delete ActiveLinks;
 
@@ -322,12 +321,11 @@ MultiCommunicationManager::~MultiCommunicationManager()
     /// Hier NICHT gerefcounted, da sie sich sonst im Kreis festhaten würden,
     /// da die Links sich erst in ihrem Destruktor austragen
     i = InactiveLinks->Count();
-    while ( i )
+    while ( i-- )
     {
-        CommunicationLinkRef rTempLink = InactiveLinks->GetObject(i-1);
-        InactiveLinks->Remove( i-1 );
+        CommunicationLinkRef rTempLink = InactiveLinks->GetObject( i );
+        InactiveLinks->Remove( i );
         rTempLink->InvalidateManager();
-        i--;
     }
     delete InactiveLinks;
 }
@@ -337,7 +335,7 @@ BOOL MultiCommunicationManager::StopCommunication()
     // Alle Verbindungen abbrechen
     // ConnectionClosed entfernt die Links aus der Liste. Je nach Implementation syncron
     // oder asyncron. Daher Von oben nach unten Abräumen, so daß sich nichts verschiebt.
-    int i = ActiveLinks->Count();
+    USHORT i = ActiveLinks->Count();
     int nFail = 0;
     while ( i )
     {
@@ -392,7 +390,7 @@ void MultiCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 
     bIsCommunicationRunning = ActiveLinks->Count() > 0;
 //  delete pCL;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         rHold->bFlag = TRUE;
 #endif
 }
@@ -410,8 +408,9 @@ void MultiCommunicationManager::DestroyingLink( CommunicationLink *pCL )
 CommunicationManagerClient::CommunicationManagerClient( BOOL bUseMultiChannel )
 : MultiCommunicationManager( bUseMultiChannel )
 {
-    aApplication = ByteString("Something inside ");
+    ByteString aApplication("Something inside ");
     aApplication.Append( ByteString( DirEntry( Application::GetAppFileName() ).GetName(), gsl_getSystemTextEncoding() ) );
+    SetApplication( aApplication );
 }
 
 
@@ -460,7 +459,7 @@ CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( 
 , nPortToListen( nPort )
 , nMaxConnections( nMaxCon )
 , nAddConnectionEventId( 0 )
-, xNewConnection( NULL )
+, xmNewConnection( NULL )
 {
     if ( !pMPostUserEvent )
         pMPostUserEvent = new NAMESPACE_VOS(OMutex);
@@ -536,10 +535,10 @@ void CommunicationManagerServerAcceptThread::run()
                 pStreamSocket->setTcpNoDelay( 1 );
 
                 TimeValue sNochEins = {0, 100};
-                while ( schedule() && xNewConnection.Is() ) // Solange die letzte Connection nicht abgeholt wurde warten wir
+                while ( schedule() && xmNewConnection.Is() )    // Solange die letzte Connection nicht abgeholt wurde warten wir
                     sleep( sNochEins );
-                xNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
-                xNewConnection->StartCallback();
+                xmNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
+                xmNewConnection->StartCallback();
                 {
                     NAMESPACE_VOS(OGuard) aGuard( aMAddConnection );
                     NAMESPACE_VOS(OGuard) aGuard2( *pMPostUserEvent );
@@ -570,8 +569,8 @@ IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYAR
         NAMESPACE_VOS(OGuard) aGuard( aMAddConnection );
         nAddConnectionEventId = 0;
     }
-    pMyServer->AddConnection( xNewConnection );
-    xNewConnection.Clear();
+    pMyServer->AddConnection( xmNewConnection );
+    xmNewConnection.Clear();
     return 1;
 }
 
