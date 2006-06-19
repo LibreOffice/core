@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:28:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nWink, co
     if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
-void SdrGluePoint::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear, const SdrObject* pObj)
+void SdrGluePoint::Shear(const Point& rRef, long /*nWink*/, double tn, FASTBOOL bVShear, const SdrObject* pObj)
 {
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     ShearPoint(aPt,rRef,tn,bVShear);
@@ -392,8 +392,8 @@ USHORT SdrGluePointList::Insert(const SdrGluePoint& rGP)
         } else {
             FASTBOOL bBrk=FALSE;
             for (USHORT nNum=0; nNum<nAnz && !bBrk; nNum++) {
-                const SdrGluePoint* pGP=GetObject(nNum);
-                USHORT nTmpId=pGP->GetId();
+                const SdrGluePoint* pGP2=GetObject(nNum);
+                USHORT nTmpId=pGP2->GetId();
                 if (nTmpId==nId) {
                     nId=nLastId+1; // bereits vorhanden
                     bBrk=TRUE;
