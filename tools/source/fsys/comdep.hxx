@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comdep.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:13:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,38 +55,10 @@
 #define ACTPARENT(e)    ( (e == FSYS_STYLE_MAC) ? ":" : ".." )
 #define ACTCURRENT(e)   ( (e == FSYS_STYLE_MAC) ? "" : "." )
 
-#if defined(DOS) || defined(WIN)
-
-#ifdef MSC
-#include "dosmsc.hxx"
-#endif
-
-#if defined(TCPP) || defined(BLC)
-#include "dosblc.hxx"
-#endif
-
-#ifdef ZTC
-#include "dosztc.hxx"
-#endif
-
-#else
-
-#if defined( WNT ) && !defined( WTC )
-#include "wntmsc.hxx"
-#endif
-
-#ifdef UNX
+#if defined UNX
 #include "unx.hxx"
-#endif
-
-#if defined(PM2) || defined(PM2)
-#include "os2.hxx"
-#endif
-
-#ifdef MAC
-#include "mac.hxx"
-#endif
-
+#elif defined WNT
+#include "wntmsc.hxx"
 #endif
 
 //--------------------------------------------------------------------
@@ -103,16 +75,8 @@ char *volumeid( const char* pPfad );
 struct DirReader_Impl
 {
     Dir*        pDir;
-#ifdef MAC
-    union
-    {
-        DIR*    pDosDir;
-        dirent* pDosEntry;
-    };
-#else
     DIR*        pDosDir;
     dirent*     pDosEntry;
-#endif
     DirEntry*   pParent;
     String      aPath;
     ByteString  aBypass;
@@ -121,9 +85,9 @@ struct DirReader_Impl
 
                 DirReader_Impl( Dir &rDir )
                 :   pDir( &rDir ),
-                    aPath( GUI2FSYS(rDir.GetFull()) ),
                     pDosEntry( 0 ),
                     pParent( 0 ),
+                    aPath( GUI2FSYS(rDir.GetFull()) ),
                     bReady ( FALSE ),
                     bInUse( FALSE )
                 {
@@ -186,7 +150,7 @@ struct FileCopier_Impl
 
 //--------------------------------------------------------------------
 
-#if defined(WNT) || defined(OS2)
+#if defined WNT
 BOOL IsRedirectable_Impl( const ByteString &rPath );
 #else
 #define IsRedirectable_Impl( rPath )    TRUE
