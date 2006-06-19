@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabline.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:54:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,11 +150,7 @@ private:
     long                nSymbolType;
     SfxItemSet*         pSymbolAttr; //attributes for the shown symbols; only necessary if not equal to line properties
     FixedLine           aFlSymbol;
-#if SUPD>642
     MenuButton          aSymbolMB;
-#else
-    LineLocalExtMenuButton  aSymbolMB;
-#endif
     FixedText           aSymbolWidthFT;
     MetricField         aSymbolWidthMF;
     FixedText           aSymbolHeightFT;
@@ -168,14 +164,6 @@ private:
     Graphic             aSymbolGraphic;
     Size                aSymbolSize;
     BOOL                bSymbols;
-    //Handler für Gallery-Popup-Menue-Button + Size
-    DECL_LINK( GraphicHdl_Impl, MenuButton * );
-    DECL_LINK( MenuCreateHdl_Impl, MenuButton * );
-    DECL_STATIC_LINK( SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
-    DECL_LINK( SizeHdl_Impl, MetricField * );
-    DECL_LINK( RatioHdl_Impl, CheckBox * );
-    // <- Symbole
-
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
@@ -196,8 +184,6 @@ private:
 
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
-//CHINA001  USHORT*             pPageType;
-//CHINA001  USHORT*             pDlgType;
     UINT16             nPageType; //add CHINA001
     UINT16             nDlgType; //add CHINA001
     USHORT*             pPosDashLb;
@@ -207,6 +193,14 @@ private:
 
     // #63083#
     INT32               nActLineWidth;
+
+    //Handler für Gallery-Popup-Menue-Button + Size
+    DECL_LINK( GraphicHdl_Impl, MenuButton * );
+    DECL_LINK( MenuCreateHdl_Impl, MenuButton * );
+    DECL_STATIC_LINK( SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
+    DECL_LINK( SizeHdl_Impl, MetricField * );
+    DECL_LINK( RatioHdl_Impl, CheckBox * );
+    // <- Symbole
 
 #ifdef _SVX_TPLINE_CXX
     DECL_LINK( ClickInvisibleHdl_Impl, void * );
