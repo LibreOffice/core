@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:50:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, ClickCancelBtn, void*, p )
+IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
 {
     maSearchThread.terminate();
     return 0L;
@@ -255,7 +255,7 @@ IMPL_LINK( SearchProgress, ClickCancelBtn, void*, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, CleanUpHdl, void*, p )
+IMPL_LINK( SearchProgress, CleanUpHdl, void*, EMPTYARG )
 {
     EndDialog( RET_OK );
     return 0L;
@@ -313,7 +313,7 @@ void SAL_CALL TakeThread::run()
             aURL = INetURLObject(*mpBrowser->aFoundList.GetObject( nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ));
 
         // Position in Taken-Liste uebernehmen
-        mrTakenList.Insert( (void*) nPos, LIST_APPEND );
+        mrTakenList.Insert( (void*) (ULONG)nPos, LIST_APPEND );
 
         rMutex.acquire();
         mpProgress->SetFile( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
@@ -342,10 +342,10 @@ void SAL_CALL TakeThread::onTerminated()
 
 TakeProgress::TakeProgress( Window* pWindow ) :
     ModalDialog     ( pWindow, GAL_RESID( RID_SVXDLG_GALLERY_TAKE_PROGRESS ) ),
-    maTakeThread    ( this, (TPGalleryThemeProperties*) pWindow, maTakenList ),
     aFtTakeFile     ( this, ResId( FT_TAKE_FILE ) ),
     aFLTakeProgress( this, ResId( FL_TAKE_PROGRESS ) ),
-    aBtnCancel      ( this, ResId( BTN_CANCEL ) )
+    aBtnCancel      ( this, ResId( BTN_CANCEL ) ),
+    maTakeThread    ( this, (TPGalleryThemeProperties*) pWindow, maTakenList )
 
 {
     FreeResource();
@@ -354,7 +354,7 @@ TakeProgress::TakeProgress( Window* pWindow ) :
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, ClickCancelBtn, void*, p )
+IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
 {
     maTakeThread.terminate();
     return 0L;
@@ -362,7 +362,7 @@ IMPL_LINK( TakeProgress, ClickCancelBtn, void*, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, CleanUpHdl, void*, p )
+IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
 {
     TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
     ::std::bit_vector           aRemoveEntries( mpBrowser->aFoundList.Count(), false );
@@ -458,7 +458,7 @@ short ActualizeProgress::Execute()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( ActualizeProgress, ClickCancelBtn, void*, p )
+IMPL_LINK( ActualizeProgress, ClickCancelBtn, void*, EMPTYARG )
 {
     pTheme->AbortActualize();
     EndDialog( RET_OK );
@@ -468,12 +468,12 @@ IMPL_LINK( ActualizeProgress, ClickCancelBtn, void*, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, pTimer )
+IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer )
 {
-    if ( pTimer )
+    if ( _pTimer )
     {
-        pTimer->Stop();
-        delete pTimer;
+        _pTimer->Stop();
+        delete _pTimer;
     }
 
     pTheme->Actualize( LINK( this, ActualizeProgress, ActualizeHdl ), &aStatusProgress );
@@ -546,7 +546,7 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, p )
+IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
 {
     Gallery*    pGal = pThm->GetParent();
     const ULONG nId = GetId();
@@ -700,7 +700,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
 // ------------------------------------------------------------------------
 
-BOOL TPGalleryThemeGeneral::FillItemSet( SfxItemSet& rSet )
+BOOL TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     pData->aEditedTitle = aEdtMSName.GetText();
     return TRUE;
@@ -719,17 +719,17 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
         SfxTabPage          ( pWindow, GAL_RESID( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
-        aFtFileType         ( this, GAL_RESID(FT_FILETYPE ) ),
-        aLbxFound           ( this, GAL_RESID(LBX_FOUND ) ),
-        aCbbFileType        ( this, GAL_RESID(CBB_FILETYPE ) ),
         aBtnSearch          ( this, GAL_RESID(BTN_SEARCH ) ),
         aBtnTake            ( this, GAL_RESID(BTN_TAKE ) ),
         aBtnTakeAll         ( this, GAL_RESID(BTN_TAKEALL ) ),
         aCbxPreview         ( this, GAL_RESID(CBX_PREVIEW ) ),
+        aCbbFileType        ( this, GAL_RESID(CBB_FILETYPE ) ),
+        aLbxFound           ( this, GAL_RESID(LBX_FOUND ) ),
+        aFtFileType         ( this, GAL_RESID(FT_FILETYPE ) ),
         aWndPreview         ( this, GAL_RESID( WND_BRSPRV ) ),
-        bEntriesFound       (FALSE),
         nCurFilterPos       (0),
         nFirstExtFilterPos  (0),
+        bEntriesFound       (FALSE),
         bInputAllowed       (TRUE),
         bSearchRecursive    (FALSE)
 {
@@ -864,15 +864,15 @@ void TPGalleryThemeProperties::FillFilterList()
 
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
-    for( int i = 0; i < aFilters.size(); ++i )
+    for( unsigned long l = 0; l < aFilters.size(); ++l )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             ::rtl::OUString aFilterWildcard( aWildcard );
 
             pFilterEntry = new FilterEntry;
-            pFilterEntry->aFilterName = aFilters[ i ].second.getToken( 0, ';', nIndex );
-            nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( aFilters[ i ].first,
+            pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
+            nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( aFilters[ l ].first,
                                                                          aFilterWildcard += pFilterEntry->aFilterName ) );
 
             aFilterEntryList.Insert( pFilterEntry, nFirstExtFilterPos );
@@ -903,14 +903,14 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // media filters
-    for( int i = 0; i < aFilters.size(); ++i )
+    for( unsigned long k = 0; k < aFilters.size(); ++k )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             if ( aExtensions.Len() )
                 aExtensions += sal_Unicode( ';' );
 
-            ( aExtensions += String( aWildcard ) ) += String( aFilters[ i ].second.getToken( 0, ';', nIndex ) );
+            ( aExtensions += String( aWildcard ) ) += String( aFilters[ k ].second.getToken( 0, ';', nIndex ) );
         }
      }
 
@@ -929,7 +929,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, SelectFileTypeHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, SelectFileTypeHdl, void *, EMPTYARG )
 {
     String aText( aCbbFileType.GetText() );
 
@@ -980,7 +980,7 @@ void TPGalleryThemeProperties::SearchFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickCloseBrowserHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, ClickCloseBrowserHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )
         aPreviewTimer.Stop();
@@ -990,7 +990,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickCloseBrowserHdl, void *, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )
     {
@@ -1048,7 +1048,7 @@ void TPGalleryThemeProperties::TakeFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickPreviewHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, ClickPreviewHdl, void *, EMPTYARG )
 {
     if ( bInputAllowed )
     {
@@ -1077,15 +1077,15 @@ void TPGalleryThemeProperties::DoPreview()
     if( aString != aPreviewString )
     {
         Graphic         aGraphic;
-        INetURLObject   aURL( *aFoundList.GetObject( aLbxFound.GetEntryPos( aString ) ) );
+        INetURLObject   _aURL( *aFoundList.GetObject( aLbxFound.GetEntryPos( aString ) ) );
 
         bInputAllowed = FALSE;
 
-        if( ::avmedia::MediaWindow::isMediaURL( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
+        if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
         {
             aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
 
-            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
             if( xMediaPlayer.is() )
                 xMediaPlayer->start();
@@ -1095,7 +1095,7 @@ void TPGalleryThemeProperties::DoPreview()
             GraphicFilter*  pFilter = GetGrfFilter();
             GalleryProgress aProgress( pFilter );
 
-            if( pFilter->ImportGraphic( aGraphic, aURL, GRFILTER_FORMAT_DONTKNOW ) )
+            if( pFilter->ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
             {
                 GetParent()->LeaveWait();
                 ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
@@ -1112,7 +1112,7 @@ void TPGalleryThemeProperties::DoPreview()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, p )
+IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
 {
     if( bInputAllowed )
     {
@@ -1140,7 +1140,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )
     {
@@ -1154,7 +1154,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )
     {
@@ -1187,7 +1187,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )
     {
@@ -1202,7 +1202,7 @@ IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, p )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, p )
+IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
 {
     aPreviewTimer.Stop();
     DoPreview();
