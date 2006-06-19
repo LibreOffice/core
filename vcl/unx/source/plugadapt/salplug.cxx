@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-27 07:59:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,9 @@
 
 using namespace rtl;
 
+extern "C" {
 typedef SalInstance*(*salFactoryProc)( oslModule pModule);
+}
 
 static oslModule pCloseModule = NULL;
 
@@ -84,7 +86,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     if( aMod )
     {
         OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "create_SalInstance" ) );
-        salFactoryProc aProc = (salFactoryProc)osl_getSymbol( aMod, aSym.pData );
+        salFactoryProc aProc = (salFactoryProc)osl_getFunctionSymbol( aMod, aSym.pData );
         if( aProc )
         {
             pInst = aProc( aMod );
