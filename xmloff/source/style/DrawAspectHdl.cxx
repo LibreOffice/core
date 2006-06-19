@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:22:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     return nAspect != 0;
 }
 
-sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
