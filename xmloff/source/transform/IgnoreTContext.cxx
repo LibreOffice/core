@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IgnoreTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:46:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ XMLTransformerContext *XMLIgnoreTransformerContext::CreateChildContext(
     return pContext;
 }
 
-void XMLIgnoreTransformerContext::StartElement( const Reference< XAttributeList >& rAttrList )
+void XMLIgnoreTransformerContext::StartElement( const Reference< XAttributeList >& )
 {
     // ignore
 }
