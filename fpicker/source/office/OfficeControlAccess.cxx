@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeControlAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:28:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,15 +338,15 @@ namespace svt
             // will throw an IllegalArgumentException if the name is not valid
 
         // fill in the property names
-        Sequence< ::rtl::OUString > aProperties( s_nPropertyCount );
-        ::rtl::OUString* pProperty = aProperties.getArray();
+        Sequence< ::rtl::OUString > aProps( s_nPropertyCount );
+        ::rtl::OUString* pProperty = aProps.getArray();
 
         for ( ControlPropertyIterator aProp = s_pProperties; aProp != s_pPropertiesEnd; ++aProp )
             if ( 0 != ( nPropertyMask & aProp->nPropertyId ) )
                 *pProperty++ = ::rtl::OUString::createFromAscii( aProp->pPropertyName );
 
-        aProperties.realloc( pProperty - aProperties.getArray() );
-        return aProperties;
+        aProps.realloc( pProperty - aProps.getArray() );
+        return aProps;
     }
 
     // --------------------------------------------------------------------------
