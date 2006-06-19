@@ -4,9 +4,9 @@
  *
  *  $RCSfile: type_misc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:08:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,9 @@ inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_
             TYPELIB_DANGER_RELEASE( pTD );
             return bRel;
         }
+        default:
+            return false;
         }
-        return false;
     }
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -100,18 +101,21 @@ inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_
                 if (bRel)
                     return true;
             }
+            default:
+                break;
             }
         }
         if (pComp->pBaseTypeDescription)
             return cppu_relatesToInterface( (typelib_TypeDescription *)pComp->pBaseTypeDescription );
-        break;
+        return false;
     }
     case typelib_TypeClass_UNION: // might relate to interface
     case typelib_TypeClass_ANY: // might relate to interface
     case typelib_TypeClass_INTERFACE:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 /** Determines whether given type is a cpp simple type, e.g. int, enum.<br>
