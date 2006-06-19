@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:17:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -363,7 +361,7 @@ class AddonsOptions_Impl : public ConfigItem
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
 
         sal_Int32                                           m_nRootAddonPopupMenuId;
-        OUString                                            m_aPropNames[PROPERTYCOUNT_INDEX];
+        OUString                                            m_aPropNames[PROPERTYCOUNT_MENUITEM];
         OUString                                            m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
         OUString                                            m_aEmpty;
         OUString                                            m_aPathDelimiter;
@@ -372,12 +370,12 @@ class AddonsOptions_Impl : public ConfigItem
         OUString                                            m_aPrivateImageURL;
         Sequence< Sequence< PropertyValue > >               m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >               m_aCachedMenuBarPartProperties;
-        AddonToolBars                                       m_aCachedToolBarPartProperties;
-        std::vector< rtl::OUString >                        m_aCachedToolBarPartResourceNames;
+       AddonToolBars                                       m_aCachedToolBarPartProperties;
+       std::vector< rtl::OUString >                        m_aCachedToolBarPartResourceNames;
         Sequence< Sequence< PropertyValue > >               m_aCachedHelpMenuProperties;
         Reference< com::sun::star::util::XMacroExpander >   m_xMacroExpander;
         ImageManager                                        m_aImageManager;
-        Sequence< Sequence< PropertyValue > >               m_aEmptyAddonToolBar;
+       Sequence< Sequence< PropertyValue > >               m_aEmptyAddonToolBar;
 };
 
 //_________________________________________________________________________________________________________________
@@ -389,10 +387,10 @@ class AddonsOptions_Impl : public ConfigItem
 //*****************************************************************************************************************
 AddonsOptions_Impl::AddonsOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem( ROOTNODE_ADDONMENU ),
+    : ConfigItem( ROOTNODE_ADDONMENU ),
+    m_nRootAddonPopupMenuId( 0 ),
     m_aPathDelimiter( PATHDELIMITER ),
     m_aSeparator( SEPARATOR_URL ),
-    m_nRootAddonPopupMenuId( 0 ),
     m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX ),
     m_aPrivateImageURL( PRIVATE_IMAGE_URL )
 {
@@ -467,7 +465,7 @@ void AddonsOptions_Impl::ReadConfigurationData()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void AddonsOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames )
+void AddonsOptions_Impl::Notify( const Sequence< OUString >& /*lPropertyNames*/ )
 {
     Application::PostUserEvent( STATIC_LINK( 0, AddonsOptions, Notify ) );
 }
@@ -525,7 +523,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenuBa
 //*****************************************************************************************************************
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
-    if ( nIndex >= 0 && nIndex < m_aCachedToolBarPartProperties.size() )
+    if ( /*nIndex >= 0 &&*/ nIndex < m_aCachedToolBarPartProperties.size() )
         return m_aCachedToolBarPartProperties[nIndex];
     else
         return m_aEmptyAddonToolBar;
@@ -536,7 +534,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBa
 //*****************************************************************************************************************
 const ::rtl::OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
-    if ( nIndex >= 0 && nIndex < m_aCachedToolBarPartResourceNames.size() )
+    if ( nIndex < m_aCachedToolBarPartResourceNames.size() )
         return m_aCachedToolBarPartResourceNames[nIndex];
     else
         return rtl::OUString();
@@ -719,12 +717,11 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< rtl::OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
-    OUString                aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
-    Sequence< OUString >    aAddonToolBarNodeSeq = GetNodeNames( aAddonToolBarNodeName );
-    OUString                aAddonToolBarNode( aAddonToolBarNodeName + m_aPathDelimiter );
+    OUString             aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
+    Sequence< OUString > aAddonToolBarNodeSeq = GetNodeNames( aAddonToolBarNodeName );
+    OUString             aAddonToolBarNode( aAddonToolBarNodeName + m_aPathDelimiter );
 
-    sal_uInt32              nCount = aAddonToolBarNodeSeq.getLength();
-    sal_uInt32              nIndex = 0;
+    sal_uInt32           nCount = aAddonToolBarNodeSeq.getLength();
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
@@ -773,9 +770,9 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarIte
             }
 
             // Successfully read a toolbar item, append to our list
-            sal_uInt32 nCount = rAddonOfficeToolBarSeq.getLength();
-            rAddonOfficeToolBarSeq.realloc( nCount+1 );
-            rAddonOfficeToolBarSeq[nCount] = aToolBarItem;
+            sal_uInt32 nAddonCount = rAddonOfficeToolBarSeq.getLength();
+            rAddonOfficeToolBarSeq.realloc( nAddonCount+1 );
+            rAddonOfficeToolBarSeq[nAddonCount] = aToolBarItem;
         }
     }
 
@@ -817,7 +814,6 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
     OUString                aAddonImagesNode( aAddonImagesNodeName + m_aPathDelimiter );
 
     sal_uInt32              nCount = aAddonImagesNodeSeq.getLength();
-    sal_uInt32              nIndex = 0;
 
     // Init the property value sequence
     Sequence< OUString >    aAddonImageItemNodePropNames( 1 );
@@ -828,10 +824,10 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
         OUString aImagesItemNode( aAddonImagesNode + aAddonImagesNodeSeq[n] );
 
         // Create sequence for data access
-        OUStringBuffer aBuf( aImagesItemNode );
-        aBuf.append( m_aPathDelimiter );
-        aBuf.append( m_aPropNames[ INDEX_URL ] );
-        aAddonImageItemNodePropNames[0] = aBuf.makeStringAndClear();
+        OUStringBuffer aBuffer( aImagesItemNode );
+        aBuffer.append( m_aPathDelimiter );
+        aBuffer.append( m_aPropNames[ OFFSET_MENUITEM_URL ] );
+        aAddonImageItemNodePropNames[0] = aBuffer.makeStringAndClear();
 
         Sequence< Any > aAddonImageItemNodeValues = GetProperties( aAddonImageItemNodePropNames );
 
@@ -1236,7 +1232,6 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
     Sequence< sal_Int8 > aImageDataSeq;
     OUString             aImageURL;
 
-    Image       aImage;
     ImageEntry* pEntry = NULL;
 
     // It is possible to use both forms (embedded image data and URLs to external bitmap files) at the
@@ -1247,6 +1242,7 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
         if ( i < PROPERTYCOUNT_EMBEDDED_IMAGES )
         {
             // Extract image data from the embedded hex binary sequence
+            Image aImage;
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
                 aImageDataSeq.getLength() > 0 &&
                 ( CreateImageFromSequence( aImage,
@@ -1580,7 +1576,7 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-IMPL_STATIC_LINK( AddonsOptions, Notify, void*, pvoid )
+IMPL_STATIC_LINK_NOINSTANCE( AddonsOptions, Notify, void*, EMPTYARG )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->ReadConfigurationData();
