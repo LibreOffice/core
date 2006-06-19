@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:52:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ inline sal_Int32 FRound( double fVal )
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
+void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
@@ -133,7 +133,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
             // write 3DScene shape
             sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
-            SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DR3D, XML_SCENE, bCreateNewline, sal_True);
+            SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DR3D, XML_SCENE, bCreateNewline, sal_True);
 
             ImpExportEvents( xShape );
 
@@ -162,7 +162,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
 void XMLShapeExport::ImpExport3DShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 /* nFeatures = SEF_DEFAULT */, awt::Point* /*pRefPoint = NULL */)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -177,14 +177,14 @@ void XMLShapeExport::ImpExport3DShape(
         SdXMLImExTransform3D aTransform;
         aTransform.AddHomogenMatrix(xHomMat);
         if(aTransform.NeedsAction())
-            rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
+            mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(mrExport.GetMM100UnitConverter()));
 
         switch(eShapeType)
         {
             case XmlShapeTypeDraw3DCubeObject:
             {
                 // write 3DCube shape
-                SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DR3D, XML_CUBE, sal_True, sal_True);
+                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_CUBE, sal_True, sal_True);
 
                 // minEdge
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
@@ -204,17 +204,17 @@ void XMLShapeExport::ImpExport3DShape(
                 // write minEdge
                 if(aPos3D != Vector3D(-2500.0, -2500.0, -2500.0)) // write only when not default
                 {
-                    rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
+                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
-                    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MIN_EDGE, aStr);
+                    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MIN_EDGE, aStr);
                 }
 
                 // write maxEdge
                 if(aDir3D != Vector3D(2500.0, 2500.0, 2500.0)) // write only when not default
                 {
-                    rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
+                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
-                    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MAX_EDGE, aStr);
+                    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MAX_EDGE, aStr);
                 }
 
                 break;
@@ -222,7 +222,7 @@ void XMLShapeExport::ImpExport3DShape(
             case XmlShapeTypeDraw3DSphereObject:
             {
                 // write 3DSphere shape
-                SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DR3D, XML_SPHERE, sal_True, sal_True);
+                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_SPHERE, sal_True, sal_True);
 
                 // Center
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
@@ -239,17 +239,17 @@ void XMLShapeExport::ImpExport3DShape(
                 // write Center
                 if(aPos3D != Vector3D(0.0, 0.0, 0.0)) // write only when not default
                 {
-                    rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
+                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
-                    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_CENTER, aStr);
+                    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_CENTER, aStr);
                 }
 
                 // write Size
                 if(aDir3D != Vector3D(5000.0, 5000.0, 5000.0)) // write only when not default
                 {
-                    rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
+                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
-                    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SIZE, aStr);
+                    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SIZE, aStr);
                 }
 
                 break;
@@ -258,7 +258,7 @@ void XMLShapeExport::ImpExport3DShape(
             case XmlShapeTypeDraw3DExtrudeObject:
             {
                 // write special 3DLathe/3DExtrude attributes
-                uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")));
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")));
                 drawing::PolyPolygonShape3D xPolyPolygon3D;
                 aAny >>= xPolyPolygon3D;
 
@@ -315,8 +315,8 @@ void XMLShapeExport::ImpExport3DShape(
                 awt::Size aMaxSize(FRound(fXMax) - aMinPoint.X, FRound(fYMax) - aMinPoint.Y);
                 SdXMLImExViewBox aViewBox(
                     aMinPoint.X, aMinPoint.Y, aMaxSize.Width, aMaxSize.Height);
-                rExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                    aViewBox.GetExportString(rExport.GetMM100UnitConverter()));
+                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
+                    aViewBox.GetExportString(mrExport.GetMM100UnitConverter()));
 
                 // prepare svx:d element export
                 SdXMLImExSvgDElement aSvgDElement(aViewBox);
@@ -346,7 +346,7 @@ void XMLShapeExport::ImpExport3DShape(
                     BOOL bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
 
                     aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
-                        aMaxSize, rExport.GetMM100UnitConverter(), bClosed);
+                        aMaxSize, mrExport.GetMM100UnitConverter(), bClosed);
 
                     // #80594# corrected error in PolyPolygon3D export for 3D XML
                     pInnerSequenceX++;
@@ -354,20 +354,22 @@ void XMLShapeExport::ImpExport3DShape(
                 }
 
                 // write point array
-                rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
+                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
 
                 if(eShapeType == XmlShapeTypeDraw3DLatheObject)
                 {
                     // write 3DLathe shape
-                    SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DR3D, XML_ROTATE, sal_True, sal_True);
+                    SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_ROTATE, sal_True, sal_True);
                 }
                 else
                 {
                     // write 3DExtrude shape
-                    SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DR3D, XML_EXTRUDE, sal_True, sal_True);
+                    SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_EXTRUDE, sal_True, sal_True);
                 }
                 break;
             }
+            default:
+                break;
         }
     }
 }
@@ -387,7 +389,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     SdXMLImExTransform3D aTransform;
     aTransform.AddHomogenMatrix(xHomMat);
     if(aTransform.NeedsAction())
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(mrExport.GetMM100UnitConverter()));
 
     // VRP, VPN, VUP
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
@@ -397,25 +399,25 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
     if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
     {
-        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
+        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VRP, aStr);
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VRP, aStr);
     }
 
     Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
     if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
     {
-        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
+        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VPN, aStr);
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VPN, aStr);
     }
 
     Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
     if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
     {
-        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
+        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VUP, aStr);
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VUP, aStr);
     }
 
     // projection "D3DScenePerspective" drawing::ProjectionMode
@@ -426,31 +428,31 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
         aStr = GetXMLToken(XML_PARALLEL);
     else
         aStr = GetXMLToken(XML_PERSPECTIVE);
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_PROJECTION, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_PROJECTION, aStr);
 
     // distance
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
     sal_Int32 nDistance;
     aAny >>= nDistance;
-    rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
     aStr = sStringBuffer.makeStringAndClear();
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DISTANCE, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DISTANCE, aStr);
 
     // focalLength
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
     sal_Int32 nFocalLength;
     aAny >>= nFocalLength;
-    rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
+    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
     aStr = sStringBuffer.makeStringAndClear();
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_FOCAL_LENGTH, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_FOCAL_LENGTH, aStr);
 
     // shadowSlant
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
     sal_Int16 nShadowSlant;
     aAny >>= nShadowSlant;
-    rExport.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
+    mrExport.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
     aStr = sStringBuffer.makeStringAndClear();
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, aStr);
 
     // shadeMode
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
@@ -471,24 +473,24 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
         // ShadeMode enum not there, write default
         aStr = GetXMLToken(XML_GOURAUD);
     }
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADE_MODE, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADE_MODE, aStr);
 
     // ambientColor
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
     sal_Int32 aColTemp;
     Color aAmbientColor;
     aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
-    rExport.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
+    mrExport.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
     aStr = sStringBuffer.makeStringAndClear();
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_AMBIENT_COLOR, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_AMBIENT_COLOR, aStr);
 
     // lightingMode
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
     sal_Bool bTwoSidedLighting;
     aAny >>= bTwoSidedLighting;
-    rExport.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
+    mrExport.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
     aStr = sStringBuffer.makeStringAndClear();
-    rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_LIGHTING_MODE, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_LIGHTING_MODE, aStr);
 }
 
 /** helper for chart that exports all lamps from the propertyset */
@@ -518,33 +520,33 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aPropName += aIndexStr;
         xPropSet->getPropertyValue( aPropName ) >>= aColTemp;
         aLightColor.SetColor(aColTemp);
-        rExport.GetMM100UnitConverter().convertColor(sStringBuffer, aLightColor);
+        mrExport.GetMM100UnitConverter().convertColor(sStringBuffer, aLightColor);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR, aStr);
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR, aStr);
 
         // lightdirection
         aPropName = aDirectionPropName;
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= xLightDir;
         aLightDirection = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aLightDirection);
+        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aLightDirection);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
 
         // lighton
         aPropName = aLightOnPropName;
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= bLightOnOff;
-        rExport.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff);
+        mrExport.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_ENABLED, aStr);
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_ENABLED, aStr);
 
         // specular
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SPECULAR,
+        mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SPECULAR,
             nLamp == 1 ? XML_TRUE : XML_FALSE);
 
         // write light entry
-        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DR3D, XML_LIGHT, sal_True, sal_True);
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_LIGHT, sal_True, sal_True);
     }
 }
 
