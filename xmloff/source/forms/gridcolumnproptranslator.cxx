@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcolumnproptranslator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:11:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,25 +270,25 @@ namespace xmloff
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::addPropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::addPropertyChangeListener: not implemented - this should not be needed!" );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::removePropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::removePropertyChangeListener: not implemented - this should not be needed!" );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::addVetoableChangeListener: not implemented - this should not be needed!" );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::removeVetoableChangeListener: not implemented - this should not be needed!" );
     }
@@ -335,19 +335,19 @@ namespace xmloff
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::addPropertiesChangeListener( const Sequence< ::rtl::OUString >& aPropertyNames, const Reference< XPropertiesChangeListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::addPropertiesChangeListener( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& ) throw (RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::addPropertiesChangeListener: not implemented - this should not be needed!" );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& ) throw (RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::removePropertiesChangeListener: not implemented - this should not be needed!" );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >& aPropertyNames, const Reference< XPropertiesChangeListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& ) throw (RuntimeException)
     {
         OSL_ENSURE( sal_False, "OGridColumnPropertyTranslator::firePropertiesChangeEvent: not implemented - this should not be needed!" );
     }
