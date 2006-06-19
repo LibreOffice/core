@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:55:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,22 +77,23 @@ using namespace xmloff::token;
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
-    : pExport(NULL),
-    xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
-    aNumberFormats(),
+    : xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
+    pExport(NULL),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
     sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
     msCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)),
-    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))
+    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)),
+    aNumberFormats()
 {
 }
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier,
             SvXMLExport& rTempExport )
-      : pExport(&rTempExport),
-    xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
-    aNumberFormats(),
+:   xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
+    pExport(&rTempExport),
+    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
+    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
     sAttrValueType(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE_TYPE))),
     sAttrValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE))),
     sAttrDateValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_DATE_VALUE))),
@@ -100,10 +101,9 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
     sAttrBooleanValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_BOOLEAN_VALUE))),
     sAttrStringValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_STRING_VALUE))),
     sAttrCurrency(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_CURRENCY))),
-    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
     msCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)),
-    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))
+    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)),
+    aNumberFormats()
 {
 }
 
@@ -132,7 +132,6 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
         aNumberFormats.insert(aFormat);
         return aFormat.nType;
     }
-    return 0;
 }
 
 void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExport,
