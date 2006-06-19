@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:20:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _DATASUPPLIER_HXX
-#include <provider/datasupplier.hxx>
 #endif
 #ifndef _RESULTSET_HXX
 #include <provider/resultset.hxx>
