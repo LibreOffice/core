@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:57:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,12 +242,12 @@ inline void AdapterImpl::release()
             m_pFactory->m_receiver2adapters.find( m_key ) );
         OSL_ASSERT( m_pFactory->m_receiver2adapters.end() != iFind );
         t_ptr_set & adapter_set = iFind->second;
-        size_t erased = adapter_set.erase( this );
-        OSL_ASSERT( 1 == erased );
+        if (adapter_set.erase( this ) != 1) {
+            OSL_ASSERT( false );
+        }
         if (adapter_set.empty())
         {
             m_pFactory->m_receiver2adapters.erase( iFind );
-            OSL_ASSERT( 1 == erased );
         }
         delete_this = true;
     }
@@ -261,7 +261,6 @@ static inline void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
     RuntimeException exc( rMsg, Reference< XInterface >() );
-    typelib_TypeDescription * pTD = 0;
     // no conversion neeeded due to binary compatibility + no convertable type
     ::uno_type_any_construct(
         pExc, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
@@ -406,7 +405,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 //______________________________________________________________________________
 void AdapterImpl::getValue(
     const typelib_TypeDescription * pMemberType,
-    void * pReturn, void * pArgs[], uno_Any ** ppException )
+    void * pReturn, void * [], uno_Any ** ppException )
 {
     uno_Any aInvokRet;
     void * pInvokArgs[1];
@@ -441,7 +440,7 @@ void AdapterImpl::getValue(
 //______________________________________________________________________________
 void AdapterImpl::setValue(
     const typelib_TypeDescription * pMemberType,
-    void * pReturn, void * pArgs[], uno_Any ** ppException )
+    void *, void * pArgs[], uno_Any ** ppException )
 {
     uno_Any aInvokVal;
     ::uno_type_any_construct(
@@ -562,14 +561,14 @@ void AdapterImpl::invoke(
                 {
                     for ( sal_Int32 n = 0; n <= nPos; ++n )
                     {
-                        sal_Int32 nIndex = pIndices[n];
-                        OSL_ENSURE( nIndex < nParams, "### illegal index!" );
-                        typelib_MethodParameter const & rParam =
-                            pFormalParams[nIndex];
-                        if (! rParam.bIn) // is pure out param
+                        sal_Int32 nIndex2 = pIndices[n];
+                        OSL_ENSURE( nIndex2 < nParams, "### illegal index!" );
+                        typelib_MethodParameter const & rParam2 =
+                            pFormalParams[nIndex2];
+                        if (! rParam2.bIn) // is pure out param
                         {
                             ::uno_type_destructData(
-                                pArgs[nIndex], rParam.pTypeRef, 0 );
+                                pArgs[nIndex2], rParam2.pTypeRef, 0 );
                         }
                     }
                 }
@@ -641,9 +640,9 @@ static void SAL_CALL adapter_dispatch(
                 if (type_equals(
                         ((typelib_TypeDescription *)pTD)->pWeakRef, pDemanded ))
                 {
-                    uno_Interface * pUnoI = &that->m_pInterfaces[nPos];
+                    uno_Interface * pUnoI2 = &that->m_pInterfaces[nPos];
                     ::uno_any_construct(
-                        (uno_Any *)pReturn, &pUnoI,
+                        (uno_Any *)pReturn, &pUnoI2,
                         (typelib_TypeDescription *)pTD, 0 );
                     return;
                 }
@@ -688,8 +687,8 @@ AdapterImpl::AdapterImpl(
     FactoryImpl * pFactory )
     SAL_THROW( (RuntimeException) )
         : m_nRef( 1 ),
-          m_key( key ),
-          m_pFactory( pFactory )
+          m_pFactory( pFactory ),
+          m_key( key )
 {
     // init adapters
     m_nInterfaces = rTypes.getLength();
@@ -892,7 +891,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
             AdapterImpl * pNew =
                 new AdapterImpl( xKey.get(), xReceiver, rTypes, this );
             // lookup again
-            ClearableMutexGuard guard( m_mutex );
+            ClearableMutexGuard guard2( m_mutex );
             that = lookup_adapter(
                 &adapter_set, m_receiver2adapters, xKey.get(), rTypes );
             if (0 == that) // again no entry
@@ -905,7 +904,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
             else
             {
                 that->acquire();
-                guard.clear();
+                guard2.clear();
                 delete pNew; // has never been inserted
             }
         }
@@ -1015,7 +1014,7 @@ sal_Bool SAL_CALL component_canUnload(
 
 //==============================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
