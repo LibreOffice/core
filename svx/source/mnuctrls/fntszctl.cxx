@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntszctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:43:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#pragma hdrstop
 
 #define ITEMID_FONTHEIGHT   1
 #define ITEMID_FONTLIST     2
