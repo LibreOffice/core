@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formevents.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:09:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ namespace xmloff
         { "XDatabaseParameterListener::approveParameter",XML_NAMESPACE_FORM, "supplyparameter" }, // "on-supplyparameter"
         { "XSQLErrorListener::errorOccured",            XML_NAMESPACE_DOM, "error" }, // "on-error"
         { "XAdjustmentListener::adjustmentValueChanged",XML_NAMESPACE_FORM, "adjust" }, // "on-adjust"
-        { 0, 0 }
+        { 0, 0, 0 }
     };
 
     const XMLEventNameTranslation* g_pFormsEventTranslation = aEventTranslations;
@@ -98,6 +98,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4.34.1  2005/11/16 22:47:10  pl
+ *  #i55991# removed warnings
+ *
+ *  Revision 1.4  2005/09/09 14:09:46  rt
+ *  INTEGRATION: CWS ooo19126 (1.3.298); FILE MERGED
+ *  2005/09/05 14:38:59 rt 1.3.298.1: #i54170# Change license header: remove SISSL
+ *
  *  Revision 1.3.298.1  2005/09/05 14:38:59  rt
  *  #i54170# Change license header: remove SISSL
  *
