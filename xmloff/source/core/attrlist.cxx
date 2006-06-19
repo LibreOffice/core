@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:34:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ sal_Int16 SAL_CALL SvXMLAttributeList::getLength(void) throw( ::com::sun::star::
 
 
 SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
+    cppu::WeakImplHelper3<com::sun::star::xml::sax::XAttributeList, com::sun::star::util::XCloneable, com::sun::star::lang::XUnoTunnel>(r),
     m_pImpl( new SvXMLAttributeList_Impl( *r.m_pImpl ) )
 {
 }
@@ -133,7 +134,7 @@ OUString SAL_CALL SvXMLAttributeList::getNameByIndex(sal_Int16 i) throw( ::com::
 }
 
 
-OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16) throw( ::com::sun::star::uno::RuntimeException )
 {
     return sType;
 }
@@ -148,7 +149,7 @@ OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i) throw( ::com
 
 }
 
-OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& sName ) throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& ) throw( ::com::sun::star::uno::RuntimeException )
 {
     return sType;
 }
@@ -234,7 +235,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
             r->getValueByIndex( i )));
     }
 
-    assert( nTotalSize == getLength());
+    assert( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
 }
 
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
@@ -305,7 +306,12 @@ SvXMLAttributeList* SvXMLAttributeList::getImplementation( uno::Reference< uno::
 {
     uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )
-        return (SvXMLAttributeList*)xUT->getSomething( SvXMLAttributeList::getUnoTunnelId() );
+    {
+        return
+            reinterpret_cast<SvXMLAttributeList*>(
+                sal::static_int_cast<sal_IntPtr>(
+                    xUT->getSomething( SvXMLAttributeList::getUnoTunnelId())));
+    }
     else
         return NULL;
 }
@@ -317,7 +323,7 @@ sal_Int64 SAL_CALL SvXMLAttributeList::getSomething( const uno::Sequence< sal_In
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0;
 }
