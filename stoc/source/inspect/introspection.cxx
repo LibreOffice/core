@@ -4,9 +4,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:55:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ IntrospectionNameMap;
 
 
 // Hashtable zur Zuordnung der exakten Namen zu den zu Lower-Case
-// konvertierten Namen, dient zur Unterstützung von XExactName
+// konvertierten Namen, dient zur Unterstï¿½tzung von XExactName
 typedef std::hash_map
 <
     OUString,
@@ -415,16 +415,16 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
                         sal_Int32 nLen = maAllMethodSeq.getLength();
                         for( int i = 0 ; i < nLen ; ++i )
                         {
-                            const Reference<XIdlMethod> xMethod = pMethods[ i ];
+                            const Reference<XIdlMethod> xMethod2 = pMethods[ i ];
 
-                            OUString aTestClassName = xMethod->getDeclaringClass()->getName();
-                            OUString aTestMethodName = xMethod->getName();
+                            OUString aTestClassName = xMethod2->getDeclaringClass()->getName();
+                            OUString aTestMethodName = xMethod2->getName();
 
-                            if( xMethod->getName() == aPureMethodName )
+                            if( xMethod2->getName() == aPureMethodName )
                             {
-                                Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
+                                Reference< XIdlClass > xMethClass2 = xMethod2->getDeclaringClass();
 
-                                if( xClass->equals( xMethClass ) )
+                                if( xClass->equals( xMethClass2 ) )
                                 {
                                     iHashResult = i;
                                     break;
@@ -470,7 +470,6 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
     else if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
     {
         throw IllegalArgumentException();
-        return;
     }
 
     // Flags pruefen
@@ -478,7 +477,6 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
     if( (pProps[ nSequenceIndex ].Attributes & READONLY) != 0 )
     {
         throw UnknownPropertyException();
-        return;
     }
 
     const sal_Int16* pMapTypeArray = maMapTypeSeq.getConstArray();
@@ -599,7 +597,6 @@ Any IntrospectionAccessStatic_Impl::getPropertyValue( const Any& obj, const OUSt
         return getPropertyValueByIndex( obj, i );
 
     throw UnknownPropertyException();
-    return Any();
 }
 
 Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex) const
@@ -701,12 +698,9 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
         break;
 
         case MAP_SETONLY:
-        {
             // get-Methode gibt es nicht
             // throw WriteOnlyPropertyException();
             return aRet;
-        }
-        break;
     }
     return aRet;
 }
@@ -978,6 +972,7 @@ public:
           throw( RuntimeException );
     virtual Sequence< Type > SAL_CALL getSupportedListeners(void)
           throw( RuntimeException );
+    using OWeakObject::queryAdapter;
     virtual Reference<XInterface> SAL_CALL queryAdapter( const Type& rType )
           throw( IllegalTypeException, RuntimeException );
 
@@ -1089,12 +1084,12 @@ void ImplIntrospectionAdapter::removeVetoableChangeListener(const OUString& aPro
 
 
 // Methoden von XFastPropertySet
-void ImplIntrospectionAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue)
+void ImplIntrospectionAdapter::setFastPropertyValue(sal_Int32, const Any&)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
 }
 
-Any ImplIntrospectionAdapter::getFastPropertyValue(sal_Int32 nHandle)
+Any ImplIntrospectionAdapter::getFastPropertyValue(sal_Int32)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     return Any();
@@ -1603,8 +1598,8 @@ public:
      ~IntrospectionAccessCacheMap()
      {
          IntrospectionAccessCacheMap::iterator iter = begin();
-         IntrospectionAccessCacheMap::iterator end = this->end();
-         while( iter != end )
+         IntrospectionAccessCacheMap::iterator stop = this->end();
+         while( iter != stop )
          {
 
             (*iter).second->release();
@@ -1702,8 +1697,8 @@ public:
      ~TypeProviderAccessCacheMap()
      {
          TypeProviderAccessCacheMap::iterator iter = begin();
-         TypeProviderAccessCacheMap::iterator end = this->end();
-         while( iter != end )
+         TypeProviderAccessCacheMap::iterator stop = this->end();
+         while( iter != stop )
          {
             (*iter).second->release();
             (*iter).second = NULL;
@@ -1799,8 +1794,8 @@ enum MethodType
 
 // Ctor
 ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rXSMgr )
-    : m_xSMgr( rXSMgr )
-    , OComponentHelper( m_mutex )
+    : OComponentHelper( m_mutex )
+    , m_xSMgr( rXSMgr )
 {
 #ifdef USE_INTROSPECTION_CACHE
     mnCacheEntryCount = 0;
@@ -2377,15 +2372,15 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             sal_Int32 nClassCount = SupportedClassSeq.getLength();
             for( sal_Int32 nIdx = 0 ; nIdx < nClassCount; nIdx++ )
             {
-                Reference<XIdlClass> xImplClass = SupportedClassSeq.getConstArray()[nIdx];
-                while( xImplClass.is() )
+                Reference<XIdlClass> xImplClass2 = SupportedClassSeq.getConstArray()[nIdx];
+                while( xImplClass2.is() )
                 {
                     // Interfaces der Implementation holen
-                    Sequence< Reference<XIdlClass> > aClassSeq = xImplClass->getInterfaces();
+                    Sequence< Reference<XIdlClass> > aClassSeq = xImplClass2->getInterfaces();
                     sal_Int32 nIfaceCount = aClassSeq.getLength();
 
                     aClassSeq.realloc( nIfaceCount + 1 );
-                    aClassSeq.getArray()[ nIfaceCount ] = xImplClass;
+                    aClassSeq.getArray()[ nIfaceCount ] = xImplClass2;
                     nIfaceCount++;
 
                     const Reference<XIdlClass>* pParamArray = aClassSeq.getConstArray();
@@ -2665,8 +2660,8 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                     }
 
                                     // Jetzt muss nur noch der return-Typ dem Parameter-Typ entsprechen
-                                    const Reference<XIdlClass>* pParamArray = setParams.getConstArray();
-                                    Reference<XIdlClass> xParamType = pParamArray[ 0 ];
+                                    const Reference<XIdlClass>* pParamArray2 = setParams.getConstArray();
+                                    Reference<XIdlClass> xParamType = pParamArray2[ 0 ];
                                     if( xParamType->equals( xGetRetType ) )
                                     {
                                         pLocalMethodConcepts[ k ] = PROPERTY;
@@ -2724,8 +2719,8 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                     // Name holen und auswerten
                                     OUString aMethName2 = rxMethod_k->getName();
                                     sal_Int32 nNameLen = aMethName2.getLength();
-                                    sal_Int32 nCopyLen = (nNameLen < 6) ? nNameLen : 6;
-                                    OUString aStartStr2 = aMethName2.copy( 0, nCopyLen );
+                                    sal_Int32 nCopyLen2 = (nNameLen < 6) ? nNameLen : 6;
+                                    OUString aStartStr2 = aMethName2.copy( 0, nCopyLen2 );
                                     OUString aRemoveStr( RTL_CONSTASCII_USTRINGPARAM("remove" ) );
                                     // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
                                     if( !( aStartStr2 == aRemoveStr ) )
@@ -2885,15 +2880,15 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                 const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
 
                                 // Namen in Hashtable eintragen, wenn nicht schon bekannt
-                                OUString aMethName = rxMethod->getName();
-                                IntrospectionNameMap::iterator aIt = rMethodNameMap.find( aMethName );
+                                OUString aMethName2 = rxMethod->getName();
+                                IntrospectionNameMap::iterator aIt = rMethodNameMap.find( aMethName2 );
                                 if( aIt == rMethodNameMap.end() )
                                 {
                                     // Eintragen
-                                    rMethodNameMap[ aMethName ] = iAllExportedMethod;
+                                    rMethodNameMap[ aMethName2 ] = iAllExportedMethod;
 
                                     // Tabelle fuer XExactName pflegen
-                                    rLowerToExactNameMap[ toLower( aMethName ) ] = aMethName;
+                                    rLowerToExactNameMap[ toLower( aMethName2 ) ] = aMethName2;
                                 }
                                 else
                                 {
@@ -2929,7 +2924,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                 // 1. Moeglichkeit: Parameter nach einer Listener-Klasse durchsuchen
                                 // Nachteil: Superklassen muessen rekursiv durchsucht werden
                                 Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
-                                const Reference<XIdlClass>* pParamArray = aParams.getConstArray();
+                                const Reference<XIdlClass>* pParamArray2 = aParams.getConstArray();
 
                                 Reference<XIdlClass> xEventListenerClass = TypeToIdlClass( getCppuType( (Reference<XEventListener>*) NULL ), m_xSMgr );
                                 // ALT: Reference<XIdlClass> xEventListenerClass = XEventListener_getReflection()->getIdlClass();
@@ -2937,7 +2932,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                 sal_Int32 k;
                                 for( k = 0 ; k < nParamCount ; k++ )
                                 {
-                                    const Reference<XIdlClass>& rxClass = pParamArray[k];
+                                    const Reference<XIdlClass>& rxClass = pParamArray2[k];
 
                                     // Sind wir von einem Listener abgeleitet?
                                     if( rxClass->equals( xEventListenerClass ) ||
@@ -2969,17 +2964,17 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                     }
 
                     // Super-Klasse(n) vorhanden? Dann dort fortsetzen
-                    Sequence< Reference<XIdlClass> > aSuperClassSeq = xImplClass->getSuperclasses();
+                    Sequence< Reference<XIdlClass> > aSuperClassSeq = xImplClass2->getSuperclasses();
 
                     // Zur Zeit wird nur von einer Superklasse ausgegangen
                     if( aSuperClassSeq.getLength() >= 1 )
                     {
-                        xImplClass = aSuperClassSeq.getConstArray()[0];
-                        OSL_ENSURE( xImplClass.is(), "super class null" );
+                        xImplClass2 = aSuperClassSeq.getConstArray()[0];
+                        OSL_ENSURE( xImplClass2.is(), "super class null" );
                     }
                     else
                     {
-                        xImplClass = NULL;
+                        xImplClass2 = NULL;
                     }
                 }
             }
@@ -3082,13 +3077,12 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -3115,7 +3109,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
 
