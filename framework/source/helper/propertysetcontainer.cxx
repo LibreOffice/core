@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:26:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-PropertySetContainer::PropertySetContainer( const Reference< XMultiServiceFactory >& rServiceManager )
+PropertySetContainer::PropertySetContainer( const Reference< XMultiServiceFactory >& )
         :   ThreadHelpBase( &Application::GetSolarMutex() )
         ,   OWeakObject()
 
