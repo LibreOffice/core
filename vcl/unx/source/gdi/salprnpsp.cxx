@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:46:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,8 @@
 #include <saldata.hxx>
 #endif
 
-#ifdef MACOSX
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
-#endif
 
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
@@ -97,20 +95,16 @@ using namespace rtl;
  *  static helpers
  */
 
-#ifndef MACOSX
-// NETBSD has no RTLD_GLOBAL
-#ifndef RTLD_GLOBAL
-#define DLOPEN_MODE (RTLD_LAZY)
-#else
-#define DLOPEN_MODE (RTLD_GLOBAL | RTLD_LAZY)
-#endif
-#include <dlfcn.h>
-#endif
 #include <rtsname.hxx>
 
-static void* driverLib                      = NULL;
-static int(*pSetupFunction)(PrinterInfo&)   = NULL;
-static int(*pFaxNrFunction)(String&)        = NULL;
+static oslModule driverLib                  = NULL;
+extern "C"
+{
+typedef int(*setupFunction)(PrinterInfo&);
+static setupFunction pSetupFunction         = NULL;
+typedef int(*faxFunction)(String&);
+static faxFunction pFaxNrFunction           = NULL;
+}
 
 static String getPdfDir( const PrinterInfo& rInfo )
 {
@@ -133,8 +127,6 @@ static String getPdfDir( const PrinterInfo& rInfo )
 
 static void getPaLib()
 {
-    const char* pErr = NULL;
-
     if( ! driverLib )
     {
         #ifdef MACOSX
@@ -170,23 +162,22 @@ static void getPaLib()
             pFaxNrFunction = (int(*)(String&))pQueryFaxNumFunc;
 
         #else
-            driverLib   = dlopen( _XSALSET_LIBNAME, DLOPEN_MODE );
-            pErr        = dlerror();
+            OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
+            driverLib   = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
             if ( !driverLib )
             {
-                fprintf( stderr, "%s: when opening %s\n", pErr, _XSALSET_LIBNAME );
                 return;
             }
 
-            pSetupFunction  = (int(*)(PrinterInfo&))dlsym( driverLib, "Sal_SetupPrinterDriver" );
-            pErr        = dlerror();
+            OUString aSetupSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_SetupPrinterDriver" ) );
+            pSetupFunction  = (setupFunction)osl_getFunctionSymbol( driverLib, aSetupSym.pData );
             if ( !pSetupFunction )
-                fprintf( stderr, "%s: when getting Sal_SetupPrinterDriver\n", pErr );
+                fprintf( stderr, "could not resolve Sal_SetupPrinterDriver\n" );
 
-            pFaxNrFunction = (int(*)(String&))dlsym( driverLib, "Sal_queryFaxNumber" );
-            pErr        = dlerror();
+            OUString aFaxSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_queryFaxNumber" ) );
+            pFaxNrFunction = (faxFunction)osl_getFunctionSymbol( driverLib, aFaxSym.pData );
             if ( !pFaxNrFunction )
-                fprintf( stderr, "%s: when getting Sal_queryFaxNumber\n", pErr );
+                fprintf( stderr, "could not resolve Sal_queryFaxNumber\n" );
         #endif
     }
 }
@@ -546,7 +537,7 @@ void X11SalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 // -----------------------------------------------------------------------
 
-void X11SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
+void X11SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
     mbPrinterInit = true;
 }
@@ -581,7 +572,7 @@ PspSalInfoPrinter::~PspSalInfoPrinter()
 
 // -----------------------------------------------------------------------
 
-void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
+void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 {
     m_aPaperFormats.clear();
     m_bPapersInit = true;
@@ -639,7 +630,7 @@ DuplexMode PspSalInfoPrinter::GetDuplexMode( const ImplJobSetup* pJobSetup )
 
 // -----------------------------------------------------------------------
 
-int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
+int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
 }
@@ -1017,7 +1008,7 @@ BOOL PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    ULONG nCopies, BOOL bCollate,
+    ULONG nCopies, BOOL /*bCollate*/,
     ImplJobSetup* pJobSetup )
 {
     vcl_sal::PrinterUpdate::jobStarted();
@@ -1114,7 +1105,7 @@ BOOL PspSalPrinter::AbortJob()
 
 // -----------------------------------------------------------------------
 
-SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
+SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo  );
@@ -1124,7 +1115,7 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData
         // take the default from jobsetup
         m_aJobData.m_nCopies = m_nCopies;
 
-    m_aPrintJob.StartPage( m_aJobData, bNewJobData ? sal_True : sal_False );
+    m_aPrintJob.StartPage( m_aJobData );
     m_aPrinterGfx.Init( m_aPrintJob );
 
     return m_pGraphics;
@@ -1168,7 +1159,7 @@ void vcl_sal::PrinterUpdate::doUpdate()
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, pDummy )
+IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
 {
     if( nActiveJobs < 1 )
     {
@@ -1192,7 +1183,7 @@ void vcl_sal::PrinterUpdate::update()
     if( ! static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
     {
         // #i45389# start background printer detection
-        psp::PrinterInfoManager& rManager = psp::PrinterInfoManager::get();
+        psp::PrinterInfoManager::get();
         return;
     }
 
