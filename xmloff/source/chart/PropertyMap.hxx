@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:18:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,11 @@
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE        ( XML_SCH_CTF_START + 23 )
 #define XML_SCH_CONTEXT_SPECIAL_STEP_HELP           ( XML_SCH_CTF_START + 24 )
 
-#define MAP_ENTRY( a, ns, nm, t ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART }
+#define MAP_ENTRY( a, ns, nm, t ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0 }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, XML_SCH_CONTEXT_##c }
 #define MAP_SPECIAL( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
 #define MAP_SPECIAL_IMP( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM_IMPORT, XML_SCH_CONTEXT_SPECIAL_##c }
-#define MAP_ENTRY_END { 0,0,0,xmloff::token::XML_TOKEN_INVALID,0 }
+#define MAP_ENTRY_END { 0,0,0,xmloff::token::XML_TOKEN_INVALID,0,0 }
 
 // ---------------------------------------------------------
 // PropertyMap for Chart properties drawing- and
@@ -270,22 +270,6 @@ SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
     { ::xmloff::token::XML_CUBIC_SPLINE, 1 },
     { ::xmloff::token::XML_B_SPLINE,     2 },
     { ::xmloff::token::XML_TOKEN_INVALID,0 }
-};
-
-SvXMLEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
-{
-    { ::xmloff::token::XML_NONE,                -3 },
-    { ::xmloff::token::XML_AUTOMATIC,           -2 },
-    { ::xmloff::token::XML_NAMED_SYMBOL,        -1 },
-    { ::xmloff::token::XML_GRADIENTSTYLE_SQUARE, 0 },  // "square"
-    { ::xmloff::token::XML_DIAMOND,              1 },
-    { ::xmloff::token::XML_ARROW_DOWN,           2 },
-    { ::xmloff::token::XML_ARROW_UP,             3 },
-    { ::xmloff::token::XML_ARROW_RIGHT,          4 },
-    { ::xmloff::token::XML_ARROW_LEFT,           5 },
-    { ::xmloff::token::XML_BOW_TIE,              6 },
-    { ::xmloff::token::XML_HOURGLASS,            7 },
-    { ::xmloff::token::XML_TOKEN_INVALID,        0 }
 };
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS
