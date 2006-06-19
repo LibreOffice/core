@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lckbitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:05:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 
 #define MAX_BUF 32000
 
-SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT nVersion ) const
+SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT ) const
 {
     sal_uInt32 nSize = 0;
     ULONG nActRead = 0;
@@ -139,7 +139,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT nVersion ) cons
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT nItemVersion ) const
+SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT ) const
 {
     SvStream aLockBytesStream( _xVal );
     sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
@@ -153,8 +153,7 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT nItemVersion ) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                    BYTE nMemberId )
+BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
@@ -179,8 +178,7 @@ BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal,
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                    BYTE nMemberId ) const
+BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     if ( _xVal.Is() )
     {
