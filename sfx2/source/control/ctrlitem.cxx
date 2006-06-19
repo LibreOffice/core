@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:27:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,8 +295,8 @@ SfxControllerItem::SfxControllerItem():
 
 // creates a representation of the function nId and registeres it
 
-SfxControllerItem::SfxControllerItem( USHORT nId, SfxBindings &rBindings ):
-    nId(nId),
+SfxControllerItem::SfxControllerItem( USHORT nID, SfxBindings &rBindings ):
+    nId(nID),
     pNext(this),
     pBindings(&rBindings)
 {
@@ -321,9 +321,9 @@ SfxControllerItem::~SfxControllerItem()
 
 void SfxControllerItem::StateChanged
 (
-    USHORT              nSID,       // <SID> des ausl"osenden Slot
-    SfxItemState        eState,     // <SfxItemState> von 'pState'
-    const SfxPoolItem*  pState      // Slot-Status, ggf. 0 oder IsInvalidItem()
+    USHORT              ,   // <SID> des ausl"osenden Slot
+    SfxItemState        ,   // <SfxItemState> von 'pState'
+    const SfxPoolItem*      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )
 
 /*  [Beschreibung]
