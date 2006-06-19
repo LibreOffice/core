@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intlwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:29:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
 #include "unotools/intlwrapper.hxx"
 
 #ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
@@ -49,8 +47,8 @@ IntlWrapper::IntlWrapper(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
             const ::com::sun::star::lang::Locale& rLocale )
         :
-        xSMgr( xSF ),
         aLocale( rLocale ),
+        xSMgr( xSF ),
         pCharClass( NULL ),
         pLocaleData( NULL ),
         pCalendar( NULL ),
@@ -66,12 +64,12 @@ IntlWrapper::IntlWrapper(
             LanguageType eLang )
         :
         xSMgr( xSF ),
-        eLanguage( eLang ),
         pCharClass( NULL ),
         pLocaleData( NULL ),
         pCalendar( NULL ),
         pCollator( NULL ),
-        pCaseCollator( NULL )
+        pCaseCollator( NULL ),
+        eLanguage( eLang )
 {
     MsLangId::convertLanguageToLocale( eLanguage, aLocale );
 }
