@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:42:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,9 +328,9 @@ SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText,
     const IntlWrapper *
 )   const
