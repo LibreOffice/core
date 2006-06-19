@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:24:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,14 +694,14 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         {
             if(GetShadeModel() == Base3DFlat)
             {
-                B3dEntity& rEnt = aBuffers[nInd1];
+                B3dEntity& rEntity = aBuffers[nInd1];
                 B3dColor aColFlatMode;
 
                 // #63505#
                 aNormal.X() = -aNormal.X();
                 aNormal.Y() = -aNormal.Y();
 
-                SolveColorModel(aColFlatMode, aNormal, rEnt.Point().GetVector3D());
+                SolveColorModel(aColFlatMode, aNormal, rEntity.Point().GetVector3D());
 
                 // Vorberechnete Farbe in Eckpunkten setzen
                 for(UINT32 i=0;i<nNumPoints;i++)
