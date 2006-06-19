@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptedtext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,19 +226,19 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
         {
             sal_Int32 nThisPos = 0;         // first position of this portion
             sal_Int32 nNextPos = 0;         // first position of next portion
-            sal_Int16 nScript;              // script type of this portion
+            sal_Int16 nPortScript;          // script type of this portion
             do
             {
-                nScript = _xBreakIter->getScriptType( maText, nThisPos );
-                nNextPos = _xBreakIter->endOfScript( maText, nThisPos, nScript );
+                nPortScript = _xBreakIter->getScriptType( maText, nThisPos );
+                nNextPos = _xBreakIter->endOfScript( maText, nThisPos, nPortScript );
 
-                switch( nScript )
+                switch( nPortScript )
                 {
                     case i18n::ScriptType::LATIN:
                     case i18n::ScriptType::ASIAN:
                     case i18n::ScriptType::COMPLEX:
                         maPosVec.push_back( nThisPos );
-                        maScriptVec.push_back( nScript );
+                        maScriptVec.push_back( nPortScript );
                     break;
                     default:
                     {
