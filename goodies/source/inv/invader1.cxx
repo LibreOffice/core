@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invader1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-11 08:48:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:50:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ void MyWindow::Kollision()
 
     long nWert;
 
-    long i;
+    unsigned long i;
     for(i=0; i<pBombe->Count(); i++)
     {
         //Kollision Bombe->Mauer prfen
@@ -443,7 +443,8 @@ void MyWindow::RandomLevel()
 
     levelpuf[0] = nLevel;
     levelpuf[1] = pGegner->Count();
-    for(long i=0; i<pGegner->Count(); i++)
+    unsigned long i;
+    for(i=0; i<pGegner->Count(); i++)
     {
         levelpuf[i*3+2] = pGegner->GegType(i);
         levelpuf[i*3+3] = pGegner->GegnerX(i);
