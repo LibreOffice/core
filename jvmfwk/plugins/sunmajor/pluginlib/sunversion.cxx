@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:16:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@ bool SunVersion::init(const char *szVersion)
     char buf[128];
 
     //char must me a number 0 - 999 and no leading
-    char cCur = *pCur;
     while (1)
     {
         if (pCur < pEnd && isdigit(*pCur))
