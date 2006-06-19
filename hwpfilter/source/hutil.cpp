@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hutil.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:39:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: hutil.cpp,v 1.2 2005-09-07 16:39:34 rt Exp $ */
+/* $Id: hutil.cpp,v 1.3 2006-06-20 00:54:40 hr Exp $ */
 
 #include "precompile.h"
 
@@ -43,7 +43,7 @@
 
 static char *get_one_roman(int num, char one, char five, char ten, char *str)
 {
-    static char *one_strs[] =
+    static const char *one_strs[] =
     {
         "", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"
     };
@@ -82,7 +82,7 @@ void str2hstr(const char *c, hchar * i)
 {
     hchar ch;
 
-    while ((ch = *c++))
+    while( 0 != (ch = *c++))
     {
         if (ch & 0x80)
         {
