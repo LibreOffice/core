@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:23:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:17:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,8 @@ namespace remotebridges_factory
 
     OBridgeFactory::OBridgeFactory( const Reference < XComponentContext > &rCtx )
         : OComponentHelper( m_mutex )
-        , m_rCtx( rCtx )
         , m_rSMgr( rCtx->getServiceManager() )
+        , m_rCtx( rCtx )
         , m_bInitialized( sal_False )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
@@ -484,7 +484,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
