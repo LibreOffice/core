@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rulritem.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:24:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,22 +166,25 @@ struct SvxColumnDescription
     long nEndMax;         //max. possible position of end
 
     SvxColumnDescription():
-        nStart(0), nEnd(0), nEndMin(0), nEndMax(0), bVisible(TRUE) {}
+        nStart(0), nEnd(0), bVisible(TRUE), nEndMin(0), nEndMax(0) {}
 
     SvxColumnDescription(const SvxColumnDescription &rCopy) :
         nStart(rCopy.nStart), nEnd(rCopy.nEnd),
-        nEndMin(rCopy.nEndMin), nEndMax(rCopy.nEndMax),
-        bVisible(rCopy.bVisible) {}
+        bVisible(rCopy.bVisible),
+        nEndMin(rCopy.nEndMin), nEndMax(rCopy.nEndMax)
+         {}
 
     SvxColumnDescription(long start, long end, BOOL bVis = TRUE):
         nStart(start), nEnd(end),
-        nEndMin(0), nEndMax(0), bVisible(bVis) {}
+        bVisible(bVis),
+        nEndMin(0), nEndMax(0) {}
 
     SvxColumnDescription(long start, long end,
                         long endMin, long endMax, BOOL bVis = TRUE):
         nStart(start), nEnd(end),
-        nEndMin(endMin), nEndMax(endMax),
-        bVisible(bVis) {}
+        bVisible(bVis),
+        nEndMin(endMin), nEndMax(endMax)
+         {}
 
     int operator==(const SvxColumnDescription &rCmp) const {
         return nStart == rCmp.nStart &&
