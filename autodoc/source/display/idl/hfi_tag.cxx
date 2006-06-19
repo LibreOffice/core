@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:55:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,9 @@ void
 HF_IdlTag::Display_ParameterAtTag( const csi::dsapi::DT_ParameterAtTag & i_rTag )
 {
     csv_assert( pTitleOut != 0 );
+    StreamLock sl(100);
     *pTitleOut
-        << ( StreamLock(100)() << "Parameter " << i_rTag.Title() << c_str );
+        << ( sl() << "Parameter " << i_rTag.Title() << c_str );
     PutText_Out( i_rTag.Text() );
 }
 
