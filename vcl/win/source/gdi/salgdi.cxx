@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:13:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ void ImplInitSalGDI()
                 pSalData->mpDitherLow[ n ] = (BYTE) ( n / 51L );
 
             for( n = 0; n < 256L; n++ )
-                pSalData->mpDitherHigh[ n ] = Min( pSalData->mpDitherLow[ n ] + 1, 5 );
+                pSalData->mpDitherHigh[ n ] = (BYTE)Min( pSalData->mpDitherLow[ n ] + 1, 5 );
         }
 
         // get system color entries
@@ -1026,7 +1026,7 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
                                         SALCOLOR_GREEN( nSalColor ),
                                         SALCOLOR_BLUE( nSalColor ) );
     HPEN        hNewPen = 0;
-    BOOL        bStockPen;
+    BOOL        bStockPen = FALSE;
 
     // search for stock pen (only screen, because printer have problems,
     // when we use stock objects)
@@ -1109,7 +1109,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
     BYTE        nBlue       = SALCOLOR_BLUE( nSalColor );
     COLORREF    nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
     HBRUSH      hNewBrush   = 0;
-    BOOL        bStockBrush;
+    BOOL        bStockBrush = FALSE;
 
     // search for stock brush (only screen, because printer have problems,
     // when we use stock objects)
