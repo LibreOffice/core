@@ -4,9 +4,9 @@
  *
  *  $RCSfile: deferredview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:28:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ static inline DeferredSetNodeImpl* deferredSetNode(SetNode const& _aNode)
 
 static inline void deferredValueNode(Node const& _aNode)
 {
+    { (void)_aNode; }
     OSL_ENSURE( _aNode.isValueNode(),"Unknown Node type in deferred view");
     OSL_ENSURE(_aNode.get_offset() == _aNode.tree().get_impl()->root_(), "TreeImpl: Unexpected node type - non-root value element");
 }
@@ -84,6 +85,7 @@ static inline void deferredValueNode(Node const& _aNode)
 
 static void deferredValueNodeChanged(Node const& _aNode)
 {
+    { (void)_aNode; }
     OSL_ENSURE( _aNode.isValueNode(),"Unknown Node type in deferred view");
     OSL_ENSURE(_aNode.get_offset() == _aNode.tree().get_impl()->root_(), "TreeImpl: Unexpected node type - non-root value element");
     OSL_ENSURE(!_aNode.isValueNode(),"Value node changes not supported in deferred view");
