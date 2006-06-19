@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xinecommon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:49:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:00:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef __RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:48:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ void Window::implLayoutVideoWindow()
 
 // ------------------------------------------------------------------------------
 
-bool Window::create( const uno::Sequence< uno::Any >& rArguments )
+bool Window::create( const uno::Sequence< uno::Any >& /*rArguments*/ )
 {
     bool bRet = false;
 
@@ -332,7 +332,7 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
     throw (uno::RuntimeException)
 {
     implLayoutVideoWindow();
@@ -350,14 +350,14 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setVisible( sal_Bool bVisible )
+void SAL_CALL Window::setVisible( sal_Bool /* bVisible */ )
     throw (uno::RuntimeException)
 {
 }
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setEnable( sal_Bool bEnable )
+void SAL_CALL Window::setEnable( sal_Bool /* bEnable */ )
     throw (uno::RuntimeException)
 {
 }
