@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxcustomshapes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:31:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,6 @@
 
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
-
-#pragma hdrstop
 
 #ifndef _SVX_TBXCUSTOMSHAPES_HXX
 #include "tbxcustomshapes.hxx"
