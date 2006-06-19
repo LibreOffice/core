@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regkey.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:17:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include "regkey.hxx"
 
 #ifndef _REGISTRY_REGISTRY_HXX_
 #include    <registry/registry.hxx>
@@ -298,14 +300,16 @@ RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
             return _ret1;
 
         pSubKey = (ORegKey*)hSubKey;
-        if (_ret1 = pSubKey->setValue(valueName, valueType, pData, valueSize))
+        _ret1 = pSubKey->setValue(valueName, valueType, pData, valueSize);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
                 return _ret2;
             else
                 return _ret1;
@@ -344,14 +348,16 @@ RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
             return _ret1;
 
         pSubKey = (ORegKey*)hSubKey;
-        if (_ret1 = pSubKey->setLongListValue(valueName, pValueList, len))
+        _ret1 = pSubKey->setLongListValue(valueName, pValueList, len);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
                 return _ret2;
             else
                 return _ret1;
@@ -390,14 +396,16 @@ RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
             return _ret1;
 
         pSubKey = (ORegKey*)hSubKey;
-        if (_ret1 = pSubKey->setStringListValue(valueName, pValueList, len))
+        _ret1 = pSubKey->setStringListValue(valueName, pValueList, len);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
                 return _ret2;
             else
                 return _ret1;
@@ -436,14 +444,16 @@ RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
             return _ret1;
 
         pSubKey = (ORegKey*)hSubKey;
-        if (_ret1 = pSubKey->setUnicodeListValue(valueName, pValueList, len))
+        _ret1 = pSubKey->setUnicodeListValue(valueName, pValueList, len);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
                 return _ret2;
             else
                 return _ret1;
@@ -484,14 +494,15 @@ RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret;
-        if (_ret = pKey->openKey(keyName, &hSubKey))
+        RegError _ret = pKey->openKey(keyName, &hSubKey);
+        if (_ret)
             return _ret;
 
         pSubKey = (ORegKey*)hSubKey;
         if (pSubKey->getValueInfo(valueName, &valueType, &valueSize))
         {
-            if (_ret = pKey->closeKey(hSubKey))
+            _ret = pKey->closeKey(hSubKey);
+            if (_ret)
                 return _ret;
             else
                 return REG_INVALID_VALUE;
@@ -544,17 +555,19 @@ RegError REGISTRY_CALLTYPE getValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
         {
             pValue = NULL;
             return _ret1;
         }
 
         pSubKey = (ORegKey*)hSubKey;
-        if (_ret1 = pSubKey->getValue(valueName, pValue))
+        _ret1 = pSubKey->getValue(valueName, pValue);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
             {
                 pValue = NULL;
                 return _ret2;
@@ -603,8 +616,8 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
         {
             pValueList = NULL;
             *pLen = 0;
@@ -613,9 +626,11 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
 
         pSubKey = (ORegKey*)hSubKey;
 
-        if (_ret1 = pSubKey->getLongListValue(valueName, pValueList, pLen))
+        _ret1 = pSubKey->getLongListValue(valueName, pValueList, pLen);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
             {
                 pValueList = NULL;
                 *pLen = 0;
@@ -666,8 +681,8 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if ((_ret1 = pKey->openKey(keyName, &hSubKey)))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
         {
             pValueList = NULL;
             *pLen = 0;
@@ -676,9 +691,11 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
 
         pSubKey = (ORegKey*)hSubKey;
 
-        if (_ret1 = pSubKey->getStringListValue(valueName, pValueList, pLen))
+        _ret1 = pSubKey->getStringListValue(valueName, pValueList, pLen);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
             {
                 pValueList = NULL;
                 *pLen = 0;
@@ -729,8 +746,8 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
     {
         RegKeyHandle hSubKey;
         ORegKey* pSubKey;
-        RegError _ret1, _ret2;
-        if (_ret1 = pKey->openKey(keyName, &hSubKey))
+        RegError _ret1 = pKey->openKey(keyName, &hSubKey);
+        if (_ret1)
         {
             pValueList = NULL;
             *pLen = 0;
@@ -739,9 +756,11 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
 
         pSubKey = (ORegKey*)hSubKey;
 
-        if (_ret1 = pSubKey->getUnicodeListValue(valueName, pValueList, pLen))
+        _ret1 = pSubKey->getUnicodeListValue(valueName, pValueList, pLen);
+        if (_ret1)
         {
-            if (_ret2 = pKey->closeKey(hSubKey))
+            RegError _ret2 = pKey->closeKey(hSubKey);
+            if (_ret2)
             {
                 pValueList = NULL;
                 *pLen = 0;
@@ -771,7 +790,6 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
     {
         case 5:
             {
-                sal_Int32* pVList = (sal_Int32*)pValueList;
                 rtl_freeMemory(pValueList);
             }
             break;
@@ -905,7 +923,7 @@ RegError REGISTRY_CALLTYPE getLinkTarget(RegKeyHandle hKey,
 //
 RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
                                               rtl_uString* keyName,
-                                              sal_Bool firstLinkOnly,
+                                              sal_Bool,
                                                 rtl_uString** pResolvedName)
 {
     ORegKey     *pKey;
@@ -921,7 +939,7 @@ RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
         return REG_INVALID_KEY;
 
     OUString resolvedName;
-    _ret = pKey->getResolvedKeyName(keyName, resolvedName, firstLinkOnly);
+    _ret = pKey->getResolvedKeyName(keyName, resolvedName);
     if (!_ret)
         rtl_uString_assign(pResolvedName, resolvedName.pData);
     return _ret;
