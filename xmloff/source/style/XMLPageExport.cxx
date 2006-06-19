@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:35:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,8 +132,8 @@ void XMLPageExport::collectPageMasterAutoStyle(
 }
 
 void XMLPageExport::exportMasterPageContent(
-                const Reference < XPropertySet > & rPropSet,
-                sal_Bool bAutoStyles )
+                const Reference < XPropertySet > &,
+                sal_Bool /*bAutoStyles*/ )
 {
 
 }
