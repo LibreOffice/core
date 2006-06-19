@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:38:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,16 +343,15 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 */
 
 {
-    SfxApplication* pSfxApp = SFX_APP();
     SfxMapUnit eUnit = SFX_MAPUNIT_CM;
 //    FieldUnit eFieldUnit = pSfxApp->GetOptions().GetMetric();
     FieldUnit eFieldUnit( FUNIT_CM );
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( pModule )
     {
-        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-        if ( pItem )
-            eFieldUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+        const SfxPoolItem* pPoolItem = pModule->GetItem( SID_ATTR_METRIC );
+        if ( pPoolItem )
+            eFieldUnit = (FieldUnit)( (SfxUInt16Item*)pPoolItem )->GetValue();
     }
 
     switch ( eFieldUnit )
@@ -475,7 +474,7 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
 //-------------------------------------------------------------------------
 
-void SfxManageStyleSheetPage::Reset( const SfxItemSet& rAttrSet )
+void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
 /*  [Beschreibung]
 
@@ -589,17 +588,17 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     SetDescriptionText_Impl();
 
     // ist es ein Style mit automatischem Update? (nur SW)
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pPoolItem;
 
     if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, FALSE, &pItem ) )
-        aAutoCB.Check( ( (const SfxBoolItem*)pItem )->GetValue() );
+         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, FALSE, &pPoolItem ) )
+        aAutoCB.Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
     aAutoCB.SaveValue();
 }
 
 //-------------------------------------------------------------------------
 
-int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pSet )
+int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
 /*  [Beschreibung]
 
@@ -640,11 +639,11 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pSet )
 
     if ( pStyle->HasFollowSupport() && aFollowLb.IsEnabled() )
     {
-        const String aFollow( aFollowLb.GetSelectEntry() );
+        const String aFollowEntry( aFollowLb.GetSelectEntry() );
 
-        if ( pStyle->GetFollow() != aFollow )
+        if ( pStyle->GetFollow() != aFollowEntry )
         {
-            if ( !pStyle->SetFollow( aFollow ) )
+            if ( !pStyle->SetFollow( aFollowEntry ) )
             {
                 InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDSTYLE ) );
                 aBox.Execute();
@@ -657,14 +656,14 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pSet )
 
     if ( aBaseLb.IsEnabled() )
     {
-        String aParent( aBaseLb.GetSelectEntry() );
+        String aParentEntry( aBaseLb.GetSelectEntry() );
 
-        if ( String( SfxResId( STR_NONE ) ) == aParent || aParent == pStyle->GetName() )
-            aParent.Erase();
+        if ( String( SfxResId( STR_NONE ) ) == aParentEntry || aParentEntry == pStyle->GetName() )
+            aParentEntry.Erase();
 
-        if ( pStyle->GetParent() != aParent )
+        if ( pStyle->GetParent() != aParentEntry )
         {
-            if ( !pStyle->SetParent( aParent ) )
+            if ( !pStyle->SetParent( aParentEntry ) )
             {
                 InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDPARENT ) );
                 aBox.Execute();
@@ -676,8 +675,8 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pSet )
         }
     }
 
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( pItemSet )
+        FillItemSet( *pItemSet );
 
     return nRet;
 }
