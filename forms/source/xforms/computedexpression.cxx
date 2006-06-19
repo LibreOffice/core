@@ -4,9 +4,9 @@
  *
  *  $RCSfile: computedexpression.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:14:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:03:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/SearchAlgorithms.hpp>
 
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
@@ -67,8 +68,8 @@ using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
-
-
+using com::sun::star::util::SearchOptions;
+using com::sun::star::util::SearchAlgorithms_REGEXP;
 
 
 namespace xforms
@@ -107,11 +108,10 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     OSL_ENSURE( pExpression != NULL, "no expression?" );
 
     // call RegExp engine
-    utl::SearchParam aSearchParam( String( pExpression,
-                                           RTL_TEXTENCODING_ASCII_US ),
-                                   utl::SearchParam::SRCH_REGEXP );
-    // invalid locale! (we don't use char classes)
-    utl::TextSearch aTextSearch( aSearchParam, 0 );
+    SearchOptions aSearchOptions;
+    aSearchOptions.algorithmType = SearchAlgorithms_REGEXP;
+    aSearchOptions.searchString = String( pExpression, RTL_TEXTENCODING_ASCII_US );
+    utl::TextSearch aTextSearch( aSearchOptions );
 
     xub_StrLen nLength =
         static_cast<xub_StrLen>( msExpression.getLength() );
