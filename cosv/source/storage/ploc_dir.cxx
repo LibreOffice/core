@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ploc_dir.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:07:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ Directory::Directory( const Path & i_rPath )
 }
 
 Directory::Directory( const Directory & i_rDir )
-    :   aPath(i_rDir.aPath)
+    :   Persistent(), aPath(i_rDir.aPath)
         // sPath
 {
 }
@@ -274,8 +274,8 @@ Directory::GetContainedDirectories( StringVector & o_rResult ) const
         if ( (aEntryStatus.st_mode & S_IFDIR) == S_IFDIR
              AND *pEntry->d_name != '.' )
         {
-            String sNew(pEntry->d_name);
-            o_rResult.push_back(sNew);
+            String sNew2(pEntry->d_name);
+            o_rResult.push_back(sNew2);
         }   // endif (aEntry.attrib == _A_SUBDIR)
     }   // end while
     closedir( pDir );
