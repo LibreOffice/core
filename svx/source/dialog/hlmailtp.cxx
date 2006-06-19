@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:15:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,16 +77,16 @@ using namespace ::com::sun::star;
 |************************************************************************/
 
 SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   maGrpMailNews   ( this, ResId (GRP_MAILNEWS) ),
+:   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
+                              rItemSet ),
+    maGrpMailNews   ( this, ResId (GRP_MAILNEWS) ),
     maRbtMail       ( this, ResId (RB_LINKTYP_MAIL) ),
     maRbtNews       ( this, ResId (RB_LINKTYP_NEWS) ),
     maFtReceiver    ( this, ResId (FT_RECEIVER) ),
     maCbbReceiver   ( this, INET_PROT_MAILTO ),
-    maFtSubject     ( this, ResId (FT_SUBJECT) ),
-    maEdSubject     ( this, ResId (ED_SUBJECT) ),
     maBtAdrBook     ( this, ResId (BTN_ADRESSBOOK) ),
-    SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
-                              rItemSet )
+    maFtSubject     ( this, ResId (FT_SUBJECT) ),
+    maEdSubject     ( this, ResId (ED_SUBJECT) )
 {
     // Set HC bitmaps and disable display of bitmap names.
     maBtAdrBook.SetModeImage( Image( ResId( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
