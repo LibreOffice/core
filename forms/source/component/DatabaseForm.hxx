@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:23:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,9 +131,6 @@
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #include "InterfaceContainer.hxx"
 #endif
-#ifndef _FRM_IDS_HXX_
-#include "ids.hxx"
-#endif
 #ifndef FORMS_SOURCE_COMPONENT_FORMPARAMETERS_HXX
 #include "formparameters.hxx"
 #endif
@@ -142,6 +139,9 @@
 #endif
 #ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
+#endif
+#ifndef _FRM_IDS_HXX_
+#include "ids.hxx"
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
@@ -368,7 +368,7 @@ public:
 
     // com::sun::star::awt::XTabControllerModel
     virtual sal_Bool SAL_CALL getGroupControl() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setGroupControl(sal_Bool _bGroupControl) throw(::com::sun::star::uno::RuntimeException) { }
+    virtual void SAL_CALL setGroupControl(sal_Bool /*_bGroupControl*/) throw(::com::sun::star::uno::RuntimeException) { }
     virtual void SAL_CALL setControlModels(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rControls) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL getControlModels() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setGroup(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rGroup, const ::rtl::OUString& _rGroupName) throw(::com::sun::star::uno::RuntimeException);
