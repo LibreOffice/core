@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:25:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ public:
     void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
 //  void                PostGroup(); ?? wird es noch gebraucht ??
 
-    SdrView*            GetDrawView() {return pView;}
+    SdrView*            GetDrawView() {return mpView;}
     SdrPageView*        GetPageView();
     void                RemovePageView();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       GetInterface( SdrObject* pObj );
