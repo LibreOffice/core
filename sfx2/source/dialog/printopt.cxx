@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:29:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,8 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     aReduceBitmapsOptimalRB( this, ResId( RB_REDUCEBITMAPS_OPTIMAL ) ),
     aReduceBitmapsNormalRB( this, ResId( RB_REDUCEBITMAPS_NORMAL ) ),
     aReduceBitmapsResolutionRB( this, ResId( RB_REDUCEBITMAPS_RESOLUTION ) ),
-    aReduceBitmapsTransparencyCB( this, ResId( CB_REDUCEBITMAPS_TRANSPARENCY ) ),
     aReduceBitmapsResolutionLB( this, ResId( LB_REDUCEBITMAPS_RESOLUTION ) ),
+    aReduceBitmapsTransparencyCB( this, ResId( CB_REDUCEBITMAPS_TRANSPARENCY ) ),
     aConvertToGreyscalesCB( this, ResId( CB_CONVERTTOGREYSCALES ) ),
     aWarnGB( this, ResId( GB_PRINT_WARN ) ),
     aPaperSizeCB( this, ResId( CB_PAPERSIZE ) ),
@@ -160,7 +160,7 @@ Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow )
 
 // -----------------------------------------------------------------------------
 
-BOOL SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
@@ -186,9 +186,8 @@ BOOL SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------------
 
-void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& rSet )
+void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& /*rSet*/ )
 {
-    const SfxPoolItem*      pItem;
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
@@ -210,10 +209,10 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------------
 
-int SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pSet )
+int SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
 {
-    if( pSet )
-        FillItemSet( *pSet );
+    if( pItemSet )
+        FillItemSet( *pItemSet );
 
     return LEAVE_PAGE;
 }
@@ -295,6 +294,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
 {
+    (void)pBox; //unused
     const BOOL bReduceTransparency = aReduceTransparencyCB.IsChecked();
 
     aReduceTransparencyAutoRB.Enable( bReduceTransparency );
@@ -309,6 +309,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, pBox )
 {
+    (void)pBox; //unused
     const BOOL bEnable = aReduceGradientsCB.IsChecked();
 
     aReduceGradientsStripesRB.Enable( bEnable );
@@ -324,6 +325,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, p
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBox )
 {
+    (void)pBox; //unused
     const BOOL bEnable = aReduceBitmapsCB.IsChecked();
 
     aReduceBitmapsOptimalRB.Enable( bEnable );
@@ -341,6 +343,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBo
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton*, pButton )
 {
+    (void)pButton; //unused
     const BOOL bEnable = aReduceGradientsCB.IsChecked() && aReduceGradientsStripesRB.IsChecked();
 
     aReduceGradientsStepCountNF.Enable( bEnable );
@@ -352,6 +355,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, Radi
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton*, pButton )
 {
+    (void)pButton; //unused
     const BOOL bEnable = aReduceBitmapsCB.IsChecked() && aReduceBitmapsResolutionRB.IsChecked();
 
     aReduceBitmapsResolutionLB.Enable( bEnable );
@@ -422,6 +426,7 @@ TransparencyPrintWarningBox::~TransparencyPrintWarningBox()
 
 IMPL_LINK( TransparencyPrintWarningBox, ClickNoBtn, PushButton*, pButton )
 {
+    (void)pButton; //unused
     EndDialog( RET_NO );
     return 0;
 }
