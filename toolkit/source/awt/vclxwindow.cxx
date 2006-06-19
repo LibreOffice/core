@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:26:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,7 @@ public:
     virtual void SAL_CALL release();
 
 protected:
-    ~VCLXWindowImpl();
+    virtual ~VCLXWindowImpl();
 
     // IEventProcessor
     virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
@@ -254,8 +254,8 @@ private:
 
 //--------------------------------------------------------------------
 VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
-    :mrAntiImpl( _rAntiImpl )
-    ,m_refCount( 0 )
+    :m_refCount( 0 )
+    ,mrAntiImpl( _rAntiImpl )
     ,mrMutex( _rMutex )
     ,mbDisposed( false )
 #ifdef THREADED_NOTIFICATION
@@ -268,7 +268,6 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
 {
 }
 
-//--------------------------------------------------------------------
 VCLXWindowImpl::~VCLXWindowImpl()
 {
 }
@@ -322,7 +321,7 @@ void VCLXWindowImpl::notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& 
 
 #if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
 //--------------------------------------------------------------------
-IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, NOINTERESTEDIN )
+IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, EMPTYARG )
 {
     // work on a copy of the events array
     EventArray aEventsCopy;
@@ -1311,20 +1310,20 @@ void VCLXWindow::setBackground( sal_Int32 nColor ) throw(::com::sun::star::uno::
     }
 }
 
-void VCLXWindow::invalidate( sal_Int16 nFlags ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
-        GetWindow()->Invalidate( (sal_uInt16) nFlags );
+        GetWindow()->Invalidate( (sal_uInt16) nInvalidateFlags );
 }
 
-void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, sal_Int16 nFlags ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
-        GetWindow()->Invalidate( VCLRectangle(rRect), (sal_uInt16) nFlags );
+        GetWindow()->Invalidate( VCLRectangle(rRect), (sal_uInt16) nInvalidateFlags );
 }
 
 
@@ -1694,6 +1693,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 case VerticalAlignment_BOTTOM:
                     nStyle |= WB_BOTTOM;
                     break;
+                default: ; // for warning free code, MAKE_FIXED_SIZE
                 }
                 pWindow->SetStyle( nStyle );
             }
@@ -2032,7 +2032,6 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     if ( GetWindow() )
     {
         WindowType nWinType = GetWindow()->GetType();
-        WinBits nStyle = GetWindow()->GetStyle();
         switch ( nWinType )
         {
             case WINDOW_MESSBOX:
@@ -2187,8 +2186,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             bool bDrawSimple = ( pDev->GetOutDevType() == OUTDEV_PRINTER ) || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW );
             if ( bDrawSimple )
             {
-                ULONG nFlags = WINDOW_DRAW_NOCONTROLS;
-                pWindow->Draw( pDev, aP, aSz, nFlags );
+                pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
             }
             else
             {
@@ -2198,7 +2196,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     }
 }
 
-void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -2322,7 +2320,7 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeExcept
     if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
         Window::GetDockingManager()->Unlock( pWindow );
 }
-void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& WindowRect ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& ) throw (::com::sun::star::uno::RuntimeException)
 {
     // TODO: remove interface in the next incompatible build
     ::vos::OGuard aGuard( GetMutex() );
