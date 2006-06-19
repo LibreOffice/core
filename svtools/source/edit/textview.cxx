@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:36:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#ifndef GCC
-#pragma hdrstop
-#endif
-
 #include <textview.hxx>
 #include <texteng.hxx>
 #include <textdoc.hxx>
@@ -63,10 +58,6 @@
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
-
-#ifndef _NEW_HXX
-#include <tools/new.hxx>
 #endif
 
 #include <sot/formats.hxx>
@@ -679,7 +670,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
-                        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+                        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
                         Copy( aSelection );
                     }
                     bMoved = TRUE;
@@ -833,14 +824,14 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Paste( aSelection );
         if ( mpImpl->mpTextEngine->IsModified() )
             mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
-        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Copy( aSelection );
     }
 }
@@ -975,10 +966,10 @@ void TextView::Command( const CommandEvent& rCEvt )
 
             if ( !pData->IsOnlyCursorChanged() )
             {
-                TextSelection aSel( mpImpl->mpTextEngine->mpIMEInfos->aPos );
-                aSel.GetEnd().GetIndex() += mpImpl->mpTextEngine->mpIMEInfos->nLen;
-                aSel = mpImpl->mpTextEngine->ImpDeleteText( aSel );
-                aSel = mpImpl->mpTextEngine->ImpInsertText( aSel, pData->GetText() );
+                TextSelection aSelect( mpImpl->mpTextEngine->mpIMEInfos->aPos );
+                aSelect.GetEnd().GetIndex() += mpImpl->mpTextEngine->mpIMEInfos->nLen;
+                aSelect = mpImpl->mpTextEngine->ImpDeleteText( aSelect );
+                aSelect = mpImpl->mpTextEngine->ImpInsertText( aSelect, pData->GetText() );
 
                 if ( mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite )
                 {
@@ -2008,7 +1999,7 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
     }
 }
 
-void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     ImpHideDDCursor();
     delete mpImpl->mpDDInfo;
@@ -2123,11 +2114,11 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
     ImpHideDDCursor();
