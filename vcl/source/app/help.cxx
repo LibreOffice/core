@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:18:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,7 @@ Size HelpTextWindow::CalcOutSize() const
 
 // -----------------------------------------------------------------------
 
-void HelpTextWindow::RequestHelp( const HelpEvent& rHEvt )
+void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 {
     // Nur damit nicht von Window::RequestHelp() ein
     // ShowQuickHelp/ShowBalloonHelp am HelpTextWindow aufgerufen wird.
@@ -670,7 +670,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
 
 // -----------------------------------------------------------------------
 
-void ImplDestroyHelpWindow( BOOL bUpdate )
+void ImplDestroyHelpWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
