@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:36:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ namespace utl
             ConfigItem_Impl*            pImpl;
 
             ConfigItem();//
-            void                    RemoveListener();
+            void                    RemoveChangesListener();
             void                    CallNotify(
                                 const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
