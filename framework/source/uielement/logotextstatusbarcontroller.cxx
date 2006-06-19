@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logotextstatusbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:54:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:38:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,28 +148,28 @@ throw ( RuntimeException )
 }
 
 // XStatusListener
-void SAL_CALL LogoTextStatusbarController::statusChanged( const FeatureStateEvent& Event )
+void SAL_CALL LogoTextStatusbarController::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )
 {
 }
 
 // XStatusbarController
 ::sal_Bool SAL_CALL LogoTextStatusbarController::mouseButtonDown(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL LogoTextStatusbarController::mouseMove(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL LogoTextStatusbarController::mouseButtonUp(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
