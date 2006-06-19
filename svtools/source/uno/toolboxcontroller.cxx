@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:13:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:28:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,12 +103,12 @@ ToolboxController::ToolboxController(
     const Reference< XFrame >& xFrame,
     const OUString& aCommandURL ) :
     OWeakObject()
-    ,   m_aListenerContainer( m_aMutex )
+    ,   m_bInitialized( sal_False )
+    ,   m_bDisposed( sal_False )
     ,   m_xFrame(xFrame)
     ,   m_xServiceManager( rServiceManager )
     ,   m_aCommandURL( aCommandURL )
-    ,   m_bInitialized( sal_False )
-    ,   m_bDisposed( sal_False )
+    ,   m_aListenerContainer( m_aMutex )
 {
     m_pImpl = new ToolboxController_Impl;
 
@@ -125,9 +125,9 @@ ToolboxController::ToolboxController(
 
 ToolboxController::ToolboxController() :
     OWeakObject()
-    ,   m_aListenerContainer( m_aMutex )
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
+    ,   m_aListenerContainer( m_aMutex )
 {
     m_pImpl = new ToolboxController_Impl;
 }
@@ -210,7 +210,6 @@ throw ( Exception, RuntimeException )
     const rtl::OUString aParentWindow( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
 
     bool bInitialized( true );
-    bool bBindListener( false );
 
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
@@ -352,7 +351,7 @@ throw ( RuntimeException )
 }
 
 // XStatusListener
-void SAL_CALL ToolboxController::statusChanged( const FeatureStateEvent& Event )
+void SAL_CALL ToolboxController::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )
 {
     // must be implemented by sub class
@@ -422,7 +421,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return Reference< XWindow >();
 }
 
-Reference< XWindow > SAL_CALL ToolboxController::createItemWindow( const Reference< XWindow >& Parent )
+Reference< XWindow > SAL_CALL ToolboxController::createItemWindow( const Reference< XWindow >& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XWindow >();
@@ -462,11 +461,11 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
-                if ( pIter != m_aListenerMap.end() )
+                URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
+                if ( aIter != m_aListenerMap.end() )
                 {
-                    Reference< XDispatch > xOldDispatch( pIter->second );
-                    pIter->second = xDispatch;
+                    Reference< XDispatch > xOldDispatch( aIter->second );
+                    aIter->second = xDispatch;
 
                     try
                     {
