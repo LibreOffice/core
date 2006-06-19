@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:21:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ using namespace ::com::sun::star::uno;
 namespace unodevtools {
 
 //-------------------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 1
 static void out( const sal_Char * pText )
 {
     fprintf( stderr, pText );
@@ -58,6 +59,7 @@ static void out( const OUString & rText )
     OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, aText.getStr() );
 }
+#endif
 
 //-------------------------------------------------------------------------------
 sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
