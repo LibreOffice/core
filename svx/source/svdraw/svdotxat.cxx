@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:35:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,9 +180,9 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             {
                 pEdtOutl->SetMaxAutoPaperSize(aSiz);
                 if (bWdtGrow) {
-                    Size aSiz(pEdtOutl->CalcTextSize());
-                    nWdt=aSiz.Width()+1; // lieber etwas Tolleranz
-                    if (bHgtGrow) nHgt=aSiz.Height()+1; // lieber etwas Tolleranz
+                    Size aSiz2(pEdtOutl->CalcTextSize());
+                    nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
                 } else {
                     nHgt=pEdtOutl->GetTextHeight()+1; // lieber etwas Tolleranz
                 }
@@ -198,9 +198,9 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
                     rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
                 }
                 if (bWdtGrow) {
-                    Size aSiz(rOutliner.CalcTextSize());
-                    nWdt=aSiz.Width()+1; // lieber etwas Tolleranz
-                    if (bHgtGrow) nHgt=aSiz.Height()+1; // lieber etwas Tolleranz
+                    Size aSiz2(rOutliner.CalcTextSize());
+                    nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
                 } else {
                     nHgt=rOutliner.GetTextHeight()+1; // lieber etwas Tolleranz
                 }
