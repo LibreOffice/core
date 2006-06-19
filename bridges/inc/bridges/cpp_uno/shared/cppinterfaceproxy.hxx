@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppinterfaceproxy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:09:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@ namespace bridges { namespace cpp_uno { namespace shared {
 
 class Bridge;
 
+extern "C" typedef void SAL_CALL FreeCppInterfaceProxy(
+    uno_ExtEnvironment * pEnv, void * pInterface);
+FreeCppInterfaceProxy freeCppInterfaceProxy;
+
 /**
  * A cpp proxy wrapping a uno interface.
  */
@@ -62,9 +66,6 @@ public:
         Bridge * pBridge, uno_Interface * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr,
         rtl::OUString const & rOId) SAL_THROW(());
-
-    static void SAL_CALL free(uno_ExtEnvironment * pEnv, void * pInterface)
-        SAL_THROW(());
 
     // Interface for individual CPP--UNO bridges:
 
@@ -102,6 +103,9 @@ private:
     rtl::OUString oid;
 
     void ** vtables[1];
+
+    friend void SAL_CALL freeCppInterfaceProxy(
+        uno_ExtEnvironment * pEnv, void * pInterface);
 };
 
 } } }
