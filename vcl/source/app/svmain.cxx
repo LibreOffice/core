@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:08:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:14:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,24 +177,24 @@ public:
         USHORT nVCLException = 0;
 
         // UAE
-        if ( (pInfo->Signal == TSignal_AccessViolation)     ||
-             (pInfo->Signal == TSignal_IntegerDivideByZero) ||
-             (pInfo->Signal == TSignal_FloatDivideByZero)   ||
-             (pInfo->Signal == TSignal_DebugBreak) )
+        if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
+             (pInfo->Signal == osl_Signal_IntegerDivideByZero) ||
+             (pInfo->Signal == osl_Signal_FloatDivideByZero)   ||
+             (pInfo->Signal == osl_Signal_DebugBreak) )
             nVCLException = EXC_SYSTEM;
 
         // RC
-        if ((pInfo->Signal == TSignal_SignalUser) &&
+        if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_RESOURCEFAILURE) )
             nVCLException = EXC_RSCNOTLOADED;
 
         // DISPLAY-Unix
-        if ((pInfo->Signal == TSignal_SignalUser) &&
+        if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
             nVCLException = EXC_DISPLAY;
 
         // Remote-Client
-        if ((pInfo->Signal == TSignal_SignalUser) &&
+        if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_RVPCONNECTIONERROR) )
             nVCLException = EXC_REMOTE;
 
@@ -379,7 +379,7 @@ void DeInitVCL()
 
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
-    ImplDeInitTimer();
+    Timer::ImplDeInitTimer();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )
     {
@@ -551,12 +551,15 @@ static unsigned __stdcall _threadmain( void *pArgs )
 }
 #else
 static oslThread hThreadID = 0;
+extern "C"
+{
 static void SAL_CALL MainWorkerFunction( void* pArgs )
 {
     ((WorkerThreadData*)pArgs)->pWorker( ((WorkerThreadData*)pArgs)->pThreadData );
     delete (WorkerThreadData*)pArgs;
     hThreadID = 0;
 }
+} // extern "C"
 #endif
 
 void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
