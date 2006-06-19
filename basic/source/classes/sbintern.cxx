@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbintern.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:10:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 #include "parser.hxx"               // Parser
 #include "codegen.hxx"              // Code-Generator
 #include "basmgr.hxx"
-#pragma hdrstop
 
 SV_IMPL_PTRARR(SbErrorStack, SbErrorStackEntry*)
 
