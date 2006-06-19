@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:44:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
 
 }
 
-void urp_BridgeImpl::addError( char *pError )
+void urp_BridgeImpl::addError( char const *pError )
 {
     OUString message = OUString( RTL_CONSTASCII_USTRINGPARAM( "(tid=" ) );
     message += OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
