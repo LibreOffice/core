@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-30 07:58:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:27:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@
 DBG_NAME( OutputDevice );
 DBG_NAME( Polygon );
 DBG_NAME( PolyPolygon );
-DBG_NAMEEX( Region );
+DBG_NAMEEX( Region )
 
 // -----------------------------------------------------------------------
 
@@ -1145,7 +1145,7 @@ namespace
     };
 
     inline SpanIterator::SpanIterator( sal_Int32 *pTable, size_t dwPitch, sal_Int32 dwNumScanlines )
-        : mpTable(pTable),maPitch(dwPitch),maRemainingScanlines(dwNumScanlines)
+        : mpTable(pTable),maRemainingScanlines(dwNumScanlines),maPitch(dwPitch)
     {
         sal_Int32 *pNumSpans = mpTable;
         mpSpanArray = reinterpret_cast<sal_Int32 *>(pNumSpans+2);
@@ -1412,13 +1412,13 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
     sal_Int32 maxy = SAL_MIN_INT32;
     sal_Int32 miny = SAL_MAX_INT32;
     sal_uInt32 dwNumTriangles = 0;
-    for(unsigned int i=0; i<rPolyPolygon.Count(); ++i)
+    for(USHORT i=0; i<rPolyPolygon.Count(); ++i)
     {
         const Polygon &rPoly = rPolyPolygon.GetObject(i);
         const sal_Int32 dwNumVertices = rPoly.GetSize();
         if(!(dwNumVertices % 3))
         {
-            for(unsigned int j=0; j<rPoly.GetSize(); ++j)
+            for(USHORT j=0; j<rPoly.GetSize(); ++j)
             {
                 const Point &p = rPoly.GetPoint(j);
                 if(p.Y() < miny)
@@ -1462,13 +1462,13 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
     // the polypolygon has already been triangulated since we don't
     // want to use the basegfx-types here. this could be leveraged
     // after the tools-types had been removed.
-    for(unsigned int i=0; i<rPolyPolygon.Count(); ++i)
+    for(USHORT i=0; i<rPolyPolygon.Count(); ++i)
     {
         const Polygon &rPoly = rPolyPolygon.GetObject(i);
-        const sal_uInt32 dwNumVertices = rPoly.GetSize();
+        const USHORT dwNumVertices = rPoly.GetSize();
         if(!(dwNumVertices % 3))
         {
-            for(unsigned int j=0; j<dwNumVertices; j+=3)
+            for(USHORT j=0; j<dwNumVertices; j+=3)
             {
                 const Point &p0 = rPoly.GetPoint(j+0);
                 const Point &p1 = rPoly.GetPoint(j+1);
@@ -1490,7 +1490,6 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
                 if(v0.y > v1.y) swap(v0, v1);
 
                 const float float2fixed(16.0f);
-                const float fixed2float(1.0f/float2fixed);
 
                 // vertex coordinates of the triangle [28.4 fixed-point]
                 const int i4x0 = iround(float2fixed * (v0.x - 0.5f));
@@ -1507,12 +1506,6 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
                 const int i4dy13 = i4y2-i4y0;
                 const int i4dx23 = i4x2-i4x1;
                 const int i4dy23 = i4y2-i4y1;
-
-                // vertex coordinate deltas [32-bit floating-point]
-                const float fdx12 = i4dx12 * fixed2float;
-                const float fdy12 = i4dy12 * fixed2float;
-                const float fdx13 = i4dx13 * fixed2float;
-                const float fdy13 = i4dy13 * fixed2float;
 
                 // slope of edges [quotient,remainder]
                 const int mq12 = floorDiv(i4dx12 << 4, i4dy12 << 4);
