@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apearcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:46:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:41:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,18 +67,20 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     :ConfigItem(OUString::createFromAscii("Office.Common/View"))
     ,nLookNFeel         ( DEFAULT_LOOKNFEEL )
     ,nDragMode          ( DEFAULT_DRAGMODE )
+    ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
     ,nMiddleMouse       ( MOUSE_MIDDLE_AUTOSCROLL )
-    ,nScaleFactor ( DEFAULT_SCALEFACTOR )
+#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+    ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
+#endif
     ,bMenuMouseFollow(FALSE)
     ,bSingleLineTabCtrl(FALSE)
     ,bColoredTabCtrl(FALSE)
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
     ,bFontAntialiasing  ( TRUE )
 #endif
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtTabAppearanceCfg::SvtTabAppearanceCfg()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtTabAppearanceCfg::SvtTabAppearanceCfg()");
 
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
@@ -155,7 +157,6 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 void  SvtTabAppearanceCfg::Commit()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
-    const OUString* pNames = rNames.getConstArray();
     Sequence<Any> aValues(rNames.getLength());
     Any* pValues = aValues.getArray();
 
