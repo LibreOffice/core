@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaevent_impl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:42:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ void MediaEventListenersImpl::cleanUp()
 
 // ---------------------------------------------------------------------
 
-void SAL_CALL MediaEventListenersImpl::disposing( const ::com::sun::star::lang::EventObject& Source )
+void SAL_CALL MediaEventListenersImpl::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -154,7 +154,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
 
 // ---------------------------------------------------------------------
 
-void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt::MouseEvent& e )
+void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt::MouseEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
@@ -167,7 +167,7 @@ void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt
 
 // ---------------------------------------------------------------------
 
-void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt::MouseEvent& e )
+void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt::MouseEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
@@ -210,14 +210,14 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::
 
 // ---------------------------------------------------------------------
 
-void SAL_CALL MediaEventListenersImpl::focusGained( const ::com::sun::star::awt::FocusEvent& e )
+void SAL_CALL MediaEventListenersImpl::focusGained( const ::com::sun::star::awt::FocusEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
 // ---------------------------------------------------------------------
 
-void SAL_CALL MediaEventListenersImpl::focusLost( const ::com::sun::star::awt::FocusEvent& e )
+void SAL_CALL MediaEventListenersImpl::focusLost( const ::com::sun::star::awt::FocusEvent& /* e */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
