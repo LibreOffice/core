@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:27:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }
 
-void ExtMultiLineEdit::InsertText( const String& rNew, BOOL bSelect )
+void ExtMultiLineEdit::InsertText( const String& rNew, BOOL )
 {
     GetTextView()->InsertText( rNew, FALSE );
 }

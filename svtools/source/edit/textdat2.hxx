@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdat2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:27:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:01:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ public:
 
 
 typedef TETextPortion* TextPortionPtr;
-SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 );
+SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 )
 
 class TETextPortionList : public TextPortionArray
 {
@@ -139,7 +139,7 @@ struct TEWritingDirectionInfo
     }
 };
 
-SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0, 4 );
+SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0, 4 )
 
 class TextLine
 {
@@ -200,7 +200,7 @@ public:
 };
 
 typedef TextLine* TextLinePtr;
- SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1, 4 );
+ SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1, 4 )
 
 inline BOOL TextLine::operator == ( const TextLine& rLine ) const
 {
