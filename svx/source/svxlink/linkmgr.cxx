@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:08:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
