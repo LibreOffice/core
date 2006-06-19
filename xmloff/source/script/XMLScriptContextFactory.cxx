@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLScriptContextFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:19:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ using ::com::sun::star::uno::Any;
 
 XMLScriptContextFactory::XMLScriptContextFactory() :
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-    sURL(RTL_CONSTASCII_USTRINGPARAM("Script")),
-    sScript(RTL_CONSTASCII_USTRINGPARAM("Script"))
+    sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
+    sURL(RTL_CONSTASCII_USTRINGPARAM("Script"))
 {
 }
 
@@ -84,12 +84,12 @@ XMLScriptContextFactory::~XMLScriptContextFactory()
 
 SvXMLImportContext * XMLScriptContextFactory::CreateContext
 (SvXMLImport & rImport,
- sal_uInt16 nPrefix,
+ sal_uInt16 p_nPrefix,
  const OUString & rLocalName,
  const Reference<XAttributeList> & xAttrList,
  XMLEventsImportContext * rEvents,
  const OUString & rApiEventName,
- const OUString & rApiLanguage)
+ const OUString & /*rApiLanguage*/)
 {
     OUString sURLVal;
 
@@ -123,6 +123,6 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
     rEvents->AddEventValues(rApiEventName, aValues);
 
     // return dummy context
-    return new SvXMLImportContext(rImport, nPrefix, rLocalName);
+    return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);
 }
 
