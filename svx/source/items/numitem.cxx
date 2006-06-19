@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:37:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
 #include <numitem.hxx>
 
 #define ITEMID_BRUSH SID_ATTR_BRUSH
@@ -197,14 +196,14 @@ SvxNumberFormat::SvxNumberFormat(sal_Int16 eType) :
     nInclUpperLevels(0),
     nStart(1),
     cBullet(SVX_DEF_BULLET),
+    nBulletRelSize(100),
+    nBulletColor(COL_BLACK),
     nFirstLineOffset(0),
     nAbsLSpace(0),
     nLSpace(0),
     nCharTextDistance(0),
     pGraphicBrush(0),
     eVertOrient(SVX_VERT_NONE),
-    nBulletRelSize(100),
-    nBulletColor(COL_BLACK),
     pBulletFont(0)
 {
 }
@@ -655,8 +654,8 @@ static SvxNumberFormat* pStdOutlineNumFmt = 0;
 SvxNumRule::SvxNumRule(ULONG nFeatures, USHORT nLevels, BOOL bCont, SvxNumRuleType eType) :
     nLevelCount(nLevels),
     nFeatureFlags(nFeatures),
-    bContinuousNumbering(bCont),
-    eNumberingType(eType)
+    eNumberingType(eType),
+    bContinuousNumbering(bCont)
 {
     ++nRefCount;
     LanguageType eLang = Application::GetSettings().GetLanguage();
@@ -993,8 +992,8 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule) :
 /*-----------------23.11.98 10:36-------------------
  MT: Das sind ja sehr sinnige Kommentare...
 --------------------------------------------------*/
-SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, USHORT nWhich ) :
-    SfxPoolItem(nWhich),
+SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, USHORT _nWhich ) :
+    SfxPoolItem(_nWhich),
     pNumRule(new SvxNumRule(rRule))
 {
 }
@@ -1025,7 +1024,7 @@ int  SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 /* -----------------27.10.98 10:41-------------------
  *
  * --------------------------------------------------*/
-SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxNumBulletItem(*this);
 }
@@ -1040,7 +1039,7 @@ SfxPoolItem*     SvxNumBulletItem::Create(SvStream &rStream, USHORT) const
 /* -----------------08.12.98 10:43-------------------
  *
  * --------------------------------------------------*/
-SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT nItemVersion )const
+SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT /*nItemVersion*/ )const
 {
     pNumRule->Store(rStream);
     return rStream;
@@ -1048,7 +1047,7 @@ SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT nItemVersion )cons
 /* -----------------08.12.98 10:43-------------------
  *
  * --------------------------------------------------*/
-USHORT  SvxNumBulletItem::GetVersion( USHORT nFileVersion ) const
+USHORT  SvxNumBulletItem::GetVersion( USHORT /*nFileVersion*/ ) const
 {
     return NUMITEM_VERSION_03;
 }
@@ -1057,13 +1056,13 @@ USHORT  SvxNumBulletItem::GetVersion( USHORT nFileVersion ) const
  *
  * --------------------------------------------------*/
 
-sal_Bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= SvxCreateNumRule( pNumRule );
     return sal_True;
 }
 
-sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace > xRule;
     if( rVal >>= xRule )
