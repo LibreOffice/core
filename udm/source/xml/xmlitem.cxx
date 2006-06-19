@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:40:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ EmptyElement::inq_Content() const
 const AttrList *
 EmptyElement::inq_Attrs() const
 {
-    return &inq_RefAttrs();
+    return & const_cast< EmptyElement* >(this)->inq_RefAttrs();
 }
 
 
@@ -271,7 +271,7 @@ PureElement::do_SetContent( DYN Item *  let_dpItem )
 const Item *
 PureElement::inq_Content() const
 {
-    return inq_RefContent().Ptr();
+    return const_cast< PureElement* >(this)->inq_RefContent().Ptr();
 }
 
 const AttrList *
@@ -510,10 +510,12 @@ Text::~Text()
 void
 Text::do_WriteOut( csv::bostream & io_aFile ) const
 {
-    const char * pStart = sText.c_str();
-    const char * pOut = 0;
+    const unsigned char *
+        pStart = reinterpret_cast< const unsigned char* >(sText.c_str());
+    const unsigned char *
+        pOut = pStart;
 
-    for ( pOut = pStart ; *pOut != '\0'; ++pOut )
+    for ( ; *pOut != '\0'; ++pOut )
     {
         if ( cReplacable[*pOut] )
         {
@@ -522,12 +524,12 @@ Text::do_WriteOut( csv::bostream & io_aFile ) const
                 io_aFile.write( pStart, pOut-pStart );
             }
 
-            switch (UINT8(*pOut))
+            switch (*pOut)
             {
                 case '<':   io_aFile.write("&lt;");     break;
                 case '>':   io_aFile.write("&gt;");     break;
                 case '"':   io_aFile.write("&quot;");   break;
-                case '&':   io_aFile.write("&amp;");        break;
+                case '&':   io_aFile.write("&amp;");    break;
                 case 255:   io_aFile.write("&nbsp;");   break;
             }
 
@@ -618,6 +620,3 @@ StreamOut( Dyn< Item >  &           o_rContent,
 
 }   // namespace xml
 }   // namespace csi
-
-
-
