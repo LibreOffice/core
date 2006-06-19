@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdef.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:27:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:18:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <appdef.hxx>
+#include "bootstrp/appdef.hxx"
 
 const char* GetDefStandList()
 {
@@ -158,7 +158,7 @@ const char* GetBServerRoot()
 
 const char* GetEnv( const char *pVar )
 {
-    char *pRet = getenv( pVar );
+    char const *pRet = getenv( pVar );
     if ( !pRet )
         pRet = "";
     return pRet;
