@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:43:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,11 +139,10 @@ JNI_interface_type_info::JNI_interface_type_info(
                               member_td.get() );
 
                     sig_buf.append( '(' );
-                    for ( sal_Int32 nPos = 0;
-                          nPos < method_td->nParams; ++nPos )
+                    for ( sal_Int32 i = 0; i < method_td->nParams; ++i )
                     {
                         typelib_MethodParameter const & param =
-                            method_td->pParams[ nPos ];
+                            method_td->pParams[ i ];
                         if (param.bOut)
                             sig_buf.append( '[' );
                         JNI_info::append_sig( &sig_buf, param.pTypeRef );
@@ -250,8 +249,8 @@ void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 JNI_compound_type_info::JNI_compound_type_info(
     JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ ),
-      m_fields( 0 ),
-      m_exc_ctor( 0 )
+      m_exc_ctor( 0 ),
+      m_fields( 0 )
 {
     OSL_ASSERT( typelib_TypeClass_STRUCT == m_td.get()->eTypeClass ||
                 typelib_TypeClass_EXCEPTION == m_td.get()->eTypeClass );
@@ -500,7 +499,10 @@ JNI_type_info const * JNI_info::get_type_info(
 JNI_info::JNI_info(
     JNIEnv * jni_env, jobject class_loader, jclass classClass,
     jmethodID methodForName )
-    : m_XInterface_queryInterface_td(
+    : m_class_Class( classClass ),
+      m_method_Class_forName( methodForName ),
+      m_class_JNI_proxy( 0 ),
+      m_XInterface_queryInterface_td(
         (reinterpret_cast< typelib_InterfaceTypeDescription * >(
             css::uno::TypeDescription(
                 ::getCppuType(
@@ -510,10 +512,7 @@ JNI_info::JNI_info(
       m_RuntimeException_type(
           ::getCppuType( (css::uno::RuntimeException const *)0 ) ),
       m_void_type( ::getCppuVoidType() ),
-      m_class_JNI_proxy( 0 ),
-      m_XInterface_type_info( 0 ),
-      m_class_Class( classClass ),
-      m_method_Class_forName( methodForName )
+      m_XInterface_type_info( 0 )
 {
     JNI_context jni( this, jni_env, class_loader ); // !no proper jni_info!
 
@@ -960,7 +959,7 @@ JNI_info const * JNI_info::get_jni_info(
             jni_env, static_cast< jobject >(uno_vm->getClassLoader()), jo_class,
             jo_forName );
 
-        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
+        ClearableMutexGuard g( Mutex::getGlobalMutex() );
         jni_info =
             reinterpret_cast< JNI_info const * >(
                 jni->GetStaticLongField(
@@ -975,7 +974,7 @@ JNI_info const * JNI_info::get_jni_info(
         }
         else
         {
-            guard.clear();
+            g.clear();
             new_info->destroy( jni_env );
         }
     }
@@ -991,7 +990,7 @@ extern "C"
 //------------------------------------------------------------------------------
 JNIEXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
-    JNIEnv * jni_env, jobject jo_holder, jlong jni_info_handle )
+    JNIEnv * jni_env, jobject, jlong jni_info_handle )
     SAL_THROW_EXTERN_C()
 {
     ::jni_uno::JNI_info * jni_info =
