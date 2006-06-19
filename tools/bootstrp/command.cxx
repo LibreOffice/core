@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:04:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,15 @@
 #include "first.hxx"
 #endif
 
-#pragma hdrstop
-
 #include "fsys.hxx"
 #include "stream.hxx"
-#include "command.hxx"
+#include "bootstrp/command.hxx"
 #include "debug.hxx"
-#include "appdef.hxx"
+#include "bootstrp/appdef.hxx"
+
+#if defined WNT
+#pragma warning (push,1)
+#endif
 
 #include <iostream>
 #include <string.h>
@@ -56,10 +58,16 @@
 #include <ctype.h>
 #include <errno.h>
 
+#if defined WNT
+#pragma warning (pop)
+#endif
+
 //#define MH_TEST2  1           // fuers direkte Testen
 
-#if defined (DOS) || defined (WNT) || defined (WIN) || defined(OS2)
+#if defined WNT
+#pragma warning (push,1)
 #include <process.h>    // for _SPAWN
+#pragma warning (pop)
 #endif
 #ifdef UNX
 #include <sys/types.h>
@@ -72,29 +80,16 @@
 #endif
 #define P_WAIT 1        // erstmal einen dummz
 #endif
-#ifdef MAC
-#define P_WAIT 1        // erstmal einen dummz
-#endif
-#ifdef WTC
-#define _spawnv spawnv
-#endif
 
-#ifdef OS2
-#include <svpm.h>
-#define _spawnv spawnv
-#endif
-#if defined (WIN) || defined (WNT)
+#if defined WNT
 #include <svwin.h>
 #endif
 
-#if defined( WNT ) || defined ( OS2 ) || defined ( WIN ) || defined (DOS )
+#if defined WNT
 #define     cPathSeperator ';'
 #endif
 #ifdef UNX
 #define     cPathSeperator  ':'
-#endif
-#ifdef MAC
-#define     cPathSeperator  ','
 #endif
 
 /*****************************************************************************/
@@ -406,17 +401,16 @@ void CCommand::ImplInit()
     size_t *pPtr;
     char *pChar;
     int nVoid = sizeof( size_t * );
-    ULONG nPos = 0;
     nArgc = aCommandLine.GetTokenCount(' ');
     ULONG nLen = aCommandLine.Len();
 
     ppArgv = (char **) new char[ (ULONG)(nLen + nVoid * (nArgc +2) + nArgc ) ];
     pChar = (char *) ppArgv + ( (1+nArgc) * nVoid );
     pPtr = (size_t *) ppArgv;
-    for ( ULONG i=0; i<nArgc; i++ )
+    for ( xub_StrLen i=0; i<nArgc; i++ )
     {
         (void) strcpy( pTmpStr, aCommandLine.GetToken(i, ' ' ).GetBuffer() );
-        USHORT nStrLen = strlen( pTmpStr ) + 1;
+        size_t nStrLen = strlen( pTmpStr ) + 1;
         strcpy( pChar, pTmpStr );
         *pPtr = (sal_uIntPtr) pChar;
         pChar += nStrLen;
@@ -444,19 +438,9 @@ CCommand::operator const int()
 /*****************************************************************************/
 {
     int nRet;
-#ifndef UNX
-#if defined( WNT ) || defined( DOS ) || defined( WIN )
+#if defined WNT
     nRet = _spawnv( P_WAIT, ppArgv[0], (const char **) ppArgv );
-#else
-#if defined( UNX ) || defined( OS2 )
-    nRet = _spawnv( P_WAIT, ppArgv[0], ppArgv );
-#endif
-#ifdef MAC
-//Mac-Implem.
-#endif
-#endif
-#else
-#ifdef UNX
+#elif defined UNX
     //fprintf( stderr, "CComand : operator (int) not implemented\n");
     // **** Unix Implementierung ***************
     pid_t pid;
@@ -479,14 +463,6 @@ CCommand::operator const int()
     }
 #endif
 
-#ifdef MAC
-//Mac_impl
-=======
-#endif
-
-#endif
-
-#ifndef MAC
     switch ( errno )
     {
         case    E2BIG :
@@ -507,7 +483,6 @@ CCommand::operator const int()
         default:
                 nError = COMMAND_UNKNOWN;
     }
-#endif
 
     if ( nRet )
         fprintf( stderr, "Program returned with errros\n");
@@ -535,11 +510,11 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
     ByteString aEntry, sReturn;
     ByteString sEnv( aEnv );
     ByteString sEnvironment = GetEnv( sEnv.GetBuffer());
-    ULONG nCount = sEnvironment.GetTokenCount( cPathSeperator );
+    xub_StrLen nCount = sEnvironment.GetTokenCount( cPathSeperator );
 
     BOOL bFound = FALSE;
 
-    for ( ULONG i=0; i<nCount && !bFound; i++ )
+    for ( xub_StrLen i=0; i<nCount && !bFound; i++ )
     {
         aEntry = sEnvironment.GetToken(i, cPathSeperator );
 #ifndef UNX
@@ -560,11 +535,11 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
     if ( !bFound )
     {
         sEnv = sEnv.ToUpperAscii();
-        ByteString sEnvironment = GetEnv(sEnv.GetBuffer() );
-        ULONG nCount = sEnvironment.GetTokenCount( cPathSeperator );
-        for ( ULONG i=0; i<nCount && !bFound; i++ )
+        ByteString sEnvironment2 = GetEnv(sEnv.GetBuffer() );
+        xub_StrLen nCount2 = sEnvironment2.GetTokenCount( cPathSeperator );
+        for ( xub_StrLen i=0; i<nCount2 && !bFound; i++ )
         {
-            aEntry = sEnvironment.GetToken(i, cPathSeperator );
+            aEntry = sEnvironment2.GetToken(i, cPathSeperator );
 #ifndef UNX
             aEntry += '\\';
 #else
@@ -622,7 +597,7 @@ CCommandd::operator const int()
     DWORD dwCreationFlags;
 
     if ( nFlag & COMMAND_EXECUTE_START )
-        DWORD dwCreationFlags = DETACHED_PROCESS;
+        dwCreationFlags = DETACHED_PROCESS;
     else
         dwCreationFlags = CREATE_NEW_CONSOLE;
 
@@ -672,7 +647,7 @@ CCommandd::operator const int()
         aStartupInfo.dwFlags = aStartupInfo.dwFlags | STARTF_USESHOWWINDOW;
     }
 
-    BOOL bProcess = CreateProcess( lpApplicationName,
+    bool bProcess = CreateProcess( lpApplicationName,
                         lpCommandLine, lpProcessAttributes,
                         lpThreadAttributes, bInheritHandles,
                         dwCreationFlags, lpEnvironment, lpCurrentDirectory,
@@ -696,11 +671,9 @@ CCommandd::operator const int()
         if ( nFlag & COMMAND_EXECUTE_WAIT )
         {
             DWORD aProcessState = STILL_ACTIVE;
-            BOOL bTest;
-
             while(aProcessState == STILL_ACTIVE)
             {
-                bTest = GetExitCodeProcess(aProcessInformation.hProcess,&aProcessState);
+                GetExitCodeProcess(aProcessInformation.hProcess,&aProcessState);
             }
         }
     }
