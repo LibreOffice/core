@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:30:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
-#pragma hdrstop
-
 
 #define TRANSLIT_LIBRARYNAME "i18n"
 #define TRANSLIT_SERVICENAME "com.sun.star.i18n.Transliteration"
@@ -209,6 +206,8 @@ void TransliterationWrapper::loadModuleImpl() const
         ByteString aMsg( "loadModuleImpl: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
 
@@ -234,6 +233,8 @@ void TransliterationWrapper::loadModuleByImplName(
         ByteString aMsg( "loadModuleByImplName: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
 
@@ -258,6 +259,8 @@ sal_Bool TransliterationWrapper::equals(
         ByteString aMsg( "equals: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return sal_False;
@@ -281,6 +284,8 @@ sal_Int32 TransliterationWrapper::compareSubstring(
         ByteString aMsg( "compareSubstring: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return 0;
@@ -302,6 +307,8 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
         ByteString aMsg( "compareString: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return 0;
@@ -323,7 +330,7 @@ sal_Bool TransliterationWrapper::isEqual( const String& rStr1, const String& rSt
 sal_Bool TransliterationWrapper::isMatch( const String& rStr1, const String& rStr2 ) const
 {
     sal_Int32 nMatch1, nMatch2;
-    sal_Bool bMatch = equals(
+    equals(
         rStr1, 0, rStr1.Len(), nMatch1,
         rStr2, 0, rStr2.Len(), nMatch2 );
     return (nMatch1 <= nMatch2) && (nMatch1 == rStr1.Len());
