@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:50:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,15 +283,16 @@ SdrHdl::SdrHdl():
     pObj(NULL),
     pPV(NULL),
     pHdlList(NULL),
-    nDrehWink(0),
     eKind(HDL_MOVE),
-    bSelect(FALSE),
-    b1PixMore(FALSE),
+    nDrehWink(0),
     nObjHdlNum(0),
     nPolyNum(0),
     nPPntNum(0),
-    bPlusHdl(FALSE),
-    nSourceHdlNum(0)
+    nSourceHdlNum(0),
+    bSelect(FALSE),
+    b1PixMore(FALSE),
+    bPlusHdl(FALSE)
+
 {
     if(!pSimpleSet)
         pSimpleSet = new SdrHdlBitmapSet(SIP_SA_MARKERS);
@@ -308,19 +309,20 @@ SdrHdl::SdrHdl():
 }
 
 SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
-    aPos(rPnt),
     pObj(NULL),
     pPV(NULL),
     pHdlList(NULL),
-    nDrehWink(0),
+    aPos(rPnt),
     eKind(eNewKind),
-    bSelect(FALSE),
-    b1PixMore(FALSE),
+    nDrehWink(0),
     nObjHdlNum(0),
     nPolyNum(0),
     nPPntNum(0),
-    bPlusHdl(FALSE),
-    nSourceHdlNum(0)
+    nSourceHdlNum(0),
+    bSelect(FALSE),
+    b1PixMore(FALSE),
+    bPlusHdl(FALSE)
+
 {
     if(!pSimpleSet)
         pSimpleSet = new SdrHdlBitmapSet(SIP_SA_MARKERS);
@@ -551,6 +553,8 @@ void SdrHdl::CreateB2dIAObject()
                 eColIndex = Yellow;
                 break;
             }
+            default:
+                break;
         }
 
         SdrMarkView* pView = pHdlList->GetView();
@@ -640,6 +644,8 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 
         // #101688# same for AnchorTR
         case AnchorTR:          eRetval = AnchorPressedTR;  break;
+        default:
+            break;
     }
 
     return eRetval;
@@ -665,7 +671,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
     }
 }
 
-B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapColorIndex eColIndex,
+B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point _aPos, BitmapColorIndex eColIndex,
     BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
 {
     B2dIAObject* pRetval = 0L;
@@ -722,6 +728,8 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
                 case Glue:
                     eNextBigger = Crosshair;
                     break;
+                default:
+                    break;
             }
         }
 
@@ -733,19 +741,19 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# when anchor is used take upper left as reference point inside the handle
-            pRetval = new B2dIAOAnimatedBitmapEx(pMan, aPos, aBmpEx1, aBmpEx2);
+            pRetval = new B2dIAOAnimatedBitmapEx(pMan, _aPos, aBmpEx1, aBmpEx2);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new B2dIAOAnimatedBitmapEx(pMan, aPos, aBmpEx1, aBmpEx2,
+            pRetval = new B2dIAOAnimatedBitmapEx(pMan, _aPos, aBmpEx1, aBmpEx2,
                 (UINT16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
                 (UINT16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
-            pRetval = new B2dIAOAnimatedBitmapEx(pMan, aPos, aBmpEx1, aBmpEx2,
+            pRetval = new B2dIAOAnimatedBitmapEx(pMan, _aPos, aBmpEx1, aBmpEx2,
                 (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
@@ -761,12 +769,12 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# upper left as reference point inside the handle for AnchorPressed, too
-            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx);
+            pRetval = new B2dIAOBitmapEx(pMan, _aPos, aBmpEx);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx,
+            pRetval = new B2dIAOBitmapEx(pMan, _aPos, aBmpEx,
                 (UINT16)(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
         else
@@ -793,7 +801,7 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
             }
 
             // create centered handle as default
-            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx, nCenX, nCenY);
+            pRetval = new B2dIAOBitmapEx(pMan, _aPos, aBmpEx, nCenX, nCenY);
         }
     }
 
@@ -827,6 +835,8 @@ Pointer SdrHdl::GetPointer() const
             case HDL_LWLFT: nHdlWink=4500;  break;
             case HDL_LOWER: nHdlWink=9000;  break;
             case HDL_LWRGT: nHdlWink=13500; break;
+            default:
+                break;
         }
         nHdlWink+=nDrehWink+2249; // und etwas drauf (zum runden)
         while (nHdlWink<0) nHdlWink+=18000;
@@ -848,6 +858,8 @@ Pointer SdrHdl::GetPointer() const
                 case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? POINTER_ROTATE : POINTER_REFHAND; break;
                 case HDL_LEFT : case HDL_RIGHT: ePtr=POINTER_VSHEAR; break;
                 case HDL_UPPER: case HDL_LOWER: ePtr=POINTER_HSHEAR; break;
+                default:
+                    break;
             }
         } else {
             switch (eKind) {
@@ -866,6 +878,8 @@ Pointer SdrHdl::GetPointer() const
                 case HDL_BWGT : ePtr=POINTER_MOVEBEZIERWEIGHT; break;
                 case HDL_GLUE : ePtr=POINTER_MOVEPOINT; break;
                 case HDL_CUSTOMSHAPE1 : ePtr=POINTER_HAND; break;
+                default:
+                    break;
             }
         }
     }
@@ -891,8 +905,6 @@ BOOL SdrHdl::IsFocusHdl() const
                 return FALSE;
             else
                 return TRUE;
-
-            break;
         }
 
         case HDL_MOVE:      // Handle zum Verschieben des Objekts
@@ -920,13 +932,11 @@ BOOL SdrHdl::IsFocusHdl() const
         case HDL_USER:
         {
             return TRUE;
-            break;
         }
 
         default:
         {
             return FALSE;
-            break;
         }
     }
 }
@@ -1085,10 +1095,10 @@ void SdrHdlColor::SetSize(const Size& rNew)
 
 SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, BOOL bGrad)
 :   SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS),
-    a2ndPos(rRef2),
-    bGradient(bGrad),
     pColHdl1(NULL),
-    pColHdl2(NULL)
+    pColHdl2(NULL),
+    a2ndPos(rRef2),
+    bGradient(bGrad)
 {
 }
 
@@ -1167,17 +1177,17 @@ void SdrHdlGradient::CreateB2dIAObject()
     }
 }
 
-IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, pHdl)
+IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, /*pHdl*/)
 {
     if(GetObj())
         FromIAOToItem(GetObj(), TRUE, TRUE);
     return 0;
 }
 
-void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL bUndo)
+void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, BOOL bSetItemOnObject, BOOL bUndo)
 {
     // from IAO positions and colors to gradient
-    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+    const SfxItemSet& rSet = _pObj->GetMergedItemSet();
 
     GradTransformer aGradTransformer;
     GradTransGradient aOldGradTransGradient;
@@ -1194,16 +1204,16 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
         aGradTransVector.aCol2 = pColHdl2->GetColor();
 
     if(IsGradient())
-        aOldGradTransGradient.aGradient = ((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetValue();
+        aOldGradTransGradient.aGradient = ((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
     else
-        aOldGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
+        aOldGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
 
     // transform vector data to gradient
-    aGradTransformer.VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, pObj, bMoveSingleHandle, bMoveFirstHandle);
+    aGradTransformer.VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, bMoveSingleHandle, bMoveFirstHandle);
 
     if(bSetItemOnObject)
     {
-        SdrModel* pModel = pObj->GetModel();
+        SdrModel* pModel = _pObj->GetModel();
         SfxItemSet aNewSet(pModel->GetItemPool());
 
         if(IsGradient())
@@ -1222,16 +1232,16 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
         if(bUndo)
         {
             pModel->BegUndo(SVX_RESSTR(IsGradient() ? SIP_XA_FILLGRADIENT : SIP_XA_FILLTRANSPARENCE));
-            pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+            pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*_pObj));
             pModel->EndUndo();
         }
 
-        //pObj->SetItemSetAndBroadcast(aNewSet);
-        pObj->SetMergedItemSetAndBroadcast(aNewSet);
+        //_pObj->SetItemSetAndBroadcast(aNewSet);
+        _pObj->SetMergedItemSetAndBroadcast(aNewSet);
     }
 
     // back transformation, set values on pIAOHandle
-    aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
+    aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, _pObj);
 
     SetPos(aGradTransVector.aPos1);
     Set2ndPos(aGradTransVector.aPos2);
@@ -1533,12 +1543,12 @@ BOOL ImpEdgeHdl::IsHorzDrag() const
     if (pEdge==NULL) return FALSE;
     if (nObjHdlNum<=1) return FALSE;
 
-    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eEdgeKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
-    if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
+    if (eEdgeKind==SDREDGE_ORTHOLINES || eEdgeKind==SDREDGE_BEZIER) {
         return !rInfo.ImpIsHorzLine(eLineCode,*pEdge->pEdgeTrack);
-    } else if (eKind==SDREDGE_THREELINES) {
+    } else if (eEdgeKind==SDREDGE_THREELINES) {
         long nWink=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
         if (nWink==0 || nWink==18000) return TRUE;
         else return FALSE;
@@ -1659,7 +1669,8 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
                 USHORT nNum1=((SdrHdl*)pElem1)->GetObjHdlNum();
                 USHORT nNum2=((SdrHdl*)pElem2)->GetObjHdlNum();
                 if (nNum1==nNum2) { // #48763#
-                    if (eKind1==eKind2) (long)pElem1<(long)pElem2 ? -1 : 1; // Notloesung, um immer die gleiche Sortierung zu haben
+                    if (eKind1==eKind2)
+                        return (long)pElem1<(long)pElem2 ? -1 : 1; // Notloesung, um immer die gleiche Sortierung zu haben
                     return (USHORT)eKind1<(USHORT)eKind2 ? -1 : 1;
                 } else return nNum1<nNum2 ? -1 : 1;
             } else {
@@ -1796,8 +1807,6 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
 
         if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
         {
-            const SdrHdl* pOld = GetHdl(nOldHdlNum);
-
             for(a = 0; a < aList.Count(); a++)
             {
                 if(pHdlAndIndex[a].mpHdl == pOld)
