@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:22:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
