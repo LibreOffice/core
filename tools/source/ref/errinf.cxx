@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errinf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:15:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,19 @@
 
 class ErrorHandler;
 
+namespace {
+
+typedef void (* DisplayFnPtr)();
+
+}
+
 struct EDcrData
 {
   public:
 
     ErrorHandler               *pFirstHdl;
     ErrorContext               *pFirstCtx;
-    void                       *pDsp;
+    DisplayFnPtr               pDsp;
     BOOL                       bIsWindowDsp;
 
 
@@ -186,15 +192,15 @@ USHORT DynamicErrorInfo::GetDialogMask() const
 
 
 StandardErrorInfo::StandardErrorInfo(
-    ULONG lUserId, ULONG lArgExtId, USHORT nFlags)
-: DynamicErrorInfo(lUserId, nFlags), lExtId(lArgExtId)
+    ULONG UserId, ULONG lArgExtId, USHORT nFlags)
+: DynamicErrorInfo(UserId, nFlags), lExtId(lArgExtId)
 {
 }
 
 
 StringErrorInfo::StringErrorInfo(
-    ULONG lUserId, const String& aStringP,  USHORT nFlags)
-: DynamicErrorInfo(lUserId, nFlags), aString(aStringP)
+    ULONG UserId, const String& aStringP,  USHORT nFlags)
+: DynamicErrorInfo(UserId, nFlags), aString(aStringP)
 {
 }
 
@@ -267,14 +273,14 @@ void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
     pData->bIsWindowDsp=TRUE;
-    pData->pDsp=(void*)aDsp;
+    pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
     pData->bIsWindowDsp=FALSE;
-    pData->pDsp=(void*)aDsp;
+    pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
