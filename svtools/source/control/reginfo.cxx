@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reginfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:04:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,16 +354,16 @@ void RegInfo::DeleteKey( const String& rKey )
 
 /*  Idee:
 
-    In eine Resource SVðð (SV<Apfel><Apfel>) sind die Resource IDs
-    der Gruppen Ÿber den Namen der Resource zugŠnglich.
+    In eine Resource SVï¿½ï¿½ (SV<Apfel><Apfel>) sind die Resource IDs
+    der Gruppen ï¿½ber den Namen der Resource zugï¿½nglich.
 
-    †ber die aktuelle Gruppe sind die Values Ÿber den Namen der Resource
-    als Key zugŠnglich ...
+    ï¿½ber die aktuelle Gruppe sind die Values ï¿½ber den Namen der Resource
+    als Key zugï¿½nglich ...
 */
 
-// Wir tuen so, als wŠren es "normale" SV-Resourcen
+// Wir tuen so, als wï¿½ren es "normale" SV-Resourcen
 
-#define     kAPPInfo 'SVðð'
+#define     kAPPInfo 'SVï¿½ï¿½'
 
 //****************************************************
 
@@ -380,7 +380,7 @@ typedef struct
 typedef struct
 {
     USHORT nValueLen;
-    char   aValue[1];   // LŠnge wie in nLen
+    char   aValue[1];   // Lï¿½nge wie in nLen
 }
     SVKeyInfo, *SVKeyInfoPtr, **SVKeyInfoHdl;
 
@@ -629,7 +629,7 @@ void RegInfo::WriteKey( const String& rKey, const String& rValue )
 
         SVGroupInfoHdl hNewInfo = (SVGroupInfoHdl) NewHandle(sizeof(SVGroupInfo));
 
-        // Die Neue Resource liegt im Bereich Ÿber "SVðð"
+        // Die Neue Resource liegt im Bereich ï¿½ber "SVï¿½ï¿½"
         pImp -> nCurrentGroup =  kAPPInfo + nNewId;
 
         (*(hNewInfo))-> nResType = pImp -> nCurrentGroup;
@@ -714,7 +714,7 @@ RegInfo::~RegInfo()
 {
 }
 
-String RegInfo::GetKeyName( USHORT nKey ) const
+String RegInfo::GetKeyName( USHORT ) const
 {
     return String::EmptyString();
 }
@@ -724,32 +724,32 @@ USHORT RegInfo::GetKeyCount() const
     return 0;
 }
 
-void RegInfo::SetAppGroup( const String& rGroup )
+void RegInfo::SetAppGroup( const String& )
 {
     return ;
 }
 
-void RegInfo::DeleteAppGroup( const String &rGroup )
+void RegInfo::DeleteAppGroup( const String& )
 {
     return;
 }
 
-String  RegInfo::ReadKey( const String& rKey ) const
+String  RegInfo::ReadKey( const String& ) const
 {
     return String::EmptyString();
 }
 
-String  RegInfo::ReadKey( const String& rKey, const String &rDefault ) const
+String  RegInfo::ReadKey( const String&, const String& ) const
 {
     return String::EmptyString();
 }
 
-void RegInfo::WriteKey( const String& rKey, const String& rValue )
+void RegInfo::WriteKey( const String&, const String& )
 {
     return;
 }
 
-void RegInfo::DeleteKey( const String& rKey )
+void RegInfo::DeleteKey( const String& )
 {
     return;
 }
