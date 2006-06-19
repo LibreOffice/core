@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBitmapRepeatOffsetPropertyHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:32:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ XMLBitmapRepeatOffsetPropertyHandler::~XMLBitmapRepeatOffsetPropertyHandler()
 sal_Bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     OUString aToken;
@@ -103,7 +103,7 @@ sal_Bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
 sal_Bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
