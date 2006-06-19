@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:36:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
     return bRet;
 }
 
-sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_True;
     OUStringBuffer aOut;
@@ -213,6 +213,8 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
             aOut.append( GetXMLToken(XML_BOTTOM) );
             bRet = sal_True;
             break;
+        default:
+            break;
         }
 
         if( bRet )
@@ -235,6 +237,8 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
             case style::GraphicLocation_RIGHT_TOP:
             case style::GraphicLocation_RIGHT_BOTTOM:
                 aOut.append( GetXMLToken(XML_RIGHT) );
+                break;
+            default:
                 break;
             }
         }
@@ -275,6 +279,8 @@ void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePo
                style::GraphicLocation_RIGHT_MIDDLE :
                style::GraphicLocation_RIGHT_BOTTOM);
         break;
+    default:
+        break;
     }
 }
 
@@ -309,6 +315,8 @@ void XMLBackGraphicPositionPropHdl::MergeXMLHoriPos( style::GraphicLocation& ePo
               (style::GraphicLocation_MIDDLE_MIDDLE==eHori ?
                style::GraphicLocation_MIDDLE_BOTTOM :
                style::GraphicLocation_RIGHT_BOTTOM);
+        break;
+    default:
         break;
     }
 }
