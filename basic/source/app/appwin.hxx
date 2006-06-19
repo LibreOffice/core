@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:12:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,9 +142,9 @@ public:
     virtual void    SetText( const XubString& rStr );
 
     USHORT GetWinId() { return nWinId; }
-    void SetWinId( USHORT nId ) { nWinId = nId; }
+    void SetWinId( USHORT nWId ) { nWinId = nWId; }
 };
 
-DECLARE_LIST( EditList, AppWin* );
+DECLARE_LIST( EditList, AppWin* )
 
 #endif
