@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdirlbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:34:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _SVX_FRMDIRLBOX_HXX
 #include "frmdirlbox.hxx"
