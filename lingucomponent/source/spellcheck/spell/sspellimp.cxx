@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 08:31:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,12 +495,12 @@ Reference< XSpellAlternatives >
 
                    aStr.realloc( numsug + count );
                    OUString *pStr = aStr.getArray();
-                       for (int i=0; i < count; i++)
+                       for (int ii=0; ii < count; ii++)
                        {
-                          // if needed add: if (suglst[i] == NULL) continue;
-                          OUString cvtwrd(suglst[i],strlen(suglst[i]),aEnc);
-                          pStr[numsug + i] = cvtwrd;
-                          free(suglst[i]);
+                          // if needed add: if (suglst[ii] == NULL) continue;
+                          OUString cvtwrd(suglst[ii],strlen(suglst[ii]),aEnc);
+                          pStr[numsug + ii] = cvtwrd;
+                          free(suglst[ii]);
                        }
                        free(suglst);
                        numsug += count;
@@ -551,7 +551,7 @@ Reference< XSpellAlternatives > SAL_CALL
 
 
 Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
-            const Reference< XMultiServiceFactory > & rSMgr )
+            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
 
@@ -594,7 +594,7 @@ sal_Bool SAL_CALL
 
 
 OUString SAL_CALL
-    SpellChecker::getServiceDisplayName( const Locale& rLocale )
+    SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
