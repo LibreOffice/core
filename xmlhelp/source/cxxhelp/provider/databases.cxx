@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:17:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,16 +95,15 @@ Databases::Databases( sal_Bool showBasic,
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
-      m_aImagesZipPaths( imagesZipPaths ),
-      m_aImagesZipFileURL(),
-      m_nSymbolsStyle( 0 ),
       newProdName(rtl::OUString::createFromAscii( "$[officename]" ) ),
       newProdVersion(rtl::OUString::createFromAscii( "$[officeversion]" ) ),
       prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
       prodVersion( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ) ),
       vendName( rtl::OUString::createFromAscii( "%VENDORNAME" ) ),
       vendVersion( rtl::OUString::createFromAscii( "%VENDORVERSION" ) ),
-      vendShort( rtl::OUString::createFromAscii( "%VENDORSHORT" ) )
+      vendShort( rtl::OUString::createFromAscii( "%VENDORSHORT" ) ),
+      m_aImagesZipPaths( imagesZipPaths ),
+      m_nSymbolsStyle( 0 )
 {
     m_vAdd[0] = 12;
     m_vAdd[1] = 15;
@@ -313,11 +312,14 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
 
     if( ! m_aInstallDirectoryAsSystemPath.getLength() )
     {
+#ifdef DBG_UTIL
         bool bla =
             osl::FileBase::E_None ==
             osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
-        VOS_ENSURE( bla,
-                    "HelpProvider, no installpath" );
+        VOS_ENSURE( bla,"HelpProvider, no installpath" );
+#else
+        osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
+#endif
     }
 
     return m_aInstallDirectoryAsSystemPath;
@@ -428,7 +430,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
             cfgFile.close();
 
             const sal_Unicode* str = fileContent.getStr();
-            rtl::OUString current,lang,program,startid,title,heading,fulltext;
+            rtl::OUString current,lang_,program,startid,title,heading,fulltext;
             rtl::OUString order = rtl::OUString::createFromAscii( "1" );
 
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
@@ -450,7 +452,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                         }
                         else if( current.compareToAscii( "Language",8 ) == 0 )
                         {
-                            lang = current.copy( current.indexOf('=') + 1 );
+                            lang_ = current.copy( current.indexOf('=') + 1 );
                         }
                         else if( current.compareToAscii( "Program",7 ) == 0 )
                         {
@@ -596,6 +598,8 @@ Reference< XCollator >
 Databases::getCollator( const rtl::OUString& Language,
                         const rtl::OUString& System )
 {
+    (void)System;
+
     rtl::OUString key = Language;
 
     osl::MutexGuard aGuard( m_aMutex );
@@ -733,11 +737,11 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
         listAnchor[i] = anchor[i];
 
         rtl::OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
-        Dbt key( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
+        Dbt key_( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
                  idi.getLength() );
         Dbt data;
         if( pDb )
-            pDb->get( 0,&key,&data,0 );
+            pDb->get( 0,&key_,&data,0 );
 
         DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
                                         data.get_size() );
@@ -800,13 +804,13 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
             Dbc* cursor = 0;
             table.cursor( 0,&cursor,0 );
-            Dbt key,data;
-            key.set_flags( DB_DBT_MALLOC ); // Initially the cursor must allocate the necessary memory
+            Dbt key_,data;
+            key_.set_flags( DB_DBT_MALLOC ); // Initially the cursor must allocate the necessary memory
             data.set_flags( DB_DBT_MALLOC );
-            while( cursor && DB_NOTFOUND != cursor->get( &key,&data,DB_NEXT ) )
+            while( cursor && DB_NOTFOUND != cursor->get( &key_,&data,DB_NEXT ) )
             {
-                rtl::OUString keyword( static_cast<sal_Char*>(key.get_data()),
-                                       key.get_size(),
+                rtl::OUString keyword( static_cast<sal_Char*>(key_.get_data()),
+                                       key_.get_size(),
                                        RTL_TEXTENCODING_UTF8 );
                 rtl::OUString doclist( static_cast<sal_Char*>(data.get_data()),
                                        data.get_size(),
@@ -818,7 +822,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                                                 doclist ) );
                 if( first )
                 {
-                    key.set_flags( DB_DBT_REALLOC );
+                    key_.set_flags( DB_DBT_REALLOC );
                     data.set_flags( DB_DBT_REALLOC );
                     first = false;
                 }
@@ -831,7 +835,8 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             KeywordElementComparator aComparator( xCollator );
             std::sort(aVector.begin(),aVector.end(),aComparator);
 
-            KeywordInfo* info = it->second = new KeywordInfo( aVector );
+            KeywordInfo* pInfo = it->second = new KeywordInfo( aVector );
+            (void)pInfo;
         }
         table.close( 0 );
     }
