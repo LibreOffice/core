@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:35:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
  ************************************************************************/
 
 #include <eeng_pch.hxx>
-
-#pragma hdrstop
-
 
 #include <impedit.hxx>
 #include <editeng.hxx>
@@ -1106,12 +1103,12 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetSelection());
+        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
         Paste( aClipBoard );
     }
     else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
-        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetSelection());
+        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
         CutCopy( aClipBoard, FALSE );
     }
 
