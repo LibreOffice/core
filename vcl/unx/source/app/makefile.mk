@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:57:37 $
+#   last change: $Author: hr $ $Date: 2006-06-19 19:50:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,6 @@ SLOFILES=\
             $(SLO)$/sm.obj				\
             $(SLO)$/keysymnames.obj		\
             $(SLO)$/wmadaptor.obj		\
-
-SLOFILES+=\
             $(SLO)$/salsound2.obj		\
             $(SLO)$/osssound.obj		\
             $(SLO)$/devaudiosound.obj		\
@@ -81,6 +79,11 @@ SLOFILES+=\
             $(SLO)$/rptpsound.obj		\
             $(SLO)$/nassound.obj		
 
+EXCEPTIONSFILES=\
+            $(SLO)$/wmadaptor.obj		\
+            $(SLO)$/saldisp.obj			\
+            $(SLO)$/i18n_status.obj		\
+            $(SLO)$/i18n_cb.obj
 
 
 .IF "$(ENABLE_NAS)" != ""
