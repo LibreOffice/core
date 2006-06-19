@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:02:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,13 +301,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
     TriStateBox     aUseBulletCB;
     FixedText       aAlignFT;
     ListBox         aAlignLB;
-
     FixedText       aBitmapFT;
-#if SUPD>642
     MenuButton      aBitmapMB;
-#else
-    NumLocalExtMenuButton aBitmapMB;
-#endif
     FixedText       aSizeFT;
     MetricField     aWidthMF;
     FixedText       aMultFT;
@@ -328,8 +323,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
-    //SwWrtShell*       pWrtSh;
-    //SwDocShell*           pDocSh;
+
     Size                aInitSize[SVX_MAX_NUM];
 
     BOOL                bHasChild           : 1;
