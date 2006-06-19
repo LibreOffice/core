@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:54:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,14 @@ SbxVariable::SbxVariable() : SbxValue()
 }
 
 SbxVariable::SbxVariable( const SbxVariable& r )
-           : SbxValue( r ), pPar( r.pPar ), pInfo( r.pInfo )
+           : SvRefBase( r ), SbxValue( r ), mpPar( r.mpPar ), pInfo( r.pInfo )
 {
     pCst = NULL;
     if( r.CanRead() )
     {
         pParent = r.pParent;
         nUserData = r.nUserData;
-        aName = r.aName;
+        maName = r.maName;
         nHash = r.nHash;
     }
     else
@@ -89,8 +89,8 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     }
 #ifdef DBG_UTIL
     static sal_Char const aCellsStr[] = "Cells";
-    if ( aName.EqualsAscii( aCellsStr ) )
-        aName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
+    if ( maName.EqualsAscii( aCellsStr ) )
+        maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
     GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
@@ -111,11 +111,11 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 SbxVariable::~SbxVariable()
 {
 #ifdef DBG_UTIL
-    ByteString aBStr( (const UniString&)aName, RTL_TEXTENCODING_ASCII_US );
+    ByteString aBStr( (const UniString&)maName, RTL_TEXTENCODING_ASCII_US );
     DbgOutf( "SbxVariable::Dtor %lx (%s)", (void*)this, aBStr.GetBuffer() );
     static sal_Char const aCellsStr[] = "Cells";
-    if ( aName.EqualsAscii( aCellsStr ) )
-        aName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
+    if ( maName.EqualsAscii( aCellsStr ) )
+        maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     GetSbxData_Impl()->aVars.Remove( this );
 #endif
     delete pCst;
@@ -154,9 +154,9 @@ void SbxVariable::Broadcast( ULONG nHintId )
         pCst = NULL;
         USHORT nSaveFlags = GetFlags();
         SetFlag( SBX_READWRITE );
-        if( pPar.Is() )
+        if( mpPar.Is() )
             // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
-            pPar->GetRef( 0 ) = this;
+            mpPar->GetRef( 0 ) = this;
         pSave->Broadcast( SbxHint( nHintId, this ) );
         delete pCst; // wer weiss schon, auf welche Gedanken mancher kommt?
         pCst = pSave;
@@ -175,11 +175,22 @@ SbxInfo* SbxVariable::GetInfo()
     return pInfo;
 }
 
+void SbxVariable::SetInfo( SbxInfo* p )
+{
+    pInfo = p;
+}
+
+void SbxVariable::SetParameters( SbxArray* p )
+{
+    mpPar = p;
+}
+
+
 /////////////////////////// Name der Variablen ///////////////////////////
 
 void SbxVariable::SetName( const XubString& rName )
 {
-    aName = rName;
+    maName = rName;
     nHash = MakeHashCode( rName );
 }
 
@@ -187,15 +198,15 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
 {
     static char cSuffixes[] = "  %&!#@ $";
     if( t == SbxNAME_NONE )
-        return aName;
+        return maName;
     // Parameter-Infos anfordern (nicht fuer Objekte)
     ((SbxVariable*)this)->GetInfo();
     // Nix anfuegen, wenn einfache Property (keine leeren Klammern)
     if( !pInfo
      || ( !pInfo->aParams.Count() && GetClass() == SbxCLASS_PROPERTY ) )
-        return aName;
+        return maName;
     xub_Unicode cType = ' ';
-    XubString aTmp( aName );
+    XubString aTmp( maName );
     // Kurzer Typ? Dann holen, evtl. ist dieser 0.
     short et = GetType();
     if( t == SbxNAME_SHORT_TYPES )
@@ -355,14 +366,14 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
     {
         if( !SbxValue::LoadData( rStrm, nVer ) )
             return FALSE;
-        rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
+        rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
         rStrm >> nUserData;
     }
     else
     {
         rStrm.SeekRel( -1L );
         rStrm >> nType;
-        rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
+        rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
         rStrm >> nUserData;
         // Korrektur: Alte Methoden haben statt SbxNULL jetzt SbxEMPTY
         if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
@@ -436,7 +447,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
     if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
         return FALSE;
     ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
-    nHash =  MakeHashCode( aName );
+    nHash =  MakeHashCode( maName );
     SetModified( TRUE );
     return TRUE;
 }
@@ -467,7 +478,7 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
         return FALSE;
     // if( !SbxValue::StoreData( rStrm ) )
         // return FALSE;
-    rStrm.WriteByteString( aName, RTL_TEXTENCODING_ASCII_US );
+    rStrm.WriteByteString( maName, RTL_TEXTENCODING_ASCII_US );
     rStrm << nUserData;
     if( pInfo.Is() )
     {
@@ -505,7 +516,8 @@ SbxAlias::SbxAlias( const XubString& rName, SbxVariable* p )
 }
 
 SbxAlias::SbxAlias( const SbxAlias& r )
-        : SbxVariable( r ), xAlias( r.xAlias )
+        : SvRefBase( r ), SbxVariable( r ),
+          SfxListener( r ), xAlias( r.xAlias )
 {}
 
 SbxAlias& SbxAlias::operator=( const SbxAlias& r )
