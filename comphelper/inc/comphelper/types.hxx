@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:52:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,17 +124,6 @@ namespace comphelper
     {
         return  _rVal.getValueType().equals(
             cppu::getTypeFavourUnsigned(pDummy));
-    }
-
-    //-------------------------------------------------------------------------
-    /** check if a type you have at hand at runtime is equal to another type you have at compile time
-    */
-    template <class TYPE>
-    sal_Bool isAReference(const staruno::Type& _rType, TYPE* pDummy)
-    {
-        return  _rType.equals(
-            cppu::getTypeFavourUnsigned(
-                static_cast<staruno::Reference<TYPE>*>(NULL)));
     }
 
     //-------------------------------------------------------------------------
