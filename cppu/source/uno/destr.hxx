@@ -4,9 +4,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:52:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,6 +189,8 @@ inline void _destructAny(
     case typelib_TypeClass_INTERFACE:
         _release( pAny->pReserved, release );
         break;
+    default:
+        break;
     }
 #if OSL_DEBUG_LEVEL > 0
     pAny->pData = (void *)0xdeadbeef;
@@ -254,9 +256,6 @@ inline sal_Int32 idestructElements(
     }
     case typelib_TypeClass_ENUM:
         return (sal_Int32)(sizeof(sal_Int32));
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -305,9 +304,6 @@ inline sal_Int32 idestructElements(
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         return (sal_Int32)(sizeof(uno_Sequence *));
     }
-    case typelib_TypeClass_ARRAY:
-        OSL_ENSURE( 0, "### unexpected array!" );
-        break;
     case typelib_TypeClass_INTERFACE:
     {
         if (release)
@@ -334,8 +330,10 @@ inline sal_Int32 idestructElements(
         }
         return (sal_Int32)(sizeof(void *));
     }
+    default:
+        OSL_ASSERT(false);
+        return 0;
     }
-    return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -437,6 +435,8 @@ inline void _destructData(
     }
     case typelib_TypeClass_INTERFACE:
         _release( *(void **)pValue, release );
+        break;
+    default:
         break;
     }
 }
