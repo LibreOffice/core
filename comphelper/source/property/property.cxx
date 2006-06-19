@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:57:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,10 @@ sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldVal
             if  ( !uno_type_assignData(
                     const_cast< void* >( _rConvertedValue.getValue() ), _rConvertedValue.getValueType().getTypeLibType(),
                     const_cast< void* >( _rValueToSet.getValue() ), _rValueToSet.getValueType().getTypeLibType(),
-                    staruno::cpp_queryInterface, staruno::cpp_acquire, staruno::cpp_release
+                    reinterpret_cast< uno_QueryInterfaceFunc >(
+                        staruno::cpp_queryInterface),
+                    reinterpret_cast< uno_AcquireFunc >(staruno::cpp_acquire),
+                    reinterpret_cast< uno_ReleaseFunc >(staruno::cpp_release)
                   )
                 )
                 throw starlang::IllegalArgumentException();
