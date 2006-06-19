@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:10:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,13 +359,12 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                     aZCodec.BeginCompression(ZCODEC_GZ_LIB);
                     mpOStm->Seek( 0 );
                     aZCodec.Decompress( *mpOStm, *pDest );
-                    BOOL bRetValue = FALSE;
 
                     if (aZCodec.EndCompression() && pDest )
                     {
                         pDest->Seek( STREAM_SEEK_TO_END );
-                        ULONG nStreamLen = pDest->Tell();
-                        if (nStreamLen)
+                        ULONG nStreamLen_ = pDest->Tell();
+                        if (nStreamLen_)
                         {
                             pDest->Seek(0L);
                             GetGrfFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
