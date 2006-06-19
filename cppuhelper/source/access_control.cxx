@@ -4,9 +4,9 @@
  *
  *  $RCSfile: access_control.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:24:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:32:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ inline void __checkPermission(
     a.pType = type.getTypeLibType();
     a.pData = &perm;
 
-    xController->checkPermission( * reinterpret_cast< Any const * >( &a ) );
+    xController->checkPermission( * static_cast< Any * >( &a ) );
 }
 //__________________________________________________________________________________________________
 void AccessControl::checkRuntimePermission(
