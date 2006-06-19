@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppcompskeleton.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:18:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ namespace skeletonmaker { namespace cpp {
 
 void generateIncludes(std::ostream & o,
          const std::hash_set< OString, OStringHash >& interfaces,
-         const AttributeInfo& properties,
+         const AttributeInfo& /*properties*/,
          OString propertyhelper, bool serviceobject,
          bool supportxcomponent)
 {
@@ -186,7 +186,7 @@ void generateCompHelperDefinition(std::ostream & o,
       << classname <<  "(context));\n}\n\n";
 
     // close namepsace
-    for (short i=0; i < nbrackets; i++)
+    for (short j=0; j < nbrackets; j++)
         o << "} ";
     o << "// closing component helper namespace\n\n";
 
@@ -541,7 +541,6 @@ OString generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
          OString const & classname,
-         std::hash_set< OString, OStringHash > const & services,
          std::hash_set< OString, OStringHash > const & interfaces,
          AttributeInfo const & properties,
          AttributeInfo const & attributes,
@@ -568,7 +567,7 @@ OString generateClassDefinition(std::ostream& o,
             interfaces.begin();
         while (iter != interfaces.end())
         {
-            o << "\n        " << scopedCppName(manager, *iter, false, true);
+            o << "\n        " << scopedCppName(*iter, false, true);
             iter++;
             if (iter != interfaces.end())
                 o << ",";
@@ -579,7 +578,7 @@ OString generateClassDefinition(std::ostream& o,
 
     if (propertyhelper.getLength() > 1) {
         o << ",\n    public ::cppu::PropertySetMixin< "
-          << scopedCppName(manager, propertyhelper, false, true) << " >";
+          << scopedCppName(propertyhelper, false, true) << " >";
     }
 
     o << "\n{\npublic:\n"
@@ -609,7 +608,7 @@ OString generateClassDefinition(std::ostream& o,
             interfaces.begin();
         while (iter != interfaces.end())
         {
-            buffer.append(scopedCppName(manager, *iter, false, true));
+            buffer.append(scopedCppName(*iter, false, true));
             iter++;
             if (iter != interfaces.end())
                 buffer.append(", ");
@@ -623,15 +622,15 @@ OString generateClassDefinition(std::ostream& o,
           << parent << "::release(); }\n\n";
     }
 
-    std::hash_set< OString, OStringHash >::const_iterator iter =
+    std::hash_set< OString, OStringHash >::const_iterator it =
         interfaces.begin();
     codemaker::GeneratedTypeSet generated;
-    while (iter != interfaces.end())
+    while (it != interfaces.end())
     {
-        typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
+        typereg::Reader reader(manager.getTypeReader((*it).replace('.','/')));
         printMethods(o, options, manager, reader, generated, "", "", "    ",
                      true, propertyhelper);
-        iter++;
+        it++;
     }
 
     o << "private:\n";
@@ -714,7 +713,7 @@ OString generateClassDefinition(std::ostream& o,
             std::hash_set< OString, OStringHash >::const_iterator iter =
                 interfaces.begin();
             while (iter != interfaces.end()) {
-                o << "\n        " << scopedCppName(manager, *iter, false, true);
+                o << "\n        " << scopedCppName(*iter, false, true);
                 iter++;
                 if (iter != interfaces.end())
                     o << ",";
@@ -724,7 +723,7 @@ OString generateClassDefinition(std::ostream& o,
         }
         if (propertyhelper.getLength() > 1) {
             o << "    ::cppu::PropertySetMixin< "
-              << scopedCppName(manager, propertyhelper, false, true) << " >(\n"
+              << scopedCppName(propertyhelper, false, true) << " >(\n"
               << "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
             if (propinterfaces.find("com/sun/star/beans/XPropertySet")
@@ -845,7 +844,7 @@ void generateQueryInterface(std::ostream& o,
         interfaces.begin();
     while (iter != interfaces.end())
     {
-        o << "\n        " << scopedCppName(manager, *iter, false, true);
+        o << "\n        " << scopedCppName(*iter, false, true);
         iter++;
         if (iter != interfaces.end())
             o << ",";
@@ -873,11 +872,13 @@ void generateQueryInterface(std::ostream& o,
 void generateSkeleton(ProgramOptions const & options,
                       TypeManager const & manager,
                       std::vector< OString > const & types,
-                      OString const & delegate)
+                      OString const & /*delegate*/)
 {
     // special handling of calc add-ins
-    if (options.componenttype == 2)
-        return generateCalcAddin(options, manager, types, delegate);
+    if (options.componenttype == 2) {
+        generateCalcAddin(options, manager, types);
+        return;
+    }
 
     std::hash_set< OString, OStringHash > interfaces;
     std::hash_set< OString, OStringHash > services;
@@ -945,7 +946,7 @@ void generateSkeleton(ProgramOptions const & options,
 
         OString parentname(
             generateClassDefinition(*pofs,
-                options, manager, classname, services, interfaces, properties,
+                options, manager, classname, interfaces, properties,
                 attributes, propinterfaces, propertyhelper, supportxcomponent));
 
         generateQueryInterface(*pofs, options, manager, interfaces, parentname,
@@ -994,8 +995,7 @@ void generateSkeleton(ProgramOptions const & options,
 
 void generateCalcAddin(ProgramOptions const & options,
                        TypeManager const & manager,
-                       std::vector< OString > const & types,
-                       OString const & delegate)
+                       std::vector< OString > const & types)
 {
     std::hash_set< OString, OStringHash > interfaces;
     std::hash_set< OString, OStringHash > services;
@@ -1104,7 +1104,7 @@ void generateCalcAddin(ProgramOptions const & options,
 
         OString parentname(
             generateClassDefinition(*pofs,
-                options, manager, classname, services, interfaces, properties,
+                options, manager, classname, interfaces, properties,
                 attributes, propinterfaces, propertyhelper, supportxcomponent));
 
         generateQueryInterface(*pofs, options, manager, interfaces, parentname,
