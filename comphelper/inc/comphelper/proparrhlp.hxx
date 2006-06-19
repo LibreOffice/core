@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proparrhlp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:34:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,9 @@ protected:
 public:
     OPropertyArrayUsageHelper();
     virtual ~OPropertyArrayUsageHelper()
-    {   // ARGHHHHHHH ..... would like to implement this in proparrhlp_impl.hxx (as we do with all other methods)
-        // but SUNPRO 5 compiler (linker) doesn't like this
+    {   // ARGHHHHHHH ..... would like to implement this after the class
+        // definition (as we do with all other methods) but SUNPRO 5 compiler
+        // (linker) doesn't like this
         ::osl::MutexGuard aGuard(OPropertyArrayUsageHelperMutex<TYPE>::get());
         OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
         if (!--s_nRefCount)
@@ -149,8 +150,48 @@ protected:
     virtual sal_Int32 getFirstAggregateId() const { return DEFAULT_AGGREGATE_PROPERTY_ID; }
 };
 
+//------------------------------------------------------------------
+template<class TYPE>
+sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
 
-#include <comphelper/proparrhlp_impl.hxx>
+template<class TYPE>
+::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = NULL;
+
+//------------------------------------------------------------------
+template <class TYPE>
+OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
+{
+    ::osl::MutexGuard aGuard(OPropertyArrayUsageHelperMutex<TYPE>::get());
+    ++s_nRefCount;
+}
+
+//------------------------------------------------------------------
+template <class TYPE>
+::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
+{
+    OSL_ENSURE(s_nRefCount, "OPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
+    if (!s_pProps)
+    {
+        ::osl::MutexGuard aGuard(OPropertyArrayUsageHelperMutex<TYPE>::get());
+        if (!s_pProps)
+        {
+            s_pProps = createArrayHelper();
+            OSL_ENSURE(s_pProps, "OPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
+        }
+    }
+    return s_pProps;
+}
+
+//------------------------------------------------------------------
+template <class TYPE>
+::cppu::IPropertyArrayHelper* OAggregationArrayUsageHelper<TYPE>::createArrayHelper() const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aAggregateProps;
+    fillProperties(aProps, aAggregateProps);
+    OSL_ENSURE(aProps.getLength(), "OAggregationArrayUsageHelper::createArrayHelper : fillProperties returned nonsense !");
+    return new OPropertyArrayAggregationHelper(aProps, aAggregateProps, getInfoService(), getFirstAggregateId());
+}
 
 //.........................................................................
 }
