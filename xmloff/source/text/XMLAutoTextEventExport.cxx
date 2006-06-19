@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:57:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     const Reference<XDocumentHandler> & rHandler,
     const Reference<XModel> & rModel,
     const Reference<XNameAccess> & rEvents,
-    sal_uInt16 nFlags )
+    sal_uInt16 /*nFlags*/ )
 :   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, MAP_INCH ),
     xEvents(rEvents),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
@@ -195,8 +195,7 @@ void XMLAutoTextEventExport::initialize(
 }
 
 
-sal_uInt32 XMLAutoTextEventExport::exportDoc(
-    enum XMLTokenEnum eClass)
+sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
 {
     if( (getExportFlags() & EXPORT_OASIS) == 0 )
     {
@@ -288,7 +287,7 @@ void XMLAutoTextEventExport::exportEvents()
 void XMLAutoTextEventExport::_ExportMeta() {}
 void XMLAutoTextEventExport::_ExportScripts() {}
 void XMLAutoTextEventExport::_ExportFontDecls() {}
-void XMLAutoTextEventExport::_ExportStyles( sal_Bool bUsed ) {}
+void XMLAutoTextEventExport::_ExportStyles( sal_Bool ) {}
 void XMLAutoTextEventExport::_ExportAutoStyles() {}
 void XMLAutoTextEventExport::_ExportMasterStyles() {}
 void XMLAutoTextEventExport::_ExportChangeTracking() {}
