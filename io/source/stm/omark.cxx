@@ -4,9 +4,9 @@
  *
  *  $RCSfile: omark.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,6 @@ OMarkableOutputStream::OMarkableOutputStream( )
 
 OMarkableOutputStream::~OMarkableOutputStream()
 {
-    m_nCurrentMark;
     delete m_pBuffer;
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
@@ -1006,7 +1005,7 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw 
 *
 *------------------------*/
 Reference < XInterface > SAL_CALL OMarkableInputStream_CreateInstance(
-    const Reference < XComponentContext > & rSMgr ) throw(Exception)
+    const Reference < XComponentContext > & ) throw(Exception)
 {
     OMarkableInputStream *p = new OMarkableInputStream( );
     return Reference< XInterface > ( (OWeakObject * ) p );
