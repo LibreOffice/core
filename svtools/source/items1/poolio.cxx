@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:05:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,10 +363,12 @@ void SfxItemPool::LoadCompleted()
                 for( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {
+                        #ifdef DBG_UTIL
                         const SfxPoolItem &rItem = **ppHtArr;
                         DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
                                     0 != &((const SfxSetItem&)rItem).GetItemSet(),
                                     "SetItem without ItemSet" );
+                        #endif
 
                         if ( !ReleaseRef( **ppHtArr, 1 ) )
                             DELETEZ( *ppHtArr );
@@ -386,12 +388,12 @@ void SfxItemPool::LoadCompleted()
 //============================================================================
 // This had to be moved to a method of its own to keep Solaris GCC happy:
 void SfxItemPool::readTheItems (
-    SvStream & rStream, USHORT nCount, USHORT nVersion,
+    SvStream & rStream, USHORT nItemCount, USHORT nVersion,
     SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** ppArr)
 {
     SfxMultiRecordReader aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS );
 
-    SfxPoolItemArray_Impl *pNewArr = new SfxPoolItemArray_Impl( nCount );
+    SfxPoolItemArray_Impl *pNewArr = new SfxPoolItemArray_Impl( nItemCount );
     SfxPoolItem *pItem = 0;
 
     USHORT n, nLastSurrogate = USHORT(-1);
@@ -427,7 +429,7 @@ void SfxItemPool::readTheItems (
     }
 
     // fehlende auff"ullen
-    for ( pItem = 0, n = nLastSurrogate+1; n < nCount; ++n )
+    for ( pItem = 0, n = nLastSurrogate+1; n < nItemCount; ++n )
         pNewArr->C40_INSERT(SfxPoolItem, pItem, n);
 
     SfxPoolItemArray_Impl *pOldArr = *ppArr;
@@ -509,11 +511,13 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                 for( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {
+                        #ifdef DBG_UTIL
                         const SfxPoolItem &rItem = **ppHtArr;
                         DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
                                     0 != &((const SfxSetItem&)rItem).GetItemSet(),
                                     "SetItem without ItemSet" );
                         DBG_WARNING( "loading non-empty ItemPool" );
+                        #endif
 
                         AddRef( **ppHtArr, 1 );
                     }
@@ -609,9 +613,9 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         for ( USHORT nVerNo = 0; aVerRec.GetContent(); ++nVerNo )
         {
             // Header f"ur einzelne Version einlesen
-            USHORT nVersion, nStart, nEnd;
-            rStream >> nVersion >> nStart >> nEnd;
-            USHORT nCount = nEnd - nStart + 1;
+            USHORT nVersion, nHStart, nHEnd;
+            rStream >> nVersion >> nHStart >> nHEnd;
+            USHORT nCount = nHEnd - nHStart + 1;
 
             // Version neuer als bekannt?
             if ( nVerNo >= pImp->aVersions.Count() )
@@ -620,7 +624,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                 USHORT *pMap = new USHORT[nCount];
                 for ( USHORT n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
-                SetVersionMap( nVersion, nStart, nEnd, pMap );
+                SetVersionMap( nVersion, nHStart, nHEnd, pMap );
             }
         }
         pImp->nVersion = nOwnVersion;
@@ -794,9 +798,9 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         for ( USHORT nVerNo = 0; nVerNo < nVerCount; ++nVerNo )
         {
             // Header f"ur einzelne Version einlesen
-            USHORT nVersion, nStart, nEnd;
-            rStream >> nVersion >> nStart >> nEnd;
-            USHORT nCount = nEnd - nStart + 1;
+            USHORT nVersion, nHStart, nHEnd;
+            rStream >> nVersion >> nHStart >> nHEnd;
+            USHORT nCount = nHEnd - nHStart + 1;
             USHORT nBytes = (nCount)*sizeof(USHORT);
 
             // Version neuer als bekannt?
@@ -806,7 +810,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                 USHORT *pMap = new USHORT[nCount];
                 for ( USHORT n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
-                SetVersionMap( nVersion, nStart, nEnd, pMap );
+                SetVersionMap( nVersion, nHStart, nHEnd, pMap );
             }
             else
                 // Version schon bekannt => "uberspringen
@@ -1598,12 +1602,12 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     {
         rStream << nItemVersion;
         rStream << (UINT32) 0L;           // Platz fuer Laenge in Bytes
-        ULONG nStart = rStream.Tell();
+        ULONG nIStart = rStream.Tell();
         rItem.Store(rStream, nItemVersion);
-        ULONG nEnd = rStream.Tell();
-        rStream.Seek( nStart-4 );
-        rStream << (INT32) ( nEnd-nStart );
-        rStream.Seek( nEnd );
+        ULONG nIEnd = rStream.Tell();
+        rStream.Seek( nIStart-4 );
+        rStream << (INT32) ( nIEnd-nIStart );
+        rStream.Seek( nIEnd );
     }
 
     return TRUE;
@@ -1674,7 +1678,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
         USHORT nVersion;
         sal_uInt32 nLen;
         rStream >> nVersion >> nLen;
-        ULONG nStart = rStream.Tell();
+        ULONG nIStart = rStream.Tell();
 
         // Which-Id in dieser Version bekannt?
         if ( nWhich )
@@ -1692,14 +1696,14 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
                 }
                 else
                     pItem = 0;
-            ULONG nEnd = rStream.Tell();
-            DBG_ASSERT( nEnd <= (nStart+nLen), "read past end of item" );
-            if ( (nStart+nLen) != nEnd )
-                rStream.Seek( nStart+nLen );
+            ULONG nIEnd = rStream.Tell();
+            DBG_ASSERT( nIEnd <= (nIStart+nLen), "read past end of item" );
+            if ( (nIStart+nLen) != nIEnd )
+                rStream.Seek( nIStart+nLen );
         }
         else
             // Item "uberspringen
-            rStream.Seek( nStart+nLen );
+            rStream.Seek( nIStart+nLen );
     }
 
     return pItem;
