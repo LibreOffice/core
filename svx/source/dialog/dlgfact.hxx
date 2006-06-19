@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:17:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,10 +101,6 @@ USHORT Class::Execute()                             \
 {                                                   \
     return pDlg->Execute();                         \
 }
-//void Class::Show( BOOL bVisible, USHORT nFlags )    \
-//{                                                   \
-//  pDlg->Show( bVisible, nFlags );                 \
-//}
 
 //for GalleryThemeProperties begin
 class VclAbstractDialog_Impl : public VclAbstractDialog
@@ -388,7 +384,7 @@ class FmInputRecordNoDialog;
 class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 {
     DECL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl,FmInputRecordNoDialog);
-    virtual void SetValue(double dNew) ;
+    virtual void SetValue(long nNew) ;
     virtual long GetValue() const ;
 };
 //for FmInputRecordNoDialog end
