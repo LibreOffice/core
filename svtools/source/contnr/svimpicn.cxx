@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:55:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 #ifdef DBG_UTIL
 #include <vcl/sound.hxx>
 #endif
-
-#pragma hdrstop
 
 #include <svlbox.hxx>
 #include <svicnvw.hxx>
@@ -503,7 +501,7 @@ void DrawText( OutputDevice* pDev, const Rectangle& rRect,
         USHORT              i;
         USHORT              nLines          = (USHORT)(nHeight/nTextHeight);
         USHORT              nFormatLines;
-        BOOL                bIsClipRegion;
+        BOOL                bIsClipRegion = FALSE;
         nMaxTextWidth = GetTextLines( pDev, aMultiLineInfo, nWidth, rStr, nStyle );
 
         nFormatLines = aMultiLineInfo.Count();
@@ -1750,7 +1748,7 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
 
 
 
-void SvImpIconView::AdjustScrollBars( BOOL bVirtSizeGrowedOnly )
+void SvImpIconView::AdjustScrollBars()
 {
     long nVirtHeight = aVirtOutputSize.Height();
     long nVirtWidth = aVirtOutputSize.Width();
@@ -1776,8 +1774,8 @@ void SvImpIconView::AdjustScrollBars( BOOL bVirtSizeGrowedOnly )
     else
         nVisibleHeight = nRealHeight;
 
-    int bVerSBar = pView->nWindowStyle & WB_VSCROLL;
-    int bHorSBar = pView->nWindowStyle & WB_HSCROLL;
+    bool bVerSBar = (pView->nWindowStyle & WB_VSCROLL) ? true : false;
+    bool bHorSBar = (pView->nWindowStyle & WB_HSCROLL) ? true : false;
 
     USHORT nResult = 0;
     if( nVirtHeight )
@@ -2034,13 +2032,12 @@ void SvImpIconView::UpdateAll()
 
 void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, SvIcnVwDataEntry* pViewData )
 {
-    Point aPos( GetEntryPos( pEntry ) );
+    Point aPos( GetEntryPosition( pEntry ) );
     PaintEntry( pEntry, aPos, pViewData );
 }
 
 void SvImpIconView::PaintEmphasis( const Rectangle& rRect, BOOL bSelected,
-                                   BOOL bInUse, BOOL bCursored,
-                                   OutputDevice* pOut )
+                                   BOOL bCursored, OutputDevice* pOut )
 {
     // HACK fuer D&D
     if( nFlags & F_NO_EMPHASIS )
@@ -2118,7 +2115,6 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
 
     BOOL bSelected  = pViewData->IsSelected();
     BOOL bCursored  = pViewData->IsCursored();
-    BOOL bInUse     = pEntry->HasInUseEmphasis();
 
     Font aTempFont( pOut->GetFont() );
     // waehrend D&D nicht die Fontfarbe wechseln, da sonst auch die
@@ -2137,37 +2133,35 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
     {
         case VIEWMODE_ICON:
             pBmpItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-            PaintEmphasis( aBmpRect, bSelected, bInUse, bCursored, pOut );
+            PaintEmphasis( aBmpRect, bSelected, bCursored, pOut );
             PaintItem( aBmpRect, pBmpItem, pEntry,
                 PAINTFLAG_HOR_CENTERED | PAINTFLAG_VER_CENTERED, pOut );
-            PaintEmphasis( aTextRect, bSelected, FALSE, FALSE, pOut );
+            PaintEmphasis( aTextRect, bSelected, FALSE, pOut );
             PaintItem( aTextRect, pStringItem, pEntry, PAINTFLAG_HOR_CENTERED, pOut );
             break;
 
         case VIEWMODE_NAME:
             pBmpItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-            PaintEmphasis( aBmpRect, bSelected, bInUse, bCursored, pOut );
+            PaintEmphasis( aBmpRect, bSelected, bCursored, pOut );
             PaintItem( aBmpRect, pBmpItem, pEntry, PAINTFLAG_VER_CENTERED, pOut );
-            PaintEmphasis( aTextRect, bSelected, FALSE, FALSE, pOut );
+            PaintEmphasis( aTextRect, bSelected, FALSE, pOut );
             PaintItem( aTextRect, pStringItem, pEntry,PAINTFLAG_VER_CENTERED, pOut );
             break;
 
         case VIEWMODE_TEXT:
-            PaintEmphasis( aTextRect, bSelected, FALSE, bCursored, pOut );
+            PaintEmphasis( aTextRect, bSelected, bCursored, pOut );
             PaintItem( aTextRect, pStringItem, pEntry, PAINTFLAG_VER_CENTERED, pOut );
             break;
     }
     pOut->SetFont( aTempFont );
 }
 
-void SvImpIconView::SetEntryPos( SvLBoxEntry* pEntry, const Point& rPos,
+void SvImpIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos,
     BOOL bAdjustAtGrid, BOOL bCheckScrollBars )
 {
     if( pModel->GetParent(pEntry) == pCurParent )
     {
         ShowCursor( FALSE );
-        long nVirtHeightOffs = 0;
-        long nVirtWidthOffs = 0;
         SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
         Rectangle aBoundRect( GetBoundingRect( pEntry, pViewData ));
         pView->Invalidate( aBoundRect );
@@ -2319,7 +2313,7 @@ SvLBoxEntry* SvImpIconView::GetPrevEntry( const Point& rDocPos, SvLBoxEntry* pCu
 }
 
 
-Point SvImpIconView::GetEntryPos( SvLBoxEntry* pEntry )
+Point SvImpIconView::GetEntryPosition( SvLBoxEntry* pEntry )
 {
     SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
     DBG_ASSERT(pViewData,"Entry not in model")
@@ -2804,7 +2798,7 @@ void SvImpIconView::HideShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPosPix
         pView->SvListView::Select( pRefEntry, TRUE );
 }
 
-void SvImpIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow )
+void SvImpIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL )
 {
     CheckBoundingRects();
     Rectangle aRect;
@@ -2835,7 +2829,7 @@ BOOL SvImpIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
         Size aSize( pViewData->aRect.GetSize() );
         Point aNewPos = FindNextEntryPos( aSize );
         AdjustVirtSize( Rectangle( aNewPos, aSize ) );
-        SetEntryPos( pEntry, aNewPos, FALSE, TRUE );
+        SetEntryPosition( pEntry, aNewPos, FALSE, TRUE );
         return FALSE;
     }
     return pView->SvLBox::NotifyMoving(pTarget,pEntry,rpNewPar,rNewChildPos);
@@ -2854,7 +2848,7 @@ void SvImpIconView::WriteDragServerInfo( const Point& rPos, SvLBoxDDInfo* pInfo)
     if( pCurEntry )
     {
         aEntryPos = rPos;
-        aEntryPos -= GetEntryPos( pCurEntry );
+        aEntryPos -= GetEntryPosition( pCurEntry );
     }
     pInfo->nMouseRelX = aEntryPos.X();
     pInfo->nMouseRelY = aEntryPos.Y();
@@ -3275,7 +3269,7 @@ void ImpIcnCursor::Clear( BOOL bGridToo )
 }
 
 SvLBoxEntry* ImpIcnCursor::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
-    USHORT nPref, BOOL bDown, BOOL bSimple  )
+    USHORT, BOOL bDown, BOOL bSimple  )
 {
     DBG_ASSERT(pCurEntry,"SearchCol: No reference entry");
     SvPtrarr* pList = &(pColumns[ nCol ]);
@@ -3351,7 +3345,7 @@ SvLBoxEntry* ImpIcnCursor::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
 }
 
 SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
-    USHORT nPref, BOOL bRight, BOOL bSimple )
+    USHORT, BOOL bRight, BOOL bSimple )
 {
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
     SvPtrarr* pList = &(pRows[ nRow ]);
@@ -3445,12 +3439,12 @@ SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
     a,b,c : 2., 3., 4. Suchrechteck
 */
 
-SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pEntry, BOOL bRight )
+SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pIcnEntry, BOOL bRight )
 {
     SvLBoxEntry* pResult;
-    pCurEntry = pEntry;
+    pCurEntry = pIcnEntry;
     Create();
-    SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pEntry);
+    SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pIcnEntry);
     USHORT nY = pViewData->nY;
     USHORT nX = pViewData->nX;
     DBG_ASSERT(nY< nRows,"GoLeftRight:Bad column");
@@ -3493,12 +3487,12 @@ SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pEntry, BOOL bRight )
     return 0;
 }
 
-SvLBoxEntry* ImpIcnCursor::GoUpDown( SvLBoxEntry* pEntry, BOOL bDown)
+SvLBoxEntry* ImpIcnCursor::GoUpDown( SvLBoxEntry* pIcnEntry, BOOL bDown)
 {
     SvLBoxEntry* pResult;
-    pCurEntry = pEntry;
+    pCurEntry = pIcnEntry;
     Create();
-    SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pEntry);
+    SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pIcnEntry);
     USHORT nY = pViewData->nY;
     USHORT nX = pViewData->nX;
     DBG_ASSERT(nY<nRows,"GoUpDown:Bad column");
@@ -3632,12 +3626,12 @@ void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry
 {
     if( !pRefEntry )
     {
-        USHORT nRows = (USHORT)(pView->aVirtOutputSize.Height() / pView->nGridDY);
-        nRows++; // wg. Abrundung!
+        USHORT nAdjustRows = (USHORT)(pView->aVirtOutputSize.Height() / pView->nGridDY);
+        nAdjustRows++; // wg. Abrundung!
 
-        if( !nRows )
+        if( !nAdjustRows )
             return;
-        for( USHORT nCurList = 0; nCurList < nRows; nCurList++ )
+        for( USHORT nCurList = 0; nCurList < nAdjustRows; nCurList++ )
         {
             SvPtrarr* pRow = new SvPtrarr;
             rLists.Insert( (void*)pRow, nCurList );
@@ -3753,7 +3747,7 @@ void SvImpIconView::Scroll( long nDeltaX, long nDeltaY, BOOL bScrollBar )
 }
 
 
-const Size& SvImpIconView::GetItemSize( SvIconView* pView,
+const Size& SvImpIconView::GetItemSize( SvIconView* pIconView,
     SvLBoxEntry* pEntry, SvLBoxItem* pItem, const SvIcnVwDataEntry* pViewData) const
 {
     if( (nFlags & F_GRIDMODE) && pItem->IsA() == SV_ITEM_ID_LBOXSTRING )
@@ -3763,7 +3757,7 @@ const Size& SvImpIconView::GetItemSize( SvIconView* pView,
         return pViewData->aTextSize;
     }
     else
-        return pItem->GetSize( pView, pEntry );
+        return pItem->GetSize( pIconView, pEntry );
 }
 
 Rectangle SvImpIconView::CalcFocusRect( SvLBoxEntry* pEntry )
@@ -4007,7 +4001,7 @@ BOOL SvImpIconView::IsTextHit( SvLBoxEntry* pEntry, const Point& rDocPos )
     return FALSE;
 }
 
-IMPL_LINK(SvImpIconView, EditTimeoutHdl, Timer*, pTimer )
+IMPL_LINK(SvImpIconView, EditTimeoutHdl, Timer*, EMPTYARG )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     if( pView->IsInplaceEditingEnabled() && pEntry &&
@@ -4069,7 +4063,7 @@ void SvImpIconView::AdjustAtGrid( const SvPtrarr& rRow, SvLBoxEntry* pStart )
             while( aNewPos.X() < nCurRight )
                 aNewPos.X() += nGridDX;
             if( aNewPos != rBoundRect.TopLeft() )
-                SetEntryPos( pCur, aNewPos );
+                SetEntryPosition( pCur, aNewPos );
             nCurRight = aNewPos.X() + nWidth;
         }
         else
