@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:01:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _SVX_DIALMGR_HXX //autogen
 #include <dialmgr.hxx>
@@ -168,7 +166,6 @@ using namespace rtl;
 #define MAX_BMP_WIDTH               16
 #define MAX_BMP_HEIGHT              16
 
-static BOOL bLastRelative =         FALSE;
 static const sal_Char cNumberingType[] = "NumberingType";
 static const sal_Char cValue[] = "Value";
 static const sal_Char cParentNumbering[] = "ParentNumbering";
@@ -505,10 +502,10 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
 
     ValueSet( pParent, rResId ),
 
-    pVDev       ( NULL ),
+    aLineColor  ( COL_LIGHTGRAY ),
     nPageType   ( nType ),
     bHTMLMode   ( FALSE ),
-    aLineColor  ( COL_LIGHTGRAY )
+    pVDev       ( NULL )
 {
     SetColCount( 4 );
     SetLineCount( 2 );
