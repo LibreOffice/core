@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:47:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1083,8 +1083,7 @@ BOOL SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         USHORT nVal = AUTOFORMAT_ID;
         rStream << nVal
                 << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
-                << (BYTE)GetStoreCharSet( ::gsl_getSystemTextEncoding(),
-                                              SOFFICE_FILEFORMAT_40 );
+                << (BYTE)GetStoreCharSet( ::gsl_getSystemTextEncoding() );
 //              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
 //              << (BYTE)::GetSystemCharSet()
 //              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
