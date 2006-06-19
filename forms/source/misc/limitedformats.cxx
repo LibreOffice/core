@@ -4,9 +4,9 @@
  *
  *  $RCSfile: limitedformats.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:01:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,13 +122,12 @@ namespace frm
                     { "HH:MM:SS", -1, ltEnglishUS },
                     { "HH:MM AM/PM", -1, ltEnglishUS },
                     { "HH:MM:SS AM/PM", -1, ltEnglishUS },
-                    { NULL, -1 }
+                    { NULL, -1, ltSystem }
                 };
                 // don't switch this table here to const. The compiler could be tempted to really place this
                 // in a non-writeable segment, but we want to fill in the format keys later ....
                 return s_aFormats;
             }
-            break;
             case FormComponentType::DATEFIELD:
             {
                 static FormatEntry s_aFormats[] = {
@@ -147,7 +146,7 @@ namespace frm
                     { "JJ-MM-TT", -1, ltGerman },
                     { "JJJJ-MM-TT", -1, ltGerman },
 
-                    { NULL, -1 }
+                    { NULL, -1, ltSystem }
                 };
                 return s_aFormats;
             }
@@ -162,8 +161,8 @@ namespace frm
     //=====================================================================
     //---------------------------------------------------------------------
     OLimitedFormats::OLimitedFormats(const Reference< XMultiServiceFactory >& _rxORB, const sal_Int16 _nClassId)
-        :m_nTableId(_nClassId)
-        ,m_nFormatEnumPropertyHandle(-1)
+        :m_nFormatEnumPropertyHandle(-1)
+        ,m_nTableId(_nClassId)
     {
         OSL_ENSURE(_rxORB.is(), "OLimitedFormats::OLimitedFormats: invalid service factory!");
         acquireSupplier(_rxORB);
