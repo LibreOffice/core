@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:37:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ public:
 };
 
 // XEventListener
-void SAL_CALL SdrControlEventListenerImpl::disposing( const ::com::sun::star::lang::EventObject& Source )
+void SAL_CALL SdrControlEventListenerImpl::disposing( const ::com::sun::star::lang::EventObject& /*Source*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
     if (pObj)
@@ -257,8 +257,8 @@ namespace
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
 SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
-    :bOwnUnoControlModel( _bOwnUnoControlModel )
-    ,m_pImpl( new SdrUnoObjDataHolder )
+:   m_pImpl( new SdrUnoObjDataHolder ),
+    bOwnUnoControlModel( _bOwnUnoControlModel )
 {
     bIsUnoObj = TRUE;
 
@@ -272,8 +272,8 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
 SdrUnoObj::SdrUnoObj(const String& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
                      BOOL _bOwnUnoControlModel)
-    :bOwnUnoControlModel( _bOwnUnoControlModel )
-    ,m_pImpl( new SdrUnoObjDataHolder )
+:   m_pImpl( new SdrUnoObjDataHolder ),
+    bOwnUnoControlModel( _bOwnUnoControlModel )
 {
     bIsUnoObj = TRUE;
 
