@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdbasestream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:22:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,9 @@ void CmdBaseStream::Read (comm_USHORT &nNr)
     comm_USHORT nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
+#ifdef DBG_UTIL
     if (nId != BinUSHORT) DBG_ERROR1( "Falscher Typ im Stream: Erwartet USHORT, gefunden :%hu", nId );
+#endif
     *pCommStream >> nNr;
 }
 
@@ -177,7 +179,9 @@ void CmdBaseStream::Read (comm_ULONG &nNr)
     comm_USHORT nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
+#ifdef DBG_UTIL
     if (nId != BinULONG) DBG_ERROR1( "Falscher Typ im Stream: Erwartet ULONG, gefunden :%hu", nId );
+#endif
     *pCommStream >> nNr;
 }
 
@@ -185,7 +189,9 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
 {
     comm_USHORT nId;
     *pCommStream >> nId;
+#ifdef DBG_UTIL
     if (nId != BinString) DBG_ERROR1( "Falscher Typ im Stream: Erwartet String, gefunden :%hu", nId );
+#endif
 
     *pCommStream >> nLenInChars;
 
@@ -203,7 +209,9 @@ void CmdBaseStream::Read (comm_BOOL &bBool)
 {
     comm_USHORT nId;
     *pCommStream >> nId;
+#ifdef DBG_UTIL
     if (nId != BinBool) DBG_ERROR1( "Falscher Typ im Stream: Erwartet BOOL, gefunden :%hu", nId );
+#endif
     *pCommStream >> bBool;
 }
 
@@ -253,12 +261,24 @@ void CmdBaseStream::Write( comm_BOOL bBool )
 }
 
 void CmdBaseStream::Read ( comm_String* &pString )
-{ DBG_ERROR("Read ( comm_String* &pString ) Not Implemented") }
+{
+    (void) pString; /* avoid warning about unused parameter */
+    DBG_ERROR("Read ( comm_String* &pString ) Not Implemented")
+}
 void CmdBaseStream::Read ( SmartId* &pId )
-{ DBG_ERROR("Read ( SmartId* &pId ) Not Implemented") }
+{
+    (void) pId; /* avoid warning about unused parameter */
+    DBG_ERROR("Read ( SmartId* &pId ) Not Implemented")
+}
 
 void CmdBaseStream::Write( comm_String *pString )
-{ DBG_ERROR("Write( comm_String *pString ) Not Implemented") }
+{
+    (void) pString; /* avoid warning about unused parameter */
+    DBG_ERROR("Write( comm_String *pString ) Not Implemented")
+}
 void CmdBaseStream::Write( SmartId* pId )
-{ DBG_ERROR("Write( SmartId* pId ) Not Implemented") }
+{
+    (void) pId; /* avoid warning about unused parameter */
+    DBG_ERROR("Write( SmartId* pId ) Not Implemented")
+}
 
