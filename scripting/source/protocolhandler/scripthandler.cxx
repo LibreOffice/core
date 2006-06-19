@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scripthandler.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:55:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,9 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     const URL& aURL, const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
     throw( ::com::sun::star::uno::RuntimeException )
 {
+    (void)sTargetFrameName;
+    (void)nSearchFlags;
+
     Reference< XDispatch > xDispatcher;
     // get scheme of url
 
@@ -353,18 +356,26 @@ void SAL_CALL ScriptProtocolHandler::addStatusListener(
 const Reference< XStatusListener >& xControl, const URL& aURL )
 throw ( RuntimeException )
 {
+    (void)xControl;
+    (void)aURL;
+
     // implement if status is supported
 }
 
 void SAL_CALL ScriptProtocolHandler::removeStatusListener(
 const Reference< XStatusListener >& xControl, const URL& aURL )
 throw ( RuntimeException )
-{}
+{
+    (void)xControl;
+    (void)aURL;
+}
 
 void
 ScriptProtocolHandler::createScriptProvider( const ::rtl::OUString& url )
 throw ( RuntimeException )
 {
+    (void)url;
+
     if ( m_xScriptProvider.is() )
     {
         return;
@@ -521,12 +532,16 @@ extern "C"
     void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
     {
+        (void)ppEnvironment;
+
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
     }
 
     sal_Bool SAL_CALL component_writeInfo( void * pServiceManager ,
                                            void * pRegistryKey )
     {
+        (void)pServiceManager;
+
         Reference< css::registry::XRegistryKey > xKey(
             reinterpret_cast< css::registry::XRegistryKey* >( pRegistryKey ) ) ;
 
@@ -547,6 +562,8 @@ extern "C"
                                          void * pServiceManager ,
                                          void * pRegistryKey )
     {
+        (void)pRegistryKey;
+
         // Set default return value for this operation - if it failed.
         void * pReturn = NULL ;
 
