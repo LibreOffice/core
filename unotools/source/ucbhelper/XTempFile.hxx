@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:50:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -68,8 +65,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -78,16 +75,15 @@
 class SvStream;
 namespace utl { class TempFile; }
 
-class XTempFile : public com::sun::star::lang::XTypeProvider,
-                  public com::sun::star::io::XInputStream,
-                  public com::sun::star::io::XOutputStream,
-                  public com::sun::star::io::XSeekable,
-                  public com::sun::star::io::XStream,
-                  public com::sun::star::io::XTruncate,
-                  public com::sun::star::beans::XPropertySetInfo,
-                  public com::sun::star::beans::XPropertySet,
-                  public ::com::sun::star::lang::XServiceInfo,
-                  public cppu::OWeakObject
+class XTempFile : public ::cppu::WeakImplHelper8<   com::sun::star::io::XInputStream
+                                                  , ::com::sun::star::io::XOutputStream
+                                                  , ::com::sun::star::io::XSeekable
+                                                  , ::com::sun::star::io::XStream
+                                                  , ::com::sun::star::io::XTruncate
+                                                  , ::com::sun::star::beans::XPropertySetInfo
+                                                  , ::com::sun::star::beans::XPropertySet
+                                                  , ::com::sun::star::lang::XServiceInfo
+                                                  >
 {
 protected:
     ::utl::TempFile*    mpTempFile;
@@ -109,20 +105,6 @@ protected:
 public:
     XTempFile ();
     virtual ~XTempFile ();
-
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw ();
-    virtual void SAL_CALL release(  )
-        throw ();
-
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw ( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId()
-        throw ( ::com::sun::star::uno::RuntimeException );
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
