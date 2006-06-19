@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 #include <tools/debug.hxx>
 
-DECLARE_LIST( BrowserColumns, BrowserColumn* );
+DECLARE_LIST( BrowserColumns, BrowserColumn* )
 
 //===================================================================
 void ButtonFrame::Draw( OutputDevice& rDev )
@@ -145,6 +145,10 @@ BrowserColumn::BrowserColumn( USHORT nItemId, const class Image &rImage,
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
+BrowserColumn::~BrowserColumn()
+{
+}
+
 //-------------------------------------------------------------------
 
 void BrowserColumn::SetWidth(ULONG nNewWidthPixel, const Fraction& rCurrentZoom)
@@ -176,23 +180,24 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
             Point( rPos.X() + Width() - 1, rPos.Y()+rBox.GetDataRowHeight()-1 ) );
         rDev.SetLineColor( aOldLineColor );
 
-        if ( rBox.bHasBitmapHandle )
-            rBox.PaintField( rDev,
-                Rectangle(
-                    Point( rPos.X() + 2, rPos.Y() + 2 ),
-                    Size( Width()-1, rBox.GetDataRowHeight()-1 ) ),
-                GetId() );
+        rBox.DoPaintField( rDev,
+            Rectangle(
+                Point( rPos.X() + 2, rPos.Y() + 2 ),
+                Size( Width()-1, rBox.GetDataRowHeight()-1 ) ),
+            GetId(),
+            BrowseBox::BrowserColumnAccess() );
     }
     else
     {
         // paint data column
         long nWidth = Width() == LONG_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
 
-        rBox.PaintField( rDev,
+        rBox.DoPaintField( rDev,
             Rectangle(
                 Point( rPos.X() + MIN_COLUMNWIDTH, rPos.Y() ),
                 Size( nWidth-2*MIN_COLUMNWIDTH, rBox.GetDataRowHeight()-1 ) ),
-            GetId() );
+            GetId(),
+            BrowseBox::BrowserColumnAccess() );
     }
 }
 
@@ -220,6 +225,8 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,bInPaint( FALSE )
     ,bInCommand( FALSE )
     ,bNoScrollBack( FALSE )
+    ,bNoHScroll( FALSE )
+    ,bNoVScroll( FALSE )
     ,bUpdateMode( TRUE )
     ,bResizeOnPaint( FALSE )
     ,bUpdateOnUnlock( FALSE )
@@ -231,8 +238,6 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,nCursorHidden( 0 )
     ,m_nDragRowDividerLimit( 0 )
     ,m_nDragRowDividerOffset( 0 )
-    ,bNoHScroll( FALSE )
-    ,bNoVScroll( FALSE )
 {
     aMouseTimer.SetTimeoutHdl( LINK( this, BrowserDataWin, RepeatedMouseMove ) );
     aMouseTimer.SetTimeout( 100 );
@@ -530,12 +535,12 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 
 //-------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( BrowserDataWin, RepeatedMouseMove, void *, pvoid )
+IMPL_LINK_INLINE_START( BrowserDataWin, RepeatedMouseMove, void *, EMPTYARG )
 {
     GetParent()->MouseMove( BrowserMouseEvent( this, aRepeatEvt ) );
     return 0;
 }
-IMPL_LINK_INLINE_END( BrowserDataWin, RepeatedMouseMove, void *, pvoid )
+IMPL_LINK_INLINE_END( BrowserDataWin, RepeatedMouseMove, void *, EMPTYARG )
 
 //-------------------------------------------------------------------
 
@@ -657,36 +662,36 @@ BrowseEvent::BrowseEvent( Window* pWindow,
 }
 
 //===================================================================
-BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWin,
+BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
                           const MouseEvent& rEvt ):
     MouseEvent(rEvt),
-    BrowseEvent( pWin->CreateBrowseEvent( rEvt.GetPosPixel() ) )
+    BrowseEvent( pWindow->CreateBrowseEvent( rEvt.GetPosPixel() ) )
 {
 }
 
 //-------------------------------------------------------------------
 
-BrowserMouseEvent::BrowserMouseEvent( Window *pWin, const MouseEvent& rEvt,
+BrowserMouseEvent::BrowserMouseEvent( Window *pWindow, const MouseEvent& rEvt,
                           long nAbsRow, USHORT nColumn, USHORT nColumnId,
                           const Rectangle& rRect ):
     MouseEvent(rEvt),
-    BrowseEvent( pWin, nAbsRow, nColumn, nColumnId, rRect )
+    BrowseEvent( pWindow, nAbsRow, nColumn, nColumnId, rRect )
 {
 }
 
 //===================================================================
 
-BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWin, const AcceptDropEvent& rEvt )
+BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const AcceptDropEvent& rEvt )
     :AcceptDropEvent(rEvt)
-    ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.maPosPixel ) )
+    ,BrowseEvent( pWindow->CreateBrowseEvent( rEvt.maPosPixel ) )
 {
 }
 
 //===================================================================
 
-BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWin, const ExecuteDropEvent& rEvt )
+BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const ExecuteDropEvent& rEvt )
     :ExecuteDropEvent(rEvt)
-    ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.maPosPixel ) )
+    ,BrowseEvent( pWindow->CreateBrowseEvent( rEvt.maPosPixel ) )
 {
 }
 
@@ -713,7 +718,7 @@ void BrowserDataWin::DoOutstandingInvalidations()
           pRect;
           pRect = aInvalidRegion.Next() )
     {
-        Window::Invalidate( *pRect, INVALIDATE_NOCHILDREN /*OV*/);
+        Control::Invalidate( *pRect );
         delete pRect;
     }
     aInvalidRegion.Clear();
@@ -721,7 +726,7 @@ void BrowserDataWin::DoOutstandingInvalidations()
 
 //-------------------------------------------------------------------
 
-void BrowserDataWin::Invalidate()
+void BrowserDataWin::Invalidate( USHORT nFlags )
 {
     if ( !GetUpdateMode() )
     {
@@ -730,21 +735,20 @@ void BrowserDataWin::Invalidate()
               pRect = aInvalidRegion.Next() )
             delete pRect;
         aInvalidRegion.Clear();
-        aInvalidRegion.Insert(
-            new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        aInvalidRegion.Insert( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     }
     else
-        Window::Invalidate(INVALIDATE_NOCHILDREN /*OV*/ );
+        Window::Invalidate( nFlags );
 }
 
 //-------------------------------------------------------------------
 
-void BrowserDataWin::Invalidate( const Rectangle& rRect )
+void BrowserDataWin::Invalidate( const Rectangle& rRect, USHORT nFlags )
 {
     if ( !GetUpdateMode() )
         aInvalidRegion.Insert( new Rectangle( rRect ) );
     else
-        Window::Invalidate( rRect, INVALIDATE_NOCHILDREN /*OV*/ );
+        Window::Invalidate( rRect, nFlags );
 }
 
 //===================================================================
