@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipcd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include <tools/new.hxx>
+#include "rtl/alloc.h"
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
@@ -241,26 +241,26 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
     nW2=nWidth>>1;
     nH2=nHeight>>1;
 
-    pL0 =(BYTE*)SvMemAlloc(nWidth,MEM_NOCALLNEWHDL);
-    pL1 =(BYTE*)SvMemAlloc(nWidth,MEM_NOCALLNEWHDL);
-    pCb =(BYTE*)SvMemAlloc(nW2+1 ,MEM_NOCALLNEWHDL);
-    pCr =(BYTE*)SvMemAlloc(nW2+1 ,MEM_NOCALLNEWHDL);
-    pL0N=(BYTE*)SvMemAlloc(nWidth,MEM_NOCALLNEWHDL);
-    pL1N=(BYTE*)SvMemAlloc(nWidth,MEM_NOCALLNEWHDL);
-    pCbN=(BYTE*)SvMemAlloc(nW2+1 ,MEM_NOCALLNEWHDL);
-    pCrN=(BYTE*)SvMemAlloc(nW2+1 ,MEM_NOCALLNEWHDL);
+    pL0 =(BYTE*)rtl_allocateMemory( nWidth );
+    pL1 =(BYTE*)rtl_allocateMemory( nWidth );
+    pCb =(BYTE*)rtl_allocateMemory( nW2+1 );
+    pCr =(BYTE*)rtl_allocateMemory( nW2+1 );
+    pL0N=(BYTE*)rtl_allocateMemory( nWidth );
+    pL1N=(BYTE*)rtl_allocateMemory( nWidth );
+    pCbN=(BYTE*)rtl_allocateMemory( nW2+1 );
+    pCrN=(BYTE*)rtl_allocateMemory( nW2+1 );
 
     if ( pL0 == NULL || pL1 == NULL || pCb == NULL || pCr == NULL ||
         pL0N == NULL || pL1N == NULL || pCbN == NULL || pCrN == NULL)
     {
-        if (pL0 !=NULL) SvMemFree((void*)pL0 );
-        if (pL1 !=NULL) SvMemFree((void*)pL1 );
-        if (pCb !=NULL) SvMemFree((void*)pCb );
-        if (pCr !=NULL) SvMemFree((void*)pCr );
-        if (pL0N!=NULL) SvMemFree((void*)pL0N);
-        if (pL1N!=NULL) SvMemFree((void*)pL1N);
-        if (pCbN!=NULL) SvMemFree((void*)pCbN);
-        if (pCrN!=NULL) SvMemFree((void*)pCrN);
+        rtl_freeMemory((void*)pL0 );
+        rtl_freeMemory((void*)pL1 );
+        rtl_freeMemory((void*)pCb );
+        rtl_freeMemory((void*)pCr );
+        rtl_freeMemory((void*)pL0N);
+        rtl_freeMemory((void*)pL1N);
+        rtl_freeMemory((void*)pCbN);
+        rtl_freeMemory((void*)pCrN);
         bStatus = FALSE;
         return;
     }
@@ -385,14 +385,14 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
         if ( bStatus == FALSE )
             break;
     }
-    SvMemFree((void*)pL0 );
-    SvMemFree((void*)pL1 );
-    SvMemFree((void*)pCb );
-    SvMemFree((void*)pCr );
-    SvMemFree((void*)pL0N);
-    SvMemFree((void*)pL1N);
-    SvMemFree((void*)pCbN);
-    SvMemFree((void*)pCrN);
+    rtl_freeMemory((void*)pL0 );
+    rtl_freeMemory((void*)pL1 );
+    rtl_freeMemory((void*)pCb );
+    rtl_freeMemory((void*)pCr );
+    rtl_freeMemory((void*)pL0N);
+    rtl_freeMemory((void*)pL1N);
+    rtl_freeMemory((void*)pCbN);
+    rtl_freeMemory((void*)pCrN);
 }
 
 //================== GraphicImport - die exportierte Funktion ================
