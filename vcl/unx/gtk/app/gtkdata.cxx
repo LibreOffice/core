@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:19:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,8 +123,17 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
     SalDisplay::deregisterFrame( pFrame );
 }
 
+extern "C" {
+GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
+                                     GdkEvent* event,
+                                     gpointer data )
+{
+    return GtkSalDisplay::filterGdkEvent( sys_event, event, data );
+}
+}
+
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
-                                               GdkEvent* event,
+                                               GdkEvent*,
                                                gpointer data )
 {
     GTK_YIELD_GRAB();
@@ -234,7 +243,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 
     if ( !m_aCursors[ ePointerStyle ] )
     {
-        GdkCursor *pCursor;
+        GdkCursor *pCursor = NULL;
 
         switch( ePointerStyle )
         {
@@ -398,9 +407,9 @@ class GtkXLib : public SalXLib
     oslMutex             m_aDispatchMutex;
     oslCondition         m_aDispatchCondition;
 
+public:
     static gboolean      timeoutFn(gpointer data);
     static gboolean      userEventFn(gpointer data);
-public:
 
     GtkXLib();
     virtual ~GtkXLib();
@@ -552,7 +561,7 @@ void GtkXLib::Init()
 
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp, aVI.visual, aColMap );
 
-    gdk_window_add_filter( NULL, GtkSalDisplay::filterGdkEvent, m_pGtkSalDisplay );
+    gdk_window_add_filter( NULL, call_filterGdkEvent, m_pGtkSalDisplay );
 
     sal_Bool bOldErrorSetting = GetIgnoreXErrors();
     SetIgnoreXErrors( True );
@@ -564,6 +573,14 @@ void GtkXLib::Init()
 
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
 
+}
+
+extern "C"
+{
+    gboolean call_timeoutFn(gpointer data)
+    {
+        return GtkXLib::timeoutFn(data);
+    }
 }
 
 gboolean GtkXLib::timeoutFn(gpointer data)
@@ -604,7 +621,7 @@ void GtkXLib::StartTimer( ULONG nMS )
     // than XEvents like in generic plugin
     g_source_set_priority( m_pTimeout, G_PRIORITY_LOW );
     g_source_set_can_recurse (m_pTimeout, TRUE);
-    g_source_set_callback (m_pTimeout, timeoutFn,
+    g_source_set_callback (m_pTimeout, call_timeoutFn,
                            (gpointer) this, NULL);
     g_source_attach (m_pTimeout, g_main_context_default ());
 
@@ -620,6 +637,14 @@ void GtkXLib::StopTimer()
         g_source_destroy (m_pTimeout);
         g_source_unref (m_pTimeout);
         m_pTimeout = NULL;
+    }
+}
+
+extern "C"
+{
+    gboolean call_userEventFn( gpointer data )
+    {
+        return GtkXLib::userEventFn( data );
     }
 }
 
@@ -661,7 +686,7 @@ void GtkXLib::PostUserEvent()
         m_pUserEvent = g_idle_source_new();
         g_source_set_priority( m_pUserEvent, G_PRIORITY_HIGH );
         g_source_set_can_recurse (m_pUserEvent, TRUE);
-        g_source_set_callback (m_pUserEvent, userEventFn,
+        g_source_set_callback (m_pUserEvent, call_userEventFn,
                                (gpointer) this, NULL);
         g_source_attach (m_pUserEvent, g_main_context_default ());
     }
@@ -757,8 +782,8 @@ sal_source_check (GSource *source)
 
 static gboolean
 sal_source_dispatch (GSource    *source,
-                     GSourceFunc callback,
-                     gpointer    user_data)
+                     GSourceFunc,
+                     gpointer)
 {
     SalData *pSalData = GetSalData();
     SalWatch *watch = (SalWatch *) source;
@@ -773,7 +798,7 @@ sal_source_dispatch (GSource    *source,
 }
 
 static void
-sal_source_finalize (GSource *source)
+sal_source_finalize (GSource*)
 {
 }
 
@@ -781,7 +806,9 @@ static GSourceFuncs sal_source_watch_funcs = {
     sal_source_prepare,
     sal_source_check,
     sal_source_dispatch,
-    sal_source_finalize
+    sal_source_finalize,
+    NULL,
+    NULL
 };
 
 static GSource *
@@ -818,7 +845,7 @@ sal_source_create_watch (int           fd,
 void GtkXLib::Insert( int       nFD,
               void     *data,
               YieldFunc pending,
-              YieldFunc queued,
+              YieldFunc,
               YieldFunc handle )
 {
     GSource *source = sal_source_create_watch
