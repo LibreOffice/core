@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vtablefactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:07:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,9 @@
 #include <sys/mman.h>
 #elif defined SAL_W32
 #define WIN32_LEAN_AND_MEAN
+#pragma warning(push,1) // disable warnings within system headers
 #include <windows.h>
+#pragma warning(pop)
 #else
 #error Unsupported platform
 #endif
@@ -106,6 +108,7 @@ extern "C" void SAL_CALL freeExec(
 #if defined SAL_UNX
     munmap(static_cast< char * >(address), size);
 #elif defined SAL_W32
+    (void) size; // unused
     VirtualFree(address, 0, MEM_RELEASE);
 #endif
 }
