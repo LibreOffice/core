@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:22:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ protected:
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ODateModel );
 
-// stario::XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::beans::XPropertySet
@@ -75,15 +75,16 @@ public:
                                         throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(ODateModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// ::com::sun::star::beans::XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    using OEditBaseModel::getFastPropertyValue;
 
-// OAggregationArrayUsageHelper
+    // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
