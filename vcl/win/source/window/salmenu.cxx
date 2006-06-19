@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:50:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,17 +159,6 @@ void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 
 
 // =======================================================================
-
-static SalMenu* ImplFindMenuBar( SalMenu *pMenu )
-{
-    WinSalMenu *pMenuBar = static_cast<WinSalMenu*>(pMenu);
-    while( pMenuBar->mpParentMenu )
-        pMenuBar = pMenuBar->mpParentMenu;
-    if( pMenuBar->mbMenuBar )
-        return pMenuBar;
-    else
-        return NULL;
-}
 
 static void ImplDrawMenuBar( SalMenu *pMenu )
 {
@@ -325,7 +314,6 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
             pWSubMenu->mpParentMenu = this;
         }
 
-        int num = ::GetMenuItemCount( mhMenu );
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWMenuItem->mInfo ) )
             myerr = GetLastError();
         else
@@ -345,7 +333,7 @@ void WinSalMenu::EnableItem( unsigned nPos, BOOL bEnable )
         ImplDrawMenuBar( this );
 }
 
-void WinSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
+void WinSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const Image& rImage )
 {
     if( pSalMenuItem )
     {
@@ -389,7 +377,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const Xu
     }
 }
 
-void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
+void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode&, const XubString& rKeyName )
 {
     if( pSalMenuItem )
     {
