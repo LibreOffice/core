@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_main.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:53:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,22 +162,23 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
     :   rClient(io_client),
         rEnv(io_env)
 {   // For Ces
-    io_env.Set_CurFile( StreamLock(100)() << i_ce.LocalName()
-                                          << ".html"
-                                          << c_str );
+    StreamLock sl(300);
+    io_env.Set_CurFile( sl()    << i_ce.LocalName()
+                                << ".html"
+                                << c_str );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
 
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
-    rClient.SetTitle( StreamLock(100)()
-                            << i_titlePrefix
+    sl().reset();
+    rClient.SetTitle( sl()  << i_titlePrefix
                             << " "
                             << i_ce.LocalName()
                             << c_str );
+    sl().reset();
     rClient.SetRelativeCssPath(
-                      StreamLock(300)()
-                            << io_env.CurPosition().LinkToRoot()
+                      sl()  << io_env.CurPosition().LinkToRoot()
                             << C_sCssFilename_Idl
                             << c_str );
 
@@ -191,18 +192,20 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
     :   rClient(io_client),
         rEnv(io_env)
 {   // For Use pages
-    io_env.Set_CurFile( StreamLock(100)() << i_fileName
-                                          << ".html"
-                                          << c_str );
+    StreamLock sl(300);
+    io_env.Set_CurFile( sl()    << i_fileName
+                                << ".html"
+                                << c_str );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
 
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
-    rClient.SetTitle( StreamLock(100)() << i_titlePrefix << " " << i_fileName << c_str );
+    sl().reset();
+    rClient.SetTitle( sl() << i_titlePrefix << " " << i_fileName << c_str );
+    sl().reset();
     rClient.SetRelativeCssPath(
-                      StreamLock(300)()
-                            << io_env.CurPosition().LinkToRoot()
+                      sl()  << io_env.CurPosition().LinkToRoot()
                             << C_sCssFilename_Idl
                             << c_str );
 
@@ -221,10 +224,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
 
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
-    rClient.SetTitle( StreamLock(100)() << "Module " << io_env.CurPosition().Name() << c_str );
+    StreamLock sl(300);
+    rClient.SetTitle( sl() << "Module " << io_env.CurPosition().Name() << c_str );
+    sl().reset();
     rClient.SetRelativeCssPath(
-                      StreamLock(300)()
-                            << io_env.CurPosition().LinkToRoot()
+                      sl()  << io_env.CurPosition().LinkToRoot()
                             << C_sCssFilename_Idl
                             << c_str );
 
@@ -237,25 +241,27 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
     :   rClient(io_client),
         rEnv(io_env)
 {   // For Index pages
-    io_env.Set_CurFile( StreamLock(100)() << "index-"
-                                          << ( i_letter != '_'
-                                                ?   int(i_letter)-'a'+1
-                                                :   27 )
-                                          << ".html"
-                                          << c_str );
+    StreamLock sl(300);
+    io_env.Set_CurFile( sl()    << "index-"
+                                << ( i_letter != '_'
+                                        ?   int(i_letter)-'a'+1
+                                        :   27 )
+                                << ".html"
+                                << c_str );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
 
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
-    rClient.SetTitle( StreamLock(100)() << "Global Index "
-                                        << ( i_letter != '_'
-                                                ?   char(i_letter-'a'+'A')
-                                                :   '_' )
-                                        << c_str );
+    sl().reset();
+    rClient.SetTitle( sl() << "Global Index "
+                           << ( i_letter != '_'
+                                    ?   char(i_letter-'a'+'A')
+                                    :   '_' )
+                           << c_str );
+    sl().reset();
     rClient.SetRelativeCssPath(
-                      StreamLock(300)()
-                            << "../"
+                      sl()  << "../"
                             << C_sCssFilename_Idl
                             << c_str );
 }
@@ -494,8 +500,9 @@ MainDisplay_Idl::do_TypedefDescr( const ary::idl::CodeEntity & i_ce )
 void
 MainDisplay_Idl::do_Interface2s( const ary::idl::CodeEntity & i_ce )
 {
+    StreamLock sl(100);
     String sUsesFileName(
-                StreamLock(100)()
+                sl()
                     << i_ce.LocalName()
                     << Env().Linker().XrefsSuffix()
                     << c_str );
@@ -553,8 +560,9 @@ MainDisplay_Idl::do_Interface2s( const ary::idl::CodeEntity & i_ce )
 void
 MainDisplay_Idl::do_Service2s( const ary::idl::CodeEntity & i_ce )
 {
+    StreamLock sl(100);
     String sUsesFileName(
-                StreamLock(100)()
+                sl()
                     << i_ce.LocalName()
                     << Env().Linker().XrefsSuffix()
                     << c_str );
@@ -584,8 +592,9 @@ MainDisplay_Idl::do_Service2s( const ary::idl::CodeEntity & i_ce )
 void
 MainDisplay_Idl::do_Struct2s( const ary::idl::CodeEntity & i_ce )
 {
+    StreamLock sl(100);
     String sUsesFileName(
-                StreamLock(100)()
+                sl()
                     << i_ce.LocalName()
                     << Env().Linker().XrefsSuffix()
                     << c_str );
@@ -632,8 +641,9 @@ MainDisplay_Idl::do_Struct2s( const ary::idl::CodeEntity & i_ce )
 void
 MainDisplay_Idl::do_Exception2s( const ary::idl::CodeEntity & i_ce )
 {
+    StreamLock sl(100);
     String sUsesFileName(
-                StreamLock(100)()
+                sl()
                     << i_ce.LocalName()
                     << Env().Linker().XrefsSuffix()
                     << c_str );
@@ -665,8 +675,9 @@ MainDisplay_Idl::do_Exception2s( const ary::idl::CodeEntity & i_ce )
 void
 MainDisplay_Idl::do_Enum2s( const ary::idl::CodeEntity & i_ce )
 {
+    StreamLock sl(100);
     String sUsesFileName(
-                StreamLock(100)()
+                sl()
                     << i_ce.LocalName()
                     << Env().Linker().XrefsSuffix()
                     << c_str );
@@ -705,9 +716,9 @@ MainDisplay_Idl::do_Enum2s( const ary::idl::CodeEntity & i_ce )
 void
 MainDisplay_Idl::do_Typedef2s( const ary::idl::CodeEntity & i_ce )
 {
+    StreamLock sl(100);
     String sUsesFileName(
-                StreamLock(100)()
-                    << i_ce.LocalName()
+               sl() << i_ce.LocalName()
                     << Env().Linker().XrefsSuffix()
                     << c_str );
     Guard_CurFile   gFile(  *pMyFile,
