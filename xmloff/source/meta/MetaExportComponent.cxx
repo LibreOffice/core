@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:17:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
-sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum eClass )
+sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
     {
