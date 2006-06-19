@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:22:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-const sal_Int32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
+const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 
 struct ToolBoxInf_Impl
 {
@@ -117,13 +117,16 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
     else
     {
         SfxImageManager_Impl* pImpl( 0 );
-        SfxImageManagerMap::const_iterator pIter = m_ImageManager_ImplMap.find( (sal_Int64)pModule );
+        SfxImageManagerMap::const_iterator pIter = m_ImageManager_ImplMap.find( sal::static_int_cast< sal_Int64>( reinterpret_cast< sal_IntPtr >( pModule )));
         if ( pIter != m_ImageManager_ImplMap.end() )
-            pImpl = (SfxImageManager_Impl*)pIter->second;
+            pImpl = reinterpret_cast< SfxImageManager_Impl* >( sal::static_int_cast< sal_IntPtr >( pIter->second ));
         else
         {
             pImpl = new SfxImageManager_Impl( pModule );
-            m_ImageManager_ImplMap.insert( SfxImageManagerMap::value_type( (sal_Int64)pModule, (sal_Int64)pImpl ));
+            m_ImageManager_ImplMap.insert(
+                SfxImageManagerMap::value_type(
+                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
+                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pImpl )) ));
         }
         return pImpl;
     }
@@ -170,8 +173,8 @@ static sal_Int16 impl_convertBools( sal_Bool bLarge, sal_Bool bHiContrast )
 //=========================================================================
 
 SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
-    m_pModule( pModule ),
-    m_nSymbolsSize( SvtMiscOptions().GetCurrentSymbolsSize() )
+    m_nSymbolsSize( SvtMiscOptions().GetCurrentSymbolsSize() ),
+    m_pModule( pModule )
 {
     for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
         m_pImageList[i] = 0;
@@ -266,7 +269,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxImageManager_Impl, OptionsChanged_Impl, void*, pVoid )
+IMPL_LINK( SfxImageManager_Impl, OptionsChanged_Impl, void*, EMPTYARG )
 {
     SetSymbolsSize_Impl( SvtMiscOptions().GetCurrentSymbolsSize() );
     return 0L;
@@ -274,7 +277,7 @@ IMPL_LINK( SfxImageManager_Impl, OptionsChanged_Impl, void*, pVoid )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, void*, pVoid )
+IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, void*, EMPTYARG )
 {
     // Check if toolbar button size have changed and we have to use system settings
     sal_Int16 nSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
@@ -304,14 +307,16 @@ SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    SfxImageManagerMap::const_iterator pIter = m_ImageManagerMap.find( sal_Int64( pModule ));
+    SfxImageManagerMap::const_iterator pIter =
+        m_ImageManagerMap.find( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )));
     if ( pIter != m_ImageManagerMap.end() )
-        return (SfxImageManager *)pIter->second;
+        return reinterpret_cast< SfxImageManager* >( sal::static_int_cast< sal_IntPtr >( pIter->second ));
     else
     {
         SfxImageManager* pSfxImageManager = new SfxImageManager( pModule );
         m_ImageManagerMap.insert( SfxImageManagerMap::value_type(
-            sal_Int64( pModule ), sal_Int64( pSfxImageManager )));
+            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
+            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pSfxImageManager )) ));
         return pSfxImageManager;
     }
 }
@@ -418,6 +423,7 @@ void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, B
             case TOOLBOXITEM_SEPARATOR:
             case TOOLBOXITEM_SPACE:
             case TOOLBOXITEM_BREAK:
+            default:
                 break;
         }
     }
