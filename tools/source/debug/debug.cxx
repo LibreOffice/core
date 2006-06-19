@@ -4,9 +4,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:31:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,10 @@
 
 #define _TOOLS_DEBUG_CXX
 
-#ifndef MAC
 #if defined (UNX) || defined (GCC)
 #include <unistd.h>
 #else
 #include <direct.h>
-#endif
 #endif
 
 #include <time.h>
@@ -49,15 +47,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifdef OS2
-#define INCL_DOSSEMAPHORES
-#define INCL_DOSMISC
-#define INCL_WINDIALOGS
-#include <svpm.h>
-#endif
-
 #if defined ( WNT )
+#pragma warning (push,1)
 #include <svwin.h>
+#pragma warning (pop)
 #endif
 
 #include <debug.hxx>
@@ -201,9 +194,7 @@ struct DebugData
 
 static DebugData aDebugData;
 
-#ifndef MAC
 static sal_Char aCurPath[260];
-#endif
 
 static int bDbgImplInMain = FALSE;
 
@@ -211,8 +202,6 @@ static int bDbgImplInMain = FALSE;
 
 #if defined( WNT )
 static CRITICAL_SECTION aImplCritDbgSection;
-#elif defined( OS2 )
-static HMTX             hImplCritDbgSection = 0;
 #endif
 static BOOL             bImplCritDbgSectionInit = FALSE;
 
@@ -222,8 +211,6 @@ void ImplDbgInitLock()
 {
 #if defined( WNT )
     InitializeCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosCreateMutexSem( NULL, &hImplCritDbgSection, 0, FALSE );
 #endif
     bImplCritDbgSectionInit = TRUE;
 }
@@ -234,8 +221,6 @@ void ImplDbgDeInitLock()
 {
 #if defined( WNT )
     DeleteCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosCloseMutexSem( hImplCritDbgSection );
 #endif
     bImplCritDbgSectionInit = FALSE;
 }
@@ -249,8 +234,6 @@ void ImplDbgLock()
 
 #if defined( WNT )
     EnterCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosRequestMutexSem( hImplCritDbgSection, SEM_INDEFINITE_WAIT );
 #endif
 }
 
@@ -263,14 +246,12 @@ void ImplDbgUnlock()
 
 #if defined( WNT )
     LeaveCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosReleaseMutexSem( hImplCritDbgSection );
 #endif
 }
 
 // =======================================================================
 
-#if (defined( WNT ) || defined( OS2 ) || defined( MAC )) && !defined ( SVX_LIGHT )
+#if defined WNT && !defined SVX_LIGHT
 //#define SV_MEMMGR //
 #endif
 #ifdef SV_MEMMGR
@@ -279,11 +260,7 @@ void DbgImpCheckMemoryDeInit();
 void DbgImpMemoryInfo( sal_Char* pBuf );
 #endif
 
-#if defined( OS2 )
-#define FILE_LINEEND    "\r\n"
-#else
 #define FILE_LINEEND    "\n"
-#endif
 
 // =======================================================================
 
@@ -296,17 +273,15 @@ static BOOL ImplActivateDebugger( const sal_Char* pMsg )
     OutputDebugString( aImplDbgOutBuf );
     DebugBreak();
     return TRUE;
-#elif defined( MAC )
-    debugstr( (sal_Char*)pLine );
-    return TRUE;
 #else
+    (void) pMsg; // avoid warning about unused parameter
     return FALSE;
 #endif
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplCoreDump( const sal_Char* pMsg )
+static BOOL ImplCoreDump()
 {
 #if defined( WNT )
     DebugBreak();
@@ -323,15 +298,6 @@ static ULONG ImplGetPerfTime()
 {
 #if defined( WNT )
     return (ULONG)GetTickCount();
-#elif defined( OS2 )
-    PM_ULONG nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (ULONG)nClock;
-#elif defined( MAC )
-    long long millisec;
-    Microseconds((UnsignedWide *)&millisec);
-    millisec = ( millisec + 500L ) / 1000L;
-    return (ULONG)millisec;
 #else
     static ULONG    nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
@@ -352,87 +318,12 @@ static ULONG ImplGetPerfTime()
 
 // -----------------------------------------------------------------------
 
-#if defined( OS2 )
-
-typedef HFILE FILETYPE;
-
-static FILETYPE FileOpen( const sal_Char* pFileName, const sal_Char* pOpenMode )
-{
-    HFILE   hFile = 0;
-    ULONG   lAction = 0;
-    ULONG   nOpen1 = FILE_OPEN;
-    ULONG   nOpen2 = OPEN_SHARE_DENYWRITE | OPEN_ACCESS_READONLY;
-
-    if ( *pOpenMode == 'w' )
-    {
-        nOpen1 = OPEN_ACTION_REPLACE_IF_EXISTS | OPEN_ACTION_CREATE_IF_NEW;
-        nOpen2 = OPEN_ACCESS_WRITEONLY | OPEN_SHARE_DENYREADWRITE;
-    }
-    else if ( *pOpenMode == 'a' )
-    {
-        nOpen1 = OPEN_ACTION_CREATE_IF_NEW | OPEN_ACTION_OPEN_IF_EXISTS;
-        nOpen2 = OPEN_ACCESS_WRITEONLY | OPEN_SHARE_DENYREADWRITE;
-    }
-
-    APIRET nRet = DosOpen( pFileName, &hFile, &lAction, 0,
-                           FILE_NORMAL, nOpen1, nOpen2, 0L );
-
-    if ( nRet )
-        return NULL;
-    else
-    {
-        if ( *pOpenMode == 'a' )
-        {
-            ULONG nTemp;
-            DosSetFilePtr( hFile, 0, FILE_END, &nTemp );
-        }
-
-        return hFile;
-    }
-}
-
-static ULONG FileRead( void* pData, int n1, int n2, FILETYPE pFile )
-{
-    ULONG nRead;
-    DosRead( pFile, pData, n1*n2, &nRead );
-    return nRead;
-}
-
-static ULONG FileWrite( void* pData, int n1, int n2, FILETYPE pFile )
-{
-    ULONG nWritten;
-    DosWrite( pFile, pData, n1*n2, &nWritten );
-    return nWritten;
-}
-
-static void FilePrintF( FILETYPE pFile, const sal_Char* pFStr, ... )
-{
-    static sal_Char aTempBuf[DBG_BUF_MAXLEN];
-
-    va_list pList;
-
-    va_start( pList, pFStr );
-    vsprintf( aTempBuf, pFStr, pList );
-    va_end( pList );
-
-    FileWrite( aTempBuf, strlen( aTempBuf ), 1, pFile );
-}
-
-static void FileClose( FILETYPE pFile )
-{
-    DosClose( pFile );
-}
-
-#else
-
 typedef FILE*       FILETYPE;
 #define FileOpen    fopen
 #define FileRead    fread
 #define FileWrite   fwrite
 #define FilePrintF  fprintf
 #define FileClose   fclose
-
-#endif
 
 // =======================================================================
 
@@ -464,6 +355,9 @@ namespace
             case eGUI       : pSectionName = "gui";     break;
             case eObjects   : pSectionName = "objects"; break;
             case eTest      : pSectionName = "test";    break;
+            case eUnknown:
+                OSL_ASSERT(false);
+                break;
         }
         return pSectionName;
     }
@@ -761,9 +655,6 @@ static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
         strncpy( pStr, pName, nMaxLen );
     else
         GetProfileStringA( "sv", "dbgsv", "dbgsv.ini", pStr, nMaxLen );
-#elif defined( OS2 )
-    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSV",
-                           "dbgsv.ini", (PSZ)pStr, nMaxLen );
 #else
     strncpy( pStr, "dbgsv.ini", nMaxLen );
 #endif
@@ -785,9 +676,6 @@ static void DbgGetLogFileName( sal_Char* pStr )
         strcpy( pStr, pName );
     else
         GetProfileStringA( "sv", "dbgsvlog", "dbgsv.log", pStr, 200 );
-#elif defined( OS2 )
-    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSVLOG",
-                           "dbgsv.log", (PSZ)pStr, 200 );
 #else
     strcpy( pStr, "dbgsv.log" );
 #endif
@@ -799,8 +687,6 @@ static void DbgDebugBeep()
 {
 #if defined( WNT )
     MessageBeep( MB_ICONHAND );
-#elif defined( OS2 )
-    WinAlarm( HWND_DESKTOP, WA_ERROR );
 #endif
 }
 
@@ -899,9 +785,7 @@ static DebugData* GetDebugData()
             FileClose( pIniFile );
         }
 
-#ifndef MAC
         getcwd( aCurPath, sizeof( aCurPath ) );
-#endif
 
         // Daten initialisieren
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
@@ -929,11 +813,9 @@ static FILETYPE ImplDbgInitFile()
 {
     static BOOL bFileInit = FALSE;
 
-#ifndef MAC
     sal_Char aBuf[4096];
     getcwd( aBuf, sizeof( aBuf ) );
     chdir( aCurPath );
-#endif
 
     DebugData*  pData = GetDebugData();
     FILETYPE    pDebugFile;
@@ -968,9 +850,7 @@ static FILETYPE ImplDbgInitFile()
     else
         pDebugFile = FileOpen( pData->aDbgData.aDebugName, "a" );
 
-#ifndef MAC
     chdir( aBuf );
-#endif
 
     return pDebugFile;
 }
@@ -1038,6 +918,7 @@ static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
 
 // -----------------------------------------------------------------------
 
+extern "C"
 void SAL_CALL dbg_printOslDebugMessage( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char * pszMessage )
 {
     DbgOut( pszMessage ? pszMessage : "assertion failed!", DBG_OUT_ERROR, pszFileName, (USHORT)nLine );
@@ -1258,7 +1139,7 @@ void* DbgFunc( USHORT nAction, void* pParam )
     if ( nAction == DBG_FUNC_GETDATA )
         return (void*)&(pDebugData->aDbgData);
     else if ( nAction == DBG_FUNC_GETPRINTMSGBOX )
-        return (void*)(pDebugData->pDbgPrintMsgBox);
+        return (void*)(long)(pDebugData->pDbgPrintMsgBox);
     else if ( nAction == DBG_FUNC_FILTERMESSAGE )
         if ( ImplDbgFilterMessage( (const sal_Char*) pParam ) )
             return (void*) -1;
@@ -1282,19 +1163,19 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 break;
 
             case DBG_FUNC_SETPRINTMSGBOX:
-                pDebugData->pDbgPrintMsgBox = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintMsgBox = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTWINDOW:
-                pDebugData->pDbgPrintWindow = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintWindow = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTSHELL:
-                pDebugData->pDbgPrintShell = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintShell = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTTESTTOOL:
-                pDebugData->pDbgPrintTestTool = (DbgPrintLine)pParam;
+                pDebugData->pDbgPrintTestTool = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SAVEDATA:
@@ -1377,14 +1258,14 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 break;
 
             case DBG_FUNC_COREDUMP:
-                ImplCoreDump( NULL );
+                ImplCoreDump();
                 break;
 
             case DBG_FUNC_ALLERROROUT:
                 return (void*)(ULONG)TRUE;
 
             case DBG_FUNC_SETTESTSOLARMUTEX:
-                pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)pParam;
+                pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)(long)pParam;
                 break;
 
             case DBG_FUNC_TESTSOLARMUTEX:
@@ -1714,7 +1595,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
     bIn = TRUE;
 
     DebugData*  pData = GetDebugData();
-    sal_Char*   pStr;
+    sal_Char const *   pStr;
     ULONG       nOut;
     int         nBufLen = 0;
 
@@ -1806,7 +1687,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
 
     if ( nOut == DBG_OUT_COREDUMP )
     {
-        if ( !ImplCoreDump( aBufOut ) )
+        if ( !ImplCoreDump() )
             nOut = DBG_OUT_DEBUGGER;
     }
 
