@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:53:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,8 +132,8 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
 
 FileParsePerformers::FileParsePerformers( ary::n22::Repository & io_rRepository,
                                           ParserInfo &           io_rParserInfo )
-    :   aDistributor(io_rRepository, io_rParserInfo),
-        pTokens(0),
+    :   pTokens(0),
+        aDistributor(io_rRepository, io_rParserInfo),
         rRepository( io_rRepository ),
         rParserInfo(io_rParserInfo)
 {
