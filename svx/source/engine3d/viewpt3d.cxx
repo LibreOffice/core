@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpt3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:44:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,16 +57,15 @@ Viewport3D::Viewport3D() :
     aVUV(0, 1, 1),
     aPRP(0, 0, 2),
     fVPD(-3),
-    aViewPoint (0, 0, 5000),
     fNearClipDist (0.0),
     fFarClipDist (0.0),
-    fWRatio (1.0),
-    fHRatio (1.0),
     eProjection(PR_PERSPECTIVE),
     eAspectMapping(AS_NO_MAPPING),
+    aDeviceRect(Point(0,0), Size(-1,-1)),
+    aViewPoint (0, 0, 5000),
     bTfValid(0),
-    // DeviceRect-Groesse < 0 -> ungueltig
-    aDeviceRect(Point(0,0), Size(-1,-1))
+    fWRatio (1.0),
+    fHRatio (1.0)
 {
     aViewWin.X = -1; aViewWin.Y = -1;
     aViewWin.W =  2; aViewWin.H = 2;
@@ -215,6 +214,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
             aViewWin.W = aViewWin.H * fRatio;
             aViewWin.X = aViewWin.X * aViewWin.W / fTmp;
             break;
+        default: break;
     }
     fWRatio = nNewW / aViewWin.W;
     fHRatio = nNewH / aViewWin.H;
