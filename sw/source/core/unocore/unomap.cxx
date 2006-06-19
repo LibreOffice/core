@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 13:57:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,9 +205,9 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         p->pName = rPropNm.pName;
         p->nNameLen = rPropNm.nNameLen;
         // get the cppu type from the comphelper
-        sal_uInt16 nTyp = (sal_uInt16) (long) p->pType;
+        CppuTypes nTyp = (CppuTypes) (long) p->pType;
         GenerateCppuType( nTyp, p->pType );
-        DBG_ASSERT( nTyp != (sal_uInt16) (long) p->pType, "unknown type" );
+        DBG_ASSERT( nTyp != (CppuTypes) (long) p->pType, "unknown type" );
     }
     qsort( aMapArr[nId], i, sizeof(SfxItemPropertyMap), lcl_CompareMap );
 }
