@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:28:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,8 @@ public:
                             { return m_xLockBytes; }
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
+    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
+    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
     virtual void SAL_CALL   start (void) throw(RuntimeException) {}
     virtual void SAL_CALL   terminate (void) throw(RuntimeException)
                             { m_xLockBytes->terminate_Impl(); }
@@ -188,8 +188,8 @@ public:
                             {}
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
+    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
+    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
     virtual void SAL_CALL   start (void) throw(RuntimeException) {}
     virtual void SAL_CALL   terminate (void) throw(RuntimeException)
                             { m_xLockBytes->terminate_Impl(); }
@@ -213,9 +213,9 @@ public:
                                 : m_aProgress( rLink )
                             {}
     // XProgressHandler
-    virtual void SAL_CALL   push(const Any & rStatus) throw (RuntimeException) {}
+    virtual void SAL_CALL   push(const Any & /*rStatus*/) throw (RuntimeException) {}
     virtual void SAL_CALL   pop() throw (RuntimeException) {}
-    virtual void SAL_CALL   update(const Any & rStatus) throw (RuntimeException)
+    virtual void SAL_CALL   update(const Any & /*rStatus*/) throw (RuntimeException)
                             { if ( m_aProgress.IsSet() ) m_aProgress.Call( 0 ); }
 };
 
@@ -255,7 +255,7 @@ public:
                                 : m_xLockBytes( rRef )
                             {}
 
-    virtual void SAL_CALL   disposing ( const EventObject &rEvent) throw(RuntimeException) {}
+    virtual void SAL_CALL   disposing ( const EventObject &/*rEvent*/) throw(RuntimeException) {}
     virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException);
 };
 
@@ -718,8 +718,8 @@ Moderator::Moderator(
 
       m_aRes(m_aMutex,*this),
       m_aResultType(NORESULT),
-      m_aResult(),
       m_nIOErrorCode(0),
+      m_aResult(),
 
       m_aRep(m_aMutex,*this),
       m_aReplyType(NOREPLY),
@@ -1339,11 +1339,11 @@ static sal_Bool _UCBOpenContentSync(
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_xInputStream (NULL)
     , m_pCommandThread( NULL )
-    , m_bTerminated  (sal_False)
-    , m_bStreamValid  (sal_False)
-    , m_bDontClose( sal_False )
     , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )
+    , m_bTerminated  (sal_False)
+    , m_bDontClose( sal_False )
+    , m_bStreamValid  (sal_False)
 {
     SetSynchronMode( TRUE );
 }
@@ -1820,4 +1820,4 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     return xLockBytes;
 }
 
-};
+}
