@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:21:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,11 @@
 
 // =======================================================================
 
-DECLARE_LIST( ImplAccelList, Accelerator* );
+DECLARE_LIST( ImplAccelList, Accelerator* )
 
 // =======================================================================
 
-DBG_NAMEEX( Accelerator );
+DBG_NAMEEX( Accelerator )
 
 // =======================================================================
 
