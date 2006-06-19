@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:43:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,8 @@ void SAL_CALL Mapping_map_to_uno(
                     OUSTR("[jni_uno bridge error] ") + err.m_message,
                     RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, cstr_msg.getStr() );
+#else
+            (void) err; // unused
 #endif
         }
         catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
@@ -188,6 +190,8 @@ void SAL_CALL Mapping_map_to_java(
                 OUSTR("[jni_uno bridge error] ") + err.m_message,
                 RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
+#else
+            (void) err; // unused
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
@@ -545,6 +549,8 @@ void SAL_CALL uno_ext_getMapping(
                     OUSTR("[jni_uno bridge error] ") + err.m_message,
                     RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, cstr_msg.getStr() );
+#else
+            (void) err; // unused
 #endif
         }
         catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
