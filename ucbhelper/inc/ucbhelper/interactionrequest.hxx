@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:28:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,14 +590,14 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
 : InteractionContinuation( pRequest ),
   m_aRememberPasswordModes( com::sun::star::uno::Sequence<
                 com::sun::star::ucb::RememberAuthentication >( 1 ) ),
-  m_eDefaultRememberPasswordMode(
-                com::sun::star::ucb::RememberAuthentication_NO ),
   m_aRememberAccountModes( com::sun::star::uno::Sequence<
                 com::sun::star::ucb::RememberAuthentication >( 1 ) ),
+  m_eRememberPasswordMode( com::sun::star::ucb::RememberAuthentication_NO ),
+  m_eDefaultRememberPasswordMode(
+                com::sun::star::ucb::RememberAuthentication_NO ),
+  m_eRememberAccountMode( com::sun::star::ucb::RememberAuthentication_NO ),
   m_eDefaultRememberAccountMode(
                 com::sun::star::ucb::RememberAuthentication_NO ),
-  m_eRememberPasswordMode( com::sun::star::ucb::RememberAuthentication_NO ),
-  m_eRememberAccountMode( com::sun::star::ucb::RememberAuthentication_NO ),
   m_bCanSetRealm( bCanSetRealm ),
   m_bCanSetUserName( bCanSetUserName ),
   m_bCanSetPassword( bCanSetPassword ),
@@ -626,11 +626,11 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
         eDefaultRememberAccountMode )
 : InteractionContinuation( pRequest ),
   m_aRememberPasswordModes( rRememberPasswordModes ),
-  m_eDefaultRememberPasswordMode( eDefaultRememberPasswordMode ),
   m_aRememberAccountModes( rRememberAccountModes ),
-  m_eDefaultRememberAccountMode( eDefaultRememberAccountMode ),
   m_eRememberPasswordMode( eDefaultRememberPasswordMode ),
+  m_eDefaultRememberPasswordMode( eDefaultRememberPasswordMode ),
   m_eRememberAccountMode( eDefaultRememberAccountMode ),
+  m_eDefaultRememberAccountMode( eDefaultRememberAccountMode ),
   m_bCanSetRealm( bCanSetRealm ),
   m_bCanSetUserName( bCanSetUserName ),
   m_bCanSetPassword( bCanSetPassword ),
