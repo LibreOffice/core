@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodevisitor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:18:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,6 @@ typedef NodeVisitor::Result Result;
         {
         case nodetype_value:
             return m_target.handle( ValueNodeAccess(m_accessor, &_aNode.value) );
-            break;
 
         case nodetype_group:
             return m_target.handle( GroupNodeAccess(m_accessor, &_aNode.group) );
@@ -216,7 +215,7 @@ Result SetVisitor::visitElements(SetNodeAccess const& _aNode)
 }
 // -------------------------------------------------------------------------
 
-Result NodeVisitor::handle(NodeAccessRef const& _aNode)
+Result NodeVisitor::handle(NodeAccessRef const& /*_aNode*/)
 {
     return CONTINUE;
 }
