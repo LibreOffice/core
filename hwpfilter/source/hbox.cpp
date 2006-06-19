@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hbox.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:32:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-/* $Id: hbox.cpp,v 1.3 2005-09-07 16:32:27 rt Exp $ */
 
 #include "precompile.h"
 
@@ -86,7 +84,7 @@ int HBox::WSize(void)
 }
 
 
-int HBox::GetString(hchar * hstr, int slen)
+int HBox::GetString(hchar * hstr, int )
 {
     *hstr++ = hh;
     *hstr = 0;
@@ -163,13 +161,14 @@ DateCode::DateCode(void):HBox(CH_DATE_CODE)
 }
 
 
+#define _DATECODE_WEEK_DEFINES_
 #include "datecode.h"
 
 int DateCode::GetString(hchar * hstr, int slen)
 {
     hchar *fmt, *d;
     int i, num;
-    char *form;
+    const char *form;
     char cbuf[256];
     bool is_pm, add_zero;
 
@@ -180,7 +179,7 @@ int DateCode::GetString(hchar * hstr, int slen)
     d = hstr;
     for (; *fmt && ((int) (d - hstr) < DATE_SIZE) && slen > 1; fmt++)
     {
-        form = const_cast < char *>((add_zero) ? "%02d" : "%d");
+        form = (add_zero) ? "%02d" : "%d";
 
         add_zero = false;
         is_pm = (date[HOUR] >= 12);
@@ -435,7 +434,7 @@ Footnote::~Footnote(void)
 // 홀수쪽시작/감추기 (21)
 
 // mail merge(22)
-int MailMerge::GetString(hchar * hstr, int slen)
+int MailMerge::GetString(hchar * hstr, int )
 {
     *hstr = 0;
     return 0;
@@ -555,7 +554,7 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
             ptr = buf;
             while (*ptr)
             {
-                *ptr = toupper(*ptr);
+                *ptr = sal::static_int_cast<char>(toupper(*ptr));
                 ptr++;
             }
         }
@@ -566,9 +565,9 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
     {
         num = (num - 1) % 26;
         if (fmt & U_ENG)
-            *hstr++ = 'A' + num;
+            *hstr++ = sal::static_int_cast<hchar>('A' + num);
         else if (fmt & L_ENG)
-            *hstr++ = 'a' + num;
+            *hstr++ = sal::static_int_cast<hchar>('a' + num);
         else if (fmt & HAN)
             *hstr++ = olHanglJaso(num, OL_HANGL_KANATA);
     }
@@ -584,7 +583,7 @@ enum
     number는 값이 그대로 들어가 있다. 즉, 1.2.1에는 1,2,1이 들어가 있다.
     style 은 1부터 값이 들어가 있다. hbox.h에 정의된 데로..
  */
-hchar *Outline::GetUnicode(hchar * hstr, int slen)
+hchar *Outline::GetUnicode(hchar * hstr, int)
 {
     int levelnum;
     hchar *p;
@@ -657,7 +656,7 @@ hchar *Outline::GetUnicode(hchar * hstr, int slen)
                                 char *ptr = dest;
                                 while( *ptr )
                                 {
-                                    *ptr = toupper(*ptr);
+                                    *ptr = sal::static_int_cast<char>(toupper(*ptr));
                                     ptr++;
                                 }
                             }
