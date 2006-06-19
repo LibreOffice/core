@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:44:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ SfxXMLMetaElementContext::~SfxXMLMetaElementContext()
 
 SvXMLImportContext* SfxXMLMetaElementContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const rtl::OUString& rLName,
-                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+                                     const uno::Reference<xml::sax::XAttributeList>& )
 {
     //  default context to ignore unknown elements
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
