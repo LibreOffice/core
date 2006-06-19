@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:54:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,6 @@ rtl::OUString lcl_GetProductName()
     utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
     if (pMgr)
     {
-        sal_Bool bValid = sal_True;
         // plain product name
         rtl::OUString aValue;
         uno::Any aAny = pMgr->GetDirectConfigProperty(
@@ -540,17 +539,17 @@ void SfxXMLMetaExport::Export()
 
         // "dynamic" prop => export it
         uno::Any              aValue = xInfoProp->getPropertyValue(pProps[i].Name);
-        ::rtl::OUStringBuffer sValue;
+        ::rtl::OUStringBuffer sValueBuffer;
         ::rtl::OUStringBuffer sType ;
 
-        if (!SvXMLUnitConverter::convertAny(sValue, sType, aValue))
+        if (!SvXMLUnitConverter::convertAny(sValueBuffer, sType, aValue))
             continue;
 
         rExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, pProps[i].Name );
         rExport.AddAttribute( XML_NAMESPACE_META, XML_VALUE_TYPE, sType.makeStringAndClear() );
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_META,
                                   XML_USER_DEFINED, sal_True, sal_False );
-        rExport.Characters( sValue.makeStringAndClear() );
+        rExport.Characters( sValueBuffer.makeStringAndClear() );
     }
 }
 
