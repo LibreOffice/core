@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:28:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@
 
 // =======================================================================
 
-DBG_NAMEEX( Window );
+DBG_NAMEEX( Window )
 
 // =======================================================================
 
@@ -169,8 +169,6 @@ DBG_NAMEEX( Window );
 
 
 // -----------------------------------------------------------------------
-static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines );
-static void ImplSetMinMaxFloatSize( ToolBox *pThis );
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highlight, BOOL bChecked, BOOL bEnabled, BOOL bIsWindow );
 // -----------------------------------------------------------------------
 
@@ -193,7 +191,7 @@ struct ImplToolSizeArray
 
 // -----------------------------------------------------------------------
 
-DECLARE_LIST( ImplTBList, ToolBox* );
+DECLARE_LIST( ImplTBList, ToolBox* )
 
 class ImplTBDragMgr
 {
@@ -250,12 +248,6 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
     if ( !pSVData->maCtrlData.mpTBDragMgr )
         pSVData->maCtrlData.mpTBDragMgr = new ImplTBDragMgr;
     return pSVData->maCtrlData.mpTBDragMgr;
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplDrawConfigFrame( ToolBox* pThis, const Rectangle& rRect )
-{
 }
 
 // -----------------------------------------------------------------------
@@ -442,7 +434,7 @@ void ToolBox::ImplDrawGrip( ToolBox* pThis )
     }
 }
 
-void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper )
+void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper * )
 {
     // draw a nice gradient
 
@@ -592,7 +584,7 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
 
 }
 
-BOOL ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion )
+BOOL ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region & )
 {
     // use NWF
     Point aPt;
@@ -804,10 +796,10 @@ const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
 Size ToolBox::ImplCalcSize( const ToolBox* pThis, USHORT nCalcLines, USHORT nCalcMode )
 {
     long            nMax;
-    long            nLeft;
-    long            nTop;
-    long            nRight;
-    long            nBottom;
+    long            nLeft = 0;
+    long            nTop = 0;
+    long            nRight = 0;
+    long            nBottom = 0;
     Size            aSize;
     WindowAlign     eOldAlign = pThis->meAlign;
     BOOL            bOldHorz = pThis->mbHorz;
@@ -1052,7 +1044,7 @@ void ToolBox::ImplSetMinMaxFloatSize( ToolBox *pThis )
     {
         pWrapper->SetMinOutputSizePixel( aMinSize );
         pWrapper->SetMaxOutputSizePixel( aMaxSize );
-        pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) );
+        pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) ? TRUE : FALSE );
     }
     else
     {
@@ -1366,9 +1358,7 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
         pToolBox->mnCurItemId = pToolBox->mnConfigItem;
         pToolBox->Highlight();
         pToolBox->mnCurItemId = 0;
-        if ( !mbResizeMode )
-            ImplDrawConfigFrame( pToolBox, rRect );
-        else
+        if ( mbResizeMode )
         {
             if ( rRect.GetWidth() < TB_MIN_WIN_WIDTH )
                 mnMinWidth = rRect.GetWidth();
@@ -1517,9 +1507,6 @@ void ImplTBDragMgr::UpdateDragRect()
     // Nur Updaten, wenn wir schon im Dragging sind
     if ( !mbShowDragRect )
         return;
-
-    if ( !mbResizeMode )
-        ImplDrawConfigFrame( mpDragBox, maStartRect );
 
     mpDragBox->ShowTracking( maRect );
 }
@@ -1777,7 +1764,7 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
         SetAlign( (WindowAlign)ReadLongRes() );
 
     if ( nObjMask & RSC_TOOLBOX_LINECOUNT )
-        SetLineCount( ReadLongRes() );
+        SetLineCount( sal::static_int_cast<USHORT>(ReadLongRes()) );
 
     if ( nObjMask & RSC_TOOLBOX_CUSTOMIZE )
     {
@@ -2911,7 +2898,7 @@ void ToolBox::ImplFormat( BOOL bResize )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, pThis )
+IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
 {
     if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & TIB_DROPDOWN)
@@ -3945,14 +3932,14 @@ void ToolBox::ShowLine( BOOL bNext )
         USHORT delta = mnVisLines;
         if ( bNext )
         {
-            mnCurLine += delta;
+            mnCurLine = mnCurLine + delta;
             if ( mnCurLine+mnVisLines-1 > mnCurLines )
                 mnCurLine = mnCurLines - mnVisLines+1;
         }
         else
         {
             if( mnCurLine >= delta+1 )
-                mnCurLine-=delta;
+                mnCurLine = mnCurLine - delta;
             else
                 mnCurLine = 1;
         }
@@ -4338,7 +4325,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                             bClearHigh = FALSE;
                             if ( mnHighItemId != it->mnId )
                             {
-                                USHORT nTempPos = it - mpData->m_aItems.begin();
+                                USHORT nTempPos = sal::static_int_cast<USHORT>(it - mpData->m_aItems.begin());
                                 if ( mnHighItemId )
                                 {
                                     ImplHideFocus();
@@ -4948,7 +4935,6 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
                 else
                     return DockingWindow::Notify( rNEvt );
                 }
-                break;
             default:
                 break;
         };
@@ -5212,8 +5198,8 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         aDockingRect.SetPos( ImplGetFrameWindow()->GetPointerPosPixel() );
     }
 
-    Rectangle aIntersect = maOutDockRect.GetIntersection( aDockingRect );
-    if ( !aIntersect.IsEmpty() && !IsDockingPrevented() )
+    Rectangle aIntersection = maOutDockRect.GetIntersection( aDockingRect );
+    if ( !aIntersection.IsEmpty() && !IsDockingPrevented() )
     {
         Rectangle   aInRect = maInDockRect;
         Size aDockSize;
@@ -5584,17 +5570,17 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
     BOOL bRet = TRUE;
     if( mnHighItemId )
     {
-        ImplToolItem *pItem = ImplGetItem( mnHighItemId );
+        ImplToolItem *pToolItem = ImplGetItem( mnHighItemId );
 
         // #107712#, activate can also be called for disabled entries
-        if( !pItem->mbEnabled )
+        if( pToolItem && !pToolItem->mbEnabled )
             return TRUE;
 
-        if( pItem && pItem->mpWindow && HasFocus() )
+        if( pToolItem && pToolItem->mpWindow && HasFocus() )
         {
             ImplHideFocus();
             mbChangingHighlight = TRUE;  // avoid focus change due to loose focus
-            pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
+            pToolItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
             mbChangingHighlight = FALSE;
         }
         else
@@ -5767,7 +5753,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             if ( mnCurLine > 1 )
             {
                 if( mnCurLine > mnVisLines )
-                    mnCurLine -= mnVisLines;
+                    mnCurLine = mnCurLine - mnVisLines;
                 else
                     mnCurLine = 1;
                 mbFormat = TRUE;
@@ -5780,7 +5766,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             if ( mnCurLine+mnVisLines-1 < mnCurLines )
             {
                 if( mnCurLine + 2*mnVisLines-1 < mnCurLines )
-                    mnCurLine += mnVisLines;
+                    mnCurLine = mnCurLine + mnVisLines;
                 else
                     mnCurLine = mnCurLines;
                 mbFormat = TRUE;
@@ -6075,9 +6061,9 @@ static BOOL ImplIsValidItem( const ImplToolItem* pItem, BOOL bNotClipped )
 
 BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
 {
-    ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+    ImplToolItem* pToolItem = ImplGetItem( mnHighItemId );
 
-    if( !pItem || !mnHighItemId )
+    if( !pToolItem || !mnHighItemId )
     {
         // menubutton highlighted ?
         if( mpData->mbMenubuttonSelected )
@@ -6168,9 +6154,9 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
         }
     }
 
-    if( pItem )
+    if( pToolItem )
     {
-        ULONG pos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
+        ULONG pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
         ULONG nCount = mpData->m_aItems.size();
 
         ULONG i=0;
@@ -6213,21 +6199,21 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
                 }
             }
 
-            pItem = &mpData->m_aItems[pos];
+            pToolItem = &mpData->m_aItems[pos];
 
-            if ( ImplIsValidItem( pItem, FALSE ) )
+            if ( ImplIsValidItem( pToolItem, FALSE ) )
                 break;
 
         } while( ++i < nCount);
 
-        if( pItem->IsClipped() && IsMenuEnabled() )
+        if( pToolItem->IsClipped() && IsMenuEnabled() )
         {
             // select the menu button if a clipped item would be selected
             ImplChangeHighlight( NULL );
             ImplDrawMenubutton( this, TRUE );
         }
         else if( i != nCount )
-            ImplChangeHighlight( pItem );
+            ImplChangeHighlight( pToolItem );
         else
             return FALSE;
     }
