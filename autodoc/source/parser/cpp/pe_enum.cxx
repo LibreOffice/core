@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:23:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ PE_Enum::On_gotName_Return2Type( const char * )
 }
 
 void
-PE_Enum::On_bodyStd_Identifier( const char * i_sText )
+PE_Enum::On_bodyStd_Identifier( const char * )
 {
     pSpuValue->Push(not_done);
 }
