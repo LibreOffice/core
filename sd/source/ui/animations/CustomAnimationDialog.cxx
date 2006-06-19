@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:57:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:31:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,7 +337,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
 
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->Get(i);
+        XColorEntry* pEntry = pColorTable->GetColor(i);
         USHORT nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         if( pEntry->GetColor().GetRGBColor() == nColor )
             mpControl->SelectEntryPos( nPos );
@@ -1357,7 +1357,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->Get(i);
+        XColorEntry* pEntry = pColorTable->GetColor(i);
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
