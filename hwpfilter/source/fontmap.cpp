@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmap.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:30:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ char* RepFontTab[] =
     "백묵 헤드라인"                                      /* 3 */
 };
 #else
-char* RepFontTab[] =
+const char* RepFontTab[] =
 {
     "Batang",                                     /* 0 */
     "Dotum",                                      /* 1 */
