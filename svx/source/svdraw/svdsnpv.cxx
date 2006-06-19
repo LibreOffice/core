@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:40:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut):
     ClearVars();
 }
 
-SdrSnapView::SdrSnapView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrPaintView(pModel1,pXOut)
+SdrSnapView::SdrSnapView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrPaintView(pModel1,_pXOut)
 {
     ClearVars();
 }
@@ -548,7 +548,7 @@ BOOL SdrSnapView::BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind, O
 void SdrSnapView::SetDraggedHelpLineKind(SdrHelpLineKind eNewKind)
 {
     if (bDragHelpLine) {
-        BOOL bVis=aDragStat.IsShown();
+        //BOOL bVis=aDragStat.IsShown();
         HideDragHelpLine(pDragWin);
         aDragHelpLine.SetKind(eNewKind);
         aDragStat.SetMinMoved();
@@ -649,11 +649,11 @@ void SdrSnapView::DrawDragHelpLine(OutputDevice* pOut) const
                 if (pPV!=NULL)
                 {
                     const SdrHelpLineList& rList = pPV->GetHelpLines();
-                    sal_uInt16 nAnz = rList.GetCount(),i;
+                    sal_uInt16 nAnz = rList.GetCount(),j;
 
-                    for(i=0; i<nAnz; i++)
+                    for(j=0; j<nAnz; j++)
                     {
-                        const SdrHelpLine rHelpLine = rList[i];
+                        const SdrHelpLine rHelpLine = rList[j];
 
                         // check if we already drawn a help line like this one
                         if( aDragHelpLine.IsVisibleEqual( rHelpLine, *pO) )
