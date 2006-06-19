@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:27:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,20 +124,20 @@ public:
 //__________________________________________________________________________________________________
 void Bootstrap_MacroExpander::disposing()
 {
-    if (m_bstrap)
+    rtlBootstrapHandle h;
     {
-        rtl_bootstrap_args_close( m_bstrap );
+        osl::MutexGuard g(m_mutex);
+        h = m_bstrap;
         m_bstrap = 0;
+    }
+    if (h) {
+        rtl_bootstrap_args_close(h);
     }
 }
 //__________________________________________________________________________________________________
 Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW( () )
 {
-    if (m_bstrap)
-    {
-        rtl_bootstrap_args_close( m_bstrap );
-        m_bstrap = 0;
-    }
+    disposing();
 }
 
 // XServiceInfo impl
@@ -199,35 +199,18 @@ void SAL_CALL Bootstrap_MacroExpander::initialize(
 OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
     throw (lang::IllegalArgumentException)
 {
-    // determine bootstrap handle
-    rtlBootstrapHandle bstrap;
-    if (m_rc_path.getLength())
-    {
-        // late init
-        if (! m_bstrap)
-        {
-            rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( m_rc_path.pData );
-            ClearableMutexGuard guard( Mutex::getGlobalMutex() );
-            if (m_bstrap)
-            {
-                guard.clear();
-                rtl_bootstrap_args_close( bstrap );
-            }
-            else
-            {
-                m_bstrap = bstrap;
-            }
+    rtlBootstrapHandle h;
+    if (m_rc_path.getLength() != 0) {
+        osl::MutexGuard g(m_mutex);
+        if (!m_bstrap) {
+            m_bstrap = rtl_bootstrap_args_open(m_rc_path.pData);
         }
-        bstrap = m_bstrap;
+        h = m_bstrap;
+    } else {
+        h = cppu::get_unorc().getHandle();
     }
-    else
-    {
-        bstrap = ::cppu::get_unorc().getHandle();
-    }
-
-    // expand
     OUString ret( exp );
-    rtl_bootstrap_expandMacros_from_handle( bstrap, &ret.pData );
+    rtl_bootstrap_expandMacros_from_handle( h, &ret.pData );
     return ret;
 }
 
