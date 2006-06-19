@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:56:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ namespace sdr
             svtools::ColorConfig                            maColorConfig;
 
             // old stuff, for first compatible tests
-            XOutputDevice*                              mpExtOutputDevice;
+            XOutputDevice*                                  mpExtOutputDevice;
             SdrPaintInfoRec*                                mpPaintInfoRec;
 
             // The root ViewObjectContact of the current visualisation. Set from
