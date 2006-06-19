@@ -4,9 +4,9 @@
  *
  *  $RCSfile: minfitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:05:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,14 @@ TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxMacroInfoItem::SfxMacroInfoItem(USHORT nWhich,       // Slot-ID
-                                const BasicManager* pMgr,
-                                const String &rLibName,
-                                const String &rModuleName,
-                                const String &rMethodName,
-                                const String &rComment) :
-    SfxPoolItem(nWhich),
+SfxMacroInfoItem::SfxMacroInfoItem(
+    USHORT nWhichId,        // Slot-ID
+    const BasicManager* pMgr,
+    const String &rLibName,
+    const String &rModuleName,
+    const String &rMethodName,
+    const String &rComment) :
+    SfxPoolItem(nWhichId),
     pBasicManager(pMgr),
     aLibName(rLibName),
     aModuleName(rModuleName),
