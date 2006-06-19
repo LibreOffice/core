@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objembed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:30:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ OutputDevice* SfxObjectShell::GetDocumentRefDev()
 }
 
 // -----------------------------------------------------------------------
-void SfxObjectShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
+void SfxObjectShell::OnDocumentPrinterChanged( Printer* /*pNewPrinter*/ )
 {
     // virtual method
 }
