@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:35:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ using namespace rtl;
 
 #define OUSTR(x) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
-static sal_Bool hasOption(char* szOption, int argc, char** argv);
+static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 //static sal_Bool printPaths(const OUString& sPathFile);
 
@@ -156,7 +156,7 @@ rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
     return paths;
 }
 
-static sal_Bool hasOption(char* szOption, int argc, char** argv)
+static sal_Bool hasOption(char const * szOption, int argc, char** argv)
 {
     sal_Bool retVal= sal_False;
     for(sal_Int16 i= 1; i < argc; i++)
