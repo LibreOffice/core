@@ -112,7 +112,7 @@ namespace configmgr
 
         bool hasValue(SelectMember _select = SELECT_BOTH)  const
         {
-            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, _select);
+            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, (cfgmgr_SelectorType)_select);
         }
         bool hasFirst()  const
         {
