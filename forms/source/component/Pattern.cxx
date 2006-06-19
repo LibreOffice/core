@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ void OPatternModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OPatternModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     ::rtl::OUString sNewValue;
     m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
