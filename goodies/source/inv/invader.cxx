@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:06:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,38 +51,38 @@
 #include <vcl/virdev.hxx>
 #endif
 
-MyWindow::MyWindow(Window* pParent, ResMgr *pRes ) :
+MyWindow::MyWindow(Window* pParent, ResMgr *pResMgr ) :
             FloatingWindow(pParent, WB_3DLOOK | WB_CLOSEABLE | WB_MOVEABLE ),
-            pRes(pRes),
+            pRes(pResMgr),
+            ProgStatus(FALSE),
+            bEndLevel(TRUE),
+            bFightDest(FALSE),
+            bTimeHigh(TRUE),
+            bPause(FALSE),
+            bAuseModus(FALSE),
+            bWaitDlg(FALSE),
+            StartPhase(1),
+            nLevel(1),
+            nScore(0L),
+            nHighScore(0L),
+            nFighter(3),
+            nTimeOut(TIMEHIGH),
+            nAuseCount(0),
+            pBitWelcome2(0L),
+            pBitHeros(0L),
+            pBitStarWars(0L),
             pGegner(0L),
             pFighter(0L),
             pMunition(0L),
             pExplosion(0L),
             pBombe(0L),
             pWall(0L),
-            pVirtualDevice(0L),
-            pBitHeros(0L),
-            pBitStarWars(0L),
-            pBitWelcome2(0L),
             pScoreWindow(0L),
+            pVirtualDevice(0L),
             pPauseWindow(0L),
             pBox(0L),
-            ProgStatus(FALSE),
-            StartPhase(1),
-            nLevel(1),
-            nScore(0L),
-            nHighScore(0L),
-            nFighter(3),
-            nAuseCount(0),
-            bEndLevel(TRUE),
-            bFightDest(FALSE),
-            nTimeOut(TIMEHIGH),
-            bTimeHigh(TRUE),
-            bAuseModus(FALSE),
-            bPause(FALSE),
             nDirection(0L),
-            bMouseMooving(FALSE),
-            bWaitDlg(FALSE)
+            bMouseMooving(FALSE)
 {
     pBitWelcome2 = ImplLoadImage( WELCOME2, GetResMgr() );
     pBitHeros = ImplLoadImage( HEROS, GetResMgr() );
@@ -145,7 +145,7 @@ MyWindow::~MyWindow()
     delete pRes;
 }
 
-void MyWindow::Paint(const Rectangle& rRect)
+void MyWindow::Paint(const Rectangle&)
 {
     if(bWaitDlg)
         return;
@@ -354,7 +354,7 @@ void MyWindow::KeyInput( const KeyEvent& rKEvent)
     }
 }
 
-IMPL_LINK( MyWindow, PaintTimer, Timer*, EMPTY_ARG)
+IMPL_LINK( MyWindow, PaintTimer, Timer*, EMPTYARG)
 {
 
     Invalidate();
@@ -362,7 +362,7 @@ IMPL_LINK( MyWindow, PaintTimer, Timer*, EMPTY_ARG)
     return 0;
 }
 
-IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
+IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTYARG )
 {
     bWaitDlg = TRUE;
 
@@ -431,14 +431,14 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
             StartPhase = 1;
             if (nScore > nHighScore)
             {
-                String  aString;
-                aString = String(ResId(STR_HIGHSCORE1,GetResMgr()));
-                aString += String::CreateFromInt32(nScore);
-                aString += String(ResId(STR_HIGHSCORE2,GetResMgr()));
-                aString += String::CreateFromInt32(nHighScore);
-                aString += String(ResId(STR_HIGHSCORE3,GetResMgr()));
+                String  aHSString;
+                aHSString = String(ResId(STR_HIGHSCORE1,GetResMgr()));
+                aHSString += String::CreateFromInt32(nScore);
+                aHSString += String(ResId(STR_HIGHSCORE2,GetResMgr()));
+                aHSString += String::CreateFromInt32(nHighScore);
+                aHSString += String(ResId(STR_HIGHSCORE3,GetResMgr()));
                 nHighScore = nScore;
-                pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
+                pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aHSString);
                 PlaceDialog(pBox);
                 Paint(Rectangle(Point(0,0),Point(640,480)));
                 SetBackground(Wallpaper( Color( COL_WHITE ) ) );
@@ -526,7 +526,7 @@ void MyWindow::MouseButtonDown(const MouseEvent& rMEvt)
         {
             ProgStatus = TRUE;
             StartPhase++;
-            pScoreWindow->Show();
+            pScoreWindow->ShowMe();
             InitLevel();
             Invalidate();
             aPaintTimer.Start();
@@ -541,26 +541,26 @@ void MyWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 void MyWindow::MouseMove(const MouseEvent& rMEvt)
 {
-    long TheHero;
+    long Hero;
 
     if ((!ProgStatus) && ( StartPhase == 1 ))
     {
-        TheHero = 0;
+        Hero = 0;
         if ((rMEvt.GetPosPixel().X() >= 57) && (rMEvt.GetPosPixel().X() <=90))
         {
             if ((rMEvt.GetPosPixel().Y() >= 211) && (rMEvt.GetPosPixel().Y() <= 244))
-                TheHero = 1;
+                Hero = 1;
             else if ((rMEvt.GetPosPixel().Y() >= 255) && (rMEvt.GetPosPixel().Y() <= 288))
-                TheHero = 2;
+                Hero = 2;
             else if ((rMEvt.GetPosPixel().Y() >= 299) && (rMEvt.GetPosPixel().Y() <= 332))
-                TheHero = 3;
+                Hero = 3;
             else if ((rMEvt.GetPosPixel().Y() >= 343) && (rMEvt.GetPosPixel().Y() <= 376))
-                TheHero = 4;
+                Hero = 4;
             else if ((rMEvt.GetPosPixel().Y() >= 387) && (rMEvt.GetPosPixel().Y() <= 420))
-                TheHero = 5;
+                Hero = 5;
         }
-        if ((TheHero) && (GetPointer() != POINTER_REFHAND)) SetPointer(POINTER_REFHAND);
-        else if ((!TheHero) && (GetPointer() != aPointer)) SetPointer(aPointer);
+        if ((Hero) && (GetPointer() != POINTER_REFHAND)) SetPointer(POINTER_REFHAND);
+        else if ((!Hero) && (GetPointer() != aPointer)) SetPointer(aPointer);
     }
     else if ( ProgStatus )
     {
@@ -576,18 +576,18 @@ BOOL MyWindow::Close()
     return TRUE;
 }
 
-void MyWindow::PlaceDialog(MessBox* pBox)
+void MyWindow::PlaceDialog(MessBox* pMessBox)
 {
-    Point aPos = GetPosPixel();
-    Size aSize = GetSizePixel();
-    Size aBoxSize = pBox->GetOutputSizePixel();
-    aSize = Size(aSize.Width()/2 - aBoxSize.Width()/2,
-                    aSize.Height()/2 - aBoxSize.Height()/2);
-
-
-    if(pBox)
-        pBox->SetPosPixel(
+    if(pMessBox)
+    {
+        Point aPos = GetPosPixel();
+        Size aSize = GetSizePixel();
+        Size aBoxSize = pMessBox->GetOutputSizePixel();
+        aSize = Size(aSize.Width()/2 - aBoxSize.Width()/2,
+                        aSize.Height()/2 - aBoxSize.Height()/2);
+        pMessBox->SetPosPixel(
                 Point(aPos.X()+aSize.Width(),aPos.Y()+aSize.Height()));
+    }
 }
 
 #ifdef TEST
