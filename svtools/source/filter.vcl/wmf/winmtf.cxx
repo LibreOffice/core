@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:04:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -844,7 +844,24 @@ void WinMtfOutput::CreateObject( INT32 nIndex, GDIObjectType eType, void* pStyle
         mpGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
     }
     else
-        delete pStyle;
+    {
+        switch ( eType )
+        {
+            case GDI_PEN :
+                delete (WinMtfLineStyle*)pStyle;
+            break;
+            case GDI_BRUSH :
+                delete (WinMtfFillStyle*)pStyle;
+            break;
+            case GDI_FONT :
+                delete (WinMtfFontStyle*)pStyle;
+            break;
+
+            default:
+                DBG_ERROR( "unsupported style not deleted" );
+                break;
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------------
