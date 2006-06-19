@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:58:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,6 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
         rtl::OUString::createFromAscii( "com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
-    SfxViewFrame*   pViewFrame = NULL;
     SfxObjectShell* pObjShell = NULL;
     uno::Reference < frame::XController > xController;
     uno::Reference < frame::XModel > xModel;
@@ -148,7 +147,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
         {
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
-                pObjShell = (SfxObjectShell*) (sal_Int32*) nHandle;
+                        pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
         }
     }
 
@@ -175,12 +174,12 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 
 SfxStatusBarControl::SfxStatusBarControl
 (
-    USHORT      nSlotId,            /* Slot-Id, mit der diese Instanz
+    USHORT      nSlotID,            /* Slot-Id, mit der diese Instanz
                                        verbunden wird. Wurde bei der
                                        Registrierung eine Slot-Id != 0
                                        angegeben, ist dies immer die dort
                                        angegebene. */
-    USHORT      nId,                /* ID of this controller in the status bar */
+    USHORT      nCtrlID,            /* ID of this controller in the status bar */
 
     StatusBar&  rBar                /* Referenz auf die StatusBar, f"ur die
                                        dieses Control erzeugt wurde. */
@@ -196,9 +195,9 @@ SfxStatusBarControl::SfxStatusBarControl
 */
 
 :   svt::StatusbarController(),
-    pBar( &rBar ),
-    nSlotId( nSlotId ),
-    nId( nId )
+    nSlotId( nSlotID ),
+    nId( nCtrlID ),
+    pBar( &rBar )
 {
 }
 
@@ -271,7 +270,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = (SfxOfficeDispatch*)(nImplementation);
+                pDisp = reinterpret_cast< SfxOfficeDispatch* >(sal::static_int_cast< sal_IntPtr >( nImplementation ));
             }
 
             if ( pDisp )
@@ -279,13 +278,13 @@ throw ( ::com::sun::star::uno::RuntimeException )
         }
     }
 
-    USHORT nSlotId = 0;
+    USHORT nSlotID = 0;
     SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
     if ( pSlot )
-        nSlotId = pSlot->GetSlotId();
+        nSlotID = pSlot->GetSlotId();
 
-    if ( nSlotId > 0 )
+    if ( nSlotID > 0 )
     {
         if ( rEvent.Requery )
             svt::StatusbarController::statusChanged( rEvent );
@@ -300,39 +299,39 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
                 if ( pType == ::getVoidCppuType() )
                 {
-                    pItem = new SfxVoidItem( nSlotId );
+                    pItem = new SfxVoidItem( nSlotID );
                     eState = SFX_ITEM_UNKNOWN;
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
                     sal_Bool bTemp ;
                     rEvent.State >>= bTemp ;
-                    pItem = new SfxBoolItem( nSlotId, bTemp );
+                    pItem = new SfxBoolItem( nSlotID, bTemp );
                 }
                 else if ( pType == ::getCppuType((const sal_uInt16*)0) )
                 {
                     sal_uInt16 nTemp ;
                     rEvent.State >>= nTemp ;
-                    pItem = new SfxUInt16Item( nSlotId, nTemp );
+                    pItem = new SfxUInt16Item( nSlotID, nTemp );
                 }
                 else if ( pType == ::getCppuType((const sal_uInt32*)0) )
                 {
                     sal_uInt32 nTemp ;
                     rEvent.State >>= nTemp ;
-                    pItem = new SfxUInt32Item( nSlotId, nTemp );
+                    pItem = new SfxUInt32Item( nSlotID, nTemp );
                 }
                 else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
                 {
                     ::rtl::OUString sTemp ;
                     rEvent.State >>= sTemp ;
-                    pItem = new SfxStringItem( nSlotId, sTemp );
+                    pItem = new SfxStringItem( nSlotID, sTemp );
                 }
                 else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::ItemStatus*)0) )
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
-                    pItem = new SfxVoidItem( nSlotId );
+                    pItem = new SfxVoidItem( nSlotID );
                 }
                 else
                 {
@@ -340,15 +339,15 @@ throw ( ::com::sun::star::uno::RuntimeException )
                         pItem = pSlot->GetType()->CreateItem();
                     if ( pItem )
                     {
-                        pItem->SetWhich( nSlotId );
+                        pItem->SetWhich( nSlotID );
                         pItem->PutValue( rEvent.State );
                     }
                     else
-                        pItem = new SfxVoidItem( nSlotId );
+                        pItem = new SfxVoidItem( nSlotID );
                 }
             }
 
-            StateChanged( nSlotId, eState, pItem );
+            StateChanged( nSlotID, eState, pItem );
             delete pItem;
         }
     }
@@ -412,8 +411,8 @@ throw ( uno::RuntimeException )
 void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
-    ::sal_Bool bMouseEvent,
-    const ::com::sun::star::uno::Any& aData )
+    ::sal_Bool /*bMouseEvent*/,
+    const ::com::sun::star::uno::Any& /*aData*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -589,7 +588,7 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 //--------------------------------------------------------------------
 
-void SfxStatusBarControl::Command( const CommandEvent &rEvt )
+void SfxStatusBarControl::Command( const CommandEvent& )
 
 /*  [Beschreibung]
 
@@ -636,7 +635,7 @@ void SfxStatusBarControl::DoubleClick()
 
 void SfxStatusBarControl::Paint
 (
-    const UserDrawEvent& rUDEvt  /* Referenz auf einen UserDrawEvent */
+    const UserDrawEvent& /* Referenz auf einen UserDrawEvent */
 )
 
 /*  [Beschreibung]
@@ -657,21 +656,19 @@ void SfxStatusBarControl::Paint
 
 void SfxStatusBarControl::CaptureMouse()
 {
-//  ( (SfxStatusBar_Impl*) pBar )->CaptureMouse(*this);
 }
 
 //--------------------------------------------------------------------
 
 void SfxStatusBarControl::ReleaseMouse()
 {
-//  ( (SfxStatusBar_Impl*) pBar )->ReleaseMouse(*this);
 }
 
 //--------------------------------------------------------------------
 
 SfxStatusBarControl* SfxStatusBarControl::CreateControl
 (
-    USHORT     nSlotId,
+    USHORT     nSlotID,
     USHORT     nStbId,
     StatusBar* pBar,
     SfxModule* pMod
@@ -686,7 +683,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     else
         pSlotPool = &SfxSlotPool::GetSlotPool();
 
-    TypeId aSlotType = pSlotPool->GetSlotType(nSlotId);
+    TypeId aSlotType = pSlotPool->GetSlotType(nSlotID);
     if ( aSlotType )
     {
         if ( pMod )
@@ -698,8 +695,8 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
                 for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
                 if ( rFactories[nFactory]->nTypeId == aSlotType &&
                      ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                     ( rFactories[nFactory]->nSlotId == nSlotId) ) )
-                    return rFactories[nFactory]->pCtor( nSlotId, nStbId, *pBar );
+                     ( rFactories[nFactory]->nSlotId == nSlotID) ) )
+                    return rFactories[nFactory]->pCtor( nSlotID, nStbId, *pBar );
             }
         }
 
@@ -707,8 +704,8 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
         for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
         if ( rFactories[nFactory]->nTypeId == aSlotType &&
              ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-             ( rFactories[nFactory]->nSlotId == nSlotId) ) )
-            return rFactories[nFactory]->pCtor( nSlotId, nStbId, *pBar );
+             ( rFactories[nFactory]->nSlotId == nSlotID) ) )
+            return rFactories[nFactory]->pCtor( nSlotID, nStbId, *pBar );
     }
 
     return NULL;
