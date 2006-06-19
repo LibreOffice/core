@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basereader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:43:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,11 @@ void CBaseReader::Initialize( const std::string& ContentName)
         parser.set_document_handler(this);  // pass current reader as reader to the sax parser
         parser.parse(&m_ZipContent[0], m_ZipContent.size());
     }
-    catch(std::exception& ex)
+    catch(std::exception&
+    #if OSL_DEBUG_LEVEL > 0
+        ex
+    #endif
+        )
     {
         ENSURE( false, ex.what() );
     }
