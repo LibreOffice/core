@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_constgroup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:50:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ HF_IdlConstGroup::Produce_byData( const client & i_ce ) const
 
     aNameChain.Produce_CompleteChain(Env().CurPosition(), nameChainLinker);
     produce_Title(aTitle, C_sCePrefix_Constants, i_ce);
+
     write_Docu(aTitle.Add_Row(), i_ce);
     CurOut() << new Html::HorizontalLine();
 
