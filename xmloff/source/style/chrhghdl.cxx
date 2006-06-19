@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrhghdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:38:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     double fSize;
 
@@ -93,7 +93,7 @@ sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return sal_False;
 }
 
-sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
@@ -159,7 +159,7 @@ XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nRel = 0;
 
@@ -172,14 +172,14 @@ sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any
     return sal_False;
 }
 
-sal_Bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
     float nRel = 0;
     if( (rValue >>= nRel) && (nRel != 0) )
     {
-        SvXMLUnitConverter::convertMeasure( aOut, nRel, MAP_POINT, MAP_POINT );
+        SvXMLUnitConverter::convertMeasure( aOut, (sal_Int32)nRel, MAP_POINT, MAP_POINT );
         rStrExpValue = aOut.makeStringAndClear();
     }
 
