@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:00:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,10 +234,10 @@ HtmlCreator::Write_ReferenceDocu( const Simstr &      i_sName,
 
 
 void
-HtmlCreator::PrintH1( char * i_pText)
+HtmlCreator::PrintH1( const char * i_pText)
 {
-    static char sH1a[] = "<H1 ALIGN=CENTER>";
-    static char sH1e[] = "</H1>";
+    static const char sH1a[] = "<H1 ALIGN=CENTER>";
+    static const char sH1e[] = "</H1>";
     WriteStr(sH1a);
     WriteStr(i_pText);
     WriteStr(sH1e);
@@ -256,7 +256,7 @@ HtmlCreator::FinishRow()
 }
 
 void
-HtmlCreator::StartCell( char * i_pWidth)
+HtmlCreator::StartCell( const char * i_pWidth)
 {
     WriteStr( "         <TD WIDTH=" );
     WriteStr( i_pWidth );

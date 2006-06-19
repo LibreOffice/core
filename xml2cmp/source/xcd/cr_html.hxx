@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_html.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:01:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,11 @@ class HtmlCreator
                             const Simstr &      i_sTitle );
   private:
     void                PrintH1(
-                            char *              i_pText );
+                            const char *        i_pText );
     void                StartRow();
     void                FinishRow();
     void                StartCell(
-                            char *              i_pWidth );
+                            const char *        i_pWidth );
     void                FinishCell();
 
     void                WriteElementName(
