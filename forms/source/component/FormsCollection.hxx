@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormsCollection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:41:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #include "InterfaceContainer.hxx"
 #endif
+#ifndef _FRM_IDS_HXX_
+#include "ids.hxx"
+#endif
 
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
@@ -46,9 +49,6 @@
 
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _FRM_IDS_HXX_
-#include "ids.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -90,24 +90,27 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// XTypeProvider
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
-// XServiceInfo
+    // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// OComponentHelper
+    // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// ::com::sun::star::container::XChild
+    // ::com::sun::star::container::XChild
     virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    // prevent method hiding
+    using OInterfaceContainer::disposing;
 };
 
 //.........................................................................
