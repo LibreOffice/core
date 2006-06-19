@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:36:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
 
     // #103516# For complete ver adjust support, set paper min height to 0, here.
-    if(SDRTEXTHORZADJUST_BLOCK != eVAdj || bFitToSize)
+    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
     {
         aPaperMin.Height() = 0;
     }
@@ -372,11 +372,11 @@ void SdrTextObj::ImpSetTextEditParams() const
         Size aPaperMax;
         Rectangle aEditArea;
         TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
-        SdrFitToSizeType eFit=GetFitToSize();
-        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        //SdrFitToSizeType eFit=GetFitToSize();
+        //FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
         FASTBOOL bContourFrame=IsContourTextFrame();
-        EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
-        ULONG nViewAnz=pEdtOutl->GetViewCount();
+        //EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
+        //ULONG nViewAnz=pEdtOutl->GetViewCount();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);
         pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
         pEdtOutl->SetPaperSize(Size());
