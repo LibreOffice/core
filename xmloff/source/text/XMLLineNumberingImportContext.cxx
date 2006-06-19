@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:14:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,31 +98,29 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG),
-        sStyleName(),
-        sNumFormat(GetXMLToken(XML_1)),
-        sNumLetterSync(GetXMLToken(XML_FALSE)),
-        sSeparator(),
-        nOffset(-1),
-        nNumberPosition(style::LineNumberPosition::LEFT),
-        nIncrement(-1),
-        nSeparatorIncrement(-1),
-        bNumberLines(sal_True),
-        bCountEmptyLines(sal_True),
-        bCountInFloatingFrames(sal_False),
-        bRestartNumbering(sal_False),
-        sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
-        sCountEmptyLines(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines")),
-        sCountLinesInFrames(RTL_CONSTASCII_USTRINGPARAM("CountLinesInFrames")),
-        sDistance(RTL_CONSTASCII_USTRINGPARAM("Distance")),
-        sInterval(RTL_CONSTASCII_USTRINGPARAM("Interval")),
-        sSeparatorText(RTL_CONSTASCII_USTRINGPARAM("SeparatorText")),
-        sNumberPosition(RTL_CONSTASCII_USTRINGPARAM("NumberPosition")),
-        sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-        sIsOn(RTL_CONSTASCII_USTRINGPARAM("IsOn")),
-        sRestartAtEachPage(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage")),
-        sSeparatorInterval(RTL_CONSTASCII_USTRINGPARAM("SeparatorInterval"))
+    const Reference<XAttributeList> & xAttrList)
+:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG)
+,   sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName"))
+,   sCountEmptyLines(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines"))
+,   sCountLinesInFrames(RTL_CONSTASCII_USTRINGPARAM("CountLinesInFrames"))
+,   sDistance(RTL_CONSTASCII_USTRINGPARAM("Distance"))
+,   sInterval(RTL_CONSTASCII_USTRINGPARAM("Interval"))
+,   sSeparatorText(RTL_CONSTASCII_USTRINGPARAM("SeparatorText"))
+,   sNumberPosition(RTL_CONSTASCII_USTRINGPARAM("NumberPosition"))
+,   sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
+,   sIsOn(RTL_CONSTASCII_USTRINGPARAM("IsOn"))
+,   sRestartAtEachPage(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage"))
+,   sSeparatorInterval(RTL_CONSTASCII_USTRINGPARAM("SeparatorInterval"))
+,   sNumFormat(GetXMLToken(XML_1))
+,   sNumLetterSync(GetXMLToken(XML_FALSE))
+,   nOffset(-1)
+,   nNumberPosition(style::LineNumberPosition::LEFT)
+,   nIncrement(-1)
+,   nSeparatorIncrement(-1)
+,   bNumberLines(sal_True)
+,   bCountEmptyLines(sal_True)
+,   bCountInFloatingFrames(sal_False)
+,   bRestartNumbering(sal_False)
 {
 }
 
@@ -246,11 +244,11 @@ void XMLLineNumberingImportContext::ProcessAttribute(
 
         case XML_TOK_LINENUMBERING_NUMBER_POSITION:
         {
-            sal_uInt16 nTmp;
-            if (SvXMLUnitConverter::convertEnum(nTmp, sValue,
+            sal_uInt16 nTmp16;
+            if (SvXMLUnitConverter::convertEnum(nTmp16, sValue,
                                                 aLineNumberPositionMap))
             {
-                nNumberPosition = nTmp;
+                nNumberPosition = nTmp16;
             }
             break;
         }
@@ -264,8 +262,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
     }
 }
 
-void XMLLineNumberingImportContext::CreateAndInsert(
-    sal_Bool bOverwrite)
+void XMLLineNumberingImportContext::CreateAndInsert(sal_Bool)
 {
     // insert and block mode is handled in insertStyleFamily
 
