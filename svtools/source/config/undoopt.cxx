@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:54:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,6 @@ SvtUndoOptions_Impl::SvtUndoOptions_Impl()
 
 void SvtUndoOptions_Impl::Commit()
 {
-    OUString* pNames = m_aPropertyNames.getArray();
     Sequence< Any > aValues( m_aPropertyNames.getLength() );
     Any* pValues = aValues.getArray();
     for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
@@ -176,7 +175,7 @@ void SvtUndoOptions_Impl::Load()
     }
 }
 // -----------------------------------------------------------------------
-void SvtUndoOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void SvtUndoOptions_Impl::Notify( const Sequence<rtl::OUString>& )
 {
     Load();
     //broadcast changes
@@ -198,7 +197,7 @@ SvtUndoOptions::SvtUndoOptions()
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtUndoOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtUndoOptions_Impl::ctor()");
         pOptions = new SvtUndoOptions_Impl;
 
         ItemHolder2::holdConfigItem(E_UNDOOPTIONS);
@@ -233,7 +232,7 @@ sal_Int32 SvtUndoOptions::GetUndoCount() const
     return pImp->GetUndoCount();
 }
 
-void SvtUndoOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvtUndoOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
     Broadcast( rHint );
