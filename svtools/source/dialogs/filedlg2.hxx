@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:13:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ protected:
     DECL_LINK(          ClickHdl, Button * );
 
 public:
-                        ImpPathDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE nType, BOOL bCreateDir );
+                        ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreateDir );
     virtual             ~ImpPathDialog();
 
     virtual void        SetPath( const String& rPath );
@@ -176,7 +176,7 @@ protected:
     BOOL                IsFileOk( const DirEntry& rDirEntry );
 
 public:
-                        ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE nType );
+                        ImpFileDialog( PathDialog* pDlg, WinBits nStyle, RESOURCE_TYPE nType );
     virtual             ~ImpFileDialog();
 
     void                AddFilter( const String& rFilter, const String& rMask );
@@ -209,11 +209,11 @@ inline String ImpFileDialog::GetFilterName( USHORT nPos ) const
 
 inline String ImpFileDialog::GetFilterType( USHORT nPos ) const
 {
-    String aMask;
+    String aFilterMask;
     ImpFilterItem* pItem = aFilterList.GetObject( nPos );
     if ( pItem )
-        aMask = pItem->aMask;
-    return aMask;
+        aFilterMask = pItem->aMask;
+    return aFilterMask;
 }
 
 class ImpSvFileDlg
