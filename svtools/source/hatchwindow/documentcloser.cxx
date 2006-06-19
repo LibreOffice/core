@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcloser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:58:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 // --------------------------------------------------------
 IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest*, pMTRequest )
 {
+    (void) pThis; // unused
     if ( pMTRequest )
     {
         if ( pMTRequest->m_xFrame.is() )
