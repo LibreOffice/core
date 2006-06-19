@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XImageManager.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:59:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 package imageManager.interfaces;
 
 import com.sun.star.graphic.XGraphic;
-import drafts.com.sun.star.ui.ImageType;
-import drafts.com.sun.star.ui.XImageManager;
+import com.sun.star.ui.ImageType;
+import com.sun.star.ui.XImageManager;
 import lib.TestParameters;
 import share.LogWriter;
 
