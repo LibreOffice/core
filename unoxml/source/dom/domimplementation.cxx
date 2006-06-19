@@ -4,9 +4,9 @@
  *
  *  $RCSfile: domimplementation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:00:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@ namespace DOM
            const Reference< XDocumentType >& doctype)
         throw (RuntimeException)
     {
+      OUString aNamespaceURI = namespaceURI;
+      OUString aQName = qualifiedName;
+      Reference< XDocumentType > aType = doctype;
         return Reference<XDocument>();
     }
 
@@ -62,6 +65,9 @@ namespace DOM
             const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
         throw (RuntimeException)
     {
+      OUString qName = qualifiedName;
+      OUString aPublicId = publicId;
+      OUString aSystemId = systemId;
         return Reference<XDocumentType>();
     }
     /**
@@ -70,6 +76,8 @@ namespace DOM
     sal_Bool SAL_CALL CDOMImplementation::hasFeature(const OUString& feature, const OUString& ver)
         throw (RuntimeException)
     {
+      OUString aFeature = feature;
+      OUString aVersion = ver;
         return sal_False;
     }
 }
