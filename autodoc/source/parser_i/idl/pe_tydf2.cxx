@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_tydf2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:50:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ PE_Typedef::Process_Default()
 }
 
 void
-PE_Typedef::On_expect_description_Any(const char * i_sText)
+PE_Typedef::On_expect_description_Any(const char *)
 {
     SetResult(not_done,push_sure, pPE_Type.Ptr());
 }
