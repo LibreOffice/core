@@ -4,9 +4,9 @@
  *
  *  $RCSfile: entityreference.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:02:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #include "entityreference.hxx"
 namespace DOM
 {
-    CEntityReference::CEntityReference(const xmlNodePtr aNodePtr)
+  CEntityReference::CEntityReference(const xmlNodePtr /*aNodePtr*/)
     {
         m_aNodeType = NodeType_ENTITY_REFERENCE_NODE;
         init_node(m_aNodePtr);
