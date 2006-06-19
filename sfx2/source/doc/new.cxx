@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:45:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ void SfxPreviewBase_Impl::SetGDIFile( GDIMetaFile* pFile )
 }
 
 SfxFrameWindow* SfxPreviewWin_Impl::PreviewFactory(
-    SfxFrame* pFrame, const String& rName )
+    SfxFrame* pFrame, const String& /*rName*/ )
 {
     return new SfxFrameWindow( new SfxPreviewWin_Impl(
         &pFrame->GetCurrentViewFrame()->GetWindow()  ) );
@@ -497,7 +497,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, Expand, MoreButton *, pMoreButton )
+IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, Expand, MoreButton *, EMPTYARG )
 {
     TemplateSelect(&aTemplateLb);
     return 0;
@@ -528,9 +528,8 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, pListBox )
+IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 {
-
     // noch am Laden
     if ( xDocShell && xDocShell->GetProgress() )
         return 0;
@@ -547,6 +546,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, pListBox )
 
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
+    (void)pListBox;
     // noch am Laden
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
@@ -829,8 +829,8 @@ String SfxNewFileDialog::GetTemplateFileName() const
 //-------------------------------------------------------------------------
 BOOL SfxNewFileDialog::FillDocumentInfo
 (
-    const String &rFile,    // Datei incl. Pfad, deren DocInfo gelesen werden soll
-    SfxDocumentInfo &rInfo  // DocInfo, die gefuellt werden soll
+    const String&    /*rFile*/,    // Datei incl. Pfad, deren DocInfo gelesen werden soll
+    SfxDocumentInfo& /*rInfo*/  // DocInfo, die gefuellt werden soll
 )
 {
     // TODO: may need reimplementation, but didn't work for xml anyway
