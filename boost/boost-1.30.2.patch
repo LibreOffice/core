@@ -1,5 +1,5 @@
-*** misc/boost-1.30.2/boost/bind.hpp	2002-10-15 12:51:34.000000000 +0200
---- misc/build/boost-1.30.2/boost/bind.hpp	2005-09-14 17:49:16.353411000 +0200
+*** misc/boost-1.30.2/boost/bind.hpp	Tue Oct 15 12:51:34 2002
+--- misc/build/boost-1.30.2/boost/bind.hpp	Thu Jan 26 17:10:47 2006
 ***************
 *** 5,10 ****
 --- 5,17 ----
@@ -37,8 +37,20 @@
   #ifdef BOOST_MEM_FN_ENABLE_STDCALL
   
   #define BOOST_BIND_MF_NAME(X) X##_stdcall
-*** misc/boost-1.30.2/boost/function/function_template.hpp	2003-02-07 15:03:36.000000000 +0100
---- misc/build/boost-1.30.2/boost/function/function_template.hpp	2005-09-14 17:47:26.513096000 +0200
+*** misc/boost-1.30.2/boost/function/function_template.hpp	Fri Feb  7 15:03:36 2003
+--- misc/build/boost-1.30.2/boost/function/function_template.hpp	Wed Mar  8 20:10:22 2006
+***************
+*** 15,20 ****
+--- 15,23 ----
+  
+  // Note: this header is a header template and must NOT have multiple-inclusion
+  // protection.
++ #if defined __GNUC__
++ #pragma GCC system_header
++ #endif
+  #include <boost/function/detail/prologue.hpp>
+  
+  #define BOOST_FUNCTION_TEMPLATE_PARMS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, typename T)
 ***************
 *** 395,401 ****
         invoker = 0;
@@ -48,7 +60,7 @@
       // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
       operator bool () const { return !this->empty(); }
   #else
---- 395,401 ----
+--- 398,404 ----
         invoker = 0;
       }
   
@@ -56,8 +68,130 @@
       // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
       operator bool () const { return !this->empty(); }
   #else
-*** misc/boost-1.30.2/boost/mem_fn.hpp	2002-12-20 19:14:59.000000000 +0100
---- misc/build/boost-1.30.2/boost/mem_fn.hpp	2005-09-14 17:49:31.078044000 +0200
+***************
+*** 443,451 ****
+                             R BOOST_FUNCTION_COMMA
+                             BOOST_FUNCTION_TEMPLATE_ARGS
+                           >::type
+!           invoker_type;
+  
+!         invoker = &invoker_type::invoke;
+          function_base::manager =
+            &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
+          function_base::functor =
+--- 446,454 ----
+                             R BOOST_FUNCTION_COMMA
+                             BOOST_FUNCTION_TEMPLATE_ARGS
+                           >::type
+!           lcl_invoker_type;
+  
+!         invoker = &lcl_invoker_type::invoke;
+          function_base::manager =
+            &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
+          function_base::functor =
+***************
+*** 476,491 ****
+                                         R BOOST_FUNCTION_COMMA
+                                         BOOST_FUNCTION_TEMPLATE_ARGS
+                                       >::type
+!           invoker_type;
+  
+!         invoker = &invoker_type::invoke;
+          function_base::manager = &detail::function::functor_manager<
+                                      FunctionObj, Allocator>::manage;
+  #ifndef BOOST_NO_STD_ALLOCATOR
+          typedef typename Allocator::template rebind<FunctionObj>::other
+!           allocator_type;
+!         typedef typename allocator_type::pointer pointer_type;
+!         allocator_type allocator;
+          pointer_type copy = allocator.allocate(1);
+          allocator.construct(copy, f);
+  
+--- 479,494 ----
+                                         R BOOST_FUNCTION_COMMA
+                                         BOOST_FUNCTION_TEMPLATE_ARGS
+                                       >::type
+!           lcl_invoker_type;
+  
+!         invoker = &lcl_invoker_type::invoke;
+          function_base::manager = &detail::function::functor_manager<
+                                      FunctionObj, Allocator>::manage;
+  #ifndef BOOST_NO_STD_ALLOCATOR
+          typedef typename Allocator::template rebind<FunctionObj>::other
+!           lcl_allocator_type;
+!         typedef typename lcl_allocator_type::pointer pointer_type;
+!         lcl_allocator_type allocator;
+          pointer_type copy = allocator.allocate(1);
+          allocator.construct(copy, f);
+  
+***************
+*** 510,518 ****
+                                         R BOOST_FUNCTION_COMMA
+                                         BOOST_FUNCTION_TEMPLATE_ARGS
+                                       >::type
+!           invoker_type;
+  
+!         invoker = &invoker_type::invoke;
+          function_base::manager = &detail::function::trivial_manager;
+          function_base::functor =
+            function_base::manager(
+--- 513,521 ----
+                                         R BOOST_FUNCTION_COMMA
+                                         BOOST_FUNCTION_TEMPLATE_ARGS
+                                       >::type
+!           lcl_invoker_type;
+  
+!         invoker = &lcl_invoker_type::invoke;
+          function_base::manager = &detail::function::trivial_manager;
+          function_base::functor =
+            function_base::manager(
+***************
+*** 532,539 ****
+                         R BOOST_FUNCTION_COMMA
+                         BOOST_FUNCTION_TEMPLATE_ARGS
+                       >::type
+!           invoker_type;
+!       invoker = &invoker_type::invoke;
+        function_base::manager = &detail::function::trivial_manager;
+        function_base::functor = detail::function::make_any_pointer(this);
+      }
+--- 535,542 ----
+                         R BOOST_FUNCTION_COMMA
+                         BOOST_FUNCTION_TEMPLATE_ARGS
+                       >::type
+!           lcl_invoker_type;
+!       invoker = &lcl_invoker_type::invoke;
+        function_base::manager = &detail::function::trivial_manager;
+        function_base::functor = detail::function::make_any_pointer(this);
+      }
+*** misc/boost-1.30.2/boost/function.hpp	Fri Feb 14 16:34:39 2003
+--- misc/build/boost-1.30.2/boost/function.hpp	Thu Jan 26 17:10:47 2006
+***************
+*** 16,21 ****
+--- 16,26 ----
+  // William Kempf, Jesse Jones and Karl Nelson were all very helpful in the
+  // design of this library.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include <boost/preprocessor/iterate.hpp>
+  #include <boost/detail/workaround.hpp>
+  
+***************
+*** 68,70 ****
+--- 73,79 ----
+  #  include BOOST_PP_ITERATE()
+  #  undef BOOST_PP_ITERATION_PARAMS_1
+  #endif
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+*** misc/boost-1.30.2/boost/mem_fn.hpp	Fri Dec 20 19:14:59 2002
+--- misc/build/boost-1.30.2/boost/mem_fn.hpp	Thu Jan 26 17:10:47 2006
 ***************
 *** 5,10 ****
 --- 5,17 ----
