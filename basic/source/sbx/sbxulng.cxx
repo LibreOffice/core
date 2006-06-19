@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxulng.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:53:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,7 @@ start:
         case SbxEMPTY:
             nRes = 0; break;
         case SbxCHAR:
-            if( p->nChar < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
-            }
-            else
-                nRes = p->nChar;
+            nRes = p->nChar;
             break;
         case SbxBYTE:
             nRes = p->nByte; break;
@@ -318,7 +313,7 @@ start:
         case SbxBYREF | SbxCURRENCY:
             if( n > SbxMAXCURR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXCURR;
+                SbxBase::SetError( SbxERR_OVERFLOW ); n = sal::static_int_cast<UINT32>( SbxMAXCURR );
             }
             *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
 
