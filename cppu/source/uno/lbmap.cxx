@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:49:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,11 +318,11 @@ static inline OUString getMappingName(
     aKey.append( (sal_Unicode)';' );
     aKey.append( rFrom.getTypeName() );
     aKey.append( (sal_Unicode)'[' );
-    aKey.append( (sal_Int64)rFrom.get(), 16 );
+    aKey.append( reinterpret_cast< sal_IntPtr >(rFrom.get()), 16 );
     aKey.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
     aKey.append( rTo.getTypeName() );
     aKey.append( (sal_Unicode)'[' );
-    aKey.append( (sal_Int64)rTo.get(), 16 );
+    aKey.append( reinterpret_cast< sal_IntPtr >(rTo.get()), 16 );
     aKey.append( (sal_Unicode)']' );
     return aKey.makeStringAndClear();
 }
@@ -405,7 +405,8 @@ static Mapping loadExternalMapping(
         {
             OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) );
             uno_ext_getMappingFunc fpGetMapFunc =
-                (uno_ext_getMappingFunc)::osl_getSymbol( hModule, aSymbolName.pData );
+                (uno_ext_getMappingFunc)::osl_getFunctionSymbol(
+                    hModule, aSymbolName.pData );
 
             if (fpGetMapFunc)
             {
