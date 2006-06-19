@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pstm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:08:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #include <debug.hxx>
 #include <pstm.hxx>
 
-#pragma hdrstop
-
 #define STOR_NO_OPTIMIZE
 
 /***********************************************************************/
@@ -48,10 +46,10 @@ void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
 {
 #ifdef DBG_UTIL
     SvCreateInstancePersist p;
-    p = (SvCreateInstancePersist)aAssocTable.Get( nClassId );
+    p = Get( nClassId );
     DBG_ASSERT( !p || p == pFunc, "register class with same id" )
 #endif
-    aAssocTable.Insert( nClassId, (void *)pFunc );
+    aAssocTable.insert(Map::value_type(nClassId, pFunc));
 }
 
 /************************************************************************
@@ -59,16 +57,19 @@ void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
 *************************************************************************/
 SvCreateInstancePersist SvClassManager::Get( USHORT nClassId )
 {
-    return (SvCreateInstancePersist)aAssocTable.Get( nClassId );
+    Map::const_iterator i(aAssocTable.find(nClassId));
+    return i == aAssocTable.end() ? 0 : i->second;
 }
 
 /****************** SvRttiBase *******************************************/
 TYPEINIT0( SvRttiBase );
 
 /****************** SvPersistBaseMemberList ******************************/
-#define inline
-SV_IMPL_REF_LIST(SuperSvPersistBase,SuperSvPersistBase*)
-#undef inline
+
+SvPersistBaseMemberList::SvPersistBaseMemberList(){}
+SvPersistBaseMemberList::SvPersistBaseMemberList(
+    USHORT nInitSz, USHORT nResize )
+    : SuperSvPersistBaseMemberList( nInitSz, nResize ){}
 
 #define PERSIST_LIST_VER        (BYTE)0
 #define PERSIST_LIST_DBGUTIL    (BYTE)0x80
@@ -86,13 +87,13 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
     BYTE bTmp = PERSIST_LIST_VER;
     rStm << bTmp;
 #endif
-    UINT32 nCount = Count();
+    UINT32 nCountMember = Count();
     ULONG  nCountPos = rStm.Tell();
     UINT32 nWriteCount = 0;
-    rStm << nCount;
+    rStm << nCountMember;
     //bloss die Liste nicht veraendern,
     //wegen Seiteneffekten beim Save
-    for( ULONG n = 0; n < nCount; n++ )
+    for( ULONG n = 0; n < nCountMember; n++ )
     {
         SvPersistBase * pObj = GetObject( n );
         if( !bOnlyStreamed || rStm.IsStreamed( pObj ) )
@@ -101,7 +102,7 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
             nWriteCount++;
         }
     }
-    if( nWriteCount != nCount )
+    if( nWriteCount != nCountMember )
     {
         // nicht alle Objekte geschrieben, Count anpassen
         ULONG nPos = rStm.Tell();
@@ -139,7 +140,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
         DBG_ERROR( "persist list, false version" )
     }
 
-    UINT32 nObjLen, nObjPos;
+    UINT32 nObjLen(0), nObjPos(0);
     if( nVer & PERSIST_LIST_DBGUTIL )
         nObjLen = rStm.ReadLen( &nObjPos );
 
@@ -415,7 +416,7 @@ UINT32 SvPersistStream::ReadCompressed
 
 */
 {
-    UINT32 nRet;
+    UINT32 nRet(0);
     BYTE    nMask;
     rStm >> nMask;
     if( nMask & LEN_1 )
@@ -567,7 +568,7 @@ void SvPersistStream::WriteLen
 {
     UINT32 nPos = Tell();
     UINT32 nLen = nPos - nObjPos;
-    // die Laenge muá im stream 4-Byte betragen
+    // die Laenge muï¿½ im stream 4-Byte betragen
     Seek( nObjPos - sizeof( UINT32 ) );
     // Laenge schreiben
     *this << nLen;
@@ -755,7 +756,7 @@ UINT32 SvPersistStream::ReadObj
                         "object already exist" )
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
 
-            UINT32 nObjLen, nObjPos;
+            UINT32 nObjLen(0), nObjPos(0);
             if( nHdr & P_DBGUTIL )
                 nObjLen = ReadLen( &nObjPos );
             if( !pFunc )
