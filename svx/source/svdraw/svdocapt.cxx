@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:32:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ sal_Bool SdrCaptionObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec
         sal_uInt32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
         sal_uInt32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-        Color aShadCol(rShadColItem.GetValue());
+        Color aShadCol(rShadColItem.GetColorValue());
         sal_uInt16 nTransp = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
         XFillStyle eStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
@@ -268,7 +268,7 @@ sal_Bool SdrCaptionObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec
 
         if(eStyle == XFILL_HATCH) // #41666#
         {
-            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetValue();
+            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue();
             aHatch.SetColor(aShadCol);
             aSet.Put(XFillHatchItem(String(),aHatch));
         }
@@ -412,7 +412,7 @@ void SdrCaptionObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
 USHORT SdrCaptionObj::GetHdlCount() const
 {
     USHORT nAnz1=SdrRectObj::GetHdlCount();
-    USHORT nAnz2=aTailPoly.GetSize();
+    //USHORT nAnz2=aTailPoly.GetSize();
     // Derzeit ist nur das Draggen des Schwanzendes implementiert
     return nAnz1+1;
 }
@@ -738,16 +738,16 @@ FASTBOOL SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-FASTBOOL SdrCaptionObj::BckCreate(SdrDragStat& rStat)
+FASTBOOL SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }
 
-void SdrCaptionObj::BrkCreate(SdrDragStat& rStat)
+void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-void SdrCaptionObj::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+void SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/, XPolyPolygon& rXPP) const
 {
     rXPP.Clear();
     rXPP.Insert(XPolygon(aRect));
@@ -863,7 +863,7 @@ USHORT SdrCaptionObj::GetSnapPointCount() const
     return 0;
 }
 
-Point SdrCaptionObj::GetSnapPoint(USHORT i) const
+Point SdrCaptionObj::GetSnapPoint(USHORT /*i*/) const
 {
     // !!!!! fehlende Impl.
     return Point(0,0);
@@ -981,7 +981,7 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
 
 // #i32599#
 // Add own implementation for TRSetBaseGeometry to handle TailPos over changes.
-void SdrCaptionObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+void SdrCaptionObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
     Vector2D aScale, aTranslate;
