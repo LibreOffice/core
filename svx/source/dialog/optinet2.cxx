@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:32:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,7 +595,7 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
 
 --------------------------------------------------*/
 
-BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& rSet)
+BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
 {
     BOOL bModified=FALSE;
 
@@ -739,25 +739,29 @@ SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_INET_SEARCH ), rSet ),
 
     aSearchGB       ( this, ResId( GB_SEARCH ) ),
-    aSearchFT       ( this, ResId( FT_SEARCH ) ),
     aSearchLB       ( this, ResId( LB_SEARCH ) ),
     aSearchNameFT   ( this, ResId( FT_SEARCH_NAME ) ),
     aSearchNameED   ( this, ResId( ED_SEARCH_NAME ) ),
-    aURLFT          ( this, ResId( FT_URL ) ),
-    aURLED          ( this, ResId( ED_URL ) ),
+    aSearchFT       ( this, ResId( FT_SEARCH ) ),
     aAndRB          ( this, ResId( RB_AND ) ),
     aOrRB           ( this, ResId( RB_OR ) ),
     aExactRB        ( this, ResId( RB_EXACT ) ),
-    aSeparatorFT    ( this, ResId( FT_SEPARATOR ) ),
-    aSeparatorED    ( this, ResId( ED_SEPARATOR ) ),
+
+    aURLFT          ( this, ResId( FT_URL ) ),
+    aURLED          ( this, ResId( ED_URL ) ),
+
     aPostFixFT      ( this, ResId( FT_POSTFIX ) ),
     aPostFixED      ( this, ResId( ED_POSTFIX ) ),
+    aSeparatorFT    ( this, ResId( FT_SEPARATOR ) ),
+    aSeparatorED    ( this, ResId( ED_SEPARATOR ) ),
     aCaseFT         ( this, ResId( FT_CASE ) ),
     aCaseED         ( this, ResId( ED_CASE ) ),
+
     aNewPB          ( this, ResId( PB_NEW ) ),
     aAddPB          ( this, ResId( PB_ADD ) ),
     aChangePB       ( this, ResId( PB_CHANGE ) ),
     aDeletePB       ( this, ResId( PB_DELETE ) ),
+
     sModifyMsg(ResId(MSG_MODIFY))
 {
     FreeResource();
@@ -821,7 +825,7 @@ void SvxSearchTabPage::Reset( const SfxItemSet& )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxSearchTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxSearchTabPage::FillItemSet( SfxItemSet&  )
 {
     if(aSearchConfig.IsModified())
         aSearchConfig.Commit();
@@ -829,20 +833,20 @@ BOOL SvxSearchTabPage::FillItemSet( SfxItemSet& rSet )
 }
 /*--------------------------------------------------------------------*/
 
-void SvxSearchTabPage::ActivatePage( const SfxItemSet& rSet )
+void SvxSearchTabPage::ActivatePage( const SfxItemSet&  )
 {
 }
 
 /*--------------------------------------------------------------------*/
 
-int SvxSearchTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     if(!ConfirmLeave(String()))
         return KEEP_PAGE;
 
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -1076,7 +1080,7 @@ IMPL_LINK( SvxSearchTabPage, SearchModifyHdl_Impl, SvxNoSpaceEdit*, pEdit )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, pButton )
+IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, EMPTYARG )
 {
     sal_Bool bAnd = aAndRB.IsChecked();
     sal_Bool bOr = aOrRB.IsChecked();
@@ -1294,10 +1298,10 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maRecommReadOnlyCB ( this, ResId( CB_SEC_RECOMMREADONLY ) )
     ,maRecordChangesCB  ( this, ResId( CB_SEC_RECORDCHANGES ) )
     ,maProtectRecordsPB ( this, ResId( PB_SEC_PROTRECORDS ) )
-    ,msProtectRecordsStr(       ResId( STR_SEC_PROTRECORDS ) )
-    ,msUnprotectRecordsStr(     ResId( STR_SEC_UNPROTRECORDS ) )
     ,mpSecOptions       ( new SvtSecurityOptions )
     ,meRedlingMode      ( RL_NONE )
+    ,msProtectRecordsStr(       ResId( STR_SEC_PROTRECORDS ) )
+    ,msUnprotectRecordsStr(     ResId( STR_SEC_UNPROTRECORDS ) )
 {
     FreeResource();
 
@@ -1415,8 +1419,7 @@ namespace
 
 IMPL_LINK( SvxSecurityTabPage, RecordChangesCBHdl, void*, EMPTYARG )
 {
-    const SfxBoolItem* pItem =
-        ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
+    ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
     CheckRecordChangesState();
     return 0;
 }
@@ -1425,7 +1428,7 @@ IMPL_LINK( SvxSecurityTabPage, ProtectRecordsPBHdl, void*, EMPTYARG )
 {
     bool bProt;
     QueryRecordChangesProtectionState( meRedlingMode, bProt );
-    const SfxBoolItem* pItem = ExecuteRecordChangesFunc( meRedlingMode, RF_PROTECT, !bProt, this );
+    ExecuteRecordChangesFunc( meRedlingMode, RF_PROTECT, !bProt, this );
     CheckRecordChangesState();
 
     if ( QueryRecordChangesProtectionState( meRedlingMode, bProt ) )
@@ -1536,14 +1539,14 @@ SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet& rAttrS
     return new SvxSecurityTabPage(pParent, rAttrSet);
 }
 
-void SvxSecurityTabPage::ActivatePage( const SfxItemSet& rSet )
+void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
 {
 }
 
-int SvxSecurityTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -1586,7 +1589,7 @@ namespace
     }
 }
 
-BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& _rSet )
+BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 {
     bool bModified = false;
 
@@ -1611,7 +1614,7 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& _rSet )
 
 /*--------------------------------------------------------------------*/
 
-void SvxSecurityTabPage::Reset( const SfxItemSet& _rSet )
+void SvxSecurityTabPage::Reset( const SfxItemSet& )
 {
     EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB, maSaveOrSendDocsFI );
     EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB, maSignDocsFI );
@@ -2015,7 +2018,7 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 
 /* -------------------------------------------------------------------------*/
 
-BOOL SvxEMailTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
     BOOL bMailModified = FALSE;
     if(!pImpl->aMailConfig.bROProgram && aMailerURLED.GetSavedValue() != aMailerURLED.GetText())
@@ -2031,7 +2034,7 @@ BOOL SvxEMailTabPage::FillItemSet( SfxItemSet& rSet )
 
 /* -------------------------------------------------------------------------*/
 
-void SvxEMailTabPage::Reset( const SfxItemSet& rSet )
+void SvxEMailTabPage::Reset( const SfxItemSet& )
 {
     aMailerURLED.Enable(TRUE );
     aMailerURLPB.Enable(TRUE );
