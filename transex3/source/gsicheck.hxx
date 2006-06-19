@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-07 13:24:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ public:
 // class GSIBlock
 //
 
-DECLARE_LIST( GSIBlock_Impl, GSILine * );
+DECLARE_LIST( GSIBlock_Impl, GSILine * )
 
 class SvStream;
 
