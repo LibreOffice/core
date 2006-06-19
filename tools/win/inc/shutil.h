@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutil.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:45:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef _SHUTIL_H_
 #define _SHUTIL_H_
+
+#if defined WNT
 
 #ifndef _SHOBJ_H
 #include <shlobj.h>
@@ -213,6 +215,8 @@ DWORD WINAPI WIN_SHDeleteValue(
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif  // _SHUTIL_H_
