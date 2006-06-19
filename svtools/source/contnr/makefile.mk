@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:53:41 $
+#   last change: $Author: hr $ $Date: 2006-06-19 20:51:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,15 +52,15 @@ PROJECTPCHSOURCE=cont_pch
 EXCEPTIONSFILES=\
             $(SLO)$/contentenumeration.obj	\
             $(SLO)$/fileview.obj	\
+            $(SLO)$/svlbox.obj		\
+            $(SLO)$/svtabbx.obj		\
+            $(SLO)$/svimpbox.obj	\
             $(SLO)$/templwin.obj
 
 SLOFILES=   $(EXCEPTIONSFILES) \
-            $(SLO)$/svtabbx.obj		\
             $(SLO)$/svicnvw.obj		\
             $(SLO)$/svimpicn.obj	\
             $(SLO)$/treelist.obj	\
-            $(SLO)$/svlbox.obj		\
-            $(SLO)$/svimpbox.obj	\
             $(SLO)$/svlbitm.obj		\
             $(SLO)$/svtreebx.obj	\
             $(SLO)$/imivctl1.obj	\
