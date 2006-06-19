@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strascii.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:51:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #ifdef DBG_UTIL
 
-static BOOL ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, xub_StrLen nLen )
+static BOOL ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
 {
     while ( nLen && *pAsciiStr )
     {
@@ -55,7 +55,7 @@ static BOOL ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, xub_StrLen nLen )
 // =======================================================================
 
 static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
-                              xub_StrLen nLen )
+                              sal_Int32 nLen )
 {
     DBG_ASSERT( ImplDbgCheckAsciiStr( pSrc, nLen ),
                 "UniString::CopyAsciiStr() - pAsciiStr include characters > 127" );
@@ -192,8 +192,6 @@ UniString UniString::CreateFromAscii( const sal_Char* pAsciiStr )
     UniString aTempStr;
     if ( nLen )
     {
-        if ( nLen > STRING_MAXLEN )
-            nLen = STRING_MAXLEN;
         ImplCopyAsciiStr( aTempStr.AllocBuffer( nLen ), pAsciiStr, nLen );
     }
     return aTempStr;
@@ -213,8 +211,6 @@ UniString UniString::CreateFromAscii( const sal_Char* pAsciiStr, xub_StrLen nLen
 
     if ( nLen )
     {
-        if ( nLen > STRING_MAXLEN )
-            nLen = STRING_MAXLEN;
         ImplCopyAsciiStr( aTempStr.AllocBuffer( nLen ), pAsciiStr, nLen );
     }
     return aTempStr;
@@ -307,7 +303,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
     DBG_ASSERT( pAsciiStr, "UniString::AppendAscii() - pAsciiStr is NULL" );
 
     // Stringlaenge ermitteln
-    xub_StrLen nCopyLen = ImplStringLen( pAsciiStr );
+    sal_Int32 nCopyLen = ImplStringLen( pAsciiStr );
 
     // Ueberlauf abfangen
     nCopyLen = ImplGetCopyLen( mpData->mnLen, nCopyLen );
@@ -354,7 +350,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 #endif
 
     // Ueberlauf abfangen
-    xub_StrLen nCopyLen = ImplGetCopyLen( mpData->mnLen, nLen );
+    sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, nLen );
 
     // Ist es kein leerer String
     if ( nCopyLen )
@@ -382,7 +378,7 @@ UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
     DBG_ASSERT( pAsciiStr, "UniString::InsertAscii() - pAsciiStr is NULL" );
 
     // Stringlaenge ermitteln
-    xub_StrLen nCopyLen = ImplStringLen( pAsciiStr );
+    sal_Int32 nCopyLen = ImplStringLen( pAsciiStr );
 
     // Ueberlauf abfangen
     nCopyLen = ImplGetCopyLen( mpData->mnLen, nCopyLen );
@@ -393,7 +389,7 @@ UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
 
     // Index groesser als Laenge
     if ( nIndex > mpData->mnLen )
-        nIndex = mpData->mnLen;
+        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
 
     // Neue Laenge ermitteln und neuen String anlegen
     UniStringData* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
@@ -440,27 +436,27 @@ UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
         return Erase( nIndex, nCount );
 
     // nCount darf nicht ueber das Stringende hinnausgehen
-    if ( (ULONG)nIndex+nCount > mpData->mnLen )
-        nCount = mpData->mnLen-nIndex;
+    if ( nCount > mpData->mnLen - nIndex )
+        nCount = static_cast< xub_StrLen >(mpData->mnLen-nIndex);
 
     // Reicht eine zeichenweise Zuweisung
     if ( nCount == nStrLen )
     {
-        ImplCopyData( this );
+        ImplCopyData();
         ImplCopyAsciiStr( mpData->maStr+nIndex, pAsciiStr, nStrLen );
         return *this;
     }
 
     // Ueberlauf abfangen
-    nStrLen = ImplGetCopyLen( mpData->mnLen-nCount, nStrLen );
+    sal_Int32 n = ImplGetCopyLen( mpData->mnLen-nCount, nStrLen );
 
     // Neue Daten anlegen
-    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen-nCount+nStrLen );
+    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen-nCount+n );
 
     // String kopieren
     memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
-    ImplCopyAsciiStr( pNewData->maStr+nIndex, pAsciiStr, nStrLen );
-    memcpy( pNewData->maStr+nIndex+nStrLen, mpData->maStr+nIndex+nCount,
+    ImplCopyAsciiStr( pNewData->maStr+nIndex, pAsciiStr, n );
+    memcpy( pNewData->maStr+nIndex+n, mpData->maStr+nIndex+nCount,
             (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
 
     // Alte Daten loeschen und Neue zuweisen
@@ -574,7 +570,7 @@ xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex 
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
                 "UniString::SearchAscii() - pAsciiStr include characters > 127" );
 
-    xub_StrLen nLen     = mpData->mnLen;
+    sal_Int32 nLen = mpData->mnLen;
     xub_StrLen nStrLen  = ImplStringLen( pAsciiStr );
 
     // Falls die Laenge des uebergebenen Strings 0 ist oder der Index
@@ -599,7 +595,7 @@ xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex 
     else
     {
         // Nur innerhalb des Strings suchen
-        while ( (ULONG)nIndex+nStrLen <= nLen )
+        while ( nLen - nIndex >= nStrLen )
         {
             // Stimmt der String ueberein
             if ( ImplStringCompareWithoutZeroAscii( pStr, pAsciiStr, nStrLen ) == 0 )
@@ -641,7 +637,7 @@ void UniString::SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniSt
     while ( nSPos != STRING_NOTFOUND )
     {
         Replace( nSPos, nCharLen, rRepStr );
-        nSPos += rRepStr.Len();
+        nSPos = nSPos + rRepStr.Len();
         nSPos = SearchAscii( pAsciiStr, nSPos );
     }
 }
