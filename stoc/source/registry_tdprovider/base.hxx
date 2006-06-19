@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:02:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,9 +155,10 @@ inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
         return rVal.m_value.aLong;
     case RT_TYPE_UINT32:
         return rVal.m_value.aULong;
+    default:
+        OSL_ENSURE( sal_False, "### unexpected value type!" );
+        return 0;
     }
-    OSL_ENSURE( sal_False, "### unexpected value type!" );
-    return 0;
 }
 //--------------------------------------------------------------------------------------------------
 inline Any getRTValue( const RTConstValue & rVal )
@@ -189,9 +190,10 @@ inline Any getRTValue( const RTConstValue & rVal )
         OUString aStr( rVal.m_value.aString );
         return Any( &aStr, ::getCppuType( (const OUString *)0 ) );
     }
+    default:
+        OSL_ENSURE( sal_False, "### unexpected RTValue!" );
+        return Any();
     }
-    OSL_ENSURE( sal_False, "### unexpected RTValue!" );
-    return Any();
 }
 
 //==================================================================================================
@@ -349,9 +351,9 @@ public:
         const OUString & rName, sal_Int32 nDefaultValue,
         const Sequence< sal_Int8 > & rBytes, bool published )
         : _xTDMgr( xTDMgr )
+        , _aBytes( rBytes )
         , _aName( rName )
         , _nDefaultValue( nDefaultValue )
-        , _aBytes( rBytes )
         , _pEnumNames( 0 )
         , _pEnumValues( 0 )
         , _published( published )
