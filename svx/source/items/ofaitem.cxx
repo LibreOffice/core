@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ofaitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:38:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:13:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 
 #include "ofaitem.hxx"
 
-OfaPtrItem::OfaPtrItem( USHORT nWhich, void *pPtr )
-    : SfxPoolItem( nWhich ), pPtr( pPtr )
+OfaPtrItem::OfaPtrItem( USHORT _nWhich, void *_pPtr )
+    : SfxPoolItem( _nWhich ), pPtr( _pPtr )
 {
 
 }
@@ -50,7 +50,7 @@ int OfaPtrItem::operator==( const SfxPoolItem& rItem) const
     return ((OfaPtrItem&)rItem).pPtr == pPtr;
 }
 
-SfxPoolItem* OfaPtrItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* OfaPtrItem::Clone( SfxItemPool * ) const
 {
     return new OfaPtrItem( *this );
 }
