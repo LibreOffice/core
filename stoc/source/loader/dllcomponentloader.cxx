@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:00:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 }
 
 //*************************************************************************
-void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArgs )
+void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE( 0, "dllcomponentloader::initialize should not be called !" );
@@ -355,7 +355,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
