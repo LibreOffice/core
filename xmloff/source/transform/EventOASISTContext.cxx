@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventOASISTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:42:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,39 +367,38 @@ void XMLEventOASISTransformerContext::StartElement(
                 }
                 break;
             case XML_ATACTION_MACRO_NAME:
+            {
+                OUString aName, aLocation;
+                bool bNeedsTransform =
+                ParseURL( rAttrValue, &aName, &aLocation );
+
+                if ( bNeedsTransform )
                 {
-                    OUString aName, aLocation;
-                    bool bNeedsTransform =
-                        ParseURL( rAttrValue, &aName, &aLocation );
+                    pMutableAttrList->SetValueByIndex( i, aName );
 
-                    if ( bNeedsTransform )
-                    {
-                        pMutableAttrList->SetValueByIndex( i, aName );
+                    sal_Int16 idx = pMutableAttrList->GetIndexByName(
+                    GetTransformer().GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_SCRIPT,
+                    GetXMLToken( XML_LANGUAGE ) ) );
 
-                        sal_Int16 idx = pMutableAttrList->GetIndexByName(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_SCRIPT,
-                            GetXMLToken( XML_LANGUAGE ) ) );
+                    pMutableAttrList->SetValueByIndex( idx,
+                    OUString::createFromAscii("StarBasic") );
 
-                        pMutableAttrList->SetValueByIndex( idx,
-                            OUString::createFromAscii("StarBasic") );
+                    OUString aLocQName(
+                    GetTransformer().GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_SCRIPT,
+                    GetXMLToken( XML_LOCATION ) ) );
 
-                        OUString aLocQName(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_SCRIPT,
-                                GetXMLToken( XML_LOCATION ) ) );
-
-                        pMutableAttrList->AddAttribute( aLocQName, aLocation );
-                    }
-                    else
-                    {
+                    pMutableAttrList->AddAttribute( aLocQName, aLocation );
+                }
+                else
+                {
                     const OUString& rApp = GetXMLToken( XML_APPLICATION );
                     const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
-                    OUString aLocation;
                     OUString aAttrValue;
                     if( rAttrValue.getLength() > rApp.getLength()+1 &&
                         rAttrValue.copy(0,rApp.getLength()).
-                                    equalsIgnoreAsciiCase( rApp ) &&
+                            equalsIgnoreAsciiCase( rApp ) &&
                         ':' == rAttrValue[rApp.getLength()] )
                     {
                         aLocation = rApp;
@@ -407,30 +406,30 @@ void XMLEventOASISTransformerContext::StartElement(
                     }
                     else if( rAttrValue.getLength() > rDoc.getLength()+1 &&
                              rAttrValue.copy(0,rDoc.getLength()).
-                                     equalsIgnoreAsciiCase( rDoc ) &&
-                        ':' == rAttrValue[rDoc.getLength()] )
+                                equalsIgnoreAsciiCase( rDoc ) &&
+                             ':' == rAttrValue[rDoc.getLength()] )
                     {
                         aLocation= rDoc;
                         aAttrValue = rAttrValue.copy( rDoc.getLength()+1 );
                     }
                     if( aAttrValue.getLength() )
                         pMutableAttrList->SetValueByIndex( i,
-                                            aAttrValue );
+                    aAttrValue );
                     if( aLocation.getLength() )
                     {
                         OUString aAttrQName( GetTransformer().GetNamespaceMap().
-                                GetQNameByKey( XML_NAMESPACE_SCRIPT,
-                            ::xmloff::token::GetXMLToken( XML_LOCATION ) ) );
+                        GetQNameByKey( XML_NAMESPACE_SCRIPT,
+                        ::xmloff::token::GetXMLToken( XML_LOCATION ) ) );
                         pMutableAttrList->AddAttribute( aAttrQName, aLocation );
                         // draw bug
                         aAttrQName = GetTransformer().GetNamespaceMap().
-                                GetQNameByKey( XML_NAMESPACE_SCRIPT,
-                            ::xmloff::token::GetXMLToken( XML_LIBRARY ) );
+                        GetQNameByKey( XML_NAMESPACE_SCRIPT,
+                        ::xmloff::token::GetXMLToken( XML_LIBRARY ) );
                         pMutableAttrList->AddAttribute( aAttrQName, aLocation );
                     }
-                    }
                 }
-                break;
+            }
+            break;
             case XML_ATACTION_COPY:
                 break;
             default:
