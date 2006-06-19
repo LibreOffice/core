@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:37:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,28 +85,33 @@ public:
 
     // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-// ::com::sun::star::io::XPersistObject
+
+    // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::beans::XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    using OBoundControlModel::getFastPropertyValue;
 
-// XReset
+    // XReset
     virtual void SAL_CALL reset(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(OEditModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// OAggregationArrayUsageHelper
+    // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+    // XEventListener
+    using OBoundControlModel::disposing;
 
 protected:
     // OControlModel overridables
