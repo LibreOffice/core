@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodelapi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:29:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,19 @@
 #ifndef INCLUDED_SFX_MAILMODEL_HXX
 #define INCLUDED_SFX_MAILMODEL_HXX
 
+#include <vector>
+
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _LINK_HXX
+#include "tools/link.hxx"
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 #ifndef INCLUDED_SFX2_DLLAPI_H
