@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:35:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,6 @@
 
 #include <vcl/svapp.hxx>
 #include <svtools/smplhint.hxx>
-
-#pragma hdrstop
 
 #define _SVX_TBCONTRL_CXX
 
@@ -1141,7 +1139,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
         for ( i = 0; i < nCount; i++ )
         {
-            pEntry = pColorTable->Get(i);
+            pEntry = pColorTable->GetColor(i);
             aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
         }
 
@@ -1287,7 +1285,7 @@ void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const 
 
                 for ( i = 0; i < nCount; ++i )
                 {
-                    pEntry = pColorTable->Get(i);
+                    pEntry = pColorTable->GetColor(i);
                     aColorSet.SetItemColor( i + 1, pEntry->GetColor() );
                     aColorSet.SetItemText ( i + 1, pEntry->GetName() );
                 }
