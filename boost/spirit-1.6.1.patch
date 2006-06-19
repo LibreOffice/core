@@ -147,8 +147,22 @@
 *** misc/spirit-1.6.1/miniboost/boost/optional.hpp	2003-07-08 04:19:09.000000000 +0200
 --- misc/build/spirit-1.6.1/miniboost/boost/optional.hpp	2005-04-01 15:23:03.764855626 +0200
 ***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_OPTIONAL_FLC_19NOV2002_HPP
+  #define BOOST_OPTIONAL_FLC_19NOV2002_HPP
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include<new>
+  #include<algorithm>
+  
+***************
 *** 194,200 ****
---- 194,204 ----
+--- 199,209 ----
   
       // implicit conversion to "bool"
       // No-throw
@@ -160,6 +174,18 @@
   
          // This is provided for those compilers which don't like the conversion to bool
          // on some contexts.
+***************
+*** 313,317 ****
+--- 322,330 ----
+  
+  } // namespace boost
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif
+  
 *** misc/spirit-1.6.1/miniboost/boost/scoped_array.hpp	2003-07-08 04:19:08.000000000 +0200
 --- misc/build/spirit-1.6.1/miniboost/boost/scoped_array.hpp	2005-04-01 15:26:31.066393207 +0200
 ***************
@@ -225,6 +251,23 @@
       {
 *** misc/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	2003-07-08 04:19:08.000000000 +0200
 --- misc/build/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	2005-04-01 15:29:09.319245401 +0200
+***************
+*** 35,41 ****
+  
+  #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+  # pragma warning(push)
+! # pragma warning(disable:4284) // odd return type for operator->
+  #endif
+  
+  namespace boost
+--- 35,41 ----
+  
+  #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+  # pragma warning(push)
+! # pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
+  #endif
+  
+  namespace boost
 ***************
 *** 246,257 ****
 --- 246,261 ----
