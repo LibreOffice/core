@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawing.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:30:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _DRAWING_H_
 #define _DRAWING_H_
 
-/* NAME $Id: drawing.h,v 1.3 2005-09-07 16:30:32 rt Exp $
+/* NAME
  *
  * NOTES
  *
@@ -223,7 +223,7 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
     common_size = HDOFILE_COMMON_SIZE;
     property_size = 44;
     hdo->type = hmem->read2b();
-    *link_info = hmem->read2b();
+    *link_info = sal::static_int_cast<WORD>(hmem->read2b());
     hdo->offset.x = hmem->read4b();
     hdo->offset.y = hmem->read4b();
     hdo->extent.w = hmem->read4b();
@@ -291,7 +291,7 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
         hdo->property.offset2.y = hmem->read4b();
         if (!hmem->readBlock(hdo->property.szPatternFile, 261))
             return FALSE;
-        hdo->property.pictype = hmem->read1b();
+        hdo->property.pictype = sal::static_int_cast<char>(hmem->read1b());
         common_size += 278;
     }
      if( ( size >= common_size + 3 ) && ( hdo->property.flag & HWPDO_FLAG_WATERMARK ) )
@@ -431,7 +431,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
 // object manipulation function
 
 static int
-HWPDODefaultFunc(int type, HWPDrawingObject * hdo, int cmd, void *, int)
+HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
 {
     if (cmd == OBJFUNC_LOAD)
         return OBJRET_FILE_NO_PRIVATE_BLOCK;
@@ -441,6 +441,7 @@ HWPDODefaultFunc(int type, HWPDrawingObject * hdo, int cmd, void *, int)
 
 // arrow polygon
 
+/* os 06.09.2005: unused function
 static void
 calcArrowPolygonPts(long lWidth, ZZPoint * arrowPt,
 ZZPoint * boxPt, int x1, int y1, int x2, int y2)
@@ -515,7 +516,7 @@ ZZPoint * boxPt, int x1, int y1, int x2, int y2)
         boxPt[2].y = arrowPt[0].y + DY1 - DY2;
     }
 }
-
+*/
 
 static int
 HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
@@ -627,6 +628,7 @@ HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 #define SPLINE_UNIT2    40
 #define SPLINE_UNIT3    60
 
+/* os 06.09.2005: unused function
 static int getBlend(int alpha)
 {
     static bool first = true;
@@ -667,7 +669,7 @@ static int getBlend(int alpha)
     }
     return blend[alpha + SPLINE_UNIT2];
 }
-
+*/
 
 static int
 HWPDOFreeFormFunc(int type, HWPDrawingObject * hdo,
