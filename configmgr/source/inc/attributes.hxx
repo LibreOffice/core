@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:42:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,14 @@ namespace configmgr
         };
         enum Access
         {
-            accessWritable,
-            accessFinal,
-            accessReadonly,
-            accessReadonlyAndFinal
+            accessNull = 0,
+            accessWritable = 0,
+            accessFinal = 1,
+            accessReadonly = 2,
+            accessReadonlyAndFinal = 3
         };
         inline Access makeAccess(bool readonly, bool final)
-        { return Access( (readonly ? accessReadonly : 0u) | (final ? accessFinal : 0u) ); }
+        { return Access( (readonly ? accessReadonly : accessNull) | (final ? accessFinal : accessNull) ); }
         inline bool isAccessReadonly(Access access)
         { return (access & accessReadonly) != 0; }
         inline bool isAccessFinal(Access access)
