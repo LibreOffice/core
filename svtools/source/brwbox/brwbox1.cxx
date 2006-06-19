@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:06:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
-#pragma hdrstop
-
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
@@ -75,11 +73,11 @@
 #include "AccessibleBrowseBoxHeaderCell.hxx"
 #endif
 
-DBG_NAME(BrowseBox);
+DBG_NAME(BrowseBox)
 
 extern const char* BrowseBoxCheckInvariants( const void* pVoid );
 
-DECLARE_LIST( BrowserColumns, BrowserColumn* );
+DECLARE_LIST( BrowserColumns, BrowserColumn* )
 
 #define SCROLL_FLAGS (SCROLL_CLIP | SCROLL_NOCHILDREN)
 #define getDataWindow() ((BrowserDataWin*)pDataWin)
@@ -141,12 +139,11 @@ void BrowseBox::Construct( BrowserMode nMode )
     pCols = new BrowserColumns;
     m_pImpl.reset( new ::svt::BrowseBoxImpl() );
 
-    aLineColor = Color( COL_LIGHTGRAY );
+    aGridLineColor = Color( COL_LIGHTGRAY );
     InitSettings_Impl( this );
     InitSettings_Impl( pDataWin );
 
     bBootstrapped = FALSE;
-    bHasBitmapHandle = FALSE;
     nDataRowHeight = 0;
     nTitleLines = 1;
     nFirstCol = 0;
@@ -244,7 +241,11 @@ short BrowseBox::GetCursorHideCount() const
 
 //-------------------------------------------------------------------
 
-void BrowseBox::DoShowCursor( const char *pWhoLogs )
+void BrowseBox::DoShowCursor( const char *
+#ifdef DBG_MI
+pWhoLogs
+#endif
+)
 {
     short nHiddenCount = --getDataWindow()->nCursorHidden;
     if (PaintCursorIfHiddenOnce())
@@ -262,7 +263,11 @@ void BrowseBox::DoShowCursor( const char *pWhoLogs )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::DoHideCursor( const char *pWhoLogs )
+void BrowseBox::DoHideCursor( const char *
+#ifdef DBG_MI
+pWhoLogs
+#endif
+)
 {
     short nHiddenCount = ++getDataWindow()->nCursorHidden;
     if (PaintCursorIfHiddenOnce())
@@ -287,14 +292,6 @@ void BrowseBox::SetRealRowCount( const String &rRealRowCount )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::SetMapMode( const MapMode& rNewMapMode )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    pDataWin->SetMapMode( rNewMapMode );
-}
-
-//-------------------------------------------------------------------
-
 void BrowseBox::SetFont( const Font& rNewFont )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -304,9 +301,19 @@ void BrowseBox::SetFont( const Font& rNewFont )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::InsertHandleColumn( ULONG nWidth, BOOL bBitmap )
+ULONG BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
+{
+    return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth( '0' ) * 4;
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::InsertHandleColumn( ULONG nWidth )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+
+    if ( !nWidth )
+        nWidth = GetDefaultColumnWidth( String() );
 
     pCols->Insert( new BrowserColumn( 0, Image(), String(), nWidth, GetZoom(), 0 ), (ULONG) 0 );
     FreezeColumn( 0 );
@@ -325,7 +332,6 @@ void BrowseBox::InsertHandleColumn( ULONG nWidth, BOOL bBitmap )
         getDataWindow()->pHeaderBar->InsertItem( USHRT_MAX - 1,
                 "", nWidth, HIB_FIXEDPOS|HIB_FIXED, 0 );*/
     ColumnInserted( 0 );
-    bHasBitmapHandle = bBitmap;
 }
 
 //-------------------------------------------------------------------
@@ -518,7 +524,6 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
         return;
 
     // does the state change?
-    BrowserColumn *pCol = pCols->GetObject(nOldPos);
     if (nOldPos != nPos)
     {
         // remark the column selection
@@ -911,7 +916,7 @@ void BrowseBox::RemoveColumns()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    long nOldCount = pCols->Count();
+    unsigned int nOldCount = pCols->Count();
     // alle Spalten entfernen
     while ( pCols->Count() )
         delete ( pCols->Remove( (ULONG) 0 ));
@@ -1034,20 +1039,6 @@ void BrowseBox::SetTitleLines( USHORT nLines )
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     nTitleLines = nLines;
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::ToTop()
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::ToBottom()
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 //-------------------------------------------------------------------
@@ -1264,7 +1255,7 @@ long BrowseBox::ScrollRows( long nRows )
 
 //-------------------------------------------------------------------
 
-long BrowseBox::ScrollPages( long nPagesY )
+long BrowseBox::ScrollPages( long )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -1796,8 +1787,6 @@ BOOL BrowseBox::GoToRowColumnId( long nRow, USHORT nColId )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    long nOldCurRow = nCurRow;
-
     // out of range?
     if ( nRow < 0 || nRow >= nRowCount )
         return FALSE;
@@ -2070,9 +2059,6 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
     }
     else
     {
-#ifdef DBG_UTIL
-        BrowserColumn* pNewSelectedCol = pCols->GetObject( nNewColPos );
-#endif
         if ( !GoToColumnId( pCols->GetObject( nNewColPos )->GetId(), bMakeVisible ) )
             return;
     }
@@ -2174,11 +2160,11 @@ long BrowseBox::PrevSelectedRow()
 
 //-------------------------------------------------------------------
 
-long BrowseBox::LastSelectedRow( BOOL bInverse )
+long BrowseBox::LastSelectedRow()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    return bMultiSelection ? uRow.pSel->LastSelected(bInverse) : uRow.nSel;
+    return bMultiSelection ? uRow.pSel->LastSelected() : uRow.nSel;
 }
 
 //-------------------------------------------------------------------
@@ -2579,7 +2565,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     getDataWindow()->bOwnDataChangedHdl =
             BROWSER_OWN_DATACHANGED == ( nMode & BROWSER_OWN_DATACHANGED );
 
-    // Headerbar erzeugen, was passiert, wenn eine erzeugt werden muß und schon Spalten bestehen ?
+    // Headerbar erzeugen, was passiert, wenn eine erzeugt werden muï¿½ und schon Spalten bestehen ?
     if ( BROWSER_HEADERBAR_NEW == ( nMode & BROWSER_HEADERBAR_NEW ) )
     {
         if (!getDataWindow()->pHeaderBar)
@@ -2636,7 +2622,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::VisibleRowsChanged( long nNewTopRow, USHORT nNumRows)
+void BrowseBox::VisibleRowsChanged( long, USHORT )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -2653,7 +2639,7 @@ void BrowseBox::VisibleRowsChanged( long nNewTopRow, USHORT nNumRows)
 
 //-------------------------------------------------------------------
 
-BOOL BrowseBox::IsCursorMoveAllowed( long nNewRow, USHORT nNewColId ) const
+BOOL BrowseBox::IsCursorMoveAllowed( long, USHORT ) const
 
 /*  [Beschreibung]
 
