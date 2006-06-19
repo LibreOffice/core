@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:06:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ using namespace ::com::sun::star::beans;
 #define SfxTopViewFrame
 #include "sfxslots.hxx"
 
-DBG_NAME(SfxTopViewFrame);
+DBG_NAME(SfxTopViewFrame)
 
 #include <comphelper/sequenceashashmap.hxx>
 static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
@@ -745,7 +745,7 @@ void SfxTopFrame::LockResize_Impl( BOOL bLock )
     pImp->bLockResize = bLock;
 }
 
-IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
+IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, EMPTYARG )
 {
     if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
         return 0L;
@@ -1060,7 +1060,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
 //========================================================================
 
-long SfxViewFrameClose_Impl( void* pObj, void* pArg )
+long SfxViewFrameClose_Impl( void* /*pObj*/, void* pArg )
 {
     ((SfxViewFrame*)pArg)->GetFrame()->DoClose();
     return 0;
@@ -1166,6 +1166,7 @@ void SfxTopViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( IsDowning_Impl())
         return;
+
     // we know only SimpleHints
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
     {
@@ -1181,9 +1182,7 @@ void SfxTopViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 // on all other changes force repaint
                 GetFrame()->DoClose();
                 return;
-                break;
-
-        }
+    }
     }
 
     SfxViewFrame::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
@@ -1201,7 +1200,6 @@ sal_Bool SfxTopViewFrame::Close()
     // eigentliches Schlie\sen
     if ( SfxViewFrame::Close() )
     {
-        SfxApplication *pSfxApp = SFX_APP();
         if (SfxViewFrame::Current() == this)
             SfxViewFrame::SetViewFrame(0);
 
@@ -1306,7 +1304,6 @@ SfxTopViewFrame::~SfxTopViewFrame()
 
     SetDowning_Impl();
 
-    SfxApplication *pApp = SFX_APP();
     if ( SfxViewFrame::Current() == this )
         SfxViewFrame::SetViewFrame(NULL);
 
