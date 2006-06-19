@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smplmailentry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:09:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 
 namespace
 {
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& )
     {
         return Reference< XInterface >( static_cast< XSimpleMailClientSupplier* >( new CSmplMailSuppl( ) ) );
     }
@@ -97,7 +97,7 @@ extern "C"
 //----------------------------------------------------------------------
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -106,7 +106,7 @@ void SAL_CALL component_getImplementationEnvironment(
 //
 //-----------------------------------------------------------------------
 
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     sal_Bool bRetVal = sal_True;
 
@@ -133,7 +133,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
+void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
 
