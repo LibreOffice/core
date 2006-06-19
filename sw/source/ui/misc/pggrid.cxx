@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:39:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aColorLB.InsertAutomaticEntry();
     for( USHORT i = 0; i < pColorTbl->Count(); ++i )
     {
-        XColorEntry* pEntry = pColorTbl->Get( i );
+        XColorEntry* pEntry = pColorTbl->GetColor( i );
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
         aColorLB.InsertEntry( aColor, sName );
