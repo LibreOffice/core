@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:16:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
             printf(
                 "%s    parameter count: %u\n", indent.getStr(),
                 static_cast< unsigned int >(reader.getMethodParameterCount(i)));
-            {for (sal_uInt32 j = 0; j < reader.getMethodParameterCount(i); ++j)
+            for (sal_uInt16 j = 0; j < reader.getMethodParameterCount(i); ++j)
             {
                 printf(
                     "%s    parameter %u:\n", indent.getStr(),
@@ -417,18 +417,18 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
                 printf("%s        type name: ", indent.getStr());
                 printString(reader.getMethodParameterTypeName(i, j));
                 printf("\n");
-            }}
+            }
             printf(
                 "%s    exception count: %u\n", indent.getStr(),
                 static_cast< unsigned int >(reader.getMethodExceptionCount(i)));
-            {for (sal_uInt32 j = 0; j < reader.getMethodExceptionCount(i); ++j)
+            for (sal_uInt16 j = 0; j < reader.getMethodExceptionCount(i); ++j)
             {
                 printf(
                     "%s    exception type name %u: ", indent.getStr(),
                     static_cast< unsigned int >(j));
                 printString(reader.getMethodExceptionTypeName(i, j));
                 printf("\n");
-            }}
+            }
         }}
         printf(
             "%sreference count: %u\n", indent.getStr(),
@@ -537,13 +537,10 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         {
             case  store_E_NotExists:
                 return REG_REGISTRY_NOT_EXISTS;
-                break;
             case store_E_LockingViolation:
                 return REG_CANNOT_OPEN_FOR_READWRITE;
-                break;
             default:
                 return REG_INVALID_REGISTRY;
-                break;
         }
     } else
     {
@@ -556,7 +553,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
             m_name = regName;
             m_isOpen = sal_True;
 
-            m_openKeyTable[ROOT] = new ORegKey(ROOT, rStoreDir, this);
+            m_openKeyTable[ROOT] = new ORegKey(ROOT, this);
             return REG_NO_ERROR;
         } else
             return REG_INVALID_REGISTRY;
@@ -702,7 +699,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     } while( nIndex != -1 );
 
 
-    pKey = new ORegKey(sFullKeyName, rStoreDir, this);
+    pKey = new ORegKey(sFullKeyName, this);
     *phNewKey = pKey;
     m_openKeyTable[sFullKeyName] = pKey;
 
@@ -783,7 +780,7 @@ RegError ORegistry::openKeyWithoutLink(
         if( _err != store_E_None )
             return REG_KEY_NOT_EXISTS;
 
-        pRet = new ORegKey(sFullKeyName, rStoreDir, this);
+        pRet = new ORegKey(sFullKeyName, this);
         *phOpenKey = pRet;
         m_openKeyTable[sFullKeyName] = pRet;
     }
@@ -923,7 +920,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
     if (_err == store_E_WrongFormat)
         return REG_INVALID_KEY;
 
-    pKey = new ORegKey(sFullKeyName, rStoreDir, this);
+    pKey = new ORegKey(sFullKeyName, this);
 
     *phOpenKey = pKey;
     m_openKeyTable[sFullKeyName] = pKey;
@@ -1029,12 +1026,14 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName, RESOLVE eRe
     }
 
     RegKeyHandle    hOldKey;
-    if (_ret = pKey->openKey(keyName, &hOldKey, eResolve))
+    _ret = pKey->openKey(keyName, &hOldKey, eResolve);
+    if (_ret)
     {
         return _ret;
     }
 
-    if (_ret = deleteSubkeysAndValues((ORegKey*)hOldKey, eResolve))
+    _ret = deleteSubkeysAndValues((ORegKey*)hOldKey, eResolve);
+    if (_ret)
     {
         pKey->closeKey(hOldKey);
         return _ret;
@@ -1053,7 +1052,8 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName, RESOLVE eRe
     // set flag deleted !!!
     ((ORegKey*)hOldKey)->setDeleted(sal_True);
 
-    if (_ret = pKey->closeKey(hOldKey))
+    _ret = pKey->closeKey(hOldKey);
+    if (_ret)
     {
         return _ret;
     }
@@ -1079,7 +1079,8 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey, RESOLVE eResolve)
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
-            if ((_ret = eraseKey(pKey, keyName, eResolve)))
+            _ret = eraseKey(pKey, keyName, eResolve);
+            if (_ret)
                 return _ret;
         } else
         {
@@ -1112,7 +1113,8 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
     ORegKey         *pKey, *pRootKey;
 
     pReg = new ORegistry();
-    if (_ret = pReg->initRegistry(regFileName, REG_READONLY))
+    _ret = pReg->initRegistry(regFileName, REG_READONLY);
+    if (_ret)
     {
         return _ret;
     }
@@ -1169,7 +1171,8 @@ RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
     ORegKey         *pKey, *pRootKey;
 
     pReg = new ORegistry();
-    if (_ret = pReg->initRegistry(regFileName, REG_CREATE))
+    _ret = pReg->initRegistry(regFileName, REG_CREATE);
+    if (_ret)
     {
         return _ret;
     }
@@ -1337,9 +1340,10 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     {
         if (valueType == RG_VALUETYPE_BINARY)
         {
-            if (_ret = checkBlop(rValue, pTargetKey, sTargetPath,
-                                 valueName, valueSize, pBuffer+VALUE_HEADEROFFSET,
-                                 bReport))
+            _ret = checkBlop(
+                rValue, sTargetPath, valueSize, pBuffer+VALUE_HEADEROFFSET,
+                bReport);
+            if (_ret)
             {
                 if (_ret == REG_MERGE_ERROR ||
                     (_ret == REG_MERGE_CONFLICT && bWarnings))
@@ -1382,9 +1386,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 //  checkblop()
 //
 RegError ORegistry::checkBlop(OStoreStream& rValue,
-                              ORegKey* pTargetKey,
                               const OUString& sTargetPath,
-                              const OUString& valueName,
                               sal_uInt32 srcValueSize,
                               sal_uInt8* pSrcBuffer,
                               sal_Bool bReport)
@@ -1440,8 +1442,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                     if (reader.getFieldCount() > 0 &&
                         reader2.getFieldCount() > 0)
                     {
-                        mergeModuleValue(rValue, pTargetKey, sTargetPath,
-                                         valueName, reader, reader2);
+                        mergeModuleValue(rValue, reader, reader2);
 
                         rtl_freeMemory(pBuffer);
                         return REG_NO_ERROR;
@@ -1519,9 +1520,6 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
 //  mergeModuleValue()
 //
 RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
-                                     ORegKey* pTargetKey,
-                                     const OUString& sTargetPath,
-                                     const OUString& valueName,
                                      RegistryTypeReader& reader,
                                      RegistryTypeReader& reader2)
 {
@@ -1634,8 +1632,9 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
         m_openKeyTable[sFullKeyName]->setDeleted(sal_False);
     }
 
-
-    if (_ret = pSourceKey->openKey(keyName, (RegKeyHandle*)&pTmpKey, RESOLVE_NOTHING))
+    _ret = pSourceKey->openKey(
+        keyName, (RegKeyHandle*)&pTmpKey, RESOLVE_NOTHING);
+    if (_ret)
     {
         return _ret;
     }
@@ -1689,8 +1688,7 @@ ORegKey* ORegistry::getRootKey()
 //
 RegError ORegistry::getResolvedKeyName(RegKeyHandle hKey,
                                        const OUString& keyName,
-                                       OUString& resolvedName,
-                                       sal_Bool firstLinkOnly)
+                                       OUString& resolvedName)
 {
     ORegKey*    pKey;
 
@@ -1704,7 +1702,7 @@ RegError ORegistry::getResolvedKeyName(RegKeyHandle hKey,
     else
         pKey = m_openKeyTable[ROOT];
 
-       resolvedName = resolveLinks(pKey, keyName, firstLinkOnly);
+       resolvedName = resolveLinks(pKey, keyName);
 
     if ( resolvedName.getLength() )
         return REG_NO_ERROR;
@@ -2063,7 +2061,7 @@ RegError ORegistry::createLink(RegKeyHandle hKey,
     else
         pKey = m_openKeyTable[ROOT];
 
-    OUString sFullLinkName = resolveLinks(pKey, linkName, sal_True);
+    OUString sFullLinkName = resolveLinks(pKey, linkName);
 
     if (sFullLinkName.getLength() == 0)
         return REG_DETECT_RECURSION;
@@ -2090,7 +2088,7 @@ RegError ORegistry::createLink(RegKeyHandle hKey,
         }
     } while( nIndex != -1 && token.getLength() > 0 );
 
-    pKey = new ORegKey(sFullLinkName, linkTarget, rStoreDir, this);
+    pKey = new ORegKey(sFullLinkName, linkTarget, this);
     delete pKey;
 
     return REG_NO_ERROR;
@@ -2148,7 +2146,8 @@ RegError ORegistry::deleteLink(RegKeyHandle hKey, const OUString& linkName)
 
     RegKeyType  keyType;
     RegError    ret = REG_NO_ERROR;
-    if (ret = pKey->getKeyType(resolvedPath, &keyType))
+    ret = pKey->getKeyType(resolvedPath, &keyType);
+    if (ret)
         return ret;
 
     if (keyType != RG_LINKTYPE)
@@ -2161,7 +2160,7 @@ RegError ORegistry::deleteLink(RegKeyHandle hKey, const OUString& linkName)
 //  resolveLinks()
 //
 
-OUString ORegistry::resolveLinks(ORegKey* pKey, const OUString& path, sal_Bool firstLinkOnly)
+OUString ORegistry::resolveLinks(ORegKey* pKey, const OUString& path)
 {
     OUString    resolvedPath(pKey->getName());
     sal_Int32   nIndex = 0;
@@ -2220,9 +2219,8 @@ ORegKey* ORegistry::resolveLink(ORegKey* pKey, OUString& resolvedPath, const OUS
                           name, KEY_MODE_OPENREAD) )
     {
         resolvedPath += name;
-        pTmpKey = new ORegKey(resolvedPath, rStoreDir, pKey->getRegistry());
+        pTmpKey = new ORegKey(resolvedPath, pKey->getRegistry());
         RegKeyType  keyType;
-        sal_Bool    bIsLink=sal_False;
         if (!pTmpKey->getKeyType(OUString(), &keyType) && (keyType == RG_LINKTYPE))
         {
             resolvedPath = pTmpKey->getLinkTarget();
