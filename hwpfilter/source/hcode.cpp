@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hcode.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:33:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
  * Special johap code => ks code => unicode
  */
 #include "precompile.h"
-
+#include <sal/types.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -411,6 +411,7 @@ static unsigned hhtg_tg[] =
     0xD4D8, 0xD4F7, 0xD4FA, 0xD4FE, 0xD4DC, 0xD4DD, 0xD4DE, 0xD4DF
 };
 
+/* os: unused
 static unsigned compatible_jamo[] =
 {
      0x8000, 0x8001, 0x8002, 0x8003, 0x8004, 0x8005, 0x8006, 0x8007,
@@ -425,7 +426,7 @@ static unsigned compatible_jamo[] =
      0x8406, 0x8817, 0x8401, 0x8818, 0x8402, 0x8403, 0x8404, 0x8407,
      0x8c0e, 0x8408, 0x8c14, 0x8c15, 0x9000, 0x8405, 0x9005, 0x9014,
      0x9015, 0x8621, 0x8701, 0x9400, 0x8721, 0x87c1, 0x87e1
-};
+};*/
 
 #define LINEBASE    0x3013
 
@@ -467,7 +468,7 @@ static hchar s_hh2ks(hchar hh)
         return 0x2020;
     if (hh >= HCA_TG)
     {
-        return (tblhhtg_ks[hh - HCA_TG]);
+        return sal::static_int_cast<hchar>((tblhhtg_ks[hh - HCA_TG]));
     }
     hh -= HCA_KSS;
     idx = hh / 0x60 + 161;
@@ -488,7 +489,7 @@ static hchar s_hh2kssm(hchar hh)
     if ((idx < 0x34 || idx >= 0x38) && idx != 0x1F)
         return 0;
     if (hh >= HCA_TG)
-        return (hhtg_tg[hh - HCA_TG]);
+        return sal::static_int_cast<hchar>((hhtg_tg[hh - HCA_TG]));
     if (idx == 0x1F)
         hh = hh - 0x1F00 + 0x360;
     else
@@ -574,8 +575,8 @@ static hchar cdkssm2ks_han(hchar kssm)
     index = KsSearch(kssm);
     if (kssm != ksTbl[index])
         return jaso2ks(kssm);
-    hi = index / (0xFE - 0xA1 + 1) + 0xB0;
-    lo = index % (0xFE - 0xA1 + 1) + 0xA1;
+    hi = sal::static_int_cast<char>(index / (0xFE - 0xA1 + 1) + 0xB0);
+    lo = sal::static_int_cast<unsigned char>(index % (0xFE - 0xA1 + 1) + 0xA1);
     return lo | (hi << 8);
 }
 
@@ -597,6 +598,7 @@ static const hchar jaso_hh_code[] =
     34465, 34497, 34529, 34625, 34657, 34689, 34721
 };
 
+/* os: unused
 static int is_jaso(hchar hh)
 {
     unsigned int i;
@@ -605,7 +607,7 @@ static int is_jaso(hchar hh)
         if (hh == jaso_hh_code[i])
             return 1;
     return 0;
-}
+}*/
 
 
 static hchar jaso2ks(hchar hh)
@@ -615,7 +617,7 @@ static hchar jaso2ks(hchar hh)
     for (i = 0; i < sizeof(jaso_hh_code) / sizeof(jaso_hh_code[0]); i++)
         if (hh == jaso_hh_code[i])
     {
-        return 0xa4a1 + i;
+        return sal::static_int_cast<hchar>(0xa4a1 + i);
     }
     return 0;
 }
@@ -979,20 +981,20 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
             /*  한자코드는 상위코드와 하위코드로 나누어지며 하위코드는 0xA1 - 0xFE 까지의 값을 가진다.
                 즉 하위코드에 올수있는 가지수는 0xFE - 0xA1 +1 가지수이다.
              */
-            hi = index / (0xFE - 0xA1 + 1) + 0xCA;
-            lo = index % (0xFE - 0xA1 + 1) + 0xA1;
+            hi = sal::static_int_cast<unsigned char>(index / (0xFE - 0xA1 + 1) + 0xCA);
+            lo = sal::static_int_cast<unsigned char>(index % (0xFE - 0xA1 + 1) + 0xA1);
             ch = (hi << 8) | lo;
         }
           else if(codeType == UNICODE){
-                hi = index / (0xFE - 0xA1 + 1) + 0xCA;
-                lo = index % (0xFE - 0xA1 + 1) + 0xA1;
+                hi = sal::static_int_cast<unsigned char>(index / (0xFE - 0xA1 + 1) + 0xCA);
+                lo = sal::static_int_cast<unsigned char>(index % (0xFE - 0xA1 + 1) + 0xA1);
                 ch = (hi << 8) | lo;
                 ch = ksc5601_han_to_ucs2(ch);
           }
         else
         {
-            hi = index / (0x100 - 0x31 - 0x11 - 2) + 0xE0;
-            lo = index % (0x100 - 0x31 - 0x11 - 2) + 0x31;
+            hi = sal::static_int_cast<unsigned char>(index / (0x100 - 0x31 - 0x11 - 2) + 0xE0);
+            lo = sal::static_int_cast<unsigned char>(index % (0x100 - 0x31 - 0x11 - 2) + 0x31);
             if (lo >= 0x7F)
                 lo += 0x12;
             ch = (hi << 8) | lo;
@@ -1009,7 +1011,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
     else if (0x2f00 <= ch && ch <= 0x2f6f && (ch & 0x0f) < 9)
     {
 // bullet
-        lo = ch & 0x0f;
+        lo = sal::static_int_cast<unsigned char>(ch & 0x0f);
 
         if( codeType != KSSM )
         {
@@ -1121,7 +1123,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
              return 1;
          }
          else{ /* 고어포함 자모조합 : 테이블 미완성 */
-             int index = choseong * 32 + jongseong - 308;
+             unsigned int index = choseong * 32 + jongseong - 308;
              if( index < sizeof(jamocomp1_to_unicode)/sizeof(jamocomp1_to_unicode[0])){
                  dest[0] = jamocomp1_to_unicode[index].v1;
                  dest[1] = jamocomp1_to_unicode[index].v2;
@@ -1183,11 +1185,11 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
 
 hchar ksc5601_sym_to_ucs2 (hchar input)
 {
-    unsigned char ch = input >> 8;
+    unsigned char ch = sal::static_int_cast<unsigned char>(input >> 8);
     unsigned char ch2;
     int idx;
 
-    ch2 = input & 0xff;
+    ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx <= 1114 && idx >= 0){
     hchar value = ksc5601_sym_to_ucs[idx];
@@ -1198,11 +1200,11 @@ hchar ksc5601_sym_to_ucs2 (hchar input)
 
 hchar ksc5601_han_to_ucs2 (hchar input)
 {
-    unsigned char ch = input >> 8;
+    unsigned char ch = sal::static_int_cast<unsigned char>(input >> 8);
     unsigned char ch2;
     int idx;
 
-    ch2 = input & 0xff;
+    ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx >= 3854){
     // Hanja : row 42 - row 93 : 3854 = 94 * (42-1)
@@ -1243,11 +1245,12 @@ int hstr2ksstr(hchar* hstr, char* buf)
           for( j = 0 ; j < res ; j++ ){
               c = dest[j];
               if( c < 32 ) c = ' ';
-              else if( c < 256 ) tmp[i++] = c;
+              else if( c < 256 )
+                    tmp[i++] = sal::static_int_cast<char>(c);
               else
               {
-                    tmp[i++] = (c >> 8 ) & 0xff;
-                    tmp[i++] = c & 0xff;
+                    tmp[i++] = sal::static_int_cast<char>((c >> 8 ) & 0xff);
+                    tmp[i++] = sal::static_int_cast<char>(c & 0xff);
               }
           }
     }
@@ -1355,7 +1358,7 @@ char *urltounix(const char *src, char *dest )
 {
     if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) // Home Dir
     {
-        int i, len;
+        unsigned int i, len;
         sprintf(dest,"file://%s/", getenv("HOME") );
         len = strlen( dest );
 
@@ -1371,7 +1374,7 @@ char *urltounix(const char *src, char *dest )
     }
     else if( src[0] == 'D' && src[1] == ':' && src[2] == '\\' ) // Root Dir
     {
-        int i, len;
+        unsigned int i, len;
         sprintf(dest,"file:///");
         len = strlen( dest );
         for( i = 0 ; i + 3 < strlen(src) ; i++ )
@@ -1386,7 +1389,7 @@ char *urltounix(const char *src, char *dest )
     }
     else if( !strncmp(src,"http",4)  ) // Start from "http"
      {
-        int i;
+        unsigned int i;
         for( i = 0 ; i < strlen(src) ; i++ )
         {
             if( src[i] == '\\')
@@ -1399,19 +1402,17 @@ char *urltounix(const char *src, char *dest )
     }
      else
     {
-        int i, len, srclen;
+        unsigned int i, len, srclen;
           srclen = strlen(src);
           char ext[4];
           strncpy(ext,src + srclen - 3,3);
           ext[3]=0;
 #ifdef _WIN32
-          if( !_strnicmp(ext,"HWP",3) || !_strnicmp(ext,"HWT",3))
+          if( _strnicmp(ext,"HWP",3) && _strnicmp(ext,"HWT",3))
 #else
-          if( !strcasecmp(ext,"HWP") || !strcasecmp(ext,"HWT"))
+          if( strcasecmp(ext,"HWP") && strcasecmp(ext,"HWT"))
 #endif
-                sprintf(dest, "");
-          else
-                sprintf(dest, "http://");
+              sprintf(dest, "http://");
           len = strlen(dest);
         for( i = 0 ; i < strlen(src) ; i++ )
         {
@@ -1431,7 +1432,7 @@ char *urltowin(const char *src, char *dest )
     if( !_strnicmp(src, "http", 4))
      {
         int i;
-        for( i = 0 ; i < strlen(src) ; i++ )
+        for( i = 0 ; i < sal::static_int_cast<int>(strlen(src)) ; i++ )
         {
             if( src[i] == '\\')
                 dest[i] = '/';
@@ -1456,7 +1457,7 @@ char *urltowin(const char *src, char *dest )
           }
           sprintf(dest, "http://");
           len = strlen(dest);
-        for( i = 0 ; i < strlen(src) ; i++ )
+        for( i = 0 ; i < sal::static_int_cast<int>(strlen(src)) ; i++ )
         {
             if( src[i] == '\\')
                 dest[i+len] = '/';
