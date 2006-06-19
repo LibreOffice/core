@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:49:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1610,56 +1610,42 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
     {
     case XML_ETACTION_DOCUMENT:
         return new XMLDocumentTransformerContext_Impl( *this, rQName );
-
-        break;
     case XML_ETACTION_DOCUMENT_RENAME:
         return new XMLDocumentTransformerContext_Impl( *this, rQName,
                             rAction.GetQNamePrefixFromParam1(),
                             rAction.GetQNameTokenFromParam1() );
-        break;
     case XML_ETACTION_BODY:
         return new XMLBodyTransformerContext_Impl( *this, rQName );
-        break;
     case XML_ETACTION_STYLE:
         return new XMLStyleOOoTContext( *this, rQName,
                                static_cast< XMLFamilyType >( rAction.m_nParam1 ),
                                bPersistent  );
-        break;
     case XML_ETACTION_STYLE_RENAME:
         return new XMLStyleOOoTContext( *this, rQName,
                     static_cast< XMLFamilyType >( rAction.m_nParam2 ),
                     rAction.GetQNamePrefixFromParam1(),
                     rAction.GetQNameTokenFromParam1(),
                     bPersistent );
-        break;
     case XML_ETACTION_FRAME:
         return new XMLFrameOOoTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_EVENT:
         return new XMLEventOOoTransformerContext( *this, rQName, bPersistent );
-        break;
     case XML_ETACTION_TAB_STOP:
         return new XMLTabStopOOoTContext_Impl( *this, rQName );
-        break;
     case XML_ETACTION_FORM_CONTROL:
         return new XMLControlOOoTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_FORM_PROPERTY:
         return new XMLFormPropOOoTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_CHART:
         return new XMLChartOOoTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_TRACKED_CHANGES:
         return new XMLTrackedChangesOOoTContext_Impl( *this, rQName,
                                rAction.GetQNamePrefixFromParam1(),
                             rAction.GetQNameTokenFromParam1() );
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOOoTContext( *this, rQName );
-        break;
     case XML_ETACTION_TABLE:
         return new XMLTableOOoTransformerContext_Impl( *this, rQName );
-        break;
     default:
         OSL_ENSURE( !this, "no user defined context found!" );
     }
@@ -2112,7 +2098,7 @@ OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
     return m_aImplName;
 }
 
-sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& )
     throw(RuntimeException)
 {
     return sal_False;
@@ -2158,7 +2144,7 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() th
 }
 
 Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr )
+        const Reference< XMultiServiceFactory > & )
     throw( Exception )
 {
     return (cppu::OWeakObject*)new OOo2OasisTransformer();
@@ -2178,7 +2164,7 @@ Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\
 }                                                                       \
                                                                         \
 Reference< XInterface > SAL_CALL className##_createInstance(            \
-        const Reference< XMultiServiceFactory > & rSMgr )               \
+        const Reference< XMultiServiceFactory > & )                     \
     throw( Exception )                                                  \
 {                                                                       \
     return (cppu::OWeakObject*)new OOo2OasisTransformer( implName,      \
