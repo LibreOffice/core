@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabarea.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:53:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,30 +52,30 @@
 class SvxAreaTabDialog : public SfxTabDialog
 {
 private:
-    SdrModel*           pDrawModel;
-    const SdrView*      pView;
+    SdrModel*           mpDrawModel;
+//  const SdrView*      mpView;
 
-    XColorTable*        pColorTab;
-    XColorTable*        pNewColorTab;
-    XGradientList*      pGradientList;
-    XGradientList*      pNewGradientList;
-    XHatchList*         pHatchingList;
-    XHatchList*         pNewHatchingList;
-    XBitmapList*        pBitmapList;
-    XBitmapList*        pNewBitmapList;
+    XColorTable*        mpColorTab;
+    XColorTable*        mpNewColorTab;
+    XGradientList*      mpGradientList;
+    XGradientList*      mpNewGradientList;
+    XHatchList*         mpHatchingList;
+    XHatchList*         mpNewHatchingList;
+    XBitmapList*        mpBitmapList;
+    XBitmapList*        mpNewBitmapList;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&   mrOutAttrs;
 
-    ChangeType          nColorTableState;
-    ChangeType          nBitmapListState;
-    ChangeType          nGradientListState;
-    ChangeType          nHatchingListState;
+    ChangeType          mnColorTableState;
+    ChangeType          mnBitmapListState;
+    ChangeType          mnGradientListState;
+    ChangeType          mnHatchingListState;
 
-    USHORT              nPageType;
-    USHORT              nDlgType;
-    USHORT              nPos;
-    BOOL                bAreaTP;
-    BOOL                bDeleteColorTable;
+    USHORT              mnPageType;
+    USHORT              mnDlgType;
+    USHORT              mnPos;
+    BOOL                mbAreaTP;
+    BOOL                mbDeleteColorTable;
 
     virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
@@ -93,28 +93,28 @@ public:
     ~SvxAreaTabDialog();
 
     void                 SetNewColorTable( XColorTable* pColTab )
-                            { pNewColorTab = pColTab; }
-    XColorTable*         GetNewColorTable() const { return pNewColorTab; }
-    const XColorTable*   GetColorTable() const { return pColorTab; }
+                            { mpNewColorTab = pColTab; }
+    XColorTable*         GetNewColorTable() const { return mpNewColorTab; }
+    const XColorTable*   GetColorTable() const { return mpColorTab; }
 
     void                 SetNewGradientList( XGradientList* pGrdLst)
-                            { pNewGradientList = pGrdLst; }
+                            { mpNewGradientList = pGrdLst; }
     XGradientList*       GetNewGradientList() const
-                            { return pNewGradientList; }
-    const XGradientList* GetGradientList() const { return pGradientList; }
+                            { return mpNewGradientList; }
+    const XGradientList* GetGradientList() const { return mpGradientList; }
 
     void                 SetNewHatchingList( XHatchList* pHtchLst)
-                            { pNewHatchingList = pHtchLst; }
+                            { mpNewHatchingList = pHtchLst; }
     XHatchList*          GetNewHatchingList() const
-                            { return pNewHatchingList; }
-    const XHatchList*    GetHatchingList() const { return pHatchingList; }
+                            { return mpNewHatchingList; }
+    const XHatchList*    GetHatchingList() const { return mpHatchingList; }
 
     void                 SetNewBitmapList( XBitmapList* pBmpLst)
-                            { pNewBitmapList = pBmpLst; }
-    XBitmapList*         GetNewBitmapList() const { return pNewBitmapList; }
-    const XBitmapList*   GetBitmapList() const { return pBitmapList; }
+                            { mpNewBitmapList = pBmpLst; }
+    XBitmapList*         GetNewBitmapList() const { return mpNewBitmapList; }
+    const XBitmapList*   GetBitmapList() const { return mpBitmapList; }
 
-    void                 DontDeleteColorTable() { bDeleteColorTable = FALSE; }
+    void                 DontDeleteColorTable() { mbDeleteColorTable = FALSE; }
 };
 
 /*************************************************************************
@@ -363,8 +363,6 @@ private:
 
     XColorTable*        pColorTab;
     ChangeType*         pnColorTableState;
-//CHINA001  USHORT*             pPageType;
-//CHINA001  USHORT*             pDlgType;
     UINT16              nPageType;  //add CHINA001
     UINT16              nDlgType;   //add CHINA001
     USHORT*             pPos;
