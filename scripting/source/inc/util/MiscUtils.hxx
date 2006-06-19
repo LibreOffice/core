@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:26:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _SCRIPT_FRAMEWORK_MISCUTILS_HXX_
 #define _SCRIPT_FRAMEWORK_MISCUTILS_HXX_
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
