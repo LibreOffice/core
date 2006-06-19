@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddedummy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:59:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ ULONG DdeData::GetFormat() const
   return 0L;
 }
 
-DdeData& DdeData::operator = ( const DdeData& rDdeData )
+DdeData& DdeData::operator = ( const DdeData& )
 {
   return *this;
 }
@@ -120,7 +120,7 @@ void DdeTransaction::Execute(void)
 {
 }
 
-void DdeTransaction::Done( BOOL bDataValid )
+void DdeTransaction::Done( BOOL )
 {
 }
 
