@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_explicit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:54:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ ExplicitType::~ExplicitType()
 }
 
 void
-ExplicitType::do_Visit( Host & io_rHost ) const
+ExplicitType::do_Visit( Host & ) const
 {
     // yet unused.
 }
