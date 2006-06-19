@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:35:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ public:
 };
 
 //========================================================================
-DECLARE_LIST( FmEntryDataBaseList, FmEntryData* );
+DECLARE_LIST( FmEntryDataBaseList, FmEntryData* )
 
 class FmEntryDataList : public FmEntryDataBaseList
 {
@@ -430,7 +430,7 @@ namespace svxform
         ImageList                   m_aNormalImages;
         ImageList                   m_aHCImages;
 
-        void Update( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
+        void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
         FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
 
         void InsertForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm, sal_uInt32 nRelPos);
@@ -455,7 +455,7 @@ namespace svxform
 
         void FillBranch( FmFormData* pParentData );
         void ClearBranch( FmFormData* pParentData );
-        void Update( FmFormShell* pNewShell );
+        void UpdateContent( FmFormShell* pNewShell );
 
         void Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos = LIST_APPEND,
                                               sal_Bool bAlterModel = sal_False );
@@ -503,33 +503,33 @@ namespace svxform
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-        NavigatorTreeModel*    m_pNavModel;
+        NavigatorTreeModel* m_pNavModel;
         SvLBoxEntry*        m_pRootEntry;
         SvLBoxEntry*        m_pEditEntry;
 
-        sal_uInt32              nEditEvent;
+        sal_uInt32          nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
         Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
         DROP_ACTION         m_aDropActionType;
 
-        sal_uInt16              m_nSelectLock;
-        sal_uInt16              m_nFormsSelected;
-        sal_uInt16              m_nControlsSelected;
-        sal_uInt16              m_nHiddenControls;      // (die Zahl geht in m_nControlsSelected mit ein)
+        sal_uInt16          m_nSelectLock;
+        sal_uInt16          m_nFormsSelected;
+        sal_uInt16          m_nControlsSelected;
+        sal_uInt16          m_nHiddenControls;      // (die Zahl geht in m_nControlsSelected mit ein)
 
         unsigned short      m_aTimerCounter;
 
-        sal_Bool                m_bDragDataDirty        : 1;        // dito
-        sal_Bool                m_bPrevSelectionMixed   : 1;
-        sal_Bool                m_bMarkingObjects       : 1;  // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
-        sal_Bool                m_bRootSelected         : 1;
-        sal_Bool                m_bInitialUpdate        : 1;   // bin ich das erste Mal im Update ?
-        sal_Bool                m_bKeyboardCut          : 1;
+        sal_Bool            m_bDragDataDirty        : 1;    // dito
+        sal_Bool            m_bPrevSelectionMixed   : 1;
+        sal_Bool            m_bMarkingObjects       : 1;    // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
+        sal_Bool            m_bRootSelected         : 1;
+        sal_Bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
+        sal_Bool            m_bKeyboardCut          : 1;
 
 
-        void            Update();
-        sal_Bool            IsDeleteAllowed();
+        void            UpdateContent();
+        sal_Bool        IsDeleteAllowed();
         FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvLBoxEntry* pParentEntry );
         SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos=LIST_APPEND );
@@ -587,7 +587,7 @@ namespace svxform
         virtual ~NavigatorTree();
 
         void Clear();
-        void Update( FmFormShell* pFormShell );
+        void UpdateContent( FmFormShell* pFormShell );
         void MarkViewObj( FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep = sal_False );
         void MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark );
         void UnmarkAllViewObj();
@@ -607,6 +607,11 @@ namespace svxform
         virtual void KeyInput( const KeyEvent& rKEvt );
 
         virtual void ModelHasRemoved( SvListEntry* _pEntry );
+
+        using SvTreeListBox::Insert;
+        using SvTreeListBox::ExecuteDrop;
+        using SvTreeListBox::Select;
+        using SvTreeListBox::Notify;
 
     private:
         sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
@@ -643,12 +648,14 @@ namespace svxform
         virtual Size CalcDockingSize( SfxChildAlignment );
         virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
 
+        using SfxDockingWindow::StateChanged;
+
     public:
         NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
                        Window* pParent );
         virtual ~NavigatorFrame();
 
-        void Update( FmFormShell* pFormShell );
+        void UpdateContent( FmFormShell* pFormShell );
         void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
         void FillInfo( SfxChildWinInfo& rInfo ) const;
     };
