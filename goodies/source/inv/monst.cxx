@@ -4,9 +4,9 @@
  *
  *  $RCSfile: monst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,7 @@
 #endif
 
 Gegner::Gegner(Fighter* pFig, Bombe* pBom, ResMgr* pRes) :
-            pFighter(pFig),
             GegnerListe(0,0),
-            bDown(FALSE),
-            bLeft(TRUE),
-            bAuseMode(FALSE),
-            pBombe(pBom),
             pBitMonst1(0L),
             pBitMonst2(0L),
             pBitMonst3(0L),
@@ -64,6 +59,11 @@ Gegner::Gegner(Fighter* pFig, Bombe* pBom, ResMgr* pRes) :
             pBitMonst5(0L),
             pBitMonst5a(0L),
             pBitMonst5b(0L),
+            pBombe(pBom),
+            pFighter(pFig),
+            bDown(FALSE),
+            bLeft(TRUE),
+            bAuseMode(FALSE),
             nDown(MOVEY)
 {
     pBitMonst1  = ImplLoadImage( MONSTER1, pRes );
@@ -140,8 +140,8 @@ void Gegner::InsertGegner(USHORT nType, USHORT x, USHORT y)
 void Gegner::Move()
 {
     BOOL bNextDown = FALSE;
-
-    for(long i=0; i<Count(); i++)
+    unsigned long i;
+    for(i=0; i<Count(); i++)
     {
         if(bDown)
         {
@@ -183,8 +183,8 @@ void Gegner::DrawGegner(OutputDevice* pDev,Point* pStart)
     srand(aTime.GetTime() % 1000);
 
     nMaxX = pDev->GetOutputSizePixel().Width()-pStart->X();
-
-    for(long i=0; i<Count();i++)
+    unsigned long i;
+    for(i=0; i<Count();i++)
     {
         switch(GegType(i))
         {
@@ -331,10 +331,12 @@ void Gegner::DrawGegner(OutputDevice* pDev,Point* pStart)
 
             int nScaledLimit;
             // NOTE: the two expressions are the same in floatingpoint but not in integer
-            if ( RAND_MAX < 32767 )
-                nScaledLimit = GetRandWert() / (32767 / RAND_MAX);
+
+            int nRandMax = RAND_MAX;
+            if ( nRandMax < 32767 )
+                nScaledLimit = GetRandWert() / ( 32767 / nRandMax );
             else
-                nScaledLimit = GetRandWert() * (RAND_MAX / 32767);
+                nScaledLimit = GetRandWert() * ( nRandMax / 32767);
 
             if(GegType(i) != GEGNER5)
             {
@@ -362,7 +364,8 @@ long Gegner::Kollision(Rectangle& rRect, Explosion* pExpl)
 
     Rectangle aWork;
 
-    for(long i=0; i<Count();i++)
+    unsigned long i;
+    for( i=0; i<Count();i++)
     {
         aWork = GegnerKoll(i);
         if((aWork.Left() <= rRect.Left() &&  aWork.Right() >= rRect.Right()) &&
@@ -424,7 +427,8 @@ BOOL Gegner::RemoveGegner()
 
 void Gegner::ClearAll()
 {
-    for(long i=0; i<Count(); i++)
+    unsigned long i;
+    for( i=0; i<Count(); i++ )
         delete GetObject(i);
 
     Clear();

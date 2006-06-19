@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,12 @@ Image* ImplLoadImage( USHORT nId, ResMgr* pRes )
 // ------------------------------------------------------------------------
 
 Fighter::Fighter(Size& rOut, ResMgr* pRes) :
-            pFight1(0L),
-            pFightr(0L),
-            pFightl(0L),
-            bNoKey(FALSE),
+            pFightr(NULL),
+            pFightl(NULL),
             eMode(FIGHT_NORM),
-            nDelay(0)
+            bNoKey(FALSE),
+            nDelay(0),
+            pFight1(NULL)
 {
     pFight1 = ImplLoadImage( FIGHTER1, pRes );
     pFightr = ImplLoadImage( FIGHTERR, pRes );
@@ -97,6 +97,8 @@ void Fighter::Paint(OutputDevice& rDev)
             break;
         case FIGHT_LEFT:
             rDev.DrawImage(aOut,*pFightl);
+            break;
+        case FIGHT_DEST:
             break;
     }
 
@@ -149,8 +151,8 @@ BOOL Fighter::Kollision(Rectangle aRect, Explosion* pExpl)
 
 Munition::Munition(ResMgr* pRes) :
             MunitionListe(0,1),
-            pMunition1(0L),
-            pMunition2(0L)
+            pMunition2( NULL ),
+            pMunition1( NULL )
 {
     pMunition1 = ImplLoadImage( MUNITION1,pRes );
     pMunition2 = ImplLoadImage( MUNITION2,pRes );
@@ -182,7 +184,8 @@ void Munition::Start(Point& rPoint)
 
 void Munition::Paint(OutputDevice& rDev)
 {
-    for(long i=0; i<Count();i++)
+    unsigned long i;
+    for(i=0; i<Count();i++)
     {
         switch(GetMode(i))
         {
@@ -193,6 +196,8 @@ void Munition::Paint(OutputDevice& rDev)
             case MUNI_MODE2:
                 rDev.DrawImage(GetPoint(i),*pMunition2);
                 SetMode(i,MUNI_MODE1);
+                break;
+            case MUNI_DEL:
                 break;
         }
 
@@ -250,7 +255,8 @@ Bombe::~Bombe()
 
 void Bombe::Paint(OutputDevice& rDev)
 {
-    for(long i=0; i<Count();i++)
+    unsigned long i;
+    for(i=0; i<Count();i++)
     {
         rDev.DrawImage(GetPoint(i),*pBombe);
         SetKoll(i,Rectangle(Point(GetPoint(i).X()+aSize.Width()/2,
@@ -285,14 +291,16 @@ void Bombe::RemoveBomben()
 
 void Bombe::ClearAll()
 {
-    for(long i=0;i<Count();i++)
+    unsigned long i;
+    for(i=0;i<Count();i++)
         delete GetObject(i);
     Clear();
 }
 
 BOOL Bombe::Kollision(Rectangle aRect, Explosion* pExpl)
 {
-    for(long i=0;i<Count();i++)
+    unsigned long i;
+    for(i=0;i<Count();i++)
     {
         if((GetPoint(i).X() <= aRect.Left() && GetPoint(i).X()+aSize.Width() >= aRect.Right()) &&
             (GetPoint(i).Y() <= aRect.Top() && GetPoint(i).Y()+aSize.Height() >= aRect.Bottom()))
@@ -351,7 +359,8 @@ Wall::~Wall()
 
 void Wall::Paint(OutputDevice& rDev)
 {
-    for(long i=0; i<Count(); i++)
+    unsigned long i;
+    for(i=0; i<Count(); i++)
     {
         switch(GetMode(i))
         {
@@ -385,6 +394,8 @@ void Wall::Paint(OutputDevice& rDev)
             case WALL_MOD10:
                 rDev.DrawImage(GetPoint(i),*pWall10);
                 break;
+            case WALL_DEL:
+                break;
         }
 
     }
@@ -403,7 +414,8 @@ void Wall::InsertWall(const Point& rPoint)
 
 void Wall::ClearAll()
 {
-    for(long i=0; i<Count(); i++)
+    unsigned long i;
+    for(i=0; i<Count(); i++)
         delete GetObject(i);
 
     Clear();
@@ -415,7 +427,8 @@ BOOL Wall::Kollision(Rectangle& rRect, BOOL bDel)
 
     Rectangle aWork;
 
-    for(long i=0; i<Count();i++)
+    unsigned long i;
+    for(i=0; i<Count();i++)
     {
 
         Point aPoint = GetPoint(i);
@@ -458,6 +471,8 @@ BOOL Wall::Kollision(Rectangle& rRect, BOOL bDel)
                     break;
                 case WALL_MOD10:
                     SetMode(i,WALL_DEL);
+                    break;
+                case WALL_DEL:
                     break;
             }
 
