@@ -33,7 +33,7 @@ namespace com
             }
         }
     }
-};
+}
 
 #define NS_UNO ::com::sun::star::uno
 #define NS_IO ::com::sun::star::io
@@ -60,6 +60,6 @@ namespace utl
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream, sal_Bool bCloseStream );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream, sal_Bool bCloseStream );
     };
-};
+}
 
 #endif
