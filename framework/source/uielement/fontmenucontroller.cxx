@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmenucontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:52:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
 }
 
 // XEventListener
-void SAL_CALL FontMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -205,7 +205,7 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 }
 
 // XMenuListener
-void SAL_CALL FontMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL FontMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -250,7 +250,7 @@ void SAL_CALL FontMenuController::select( const css::awt::MenuEvent& rEvent ) th
     }
 }
 
-void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -287,7 +287,7 @@ void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& rEvent ) 
     }
 }
 
-void SAL_CALL FontMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL FontMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -373,7 +373,6 @@ void SAL_CALL FontMenuController::initialize( const Sequence< Any >& aArguments 
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
 
