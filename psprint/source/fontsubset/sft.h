@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:36:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.14 2006-01-25 11:36:41 hr Exp $ */
+/* $Id: sft.h,v 1.15 2006-06-19 10:25:17 hr Exp $ */
 
 /**
 
@@ -90,8 +90,10 @@ extern "C" {
 #endif
 
 /*@{*/
+#ifndef __cplusplus
 #define false 0               /**< standard false value */
 #define true  1               /**< standard true value */
+#endif
 /*@}*/
 
 /*@{*/
