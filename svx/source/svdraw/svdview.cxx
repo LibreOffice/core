@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:42:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,23 +65,24 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrViewEvent::SdrViewEvent():
-      bMouseDown(FALSE),
-      bMouseUp(FALSE),
+SdrViewEvent::SdrViewEvent()
+:     pHdl(NULL),
+      pObj(NULL),
+      pRootObj(NULL),
+      pPV(NULL),
+      pURLField(NULL),
+      eHit(SDRHIT_NONE),
+      eEvent(SDREVENT_NONE),
+      eHdlKind(HDL_MOVE),
+      eEndCreateCmd(SDRCREATE_NEXTPOINT),
       nMouseClicks(0),
       nMouseMode(0),
       nMouseCode(0),
       nHlplIdx(0),
       nGlueId(0),
-      pHdl(NULL),
-      pObj(NULL),
-      pRootObj(NULL),
-      pPV(NULL),
-      eHit(SDRHIT_NONE),
-      eEvent(SDREVENT_NONE),
-      eHdlKind(HDL_MOVE),
+      bMouseDown(FALSE),
+      bMouseUp(FALSE),
       bDoubleHdlSize(FALSE),
-      pURLField(NULL),
       bIsAction(FALSE),
       bIsTextEdit(FALSE),
       bTextEditHit(FALSE),
@@ -90,7 +91,6 @@ SdrViewEvent::SdrViewEvent():
       bPrevNextMark(FALSE),
       bMarkPrev(FALSE),
       bInsPointNewObj(FALSE),
-      eEndCreateCmd(SDRCREATE_NEXTPOINT),
       bDragWithCopy(FALSE),
       bCaptureMouse(FALSE),
       bReleaseMouse(FALSE)
@@ -131,8 +131,8 @@ SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut):
     onAccessibilityOptionsChanged();
 }
 
-SdrView::SdrView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrCreateView(pModel1,pXOut),
+SdrView::SdrView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrCreateView(pModel1,_pXOut),
     bNoExtendedMouseDispatcher(FALSE),
     bNoExtendedKeyDispatcher(FALSE),
     bNoExtendedCommandDispatcher(FALSE),
@@ -266,8 +266,8 @@ BOOL SdrView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) const
 
 SfxStyleSheet* SdrView::GetStyleSheet() const
 {
-    BOOL bOk=FALSE;
-    return SdrCreateView::GetStyleSheet(bOk);
+    //BOOL bOk=FALSE;
+    return SdrCreateView::GetStyleSheet(); //bOk);
 }
 
 SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, USHORT nEventKind, SdrViewEvent& rVEvt) const
@@ -632,7 +632,7 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     BOOL bCtrl=(rVEvt.nMouseCode & KEY_MOD1) !=0;
     BOOL bAlt=(rVEvt.nMouseCode & KEY_MOD2) !=0;
     BOOL bMouseLeft=(rVEvt.nMouseCode&MOUSE_LEFT)!=0;
-    BOOL bMouseRight=(rVEvt.nMouseCode&MOUSE_RIGHT)!=0;
+    //BOOL bMouseRight=(rVEvt.nMouseCode&MOUSE_RIGHT)!=0;
     BOOL bMouseDown=rVEvt.bMouseDown;
     BOOL bMouseUp=rVEvt.bMouseUp;
     if (bMouseDown) {
@@ -695,9 +695,9 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 if (eHit==SDRHIT_UNMARKEDOBJECT || eHit==SDRHIT_TEXTEDIT) {
                     MarkObj(rVEvt.pRootObj,rVEvt.pPV);
                     if (eHit==SDRHIT_TEXTEDIT) {
-                        BOOL bRet=pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW &&
+                        BOOL bRet2=pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW &&
                                       BegTextEdit(rVEvt.pObj,rVEvt.pPV,(Window*)pActualOutDev,(SdrOutliner*)NULL);
-                        if (bRet) {
+                        if (bRet2) {
                             MouseEvent aMEvt(pActualOutDev->LogicToPixel(aLogicPos),
                                              1,rVEvt.nMouseMode,rVEvt.nMouseCode,rVEvt.nMouseCode);
                             OutlinerView* pOLV=GetTextEditOutlinerView();
@@ -791,6 +791,7 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 if (pOLV!=NULL) pOLV->MouseButtonDown(aMEvt); // Event an den Outliner, aber ohne Doppelklick
             }
         } break;
+        default: break;
     } // switch
     if (bRet && pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
         Window* pWin=(Window*)pActualOutDev;
@@ -840,7 +841,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         aHitRec.bDown=bMacroDown;
         return pMacroObj->GetMacroPointer(aHitRec);
     }
-    USHORT nTol=nHitTolLog;
+    //USHORT nTol=nHitTolLog;
     // TextEdit, ObjEdit, Macro
     if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/)))
     {
@@ -887,6 +888,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
             aHitRec.pOut=(OutputDevice*)pOut;
             return aVEvt.pObj->GetMacroPointer(aHitRec);
         }
+        default: break;
     } // switch
 
     switch(eHit)
@@ -910,6 +912,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
             }
             return Pointer(POINTER_TEXT);
         }
+        default: break;
     }
 
     BOOL bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
@@ -987,7 +990,6 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                     return Pointer(POINTER_NOTALLOWED);
 
                 return Pointer(POINTER_REFHAND);
-                break;
             }
 
             case SDRDRAG_GRADIENT:
@@ -996,13 +998,12 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                     return Pointer(POINTER_NOTALLOWED);
 
                 return Pointer(POINTER_REFHAND);
-                break;
             }
 
             case SDRDRAG_CROOK: {
                 if (bCorner || bVertex || bMov) {
                     if (!IsCrookAllowed(TRUE) && !IsCrookAllowed(FALSE)) return Pointer(POINTER_NOTALLOWED);
-                    return Pointer(POINTER_CROOK); break;
+                    return Pointer(POINTER_CROOK);
                 }
             }
             default: {
