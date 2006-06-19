@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 15:01:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //------------------------------------------------------------------------
 //
@@ -787,7 +785,6 @@ namespace accessibility
                             sal_uInt32 nPara = aTmpSel.nStartPara;
                             for ( ; nPara <= aTmpSel.nEndPara; ++nPara )
                             {
-                                bool bSubmit( false );
                                 if ( nPara < aTmpLastSel.nStartPara ||
                                      nPara > aTmpLastSel.nEndPara )
                                 {
@@ -822,7 +819,6 @@ namespace accessibility
                             nPara = aTmpLastSel.nStartPara;
                             for ( ; nPara <= aTmpLastSel.nEndPara; ++nPara )
                             {
-                                bool bSubmit( false );
                                 if ( nPara < aTmpSel.nStartPara ||
                                      nPara > aTmpSel.nEndPara )
                                 {
@@ -1399,20 +1395,20 @@ namespace accessibility
                                 sal_Int32 nPara( pTextHint->GetValue() );
 
                                 // #108900# Delegate change event to children
-                                AccessibleTextHelper_ChildrenTextChanged aFunctor;
+                                AccessibleTextHelper_ChildrenTextChanged aNotifyChildrenFunctor;
 
                                 if( nPara == static_cast<sal_Int32>(EE_PARA_ALL) )
                                 {
                                     // #108900# Call every child
                                     ::std::for_each( maParaManager.begin(), maParaManager.end(),
-                                                     AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aFunctor) );
+                                                     AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
                                 }
                                 else
                                     if( nPara < nParas )
                                     {
                                         // #108900# Call child at index nPara
                                         ::std::for_each( maParaManager.begin()+nPara, maParaManager.begin()+nPara+1,
-                                                         AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aFunctor) );
+                                                         AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
                                     }
                                 break;
                             }
@@ -1464,6 +1460,7 @@ namespace accessibility
                             }
 
                             case HINT_ENDEDIT:
+                            {
                                 // focused child now looses focus
                                 ESelection aSelection;
                                 if( GetEditViewForwarder().GetSelection( aSelection ) )
@@ -1474,6 +1471,9 @@ namespace accessibility
 
                                 maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND,
                                                               EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND);
+                                break;
+                            }
+                            default:
                                 break;
                         }
                     }
@@ -1506,7 +1506,7 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
