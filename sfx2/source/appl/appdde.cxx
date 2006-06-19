@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:33:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,9 +241,9 @@ long SfxApplication::DdeExecute
 
 long SfxApplication::DdeGetData
 (
-    const String&   rItem,                  // das anzusprechende Item
-    const String& rMimeType,                // in: Format
-    ::com::sun::star::uno::Any & rValue     // out: angeforderte Daten
+    const String&,              // das anzusprechende Item
+    const String&,              // in: Format
+    ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -263,9 +263,9 @@ long SfxApplication::DdeGetData
 
 long SfxApplication::DdeSetData
 (
-    const String&   rItem,      // das anzusprechende Item
-    const String& rMimeType,                // in: Format
-    const ::com::sun::star::uno::Any & rValue   // out: angeforderte Daten
+    const String&,                    // das anzusprechende Item
+    const String&,                    // in: Format
+    const ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -285,7 +285,7 @@ long SfxApplication::DdeSetData
 
 ::sfx2::SvLinkSource* SfxApplication::DdeCreateLinkSource
 (
-    const String&   rItem      // das zu erzeugende Item
+    const String&      // das zu erzeugende Item
 )
 
 /*  [Beschreibung]
@@ -333,9 +333,9 @@ long SfxObjectShell::DdeExecute
 
 long SfxObjectShell::DdeGetData
 (
-    const String&   rItem,                      // das anzusprechende Item
-    const String& rMimeType,                    // in: Format
-    ::com::sun::star::uno::Any & rValue     // out: angeforderte Daten
+    const String&,              // das anzusprechende Item
+    const String&,              // in: Format
+    ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -355,9 +355,9 @@ long SfxObjectShell::DdeGetData
 
 long SfxObjectShell::DdeSetData
 (
-    const String&   rItem,                      // das anzusprechende Item
-    const String& rMimeType,                    // in: Format
-    const ::com::sun::star::uno::Any & rValue   // out: angeforderte Daten
+    const String&,                    // das anzusprechende Item
+    const String&,                    // in: Format
+    const ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -376,7 +376,7 @@ long SfxObjectShell::DdeSetData
 //--------------------------------------------------------------------
 ::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
 (
-    const String&   rItem      // das zu erzeugende Item
+    const String&      // das zu erzeugende Item
 )
 
 /*  [Beschreibung]
@@ -421,9 +421,9 @@ long SfxViewFrame::DdeExecute
 
 long SfxViewFrame::DdeGetData
 (
-    const String&   rItem,                  // das anzusprechende Item
-    const String& rMimeType,                // in: Format
-    ::com::sun::star::uno::Any & rValue     // out: angeforderte Daten
+    const String&,              // das anzusprechende Item
+    const String&,              // in: Format
+    ::com::sun::star::uno::Any& // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -443,9 +443,9 @@ long SfxViewFrame::DdeGetData
 
 long SfxViewFrame::DdeSetData
 (
-    const String&   rItem,                      // das anzusprechende Item
-    const String& rMimeType,                    // in: Format
-    const ::com::sun::star::uno::Any & rValue   // out: angeforderte Daten
+    const String& ,                     // das anzusprechende Item
+    const String& ,                     // in: Format
+    const ::com::sun::star::uno::Any&   // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -465,7 +465,7 @@ long SfxViewFrame::DdeSetData
 
 ::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
 (
-    const String&   rItem      // das zu erzeugende Item
+    const String& // das zu erzeugende Item
 )
 
 /*  [Beschreibung]
@@ -675,7 +675,7 @@ BOOL ImplDdeService::SysTopicExecute( const String* pStr )
 
 //--------------------------------------------------------------------
 
-BOOL SfxDdeTriggerTopic_Impl::Execute( const String* pStr )
+BOOL SfxDdeTriggerTopic_Impl::Execute( const String* )
 {
     return TRUE;
 }
