@@ -56,10 +56,6 @@
 #include <salprn.h>
 #endif
 
-#ifndef _NEW_HXX
-#include <tools/new.hxx>
-#endif
-
 #ifndef _SV_PRINT_H
 #include <print.h>
 #endif
@@ -287,7 +283,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pPortName = aPortBuf;
 
         // Namen anlegen
-        xub_StrLen nNameLen = strlen( pName );
+        xub_StrLen nNameLen = sal::static_int_cast<xub_StrLen>(strlen( pName ));
         XubString aName( ImplSalGetUniString( pName, nNameLen ) );
 
         // Treibernamen rausfischen
@@ -551,7 +547,10 @@ static BOOL ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     pOutDevBuffer               = (LPDEVMODE)(pOutBuffer->maDriverData);
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
     pOutBuffer->mnVersion       = SAL_DRIVERDATA_VERSION;
-    pOutBuffer->mnDriverOffset  = (USHORT)(((SalDriverData*)NULL)->maDriverData);
+    // calculate driver data offset including structure padding
+    pOutBuffer->mnDriverOffset  = sal::static_int_cast<USHORT>(
+                                    (char*)pOutBuffer->maDriverData -
+                                    (char*)pOutBuffer );
 
     // Testen, ob wir einen geeigneten Inputbuffer haben
     if ( bIn && ImplTestSalJobSetup( pPrinter, pSetupData, FALSE ) )
@@ -591,13 +590,13 @@ static BOOL ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // identisch sind
     if ( pOutDevBuffer->dmSize >= 32 )
     {
-        USHORT nLen = strlen( (const char*)pOutDevBuffer->dmDeviceName );
+        USHORT nLen = sal::static_int_cast<USHORT>(strlen( (const char*)pOutDevBuffer->dmDeviceName ));
         if ( nLen < sizeof( pOutDevBuffer->dmDeviceName ) )
             memset( pOutDevBuffer->dmDeviceName+nLen, 0, sizeof( pOutDevBuffer->dmDeviceName )-nLen );
     }
     if ( pOutDevBuffer->dmSize >= 102 )
     {
-        USHORT nLen = strlen( (const char*)pOutDevBuffer->dmFormName );
+        USHORT nLen = sal::static_int_cast<USHORT>(strlen( (const char*)pOutDevBuffer->dmFormName ));
         if ( nLen < sizeof( pOutDevBuffer->dmFormName ) )
             memset( pOutDevBuffer->dmFormName+nLen, 0, sizeof( pOutDevBuffer->dmFormName )-nLen );
     }
@@ -1362,7 +1361,6 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
 
     LPDEVMODE   pOrgDevMode = NULL;
     LPDEVMODE   pDevMode;
-    BOOL        bOwnDevMode = FALSE;
     if ( pSetupData && pSetupData->mpDriverData )
     {
         pOrgDevMode = SAL_DEVMODE( pSetupData );
@@ -1610,7 +1608,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobDat
     int nRet = ::StartPage( hDC );
     if ( nRet <= 0 )
     {
-        DWORD err = GetLastError();
+        GetLastError();
         mnError = SAL_PRINTER_ERROR_GENERALERROR;
         return NULL;
     }
@@ -1643,7 +1641,7 @@ BOOL WinSalPrinter::EndPage()
         return TRUE;
     else
     {
-        DWORD err = GetLastError();
+        GetLastError();
         mnError = SAL_PRINTER_ERROR_GENERALERROR;
         return FALSE;
     }
