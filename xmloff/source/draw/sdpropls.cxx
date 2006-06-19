@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:48:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONTYPE_HPP_
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -414,7 +412,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // misc object properties
     GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
     GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
-    { 0L }
+    { 0L, 0, 0, XML_EMPTY, 0, 0 }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -462,7 +460,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     DPMAP( "TransitionSubtype",         XML_NAMESPACE_SMIL, XML_SUBTYPE,                XML_SD_TYPE_TRANSTIION_SUBTYPE, CTF_PAGE_TRANSITION_SUBTYPE ),
     DPMAP( "TransitionDirection",       XML_NAMESPACE_SMIL, XML_DIRECTION,              XML_SD_TYPE_TRANSTIION_DIRECTION, CTF_PAGE_TRANSITION_DIRECTION ),
     DPMAP( "TransitionFadeColor",       XML_NAMESPACE_SMIL, XML_FADECOLOR,              XML_TYPE_COLOR, CTF_PAGE_TRANSITION_FADECOLOR ),
-    { 0L }
+    { 0L, 0, 0, XML_EMPTY, 0, 0 }
 };
 
 const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
@@ -472,7 +470,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
     DPMAP( "IsPageNumberVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
     DPMAP( "IsDateTimeVisible",             XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
 
-    { 0L }
+    { 0L, 0, 0, XML_EMPTY, 0, 0 }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -884,14 +882,14 @@ private:
     const sal_Int32 mnType;
 };
 
-sal_Bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     const sal_Bool bValue = rStrImpValue.indexOf( GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE ) ) != -1;
     rValue <<= bValue;
     return sal_True;
 }
 
-sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bValue;
     if( !(rValue >>= bValue ) )
@@ -927,7 +925,7 @@ XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
 sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         const ::rtl::OUString& rStrImpValue,
         ::com::sun::star::uno::Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     // #i38644#
     // attributes with this type where saved with VISIBLE|HIDDEN prior
@@ -961,7 +959,7 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 //////////////////////////////////////////////////////////////////////////////
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
-: mxModel( xModel ), mpImport( &rImport ), mpExport(0)
+: mxModel( xModel ), mpExport(0), mpImport( &rImport )
 {
 }
 
@@ -1264,18 +1262,17 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 {
 }
 
-#ifndef SVX_LIGHT
 // ----------------------------------------
 
-XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport ) :
-        SvXMLExportPropertyMapper( rMapper ),
-        mpListAutoPool( pListAutoPool ),
-        mrExport( rExport ),
-        maNumRuleExp( rExport ),
-        msCDATA( GetXMLToken(XML_CDATA)),
-        msTrue( GetXMLToken(XML_TRUE)),
-        msFalse( GetXMLToken(XML_FALSE)),
-        mbIsInAutoStyles( sal_True )
+XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport )
+: SvXMLExportPropertyMapper( rMapper )
+, mpListAutoPool( pListAutoPool )
+, mrExport( rExport )
+, maNumRuleExp( rExport )
+, mbIsInAutoStyles( sal_True )
+, msCDATA( GetXMLToken(XML_CDATA))
+, msTrue( GetXMLToken(XML_TRUE))
+, msFalse( GetXMLToken(XML_FALSE))
 {
 }
 
@@ -1788,6 +1785,4 @@ void XMLPageExportPropertyMapper::handleElementItem(
             break;
     }
 }
-
-#endif // #ifndef SVX_LIGHT
 
