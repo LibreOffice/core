@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:38:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,10 @@ void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
 // - SvxGalleryChildWindow -
 // -------------------------
 
-GalleryChildWindow::GalleryChildWindow( Window* pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
+GalleryChildWindow::GalleryChildWindow( Window* _pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+    SfxChildWindow( _pParent, nId )
 {
-    pWindow = new GalleryBrowser( pBindings, this, pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
+    pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
     eChildAlignment = SFX_ALIGN_TOP;
     ( (GalleryBrowser*) pWindow )->Initialize( pInfo );
 };
@@ -108,9 +108,9 @@ SFX_IMPL_DOCKINGWINDOW( GalleryChildWindow, SID_GALLERY )
 // - GalleryBrowser -
 // ------------------
 
-GalleryBrowser::GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
+GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
                                 Window* pParent, const ResId& rResId ) :
-    SfxDockingWindow( pBindings, pCW, pParent, rResId )
+    SfxDockingWindow( _pBindings, pCW, pParent, rResId )
 {
     mpGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
     mpBrowser1 = new GalleryBrowser1( this, GAL_RESID( GALLERY_BROWSER1 ), mpGallery );
@@ -188,10 +188,9 @@ void GalleryBrowser::Resize()
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 {
     const USHORT    nCode = rKEvt.GetKeyCode().GetCode();
-    BOOL            bForward = FALSE;
     BOOL            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
                            ( ( KEY_TAB == nCode ) || ( KEY_F6 == nCode && rKEvt.GetKeyCode().IsMod2() ) ) );
 
@@ -283,7 +282,7 @@ BOOL GalleryBrowser::IsLinkage() const
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser, SplitHdl, void*, p )
+IMPL_LINK( GalleryBrowser, SplitHdl, void*, EMPTYARG )
 {
     mpSplitter->SetPosPixel( Point( mpSplitter->GetSplitPosPixel(), mpSplitter->GetPosPixel().Y() ) );
     Resize();
