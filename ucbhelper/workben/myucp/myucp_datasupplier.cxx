@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_datasupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:44:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ DataSupplier::~DataSupplier()
 
 //=========================================================================
 // virtual
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+rtl::OUString DataSupplier::queryContentIdentifierString( sal_Int32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -188,7 +188,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 //=========================================================================
 // virtual
 uno::Reference< star::ucb::XContentIdentifier >
-DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+DataSupplier::queryContentIdentifier( sal_Int32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -217,7 +217,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 //=========================================================================
 // virtual
 uno::Reference< star::ucb::XContent >
-DataSupplier::queryContent( sal_uInt32 nIndex )
+DataSupplier::queryContent( sal_Int32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -253,7 +253,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
+sal_Bool DataSupplier::getResult( sal_Int32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -270,9 +270,9 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     // Try to obtain result...
 
-    sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
+    sal_Int32 nOldCount = m_pImpl->m_aResults.size();
     sal_Bool bFound = sal_False;
-    sal_uInt32 nPos = nOldCount;
+    sal_Int32 nPos = nOldCount;
 
     // @@@ Obtain data and put it into result list...
 /*
@@ -314,14 +314,14 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-sal_uInt32 DataSupplier::totalCount()
+sal_Int32 DataSupplier::totalCount()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_bCountFinal )
         return m_pImpl->m_aResults.size();
 
-    sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
+    sal_Int32 nOldCount = m_pImpl->m_aResults.size();
 
     // @@@ Obtain data and put it into result list...
 /*
@@ -349,7 +349,7 @@ sal_uInt32 DataSupplier::totalCount()
 
 //=========================================================================
 // virtual
-sal_uInt32 DataSupplier::currentCount()
+sal_Int32 DataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
@@ -364,7 +364,7 @@ sal_Bool DataSupplier::isCountFinal()
 //=========================================================================
 // virtual
 uno::Reference< sdbc::XRow >
-DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+DataSupplier::queryPropertyValues( sal_Int32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -395,7 +395,7 @@ DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 
 //=========================================================================
 // virtual
-void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
+void DataSupplier::releasePropertyValues( sal_Int32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
