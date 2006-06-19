@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:48:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,32 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::uno;
+
+using namespace bridges_urp;
+
+extern "C" {
+
+static void SAL_CALL staticAcquire( remote_Interface *pRemoteI )
+{
+    PropertyObject *pProperties = (PropertyObject *) pRemoteI;
+    pProperties->thisAcquire();
+}
+
+static void SAL_CALL staticRelease( remote_Interface *pRemoteI )
+{
+    PropertyObject *pProperties = (PropertyObject *) pRemoteI;
+    pProperties->thisRelease();
+}
+
+static void SAL_CALL staticDispatch(
+    remote_Interface * pRemoteI, typelib_TypeDescription const * pMemberType,
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
+{
+    PropertyObject *pProperties = (PropertyObject *) pRemoteI;
+    pProperties->thisDispatch( pMemberType, pReturn, pArgs, ppException );
+}
+
+}
 
 namespace bridges_urp
 {
@@ -328,7 +354,8 @@ PropertyObject::~PropertyObject()
 }
 
 void SAL_CALL PropertyObject::thisDispatch(
-    typelib_TypeDescription * pMemberType, void * pReturn, void * ppArgs[],uno_Any ** ppException )
+    typelib_TypeDescription const * pMemberType, void * pReturn, void * ppArgs[],
+    uno_Any ** ppException )
 {
     OSL_ASSERT( pMemberType->eTypeClass == typelib_TypeClass_INTERFACE_METHOD );
 
