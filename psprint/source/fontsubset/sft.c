@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 13:48:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,11 +319,11 @@ _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, size_t offset, int bigendia
     assert(ptr != 0);
 
     if (bigendian) {
-        ptr[offset] = (val >> 8) & 0xFF;
-        ptr[offset+1] = val & 0xFF;
+        ptr[offset] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)(val & 0xFF);
     } else {
-        ptr[offset+1] = (val >> 8) & 0xFF;
-        ptr[offset] = val & 0xFF;
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset] = (sal_uInt8)(val & 0xFF);
     }
 
 }
@@ -336,7 +336,7 @@ static sal_uInt16 Int16FromMOTA(sal_uInt16 a) {
   return (sal_uInt16) (((sal_uInt8)((a) >> 8)) | ((sal_uInt8)(a) << 8));
 }
 static sal_uInt32 Int32FromMOTA(sal_uInt32 a) {
-  return ((a>>24)&0xFF) | ((a>>8)&0xFF00 | ((a&0xFF00)<<8) | ((a&0xFF)<<24));
+  return ((a>>24)&0xFF) | (((a>>8)&0xFF00) | ((a&0xFF00)<<8) | ((a&0xFF)<<24));
 }
 #endif
 
@@ -586,7 +586,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
             z += GetInt16(p, 0, 1);
             p += 2;
         }
-        pa[i].x = z;
+        pa[i].x = (sal_Int16)z;
     }
 
     /*- Process the Y coordinate */
@@ -602,7 +602,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
             z += GetInt16(p, 0, 1);
             p += 2;
         }
-        pa[i].y = z;
+        pa[i].y = (sal_Int16)z;
     }
 
     for (i=0; i<numberOfContours; i++) {
@@ -1287,11 +1287,13 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32 c) {
 }
 
 static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32 c) {
-    sal_uInt16 firstCode;
+    sal_uInt16 firstCode, lastCode, count;
     sal_uInt16 *CMAP6 = (sal_uInt16 *) cmap;
 
-    firstCode = *(CMAP6 + 3);
-    if (c < firstCode ||  c > (firstCode + (*(CMAP6 + 4))/*entryCount*/ - 1)) {
+    firstCode = Int16FromMOTA(*(CMAP6 + 3));
+    count = Int16FromMOTA(*(CMAP6 + 4));
+    lastCode = firstCode + count - 1;
+    if (c < firstCode || c > lastCode) {
         return MISSING_GLYPH_INDEX;
     } else {
         return *((CMAP6 + 5)/*glyphIdArray*/ + (c - firstCode));
@@ -1316,7 +1318,7 @@ static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSe
             low = ++mid;
         }
     }
-    return lastfound;
+    return (sal_uInt16)lastfound;
 }
 
 
@@ -1335,7 +1337,7 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
 
     segCount = Int16FromMOTA(*(CMAP4 + 3))/2;
     endCode = CMAP4 + 7;
-    i = GEbinsearch(endCode, segCount, c);
+    i = GEbinsearch(endCode, segCount, (sal_uInt16)c);
 
     if (i == (sal_uInt16) 0xFFFF) {
         return MISSING_GLYPH_INDEX;
@@ -1393,7 +1395,7 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt8 *table = getTable(ttf, O_cmap);
     sal_uInt32 table_size = getTableSize(ttf, O_cmap);
     sal_uInt16 ncmaps = GetUInt16(table, 2, 1);
-    int i;
+    unsigned int i;
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
     sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
     sal_uInt32 ThreeTwo   = 0;              /* MS ShiftJIS          */
@@ -1415,7 +1417,7 @@ static void FindCmap(TrueTypeFont *ttf)
         offset = GetUInt32(table, 8 + i * 8, 1);
 
          /* sanity check, cmap must lie within file */
-        if( (table - ttf->ptr) + offset > ttf->fsize )
+        if( (table - ttf->ptr) + offset > (sal_uInt32)ttf->fsize )
             continue;
 
         /* Unicode tables in Apple fonts */
@@ -1546,6 +1548,12 @@ static void GetKern(TrueTypeFont *ttf)
  */
 static void KernGlyphsPrim1(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern)
 {
+    (void)ttf; /* avoid warning */
+    (void)glyphs; /* avoid warning */
+    (void)nglyphs; /* avoid warning */
+    (void)wmode; /* avoid warning */
+    (void)nglyphs; /* avoid warning */
+    (void)kern; /* avoid warning */
     fprintf(stderr, "MacOS kerning tables have not been implemented yet!\n");
 }
 
@@ -1630,7 +1638,10 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
 #endif
 {
     TrueTypeFont *t;
-    int ret, i, fd = -1;
+    int i;
+    #ifndef WIN32
+    int ret, fd = -1;
+    #endif
     sal_uInt32 version;
     sal_uInt8 *table, *offset;
     sal_uInt32 length, tag;
@@ -1772,7 +1783,7 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     }
 
     /* Fixup offsets when only a TTC extract was provided */
-    if( facenum == ~0 ) {
+    if( facenum == (sal_uInt32)~0 ) {
         sal_uInt8 *pHead = t->tables[O_head], *p = NULL;
         if( !pHead )
             return SF_TTFORMAT;
@@ -1855,7 +1866,7 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     assert(t->goffsets != 0);
 
     for (i = 0; i <= (int)t->nglyphs; i++) {
-        t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2, 1) : GetUInt16(table, i << 1, 1) << 1;
+        t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2, 1) : (sal_uInt32)GetUInt16(table, i << 1, 1) << 1;
     }
 
     table = getTable(t, O_hhea);
@@ -1877,9 +1888,9 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     if (fd != -1) close(fd);
     /*- t and t->fname have been allocated! */
     free(t->fname);
-#endif
     free(t);
     return ret;
+#endif
 }
 
 void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
@@ -2145,7 +2156,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
            newname.slen = name[i].slen + strlen(suffix);
         */
         const sal_uInt8 ptr[] = {0,'T',0,'r',0,'u',0,'e',0,'T',0,'y',0,'p',0,'e',0,'S',0,'u',0,'b',0,'s',0,'e',0,'t'};
-        NameRecord n1 = {1, 0, 0, 6, 14, "(byte *) TrueTypeSubset"};
+        NameRecord n1 = {1, 0, 0, 6, 14, (sal_uInt8*)"TrueTypeSubset"};
         NameRecord n2 = {3, 1, 1033, 6, 28, 0};
         n2.sptr = (sal_uInt8 *) ptr;
         name = TrueTypeTableNew_name(0, 0);
@@ -2502,9 +2513,9 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
     }
 
     for (i = 0; i < nchars; i++) {
-        cp[i] = ttf->mapper(ttf->cmap, cp[i]);
+        cp[i] = (sal_uInt16)ttf->mapper(ttf->cmap, cp[i]);
         if (cp[i]!=0 && bvertical!=0)
-            cp[i] = UseGSUB(ttf,cp[i],bvertical);
+            cp[i] = (sal_uInt16)UseGSUB(ttf,cp[i],bvertical);
     }
     return nchars;
 }
@@ -2516,7 +2527,7 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, int bvertical)
 
             if( ttf->mapper == getGlyph0 && ( ch & 0xf000 ) == 0xf000 )
                 ch &= 0x00ff;
-            return ttf->mapper(ttf->cmap, ch );
+            return (sal_uInt16)ttf->mapper(ttf->cmap, ch );
 
         case CMAP_MS_Unicode:   break;
         case CMAP_MS_ShiftJIS:  ch = TranslateChar12(ch); break;
@@ -2526,9 +2537,9 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, int bvertical)
         case CMAP_MS_Johab:     ch = TranslateChar16(ch); break;
         default:                return 0;
     }
-    ch = ttf->mapper(ttf->cmap, ch);
+    ch = (sal_uInt16)ttf->mapper(ttf->cmap, ch);
     if (ch!=0 && bvertical!=0)
-        ch = UseGSUB(ttf,ch,bvertical);
+        ch = (sal_uInt16)UseGSUB(ttf,ch,bvertical);
     return ch;
 }
 
@@ -2586,12 +2597,16 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
         if( nAdvOffset >= nTableSize)
             res[i].adv = 0; /* better than a crash for buggy fonts */
         else
-            res[i].adv = XUnits( UPEm, GetUInt16( pTable, nAdvOffset, 1) );
+            res[i].adv = SAL_INT_CAST(
+                sal_uInt16,
+                XUnits( UPEm, GetUInt16( pTable, nAdvOffset, 1) ) );
 
         if( nLsbOffset >= nTableSize)
             res[i].sb  = 0; /* better than a crash for buggy fonts */
         else
-            res[i].sb  = XUnits( UPEm, GetInt16( pTable, nLsbOffset, 1) );
+            res[i].sb  = SAL_INT_CAST(
+                sal_Int16,
+                XUnits( UPEm, GetInt16( pTable, nLsbOffset, 1) ) );
     }
 
     return res;
@@ -2607,7 +2622,7 @@ TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firs
     str = malloc(nChars * 2);
     assert(str != 0);
 
-    for (i=0; i<nChars; i++) str[i] = firstChar + i;
+    for (i=0; i<nChars; i++) str[i] = (sal_uInt16)(firstChar + i);
     if ((n = MapString(ttf, str, nChars, 0, mode)) != -1) {
         res = GetTTSimpleGlyphMetrics(ttf, str, n, mode);
     }
@@ -2746,8 +2761,8 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
         for (i = 0; i < n; i++) {
             if (cp[i].flags & 0x8000) m++;
         }
-        d->npoints = n;
-        d->ncontours = m;
+        d->npoints = (sal_uInt16)n;
+        d->ncontours = (sal_uInt16)m;
         free(cp);
     } else {
         d->npoints = 0;
