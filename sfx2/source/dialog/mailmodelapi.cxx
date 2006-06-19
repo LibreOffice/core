@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodelapi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:23:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,11 +215,11 @@ class OMailSendThreadImpl : public ::vos::OThread
                 Reference< XSimpleMailMessage > xSimpleMailMessage,
                 const Reference< XFrame >&  _xCurrentFrame,
                 long nSendFlags ) :
+            m_nSendFlags( nSendFlags ),
+            m_bSend( sal_False ),
             m_xSimpleMailClient( xSimpleMailClient ),
             m_xSimpleMailMessage( xSimpleMailMessage ),
-            m_xCurrentFrame(_xCurrentFrame),
-            m_nSendFlags( nSendFlags ),
-            m_bSend( sal_False ) {}
+            m_xCurrentFrame(_xCurrentFrame) {}
 
         virtual ~OMailSendThreadImpl();
 
@@ -273,7 +273,7 @@ void SAL_CALL OMailSendThreadImpl::onTerminated()
 // class AddressList_Impl ------------------------------------------------
 
 typedef String* AddressItemPtr_Impl;
-DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl );
+DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl )
 
 // class SfxMailModel -----------------------------------------------
 
@@ -385,15 +385,16 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
         if ( xMod.is() )
         {
             // save old settings
+/*
             BOOL bModified = xMod->isModified();
             // prepare for mail export
-/* TODO
+ TODO
             SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
             pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
 */
             // detect filter
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter(lcl_getFactoryName(_xModel));
-            sal_Bool bHasFilter = pFilter != NULL;
+//          sal_Bool bHasFilter = pFilter != NULL;
 
             sal_Bool bRet = sal_False;
             // create temp file name with leading chars and extension
@@ -487,10 +488,10 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
         // save the document
         if ( xMod.is() )
         {
+            /* TODO
             // save old settings
             BOOL bModified = xMod->isModified();
             // prepare for mail export
-            /* TODO
             SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
             pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
             */
@@ -559,7 +560,7 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(   MailDocType _eMailD
     SaveResult eSaveResult;
     String aFileName;
 
-    sal_Bool bSuccessfull = sal_False;
+//  sal_Bool bSuccessfull = sal_False;
     if ( _eMailDocType == TYPE_SELF )
         eSaveResult = SaveDocument( _sAttachmentTitle,_xModel,aFileName);
     else
