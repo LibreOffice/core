@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.191 $
+#   $Revision: 1.192 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:32:35 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:12:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -411,6 +411,10 @@ SOLARLANG:=$(solarlang)
 .IF "$(wall)"!=""
 COMPILER_WARN_ALL=TRUE
 .ENDIF          # "$(wall)"!=""
+
+.IF "$(werror)"!=""
+COMPILER_WARN_ERRORS=TRUE
+.ENDIF
 
 .IF "$(RSC_ONCE)"!=""
 rsc_once*=$(RSC_ONCE)
@@ -1240,12 +1244,34 @@ CDEFS+=-D$(WORK_STAMP)=$(WORK_STAMP)
 
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
 
+# Once all modules on a given platform compile without warnings, the specific
+# .mk file for that platform should set COMPILER_WARN_ERRORS=TRUE and no longer
+# set MODULES_WITH_WARNINGS, and once no platform sets MODULES_WITH_WARNINGS any
+# longer, this code can go away:
+.IF "$(MODULES_WITH_WARNINGS)" != ""
+MODULES_WITH_WARNINGS_1 := $(foreach,i,$(MODULES_WITH_WARNINGS) .$(i).)
+MODULES_WITH_WARNINGS_2 := $(subst,.$(PRJNAME)., $(MODULES_WITH_WARNINGS_1))
+.IF "$(MODULES_WITH_WARNINGS_1)" == "$(MODULES_WITH_WARNINGS_2)"
+COMPILER_WARN_ERRORS = TRUE
+.ENDIF
+.ENDIF
+
+CFLAGSWARNCXX *= $(CFLAGSWARNCC)
+CFLAGSWALLCXX *= $(CFLAGSWALLCC)
+CFLAGSWERRCXX *= $(CFLAGSWERRCC)
+
 .IF "$(ENVWARNFLAGS)"==""
-.IF "$(COMPILER_WARN_ALL)"!=""
-CFLAGSAPPEND+=$(CFLAGSWALL)
-.ELSE           # "$(WARN_ALL)"!=""
-CFLAGSAPPEND+=$(CFLAGSDFLTWARN)
-.ENDIF          # "$(WARN_ALL)"!=""
+.IF "$(COMPILER_WARN_ALL)"==""
+CFLAGSCC+=$(CFLAGSWARNCC)
+CFLAGSCXX+=$(CFLAGSWARNCXX)
+.ELSE
+CFLAGSCC+=$(CFLAGSWALLCC)
+CFLAGSCXX+=$(CFLAGSWALLCXX)
+.ENDIF
+.IF "$(COMPILER_WARN_ERRORS)"!="" && "$(EXTERNAL_WARNINGS_NOT_ERRORS)"==""
+CFLAGSCC+=$(CFLAGSWERRCC)
+CFLAGSCXX+=$(CFLAGSWERRCXX)
+.ENDIF
 .ELSE			# "$(ENVWARNFLAGS)"==""
 CFLAGSAPPEND+=$(ENVWARNFLAGS)
 .ENDIF			# "$(ENVWARNFLAGS)"==""
