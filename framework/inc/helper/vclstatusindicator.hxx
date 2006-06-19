@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclstatusindicator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:20:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
 
     public:
 
-        DECLARE_XINTERFACE
+        FWK_DECLARE_XINTERFACE
 
         /// ctor
         VCLStatusIndicator(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
