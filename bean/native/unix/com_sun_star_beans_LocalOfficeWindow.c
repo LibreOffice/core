@@ -4,9 +4,9 @@
  *
  *  $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:03:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#if HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -73,6 +69,8 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
 JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
+    (void) env; /* avoid warning about unused parameter */
+    (void) obj_this; /* avoid warning about unused parameter */
     return (SYSTEM_XWINDOW);
 }
 
@@ -86,6 +84,8 @@ JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
 JNIEXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
   (JNIEnv * env, jobject obj_this)
 {
+    (void) env; /* avoid warning about unused parameter */
+    (void) obj_this; /* avoid warning about unused parameter */
     return Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow(env, obj_this);
 }
 
