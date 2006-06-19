@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLShapePropertySetContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:06:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _XMLOFF_XMLSHAPEPROPERTYSETCONTEXT_HXX_
 #include "XMLShapePropertySetContext.hxx"
@@ -93,7 +91,7 @@ void XMLShapePropertySetContext::EndElement()
     aAny <<= xNumRule;
 
     XMLPropertyState aPropState( mnBulletIndex, aAny );
-    rProperties.push_back( aPropState );
+    mrProperties.push_back( aPropState );
 
     SvXMLPropertySetContext::EndElement();
 }
@@ -107,7 +105,7 @@ SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    switch( xMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_NUMBERINGRULES:
         mnBulletIndex = rProp.mnIndex;
