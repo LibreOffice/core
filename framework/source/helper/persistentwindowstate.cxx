@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:25:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-    sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
+//    sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -237,11 +237,13 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                 PersistentWindowState::implst_setWindowStateOnConfig(xSMGR, sModuleName, sWindowState);
             }
             break;
+        default:
+            break;
     }
 }
 
 //*****************************************************************************************************************
-void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     // nothing todo here - because we hold the frame as weak reference only
@@ -363,8 +365,8 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 
 
 //*********************************************************************************************************
-void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                                                          const ::rtl::OUString&                          sWindowState)
+void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& /*xWindow*/     ,
+                                                          const ::rtl::OUString&                          /*sWindowState*/)
 {
     /*
     if (
