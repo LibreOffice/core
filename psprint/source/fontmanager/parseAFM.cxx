@@ -46,9 +46,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:25:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:24:16 $
  *
  ************************************************************************/
 
@@ -1537,7 +1537,7 @@ freeFontInfo (FontInfo *fi)
 
     if (fi->pkd)
     {
-        for (int i = 0; i < fi->numOfPairs; i++)
+        for ( i = 0; i < fi->numOfPairs; i++)
         {
             free (fi->pkd[i].name1);
             free (fi->pkd[i].name2);
