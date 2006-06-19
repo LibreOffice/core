@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nav_main.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:33:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,12 +390,12 @@ MainRow::Create_ItemList_Global( E_Style             i_eOverview,
 void
 MainRow::Create_ItemList_InDirTree_Cpp( E_Style i_eNsp,
                                         E_Style i_eClass,
-                                        E_Style i_eTree,
-                                        const char *  i_sTreeLink,
-                                        E_Style i_eProj,
-                                        const ary::cpp::ProjectGroup * i_pProj,
-                                        E_Style i_eFile,
-                                        const ary::cpp::FileGroup * i_pFile )
+                                        E_Style ,
+                                        const char *  ,
+                                        E_Style ,
+                                        const ary::cpp::ProjectGroup * ,
+                                        E_Style ,
+                                        const ary::cpp::FileGroup * )
 {
     udmstri sLinkOverview = PathPerRoot(*pEnv, C_sHFN_Overview);
     Add_Item( eStd, sOverview, sLinkOverview.c_str(), "" );
