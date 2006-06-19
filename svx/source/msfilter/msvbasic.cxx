@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:47:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,7 +487,6 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
         SvStorageStreamRef xProject = xMacros->OpenSotStream(
             String( RTL_CONSTASCII_USTRINGPARAM( "PROJECT" ) ) );
         SvStorageStream* pStp = xProject;
-        int i = 0;
         UniString tmp;
         static const String sThisDoc(   RTL_CONSTASCII_USTRINGPARAM( "ThisDocument" ) );
         static const String sModule(    RTL_CONSTASCII_USTRINGPARAM( "Module" ) );
