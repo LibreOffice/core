@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:18:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     ::cppu::OWeakObject* pController = 0;
 
                     if ( aControlType.equalsAsciiL( "Button", 6 ))
-                        pController = new ButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
+                        pController = new ButtonToolbarController( m_xServiceManager, m_pToolBar, aURL );
                     else if ( aControlType.equalsAsciiL( "Combobox", 8 ))
                         pController = new ComboboxToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
                     else if ( aControlType.equalsAsciiL( "ImageButton", 11 ))
@@ -500,7 +500,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     AddFrameActionListener();
 }
 
-IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, pToolBar )
+IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, EMPTYARG )
 {
     if ( m_bDisposed )
         return 1;
@@ -517,7 +517,7 @@ IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, pToolBar )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, pToolBar )
+IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
 {
     if ( m_bDisposed )
         return 1;
@@ -534,7 +534,7 @@ IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, pToolBar )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Command, CommandEvent*, pCmdEvt )
+IMPL_LINK( AddonsToolBarManager, Command, CommandEvent*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -544,7 +544,7 @@ IMPL_LINK( AddonsToolBarManager, Command, CommandEvent*, pCmdEvt )
     return 0;
 }
 
-IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, pToolBar )
+IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
 {
     if ( m_bDisposed )
         return 1;
@@ -559,17 +559,17 @@ IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, pToolBar )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Highlight, ToolBox*, pToolBar )
+IMPL_LINK( AddonsToolBarManager, Highlight, ToolBox*, EMPTYARG )
 {
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Activate, ToolBox*, pToolBar )
+IMPL_LINK( AddonsToolBarManager, Activate, ToolBox*, EMPTYARG )
 {
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Deactivate, ToolBox*, pToolBar )
+IMPL_LINK( AddonsToolBarManager, Deactivate, ToolBox*, EMPTYARG )
 {
     return 1;
 }
