@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:42:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,17 +34,12 @@
  ************************************************************************/
 
 #include <stdlib.h>
-#include <sbx.hxx>
 #include <rtl/math.hxx>
 #include "runtime.hxx"
-#pragma hdrstop
 #include "sbintern.hxx"
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbunoobj.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 // Laden einer numerischen Konstanten (+ID)
 
@@ -243,7 +238,6 @@ void SbiRuntime::StepTESTFOR( USHORT nOp1 )
         return;
     }
 
-    ForType eForType = pForStk->eForType;
     bool bEndLoop = false;
     switch( pForStk->eForType )
     {
