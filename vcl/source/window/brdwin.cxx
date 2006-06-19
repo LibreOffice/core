@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:50:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
             pWin->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
             pWin->SetLineColor();
             pWin->DrawRect( rRect );
-            pWin->DrawSelectionBackground( rRect, 2, nState & BUTTON_DRAW_PRESSED,
+            pWin->DrawSelectionBackground( rRect, 2, (nState & BUTTON_DRAW_PRESSED) ? TRUE : FALSE,
                                             TRUE, FALSE );
         }
         aTempRect = rRect;
@@ -203,28 +203,28 @@ ImplBorderWindowView::~ImplBorderWindowView()
 
 // -----------------------------------------------------------------------
 
-BOOL ImplBorderWindowView::MouseMove( const MouseEvent& rMEvt )
+BOOL ImplBorderWindowView::MouseMove( const MouseEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImplBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL ImplBorderWindowView::MouseButtonDown( const MouseEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImplBorderWindowView::Tracking( const TrackingEvent& rTEvt )
+BOOL ImplBorderWindowView::Tracking( const TrackingEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-String ImplBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
+String ImplBorderWindowView::RequestHelp( const Point&, Rectangle& )
 {
     return String();
 }
@@ -1064,13 +1064,13 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
 // - ImplNoBorderWindowView -
 // --------------------------
 
-ImplNoBorderWindowView::ImplNoBorderWindowView( ImplBorderWindow* pBorderWindow )
+ImplNoBorderWindowView::ImplNoBorderWindowView( ImplBorderWindow* )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void ImplNoBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
+void ImplNoBorderWindowView::Init( OutputDevice*, long, long )
 {
 }
 
@@ -1094,7 +1094,7 @@ long ImplNoBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplNoBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
+void ImplNoBorderWindowView::DrawWindow( USHORT, OutputDevice*, const Point* )
 {
 }
 
@@ -1241,7 +1241,6 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
                     aCtrlPart = PART_WINDOW;
                 }
                 break;
-                break;
 
             default:
                 break;
@@ -1259,7 +1258,7 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
             nState |= CTRL_STATE_FOCUSED;
         BOOL bMouseOver = FALSE;
         Window *pCtrlChild = pCtrl->GetWindow( WINDOW_FIRSTCHILD );
-        while( pCtrlChild && !(bMouseOver = pCtrlChild->IsMouseOver()) )
+        while( pCtrlChild && (bMouseOver = pCtrlChild->IsMouseOver()) == FALSE )
             pCtrlChild = pCtrlChild->GetWindow( WINDOW_NEXT );
 
         if( bMouseOver )
@@ -1737,7 +1736,7 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
 // =======================================================================
 void ImplBorderWindow::ImplInit( Window* pParent,
                                  WinBits nStyle, USHORT nTypeStyle,
-                                 const ::com::sun::star::uno::Any& aSystemToken )
+                                 const ::com::sun::star::uno::Any& )
 {
     ImplInit( pParent, nStyle, nTypeStyle, NULL );
 }
@@ -1872,12 +1871,12 @@ void ImplBorderWindow::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-void ImplBorderWindow::Paint( const Rectangle& rRect )
+void ImplBorderWindow::Paint( const Rectangle& )
 {
     mpBorderView->DrawWindow( BORDERWINDOW_DRAW_ALL );
 }
 
-void ImplBorderWindow::Draw( const Rectangle& rRect, OutputDevice* pOutDev, const Point& rPos )
+void ImplBorderWindow::Draw( const Rectangle&, OutputDevice* pOutDev, const Point& rPos )
 {
     mpBorderView->DrawWindow( BORDERWINDOW_DRAW_ALL, pOutDev, &rPos );
 }
