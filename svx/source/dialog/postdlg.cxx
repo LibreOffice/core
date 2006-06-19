@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:01:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -105,18 +104,18 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_POSTIT ) ),
 
+    aPostItFL       ( this, ResId( FL_POSTIT ) ),
     aLastEditLabelFT( this, ResId( FT_LASTEDITLABEL ) ),
     aLastEditFT     ( this, ResId( FT_LASTEDIT ) ),
     aEditFT         ( this, ResId( FT_EDIT ) ),
     aEditED         ( this, ResId( ED_EDIT ) ),
-    aPostItFL       ( this, ResId( FL_POSTIT ) ),
-    aOKBtn          ( this, ResId( BTN_POST_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_POST_CANCEL ) ),
-    aPrevBtn        ( this, ResId( BTN_PREV ) ),
-    aNextBtn        ( this, ResId( BTN_NEXT ) ),
     aAuthorFT       ( this, ResId( FT_AUTHOR) ),
     aAuthorBtn      ( this, ResId( BTN_AUTHOR ) ),
+    aOKBtn          ( this, ResId( BTN_POST_OK ) ),
+    aCancelBtn      ( this, ResId( BTN_POST_CANCEL ) ),
     aHelpBtn        ( this, ResId( BTN_POST_HELP ) ),
+    aPrevBtn        ( this, ResId( BTN_PREV ) ),
+    aNextBtn        ( this, ResId( BTN_NEXT ) ),
 
     rSet        ( rCoreSet ),
     pOutSet     ( 0 )
@@ -140,7 +139,6 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     aEditED.SetFont( aFont );
 
     BOOL bNew = TRUE;
-    const SfxPoolItem* pItem = 0;
     USHORT nWhich            = 0;
 
     if ( !bPrevNext )
