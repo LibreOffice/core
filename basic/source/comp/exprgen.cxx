@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:46:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include "expr.hxx"
 
 // Umsetztabelle fuer Token-Operatoren und Opcodes
@@ -93,7 +92,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
     }
     else if( IsOperand() )
     {
-        SbiExprNode* pWithParent = NULL;
+        SbiExprNode* pWithParent_ = NULL;
         SbiOpcode eOp;
         if( aVar.pDef->GetScope() == SbPARAM )
         {
@@ -115,7 +114,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
             }
         }
         // AB: 17.12.1995, Spezialbehandlung fuer WITH
-        else if( (pWithParent = GetWithParent()) != NULL )
+        else if( (pWithParent_ = GetWithParent()) != NULL )
         {
             eOp = _ELEM;            // .-Ausdruck in WITH
         }
@@ -135,8 +134,8 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
 
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
-            if( p == this && pWithParent != NULL )
-                pWithParent->Gen();
+            if( p == this && pWithParent_ != NULL )
+                pWithParent_->Gen();
             p->GenElement( eOp );
             eOp = _ELEM;
         }
@@ -205,7 +204,7 @@ void SbiExprList::Gen()
         pParser->aGen.Gen( _ARGC );
         // AB 10.1.96: Typ-Anpassung bei DECLARE
         USHORT nCount = 1, nParAnz = 0;
-        SbiSymPool* pPool;
+        SbiSymPool* pPool = NULL;
         if( pProc )
         {
             pPool = &pProc->GetParams();
