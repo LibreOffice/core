@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:11:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ namespace configmgr
 
         typedef uno::Reference< lang::XComponent > Comp;
         DisposingForwarder::forward( Comp::query(xProvDelegate),Comp::query(xResult) );
-        return xResult;
+        return uno::Reference< uno::XInterface >( xResult, uno::UNO_QUERY );
     }
 
 
@@ -168,10 +168,10 @@ namespace configmgr
     }
 
     uno::Reference< uno::XInterface > SAL_CALL
-        ProviderWrapper::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+        ProviderWrapper::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& rArguments )
             throw(uno::Exception, uno::RuntimeException)
     {
-        return getDelegate()->createInstanceWithArguments(ServiceSpecifier,patchArguments(Arguments));
+        return getDelegate()->createInstanceWithArguments(ServiceSpecifier,patchArguments(rArguments));
     }
 
     uno::Sequence< OUString > SAL_CALL
