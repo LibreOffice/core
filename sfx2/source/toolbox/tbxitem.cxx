@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:00:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,7 +228,6 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
-    SfxViewFrame*   pViewFrame = NULL;
     SfxObjectShell* pObjShell = NULL;
     Reference < XController > xController;
     Reference < XModel > xModel;
@@ -248,7 +247,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
             ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
-                pObjShell = (SfxObjectShell*) (sal_Int32*) nHandle;
+                            pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
         }
     }
 
@@ -600,7 +599,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = (SfxOfficeDispatch*)(nImplementation);
+                pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
             }
 
             if ( pDisp )
@@ -700,7 +699,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     return rtl::OUString();
 }
 
-void SAL_CALL SfxToolBoxControl::functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::functionSelected( const ::rtl::OUString& /*aCommand*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     // must be implemented by sub-class
 }
@@ -745,38 +744,38 @@ Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createIt
 }
 
 // XDockableWindowListener
-void SAL_CALL SfxToolBoxControl::startDocking( const ::com::sun::star::awt::DockingEvent& e )
+void SAL_CALL SfxToolBoxControl::startDocking( const ::com::sun::star::awt::DockingEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
-::com::sun::star::awt::DockingData SAL_CALL SfxToolBoxControl::docking( const ::com::sun::star::awt::DockingEvent& e )
+::com::sun::star::awt::DockingData SAL_CALL SfxToolBoxControl::docking( const ::com::sun::star::awt::DockingEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return ::com::sun::star::awt::DockingData();
 }
 
-void SAL_CALL SfxToolBoxControl::endDocking( const ::com::sun::star::awt::EndDockingEvent& e )
+void SAL_CALL SfxToolBoxControl::endDocking( const ::com::sun::star::awt::EndDockingEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-sal_Bool SAL_CALL SfxToolBoxControl::prepareToggleFloatingMode( const ::com::sun::star::lang::EventObject& e )
+sal_Bool SAL_CALL SfxToolBoxControl::prepareToggleFloatingMode( const ::com::sun::star::lang::EventObject& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
-void SAL_CALL SfxToolBoxControl::toggleFloatingMode( const ::com::sun::star::lang::EventObject& e )
+void SAL_CALL SfxToolBoxControl::toggleFloatingMode( const ::com::sun::star::lang::EventObject& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SfxToolBoxControl::closed( const ::com::sun::star::lang::EventObject& e )
+void SAL_CALL SfxToolBoxControl::closed( const ::com::sun::star::lang::EventObject& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SfxToolBoxControl::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e )
+void SAL_CALL SfxToolBoxControl::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& aEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -805,7 +804,7 @@ throw (::com::sun::star::uno::RuntimeException)
     pImpl->mxUIElement = 0;
 
     // if the toolbar was teared-off recreate it and place it at the given position
-    if( e.bTearoff )
+    if( aEvent.bTearoff )
     {
         Reference< XUIElement >     xUIElement;
         Reference< XLayoutManager > xLayoutManager = getLayoutManager();
@@ -818,8 +817,6 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( xUIElement.is() )
         {
             Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
-
-            Window* pParent = VCLUnoHelper::GetWindow( xParent );
 
             Reference< ::com::sun::star::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), UNO_QUERY );
             Reference< ::com::sun::star::beans::XPropertySet > xProp( xUIElement, UNO_QUERY );
@@ -841,17 +838,17 @@ throw (::com::sun::star::uno::RuntimeException)
                         xLayoutManager->hideElement( aSubToolBarResName );
                         xLayoutManager->floatWindow( aSubToolBarResName );
 
-                        xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
+                        xLayoutManager->setElementPos( aSubToolBarResName, aEvent.FloatingPosition );
                         xLayoutManager->showElement( aSubToolBarResName );
 
                         xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" )), a );
                     }
                 }
-                catch ( RuntimeException& e )
+                catch ( ::com::sun::star::uno::RuntimeException& )
                 {
-                    throw e;
+                    throw;
                 }
-                catch ( Exception& )
+                catch ( ::com::sun::star::uno::Exception& )
                 {
                 }
             }
@@ -859,7 +856,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 }
 
-::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& xFrame, const ::rtl::OUString& rSubToolBarResName )
+::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& /*xFrame*/, const ::rtl::OUString& /*rSubToolBarResName*/ )
 {
     ::Size  aToolboxSize;
     return aToolboxSize;
@@ -917,8 +914,6 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
         if ( xUIElement.is() )
         {
             Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
-
-            Window* pParent = VCLUnoHelper::GetWindow( xParent );
 
             Reference< ::com::sun::star::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), UNO_QUERY );
             if ( xSubToolBar.is() )
@@ -1072,7 +1067,7 @@ void SfxToolBoxControl::Select( USHORT nModifier )
 
 //--------------------------------------------------------------------
 
-void SfxToolBoxControl::Select( BOOL bMod1 )
+void SfxToolBoxControl::Select( BOOL /*bMod1*/ )
 {
     svt::ToolboxController::execute( pImpl->nSelectModifier );
 }
@@ -1156,7 +1151,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = (SfxOfficeDispatch*)(nImplementation);
+                pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
             }
 
             if ( pDisp )
@@ -1256,11 +1251,11 @@ SfxPopupWindow::SfxPopupWindow(
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
     FloatingWindow( SFX_APP()->GetTopWindow(), nBits )
-    , m_nId( nId )
     , m_bFloating(FALSE)
-    , m_pStatusListener( 0 )
     , m_bCascading( FALSE )
+    , m_nId( nId )
     , m_xFrame( rFrame )
+    , m_pStatusListener( 0 )
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
@@ -1276,11 +1271,11 @@ SfxPopupWindow::SfxPopupWindow(
     const Reference< XFrame >& rFrame,
     const ResId &rId ) :
     FloatingWindow( SFX_APP()->GetTopWindow(), rId )
-    , m_nId( nId )
     , m_bFloating(FALSE)
-    , m_pStatusListener( 0 )
     , m_bCascading( FALSE )
+    , m_nId( nId )
     , m_xFrame( rFrame )
+    , m_pStatusListener( 0 )
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
@@ -1297,11 +1292,11 @@ SfxPopupWindow::SfxPopupWindow(
     Window* pParentWindow,
     WinBits nBits ) :
     FloatingWindow( pParentWindow, nBits )
-    , m_nId( nId )
     , m_bFloating(FALSE)
-    , m_pStatusListener( 0 )
     , m_bCascading( FALSE )
+    , m_nId( nId )
     , m_xFrame( rFrame )
+    , m_pStatusListener( 0 )
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
@@ -1318,11 +1313,11 @@ SfxPopupWindow::SfxPopupWindow(
     Window* pParentWindow,
     const ResId &rId ) :
     FloatingWindow( pParentWindow, rId )
-    , m_nId( nId )
     , m_bFloating(FALSE)
-    , m_pStatusListener( 0 )
     , m_bCascading( FALSE )
+    , m_nId( nId )
     , m_xFrame( rFrame )
+    , m_pStatusListener( 0 )
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
@@ -1505,8 +1500,10 @@ SfxPopupWindow* SfxPopupWindow::Clone() const
 
 //--------------------------------------------------------------------
 
-void SfxPopupWindow::StateChanged( USHORT nSID, SfxItemState eState,
-                                   const SfxPoolItem* pState )
+void SfxPopupWindow::StateChanged(
+    USHORT /*nSID*/,
+    SfxItemState eState,
+    const SfxPoolItem* /*pState*/ )
 /*  [Bescheibung]
 
     Siehe auch <SfxControllerItem::StateChanged()>. Au\serdem wird
@@ -1532,7 +1529,7 @@ void SfxPopupWindow::StateChanged( USHORT nSID, SfxItemState eState,
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxPopupWindow, Delete, void *, pvoid )
+IMPL_LINK( SfxPopupWindow, Delete, void *, EMPTYARG )
 {
     if ( m_aDeleteLink.IsSet() )
         m_aDeleteLink.Call( this );
@@ -1635,12 +1632,8 @@ long Select_Impl( void* pHdl, void* pVoid );
 
 SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
 {
-    SfxApplication* pApp = SFX_APP();
     ToolBox& rBox = GetToolBox();
     ::Rectangle aRect( rBox.GetItemRect( GetId() ) );
-
-    USHORT nId = GetId();
-    BOOL bNew = FALSE;
 
     if ( !pMenu )
     {
@@ -1651,7 +1644,7 @@ SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU );
     }
 
-    if( pMenu )
+    if ( pMenu )
     {
         pMenu->SetSelectHdl( Link( NULL, Select_Impl ) );
         pMenu->SetActivateHdl( LINK( this, SfxAppToolBoxControl_Impl, Activate ));
@@ -1775,7 +1768,7 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
 }
 
 //--------------------------------------------------------------------
-long Select_Impl( void* pHdl, void* pVoid )
+long Select_Impl( void* /*pHdl*/, void* pVoid )
 {
     Menu* pMenu = (Menu*)pVoid;
     String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
@@ -1826,9 +1819,9 @@ long Select_Impl( void* pHdl, void* pVoid )
     return TRUE;
 }
 
-IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
+IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
 {
-    if ( pMenu )
+    if ( pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
@@ -1840,11 +1833,11 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
             m_bWasHiContrastMode = bIsHiContrastMode;
             m_bShowMenuImages    = bShowMenuImages;
 
-            USHORT nCount = pMenu->GetItemCount();
+            USHORT nCount = pActMenu->GetItemCount();
             for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
             {
-                USHORT nId = pMenu->GetItemId( nSVPos );
-                if ( pMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
+                USHORT nId = pActMenu->GetItemId( nSVPos );
+                if ( pActMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
                 {
                     if ( bShowMenuImages )
                     {
@@ -1863,21 +1856,21 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
-                                pMenu->SetItemImage( nId, aImage );
+                                pActMenu->SetItemImage( nId, aImage );
                             }
                         }
 
-                        String aCmd( pMenu->GetItemCommand( nId ) );
+                        String aCmd( pActMenu->GetItemCommand( nId ) );
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
                                 INetURLObject(aCmd), FALSE, bIsHiContrastMode );
                             if ( !!aImage )
-                                pMenu->SetItemImage( nId, aImage );
+                                pActMenu->SetItemImage( nId, aImage );
                         }
                     }
                     else
-                        pMenu->SetItemImage( nId, Image() );
+                        pActMenu->SetItemImage( nId, Image() );
                 }
             }
         }
@@ -1890,7 +1883,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
 
 //--------------------------------------------------------------------
 
-IMPL_STATIC_LINK( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
 /*  i62706: Don't catch all exceptions. We hide all problems here and are not able
             to handle them on higher levels.
