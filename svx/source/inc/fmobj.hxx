@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:17:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,8 +115,6 @@ public:
     sal_Int32   getType() const;
 
 protected:
-    //BFS01virtual void     WriteData(SvStream& rOut) const;
-    //BFS01virtual void     ReadData(const SdrObjIOHeader& rHead, SvStream& rIn);
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     DECL_LINK(OnCreate, void* );
