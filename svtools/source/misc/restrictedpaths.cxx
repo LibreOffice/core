@@ -4,9 +4,9 @@
  *
  *  $RCSfile: restrictedpaths.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2005-11-16 09:03:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,8 @@ namespace svt
             // "/home/user3" is allowed - with the final slash, we make it "/home/user3/".
             lcl_convertStringListToUrls( sRestrictedPathList, m_aUnrestrictedURLs, true );
     }
+
+    RestrictedPaths::~RestrictedPaths() {}
 
     // --------------------------------------------------------------------
     bool RestrictedPaths::isUrlAllowed( const String& _rURL ) const
