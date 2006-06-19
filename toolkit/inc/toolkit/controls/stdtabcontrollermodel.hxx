@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtabcontrollermodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:50:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
 
 struct UnoControlModelEntry;
 
-DECLARE_LIST( UnoControlModelEntryListBase, UnoControlModelEntry* );
+DECLARE_LIST( UnoControlModelEntryListBase, UnoControlModelEntry* )
 
 class UnoControlModelEntryList : public UnoControlModelEntryListBase
 {
@@ -112,7 +112,7 @@ struct ComponentEntry
     Point                               aPos;
 };
 
-DECLARE_LIST( ComponentEntryList, ComponentEntry* );
+DECLARE_LIST( ComponentEntryList, ComponentEntry* )
 
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
