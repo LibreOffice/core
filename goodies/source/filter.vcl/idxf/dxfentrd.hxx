@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfentrd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,7 @@ struct DXFEdgeType
     sal_Int32 nEdgeType;
 
     virtual ~DXFEdgeType(){};
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ){ return sal_True; };
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & /*rDGR*/ ){ return sal_True; };
 
     protected :
 
