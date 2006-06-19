@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:50:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,10 @@
  ************************************************************************/
 
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#if defined (ICC) || defined (WTC) || defined(__powerc) || defined ( MAC ) || defined UNX
+#if defined UNX
 #include <stdlib.h>
 #else
 #include <math.h>   // atof()
@@ -181,14 +180,14 @@ BOOL SbiScanner::NextSym()
         INT32 nLen = aBuf.getLength();
         if( nBufPos >= nLen )
             return FALSE;
-        const sal_Unicode* p = aBuf.getStr();
-        p += n;
-        while( ( n < nLen ) && ( *p != '\n' ) && ( *p != '\r' ) )
-            p++, n++;
+        const sal_Unicode* p2 = aBuf.getStr();
+        p2 += n;
+        while( ( n < nLen ) && ( *p2 != '\n' ) && ( *p2 != '\r' ) )
+            p2++, n++;
         aLine = aBuf.copy( nBufPos, n - nBufPos );
         if( n < nLen )
         {
-            if( *p == '\r' && *( p+1 ) == '\n' )
+            if( *p2 == '\r' && *( p2+1 ) == '\n' )
                 n += 2;
             else
                 n++;
