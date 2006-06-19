@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framestatuslistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,10 +69,10 @@ FrameStatusListener::FrameStatusListener(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame ) :
     OWeakObject()
-    ,   m_xServiceManager( rServiceManager )
-    ,   m_xFrame( xFrame )
     ,   m_bInitialized( sal_True )
     ,   m_bDisposed( sal_False )
+    ,   m_xFrame( xFrame )
+    ,   m_xServiceManager( rServiceManager )
 {
 }
 
@@ -193,7 +193,7 @@ throw ( RuntimeException )
 }
 
 // XStatusListener
-void SAL_CALL FrameStatusListener::statusChanged( const FeatureStateEvent& Event )
+void SAL_CALL FrameStatusListener::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )
 {
     // must be implemented by sub class
@@ -242,11 +242,11 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
-                if ( pIter != m_aListenerMap.end() )
+                URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
+                if ( aIter != m_aListenerMap.end() )
                 {
-                    Reference< XDispatch > xOldDispatch( pIter->second );
-                    pIter->second = xDispatch;
+                    Reference< XDispatch > xOldDispatch( aIter->second );
+                    aIter->second = xDispatch;
 
                     try
                     {
