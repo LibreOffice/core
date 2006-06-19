@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:54:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
 static sal_Char __READONLY_DATA sHTML_SC_auto[] =   "AUTO";
 static sal_Char __READONLY_DATA sHTML_MIME_text_html[] =    "text/html; charset=";
 
+/* not used anymore?
 static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
 {
     { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
@@ -79,6 +80,7 @@ static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
     { sHTML_O_SDonblur,     sHTML_O_onblur,     SFX_EVENT_DEACTIVATEDOC },
     { 0,                    0,                  0                   }
 };
+*/
 
 #if defined(MAC)
 const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015";
