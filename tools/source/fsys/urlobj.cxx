@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:41:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,134 +483,134 @@ namespace unnamed_tools_urlobj {
 
 enum
 {
-    pA = INetURLObject::PART_OBSOLETE_NORMAL,
-    pB = INetURLObject::PART_OBSOLETE_FILE,
-    pC = INetURLObject::PART_OBSOLETE_PARAM,
-    pD = INetURLObject::PART_USER_PASSWORD,
-    pE = INetURLObject::PART_IMAP_ACHAR,
-    pF = INetURLObject::PART_VIM,
-    pG = INetURLObject::PART_HOST_EXTRA,
-    pH = INetURLObject::PART_FPATH,
-    pI = INetURLObject::PART_AUTHORITY,
-    pJ = INetURLObject::PART_PATH_SEGMENTS_EXTRA,
-    pK = INetURLObject::PART_REL_SEGMENT_EXTRA,
-    pL = INetURLObject::PART_URIC,
-    pM = INetURLObject::PART_HTTP_PATH,
-    pN = INetURLObject::PART_FILE_SEGMENT_EXTRA,
-    pO = INetURLObject::PART_MESSAGE_ID,
-    pP = INetURLObject::PART_MESSAGE_ID_PATH,
-    pQ = INetURLObject::PART_MAILTO,
-    pR = INetURLObject::PART_PATH_BEFORE_QUERY,
-    pS = INetURLObject::PART_PCHAR,
-    pT = INetURLObject::PART_FRAGMENT,
-    pU = INetURLObject::PART_VISIBLE,
-    pV = INetURLObject::PART_VISIBLE_NONSPECIAL,
-    pW = INetURLObject::PART_CREATEFRAGMENT,
-    pX = INetURLObject::PART_UNO_PARAM_VALUE,
-    pY = INetURLObject::PART_UNAMBIGUOUS,
-    pZ = INetURLObject::PART_URIC_NO_SLASH,
-    p1 = INetURLObject::PART_HTTP_QUERY,
-    p2 = INetURLObject::PART_NEWS_ARTICLE_LOCALPART
+    PA = INetURLObject::PART_OBSOLETE_NORMAL,
+    PB = INetURLObject::PART_OBSOLETE_FILE,
+    PC = INetURLObject::PART_OBSOLETE_PARAM,
+    PD = INetURLObject::PART_USER_PASSWORD,
+    PE = INetURLObject::PART_IMAP_ACHAR,
+    PF = INetURLObject::PART_VIM,
+    PG = INetURLObject::PART_HOST_EXTRA,
+    PH = INetURLObject::PART_FPATH,
+    PI = INetURLObject::PART_AUTHORITY,
+    PJ = INetURLObject::PART_PATH_SEGMENTS_EXTRA,
+    PK = INetURLObject::PART_REL_SEGMENT_EXTRA,
+    PL = INetURLObject::PART_URIC,
+    PM = INetURLObject::PART_HTTP_PATH,
+    PN = INetURLObject::PART_FILE_SEGMENT_EXTRA,
+    PO = INetURLObject::PART_MESSAGE_ID,
+    PP = INetURLObject::PART_MESSAGE_ID_PATH,
+    PQ = INetURLObject::PART_MAILTO,
+    PR = INetURLObject::PART_PATH_BEFORE_QUERY,
+    PS = INetURLObject::PART_PCHAR,
+    PT = INetURLObject::PART_FRAGMENT,
+    PU = INetURLObject::PART_VISIBLE,
+    PV = INetURLObject::PART_VISIBLE_NONSPECIAL,
+    PW = INetURLObject::PART_CREATEFRAGMENT,
+    PX = INetURLObject::PART_UNO_PARAM_VALUE,
+    PY = INetURLObject::PART_UNAMBIGUOUS,
+    PZ = INetURLObject::PART_URIC_NO_SLASH,
+    P1 = INetURLObject::PART_HTTP_QUERY,
+    P2 = INetURLObject::PART_NEWS_ARTICLE_LOCALPART
 };
 
 static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-/*   */                                                                         pY,
-/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* " */                                                             pU+pV      +pY,
-/* # */                                                             pU,
-/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* % */                                                             pU,
-/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX   +pZ+p1+p2,
-/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1+p2,
-/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ+p1+p2,
-/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* / */ pA+pB+pC            +pH   +pJ   +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX         +p2,
-/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1+p2,
-/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW      +pZ+p1+p2,
-/* < */       pC                                 +pO+pP            +pU+pV      +pY,
-/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW      +pZ+p1+p2,
-/* > */       pC                                 +pO+pP            +pU+pV      +pY,
-/* ? */       pC                        +pL                     +pT+pU   +pW+pX   +pZ   +p2,
-/* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* [ */                                  pL                        +pU+pV   +pX,
-/* \ */    pB                                                      +pU+pV      +pY,
-/* ] */                                  pL                        +pU+pV   +pX,
-/* ^ */                                                             pU+pV      +pY,
-/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* ` */                                                             pU+pV      +pY,
-/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
-/* { */                                                             pU+pV      +pY,
-/* | */    pB+pC                              +pN               +pT+pU+pV      +pY,
-/* } */                                                             pU+pV      +pY,
-/* ~ */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ  +p2,
+/*   */                                                                         PY,
+/* ! */       PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* " */                                                             PU+PV      +PY,
+/* # */                                                             PU,
+/* $ */          PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* % */                                                             PU,
+/* & */ PA+PB+PC+PD+PE      +PH+PI+PJ+PK+PL+PM+PN+PO+PP   +PR+PS+PT+PU+PV+PW+PX   +PZ+P1+P2,
+/* ' */          PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* ( */          PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* ) */          PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* * */ PA+PB+PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* + */ PA+PB+PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX   +PZ+P1+P2,
+/* , */ PA+PB+PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW      +PZ+P1+P2,
+/* - */ PA+PB+PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* . */ PA+PB+PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* / */ PA+PB+PC            +PH   +PJ   +PL+PM      +PP+PQ+PR   +PT+PU+PV   +PX         +P2,
+/* 0 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 1 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 2 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 3 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 4 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 5 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 6 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 7 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 8 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* 9 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* : */    PB+PC            +PH+PI+PJ   +PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX   +PZ+P1+P2,
+/* ; */       PC+PD            +PI+PJ+PK+PL+PM   +PO+PP+PQ+PR   +PT+PU   +PW      +PZ+P1+P2,
+/* < */       PC                                 +PO+PP            +PU+PV      +PY,
+/* = */ PA+PB+PC+PD+PE      +PH+PI+PJ+PK+PL+PM+PN         +PR+PS+PT+PU+PV+PW      +PZ+P1+P2,
+/* > */       PC                                 +PO+PP            +PU+PV      +PY,
+/* ? */       PC                        +PL                     +PT+PU   +PW+PX   +PZ   +P2,
+/* @ */       PC            +PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1,
+/* A */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* B */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* C */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* D */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* E */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* F */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* G */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* H */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* I */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* J */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* K */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* L */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* M */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* N */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* O */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* P */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* Q */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* R */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* S */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* T */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* U */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* V */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* W */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* X */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* Y */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* Z */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* [ */                                  PL                        +PU+PV   +PX,
+/* \ */    PB                                                      +PU+PV      +PY,
+/* ] */                                  PL                        +PU+PV   +PX,
+/* ^ */                                                             PU+PV      +PY,
+/* _ */ PA+PB+PC+PD+PE   +PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* ` */                                                             PU+PV      +PY,
+/* a */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* b */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* c */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* d */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* e */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* f */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* g */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* h */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* i */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* j */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* k */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* l */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* m */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* n */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* o */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* p */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* q */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* r */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* s */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* t */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* u */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* v */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* w */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* x */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* y */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* z */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
+/* { */                                                             PU+PV      +PY,
+/* | */    PB+PC                              +PN               +PT+PU+PV      +PY,
+/* } */                                                             PU+PV      +PY,
+/* ~ */ PA+PB+PC+PD+PE      +PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ  +P2,
         0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
@@ -793,37 +793,37 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
             // sequences and fragments are never detected as such, but are
             // taken as literal characters.
 
-            sal_Unicode const * p = pPos;
+            sal_Unicode const * p1 = pPos;
             if (eStyle & FSYS_DOS
-                && pEnd - p >= 2
-                && INetMIME::isAlpha(p[0])
-                && p[1] == ':'
-                && (pEnd - p == 2 || p[2] == '/' || p[2] == '\\'))
+                && pEnd - p1 >= 2
+                && INetMIME::isAlpha(p1[0])
+                && p1[1] == ':'
+                && (pEnd - p1 == 2 || p1[2] == '/' || p1[2] == '\\'))
             {
                 m_eScheme = INET_PROT_FILE; // 8th, 9th
                 eMechanism = ENCODE_ALL;
                 nFragmentDelimiter = 0x80000000;
             }
-            else if (pEnd - p >= 2 && p[0] == '/' && p[1] == '/')
+            else if (pEnd - p1 >= 2 && p1[0] == '/' && p1[1] == '/')
             {
-                p += 2;
-                if ((scanDomain(p, pEnd) > 0 || scanIPv6reference(p, pEnd))
-                    && (p == pEnd || *p == '/'))
+                p1 += 2;
+                if ((scanDomain(p1, pEnd) > 0 || scanIPv6reference(p1, pEnd))
+                    && (p1 == pEnd || *p1 == '/'))
                     m_eScheme = INET_PROT_FILE; // 5th
             }
-            else if (p != pEnd && *p == '/')
+            else if (p1 != pEnd && *p1 == '/')
             {
                 m_eScheme = INET_PROT_FILE; // 6th
                 eMechanism = ENCODE_ALL;
                 nFragmentDelimiter = 0x80000000;
             }
             else if (eStyle & FSYS_DOS
-                     && pEnd - p >= 2
-                     && p[0] == '\\'
-                     && p[1] == '\\')
+                     && pEnd - p1 >= 2
+                     && p1[0] == '\\'
+                     && p1[1] == '\\')
             {
-                p += 2;
-                if (scanDomain(p, pEnd) > 0 && (p == pEnd || *p == '\\'))
+                p1 += 2;
+                if (scanDomain(p1, pEnd) > 0 && (p1 == pEnd || *p1 == '\\'))
                 {
                     m_eScheme = INET_PROT_FILE; // 7th
                     eMechanism = ENCODE_ALL;
@@ -832,7 +832,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
             }
             else
             {
-                sal_Unicode const * pDomainEnd = p;
+                sal_Unicode const * pDomainEnd = p1;
                 sal_uInt32 nLabels = scanDomain(pDomainEnd, pEnd);
                 if (nLabels > 0 && pDomainEnd != pEnd && *pDomainEnd == '@')
                 {
@@ -844,23 +844,23 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 else if (nLabels >= 3
                          && (pDomainEnd == pEnd || *pDomainEnd == '/'))
                     m_eScheme
-                        = pDomainEnd - p >= 4
-                          && (p[0] == 'f' || p[0] == 'F')
-                          && (p[1] == 't' || p[1] == 'T')
-                          && (p[2] == 'p' || p[2] == 'P')
-                          && p[3] == '.' ?
+                        = pDomainEnd - p1 >= 4
+                          && (p1[0] == 'f' || p1[0] == 'F')
+                          && (p1[1] == 't' || p1[1] == 'T')
+                          && (p1[2] == 'p' || p1[2] == 'P')
+                          && p1[3] == '.' ?
                               INET_PROT_FTP : INET_PROT_HTTP; // 3rd, 4th
             }
         }
 
         rtl::OUString aSynScheme;
         if (m_eScheme == INET_PROT_NOT_VALID) {
-            sal_Unicode const * p = pPos;
-            aSynScheme = parseScheme(&p, pEnd, nFragmentDelimiter);
+            sal_Unicode const * p1 = pPos;
+            aSynScheme = parseScheme(&p1, pEnd, nFragmentDelimiter);
             if (aSynScheme.getLength() > 0)
             {
                 m_eScheme = INET_PROT_GENERIC;
-                pPos = p;
+                pPos = p1;
             }
         }
 
@@ -1031,18 +1031,19 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     //    "file://" domain "/" *path ["#" *UCS4]
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
-                        sal_Unicode const * p = pPos + 2;
-                        if (p == pEnd || *p == nFragmentDelimiter || *p == '/'
-                            || (scanDomain(p, pEnd) > 0
-                                    || scanIPv6reference(p, pEnd))
-                               && (p == pEnd || *p == nFragmentDelimiter
-                                   || *p == '/'))
+                        sal_Unicode const * p1 = pPos + 2;
+                        if (p1 == pEnd || *p1 == nFragmentDelimiter
+                            || *p1 == '/'
+                            || (scanDomain(p1, pEnd) > 0
+                                    || scanIPv6reference(p1, pEnd))
+                               && (p1 == pEnd || *p1 == nFragmentDelimiter
+                                   || *p1 == '/'))
                         {
                             aSynAbsURIRef.
                                 appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                             pHostPortBegin = pPos + 2;
-                            pHostPortEnd = p;
-                            pPos = p;
+                            pHostPortEnd = p1;
+                            pPos = p1;
                             break;
                         }
                     }
@@ -1100,16 +1101,16 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         && pPos[0] == '\\'
                         && pPos[1] == '\\')
                     {
-                        sal_Unicode const * p = pPos + 2;
-                        if (scanDomain(p, pEnd) > 0
-                            && (p == pEnd || *p == nFragmentDelimiter
-                                || *p == '\\'))
+                        sal_Unicode const * p1 = pPos + 2;
+                        if (scanDomain(p1, pEnd) > 0
+                            && (p1 == pEnd || *p1 == nFragmentDelimiter
+                                || *p1 == '\\'))
                         {
                             aSynAbsURIRef.
                                 appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                             pHostPortBegin = pPos + 2;
-                            pHostPortEnd = p;
-                            pPos = p;
+                            pHostPortEnd = p1;
+                            pPos = p1;
                             nSegmentDelimiter = '\\';
                             break;
                         }
@@ -1210,10 +1211,10 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 if (getSchemeInfo().m_bUser)
                     if (getSchemeInfo().m_bHost)
                     {
-                        sal_Unicode const * p = pAuthority;
-                        while (p < pPos && *p != '@')
-                            ++p;
-                        if (p == pPos)
+                        sal_Unicode const * p1 = pAuthority;
+                        while (p1 < pPos && *p1 != '@')
+                            ++p1;
+                        if (p1 == pPos)
                         {
                             pHostPortBegin = pAuthority;
                             pHostPortEnd = pPos;
@@ -1221,8 +1222,8 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         else
                         {
                             pUserInfoBegin = pAuthority;
-                            pUserInfoEnd = p;
-                            pHostPortBegin = p + 1;
+                            pUserInfoEnd = p1;
+                            pHostPortBegin = p1 + 1;
                             pHostPortEnd = pPos;
                         }
                     }
@@ -1257,11 +1258,11 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 = !bSupportsPassword && getSchemeInfo().m_bAuth;
             bool bHasAuth = false;
             rtl::OUStringBuffer aSynUser;
-            sal_Unicode const * p = pUserInfoBegin;
-            while (p < pUserInfoEnd)
+            sal_Unicode const * p1 = pUserInfoBegin;
+            while (p1 < pUserInfoEnd)
             {
                 EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(p, pUserInfoEnd, bOctets,
+                sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
                                              cEscapePrefix, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
@@ -1271,14 +1272,14 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         break;
                     }
                     else if (nUTF32 == ';' && bSupportsAuth
-                             && pUserInfoEnd - p
+                             && pUserInfoEnd - p1
                                     > RTL_CONSTASCII_LENGTH("auth=")
                              && INetMIME::equalIgnoreCase(
-                                    p,
-                                    p + RTL_CONSTASCII_LENGTH("auth="),
+                                    p1,
+                                    p1 + RTL_CONSTASCII_LENGTH("auth="),
                                     "auth="))
                     {
-                        p += RTL_CONSTASCII_LENGTH("auth=");
+                        p1 += RTL_CONSTASCII_LENGTH("auth=");
                         bHasAuth = true;
                         break;
                     }
@@ -1292,10 +1293,10 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 {
                     aSynAbsURIRef.append(sal_Unicode(':'));
                     rtl::OUStringBuffer aSynAuth;
-                    while (p < pUserInfoEnd)
+                    while (p1 < pUserInfoEnd)
                     {
                         EscapeType eEscapeType;
-                        sal_uInt32 nUTF32 = getUTF32(p, pUserInfoEnd, bOctets,
+                        sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
                                                      cEscapePrefix,
                                                      eMechanism, eCharset,
                                                      eEscapeType);
@@ -1310,10 +1311,10 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     aSynAbsURIRef.
                         appendAscii(RTL_CONSTASCII_STRINGPARAM(";AUTH="));
                     rtl::OUStringBuffer aSynAuth;
-                    while (p < pUserInfoEnd)
+                    while (p1 < pUserInfoEnd)
                     {
                         EscapeType eEscapeType;
-                        sal_uInt32 nUTF32 = getUTF32(p, pUserInfoEnd, bOctets,
+                        sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
                                                      cEscapePrefix,
                                                      eMechanism, eCharset,
                                                      eEscapeType);
@@ -1337,11 +1338,11 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
             sal_Unicode const * pPort = pHostPortEnd;
             if (getSchemeInfo().m_bPort && pHostPortBegin < pHostPortEnd)
             {
-                sal_Unicode const * p = pHostPortEnd - 1;
-                while (p > pHostPortBegin && INetMIME::isDigit(*p))
-                    --p;
-                if (*p == ':')
-                    pPort = p;
+                sal_Unicode const * p1 = pHostPortEnd - 1;
+                while (p1 > pHostPortBegin && INetMIME::isDigit(*p1))
+                    --p1;
+                if (*p1 == ':')
+                    pPort = p1;
             }
             bool bNetBiosName = false;
             switch (m_eScheme)
@@ -1373,8 +1374,9 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     break;
             }
             rtl::OUStringBuffer aSynHost;
-            if (!parseHost(pHostPortBegin, pPort, bOctets, eMechanism, eCharset,
-                           bNetBiosName, &aSynHost))
+            if (!parseHostOrNetBiosName(
+                    pHostPortBegin, pPort, bOctets, eMechanism, eCharset,
+                    bNetBiosName, &aSynHost))
             {
                 setInvalid();
                 return false;
@@ -1987,7 +1989,6 @@ bool INetURLObject::convertAbsToRel(rtl::OUString const & rTheAbsURIRef,
 // static
 bool INetURLObject::convertIntToExt(rtl::OUString const & rTheIntURIRef,
                                     bool bOctets, rtl::OUString & rTheExtURIRef,
-                                    EncodeMechanism eEncodeMechanism,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset)
 {
@@ -2016,7 +2017,6 @@ bool INetURLObject::convertIntToExt(rtl::OUString const & rTheIntURIRef,
 // static
 bool INetURLObject::convertExtToInt(rtl::OUString const & rTheExtURIRef,
                                     bool bOctets, rtl::OUString & rTheIntURIRef,
-                                    EncodeMechanism eEncodeMechanism,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset)
 {
@@ -2322,22 +2322,457 @@ bool INetURLObject::setPassword(rtl::OUString const & rThePassword,
 
 //============================================================================
 // static
-bool INetURLObject::parseHost(sal_Unicode const * pBegin,
-                              sal_Unicode const * pEnd, bool bOctets,
-                              EncodeMechanism eMechanism,
-                              rtl_TextEncoding eCharset, bool bNetBiosName,
-                              rtl::OUStringBuffer* pCanonic)
+bool INetURLObject::parseHost(
+    sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
+    rtl::OUString & rCanonic)
+{
+    // RFC 2373 is inconsistent about how to write an IPv6 address in which an
+    // IPv4 address directly follows the abbreviating "::".  The ABNF in
+    // Appendix B suggests ":::13.1.68.3", while an example in 2.2/3 explicitly
+    // mentions "::13:1.68.3".  This algorithm accepts both variants:
+    enum State { STATE_INITIAL, STATE_LABEL, STATE_LABEL_HYPHEN,
+                 STATE_LABEL_DOT, STATE_TOPLABEL, STATE_TOPLABEL_HYPHEN,
+                 STATE_TOPLABEL_DOT, STATE_IP4, STATE_IP4_DOT, STATE_IP6,
+                 STATE_IP6_COLON, STATE_IP6_2COLON, STATE_IP6_3COLON,
+                 STATE_IP6_HEXSEQ1, STATE_IP6_HEXSEQ1_COLON,
+                 STATE_IP6_HEXSEQ1_MAYBE_IP4, STATE_IP6_HEXSEQ2,
+                 STATE_IP6_HEXSEQ2_COLON, STATE_IP6_HEXSEQ2_MAYBE_IP4,
+                 STATE_IP6_IP4, STATE_IP6_IP4_DOT, STATE_IP6_DONE };
+    rtl::OUStringBuffer aTheCanonic;
+    sal_uInt32 nNumber = 0;
+    int nDigits = 0;
+    int nOctets = 0;
+    State eState = STATE_INITIAL;
+    sal_Unicode const * p = rBegin;
+    for (; p != pEnd; ++p)
+        switch (eState)
+        {
+            case STATE_INITIAL:
+                if (*p == '[')
+                {
+                    aTheCanonic.append(sal_Unicode('['));
+                    eState = STATE_IP6;
+                }
+                else if (INetMIME::isAlpha(*p))
+                    eState = STATE_TOPLABEL;
+                else if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    nOctets = 1;
+                    eState = STATE_IP4;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_LABEL:
+                if (*p == '.')
+                    eState = STATE_LABEL_DOT;
+                else if (*p == '-')
+                    eState = STATE_LABEL_HYPHEN;
+                else if (!INetMIME::isAlphanumeric(*p))
+                    goto done;
+                break;
+
+            case STATE_LABEL_HYPHEN:
+                if (INetMIME::isAlphanumeric(*p))
+                    eState = STATE_LABEL;
+                else if (*p != '-')
+                    goto done;
+                break;
+
+            case STATE_LABEL_DOT:
+                if (INetMIME::isAlpha(*p))
+                    eState = STATE_TOPLABEL;
+                else if (INetMIME::isDigit(*p))
+                    eState = STATE_LABEL;
+                else
+                    goto done;
+                break;
+
+            case STATE_TOPLABEL:
+                if (*p == '.')
+                    eState = STATE_TOPLABEL_DOT;
+                else if (*p == '-')
+                    eState = STATE_TOPLABEL_HYPHEN;
+                else if (!INetMIME::isAlphanumeric(*p))
+                    goto done;
+                break;
+
+            case STATE_TOPLABEL_HYPHEN:
+                if (INetMIME::isAlphanumeric(*p))
+                    eState = STATE_TOPLABEL;
+                else if (*p != '-')
+                    goto done;
+                break;
+
+            case STATE_TOPLABEL_DOT:
+                if (INetMIME::isAlpha(*p))
+                    eState = STATE_TOPLABEL;
+                else if (INetMIME::isDigit(*p))
+                    eState = STATE_LABEL;
+                else
+                    goto done;
+                break;
+
+            case STATE_IP4:
+                if (*p == '.')
+                    if (nOctets < 4)
+                    {
+                        aTheCanonic.append(
+                            rtl::OUString::valueOf(sal_Int32(nNumber)));
+                        aTheCanonic.append(sal_Unicode('.'));
+                        ++nOctets;
+                        eState = STATE_IP4_DOT;
+                    }
+                    else
+                        eState = STATE_LABEL_DOT;
+                else if (*p == '-')
+                    eState = STATE_LABEL_HYPHEN;
+                else if (INetMIME::isAlpha(*p))
+                    eState = STATE_LABEL;
+                else if (INetMIME::isDigit(*p))
+                    if (nDigits < 3)
+                    {
+                        nNumber = 10 * nNumber + INetMIME::getWeight(*p);
+                        ++nDigits;
+                    }
+                    else
+                        eState = STATE_LABEL;
+                else
+                    goto done;
+                break;
+
+            case STATE_IP4_DOT:
+                if (INetMIME::isAlpha(*p))
+                    eState = STATE_TOPLABEL;
+                else if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP4;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6:
+                if (*p == ':')
+                    eState = STATE_IP6_COLON;
+                else if (INetMIME::isHexDigit(*p))
+                {
+                    nNumber = INetMIME::getHexWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ1;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_COLON:
+                if (*p == ':')
+                {
+                    aTheCanonic.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
+                    eState = STATE_IP6_2COLON;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_2COLON:
+                if (*p == ']')
+                    eState = STATE_IP6_DONE;
+                else if (*p == ':')
+                {
+                    aTheCanonic.append(sal_Unicode(':'));
+                    eState = STATE_IP6_3COLON;
+                }
+                else if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
+                }
+                else if (INetMIME::isHexDigit(*p))
+                {
+                    nNumber = INetMIME::getHexWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ2;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_3COLON:
+                if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    nOctets = 1;
+                    eState = STATE_IP6_IP4;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_HEXSEQ1:
+                if (*p == ']')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    eState = STATE_IP6_DONE;
+                }
+                else if (*p == ':')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    aTheCanonic.append(sal_Unicode(':'));
+                    eState = STATE_IP6_HEXSEQ1_COLON;
+                }
+                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                {
+                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
+                    ++nDigits;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_HEXSEQ1_COLON:
+                if (*p == ':')
+                {
+                    aTheCanonic.append(sal_Unicode(':'));
+                    eState = STATE_IP6_2COLON;
+                }
+                else if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ1_MAYBE_IP4;
+                }
+                else if (INetMIME::isHexDigit(*p))
+                {
+                    nNumber = INetMIME::getHexWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ1;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_HEXSEQ1_MAYBE_IP4:
+                if (*p == ']')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    eState = STATE_IP6_DONE;
+                }
+                else if (*p == ':')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    aTheCanonic.append(sal_Unicode(':'));
+                    eState = STATE_IP6_HEXSEQ1_COLON;
+                }
+                else if (*p == '.')
+                {
+                    nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
+                                  + (nNumber & 15);
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber)));
+                    aTheCanonic.append(sal_Unicode('.'));
+                    nOctets = 2;
+                    eState = STATE_IP6_IP4_DOT;
+                }
+                else if (INetMIME::isDigit(*p) && nDigits < 3)
+                {
+                    nNumber = 16 * nNumber + INetMIME::getWeight(*p);
+                    ++nDigits;
+                }
+                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                {
+                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
+                    ++nDigits;
+                    eState = STATE_IP6_HEXSEQ1;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_HEXSEQ2:
+                if (*p == ']')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    eState = STATE_IP6_DONE;
+                }
+                else if (*p == ':')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    aTheCanonic.append(sal_Unicode(':'));
+                    eState = STATE_IP6_HEXSEQ2_COLON;
+                }
+                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                {
+                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
+                    ++nDigits;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_HEXSEQ2_COLON:
+                if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
+                }
+                else if (INetMIME::isHexDigit(*p))
+                {
+                    nNumber = INetMIME::getHexWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ2;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_HEXSEQ2_MAYBE_IP4:
+                if (*p == ']')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    eState = STATE_IP6_DONE;
+                }
+                else if (*p == ':')
+                {
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                    aTheCanonic.append(sal_Unicode(':'));
+                    eState = STATE_IP6_HEXSEQ2_COLON;
+                }
+                else if (*p == '.')
+                {
+                    nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
+                                  + (nNumber & 15);
+                    aTheCanonic.append(
+                        rtl::OUString::valueOf(sal_Int32(nNumber)));
+                    aTheCanonic.append(sal_Unicode('.'));
+                    nOctets = 2;
+                    eState = STATE_IP6_IP4_DOT;
+                }
+                else if (INetMIME::isDigit(*p) && nDigits < 3)
+                {
+                    nNumber = 16 * nNumber + INetMIME::getWeight(*p);
+                    ++nDigits;
+                }
+                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                {
+                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
+                    ++nDigits;
+                    eState = STATE_IP6_HEXSEQ2;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_IP4:
+                if (*p == ']')
+                    if (nOctets == 4)
+                    {
+                        aTheCanonic.append(
+                            rtl::OUString::valueOf(sal_Int32(nNumber)));
+                        eState = STATE_IP6_DONE;
+                    }
+                    else
+                        goto done;
+                else if (*p == '.')
+                    if (nOctets < 4)
+                    {
+                        aTheCanonic.append(
+                            rtl::OUString::valueOf(sal_Int32(nNumber)));
+                        aTheCanonic.append(sal_Unicode('.'));
+                        ++nOctets;
+                        eState = STATE_IP6_IP4_DOT;
+                    }
+                    else
+                        goto done;
+                else if (INetMIME::isDigit(*p) && nDigits < 3)
+                {
+                    nNumber = 10 * nNumber + INetMIME::getWeight(*p);
+                    ++nDigits;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_IP4_DOT:
+                if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_IP4;
+                }
+                else
+                    goto done;
+                break;
+
+            case STATE_IP6_DONE:
+                goto done;
+        }
+ done:
+    switch (eState)
+    {
+        case STATE_LABEL:
+        case STATE_TOPLABEL:
+        case STATE_TOPLABEL_DOT:
+            aTheCanonic.setLength(0);
+            aTheCanonic.append(rBegin, p - rBegin);
+            rBegin = p;
+            rCanonic = aTheCanonic.makeStringAndClear();
+            return true;
+
+        case STATE_IP4:
+            if (nOctets == 4)
+            {
+                aTheCanonic.append(
+                    rtl::OUString::valueOf(sal_Int32(nNumber)));
+                rBegin = p;
+                rCanonic = aTheCanonic.makeStringAndClear();
+                return true;
+            }
+            return false;
+
+        case STATE_IP6_DONE:
+            aTheCanonic.append(sal_Unicode(']'));
+            rBegin = p;
+            rCanonic = aTheCanonic.makeStringAndClear();
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+//============================================================================
+// static
+bool INetURLObject::parseHostOrNetBiosName(
+    sal_Unicode const * pBegin, sal_Unicode const * pEnd, bool bOctets,
+    EncodeMechanism eMechanism, rtl_TextEncoding eCharset, bool bNetBiosName,
+    rtl::OUStringBuffer* pCanonic)
 {
     OSL_ENSURE(pCanonic != 0, "Null pCanonic");
-    rtl::OUStringBuffer aTheCanonic;
+    rtl::OUString aTheCanonic;
     if (pBegin < pEnd)
     {
         sal_Unicode const * p = pBegin;
-        if (!parseHost(p, pEnd, bOctets, eMechanism, eCharset, aTheCanonic)
-            || p != pEnd)
+        if (!parseHost(p, pEnd, aTheCanonic) || p != pEnd)
             if (bNetBiosName)
             {
-                aTheCanonic.setLength(0);
+                rtl::OUStringBuffer buf;
                 while (pBegin < pEnd)
                 {
                     EscapeType eEscapeType;
@@ -2367,9 +2802,10 @@ bool INetURLObject::parseHost(sal_Unicode const * pBegin,
                         case '|':
                             return false;;
                         }
-                    appendUCS4(aTheCanonic, nUTF32, eEscapeType, bOctets,
+                    appendUCS4(buf, nUTF32, eEscapeType, bOctets,
                                PART_URIC, '%', eCharset, true);
                 }
+                aTheCanonic = buf.makeStringAndClear();
             }
             else
                 return false;
@@ -2434,9 +2870,9 @@ bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
                 return false;
             break;
     }
-    if (!parseHost(aSynHost.getStr(),
-        aSynHost.getStr() + aSynHost.getLength(), bOctets, eMechanism,
-        eCharset, bNetBiosName, &aSynHost))
+    if (!parseHostOrNetBiosName(
+            aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
+            bOctets, eMechanism, eCharset, bNetBiosName, &aSynHost))
         return false;
     sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear());
     m_aPort += nDelta;
@@ -2617,8 +3053,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                        && *pPos != nFragmentDelimiter)
                     ++p;
                 rtl::OUString aCanonic;
-                if (!parseHost(pPos, p, bOctets, eMechanism, eCharset,
-                               aCanonic))
+                if (!parseHost(pPos, p, aCanonic))
                     return false;
                 aTheSynPath.append(aCanonic);
             }
@@ -2821,7 +3256,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                         return false;
                     aTheSynPath.append(sal_Unicode('.'));
                 }
-                bool bEmpty = true;
+                bEmpty = true;
                 while (pPos < pPathEnd && *pPos != '.')
                 {
                     EscapeType eEscapeType;
@@ -2917,6 +3352,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             if (aTheSynPath.getLength() == 0)
                 return false;
+            break;
+
+        default:
+            OSL_ASSERT(false);
             break;
     }
 
@@ -3244,6 +3683,9 @@ rtl::OUString INetURLObject::decode(sal_Unicode const * pBegin,
 
         case DECODE_TO_IURI:
             eCharset = RTL_TEXTENCODING_UTF8;
+            break;
+
+        default:
             break;
     }
     rtl::OUStringBuffer aResult;
@@ -3669,9 +4111,9 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     }
                     break;
             }
-            if (!parseHost(aSynHost.getStr(),
-                           aSynHost.getStr() + aSynHost.getLength(), false,
-                           eMechanism, eCharset, bNetBiosName, &aSynHost))
+            if (!parseHostOrNetBiosName(
+                    aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
+                    false, eMechanism, eCharset, bNetBiosName, &aSynHost))
             {
                 setInvalid();
                 return false;
@@ -3748,8 +4190,8 @@ rtl::OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
                                         rtl_TextEncoding eCharset) const
 {
     rtl::OUString aTheExtURIRef;
-    translateToExternal(rtl::OUString(m_aAbsURIRef), aTheExtURIRef,
-        NOT_CANONIC, eMechanism, eCharset);
+    translateToExternal(
+        rtl::OUString(m_aAbsURIRef), aTheExtURIRef, eMechanism, eCharset);
     return aTheExtURIRef;
 }
 
@@ -3873,440 +4315,6 @@ void INetURLObject::makePortCanonic()
             m_aFragment += nDelta;
         }
     }
-}
-
-//============================================================================
-// static
-bool INetURLObject::parseHost(sal_Unicode const *& rBegin,
-                              sal_Unicode const * pEnd, bool bOctets,
-                              EncodeMechanism eMechanism,
-                              rtl_TextEncoding eCharset,
-                              rtl::OUString & rCanonic)
-{
-    // RFC 2373 is inconsistent about how to write an IPv6 address in which an
-    // IPv4 address directly follows the abbreviating "::".  The ABNF in
-    // Appendix B suggests ":::13.1.68.3", while an example in 2.2/3 explicitly
-    // mentions "::13:1.68.3".  This algorithm accepts both variants:
-    enum State { STATE_INITIAL, STATE_LABEL, STATE_LABEL_HYPHEN,
-                 STATE_LABEL_DOT, STATE_TOPLABEL, STATE_TOPLABEL_HYPHEN,
-                 STATE_TOPLABEL_DOT, STATE_IP4, STATE_IP4_DOT, STATE_IP6,
-                 STATE_IP6_COLON, STATE_IP6_2COLON, STATE_IP6_3COLON,
-                 STATE_IP6_HEXSEQ1, STATE_IP6_HEXSEQ1_COLON,
-                 STATE_IP6_HEXSEQ1_MAYBE_IP4, STATE_IP6_HEXSEQ2,
-                 STATE_IP6_HEXSEQ2_COLON, STATE_IP6_HEXSEQ2_MAYBE_IP4,
-                 STATE_IP6_IP4, STATE_IP6_IP4_DOT, STATE_IP6_DONE };
-    rtl::OUStringBuffer aTheCanonic;
-    sal_uInt32 nNumber = 0;
-    int nDigits = 0;
-    int nOctets = 0;
-    State eState = STATE_INITIAL;
-    sal_Unicode const * p = rBegin;
-    for (; p != pEnd; ++p)
-        switch (eState)
-        {
-            case STATE_INITIAL:
-                if (*p == '[')
-                {
-                    aTheCanonic.append(sal_Unicode('['));
-                    eState = STATE_IP6;
-                }
-                else if (INetMIME::isAlpha(*p))
-                    eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    nOctets = 1;
-                    eState = STATE_IP4;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_LABEL:
-                if (*p == '.')
-                    eState = STATE_LABEL_DOT;
-                else if (*p == '-')
-                    eState = STATE_LABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p))
-                    goto done;
-                break;
-
-            case STATE_LABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p))
-                    eState = STATE_LABEL;
-                else if (*p != '-')
-                    goto done;
-                break;
-
-            case STATE_LABEL_DOT:
-                if (INetMIME::isAlpha(*p))
-                    eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
-                    eState = STATE_LABEL;
-                else
-                    goto done;
-                break;
-
-            case STATE_TOPLABEL:
-                if (*p == '.')
-                    eState = STATE_TOPLABEL_DOT;
-                else if (*p == '-')
-                    eState = STATE_TOPLABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p))
-                    goto done;
-                break;
-
-            case STATE_TOPLABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p))
-                    eState = STATE_TOPLABEL;
-                else if (*p != '-')
-                    goto done;
-                break;
-
-            case STATE_TOPLABEL_DOT:
-                if (INetMIME::isAlpha(*p))
-                    eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
-                    eState = STATE_LABEL;
-                else
-                    goto done;
-                break;
-
-            case STATE_IP4:
-                if (*p == '.')
-                    if (nOctets < 4)
-                    {
-                        aTheCanonic.append(
-                            rtl::OUString::valueOf(sal_Int32(nNumber)));
-                        aTheCanonic.append(sal_Unicode('.'));
-                        ++nOctets;
-                        eState = STATE_IP4_DOT;
-                    }
-                    else
-                        eState = STATE_LABEL_DOT;
-                else if (*p == '-')
-                    eState = STATE_LABEL_HYPHEN;
-                else if (INetMIME::isAlpha(*p))
-                    eState = STATE_LABEL;
-                else if (INetMIME::isDigit(*p))
-                    if (nDigits < 3)
-                    {
-                        nNumber = 10 * nNumber + INetMIME::getWeight(*p);
-                        ++nDigits;
-                    }
-                    else
-                        eState = STATE_LABEL;
-                else
-                    goto done;
-                break;
-
-            case STATE_IP4_DOT:
-                if (INetMIME::isAlpha(*p))
-                    eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP4;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6:
-                if (*p == ':')
-                    eState = STATE_IP6_COLON;
-                else if (INetMIME::isHexDigit(*p))
-                {
-                    nNumber = INetMIME::getHexWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ1;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_COLON:
-                if (*p == ':')
-                {
-                    aTheCanonic.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
-                    eState = STATE_IP6_2COLON;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_2COLON:
-                if (*p == ']')
-                    eState = STATE_IP6_DONE;
-                else if (*p == ':')
-                {
-                    aTheCanonic.append(sal_Unicode(':'));
-                    eState = STATE_IP6_3COLON;
-                }
-                else if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
-                }
-                else if (INetMIME::isHexDigit(*p))
-                {
-                    nNumber = INetMIME::getHexWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ2;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_3COLON:
-                if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    nOctets = 1;
-                    eState = STATE_IP6_IP4;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_HEXSEQ1:
-                if (*p == ']')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    eState = STATE_IP6_DONE;
-                }
-                else if (*p == ':')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    aTheCanonic.append(sal_Unicode(':'));
-                    eState = STATE_IP6_HEXSEQ1_COLON;
-                }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
-                {
-                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
-                    ++nDigits;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_HEXSEQ1_COLON:
-                if (*p == ':')
-                {
-                    aTheCanonic.append(sal_Unicode(':'));
-                    eState = STATE_IP6_2COLON;
-                }
-                else if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ1_MAYBE_IP4;
-                }
-                else if (INetMIME::isHexDigit(*p))
-                {
-                    nNumber = INetMIME::getHexWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ1;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_HEXSEQ1_MAYBE_IP4:
-                if (*p == ']')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    eState = STATE_IP6_DONE;
-                }
-                else if (*p == ':')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    aTheCanonic.append(sal_Unicode(':'));
-                    eState = STATE_IP6_HEXSEQ1_COLON;
-                }
-                else if (*p == '.')
-                {
-                    nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
-                                  + (nNumber & 15);
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber)));
-                    aTheCanonic.append(sal_Unicode('.'));
-                    nOctets = 2;
-                    eState = STATE_IP6_IP4_DOT;
-                }
-                else if (INetMIME::isDigit(*p) && nDigits < 3)
-                {
-                    nNumber = 16 * nNumber + INetMIME::getWeight(*p);
-                    ++nDigits;
-                }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
-                {
-                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
-                    ++nDigits;
-                    eState = STATE_IP6_HEXSEQ1;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_HEXSEQ2:
-                if (*p == ']')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    eState = STATE_IP6_DONE;
-                }
-                else if (*p == ':')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    aTheCanonic.append(sal_Unicode(':'));
-                    eState = STATE_IP6_HEXSEQ2_COLON;
-                }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
-                {
-                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
-                    ++nDigits;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_HEXSEQ2_COLON:
-                if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
-                }
-                else if (INetMIME::isHexDigit(*p))
-                {
-                    nNumber = INetMIME::getHexWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_HEXSEQ2;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_HEXSEQ2_MAYBE_IP4:
-                if (*p == ']')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    eState = STATE_IP6_DONE;
-                }
-                else if (*p == ':')
-                {
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
-                    aTheCanonic.append(sal_Unicode(':'));
-                    eState = STATE_IP6_HEXSEQ2_COLON;
-                }
-                else if (*p == '.')
-                {
-                    nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
-                                  + (nNumber & 15);
-                    aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber)));
-                    aTheCanonic.append(sal_Unicode('.'));
-                    nOctets = 2;
-                    eState = STATE_IP6_IP4_DOT;
-                }
-                else if (INetMIME::isDigit(*p) && nDigits < 3)
-                {
-                    nNumber = 16 * nNumber + INetMIME::getWeight(*p);
-                    ++nDigits;
-                }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
-                {
-                    nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
-                    ++nDigits;
-                    eState = STATE_IP6_HEXSEQ2;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_IP4:
-                if (*p == ']')
-                    if (nOctets == 4)
-                    {
-                        aTheCanonic.append(
-                            rtl::OUString::valueOf(sal_Int32(nNumber)));
-                        eState = STATE_IP6_DONE;
-                    }
-                    else
-                        goto done;
-                else if (*p == '.')
-                    if (nOctets < 4)
-                    {
-                        aTheCanonic.append(
-                            rtl::OUString::valueOf(sal_Int32(nNumber)));
-                        aTheCanonic.append(sal_Unicode('.'));
-                        ++nOctets;
-                        eState = STATE_IP6_IP4_DOT;
-                    }
-                    else
-                        goto done;
-                else if (INetMIME::isDigit(*p) && nDigits < 3)
-                {
-                    nNumber = 10 * nNumber + INetMIME::getWeight(*p);
-                    ++nDigits;
-                }
-                else
-                    goto done;
-                break;
-
-            case STATE_IP6_IP4_DOT:
-                if (INetMIME::isDigit(*p))
-                {
-                    nNumber = INetMIME::getWeight(*p);
-                    nDigits = 1;
-                    eState = STATE_IP6_IP4;
-                }
-                else
-                    goto done;
-                break;
-        }
- done:
-    switch (eState)
-    {
-        case STATE_LABEL:
-        case STATE_TOPLABEL:
-        case STATE_TOPLABEL_DOT:
-            aTheCanonic.setLength(0);
-            aTheCanonic.append(rBegin, p - rBegin);
-            rBegin = p;
-            rCanonic = aTheCanonic.makeStringAndClear();
-            return true;
-
-        case STATE_IP4:
-            if (nOctets == 4)
-            {
-                aTheCanonic.append(
-                    rtl::OUString::valueOf(sal_Int32(nNumber)));
-                rBegin = p;
-                rCanonic = aTheCanonic.makeStringAndClear();
-                return true;
-            }
-            break;
-
-        case STATE_IP6_DONE:
-            aTheCanonic.append(sal_Unicode(']'));
-            rBegin = p;
-            rCanonic = aTheCanonic.makeStringAndClear();
-            return true;
-    }
-    return false;
 }
 
 //============================================================================
@@ -4692,8 +4700,7 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
 
                 sal_Unicode const * p = pFSysBegin + 2;
                 rtl::OUString aHost;
-                if (parseHost(p, pFSysEnd, false, ENCODE_ALL,
-                              RTL_TEXTENCODING_UTF8, aHost)
+                if (parseHost(p, pFSysEnd, aHost)
                     && (p == pFSysEnd || *p == '/'))
                 {
                     eStyle = FSYS_VOS; // Production T2
@@ -4708,8 +4715,7 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
             {
                 sal_Unicode const * p = pFSysBegin + 2;
                 rtl::OUString aHost;
-                if (parseHost(p, pFSysEnd, false, ENCODE_ALL,
-                              RTL_TEXTENCODING_UTF8, aHost)
+                if (parseHost(p, pFSysEnd, aHost)
                     && (p == pFSysEnd || *p == '\\'))
                 {
                     eStyle = FSYS_DOS; // Production T3
@@ -4842,6 +4848,10 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
                 }
             }
             break;
+
+        default:
+            OSL_ASSERT(false);
+            break;
     }
 
     INetURLObject aTemp(aSynAbsURIRef.makeStringAndClear(), WAS_ENCODED,
@@ -4973,9 +4983,10 @@ rtl::OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             }
             return aSynFSysPath.makeStringAndClear();
         }
-    }
 
-    return rtl::OUString();
+        default:
+            return rtl::OUString();
+    }
 }
 
 //============================================================================
