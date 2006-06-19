@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storlckb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:46:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:33:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_ "$Revision: 1.4 $"
+#define _STORE_STORLCKB_HXX_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -120,8 +120,8 @@ private:
 
     /** IStoreHandle query() template function specialization.
      */
-    friend inline OStoreDirectory*
-    SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory*);
+    friend OStoreDirectory*
+    SAL_CALL query<> (IStoreHandle *pHandle, OStoreDirectory*);
 
     /** Representation.
      */
@@ -140,7 +140,7 @@ private:
     OStoreDirectory& operator= (const OStoreDirectory&);
 };
 
-inline OStoreDirectory*
+template<> inline OStoreDirectory*
 SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory*)
 {
     if (pHandle && pHandle->isKindOf (OStoreDirectory::m_nTypeId))
@@ -261,8 +261,8 @@ private:
 
     /** IStoreHandle query() template specialization.
      */
-    friend inline OStoreLockBytes*
-    SAL_CALL query (IStoreHandle *pHandle, OStoreLockBytes*);
+    friend OStoreLockBytes*
+    SAL_CALL query<> (IStoreHandle *pHandle, OStoreLockBytes*);
 
     /** Representation.
      */
@@ -288,7 +288,7 @@ private:
     OStoreLockBytes& operator= (const OStoreLockBytes&);
 };
 
-inline OStoreLockBytes*
+template<> inline OStoreLockBytes*
 SAL_CALL query (IStoreHandle *pHandle, OStoreLockBytes*)
 {
     if (pHandle && pHandle->isKindOf (OStoreLockBytes::m_nTypeId))
