@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:51:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 
 // ========================================================================
 
-DBG_NAMEEX( OutputDevice );
+DBG_NAMEEX( OutputDevice )
 
 // ------------------------------------------------------------------------
 
@@ -147,8 +147,8 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     if( nFlags & GRID_DOTS )
     {
         for( long i = 0L; i < nVertCount; i++ )
-            for( long j = 0L, nY = aVertBuf[ i ]; j < nHorzCount; j++ )
-                mpGraphics->DrawPixel( aHorzBuf[ j ], nY, this );
+            for( long j = 0L, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
+                mpGraphics->DrawPixel( aHorzBuf[ j ], Y, this );
     }
     else
     {
@@ -429,9 +429,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         if( mpAlphaVDev )
         {
             const Color aFillCol( mpAlphaVDev->GetFillColor() );
-            mpAlphaVDev->SetFillColor( Color(255*nTransparencePercent/100,
-                                             255*nTransparencePercent/100,
-                                             255*nTransparencePercent/100) );
+            mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<UINT8>(255*nTransparencePercent/100),
+                                             sal::static_int_cast<UINT8>(255*nTransparencePercent/100),
+                                             sal::static_int_cast<UINT8>(255*nTransparencePercent/100)) );
 
             mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
 
