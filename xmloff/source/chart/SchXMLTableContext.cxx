@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:26:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ SchXMLTableContext::~SchXMLTableContext()
 SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetTableElemTokenMap();
@@ -160,7 +160,7 @@ SchXMLTableColumnsContext::~SchXMLTableColumnsContext()
 SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -251,7 +251,7 @@ SchXMLTableRowsContext::~SchXMLTableRowsContext()
 SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -297,7 +297,7 @@ SchXMLTableRowContext::~SchXMLTableRowContext()
 SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -393,7 +393,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
 SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -429,7 +429,7 @@ void SchXMLTableHelper::applyTableSimple(
 {
     // interpret table like this:
     //
-    //  series ----+---\
+    //  series ----+---+
     //             |   |
     //  categories |   |
     //        |    |   |
@@ -520,7 +520,6 @@ void SchXMLTableHelper::applyTable(
         if( xData.is())
         {
             sal_Int32 nNumSeriesAddresses = rSeriesAddresses.getLength();
-            sal_Int32 nNumLabelAddresses = nNumSeriesAddresses;
             sal_Int32 nDomainOffset = 0;
             sal_Int32 nNumAddrSize = nNumSeriesAddresses;
 
@@ -583,8 +582,7 @@ void SchXMLTableHelper::applyTable(
                 }
 
                 // set labels
-                uno::Sequence< rtl::OUString > aLabels;
-                aLabels.realloc( nNumAddrSize );
+                uno::Sequence< rtl::OUString > aColumnLabels( nNumAddrSize );
 
                 sal_Int32 nRow, nCol;
                 for( i = 0; i < nNumSeriesAddresses; i++ )
@@ -592,13 +590,10 @@ void SchXMLTableHelper::applyTable(
                     if( rSeriesAddresses[ i ].LabelAddress.getLength())
                     {
                         GetCellAddress( rSeriesAddresses[ i ].LabelAddress, nCol, nRow );
-                        aLabels[ i + nDomainOffset ] = rTable.aData[ nRow ][ nCol ].aString;
+                        aColumnLabels[ i + nDomainOffset ] = rTable.aData[ nRow ][ nCol ].aString;
                     }
                 }
-                xData->setColumnDescriptions( aLabels );
-
-                // set categories
-                aLabels = xData->getRowDescriptions();
+                xData->setColumnDescriptions( aColumnLabels );
 
                 if( rCategoriesAddress.getLength())
                 {
@@ -625,7 +620,7 @@ void SchXMLTableHelper::applyTable(
                             sal_Int32 nWidth = aAddress.nCol2 - aAddress.nCol1 + 1;
                             aLabels.realloc( nWidth );
 
-                            for( sal_Int32 i = 0; i < nWidth; i++ )
+                            for( i = 0; i < nWidth; i++ )
                             {
                                 DBG_ASSERT( rTable.aData[ aAddress.nRow1 ][ aAddress.nCol1 + i ].eType == SCH_CELL_TYPE_STRING, "expecting string" );
                                 aLabels[ i ] = rTable.aData[ aAddress.nRow1 ][ aAddress.nCol1 + i ].aString;
