@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:55:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:28:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,8 +227,7 @@ OUString SvBaseEventDescriptor::mapEventIDToName(sal_uInt16 nPoolID) const
     }
 
     // not found -> return empty string
-    OUString sEmpty;
-    return sEmpty;
+    return OUString();
 }
 
 sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
