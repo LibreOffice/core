@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpmread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:43:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:07:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 // - XPMReader -
 // -------------
 
-XPMReader::XPMReader( SvStream& rStm, void* pCallData ) :
+XPMReader::XPMReader( SvStream& rStm, void* ) :
             mrIStm          ( rStm ),
             mpAcc           ( NULL ),
             mpMaskAcc       ( NULL ),
