@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:45:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,9 @@ struct SvxMSDffVertPair
 struct SvxMSDffCalculationData
 {
     sal_uInt16  nFlags;
-    sal_Int16   nVal[ 3 ];
+    sal_Int16   nVal1;
+    sal_Int16   nVal2;
+    sal_Int16   nVal3;
 };
 struct SvxMSDffTextRectangles
 {
@@ -3807,17 +3809,17 @@ static const sal_uInt16 mso_sptVerticalScrollSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptScrollCalc[] =
 {
-    0x2000, DFF_Prop_adjustValue, 0, 0,
-    0x2001, 0x400, 1, 2,
-    0x8000, 21600, 0, 0x401,
-    0x8000, 21600, 0, 0x400,
-    0x6000, 0x400, 0x401, 0,
-    0x8000, 21600, 0, 0x404,
-    0x2001, 0x400, 2, 1,
-    0x2001, 0x401, 1, 2,
-    0x6000, 0x400, 0x407, 0,
-    0x6000, 0x401, 0x407, 0,
-    0x8000, 21600, 0, 0x409
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0x2001, 0x400, 1, 2 },
+    { 0x8000, 21600, 0, 0x401 },
+    { 0x8000, 21600, 0, 0x400 },
+    { 0x6000, 0x400, 0x401, 0 },
+    { 0x8000, 21600, 0, 0x404 },
+    { 0x2001, 0x400, 2, 1 },
+    { 0x2001, 0x401, 1, 2 },
+    { 0x6000, 0x400, 0x407, 0 },
+    { 0x6000, 0x401, 0x407, 0 },
+    { 0x8000, 21600, 0, 0x409 }
 };
 static const SvxMSDffTextRectangles mso_sptScrollTextRect[] =
 {
@@ -5207,23 +5209,23 @@ SvxMSDffCustomShape::~SvxMSDffCustomShape()
 
 SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, SvStream& rSt,
                                         DffObjData& rData, Rectangle& rSnapRect, sal_Int32 nAngle, MSFilterTracer* pT ) :
-    eSpType             ( rData.eShapeType ),
     pTracer             ( pT ),
+    eSpType             ( rData.eShapeType ),
     aSnapRect           ( rSnapRect ),
     nFix16Angle         ( nAngle ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
     nFlags              ( 0 ),
     nColorData          ( 0 ),
-    nCalculationData    ( 0 ),
-    nTextRectData       ( 0 ),
-    nAdjustmentHandles  ( 0 ),
-    nGluePoints         ( 0 ),
-    pAdjustmentHandles  ( NULL ),
     pVertData           ( NULL ),
     pSegData            ( NULL ),
-    pCalculationData    ( NULL ),
+    nTextRectData       ( 0 ),
     pTextRectData       ( NULL ),
+    nCalculationData    ( 0 ),
+    pCalculationData    ( NULL ),
+    nAdjustmentHandles  ( 0 ),
+    pAdjustmentHandles  ( NULL ),
+    nGluePoints         ( 0 ),
     pGluePoints         ( NULL ),
     bIsEmpty            ( TRUE ),
     bVertAlloc          ( FALSE ),
@@ -5313,6 +5315,7 @@ SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, 
             break;
             case mso_sptVerticalScroll :            nColorData = 0x30dd0000; break;
             case mso_sptHorizontalScroll :          nColorData = 0x30dd0000; break;
+            default: break;
         }
     }
     nCoordHeight = nCoordWidth  = 21600;
@@ -5356,13 +5359,13 @@ SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, 
         {
             bIsEmpty = FALSE;
             nNumElemVert = nTmp16;
-            sal_uInt32 i = nNumElemVert;
+            sal_uInt32 k = nNumElemVert;
             bVertAlloc = TRUE;
             pVertData = new SvxMSDffVertPair[ nNumElemVert ];
             SvxMSDffVertPair* pTmp = pVertData;
             if ( nElemSizeVert == 8 )
             {
-                while( i-- )
+                while( k-- )
                 {
                     rSt >> pTmp->nValA
                         >> pTmp->nValB;
@@ -5372,7 +5375,7 @@ SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, 
             else
             {
                 sal_Int16 nTmpA, nTmpB;
-                while ( i-- )
+                while ( k-- )
                 {
                     rSt >> nTmpA
                         >> nTmpB;
@@ -5396,9 +5399,9 @@ SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, 
                 bSegAlloc = TRUE;
                 pSegData = new sal_uInt16[ nNumElemSeg + 1 ];   // #97948# allocate one more element,
 #ifdef OSL_BIGENDIAN                                              // so it won't be difficult to append
-                sal_uInt32 i = nNumElemSeg;                     // a missing end segment action
+                sal_uInt32 k = nNumElemSeg;                     // a missing end segment action
                 sal_uInt16* pTmp = pSegData;
-                while( i-- )
+                while( k-- )
                 {
                     rSt >> *pTmp++;
                 }
@@ -5418,16 +5421,16 @@ SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, 
                 nCalculationData = nTmp16;
                 pCalculationData = new SvxMSDffCalculationData[ nCalculationData ];
                 bCalcAlloc = TRUE;
-                sal_uInt32 i;
+                sal_uInt32 k;
                 sal_uInt16 nVal0, nVal1, nVal2;
-                for ( i = 0; i < nCalculationData; i++ )
+                for ( k = 0; k < nCalculationData; k++ )
                 {
-                    SvxMSDffCalculationData& rDat = pCalculationData[ i ];
+                    SvxMSDffCalculationData& rDat = pCalculationData[ k ];
                     rSt >> rDat.nFlags
                         >> nVal0 >> nVal1 >> nVal2;
-                    rDat.nVal[ 0 ] = nVal0;
-                    rDat.nVal[ 1 ] = nVal1;
-                    rDat.nVal[ 2 ] = nVal2;
+                    rDat.nVal1 = nVal0;
+                    rDat.nVal2 = nVal1;
+                    rDat.nVal3 = nVal2;
                 }
             }
         }
@@ -5540,7 +5543,7 @@ Point SvxMSDffCustomShape::GetPoint( const SvxMSDffVertPair& rPair, sal_Bool bSc
             }
             if ( bScaleWidth )
             {
-                if ( ( aSnapRect.GetWidth() > aSnapRect.GetHeight() ) && ( ( nXRef != 0x80000000 ) || nGeometryFlags ) )
+                if ( ( aSnapRect.GetWidth() > aSnapRect.GetHeight() ) && ( ( nXRef != (sal_Int32)0x80000000 ) || nGeometryFlags ) )
                 {
                     sal_Bool bGeo = ( ( ( nGeometryFlags & GEOMETRY_USED_LEFT ) == 0 ) && ( fVal > nXRef ) )
                                         || ( ( nGeometryFlags & GEOMETRY_USED_RIGHT ) != 0 );
@@ -5564,7 +5567,7 @@ Point SvxMSDffCustomShape::GetPoint( const SvxMSDffVertPair& rPair, sal_Bool bSc
             }
             else
             {
-                if ( ( aSnapRect.GetHeight() > aSnapRect.GetWidth() ) && ( ( nYRef != 0x80000000 ) || nGeometryFlags ) )
+                if ( ( aSnapRect.GetHeight() > aSnapRect.GetWidth() ) && ( ( nYRef != (sal_Int32)0x80000000 ) || nGeometryFlags ) )
                 {
                     sal_Bool bGeo = ( ( ( nGeometryFlags & GEOMETRY_USED_TOP ) == 0 ) && ( fVal > nYRef ) )
                                         || ( ( nGeometryFlags & GEOMETRY_USED_BOTTOM ) != 0 );
@@ -5604,12 +5607,18 @@ double SvxMSDffCustomShape::ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeomet
         return 0;
 
     double fVal[ 3 ];
-    sal_Int16 i, nFlags = pCalculationData[ nIndex ].nFlags;
+    sal_Int16 i, nF = pCalculationData[ nIndex ].nFlags;
     for ( i = 0; i < 3; i++ )
     {
-        if ( nFlags & ( 0x2000 << i ) )
+        if ( nF & ( 0x2000 << i ) )
         {
-            sal_Int16 nVal = pCalculationData[ nIndex ].nVal[ i ];
+            sal_Int16 nVal = 0;
+            switch( i )
+            {
+                case 0: nVal = pCalculationData[ nIndex ].nVal1; break;
+                case 1: nVal = pCalculationData[ nIndex ].nVal2; break;
+                case 2: nVal = pCalculationData[ nIndex ].nVal3; break;
+            }
             if ( nVal & 0x400 )
                 fVal[ i ] = ImplGetValue( nVal & 0xff, nGeometryFlags );
             else
@@ -5659,10 +5668,19 @@ double SvxMSDffCustomShape::ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeomet
             }
         }
         else
-            fVal[ i ] = pCalculationData[ nIndex ].nVal[ i ];
+        {
+            switch( i )
+            {
+                case 0 : fVal[ 0 ] = pCalculationData[ nIndex ].nVal1; break;
+                case 1 : fVal[ 1 ] = pCalculationData[ nIndex ].nVal2; break;
+                case 2 : fVal[ 2 ] = pCalculationData[ nIndex ].nVal3; break;
+            }
+
+
+        }
     }
 
-    switch ( nFlags & 0xff )
+    switch ( nF & 0xff )
     {
         case 0 :                                    // sum
         {
@@ -5811,7 +5829,7 @@ double SvxMSDffCustomShape::ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeomet
         break;
         default :
         {
-            sal_Bool bStop = sal_True;
+//          sal_Bool bStop = sal_True;
         }
         break;
     }
@@ -5910,7 +5928,7 @@ MSO_SPT SvxMSDffCustomShape::GetShapeTypeFromSdrObject(  const SdrObject* pObj )
         {
             /* checking magic number, so we can get sure that the SdrObject was a customshape
                and we can get the customshape type */
-            if ( rAdjustItem.GetValue( nCount - 1 ).GetValue() == 0x80001234 )
+            if ( rAdjustItem.GetValue( nCount - 1 ).GetValue() == (sal_Int32)0x80001234 )
                 eShapeType = (MSO_SPT)((sal_uInt32)(rAdjustItem.GetValue( nCount - 2 ).GetValue()) >> 16);
         }
     }
@@ -5922,12 +5940,12 @@ void SvxMSDffCustomShape::SwapStartAndEndArrow( SdrObject* pObj )   //#108274
     XLineStartItem       aLineStart;
     const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
-    aLineStart.SetValue(((XLineStartItem&)rObjItemSet.Get( XATTR_LINEEND )).GetValue());
+    aLineStart.SetLineStartValue(((XLineStartItem&)rObjItemSet.Get( XATTR_LINEEND )).GetLineStartValue());
     XLineStartWidthItem  aLineStartWidth(((XLineStartWidthItem&)rObjItemSet.Get( XATTR_LINEENDWIDTH )).GetValue());
     XLineStartCenterItem aLineStartCenter(((XLineStartCenterItem&)rObjItemSet.Get( XATTR_LINEENDCENTER )).GetValue());
 
     XLineEndItem         aLineEnd;
-    aLineEnd.SetValue(((XLineEndItem&)rObjItemSet.Get( XATTR_LINESTART )).GetValue());
+    aLineEnd.SetLineEndValue(((XLineEndItem&)rObjItemSet.Get( XATTR_LINESTART )).GetLineEndValue());
     XLineEndWidthItem    aLineEndWidth(((XLineEndWidthItem&)rObjItemSet.Get( XATTR_LINESTARTWIDTH )).GetValue());
     XLineEndCenterItem   aLineEndCenter(((XLineEndCenterItem&)rObjItemSet.Get( XATTR_LINESTARTCENTER )).GetValue());
 
@@ -6026,7 +6044,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                 aPolygon[ nPt - 1 ] = aPolygon[ nPt - 2 ];
                 Rectangle aPolyArcRect( aPolygon.GetBoundRect() );
 
-                double  fYScale, fXScale;
+                double  fYSc, fXSc;
                 double  fYOfs, fXOfs;
                 int     nCond;
 
@@ -6037,8 +6055,8 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                     nCond ^= bFlipH ? 1 : 0;
                     if ( nCond )
                     {
-                        fXScale = (double)aSnapRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                        fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXScale;
+                        fXSc = (double)aSnapRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                        fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXSc;
                     }
                 }
                 if ( aPolyPieRect.GetHeight() != aPolyArcRect.GetHeight() )
@@ -6047,15 +6065,15 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                     nCond ^= bFlipV ? 1 : 0;
                     if ( nCond )
                     {
-                        fYScale = (double)aSnapRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-                        fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYScale;
+                        fYSc = (double)aSnapRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                        fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYSc;
                     }
                 }
-                fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                fXSc = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                fYSc = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
 
                 aPolyArcRect = Rectangle( Point( aSnapRect.Left() + (sal_Int32)fXOfs, aSnapRect.Top() + (sal_Int32)fYOfs ),
-                    Size( (sal_Int32)( aSnapRect.GetWidth() * fXScale ), (sal_Int32)( aSnapRect.GetHeight() * fYScale ) ) );
+                    Size( (sal_Int32)( aSnapRect.GetWidth() * fXSc ), (sal_Int32)( aSnapRect.GetHeight() * fYSc ) ) );
 
                 SdrCircObj* pObjCirc = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
                 pObjCirc->SetSnapRect( aPolyArcRect );
@@ -6084,10 +6102,10 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
         {
             // Header auswerten
             XPolygon aXP( (sal_uInt16)nNumElemVert );
-            const SvxMSDffVertPair* pTmp = pVertData;
+            const SvxMSDffVertPair* pT = pVertData;
             sal_uInt32 nPtNum;
             for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
-                aXP[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_True );
+                aXP[ (sal_uInt16)nPtNum ] = GetPoint( *pT++, sal_True );
             Rectangle   aPolyBoundRect( aXP.GetBoundRect() );
 
             if ( !pSegData )
@@ -6112,7 +6130,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                 XPolyPolygon    aEmptyPolyPoly;
                 XPolygon        aEmptyPoly;
 
-                BOOL            bClosed;
+                BOOL            bClosed = FALSE;
                 sal_uInt16      nPolyFlags;
 
                 Color           aFillColor( COL_WHITE );
@@ -6122,7 +6140,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
 
                 Rectangle       aUnion;
 
-                const sal_uInt16* pTmp = pSegData;
+                const sal_uInt16* pS = pSegData;
 
                 if ( nColorCount )
                 {
@@ -6131,12 +6149,12 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                     if( SFX_ITEM_SET == eState )
                     {
                         if ( pPoolItem )
-                            aFillColor = ((XFillColorItem*)pPoolItem)->GetValue();
+                            aFillColor = ((XFillColorItem*)pPoolItem)->GetColorValue();
                     }
                 }
                 for ( sal_uInt16 i = 0; i < nNumElemSeg; i++ )
                 {
-                    nPolyFlags = *pTmp++;
+                    nPolyFlags = *pS++;
                     switch ( nPolyFlags >> 12 )
                     {
                         case 0x4 :
@@ -6204,7 +6222,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                         case 0x2 :
                         {
                             sal_uInt16 nDstPt = aPoly.GetPointCount();
-                            for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xfff ); i++ )
+                            for ( sal_uInt16 k = 0; k < ( nPolyFlags & 0xfff ); k++ )
                             {
                                 aPoly[ nDstPt ] = aXP[ nSrcPt++ ];
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
@@ -6260,7 +6278,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                                         else
                                         {
                                             sal_uInt32 nXor = ( nMod == 5 ) ? 3 : 2;
-                                            for ( sal_uInt16 i = 0; i < ( nPntCount >> 2 ); i++ )
+                                            for ( sal_uInt16 k = 0; k < ( nPntCount >> 2 ); k++ )
                                             {
                                                 PolyStyle ePolyStyle = POLY_ARC;
                                                 Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
@@ -6303,9 +6321,9 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                                     case 7 :
                                     case 8 :
                                     {
-                                        BOOL    bFirstDirection;
+                                        BOOL    bFirstDirection = TRUE;
                                         sal_uInt16  nDstPt = aPoly.GetPointCount();
-                                        for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xff ); i++ )
+                                        for ( sal_uInt16 k = 0; k < ( nPolyFlags & 0xff ); k++ )
                                         {
                                             sal_uInt32 nModT = ( nMod == 7 ) ? 1 : 0;
                                             Point aCurrent( aXP[ nSrcPt ] );
@@ -6317,14 +6335,14 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                                                 nY = aCurrent.Y() - aPrev.Y();
                                                 if ( ( nY ^ nX ) & 0x80000000 )
                                                 {
-                                                    if ( !i )
+                                                    if ( !k )
                                                         bFirstDirection = TRUE;
                                                     else if ( !bFirstDirection )
                                                         nModT ^= 1;
                                                 }
                                                 else
                                                 {
-                                                    if ( !i )
+                                                    if ( !k )
                                                         bFirstDirection = FALSE;
                                                     else if ( bFirstDirection )
                                                         nModT ^= 1;
@@ -6363,7 +6381,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                         case 0x0 :
                         {
                             sal_uInt16 nDstPt = aPoly.GetPointCount();
-                            for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xfff ); i++ )
+                            for ( sal_uInt16 k = 0; k < ( nPolyFlags & 0xfff ); k++ )
                                 aPoly[ nDstPt++ ] = aXP[ nSrcPt++ ];
                         }
                         break;
@@ -6457,7 +6475,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                 aGluePoint.SetEscDir( SDRESC_SMART );
                 SdrGluePointList* pList = pRet->ForceGluePointList();
                 if( pList )
-                    sal_uInt16 nId = pList->Insert( aGluePoint );
+                    /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
             }
         }
         if ( bSetCustomShapeAdjustItem )
