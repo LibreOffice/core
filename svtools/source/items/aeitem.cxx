@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aeitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:55:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxAllEnumItem);
+DBG_NAME(SfxAllEnumItem)
 
 TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 
@@ -57,8 +57,8 @@ struct SfxAllEnumValue_Impl
     XubString aText;
 };
 
-SV_DECL_PTRARR_DEL(SfxAllEnumValueArr, SfxAllEnumValue_Impl*, 0, 8);
-SV_IMPL_PTRARR(SfxAllEnumValueArr, SfxAllEnumValue_Impl*);
+SV_DECL_PTRARR_DEL(SfxAllEnumValueArr, SfxAllEnumValue_Impl*, 0, 8)
+SV_IMPL_PTRARR(SfxAllEnumValueArr, SfxAllEnumValue_Impl*)
 
 // -----------------------------------------------------------------------
 
@@ -69,8 +69,8 @@ SfxAllEnumItem::SfxAllEnumItem() :
 {
 }
 
-SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, USHORT nVal, const XubString &rText ):
-    SfxEnumItem(nWhich, nVal),
+SfxAllEnumItem::SfxAllEnumItem( USHORT which, USHORT nVal, const XubString &rText ):
+    SfxEnumItem(which, nVal),
     pValues( 0 ),
     pDisabledValues( 0 )
 {
@@ -80,8 +80,8 @@ SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, USHORT nVal, const XubString &rTe
 
 // -----------------------------------------------------------------------
 
-SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich, USHORT nVal):
-    SfxEnumItem(nWhich, nVal),
+SfxAllEnumItem::SfxAllEnumItem(USHORT which, USHORT nVal):
+    SfxEnumItem(which, nVal),
     pValues( 0 ),
     pDisabledValues( 0 )
 {
@@ -91,8 +91,8 @@ SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich, USHORT nVal):
 
 // -----------------------------------------------------------------------
 
-SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, SvStream &rStream ):
-    SfxEnumItem(nWhich, rStream),
+SfxAllEnumItem::SfxAllEnumItem( USHORT which, SvStream &rStream ):
+    SfxEnumItem(which, rStream),
     pValues( 0 ),
     pDisabledValues( 0 )
 {
@@ -103,8 +103,8 @@ SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, SvStream &rStream ):
 // -----------------------------------------------------------------------
 
 
-SfxAllEnumItem::SfxAllEnumItem(USHORT nWhich):
-    SfxEnumItem(nWhich, 0),
+SfxAllEnumItem::SfxAllEnumItem(USHORT which):
+    SfxEnumItem(which, 0),
     pValues( 0 ),
     pDisabledValues( 0 )
 {
@@ -190,7 +190,7 @@ SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, USHORT nVersion ) const
+SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     return new SfxAllEnumItem( Which(), rStream );
