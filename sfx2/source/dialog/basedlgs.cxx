@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 11:32:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ public:
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
-void SfxModelessDialog_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
     {
@@ -118,7 +118,7 @@ SfxModalDefParentHelper::~SfxModalDefParentHelper()
 
 // -----------------------------------------------------------------------
 
-void SetDialogData_Impl( SfxViewFrame *pFrame, SfxModalDialog *pDlg,
+void SetDialogData_Impl( SfxViewFrame* /*pFrame*/, SfxModalDialog *pDlg,
                          sal_uInt16 nId, const String &rExtraData = aEmptyString )
 {
     // save settings (position and user data)
@@ -131,7 +131,7 @@ void SetDialogData_Impl( SfxViewFrame *pFrame, SfxModalDialog *pDlg,
 
 // -----------------------------------------------------------------------
 
-String GetDialogData_Impl( SfxViewFrame *pFrame, SfxModalDialog *pDlg, sal_uInt16 nId )
+String GetDialogData_Impl( SfxViewFrame* /*pFrame*/, SfxModalDialog *pDlg, sal_uInt16 nId )
 
 /*      [Beschreibung]
 
@@ -298,14 +298,14 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
                 aSize = GetSizePixel();
 
                 Size aParentSize = GetParent()->GetOutputSizePixel();
-                Size aSize = GetSizePixel();
-                aPos.X() += ( aParentSize.Width() - aSize.Width() ) / 2;
-                aPos.Y() += ( aParentSize.Height() - aSize.Height() ) / 2;
+                Size aDlgSize = GetSizePixel();
+                aPos.X() += ( aParentSize.Width() - aDlgSize.Width() ) / 2;
+                aPos.Y() += ( aParentSize.Height() - aDlgSize.Height() ) / 2;
 
                 Point aPoint;
                 Rectangle aRect = GetDesktopRectPixel();
-                aPoint.X() = aRect.Right() - aSize.Width();
-                aPoint.Y() = aRect.Bottom() - aSize.Height();
+                aPoint.X() = aRect.Right() - aDlgSize.Width();
+                aPoint.Y() = aRect.Bottom() - aDlgSize.Height();
 
                 aPoint = OutputToScreenPixel( aPoint );
 
@@ -754,6 +754,7 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
 */
 
 {
+    (void)pButton; //unused
     if ( !pOutSet )
     {
         pOutSet = new SfxItemSet( *pOptions );
@@ -819,10 +820,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 SfxSingleTabDialog::SfxSingleTabDialog
 (
-    SfxViewFrame*           pViewFrame,
-    Window*                         pParent,
-    const SfxItemSet&       rSet,
-    sal_uInt16                          nUniqueId
+    SfxViewFrame*      /*pViewFrame*/,
+    Window*            pParent,
+    const SfxItemSet&  rSet,
+    sal_uInt16         nUniqueId
 ) :
 
 /*  [Beschreibung]
@@ -876,7 +877,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 SfxSingleTabDialog::SfxSingleTabDialog
 (
-    SfxViewFrame* pViewFrame,
+    SfxViewFrame* /*pViewFrame*/,
     Window* pParent,
     sal_uInt16 nUniqueId,
     const SfxItemSet* pInSet
@@ -994,7 +995,7 @@ int __cdecl BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
 #if defined(OS2) && defined(ICC)
 int _Optlink BaseDlgsCmpUS_Impl(        const void* p1, const void* p2 )
 #else
-int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
+extern "C" int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
 #endif
 #endif
 {
