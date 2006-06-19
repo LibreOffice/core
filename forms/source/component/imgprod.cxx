@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgprod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:48:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,7 +469,6 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
         List             aTmp;
         void *           pCons;
         sal_uInt16       nPalCount = 0;
-        const sal_uInt16 nBitCount = pBmpAcc->GetBitCount();
         sal_uInt32       nRMask = 0;
         sal_uInt32       nGMask = 0;
         sal_uInt32       nBMask = 0;
