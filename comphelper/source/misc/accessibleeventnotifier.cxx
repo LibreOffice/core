@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:47:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,10 +260,8 @@ namespace comphelper
             {
                 static_cast< XAccessibleEventListener* >( pListeners->get() )->notifyEvent( _rEvent );
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-                e;
-                // silent this
                 // no assertion, because a broken access remote bridge or something like this
                 // can cause this exception
             }
