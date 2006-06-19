@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:11:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:43:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { WITH,     "With" },
     { WRITE,    "Write" },              // auch WRITE #
     { XOR,      "Xor" },
-    { NIL }
+    { NIL,      "" }
 };
 
 /*
@@ -437,6 +437,7 @@ const String& SbiTokenizer::Symbol( SbiToken t )
         case NEG   : aSym = '-'; return aSym;
         case EOS   : aSym = String::CreateFromAscii( ":/CRLF" ); return aSym;
         case EOLN  : aSym = String::CreateFromAscii( "CRLF" ); return aSym;
+        default: break;
     }
     TokenTable* tp = pTokTable;
     for( short i = 0; i < nToken; i++, tp++ )
@@ -669,7 +670,6 @@ void SbiTokenizer::Hilite( SbTextPortions& rList )
         aRes.nLine = nLine;
         aRes.nStart = nCol1;
         aRes.nEnd = nCol2;
-        sal_Unicode ch = aSym.GetBuffer()[0];
         switch( eCurTok )
         {
             case REM:
