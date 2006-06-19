@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:12:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,7 @@ SwFmDrawPage::~SwFmDrawPage() throw ()
 const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
 {
     _SelectObjectsInView( xShapes, GetPageView() );
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     return rMarkList;
 }
 /*-- 22.01.99 11:13:08---------------------------------------------------
@@ -404,7 +404,7 @@ void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >  xSha
 SdrPageView*    SwFmDrawPage::GetPageView()
 {
     if(!pPageView)
-        pPageView = pView->ShowPage( pPage, Point() );
+        pPageView = mpView->ShowPage( mpPage, Point() );
     return pPageView;
 }
 /*-- 22.01.99 11:13:08---------------------------------------------------
@@ -412,8 +412,8 @@ SdrPageView*    SwFmDrawPage::GetPageView()
   -----------------------------------------------------------------------*/
 void    SwFmDrawPage::RemovePageView()
 {
-    if(pPageView && pView)
-        pView->HidePage( pPageView );
+    if(pPageView && mpView)
+        mpView->HidePage( pPageView );
     pPageView = 0;
 }
 /*-- 22.01.99 11:13:09---------------------------------------------------
