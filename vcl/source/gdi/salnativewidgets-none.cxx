@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-none.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:11:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ using namespace rtl;
  *  Returns TRUE if the platform supports native
  *  drawing of the control defined by nPart
  */
-BOOL SalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+BOOL SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 {
     return( FALSE );
 }
@@ -61,12 +61,12 @@ BOOL SalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-BOOL SalGraphics::hitTestNativeControl( ControlType nType,
-                              ControlPart nPart,
-                              const Region& rControlRegion,
-                              const Point& aPos,
-                              SalControlHandle& rControlHandle,
-                              BOOL& rIsInside )
+BOOL SalGraphics::hitTestNativeControl( ControlType,
+                              ControlPart,
+                              const Region&,
+                              const Point&,
+                              SalControlHandle&,
+                              BOOL& )
 {
     return( FALSE );
 }
@@ -82,13 +82,13 @@ BOOL SalGraphics::hitTestNativeControl( ControlType nType,
  *  rControlHandle: Carries platform dependent data and is maintained by the SalFrame implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL SalGraphics::drawNativeControl(    ControlType nType,
-                            ControlPart nPart,
-                            const Region& rControlRegion,
-                            ControlState nState,
-                            const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle,
-                            OUString aCaption )
+BOOL SalGraphics::drawNativeControl(    ControlType,
+                            ControlPart,
+                            const Region&,
+                            ControlState,
+                            const ImplControlValue&,
+                            SalControlHandle&,
+                            const OUString& )
 {
     return( FALSE );
 }
@@ -105,13 +105,13 @@ BOOL SalGraphics::drawNativeControl(    ControlType nType,
  *  rControlHandle: Carries platform dependent data and is maintained by the SalFrame implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL SalGraphics::drawNativeControlText(    ControlType nType,
-                                ControlPart nPart,
-                                const Region& rControlRegion,
-                                ControlState nState,
-                                const ImplControlValue& aValue,
-                                SalControlHandle& rControlHandle,
-                                OUString aCaption )
+BOOL SalGraphics::drawNativeControlText(    ControlType,
+                                ControlPart,
+                                const Region&,
+                                ControlState,
+                                const ImplControlValue&,
+                                SalControlHandle&,
+                                const OUString& )
 {
     return( FALSE );
 }
@@ -131,15 +131,15 @@ BOOL SalGraphics::drawNativeControlText(    ControlType nType,
  *  rControlHandle: Carries platform dependent data and is maintained by the SalFrame implementation.
  *  aCaption:       A caption or title string (like button text etc)
  */
-BOOL SalGraphics::getNativeControlRegion(  ControlType nType,
-                                ControlPart nPart,
-                                const Region& rControlRegion,
-                                ControlState nState,
-                                const ImplControlValue& aValue,
-                                SalControlHandle& rControlHandle,
-                                OUString aCaption,
-                                Region &rNativeBoundingRegion,
-                                Region &rNativeContentRegion )
+BOOL SalGraphics::getNativeControlRegion(  ControlType,
+                                ControlPart,
+                                const Region&,
+                                ControlState,
+                                const ImplControlValue&,
+                                SalControlHandle&,
+                                const OUString&,
+                                Region &,
+                                Region & )
 {
     return( FALSE );
 }
