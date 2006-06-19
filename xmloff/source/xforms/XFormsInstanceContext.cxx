@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFormsInstanceContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:03:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Sequence;
 using com::sun::star::xforms::XModel;
 using com::sun::star::beans::XPropertySet;
-using com::sun::star::beans::PropertyValue;;
+using com::sun::star::beans::PropertyValue;
 using com::sun::star::xml::sax::XAttributeList;
 
 using xmloff::token::IsXMLToken;
@@ -93,7 +93,7 @@ XFormsInstanceContext::~XFormsInstanceContext()
 SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
     USHORT nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+    const Reference<XAttributeList>& )
 {
     SvXMLImportContext* pContext = NULL;
 
@@ -153,7 +153,7 @@ void XFormsInstanceContext::HandleAttribute(
 }
 
 SvXMLImportContext* XFormsInstanceContext::HandleChild(
-    sal_uInt16 nToken,
+    sal_uInt16,
     sal_uInt16,
     const OUString&,
     const Reference<XAttributeList>& )
