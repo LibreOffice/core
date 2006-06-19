@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:25:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ XMLPropertyStateBuffer::XMLPropertyStateBuffer() :
 {
 }
 
-void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& rPropState )
+void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
 {
     if( pPMBorderAll )
     {
@@ -247,9 +247,9 @@ XMLPageMasterExportPropMapper::~XMLPageMasterExportPropMapper()
 }
 
 void XMLPageMasterExportPropMapper::handleElementItem(
-        SvXMLExport& rExport,
+        SvXMLExport&,
         const XMLPropertyState& rProperty,
-        sal_uInt16 nFlags,
+        sal_uInt16 /*nFlags*/,
         const ::std::vector< XMLPropertyState >* pProperties,
         sal_uInt32 nIdx ) const
 {
@@ -316,12 +316,12 @@ void XMLPageMasterExportPropMapper::handleElementItem(
 }
 
 void XMLPageMasterExportPropMapper::handleSpecialItem(
-        SvXMLAttributeList& rAttrList,
-        const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState >* pProperties,
-        sal_uInt32 nIdx) const
+        SvXMLAttributeList&,
+        const XMLPropertyState&,
+        const SvXMLUnitConverter&,
+        const SvXMLNamespaceMap&,
+        const ::std::vector< XMLPropertyState >*,
+        sal_uInt32 /*nIdx*/) const
 {
 }
 
