@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:12:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,8 +267,6 @@ sal_Bool SAL_CALL RegistryKeyImpl::isReadOnly(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-
-    return sal_False;
 }
 
 //*************************************************************************
@@ -292,10 +290,8 @@ RegistryKeyType SAL_CALL RegistryKeyImpl::getKeyType( const OUString& rKeyName )
             {
                 case RG_KEYTYPE:
                     return RegistryKeyType_KEY;
-                    break;
                 case RG_LINKTYPE:
                     return RegistryKeyType_LINK;
-                    break;
             }
         } else
         {
@@ -381,8 +377,6 @@ sal_Int32 SAL_CALL RegistryKeyImpl::getLongValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return 0;
 }
 
 //*************************************************************************
@@ -444,8 +438,6 @@ Sequence< sal_Int32 > SAL_CALL RegistryKeyImpl::getLongListValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return Sequence<sal_Int32>();
 }
 
 //*************************************************************************
@@ -519,8 +511,6 @@ OUString SAL_CALL RegistryKeyImpl::getAsciiValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return OUString();
 }
 
 //*************************************************************************
@@ -586,8 +576,6 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getAsciiListValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return Sequence<OUString>();
 }
 
 //*************************************************************************
@@ -665,8 +653,6 @@ OUString SAL_CALL RegistryKeyImpl::getStringValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return OUString();
 }
 
 //*************************************************************************
@@ -730,8 +716,6 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getStringListValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return Sequence<OUString>();
 }
 
 //*************************************************************************
@@ -805,8 +789,6 @@ Sequence< sal_Int8 > SAL_CALL RegistryKeyImpl::getBinaryValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-
-    return Sequence< sal_Int8 >();
 }
 
 //*************************************************************************
@@ -846,8 +828,8 @@ Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::openKey( const OUString& aKe
             (OWeakObject *)this );
     } else
     {
-        RegError _ret = REG_NO_ERROR;
-        if ( _ret = m_key.openKey(aKeyName, newKey) )
+        RegError _ret = m_key.openKey(aKeyName, newKey);
+        if ( _ret )
         {
             if ( _ret == REG_INVALID_KEY )
             {
@@ -862,8 +844,6 @@ Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::openKey( const OUString& aKe
             return ((XRegistryKey*)new RegistryKeyImpl(newKey, m_pRegistry));
         }
     }
-
-    return Reference<XRegistryKey>();
 }
 
 //*************************************************************************
@@ -880,8 +860,8 @@ Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::createKey( const OUString& a
             (OWeakObject *)this );
     } else
     {
-        RegError _ret = REG_NO_ERROR;
-        if ( _ret = m_key.createKey(aKeyName, newKey) )
+        RegError _ret = m_key.createKey(aKeyName, newKey);
+        if ( _ret )
         {
             if (_ret == REG_INVALID_KEY)
             {
@@ -896,8 +876,6 @@ Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::createKey( const OUString& a
             return ((XRegistryKey*)new RegistryKeyImpl(newKey, m_pRegistry));
         }
     }
-
-    return Reference<XRegistryKey>();
 }
 
 //*************************************************************************
@@ -969,8 +947,6 @@ Sequence< Reference< XRegistryKey > > SAL_CALL RegistryKeyImpl::openKeys(  )
             return seqKeys;
         }
     }
-
-    return Sequence< Reference<XRegistryKey> >();
 }
 
 //*************************************************************************
@@ -1009,8 +985,6 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getKeyNames(  )
             return seqKeys;
         }
     }
-
-    return Sequence<OUString>();
 }
 
 //*************************************************************************
@@ -1025,9 +999,8 @@ sal_Bool SAL_CALL RegistryKeyImpl::createLink( const OUString& aLinkName, const 
             (OWeakObject *)this );
     } else
     {
-        RegError ret = REG_NO_ERROR;
-
-        if ( ret = m_key.createLink(aLinkName, aLinkTarget) )
+        RegError ret = m_key.createLink(aLinkName, aLinkTarget);
+        if ( ret )
         {
             if ( ret == REG_DETECT_RECURSION ||
                  ret == REG_INVALID_KEY )
@@ -1042,8 +1015,6 @@ sal_Bool SAL_CALL RegistryKeyImpl::createLink( const OUString& aLinkName, const 
             return sal_True;
         }
     }
-
-    return sal_False;
 }
 
 //*************************************************************************
@@ -1081,9 +1052,8 @@ OUString SAL_CALL RegistryKeyImpl::getLinkTarget( const OUString& rLinkName )
             (OWeakObject *)this );
     } else
     {
-        RegError    ret = REG_NO_ERROR;
-
-        if ( ret = m_key.getLinkTarget(rLinkName, linkTarget) )
+        RegError ret = m_key.getLinkTarget(rLinkName, linkTarget);
+        if ( ret )
         {
             throw InvalidRegistryException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
@@ -1108,9 +1078,9 @@ OUString SAL_CALL RegistryKeyImpl::getResolvedName( const OUString& aKeyName )
             (OWeakObject *)this );
     } else
     {
-        RegError    ret = REG_NO_ERROR;
-
-        if ( ret = m_key.getResolvedKeyName(aKeyName, sal_True, resolvedName) )
+        RegError ret = m_key.getResolvedKeyName(
+            aKeyName, sal_True, resolvedName);
+        if ( ret )
         {
             throw InvalidRegistryException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
@@ -1281,8 +1251,6 @@ Reference< XRegistryKey > SAL_CALL SimpleRegistryImpl::getRootKey(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-
-    return Reference< XRegistryKey >();
 }
 
 //*************************************************************************
@@ -1298,8 +1266,6 @@ sal_Bool SAL_CALL SimpleRegistryImpl::isReadOnly(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-
-    return sal_False;
 }
 
 //*************************************************************************
@@ -1312,8 +1278,8 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
         RegistryKey rootKey;
         if ( !m_registry.openRootKey(rootKey) )
         {
-            RegError ret;
-            if (ret = m_registry.mergeKey(rootKey, aKeyName, aUrl, sal_False, sal_False))
+            RegError ret = m_registry.mergeKey(rootKey, aKeyName, aUrl, sal_False, sal_False);
+            if (ret)
             {
                 if ( ret == REG_MERGE_CONFLICT )
                     return;
@@ -1341,7 +1307,7 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
 }
 
 //*************************************************************************
-Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XComponentContext>& xCtx )
+Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XComponentContext>& )
 {
     Reference<XInterface>   xRet;
     RegistryLoader          aLoader;
@@ -1384,7 +1350,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
