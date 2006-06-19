@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:24:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,19 +64,19 @@ using namespace xmlsearch::qe;
 
 XmlIndex::XmlIndex( const rtl::OUString& indexDir )
     throw( IOException )
-    : indexAccessor_( indexDir ),
+    : currentBatchOffset_( 0 ),
+      maxDocNumberInCache_( -1 ),
+      indexAccessor_( indexDir ),
       dict_( indexAccessor_ ),
-      documents_( 0 ),
-      concepts_( 0 ),
-      allLists_( 0 ),
+      contextTables_( 0 ),
       allListsL_( 0 ),
+      allLists_( 0 ),
       positionsL_( 0 ),
       positions_( 0 ),
       contextsDataL_( 0 ),
       contextsData_( 0 ),
-      contextTables_( 0 ),
-      currentBatchOffset_( 0 ),
-      maxDocNumberInCache_( -1 )
+      concepts_( 0 ),
+      documents_( 0 )
 {
     // reading DOCS
     try
