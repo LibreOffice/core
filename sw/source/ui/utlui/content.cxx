@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:18:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:44:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2585,7 +2585,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                 SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
                 if( pItem && SV_ITEM_ID_LBOXSTRING == pItem->IsA())
                 {
-                    aPos = GetEntryPos( pEntry );
+                    aPos = GetEntryPosition( pEntry );
 
                     aPos.X() = GetTabPos( pEntry, pTab );
                     Size aSize( pItem->GetSize( this, pEntry ) );
