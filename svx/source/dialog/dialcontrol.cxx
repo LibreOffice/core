@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:57:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,8 +266,8 @@ struct DialControl_Impl
     NumericField*       mpLinkField;
     Size                maWinSize;
     Font                maWinFont;
-    sal_uInt32          mnAngle;
-    sal_uInt32          mnOldAngle;
+    sal_Int32           mnAngle;
+    sal_Int32           mnOldAngle;
     long                mnCenterX;
     long                mnCenterY;
     bool                mbNoRot;
@@ -333,7 +333,7 @@ DialControl::~DialControl()
 {
 }
 
-void DialControl::Paint( const Rectangle& rRect )
+void DialControl::Paint( const Rectangle&  )
 {
     Point aPos;
     DrawBitmapEx( aPos, mpImpl->maBmpBuffered.GetBitmapEx( aPos, mpImpl->maWinSize ) );
