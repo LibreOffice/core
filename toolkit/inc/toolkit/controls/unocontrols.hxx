@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:53:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ private:
 
 protected:
     ImageProducerControlModel() : mbAdjustingImagePosition( sal_False ) { }
-    ImageProducerControlModel( const ImageProducerControlModel& _rSource ) : UnoControlModel( _rSource ), mbAdjustingImagePosition( sal_False ) { }
+    ImageProducerControlModel( const ImageProducerControlModel& _rSource ) : com::sun::star::awt::XImageProducer(), UnoControlModel( _rSource ), mbAdjustingImagePosition( sal_False ) { }
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
