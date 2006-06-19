@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:49:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     BOOL bForward = !aKeyCode.IsShift();
     if( ( (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && aKeyCode.GetCode() == KEY_TAB )  // Ctrl-TAB or Alt-TAB
-        || ( bF6 = ( aKeyCode.GetCode()) == KEY_F6 )    // F6
+        || ( bF6 = ( aKeyCode.GetCode()) == KEY_F6 ) != FALSE    // F6
         )
     {
         bSplitterOnly = bF6 && aKeyCode.IsMod1() && aKeyCode.IsShift();
