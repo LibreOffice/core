@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContextTables.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:22:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,25 +114,25 @@ void Tables::setTables( ContextTables* p )
 ContextTables::ContextTables( const std::vector< sal_Int32 >& offsets,
                               sal_Int32 contextDataL,sal_Int8 *contextData,
                               sal_Int32 linkNamesL,rtl::OUString *linkNames )
-    : kTable_( 5 ),
-      auxArray_( 4096 ),
-      lastDocNo_( -1 ),
-      offsets_( offsets ),
+    : lastDocNo_( -1 ),
+      initialWordsL_( 0 ),
+      destsL_( 0 ),
+      linkTypesL_( 0 ),
+      seqNumbersL_( 0 ),
+      markersL_( 0 ),
+      initialWords_( 0 ),
+      dests_( 0 ),
+      linkTypes_( 0 ),
+      seqNumbers_( 0 ),
+      markers_( 0 ),
       contextDataL_( contextDataL ),
       contextData_( contextData ),
       linkNamesL_( linkNamesL ),
       linkNames_( linkNames ),
       cache_( offsets.size() ),
-      initialWordsL_( 0 ),
-      initialWords_( 0 ),
-      destsL_( 0 ),
-      dests_( 0 ),
-      linkTypesL_( 0 ),
-      linkTypes_( 0 ),
-      seqNumbersL_( 0 ),
-      seqNumbers_( 0 ),
-      markersL_( 0 ),
-      markers_( 0 )
+      kTable_( 5 ),
+      auxArray_( 4096 ),
+      offsets_( offsets )
 {
     for( sal_uInt32 i = 0; i < offsets_.size(); ++i )
         cache_[i] = 0;
@@ -220,10 +220,10 @@ rtl::OUString ContextTables::linkName( sal_Int32 context )
 }
 
 
-sal_Int32 ContextTables::linkCode( const rtl::OUString& linkName )
+sal_Int32 ContextTables::linkCode( const rtl::OUString& linkName_ )
 {
     for( sal_Int32 i = 0; i < linkNamesL_; ++i )
-        if( linkName == linkNames_[i] )
+        if( linkName_ == linkNames_[i] )
             return i;
     return -1;          // when not found
 }
@@ -256,6 +256,8 @@ bool* ContextTables::getIgnoredElementsSet( sal_Int32& len,
 bool ContextTables::notIgnored( sal_Int32 ctx,
                                 sal_Int32 ignoredElementsL,bool* ignoredElements )
 {
+    (void)ignoredElementsL;
+
     do
     {
         if( ignoredElements[ linkTypes_[ ctx ] ] )
@@ -271,12 +273,12 @@ bool ContextTables::notIgnored( sal_Int32 ctx,
  *  context with the given linkCode
  */
 
-sal_Int32 ContextTables::firstParentWithCode( const sal_Int32 pos,const sal_Int32 linkCode )
+sal_Int32 ContextTables::firstParentWithCode( const sal_Int32 pos,const sal_Int32 linkCode_ )
 {
     sal_Int32 ctx = dests_[ wordContextLin(pos) ]; // first parent of text node
     const sal_Int32 shift = nTextNodes_;
     const sal_Int32 limit = destsL_ - 1;
-    while( linkTypes_[ ctx - shift ] != linkCode )
+    while( linkTypes_[ ctx - shift ] != linkCode_ )
         if( ( ctx = dests_[ ctx ] ) == limit )
             return -1;
     return ctx;
@@ -289,13 +291,13 @@ sal_Int32 ContextTables::firstParentWithCode( const sal_Int32 pos,const sal_Int3
  * context with the given linkCode and given parent code
  */
 
-sal_Int32 ContextTables::firstParentWithCode2( sal_Int32 pos,const sal_Int32 linkCode,const sal_Int32 parentCode)
+sal_Int32 ContextTables::firstParentWithCode2( sal_Int32 pos,const sal_Int32 linkCode_,const sal_Int32 parentCode)
 {
     sal_Int32 ctx = dests_[ wordContextLin( pos ) ]; // first parent of text node
     const sal_Int32 shift = nTextNodes_;
     const sal_Int32 limit = destsL_ - 1;
     for( sal_Int32 parent = dests_[ctx]; parent < limit; parent = dests_[ parent ] )
-        if( linkTypes_[ parent - shift ] == parentCode && linkTypes_[ ctx - shift ] == linkCode )
+        if( linkTypes_[ parent - shift ] == parentCode && linkTypes_[ ctx - shift ] == linkCode_ )
             return ctx;
         else
             ctx = parent;
@@ -308,13 +310,13 @@ sal_Int32 ContextTables::firstParentWithCode2( sal_Int32 pos,const sal_Int32 lin
  * context with the given linkCode and given ancestor code
  */
 
-sal_Int32 ContextTables::firstParentWithCode3( sal_Int32 pos,sal_Int32 linkCode,sal_Int32 ancestorCode )
+sal_Int32 ContextTables::firstParentWithCode3( sal_Int32 pos,sal_Int32 linkCode_,sal_Int32 ancestorCode )
 {
     sal_Int32 ctx = dests_[ wordContextLin( pos ) ];
     const sal_Int32 shift = nTextNodes_;
     const sal_Int32 limit = destsL_ - 1;
     // find first instance of linkCode
-    while( ctx < limit && linkTypes_[ ctx - shift ] != linkCode )
+    while( ctx < limit && linkTypes_[ ctx - shift ] != linkCode_ )
         ctx = dests_[ ctx ];
     if( ctx < limit )       // found linkCode, check ancestry
         for( sal_Int32 ancestor = dests_[ctx];
@@ -383,12 +385,12 @@ sal_Int32 ContextTables::firstParentWithCode5(sal_Int32 pos,sal_Int32 pathCodesL
  * context with the given linkCode
  */
 
-sal_Int32 ContextTables::firstParentWithCode7( const sal_Int32 pos,const sal_Int32 linkCode,const sal_Int32 seq)
+sal_Int32 ContextTables::firstParentWithCode7( const sal_Int32 pos,const sal_Int32 linkCode_,const sal_Int32 seq)
 {
     sal_Int32 ctx = dests_[ wordContextLin(pos) ]; // first parent of text node
     const sal_Int32 shift = nTextNodes_;
     const sal_Int32 limit = destsL_ - 1;
-    while (linkTypes_[ctx - shift] != linkCode || seqNumbers_[ctx] != seq)
+    while (linkTypes_[ctx - shift] != linkCode_ || seqNumbers_[ctx] != seq)
         if ((ctx = dests_[ctx]) == limit)
             return -1;
     return ctx;

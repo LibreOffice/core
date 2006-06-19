@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocGenerator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,16 +53,16 @@ RoleFiller RoleFiller::roleFiller_;
 
 
 RoleFiller::RoleFiller()
-    : conceptData_( 0 ),
+    : m_nRefcount( 0 ),
       fixedRole_( 0 ),
       filled_( 0 ),
       begin_( 0 ),
       end_( 0 ),
-      limit_( 0 ),
       parentContext_( 0 ),
+      limit_( 0 ),
       next_( 0 ),
       fillers_( 0 ),
-      m_nRefcount( 0 )
+      conceptData_( 0 )
 {
 }
 
@@ -73,11 +73,11 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
                         sal_Int32 pos,
                         sal_Int32 parentContext,
                         sal_Int32 limit )
-    : next_( 0 ),
-      conceptData_( first ),
+    : m_nRefcount( 0 ),
       fixedRole_( sal_uInt8( role & 0xF ) ),                    // primary/constitutive concept/role
+      next_( 0 ),
       fillers_( nColumns ),
-      m_nRefcount( 0 )
+      conceptData_( first )
 {
     filled_ = sal_Int16( 1 << fixedRole_ );
     begin_ = pos;       // offset in file
@@ -112,33 +112,33 @@ void RoleFiller::scoreList( Query* query,sal_Int32 document )
     // the loop's logic makes sure that at emit time there's no better/earlier filler
     // to overlap with the candidate
 
-    double penalty = candidateHit->penalty( query,nColumns );
+    double penalty_ = candidateHit->penalty( query,nColumns );
 
     for( next = candidateHit->next_; next; next = next->next_ )
         if( next->end_ < candidateHit->begin_ )
         { // no overlap
-            candidateHit->makeQueryHit( query,document,penalty );
+            candidateHit->makeQueryHit( query,document,penalty_ );
             candidateHit = next;
-            penalty = candidateHit->penalty( query,nColumns );
+            penalty_ = candidateHit->penalty( query,nColumns );
         }
         else
         { // !!! can be computed in two steps
             double penalty2 = next->penalty( query,nColumns );
-            if( penalty2 <= penalty )
+            if( penalty2 <= penalty_ )
             { // prefer next, disregard candidateHit
-                penalty = penalty2;
+                penalty_ = penalty2;
                 candidateHit = next;
             }
         }
-    candidateHit->makeQueryHit(query,document,penalty);
+    candidateHit->makeQueryHit(query,document,penalty_);
 }
 
 
 
 
-void RoleFiller::makeQueryHit( Query* query,sal_Int32 doc,double penalty )
+void RoleFiller::makeQueryHit( Query* query,sal_Int32 doc,double penalty_ )
 {
-    QueryHit* hit = query->maybeCreateQueryHit( penalty,doc,
+    QueryHit* hit = query->maybeCreateQueryHit( penalty_,doc,
                                                 begin_,end_,parentContext_ );
     if( hit )
     {
@@ -217,22 +217,22 @@ void RoleFiller::considerReplacementWith( RoleFiller* replacement )
 double RoleFiller::penalty( Query* query,sal_Int32 nColumns )
 {
     sal_Int32 length = end_ - begin_ + 1;
-    double penalty = query->lookupPenalty( filled_ );
+    double penalty_ = query->lookupPenalty( filled_ );
     // !!! here is a chance to check against query
     // if hit worth scoring further
     // might not be if query already has lots of good hits
     for( sal_Int32 i = 0; i < nColumns; ++i )
         if( filled_ & ( 1 << i ) )
         {
-            penalty += fillers_[i]->conceptData_->getPenalty();
+            penalty_ += fillers_[i]->conceptData_->getPenalty();
             //length -= _fillers[i]._conceptData.getConceptLength() + 1;
             length -= 2;        // !!! ??? c.length is not used ?
             if( filled_ >> (i + 1) )
                 for( sal_Int32 j = i + 1; j < nColumns; ++j )
                     if( ( filled_ & 1 << j ) && fillers_[j]->begin_ < begin_ )
-                        penalty += query->getOutOufOrderPenalty();
+                        penalty_ += query->getOutOufOrderPenalty();
         }
-    double result = penalty + length * query->getGapPenalty();
+    double result = penalty_ + length * query->getGapPenalty();
     return result < 0.0 ? 0.0 : result; // !!! quick fix
 }
 
@@ -337,8 +337,8 @@ ConceptGroupGenerator::ConceptGroupGenerator( sal_Int32 dataL,sal_Int8* data,sal
     : last_( 0 ),
       k1_( k ),
       k2_( BitsInLabel ),
-      bits_( new util::ByteArrayDecompressor( dataL,data,index ) ),
-      table_( NConceptsInGroup )
+      table_( NConceptsInGroup ),
+      bits_( new util::ByteArrayDecompressor( dataL,data,index ) )
 {
 }
 
@@ -348,8 +348,8 @@ ConceptGroupGenerator::ConceptGroupGenerator()
     : last_( 0 ),
       k1_( 0 ),
       k2_( BitsInLabel ),
-      bits_( 0 ),
-      table_( NConceptsInGroup )
+      table_( NConceptsInGroup ),
+      bits_( 0 )
 {
 }
 
