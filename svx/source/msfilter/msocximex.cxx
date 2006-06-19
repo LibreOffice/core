@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:30:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -841,10 +841,8 @@ class ContainerRecordReaderFac
             case USERFORM:
             case STDCONTAINER:
                 return new StdContainerRecReader();
-                break;
             case MULTIPAGE:
                 return new MultiPageContainerRecReader();
-                break;
             default:
                 DBG_ERROR("Illegal container type for factory");
                 return NULL;
@@ -1099,10 +1097,10 @@ sal_uInt32 OCX_Control::ImportColor(sal_uInt32 nColor) const
     return nColor;
 }
 
-sal_Int16 OCX_FontData::ImportAlign(sal_uInt8 nJustification) const
+sal_Int16 OCX_FontData::ImportAlign(sal_uInt8 _nJustification) const
 {
     sal_Int16 nRet;
-    switch (nJustification)
+    switch (_nJustification)
     {
     default:
     case 1:
@@ -1432,25 +1430,25 @@ sal_Bool OCX_CommandButton::Import( com::sun::star::uno::Reference<
     return sal_True;
 }
 
-sal_Bool OCX_GroupBox::Export(SvStorageRef &rObj,
-    const uno::Reference< beans::XPropertySet > &rPropSet,
-    const awt::Size &rSize)
+sal_Bool OCX_GroupBox::Export(SvStorageRef& /* rObj */,
+    const uno::Reference< beans::XPropertySet >& /* rPropSet */,
+    const awt::Size& /* rSize */ )
 {
     sal_Bool bRet=sal_True;
     return bRet;
 }
 
-sal_Bool OCX_GroupBox::WriteContents(SvStorageStreamRef &rObj,
-    const uno::Reference< beans::XPropertySet > &rPropSet,
-    const awt::Size &rSize)
+sal_Bool OCX_GroupBox::WriteContents(SvStorageStreamRef& /* rObj */,
+    const uno::Reference< beans::XPropertySet >& /* rPropSet */,
+    const awt::Size& /* rSize */)
 {
     sal_Bool bRet=sal_True;
     return bRet;
 }
 
-sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
-    const uno::Reference< beans::XPropertySet > &rPropSet,
-    const awt::Size &rSize)
+sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef& rContents,
+    const uno::Reference< beans::XPropertySet >& rPropSet,
+    const awt::Size& rSize )
 {
     sal_Bool bRet=sal_True;
 
@@ -3416,8 +3414,8 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
 
 TypeName::TypeName(sal_Char *pName, sal_uInt32 nStoreId, sal_uInt32 nLen, sal_uInt16 nType, sal_Int32 nLeft,
     sal_Int32 nTop)
-    : msName(lclCreateOUString(pName, nLen)), mnStoreId(nStoreId),mnType(nType), mnLeft(nLeft),
-    mnTop(nTop)
+    : msName(lclCreateOUString(pName, nLen)), mnType(nType), mnLeft(nLeft),
+    mnTop(nTop),mnStoreId(nStoreId)
 {
 }
 
@@ -3426,7 +3424,7 @@ OCX_ContainerControl::OCX_ContainerControl( SotStorageRef& parent,
             const ::rtl::OUString& sN,
             const uno::Reference< container::XNameContainer >  &rParent,
             OCX_Control* pParent ) :
-                OCX_Control(sN, pParent), mxParent(rParent), nNoRecords(0), nTotalLen(0), containerType( STDCONTAINER ),rbGroupMgr( sName )
+                OCX_Control(sN, pParent), rbGroupMgr( sName ), mxParent(rParent), nNoRecords(0), nTotalLen(0), containerType( STDCONTAINER )
 {
 
     mContainerStorage = parent->OpenSotStorage(storageName,
@@ -3455,14 +3453,14 @@ OCX_ContainerControl::~OCX_ContainerControl()
 // the base class ) but... the reality is we have no containment model
 // so we make sure rPropSet is always the parent Dialog
 
-sal_Bool OCX_ContainerControl::Import(uno::Reference<beans::XPropertySet> &rProps )
+sal_Bool OCX_ContainerControl::Import(uno::Reference<beans::XPropertySet>& /* rProps */ )
 {
     if ( !mxParent.is() )
     {
         return sal_False;
     }
     CtrlIterator aEnd = mpControls.end();
-    int count = 0;
+//    int count = 0;
     for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
     {
         if ( !(*aIter)->Import( mxParent ) )
@@ -3562,7 +3560,6 @@ bool OCX_ContainerControl::createFromContainerRecord( const ContainerRecord& rec
                 OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
                 DBG_ERROR( "Unknown control");
                 return false;
-                break;
         }
         pControl->sName = record.cName;
         return true;
@@ -3592,7 +3589,7 @@ void addRButtons( std::vector< OCX_Control* >& src,
     }
 }
 
-void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream* pS,  ContainerRecord& rec )
+void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream* /* pS */,  ContainerRecord& rec )
 {
     SotStorageStreamRef oStream = mContainedControlsStream;
 
@@ -3686,14 +3683,14 @@ OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
             const ::rtl::OUString& sN,
             const uno::Reference< container::XNameContainer >  &rDialog,
             OCX_Control* pParent):
-        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ), fEnabled(1),
+        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ), fUnknown1(0), fEnabled(1),
         fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0),
         nVertPos(1), nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
         bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0),fUnknown1(0)
+        pPicture(0)
 {
     msDialogType = C2U("NotSupported");
     mnForeColor = 0x80000012L,
@@ -3704,7 +3701,7 @@ OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
     mnCurrentPageStep = 0;
 }
 
-void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* pS,  ContainerRecord& rec )
+void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* /* pS */,  ContainerRecord& rec )
 {
     SotStorageStreamRef oStream = mContainedControlsStream;
 
@@ -3796,14 +3793,14 @@ OCX_Page::OCX_Page( SotStorageRef& parent,
             const uno::Reference< container::XNameContainer >  &rDialog,
             OCX_Control* pParent):
         OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),
-        fEnabled(1), fLocked(0),
+        fUnknown1(0), fEnabled(1), fLocked(0),
         fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
         nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
         bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0),fUnknown1(0)
+        pPicture(0)
 {
     msDialogType = C2U("NotSupported");
     mnForeColor = 0x80000012,
@@ -3864,14 +3861,14 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
             const ::rtl::OUString& storageName,
             const ::rtl::OUString& sN,
             const uno::Reference< container::XNameContainer >  &rDialog, OCX_Control* pParent):
-        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),fEnabled(1), fLocked(0),
+        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),fUnknown1(0),fEnabled(1), fLocked(0),
         fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
         nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
         bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
         nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0),fUnknown1(0)
+        pPicture(0)
 {
     msDialogType = C2U("com.sun.star.awt.UnoControlGroupBoxModel");
     mnForeColor = 0x80000012;
@@ -4378,7 +4375,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
-
+/*
     static sal_uInt8 __READONLY_DATA aTest[] = {
         0x00, 0x02, 0x20, 0x00, 0x2B, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00,
@@ -4390,7 +4387,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
         0x54, 0x69, 0x6D, 0x65, 0x73, 0x20, 0x4E, 0x65,
         0x77, 0x20, 0x52, 0x6F, 0x6D, 0x61, 0x6E, 0x00,
         };
-
+*/
     SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
@@ -4946,7 +4943,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
-
+/*
     static sal_uInt8 __READONLY_DATA aTest[] = {
         0x00, 0x02, 0x34, 0x00, 0x46, 0x01, 0xC0, 0x80,
         0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00,
@@ -4961,6 +4958,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
         0x73, 0x20, 0x4E, 0x65, 0x77, 0x20, 0x52, 0x6F,
         0x6D, 0x61, 0x6E, 0x00,
     };
+*/
     SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
@@ -5129,10 +5127,10 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     aFontName.WriteCharArray( *rContent );
     WriteAlign(rContent,4);
 
-    sal_uInt16 nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell()-nOldPos-4);
+    sal_uInt16 nFixedAreaLn = static_cast<sal_uInt16>(rContent->Tell()-nOldPos-4);
     rContent->Seek(nOldPos);
     *rContent << nStandardId;
-    *rContent << nFixedAreaLen;
+    *rContent << nFixedAreaLn;
     *rContent << nFlags;
     *rContent << sal_uInt8(0x00);
     *rContent << sal_uInt8(0x00);
@@ -5357,7 +5355,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     }
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ImageURL"));
-    OUString *pStr = (OUString *)aTmp.getValue();
+//  OUString *pStr = (OUString *)aTmp.getValue();
     /*Magically fetch that image and turn it into something that
      *we can store in ms controls, wmf,png,jpg are almost certainly
      *the options we have for export...*/
@@ -5510,7 +5508,7 @@ sal_Bool OCX_SpinButton::Read( SvStorageStream *pS )
     return sal_True;
 }
 
-sal_Bool OCX_SpinButton::ReadFontData( SvStorageStream *pS )
+sal_Bool OCX_SpinButton::ReadFontData( SvStorageStream* /* pS */ )
 {
     // spin buttons and scroll bars do not support font data
     return sal_True;
