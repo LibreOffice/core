@@ -4,9 +4,9 @@
  *
  *  $RCSfile: io.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:40:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include <tools/stream.hxx>
 #endif
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include "iosys.hxx"
 
 // Test, ob ein I/O-Channel angegeben wurde
@@ -260,6 +259,7 @@ void SbiParser::Open()
             else
                 Error( SbERR_SYNTAX );
             break;
+        default: break;
     }
     TestToken( AS );
     // Die Kanalnummer
