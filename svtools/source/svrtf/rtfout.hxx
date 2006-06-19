@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfout.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:50:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+
+#ifndef _RTL_TEXTENC_H_
+#include <rtl/textenc.h>
 #endif
 
 class String;
