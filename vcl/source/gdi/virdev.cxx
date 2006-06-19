@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:09:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, US
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
     // #110958# Enable alpha channel
-    mnAlphaDepth = nAlphaBitCount;
+    mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
 }
 
 // -----------------------------------------------------------------------
