@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:11:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -199,9 +198,9 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
 //= FmXModifyMultiplexer
 //==================================================================
 //------------------------------------------------------------------
-FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
+FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
-                    ,OInterfaceContainerHelper(rMutex)
+                    ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
@@ -237,9 +236,9 @@ void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeExceptio
 //= FmXUpdateMultiplexer
 //==================================================================
 //------------------------------------------------------------------
-FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
+FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
-                    ,OInterfaceContainerHelper(rMutex)
+                    ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
@@ -293,9 +292,9 @@ void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException
 //= FmXSelectionMultiplexer
 //==================================================================
 //------------------------------------------------------------------
-FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
+FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
-    ,OInterfaceContainerHelper(rMutex)
+    ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
@@ -331,9 +330,9 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
 //= FmXContainerMultiplexer
 //==================================================================
 //------------------------------------------------------------------
-FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex )
+FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                         :OWeakSubObject( rSource )
-                        ,OInterfaceContainerHelper(rMutex)
+                        ,OInterfaceContainerHelper( _rMutex )
 {
 }
 
@@ -533,7 +532,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit >& rToolkit, const Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( RuntimeException )
+void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit >& /*rToolkit*/, const Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( RuntimeException )
 {
     if ( !mxModel.is() )
         throw DisposedException( ::rtl::OUString(), *this );
@@ -1118,13 +1117,13 @@ FmXGridPeer::FmXGridPeer(const Reference< XMultiServiceFactory >& _rxFactory)
             ,m_aUpdateListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
             ,m_aSelectionListeners(m_aMutex)
-            ,m_nCursorListening(0)
             ,m_aMode( getDataModeIdentifier() )
+            ,m_nCursorListening(0)
+            ,m_bInterceptingDispatch(sal_False)
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
-            ,m_bInterceptingDispatch(sal_False)
-            ,m_xServiceFactory(_rxFactory)
             ,m_pSelectionListener(NULL)
+            ,m_xServiceFactory(_rxFactory)
 {
     // nach diesem Constructor muss Create gerufen werden !
     m_pSelectionListener = new SelectionListenerImpl(this);
@@ -1304,6 +1303,8 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
         case TypeClass_UNSIGNED_LONG:
         case TypeClass_UNSIGNED_SHORT   : nMapColumn = 2; break;
         case TypeClass_BOOLEAN          : nMapColumn = 3; break;
+        default:
+            break;
     }
 
     Reference< XIndexContainer >  xColumns = getColumns();
@@ -1529,7 +1530,6 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
             // it design mode it doesn't matter
             if (!isDesignMode())
             {
-                FmGridControl* pGrid = (FmGridControl*) GetWindow();
                 DbGridColumn* pCol = pGrid->GetColumns().GetObject(i);
 
                 pCol->SetAlignmentFromModel(-1);
@@ -1545,8 +1545,6 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
         // need to invalidate the affected column ?
         if (bInvalidateColumn)
         {
-            FmGridControl* pGrid = (FmGridControl*) GetWindow();
-
             sal_Bool bWasEditing = pGrid->IsEditing();
             if (bWasEditing)
                 pGrid->DeactivateCell();
@@ -1593,9 +1591,7 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException )
         bCancel = !pGrid->commit();
 
     if (!bCancel)
-    {
-        NOTIFY_LISTENERS(m_aUpdateListeners, XUpdateListener, updated, aEvt);
-    }
+        m_aUpdateListeners.notifyEach( &XUpdateListener::updated, aEvt );
     return !bCancel;
 }
 
@@ -1624,7 +1620,7 @@ void FmXGridPeer::rowChanged(const EventObject& _rEvent) throw( RuntimeException
 }
 
 //------------------------------------------------------------------------------
-void FmXGridPeer::rowSetChanged(const EventObject& event) throw( RuntimeException )
+void FmXGridPeer::rowSetChanged(const EventObject& /*event*/) throw( RuntimeException )
 {
     // not interested in ...
     // (our parent is a form which means we get a loaded or reloaded after this rowSetChanged)
@@ -1632,33 +1628,33 @@ void FmXGridPeer::rowSetChanged(const EventObject& event) throw( RuntimeExceptio
 
 // XLoadListener
 //------------------------------------------------------------------------------
-void FmXGridPeer::loaded(const EventObject& rEvent) throw( RuntimeException )
+void FmXGridPeer::loaded(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
     updateGrid(m_xCursor);
 }
 
 //------------------------------------------------------------------------------
-void FmXGridPeer::unloaded(const EventObject& rEvent) throw( RuntimeException )
+void FmXGridPeer::unloaded(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
     updateGrid( Reference< XRowSet > (NULL) );
 }
 
 //------------------------------------------------------------------------------
-void FmXGridPeer::reloading(const EventObject& aEvent) throw( RuntimeException )
-{
-    // empty the grid
-    updateGrid( Reference< XRowSet > (NULL) );
-}
-
-//------------------------------------------------------------------------------
-void FmXGridPeer::unloading(const EventObject& aEvent) throw( RuntimeException )
+void FmXGridPeer::reloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     // empty the grid
     updateGrid( Reference< XRowSet > (NULL) );
 }
 
 //------------------------------------------------------------------------------
-void FmXGridPeer::reloaded(const EventObject& aEvent) throw( RuntimeException )
+void FmXGridPeer::unloading(const EventObject& /*aEvent*/) throw( RuntimeException )
+{
+    // empty the grid
+    updateGrid( Reference< XRowSet > (NULL) );
+}
+
+//------------------------------------------------------------------------------
+void FmXGridPeer::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     updateGrid(m_xCursor);
 }
@@ -2658,7 +2654,7 @@ void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXGridPeer::approveReset(const EventObject& rEvent) throw( RuntimeException )
+sal_Bool FmXGridPeer::approveReset(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
     return sal_True;
 }
