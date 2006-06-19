@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:15:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ void OConfigurationRegistry::implCheckOpen() throw(InvalidRegistryException, Run
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bool _bReadOnly, sal_Bool _bCreate ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bool _bReadOnly, sal_Bool /*_bCreate*/ ) throw(InvalidRegistryException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -346,7 +346,7 @@ sal_Bool SAL_CALL OConfigurationRegistry::isReadOnly(  ) throw(InvalidRegistryEx
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::mergeKey( const ::rtl::OUString& aKeyName, const ::rtl::OUString& aUrl ) throw(InvalidRegistryException, MergeConflictException, RuntimeException)
+void SAL_CALL OConfigurationRegistry::mergeKey( const ::rtl::OUString& /*aKeyName*/, const ::rtl::OUString& /*aUrl*/ ) throw(InvalidRegistryException, MergeConflictException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     implCheckOpen();
