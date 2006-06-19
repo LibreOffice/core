@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:31:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,19 @@
 #include <stdio.h>
 
 // local includes
-#include "mkcreate.hxx"
-#include "inimgr.hxx"
-#include "appdef.hxx"
+#include "bootstrp/mkcreate.hxx"
+#include "bootstrp/inimgr.hxx"
+#include "bootstrp/appdef.hxx"
 #include "geninfo.hxx"
 #include "iparser.hxx"
-#include "prj.hxx"
+#include "bootstrp/prj.hxx"
 
-char *NoBuildProject[] = {
+char const *NoBuildProject[] = {
     "solenv",
     "EndOf_NoBuildProject"
 };
 
-char *LimitedPath[] = {
+char const *LimitedPath[] = {
     "jurt\\com\\sun\\star",
     "r_tools",
     "ridljar",
@@ -68,8 +68,8 @@ SourceDirectory::SourceDirectory( const ByteString &rDirectoryName,
 /*****************************************************************************/
                 : ByteString( rDirectoryName ),
                 pParent( pParentDirectory ),
-                nOSType( nOperatingSystem ),
                 pSubDirectories( NULL ),
+                nOSType( nOperatingSystem ),
                 nDepth( 0 ),
                 pDependencies( NULL ),
                 pCodedDependencies( NULL ),
@@ -317,10 +317,10 @@ void SourceDirectory::ResolveDependencies()
                         ( pCodedDependency->GetOperatingSystem() != OS_NONE );
                     k++
                 ) {
-                    Dependency *pDependency = NULL;
-                    if ( pDependency =
-                        (( SourceDirectory * ) pSubDirectories->GetObject( k ))->
-                        ResolvesDependency( pCodedDependency ))
+                    Dependency *pDependency =
+                        ((SourceDirectory *) pSubDirectories->GetObject( k ))->
+                        ResolvesDependency( pCodedDependency );
+                    if ( pDependency )
                     {
                         if ( !pActDirectory->pDependencies )
                             pActDirectory->pDependencies = new SByteStringList();
@@ -392,21 +392,6 @@ ByteString SourceDirectory::GetTarget()
         sWNT += " :";
         BOOL bWNT = FALSE;
 
-//      ByteString sWIN( ".IF \"$(GUI)\" == \"WIN\"\n" );
-//      sWIN += sTarget;
-//      sWIN += " :";
-//      BOOL bWIN = FALSE;
-
-        ByteString sMAC( ".IF \"$(GUI)\" == \"MAC\"\n" );
-        sMAC += sTarget;
-        sMAC += " :";
-        BOOL bMAC = FALSE;
-
-        ByteString sOS2( ".IF \"$(GUI)\" == \"OS2\"\n" );
-        sOS2 += sTarget;
-        sOS2 += " :";
-        BOOL bOS2 = FALSE;
-
         for ( ULONG i = 0; i < pDependencies->Count(); i++ ) {
             Dependency *pDependency =
                 ( Dependency * ) pDependencies->GetObject( i );
@@ -423,21 +408,6 @@ ByteString SourceDirectory::GetTarget()
                 sWNT += sDependency;
                 bWNT = TRUE;
             }
-//          if ( pDependency->GetOperatingSystem() & OS_WIN16 ) {
-//              sWIN += " ";
-//              sWIN += sDependency;
-//              bWIN = TRUE;
-//          }
-            if ( pDependency->GetOperatingSystem() & OS_MAC ) {
-                sMAC += " ";
-                sMAC += sDependency;
-                bMAC = TRUE;
-            }
-            if ( pDependency->GetOperatingSystem() & OS_OS2 ) {
-                sOS2 += " ";
-                sOS2 += sDependency;
-                bOS2 = TRUE;
-            }
         }
 
         if ( bUNX ) {
@@ -446,18 +416,6 @@ ByteString SourceDirectory::GetTarget()
         }
         if ( bWNT ) {
             sReturn += sWNT;
-            sReturn += "\n.ENDIF\n";
-        }
-//      if ( bWIN ) {
-//          sReturn += sWIN;
-//          sReturn += "\n.ENDIF\n";
-//      }
-        if ( bMAC ) {
-            sReturn += sMAC;
-            sReturn += "\n.ENDIF\n";
-        }
-        if ( bOS2 ) {
-            sReturn += sOS2;
             sReturn += "\n.ENDIF\n";
         }
     }
@@ -498,18 +456,6 @@ ByteString SourceDirectory::GetSubDirsTarget()
             sWNT += "RC_SUBDIRS = ";
             BOOL bWNT = FALSE;
 
-    //      ByteString sWIN( ".IF \"$(GUI)\" == \"WIN\"\n" );
-    //      sWIN += "RC_SUBDIRS = ";
-    //      BOOL bWIN = FALSE;
-
-            ByteString sMAC( ".IF \"$(GUI)\" == \"MAC\"\n" );
-            sMAC += "RC_SUBDIRS = ";
-            BOOL bMAC = FALSE;
-
-            ByteString sOS2( ".IF \"$(GUI)\" == \"OS2\"\n" );
-            sOS2 += "RC_SUBDIRS = ";
-            BOOL bOS2 = FALSE;
-
             for ( ULONG i = 0; i < pSubDirectories->Count(); i++ ) {
                 SourceDirectory *pDirectory =
                     ( SourceDirectory * ) pSubDirectories->GetObject( i );
@@ -526,21 +472,6 @@ ByteString SourceDirectory::GetSubDirsTarget()
                     sWNT += sDirectory;
                     bWNT = TRUE;
                 }
-    //          if ( pDirectory->GetOperatingSystems() & OS_WIN16 ) {
-    //              sWIN += " \\\n\t";
-    //              sWIN += sDirectory;
-    //              bWIN = TRUE;
-    //          }
-                if ( pDirectory->GetOperatingSystems() & OS_MAC ) {
-                    sMAC += " \\\n\t";
-                    sMAC += sDirectory;
-                    bMAC = TRUE;
-                }
-                if ( pDirectory->GetOperatingSystems() & OS_OS2 ) {
-                    sOS2 += " \\\n\t";
-                    sOS2 += sDirectory;
-                    bOS2 = TRUE;
-                }
             }
             if ( bUNX ) {
                 sReturn += sUNX;
@@ -548,18 +479,6 @@ ByteString SourceDirectory::GetSubDirsTarget()
             }
             if ( bWNT ) {
                 sReturn += sWNT;
-                sReturn += "\n.ENDIF\n";
-            }
-    //      if ( bWIN ) {
-    //          sReturn += sWIN;
-    //          sReturn += "\n.ENDIF\n";
-    //      }
-            if ( bMAC ) {
-                sReturn += sMAC;
-                sReturn += "\n.ENDIF\n";
-            }
-            if ( bOS2 ) {
-                sReturn += sOS2;
                 sReturn += "\n.ENDIF\n";
             }
         }
@@ -574,18 +493,10 @@ USHORT SourceDirectory::GetOSType( const ByteString &sDependExt )
     USHORT nOSType = 0;
     if ( sDependExt == "" )
         nOSType |= OS_ALL;
-    else if ( sDependExt == "D" )
-        /* nOSType |= OS_WIN16 */;
-    else if ( sDependExt == "W" )
-        nOSType |= OS_WIN32 /* | OS_WIN16 */;
-    else if ( sDependExt == "N" )
+    else if ( sDependExt == "N" || sDependExt == "W" )
         nOSType |= OS_WIN32;
     else if ( sDependExt == "U" )
         nOSType |= OS_UNX;
-    else if ( sDependExt == "P" )
-        nOSType |= OS_OS2;
-    else if ( sDependExt == "M" )
-        nOSType |= OS_MAC;
     return nOSType;
 }
 
@@ -777,9 +688,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#  $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#  $Revision: 1.13 $\n"
+        "#  $Revision: 1.14 $\n"
         "#\n"
-        "#  last change: $Author: rt $ $Date: 2005-09-09 13:31:15 $\n"
+        "#  last change: $Author: hr $ $Date: 2006-06-19 13:21:07 $\n"
         "#\n"
         "#  The Contents of this file are made available subject to\n"
         "#  the terms of GNU Lesser General Public License Version 2.1.\n"
@@ -983,8 +894,8 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
 
     BOOL bSuccess = TRUE;
     if ( bAllChilds )
-        for ( ULONG j = 0; j < pSubDirectories->Count(); j++ )
-            if  ( !(( SourceDirectory * ) pSubDirectories->GetObject( j ))->
+        for ( ULONG k = 0; k < pSubDirectories->Count(); k++ )
+            if  ( !(( SourceDirectory * ) pSubDirectories->GetObject( k ))->
                 CreateRecursiveMakefile( TRUE ))
                 bSuccess = FALSE;
 
