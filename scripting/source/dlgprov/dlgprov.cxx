@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:25:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,10 +322,10 @@ namespace dlgprov
             Reference< io::XInputStream > xInput( xISP->createInputStream() );
             if ( xInput.is() && m_xContext.is() )
             {
-                Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
-                if ( xSMgr.is() )
+                Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager() );
+                if ( xSMgr_.is() )
                 {
-                    Reference< container::XNameContainer > xDialogModel( xSMgr->createInstanceWithContext(
+                    Reference< container::XNameContainer > xDialogModel( xSMgr_->createInstanceWithContext(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), m_xContext ), UNO_QUERY );
 
                     if ( xDialogModel.is() )
@@ -557,6 +557,8 @@ extern "C"
     void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
     {
+        (void)ppEnv;
+
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
