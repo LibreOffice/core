@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:41:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #endif
 
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -146,11 +146,11 @@ XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     XMLFootnoteConfigurationImportContext& rConfigImport,
-    sal_Bool bBegin) :
-        SvXMLImportContext(rImport, nPrfx, rLName),
-        rConfig(rConfigImport),
-        sBuffer(),
-        bIsBegin(bBegin)
+    sal_Bool bBegin)
+:   SvXMLImportContext(rImport, nPrfx, rLName)
+,   sBuffer()
+,   rConfig(rConfigImport)
+,   bIsBegin(bBegin)
 {
 }
 
@@ -184,40 +184,27 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList,
-                             XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG),
-        bIsEndnote(sal_False),
-        pAttrTokenMap(NULL),
-        sCitationStyle(),
-        sAnchorStyle(),
-        sDefaultStyle(),
-        sPageStyle(),
-        sPrefix(),
-        sSuffix(),
-        sBeginNotice(),
-        sEndNotice(),
-        sNumFormat(RTL_CONSTASCII_USTRINGPARAM("1")),
-        sNumSync(RTL_CONSTASCII_USTRINGPARAM("false")),
-        nOffset(0),
-        nNumbering(FootnoteNumbering::PER_PAGE),
-        bPosition(sal_False),
-        sPropertyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
-        sPropertyAnchorCharStyleName(
-            RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
-        sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-        sPropertyPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName")),
-        sPropertyParagraphStyleName(
-            RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
-        sPropertyPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix")),
-        sPropertyStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt")),
-        sPropertySuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix")),
-        sPropertyPositionEndOfDoc(
-            RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc")),
-        sPropertyFootnoteCounting(
-            RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting")),
-        sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
-        sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
+    const Reference<XAttributeList> & xAttrList)
+:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG)
+,   sPropertyAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName"))
+,   sPropertyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName"))
+,   sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
+,   sPropertyPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))
+,   sPropertyParagraphStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"))
+,   sPropertyPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix"))
+,   sPropertyStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt"))
+,   sPropertySuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix"))
+,   sPropertyPositionEndOfDoc(RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc"))
+,   sPropertyFootnoteCounting(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting"))
+,   sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice"))
+,   sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
+,   sNumFormat(RTL_CONSTASCII_USTRINGPARAM("1"))
+,   sNumSync(RTL_CONSTASCII_USTRINGPARAM("false"))
+,   pAttrTokenMap(NULL)
+,   nOffset(0)
+,   nNumbering(FootnoteNumbering::PER_PAGE)
+,   bPosition(sal_False)
+,   bIsEndnote(sal_False)
 {
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
