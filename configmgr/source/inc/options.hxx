@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:52:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,8 @@ namespace configmgr
         }
 
         OOptions(const OOptions& _aOtherOptions)
-        : m_aRequestOptions(_aOtherOptions.m_aRequestOptions)
+        : salhelper::SimpleReferenceObject()
+        , m_aRequestOptions(_aOtherOptions.m_aRequestOptions)
         {
         }
 
