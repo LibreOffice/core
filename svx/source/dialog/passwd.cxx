@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:52:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_PASSWD_CXX
 
@@ -104,14 +103,14 @@ IMPL_LINK( SvxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 
 SvxPasswordDialog::SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords, BOOL bDisableOldPassword ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_PASSWORD ) ),
+    aOldFL          ( this, ResId( FL_OLD_PASSWD ) ),
     aOldPasswdFT    ( this, ResId( FT_OLD_PASSWD ) ),
     aOldPasswdED    ( this, ResId( ED_OLD_PASSWD ) ),
-    aOldFL          ( this, ResId( FL_OLD_PASSWD ) ),
+    aNewFL          ( this, ResId( FL_NEW_PASSWD ) ),
     aNewPasswdFT    ( this, ResId( FT_NEW_PASSWD ) ),
     aNewPasswdED    ( this, ResId( ED_NEW_PASSWD ) ),
     aRepeatPasswdFT ( this, ResId( FT_REPEAT_PASSWD ) ),
     aRepeatPasswdED ( this, ResId( ED_REPEAT_PASSWD ) ),
-    aNewFL          ( this, ResId( FL_NEW_PASSWD ) ),
     aOKBtn          ( this, ResId( BTN_PASSWD_OK ) ),
     aEscBtn         ( this, ResId( BTN_PASSWD_ESC ) ),
     aHelpBtn        ( this, ResId( BTN_PASSWD_HELP ) ),
