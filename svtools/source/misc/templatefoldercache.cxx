@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:23:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -677,7 +677,6 @@ namespace svt
             }
             catch( ::com::sun::star::uno::Exception& e )
             {
-                e; // make compiler happy
             }
 
             // collect the infos about the sub contents
@@ -858,7 +857,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void TemplateFolderCacheImpl::initTemplDirs( ::std::vector< String >& _rRootDirs )
+    void TemplateFolderCacheImpl::initTemplDirs( ::std::vector< String >& )
     {
     }
 
