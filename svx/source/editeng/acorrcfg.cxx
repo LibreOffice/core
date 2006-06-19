@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 #include "acorrcfg.hxx"
-
-#pragma hdrstop
 
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
