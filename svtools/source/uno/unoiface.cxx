@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:07:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:29:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     return pWindow;
 }
 
-};  // extern "C"
+}   // extern "C"
 
 //  ----------------------------------------------------
 //  class VCLXMultiLineEdit
@@ -690,11 +690,11 @@ void SAL_CALL VCLXFileControl::setProperty( const ::rtl::OUString& PropertyName,
 
 void VCLXFileControl::SetWindow( Window* pWindow )
 {
-    FileControl* pPrevFileControl = (FileControl*) GetWindow();
+    FileControl* pPrevFileControl = dynamic_cast<FileControl*>( GetWindow() );
     if ( pPrevFileControl )
         pPrevFileControl->GetEdit().SetModifyHdl( Link() );
 
-    FileControl* pNewFileControl = (FileControl*) pWindow;
+    FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow );
     if ( pNewFileControl )
         pNewFileControl->GetEdit().SetModifyHdl( LINK( this, VCLXFileControl, ModifyHdl ) );
 
@@ -865,7 +865,7 @@ IMPL_LINK( VCLXFileControl, ModifyHdl, Edit*, EMPTYARG )
     return aSz;
 }
 
-::com::sun::star::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -1137,11 +1137,11 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                     pFormatter = pField->StandardFormatter();
                     // should never fail
 
-                Color* pDummy;
+                Color* pDum;
                 double d;
                 rValue >>= d;
                 String sConverted;
-                pFormatter->GetOutputString(d, 0, sConverted, &pDummy);
+                pFormatter->GetOutputString(d, 0, sConverted, &pDum);
                 aReturn <<= ::rtl::OUString( sConverted );
             }
             break;
@@ -1566,20 +1566,20 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( SVTXRoadmap, VCLXWindow, SVTXRoadmap_Base )
 
 RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent )
 {
-    RMItemData CurRMItemData;
+    RMItemData aCurRMItemData;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRoadmapItem;
     _rEvent.Element >>= xRoadmapItem;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
         ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "Label" ));
-        aValue >>= CurRMItemData.Label;
+        aValue >>= aCurRMItemData.Label;
         aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "ID" ));
-        aValue >>= CurRMItemData.n_ID;
+        aValue >>= aCurRMItemData.n_ID;
         aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "Enabled" ));
-        aValue >>= CurRMItemData.b_Enabled;
+        aValue >>= aCurRMItemData.b_Enabled;
     }
-    return CurRMItemData;;
+    return aCurRMItemData;;
 }
 
 
@@ -1743,7 +1743,7 @@ void SVTXRoadmap::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, s
     ImplUpdateImage( sal_True );
 }
 
-void SVTXRoadmap::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & Producer ) throw(::com::sun::star::uno::RuntimeException)
+void SVTXRoadmap::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
