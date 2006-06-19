@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosmenucontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:54:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 }
 
 // XEventListener
-void SAL_CALL MacrosMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -126,7 +126,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& Source ) throw
 }
 
 // XStatusListener
-void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
+void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
     if ( m_xPopupMenu.is() )
@@ -136,7 +136,7 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void SAL_CALL MacrosMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL MacrosMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -192,7 +192,7 @@ void SAL_CALL MacrosMenuController::select( const css::awt::MenuEvent& rEvent ) 
 }
 
 
-IMPL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    try
    {
@@ -208,11 +208,11 @@ IMPL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteI
    return 0;
 }
 
-void SAL_CALL MacrosMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL MacrosMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
-void SAL_CALL MacrosMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL MacrosMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -269,10 +269,8 @@ void SAL_CALL MacrosMenuController::initialize( const Sequence< Any >& aArgument
                     aPropValue.Value >>= aCommandURL;
             }
         }
-::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                   m_xUICommandLabels;
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
             m_bInitialized = sal_True;
