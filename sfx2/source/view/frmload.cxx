@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:20:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:37:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ namespace css = ::com::sun::star;
 #include "brokenpackageint.hxx"
 #include "objshimp.hxx"
 
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& /*xFactory*/ )
 {
 }
 
@@ -228,7 +228,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     String                                                aTypeName     = lDescriptor.getUnpackedValueOrDefault(PROP_TYPENAME          , ::rtl::OUString()                                      );
                                                           aFilterName   = lDescriptor.getUnpackedValueOrDefault(PROP_FILTERNAME        , ::rtl::OUString()                                      );
     String                                                aServiceName  = lDescriptor.getUnpackedValueOrDefault(PROP_DOCUMENTSERVICE   , ::rtl::OUString()                                      );
-    sal_Bool                                              bReadOnlyTest = lDescriptor.getUnpackedValueOrDefault(PROP_READONLY          , sal_False                                              );
     css::uno::Reference< css::task::XInteractionHandler > xInteraction  = lDescriptor.getUnpackedValueOrDefault(PROP_INTERACTIONHANDLER, css::uno::Reference< css::task::XInteractionHandler >());
     css::uno::Reference< css::frame::XModel >             xModel        = lDescriptor.getUnpackedValueOrDefault(PROP_MODEL             , css::uno::Reference< css::frame::XModel >()            );
 
@@ -374,8 +373,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     }
 
     // check for the URL pattern of our factory URLs
-    BOOL bFactoryURL = FALSE;
-    const SfxObjectFactory* pFactory = 0;
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     String aFact( rURL );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
@@ -531,14 +528,14 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
         {
             xLoadable->load( aLoadArgs );
 
-            SfxMedium* pMedium = pDoc->GetMedium();
+            SfxMedium* pDocMedium = pDoc->GetMedium();
             BOOL bHidden = FALSE;
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
+            SFX_ITEMSET_ARG( pDocMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
             if ( pHidItem )
                 bHidden = pHidItem->GetValue();
 
             // !TODO: will be done by Framework!
-            pMedium->SetUpdatePickList( !bHidden );
+            pDocMedium->SetUpdatePickList( !bHidden );
 
             /*
                 #121119#
@@ -593,7 +590,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             if ( pFrame && !pFrame->GetCurrentDocument() )
             {
                 // document loading was not successful; close SfxFrame (but not XFrame!)
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 css::uno::Reference< css::frame::XFrame > axFrame;
                 pFrame->SetFrameInterface_Impl( axFrame );
                 pFrame->DoClose();
