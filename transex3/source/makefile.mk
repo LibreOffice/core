@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 13:27:21 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:23:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,14 @@
 
 PRJ=..
 
+INCPRE=$(MISC)
+
 PRJNAME=transex
 TARGET=transex3
 TARGETTYPE=CUI
 LIBTARGET=no
 # --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
@@ -49,15 +52,13 @@ CDEFS+= -DYY_NEVER_INTERACTIVE=1
 CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
 
+    
 # --- Files --------------------------------------------------------
 
 OBJFILES=   			\
     $(OBJ)$/export.obj	\
     $(OBJ)$/export2.obj	\
     $(OBJ)$/merge.obj   \
-    $(OBJ)$/wrdtrans.obj	\
-    $(OBJ)$/wtratree.obj	\
-    $(OBJ)$/wtranode.obj    \
     $(OBJ)$/srciter.obj		\
     $(OBJ)$/utf8conv.obj	\
     $(OBJ)$/xmlparse.obj    \
@@ -71,9 +72,6 @@ LIB1ARCHIV= $(LB)$/libtransex.a
 LIB1OBJFILES=        $(OBJ)$/export.obj      \
         $(OBJ)$/export2.obj     \
         $(OBJ)$/merge.obj   \
-        $(OBJ)$/wrdtrans.obj    \
-        $(OBJ)$/wtratree.obj    \
-        $(OBJ)$/wtranode.obj    \
         $(OBJ)$/srciter.obj             \
         $(OBJ)$/utf8conv.obj    \
         $(OBJ)$/hw2fw.obj
@@ -82,7 +80,8 @@ APP1VERSIONMAP=exports.map
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=     $(TARGET)
-APP1OBJS=   $(OBJ)$/src_yy.obj
+#APP1OBJS=   $(OBJ)$/src_yy.obj
+APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 
 .IF "$(GUI)"=="WNT"
 BOOTSTRP2 = bootstrp2.lib
@@ -104,7 +103,8 @@ APP1STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
 .ENDIF
 
 APP1LIBS+=	$(LB)$/$(PRJNAME).lib
-APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
+#APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
+APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(PRJNAME).lib
 
 #APP2TARGET= termilo
 #APP2STACK=  16000
@@ -161,7 +161,7 @@ APP5STDLIBS+= \
 
 # extractor and merger for *.cfg
 APP6TARGET= cfgex
-APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
 .IF "$(OS)"!="MACOSX"
 APP6STDLIBS+= $(BTSTRPLIB)
@@ -179,7 +179,7 @@ APP6STDLIBS+= $(BTSTRPLIB)
 
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
-APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
 .IF "$(OS)"!="MACOSX"
 APP7STDLIBS+= $(BTSTRPLIB)
@@ -215,8 +215,6 @@ APP8STDLIBS=$(TOOLSLIB) $(SALLIB)
 
 # localizer for l10n framework
 APP9TARGET= localize_sl
-EXCEPTIONSFILES=                            \
-                    $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
 
 .IF "$(OS)"!="MACOSX"
@@ -244,5 +242,11 @@ DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OB
 .INCLUDE :  target.mk
 
 $(MISC)$/%_yy.c : %lex.l
-    +flex -l -8 -o$@ $<
+    +flex -l -w -8 -o$@ $<
+
+# Helper to suppress warnings in lex generated c code, see #i57362#
+
+$(OBJ)$/src_yy_wrapper.obj: $(MISC)$/src_yy.c
+$(OBJ)$/cfg_yy_wrapper.obj: $(MISC)$/cfg_yy.c
+$(OBJ)$/xrm_yy_wrapper.obj: $(MISC)$/xrm_yy.c
 
