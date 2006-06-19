@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:03:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,10 +190,8 @@ uno::Any SAL_CALL SvxUnoColorTable::getByName( const  OUString& aName )
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    XColorEntry* pEntry = pTable->Get( nIndex );
-    uno::Any aAny;
-    aAny <<= (sal_Int32) pEntry->GetColor().GetRGBColor();
-    return aAny;
+    XColorEntry* pEntry = ((XColorTable*)pTable)->GetColor( nIndex );
+    return uno::Any( (sal_Int32) pEntry->GetColor().GetRGBColor() );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames(  )
@@ -206,7 +204,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames(  )
 
     for( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        XColorEntry* pEntry = pTable->Get( nIndex );
+        XColorEntry* pEntry = pTable->GetColor( (long)nIndex );
         pStrings[nIndex] = pEntry->GetName();
     }
 
@@ -236,7 +234,7 @@ sal_Bool SAL_CALL SvxUnoColorTable::hasElements(  )
 /**
  * Create a colortable
  */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoColorTable_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw(uno::Exception)
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoColorTable_createInstance(const uno::Reference< lang::XMultiServiceFactory > & ) throw(uno::Exception)
 {
     return *new SvxUnoColorTable();
 }
@@ -278,7 +276,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv)
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -297,7 +295,7 @@ static void writeInfo (
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * pServiceManager, void * pRegistryKey)
+    void * , void * pRegistryKey)
 {
     if( pRegistryKey )
     {
@@ -324,7 +322,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void *  )
 {
     void * pRet = 0;
     if( pServiceManager  )
