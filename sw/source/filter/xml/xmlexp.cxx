@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         eClass = XML_TEXT_GLOBAL;
 
         // additionally, we take care of the save-linked-sections-thingy
-        bSaveLinkedSections = pDoc->IsGlblDocSaveLinks();
+        mbSaveLinkedSections = pDoc->IsGlblDocSaveLinks();
     }
     // MIB: 03/26/04: The Label information is saved in the settings, so
     // we don't need it here.
