@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:24:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ class ImpSdrConnectMarker: public SdrViewUserMarker
     virtual void Draw(OutputDevice* pOut, FASTBOOL bHiding, FASTBOOL bNoSaveDC);
 
 public:
-    ImpSdrConnectMarker(SdrCreateView* pView): SdrViewUserMarker(pView),pAktObj(NULL),pAktPV(NULL) {}
+    ImpSdrConnectMarker(SdrCreateView* _pView): SdrViewUserMarker(_pView),pAktObj(NULL),pAktPV(NULL) {}
     ~ImpSdrConnectMarker() {}
     void SetTargetObject(const SdrObject* pObj);
 }; // svdvmark
@@ -85,11 +85,11 @@ void ImpSdrConnectMarker::Draw(OutputDevice* pOut, FASTBOOL bHiding, FASTBOOL bN
 {
     SdrViewUserMarker::Draw(pOut,bHiding,bNoSaveDC);
 
-    const SdrCreateView* pView=(SdrCreateView*)GetView();
+    const SdrCreateView* pView2=(SdrCreateView*)GetView();
     const SdrObject* pObj=pAktObj;
     const SdrPageView* pPV=pAktPV;
 
-    if (pObj!=NULL && pView!=NULL && pOut!=NULL)
+    if (pObj!=NULL && pView2!=NULL && pOut!=NULL)
     {
         RasterOp eRop0=pOut->GetRasterOp();
         BOOL bMap0=pOut->IsMapModeEnabled();
@@ -103,14 +103,14 @@ void ImpSdrConnectMarker::Draw(OutputDevice* pOut, FASTBOOL bHiding, FASTBOOL bN
             aOldFillColor = pOut->GetFillColor();
         }
         Point aPvOfs; if (pPV!=NULL) aPvOfs=pPV->GetOffset();
-        if (pView->IsAutoVertexConnectors())
+        if (pView2->IsAutoVertexConnectors())
         {
             for (USHORT i=0; i<4; i++) {
                 SdrGluePoint aGluePoint(pObj->GetVertexGluePoint(i));
                 aGluePoint.Draw(*pOut,pObj);
             }
         }
-        if (pView->IsAutoCornerConnectors())
+        if (pView2->IsAutoCornerConnectors())
         {
             for (USHORT i=0; i<4; i++)
             {
@@ -132,10 +132,10 @@ void ImpSdrConnectMarker::Draw(OutputDevice* pOut, FASTBOOL bHiding, FASTBOOL bN
 void ImpSdrConnectMarker::SetTargetObject(const SdrObject* pObj)
 {
     if (pAktObj!=pObj) {
-        BOOL bVisible=IsVisible();
-        if (bVisible) Hide();
+        BOOL bVisible2=IsVisible();
+        if (bVisible2) Hide();
         pAktObj=pObj;
-        if (bVisible) Show();
+        if (bVisible2) Show();
     }
 }
 
@@ -191,8 +191,8 @@ SdrCreateView::SdrCreateView(SdrModel* pModel1, OutputDevice* pOut):
     ImpMakeCreateAttr();
 }
 
-SdrCreateView::SdrCreateView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrDragView(pModel1,pXOut)
+SdrCreateView::SdrCreateView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrDragView(pModel1,_pXOut)
 {
     ImpClearVars();
     ImpMakeCreateAttr();
@@ -1014,7 +1014,7 @@ void SdrCreateView::DrawCreateObjDiff(XPolyPolygon& rXPP0, XPolyPolygon& rXPP1)
     } while (pDragWin==NULL && nOutNum<GetWinCount());
 }
 
-void SdrCreateView::DrawCreateObj(OutputDevice* pOut, BOOL bFull) const
+void SdrCreateView::DrawCreateObj(OutputDevice* pOut, BOOL /*bFull*/) const
 {
     if (IsSolidDraggingNow()) return;
     if (IsCreateObj()) {
@@ -1037,8 +1037,8 @@ void SdrCreateView::DrawCreateObj(OutputDevice* pOut, BOOL bFull) const
                 pXOut->SetOffset(pCreatePV->GetOffset());
                 XPolyPolygon aXPP(pCreatePV->DragPoly());
                 USHORT nAnz=aXPP.Count();
-                for (USHORT i=0; i<nAnz; i++) {
-                    pXOut->DrawXPolyLine(aXPP[i]);
+                for (USHORT j=0; j<nAnz; j++) {
+                    pXOut->DrawXPolyLine(aXPP[j]);
                 }
                 pXOut->SetOffset(Point(0,0));
                 pO->SetRasterOp(eRop0);
@@ -1127,13 +1127,13 @@ BOOL SdrCreateView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     }
 }
 
-SfxStyleSheet* SdrCreateView::GetStyleSheet(BOOL& rOk) const
+SfxStyleSheet* SdrCreateView::GetStyleSheet() const // SfxStyleSheet* SdrCreateView::GetStyleSheet(BOOL& rOk) const
 {
     if (pAktCreate!=NULL) {
-        rOk=TRUE;
+        //rOk=TRUE;
         return pAktCreate->GetStyleSheet();
     } else {
-        return SdrDragView::GetStyleSheet(rOk);
+        return SdrDragView::GetStyleSheet(); // SdrDragView::GetStyleSheet(rOk);
     }
 }
 
