@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:38:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:51:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,8 +173,8 @@ AccessibleControlShape::AccessibleControlShape (
     :      AccessibleShape (rShapeInfo, rShapeTreeInfo)
     ,   m_bListeningForName( sal_False )
     ,   m_bListeningForDesc( sal_False )
-    ,   m_bDisposeNativeContext( sal_False )
     ,   m_bMultiplexingStates( sal_False )
+    ,   m_bDisposeNativeContext( sal_False )
     ,   m_bWaitingForControl( sal_False )
 {
     m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessServiceFactory() );
@@ -614,7 +614,7 @@ sal_Bool AccessibleControlShape::ensureListeningState(
     }
     catch( const Exception& e )
     {
-        e;  // make compiler happy
+        (void)e;    // make compiler happy
         OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
     }
 
@@ -780,7 +780,7 @@ sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
     }
     catch( const Exception& e )
     {
-        e;  // make compiler happy
+        (void)e;    // make compiler happy
         OSL_ENSURE( sal_False, "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
     }
 
