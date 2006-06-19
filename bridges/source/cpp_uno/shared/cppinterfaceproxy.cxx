@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppinterfaceproxy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:07:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:45:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,6 @@
 #include <cstddef>
 #include <new>
 
-using bridges::cpp_uno::shared::CppInterfaceProxy;
-
 namespace {
 
 struct InitVtableFactory {
@@ -69,6 +67,30 @@ bridges::cpp_uno::shared::VtableFactory * getVtableFactory() {
             InitVtableFactory(), osl::GetGlobalMutex());
 }
 
+}
+
+namespace bridges { namespace cpp_uno { namespace shared {
+
+void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
+{
+    CppInterfaceProxy * pThis = CppInterfaceProxy::castInterfaceToProxy(
+        pInterface);
+    if (pEnv != pThis->pBridge->getCppEnv()) {
+        OSL_ASSERT(false);
+    }
+
+    (*pThis->pBridge->getUnoEnv()->revokeInterface)(
+        pThis->pBridge->getUnoEnv(), pThis->pUnoI );
+    (*pThis->pUnoI->release)( pThis->pUnoI );
+    ::typelib_typedescription_release(
+        (typelib_TypeDescription *)pThis->pTypeDescr );
+    pThis->pBridge->release();
+
+#if OSL_DEBUG_LEVEL > 1
+    *(int *)pInterface = 0xdeadbabe;
+#endif
+    pThis->~CppInterfaceProxy();
+    delete[] reinterpret_cast< char * >(pThis);
 }
 
 com::sun::star::uno::XInterface * CppInterfaceProxy::create(
@@ -94,26 +116,6 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
     return castProxyToInterface(pProxy);
 }
 
-void CppInterfaceProxy::free(uno_ExtEnvironment * pEnv, void * pInterface)
-    SAL_THROW(())
-{
-    CppInterfaceProxy * pThis = castInterfaceToProxy(pInterface);
-    OSL_ASSERT( pEnv == pThis->pBridge->getCppEnv() );
-
-    (*pThis->pBridge->getUnoEnv()->revokeInterface)(
-        pThis->pBridge->getUnoEnv(), pThis->pUnoI );
-    (*pThis->pUnoI->release)( pThis->pUnoI );
-    ::typelib_typedescription_release(
-        (typelib_TypeDescription *)pThis->pTypeDescr );
-    pThis->pBridge->release();
-
-#if OSL_DEBUG_LEVEL > 1
-    *(int *)pInterface = 0xdeadbabe;
-#endif
-    pThis->~CppInterfaceProxy();
-    delete[] reinterpret_cast< char * >(pThis);
-}
-
 void CppInterfaceProxy::acquireProxy() SAL_THROW(())
 {
     if (1 == osl_incrementInterlockedCount( &nRef ))
@@ -122,7 +124,8 @@ void CppInterfaceProxy::acquireProxy() SAL_THROW(())
         // register at cpp env
         void * pThis = castProxyToInterface( this );
         (*pBridge->getCppEnv()->registerProxyInterface)(
-            pBridge->getCppEnv(), &pThis, free, oid.pData, pTypeDescr );
+            pBridge->getCppEnv(), &pThis, freeCppInterfaceProxy, oid.pData,
+            pTypeDescr );
         OSL_ASSERT( pThis == castProxyToInterface( this ) );
     }
 }
@@ -175,3 +178,5 @@ CppInterfaceProxy * CppInterfaceProxy::castInterfaceToProxy(void * pInterface)
     return reinterpret_cast< CppInterfaceProxy * >(
         static_cast< char * >(pInterface) - offset);
 }
+
+} } }
