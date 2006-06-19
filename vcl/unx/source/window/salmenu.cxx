@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:51:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 
 // X11SalInst factory methods
 
-SalMenu* X11SalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* X11SalInstance::CreateMenu( BOOL /*bMenuBar*/ )
 {
     return NULL;  // no support for native menues
 }
@@ -60,7 +60,7 @@ void X11SalInstance::DestroyMenu( SalMenu* pSalMenu )
 }
 
 
-SalMenuItem* X11SalInstance::CreateMenuItem( const SalItemParams* pItemData )
+SalMenuItem* X11SalInstance::CreateMenuItem( const SalItemParams* )
 {
     return NULL;  // no support for native menues
 }
@@ -88,43 +88,43 @@ BOOL X11SalMenu::VisibleMenuBar()
     return FALSE;
 }
 
-void X11SalMenu::SetFrame( const SalFrame *pFrame )
+void X11SalMenu::SetFrame( const SalFrame* )
 {
 }
 
-void X11SalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
+void X11SalMenu::InsertItem( SalMenuItem*, unsigned )
 {
 }
 
-void X11SalMenu::RemoveItem( unsigned nPos )
+void X11SalMenu::RemoveItem( unsigned )
 {
 }
 
-void X11SalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
+void X11SalMenu::SetSubMenu( SalMenuItem*, SalMenu*, unsigned )
 {
 }
 
-void X11SalMenu::CheckItem( unsigned nPos, BOOL bCheck )
+void X11SalMenu::CheckItem( unsigned, BOOL )
 {
 }
 
-void X11SalMenu::EnableItem( unsigned nPos, BOOL bEnable )
+void X11SalMenu::EnableItem( unsigned, BOOL )
 {
 }
 
-void X11SalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
+void X11SalMenu::SetItemImage( unsigned, SalMenuItem*, const Image& )
 {
 }
 
-void X11SalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
+void X11SalMenu::SetItemText( unsigned, SalMenuItem*, const XubString& )
 {
 }
 
-void X11SalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
+void X11SalMenu::SetAccelerator( unsigned, SalMenuItem*, const KeyCode&, const XubString& )
 {
 }
 
-void X11SalMenu::GetSystemMenuData( SystemMenuData* pData )
+void X11SalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
 
