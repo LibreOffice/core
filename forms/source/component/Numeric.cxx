@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ void ONumericModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-sal_Bool ONumericModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
