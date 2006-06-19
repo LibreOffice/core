@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowsAccessBridgeAdapter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:44:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #include <WindowsAccessBridgeAdapter.h>
 
+#include <tools/prewin.h>
+#include <wtypes.h>
+#include <tools/postwin.h>
+
 #ifndef _RTL_PROCESS_H_
 #include <rtl/process.h>
 #endif
@@ -54,10 +58,6 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
-
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
 
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
@@ -117,7 +117,7 @@ jmethodID g_jmRevokeTopWindow = 0;
 // functions
 //------------------------------------------------------------------------
 
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *, void *)
 {
     return JNI_VERSION_1_2;
 }
@@ -127,7 +127,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv
 {
     // Initialize global class and method references
     g_jcWindowsAccessBridgeAdapter =
-        reinterpret_cast< jclass > (pJNIEnv->NewGlobalRef(clazz));
+        static_cast< jclass > (pJNIEnv->NewGlobalRef(clazz));
     if (NULL == g_jcWindowsAccessBridgeAdapter) {
         return 0; /* jni error occured */
     }
@@ -159,7 +159,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv
 }
 
 JNIEXPORT jboolean JNICALL
-Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEnv *pJNIEnv, jclass clazz, jlong pointer)
+Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEnv *, jclass, jlong pointer)
 {
     uno_Environment * pJava_environment = NULL;
     uno_Environment * pUno_environment = NULL;
@@ -214,7 +214,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
     return JNI_TRUE;
 }
 
-JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *reserved)
+JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *)
 {
     ::Application::RemoveEventListener(g_aEventListenerLink);
 
@@ -329,7 +329,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
     }
 }
 
-long VCLEventListenerLinkFunc(void * pInst, void * pData)
+long VCLEventListenerLinkFunc(void *, void * pData)
 {
     ::VclSimpleEvent const * pEvent = (::VclSimpleEvent const *) pData;
 
