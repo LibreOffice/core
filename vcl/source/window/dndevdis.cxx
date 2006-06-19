@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 // DNDEventDispatcher::dragExit
 //==================================================================================================
 
-void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& dte )
+void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     throw(RuntimeException)
 {
     MutexGuard aImplGuard( m_aMutex );
@@ -339,7 +339,7 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 // DNDEventDispatcher::disposing
 //==================================================================================================
 
-void SAL_CALL DNDEventDispatcher::disposing( const EventObject& eo )
+void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
     throw(RuntimeException)
 {
 }
@@ -348,7 +348,7 @@ void SAL_CALL DNDEventDispatcher::disposing( const EventObject& eo )
 // DNDEventDispatcher::acceptDrag
 //==================================================================================================
 
-void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 dropAction ) throw(RuntimeException)
+void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ ) throw(RuntimeException)
 {
 }
 
