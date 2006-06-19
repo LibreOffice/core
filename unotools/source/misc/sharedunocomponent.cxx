@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedunocomponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:38:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,11 @@ namespace utl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException)
+    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject&
+    #ifdef DBG_UTIL
+    Source
+    #endif
+    , ::sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException)
     {
         // as long as we live, somebody wants to keep the object alive. So, veto the
         // closing
@@ -211,7 +215,11 @@ namespace utl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject&
+    #ifdef DBG_UTIL
+    Source
+    #endif
+    ) throw (RuntimeException)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::notifyClosing: where did this come from?" );
 
@@ -222,7 +230,11 @@ namespace utl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL CloseableComponentImpl::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL CloseableComponentImpl::disposing( const EventObject&
+    #ifdef DBG_UTIL
+    Source
+    #endif
+    ) throw (RuntimeException)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
         DBG_ERROR( "CloseableComponentImpl::disposing: unreachable!" );
