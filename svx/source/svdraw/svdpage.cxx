@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:12:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@
 
 using namespace ::com::sun::star;
 
-DBG_NAME(SdrObjList);
+DBG_NAME(SdrObjList)
 
 TYPEINIT0(SdrObjList);
 
@@ -352,7 +352,7 @@ void SdrObjList::SetRectsDirty()
     if (pUpList!=NULL) pUpList->SetRectsDirty();
 }
 
-void SdrObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason)
+void SdrObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* /*pReason*/)
 {
     DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcInsertObject(NULL)");
     if (pObj!=NULL) {
@@ -1015,7 +1015,7 @@ void SdrObjList::UnGroupObj( ULONG nObjNum )
     if( pUngroupObj )
     {
         SdrObjList* pSrcLst = pUngroupObj->GetSubList();
-        sal_Int32 nCount( 0 );
+        //sal_Int32 nCount( 0 );
         if( pUngroupObj->ISA( SdrObjGroup ) && pSrcLst )
         {
             SdrObjGroup* pUngroupGroup = static_cast< SdrObjGroup* > (pUngroupObj);
@@ -1121,6 +1121,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, FASTBOOL bMasterPage)
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
 :   SdrObjList(rSrcPage.pModel, this),
+    tools::WeakBase< SdrPage >(),
     mpViewContact(0L),
     nWdt(rSrcPage.nWdt),
     nHgt(rSrcPage.nHgt),
@@ -1246,9 +1247,9 @@ SdrPage* SdrPage::Clone() const
 SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
 {
     if (pNewModel==NULL) pNewModel=pModel;
-    SdrPage* pPage=new SdrPage(*pNewModel);
-    *pPage=*this;
-    return pPage;
+    SdrPage* pPage2=new SdrPage(*pNewModel);
+    *pPage2=*this;
+    return pPage2;
 }
 
 //BFS01SfxItemPool& SdrPage::GetItemPool() const
@@ -1374,9 +1375,9 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         uno::Reference< uno::XInterface > xPage( mxUnoPage );
         if( xPage.is() )
         {
-            SvxDrawPage* pPage = SvxDrawPage::getImplementation( xPage );
-            if( pPage )
-                pPage->ChangeModel( pNewModel );
+            SvxDrawPage* pPage2 = SvxDrawPage::getImplementation( xPage );
+            if( pPage2 )
+                pPage2->ChangeModel( pNewModel );
         }
     }
 
@@ -1524,7 +1525,7 @@ FASTBOOL SdrPage::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const
+const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const Rectangle* /*pRect*/) const
 {
     return NULL;
 }
@@ -1804,18 +1805,18 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
     }
 
     // first, see if we have a background object
-    SdrObject* pBackgroundObj = NULL;
+    SdrObject* pBackgroundObj2 = NULL;
 
 
     if( IsMasterPage() )
     {
         if( GetObjCount() )
-            pBackgroundObj = GetObj( 0 );
+            pBackgroundObj2 = GetObj( 0 );
     }
     else
     {
-        pBackgroundObj = GetBackgroundObj();
-        if( NULL == pBackgroundObj )
+        pBackgroundObj2 = GetBackgroundObj();
+        if( NULL == pBackgroundObj2 )
         {
             // if not, see if we have a masterpage and get that background object
             if(TRG_HasMasterPage())
@@ -1824,15 +1825,15 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 
                 if(rMasterPage.GetObjCount())
                 {
-                    pBackgroundObj = rMasterPage.GetObj( 0 );
+                    pBackgroundObj2 = rMasterPage.GetObj( 0 );
                 }
             }
         }
     }
 
-    if( pBackgroundObj )
+    if( pBackgroundObj2 )
     {
-        const SfxItemSet& rSet = pBackgroundObj->GetMergedItemSet();
+        const SfxItemSet& rSet = pBackgroundObj2->GetMergedItemSet();
         GetDraftFillColor( rSet, aColor );
     }
 
@@ -1851,9 +1852,9 @@ Color SdrPage::GetBackgroundColor() const
     like printing.
 */
 bool SdrPage::checkVisibility(
-    ::sdr::contact::ViewObjectContact& rOriginal,
-    ::sdr::contact::DisplayInfo& rDisplayInfo,
-    bool bEdit )
+    ::sdr::contact::ViewObjectContact& /*rOriginal*/,
+    ::sdr::contact::DisplayInfo& /*rDisplayInfo*/,
+    bool /*bEdit*/)
 {
     // this will be handled in the application if needed
     return true;
@@ -1873,12 +1874,12 @@ void SdrPage::ActionChanged() const
 }
 
 // NYI: Dummy implementations for declarations in svdpage.hxx
-Bitmap      SdrPage::GetBitmap(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders) const
+Bitmap      SdrPage::GetBitmap(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /*bTrimBorders*/) const
 {
     DBG_ASSERT(0, "SdrPage::GetBitmap(): not yet implemented.");
     return Bitmap();
 }
-GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders)
+GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /*bTrimBorders*/)
 {
     DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
     return GDIMetaFile();
