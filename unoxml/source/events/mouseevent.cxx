@@ -59,7 +59,7 @@ namespace DOM { namespace events
                         sal_Bool shiftKeyArg,
                         sal_Bool metaKeyArg,
                         sal_Int16 buttonArg,
-                        const Reference< XEventTarget >& relatedTargetArg)
+                        const Reference< XEventTarget >& /*relatedTargetArg*/)
         throw(RuntimeException)
     {
         CUIEvent::initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
@@ -146,3 +146,4 @@ namespace DOM { namespace events
         CUIEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);
     }
 }}
+
