@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLErrorIndicatorPropertyHdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:28:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:02:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 {}
 
 sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImpValue,
-                                                  uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+                                                  uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     sal_Bool bValue;
     SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
@@ -95,7 +95,7 @@ sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImp
 }
 
 sal_Bool XMLErrorIndicatorPropertyHdl::exportXML( ::rtl::OUString& rStrExpValue,
-                                                  const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+                                                  const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     rtl::OUStringBuffer aBuffer;
     chart::ChartErrorIndicatorType eType;
