@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:00:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,8 +127,8 @@ class ConfigurationAccess_PopupMenuControllerFactory : // interfaces
                                                        public  ::cppu::OWeakObject
 {
     public:
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
                       ConfigurationAccess_PopupMenuControllerFactory( Reference< XMultiServiceFactory >& rServiceManager );
         virtual       ~ConfigurationAccess_PopupMenuControllerFactory();
@@ -189,10 +189,10 @@ DEFINE_XTYPEPROVIDER_3  (   ConfigurationAccess_PopupMenuControllerFactory  ,
 
 ConfigurationAccess_PopupMenuControllerFactory::ConfigurationAccess_PopupMenuControllerFactory( Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( rServiceManager ),
     m_aPropCommand( RTL_CONSTASCII_USTRINGPARAM( "Command" )),
     m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
     m_aPropController( RTL_CONSTASCII_USTRINGPARAM( "Controller" )),
+    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False )
 {
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(
@@ -313,7 +313,7 @@ void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementReplaced( c
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::disposing( const EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::disposing( const EventObject& ) throw(RuntimeException)
 {
     // SAFE
     // remove our reference to the config access
@@ -434,8 +434,8 @@ DEFINE_INIT_SERVICE                     (   PopupMenuControllerFactory, {} )
 
 PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( xServiceManager ),
-    m_bConfigRead( sal_False )
+    m_bConfigRead( sal_False ),
+    m_xServiceManager( xServiceManager )
 {
     m_pConfigAccess = new ConfigurationAccess_PopupMenuControllerFactory( m_xServiceManager );
     m_pConfigAccess->acquire();
@@ -452,7 +452,7 @@ PopupMenuControllerFactory::~PopupMenuControllerFactory()
 // XMultiComponentFactory
 Reference< XInterface > SAL_CALL PopupMenuControllerFactory::createInstanceWithContext(
     const ::rtl::OUString& aServiceSpecifier,
-    const Reference< XComponentContext >& Context )
+    const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
     // SAFE
@@ -475,7 +475,7 @@ throw (Exception, RuntimeException)
 Reference< XInterface > SAL_CALL PopupMenuControllerFactory::createInstanceWithArgumentsAndContext(
     const ::rtl::OUString&                  ServiceSpecifier,
     const Sequence< Any >&                  Arguments,
-    const Reference< XComponentContext >&   Context )
+    const Reference< XComponentContext >&    )
 throw (Exception, RuntimeException)
 {
     const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
