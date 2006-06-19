@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:52:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:49:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,8 +148,8 @@ double ImpGetDate( const SbxValues* p )
                 BOOL bSuccess = pFormatter->IsNumberFormat( *p->pString, nIndex, nRes );
                 if ( bSuccess )
                 {
-                    short nType = pFormatter->GetType( nIndex );
-                    if(!(nType & (  NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
+                    short nType_ = pFormatter->GetType( nIndex );
+                    if(!(nType_ & ( NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
                                     NUMBERFORMAT_TIME | NUMBERFORMAT_DEFINED )))
                         bSuccess = FALSE;
                 }
