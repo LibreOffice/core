@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:25:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,15 +60,15 @@ protected:
     ByteString GetAttribute( const ByteString &rToken, const ByteString &rAttribute );
     void Error( const ByteString &rError );
 
-    virtual void Output( const ByteString& rOutput );
+    virtual void Output( const ByteString& rOutput )=0;
     virtual void WorkOnText(
         const ByteString &rOpenTag,
         ByteString &rText
-    );
+    )=0;
     virtual void EndOfText(
         const ByteString &rOpenTag,
         const ByteString &rCloseTag
-    );
+    )=0;
 
     ByteString GetGID() { return sGID; }
     ByteString GetLID() { return sLID; }
@@ -114,14 +114,15 @@ private:
     std::vector<ByteString> aLanguages;
 
 protected:
-    virtual void WorkOnText(
+    void WorkOnText(
         const ByteString &rOpenTag,
         ByteString &rText
     );
-    virtual void EndOfText(
+    void EndOfText(
         const ByteString &rOpenTag,
         const ByteString &rCloseTag
     );
+    void Output( const ByteString& rOutput );
 
 public:
     XRMResExport(
@@ -140,25 +141,25 @@ class XRMResMerge : public XRMResOutputParser
 {
 private:
     MergeDataFile *pMergeDataFile;
+    ByteString sFilename;
     ResData *pResData;
     std::vector<ByteString> aLanguages;
-    ByteString sFilename;
 
 protected:
-    virtual void WorkOnText(
+    void WorkOnText(
         const ByteString &rOpenTag,
         ByteString &rText
     );
-    virtual void EndOfText(
+    void EndOfText(
         const ByteString &rOpenTag,
         const ByteString &rCloseTag
     );
-    virtual void Output( const ByteString& rOutput );
+    void Output( const ByteString& rOutput );
 public:
     XRMResMerge(
         const ByteString &rMergeSource,
         const ByteString &rOutputFile,
-        BOOL bErrorLog , ByteString &rFilename
+        ByteString &rFilename
     );
     virtual ~XRMResMerge();
 };
