@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:51:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,12 @@
 #include <tools/fsys.hxx>
 #endif
 
-#pragma hdrstop
-
 /*************************************************************************
 |*
 |*    Syntaxbeschreibung
 |*
 *************************************************************************/
-char* SyntaxStrings[] = {
+char const * SyntaxStrings[] = {
 "basic-type:",
 "\tvoid|        char|       int|        float|      double|",
 "\tUINT16|      INT16|      UINT32|     INT32|      BOOL|",
@@ -152,7 +150,7 @@ char CommandLineSyntax[] =
 |*    Letzte Aenderung  MM 15.12.94
 |*
 *************************************************************************/
-void Init( const SvCommand & rCommand )
+void Init()
 {
     if( !IDLAPP->pHashTable )
         IDLAPP->pHashTable      = new SvStringHashTable( 2801 );
@@ -365,7 +363,10 @@ SvCommand::SvCommand( int argc, char ** argv )
                 }
                 else
                 {
-                    printf( "unknown switch: %s\n", aParam.GetBuffer() );
+                    printf(
+                        "unknown switch: %s\n",
+                        rtl::OUStringToOString(
+                            aParam, RTL_TEXTENCODING_UTF8).getStr());
                     exit( -1 );
                 }
             }
@@ -375,9 +376,9 @@ SvCommand::SvCommand( int argc, char ** argv )
             }
             else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
             { // Hilfe
-                int i = 0;
-                while(SyntaxStrings[i])
-                    printf("%s\n",SyntaxStrings[i++]);
+                int j = 0;
+                while(SyntaxStrings[j])
+                    printf("%s\n",SyntaxStrings[j++]);
             }
             else if( aParam.EqualsIgnoreCaseAscii( "i", 0, 1 ) )
             { // Include-Pfade definieren
@@ -398,7 +399,10 @@ SvCommand::SvCommand( int argc, char ** argv )
             {
 #if SUPD>589
                 // temporary compatibility hack
-                printf( "unknown switch: %s\n", aParam.GetBuffer() );
+                printf(
+                    "unknown switch: %s\n",
+                    rtl::OUStringToOString(
+                        aParam, RTL_TEXTENCODING_UTF8).getStr());
                 exit( -1 );
 #endif
             }
