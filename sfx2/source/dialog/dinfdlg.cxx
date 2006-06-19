@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:32:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,6 @@ sal_Bool SfxDocumentInfoItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE n
     BOOL bField = FALSE;
     BOOL bIsInt = FALSE;
     BOOL bIsString = FALSE;
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -392,7 +391,6 @@ sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BY
     sal_Int32 nValue=0;
     sal_Bool bValue = sal_False;
     sal_Bool bRet = sal_False;
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -994,11 +992,11 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aRBNoAutoUpdate     ( this, ResId( RB_NOAUTOUPDATE      ) ),
 
     aRBReloadUpdate     ( this, ResId( RB_RELOADUPDATE      ) ),
+
+    aRBForwardUpdate    ( this, ResId( RB_FORWARDUPDATE     ) ),
     aFTEvery            ( this, ResId( FT_EVERY             ) ),
     aNFReload           ( this, ResId( ED_RELOAD            ) ),
     aFTReloadSeconds    ( this, ResId( FT_RELOADSECS        ) ),
-
-    aRBForwardUpdate    ( this, ResId( RB_FORWARDUPDATE     ) ),
     aFTAfter            ( this, ResId( FT_AFTER             ) ),
     aNFAfter            ( this, ResId( ED_FORWARD           ) ),
     aFTAfterSeconds     ( this, ResId( FT_FORWARDSECS       ) ),
@@ -1009,8 +1007,8 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aCBFrame            ( this, ResId( CB_FRAME             ) ),
 
     aForwardErrorMessg  (       ResId( STR_FORWARD_ERRMSSG  ) ),
-    eState( S_Init ),
-    pInfoItem( NULL )
+    pInfoItem( NULL ),
+    eState( S_Init )
 
 {
     FreeResource();
@@ -1128,6 +1126,7 @@ void SfxInternetPage::EnableForward( BOOL bEnable )
 
 IMPL_LINK( SfxInternetPage, ClickHdlNoUpdate, Control*, pCtrl )
 {
+    (void)pCtrl; //unused
     ChangeState( S_NoUpdate );
     return 0;
 }
@@ -1136,6 +1135,7 @@ IMPL_LINK( SfxInternetPage, ClickHdlNoUpdate, Control*, pCtrl )
 
 IMPL_LINK( SfxInternetPage, ClickHdlReload, Control*, pCtrl )
 {
+    (void)pCtrl; //unused
     ChangeState( S_Reload );
     return 0;
 }
@@ -1144,6 +1144,7 @@ IMPL_LINK( SfxInternetPage, ClickHdlReload, Control*, pCtrl )
 
 IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 {
+    (void)pCtrl; //unused
     ChangeState( S_Forward );
     return 0;
 }
@@ -1152,6 +1153,7 @@ IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 
 IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, pButton )
 {
+    (void)pButton; //unused
     sfx2::FileDialogHelper aHelper( ::sfx2::FILEOPEN_SIMPLE, WB_OPEN );
     aHelper.SetDisplayDirectory( aEDForwardURL.GetText() );
 
@@ -1205,6 +1207,8 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
             aFrame = ::std::auto_ptr< String >( new String( aCBFrame.GetText() ) );
             nDelay = aNFAfter.GetValue();
             break;
+              default:
+                  break;
     }
 
     rInfo.EnableReload( bEnableReload );
@@ -1284,7 +1288,7 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------------
 
-int SfxInternetPage::DeactivatePage( SfxItemSet* pSet )
+int SfxInternetPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
     int             nRet = LEAVE_PAGE;
 
@@ -1341,6 +1345,7 @@ SfxDocumentUserPage::SfxDocumentUserPage( Window* pParent,
 
 IMPL_LINK( SfxDocumentUserPage, EditLabelHdl, PushButton *, pPushButton )
 {
+    (void)pPushButton; //unused
     SfxDocInfoEditDlg* pDlg = new SfxDocInfoEditDlg( this );
     pDlg->SetText1( GetLabelText_Impl( &aInfo1Ft ) );
     pDlg->SetText2( GetLabelText_Impl( &aInfo2Ft ) );
