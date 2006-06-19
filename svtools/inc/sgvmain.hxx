@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sgvmain.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:54:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ public:
 
 
 struct Seitenformat {
-    PointType Size;       // 0.00mm...819.175mm (Papiergröße)
+    PointType Size;       // 0.00mm...819.175mm (Papiergrï¿½ï¿½e)
     INT16     RandL;      // links     Rand auf
     INT16     RandR;      // rechts    dem Papier
     INT16     RandO;      // oben      Rand auf
@@ -74,7 +74,7 @@ struct Seitenformat {
 #define PageSize 146
 class PageType {
 public:
-    UINT32       Next;       // Nächste Seite
+    UINT32       Next;       // Nï¿½chste Seite
     UINT32       nList;      // Objektdaten, erster Record
     UINT32       ListEnd;    // Objektdaten, letzter Record
     Seitenformat Paper;      // Papierdaten
@@ -99,7 +99,7 @@ struct ObjLineType {
     BYTE  LIntens;   //  [%]
     BYTE  LMuster;   //  [Index] inkl. Transparenz
     INT16 LMSize;    //  [Koeffizient/100]
-    INT16 LDicke;    //  Strichstärke
+    INT16 LDicke;    //  Strichstï¿½rke
 };
 
 struct ObjAreaType {
@@ -117,28 +117,29 @@ public:
     ObjLineType  L;        // Text-Outline (future)
     ObjAreaType  F;        // Text innen
     UINT16       FontLo,FontHi;// z.B. 92500 (CG Times), zweigeteilt wegen DWordAllign in TextType.
-    UINT16       Grad;     // 0.5..32767.5 Pt - bei 1000 Pt sollte aber schluß sein
+    UINT16       Grad;     // 0.5..32767.5 Pt - bei 1000 Pt sollte aber schluï¿½ sein
     UINT16       Breite;   // 1..65535%  bitte nicht mehr als 500%
     BYTE         Justify;  // 2 Bit Vert (Hi), 3 Bit Hor (Lo)
     BYTE         Kapit;    // 1..255%
     UINT16       Schnitt;  // 8 Flags
     UINT16       LnFeed;   // 1..32767% vom max. Schriftgrad der Zeile
-    UINT16       Slant;    // Kursivwinkel 0.00..89.99ø default 15.00ø          doppelt Breit angesehen)
+    UINT16       Slant;    // Kursivwinkel 0.00..89.99ï¿½ default 15.00ï¿½          doppelt Breit angesehen)
     BYTE         ZAbst;    // Zeichenabstand 0..255% (0=auf der Stelle; 100=normal; 200=Zeichen wird als
-    INT8         ChrVPos;  // Zeichen V-Position default 0= on Baseline, 10= 5Pt drunter (-64..63«)
+    INT8         ChrVPos;  // Zeichen V-Position default 0= on Baseline, 10= 5Pt drunter (-64..63ï¿½)
     ObjLineType  ShdL;     // Schatten-Outline (neu 2.0)
     ObjAreaType  ShdF;     // Schatten-innen   (neu 2.0)
     PointType    ShdVers;  // Schattenversatz Max.300.00%
     BOOL         ShdAbs;   // True-> Schattenversatz ist absolut statt relativ zum Schriftgrad
-    BOOL         NoSpc;    // True-> kein Zwischenraum (für BackArea)
-    ObjAreaType  BackF;    // Hintergrundfläche
+    BOOL         NoSpc;    // True-> kein Zwischenraum (fï¿½r BackArea)
+    ObjAreaType  BackF;    // Hintergrundflï¿½che
     UINT32 GetFont();
     void   SetFont(UINT32 FontID);
 };
 
-class Obj0Type {           // SuperClass für Apple-VMT
+class Obj0Type {           // SuperClass fï¿½r Apple-VMT
 public:
     virtual void Draw(OutputDevice& rOut);
+    virtual ~Obj0Type() {}
 };
 
 #define ObjkSize 20  /* eigentlich 21. Wg. Allignment ist Flags jedoch verschoben worden*/
@@ -151,7 +152,7 @@ public:
     PointType  ObjMax;     // XY-Maximum des Objekts
     BYTE       Art;
     BYTE       Layer;
-//    BYTE       Flags;    // (Schummel für Allignment unter NT)
+//    BYTE       Flags;    // (Schummel fï¿½r Allignment unter NT)
     friend SvStream& operator>>(SvStream& rIStream, ObjkType& rObjk);
     friend BOOL ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
@@ -161,7 +162,7 @@ public:
 #define StrkSize 38
 class StrkType: public ObjkType {
 public:
-    BYTE        Flags;     // (Schummel für Allignment unter NT)
+    BYTE        Flags;     // (Schummel fï¿½r Allignment unter NT)
     BYTE        LEnden;    // Linienenden
     ObjLineType L;
     PointType   Pos1;      // Anfangspunkt
@@ -174,7 +175,7 @@ public:
 #define RectSize 52
 class RectType: public ObjkType {
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
     BYTE        Reserve;
     ObjLineType L;
     ObjAreaType F;
@@ -191,10 +192,10 @@ public:
 #define PolySize 44
 class PolyType: public ObjkType { // identisch mit Spline !
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
-    BYTE        LEnden;  // nur für Polyline
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
+    BYTE        LEnden;  // nur fï¿½r Polyline
     ObjLineType L;
-    ObjAreaType F;       // nicht für Polyline
+    ObjAreaType F;       // nicht fï¿½r Polyline
     BYTE        nPoints;
     BYTE        Reserve;
     UINT32      SD_EckP; // Zeiger auf die Eckpunkte (StarDraw)
@@ -208,10 +209,10 @@ public:
 #define SplnSize 44
 class SplnType: public ObjkType { // identisch mit Poly !
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
-    BYTE        LEnden;  // nur für nSpline
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
+    BYTE        LEnden;  // nur fï¿½r nSpline
     ObjLineType L;
-    ObjAreaType F;       // nicht für nSpline
+    ObjAreaType F;       // nicht fï¿½r nSpline
     BYTE        nPoints;
     BYTE        Reserve;
     UINT32      SD_EckP; // Zeiger auf die Eckpunkte (StarDraw)
@@ -225,15 +226,15 @@ public:
 #define CircSize 52
 class CircType: public ObjkType {
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
     BYTE        LEnden;    // nur Bogen (Kr & El)
     ObjLineType L;
-    ObjAreaType F;         // nicht für Bogen (Kr & El)
+    ObjAreaType F;         // nicht fï¿½r Bogen (Kr & El)
     PointType   Center;    // Mittelpunkt
     PointType   Radius;    // Radius
     UINT16      DrehWink;  // nur Ellipse
-    UINT16      StartWink; // ¿ nicht für Vollkreis
-    UINT16      RelWink;   // Ù und Vollellipse
+    UINT16      StartWink; // ï¿½ nicht fï¿½r Vollkreis
+    UINT16      RelWink;   // ï¿½ und Vollellipse
     friend SvStream& operator>>(SvStream& rIStream, CircType& rCirc);
     virtual void Draw(OutputDevice& rOut);
 };
@@ -246,24 +247,24 @@ public:
 #define TextSize 116
 class TextType: public ObjkType {
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
-    BYTE        Reserve;   // für Word Allign
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
+    BYTE        Reserve;   // fï¿½r Word Allign
     ObjTextType T;         // 64 Bytes  << DWord-Allign bei FontID erforderlich
     PointType   Pos1;      // Bezugspunkt (ObenLinks)
     PointType   Pos2;      //             (untenRechts)
-    INT16       TopOfs;    // Von Oberkante bis Textbegin (future für vJustify)
+    INT16       TopOfs;    // Von Oberkante bis Textbegin (future fï¿½r vJustify)
     UINT16      DrehWink;  //    0...<360
     UINT16      BoxSlant;  // >270...<90 (nur Box)
-    UINT16      BufSize;   // Größe von Buf für Load, Save, Copy und so
+    UINT16      BufSize;   // Grï¿½ï¿½e von Buf fï¿½r Load, Save, Copy und so
     UINT16      BufLo,BufHi;// (UCHAR*) Zeiger auf den Textbuffer << ShortArr, weil sonst DWord-Allign erforderlich
-    UINT16      ExtLo,ExtHi;// (Ptr)  Text über mehrere Rahmen    << ShortArr, weil sonst DWord-Allign erforderlich
-    PointType   FitSize;   // Ursprungsgröße für Fit2Size
+    UINT16      ExtLo,ExtHi;// (Ptr)  Text ï¿½ber mehrere Rahmen    << ShortArr, weil sonst DWord-Allign erforderlich
+    PointType   FitSize;   // Ursprungsgrï¿½ï¿½e fï¿½r Fit2Size
     INT16       FitBreit;  // Breite zum formatieren bei Fit2Size
-    UCHAR*      Buffer;    // Diese Variable wird nicht durch Lesen von Disk gefüllt, sondern explizit!
+    UCHAR*      Buffer;    // Diese Variable wird nicht durch Lesen von Disk gefï¿½llt, sondern explizit!
     friend SvStream& operator>>(SvStream& rIStream, TextType& rText);
     virtual void Draw(OutputDevice& rOut);
 };
-#define TextOutlBit 0x01     /*       1=Sourcecode für Outliner (wird von DrawObjekt() ignoriert) */
+#define TextOutlBit 0x01     /*       1=Sourcecode fï¿½r Outliner (wird von DrawObjekt() ignoriert) */
 #define TextFitSBit 0x02     /* Bit1: 1=Text-FitToSize, auch Outliner (2.0)       */
 #define TextFitZBit 0x08     /* Bit3: 1=Fit2Size Zeilenweise          (2.0)       */
 #define TextDrftBit 0x04     /* Bit2: 1=DraftDraw                     (2.0)       */
@@ -275,7 +276,7 @@ enum GrafStat {NoGraf,Pic,Pcx,Hpgl,Img,Msp,Tiff,Dxf,Lot,Usr,Sgf};
 #define BmapSize 132
 class BmapType: public ObjkType {
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
     BYTE        Reserve;
     ObjAreaType F;            // Farbe und Muster der 1-Plane Bitmap
     PointType   Pos1;
@@ -283,15 +284,15 @@ public:
     UINT16      DrehWink;     //  315...<45   (Future)
     UINT16      Slant;        // >270...<90   (Future)
     UCHAR       Filename[80]; //  Pfad
-    PointType   PixSize;      // Größe in Pixel (0 bei Vektor)
+    PointType   PixSize;      // Grï¿½ï¿½e in Pixel (0 bei Vektor)
     GrafStat    Format;       // siehe GpmDef.Pas
     BYTE        nPlanes;      // Anzahl der Bitplanes (0 bei Vektor)
     BOOL        RawOut;       // als Raw ausgeben ?
     BOOL        InvOut;       // invertiert ausgeben ?
     BOOL        LightOut;     // aufhellen? (SD20)
-    BYTE        GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=Hpgl 4=Raw $FF=Undef(für Fix in DrawBmp)
+    BYTE        GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=Hpgl 4=Raw $FF=Undef(fï¿½r Fix in DrawBmp)
 
-    INetURLObject aFltPath;     // Für GraphicFilter
+    INetURLObject aFltPath;     // Fï¿½r GraphicFilter
     friend SvStream& operator>>(SvStream& rIStream, BmapType& rBmap);
     virtual void Draw(OutputDevice& rOut);
     void SetPaths( const INetURLObject rFltPath );
@@ -301,7 +302,7 @@ public:
 #define GrupSize 48
 class GrupType: public ObjkType {
 public:
-    BYTE        Flags;    // (Schummel für Allignment unter NT)
+    BYTE        Flags;    // (Schummel fï¿½r Allignment unter NT)
     UCHAR       Name[13];  // Name der Gruppe
     UINT16      SbLo,SbHi; // (Ptr) Gruppenliste << ShortArr, weil sonst DWord Allign erforderlich
     UINT16      UpLo,UpHi; // (Ptr) Vaterliste   << ShortArr, weil sonst DWord Allign erforderlich
@@ -324,7 +325,7 @@ UINT16 MulDiv(UINT16 a, UINT16 Mul, UINT16 Div);
 
 class SgfFontOne {
 public:
-    SgfFontOne* Next;        // Zeiger für Listenverkettung
+    SgfFontOne* Next;        // Zeiger fï¿½r Listenverkettung
     UINT32      IFID;
     BOOL        Bold;
     BOOL        Ital;
@@ -341,11 +342,11 @@ public:
 
 class SgfFontLst {
 public:
-    String      FNam;   // vollständiger Filename des Inifiles
+    String      FNam;   // vollstï¿½ndiger Filename des Inifiles
     SgfFontOne* pList;  // Listenanfang
     SgfFontOne* Last;   // Listenende
-    UINT32      LastID; // für schnelleren Zugriff bei Wiederholungen
-    SgfFontOne* LastLn; // für schnelleren Zugriff bei Wiederholungen
+    UINT32      LastID; // fï¿½r schnelleren Zugriff bei Wiederholungen
+    SgfFontOne* LastLn; // fï¿½r schnelleren Zugriff bei Wiederholungen
     BOOL        Tried;
                 SgfFontLst();
                 ~SgfFontLst();
