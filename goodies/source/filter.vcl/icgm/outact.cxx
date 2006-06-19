@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,17 +139,17 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
 
 // ---------------------------------------------------------------
 
-void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType )
+void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nType*/ )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
     mpGradient->XOffset = ( (sal_uInt16)nHorzOfs & 0x7f );
-    mpGradient->YOffset = ( (sal_uInt16)nHorzOfs & 0x7f );
+    mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
 }
 
 // ---------------------------------------------------------------
 
-void CGMOutAct::SetGradientEdge( long nEdge )
+void CGMOutAct::SetGradientEdge( long /*nEdge*/ )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
@@ -176,7 +176,7 @@ void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorT
 
 // ---------------------------------------------------------------
 
-void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double fRatio )
+void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
