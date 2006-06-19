@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:40:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.7 2005-09-08 16:40:28 rt Exp $ */
+/* $Id: ttcr.c,v 1.8 2006-06-19 10:25:29 hr Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -158,11 +158,11 @@ _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bige
     assert(ptr != 0);
 
     if (bigendian) {
-        ptr[offset] = (val >> 8) & 0xFF;
-        ptr[offset+1] = val & 0xFF;
+        ptr[offset] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)(val & 0xFF);
     } else {
-        ptr[offset+1] = (val >> 8) & 0xFF;
-        ptr[offset] = val & 0xFF;
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset] = (sal_uInt8)(val & 0xFF);
     }
 
 }
@@ -172,11 +172,11 @@ _inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bi
     assert(ptr != 0);
 
     if (bigendian) {
-        ptr[offset] = (val >> 8) & 0xFF;
-        ptr[offset+1] = val & 0xFF;
+        ptr[offset] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)(val & 0xFF);
     } else {
-        ptr[offset+1] = (val >> 8) & 0xFF;
-        ptr[offset] = val & 0xFF;
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset] = (sal_uInt8)(val & 0xFF);
     }
 
 }
@@ -758,10 +758,10 @@ static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
     sal_uInt16 g;
 
     PutUInt16(6, ptr, 0, 1);
-    PutUInt16(s->n*2+10, ptr, 2, 1);
+    PutUInt16((sal_uInt16)(s->n*2+10), ptr, 2, 1);
     PutUInt16(0, ptr, 4, 1);
     PutUInt16(0, ptr, 6, 1);
-    PutUInt16(s->n, ptr, 8, 1 );
+    PutUInt16((sal_uInt16)(s->n), ptr, 8, 1 );
 
     for (i = 0; i < s->n; i++) {
         g = 0;
@@ -858,7 +858,7 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     l = (list) _this->data;
     assert(l != 0);
 
-    if ((n = listCount(l)) == 0) return TTCR_NONAMES;
+    if ((n = (sal_Int16)listCount(l)) == 0) return TTCR_NONAMES;
 
     nr = scalloc(n, sizeof(NameRecord));
 
@@ -877,7 +877,7 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
     qsort(nr, n, sizeof(NameRecord), NameRecordCompareF);
 
-    nameLen = stringLen + 12 * n + 6;
+    nameLen = (sal_uInt16)(stringLen + 12 * n + 6);
     name = ttmalloc(nameLen);
 
     PutUInt16(0, name, 0, 1);
@@ -1213,7 +1213,7 @@ TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
 void TrueTypeTableDispose(TrueTypeTable *_this)
 {
     /* XXX do a binary search */
-    int i;
+    unsigned int i;
 
     assert(_this != 0);
 
@@ -1231,7 +1231,7 @@ void TrueTypeTableDispose(TrueTypeTable *_this)
 int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     /* XXX do a binary search */
-    int i;
+    unsigned int i;
 
     assert(_this != 0);
     assert(ptr != 0);
@@ -1334,7 +1334,7 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
     assert(table != 0);
     assert(table->tag == T_glyf);
 
-    if (!glyphdata) return -1;
+    if (!glyphdata) return (sal_uInt32)~0;
 
     glyphlist = listNewEmpty();
 
