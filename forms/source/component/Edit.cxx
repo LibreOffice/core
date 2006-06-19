@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:58:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ OEditControl::OEditControl(const Reference<XMultiServiceFactory>& _rxFactory)
     DBG_CTOR(OEditControl,NULL);
 
     increment(m_refCount);
-    {   // als FocusListener anmelden
+    {
         Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
         {
@@ -152,8 +152,7 @@ OEditControl::OEditControl(const Reference<XMultiServiceFactory>& _rxFactory)
             xComp->addKeyListener(this);
         }
     }
-    // Refcount wieder bei 2 fuer beide Listener
-    sal_Int32 n = decrement(m_refCount);
+    decrement(m_refCount);
 }
 
 //------------------------------------------------------------------------------
@@ -215,7 +214,7 @@ void OEditControl::disposing(const EventObject& Source) throw( RuntimeException 
 
 // XFocusListener
 //------------------------------------------------------------------------------
-void OEditControl::focusGained( const FocusEvent& e ) throw ( ::com::sun::star::uno::RuntimeException)
+void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
@@ -223,7 +222,7 @@ void OEditControl::focusGained( const FocusEvent& e ) throw ( ::com::sun::star::
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::focusLost( const FocusEvent& e ) throw ( ::com::sun::star::uno::RuntimeException)
+void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
@@ -297,12 +296,12 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OEditControl, OnKeyPressed, void*, EMPTYARG)
+IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
 {
     m_nKeyEvent = 0;
 
@@ -342,11 +341,11 @@ DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
-    ,m_bMaxTextLenModified(sal_False)
-    ,m_nKeyType(NumberFormat::UNDEFINED)
-    ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nFormatKey(0)
+    ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nFieldType(DataType::OTHER)
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
     ,m_bNumericField(sal_False)
 {
@@ -359,11 +358,11 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
 //------------------------------------------------------------------
 OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
         :OEditBaseModel( _pOriginal, _rxFactory )
-    ,m_bMaxTextLenModified(sal_False)
-    ,m_nKeyType(NumberFormat::UNDEFINED)
-    ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nFormatKey(0)
+    ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nFieldType(DataType::OTHER)
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
     ,m_bNumericField(sal_False)
 {
@@ -770,7 +769,7 @@ sal_Bool OEditModel::approveValueBinding( const Reference< XValueBinding >& _rxB
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OEditModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     ::rtl::OUString sNewValue;
     m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
