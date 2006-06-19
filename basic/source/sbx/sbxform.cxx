@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:50:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,6 @@ BEMERKUNG: Visual-Basic behandelt folgende (ung"ultige) Format-Strings
 //=================================================================
 //=========================== DEFINES =============================
 //=================================================================
-
-#if defined(MAC) && defined(__MWERKS__)
-#undef DBL_DIG
-#define DBL_DIG             15
-#endif
 
 #define _NO_DIGIT                   -1
 
@@ -233,17 +228,17 @@ void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow
     else
     {
         // ist die zu rundende Position eine Ziffer ?
-        sal_Unicode c = sStrg.GetChar( nPos );
-        if( c >= ASCII_0 && c <= ASCII_9 )
+        sal_Unicode c2 = sStrg.GetChar( nPos );
+        if( c2 >= ASCII_0 && c2 <= ASCII_9 )
         {
             // muss eine 9 gerundet werden? Falls: Ja --> rekursiver Aufruf
-            if( c == ASCII_9 )
+            if( c2 == ASCII_9 )
             {
                 sStrg.SetChar( nPos, '0' );
                 StrRoundDigit( sStrg,nPos-1,bOverflow );
             }
             else
-                sStrg.SetChar( nPos, c+1 );
+                sStrg.SetChar( nPos, c2+1 );
         }
         else
         {
@@ -740,6 +735,8 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         bIsNegative = dNumber<0.0;
         nLen = sFormatStrg.Len();
         dExponent = get_number_of_digits( dNumber );
+        nExponentPos = 0;
+        nMaxExponentDigit = 0;
         nMaxDigit = (short)dExponent;
         bDigitPosNegative = false;
         if( bScientific )
@@ -1067,7 +1064,7 @@ String SbxBasicFormater::BasicFormatNull( String sFormatStrg )
 
 String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
 {
-    BOOL bPosFormatFound,bNegFormatFound,b0FormatFound,bNullFormatFound;
+    BOOL bPosFormatFound,bNegFormatFound,b0FormatFound;
 
     // analysiere Format-String auf vordefinierte Formate:
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_GENERALNUMBER ) )
