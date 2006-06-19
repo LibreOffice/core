@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxform.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:27:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,9 @@ class SvxFmTbxCtlConfig : public SfxToolBoxControl
 {
 private:
     UINT16 nLastSlot;
+
+protected:
+    using SfxToolBoxControl::Select;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
