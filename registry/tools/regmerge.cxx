@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regmerge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:19:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:29:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,22 @@ OUString convertToFileUrl(const OString& fileName)
     if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return uUrlFileName;
@@ -240,11 +251,13 @@ int _cdecl main( int argc, char * argv[] )
     {
         ::rtl::OUString mergeKeyName( ::rtl::OUString::createFromAscii(realargv[2]) );
         ::rtl::OUString targetRegName;
-        RegError _ret = REG_NO_ERROR;
         for (int i = 3; i < realargc; i++)
         {
             targetRegName = convertToFileUrl(realargv[i]);
-            if (_ret = reg_mergeKey(hRootKey, mergeKeyName.pData, targetRegName.pData, sal_False, bVerbose))
+            RegError _ret = reg_mergeKey(
+                hRootKey, mergeKeyName.pData, targetRegName.pData, sal_False,
+                bVerbose);
+            if (_ret)
             {
                 if (_ret == REG_MERGE_CONFLICT)
                 {
