@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlerror.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:36:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,12 +121,12 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
     const OUString& rExceptionMessage, sal_Int32 nRowNumber, sal_Int32 nCol,
     const OUString& rPublicId, const OUString& rSystemId) :
         nId(nID),
-        aParams(rParams),
         sExceptionMessage(rExceptionMessage),
         nRow(nRowNumber),
         nColumn(nCol),
         sPublicId(rPublicId),
-        sSystemId(rSystemId)
+        sSystemId(rSystemId),
+        aParams(rParams)
 {
 }
 
