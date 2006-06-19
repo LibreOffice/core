@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:01:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ using namespace ::com::sun::star;
 #include "pgrditem.hxx"
 
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 
 #include <unomid.hxx>
 
@@ -120,7 +120,9 @@ using namespace ::com::sun::star;
 
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+#define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -218,8 +220,10 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case SVX_LINE_SPACE_FIX :
         case SVX_LINE_SPACE_MIN :
             aLSp.Mode = eLineSpace == SVX_LINE_SPACE_FIX ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
-            aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100(nLineHeight) : nLineHeight );
+            aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100_UNSIGNED(nLineHeight) : nLineHeight );
         break;
+        default:
+            ;//prevent warning about SVX_LINE_SPACE_END
     }
 
     switch ( nMemberId )
@@ -286,7 +290,7 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
                 nLineHeight = aLSp.Height;
                 if(bConvert)
-                    nLineHeight = (USHORT)MM100_TO_TWIP(nLineHeight);
+                    nLineHeight = (USHORT)MM100_TO_TWIP_UNSIGNED(nLineHeight);
             }
             break;
         }
@@ -306,10 +310,10 @@ SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
 
 SfxItemPresentation SvxLineSpacingItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
 #ifndef PRODUCT
@@ -345,7 +349,7 @@ SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm << (sal_Int8)  GetPropLineSpace()
           << (short)  GetInterLineSpace()
@@ -432,7 +436,7 @@ int SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 --------------------------------------------------*/
 sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -444,6 +448,7 @@ sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal.setValue( &bValue, ::getCppuBooleanType() );
             break;
         }
+        default: ;//prevent warning
     }
     return sal_True;
 }
@@ -453,7 +458,7 @@ sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -499,9 +504,9 @@ SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 SfxItemPresentation SvxAdjustItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -513,6 +518,7 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( (sal_uInt16)GetAdjust() );
             return ePres;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -616,7 +622,7 @@ SfxPoolItem* SvxWidowsItem::Create(SvStream& rStrm, sal_uInt16) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm << (sal_Int8)GetValue();
     return rStrm;
@@ -627,9 +633,9 @@ SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
 SfxItemPresentation SvxWidowsItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -648,6 +654,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
             rText += String::CreateFromInt32( GetValue() );
             rText += SVX_RESSTR(RID_SVXITEMS_LINES);
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -677,7 +684,7 @@ SfxPoolItem* SvxOrphansItem::Create(SvStream& rStrm, sal_uInt16) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm << (sal_Int8) GetValue();
     return rStrm;
@@ -688,9 +695,9 @@ SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) cons
 SfxItemPresentation SvxOrphansItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -709,6 +716,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
             rText += String::CreateFromInt32( GetValue() );
             rText += SVX_RESSTR(RID_SVXITEMS_LINES);
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -727,7 +735,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId
 // -----------------------------------------------------------------------
 sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -749,7 +757,7 @@ sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) cons
 // -----------------------------------------------------------------------
 sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int16 nNewVal = 0;
 
@@ -800,9 +808,9 @@ SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
 SfxItemPresentation SvxHyphenZoneItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -855,6 +863,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
             rText += SVX_RESSTR(RID_SVXITEMS_HYPHEN_MAX);
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -863,21 +872,21 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
 
 SfxPoolItem* SvxHyphenZoneItem::Create(SvStream& rStrm, sal_uInt16) const
 {
-    sal_Int8 bHyphen, bHyphenPageEnd;
-    sal_Int8 nMinLead, nMinTrail, nMaxHyphens;
-    rStrm >> bHyphen >> bHyphenPageEnd >> nMinLead >> nMinTrail >> nMaxHyphens;
+    sal_Int8 _bHyphen, _bHyphenPageEnd;
+    sal_Int8 _nMinLead, _nMinTrail, _nMaxHyphens;
+    rStrm >> _bHyphen >> _bHyphenPageEnd >> _nMinLead >> _nMinTrail >> _nMaxHyphens;
     SvxHyphenZoneItem* pAttr = new SvxHyphenZoneItem( sal_False, Which() );
-    pAttr->SetHyphen( sal_Bool( bHyphen != 0 ) );
-    pAttr->SetPageEnd( sal_Bool( bHyphenPageEnd != 0 ) );
-    pAttr->GetMinLead() = nMinLead;
-    pAttr->GetMinTrail() = nMinTrail;
-    pAttr->GetMaxHyphens() = nMaxHyphens;
+    pAttr->SetHyphen( sal_Bool( _bHyphen != 0 ) );
+    pAttr->SetPageEnd( sal_Bool( _bHyphenPageEnd != 0 ) );
+    pAttr->GetMinLead() = _nMinLead;
+    pAttr->GetMinTrail() = _nMinTrail;
+    pAttr->GetMaxHyphens() = _nMaxHyphens;
     return pAttr;
 }
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm << (sal_Int8) IsHyphen()
           << (sal_Int8) IsPageEnd()
@@ -937,8 +946,8 @@ XubString SvxTabStop::GetValueString() const
 
 // class SvxTabStopItem --------------------------------------------------
 
-SvxTabStopItem::SvxTabStopItem( sal_uInt16 nWhich ) :
-    SfxPoolItem( nWhich ),
+SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
+    SfxPoolItem( _nWhich ),
     SvxTabStopArr( sal_Int8(SVX_TAB_DEFCOUNT) )
 {
     const sal_uInt16 nTabs = SVX_TAB_DEFCOUNT, nDist = SVX_TAB_DEFDIST;
@@ -956,8 +965,8 @@ SvxTabStopItem::SvxTabStopItem( sal_uInt16 nWhich ) :
 SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
                                 const sal_uInt16 nDist,
                                 const SvxTabAdjust eAdjst,
-                                sal_uInt16 nWhich ) :
-    SfxPoolItem( nWhich ),
+                                sal_uInt16 _nWhich ) :
+    SfxPoolItem( _nWhich ),
     SvxTabStopArr( sal_Int8(nTabs) )
 {
     for ( sal_uInt16 i = 0; i < nTabs; ++i )
@@ -1133,6 +1142,7 @@ sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 case style::TabAlign_CENTER : eAdjust = SVX_TAB_ADJUST_CENTER; break;
                 case style::TabAlign_RIGHT  : eAdjust = SVX_TAB_ADJUST_RIGHT; break;
                 case style::TabAlign_DECIMAL: eAdjust = SVX_TAB_ADJUST_DECIMAL; break;
+                default: ;//prevent warning
                 }
                 sal_Unicode cFill = pArr[i].FillChar;
                 sal_Unicode cDecimal = pArr[i].DecimalChar;
@@ -1242,7 +1252,7 @@ SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     //MA 05. Sep. 96: Default-Tabs werden nur noch fuer das default-Attr
     //expandiert. Fuer vollstaendige Rueckwaertskompatibilitaet (<=304)
@@ -1334,7 +1344,7 @@ SfxPoolItem* SvxFmtSplitItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm << (sal_Int8)GetValue();
     return rStrm;
@@ -1354,9 +1364,9 @@ SfxPoolItem* SvxFmtSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
 SfxItemPresentation SvxFmtSplitItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -1374,6 +1384,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
             rText = SVX_RESSTR(nId);
             return ePres;
         }
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1389,7 +1400,7 @@ SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 
 sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     switch ( nMemberId )
@@ -1404,7 +1415,7 @@ sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMem
 
 sal_Bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet;
     ::rtl::OUString aStr;
@@ -1421,9 +1432,9 @@ sal_Bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE 
 SfxItemPresentation SvxPageModelItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     rText.Erase();
@@ -1446,6 +1457,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
                 rText += GetValue();
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1457,7 +1469,7 @@ SvxScriptSpaceItem::SvxScriptSpaceItem( sal_Bool bOn, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxScriptSpaceItem( GetValue(), Which() );
 }
@@ -1481,8 +1493,8 @@ USHORT  SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
 
 SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const IntlWrapper* pIntl ) const
+        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        String &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
@@ -1498,6 +1510,7 @@ SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
             return ePres;
         }
         break;
+    default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1510,7 +1523,7 @@ SvxHangingPunctuationItem::SvxHangingPunctuationItem(
 {
 }
 
-SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxHangingPunctuationItem( GetValue(), Which() );
 }
@@ -1534,23 +1547,24 @@ USHORT SvxHangingPunctuationItem::GetVersion( USHORT nFFVer ) const
 
 SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const IntlWrapper* pIntl ) const
+        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        String &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
-    case SFX_ITEM_PRESENTATION_NONE:
-        rText.Erase();
-        break;
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = SVX_RESSTR( !GetValue()
-                                    ? RID_SVXITEMS_HNGPNCT_OFF
-                                    : RID_SVXITEMS_HNGPNCT_ON );
-            return ePres;
-        }
-        break;
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            break;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            {
+                rText = SVX_RESSTR( !GetValue()
+                                        ? RID_SVXITEMS_HNGPNCT_OFF
+                                        : RID_SVXITEMS_HNGPNCT_ON );
+                return ePres;
+            }
+            break;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1564,7 +1578,7 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
 /* -----------------------------29.11.00 11:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxForbiddenRuleItem( GetValue(), Which() );
 }
@@ -1594,23 +1608,24 @@ USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
  ---------------------------------------------------------------------------*/
 SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const IntlWrapper* pIntl ) const
+        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        String &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
-    case SFX_ITEM_PRESENTATION_NONE:
-        rText.Erase();
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            break;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            {
+                rText = SVX_RESSTR( !GetValue()
+                                        ? RID_SVXITEMS_FORBIDDEN_RULE_OFF
+                                        : RID_SVXITEMS_FORBIDDEN_RULE_ON );
+                return ePres;
+            }
         break;
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = SVX_RESSTR( !GetValue()
-                                    ? RID_SVXITEMS_FORBIDDEN_RULE_OFF
-                                    : RID_SVXITEMS_FORBIDDEN_RULE_ON );
-            return ePres;
-        }
-        break;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1650,43 +1665,44 @@ USHORT SvxParaVertAlignItem::GetVersion( USHORT nFFVer ) const
 
 SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         String &rText, const IntlWrapper*  ) const
 {
     switch( ePres )
     {
-    case SFX_ITEM_PRESENTATION_NONE:
-        rText.Erase();
-        break;
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            USHORT nTmp;
-            switch( GetValue() )
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            break;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
             {
-                case AUTOMATIC: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
-                case TOP:       nTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
-                case CENTER:    nTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
-                case BOTTOM:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
-                default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
+                USHORT nTmp;
+                switch( GetValue() )
+                {
+                    case AUTOMATIC: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
+                    case TOP:       nTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
+                    case CENTER:    nTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
+                    case BOTTOM:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
+                    default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
+                }
+                rText = SVX_RESSTR( nTmp );
+                return ePres;
             }
-            rText = SVX_RESSTR( nTmp );
-            return ePres;
-        }
         break;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
 sal_Bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                           BYTE nMemberId ) const
+                                           BYTE /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int16)GetValue();
     return sal_True;
 }
 
 sal_Bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                         BYTE nMemberId )
+                                         BYTE /*nMemberId*/ )
 {
     sal_Int16 nVal;
     if((rVal >>= nVal) && nVal >=0 && nVal <= BOTTOM )
@@ -1710,7 +1726,7 @@ SvxParaGridItem::SvxParaGridItem( sal_Bool bOn, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
 {
     return new SvxParaGridItem( GetValue(), Which() );
 }
@@ -1734,24 +1750,25 @@ USHORT  SvxParaGridItem::GetVersion( USHORT nFFVer ) const
 
 SfxItemPresentation SvxParaGridItem::GetPresentation(
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const IntlWrapper* pIntl ) const
+        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        String &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
-    case SFX_ITEM_PRESENTATION_NONE:
-        rText.Erase();
-        break;
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = GetValue() ?
-                    SVX_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
-                    SVX_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_OFF );
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            break;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            {
+                rText = GetValue() ?
+                        SVX_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
+                        SVX_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_OFF );
 
-            return ePres;
-        }
+                return ePres;
+            }
         break;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
