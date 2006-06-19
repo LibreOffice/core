@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:22:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,7 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     if( PrinterInfoManager::get().getType() == PrinterInfoManager::Default )
         m_nPrinterEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
     else
-        m_nPrinterEntry = -1;
+        m_nPrinterEntry = ~0;
     m_nFaxEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_FAX ) ) );
     m_nPdfEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PDF ) ) );
 
@@ -434,7 +434,7 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
     if( pButton == & m_aPdfDirectoryButton )
     {
         String aPath( m_aPdfDirectoryEdit.GetText() );
-        if( chooseDirectory( this, aPath ) )
+        if( chooseDirectory( aPath ) )
             m_aPdfDirectoryEdit.SetText( aPath );
     }
     else if( pButton == &m_aRemovePB )
