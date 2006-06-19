@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileunx.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-09-13 10:32:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ inline HSTORE __store_fmap (HSTORE hFile)
 /*
  * __store_funmap.
  */
-inline void __store_funmap (HSTORE hMap)
+inline void __store_funmap (HSTORE)
 {
     // Nothing to do, see '__store_fmap()'.
 }
@@ -296,7 +296,7 @@ inline storeError __store_ftrunc (HSTORE h, sal_uInt32 n)
         sal_uInt32 k = (sal_uInt32)::lseek (h, (off_t)0, SEEK_END);
         if (k == (sal_uInt32)(-1))
             return (result);
-        if ((0 <= n) && (n <= k))
+        if (n <= k)
             return (result);
 
         // Try 'expand' via 'lseek()' and 'write()'.
