@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartPropertyContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:27:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ SvXMLImportContext* XMLChartPropertyContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    switch( xMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
             pContext = new XMLSymbolImageContext( GetImport(), nPrefix, rLocalName, rProp, rProperties );
