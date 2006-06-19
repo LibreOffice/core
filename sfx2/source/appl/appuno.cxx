@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:53:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             USHORT nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                const ::com::sun::star::beans::PropertyValue& rPropValue = pPropsVal[n];
                 USHORT nSub;
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
@@ -365,19 +365,19 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     aStr += '.';
                     aStr += ByteString( pType->aAttrib[nSub].pName );
                     const char* pName = aStr.GetBuffer();
-                    if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
+                    if ( rPropValue.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                     {
                         BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
-                        if ( pItem->PutValue( rProp.Value, nSubId ) )
+                        if ( pItem->PutValue( rPropValue.Value, nSubId ) )
                             nFound++;
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aStr( "Property not convertable: ");
-                            aStr += pSlot->pUnoName;
-                            DBG_ERROR( aStr.GetBuffer() );
+                            ByteString aDbgStr( "Property not convertable: ");
+                            aDbgStr += pSlot->pUnoName;
+                            DBG_ERROR( aDbgStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -389,7 +389,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     // there was a parameter with a name that didn't match to any of the members
                     ByteString aStr( "Property name does not match: ");
-                    aStr += ByteString( String(rProp.Name), RTL_TEXTENCODING_UTF8 );
+                    aStr += ByteString( String(rPropValue.Name), RTL_TEXTENCODING_UTF8 );
                     DBG_ERROR( aStr.GetBuffer() );
                 }
 #endif
@@ -514,9 +514,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                                     // ... but it was not convertable
                                     bRet = FALSE;
 #ifdef DBG_UTIL
-                                    ByteString aStr( "Property not convertable: ");
-                                    aStr += rArg.pName;
-                                    DBG_ERROR( aStr.GetBuffer() );
+                                    ByteString aDbgStr( "Property not convertable: ");
+                                    aDbgStr += rArg.pName;
+                                    DBG_ERROR( aDbgStr.GetBuffer() );
 #endif
                                 }
 
@@ -1248,7 +1248,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
-                    DBG_ASSERT( nSubId <= 255, "Member ID out of range" );
+                    DBG_ASSERT(( pType->aAttrib[n-1].nAID ) <= 127, "Member ID out of range" );
                     String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                     aName += '.';
                     aName += String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
@@ -1299,7 +1299,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
 
-                        DBG_ASSERT( nSubId <= 255, "Member ID out of range" );
+                        DBG_ASSERT((rArg.pType->aAttrib[n-1].nAID) <= 127, "Member ID out of range" );
                         String aName( String::CreateFromAscii( rArg.pName ) ) ;
                         aName += '.';
                         aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
@@ -1576,9 +1576,10 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
 }
 
 // -----------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL SfxMacroLoader::queryDispatch( const ::com::sun::star::util::URL&   aURL            ,
-                                                                                                               const ::rtl::OUString&               sTargetFrameName,
-                                                                                                                     sal_Int32                      nSearchFlags    ) throw( ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL SfxMacroLoader::queryDispatch(
+    const ::com::sun::star::util::URL&   aURL            ,
+    const ::rtl::OUString&               /*sTargetFrameName*/,
+    sal_Int32                            /*nSearchFlags*/    ) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatcher;
     if(aURL.Complete.compareToAscii("macro:",6)==0)
@@ -1637,11 +1638,12 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
     }
 }
 
-::com::sun::star::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue( const ::com::sun::star::util::URL& aURL,
-                                                                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
+    const ::com::sun::star::util::URL& aURL,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet;
-    ErrCode nErr = loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
+        /*ErrCode nErr = */loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
     return aRet;
 }
 
@@ -1664,12 +1666,13 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
     }
 
     ::com::sun::star::uno::Any aAny;
-    ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
+    /*ErrCode nErr = */loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL SfxMacroLoader::addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl ,
-                                                 const ::com::sun::star::util::URL&                                                  aURL     )
+void SAL_CALL SfxMacroLoader::addStatusListener(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& ,
+    const ::com::sun::star::util::URL&                                                    )
               throw (::com::sun::star::uno::RuntimeException)
 {
     /* TODO
@@ -1679,8 +1682,9 @@ void SAL_CALL SfxMacroLoader::addStatusListener( const ::com::sun::star::uno::Re
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL SfxMacroLoader::removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl ,
-                                                    const ::com::sun::star::util::URL&                                                  aURL     )
+void SAL_CALL SfxMacroLoader::removeStatusListener(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >&,
+    const ::com::sun::star::util::URL&                                                  )
         throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -1894,8 +1898,10 @@ void SAL_CALL SfxAppDispatchProvider::initialize( const ::com::sun::star::uno::S
     }
 }
 
-Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
-                    FrameSearchFlags eSearchFlags ) throw( RuntimeException )
+Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
+    const ::com::sun::star::util::URL& aURL,
+    const ::rtl::OUString& /*sTargetFrameName*/,
+    FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException )
 {
     USHORT                  nId( 0 );
     sal_Bool                bMasterCommand( sal_False );
@@ -2000,7 +2006,6 @@ throw (::com::sun::star::uno::RuntimeException)
                 {
                     while ( pSfxSlot )
                     {
-                        USHORT nId = pSfxSlot->GetSlotId();
                         if ( pSfxSlot->GetMode() & nMode )
                         {
                             ::com::sun::star::frame::DispatchInformation aCmdInfo;
@@ -2100,14 +2105,16 @@ SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
 
 extern "C" {
 
-SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(    const   sal_Char**          ppEnvironmentTypeName   ,
-                                                                uno_Environment**   ppEnvironment           )
+SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char**  ppEnvironmentTypeName ,
+    uno_Environment** )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager ,
-                                        void*   pRegistryKey    )
+SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
+    void*                  ,
+    void*   pRegistryKey    )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )   ;
 
@@ -2261,9 +2268,10 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager 
     return sal_True;
 }
 
-SFX2_DLLPUBLIC void* SAL_CALL component_getFactory( const   sal_Char*   pImplementationName ,
-                                                void*       pServiceManager     ,
-                                                void*       pRegistryKey        )
+SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
+    const sal_Char* pImplementationName ,
+    void*           pServiceManager     ,
+    void*                                 )
 {
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
