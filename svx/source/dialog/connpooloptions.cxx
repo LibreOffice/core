@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:46:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    sal_Bool DriverListControl::IsTabAllowed(sal_Bool _bForward) const
+    sal_Bool DriverListControl::IsTabAllowed(sal_Bool /*_bForward*/) const
     {
         // no travinling within the fields via RETURN and TAB
         return sal_False;
@@ -294,7 +294,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    ::svt::CellController* DriverListControl::GetController( long nRow, USHORT nCol )
+    ::svt::CellController* DriverListControl::GetController( long /*nRow*/, USHORT /*nCol*/ )
     {
         return NULL;
     }
