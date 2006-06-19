@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:43:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:07:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ extern "C"
 #endif
 
 #define _JPEGPRIVATE
-#include <tools/new.hxx>
 #include <vcl/bmpacc.hxx>
 #include "jpeg.hxx"
 #include "FilterConfigItem.hxx"
@@ -84,7 +83,7 @@ extern "C" void* GetScanline( void* pJPEGWriter, long nY )
 
 // ------------------------------------------------------------------------
 
-extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
+extern "C" long JPEGCallback( void* /*pCallbackData*/, long /*nPercent*/ )
 {
 /*
     MyCallbackHandler* pH = (MyCallbackHandler*) pCallbackData;
@@ -274,7 +273,7 @@ extern "C" void skip_input_data (j_decompress_ptr cinfo, long num_bytes)
   }
 }
 
-extern "C" void term_source (j_decompress_ptr cinfo)
+extern "C" void term_source (j_decompress_ptr)
 {
   /* no work necessary here */
 }
@@ -316,7 +315,7 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void * in)
 // - JPEGReader -
 // --------------
 
-JPEGReader::JPEGReader( SvStream& rStm, void* pCallData, sal_Bool bSetLS ) :
+JPEGReader::JPEGReader( SvStream& rStm, void*, sal_Bool bSetLS ) :
         rIStm           ( rStm ),
         pAcc            ( NULL ),
         pAcc1           ( NULL ),
@@ -334,7 +333,7 @@ JPEGReader::JPEGReader( SvStream& rStm, void* pCallData, sal_Bool bSetLS ) :
 JPEGReader::~JPEGReader()
 {
     if( pBuffer )
-        SvMemFree( pBuffer );
+        rtl_freeMemory( pBuffer );
 
     if( pAcc )
         aBmp.ReleaseAccess( pAcc );
@@ -415,7 +414,7 @@ void* JPEGReader::CreateBitmap( void* pParam )
         {
             nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
             ((JPEGCreateBitmapParam*)pParam)->bTopDown = TRUE;
-            pBmpBuf = pBuffer = SvMemAlloc( nAlignedWidth * aSize.Height() );
+            pBmpBuf = pBuffer = rtl_allocateMemory( nAlignedWidth * aSize.Height() );
         }
         ((JPEGCreateBitmapParam*)pParam)->nAlignedWidth = nAlignedWidth;
     }
@@ -566,7 +565,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         if( pBuffer )
         {
             FillBitmap();
-            SvMemFree( pBuffer );
+            rtl_freeMemory( pBuffer );
             pBuffer = NULL;
         }
 
@@ -678,17 +677,17 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic,
 {
     BOOL bRet = FALSE;
 
-    Bitmap aBmp( rGraphic.GetBitmap() );
+    Bitmap aGraphicBmp( rGraphic.GetBitmap() );
     FilterConfigItem aConfigItem( (::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)pFilterData );
     const sal_Bool bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
     if ( bGreys )
     {
-        if ( !aBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
-            aBmp = rGraphic.GetBitmap();
+        if ( !aGraphicBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
+            aGraphicBmp = rGraphic.GetBitmap();
     }
     sal_Int32 nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
 
-    pAcc = aBmp.AcquireReadAccess();
+    pAcc = aGraphicBmp.AcquireReadAccess();
     if( pAcc )
     {
 #ifndef SYSTEM_JPEG
@@ -712,7 +711,7 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic,
         delete[] pBuffer;
         pBuffer = NULL;
 
-        aBmp.ReleaseAccess( pAcc );
+        aGraphicBmp.ReleaseAccess( pAcc );
         pAcc = NULL;
     }
     return bRet;
