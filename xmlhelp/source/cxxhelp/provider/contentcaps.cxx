@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentcaps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:18:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@ using namespace chelp;
 // virtual
 Sequence< Property > Content::getProperties( const Reference< XCommandEnvironment > & xEnv )
 {
+    (void)xEnv;
+
     bool withMediaType = m_aURLParameter.isFile() || m_aURLParameter.isRoot();
     bool isModule = m_aURLParameter.isModule();
     bool isFile = m_aURLParameter.isFile();
@@ -183,6 +185,7 @@ Sequence< Property > Content::getProperties( const Reference< XCommandEnvironmen
 Sequence< CommandInfo > Content::getCommands(
                             const Reference< XCommandEnvironment > & xEnv )
 {
+    (void)xEnv;
 //  osl::MutexGuard aGuard( m_aMutex );
 
     //=================================================================
