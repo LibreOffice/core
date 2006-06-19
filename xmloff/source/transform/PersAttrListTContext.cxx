@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PersAttrListTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:50:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,10 @@ XMLPersAttrListTContext::~XMLPersAttrListTContext()
 }
 
 XMLTransformerContext *XMLPersAttrListTContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        sal_uInt16 /*nPrefix*/,
+        const OUString& /*rLocalName*/,
         const OUString& rQName,
-        const Reference< XAttributeList >& rAttrList )
+        const Reference< XAttributeList >& )
 {
     // ignore all child elements
     return  new XMLIgnoreTransformerContext( GetTransformer(),
@@ -185,7 +185,7 @@ void XMLPersAttrListTContext::EndElement()
     // ignore for now
 }
 
-void XMLPersAttrListTContext::Characters( const OUString& rChars )
+void XMLPersAttrListTContext::Characters( const OUString& )
 {
 }
 
