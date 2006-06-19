@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:58:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -920,33 +920,33 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
         for ( i = 0; i < nCount; i++, pData++ )
         {
             sal_Int32 nPropertiesNeeded = 1;    // position is always needed
-            sal_Int32 nFlags = pData->nFlags;
-            if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
+            sal_Int32 _nFlags = pData->nFlags;
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
                 nPropertiesNeeded++;
-            if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
                 nPropertiesNeeded++;
-            if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
                 nPropertiesNeeded++;
-            if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_POLAR )
             {
                 nPropertiesNeeded++;
-                if ( nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
+                if ( _nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
                 {
-                    if ( pData->nRangeXMin != 0x80000000 )
+                    if ( (sal_uInt32)pData->nRangeXMin != 0x80000000 )
                         nPropertiesNeeded++;
-                    if ( pData->nRangeXMax != 0x7fffffff )
+                    if ( (sal_uInt32)pData->nRangeXMax != 0x7fffffff )
                         nPropertiesNeeded++;
                 }
             }
-            else if ( nFlags & MSDFF_HANDLE_FLAGS_RANGE )
+            else if ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE )
             {
-                if ( pData->nRangeXMin != 0x80000000 )
+                if ( (sal_uInt32)pData->nRangeXMin != 0x80000000 )
                     nPropertiesNeeded++;
-                if ( pData->nRangeXMax != 0x7fffffff )
+                if ( (sal_uInt32)pData->nRangeXMax != 0x7fffffff )
                     nPropertiesNeeded++;
-                if ( pData->nRangeYMin != 0x80000000 )
+                if ( (sal_uInt32)pData->nRangeYMin != 0x80000000 )
                     nPropertiesNeeded++;
-                if ( pData->nRangeYMax != 0x7fffffff )
+                if ( (sal_uInt32)pData->nRangeYMax != 0x7fffffff )
                     nPropertiesNeeded++;
             }
 
@@ -963,94 +963,94 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                 rPropValues[ n ].Name = sPosition;
                 rPropValues[ n++ ].Value <<= aPosition;
             }
-            if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
             {
                 const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
                 sal_Bool bMirroredX = sal_True;
                 rPropValues[ n ].Name = sMirroredX;
                 rPropValues[ n++ ].Value <<= bMirroredX;
             }
-            if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
             {
                 const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
                 sal_Bool bMirroredY = sal_True;
                 rPropValues[ n ].Name = sMirroredY;
                 rPropValues[ n++ ].Value <<= bMirroredY;
             }
-            if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
             {
                 const rtl::OUString sSwitched( RTL_CONSTASCII_USTRINGPARAM ( "Switched" ) );
                 sal_Bool bSwitched = sal_True;
                 rPropValues[ n ].Name = sSwitched;
                 rPropValues[ n++ ].Value <<= bSwitched;
             }
-            if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+            if ( _nFlags & MSDFF_HANDLE_FLAGS_POLAR )
             {
                 const rtl::OUString sPolar( RTL_CONSTASCII_USTRINGPARAM ( "Polar" ) );
                 ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aCenter;
                 SetEnhancedCustomShapeHandleParameter( aCenter.First,  pData->nCenterX,
-                    ( nFlags & MSDFF_HANDLE_FLAGS_CENTER_X_IS_SPECIAL ) != 0, sal_True  );
+                    ( _nFlags & MSDFF_HANDLE_FLAGS_CENTER_X_IS_SPECIAL ) != 0, sal_True  );
                 SetEnhancedCustomShapeHandleParameter( aCenter.Second, pData->nCenterY,
-                    ( nFlags & MSDFF_HANDLE_FLAGS_CENTER_Y_IS_SPECIAL ) != 0, sal_False );
+                    ( _nFlags & MSDFF_HANDLE_FLAGS_CENTER_Y_IS_SPECIAL ) != 0, sal_False );
                 rPropValues[ n ].Name = sPolar;
                 rPropValues[ n++ ].Value <<= aCenter;
-                if ( nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
+                if ( _nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
                 {
-                    if ( pData->nRangeXMin != 0x80000000 )
+                    if ( (sal_uInt32)pData->nRangeXMin != 0x80000000 )
                     {
                         const rtl::OUString sRadiusRangeMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMinimum" ) );
                         ::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, pData->nRangeXMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
+                            ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
                         rPropValues[ n ].Name = sRadiusRangeMinimum;
                         rPropValues[ n++ ].Value <<= aRadiusRangeMinimum;
                     }
-                    if ( pData->nRangeXMax != 0x7fffffff )
+                    if ( (sal_uInt32)pData->nRangeXMax != 0x7fffffff )
                     {
                         const rtl::OUString sRadiusRangeMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMaximum" ) );
                         ::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, pData->nRangeXMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
+                            ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
                         rPropValues[ n ].Name = sRadiusRangeMaximum;
                         rPropValues[ n++ ].Value <<= aRadiusRangeMaximum;
                     }
                 }
             }
-            else if ( nFlags & MSDFF_HANDLE_FLAGS_RANGE )
+            else if ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE )
             {
-                if ( pData->nRangeXMin != 0x80000000 )
+                if ( (sal_uInt32)pData->nRangeXMin != 0x80000000 )
                 {
                     const rtl::OUString sRangeXMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMinimum" ) );
                     ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMinimum;
                     SetEnhancedCustomShapeHandleParameter( aRangeXMinimum, pData->nRangeXMin,
-                        ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
+                        ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
                     rPropValues[ n ].Name = sRangeXMinimum;
                     rPropValues[ n++ ].Value <<= aRangeXMinimum;
                 }
-                if ( pData->nRangeXMax != 0x7fffffff )
+                if ( (sal_uInt32)pData->nRangeXMax != 0x7fffffff )
                 {
                     const rtl::OUString sRangeXMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMaximum" ) );
                     ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum;
                     SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, pData->nRangeXMax,
-                        ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
+                        ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
                     rPropValues[ n ].Name = sRangeXMaximum;
                     rPropValues[ n++ ].Value <<= aRangeXMaximum;
                 }
-                if ( pData->nRangeYMin != 0x80000000 )
+                if ( (sal_uInt32)pData->nRangeYMin != 0x80000000 )
                 {
                     const rtl::OUString sRangeYMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMinimum" ) );
                     ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum;
                     SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, pData->nRangeYMin,
-                        ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
+                        ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
                     rPropValues[ n ].Name = sRangeYMinimum;
                     rPropValues[ n++ ].Value <<= aRangeYMinimum;
                 }
-                if ( pData->nRangeYMax != 0x7fffffff )
+                if ( (sal_uInt32)pData->nRangeYMax != 0x7fffffff )
                 {
                     const rtl::OUString sRangeYMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMaximum" ) );
                     ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMaximum;
                     SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, pData->nRangeYMax,
-                        ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
+                        ( _nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
                     rPropValues[ n ].Name = sRangeYMaximum;
                     rPropValues[ n++ ].Value <<= aRangeYMaximum;
                 }
@@ -1065,15 +1065,15 @@ EnhancedCustomShape2d::~EnhancedCustomShape2d()
 }
 
 EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
-    pCustomShapeObj     ( pAObj ),
     SfxItemSet          ( pAObj->GetMergedItemSet() ),
+    pCustomShapeObj     ( pAObj ),
     eSpType             ( mso_sptNil ),
-    nXRef               ( 0x80000000 ),
-    nYRef               ( 0x80000000 ),
     nCoordLeft          ( 0 ),
     nCoordTop           ( 0 ),
     nCoordWidth         ( 21600 ),
     nCoordHeight        ( 21600 ),
+    nXRef               ( 0x80000000 ),
+    nYRef               ( 0x80000000 ),
     nFlags              ( 0 ),
     nColorData          ( 0 ),
     bTextFlow           ( sal_False ),
@@ -1115,7 +1115,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     else
          nRotateAngle = pCustomShapeObj->GetRotateAngle();
 
-    const sal_Int32* pDefData = ApplyShapeAttributes( rGeometryItem );
+    /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
     switch( eSpType )
     {
         case mso_sptCan :                       nColorData = 0x20200000; break;
@@ -1199,10 +1199,12 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         break;
         case mso_sptVerticalScroll :            nColorData = 0x30dd0000; break;
         case mso_sptHorizontalScroll :          nColorData = 0x30dd0000; break;
+        default:
+            break;
     }
     fXScale = (double)aLogicRect.GetWidth() / (double)nCoordWidth;
     fYScale = (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-    if ( nXRef != 0x80000000 )
+    if ( (sal_uInt32)nXRef != 0x80000000 )
     {
         fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
         if ( fXRatio > 1 )
@@ -1212,7 +1214,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
     else
         fXRatio = 1.0;
-    if ( nYRef != 0x80000000 )
+    if ( (sal_uInt32)nYRef != 0x80000000 )
     {
         fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
         if ( fYRatio > 1 )
@@ -1235,14 +1237,13 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
             }
             catch ( ParseError& )
             {
-                sal_Bool bUps = sal_True;
             }
         }
     }
 }
 double EnhancedCustomShape2d::GetEnumFunc( const EnumFunc eFunc ) const
 {
-    double fRet;
+    double fRet = 0.0;
     switch( eFunc )
     {
         case ENUM_FUNC_PI :         fRet = F_PI; break;
@@ -1289,7 +1290,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
         }
         catch ( ... )
         {
-            sal_Bool bUps = sal_True;
+            /* sal_Bool bUps = sal_True; */
         }
     }
     return fNumber;
@@ -1707,12 +1708,12 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
 void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
 {
     XLineStartItem       aLineStart;
-    aLineStart.SetValue(((XLineStartItem&)pObj->GetMergedItem( XATTR_LINEEND )).GetValue());
+    aLineStart.SetLineStartValue(((XLineStartItem&)pObj->GetMergedItem( XATTR_LINEEND )).GetLineStartValue());
     XLineStartWidthItem  aLineStartWidth(((XLineStartWidthItem&)pObj->GetMergedItem( XATTR_LINEENDWIDTH )).GetValue());
     XLineStartCenterItem aLineStartCenter(((XLineStartCenterItem&)pObj->GetMergedItem( XATTR_LINEENDCENTER )).GetValue());
 
     XLineEndItem         aLineEnd;
-    aLineEnd.SetValue(((XLineEndItem&)pObj->GetMergedItem( XATTR_LINESTART )).GetValue());
+    aLineEnd.SetLineEndValue(((XLineEndItem&)pObj->GetMergedItem( XATTR_LINESTART )).GetLineEndValue());
     XLineEndWidthItem    aLineEndWidth(((XLineEndWidthItem&)pObj->GetMergedItem( XATTR_LINESTARTWIDTH )).GetValue());
     XLineEndCenterItem   aLineEndCenter(((XLineEndCenterItem&)pObj->GetMergedItem( XATTR_LINESTARTCENTER )).GetValue());
 
@@ -1765,8 +1766,6 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                                                                         const sal_Bool bLineGeometryNeededOnly,
                                                                                         const sal_Bool bSortFilledObjectsToBack )
 {
-    SdrObject* pRet = NULL;
-
     sal_Bool bNoFill = sal_False;
     sal_Bool bNoStroke = sal_False;
 
@@ -1850,13 +1849,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {    // create a circle
 
-                        Point aCenter( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
+                        Point _aCenter( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
                         double fWidth, fHeight;
                         GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, sal_True, sal_False  );
                         GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, sal_False, sal_True );
                         fWidth *= fXScale;
                         fHeight*= fYScale;
-                        Point aP( (sal_Int32)( aCenter.X() - fWidth ), (sal_Int32)( aCenter.Y() - fHeight ) );
+                        Point aP( (sal_Int32)( _aCenter.X() - fWidth ), (sal_Int32)( _aCenter.Y() - fHeight ) );
                         Size  aS( (sal_Int32)( fWidth * 2.0 ), (sal_Int32)( fHeight * 2.0 ) );
                         Rectangle aRect( aP, aS );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
@@ -1877,7 +1876,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                     {   // in the binary filter the endangle is the amount
                                         double fTemp = fStartAngle;
                                         fStartAngle = fEndAngle;
-                                        fEndAngle = fStartAngle;
+                                        fEndAngle = fTemp;
                                     }
                                 }
                                 double fCenterX = aRect.Center().X();
@@ -1896,28 +1895,28 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                    and endangle 360 nothing is painted :-( */
                                 sal_Int32 nXControl = (sal_Int32)((double)aRect.GetWidth() * 0.2835 );
                                 sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
-                                Point     aCenter( aRect.Center() );
-                                aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Top() );
-                                aPoly[ nDstPt ] = Point( aCenter.X() + nXControl, aRect.Top() );
+                                Point __aCenter( aRect.Center() );
+                                aPoly[ nDstPt++ ] = Point( __aCenter.X(), aRect.Top() );
+                                aPoly[ nDstPt ] = Point( __aCenter.X() + nXControl, aRect.Top() );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( aRect.Right(), aCenter.Y() - nYControl );
+                                aPoly[ nDstPt ] = Point( aRect.Right(), __aCenter.Y() - nYControl );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( aRect.Right(), aCenter.Y() );
-                                aPoly[ nDstPt ] = Point( aRect.Right(), aCenter.Y() + nYControl );
+                                aPoly[ nDstPt++ ] = Point( aRect.Right(), __aCenter.Y() );
+                                aPoly[ nDstPt ] = Point( aRect.Right(), __aCenter.Y() + nYControl );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( aCenter.X() + nXControl, aRect.Bottom() );
+                                aPoly[ nDstPt ] = Point( __aCenter.X() + nXControl, aRect.Bottom() );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Bottom() );
-                                aPoly[ nDstPt ] = Point( aCenter.X() - nXControl, aRect.Bottom() );
+                                aPoly[ nDstPt++ ] = Point( __aCenter.X(), aRect.Bottom() );
+                                aPoly[ nDstPt ] = Point( __aCenter.X() - nXControl, aRect.Bottom() );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( aRect.Left(), aCenter.Y() + nYControl );
+                                aPoly[ nDstPt ] = Point( aRect.Left(), __aCenter.Y() + nYControl );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( aRect.Left(), aCenter.Y() );
-                                aPoly[ nDstPt ] = Point( aRect.Left(), aCenter.Y() - nYControl );
+                                aPoly[ nDstPt++ ] = Point( aRect.Left(), __aCenter.Y() );
+                                aPoly[ nDstPt ] = Point( aRect.Left(), __aCenter.Y() - nYControl );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( aCenter.X() - nXControl, aRect.Top() );
+                                aPoly[ nDstPt ] = Point( __aCenter.X() - nXControl, aRect.Top() );
                                 aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Top() );
+                                aPoly[ nDstPt++ ] = Point( __aCenter.X(), aRect.Top() );
                             }
                         }
                         rSrcPt += 3;
@@ -1968,7 +1967,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ELLIPTICALQUADRANTX :
                 case ELLIPTICALQUADRANTY :
                 {
-                    BOOL    bFirstDirection;
+                    BOOL    bFirstDirection = TRUE;
                     sal_uInt16  nDstPt = aPoly.GetPointCount();
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
@@ -2139,7 +2138,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
 
         if ( nColorCount )
         {
-            aBasicColor = (((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetValue());
+            aBasicColor = ((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue();
         }
 
         // #i37011# remove invisible objects
@@ -2432,7 +2431,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();
             if( pList )
-                sal_uInt16 nId = pList->Insert( aGluePoint );
+                /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
         }
     }
 }
