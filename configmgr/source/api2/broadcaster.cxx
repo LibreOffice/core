@@ -4,9 +4,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:10:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,6 +561,7 @@ namespace configmgr
                     SubNodeID const& aChangedNodeID,
                     NodeChangeLocation const& aChange)
         {
+                    { (void)aChange; }
             OSL_ENSURE(aChange.isValidData(), "ERROR: Invalid Change Location for Broadcaster");
             OSL_ENSURE(aAffectedID.isValidNode(),"Cannot broadcast without affected node");
 
@@ -1046,7 +1047,7 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    bool Broadcaster::Impl::translateChanges(NodeChangesInformation& _rInfos, NodeChanges const& aChanges, bool bSingleBase) const
+       bool Broadcaster::Impl::translateChanges(NodeChangesInformation& _rInfos, NodeChanges const& aChanges, bool /*bSingleBase*/) const
     {
         TreeRef aBaseTree = m_aNotifierData.second->getTree();
         Factory& rFactory = m_aNotifierData.second->getFactory();
@@ -1088,7 +1089,7 @@ namespace configmgr
 
 // ---------------------------------------------------------------------------------------------------
 
-    bool Broadcaster::Impl::translateChanges(NodeChangesInformation& aInfos, NodeChangesInformation const& aChanges, bool bSingleBase) const
+       bool Broadcaster::Impl::translateChanges(NodeChangesInformation& aInfos, NodeChangesInformation const& aChanges, bool /*bSingleBase*/) const
     {
         NodeChangesInformation aNewInfos;
         aNewInfos.reserve( aChanges.size() );
