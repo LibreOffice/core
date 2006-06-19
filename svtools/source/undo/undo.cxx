@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:20:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
 #include <tools/debug.hxx>
 #endif
 
-#pragma hdrstop
-
 #include "undo.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxUndoAction);
+DBG_NAME(SfxUndoAction)
 
 //========================================================================
 
@@ -372,7 +370,7 @@ void SfxUndoManager::RemoveLastUndoAction()
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Undo( USHORT nCount )
+BOOL SfxUndoManager::Undo( USHORT )
 {
     DBG_ASSERT( pActUndoArray == pUndoArray, "svtools::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
     if ( pActUndoArray->nCurUndoAction )
@@ -413,7 +411,7 @@ USHORT SfxUndoManager::GetRedoActionId( USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Redo( USHORT nNumber )
+BOOL SfxUndoManager::Redo( USHORT )
 {
     if ( pActUndoArray->aUndoActions.Count() > pActUndoArray->nCurUndoAction )
     {
@@ -448,7 +446,7 @@ XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget, USHO
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT nFrom, USHORT nCount )
+BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT /*nFrom*/, USHORT /*nCount*/ )
 {
     if ( pActUndoArray->aUndoActions.Count() )
     {
@@ -580,7 +578,7 @@ void SfxListUndoAction::SetComment( const UniString& rComment )
 
 //------------------------------------------------------------------------
 
-XubString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &r) const
+XubString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 {
     return aRepeatComment;
 }
@@ -595,7 +593,7 @@ SfxListUndoAction::SfxListUndoAction
     USHORT Id,
     SfxUndoArray *pFather
 )
-: aComment(rComment), aRepeatComment(rRepeatComment), nId(Id)
+: nId(Id), aComment(rComment), aRepeatComment(rRepeatComment)
 {
     pFatherUndoArray = pFather;
     nMaxUndoActions = USHRT_MAX;
