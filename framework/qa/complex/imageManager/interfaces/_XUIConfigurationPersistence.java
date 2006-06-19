@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XUIConfigurationPersistence.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:00:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@ package imageManager.interfaces;
 import com.sun.star.embed.XStorage;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
-import drafts.com.sun.star.ui.XUIConfigurationPersistence;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XUIConfigurationPersistence;
 import lib.TestParameters;
 import share.LogWriter;
 
