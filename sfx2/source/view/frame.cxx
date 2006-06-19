@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:02:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,38 +437,38 @@ SfxFrame* SfxFrame::GetTopFrame() const
     return pParent;
 }
 
-SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
+SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* /*pMedium*/ )
 {
     // Weil Netscape f"uhrende BLANKS "uberliest, m"ussen wir das wohl auch
     // Sollte besser auch bei den FrameNames gemacht werden!
-    String aName( rName );
-    aName.EraseLeadingChars();
+    String aFrameName( rName );
+    aFrameName.EraseLeadingChars();
 
     SfxFrame *pFrame = this;
-    if( !aName.Len() || aName.CompareIgnoreCaseToAscii("_self") == COMPARE_EQUAL )
+    if( !aFrameName.Len() || aFrameName.CompareIgnoreCaseToAscii("_self") == COMPARE_EQUAL )
     {
         return pFrame;
     }
-    else if (  aName.CompareIgnoreCaseToAscii("_smartself") == COMPARE_EQUAL )
+    else if (  aFrameName.CompareIgnoreCaseToAscii("_smartself") == COMPARE_EQUAL )
     {
         DBG_ERROR("Not supported!");
         return pFrame;
     }
-    else if ( aName.CompareIgnoreCaseToAscii( GetFrameName() ) == COMPARE_EQUAL)
+    else if ( aFrameName.CompareIgnoreCaseToAscii( GetFrameName() ) == COMPARE_EQUAL)
     {
         // Eigener Name, kein Name oder Selbstbezug
         return pFrame;
     }
-    else if ( aName.CompareIgnoreCaseToAscii("_parent") == COMPARE_EQUAL )
+    else if ( aFrameName.CompareIgnoreCaseToAscii("_parent") == COMPARE_EQUAL )
     {
         // Gesucht ist das Parent Frameset
         return pParentFrame ? pParentFrame : this;
     }
-    else if ( aName.CompareIgnoreCaseToAscii("_blank") == COMPARE_EQUAL )
+    else if ( aFrameName.CompareIgnoreCaseToAscii("_blank") == COMPARE_EQUAL )
     {
         return NULL;
     }
-    else if ( aName.CompareIgnoreCaseToAscii("_top") == COMPARE_EQUAL )
+    else if ( aFrameName.CompareIgnoreCaseToAscii("_top") == COMPARE_EQUAL )
     {
         while ( pFrame->GetParentFrame() )
             pFrame = pFrame->GetParentFrame();
@@ -477,7 +477,7 @@ SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
     else
     {
         // Zuerst unterhalb dieses Frames absuchen
-        pFrame = SearchChildrenForName_Impl( aName );
+        pFrame = SearchChildrenForName_Impl( aFrameName );
     }
 
     if ( !pFrame && GetParentFrame() )
@@ -489,7 +489,7 @@ SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
         do
         {
             // Ist es der Parent ?
-            if ( aName.CompareIgnoreCaseToAscii( pParent->GetFrameName() ) == COMPARE_EQUAL )
+            if ( aFrameName.CompareIgnoreCaseToAscii( pParent->GetFrameName() ) == COMPARE_EQUAL )
                 return pParent;
 
             // Weiter nach oben
@@ -510,12 +510,12 @@ SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
             SfxFrame* pCurFrame = rArr[ nPos ];
             if(  pCurFrame != pTop )
             {
-                if( aName.CompareIgnoreCaseToAscii( pCurFrame->GetFrameName() ) ==
+                if( aFrameName.CompareIgnoreCaseToAscii( pCurFrame->GetFrameName() ) ==
                     COMPARE_EQUAL )
                     return pCurFrame;
                 else
                 {
-                    pFrame = pCurFrame->SearchChildrenForName_Impl( aName );
+                    pFrame = pCurFrame->SearchChildrenForName_Impl( aFrameName );
                     if( pFrame )
                         return pFrame;
                 }
@@ -536,7 +536,7 @@ void SfxFrame::SetIsClosing_Impl()
     pImp->bClosing = TRUE;
 }
 
-void SfxFrame::DocumentInserted( SfxObjectShell* pDoc )
+void SfxFrame::DocumentInserted( SfxObjectShell* /*pDoc*/ )
 {
 }
 
@@ -545,13 +545,13 @@ sal_uInt16 SfxFrame::GetChildFrameCount() const
     return pChildArr ? pChildArr->Count() : 0;
 }
 
-sal_Bool SfxFrame::InsertDocument( SfxObjectShell *pDoc )
+sal_Bool SfxFrame::InsertDocument( SfxObjectShell* pDoc )
 {
     DocumentInserted( pDoc );
     return sal_True;
 }
 
-void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
+void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
 {
     if( !pImp->bInCancelTransfers )
     {
@@ -622,7 +622,7 @@ void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
     pImp->nType = n;
 }
 
-void SfxFrame::CopyHistory_Impl( SfxFrame *pFrame ) const
+void SfxFrame::CopyHistory_Impl( SfxFrame* /*pFrame*/ ) const
 {
 }
 
@@ -631,12 +631,12 @@ void SfxFrame::ClearHistory()
 {
 }
 
-sal_Bool SfxFrame::ExecuteHistoryMenu_Impl( sal_uInt16 nWhich, const Rectangle& rRect, sal_uInt16 nFlags )
+sal_Bool SfxFrame::ExecuteHistoryMenu_Impl( sal_uInt16 /*nWhich*/, const Rectangle& /*rRect*/, sal_uInt16 /*nFlags*/ )
 {
     return sal_True;
 }
 
-sal_Bool SfxFrame::Browse( sal_Bool bForward, sal_uInt16 nSteps, sal_Bool bNewFrame )
+sal_Bool SfxFrame::Browse( sal_Bool /*bForward*/, sal_uInt16 /*nSteps*/, sal_Bool /*bNewFrame*/ )
 {
     return FALSE;
 }
@@ -645,23 +645,26 @@ void SfxFrame::UpdatePickEntries()
 {
 }
 
-void SfxFrame::UpdatePickEntries( const ::com::sun::star::uno::Any& rValue )
+void SfxFrame::UpdatePickEntries( const ::com::sun::star::uno::Any& /*rValue*/ )
 {
 }
 
-void SfxFrame::UpdateUndoHistory_Impl( SfxObjectShell *pDocSh, const String* pNew, const String* pTitle )
+void SfxFrame::UpdateUndoHistory_Impl( SfxObjectShell* /*pDocSh*/, const String* /*pNew*/, const String* /*pTitle*/ )
 {
 }
 
-void SfxFrame::UpdateCurrentHistory_Impl( SfxObjectShell *pDocSh, const String* pNew  )
+void SfxFrame::UpdateCurrentHistory_Impl( SfxObjectShell* /*pDocSh*/, const String* /*pNew*/  )
 {
 }
 
-void SfxFrame::UpdateHistory( SfxObjectShell *pDocSh, const String* pNew  )
+void SfxFrame::UpdateHistory( SfxObjectShell* /*pDocSh*/, const String* /*pNew*/  )
 {
 }
 
-void SfxFrame::UpdateHistory( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const ::rtl::OUString& rTitle  )
+void SfxFrame::UpdateHistory(
+    const ::rtl::OUString& /*aURL*/,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& /*aArgs*/,
+    const ::rtl::OUString& /*rTitle*/  )
 {
 }
 
@@ -730,7 +733,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     // FileOpen-Parameter merken
     SfxItemSet* pItemSet = pMed->GetItemSet();
-    String aName( pMed->GetName() );
+    String aMedName( pMed->GetName() );
 
     const SfxFilter* pFilter = pMed->GetOrigFilter();
     String aFilter;
@@ -783,8 +786,6 @@ void SfxFrame::SetDescriptor( SfxFrameDescriptor *pD )
 
     if ( pImp->pDescr )
     {
-        sal_uInt16 nPos = pImp->pDescr->GetItemPos();
-
         // Nur TopLevel-Frames verwalten ihren Descriptor selbst, bei den
         // anderen tut es das Frameset
         if ( !pParentFrame )
@@ -1026,14 +1027,14 @@ void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
     rArr.Remove( rArr.GetPos( pFrame ) );
 }
 
-SfxFrameItem::SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p )
-    : SfxPoolItem( nWhich ), pFrame( p ? p->GetFrame() : NULL )
+SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame *p )
+    : SfxPoolItem( nWhichId ), pFrame( p ? p->GetFrame() : NULL )
 {
     wFrame = pFrame;
 }
 
-SfxFrameItem::SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p ):
-    SfxPoolItem( nWhich ),
+SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxFrame *p ):
+    SfxPoolItem( nWhichId ),
     pFrame( p ), wFrame( p )
 {
 }
@@ -1098,13 +1099,13 @@ sal_Bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 }
 
 
-SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Any& rAny )
-    : SfxPoolItem( nWhich )
+SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::Any& rAny )
+    : SfxPoolItem( nWhichId )
 {
     aValue = rAny;
 }
 
-int SfxUsrAnyItem::operator==( const SfxPoolItem &rItem ) const
+int SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 {
 //   return rItem.ISA( SfxUsrAnyItem ) && ((SfxUsrAnyItem&)rItem).aValue == aValue;
     return sal_False;
@@ -1120,19 +1121,19 @@ SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
     return new SfxUsrAnyItem( Which(), aValue );
 }
 
-sal_Bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal = aValue;
     return sal_True;
 }
 
-sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     aValue = rVal;
     return sal_True;
 }
 
-sal_Bool SfxFrame::BrowseInFrame( int nDelta )
+sal_Bool SfxFrame::BrowseInFrame( int /*nDelta*/ )
 {
     return sal_False;
 }
@@ -1200,41 +1201,41 @@ SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32
 {
     // Weil Netscape f"uhrende BLANKS "uberliest, m"ussen wir das wohl auch
     // Sollte besser auch bei den FrameNames gemacht werden!
-    String aName( aTargetframename );
-    aName.EraseLeadingChars();
+    String aTargetName( aTargetframename );
+    aTargetName.EraseLeadingChars();
 
     SfxFrame *pFrame = this;
 
-    if ( !aName.Len() && GetParentFrame() && GetParentFrame()->GetCurrentViewFrame()->GetViewShell()->IsImplementedAsFrameset_Impl() )
+    if ( !aTargetName.Len() && GetParentFrame() && GetParentFrame()->GetCurrentViewFrame()->GetViewShell()->IsImplementedAsFrameset_Impl() )
         return GetParentFrame();
 
-    if( !aName.Len() || aName.CompareIgnoreCaseToAscii("_self") == COMPARE_EQUAL )
+    if( !aTargetName.Len() || aTargetName.CompareIgnoreCaseToAscii("_self") == COMPARE_EQUAL )
         return pFrame;
 
-    if (  aName.CompareIgnoreCaseToAscii("_smartself") == COMPARE_EQUAL )
+    if (  aTargetName.CompareIgnoreCaseToAscii("_smartself") == COMPARE_EQUAL )
     {
         DBG_ERROR("Not supported!");
         return pFrame;
     }
 
-    if ( aName.CompareIgnoreCaseToAscii("_parent") == COMPARE_EQUAL )
+    if ( aTargetName.CompareIgnoreCaseToAscii("_parent") == COMPARE_EQUAL )
     {
         // Gesucht ist das Parent Frameset
         return pFrame->GetParentFrame();
     }
-    else if ( aName.CompareIgnoreCaseToAscii("_blank") == COMPARE_EQUAL )
+    else if ( aTargetName.CompareIgnoreCaseToAscii("_blank") == COMPARE_EQUAL )
     {
         return NULL;
 
     }
-    else if ( aName.CompareIgnoreCaseToAscii("_top") == COMPARE_EQUAL )
+    else if ( aTargetName.CompareIgnoreCaseToAscii("_top") == COMPARE_EQUAL )
     {
         while ( pFrame->GetParentFrame() )
             pFrame = pFrame->GetParentFrame();
         return pFrame;
     }
 
-    if ( ( nSearchFlags & FRAME_SEARCH_SELF ) && aName.CompareIgnoreCaseToAscii( GetFrameName() ) == COMPARE_EQUAL )
+    if ( ( nSearchFlags & FRAME_SEARCH_SELF ) && aTargetName.CompareIgnoreCaseToAscii( GetFrameName() ) == COMPARE_EQUAL )
     {
         // Eigener Name
         return pFrame;
@@ -1243,7 +1244,7 @@ SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32
     if ( nSearchFlags & FRAME_SEARCH_CHILDREN )
     {
         // Zuerst unterhalb dieses Frames absuchen
-        pFrame = SearchChildrenForName_Impl( aName );
+        pFrame = SearchChildrenForName_Impl( aTargetName );
     }
 
     if ( ( nSearchFlags & FRAME_SEARCH_CHILDREN ) && !pFrame && GetParentFrame() )
@@ -1255,7 +1256,7 @@ SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32
         do
         {
             // Ist es der Parent ?
-            if ( aName.CompareIgnoreCaseToAscii( pParent->GetFrameName() ) == COMPARE_EQUAL )
+            if ( aTargetName.CompareIgnoreCaseToAscii( pParent->GetFrameName() ) == COMPARE_EQUAL )
                 return pParent;
 
             // Weiter nach oben
@@ -1276,11 +1277,11 @@ SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32
             SfxFrame* pCurFrame = rArr[ nPos ];
             if(  pCurFrame != pTop )
             {
-                if( aName.CompareIgnoreCaseToAscii( pCurFrame->GetFrameName() ) == COMPARE_EQUAL )
+                if( aTargetName.CompareIgnoreCaseToAscii( pCurFrame->GetFrameName() ) == COMPARE_EQUAL )
                     return pCurFrame;
                 else
                 {
-                    pFrame = pCurFrame->SearchChildrenForName_Impl( aName );
+                    pFrame = pCurFrame->SearchChildrenForName_Impl( aTargetName );
                     if( pFrame )
                         return pFrame;
                 }
@@ -1479,7 +1480,11 @@ void SfxFrame::ReleasingComponent_Impl( sal_Bool bSet )
     pImp->bReleasingComponent = bSet;
 }
 
-sal_Bool SfxFrame::LoadSfxComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & aFrame, const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const SfxObjectFactory *pFact )
+sal_Bool SfxFrame::LoadSfxComponent(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & /*aFrame*/,
+    const ::rtl::OUString& /*aURL*/,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& /*aArgs*/,
+    const SfxObjectFactory */*pFact*/ )
 {
     // get Implementation of xComponents ...
     DBG_ERROR( "Should not be called anymore!" );
@@ -1537,7 +1542,7 @@ void SfxFrame::Resize()
                 sal_Int64 nHandle = xObj->getSomething( aSeq );
                 if ( nHandle )
                 {
-                    SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+                    SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
                     pWork = SfxViewFrame::GetFirst( pDoc )->GetFrame()->GetWorkWindow_Impl();
                 }
             }
