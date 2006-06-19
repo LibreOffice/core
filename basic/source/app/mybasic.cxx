@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:17:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ Link MyBasic::GenWriteStringHdl()
     return LINK( GetpApp()->GetAppWindow(), BasicFrame, WriteString );
 }
 
-void MyBasic::StartListening( SfxBroadcaster &rBroadcaster )
+void MyBasic::StartListeningTT( SfxBroadcaster &rBroadcaster )
 {
     ((BasicFrame*)GetpApp()->GetAppWindow())->StartListening( rBroadcaster );
 }
@@ -164,6 +164,8 @@ void MyBasic::LoadIniFile()
 
 SbTextType MyBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
 {
+    (void) rSymbol; /* avoid warning about unused parameter */
+    (void) bWasTTControl; /* avoid warning about unused parameter */
     return SB_SYMBOL;   // Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
 }
 
@@ -232,6 +234,7 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
 
 void MyBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
 {
+    (void) bDebugFindNoErrors; /* avoid warning about unused parameter */
 }
 
 const String MyBasic::GetSpechialErrorText()
