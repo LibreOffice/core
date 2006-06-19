@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:27:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:16:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,6 @@ public:
     void                SetDefaultExt( const UniString& rExt ) { aDfltExt = rExt; }
     const UniString&        GetDefaultExt() const { return aDfltExt; }
     void                AddFilter( const UniString& rFilter, const UniString& rType );
-    void                AddFilter( const UniString& rFilter, const UniString& rType,
-                                   const UniString& rSysType );
     void                RemoveFilter( const UniString& rFilter );
     void                RemoveAllFilter();
     void                SetCurFilter( const UniString& rFilter );
