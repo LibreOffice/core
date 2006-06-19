@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:50:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ BitSet BitSet::operator<<( USHORT nOffset ) const
 
 // substracts nOffset from each bit-value in the set
 
-BitSet BitSet::operator>>( USHORT nOffset ) const
+BitSet BitSet::operator>>( USHORT ) const
 {
     DBG_MEMTEST();
     return BitSet();
@@ -150,7 +150,7 @@ BitSet::BitSet( const BitSet& rOrig )
 // creates a bitset from an array
 
 BitSet::BitSet( USHORT* pArray, USHORT nSize ):
-    nCount(0)
+    nCount(nSize)
 {
     DBG_MEMTEST();
     // find the highest bit to set
@@ -204,10 +204,9 @@ BitSet::~BitSet()
 
 // creates a bitmap with all bits in rRange set
 
-BitSet::BitSet( const Range& rRange )
+BitSet::BitSet( const Range& )
 {
     DBG_MEMTEST();
-
 }
 
 //--------------------------------------------------------------------
@@ -234,11 +233,11 @@ BitSet& BitSet::operator=( USHORT nBit )
     DBG_MEMTEST();
     delete [] pBitmap;
 
-    USHORT nBlocks = nBit / 32;
+    nBlocks = nBit / 32;
     ULONG nBitVal = 1L << (nBit % 32);
     nCount = 1;
 
-    ULONG *pBitmap = new ULONG[nBlocks];
+    pBitmap = new ULONG[nBlocks];
     memset( pBitmap + nBlocks, 0, 4 * nBlocks );
 
     *(pBitmap+nBlocks) = nBitVal;
