@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:16:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -707,9 +707,9 @@ INT32 AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFlags() const
 //for SvxJSearchOptionsDialog end
 
 //for FmInputRecordNoDialog begin
-void AbstractFmInputRecordNoDialog_Impl::SetValue(double dNew)
+void AbstractFmInputRecordNoDialog_Impl::SetValue(long nNew)
 {
-    pDlg->SetValue(dNew);
+    pDlg->SetValue(nNew);
 }
 
 long AbstractFmInputRecordNoDialog_Impl::GetValue() const
@@ -751,7 +751,7 @@ void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
-IMPL_LINK( AbstractSvxNameDialog_Impl, CheckNameHdl, Window*, pWin )
+IMPL_LINK( AbstractSvxNameDialog_Impl, CheckNameHdl, Window*, EMPTYARG )
 {
     if( aCheckNameHdl.IsSet() )
         return aCheckNameHdl.Call(this);
@@ -940,13 +940,13 @@ void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link& rLink )
     else
         pDlg->SetPrevHdl( Link() );
 }
-IMPL_LINK( AbstractSvxPostItDialog_Impl, NextHdl, Window*, pWin )
+IMPL_LINK( AbstractSvxPostItDialog_Impl, NextHdl, Window*, EMPTYARG )
 {
     if( aNextHdl.IsSet() )
         aNextHdl.Call(this);
     return 0;
 }
-IMPL_LINK( AbstractSvxPostItDialog_Impl, PrevHdl, Window*, pWin )
+IMPL_LINK( AbstractSvxPostItDialog_Impl, PrevHdl, Window*, EMPTYARG )
 {
     if( aPrevHdl.IsSet() )
         aPrevHdl.Call(this);
@@ -987,7 +987,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
 }
 
 // dialogs that use SfxBindings
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, const ResId& rResId )
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParent*/, const SfxBindings&, const ResId& )
 {
     return 0;
 }
@@ -996,9 +996,9 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& rResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pAttrSet,
-                                                SfxViewFrame* pViewFrame,
-                                                bool bEditFmt,
-                                                const String *pUserButtonText )
+                                                SfxViewFrame* ,
+                                                bool /*bEditFmt*/,
+                                                const String */*pUserButtonText*/ )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
@@ -1022,8 +1022,8 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
                                                 Window* pParent,
                                                 const SfxItemSet* pAttrSet,
                                                 const css::uno::Reference< css::frame::XFrame >& xViewFrame,
-                                                bool bEditFmt,
-                                                const String *pUserButtonText )
+                                                bool /*bEditFmt*/,
+                                                const String */*pUserButtonText*/ )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
@@ -1052,7 +1052,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
                                             const SfxItemSet* pAttrSet,
                                             const ResId& rResId,
                                             SdrView* pView,
-                                            SdrModel* pModel )
+                                            SdrModel* )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
