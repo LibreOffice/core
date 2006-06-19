@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:21:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:11:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,9 +483,9 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
         {
             if ( pParent->GetUserData() )
             {
-                String aURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
+                String aTmpURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
-                    SfxContentHelper::GetHelpTreeViewContents( aURL );
+                    SfxContentHelper::GetHelpTreeViewContents( aTmpURL );
 
                 const ::rtl::OUString* pEntries  = aList.getConstArray();
                 UINT32 i, nCount = aList.getLength();
@@ -1281,8 +1281,8 @@ void SearchTabPage_Impl::Resize()
         Size aBtnSize = aOpenBtn.GetSizePixel();
         long nExtraHeight = aBtnSize.Height() + n3Height;
 
-        Point aPnt = aResultsLB.GetPosPixel();
-        Size aNewSize = aResultsLB.GetSizePixel();
+        aPnt = aResultsLB.GetPosPixel();
+        aNewSize = aResultsLB.GetSizePixel();
         aNewSize.Height() = aSize.Height() - aPnt.Y();
         aNewSize.Height() -= ( nExtraHeight + ( a6Size.Height() * 3 / 2 ) );
         aResultsLB.SetSizePixel( aNewSize );
@@ -2512,6 +2512,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
 
 IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
 {
+    (void)pOptions; // unused variable
     InitToolBoxImages();
     Resize();
     aToolBox.Invalidate();
@@ -3279,7 +3280,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParent, WinBits nBits ) :
+    Window* pParent, WinBits ) :
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
