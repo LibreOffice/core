@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:38:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include <tools/stream.hxx>
 #endif
 #include <tools/tenccvt.hxx>
-#pragma hdrstop
 #include <sbx.hxx>
 #include "sb.hxx"
 #include <string.h>     // memset() etc
@@ -127,7 +126,6 @@ BOOL SbiImage::Load( SvStream& r )
     UINT32 nLen, nOff;
 
     Clear();
-    ULONG nStart = r.Tell();
     // Master-Record einlesen
     r >> nSign >> nLen >> nCount;
     ULONG nLast = r.Tell() + nLen;
@@ -177,7 +175,7 @@ BOOL SbiImage::Load( SvStream& r )
 #ifdef EXTENDED_BINARY_MODULES
             case B_EXTSOURCE:
             {
-                for( UINT16 i = 0 ; i < nCount ; i++ )
+                for( UINT16 j = 0 ; j < nCount ; j++ )
                 {
                     String aTmp;
                     r.ReadByteString( aTmp, eCharSet );
@@ -214,11 +212,11 @@ BOOL SbiImage::Load( SvStream& r )
 
                     char* pByteStrings = new char[ nLen ];
                     r.Read( pByteStrings, nStringSize );
-                    for( short i = 0; i < nStrings; i++ )
+                    for( short j = 0; j < nStrings; j++ )
                     {
-                        USHORT nOff = pStringOff[ i ];
-                        String aStr( pByteStrings + nOff, eCharSet );
-                        memcpy( pStrings + nOff, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( sal_Unicode ) );
+                        USHORT nOff2 = pStringOff[ j ];
+                        String aStr( pByteStrings + nOff2, eCharSet );
+                        memcpy( pStrings + nOff2, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( sal_Unicode ) );
                     }
                     delete[] pByteStrings;
                 } break;
@@ -297,9 +295,9 @@ BOOL SbiImage::Save( SvStream& r )
             {
                 sal_Int32 nCopyLen =
                     (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
-                String aTmp = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
+                String aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
                 nRemainingLen -= nCopyLen;
-                r.WriteByteString( aTmp, eCharSet );
+                r.WriteByteString( aTmp2, eCharSet );
             }
             SbiCloseRecord( r, nPos );
         }
