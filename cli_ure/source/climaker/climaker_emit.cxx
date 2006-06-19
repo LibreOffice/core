@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:52:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,7 @@ System::String* mapUnoPolymorphicName(System::String* unoName)
 
 //______________________________________________________________________________
 Assembly * TypeEmitter::type_resolve(
-    ::System::Object * sender, ::System::ResolveEventArgs * args )
+    ::System::Object *, ::System::ResolveEventArgs * args )
 {
     ::System::String * cts_name = args->get_Name();
     ::System::Type * ret_type = m_module_builder->GetType(
@@ -1301,8 +1301,6 @@ Assembly * TypeEmitter::type_resolve(
                 {
                     //get th ctor of the attribute
                     ::System::Type * arCtor[] = {::System::Type::GetType(S"System.Type[]")};
-                    ConstructorInfo *info =  __typeof(::uno::TypeParametersAttribute)
-                            ->GetConstructor( arCtor);
                     //Get the arguments for the attribute's ctor
                     Reference<reflection::XTypeDescription> const * arXTypeArgs =
                         seq_type_args.getConstArray();
@@ -1531,7 +1529,7 @@ Assembly * TypeEmitter::type_resolve(
 //        arParamTypes[0] = get_type(S"unoidl.com.sun.star.uno.XComponentContext", true);
         for (int i = 0; i < cParams + 1; i++)
         {
-            ::uno::PolymorphicType * pT = dynamic_cast<::uno::PolymorphicType *>(arTypeParameters[i]);
+            ::uno::PolymorphicType * pT = dynamic_cast< ::uno::PolymorphicType * >(arTypeParameters[i]);
             if (pT)
                 arParamTypes[i] = pT->OriginalType;
             else
@@ -1561,7 +1559,7 @@ Assembly * TypeEmitter::type_resolve(
         //The first parameter is the XComponentContext, which cannot be obtained
         //from reflection.
         //The context is not part of the idl description
-        Emit::ParameterBuilder * param_builder = method_builder->DefineParameter(
+        method_builder->DefineParameter(
             1, ParameterAttributes::In, S"the_context");
 
         Emit::ParameterBuilder * arParameterBuilder[] =
@@ -1670,7 +1668,6 @@ Assembly * TypeEmitter::type_resolve(
 
             for (int iParam = 0; iParam < cParams; iParam ++)
             {
-                Reference<reflection::XParameter> const &  aParam = arXParams[iParam];
                 arLocalAny[iParam] = ilGen->DeclareLocal(typeAny);
             }
 
@@ -1694,7 +1691,7 @@ Assembly * TypeEmitter::type_resolve(
             for (int i = 0; i < arLocalAny->Length; i ++)
             {
                 //check if the parameter is a polymorphic struct
-                ::uno::PolymorphicType *polyType = dynamic_cast<::uno::PolymorphicType*>(arTypeParameters[i+1]);
+                ::uno::PolymorphicType *polyType = dynamic_cast< ::uno::PolymorphicType* >(arTypeParameters[i+1]);
                 //arTypeParameters[i+1] = polyType->OriginalType;
                 if (polyType)
                 {
@@ -1801,7 +1798,7 @@ Assembly * TypeEmitter::type_resolve(
             //catch and rethrow all other defined Exceptions
             for (int i = 0; i < arExceptionTypes->Count; i++)
             {
-                ::System::Type * excType = __try_cast<::System::Type*>(
+                ::System::Type * excType = __try_cast< ::System::Type* >(
                     arExceptionTypes->get_Item(i));
                 if (excType->IsInstanceOfType(
                         get_type(S"unoidl.com.sun.star.uno.RuntimeException", true)))
@@ -1963,15 +1960,6 @@ Emit::CustomAttributeBuilder* TypeEmitter::get_exception_attribute(
         xIfaceType = resolveInterfaceTypedef(xSingletonType->getInterface());
     System::Type * retType = get_type(xIfaceType);
 
-    //Create the ConstructorInfo for a DeploymentException
-    ::System::Type * typeDeploymentExc =
-          get_type(S"unoidl.com.sun.star.uno.DeploymentException", true);
-
-    ::System::Type * arTypeCtor[] = {__typeof(::System::String),
-                                         __typeof(::System::Object)};
-    ::System::Reflection::ConstructorInfo * ctorDeploymentException  =
-          typeDeploymentExc->GetConstructor(arTypeCtor);
-
     //define method
     ::System::Type * arTypeParameters[] = {get_type(S"unoidl.com.sun.star.uno.XComponentContext", true)};
     Emit::MethodBuilder* method_builder = type_builder->DefineMethod(
@@ -1987,8 +1975,7 @@ Emit::CustomAttributeBuilder* TypeEmitter::get_exception_attribute(
     //The first parameter is the XComponentContext, which cannot be obtained
     //from reflection.
     //The context is not part of the idl description
-    Emit::ParameterBuilder * param_builder = method_builder->DefineParameter(
-        1, ParameterAttributes::In, S"the_context");
+    method_builder->DefineParameter(1, ParameterAttributes::In, S"the_context");
 
 
     ilGen = method_builder->GetILGenerator();
@@ -2112,7 +2099,7 @@ Emit::CustomAttributeBuilder* TypeEmitter::get_exception_attribute(
             ::System::String::Concat(
                 element_type->get_FullName(), S"[]" ), true );
 
-        ::uno::PolymorphicType * pt = dynamic_cast<::uno::PolymorphicType *>(element_type);
+        ::uno::PolymorphicType * pt = dynamic_cast< ::uno::PolymorphicType * >(element_type);
         if (pt)
         {
             ::System::String * sName = ::System::String::Concat(pt->PolymorphicName, S"[]");
@@ -2220,10 +2207,10 @@ TypeEmitter::TypeEmitter(
         bool bRemove = false;
         for (int i = start; i < arTypes->Count; i++)
         {
-            ::System::Type * t = __try_cast<::System::Type*>(arTypes->get_Item(i));
+            ::System::Type * t = __try_cast< ::System::Type* >(arTypes->get_Item(i));
             for (int j = 0; j < arTypes->Count; j++)
             {
-                if (t->IsSubclassOf(__try_cast<::System::Type*>(arTypes->get_Item(j))))
+                if (t->IsSubclassOf(__try_cast< ::System::Type* >(arTypes->get_Item(j))))
                 {
                     arTypes->RemoveAt(i);
                     bRemove = true;
