@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:05:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ struct Expl_Impl
     ExplMode        eMode;
 };
 
-DECLARE_LIST(ExplListe, Expl_Impl*);
+DECLARE_LIST(ExplListe, Expl_Impl*)
 
 class Explosion : public ExplListe
 {
