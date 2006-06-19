@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:06:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ public :
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier,
                                             SvXMLExport& rExport );
     ~XMLNumberFormatAttributesExportHelper();
-    void SetExport(SvXMLExport* pExport) { this->pExport = pExport; }
+    void SetExport(SvXMLExport* pExp) { this->pExport = pExp; }
 
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard);
     static void WriteAttributes(SvXMLExport& rXMLExport,
