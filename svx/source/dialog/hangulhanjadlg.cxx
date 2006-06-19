@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:18:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void RubyRadioButton::Paint( const Rectangle& _rRect )
+    void RubyRadioButton::Paint( const Rectangle& )
     {
         HideFocus();
 
@@ -763,7 +763,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversionDialog, OnSuggestionSelected, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversionDialog, OnSuggestionSelected, void*, EMPTYARG )
     {
         m_pPlayground->GetWordInputControl().SetText( m_aSuggestions.GetSelectEntry() );
         OnSuggestionModified( NULL );
@@ -771,7 +771,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversionDialog, OnSuggestionModified, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversionDialog, OnSuggestionModified, void*, EMPTYARG )
     {
         m_aFind.Enable( m_pPlayground->GetWordInputControl().GetSavedValue() != m_pPlayground->GetWordInputControl().GetText() );
 
@@ -813,13 +813,13 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversionDialog, OnClose, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversionDialog, OnClose, void*, EMPTYARG )
     {
         Close();
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversionDialog, OnOption, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversionDialog, OnOption, void*, EMPTYARG )
     {
         HangulHanjaOptionsDialog        aOptDlg( this );
         aOptDlg.Execute();
@@ -1051,7 +1051,7 @@ namespace svx
         }
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, OkHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaOptionsDialog, OkHdl, void*, EMPTYARG )
     {
         sal_uInt32              nCnt = m_aDictList.size();
         sal_uInt32              n = 0;
@@ -1105,7 +1105,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, DictsLB_SelectHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaOptionsDialog, DictsLB_SelectHdl, void*, EMPTYARG )
     {
         bool    bSel = m_aDictsLB.FirstSelected() != NULL;
 
@@ -1115,7 +1115,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, NewDictHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaOptionsDialog, NewDictHdl, void*, EMPTYARG )
     {
         String                      aName;
         HangulHanjaNewDictDialog    aNewDlg( this );
@@ -1148,7 +1148,7 @@ namespace svx
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, EditDictHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaOptionsDialog, EditDictHdl, void*, EMPTYARG )
     {
         SvLBoxEntry*    pEntry = m_aDictsLB.FirstSelected();
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
@@ -1160,7 +1160,7 @@ namespace svx
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, DeleteDictHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaOptionsDialog, DeleteDictHdl, void*, EMPTYARG )
     {
         USHORT nSelPos = m_aDictsLB.GetSelectEntryPos();
         if( nSelPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1271,7 +1271,7 @@ namespace svx
     //=========================================================================
     //-------------------------------------------------------------------------
 
-    IMPL_LINK( HangulHanjaNewDictDialog, OKHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaNewDictDialog, OKHdl, void*, EMPTYARG )
     {
         String  aName( m_aDictNameED.GetText() );
 
@@ -1284,7 +1284,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaNewDictDialog, ModifyHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaNewDictDialog, ModifyHdl, void*, EMPTYARG )
     {
         String  aName( m_aDictNameED.GetText() );
 
@@ -1522,9 +1522,9 @@ namespace svx
     SuggestionEdit::SuggestionEdit( Window* pParent, const ResId& rResId,
         ScrollBar& _rScrollBar, SuggestionEdit* _pPrev, SuggestionEdit* _pNext  )
         :Edit( pParent, rResId )
-        ,m_rScrollBar( _rScrollBar )
         ,m_pPrev( _pPrev )
         ,m_pNext( _pNext )
+        ,m_rScrollBar( _rScrollBar )
     {
     }
 
@@ -1541,7 +1541,6 @@ namespace svx
             const KeyCode&              rKeyCode = pKEvt->GetKeyCode();
             USHORT                      nMod = rKeyCode.GetModifier();
             USHORT                      nCode = rKeyCode.GetCode();
-            HangulHanjaEditDictDialog*  pDlg = static_cast< HangulHanjaEditDictDialog* >( GetParent() );
             if( nCode == KEY_TAB && ( !nMod || KEY_SHIFT == nMod ) )
             {
                 bool        bUp = KEY_SHIFT == nMod;
@@ -1611,14 +1610,14 @@ namespace svx
     }
 
 
-    IMPL_LINK( HangulHanjaEditDictDialog, ScrollHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaEditDictDialog, ScrollHdl, void*, EMPTYARG )
     {
         UpdateScrollbar();
 
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, OriginalModifyHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaEditDictDialog, OriginalModifyHdl, void*, EMPTYARG )
     {
         m_bModifiedOriginal = true;
         m_aOriginal = m_aOriginalLB.GetText();
@@ -1654,13 +1653,13 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, BookLBSelectHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaEditDictDialog, BookLBSelectHdl, void*, EMPTYARG )
     {
         InitEditDictDialog( m_aBookLB.GetSelectEntryPos() );
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, NewPBPushHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaEditDictDialog, NewPBPushHdl, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pSuggestions, "-HangulHanjaEditDictDialog::NewPBPushHdl(): no suggestions... search in hell..." );
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
@@ -1700,7 +1699,7 @@ namespace svx
         return 0;
     }
 
-    bool HangulHanjaEditDictDialog::DeleteEntryFromDictionary( const OUString& rEntry, const Reference< XConversionDictionary >& xDict  )
+    bool HangulHanjaEditDictDialog::DeleteEntryFromDictionary( const OUString&, const Reference< XConversionDictionary >& xDict  )
     {
         bool bRemovedSomething = false;
         if( xDict.is() )
@@ -1729,7 +1728,7 @@ namespace svx
         return bRemovedSomething;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, DeletePBPushHdl, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaEditDictDialog, DeletePBPushHdl, void*, EMPTYARG )
     {
         if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
         {
@@ -1866,9 +1865,9 @@ namespace svx
 
     HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
         :ModalDialog            ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_EDIT ) )
+        ,m_aEditHintText        ( ResId( STR_EDITHINT ) )
         ,m_rDictList            ( _rDictList )
         ,m_nCurrentDict         ( 0xFFFFFFFF )
-        ,m_aEditHintText        ( ResId( STR_EDITHINT ) )
         ,m_pSuggestions         ( NULL )
         ,m_aBookFT              ( this, ResId( FT_BOOK ) )
         ,m_aBookLB              ( this, ResId( LB_BOOK ) )
@@ -1884,7 +1883,6 @@ namespace svx
         ,m_aDeletePB            ( this, ResId( PB_HHE_DELETE ) )
         ,m_aHelpPB              ( this, ResId( PB_HHE_HELP ) )
         ,m_aClosePB             ( this, ResId( PB_HHE_CLOSE ) )
-
         ,m_nTopPos              ( 0 )
         ,m_bModifiedSuggestions ( false )
         ,m_bModifiedOriginal    ( false )
