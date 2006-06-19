@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reposy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:15:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ RepositoryCenter::RunCommand_ProduceAllSecondaries()
 }
 
 void
-RepositoryCenter::RunCommand_Statistic( ::ary::action::Statistic & io_rCommand )
+RepositoryCenter::RunCommand_Statistic( ::ary::action::Statistic & )
 {
     // KORR_FUTURE
 }
