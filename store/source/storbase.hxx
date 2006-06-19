@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storbase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:31:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.8 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.9 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -542,6 +542,11 @@ struct OStorePageData
         rtl_freeMemory (p);
     }
 
+    static void operator delete (void *p, sal_uInt16)
+    {
+        rtl_freeMemory (p);
+    }
+
     /** Construction.
      */
     OStorePageData (sal_uInt16 nPageSize)
@@ -571,7 +576,7 @@ struct OStorePageData
 
     /** swap (internal and external representation).
      */
-    void swap (const D& rDescr)
+    void swap ()
     {
 #ifdef OSL_BIGENDIAN
         m_aGuard.swap();
@@ -583,7 +588,7 @@ struct OStorePageData
 
     /** guard (external representation).
      */
-    void guard (const D& rDescr)
+    void guard ()
     {
         sal_uInt32 nCRC32 = 0;
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
@@ -596,7 +601,7 @@ struct OStorePageData
 
     /** verify (external representation).
      */
-    storeError verify (const D& rDescr)
+    storeError verify ()
     {
         sal_uInt32 nCRC32 = 0;
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
@@ -783,8 +788,7 @@ public:
     storeError acquirePage (
         const OStorePageDescriptor& rDescr, storeAccessMode eMode);
 
-    storeError releasePage (
-        const OStorePageDescriptor& rDescr, storeAccessMode eMode);
+    storeError releasePage (const OStorePageDescriptor& rDescr);
 
     sal_uInt32 getRefererCount (void);
 
