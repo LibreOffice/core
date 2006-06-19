@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:03:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
-
-// include ---------------------------------------------------------------
 
 #ifndef _RTL_USTRING_HXX_
 #include<rtl/ustring.hxx>
@@ -286,11 +283,11 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     bDialog     ( sal_False ),
     bHyphen     ( sal_False ),
     bAuto       ( sal_False ),
+    bReverse    ( sal_False ),
     bStartDone  ( bOther || ( !bReverse && bStart ) ),
     bEndDone    ( bReverse && bStart && !bOther ),
     bStartChk   ( bOther ),
-    bRevAllowed ( sal_False ),
-    bReverse    ( sal_False )
+    bRevAllowed ( sal_False )
 {
 }
 
@@ -349,7 +346,7 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
 // -----------------------------------------------------------------------
 
 
-void SvxSpellWrapper::SpellStart( SvxSpellArea eSpell )
+void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
 {   // Hier muessen die notwendigen Vorbereitungen fuer SpellContinue
 }   // im uebergebenen Bereich getroffen werden.
 
@@ -389,8 +386,7 @@ sal_Bool SvxSpellWrapper::SpellContinue()
 
 // -----------------------------------------------------------------------
 
-void SvxSpellWrapper::AutoCorrect( const String& rAktWord,
-                                   const String& rNewWord )
+void SvxSpellWrapper::AutoCorrect( const String&, const String& )
 {
 }
 
@@ -404,7 +400,7 @@ void SvxSpellWrapper::ScrollArea()
 // -----------------------------------------------------------------------
 
 
-void SvxSpellWrapper::ChangeWord( const String& rNewWord, const sal_uInt16 nLang )
+void SvxSpellWrapper::ChangeWord( const String&, const sal_uInt16 )
 {   // Wort ersetzen
 }
 
@@ -452,21 +448,21 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
 
 // -----------------------------------------------------------------------
 
-void SvxSpellWrapper::ReplaceAll( const String &rNewText, sal_Int16 nLanguage )
+void SvxSpellWrapper::ReplaceAll( const String &, sal_Int16 )
 {   // Wort aus der Replace-Liste ersetzen
 }
 
 // -----------------------------------------------------------------------
 
 
-void SvxSpellWrapper::SetLanguage( const sal_uInt16 nLang )
+void SvxSpellWrapper::SetLanguage( const sal_uInt16 )
 {   // Sprache aendern
 }
 
 // -----------------------------------------------------------------------
 
 
-void SvxSpellWrapper::InsertHyphen( const sal_uInt16 nPos )
+void SvxSpellWrapper::InsertHyphen( const sal_uInt16 )
 {   // Hyphen einfuegen bzw. loeschen
 }
 
