@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plocroot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:07:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,7 +366,7 @@ WinRootDir::OwnDelimiter() const
 //**********************    WinDrive    ****************************//
 
 WinDrive::WinDrive( char i_cDrive )
-    :   cDrive(toupper(i_cDrive))
+    :   cDrive(static_cast< char >(toupper(i_cDrive)))
 {
 }
 
@@ -400,7 +400,7 @@ WinDrive::OwnDelimiter() const
 //**********************    WinDriveRootDir    ****************************//
 
 WinDriveRootDir::WinDriveRootDir( const char * i_sPath )
-    :   cDrive(toupper(*i_sPath))
+    :   cDrive(static_cast< char >(toupper(*i_sPath)))
 {
     if ( 'A' > cDrive OR 'Z' < cDrive )
         cDrive = 0;
@@ -502,12 +502,12 @@ UNCRoot::OwnDelimiter() const
 //**********************    InvalidRoot    ****************************//
 
 void
-InvalidRoot::Get( ostream      &      o_rPath ) const
+InvalidRoot::Get( ostream      & ) const
 {
 }
 
 void
-InvalidRoot::Get( bostream      &    o_rPath ) const
+InvalidRoot::Get( bostream      & ) const
 {
 }
 
