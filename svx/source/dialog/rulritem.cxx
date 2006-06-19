@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:59:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#pragma hdrstop
 
 #include "dialogs.hrc"
 #include "rulritem.hxx"
@@ -147,18 +146,19 @@ sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
 
 SfxItemPresentation SvxLongLRSpaceItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText, const IntlWrapper *
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    String&             /*rText*/, const IntlWrapper *
 )   const
 {
+
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *pPool) const
+SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
 {
     return new SvxLongLRSpaceItem(*this);
 }
@@ -272,10 +272,10 @@ sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
 
 SfxItemPresentation SvxLongULSpaceItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText, const IntlWrapper *
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    String&             /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -283,7 +283,7 @@ SfxItemPresentation SvxLongULSpaceItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *pPool) const
+SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
 {
     return new SvxLongULSpaceItem(*this);
 }
@@ -324,7 +324,6 @@ int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 
 sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     sal_Int32 nVal;
@@ -355,7 +354,6 @@ sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
 
 sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     sal_Int32 nVal;
@@ -402,10 +400,10 @@ String SvxPagePosSizeItem::GetValueText() const
 
 SfxItemPresentation SvxPagePosSizeItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText, const IntlWrapper *
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    String&             /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -413,7 +411,7 @@ SfxItemPresentation SvxPagePosSizeItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxPagePosSizeItem::Clone(SfxItemPool *pPool) const
+SfxPoolItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
 {
     return new SvxPagePosSizeItem(*this);
 }
@@ -493,10 +491,10 @@ String SvxColumnItem::GetValueText() const
 
 SfxItemPresentation SvxColumnItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText, const IntlWrapper *
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    String&             /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -504,7 +502,7 @@ SfxItemPresentation SvxColumnItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxColumnItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxColumnItem::Clone( SfxItemPool * ) const
 {
     return new SvxColumnItem(*this);
 }
@@ -515,10 +513,11 @@ SvxColumnItem::SvxColumnItem( USHORT nAct ) :
 
     SfxPoolItem( SID_RULER_BORDERS ),
 
-    nActColumn  ( nAct ),
     nLeft       ( 0 ),
     nRight      ( 0 ),
-    bTable      ( FALSE )
+    nActColumn  ( nAct ),
+    bTable      ( FALSE ),
+    bOrtho      (TRUE )
 
 {
 }
@@ -529,11 +528,11 @@ SvxColumnItem::SvxColumnItem( USHORT nActCol, USHORT left, USHORT right ) :
 
     SfxPoolItem( SID_RULER_BORDERS ),
 
-    nActColumn  ( nActCol ),
     nLeft       ( left ),
     nRight      ( right ),
-    bTable      ( TRUE )
-
+    nActColumn  ( nActCol ),
+    bTable      ( TRUE ),
+    bOrtho      ( TRUE )
 {
 }
 
@@ -543,11 +542,12 @@ SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
 
     SfxPoolItem( rCopy ),
 
-      nActColumn( rCopy.nActColumn ),
+      aColumns  ( (BYTE)rCopy.Count() ),
       nLeft     ( rCopy.nLeft ),
       nRight    ( rCopy.nRight ),
+      nActColumn( rCopy.nActColumn ),
       bTable    ( rCopy.bTable ),
-      aColumns  ( (BYTE)rCopy.Count() )
+      bOrtho    ( rCopy.bOrtho )
 
 {
     const USHORT nCount = rCopy.Count();
@@ -612,7 +612,6 @@ long SvxColumnItem::GetVisibleRight() const
 
 sal_Bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -634,7 +633,6 @@ sal_Bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 
 sal_Bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal;
     switch ( nMemberId )
@@ -678,10 +676,10 @@ String SvxObjectItem::GetValueText() const
 
 SfxItemPresentation SvxObjectItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText, const IntlWrapper *
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    String&             /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -689,7 +687,7 @@ SfxItemPresentation SvxObjectItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *pPool) const
+SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 {
     return new SvxObjectItem(*this);
 }
@@ -727,9 +725,7 @@ SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
 
 sal_Bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int32 nVal = 0;
     switch ( nMemberId )
     {
         case MID_START_X : rVal <<= nStartX; break;
@@ -747,7 +743,6 @@ sal_Bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 
 sal_Bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     BOOL bRet=FALSE;
     switch ( nMemberId )
