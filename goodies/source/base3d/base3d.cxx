@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:28:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:40:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ B3dGlobalData::~B3dGlobalData()
 |*
 \************************************************************************/
 
-IMPL_LINK(B3dGlobalData, TimerHdl, AutoTimer*, pTimer)
+IMPL_LINK(B3dGlobalData, TimerHdl, AutoTimer*, EMPTYARG)
 {
     if(maTextureStore.Count())
     {
@@ -414,7 +414,7 @@ Base3D* Base3D::CreateScreenRenderer(OutputDevice* pOutDev)
 |*
 \************************************************************************/
 
-void Base3D::Destroy(OutputDevice *pOutDev)
+void Base3D::Destroy(OutputDevice *)
 {
     Base3D* pTmp;
     if((pTmp = (Base3D*)GetOutputDevice()->Get3DContext()) == this)
@@ -442,7 +442,7 @@ void Base3D::SetTransformationSet(B3dTransformationSet* pSet)
 |*
 \************************************************************************/
 
-void Base3D::SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal)
+void Base3D::SetLightGroup(B3dLightGroup* pSet, BOOL /*bSetGlobal*/)
 {
     // Aktuelle Beleuchtung eintragen
     pLightGroup = pSet;
@@ -771,7 +771,6 @@ B3dEntity& Base3D::GetFreeEntity()
             {
                 // Im eigenen Buffer anlegen
                 return aComplexPolygon.GetFreeEntity();
-                break;
             }
             default:
                 break;
