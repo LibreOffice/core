@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_enumvalue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:08:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:48:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@ namespace ifc_enumvalue
 }
 
 
-/*  OPEN?
-*/
-
 /** @resp
     Represents an IDL enum value.
 */
@@ -74,11 +71,6 @@ class EnumValue : public CodeEntity
                             Ce_id               i_nNameRoom,
                             const String &      i_sInitValue );
                         ~EnumValue();
-#if ENABLE_UDM
-    static void         SetupUdmTraits_(
-                            udm::struct_traits<EnumValue> &
-                                                o_rTraits );
-#endif // ENABLE_UDM
 
     // INQUIRY
     const String &      Value() const;
@@ -119,4 +111,3 @@ EnumValue::Value() const
 
 
 #endif
-
