@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:58:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,11 @@
 #define OUSTRING2ASCII(rtlOUString) ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ASCII_US).getStr()
 
 #define CFG_TRACE_INFO          OTraceIndent aIndent; OConfigTracer::traceInfo
+// FIXME: do something more intelligent here
+// the CFG_TRACE_INFO2 macro exists only to have a unique name of aIndent2
+// so it does not hide aIndent in an outer scope (which would produce a
+// a shadowing warning
+#define CFG_TRACE_INFO2         OTraceIndent aIndent2; OConfigTracer::traceInfo
 #define CFG_TRACE_WARNING       OTraceIndent aIndent; OConfigTracer::traceWarning
 #define CFG_TRACE_ERROR         OTraceIndent aIndent; OConfigTracer::traceError
 #define CFG_TRACE_INFO_NI       OConfigTracer::traceInfo
@@ -129,13 +134,18 @@ public:
 
 #define OUSTRING2ASCII(rtlOUString) "nothing"
 
-#define CFG_TRACE_INFO          1 ? (0) : printf
-#define CFG_TRACE_WARNING       1 ? (0) : printf
-#define CFG_TRACE_ERROR         1 ? (0) : printf
-#define CFG_TRACE_INFO_NI       1 ? (0) : printf
-#define CFG_TRACE_WARNING_NI    1 ? (0) : printf
-#define CFG_TRACE_ERROR_NI      1 ? (0) : printf
-#define CFG_TRACE_TO_DEVICE     1 ? (0) : printf
+namespace configmgr {
+inline static void dont_trace(const char*,...) {}
+}
+
+#define CFG_TRACE_INFO          dont_trace
+#define CFG_TRACE_INFO2         dont_trace
+#define CFG_TRACE_WARNING       dont_trace
+#define CFG_TRACE_ERROR         dont_trace
+#define CFG_TRACE_INFO_NI       dont_trace
+#define CFG_TRACE_WARNING_NI        dont_trace
+#define CFG_TRACE_ERROR_NI      dont_trace
+#define CFG_TRACE_TO_DEVICE     dont_trace
 
 #endif  // CFG_ENABLE_TRACING
 
