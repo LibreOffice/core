@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:24:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,11 +162,11 @@ namespace dlgprov
                         bool bSuccess = false;
                         try
                         {
-                            Reference< XEventListener > xListener = m_xEventAttacher->attachSingleEventListener(
+                            Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
                                 xControlModel, xAllListener, Helper, aDesc.ListenerType,
                                 aDesc.AddListenerParam, aDesc.EventMethod );
 
-                            if ( xListener.is() )
+                            if ( xListener_.is() )
                                 bSuccess = true;
                         }
                         catch ( IllegalArgumentException& )
@@ -187,7 +187,7 @@ namespace dlgprov
                             // if we had no success, try to attach to the control
                             if ( !bSuccess )
                             {
-                                Reference< XEventListener > xListener = m_xEventAttacher->attachSingleEventListener(
+                                Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
                                     xControl, xAllListener, Helper, aDesc.ListenerType,
                                     aDesc.AddListenerParam, aDesc.EventMethod );
                             }
