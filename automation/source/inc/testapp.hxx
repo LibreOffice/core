@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:15:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@ public:
     ErrorEntry(ULONG nNr, String aStr = String()) : nError(nNr),aText(aStr),nLine(0),nCol1(0),nCol2(0) {}
     ErrorEntry(ULONG nNr, String aStr, xub_StrLen l, xub_StrLen c1, xub_StrLen c2 )
         : nError(nNr),aText(aStr),nLine(l),nCol1(c1),nCol2(c2) {}
-    String aText;
     ULONG nError;
+    String aText;
     xub_StrLen nLine;
     xub_StrLen nCol1;
     xub_StrLen nCol2;
@@ -157,13 +157,13 @@ private:
 
     void AddName(String &aBisher, String &aNeu );   // Name eventuell mit / anhängen
     void AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem );    //
-    CNames *pControls;
-    CNames *pNameKontext;       // Zeigt auf den aktuellen Namenskontext, der über 'Kontext' gesetzt wurde
-    CNames *pSIds;
-    CNames *pReverseSlots;      // Slots mit Kurznamen nach Nummer
-    CNames *pReverseControls;   // Controls mit Kurznamen nach Nummer
-    CNames *pReverseControlsSon;// Controls mit Kurznamen nach Nummer nach Fenstern (Son)
-    CNames *pReverseUIds;       // Langnamen nach Nummer
+    CNames *m_pControls;
+    CNames *m_pNameKontext;     // Zeigt auf den aktuellen Namenskontext, der über 'Kontext' gesetzt wurde
+    CNames *m_pSIds;
+    CNames *m_pReverseSlots;        // Slots mit Kurznamen nach Nummer
+    CNames *m_pReverseControls; // Controls mit Kurznamen nach Nummer
+    CNames *m_pReverseControlsSon;// Controls mit Kurznamen nach Nummer nach Fenstern (Son)
+    CNames *m_pReverseUIds;     // Langnamen nach Nummer
 
 
     USHORT nMyVar;              // Wievielte Var aus Pool ist dran
@@ -172,7 +172,7 @@ private:
     CommunicationManagerClientViaSocketTT *pCommunicationManager;
     void SendViaSocket();
 
-    BOOL Load( String aName, SbModule *pMod );
+    BOOL Load( String aFileName, SbModule *pMod );
 
     void ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, BOOL bIsFlat = FALSE );
     void ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName );
