@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:24:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,8 +274,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         SVT_DLLPRIVATE AcceleratorExecute();
 
         AcceleratorExecute(const AcceleratorExecute& rCopy);
-        void operator=(const AcceleratorExecute& rCopy) {};
-
+        void operator=(const AcceleratorExecute&) {};
         //---------------------------------------
         /** TODO document me */
         SVT_DLLPRIVATE ::rtl::OUString impl_ts_findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
