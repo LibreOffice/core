@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: hr $ $Date: 2006-01-26 17:39:56 $
-#*    $Revision: 1.15 $
+#*    last change   $Author: hr $ $Date: 2006-06-19 23:12:56 $
+#*    $Revision: 1.16 $
 #*
 #*    $Logfile: $
 #*
@@ -67,7 +67,7 @@ inline static Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString >( &aName, 1 );
 }
 
-static sal_Bool check( sal_Bool b , char * message )
+static bool check( bool b , char const * message )
 {
     if ( ! b )
         fprintf( stderr, "%s failed\n" , message );
@@ -192,23 +192,6 @@ static void assign( TestElement & rData,
     rData.String = rStr;
     rData.Interface = xTest;
     rData.Any = rAny;
-}
-//==================================================================================================
-static void assign( TestData & rData,
-                    sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
-                    sal_Int16 nShort, sal_uInt16 nUShort,
-                    sal_Int32 nLong, sal_uInt32 nULong,
-                    sal_Int64 nHyper, sal_uInt64 nUHyper,
-                    float fFloat, double fDouble,
-                    TestEnum eEnum, const ::rtl::OUString& rStr,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
-                    const ::com::sun::star::uno::Any& rAny,
-                    const com::sun::star::uno::Sequence< TestElement >& rSequence )
-{
-    assign( (TestElement &)rData,
-            bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
-            eEnum, rStr, xTest, rAny );
-    rData.Sequence = rSequence;
 }
 
 namespace {
@@ -409,7 +392,7 @@ static sal_Bool performTest(
     const Reference<XBridgeTest > & xLBT )
 {
     check( xLBT.is(), "### no test interface!" );
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if (xLBT.is())
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
@@ -631,8 +614,8 @@ static sal_Bool performTest(
     // create the sequence which are compared with the results
     sal_Bool _arBool[] = {sal_True, sal_False, sal_True};
     sal_Unicode _arChar[] = {0x0065, 0x0066, 0x0067};
-    sal_Int8 _arByte[] = { (sal_Int8)1, (sal_Int8) 2, (sal_Int8) 0xff};
-    sal_Int16 _arShort[] = {(sal_Int16) 0x8000,(sal_Int16) 1, (sal_Int16) 0xefff};
+    sal_Int8 _arByte[] = { 1, 2, -1 };
+    sal_Int16 _arShort[] = { -0x8000, 1, 0x7fff };
     sal_uInt16 _arUShort[] = {0 , 1, 0xffff};
     sal_Int32 _arLong[] = {0x80000000, 1, 0x7fffffff};
     sal_uInt32 _arULong[] = {0, 1, 0xffffffff};
@@ -683,6 +666,7 @@ static sal_Bool performTest(
             TestEnum_CHECK, OUSTR(STRING_TEST_CONSTANT), _arObj[2],
             Any( &_arObj[2], ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
+    {
     Sequence<sal_Bool> arBool(_arBool, 3);
     Sequence<sal_Unicode> arChar( _arChar, 3);
     Sequence<sal_Int8> arByte(_arByte, 3);
@@ -710,8 +694,8 @@ static sal_Bool performTest(
 
         _arSeqLong2[j] = Sequence< Sequence<sal_Int32> > (_arSeqLong, 3);
     }
+
     Sequence<Sequence<Sequence<sal_Int32> > > arLong3( _arSeqLong2, 3);
-    {
     Sequence<Sequence<sal_Int32> > seqSeqRet = xBT2->setDim2(arLong3[0]);
     bRet = check( seqSeqRet == arLong3[0], "sequence test") && bRet;
     Sequence<Sequence<Sequence<sal_Int32> > > seqSeqRet2 = xBT2->setDim3(arLong3);
@@ -748,8 +732,7 @@ static sal_Bool performTest(
     bRet = check( seqStringRet == arString, "sequence test") && bRet;
     Sequence<TestElement> seqStructRet = xBT2->setSequenceStruct(arStruct);
     bRet = check( seqStructRet == arStruct, "sequence test") && bRet;
-    }
-    {
+
     Sequence<sal_Bool> arBoolTemp = cloneSequence(arBool);
     Sequence<sal_Unicode> arCharTemp = cloneSequence(arChar);
     Sequence<sal_Int8> arByteTemp = cloneSequence(arByte);
@@ -1032,8 +1015,9 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
         break;
     }
     default:
-        uno_type_sequence_construct( & retSeq, type.getTypeLibType(),
-                                     (void*) val->elements, val->nElements, cpp_acquire);
+        uno_type_sequence_construct(
+            &retSeq, type.getTypeLibType(), (void*) val->elements,
+            val->nElements, reinterpret_cast< uno_AcquireFunc >(cpp_acquire));
         break;
     }
     delete[] buf;
@@ -1048,7 +1032,7 @@ Sequence<T> cloneSequence(const Sequence<T>& val)
 }
 
 template< class T >
-static inline bool makeSurrogate(
+inline bool makeSurrogate(
     Reference< T > & rOut, Reference< T > const & rOriginal )
 {
     rOut.clear();
@@ -1233,13 +1217,12 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -1261,7 +1244,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
 
