@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventsconfiguration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,6 @@ sal_Bool EventsConfiguration::LoadEventsConfig(
     {
         return sal_False;
     }
-
-    return sal_False;
 }
 
 // #110897#
@@ -190,8 +188,6 @@ sal_Bool EventsConfiguration::StoreEventsConfig(
     {
         return sal_False;
     }
-
-    return sal_False;
 }
 
 }
