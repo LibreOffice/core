@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_dictionarydialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:55:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,7 @@ void DictionaryList::addEntry( const rtl::OUString& rTerm, const rtl::OUString& 
         return;
 
     DictionaryEntry* pEntry = new DictionaryEntry( rTerm, rMapping, nConversionPropertyType, sal_True );
-    SvLBoxEntry* pLBEntry = InsertEntry( makeTabString( *pEntry ), nPos );
+    SvLBoxEntry* pLBEntry = InsertEntryToColumn( makeTabString( *pEntry ), nPos );
     pLBEntry->SetUserData( pEntry );
     SelectRow( GetEntryPos( pLBEntry ) );
 }
