@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,15 +284,12 @@ TYPEINIT1(E3dScene, E3dObject);
 E3dScene::E3dScene()
 :   E3dObject(),
     aCamera(Vector3D(0,0,4), Vector3D()),
-    bDoubleBuffered(FALSE),
-    bClipping(FALSE),
-    //BFS01nSaveStatus (0),
-    //BFS01nRestStatus (0),
-    bFitInSnapRect(TRUE),
     aPaintTime(),
     nDisplayQuality(255),
-    // #110988#
     mp3DDepthRemapper(0L),
+    bDoubleBuffered(FALSE),
+    bClipping(FALSE),
+    bFitInSnapRect(TRUE),
     bDrawOnlySelected(FALSE)
 {
     // Defaults setzen
@@ -303,15 +300,12 @@ E3dScene::E3dScene()
 E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
 :   E3dObject(),
     aCamera(Vector3D(0,0,4), Vector3D()),
-    bDoubleBuffered(FALSE),
-    bClipping(FALSE),
-    //BFS01nSaveStatus (0),
-    //BFS01nRestStatus (0),
-    bFitInSnapRect(TRUE),
     aPaintTime(),
     nDisplayQuality(255),
-    // #110988#
     mp3DDepthRemapper(0L),
+    bDoubleBuffered(FALSE),
+    bClipping(FALSE),
+    bFitInSnapRect(TRUE),
     bDrawOnlySelected(FALSE)
 {
     // Defaults setzen
@@ -411,7 +405,7 @@ void E3dScene::ImpCleanup3DDepthMapper()
 }
 
 // #110988#
-sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nOrdNum) const
+sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 {
     if(!mp3DDepthRemapper)
     {
@@ -425,10 +419,10 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nOrdNum) const
 
     if(mp3DDepthRemapper)
     {
-        return mp3DDepthRemapper->RemapOrdNum(nOrdNum);
+        return mp3DDepthRemapper->RemapOrdNum(nNewOrdNum);
     }
 
-    return nOrdNum;
+    return nNewOrdNum;
 }
 
 /*************************************************************************
@@ -1213,7 +1207,7 @@ void E3dScene::RebuildLists()
 {
     // zuerst loeschen
     aLabelList.Clear();
-    SdrLayerID nLayerID = GetLayer();
+    SdrLayerID nCurrLayerID = GetLayer();
 
     SdrObjListIter a3DIterator(*pSub, IM_FLAT);
 
@@ -1221,7 +1215,7 @@ void E3dScene::RebuildLists()
     while ( a3DIterator.IsMore() )
     {
         E3dObject* p3DObj = (E3dObject*) a3DIterator.Next();
-        p3DObj->NbcSetLayer(nLayerID);
+        p3DObj->NbcSetLayer(nCurrLayerID);
         NewObjectInserted(p3DObj);
     }
 }
@@ -1285,7 +1279,7 @@ void E3dScene::SFX_NOTIFY(SfxBroadcaster &rBC,
 |*
 \************************************************************************/
 
-void E3dScene::RotateScene (const Point& rRef, long nWink, double sn, double cs)
+void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double cs)
 {
     Point UpperLeft, LowerRight, Center, NewCenter;
 
@@ -1747,13 +1741,12 @@ sal_uInt32 E3dScene::HitTest(const Point& rHitTestPosition, ::std::vector< SdrOb
                                     aTempResult.fDepth = aTempVector.Z();
 
                                     // look for cut points in front of the first one
-                                    Vector3DVector::iterator aIterator(aParameter.begin());
-                                    aIterator++;
+                                    Vector3DVector::iterator aIterator2(aParameter.begin());
+                                    aIterator2++;
 
-                                    for(;aIterator != aParameter.end(); aIterator++)
+                                    for(;aIterator2 != aParameter.end(); aIterator2++)
                                     {
-                                        Vector3D aTempVector(*aIterator);
-                                        aTempVector = GetCameraSet().ObjectToViewCoor(aTempVector);
+                                        aTempVector = GetCameraSet().ObjectToViewCoor(*aIterator2);
 
                                         // use the smallest one
                                         if(aTempVector.Z() < aTempResult.fDepth)
@@ -1781,11 +1774,11 @@ sal_uInt32 E3dScene::HitTest(const Point& rHitTestPosition, ::std::vector< SdrOb
             ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
 
             // copy SdrObject pointers to return result set
-            ::std::vector< ImplPairDephAndObject >::iterator aIterator(aDepthAndObjectResults.begin());
+            ::std::vector< ImplPairDephAndObject >::iterator aIterator2(aDepthAndObjectResults.begin());
 
-            for(;aIterator != aDepthAndObjectResults.end(); aIterator++)
+            for(;aIterator2 != aDepthAndObjectResults.end(); aIterator2++)
             {
-                o_rResult.push_back(aIterator->pObject);
+                o_rResult.push_back(aIterator2->pObject);
             }
         }
     }
