@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetmixin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:44:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,12 @@ namespace rtl { class OUString; }
 namespace cppu {
 
 template< typename T > class PropertySetMixin;
+
+// Suppress warnings about virtual functions but non-virtual destructor:
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4265)
+#endif
 
 /**
    @short A helper base class for <code>cppu::PropertySetMixin</code>.
@@ -436,13 +442,13 @@ private:
         com::sun::star::uno::Sequence< rtl::OUString > const & absentOptional,
         com::sun::star::uno::Type const & type);
 
-    ~PropertySetMixinImpl();
-
     class Impl;
     Impl * m_impl;
 
     friend class Impl;
     template< typename T > friend class PropertySetMixin;
+
+    ~PropertySetMixinImpl();
 };
 
 /**
@@ -514,6 +520,10 @@ private:
     PropertySetMixin(PropertySetMixin &); // not defined
     void operator =(PropertySetMixin); // not defined
 };
+
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 }
 
