@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:55:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:11:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,34 +328,33 @@ rtl::OUString BootParams::getUserData()
     //at startup and is later created when data are read or written.
     //get the system path to the javasettings_xxx_xxx.xml file
     rtl::OUString retVal;
-    sal_Bool bSuccess = getBootstrap().getFrom(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_USER_DATA)),
-        retVal);
-#if OSL_DEBUG_LEVEL >=2
-    if (bSuccess)
+    if (getBootstrap().getFrom(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_USER_DATA)),
+            retVal))
     {
+#if OSL_DEBUG_LEVEL >=2
         rtl::OString sValue = rtl::OUStringToOString(retVal, osl_getThreadTextEncoding());
         fprintf(stderr,"[Java framework] Using bootstrap parameter "
                 UNO_JAVA_JFW_USER_DATA" = %s.\n", sValue.getStr());
-    }
 #endif
+    }
     return retVal;
 }
 
 rtl::OUString BootParams::getSharedData()
 {
     rtl::OUString sShare;
-    sal_Bool bSuccess = getBootstrap().getFrom(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_SHARED_DATA)),
-        sShare);
-#if OSL_DEBUG_LEVEL >=2
-    if (bSuccess)
+    if (getBootstrap().getFrom(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_SHARED_DATA)),
+            sShare))
     {
+#if OSL_DEBUG_LEVEL >=2
         rtl::OString sValue = rtl::OUStringToOString(sShare, osl_getThreadTextEncoding());
         fprintf(stderr,"[Java framework] Using bootstrap parameter "
                 UNO_JAVA_JFW_SHARED_DATA" = %s.\n", sValue.getStr());
-    }
 #endif
+    }
     return sShare;
 }
 
@@ -603,7 +602,6 @@ rtl::OString makeClassPathOption(CNodeJava & javaSettings)
     rtl::OUStringBuffer sBufCP(4096);
     char szSep[] = {SAL_PATHSEPARATOR,0};
     JFW_MODE mode = getMode();
-    bool bUseEnvClasspath = false;
     if (mode == JFW_MODE_APPLICATION)
     {
         // append all user selected jars to the class path
