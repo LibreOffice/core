@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:24:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,20 +102,19 @@ TYPEINIT1( XMLTextMasterPageContext, SvXMLStyleContext );
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        sal_Bool bOverwrite ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE ),
-    sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
-    sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) ),
-    sPageMasterName(),
-    bInsertHeader( sal_False ),
-    bInsertFooter( sal_False ),
-    bInsertHeaderLeft( sal_False ),
-    bInsertFooterLeft( sal_False ),
-    bHeaderInserted( sal_False ),
-    bFooterInserted( sal_False ),
-    bHeaderLeftInserted( sal_False ),
-    bFooterLeftInserted( sal_False )
+        sal_Bool bOverwrite )
+:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
+,   sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,   sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) )
+,   sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,   bInsertHeader( sal_False )
+,   bInsertFooter( sal_False )
+,   bInsertHeaderLeft( sal_False )
+,   bInsertFooterLeft( sal_False )
+,   bHeaderInserted( sal_False )
+,   bFooterInserted( sal_False )
+,   bHeaderLeftInserted( sal_False )
+,   bFooterLeftInserted( sal_False )
 {
     OUString sName, sDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
