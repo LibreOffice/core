@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datalistener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,17 +60,17 @@ namespace svxform
     }
 
     // XContainerListener
-    void SAL_CALL DataListener::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
+    void SAL_CALL DataListener::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    void SAL_CALL DataListener::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
+    void SAL_CALL DataListener::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    void SAL_CALL DataListener::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
+    void SAL_CALL DataListener::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
     }
@@ -86,13 +86,13 @@ namespace svxform
     }
 
     // xml::dom::events::XEventListener
-    void SAL_CALL DataListener::handleEvent( const Reference< XEvent >& evt ) throw (RuntimeException)
+    void SAL_CALL DataListener::handleEvent( const Reference< XEvent >& /*evt*/ ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
     }
 
     // lang::XEventListener
-    void SAL_CALL DataListener::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL DataListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
         DBG_ERRORFILE( "disposing" );
     }
