@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:55:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,13 +132,13 @@ private:
 
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
-        mnLastPercent   ( 0UL ),
-        mnInterlaced    ( 0 ),
         mnCompLevel     ( PNG_DEF_COMPRESSION ),
+        mnInterlaced    ( 0 ),
+        mbStatus        ( TRUE ),
         mpAccess        ( NULL ),
         mpMaskAccess    ( NULL ),
-        mbStatus        ( TRUE ),
-        mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) )
+        mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
+        mnLastPercent   ( 0UL )
 {
     if ( !rBmpEx.IsEmpty() )
     {
@@ -190,7 +190,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 mpAccess = aBmp.AcquireReadAccess();    // TRUE RGB with alphachannel
                 if( mpAccess )
                 {
-                    if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) )
+                    if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) != FALSE )
                     {
                         AlphaMask aMask( rBmpEx.GetAlpha() );
                         mpMaskAccess = aMask.AcquireReadAccess();
@@ -509,7 +509,7 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
                     {
                         ULONG nShift = ( nXIndex & 7 ) ^ 7;
                         if ( nShift == 7)
-                            *pDest = (BYTE) mpAccess->GetPixel( nY, nX ) << nShift;
+                            *pDest = (BYTE)(mpAccess->GetPixel( nY, nX ) << nShift);
                         else if  ( nShift == 0 )
                             *pDest++ |= (BYTE) mpAccess->GetPixel( nY, nX ) << nShift;
                         else
