@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainercontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:15:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,12 +93,12 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
-    Reference< XInterface > xDelegator = BaseControl::impl_getDelegator();
-    if ( xDelegator.is() == sal_True )
+    Reference< XInterface > xDel = BaseControl::impl_getDelegator();
+    if ( xDel.is() == sal_True )
     {
         // If an delegator exist, forward question to his queryInterface.
         // Delegator will ask his own queryAggregation!
-        aReturn = xDelegator->queryInterface( rType );
+        aReturn = xDel->queryInterface( rType );
     }
     else
     {
@@ -205,7 +205,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 //  XControl
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& xModel ) throw( RuntimeException )
+sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException )
 {
     // This object has NO model.
     return sal_False ;
@@ -228,7 +228,7 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( Runt
 
 void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 {
-    // Zuerst der Welt mitteilen, daß der Container wegfliegt. Dieses ist um einiges
+    // Zuerst der Welt mitteilen, daï¿½ der Container wegfliegt. Dieses ist um einiges
     // schneller wenn die Welt sowohl an den Controls als auch am Container horcht
 
     // Ready for multithreading
@@ -592,7 +592,7 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
 //  protected method
 //____________________________________________________________________________________________________________
 
-void BaseContainerControl::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
+void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, const Reference< XGraphics > & /*rGraphics*/ )
 {
 /*
     if (rGraphics.is())
