@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:08:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:16:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace xmloff
         OElementExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents);
-        ~OElementExport();
+        virtual ~OElementExport();
 
         void doExport();
 
