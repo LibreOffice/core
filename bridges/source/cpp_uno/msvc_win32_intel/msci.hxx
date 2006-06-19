@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msci.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:33:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,10 @@
  *
  ************************************************************************/
 
+#pragma warning(push, 1)
 #include <windows.h>
+#pragma warning(pop)
+
 #include "rtl/ustring.hxx"
 
 
@@ -44,7 +47,7 @@ typedef struct _uno_Mapping uno_Mapping;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-const long MSVC_ExceptionCode = 0xe06d7363;
+const DWORD MSVC_ExceptionCode = 0xe06d7363;
 const long MSVC_magic_number = 0x19930520L;
 
 //==============================================================================
