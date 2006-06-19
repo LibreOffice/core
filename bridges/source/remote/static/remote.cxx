@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remote.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:43:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,60 @@
 static MyCounter thisCounter( "DEBUG : Remote2RemoteStub");
 #endif
 
+using namespace bridges_remote;
+
+extern "C" {
+
+static void SAL_CALL thisRelease( remote_Interface *pThis )
+{
+    Remote2RemoteStub *p = ( Remote2RemoteStub * ) pThis;
+     if (! osl_decrementInterlockedCount( &(p->m_nRef) ))
+    {
+        p->m_pEnvRemote->pExtEnv->revokeInterface( p->m_pEnvRemote->pExtEnv, pThis );
+
+    }
+}
+
+static void SAL_CALL thisDispatch(
+    remote_Interface * pRemoteI,
+    typelib_TypeDescription const * pMemberType,
+    void * pReturn,
+    void * pArgs[],
+    uno_Any ** ppException )
+{
+    Remote2RemoteStub *pThis = ( Remote2RemoteStub * ) pRemoteI;
+
+    pThis->m_dispatch( pThis->m_pEnvRemote,
+                       pMemberType,
+                       pThis->m_sOid.pData,
+                       pThis->m_pType,
+                       pReturn,
+                       pArgs,
+                       ppException );
+}
+
+}
+
 namespace bridges_remote {
+
+void acquireRemote2RemoteStub( remote_Interface *pThis )
+{
+    Remote2RemoteStub *p = ( Remote2RemoteStub * ) pThis;
+    if( 1 == osl_incrementInterlockedCount( &(p->m_nRef) ) )
+    {
+        p->m_pEnvRemote->pExtEnv->registerProxyInterface(
+            p->m_pEnvRemote->pExtEnv,
+            (void**)&pThis,
+            freeRemote2RemoteStub,
+            p->m_sOid.pData,
+            p->m_pType );
+        assert( (remote_Interface *)p == pThis );
+    }
+}
+
+void freeRemote2RemoteStub(uno_ExtEnvironment *, void * stub) {
+    delete static_cast< Remote2RemoteStub * >(stub);
+}
 
 Remote2RemoteStub::Remote2RemoteStub( rtl_uString *pOid,
                                       typelib_InterfaceTypeDescription *pType,
@@ -61,7 +114,7 @@ Remote2RemoteStub::Remote2RemoteStub( rtl_uString *pOid,
     typelib_typedescription_acquire( ( typelib_TypeDescription * ) m_pType );
     m_pEnvRemote->acquire( m_pEnvRemote );
 
-    acquire = thisAcquire;
+    acquire = acquireRemote2RemoteStub;
     release = thisRelease;
     pDispatcher = thisDispatch;
 #if OSL_DEBUG_LEVEL > 1
@@ -111,57 +164,9 @@ Remote2RemoteStub::~Remote2RemoteStub()
 #endif
 }
 
-
-void Remote2RemoteStub::thisFree( uno_ExtEnvironment *pEnvUno , void *pThis )
-{
-    delete (Remote2RemoteStub *) pThis;
-}
 void Remote2RemoteStub::releaseRemote()
 {
     osl_incrementInterlockedCount( &m_nReleaseRemote );
-}
-
-void Remote2RemoteStub::thisAcquire( remote_Interface *pThis )
-{
-    Remote2RemoteStub *p = ( Remote2RemoteStub * ) pThis;
-    if( 1 == osl_incrementInterlockedCount( &(p->m_nRef) ) )
-    {
-        p->m_pEnvRemote->pExtEnv->registerProxyInterface(
-            p->m_pEnvRemote->pExtEnv,
-            (void**)&pThis,
-            Remote2RemoteStub::thisFree,
-            p->m_sOid.pData,
-            p->m_pType );
-        assert( (remote_Interface *)p == pThis );
-    }
-}
-
-void Remote2RemoteStub::thisRelease( remote_Interface *pThis )
-{
-    Remote2RemoteStub *p = ( Remote2RemoteStub * ) pThis;
-     if (! osl_decrementInterlockedCount( &(p->m_nRef) ))
-    {
-        p->m_pEnvRemote->pExtEnv->revokeInterface( p->m_pEnvRemote->pExtEnv, pThis );
-
-    }
-}
-
-void Remote2RemoteStub::thisDispatch(
-    remote_Interface * pRemoteI,
-    typelib_TypeDescription * pMemberType,
-    void * pReturn,
-    void * pArgs[],
-    uno_Any ** ppException )
-{
-    Remote2RemoteStub *pThis = ( Remote2RemoteStub * ) pRemoteI;
-
-    pThis->m_dispatch( pThis->m_pEnvRemote,
-                       pMemberType,
-                       pThis->m_sOid.pData,
-                       pThis->m_pType,
-                       pReturn,
-                       pArgs,
-                       ppException );
 }
 
 } // end namespace bridges_remote
