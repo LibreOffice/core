@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 12:14:57 $
+#   last change: $Author: hr $ $Date: 2006-06-19 21:20:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@ PRJ=..$/..
 PRJNAME=svtools
 TARGET=misc
 
+ENABLE_EXCEPTIONS := TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -58,7 +60,7 @@ SRS2NAME=ehdl
 SRC2FILES=\
     errtxt.src
 
-EXCEPTIONSFILES=\
+SLOFILES=\
     $(SLO)$/acceleratorexecute.obj \
     $(SLO)$/cliplistener.obj \
     $(SLO)$/embedhlp.obj \
@@ -70,10 +72,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/transfer.obj			\
     $(SLO)$/transfer2.obj			\
     $(SLO)$/stringtransfer.obj		\
-    $(SLO)$/urihelper.obj
-
-SLOFILES=\
-    $(EXCEPTIONSFILES) \
+    $(SLO)$/urihelper.obj \
     $(SLO)$/ehdl.obj \
     $(SLO)$/flbytes.obj \
     $(SLO)$/helpagentwindow.obj \
