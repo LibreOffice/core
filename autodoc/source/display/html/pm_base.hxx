@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_base.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:34:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,10 @@ class SpecializedPageMaker
     virtual void        Write_NavBar();
     virtual void        Write_TopArea();
     virtual void        Write_DocuArea();
-    virtual void        Write_ChildList(
-                            ary::SlotAccessId   i_nSlot,
-                            const char *        i_nListTitle,
-                            const char *        i_nLabel );
+//    virtual void        Write_ChildList(
+//                            ary::SlotAccessId   i_nSlot,
+//                            const char *        i_nListTitle,
+//                            const char *        i_nLabel );
 
   protected:
                         SpecializedPageMaker(

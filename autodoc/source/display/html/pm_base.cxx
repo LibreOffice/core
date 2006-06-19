@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_base.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:34:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@ SpecializedPageMaker::Write_DocuArea()
      // Dummy
 }
 
-void
-SpecializedPageMaker::Write_ChildList( ary::SlotAccessId   ,
-                                       const char *        ,
-                                       const char *        )
-{
-     // Dummy
-}
+//void
+//SpecializedPageMaker::Write_ChildList( ary::SlotAccessId   ,
+//                                       const char *        ,
+//                                       const char *        )
+//{
+//  // Dummy
+//}
 
 csi::xml::Element &
 SpecializedPageMaker::CurOut()
