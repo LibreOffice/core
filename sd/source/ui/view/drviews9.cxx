@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:28:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,7 +454,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->Get (i);
+                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -514,7 +514,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->Get (i);
+                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -573,7 +573,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
-                            if (pDashList->Get (i)->GetName () == pName->GetValue ())
+                            if (pDashList->GetDash (i)->GetName () == pName->GetValue ())
                                 break;
 
                         if (i < nCounts)
@@ -625,7 +625,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XGradientEntry *pEntry = pGradientList->Get (i);
+                            XGradientEntry *pEntry = pGradientList->GetGradient (i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
@@ -691,7 +691,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XHatchEntry *pEntry = pHatchList->Get (i);
+                            XHatchEntry *pEntry = pHatchList->GetHatch (i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
@@ -742,7 +742,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                               i < nCounts;
                               i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->Get (i);
+                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -776,7 +776,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                               i < nCounts;
                               i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->Get (i);
+                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -893,7 +893,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     {
                         const XLineColorItem &rLineColorItem = (const XLineColorItem &) aAttr.Get (XATTR_LINECOLOR);
 
-                        aColor = rLineColorItem.GetValue ();
+                        aColor = rLineColorItem.GetColorValue ();
                         break;
                     }
 
@@ -901,7 +901,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     {
                         const XFillColorItem &rFillColorItem = (const XFillColorItem &) aAttr.Get (XATTR_FILLCOLOR);
 
-                        aColor = rFillColorItem.GetValue ();
+                        aColor = rFillColorItem.GetColorValue ();
                         break;
                     }
 
@@ -909,7 +909,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     case 4 :
                     {
                         const XFillGradientItem &rFillGradientItem = (const XFillGradientItem &) aAttr.Get (XATTR_FILLGRADIENT);
-                        const XGradient         &rGradient         = rFillGradientItem.GetValue ();
+                        const XGradient         &rGradient         = rFillGradientItem.GetGradientValue ();
 
                         aColor = (rWhatKind.GetValue () == 3)
                                     ? rGradient.GetStartColor ()
@@ -920,7 +920,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     case 5:
                     {
                         const XFillHatchItem &rFillHatchItem = (const XFillHatchItem &) aAttr.Get (XATTR_FILLHATCH);
-                        const XHatch         &rHatch         = rFillHatchItem.GetValue ();
+                        const XHatch         &rHatch         = rFillHatchItem.GetHatchValue ();
 
                         aColor = rHatch.GetColor ();
                         break;
