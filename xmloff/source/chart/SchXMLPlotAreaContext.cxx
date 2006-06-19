@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:26:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,8 +158,6 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
         mrCategoriesAddress( rCategoriesAddress ),
-        mrChartAddress( rChartAddress ),
-        mrTableNumberList( rTableNumberList ),
         mnDomainOffset( 0 ),
         mnNumOfLines( 0 ),
         mbStockHasVolume( sal_False ),
@@ -167,7 +165,9 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         mnMaxSeriesLength( 0 ),
         maSceneImportHelper( rImport ),
         mbSetDiagramSize( false ),
-        mbSetDiagramPosition( false )
+        mbSetDiagramPosition( false ),
+        mrChartAddress( rChartAddress ),
+        mrTableNumberList( rTableNumberList )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
@@ -324,7 +324,6 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
 
     sal_Bool bColHasLabels = sal_False;
@@ -550,6 +549,10 @@ void SchXMLPlotAreaContext::EndElement()
                                         OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                       "DataErrorProperties" )));
                                     break;
+                                case ::chartxml::DataRowPointStyle::DATA_POINT:
+                                case ::chartxml::DataRowPointStyle::DATA_SERIES:
+                                    // nothing
+                                    break;
                             }
                             aAny >>= xProp;
                         }
@@ -691,6 +694,7 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             }
             break;
         case SCH_XML_AXIS_Z:
+        {
             uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
             if( xSuppl.is())
             {
@@ -698,6 +702,10 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
                     xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasZAxisTitle" ), aTrueBool );
                 xResult = uno::Reference< drawing::XShape >( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
             }
+            break;
+        }
+        case SCH_XML_AXIS_UNDEF:
+            DBG_ERROR( "Invalid axis" );
             break;
     }
 
@@ -771,6 +779,9 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
                 }
             }
             break;
+        case SCH_XML_AXIS_UNDEF:
+            DBG_ERROR( "Invalid axis" );
+            break;
     }
 
     // enable grid
@@ -812,7 +823,6 @@ void SchXMLAxisContext::StartElement( const uno::Reference< xml::sax::XAttribute
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
     SchXMLImport& rImport = ( SchXMLImport& )GetImport();
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetAxisAttrTokenMap();
 
@@ -1044,6 +1054,9 @@ void SchXMLAxisContext::EndElement()
                 }
             }
             break;
+        case SCH_XML_AXIS_UNDEF:
+            // nothing
+            break;
     }
 
     // set properties
@@ -1066,14 +1079,14 @@ void SchXMLAxisContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
-    USHORT nPrefix,
+    USHORT p_nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetAxisElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    switch( rTokenMap.Get( p_nPrefix, rLocalName ))
     {
         case XML_TOK_AXIS_TITLE:
         {
@@ -1088,7 +1101,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
 
         case XML_TOK_AXIS_CATEGORIES:
             pContext = new SchXMLCategoriesDomainContext( mrImportHelper, GetImport(),
-                                                          nPrefix, rLocalName,
+                                                          p_nPrefix, rLocalName,
                                                           mrCategoriesAddress );
             break;
 
@@ -1119,12 +1132,12 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             CreateGrid( sAutoStyleName, bIsMajor );
 
             // don't create a context => use default context. grid elements are empty
-            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+            pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
         }
         break;
 
         default:
-            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+            pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
             break;
     }
 
@@ -1146,18 +1159,19 @@ SchXMLSeriesContext::SchXMLSeriesContext(
     sal_Int32& rNumOfLines,
     sal_Bool&  rStockHasVolume ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+        mrImportHelper( rImpHelper ),
         mxDiagram( xDiagram ),
         mrAxes( rAxes ),
-        mrImportHelper( rImpHelper ),
         mrSeriesAddress( rSeriesAddress ),
         mrStyleList( rStyleList ),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
+        mrMaxSeriesLength( rMaxSeriesLength ),
         mrDomainOffset( rDomainOffset ),
         mrNumOfLines( rNumOfLines ),
         mrStockHasVolume( rStockHasVolume ),
-        mrMaxSeriesLength( rMaxSeriesLength ),
-        mpAttachedAxis( NULL )
+        mpAttachedAxis( NULL ),
+        mnAttachedAxis( 0 )
 {
 }
 
@@ -1169,7 +1183,6 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    ::rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetSeriesAttrTokenMap();
     mnAttachedAxis = 1;
 
@@ -1252,7 +1265,7 @@ void SchXMLSeriesContext::EndElement()
 SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetSeriesElemTokenMap();
@@ -1541,8 +1554,8 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
-        mnSeriesIndex( nSeries ),
         mrStyleList( rStyleList ),
+        mnSeriesIndex( nSeries ),
         meContextType( eContextType )
 {}
 
@@ -1555,7 +1568,6 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     ::rtl::OUString aValue;
     ::rtl::OUString sAutoStyleName;
-    sal_Int32 nRepeat = 1;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
