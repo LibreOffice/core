@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refvaluecomponent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:24:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace frm
 {
 //........................................................................
 
-    enum state { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
+    enum CheckState { STATE_NOCHECK = 0, STATE_CHECK = 1, STATE_DONTKNOW = 2 };
 
     //====================================================================
     //= OReferenceValueComponent
@@ -61,7 +61,7 @@ namespace frm
         // <properties>
         ::rtl::OUString     m_sReferenceValue;          // the reference value to use for data exchange
         ::rtl::OUString     m_sNoCheckReferenceValue;   // the reference value to be exchanged when the control is not checked
-        sal_Int16           m_nDefaultChecked;          // the default check state
+        CheckState          m_eDefaultChecked;          // the default check state
         // </properties>
 
         sal_Bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
@@ -82,8 +82,8 @@ namespace frm
         const ::rtl::OUString& getNoCheckReferenceValue() const { return m_sNoCheckReferenceValue; }
         void                   setNoCheckReferenceValue( const ::rtl::OUString& _rNoCheckRefValue );
 
-        sal_Int16              getDefaultChecked() const { return m_nDefaultChecked; }
-        void                   setDefaultChecked( sal_Int16 _nChecked ) { m_nDefaultChecked = _nChecked; }
+        CheckState             getDefaultChecked() const { return m_eDefaultChecked; }
+        void                   setDefaultChecked( CheckState _eChecked ) { m_eDefaultChecked = _eChecked; }
 
     protected:
         OReferenceValueComponent(
@@ -106,6 +106,7 @@ namespace frm
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
         virtual void            onConnectedExternalValue( );
