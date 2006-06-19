@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapping.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:41:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,16 @@ struct _typelib_InterfaceTypeDescription;
 struct _uno_Mapping;
 struct _uno_Environment;
 
+/**
+   Function pointer declaration to acquire a UNO mapping.
+*/
+typedef void (SAL_CALL * uno_AcquireMappingFunc)(struct _uno_Mapping *);
+
+/**
+   Function pointer declaration to release a UNO mapping.
+*/
+typedef void (SAL_CALL * uno_ReleaseMappingFunc)(struct _uno_Mapping *);
+
 /** Function pointer declaration to map an interface from one environment to another.
 
     @param pMapping         mapping
@@ -76,15 +86,12 @@ typedef void (SAL_CALL * uno_MapInterfaceFunc)(
 typedef struct _uno_Mapping
 {
     /** Acquires mapping
-
-        @param pMapping     mapping
     */
-    void (SAL_CALL * acquire)( struct _uno_Mapping * pMapping );
+    uno_AcquireMappingFunc acquire;
+
     /** Releases mapping. The last release may unload bridges.
-
-        @param pMapping     mapping
     */
-    void (SAL_CALL * release)( struct _uno_Mapping * pMapping );
+    uno_ReleaseMappingFunc release;
 
     /** mapping function
     */
