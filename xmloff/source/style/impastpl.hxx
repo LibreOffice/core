@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:43:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,10 @@ public:
             const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
 
     XMLFamilyData_Impl( sal_Int32 nFamily ) :
+        pCache( 0 ),
         mnFamily( nFamily ), mpParentList( NULL ),
-        mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
-        pCache( 0 )
+        mpNameList( NULL ), mnCount( 0 ), mnName( 0 )
+
     {}
     ~XMLFamilyData_Impl();
 
