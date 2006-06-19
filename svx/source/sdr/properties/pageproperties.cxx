@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pageproperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:15:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ namespace sdr
             return *mpEmptyItemSet;
         }
 
-        void PageProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+        void PageProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
             // #86481# simply ignore item setting on page objects
         }
@@ -106,7 +106,7 @@ namespace sdr
             return 0L;
         }
 
-        void PageProperties::ClearObjectItem(const sal_uInt16 nWhich)
+        void PageProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
             // simply ignore item clearing on page objects
         }
