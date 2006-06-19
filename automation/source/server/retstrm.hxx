@@ -4,9 +4,9 @@
  *
  *  $RCSfile: retstrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:58:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:23:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,12 @@ public:
     RetStream();
     ~RetStream();
 
-//  CmdBaseStream::GenError;
+    using CmdBaseStream::GenError;
 //    void GenError( comm_ULONG nError, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenError( nError, aString, nLenInChars );}
 //  new
     void GenError( SmartId aUId, String aString );
 
-//  CmdBaseStream::GenReturn;
+    using CmdBaseStream::GenReturn;
     void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
@@ -79,7 +79,7 @@ public:
 
 
 
-//  CmdBaseStream::Write;
+    using CmdBaseStream::Write;
     void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
