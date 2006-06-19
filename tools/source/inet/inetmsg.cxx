@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:08:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1014,8 +1014,8 @@ enum _ImplINetMIMEMessageHeaderState
  */
 INetMIMEMessage::INetMIMEMessage (void)
     : INetRFC822Message (),
-      nNumChildren  (0),
       pParent       (NULL),
+      nNumChildren  (0),
       bHeaderParsed (FALSE)
 {
     for (USHORT i = 0; i < INETMSG_MIME_NUMHDR; i++)
@@ -1390,7 +1390,9 @@ BOOL INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
         // Generate a unique boundary from current time.
         sal_Char sTail[16 + 1];
         Time aCurTime;
-        sprintf (sTail, "%08X%08X", aCurTime.GetTime(), (ULONG)this);
+        sprintf (sTail, "%08X%08X",
+                 static_cast< unsigned int >(aCurTime.GetTime()),
+                 reinterpret_cast< unsigned int >(this));
         m_aBoundary = "------------_4D48";
         m_aBoundary += sTail;
 
@@ -1576,7 +1578,7 @@ BOOL INetMIMEMessage::DetachChild (
                 {
                     // Bytes still in buffer. Put message down-stream.
                     int status = pMsgStrm->Write (
-                        pMsgBuffer, (pMsgRead - pMsgWrite), NULL);
+                        pMsgBuffer, (pMsgRead - pMsgWrite));
                     if (status != INETSTREAM_STATUS_OK)
                     {
                         // Cleanup.
