@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:34:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ XMLEmbeddedObjectImportContext_Impl::~XMLEmbeddedObjectImportContext_Impl()
 SvXMLImportContext *XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
         USHORT nPrefix,
         const OUString& rLocalName,
-        const Reference< XAttributeList >& xAttrList )
+        const Reference< XAttributeList >& )
 {
     return new XMLEmbeddedObjectImportContext_Impl( GetImport(),
                                                     nPrefix, rLocalName,
@@ -284,6 +284,8 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
                     case XML_DRAWING:       aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
                     case XML_PRESENTATION:  aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
                     case XML_CHART:         aName = SvGlobalName(SO3_SCH_CLASSID); break;
+                    default:
+                        break;
                     }
 
                     break;
@@ -302,7 +304,7 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext::CreateChildContext(
         USHORT nPrefix, const OUString& rLocalName,
-        const Reference< XAttributeList >& xAttrList )
+        const Reference< XAttributeList >& )
 {
     if( xHandler.is() )
         return new XMLEmbeddedObjectImportContext_Impl( GetImport(),
