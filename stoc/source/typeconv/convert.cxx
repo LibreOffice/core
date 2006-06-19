@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:14:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -636,9 +636,14 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
             sal_uInt32 nPos = (*(const uno_Sequence * const *)rVal.getValue())->nElements;
             uno_Sequence * pRet = 0;
-            uno_sequence_construct( &pRet, aDestTD.get(), 0, nPos, cpp_acquire );
+            uno_sequence_construct(
+                &pRet, aDestTD.get(), 0, nPos,
+                reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
             aRet.setValue( &pRet, aDestTD.get() );
-            uno_destructData( &pRet, aDestTD.get(), cpp_release ); // decr ref count
+            uno_destructData(
+                &pRet, aDestTD.get(),
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
+                // decr ref count
 
             char * pDestElements = (*(uno_Sequence * const *)aRet.getValue())->elements;
             const char * pSourceElements =
@@ -652,12 +657,19 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                 Any aElement(
                     convertTo( Any( pSourcePos, pSourceElementTD ), pDestElementTD->pWeakRef ) );
 
-                sal_Bool bSucc = uno_assignData(
-                    pDestPos, pDestElementTD,
-                    (pDestElementTD->eTypeClass == typelib_TypeClass_ANY
-                     ? &aElement : const_cast< void * >( aElement.getValue() )),
-                    pDestElementTD, cpp_queryInterface, cpp_acquire, cpp_release );
-                OSL_ASSERT( bSucc );
+                if (!uno_assignData(
+                        pDestPos, pDestElementTD,
+                        (pDestElementTD->eTypeClass == typelib_TypeClass_ANY
+                         ? &aElement
+                         : const_cast< void * >( aElement.getValue() )),
+                        pDestElementTD,
+                        reinterpret_cast< uno_QueryInterfaceFunc >(
+                            cpp_queryInterface),
+                        reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                        reinterpret_cast< uno_ReleaseFunc >(cpp_release) ))
+                {
+                    OSL_ASSERT( false );
+                }
             }
             TYPELIB_DANGER_RELEASE( pDestElementTD );
             TYPELIB_DANGER_RELEASE( pSourceElementTD );
@@ -749,6 +761,8 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         throw IllegalArgumentException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("destination type is not simple!") ),
             Reference< XInterface >(), (sal_Int16) 1 );
+    default:
+        break;
     }
 
     Type aSourceType = rVal.getValueType();
@@ -921,6 +935,11 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         default:
             aRet <<= OUString::valueOf( toDouble( rVal ) );
         }
+        break;
+
+    default:
+        OSL_ASSERT(false);
+        break;
     }
 
     if (aRet.hasValue())
@@ -967,7 +986,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
