@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,23 +253,23 @@ BOOL E3dPolyScene::LocalPaint3D(XOutputDevice& rOut,
             static BOOL bDoDrawClipBoundForTesting(FALSE);
             if(bDoDrawClipBoundForTesting)
             {
-                OutputDevice* pOut = rOut.GetOutDev();
+                OutputDevice* pTempOut = rOut.GetOutDev();
 
                 // red
-                pOut->SetLineColor(Color(COL_RED));
-                pOut->SetFillColor();
-                pOut->DrawRect(aClipBound);
+                pTempOut->SetLineColor(Color(COL_RED));
+                pTempOut->SetFillColor();
+                pTempOut->DrawRect(aClipBound);
 
-                Rectangle aClipBoundPixel = pOut->LogicToPixel(aClipBound);
-                BOOL bWasEnabled = pOut->IsMapModeEnabled();
-                pOut->EnableMapMode(FALSE);
+                Rectangle aClipBoundPixel = pTempOut->LogicToPixel(aClipBound);
+                BOOL bWasEnabled = pTempOut->IsMapModeEnabled();
+                pTempOut->EnableMapMode(FALSE);
 
                 // GREEN
-                pOut->SetLineColor(Color(COL_GREEN));
-                pOut->SetFillColor();
-                pOut->DrawRect(aClipBoundPixel);
+                pTempOut->SetLineColor(Color(COL_GREEN));
+                pTempOut->SetFillColor();
+                pTempOut->DrawRect(aClipBoundPixel);
 
-                pOut->EnableMapMode(bWasEnabled);
+                pTempOut->EnableMapMode(bWasEnabled);
             }
 #endif
         }
@@ -354,7 +354,7 @@ BOOL E3dPolyScene::LocalPaint3D(XOutputDevice& rOut,
 \************************************************************************/
 
 void E3dPolyScene::DrawPolySceneClip(XOutputDevice& rOut,
-    const E3dObject* p3DObj, Base3D* pBase3D, const SdrPaintInfoRec& rInfoRec)
+    const E3dObject* /*p3DObj*/, Base3D* pBase3D, const SdrPaintInfoRec& rInfoRec)
 {
     // spezielles Clipping fuer OpenGL, um keine floating windows ueberzumalen
     OutputDevice* pOut = rOut.GetOutDev();
