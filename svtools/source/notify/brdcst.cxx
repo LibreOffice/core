@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdcst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,13 @@
 #include "smplhint.hxx"
 #include "lstner.hxx"
 
-SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0, 2 );
+SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0, 2 )
 
 #define _SFX_BRDCST_CXX
 #include "brdcst.hxx"
 
 //====================================================================
-DBG_NAME(SfxBroadcaster);
+DBG_NAME(SfxBroadcaster)
 TYPEINIT0(SfxBroadcaster);
 
 //====================================================================
@@ -67,16 +67,22 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
     // is anybody to notify?
     if ( aListeners.Count() /*! || aGlobListeners.Count() */ )
     {
+        #if 0
         // determine the type only once, because of its expensiveness
         const TypeId& rBCType = Type();
         const TypeId& rHintType = rHint.Type();
+        #endif
 
         // notify all registered listeners exactly once
         for ( USHORT n = 0; n < aListeners.Count(); ++n )
         {
             SfxListener* pListener = aListeners[n];
             if ( pListener )
+                #if 0
                 pListener->SFX_NOTIFY( *this, rBCType, rHint, rHintType );
+                #else
+                pListener->Notify( *this, rHint );
+                #endif
         }
     }
 }
