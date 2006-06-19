@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendedsecurityoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:48:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -316,7 +314,7 @@ SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
+void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     // Not implemented
 }
@@ -411,9 +409,6 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
     // Get sequence with secure extensions from configuration
     Sequence< OUString >    seqNodes = GetNodeNames( m_aSecureExtensionsSetName );
 
-    Any                     a;
-    OUString                aExtEntryProp;
-    OUString                aExtEntry;
     OUString                aValue;
     Sequence< Any >         aValues;
     Sequence< OUString >    aPropSeq( 1 );
@@ -477,7 +472,7 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-       RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtExtendedSecurityOptions_Impl::ctor()");
+       RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtExtendedSecurityOptions_Impl::ctor()");
        m_pDataContainer = new SvtExtendedSecurityOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_EXTENDEDSECURITYOPTIONS);
