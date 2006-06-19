@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocale.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:04:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
 }
 
 
-void SvtSysLocale_Impl::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
+void SvtSysLocale_Impl::Notify( SvtBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* p = PTR_CAST( SfxSimpleHint, &rHint );
     if( p && (p->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE) )
