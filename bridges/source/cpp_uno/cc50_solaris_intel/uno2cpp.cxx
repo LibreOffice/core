@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:21:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ static inline void cpp_call(
 
       void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
-    long return_buffer[64];
     void * pReturnSpace = 0;
 
     if (pReturnTypeDescr)
@@ -244,7 +243,9 @@ static inline void cpp_call(
                                         pThis->getBridge()->getCpp2Uno() );
             }
             // destroy temp cpp param => cpp: every param was constructed
-            uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+            uno_destructData(
+                pCppArgs[nIndex], pParamTypeDescr,
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
 
             if (bAllocated)
                 rtl_freeMemory( pCppArgs[nIndex] );
@@ -255,7 +256,9 @@ static inline void cpp_call(
         {
             uno_copyAndConvertData( pUnoReturn, pCppReturn, pReturnTypeDescr,
                                     pThis->getBridge()->getCpp2Uno() );
-            uno_destructData( pCppReturn, pReturnTypeDescr, cpp_release );
+            uno_destructData(
+                pCppReturn, pReturnTypeDescr,
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
         }
      }
      catch( ... )
@@ -275,7 +278,9 @@ static inline void cpp_call(
             sal_Bool bAllocated = (nIndex & 0x80000000) != 0;
             nIndex &= 0x7fffffff;
             // destroy temp cpp param => cpp: every param was constructed
-            uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
+            uno_destructData(
+                pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes],
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
             if (bAllocated)
                 rtl_freeMemory( pCppArgs[nIndex] );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
@@ -293,10 +298,11 @@ static inline void cpp_call(
 
 }
 
-//==================================================================================================
-void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
+namespace bridges { namespace cpp_uno { namespace shared {
+
+void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
@@ -414,3 +420,4 @@ void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
     }
 }
 
+} } }
