@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogaltheme.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:14:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
 
 // ------------------------------------------------------------------------------
 
-void GalleryTheme::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
     const GalleryHint&  rGalleryHint = static_cast< const GalleryHint& >( rHint );
