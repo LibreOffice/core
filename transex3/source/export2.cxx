@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:26:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,27 +99,11 @@ ByteString Export::sForcedLanguages;
 ByteString Export::sIsoCode99;
 /*****************************************************************************/
 
-
-/*****************************************************************************/
-USHORT Export::GetLangIndex( USHORT nLangId )
-/*****************************************************************************/
-{
-    // removeme
-    return 0xFFFF;
-}
-
-/*****************************************************************************/
-CharSet Export::GetCharSet( USHORT nLangId )
-/*****************************************************************************/
-{
-    return 0;
-}
-
 void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
     printf( "%s\n", sListName.GetBuffer() );
     ByteString l("");
     ExportListEntry* aEntry;
-    for( int x = 0; x < aList.Count() ; x++ ){
+    for( unsigned int x = 0; x < aList.Count() ; x++ ){
         aEntry = (ExportListEntry*) aList.GetObject( x );
         Export::DumpMap( l , *aEntry );
     }
@@ -142,15 +126,6 @@ ByteString Export::DumpMap( ByteString& sMapName , ByteStringHashMap& aMap ){
     return sReturn;
 }
 /*****************************************************************************/
-USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
-/*****************************************************************************/
-{
-    // removeme
-    ByteString sLang( rIsoLang );
-    sLang.ToUpperAscii();
-    return 0xFFFF;
-}
-/*****************************************************************************/
 void Export::SetLanguages( std::vector<ByteString> val ){
 /*****************************************************************************/
     aLanguages = val;
@@ -169,20 +144,12 @@ std::vector<ByteString> Export::GetForcedLanguages(){
 std::vector<ByteString> Export::aLanguages       = std::vector<ByteString>();
 std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
 
-/*****************************************************************************/
-ByteString Export::GetIsoLangByIndex( USHORT nIndex )
-/*****************************************************************************/
-{
-// remove me
-    return "";
-}
 
 /*****************************************************************************/
 void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    BOOL bBreak = FALSE;
     for ( USHORT i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
@@ -237,7 +204,12 @@ void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
 
 bool Export::hasUTF8ByteOrderMarker( const ByteString &rString ){
     // Byte order marker signature
-    const char bom[ 3 ] = { 0xEF , 0xBB , 0xBF };
+
+    const unsigned char c1 =  0xEF;
+    const unsigned char c2 =  0xBB;
+    const unsigned char c3 =  0xBF;
+
+    const char bom[ 3 ] = { c1 , c2 , c3 };
 
     return      rString.Len() >= 3 &&
                 rString.GetChar( 0 ) == bom[ 0 ] &&
@@ -340,7 +312,7 @@ void Export::UnquotHTML( ByteString &rString )
     }
     rString = sReturn;
 }
-bool Export::isAllowed( ByteString &sLanguage ){
+bool Export::isAllowed( const ByteString &sLanguage ){
     // CAREFUL, ONLY MERGE SOURCE LANGUAGES IF YOUR KNOW WHAT YOU DO!!!
 #ifdef MERGE_SOURCE_LANGUAGES
     return true;
@@ -405,7 +377,7 @@ void Export::FillInFallbacks( ResData *pResData )
 /*****************************************************************************/
 {
     ByteString sCur;
-    for( long int n = 0; n < aLanguages.size(); n++ ){
+    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
         if( isAllowed( sCur )  ){
         //if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
@@ -475,8 +447,8 @@ ByteString Export::GetTimeStamp()
     char buf[20];
     Time aTime;
 
-    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", Date().GetDate(),
-        aTime.GetHour(), aTime.GetMin(), aTime.GetSec());
+    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", int(Date().GetDate()),
+        int(aTime.GetHour()), int(aTime.GetMin()), int(aTime.GetSec()));
     return ByteString(buf);
 }
 
