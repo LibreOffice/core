@@ -4,9 +4,9 @@
  *
  *  $RCSfile: session.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:41:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,7 @@ static Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
     return aRet;
 }
 
-static Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XMultiServiceFactory > & xMultiServiceFactory )
+static Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->xSMClient.is() )
@@ -383,12 +383,12 @@ extern "C" {
 
     VCL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName,
-        uno_Environment** ppEnv )
+        uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    VCL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pXUnoKey )
+    VCL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pXUnoKey )
     {
         if( pXUnoKey )
         {
@@ -414,7 +414,7 @@ extern "C" {
     VCL_DLLPUBLIC void* SAL_CALL component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
-        void* pXUnoKey
+        void* /*pXUnoKey*/
         )
     {
         void* pRet = 0;
