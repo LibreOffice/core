@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:15:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ namespace sdr
         {
         }
 
-        BaseProperties::BaseProperties(const BaseProperties& rProps, SdrObject& rObj)
+        BaseProperties::BaseProperties(const BaseProperties& /*rProps*/, SdrObject& rObj)
         :   mrObject(rObj)
         {
         }
@@ -103,25 +103,25 @@ namespace sdr
             ClearObjectItem(nWhich);
         }
 
-        void BaseProperties::Scale(const Fraction& rScale)
+        void BaseProperties::Scale(const Fraction& /*rScale*/)
         {
             // default implementation does nothing; overload where
             // an ItemSet is implemented.
         }
 
-        void BaseProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
+        void BaseProperties::MoveToItemPool(SfxItemPool* /*pSrcPool*/, SfxItemPool* /*pDestPool*/, SdrModel* /*pNewModel*/)
         {
             // Move properties to a new ItemPool. Default implementation does nothing.
             // Overload where an ItemSet is implemented.
         }
 
-        void BaseProperties::SetModel(SdrModel* pOldModel, SdrModel* pNewModel)
+        void BaseProperties::SetModel(SdrModel* /*pOldModel*/, SdrModel* /*pNewModel*/)
         {
             // Set new model. Default implementation does nothing.
             // Overload where an ItemSet is implemented.
         }
 
-        void BaseProperties::ForceStyleToHardAttributes(sal_Bool bPseudoSheetsOnly)
+        void BaseProperties::ForceStyleToHardAttributes(sal_Bool /*bPseudoSheetsOnly*/)
         {
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style. Default implementation does nothing.
