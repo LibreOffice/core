@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:22:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:55:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,9 @@ ShapeTypeHandler* ShapeTypeHandler::instance = NULL;
 // Create an empty reference to an accessible object.
 AccessibleShape*
     CreateEmptyShapeReference (
-        const AccessibleShapeInfo& rShapeInfo,
-        const AccessibleShapeTreeInfo& rShapeTreeInfo,
-        ShapeTypeId nId)
+        const AccessibleShapeInfo& /*rShapeInfo*/,
+        const AccessibleShapeTreeInfo& /*rShapeTreeInfo*/,
+        ShapeTypeId /*nId*/)
 {
     return NULL;
 }
@@ -182,16 +182,6 @@ ShapeTypeHandler::ShapeTypeHandler (void)
 
 
 
-ShapeTypeHandler::ShapeTypeHandler (const ShapeTypeHandler& aHandler)
-{
-    // Don't call this constructor.  This class is a singleton.
-    OSL_ENSURE (sal_False, "Wrong (copy-) constructor of singleton ShapeTypeHandler called."
-        "  Don't do that again.");
-}
-
-
-
-
 ShapeTypeHandler::~ShapeTypeHandler (void)
 {
     //  Because this class is a singleton and the only instance, whose
@@ -200,17 +190,6 @@ ShapeTypeHandler::~ShapeTypeHandler (void)
     //  getInstance do not return an undefined object but create a new
     //  singleton.
     instance = NULL;
-}
-
-
-
-
-ShapeTypeHandler& ShapeTypeHandler::operator= (const ShapeTypeHandler& aHandler)
-{
-    // Don't call this operator.  This class is a singleton.
-    OSL_ENSURE (sal_False, "Assignment operator of singleton ShapeTypeHandler called."
-        "  Don't do that again.");
-    return *this;
 }
 
 
@@ -229,7 +208,10 @@ bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
 
     for (int i=0; i<nDescriptorCount; i++)
     {
+    #if OSL_DEBUG_LEVEL > 0
         ShapeTypeId nId (aDescriptorList[i].mnShapeTypeId);
+        (void)nId;
+    #endif
 
         // Fill Type descriptor.
         maShapeTypeDescriptorList[nFirstId+i].mnShapeTypeId = aDescriptorList[i].mnShapeTypeId;
