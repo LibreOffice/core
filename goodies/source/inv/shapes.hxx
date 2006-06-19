@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ struct Munition_Impl
     Rectangle   aKoll;
 };
 
-DECLARE_LIST(MunitionListe,Munition_Impl*);
+DECLARE_LIST(MunitionListe,Munition_Impl*)
 
 class Munition : public MunitionListe
 {
@@ -133,7 +133,7 @@ struct Bombe_Impl
     BOOL            bDelete;
 };
 
-DECLARE_LIST(BombenListe, Bombe_Impl*);
+DECLARE_LIST(BombenListe, Bombe_Impl*)
 
 class Bombe : public BombenListe
 {
@@ -169,7 +169,7 @@ struct Wall_Impl
     WallMode        eMode;
 };
 
-DECLARE_LIST(WallListe, Wall_Impl*);
+DECLARE_LIST(WallListe, Wall_Impl*)
 
 class Wall : public WallListe
 {
