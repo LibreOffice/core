@@ -4,9 +4,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:12:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ inline bool SocketPermission::resolveHost() const SAL_THROW( () )
         SocketAddr addr;
         SocketAddr::resolveHostname( m_host, addr );
         OUString ip;
-        m_resolveErr = (::osl_Socket_E_None != ::osl_getDottedInetAddrOfSocketAddr(
+        m_resolveErr = (::osl_Socket_Ok != ::osl_getDottedInetAddrOfSocketAddr(
             addr.getHandle(), &ip.pData ));
         if (m_resolveErr)
             return false;
@@ -543,7 +543,6 @@ PermissionCollection::PermissionCollection(
             buf.append( perm_type.getTypeName() );
             throw RuntimeException(
                 buf.makeStringAndClear(), Reference< XInterface >() );
-            OSL_ASSERT( 0 );
         }
     }
 }
@@ -601,7 +600,6 @@ static void throwAccessControlException(
     buf.append( perm.toString() );
     throw security::AccessControlException(
         buf.makeStringAndClear(), Reference< XInterface >(), demanded_perm );
-    OSL_ASSERT( 0 );
 }
 //==================================================================================================
 void PermissionCollection::checkPermission( Any const & perm ) const
@@ -670,7 +668,6 @@ void PermissionCollection::checkPermission( Any const & perm ) const
         buf.append( demanded_type.getTypeName() );
         throw RuntimeException(
             buf.makeStringAndClear(), Reference< XInterface >() );
-        OSL_ASSERT( 0 );
     }
 }
 
