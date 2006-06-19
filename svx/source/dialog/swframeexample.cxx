@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swframeexample.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:09:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-
-#pragma hdrstop
 
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
@@ -80,14 +78,14 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
 
     Window(pParent, rResID),
 
-    nAnchor     (TextContentAnchorType_AT_PAGE),
     nHAlign     (HoriOrientation::CENTER),
     nHRel       (RelOrientation::FRAME),
     nVAlign     (VertOrientation::TOP),
     nVRel       (RelOrientation::PRINT_AREA),
-    aRelPos     (Point(0,0)),
     nWrap       (WrapTextMode_NONE),
-    bTrans      (FALSE)
+    nAnchor     (TextContentAnchorType_AT_PAGE),
+    bTrans      (FALSE),
+    aRelPos     (Point(0,0))
 {
     InitColors_Impl();
     SetMapMode(MAP_PIXEL);
@@ -486,7 +484,6 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
     if (nAnchor == TextContentAnchorType_AT_FRAME && &rRect == &aPagePrtArea)
     {
         // Testabsatz zeichnen
-        const long nTxtLineHeight = aTextLine.GetHeight();
         Rectangle aTxt(aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
         USHORT nLines = (USHORT)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
@@ -503,7 +500,7 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
     return aRect;
 }
 
-void SvxSwFrameExample::Paint(const Rectangle &rRect)
+void SvxSwFrameExample::Paint(const Rectangle&)
 {
     InitAllRects_Impl();
 
