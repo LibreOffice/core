@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:04:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ TYPEINIT1( XMLTextFrameDescContext_Impl, SvXMLImportContext );
 XMLTextFrameDescContext_Impl::XMLTextFrameDescContext_Impl(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        const Reference< XAttributeList > &,
         OUString& rD  ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rDesc( rD )
@@ -265,7 +265,7 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
           const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-        sal_uInt16 nType,
+        sal_uInt16 /*nType*/,
         ParamMap &rParamMap):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -546,9 +546,9 @@ public:
 
 TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
 
-void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
+void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 {
-    UniReference < XMLTextImportHelper > xTxtImport =
+    UniReference < XMLTextImportHelper > xTextImportHelper =
         GetImport().GetTextImport();
 
     switch ( nType)
@@ -665,14 +665,14 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
         {
             OUString sOldName( sName );
             sal_Int32 i = 0;
-            while( xTxtImport->HasFrameByName( sName ) )
+            while( xTextImportHelper->HasFrameByName( sName ) )
             {
                 sName = sOldName;
                 sName += OUString::valueOf( ++i );
             }
             xNamed->setName( sName );
             if( sName != sOldName )
-                xTxtImport->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
+                xTextImportHelper->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
                                              sOldName, sName );
         }
     }
@@ -681,7 +681,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
     XMLPropStyleContext *pStyle = 0;
     if( sStyleName.getLength() )
     {
-        pStyle = xTxtImport->FindAutoFrameStyle( sStyleName );
+        pStyle = xTextImportHelper->FindAutoFrameStyle( sStyleName );
         if( pStyle )
             sStyleName = pStyle->GetParentName();
     }
@@ -692,7 +692,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
         OUString sDisplayStyleName( GetImport().GetStyleDisplayName(
                             XML_STYLE_FAMILY_SD_GRAPHICS_ID, sStyleName ) );
         const Reference < XNameContainer > & rStyles =
-            xTxtImport->GetFrameStyles();
+            xTextImportHelper->GetFrameStyles();
         if( rStyles.is() &&
             rStyles->hasByName( sDisplayStyleName ) )
         {
@@ -831,7 +831,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
         XML_TEXT_FRAME_FLOATING_FRAME != nType)
     {
         Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-        xTxtImport->InsertTextContent( xTxtCntnt );
+        xTextImportHelper->InsertTextContent( xTxtCntnt );
     }
 
     Reference < XShape > xShape( xPropSet, UNO_QUERY );
@@ -850,18 +850,18 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
 
     if( XML_TEXT_FRAME_TEXTBOX == nType )
     {
-        xTxtImport->ConnectFrameChains( sName, sNextName, xPropSet );
+        xTextImportHelper->ConnectFrameChains( sName, sNextName, xPropSet );
         Reference < XTextFrame > xTxtFrame( xPropSet, UNO_QUERY );
         Reference < XText > xTxt = xTxtFrame->getText();
-        xOldTextCursor = xTxtImport->GetCursor();
-        xTxtImport->SetCursor( xTxt->createTextCursor() );
+        xOldTextCursor = xTextImportHelper->GetCursor();
+        xTextImportHelper->SetCursor( xTxt->createTextCursor() );
 
         // remember old list item and block (#89892#) and reset them
         // for the text frame
-        xListBlock = xTxtImport->GetListBlock();
-        xListItem = xTxtImport->GetListItem();
-        xTxtImport->SetListBlock( NULL );
-        xTxtImport->SetListItem( NULL );
+        xListBlock = xTextImportHelper->GetListBlock();
+        xListItem = xTextImportHelper->GetListItem();
+        xTextImportHelper->SetListBlock( NULL );
+        xTextImportHelper->SetListItem( NULL );
     }
 }
 
@@ -886,32 +886,32 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         const Reference< XAttributeList > & rAttrList,
         TextContentAnchorType eATyp,
         sal_uInt16 nNewType,
-        const Reference< XAttributeList > & rFrameAttrList ) :
-    nType( nNewType ),
-    eAnchorType( eATyp ),
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    sWidth(RTL_CONSTASCII_USTRINGPARAM("Width")),
-    sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth")),
-    sHeight(RTL_CONSTASCII_USTRINGPARAM("Height")),
-    sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight")),
-    sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType")),
-    sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight")),
-    sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth")),
-    sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
-    sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")),
-    sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
-    sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")),
-    sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
-    sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
-    sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
-    sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")),
-    sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter")),
-    sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
-    sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
-    sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
-    sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
-    sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject")),
-    sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
+        const Reference< XAttributeList > & rFrameAttrList )
+:   SvXMLImportContext( rImport, nPrfx, rLName )
+,   sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
+,   sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
+,   sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
+,   sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"))
+,   sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"))
+,   sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType"))
+,   sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight"))
+,   sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth"))
+,   sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient"))
+,   sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition"))
+,   sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"))
+,   sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
+,   sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName"))
+,   sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))
+,   sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
+,   sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
+,   sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
+,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
+,   sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
+,   sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
+,   sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
+,   sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
+,   nType( nNewType )
+,   eAnchorType( eATyp )
 {
     nX = 0;
     nY = 0;
@@ -1389,15 +1389,15 @@ XMLTextFrameContext::XMLTextFrameContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        TextContentAnchorType eATyp ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    m_xAttrList( new SvXMLAttributeList( xAttrList ) ),
-    m_eDefaultAnchorType( eATyp ),
-    m_pHyperlink( 0 ),
+        TextContentAnchorType eATyp )
+:   SvXMLImportContext( rImport, nPrfx, rLName )
+,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
+,   m_pHyperlink( 0 )
+,   m_eDefaultAnchorType( eATyp )
     // --> OD 2006-03-10 #i51726#
-    m_HasAutomaticStyleWithoutParentStyle( sal_False ),
+,   m_HasAutomaticStyleWithoutParentStyle( sal_False )
     // <--
-    m_bSupportsReplacement( sal_False )
+,   m_bSupportsReplacement( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1471,7 +1471,7 @@ void XMLTextFrameContext::EndElement()
 }
 
 SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
-        sal_uInt16 nPrefix,
+        sal_uInt16 p_nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
@@ -1480,7 +1480,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     if( !m_xImplContext.Is() )
     {
         // no child exists
-        if( XML_NAMESPACE_DRAW == nPrefix )
+        if( XML_NAMESPACE_DRAW == p_nPrefix )
         {
             sal_uInt16 nFrameType = USHRT_MAX;
             if( IsXMLToken( rLocalName, XML_TEXT_BOX ) )
@@ -1508,7 +1508,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 {
                     Reference < XShapes > xShapes;
                     pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
-                                    GetImport(), nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
+                                    GetImport(), p_nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
                 }
                 else if( XML_TEXT_FRAME_PLUGIN == nFrameType )
                 {
@@ -1534,7 +1534,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     {
                         Reference < XShapes > xShapes;
                         pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
-                                        GetImport(), nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
+                                        GetImport(), p_nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
                     }
                 }
                 else if( XML_TEXT_FRAME_OBJECT == nFrameType ||
@@ -1546,7 +1546,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 if( !pContext )
                 {
 
-                    pContext = new XMLTextFrameContext_Impl( GetImport(), nPrefix,
+                    pContext = new XMLTextFrameContext_Impl( GetImport(), p_nPrefix,
                                                         rLocalName, xAttrList,
                                                         m_eDefaultAnchorType,
                                                         nFrameType,
@@ -1558,7 +1558,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         }
     }
     else if( m_bSupportsReplacement && !m_xReplImplContext &&
-             XML_NAMESPACE_DRAW == nPrefix &&
+             XML_NAMESPACE_DRAW == p_nPrefix &&
              IsXMLToken( rLocalName, XML_IMAGE ) )
     {
         // read replacement image
@@ -1566,40 +1566,40 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         if( CreateIfNotThere( xPropSet ) )
         {
             pContext = new XMLReplacementImageContext( GetImport(),
-                                nPrefix, rLocalName, xAttrList, xPropSet );
+                                p_nPrefix, rLocalName, xAttrList, xPropSet );
             m_xReplImplContext = pContext;
         }
     }
     else if( m_xImplContext->ISA( XMLTextFrameContext_Impl ) )
     {
         // the child is a writer frame
-        if( XML_NAMESPACE_SVG == nPrefix && IsXMLToken( rLocalName, XML_DESC ) )
+        if( XML_NAMESPACE_SVG == p_nPrefix && IsXMLToken( rLocalName, XML_DESC ) )
         {
-            pContext = new XMLTextFrameDescContext_Impl( GetImport(), nPrefix, rLocalName,
+            pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                             xAttrList, m_sDesc );
         }
-        else if( XML_NAMESPACE_DRAW == nPrefix )
+        else if( XML_NAMESPACE_DRAW == p_nPrefix )
         {
             Reference < XPropertySet > xPropSet;
             if( IsXMLToken( rLocalName, XML_CONTOUR_POLYGON ) )
             {
                 if( CreateIfNotThere( xPropSet ) )
-                    pContext = new XMLTextFrameContourContext_Impl( GetImport(), nPrefix, rLocalName,
+                    pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                   xAttrList, xPropSet, sal_False );
             }
             else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
             {
                 if( CreateIfNotThere( xPropSet ) )
-                    pContext = new XMLTextFrameContourContext_Impl( GetImport(), nPrefix, rLocalName,
+                    pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                   xAttrList, xPropSet, sal_True );
             }
             else if( IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
             {
                 if( CreateIfNotThere( xPropSet ) )
-                    pContext = new XMLImageMapContext( GetImport(), nPrefix, rLocalName, xPropSet );
+                    pContext = new XMLImageMapContext( GetImport(), p_nPrefix, rLocalName, xPropSet );
             }
         }
-        else if( (XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+        else if( (XML_NAMESPACE_OFFICE == p_nPrefix) && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
         {
             // do we still have the frame object?
             Reference < XPropertySet > xPropSet;
@@ -1610,7 +1610,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 if (xEventsSupplier.is())
                 {
                     // OK, we have the events, so create the context
-                    pContext = new XMLEventsImportContext(GetImport(), nPrefix,
+                    pContext = new XMLEventsImportContext(GetImport(), p_nPrefix,
                                                       rLocalName, xEventsSupplier);
                 }
             }
@@ -1618,13 +1618,13 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     }
     else
     {
-        // the child is a drawinh´g shape
+        // the child is a drawinhï¿½g shape
         pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
-                                    &m_xImplContext, nPrefix, rLocalName, xAttrList );
+                                    &m_xImplContext, p_nPrefix, rLocalName, xAttrList );
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
 
     return pContext;
 }
