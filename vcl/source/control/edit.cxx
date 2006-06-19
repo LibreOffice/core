@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:37:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,16 +177,6 @@ static FncGetSpecialChars pImplFncGetSpecialChars = NULL;
 
 // =======================================================================
 
-static uno::Reference < i18n::XBreakIterator > ImplGetBreakIterator()
-{
-    static uno::Reference < i18n::XBreakIterator > xB;
-    if ( !xB.is() )
-        xB = vcl::unohelper::CreateBreakIterator();
-    return xB;
-}
-
-// =======================================================================
-
 struct DDInfo
 {
     Cursor          aCursor;
@@ -267,7 +257,7 @@ void Impl_IMEInfos::DestroyAttribs()
 Edit::Edit( WindowType nType ) :
     Control( nType )
 {
-    ImplInitData();
+    ImplInitEditData();
 }
 
 // -----------------------------------------------------------------------
@@ -275,7 +265,7 @@ Edit::Edit( WindowType nType ) :
 Edit::Edit( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_EDIT )
 {
-    ImplInitData();
+    ImplInitEditData();
     ImplInit( pParent, nStyle );
 }
 
@@ -284,7 +274,7 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
 Edit::Edit( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )
 {
-    ImplInitData();
+    ImplInitEditData();
     rResId.SetRT( RSC_EDIT );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -333,7 +323,7 @@ Edit::~Edit()
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInitData()
+void Edit::ImplInitEditData()
 {
     mpSubEdit               = NULL;
     mpUpdateDataTimer       = NULL;
@@ -552,7 +542,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -745,7 +735,6 @@ void Edit::ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode 
 
     delete mpLayoutData, mpLayoutData = NULL;
 
-    long nOldWidth = GetTextWidth( aText );
     Selection aSelection( rSelection );
     aSelection.Justify();
 
@@ -793,7 +782,7 @@ void Edit::ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode 
     maText.Erase( (xub_StrLen)aSelection.Min(), (xub_StrLen)aSelection.Len() );
     maSelection.Min() = aSelection.Min();
     maSelection.Max() = aSelection.Min();
-    ImplAlignAndPaint( (xub_StrLen)aSelection.Min(), nOldWidth );
+    ImplAlignAndPaint();
     mbInternModified = TRUE;
 }
 
@@ -861,8 +850,6 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         return;
 
     delete mpLayoutData, mpLayoutData = NULL;
-
-    long nOldWidth = GetTextWidth( ImplGetText() );
 
     if ( aSelection.Len() )
         maText.Erase( (xub_StrLen)aSelection.Min(), (xub_StrLen)aSelection.Len() );
@@ -938,7 +925,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
             rtl::OUString aTmpText( aOldText );
             if (bCTLSequenceCheckingTypeAndReplace)
             {
-                const xub_StrLen nPrevPos = static_cast< xub_StrLen >( xISC->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode ) );
+                xISC->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode );
 
                 // find position of first character that has changed
                 sal_Int32 nOldLen = aOldText.getLength();
@@ -954,7 +941,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
                 String aChgText( aTmpText.copy( nChgPos ), nChgLen );
 
                 // remove text from first pos to be changed to current pos
-                maText.Erase( static_cast< xub_StrLen >( nChgPos ), nTmpPos - nChgPos );
+                maText.Erase( static_cast< xub_StrLen >( nChgPos ), static_cast< xub_StrLen >( nTmpPos - nChgPos ) );
 
                 if (aChgText.Len())
                 {
@@ -992,7 +979,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
             maSelection.Max() = maText.Len();
     }
 
-    ImplAlignAndPaint( (xub_StrLen)aSelection.Min(), nOldWidth );
+    ImplAlignAndPaint();
     mbInternModified = TRUE;
 }
 
@@ -1167,7 +1154,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -1269,7 +1256,7 @@ void Edit::ImplAlign()
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
+void Edit::ImplAlignAndPaint()
 {
     ImplAlign();
     ImplRepaint( 0, STRING_LEN );
@@ -1286,7 +1273,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
-    if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+    if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
     {
         pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
         pDX = pDXBuffer;
@@ -1299,7 +1286,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
             (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
         {
-            nIndex = i;
+            nIndex = sal::static_int_cast<xub_StrLen>(i);
             if( pDX[2*i] < pDX[2*i+1] )
             {
                 if( nX > (pDX[2*i]+pDX[2*i+1])/2 )
@@ -1323,7 +1310,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
             if( nNewDiff < nDiff )
             {
-                nIndex = i;
+                nIndex = sal::static_int_cast<xub_StrLen>(i);
                 nDiff = nNewDiff;
             }
         }
@@ -1365,7 +1352,7 @@ void Edit::ImplCopyToSelectionClipboard()
 {
     if ( GetSelection().Len() )
     {
-        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
+        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(GetPrimarySelection());
         ImplCopy( aSelection );
     }
 }
@@ -1470,7 +1457,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
+        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
         ImplPaste( aSelection );
         ImplModified();
     }
@@ -2148,7 +2135,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             mpIMEInfos->DestroyAttribs();
         }
 
-        ImplAlignAndPaint( 0, maText.Len() );
+        ImplAlignAndPaint();
         xub_StrLen nCursorPos = mpIMEInfos->nPos + pData->GetCursorPos();
         SetSelection( Selection( nCursorPos, nCursorPos ) );
         SetInsertMode( !pData->IsCursorOverwrite() );
@@ -2838,7 +2825,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
+void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !mpDDInfo )
     {
@@ -2851,7 +2838,7 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
 //        rDTDEE.Context->rejectDrop();
 }
 
-void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
+void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
