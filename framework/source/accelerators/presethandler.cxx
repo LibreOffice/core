@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:11:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,13 +161,14 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::lang::XMultiService
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_xSMGR            (xSMGR                                )
     , m_aSharedStorages  (                                     )
-    , m_aLocale          (::comphelper::Locale::X_NOTRANSLATE())
     , m_lDocumentStorages(xSMGR                                )
+    , m_aLocale          (::comphelper::Locale::X_NOTRANSLATE())
 {
 }
 
 //-----------------------------------------------
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
+    : ThreadHelpBase     (&Application::GetSolarMutex()        )
 {
     m_xSMGR                 = rCopy.m_xSMGR;
     m_eConfigType           = rCopy.m_eConfigType;
@@ -335,7 +336,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& xChild)
+css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -347,7 +348,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& xChild)
+css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
