@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parawin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:04:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,14 @@ void ScParaWin::UpdateArgInput( USHORT nOffset, USHORT i )
 ScParaWin::~ScParaWin()
 {
     DelParaArray();
+
+    // #i66422# if the focus changes during destruction of the controls,
+    // don't call the focus handlers
+    Link aEmptyLink;
+    aBtnFx1.SetGetFocusHdl( aEmptyLink );
+    aBtnFx2.SetGetFocusHdl( aEmptyLink );
+    aBtnFx3.SetGetFocusHdl( aEmptyLink );
+    aBtnFx4.SetGetFocusHdl( aEmptyLink );
 }
 
 USHORT ScParaWin::GetActiveLine()
