@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:08:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 |*    ImpSearchEntry()
 |*
 |*    Beschreibung      Prueft ob im Speicherbereich pSource der nComp Bytes
-|*                      gross ist eine Zeichenkette(pDest) mit der länge nSize
+|*                      gross ist eine Zeichenkette(pDest) mit der lï¿½nge nSize
 |*                      liegt. Geprueft wird NON-CASE-SENSITIVE und der Rueck-
 |*                      gabewert ist die Adresse an der die Zeichekette gefunden
 |*                      wurde oder NULL
@@ -185,7 +185,6 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     };
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
-    oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
     oslProcessError eErr = osl_executeProcess_WithRedirectedIO(fileName.pData,
         args, sizeof(args)/sizeof(rtl_uString *), osl_Process_SEARCHPATH,
@@ -208,7 +207,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 }
 
 static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    const Size &rSize, Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString **pArgs, size_t nArgs)
+    Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString **pArgs, size_t nArgs)
 {
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
@@ -231,7 +230,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
         oslFileError eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
         while (eFileErr == osl_File_E_None && nCount)
         {
-            aMemStm.Write(aBuf, nCount);
+            aMemStm.Write(aBuf, sal::static_int_cast< sal_Size >(nCount));
             eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
         }
 
@@ -250,7 +249,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
 }
 
 static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    const Size &rSize, Graphic &rGraphic)
+    Graphic &rGraphic)
 {
     rtl::OUString fileName =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert"));
@@ -267,7 +266,7 @@ static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
     };
-    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rSize, rGraphic, fileName, args,
+    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 
@@ -307,14 +306,14 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         arg1.pData, arg2.pData, arg3.pData, arg4.pData, arg5.pData,
         arg6.pData, arg7.pData, arg8.pData, arg9.pData
     };
-    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rSize, rGraphic, fileName, args,
+    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 
 static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     const Size &rSize, Graphic &rGraphic)
 {
-    if (RenderAsPNGThroughConvert(pBuf, nBytesRead, rSize, rGraphic))
+    if (RenderAsPNGThroughConvert(pBuf, nBytesRead, rGraphic))
         return true;
     else
         return RenderAsPNGThroughGS(pBuf, nBytesRead, rSize, rGraphic);
@@ -456,7 +455,7 @@ extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                 FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
+                            PFilterCallback /*pCallback*/, void * /*pCallerData*/,
                                 FilterConfigItem*, BOOL)
 #endif
 {
