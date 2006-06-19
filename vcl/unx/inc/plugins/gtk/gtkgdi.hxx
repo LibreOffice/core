@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 10:01:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,12 @@ public:
                                               const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                           rtl::OUString aCaption );
+                                           const rtl::OUString& rCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, rtl::OUString aCaption );
+                                               SalControlHandle& rControlHandle, const rtl::OUString& rCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, rtl::OUString aCaption,
+                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& rCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     //helper methods for frame's UpdateSettings
@@ -109,68 +109,68 @@ protected:
                            const Rectangle& rControlRectangle,
                            const clipList& rClipList,
                            ControlState nState, const ImplControlValue& aValue,
-                           SalControlHandle& rControlHandle, OUString aCaption );
+                           SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKRadio( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                           const Rectangle& rControlRectangle,
                           const clipList& rClipList,
                           ControlState nState, const ImplControlValue& aValue,
-                          SalControlHandle& rControlHandle, OUString aCaption );
+                          SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKCheck( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                           const Rectangle& rControlRectangle,
                           const clipList& rClipList,
                           ControlState nState, const ImplControlValue& aValue,
-                          SalControlHandle& rControlHandle, OUString aCaption );
+                          SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
                               const Rectangle& rControlRectangle,
                               const clipList& rClipList,
                               ControlState nState, const ImplControlValue& aValue,
-                              SalControlHandle& rControlHandle, OUString aCaption );
+                              SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKEditBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKComboBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                              const Rectangle& rControlRectangle,
                              const clipList& rClipList,
                              ControlState nState, const ImplControlValue& aValue,
-                             SalControlHandle& rControlHandle, OUString aCaption );
+                             SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKTabItem( ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKListBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
 
     BOOL NWPaintGTKToolbar( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKMenubar( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKPopupMenu( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                               const Rectangle& rControlRectangle,
                               const clipList& rClipList,
                               ControlState nState, const ImplControlValue& aValue,
-                              SalControlHandle& rControlHandle, OUString aCaption );
+                              SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKTooltip( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle, OUString aCaption );
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
 
 };
 
