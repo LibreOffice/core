@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:00:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,8 +334,10 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         {
             bLineWidth = bLineColor = TRUE;
 
-            aStartLineCol = ITEMVALUE( aSet1, XATTR_LINECOLOR, XLineColorItem );
-            aEndLineCol = ITEMVALUE( aSet2, XATTR_LINECOLOR, XLineColorItem );
+            aStartLineCol = static_cast< XLineColorItem const & >(
+                aSet1.Get(XATTR_LINECOLOR)).GetColorValue();
+            aEndLineCol = static_cast< XLineColorItem const & >(
+                aSet2.Get(XATTR_LINECOLOR)).GetColorValue();
 
             nStartLineWidth = ITEMVALUE( aSet1, XATTR_LINEWIDTH, XLineWidthItem );
             nEndLineWidth = ITEMVALUE( aSet2, XATTR_LINEWIDTH, XLineWidthItem );
@@ -346,8 +348,10 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         if ( ( eFillStyle1 == XFILL_SOLID ) && ( eFillStyle2 == XFILL_SOLID ) )
         {
             bFillColor = TRUE;
-            aStartFillCol = ITEMVALUE( aSet1, XATTR_FILLCOLOR, XFillColorItem );
-            aEndFillCol = ITEMVALUE( aSet2, XATTR_FILLCOLOR, XFillColorItem );
+            aStartFillCol = static_cast< XFillColorItem const & >(
+                aSet1.Get(XATTR_FILLCOLOR)).GetColorValue();
+            aEndFillCol = static_cast< XFillColorItem const & >(
+                aSet2.Get(XATTR_FILLCOLOR)).GetColorValue();
         }
         else if ( ( eFillStyle1 == XFILL_NONE ) && ( eFillStyle2 == XFILL_NONE ) )
             bIgnoreFill = TRUE;
