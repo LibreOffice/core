@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:49:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ sal_Bool Unmarshal::unpackTid( sal_Sequence **ppThreadId )
 sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
 {
     sal_Bool bReturn = sal_True;
-    sal_uInt16 nCacheIndex;
+    sal_uInt16 nCacheIndex = 0;
 
     bReturn = bReturn && unpackString( ppOid );
     bReturn = bReturn && unpackInt16( &nCacheIndex );
@@ -586,7 +586,7 @@ sal_Bool Unmarshal::unpackType( void *pDest )
         }
         else
         {
-            sal_uInt16 nCacheIndex;
+            sal_uInt16 nCacheIndex = 0;
             bReturn = bReturn && unpackInt16( &nCacheIndex  );
 
             if( bReturn )
