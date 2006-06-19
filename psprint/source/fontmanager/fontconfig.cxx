@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:57:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ using namespace rtl;
 
 class FontCfgWrapper
 {
-    void*           m_pLib;
+    oslModule       m_pLib;
     FcConfig*       m_pDefConfig;
 
     FcBool          (*m_pFcInit)();
@@ -102,7 +102,7 @@ class FontCfgWrapper
     FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
     FcBool          (*m_pFcPatternAddString)(FcPattern*,const char*,const FcChar8*);
 
-    void* loadSymbol( const char* );
+    oslGenericFunction loadSymbol( const char* );
 
     FontCfgWrapper();
     ~FontCfgWrapper();
@@ -177,10 +177,10 @@ public:
     { return m_pFcPatternAddString( pPattern, pObject, pString ); }
 };
 
-void* FontCfgWrapper::loadSymbol( const char* pSymbol )
+oslGenericFunction FontCfgWrapper::loadSymbol( const char* pSymbol )
 {
     OUString aSym( OUString::createFromAscii( pSymbol ) );
-    void* pSym = osl_getSymbol( (oslModule)m_pLib, aSym.pData );
+    oslGenericFunction pSym = osl_getFunctionSymbol( m_pLib, aSym.pData );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s %s\n", pSymbol, pSym ? "found" : "not found" );
 #endif
@@ -396,7 +396,7 @@ bool PrintFontManager::initFontconfig()
             OString aDir, aBase, aOrgPath( (sal_Char*)file );
             splitPath( aOrgPath, aDir, aBase );
             int nDirID = getDirectoryAtom( aDir, true );
-            if( ! m_pFontCache->getFontCacheFile( nDirID, aDir, aBase, aFonts ) )
+            if( ! m_pFontCache->getFontCacheFile( nDirID, aBase, aFonts ) )
             {
 #if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "file %s not cached\n", aBase.getStr() );
@@ -404,7 +404,7 @@ bool PrintFontManager::initFontconfig()
                 // not known, analyze font file to get attributes
                 // not described by fontconfig (e.g. alias names, PSName)
                 std::list< OString > aDummy;
-                analyzeFontFile( nDirID, aBase, true, aDummy, aFonts );
+                analyzeFontFile( nDirID, aBase, aDummy, aFonts );
 #if OSL_DEBUG_LEVEL > 1
                 if( aFonts.empty() )
                     fprintf( stderr, "Warning: file is unusable to psprint\n" );
@@ -415,7 +415,9 @@ bool PrintFontManager::initFontconfig()
 
             int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), sal_True );
             PrintFont* pUpdate = aFonts.front();
-            if( ++aFonts.begin() != aFonts.end() ) // more than one font
+            std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
+            ++second_font;
+            if( second_font != aFonts.end() ) // more than one font
             {
                 // a collection entry, get the correct index
                 if( eIndexRes == FcResultMatch && nCollectionEntry != -1 )
