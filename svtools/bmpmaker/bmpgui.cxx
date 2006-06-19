@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:54:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ Pathes::Pathes( Window* pParent,
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( Pathes, ClickSrsHdl, void*, p )
+IMPL_LINK( Pathes, ClickSrsHdl, void*, EMPTYARG )
 {
     FileDialog  aFileDlg( this, WB_OPEN | WB_3DLOOK );
     DirEntry    aPath( aEdtSrs.GetText() );
@@ -222,7 +222,7 @@ IMPL_LINK( Pathes, ClickSrsHdl, void*, p )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( Pathes, ClickResHdl, void*, p )
+IMPL_LINK( Pathes, ClickResHdl, void*, EMPTYARG )
 {
     PathDialog aPathDlg( this, WB_OPEN | WB_3DLOOK );
 
@@ -235,7 +235,7 @@ IMPL_LINK( Pathes, ClickResHdl, void*, p )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( Pathes, ClickOutHdl, void*, p )
+IMPL_LINK( Pathes, ClickOutHdl, void*, EMPTYARG )
 {
     PathDialog aPathDlg( this, WB_OPEN | WB_3DLOOK );
 
@@ -424,6 +424,8 @@ BOOL SVMain();
 
 SAL_IMPLEMENT_MAIN()
 {
+    (void)argc; // avoid warning
+    (void)argv; // avoid warning
     SVMain();
     return 0;
 }
