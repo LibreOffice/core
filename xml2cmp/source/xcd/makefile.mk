@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:03:20 $
+#   last change: $Author: hr $ $Date: 2006-06-19 20:05:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ PRJNAME=xml2cmp
 TARGET=x2c_xcd
 TARGETTYPE=CUI
 
+LIBTARGET=NO
+
 
 
 # --- Settings -----------------------------------------------------
@@ -51,9 +53,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-LIB1TARGET=$(LB)$/$(TARGET).lib
-LIB1OBJFILES=\
-    $(OBJ)$/main.obj		\
+
+LIBONLYFILES=\
     $(OBJ)$/cr_html.obj		\
     $(OBJ)$/cr_index.obj	\
     $(OBJ)$/cr_metho.obj	\
@@ -61,17 +62,21 @@ LIB1OBJFILES=\
     $(OBJ)$/parse.obj		\
     $(OBJ)$/xmlelem.obj		\
     $(OBJ)$/xmltree.obj
+
+
+OBJFILES=\
+    $(OBJ)$/main.obj		\
+    $(LIBONLYFILES)
+
+
+LIB1TARGET=$(LB)$/$(TARGET).lib
+LIB1OBJFILES=\
+    $(OBJFILES)
 
 
 LIB2TARGET=$(LB)$/$(TARGET)l.lib
 LIB2OBJFILES=\
-    $(OBJ)$/cr_html.obj		\
-    $(OBJ)$/cr_index.obj	\
-    $(OBJ)$/cr_metho.obj	\
-    $(OBJ)$/filebuff.obj	\
-    $(OBJ)$/parse.obj		\
-    $(OBJ)$/xmlelem.obj		\
-    $(OBJ)$/xmltree.obj
+    $(LIBONLYFILES)
 
 
 
@@ -80,6 +85,3 @@ LIB2OBJFILES=\
 
 
 .INCLUDE :  target.mk
-
-
-
