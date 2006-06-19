@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:06:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ void SvxUnoMarkerTable::dispose()
 }
 
 // SfxListener
-void SvxUnoMarkerTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
+void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
