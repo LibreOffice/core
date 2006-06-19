@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_a_std.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,27 +68,27 @@ const uintt nF_goto_CheckStar = 21;
 
 DYN TextToken * TCF_DocWord(const char * text) { return new Tok_DocWord(text); }
 
-DYN TextToken * TCF_atstd_ATT(const char * text) { return new Tok_at_std(ary::info::atid_ATT); }
-DYN TextToken * TCF_atstd_author(const char * text) { return new Tok_at_std(ary::info::atid_author); }
-DYN TextToken * TCF_atstd_change(const char * text) { return new Tok_at_std(ary::info::atid_change); }
-DYN TextToken * TCF_atstd_collab(const char * text) { return new Tok_at_std(ary::info::atid_collab); }
-DYN TextToken * TCF_atstd_contact(const char * text) { return new Tok_at_std(ary::info::atid_contact); }
-DYN TextToken * TCF_atstd_copyright(const char * text) { return new Tok_at_std(ary::info::atid_copyright); }
-DYN TextToken * TCF_atstd_descr(const char * text) { return new Tok_at_std(ary::info::atid_descr); }
-DYN TextToken * TCF_atstd_docdate(const char * text) { return new Tok_at_std(ary::info::atid_docdate); }
-DYN TextToken * TCF_atstd_derive(const char * text) { return new Tok_at_std(ary::info::atid_derive); }
-DYN TextToken * TCF_atstd_instance(const char * text) { return new Tok_at_std(ary::info::atid_instance); }
-DYN TextToken * TCF_atstd_life(const char * text) { return new Tok_at_std(ary::info::atid_life); }
-DYN TextToken * TCF_atstd_multi(const char * text) { return new Tok_at_std(ary::info::atid_multi); }
-DYN TextToken * TCF_atstd_onerror(const char * text) { return new Tok_at_std(ary::info::atid_onerror); }
-DYN TextToken * TCF_atstd_persist(const char * text) { return new Tok_at_std(ary::info::atid_persist); }
-DYN TextToken * TCF_atstd_postcond(const char * text) { return new Tok_at_std(ary::info::atid_postcond); }
-DYN TextToken * TCF_atstd_precond(const char * text) { return new Tok_at_std(ary::info::atid_precond); }
-DYN TextToken * TCF_atstd_responsibility(const char * text) { return new Tok_at_std(ary::info::atid_resp); }
-DYN TextToken * TCF_atstd_return(const char * text) { return new Tok_at_std(ary::info::atid_return); }
-DYN TextToken * TCF_atstd_short(const char * text) { return new Tok_at_std(ary::info::atid_short); }
-DYN TextToken * TCF_atstd_todo(const char * text) { return new Tok_at_std(ary::info::atid_todo); }
-DYN TextToken * TCF_atstd_version(const char * text) { return new Tok_at_std(ary::info::atid_version); }
+DYN TextToken * TCF_atstd_ATT(const char * ) { return new Tok_at_std(ary::info::atid_ATT); }
+DYN TextToken * TCF_atstd_author(const char * ) { return new Tok_at_std(ary::info::atid_author); }
+DYN TextToken * TCF_atstd_change(const char * ) { return new Tok_at_std(ary::info::atid_change); }
+DYN TextToken * TCF_atstd_collab(const char * ) { return new Tok_at_std(ary::info::atid_collab); }
+DYN TextToken * TCF_atstd_contact(const char * ) { return new Tok_at_std(ary::info::atid_contact); }
+DYN TextToken * TCF_atstd_copyright(const char * ) { return new Tok_at_std(ary::info::atid_copyright); }
+DYN TextToken * TCF_atstd_descr(const char * ) { return new Tok_at_std(ary::info::atid_descr); }
+DYN TextToken * TCF_atstd_docdate(const char * ) { return new Tok_at_std(ary::info::atid_docdate); }
+DYN TextToken * TCF_atstd_derive(const char * ) { return new Tok_at_std(ary::info::atid_derive); }
+DYN TextToken * TCF_atstd_instance(const char * ) { return new Tok_at_std(ary::info::atid_instance); }
+DYN TextToken * TCF_atstd_life(const char * ) { return new Tok_at_std(ary::info::atid_life); }
+DYN TextToken * TCF_atstd_multi(const char * ) { return new Tok_at_std(ary::info::atid_multi); }
+DYN TextToken * TCF_atstd_onerror(const char * ) { return new Tok_at_std(ary::info::atid_onerror); }
+DYN TextToken * TCF_atstd_persist(const char * ) { return new Tok_at_std(ary::info::atid_persist); }
+DYN TextToken * TCF_atstd_postcond(const char * ) { return new Tok_at_std(ary::info::atid_postcond); }
+DYN TextToken * TCF_atstd_precond(const char * ) { return new Tok_at_std(ary::info::atid_precond); }
+DYN TextToken * TCF_atstd_responsibility(const char * ) { return new Tok_at_std(ary::info::atid_resp); }
+DYN TextToken * TCF_atstd_return(const char * ) { return new Tok_at_std(ary::info::atid_return); }
+DYN TextToken * TCF_atstd_short(const char * ) { return new Tok_at_std(ary::info::atid_short); }
+DYN TextToken * TCF_atstd_todo(const char * ) { return new Tok_at_std(ary::info::atid_todo); }
+DYN TextToken * TCF_atstd_version(const char * ) { return new Tok_at_std(ary::info::atid_version); }
 
 DYN TextToken * TCF_at_base(const char *) { return new Tok_at_base; }
 DYN TextToken * TCF_at_exception(const char *) { return new Tok_at_exception; }
@@ -137,7 +137,7 @@ Context_AdocStd::Context_AdocStd()
 
 void
 Context_AdocStd::SetParentContext( TkpContext & io_rParentContext,
-                                   const char * i_sMultiLineEndToken )
+                                   const char * )
 {
     pFollowUpContext = pParentContext = &io_rParentContext;
     pCx_CheckStar->Set_End_FollowUpContext(io_rParentContext);
@@ -201,9 +201,9 @@ Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
         case nF_fin_Error:
         {
             char cCC = io_rText.CurChar();
-            udmstri sChar( &cCC, 1 );
+            String sChar( &cCC, 1 );
             throw X_Parser(X_Parser::x_InvalidChar, sChar, udmstri::Null_(), 0);
-        }   break;
+        }   // no break, because of throw
         case nF_fin_Ignore:
             io_rText.CutToken();
             pNewToken = 0;
@@ -462,7 +462,7 @@ Context_AdocStd::SetMode_IsMultiLine( bool  i_bTrue )
 DYN TextToken *
 TCF_Whitespace(const char * i_sText)
 {
-    UINT8 nSize = strlen(i_sText);
+    UINT8 nSize = static_cast<UINT8>(strlen(i_sText));
     for ( const char * pTab = strchr(i_sText,'\t');
           pTab != 0;
           pTab = strchr(pTab+1,'\t') )
