@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ namespace stoc_connector
 
     {
     public:
-        PipeConnection( const ::rtl::OUString & s, const ::rtl::OUString &sConnectionDescription );
+        PipeConnection( const ::rtl::OUString &sConnectionDescription );
         virtual ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -111,7 +111,7 @@ namespace stoc_connector
 
     {
     public:
-        SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort, const ::rtl::OUString & sConnectionDescription  );
+        SocketConnection( const ::rtl::OUString & sConnectionDescription  );
         virtual ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -152,6 +152,6 @@ namespace stoc_connector
 
           XStreamListener_hash_set _listeners;
     };
-};
+}
 
 
