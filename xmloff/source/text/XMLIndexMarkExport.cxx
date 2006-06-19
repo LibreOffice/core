@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:06:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,22 +87,21 @@ using ::com::sun::star::uno::Any;
 
 XMLIndexMarkExport::XMLIndexMarkExport(
     SvXMLExport& rExp,
-    XMLTextParagraphExport& rParaExp) :
-        rExport(rExp),
-        rParaExport(rParaExp),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
-        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
-        sPrimaryKey(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey")),
-        sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey")),
-        sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
-        sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
-        sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
-        sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
-        sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading")),
-        sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading")),
-        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM
-                             ("SecondaryKeyReading")),
-        sMainEntry(RTL_CONSTASCII_USTRINGPARAM("IsMainEntry"))
+    XMLTextParagraphExport& rParaExp)
+:   sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
+,   sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
+,   sPrimaryKey(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey"))
+,   sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey"))
+,   sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark"))
+,   sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart"))
+,   sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed"))
+,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
+,   sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading"))
+,   sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading"))
+,   sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading"))
+,   sMainEntry(RTL_CONSTASCII_USTRINGPARAM("IsMainEntry"))
+,   rExport(rExp)
+,   rParaExport(rParaExp)
 {
 }
 
@@ -297,7 +296,7 @@ void XMLIndexMarkExport::GetID(
     static const sal_Char sPrefix[] = "IMark";
 
     // HACK: use address of object to form identifier
-    sal_Int64 nId = (sal_Int64)rPropSet.get();
+    sal_Int64 nId = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(rPropSet.get()));
     sBuf.appendAscii(sPrefix, sizeof(sPrefix)-1);
     sBuf.append(nId);
 }
