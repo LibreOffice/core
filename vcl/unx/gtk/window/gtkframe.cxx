@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:20:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@
 #include <bitmapex.hxx>
 #include <impbmp.hxx>
 #include <svids.hrc>
+
+#include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
@@ -308,7 +310,7 @@ GetAlternateKeyCode( const USHORT nKeyCode )
 void GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
-                                 guint8 group,
+                                 guint8 /*group*/,
                                  guint32 time,
                                  sal_Unicode aOrigCode,
                                  bool bDown,
@@ -568,7 +570,8 @@ void GtkSalFrame::InitCommon()
  */
 
 extern "C" {
-    static void(*p_gtk_window_set_accept_focus)( GtkWindow*, gboolean ) = NULL;
+    typedef void(*setAcceptFn)( GtkWindow*, gboolean );
+    static setAcceptFn p_gtk_window_set_accept_focus = NULL;
     static bool bGetAcceptFocusFn = true;
 }
 
@@ -578,7 +581,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     {
         bGetAcceptFocusFn = false;
         OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "gtk_window_set_accept_focus" ) );
-        p_gtk_window_set_accept_focus = (void(*)(GtkWindow*,gboolean))osl_getSymbol( GetSalData()->m_pPlugin, aSym.pData );
+        p_gtk_window_set_accept_focus = (setAcceptFn)osl_getFunctionSymbol( GetSalData()->m_pPlugin, aSym.pData );
     }
     if( p_gtk_window_set_accept_focus && bBeforeRealize )
         p_gtk_window_set_accept_focus( pWindow, bAccept );
@@ -1037,7 +1040,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     g_list_free( pIcons );
 }
 
-void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
+void GtkSalFrame::SetMenu( SalMenu* )
 {
 }
 
@@ -1134,7 +1137,7 @@ static void initClientId()
     }
 }
 
-void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+void GtkSalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
 {
     if( m_pWindow )
     {
@@ -1195,7 +1198,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     }
 }
 
-void GtkSalFrame::Enable( BOOL bEnable )
+void GtkSalFrame::Enable( BOOL /*bEnable*/ )
 {
     // Not implemented by X11SalFrame either
 }
@@ -1598,7 +1601,7 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
     }
 }
 
-void GtkSalFrame::SetAlwaysOnTop( BOOL bOnTop )
+void GtkSalFrame::SetAlwaysOnTop( BOOL /*bOnTop*/ )
 {
 }
 
@@ -1795,7 +1798,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         ReleaseGraphics( pGraphics );
 }
 
-void GtkSalFrame::Beep( SoundType eType )
+void GtkSalFrame::Beep( SoundType /*eType*/ )
 {
     gdk_display_beep( getGdkDisplay() );
 }
@@ -1867,8 +1870,10 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
         {
             bContinueDispatch = false;
             gtk_window_resize( m_pWindow, pEvent->xconfigure.width, pEvent->xconfigure.height );
-            if( maGeometry.nWidth != pEvent->xconfigure.width ||
-                maGeometry.nHeight != pEvent->xconfigure.height )
+            if( ( sal::static_int_cast< int >(maGeometry.nWidth) !=
+                  pEvent->xconfigure.width ) ||
+                ( sal::static_int_cast< int >(maGeometry.nHeight) !=
+                  pEvent->xconfigure.height ) )
             {
                 maGeometry.nWidth  = pEvent->xconfigure.width;
                 maGeometry.nHeight = pEvent->xconfigure.height;
@@ -1937,7 +1942,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
     }
 }
 
-gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     SalMouseEvent aEvent;
@@ -1958,7 +1963,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
         case 1: aEvent.mnButton = MOUSE_LEFT;   break;
         case 2: aEvent.mnButton = MOUSE_MIDDLE; break;
         case 3: aEvent.mnButton = MOUSE_RIGHT;  break;
-        default: return FALSE;              break;
+        default: return FALSE;
     }
     aEvent.mnTime   = pEvent->time;
     aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
@@ -2022,7 +2027,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalScroll( GtkWidget* pWidget, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     GdkEventScroll* pSEvent = (GdkEventScroll*)pEvent;
@@ -2058,7 +2063,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget* pWidget, GdkEvent* pEvent, gpoint
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2103,7 +2108,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, 
     return TRUE;
 }
 
-gboolean GtkSalFrame::signalCrossing( GtkWidget* pWidget, GdkEventCrossing* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     SalMouseEvent aEvent;
@@ -2120,7 +2125,7 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget* pWidget, GdkEventCrossing* pEve
 }
 
 
-gboolean GtkSalFrame::signalExpose( GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2137,7 +2142,7 @@ gboolean GtkSalFrame::signalExpose( GtkWidget* pWidget, GdkEventExpose* pEvent, 
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2174,7 +2179,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gp
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalMap( GtkWidget* pWidget, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2184,7 +2189,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget* pWidget, GdkEvent* pEvent, gpointer 
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalUnmap( GtkWidget* pWidget, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2194,7 +2199,7 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget* pWidget, GdkEvent* pEvent, gpointe
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2268,7 +2273,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pE
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2409,7 +2414,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
     return TRUE;
 }
 
-gboolean GtkSalFrame::signalDelete( GtkWidget* pWidget, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2419,7 +2424,7 @@ gboolean GtkSalFrame::signalDelete( GtkWidget* pWidget, GdkEvent* pEvent, gpoint
     return TRUE;
 }
 
-void GtkSalFrame::signalStyleSet( GtkWidget* pWidget, GtkStyle* pPrevious, gpointer frame )
+void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -2456,7 +2461,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget* pWidget, GtkStyle* pPrevious, gpoin
     }
 }
 
-gboolean GtkSalFrame::signalState( GtkWidget* pWidget, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
@@ -2474,7 +2479,7 @@ gboolean GtkSalFrame::signalState( GtkWidget* pWidget, GdkEvent* pEvent, gpointe
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalVisibility( GtkWidget* pWidget, GdkEventVisibility* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     pThis->m_nVisibility = pEvent->state;
@@ -2566,7 +2571,7 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
 }
 
-void GtkSalFrame::IMHandler::setInputContext( SalInputContext* pContext )
+void GtkSalFrame::IMHandler::setInputContext( SalInputContext* )
 {
 }
 
@@ -2587,7 +2592,7 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
         m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
 }
 
-void GtkSalFrame::IMHandler::endExtTextInput( USHORT nFlags )
+void GtkSalFrame::IMHandler::endExtTextInput( USHORT /*nFlags*/ )
 {
     if( m_aInputEvent.mpTextAttr )
     {
@@ -2732,7 +2737,12 @@ static bool checkSingleKeyCommitHack( guint keyval, sal_Unicode cCode )
     return bRet;
 }
 
-void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer im_handler )
+#ifdef SOLARIS
+#define CONTEXT_ARG pContext
+#else
+#define CONTEXT_ARG EMPTYARG
+#endif
+void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* pText, gpointer im_handler )
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
@@ -2804,7 +2814,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
     #endif
 }
 
-void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpointer im_handler )
+void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_handler )
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
@@ -2836,7 +2846,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpo
     pThis->m_aInputEvent.mnDeltaStart       = 0;
     pThis->m_aInputEvent.mbOnlyCursor       = False;
 
-    pThis->m_aInputFlags = std::vector<USHORT>( pThis->m_aInputEvent.maText.Len(), 0 );
+    pThis->m_aInputFlags = std::vector<USHORT>( std::max( 1, (int)pThis->m_aInputEvent.maText.Len() ), 0 );
 
     PangoAttrIterator   *iter       = pango_attr_list_get_iterator (pAttrs);
     do
@@ -2900,11 +2910,11 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpo
         pThis->updateIMSpotLocation();
 }
 
-void GtkSalFrame::IMHandler::signalIMPreeditStart( GtkIMContext* pContext, gpointer im_handler )
+void GtkSalFrame::IMHandler::signalIMPreeditStart( GtkIMContext*, gpointer /*im_handler*/ )
 {
 }
 
-void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext* pContext, gpointer im_handler )
+void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_handler )
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
     GTK_YIELD_GRAB();
@@ -2915,12 +2925,12 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext* pContext, gpointe
         pThis->updateIMSpotLocation();
 }
 
-gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer im_handler )
+gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext*, gpointer /*im_handler*/ )
 {
     return FALSE;
 }
 
-gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext* pContext, gint arg1, gint arg2, gpointer im_handler )
+gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer /*im_handler*/ )
 {
     return FALSE;
 }
