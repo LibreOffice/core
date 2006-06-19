@@ -4,9 +4,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:49:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#if defined(SOLARIS) && !defined(__GNUC__)
-#include <varargs.h>
-#else
-#include <stdarg.h>
-#endif
 
+#include <stdarg.h>
 #include <algorithm>
 
 #include <osl/mutex.hxx>
@@ -249,8 +245,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     // Exception
                     OSL_ASSERT( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
                     {
-                    typelib_TypeDescription * pTD = 0;
-                    OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception") );
+                    typelib_TypeDescription * pTD1 = 0;
+                    OUString sTypeName1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception") );
 
                     typelib_CompoundMember_Init aMembers[2];
                     OUString sMemberType0( RTL_CONSTASCII_USTRINGPARAM("string") );
@@ -265,10 +261,10 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     aMembers[1].pMemberName = sMemberName1.pData;
 
                     ::typelib_typedescription_new(
-                        &pTD, typelib_TypeClass_EXCEPTION, sTypeName.pData, 0, 2, aMembers );
-                    typelib_typedescription_register( &pTD );
+                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, 0, 2, aMembers );
+                    typelib_typedescription_register( &pTD1 );
                     typelib_typedescriptionreference_acquire(
-                        s_aTypes[typelib_TypeClass_EXCEPTION] = pTD->pWeakRef );
+                        s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef );
 #ifndef CPPU_LEAK_STATIC_DATA
                     // another static ref
                     ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
@@ -276,9 +272,9 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     // RuntimeException
                     OUString sTypeName2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
                     ::typelib_typedescription_new(
-                        &pTD, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, 0 );
-                    ::typelib_typedescription_register( &pTD );
-                    ::typelib_typedescription_release( pTD );
+                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, 0 );
+                    ::typelib_typedescription_register( &pTD1 );
+                    ::typelib_typedescription_release( pTD1 );
                     }
                     // XInterface members
                     typelib_InterfaceMethodTypeDescription * pMethod = 0;
@@ -369,7 +365,8 @@ void SAL_CALL typelib_static_sequence_type_init(
             OUString aTypeName( aBuf.makeStringAndClear() );
 
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
-            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
+            *ppRef = igetTypeByName( aTypeName.pData );
+            if (!*ppRef)
             {
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_new(
@@ -408,7 +405,8 @@ void init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(eTypeClass) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
+            *ppRef = igetTypeByName( aTypeName.pData );
+            if (!*ppRef)
             {
                 typelib_CompoundTypeDescription * pComp = 0;
                 ::typelib_typedescription_newEmpty(
@@ -523,7 +521,8 @@ void SAL_CALL typelib_static_mi_interface_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
+            *ppRef = igetTypeByName( aTypeName.pData );
+            if (!*ppRef)
             {
                 typelib_InterfaceTypeDescription * pIface = 0;
                 ::typelib_typedescription_newEmpty(
@@ -587,7 +586,8 @@ void SAL_CALL typelib_static_enum_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
+            *ppRef = igetTypeByName( aTypeName.pData );
+            if (!*ppRef)
             {
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_newEmpty(
@@ -647,7 +647,8 @@ void SAL_CALL typelib_static_array_type_init(
             OUString aTypeName( aBuf.makeStringAndClear() );
 
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ARRAY) );
-            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
+            *ppRef = igetTypeByName( aTypeName.pData );
+            if (!*ppRef)
             {
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_newEmpty(
@@ -699,7 +700,8 @@ void SAL_CALL typelib_static_union_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_UNION) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
+            *ppRef = igetTypeByName( aTypeName.pData );
+            if (!*ppRef)
             {
                 typelib_UnionTypeDescription * pUnion = 0;
                 ::typelib_typedescription_newEmpty(
