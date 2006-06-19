@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:01:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -130,11 +130,10 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rHelper(rHlp),
-        xFootnote(),
-        sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
+    const OUString& rLocalName )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
+,   rHelper(rHlp)
 {
 }
 
@@ -217,8 +216,7 @@ void XMLFootnoteImportContext::StartElement(
     // else: ignore footnote! Content will be merged into document.
 }
 
-void XMLFootnoteImportContext::Characters(
-    const OUString& rString)
+void XMLFootnoteImportContext::Characters(const OUString&)
 {
     // ignore characters! Text must be contained in paragraphs!
     // rHelper.InsertString(rString);
@@ -239,7 +237,7 @@ void XMLFootnoteImportContext::EndElement()
 
 
 SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
@@ -247,7 +245,7 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
 
     SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
 
-    switch(aTokenMap.Get(nPrefix, rLocalName))
+    switch(aTokenMap.Get(p_nPrefix, rLocalName))
     {
         case XML_TOK_FTN_NOTE_CITATION:
         {
@@ -271,18 +269,18 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
 
             // ignore content: return default context
             pContext = new SvXMLImportContext(GetImport(),
-                                              nPrefix, rLocalName);
+                                              p_nPrefix, rLocalName);
             break;
         }
 
         case XML_TOK_FTN_NOTE_BODY:
             // return footnote body
             pContext = new XMLFootnoteBodyImportContext(GetImport(),
-                                                        nPrefix, rLocalName);
+                                                        p_nPrefix, rLocalName);
             break;
         default:
             // default:
-            pContext = SvXMLImportContext::CreateChildContext(nPrefix,
+            pContext = SvXMLImportContext::CreateChildContext(p_nPrefix,
                                                               rLocalName,
                                                               xAttrList);
             break;
