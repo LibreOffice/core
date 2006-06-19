@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:32:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,7 @@ namespace comphelper
 
         CPPUTYPE_END
     };
-    COMPHELPER_DLLPUBLIC void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType );
+    COMPHELPER_DLLPUBLIC void GenerateCppuType (
+        CppuTypes eType, const com::sun::star::uno::Type*& pType );
 }
 #endif
