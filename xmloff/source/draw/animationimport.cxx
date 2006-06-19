@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:07:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,10 +204,11 @@ namespace xmloff
 class AnimationsImportHelperImpl
 {
 private:
+    SvXMLImport& mrImport;
+
     SvXMLTokenMap* mpAnimationNodeTokenMap;
     SvXMLTokenMap* mpAnimationNodeAttributeTokenMap;
 
-    SvXMLImport& mrImport;
 public:
     AnimationsImportHelperImpl( SvXMLImport& rImport );
     ~AnimationsImportHelperImpl();
@@ -443,9 +444,9 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
     {
         Reference< XInterface > xRef( mrImport.getInterfaceToIdentifierMapper().getReference( rValue ) );
 
-        Reference< XShape > xShape( xRef, UNO_QUERY );
-        if( xShape.is() )
-            return makeAny( xShape );
+        Reference< XShape > _xShape( xRef, UNO_QUERY );
+        if( _xShape.is() )
+            return makeAny( _xShape );
 
         Reference< XTextCursor > xTextCursor( xRef, UNO_QUERY );
         if( xTextCursor.is() )
@@ -485,7 +486,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
 {
     sal_Int32 nCommaPos = -1, nPos;
     sal_Int32 nOpenBrakets = 0;
-    for( sal_Int32 nPos = 0; (nPos < rValue.getLength()) && (nCommaPos == -1); nPos++ )
+    for( nPos = 0; (nPos < rValue.getLength()) && (nCommaPos == -1); nPos++ )
     {
         switch( rValue[nPos] )
         {
@@ -516,7 +517,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
     else
     {
         Any aAny;
-        sal_Int32 nType;
+        sal_Int32 nType = XML_TYPE_STRING;
 
         if( rValue.getLength() ) switch( eAttributeName )
         {
@@ -860,7 +861,7 @@ AnimationNodeContext::~AnimationNodeContext()
         delete mpHelper;
 }
 
-void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     // code of StartElement is moved to init_node that is now called
     // in c'tor before appending this node to its parent.
@@ -883,7 +884,6 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
         XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
         OUString aFrom, aBy, aTo, aValues;
 
-        const SvXMLTokenMap& rTokenMap = mpHelper->getAnimationNodeAttributeTokenMap();
         const sal_Int16 nCount = xAttrList.is() ? xAttrList->getLength() : 0;
         sal_uInt16 nEnum;
         sal_Int16 nAttribute;
@@ -1230,7 +1230,6 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             {
                 if( xTransitionFilter.is() )
                 {
-                    sal_uInt16 nEnum;
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_TransitionSubType) ) )
                         xTransitionFilter->setSubtype( (sal_Int16)nEnum );
                 }
