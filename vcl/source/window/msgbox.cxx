@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:51:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ static void ImplInitMsgBoxImageList()
 
 // =======================================================================
 
-void MessBox::ImplInitData()
+void MessBox::ImplInitMessBoxData()
 {
     mpFixedText         = NULL;
     mpFixedImage        = NULL;
@@ -167,7 +167,6 @@ void MessBox::ImplInitButtons()
     else if ( nStyle & WB_ABORT_RETRY_IGNORE )
     {
         USHORT nAbortFlags = 0;
-        USHORT nRetryFlags = 0;
         USHORT nIgnoreFlags = 0;
 
         if ( nStyle & WB_DEF_CANCEL )
@@ -191,10 +190,10 @@ void MessBox::ImplInitButtons()
 
 // -----------------------------------------------------------------------
 
-MessBox::MessBox( WindowType nType ) :
+MessBox::MessBox( WindowType ) :
     ButtonDialog( WINDOW_MESSBOX )
 {
-    ImplInitData();
+    ImplInitMessBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -204,7 +203,7 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
     ButtonDialog( WINDOW_MESSBOX ),
     maMessText( rMessage )
 {
-    ImplInitData();
+    ImplInitMessBoxData();
     ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();
 
@@ -217,7 +216,7 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
 MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ButtonDialog( WINDOW_MESSBOX )
 {
-    ImplInitData();
+    ImplInitMessBoxData();
 
     GetRes( rResId.SetRT( RSC_MESSBOX ) );
     USHORT nHiButtons   = ReadShortRes();
@@ -238,7 +237,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void MessBox::ImplLoadRes( const ResId& rResId )
+void MessBox::ImplLoadRes( const ResId& )
 {
     SetText( ReadStringRes() );
     SetMessText( ReadStringRes() );
@@ -519,7 +518,7 @@ const Image& MessBox::GetModeImage( BmpColorMode eMode ) const
 
 // -----------------------------------------------------------------------
 
-void InfoBox::ImplInitData()
+void InfoBox::ImplInitInfoBoxData()
 {
     // Default Text is the display title from the application
     if ( !GetText().Len() )
@@ -534,7 +533,7 @@ void InfoBox::ImplInitData()
 InfoBox::InfoBox( Window* pParent, const XubString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, ImplGetSVEmptyStr(), rMessage )
 {
-    ImplInitData();
+    ImplInitInfoBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -542,7 +541,7 @@ InfoBox::InfoBox( Window* pParent, const XubString& rMessage ) :
 InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_INFOBOX ) )
 {
-    ImplInitData();
+    ImplInitInfoBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -555,7 +554,7 @@ Image InfoBox::GetStandardImage()
 
 // -----------------------------------------------------------------------
 
-void WarningBox::ImplInitData()
+void WarningBox::ImplInitWarningBoxData()
 {
     // Default Text is the display title from the application
     if ( !GetText().Len() )
@@ -571,7 +570,7 @@ WarningBox::WarningBox( Window* pParent, WinBits nStyle,
                         const XubString& rMessage ) :
     MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
 {
-    ImplInitData();
+    ImplInitWarningBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -579,7 +578,7 @@ WarningBox::WarningBox( Window* pParent, WinBits nStyle,
 WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_WARNINGBOX ) )
 {
-    ImplInitData();
+    ImplInitWarningBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -601,7 +600,7 @@ Image WarningBox::GetStandardImage()
 
 // -----------------------------------------------------------------------
 
-void ErrorBox::ImplInitData()
+void ErrorBox::ImplInitErrorBoxData()
 {
     // Default Text is the display title from the application
     if ( !GetText().Len() )
@@ -617,7 +616,7 @@ ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
                     const XubString& rMessage ) :
     MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
 {
-    ImplInitData();
+    ImplInitErrorBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -625,7 +624,7 @@ ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
 ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_ERRORBOX ) )
 {
-    ImplInitData();
+    ImplInitErrorBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -638,7 +637,7 @@ Image ErrorBox::GetStandardImage()
 
 // -----------------------------------------------------------------------
 
-void QueryBox::ImplInitData()
+void QueryBox::ImplInitQueryBoxData()
 {
     // Default Text is the display title from the application
     if ( !GetText().Len() )
@@ -653,7 +652,7 @@ void QueryBox::ImplInitData()
 QueryBox::QueryBox( Window* pParent, WinBits nStyle, const XubString& rMessage ) :
     MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
 {
-    ImplInitData();
+    ImplInitQueryBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -661,7 +660,7 @@ QueryBox::QueryBox( Window* pParent, WinBits nStyle, const XubString& rMessage )
 QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_QUERYBOX ) )
 {
-    ImplInitData();
+    ImplInitQueryBoxData();
 }
 
 // -----------------------------------------------------------------------
