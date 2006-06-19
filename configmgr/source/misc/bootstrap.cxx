@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:08:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ namespace configmgr
 
         pContext->initialize();
 
-        return xResult;
+        return uno::Reference< uno::XInterface >( xResult, uno::UNO_QUERY );
     }
 
     const SingletonRegistrationInfo * getBootstrapContextSingletonInfo()
@@ -285,7 +285,7 @@ void BootstrapContext::initialize()
 static OUString getCurrentModuleDirectory() // URL including terminating slash
 {
     OUString aFileURL;
-    if ( !osl::Module::getUrlFromAddress((void*)&getCurrentModuleDirectory,aFileURL) )
+    if ( !osl::Module::getUrlFromAddress(reinterpret_cast< oslGenericFunction >( &getCurrentModuleDirectory ),aFileURL) )
     {
         OSL_TRACE(false, "Cannot locate current module - using executable instead");
 
