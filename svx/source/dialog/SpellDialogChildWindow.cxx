@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:31:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,17 +45,17 @@ namespace svx {
 
   -----------------------------------------------------------------------*/
 SpellDialogChildWindow::SpellDialogChildWindow (
-    Window* pParent,
+    Window* _pParent,
     USHORT nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
-    : SfxChildWindow (pParent, nId)
+    SfxChildWinInfo* /*pInfo*/)
+    : SfxChildWindow (_pParent, nId)
 
 {
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "SvxAbstractDialogFactory::Create() failed");
-    m_pAbstractSpellDialog = pFact->CreateSvxSpellDialog(pParent,
+    m_pAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent,
                                             pBindings,
                                             this );
     pWindow = m_pAbstractSpellDialog->GetWindow();
@@ -95,7 +95,10 @@ bool SpellDialogChildWindow::HasAutoCorrection()
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SpellDialogChildWindow::AddAutoCorrection(const String& rOld, const String& rNew, LanguageType eLanguage)
+void SpellDialogChildWindow::AddAutoCorrection(
+        const String& /*rOld*/,
+        const String& /*rNew*/,
+        LanguageType /*eLanguage*/)
 {
     DBG_ERROR("AutoCorrection should have been overloaded - if avalable")
 }
