@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:31:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ SFX_IMPL_FLOATINGWINDOW( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 |*
 \************************************************************************/
 
-SvxContourDlgItem::SvxContourDlgItem( USHORT nId, SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
-            SfxControllerItem   ( nId, rBindings ),
+SvxContourDlgItem::SvxContourDlgItem( USHORT _nId, SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
+            SfxControllerItem   ( _nId, rBindings ),
             rDlg                ( rContourDlg )
 {
 }
@@ -131,7 +131,7 @@ SvxContourDlgItem::SvxContourDlgItem( USHORT nId, SvxSuperContourDlg& rContourDl
 |*
 \************************************************************************/
 
-void SvxContourDlgItem::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pItem )
+void SvxContourDlgItem::StateChanged( USHORT nSID, SfxItemState /*eState*/, const SfxPoolItem* pItem )
 {
     if ( pItem && ( SID_CONTOUR_EXEC == nSID ) )
     {
@@ -153,11 +153,11 @@ void SvxContourDlgItem::StateChanged( USHORT nSID, SfxItemState eState, const Sf
 |*
 \************************************************************************/
 
-SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* pParent, USHORT nId,
+SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, USHORT nId,
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
-            SfxChildWindow( pParent, nId )
+            SfxChildWindow( _pParent, nId )
 {
-    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg( pBindings, this, pParent, CONT_RESID( RID_SVXDLG_CONTOUR ) );
+    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg( pBindings, this, _pParent, CONT_RESID( RID_SVXDLG_CONTOUR ) );
     pWindow = pDlg;
 
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
@@ -188,10 +188,10 @@ void SvxContourDlgChildWindow::UpdateContourDlg( const Graphic& rGraphic, BOOL b
 |*
 \************************************************************************/
 
-SvxContourDlg::SvxContourDlg( SfxBindings* pBindings, SfxChildWindow* pCW,
-                              Window* pParent, const ResId& rResId ) :
+SvxContourDlg::SvxContourDlg( SfxBindings* _pBindings, SfxChildWindow* pCW,
+                              Window* _pParent, const ResId& rResId ) :
 
-    SfxFloatingWindow   ( pBindings, pCW, pParent, rResId )
+    SfxFloatingWindow   ( _pBindings, pCW, _pParent, rResId )
 
 {
 }
@@ -408,16 +408,16 @@ void SvxContourDlg::Update( const Graphic& rGraphic, BOOL bGraphicLinked,
 |*
 \************************************************************************/
 
-SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                        Window* pParent, const ResId& rResId ) :
-        SvxContourDlg       ( pBindings, pCW, pParent, rResId ),
-        aContourItem        ( SID_CONTOUR_EXEC, *this, *pBindings ),
+SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
+                                        Window* _pParent, const ResId& rResId ) :
+        SvxContourDlg       ( _pBindings, pCW, _pParent, rResId ),
+        pCheckObj           ( NULL ),
+        aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
         aTbx1               ( this, ResId( TBX1 ) ),
         aMtfTolerance       ( this, ResId( MTF_TOLERANCE ) ),
         aContourWnd         ( this, ResId( CTL_CONTOUR) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         nGrfChanged         ( 0UL ),
-        pCheckObj           ( NULL ),
         bExecState          ( FALSE ),
         bGraphicLinked      ( FALSE ),
         maImageList         ( SVX_RES( CD_IMAPDLG ) ),
@@ -493,17 +493,17 @@ void SvxSuperContourDlg::Resize()
 
     if ( aNewSize.Height() >= aMinSize.Height() )
     {
-        Size    aSize( aStbStatus.GetSizePixel() );
-        Point   aPoint( 0, aNewSize.Height() - aSize.Height() );
+        Size    _aSize( aStbStatus.GetSizePixel() );
+        Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
 
         // StatusBar positionieren
-        aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), aSize.Height() ) );
+        aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), _aSize.Height() ) );
         aStbStatus.Show();
 
         // EditWindow positionieren
-        aSize.Width() = aNewSize.Width() - 18;
-        aSize.Height() = aPoint.Y() - aContourWnd.GetPosPixel().Y() - 6;
-        aContourWnd.SetSizePixel( aSize );
+        _aSize.Width() = aNewSize.Width() - 18;
+        _aSize.Height() = aPoint.Y() - aContourWnd.GetPosPixel().Y() - 6;
+        aContourWnd.SetSizePixel( _aSize );
 
         aLastSize = aNewSize;
     }
@@ -646,11 +646,11 @@ PolyPolygon SvxSuperContourDlg::GetPolyPolygon( BOOL bRescaleToGraphic )
 |*
 \************************************************************************/
 
-void SvxSuperContourDlg::Update( const Graphic& rGraphic, BOOL bGraphicLinked,
+void SvxSuperContourDlg::Update( const Graphic& rGraphic, BOOL _bGraphicLinked,
                                  const PolyPolygon* pPolyPoly, void* pEditingObj )
 {
     aUpdateGraphic = rGraphic;
-    bUpdateGraphicLinked = bGraphicLinked;
+    bUpdateGraphicLinked = _bGraphicLinked;
     pUpdateEditingObject = pEditingObj;
 
     if ( pPolyPoly )
@@ -936,7 +936,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, pTimer )
+IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, EMPTYARG )
 {
     aUpdateTimer.Stop();
 
@@ -969,7 +969,7 @@ IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, pTimer )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxSuperContourDlg, CreateHdl, Timer*, pTimer )
+IMPL_LINK( SvxSuperContourDlg, CreateHdl, Timer*, EMPTYARG )
 {
     aCreateTimer.Stop();
 
@@ -1093,7 +1093,6 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
     {
         Bitmap          aMask;
         const Color&    rColor = pWnd->GetPipetteColor();
-        Bitmap*         pMask = NULL;
 
         EnterWait();
 
@@ -1174,7 +1173,7 @@ void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, p )
+IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, EMPTYARG )
 {
        SvtMiscOptions aMiscOptions;
     aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
