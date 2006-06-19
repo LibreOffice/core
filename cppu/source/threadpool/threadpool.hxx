@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadpool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:50:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ namespace cppu_threadpool {
         void addJob( const ByteSequence &aThreadId,
                      sal_Bool bAsynchron,
                      void *pThreadSpecificData,
-                     void ( SAL_CALL * doRequest ) ( void * ) );
+                     RequestFun * doRequest );
 
         void prepare( const ByteSequence &aThreadId );
         void * enter( const ByteSequence &aThreadId, sal_Int64 nDisposeId );
