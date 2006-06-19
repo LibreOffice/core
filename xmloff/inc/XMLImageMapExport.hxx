@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:51:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,20 +53,20 @@ class SvXMLExport;
  */
 class XMLImageMapExport
 {
-    const ::rtl::OUString sBoundary;
-    const ::rtl::OUString sCenter;
-    const ::rtl::OUString sDescription;
-    const ::rtl::OUString sImageMap;
-    const ::rtl::OUString sIsActive;
-    const ::rtl::OUString sName;
-    const ::rtl::OUString sPolygon;
-    const ::rtl::OUString sRadius;
-    const ::rtl::OUString sTarget;
-    const ::rtl::OUString sURL;
+    const ::rtl::OUString msBoundary;
+    const ::rtl::OUString msCenter;
+    const ::rtl::OUString msDescription;
+    const ::rtl::OUString msImageMap;
+    const ::rtl::OUString msIsActive;
+    const ::rtl::OUString msName;
+    const ::rtl::OUString msPolygon;
+    const ::rtl::OUString msRadius;
+    const ::rtl::OUString msTarget;
+    const ::rtl::OUString msURL;
 
-    SvXMLExport& rExport;
+    SvXMLExport& mrExport;
 
-    sal_Bool bWhiteSpace;   /// use whitespace between image map elements?
+    sal_Bool mbWhiteSpace;  /// use whitespace between image map elements?
 
 public:
     XMLImageMapExport(SvXMLExport& rExport);
