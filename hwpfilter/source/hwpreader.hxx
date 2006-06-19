@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwpreader.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:28:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,9 @@ class MyDataSink : public ::cppu::WeakImplHelper2< XActiveDataControl, XActiveDa
 public:
 
   // XActiveDataControl.
-  virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener)
+  virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &)
     throw(RuntimeException) {}
-  virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener)
+  virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &)
     throw(RuntimeException) {}
   virtual void SAL_CALL   start (void) throw(RuntimeException) {}
   virtual void SAL_CALL   terminate (void) throw(RuntimeException) {}
@@ -356,14 +356,14 @@ extern "C"
 {
 
     void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+        const sal_Char ** ppEnvTypeName, uno_Environment **  )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
 
     sal_Bool SAL_CALL component_writeInfo(
-        void * pServiceManager, void * pRegistryKey )
+        void * , void * pRegistryKey )
     {
         if (pRegistryKey)
         {
@@ -385,7 +385,7 @@ extern "C"
         return sal_False;
     }
 
-    void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
     {
         void * pRet = 0;
 
