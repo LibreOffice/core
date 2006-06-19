@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:46:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,17 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
+using namespace bridges_urp;
+
+extern "C" {
+
+static void SAL_CALL doit(void * job) {
+    ServerMultiJob * p = static_cast< ServerMultiJob * >(job);
+    p->execute();
+    delete p;
+}
+
+}
 
 namespace bridges_urp
 {
@@ -551,14 +562,6 @@ namespace bridges_urp
     }
 
     //-------------------------------------------------------------------------------------
-    void ServerMultiJob::doit( void *pThis )
-    {
-        ServerMultiJob *pJob = ( ServerMultiJob * ) pThis;
-        pJob->execute();
-        delete pJob;
-    }
-
-    //-------------------------------------------------------------------------------------
     void ServerMultiJob::execute()
     {
         for( sal_Int32 i = 0; i < m_nCalls ; i ++ )
@@ -641,12 +644,12 @@ namespace bridges_urp
               if( pMTI->m_bIsOneway )
             {
                 // Oneway call, destruct in parameters
-                for( sal_Int32 i = 0 ; i < pMTI->m_pMethodType->nParams ; i ++ )
+                for( sal_Int32 j = 0 ; j < pMTI->m_pMethodType->nParams ; j ++ )
                 {
                     // usually all parameters must be in parameters, but to be robust ...
-                    if( pMTI->m_pbIsIn[i] && !cppu_isSimpleType( pMTI->m_ppArgType[i] ) )
+                    if( pMTI->m_pbIsIn[j] && !cppu_isSimpleType( pMTI->m_ppArgType[j] ) )
                     {
-                        uno_destructData( pSJE->m_ppArgs[i] , pMTI->m_ppArgType[i] , 0 );
+                        uno_destructData( pSJE->m_ppArgs[j] , pMTI->m_ppArgType[j] , 0 );
                     }
                 }
 
@@ -702,11 +705,11 @@ namespace bridges_urp
                     uno_any_destruct( &(pSJE->m_exception) , ::bridges_remote::remote_release );
 
                     // destroy in parameters
-                    for( sal_Int32 i = 0 ; i < pMTI->m_nArgCount ; i ++ )
+                    for( sal_Int32 j = 0 ; j < pMTI->m_nArgCount ; j ++ )
                     {
-                        if( pMTI->m_pbIsIn[i] && ! cppu_isSimpleType( pMTI->m_ppArgType[i] ))
+                        if( pMTI->m_pbIsIn[j] && ! cppu_isSimpleType( pMTI->m_ppArgType[j] ))
                         {
-                            uno_destructData( pSJE->m_ppArgs[i] , pMTI->m_ppArgType[i] ,
+                            uno_destructData( pSJE->m_ppArgs[j] , pMTI->m_ppArgType[j] ,
                                               ::bridges_remote::remote_release );
                         }
                     }
@@ -726,16 +729,16 @@ namespace bridges_urp
                                               ::bridges_remote::remote_release );
                         }
                     }
-                    for( sal_Int32 i = 0 ; i < pMTI->m_nArgCount ; i ++ )
+                    for( sal_Int32 j = 0 ; j < pMTI->m_nArgCount ; j ++ )
                     {
-                        if( pMTI->m_pbIsOut[i] )
+                        if( pMTI->m_pbIsOut[j] )
                         {
                             m_pBridgeImpl->m_blockMarshaler.pack(
-                                pSJE->m_ppArgs[i] , pMTI->m_ppArgType[i] );
+                                pSJE->m_ppArgs[j] , pMTI->m_ppArgType[j] );
                         }
-                        if( ! cppu_isSimpleType( pMTI->m_ppArgType[i] ) )
+                        if( ! cppu_isSimpleType( pMTI->m_ppArgType[j] ) )
                         {
-                            uno_destructData( pSJE->m_ppArgs[i], pMTI->m_ppArgType[i] ,
+                            uno_destructData( pSJE->m_ppArgs[j], pMTI->m_ppArgType[j] ,
                                               ::bridges_remote::remote_release );
                         }
                     }
