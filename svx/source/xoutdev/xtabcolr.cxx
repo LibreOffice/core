@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:21:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ XColorEntry* XColorTable::Remove(long nIndex)
 
 /************************************************************************/
 
-XColorEntry* XColorTable::Get(long nIndex) const
+XColorEntry* XColorTable::GetColor(long nIndex) const
 {
     return (XColorEntry*) XPropertyTable::Get(nIndex, 0);
 }
@@ -505,7 +505,7 @@ BOOL XColorTable::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XColorTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -752,7 +752,7 @@ XColorEntry* XColorList::Remove(long nIndex)
 
 /************************************************************************/
 
-XColorEntry* XColorList::Get(long nIndex) const
+XColorEntry* XColorList::GetColor(long nIndex) const
 {
     return (XColorEntry*) XPropertyList::Get(nIndex, 0);
 }
@@ -787,7 +787,7 @@ BOOL XColorList::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XColorList::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
