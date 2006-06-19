@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:11:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -859,7 +859,7 @@ ModelessDialog IDD_PRINT_DIALOG {
 };
 
 
-ModelessDialog IDD_OPTIONS_DLG
+TabDialog IDD_OPTIONS_DLG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -899,17 +899,6 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text [ de ] = "Schrift" ;
                 Text[ en-US ] = "Font";
             };
-        };
-    OKButton RID_OK {
-            Pos = MAP_APPFONT( 65, 124 );
-            Size = MAP_APPFONT( 55, 12 );
-            TabStop = TRUE;
-            DefButton = TRUE;
-        };
-    CancelButton RID_CANCEL {
-            Pos = MAP_APPFONT( 135, 124 );
-            Size = MAP_APPFONT( 55, 12 );
-            TabStop = TRUE;
         };
     };
     Text[ en-US ] = "Settings";
