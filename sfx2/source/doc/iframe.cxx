@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:44:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:28:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ SfxItemPropertyMap aIFramePropertyMap_Impl[] =
     { "FrameMarginWidth",     16, 6, &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
     { "FrameName",             9, 7, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "FrameURL",              8, 8, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    {0,0,0,0,0}
+    {0,0,0,0,0,0}
 };
 
 SFX_IMPL_XSERVICEINFO( IFrameObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.IFrameObject" )
@@ -137,8 +137,10 @@ void SAL_CALL IFrameObject::initialize( const uno::Sequence< uno::Any >& aArgume
         aArguments[0] >>= mxObj;
 }
 
-sal_Bool SAL_CALL IFrameObject::load( const uno::Sequence < com::sun::star::beans::PropertyValue >& lDescriptor,
-            const uno::Reference < frame::XFrame >& xFrame ) throw( uno::RuntimeException )
+sal_Bool SAL_CALL IFrameObject::load(
+    const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
+    const uno::Reference < frame::XFrame >& xFrame )
+throw( uno::RuntimeException )
 {
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
@@ -196,19 +198,19 @@ void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeExceptio
     {}
 }
 
-void SAL_CALL IFrameObject::close( sal_Bool bDeliverOwnership ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
+void SAL_CALL IFrameObject::disposing( const com::sun::star::lang::EventObject& ) throw (com::sun::star::uno::RuntimeException)
 {
     cancel();
 }
@@ -331,19 +333,19 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropert
     return aAny;
 }
 
-void SAL_CALL IFrameObject::addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::addPropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::removePropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::removePropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::addVetoableChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::addVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
@@ -356,7 +358,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString& 
     return 0;
 }
 
-void SAL_CALL IFrameObject::setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL IFrameObject::setTitle( const ::rtl::OUString& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
