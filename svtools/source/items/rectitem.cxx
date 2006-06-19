@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rectitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxRectangleItem);
+DBG_NAME(SfxRectangleItem)
 
 
 // -----------------------------------------------------------------------
@@ -97,9 +97,9 @@ SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
 
 SfxItemPresentation SfxRectangleItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -134,7 +134,7 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, USHORT nVersion ) const
+SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     Rectangle aStr;
@@ -144,7 +144,7 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, USHORT nVersion ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     rStream << aVal;
