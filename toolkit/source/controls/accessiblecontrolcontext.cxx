@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:16:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
+    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int32 ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         // we do not have children
         throw IndexOutOfBoundsException();
@@ -221,7 +221,11 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleControlContext::disposing( const EventObject& _rSource ) throw ( RuntimeException )
+    void SAL_CALL OAccessibleControlContext::disposing( const EventObject&
+    #if OSL_DEBUG_LEVEL > 0
+    _rSource
+    #endif
+    ) throw ( RuntimeException )
     {
         OSL_ENSURE( Reference< XPropertySet >( _rSource.Source, UNO_QUERY ).get() == m_xControlModel.get(),
             "OAccessibleControlContext::disposing: where did this come from?" );
