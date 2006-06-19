@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:30:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:03:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
             // Ueber den Absatz selektieren?
             // Select over the paragraph?
             // FIXME  This should be max long...
-            if( nEndPos == (-1) ) // USHORT for 0 and -1 !
+            if( nEndPos == sal::static_int_cast<USHORT>(-1) ) // USHORT for 0 and -1 !
             {
                 if ( (rSel.GetEnd().GetPara()+1) < GetParagraphCount() )
                 {
