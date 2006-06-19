@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_navi_sub.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:34:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,10 +93,11 @@ HF_NaviSubRow::Produce_Row()
             rCell = *pMyRow
                      >> *new Html::TableCell
                          << new Html::ClassAttr("navisub");
+        StreamLock sl(100);
         Xml::Element &
             rGoon = (*it).second
                             ?   ( rCell
-                                  >> *new Html::Link( StreamLock(100)()
+                                  >> *new Html::Link( sl()
                                                       << "#"
                                                       << (*it).first.second
                                                       << c_str )
