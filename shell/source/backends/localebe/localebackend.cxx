@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:15:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,13 @@ namespace /* private */
 #endif
 #define WINVER 0x0501
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 rtl::OUString ImplGetLocale(LCID lcid)
 {
@@ -305,11 +311,12 @@ rtl::OUString LocaleBackend::createTimeStamp()
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XLayer> SAL_CALL LocaleBackend::getLayer(
-        const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
+        const rtl::OUString& aComponent, const rtl::OUString& /*aTimestamp*/)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
 
-    if( aComponent.equals( getSupportedComponents()[0]) )
+    uno::Sequence<rtl::OUString> aComps( getSupportedComponents() );
+    if( aComponent.equals( aComps[0]) )
     {
         if( ! m_xSystemLayer.is() )
         {
@@ -342,7 +349,7 @@ uno::Reference<backend::XLayer> SAL_CALL LocaleBackend::getLayer(
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-LocaleBackend::getUpdatableLayer(const rtl::OUString& aComponent)
+LocaleBackend::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
     throw (backend::BackendAccessException,lang::NoSupportException,
            lang::IllegalArgumentException)
 {
@@ -350,8 +357,6 @@ LocaleBackend::getUpdatableLayer(const rtl::OUString& aComponent)
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
             "LocaleBackend: No Update Operation allowed, Read Only access") ),
         *this) ;
-
-    return NULL;
 }
 
 //------------------------------------------------------------------------------
