@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opostponedtruncationstream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 14:34:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ struct PTFStreamData_Impl
     , m_bDelete( bDelete )
     , m_aURL( aURL )
     , m_xOrigStream( xOrigStream )
-    , m_xOrigInStream( xOrigInStream )
-    , m_xOrigOutStream( xOrigOutStream )
     , m_xOrigTruncate( xOrigTruncate )
     , m_xOrigSeekable( xOrigSeekable )
+    , m_xOrigInStream( xOrigInStream )
+    , m_xOrigOutStream( xOrigOutStream )
     , m_bInOpen( sal_False )
     , m_bOutOpen( sal_False )
     , m_bPostponedTruncate( sal_True )
@@ -94,7 +94,7 @@ struct PTFStreamData_Impl
 // ------------------------------------------------------------------------
 OPostponedTruncationFileStream::OPostponedTruncationFileStream(
         const ::rtl::OUString& aURL,
-        const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+        const uno::Reference< lang::XMultiServiceFactory >& /*xFactory*/,
         const uno::Reference< ucb::XSimpleFileAccess >& xFileAccess,
         sal_Bool bDeleteIfNotCommited )
 : m_pStreamData( NULL )
