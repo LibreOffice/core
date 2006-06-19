@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:35:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,14 @@
  *
  ************************************************************************/
 
-#ifdef WNT
+#if defined WNT
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #endif
 
 #include <string>
@@ -98,7 +104,7 @@ bool isAccessibilitySupportDesired()
                 else if (strcmp((char*) arData, "false") == 0
                          || strcmp((char*) arData, "0") == 0)
                     retVal = false;
-#if OSL_DEBUG_LEVER > 1
+#if OSL_DEBUG_LEVEL > 1
                 else
                     OSL_ASSERT(0);
 #endif
@@ -109,7 +115,7 @@ bool isAccessibilitySupportDesired()
                     retVal = true;
                 else if (arData[0] == 0)
                     retVal = false;
-#if OSL_DEBUG_LEVER > 1
+#if OSL_DEBUG_LEVEL > 1
                 else
                     OSL_ASSERT(0);
 #endif
@@ -172,30 +178,26 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenData = data.getLength();
     sal_Int32 lenBuf = lenData / 2; //always divisable by two
-    char* pBuf = new char[lenBuf];
-    const sal_Int8* arData = data.getConstArray();
-
-    char* pCurBuf = pBuf;
-    const sal_Int8* pData = arData;
-    for (int i = 0; i < lenBuf; i++)
+    unsigned char* pBuf = new unsigned char[lenBuf];
+    const sal_Int8* pData = data.getConstArray();
+    for (sal_Int32 i = 0; i < lenBuf; i++)
     {
-        sal_Int8 curChar = *pData;
+        sal_Int8 curChar = *pData++;
         //find the index of the first 4bits
         //  TODO  What happens if text is not valid Hex characters?
-        char nibble = 0;
-        for (int ii = 0; ii < 16; ii++)
+        unsigned char nibble = 0;
+        for (unsigned char j = 0; j < 16; j++)
         {
-            if (curChar == decodingTable[ii])
+            if (curChar == decodingTable[j])
             {
-                nibble = ii;
+                nibble = j;
                 break;
             }
         }
         nibble <<= 4;
-        pData++;
-        curChar = *pData;
+        curChar = *pData++;
         //find the index for the next 4bits
-        for (int j = 0; j < 16; j++)
+        for (unsigned char j = 0; j < 16; j++)
         {
             if (curChar == decodingTable[j])
             {
@@ -203,9 +205,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
                 break;
             }
         }
-        *pCurBuf = nibble;
-        pData++;
-        pCurBuf++;
+        pBuf[i] = nibble;
     }
     rtl::ByteSequence ret((sal_Int8*) pBuf, lenBuf );
     delete [] pBuf;
@@ -313,8 +313,9 @@ rtl::OUString getLibraryLocation()
                          "(fwkutil.cxx).");
     rtl::OUString libraryFileUrl;
 
-    if (osl::Module::getUrlFromAddress((void *) getLibraryLocation, libraryFileUrl)
-        == sal_False)
+    if (!osl::Module::getUrlFromAddress(
+            reinterpret_cast< oslGenericFunction >(getLibraryLocation),
+            libraryFileUrl))
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     return getDirFromFile(libraryFileUrl);
@@ -325,8 +326,9 @@ rtl::OUString searchFileNextToThisLib(const rtl::OUString & sFile)
 {
     rtl::OUString ret;
     rtl::OUString sLib;
-    if (osl_getModuleURLFromAddress((void *) & searchFileNextToThisLib,
-                                    & sLib.pData) == sal_True)
+    if (osl::Module::getUrlFromAddress(
+            reinterpret_cast< oslGenericFunction >(searchFileNextToThisLib),
+            sLib))
     {
         sLib = getDirFromFile(sLib);
         rtl::OUStringBuffer sBufVendor(256);
