@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propacc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #define NS_UNO      ::com::sun::star::uno
 
 typedef NS_BEANS::PropertyValue* SbPropertyValuePtr;
-SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4, 4 );
+SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4, 4 )
 
 typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySet,
                                  NS_BEANS::XPropertyAccess > SbPropertyValuesHelper;
