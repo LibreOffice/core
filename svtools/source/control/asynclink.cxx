@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asynclink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,11 @@ void AsynchronLink::CreateMutex()
     if( !_pMutex ) _pMutex = new vos::OMutex;
 }
 
-void AsynchronLink::Call( void* pObj, BOOL bAllowDoubles, BOOL bUseTimer )
+void AsynchronLink::Call( void* pObj, BOOL
+#ifdef DBG_UTIL
+bAllowDoubles
+#endif
+, BOOL bUseTimer )
 {
 #ifdef DBG_UTIL
     if ( bUseTimer || !_bInCall )
