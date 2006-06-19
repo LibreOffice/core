@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:53:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ String SvxPluginFileDlg::GetPath() const
     return maFileDlg.GetPath();
 }
 
-SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind ) :
+SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
     maFileDlg(SFXWB_INSERT)
 {
     // set title of the dialogwindow
