@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,6 @@
 
 #ifndef _SVDIO_HXX
 #include "svdio.hxx"
-#endif
-
-#ifndef _E3D_POLYOB3D_HXX
-#include "polyob3d.hxx"
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
@@ -336,7 +332,7 @@ void E3dLatheObj::CreateGeometry()
         Matrix4D aRotMat;
 
         // Skalierung vorbereiten
-        double fScalePerStep;
+        double fScalePerStep(0.0);
         if(GetBackScale() != 100)
             fScalePerStep = (((double)GetBackScale() - 100.0) / 100.0) / (double)GetHorizontalSegments();
 
@@ -1002,7 +998,7 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
