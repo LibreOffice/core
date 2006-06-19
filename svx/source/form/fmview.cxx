@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:59:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:59:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
+
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -199,8 +199,8 @@ FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
 }
 
 //------------------------------------------------------------------------
-FmFormView::FmFormView( FmFormModel* pModel, XOutputDevice* pXOut )
-    :E3dView( pModel, pXOut )
+FmFormView::FmFormView( FmFormModel* _pModel, XOutputDevice* _pXOut )
+    :E3dView( _pModel, _pXOut )
 {
     Init();
 }
@@ -265,10 +265,7 @@ void FmFormView::Init()
         }
     }
 
-    sal_Bool bReadOnly = sal_False;
-    if( pObjShell )
-        bReadOnly = pObjShell->IsReadOnly();
-    if( bReadOnly )
+    if( pObjShell && pObjShell->IsReadOnly() )
         bInitDesignMode = sal_False;
 
     // dieses wird in der Shell vorgenommen
@@ -307,7 +304,7 @@ void FmFormView::MarkListHasChanged()
             RefreshAllIAOManagers();
         }
 
-        pFormShell->GetImpl()->SetSelectionDelayed(this);
+        pFormShell->GetImpl()->SetSelectionDelayed();
     }
 }
 
