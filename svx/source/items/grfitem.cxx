@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:35:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:11:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #define ITEMID_GRF_CROP         0
 
@@ -180,7 +178,7 @@ BOOL SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
 }
 
 SfxItemPresentation SvxGrfCrop::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
+    SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit /*ePresUnit*/,
     String &rText, const IntlWrapper* pIntl ) const
 {
     rText.Erase();
