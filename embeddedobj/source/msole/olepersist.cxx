@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:23:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,20 +594,20 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
         // get the size
         awt::Size aSize = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-        sal_Int32 nInd = 0;
+        sal_Int32 nIndex = 0;
 
         // write width
-        for ( nInd = 0; nInd < 4; nInd++ )
+        for ( nIndex = 0; nIndex < 4; nIndex++ )
         {
-            aData[nInd] = (sal_Int8)( aSize.Width % 0x100 );
+            aData[nIndex] = (sal_Int8)( aSize.Width % 0x100 );
             aSize.Width /= 0x100;
         }
         xTempOutStream->writeBytes( aData );
 
         // write height
-        for ( nInd = 0; nInd < 4; nInd++ )
+        for ( nIndex = 0; nIndex < 4; nIndex++ )
         {
-            aData[nInd] = (sal_Int8)( aSize.Height % 0x100 );
+            aData[nIndex] = (sal_Int8)( aSize.Height % 0x100 );
             aSize.Height /= 0x100;
         }
         xTempOutStream->writeBytes( aData );
@@ -1079,7 +1079,11 @@ void OleEmbeddedObject::OnViewChanged_Impl()
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
+void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent*
+#ifdef WNT
+pOleComponent
+#endif
+)
 {
 #ifdef WNT
     if ( !m_pOleComponent )
@@ -1098,7 +1102,11 @@ void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent )
+void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent*
+#ifdef WNT
+pOleComponent
+#endif
+)
 {
 #ifdef WNT
     if ( !m_pOleComponent )
@@ -1122,7 +1130,11 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleCompon
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent )
+void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent*
+#ifdef WNT
+pOleComponent
+#endif
+)
 {
 #ifdef WNT
     if ( !m_pOleComponent )
@@ -1159,7 +1171,11 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 }
 
 //----------------------------------------------
-void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
+void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
+#ifdef WNT
+xOutStream
+#endif
+)
     throw ( uno::Exception )
 {
     // this method should be used only on windows
@@ -1210,7 +1226,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
 void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
                             const ::rtl::OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments,
+                            const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs,
                             sal_Bool bSaveAs )
         throw ( uno::Exception )
@@ -1493,7 +1509,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         if ( lArguments[nInd].Name.equalsAscii( "ReadOnly" ) )
             lArguments[nInd].Value >>= m_bReadOnly;
 
+#ifdef WNT
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
+#endif
 
     SwitchOwnPersistence( xStorage, sEntName );
 
@@ -1949,8 +1967,8 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
 
 //------------------------------------------------------
 void SAL_CALL OleEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >& lArguments,
-                const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
+                const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 io::IOException,
