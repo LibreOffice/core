@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:04:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,22 +183,22 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
 }
 
 //-----------------------------------------------
-void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                 const css::util::URL&                                     aURL     )
+void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+                                                 const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
 
 //-----------------------------------------------
-void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                    const css::util::URL&                                     aURL     )
+void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+                                                    const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
 
 //-----------------------------------------------
 void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
-                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                        const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
     throw(css::uno::RuntimeException)
 {
@@ -277,7 +277,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     @param  aState
             normaly not needed - because the call itself is enough.
  */
-void SAL_CALL CloseDispatcher::statusChanged(const css::frame::FeatureStateEvent& aState)
+void SAL_CALL CloseDispatcher::statusChanged(const css::frame::FeatureStateEvent&)
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
@@ -299,7 +299,7 @@ void SAL_CALL CloseDispatcher::statusChanged(const css::frame::FeatureStateEvent
 }
 
 //-----------------------------------------------
-void SAL_CALL CloseDispatcher::disposing(const css::lang::EventObject& aSource)
+void SAL_CALL CloseDispatcher::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("CloseDispatcher::disposing()", "Not allowed to be called. Listener interface is an implementation helper only .-)")
@@ -322,7 +322,7 @@ void SAL_CALL CloseDispatcher::disposing(const css::lang::EventObject& aSource)
                 - decide then, if we must close this frame only, establish the backing mode
                   or shutdown the whole application.
 */
-IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, pVoid )
+IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
 {
     try
     {
