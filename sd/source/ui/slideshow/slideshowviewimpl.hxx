@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:30:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:33:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ public:
     SlideShowViewPaintListeners( ::osl::Mutex& rMutex );
 
 protected:
-    virtual bool implNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener,
+    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener,
                              const ::com::sun::star::awt::PaintEvent&                       rEvent ) throw( ::com::sun::star::uno::Exception );
 };
 typedef ::std::auto_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
@@ -290,7 +290,7 @@ public:
     SlideShowViewMouseListeners( ::osl::Mutex& rMutex );
 
 protected:
-    virtual bool implNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >&   rListener,
+    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >&  rListener,
                              const WrappedMouseEvent&                   rEvent ) throw( ::com::sun::star::uno::Exception );
 };
 
@@ -310,7 +310,7 @@ public:
     SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex );
 
 protected:
-    virtual bool implNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rListener,
+    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >&    rListener,
                              const WrappedMouseMotionEvent&                 rEvent ) throw( ::com::sun::star::uno::Exception );
 };
 typedef ::std::auto_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMouseMotionListenersPtr;
