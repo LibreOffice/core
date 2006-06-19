@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:43:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 
 DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPS, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
                 aCBPreviewTiff      ( this, ResId( CB_PREVIEW_TIFF ) ),
                 aCBPreviewEPSI      ( this, ResId( CB_PREVIEW_EPSI ) ),
@@ -66,8 +67,7 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pMgr                ( rPara.pResMgr ),
-                rFltCallPara        ( rPara )
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
