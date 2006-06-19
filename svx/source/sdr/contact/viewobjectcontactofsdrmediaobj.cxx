@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:08:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
 
         if( !mpMediaWindow )
         {
-            OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
+            //OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
 
             if( pOutDev &&
                 ( aPaintRect.Left() < aPaintRect.Right() &&
