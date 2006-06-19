@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:44:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,6 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         //  init member
         ,   m_xFactory                  ( xFactory                                          )
         ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
-        ,   m_aChildFrameContainer      (                                                   )
         ,   m_xParent                   (                                                   )
         ,   m_xContainerWindow          (                                                   )
         ,   m_xComponentWindow          (                                                   )
@@ -430,6 +429,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_nExternalLockCount        ( 0                                                 )
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
         ,   m_bIsHidden                 ( sal_True                                          )
+        ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
     LOG_ASSERT2( implcp_ctor( xFactory ), "Frame::Frame()", "Invalid parameter detected!" )
@@ -1211,7 +1211,6 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow >            xComponentWindow( m_xComponentWindow, css::uno::UNO_QUERY )                       ;
     EActiveState                                        eState          = m_eActiveState                                                  ;
-    sal_Bool                                            bIsTop          = m_bIsFrameTop                                                   ;
 
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -2191,7 +2190,11 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigu
 
     @onerror    -
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowResized( const css::awt::WindowEvent&
+#if OSL_DEBUG_LEVEL > 0
+aEvent
+#endif
+) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2207,7 +2210,11 @@ void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw(
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::focusGained( const css::awt::FocusEvent&
+#if OSL_DEBUG_LEVEL > 0
+aEvent
+#endif
+) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2243,7 +2250,11 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
 
     @onerror    -
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowActivated( const css::lang::EventObject&
+#if OSL_DEBUG_LEVEL > 0
+aEvent
+#endif
+) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2267,7 +2278,11 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject&
+#if OSL_DEBUG_LEVEL > 0
+aEvent
+#endif
+) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2300,7 +2315,6 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
             )
         {
             css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
-            Window*                                   pOwnWindow      = VCLUnoHelper::GetWindow( xContainerWindow );
             Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
             if( pFocusWindow==NULL || pParentWindow->IsChild( pFocusWindow ) )
             {
@@ -2316,7 +2330,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::windowClosing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     /* #i62088#
         Some interceptor objects intercept our "internaly asynchronoues implemented" dispatch call.
@@ -2384,7 +2398,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& aEvent ) throw
     @threadsafe yes
     @modified   31.07.2002 07:56, as96863
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowShown( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     static sal_Bool bFirstVisibleTask = sal_True;
 
@@ -2418,7 +2432,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& aEvent ) throw(c
     }
 }
 
-void SAL_CALL Frame::windowHidden( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL Frame::windowHidden( const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
@@ -2591,7 +2605,7 @@ void Frame::impl_initializePropInfo()
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& sProperty,
+void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
                                                  sal_Int32        nHandle  ,
                                            const css::uno::Any&   aValue   )
 
@@ -2660,7 +2674,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& sProperty,
 }
 
 //*****************************************************************************************************************
-css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& sProperty,
+css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& /*sProperty*/,
                                                           sal_Int32        nHandle  )
 {
     /* There is no need to lock any mutex here. Because we share the
@@ -3157,7 +3171,6 @@ void Frame::impl_checkMenuCloser()
     // to all other top level frames too.
     css::uno::Reference< css::frame::XDesktop >        xDesktop     (m_xParent, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XFramesSupplier > xTaskSupplier(xDesktop , css::uno::UNO_QUERY);
-    sal_Bool                                           bHidden      = m_bIsHidden;
     if ( !xDesktop.is() || !xTaskSupplier.is() )
         return;
 
@@ -3288,7 +3301,7 @@ sal_Bool Frame::implcp_setName( const ::rtl::OUString& sName )
 // We don't accept null pointer or references!
 // An empty target name is allowed => is the same like "_self"
 sal_Bool Frame::implcp_findFrame(  const   ::rtl::OUString& sTargetFrameName,
-                                            sal_Int32        nSearchFlags    )
+                                            sal_Int32        /*nSearchFlags*/    )
 {
     return( &sTargetFrameName == NULL );
 }
