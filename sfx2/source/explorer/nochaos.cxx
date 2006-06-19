@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nochaos.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:52:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
 }
 
 //-------------------------------------------------------------------------
-CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* pPool )
+CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
 : m_nItems( 1 ),
   m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
