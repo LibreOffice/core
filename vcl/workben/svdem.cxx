@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:10:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
+    (void)argc; // avoid warning
+    (void)argv; // avoid warning
     Reference< XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
