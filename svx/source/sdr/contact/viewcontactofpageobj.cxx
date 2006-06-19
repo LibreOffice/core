@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:05:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ namespace sdr
             return bRetval;
         }
 
-        void OCOfPageObjPagePainter::InvalidatePartOfView(const Rectangle& rRectangle) const
+        void OCOfPageObjPagePainter::InvalidatePartOfView(const Rectangle& /*rRectangle*/) const
         {
             // call user change
             mrUserViewContact.ActionChanged();
@@ -285,7 +285,7 @@ namespace sdr
         sal_Bool ViewContactOfPageObj::PaintPageContents(
             DisplayInfo& rDisplayInfo,
             const Rectangle& rPaintRectangle,
-            const ViewObjectContact& rAssociatedVOC)
+            const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Prepare page painter
             sal_Bool bRetval(sal_False);
@@ -303,7 +303,7 @@ namespace sdr
         sal_Bool ViewContactOfPageObj::PaintPageReplacement(
             DisplayInfo& rDisplayInfo,
             const Rectangle& rPaintRectangle,
-            const ViewObjectContact& rAssociatedVOC)
+            const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // If painting recursive, paint a replacement visualization
             OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
@@ -324,7 +324,7 @@ namespace sdr
         sal_Bool ViewContactOfPageObj::PaintPageBorder(
             DisplayInfo& rDisplayInfo,
             const Rectangle& rPaintRectangle,
-            const ViewObjectContact& rAssociatedVOC)
+            const ViewObjectContact& /*rAssociatedVOC*/)
         {
             OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
             sal_Bool bRetval(sal_False);

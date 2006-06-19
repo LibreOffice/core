@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:05:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,13 +214,13 @@ namespace sdr
             return bRetval;
         }
 
-        void OwnMasterPagePainter::InvalidatePartOfView(const Rectangle& rRectangle) const
+        void OwnMasterPagePainter::InvalidatePartOfView(const Rectangle& /*rRectangle*/) const
         {
             // call user change
             mrVCOfMasterPageDescriptor.ActionChanged();
         }
 
-        void OwnMasterPagePainter::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
+        void OwnMasterPagePainter::ObjectGettingPotentiallyVisible(const ViewObjectContact& /*rVOC*/) const
         {
             // call user change
             mrVCOfMasterPageDescriptor.ActionChanged();
@@ -371,18 +371,18 @@ namespace
             // reduce member count if getting too big
             if(maEntries.size() > MASTERPAGE_MAXIMUM_COUNT)
             {
-                ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+                ::std::vector< MasterPageBufferEntry >::iterator aCandidate2 = maEntries.begin();
                 ::std::vector< MasterPageBufferEntry >::iterator aSmallest = maEntries.begin();
 
                 // search for existing entry with smallest UsageCount
-                while(aCandidate != maEntries.end())
+                while(aCandidate2 != maEntries.end())
                 {
-                    if(aCandidate->GetMPUsageCount() < aSmallest->GetMPUsageCount())
+                    if(aCandidate2->GetMPUsageCount() < aSmallest->GetMPUsageCount())
                     {
-                        aSmallest = aCandidate;
+                        aSmallest = aCandidate2;
                     }
 
-                    aCandidate++;
+                    aCandidate2++;
                 }
 
                 if(aSmallest != maEntries.end())
@@ -547,7 +547,7 @@ namespace sdr
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
         sal_Bool ViewContactOfMasterPageDescriptor::ShouldPaintObject(DisplayInfo& rDisplayInfo,
-            const ViewObjectContact& rAssociatedVOC)
+            const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Test page painting. Suppress output when control layer is painting.
             if(rDisplayInfo.GetControlLayerPainting())
