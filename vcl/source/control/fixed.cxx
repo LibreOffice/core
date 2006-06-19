@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:46:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
 // -----------------------------------------------------------------------
 
-void FixedText::Paint( const Rectangle& rRect )
+void FixedText::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
@@ -601,15 +601,14 @@ void  FixedLine::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-void FixedLine::Paint( const Rectangle& rRect )
+void FixedLine::Paint( const Rectangle& )
 {
     ImplDraw();
 }
 
 // -----------------------------------------------------------------------
 
-void FixedLine::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                      ULONG nFlags )
+void FixedLine::Draw( OutputDevice*, const Point&, const Size&, ULONG )
 {
 }
 
@@ -812,7 +811,7 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, ULONG /* nDrawFlags */,
 
 // -----------------------------------------------------------------------
 
-void FixedBitmap::Paint( const Rectangle& rRect )
+void FixedBitmap::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
@@ -1053,7 +1052,7 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
 // -----------------------------------------------------------------------
 
-void FixedImage::Paint( const Rectangle& rRect )
+void FixedImage::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
