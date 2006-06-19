@@ -4,9 +4,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:41:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ void SAL_CALL SchemaParser::endElement( const OUString& aName )
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-void SchemaParser::startSchema( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
+void SchemaParser::startSchema( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& /*xAttribs*/ )
 {
     m_sComponent = aInfo.name;
     m_xHandler->startSchema();
@@ -268,7 +268,7 @@ void SchemaParser::endSection( )
 }
 // -----------------------------------------------------------------------------
 
-void SchemaParser::handleImport( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
+void SchemaParser::handleImport( ElementInfo const & /*aInfo*/, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
     OUString aComponent;
     if (getDataParser().getImportComponent(xAttribs,aComponent))
@@ -290,7 +290,7 @@ void SchemaParser::handleInstance( ElementInfo const & aInfo, const uno::Referen
 }
 // -----------------------------------------------------------------------------
 
-void SchemaParser::handleItemType( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
+void SchemaParser::handleItemType( ElementInfo const & /*aInfo*/, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
     backenduno::TemplateIdentifier aTemplate;
     if (getDataParser().getInstanceType(xAttribs, aTemplate.Name, aTemplate.Component))
