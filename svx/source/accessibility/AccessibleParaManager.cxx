@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:35:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //------------------------------------------------------------------------
 //
@@ -104,9 +102,9 @@ namespace accessibility
         return maChildStates;
     }
 
-    void AccessibleParaManager::SetNum( sal_uInt32 nNumParas )
+    void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
     {
-        if( nNumParas < maChildren.size() )
+        if( (size_t)nNumParas < maChildren.size() )
             Release( nNumParas, maChildren.size() );
 
         maChildren.resize( nNumParas );
