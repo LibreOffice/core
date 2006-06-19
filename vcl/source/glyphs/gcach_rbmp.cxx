@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_rbmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:14:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ bool RawBitmap::Rotate( int nAngle )
             break;
     }
 
-    int nBufSize = nNewHeight * nNewScanlineSize;
+    unsigned int nBufSize = nNewHeight * nNewScanlineSize;
     unsigned char* pBuf = new unsigned char[ nBufSize ];
     if( !pBuf )
         return false;
