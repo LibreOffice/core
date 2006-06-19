@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:34:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:43:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 
 // =======================================================================
 
-void WorkWindow::ImplInitData()
+void WorkWindow::ImplInitWorkWindowData()
 {
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
 
@@ -143,7 +143,7 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::st
 WorkWindow::WorkWindow( WindowType nType ) :
     SystemWindow( nType )
 {
-    ImplInitData();
+    ImplInitWorkWindowData();
 }
 
 // -----------------------------------------------------------------------
@@ -151,7 +151,7 @@ WorkWindow::WorkWindow( WindowType nType ) :
 WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
-    ImplInitData();
+    ImplInitWorkWindowData();
     ImplInit( pParent, nStyle, NULL );
 }
 
@@ -160,7 +160,7 @@ WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
 WorkWindow::WorkWindow( Window* pParent, const ResId& rResId ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
-    ImplInitData();
+    ImplInitWorkWindowData();
     rResId.SetRT( RSC_WORKWIN );
     ImplInit( pParent, ImplInitRes( rResId ) );
     ImplLoadRes( rResId );
@@ -171,7 +171,7 @@ WorkWindow::WorkWindow( Window* pParent, const ResId& rResId ) :
 WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
-    ImplInitData();
+    ImplInitWorkWindowData();
     mbSysChild = TRUE;
     ImplInit( pParent, nStyle, aSystemWorkWindowToken );
 }
@@ -181,7 +181,7 @@ WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSyst
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
-    ImplInitData();
+    ImplInitWorkWindowData();
     mbSysChild = TRUE;
     ImplInit( NULL, 0, pParent );
 }
@@ -301,11 +301,9 @@ BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
 
 void WorkWindow::ImplSetFrameState( ULONG aFrameState )
 {
-    Window* pWindow = mpWindowImpl->mpFrameWindow;
-
     SalFrameState   aState;
     aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;
-    aState.mnState  = aFrameState; //SAL_FRAMESTATE_MAXIMIZED;
+    aState.mnState  = aFrameState;
     mpWindowImpl->mpFrame->SetWindowState( &aState );
 }
 
