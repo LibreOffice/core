@@ -1,3 +1,4 @@
+
 %{
 /*
  * lexer for parsing ressource source files (*.src)
@@ -22,17 +23,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#if defined __GNUC__
+#pragma GCC system_header
+#elif defined __SINPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 
 /* external functions (C++ code, declared as extren "C" */
-extern WorkOnTokenSet( int, char* );
-extern InitExport( char * , char * );
-extern Parse( int nTyp, char *pTokenText );
-extern EndExport();
-extern SetError();
-extern GetError();
+extern int WorkOnTokenSet( int, char* );
+extern int InitExport( char * , char * );
+extern int Parse( int nTyp, char *pTokenText );
+extern int EndExport();
+extern int SetError();
+extern int GetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetNextFile();
 extern int isQuiet();
+extern void Close();
 extern char* getFilename();
 
 /* forwards */
@@ -283,7 +292,6 @@ main( int argc, char* argv[])
    	yyin = pFile;
 
 	/* create global instance of class Export */
-	//InitExport( pOutput , sFilename );
 
 	/* start parser */
    	yylex();
