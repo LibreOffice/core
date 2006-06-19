@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:03:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,11 +178,19 @@ public:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-void SAL_CALL SfxInPlaceClient_Impl::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxInPlaceClient_Impl::changingState(
+    const ::com::sun::star::lang::EventObject& /*aEvent*/,
+    ::sal_Int32 /*nOldState*/,
+    ::sal_Int32 /*nNewState*/ )
+throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxInPlaceClient_Impl::stateChanged(
+    const ::com::sun::star::lang::EventObject& /*aEvent*/,
+    ::sal_Int32 nOldState,
+    ::sal_Int32 nNewState )
+throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_pClient && nOldState != embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
@@ -197,7 +205,7 @@ void SAL_CALL SfxInPlaceClient_Impl::stateChanged( const ::com::sun::star::lang:
         if ( nHandle )
         {
             // currently needs SFX code
-            SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+            SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
             SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
             SfxWorkWindow *pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
             pWorkWin->UpdateObjectBars_Impl();
@@ -216,7 +224,8 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
     }
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxInPlaceClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
+throw (::com::sun::star::uno::RuntimeException)
 {
     DELETEZ( m_pClient );
 }
@@ -397,9 +406,9 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
     xLayoutManager->lock();
     xLayoutManager->setVisible( sal_False );
 #endif
-    SfxWorkWindow *pWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
-    pWorkWin->Lock_Impl( TRUE );
-    pWorkWin->MakeVisible_Impl( FALSE );
+    SfxWorkWindow* pClientWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
+    pClientWorkWin->Lock_Impl( TRUE );
+    pClientWorkWin->MakeVisible_Impl( FALSE );
 
     // make LayoutManager of object visible and force placement of objects tools
     uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
@@ -408,9 +417,9 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
     if ( nHandle )
     {
         // currently needs SFX code
-        SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+        SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-        SfxWorkWindow *pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
+        SfxWorkWindow* pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
         pWorkWin->MakeVisible_Impl( TRUE );
         pWorkWin->Lock_Impl( FALSE );
 
@@ -464,10 +473,10 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     xLayoutManager->unlock();
 #endif
 
-    SfxWorkWindow *pWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
-    pWorkWin->MakeVisible_Impl( TRUE );
-    pWorkWin->Lock_Impl( FALSE );
-    pWorkWin->UpdateObjectBars_Impl();
+    SfxWorkWindow* pClientWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
+    pClientWorkWin->MakeVisible_Impl( TRUE );
+    pClientWorkWin->Lock_Impl( FALSE );
+    pClientWorkWin->UpdateObjectBars_Impl();
 
     // make LayoutManager of object invisible
     SfxObjectShell* pDoc = 0;
@@ -477,9 +486,9 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     if ( nHandle )
     {
         // currently needs SFX code
-        pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+        pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-        SfxWorkWindow *pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
+        SfxWorkWindow* pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
         pWorkWin->MakeVisible_Impl( FALSE );
         pWorkWin->Lock_Impl( TRUE );
 
@@ -573,7 +582,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& aKeys )
+void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
@@ -584,7 +593,7 @@ void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const uno::Sequence<
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL SfxInPlaceClient_Impl::scrollObject( const awt::Size& aOffset )
+void SAL_CALL SfxInPlaceClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
@@ -715,7 +724,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
 }
 
 //--------------------------------------------------------------------
-IMPL_LINK( SfxInPlaceClient_Impl, TimerHdl, Timer*, pTimer )
+IMPL_LINK( SfxInPlaceClient_Impl, TimerHdl, Timer*, EMPTYARG )
 {
     if ( m_pClient && m_xObject.is() )
         m_pClient->GetViewShell()->CheckIPClient_Impl( m_pClient, m_pClient->GetViewShell()->GetObjectShell()->GetVisArea() );
