@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:31:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,8 +227,6 @@ namespace vcl
 
             uno::Sequence< geometry::RealPoint2D > pointSequenceFromPolygon( const ::Polygon& inputPolygon )
             {
-                int i;
-
                 // fetch preliminary polygon size
                 const int nSize = inputPolygon.GetSize();
 
@@ -237,7 +235,7 @@ namespace vcl
                 geometry::RealPoint2D* pOutput = outputSequence.getArray();
 
                 // fill sequence from polygon
-                for( i=0; i<nSize; ++i )
+                for( USHORT i=0; i<nSize; ++i )
                 {
                     pOutput[i] = geometry::RealPoint2D( inputPolygon[i].X(),
                                                         inputPolygon[i].Y() );
@@ -304,9 +302,9 @@ namespace vcl
             if( !xGraphicDevice.is() )
                 return xRes;
 
-            const int nNumPolys( inputPolyPolygon.Count() );
+            const USHORT nNumPolys( inputPolyPolygon.Count() );
 
-            int i;
+            USHORT i;
             bool needBeziers( false );
 
             for( i=0; i<nNumPolys && !needBeziers; ++i )
@@ -373,11 +371,11 @@ namespace vcl
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polygonFromPoint2DSequence()" );
 
-            const int nCurrSize( points.getLength() );
+            const USHORT nCurrSize( sal::static_int_cast<USHORT>(points.getLength()) );
 
             ::Polygon aPoly( nCurrSize );
 
-            int nCurrPoint;
+            USHORT nCurrPoint;
             for( nCurrPoint=0; nCurrPoint<nCurrSize; ++nCurrPoint )
                 aPoly[nCurrPoint] = pointFromRealPoint2D( points[nCurrPoint] );
 
@@ -407,7 +405,7 @@ namespace vcl
         {
             const int nSize( curves.getLength() );
 
-            int i, nCurrSize;
+            USHORT i, nCurrSize;
 
             // determine size
             for( i=0, nCurrSize=0; i<nSize; ++i )
@@ -478,7 +476,7 @@ namespace vcl
 
         //---------------------------------------------------------------------------------------
 
-        uno::Reference< rendering::XBitmap > xBitmapFromBitmap( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+        uno::Reference< rendering::XBitmap > xBitmapFromBitmap( const uno::Reference< rendering::XGraphicDevice >&  /*xGraphicDevice*/,
                                                                 const ::Bitmap&                                     inputBitmap )
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmap()" );
@@ -488,7 +486,7 @@ namespace vcl
 
         //---------------------------------------------------------------------------------------
 
-        uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    xGraphicDevice,
+        uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    /*xGraphicDevice*/,
                                                                   const ::BitmapEx&                                     inputBitmap )
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmapEx()" );
@@ -530,7 +528,7 @@ namespace vcl
                 sal_Int64 nPtr = xTunnel->getSomething( rTest );
                 if( nPtr != 0 )
                 {
-                    return BitmapEx( *(BitmapEx*)nPtr );
+                    return BitmapEx( *(BitmapEx*)sal_IntPtr(nPtr) );
                 }
             }
 
@@ -575,7 +573,7 @@ namespace vcl
 
         //---------------------------------------------------------------------------------------
 
-        uno::Sequence< double > colorToDoubleSequence( const uno::Reference< rendering::XGraphicDevice >&   xGraphicDevice,
+        uno::Sequence< double > colorToDoubleSequence( const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/,
                                                        const Color&                                         rColor       )
         {
             // TODO: handle color space conversions, when defined on canvas/graphicDevice
@@ -592,7 +590,7 @@ namespace vcl
             return aRet;
         }
 
-        uno::Sequence< sal_Int8 > colorToIntSequence( const uno::Reference< rendering::XGraphicDevice >&    xGraphicDevice,
+        uno::Sequence< sal_Int8 > colorToIntSequence( const uno::Reference< rendering::XGraphicDevice >&    /*xGraphicDevice*/,
                                                       const Color&                                          rColor       )
         {
             // TODO: handle color space conversions, when defined on canvas/graphicDevice
@@ -609,7 +607,7 @@ namespace vcl
             return aRet;
         }
 
-        Color sequenceToColor( const uno::Reference< rendering::XGraphicDevice >&   xGraphicDevice,
+        Color sequenceToColor( const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/,
                                const uno::Sequence< sal_Int8 >&                     rColor       )
         {
             OSL_ENSURE( rColor.getLength() > 2, "sequenceToColor: need at least three channels" );
@@ -630,7 +628,7 @@ namespace vcl
             return aColor;
         }
 
-        Color sequenceToColor( const uno::Reference< rendering::XGraphicDevice >&   xGraphicDevice,
+        Color sequenceToColor( const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/,
                                const uno::Sequence< double >&                       rColor       )
         {
             OSL_ENSURE( rColor.getLength() > 2, "sequenceToColor: need at least three channels" );
