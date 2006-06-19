@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:38:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ using namespace ::com::sun::star::accessibility;
 static SvLBox* pDDSource = NULL;
 static SvLBox* pDDTarget = NULL;
 
-DBG_NAME(SvInplaceEdit);
-DBG_NAME(SvInplaceEdit2);
+DBG_NAME(SvInplaceEdit)
+DBG_NAME(SvInplaceEdit2)
 
 #define SVLBOX_ACC_RETURN 1
 #define SVLBOX_ACC_ESCAPE 2
@@ -140,23 +140,23 @@ SvInplaceEdit::~SvInplaceEdit()
     }
 }
 
-IMPL_LINK_INLINE_START( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_START( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
     bCanceled = FALSE;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_END( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 
-IMPL_LINK_INLINE_START( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_START( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
     bCanceled = TRUE;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_END( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 
 void SvInplaceEdit::KeyInput( const KeyEvent& rKEvt )
 {
@@ -201,13 +201,13 @@ void SvInplaceEdit::LoseFocus()
     }
 }
 
-IMPL_LINK_INLINE_START( SvInplaceEdit, Timeout_Impl, Timer *, pTimer )
+IMPL_LINK_INLINE_START( SvInplaceEdit, Timeout_Impl, Timer *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
     CallCallBackHdl_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit, Timeout_Impl, Timer *, pTimer )
+IMPL_LINK_INLINE_END( SvInplaceEdit, Timeout_Impl, Timer *, EMPTYARG )
 
 void SvInplaceEdit::CallCallBackHdl_Impl()
 {
@@ -353,23 +353,23 @@ void SvInplaceEdit2::Hide()
 }
 
 
-IMPL_LINK_INLINE_START( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_START( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     bCanceled = FALSE;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_END( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 
-IMPL_LINK_INLINE_START( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_START( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     bCanceled = TRUE;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, pAccelerator )
+IMPL_LINK_INLINE_END( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 
 
 BOOL SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
@@ -386,13 +386,9 @@ BOOL SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
             return TRUE;
 
         case KEY_RETURN:
-//          if( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
-            {
-                bCanceled = FALSE;
-                CallCallBackHdl_Impl();
-                return TRUE;
-            }
-            break;
+            bCanceled = FALSE;
+            CallCallBackHdl_Impl();
+            return TRUE;
     }
     return FALSE;
 }
@@ -421,13 +417,13 @@ void SvInplaceEdit2::LoseFocus()
     }
 }
 
-IMPL_LINK_INLINE_START( SvInplaceEdit2, Timeout_Impl, Timer *, pTimer )
+IMPL_LINK_INLINE_START( SvInplaceEdit2, Timeout_Impl, Timer *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     CallCallBackHdl_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit2, Timeout_Impl, Timer *, pTimer )
+IMPL_LINK_INLINE_END( SvInplaceEdit2, Timeout_Impl, Timer *, EMPTYARG )
 
 void SvInplaceEdit2::CallCallBackHdl_Impl()
 {
@@ -932,13 +928,21 @@ void SvLBox::NotifyRemoving( SvLBoxEntry* )
     3. Target ist ein zugeklappter Parent
         - Entry wird an das Ende der Target-Childlist gehaengt
 */
-
+#ifdef DBG_UTIL
 BOOL SvLBox::NotifyMoving(
     SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
     SvLBoxEntry*  pEntry,        // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
     ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
+#else
+BOOL SvLBox::NotifyMoving(
+    SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
+    SvLBoxEntry*,                // Zu verschiebender Entry aus
+                                 // GetSourceListBox()->GetModel()
+    SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
+    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
+#endif
 {
     DBG_CHKTHIS(SvLBox,0);
     DBG_ASSERT(pEntry,"NotifyMoving:SoureEntry?")
@@ -1288,7 +1292,7 @@ void SvLBox::FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPa
     }
 }
 
-String SvLBox::GetEntryText( SvLBoxEntry* pEntry ) const
+String SvLBox::GetEntryText( SvLBoxEntry* ) const
 {
     DBG_CHKTHIS(SvLBox,0);
 
@@ -1322,7 +1326,7 @@ void SvLBox::SetDragDropMode( DragDropMode nDDMode )
     nDragDropMode = nDDMode;
 }
 
-SvViewData* SvLBox::CreateViewData( SvListEntry* pEntry )
+SvViewData* SvLBox::CreateViewData( SvListEntry* )
 {
     DBG_CHKTHIS(SvLBox,0);
     SvViewDataEntry* pEntryData = new SvViewDataEntry;
@@ -1423,7 +1427,7 @@ void SvLBox::EditText( const String& rStr, const Rectangle& rRect,
         rSel, bMulti );
 }
 
-IMPL_LINK( SvLBox, TextEditEndedHdl_Impl, SvInplaceEdit2 *, pSvInplaceEdit )
+IMPL_LINK( SvLBox, TextEditEndedHdl_Impl, SvInplaceEdit2 *, EMPTYARG )
 {
     DBG_CHKTHIS(SvLBox,0);
     if ( nImpFlags & SVLBOX_EDTEND_CALLED ) // Nesting verhindern
@@ -1503,7 +1507,7 @@ void SvLBox::Command( const CommandEvent& )
     DBG_CHKTHIS(SvLBox,0);
 }
 
-SvLBoxEntry* SvLBox::GetEntry( const Point& rPos, BOOL ) const
+SvLBoxEntry* SvLBox::GetEntry( const Point&, BOOL ) const
 {
     DBG_CHKTHIS(SvLBox,0);
     return 0;
@@ -1677,7 +1681,7 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return ExecuteDrop( rEvt, GetSourceView() );
 }
 
-void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
 
@@ -1730,7 +1734,11 @@ void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
 }
 
-void SvLBox::DragFinished( sal_Int8 nAction )
+void SvLBox::DragFinished( sal_Int8
+#ifndef UNX
+nAction
+#endif
+)
 {
     EnableSelectionAsDropTarget( TRUE, TRUE );
 
@@ -1805,7 +1813,7 @@ Link SvLBox::GetDragFinishedHdl() const
     return STATIC_LINK( this, SvLBox, DragFinishHdl_Impl );
 }
 
-void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
+void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& ) const
 {
 }
 
@@ -1814,7 +1822,7 @@ void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet 
     return ::com::sun::star::uno::Reference< XAccessible >();
 }
 
-Rectangle SvLBox::GetBoundingRect( SvLBoxEntry* pEntry )
+Rectangle SvLBox::GetBoundingRect( SvLBoxEntry* )
 {
     return Rectangle();
 }
