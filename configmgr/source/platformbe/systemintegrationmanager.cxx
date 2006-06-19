@@ -4,9 +4,9 @@
  *
  *  $RCSfile: systemintegrationmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:14:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ SystemIntegrationManager::~SystemIntegrationManager()
 }
 //------------------------------------------------------------------------------
 void SAL_CALL SystemIntegrationManager::initialize(
-        const uno::Sequence<uno::Any>& aParameters)
+    const uno::Sequence<uno::Any>& /*aParameters*/)
     throw (uno::RuntimeException, uno::Exception,
            lang::IllegalArgumentException,
            backenduno::BackendSetupException)
@@ -224,7 +224,7 @@ SystemIntegrationManager::PlatformBackendList SystemIntegrationManager::getSuppo
 //------------------------------------------------------------------------------
 uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
     SystemIntegrationManager::listLayers(const rtl::OUString& aComponent,
-                                         const rtl::OUString& aEntity)
+                                         const rtl::OUString& /*aEntity*/)
         throw (backenduno::BackendAccessException,
                 lang::IllegalArgumentException,
                 uno::RuntimeException)
@@ -236,10 +236,10 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
 
     uno::Reference<backenduno::XLayer> * pLayer = aLayers.getArray();
 
-    for (sal_Int32 i=0 ; i< aUniversalBackends.size(); ++i, ++pLayer)
+    for (PlatformBackendList::size_type i=0 ; i< aUniversalBackends.size(); ++i, ++pLayer)
         *pLayer = aUniversalBackends[i]->getLayer(aComponent, rtl::OUString());
 
-    for (sal_Int32 j=0 ; j< aSpecialBackends.size(); ++j, ++pLayer)
+    for (PlatformBackendList::size_type j=0 ; j< aSpecialBackends.size(); ++j, ++pLayer)
         *pLayer = aSpecialBackends[j]->getLayer(aComponent, rtl::OUString());
 
     OSL_ASSERT( aLayers.getConstArray()+aLayers.getLength() == pLayer );
@@ -248,8 +248,8 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
 //------------------------------------------------------------------------------
 
 uno::Reference<backenduno::XUpdateHandler> SAL_CALL
-    SystemIntegrationManager::getUpdateHandler(const rtl::OUString& aComponent,
-                                          const rtl::OUString& aEntity)
+    SystemIntegrationManager::getUpdateHandler(const rtl::OUString& /*aComponent*/,
+                                               const rtl::OUString& /*aEntity*/)
         throw (backenduno::BackendAccessException,
                 lang::NoSupportException,
                 lang::IllegalArgumentException,
@@ -260,8 +260,6 @@ uno::Reference<backenduno::XUpdateHandler> SAL_CALL
                 rtl::OUString::createFromAscii(
                 "SystemIntegrationManager: No Update Operation allowed, Read Only access"),
                 *this) ;
-    return NULL;
-
 }
 // ---------------------------------------------------------------------------
 // ComponentHelper
