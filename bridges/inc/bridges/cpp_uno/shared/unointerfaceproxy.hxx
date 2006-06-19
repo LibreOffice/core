@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unointerfaceproxy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:10:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,26 @@ namespace bridges { namespace cpp_uno { namespace shared {
 
 class Bridge;
 
+extern "C" typedef void SAL_CALL FreeUnoInterfaceProxy(
+    uno_ExtEnvironment * pEnv, void * pProxy);
+FreeUnoInterfaceProxy freeUnoInterfaceProxy;
+
+// private:
+extern "C" typedef void SAL_CALL UnoInterfaceProxyDispatch(
+    uno_Interface * pUnoI, typelib_TypeDescription const * pMemberDescr,
+    void * pReturn, void * pArgs[], uno_Any ** ppException);
+UnoInterfaceProxyDispatch unoInterfaceProxyDispatch;
+    // this function is not defined in the generic part, but instead has to be
+    // defined individually for each CPP--UNO bridge
+
+// private:
+extern "C" typedef void SAL_CALL AcquireProxy(uno_Interface *);
+AcquireProxy acquireProxy;
+
+// private:
+extern "C" typedef void SAL_CALL ReleaseProxy(uno_Interface *);
+ReleaseProxy releaseProxy;
+
 /**
  * A uno proxy wrapping a cpp interface.
  */
@@ -62,9 +82,6 @@ public:
         Bridge * pBridge, com::sun::star::uno::XInterface * pCppI,
         typelib_InterfaceTypeDescription * pTypeDescr,
         rtl::OUString const & rOId) SAL_THROW(());
-
-    static void SAL_CALL free(uno_ExtEnvironment * pEnv, void * pProxy)
-        SAL_THROW(());
 
     // Interface for individual CPP--UNO bridges:
 
@@ -82,15 +99,6 @@ private:
 
     ~UnoInterfaceProxy();
 
-    static void SAL_CALL acquireProxy(uno_Interface * pUnoI) SAL_THROW(());
-    static void SAL_CALL releaseProxy(uno_Interface * pUnoI) SAL_THROW(());
-
-    // This function is not defined in the generic part, but instead has to be
-    // defined individually for each CPP--UNO bridge:
-    static void SAL_CALL dispatch(
-        uno_Interface * pUnoI, typelib_TypeDescription const * pMemberDescr,
-        void * pReturn, void * pArgs[], uno_Any ** ppException) SAL_THROW(());
-
     oslInterlockedCount nRef;
     Bridge * pBridge;
 
@@ -98,6 +106,17 @@ private:
     com::sun::star::uno::XInterface * pCppI; // wrapped interface
     typelib_InterfaceTypeDescription * pTypeDescr;
     rtl::OUString oid;
+
+    friend void SAL_CALL freeUnoInterfaceProxy(
+        uno_ExtEnvironment * pEnv, void * pProxy);
+
+    friend void SAL_CALL unoInterfaceProxyDispatch(
+        uno_Interface * pUnoI, typelib_TypeDescription const * pMemberDescr,
+        void * pReturn, void * pArgs[], uno_Any ** ppException);
+
+    friend void SAL_CALL acquireProxy(uno_Interface * pUnoI);
+
+    friend void SAL_CALL releaseProxy(uno_Interface * pUnoI);
 };
 
 } } }
