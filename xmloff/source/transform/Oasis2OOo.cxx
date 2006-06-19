@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:50:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1311,9 +1311,6 @@ void XMLTableTransformerContext_Impl::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                     xAttrList = pMutableAttrList;
                 }
-                XMLMutableAttributeList *pMutableAttrList =
-                    new XMLMutableAttributeList( xAttrList );
-                xAttrList = pMutableAttrList;
                 pMutableAttrList->RemoveAttributeByIndex( i );
             }
         }
@@ -1365,7 +1362,7 @@ XMLBodyOASISTransformerContext_Impl::~XMLBodyOASISTransformerContext_Impl()
 }
 
 void XMLBodyOASISTransformerContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+        const Reference< XAttributeList >& )
 {
 }
 
@@ -1723,39 +1720,29 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
     {
     case XML_ETACTION_META:
         return new XMLMetaTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_DOCUMENT:
         return new XMLDocumentTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_BODY:
         return new XMLBodyOASISTransformerContext_Impl( *this, rQName );
-        break;
     case XML_ETACTION_NOTES:
         return new XMLNotesTransformerContext( *this, rQName,
                 static_cast< XMLTokenEnum>( rAction.m_nParam1 ), bPersistent );
-        break;
     case XML_ETACTION_TABLE:
         return new XMLTableTransformerContext_Impl( *this, rQName );
-        break;
     case XML_ETACTION_STYLE:
         return new XMLStyleOASISTContext( *this, rQName, bPersistent );
-        break;
     case XML_ETACTION_STYLE_RENAME:
         return new XMLStyleOASISTContext( *this, rQName,
                     rAction.GetQNamePrefixFromParam1(),
                     rAction.GetQNameTokenFromParam1(), bPersistent );
     case XML_ETACTION_FRAME:
         return new XMLFrameOASISTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_EVENT:
         return new XMLEventOASISTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_DLG:
         return new XMLDlgOASISTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_TAB_STOP:
         return new XMLTabStopOASISTContext_Impl( *this, rQName );
-        break;
     case XML_ETACTION_FORM_CONTROL:
         {
             const XMLTransformerContext *pCurrent = GetCurrentContext();
@@ -1763,25 +1750,19 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
                         pCurrent ? pCurrent->HasQName( XML_NAMESPACE_FORM,
                                            XML_FORM ) : sal_False  );
         }
-        break;
     case XML_ETACTION_FORM_PROPERTY:
         return new XMLFormPropOASISTransformerContext( *this, rQName,
                 static_cast< XMLTokenEnum >( rAction.m_nParam1 ) );
-        break;
     case XML_ETACTION_CHART:
         return new XMLChartOASISTransformerContext( *this, rQName );
-        break;
     case XML_ETACTION_CONFIG_ITEM:
         return new XMLConfigItemTContext_Impl( *this, rQName );
-        break;
     case XML_ETACTION_TRACKED_CHANGES:
         return new XMLTrackedChangesOASISTContext_Impl( *this, rQName,
                                rAction.GetQNamePrefixFromParam1(),
                             rAction.GetQNameTokenFromParam1() );
-        break;
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOASISTContext( *this, rQName );
-        break;
     default:
         OSL_ENSURE( !this, "no user defined context found!" );
         break;
@@ -2134,7 +2115,7 @@ OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
     return Oasis2OOoTransformer_getImplementationName();
 }
 
-sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& )
     throw(RuntimeException)
 {
     return sal_False;
@@ -2164,7 +2145,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames()
 }
 
 Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
+        const Reference< XMultiServiceFactory > &)
     throw( Exception )
 {
     OSL_TRACE("Creating Oasis2OOoTransformer");
