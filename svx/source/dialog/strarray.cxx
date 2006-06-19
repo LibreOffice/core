@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:06:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#pragma hdrstop
 
 // include ---------------------------------------------------------------
 
@@ -74,7 +73,7 @@ const String& SvxStringArray::GetStringByPos( USHORT nPos ) const
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
     else
-        return String();
+        return String::EmptyString();
 }
 
 //------------------------------------------------------------------------
@@ -86,7 +85,7 @@ const String& SvxStringArray::GetStringByType( long nType ) const
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
     else
-        return String();
+        return String::EmptyString();
 }
 
 //------------------------------------------------------------------------
