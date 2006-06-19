@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:37:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,12 +118,12 @@ SV_IMPL_PTRARR(E3dDragMethodUnitGroup, E3dDragMethodUnit*);
 \************************************************************************/
 
 E3dDragMethod::E3dDragMethod (
-    SdrDragView &rView,
+    SdrDragView &_rView,
     const SdrMarkList& rMark,
     //BFS01E3dDragDetail eDetail,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   SdrDragMethod(rView),
+:   SdrDragMethod(_rView),
     eConstraint(eConstr),
     //BFS01eDragDetail(eDetail),
     bMoveFull(bFull),
@@ -235,7 +235,7 @@ IMPL_LINK(E3dDragMethod, TimerInterruptHdl, void*, EMPTYARG)
 |*
 \************************************************************************/
 
-void E3dDragMethod::TakeComment(XubString& rStr) const
+void E3dDragMethod::TakeComment(XubString& /*rStr*/) const
 {
 }
 
@@ -276,7 +276,7 @@ FASTBOOL E3dDragMethod::Beg()
 |*
 \************************************************************************/
 
-FASTBOOL E3dDragMethod::End(FASTBOOL bCopy)
+FASTBOOL E3dDragMethod::End(FASTBOOL /*bCopy*/)
 {
     UINT16 nCnt = aGrp.Count();
 
@@ -369,7 +369,7 @@ void E3dDragMethod::Brk()
 |*
 \************************************************************************/
 
-void E3dDragMethod::Mov(const Point& rPnt)
+void E3dDragMethod::Mov(const Point& /*rPnt*/)
 {
     bMovedAtAll = TRUE;
     if(bMoveFull)
@@ -416,7 +416,7 @@ void E3dDragMethod::Mov(const Point& rPnt)
 |*
 \************************************************************************/
 
-void E3dDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
+void E3dDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL /*bFull*/) const
 {
     UINT16 nPVCnt = rView.GetPageViewCount();
     XPolygon aLine(2);
@@ -462,12 +462,12 @@ void E3dDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 
 TYPEINIT1(E3dDragRotate, E3dDragMethod);
 
-E3dDragRotate::E3dDragRotate(SdrDragView &rView,
+E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     const SdrMarkList& rMark,
     //BFS01E3dDragDetail eDetail,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(rView, rMark/*BFS01, eDetail*/, eConstr, bFull)
+:   E3dDragMethod(_rView, rMark/*BFS01, eDetail*/, eConstr, bFull)
 {
     // Zentrum aller selektierten Objekte in Augkoordinaten holen
     UINT16 nCnt = aGrp.Count();
@@ -643,13 +643,13 @@ Pointer E3dDragRotate::GetPointer() const
 
 TYPEINIT1(E3dDragMove, E3dDragMethod);
 
-E3dDragMove::E3dDragMove(SdrDragView &rView,
+E3dDragMove::E3dDragMove(SdrDragView &_rView,
     const SdrMarkList& rMark,
     //BFS01E3dDragDetail eDetail,
     SdrHdlKind eDrgHdl,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(rView, rMark, /*BFS01eDetail,*/ eConstr, bFull),
+:   E3dDragMethod(_rView, rMark, /*BFS01eDetail,*/ eConstr, bFull),
     eWhatDragHdl(eDrgHdl)
 {
     switch(eWhatDragHdl)
@@ -801,6 +801,8 @@ void E3dDragMove::Mov(const Point& rPnt)
                     case HDL_LOWER:
                         // Einschraenken auf Y -> X gleichsetzen
                         aScNext.X() = aScFixPos.X();
+                        break;
+                    default:
                         break;
                 }
 
