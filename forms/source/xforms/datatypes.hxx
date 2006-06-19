@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datatypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:16:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,6 +380,9 @@ namespace xforms
         // OValueLimitedType overridables
         virtual ::rtl::OUString typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const;
         virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const;
+
+    private:
+        using ODecimalType_Base::initializeTypedClone;
     };
 
     //====================================================================
@@ -400,9 +403,12 @@ namespace xforms
         virtual sal_uInt16          _validate( const ::rtl::OUString& value );  \
         virtual bool                _getValue( const ::rtl::OUString& value, double& fValue );  \
                                                                 \
-        /* OValueLimitedType overridables */                      \
+        /* OValueLimitedType overridables */                    \
         virtual ::rtl::OUString     typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const;  \
         virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const; \
+                                                                \
+    private:                                                    \
+        using classname##_Base::initializeTypedClone;          \
     };
 
     //====================================================================
@@ -439,6 +445,9 @@ namespace xforms
         // OValueLimitedType overridables
         virtual ::rtl::OUString typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const;
         virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const;
+
+    private:
+        using OShortIntegerType_Base::initializeTypedClone;
     };
 
 //........................................................................
