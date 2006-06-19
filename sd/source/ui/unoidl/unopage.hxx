@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:27:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,10 +130,10 @@ public:
     virtual ~SdGenericDrawPage() throw();
 
     // intern
-    void Invalidate() { pPage = NULL; mpModel = NULL; }
-    sal_Bool isValid() { return (pPage != NULL) && (mpModel != NULL); }
+    void Invalidate() { SvxDrawPage::mpPage = NULL; mpModel = NULL; }
+    sal_Bool isValid() { return (SvxDrawPage::mpPage != NULL) && (mpModel != NULL); }
 
-    SdPage* GetPage() const { return (SdPage*)pPage; }
+    SdPage* GetPage() const { return (SdPage*)SvxDrawPage::mpPage; }
     SdXImpressDocument* GetModel() const;
 
     UNO3_GETIMPLEMENTATION_DECL( SdGenericDrawPage )
