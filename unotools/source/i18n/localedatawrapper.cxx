@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:26:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,8 @@ LocaleDataWrapper::LocaleDataWrapper(
             ByteString aMsg( "LocaleDataWrapper ctor: Exception caught\n" );
             aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
         }
     }
@@ -162,6 +164,8 @@ LocaleDataWrapper::LocaleDataWrapper(
             ByteString aMsg( "getComponentInstance: Exception caught\n" );
             aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
         }
     }
@@ -229,6 +233,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getLanguageCountryInfo: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::i18n::LanguageCountryInfo();
@@ -248,6 +254,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getLocaleItem: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::i18n::LocaleDataItem();
@@ -267,6 +275,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getAllCalendars: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar >(0);
@@ -286,6 +296,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getAllCurrencies: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >(0);
@@ -305,6 +317,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getAllFormats: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
@@ -324,6 +338,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getCollatorImplementations: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation >(0);
@@ -343,6 +359,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getTransliterations: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
@@ -362,6 +380,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getForbiddenCharacters: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::i18n::ForbiddenCharacters();
@@ -381,6 +401,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getReservedWord: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
@@ -405,6 +427,8 @@ void LocaleDataWrapper::invalidateData()
         ByteString aMsg( "getAllInstalledLocaleNames: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
     }
     return rInstalledLocales;
@@ -830,16 +854,16 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
                 break;
                 case '-' :
                     if ( !nInSection && nSign == STRING_NOTFOUND )
-                        nSign = p - pStr;
+                        nSign = (xub_StrLen)(p - pStr);
                 break;
                 case '(' :
                     if ( !nInSection && nPar == STRING_NOTFOUND )
-                        nPar = p - pStr;
+                        nPar = (xub_StrLen)(p - pStr);
                 break;
                 case '0' :
                 case '#' :
                     if ( !nInSection && nNum == STRING_NOTFOUND )
-                        nNum = p - pStr;
+                        nNum = (xub_StrLen)(p - pStr);
                 break;
                 case '[' :
                     nInSection++;
@@ -850,15 +874,15 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
                         nInSection--;
                         if ( !nInSection && nBlank == STRING_NOTFOUND
                           && nSym != STRING_NOTFOUND && p < pStop-1 && *(p+1) == ' ' )
-                            nBlank = p - pStr + 1;
+                            nBlank = (xub_StrLen)(p - pStr + 1);
                     }
                 break;
                 case '$' :
                     if ( nSym == STRING_NOTFOUND && nInSection && *(p-1) == '[' )
                     {
-                        nSym = p - pStr + 1;
+                        nSym = (xub_StrLen)(p - pStr + 1);
                         if ( nNum != STRING_NOTFOUND && *(p-2) == ' ' )
-                            nBlank = p - pStr - 2;
+                            nBlank = (xub_StrLen)(p - pStr - 2);
                     }
                 break;
                 case ';' :
@@ -866,14 +890,14 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
                         p = pStop;
                 break;
                 default:
-                    if ( !nInSection && nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, p-pStr, aCurrSymbol.Len() ) )
+                    if ( !nInSection && nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, (xub_StrLen)(p-pStr), aCurrSymbol.Len() ) )
                     {   // currency symbol not surrounded by [$...]
-                        nSym = p - pStr;
+                        nSym = (xub_StrLen)(p - pStr);
                         if ( nBlank == STRING_NOTFOUND && pStr < p && *(p-1) == ' ' )
-                            nBlank = p - pStr - 1;
+                            nBlank = (xub_StrLen)(p - pStr - 1);
                         p += aCurrSymbol.Len() - 1;
                         if ( nBlank == STRING_NOTFOUND && p < pStop-2 && *(p+2) == ' ' )
-                            nBlank = p - pStr + 2;
+                            nBlank = (xub_StrLen)(p - pStr + 2);
                     }
             }
         }
@@ -966,7 +990,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     else
     {
         const ::rtl::OUString& rCode = pFormatArr[nNeg].Code;
-        sal_Int32 nDelim = rCode.indexOf( ';' );
+        xub_StrLen nDelim = (xub_StrLen)rCode.indexOf( ';' );
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
         if (areChecksEnabled() && (nNum == STRING_NOTFOUND ||
                     nSym == STRING_NOTFOUND || (nPar == STRING_NOTFOUND &&
