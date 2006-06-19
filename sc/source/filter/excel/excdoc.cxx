@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:34:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 
 #include "cell.hxx"
 #include "dociter.hxx"
