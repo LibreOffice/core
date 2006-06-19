@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:45:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ void SvtMatchContext_Impl::onTerminated( )
 // Cancellable does not not discard the information gained so far, it
 // inserts all collected completions into the listbox.
 
-IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, pArg )
+IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 {
     // avoid recursion through cancel button
     if( pThis->bStop )
@@ -834,7 +834,7 @@ void SvtMatchContext_Impl::run()
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-void SvtURLBox::TryAutoComplete( BOOL bForward, BOOL bForce )
+void SvtURLBox::TryAutoComplete( BOOL bForce )
 {
     if( Application::AnyInput( INPUT_KEYBOARD ) ) return;
 
@@ -864,9 +864,9 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
         bAutoCompleteMode( FALSE ),
         bOnlyDirectories( FALSE ),
         bTryAutoComplete( FALSE ),
-        bNoSelection( FALSE ),
         bCtrlClick( FALSE ),
-        bHistoryDisabled( FALSE )
+        bHistoryDisabled( FALSE ),
+        bNoSelection( FALSE )
 {
     ImplInit();
 
@@ -879,14 +879,14 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
 //-------------------------------------------------------------------------
 SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
     :   ComboBox( pParent, _nStyle ),
-        bTryAutoComplete( FALSE ),
+        pCtx( 0 ),
+        eSmartProtocol( eSmart ),
         bAutoCompleteMode( FALSE ),
         bOnlyDirectories( FALSE ),
-        bNoSelection( FALSE ),
+        bTryAutoComplete( FALSE ),
         bCtrlClick( FALSE ),
         bHistoryDisabled( FALSE ),
-        pCtx( 0 ),
-        eSmartProtocol( eSmart )
+        bNoSelection( FALSE )
 {
     ImplInit();
 }
@@ -899,9 +899,9 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
         bAutoCompleteMode( FALSE ),
         bOnlyDirectories( FALSE ),
         bTryAutoComplete( FALSE ),
-        bNoSelection( FALSE ),
         bCtrlClick( FALSE ),
-        bHistoryDisabled( FALSE )
+        bHistoryDisabled( FALSE ),
+        bNoSelection( FALSE )
 {
     ImplInit();
 }
@@ -1135,11 +1135,11 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( SvtURLBox, AutoCompleteHdl_Impl, void*, pVoid )
+IMPL_LINK( SvtURLBox, AutoCompleteHdl_Impl, void*, EMPTYARG )
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
     {
-        TryAutoComplete( TRUE, FALSE );
+        TryAutoComplete( FALSE );
         return 1L;
     }
 
@@ -1186,7 +1186,7 @@ void SvtURLBox::SetOnlyDirectories( BOOL bDir )
 }
 
 //-------------------------------------------------------------------------
-void SvtURLBox::SetNoSelection( BOOL bSet )
+void SvtURLBox::SetNoURLSelection( BOOL bSet )
 {
     bNoSelection = bSet;
 }
