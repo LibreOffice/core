@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:22:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -736,6 +736,7 @@ Reference< uno::XInterface > implCreateElement(NodeTreeSetAccess& rNode )
 Reference< uno::XInterface > implCreateElement(NodeTreeSetAccess& rNode, const Sequence< Any >& aArguments )
     throw(Exception, RuntimeException)
 {
+    { (void)aArguments; }
     OSL_ENSURE(aArguments.getLength() == 0, "ConfigurationContainer: createInstance: Arguments not supported - ignoring ...");
     return implCreateElement(rNode);
 }
