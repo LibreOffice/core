@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:42:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,6 +477,8 @@ JobData::EEnvironment JobData::getEnvironment() const
 
         case E_DOCUMENTEVENT :
             sDescriptor = ::rtl::OUString::createFromAscii("DOCUMENTEVENT");
+            break;
+        default:
             break;
     }
     /* } SAFE */
