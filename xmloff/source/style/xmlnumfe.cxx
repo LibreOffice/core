@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:58:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ struct SvXMLEmbeddedTextEntry
 };
 
 typedef SvXMLEmbeddedTextEntry* SvXMLEmbeddedTextEntryPtr;
-SV_DECL_PTRARR_DEL( SvXMLEmbeddedTextEntryArr, SvXMLEmbeddedTextEntryPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( SvXMLEmbeddedTextEntryArr, SvXMLEmbeddedTextEntryPtr, 4, 4 )
 
 //-------------------------------------------------------------------------
 
@@ -1645,6 +1645,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NUMBERFORMAT_OP_LE: eOp3 = NUMBERFORMAT_OP_GT; break;
                 case NUMBERFORMAT_OP_GT: eOp3 = NUMBERFORMAT_OP_LE; break;
                 case NUMBERFORMAT_OP_GE: eOp3 = NUMBERFORMAT_OP_LT; break;
+                default:
+                    break;
             }
 
             if ( fLimit1 == fLimit2 &&
@@ -1729,10 +1731,10 @@ void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
             sal_uInt32 nStandard;
             SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
                                             NUMBERFORMAT_DEFINED, nStandard, nLang );
-            SvNumberformat* pFormat = rTable.First();
+            pFormat = rTable.First();
             while (pFormat)
             {
-                sal_uInt32 nKey(rTable.GetCurKey());
+                nKey = rTable.GetCurKey();
                 if (!pUsedList->IsUsed(nKey))
                 {
                     DBG_ASSERT((pFormat->GetType() & NUMBERFORMAT_DEFINED) != 0, "a not user defined numberformat found");
