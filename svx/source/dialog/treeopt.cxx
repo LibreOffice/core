@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:34:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,16 +510,16 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent ) :
     aCancelPB       ( this, ResId( PB_CANCEL ) ),
     aHelpPB         ( this, ResId( PB_HELP ) ),
     aBackPB         ( this, ResId( PB_BACK ) ),
-    aTreeLB         ( this, ResId( TLB_PAGES ) ),
     aHiddenGB       ( this, ResId( FB_BORDER ) ),
     aPageTitleFT    ( this, ResId( FT_PAGE_TITLE ) ),
     aLine1FL        ( this, ResId( FL_LINE_1 ) ),
     aHelpFT         ( this, ResId( FT_HELPTEXT ) ),
     aHelpImg        ( this, ResId( IMG_HELP ) ),
     aHelpTextsArr   (       ResId( STR_HELPTEXTS ) ),
-    sNotLoadedError (       ResId( ST_LOAD_ERROR ) ),
+    aTreeLB         ( this, ResId( TLB_PAGES ) ),
 
-    sTitle              ( GetText() ),
+    sTitle          ( GetText() ),
+    sNotLoadedError (       ResId( ST_LOAD_ERROR ) ),
     pCurrentPageEntry   ( NULL ),
     pColorPageItemSet   ( NULL ),
     pColorTab           ( NULL ),
@@ -659,7 +659,7 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
 /* -----------------11.02.99 10:31-------------------
  *
  * --------------------------------------------------*/
-IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, pBox)
+IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 {
     if ( aSelectTimer.GetTimeout() == SELECT_FIRST_TIMEOUT )
     {
@@ -691,7 +691,7 @@ IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
 /* -----------------11.02.99 16:45-------------------
  *
  * --------------------------------------------------*/
-IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTRARG )
+IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTYARG )
 {
     aTreeLB.EndSelection();
     if(pCurrentPageEntry)
@@ -754,7 +754,7 @@ IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
             {
                 Size aSz(pBox->GetOutputSizePixel());
                 int nHeight = pBox->GetEntryHeight();
-                Point aPos(pBox->GetEntryPos(pNext));
+                Point aPos(pBox->GetEntryPosition(pNext));
                 if(aPos.Y()+nHeight > aSz.Height())
                 {
                     pBox->ScrollOutputArea( -(short)(nChildCount - i + 1) );
@@ -845,7 +845,6 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
-        const sal_uInt16 nModifier = aKeyCode.GetModifier();
 
         if( aKeyCode.GetCode() == KEY_PAGEUP ||
                 aKeyCode.GetCode() == KEY_PAGEDOWN)
@@ -1216,8 +1215,8 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
 OfaPageResource::OfaPageResource() :
     Resource(ResId(RID_OFADLG_OPTIONS_TREE_PAGES, DIALOG_MGR())),
     aGeneralDlgAry(ResId(SID_GENERAL_OPTIONS)),
-    aLangDlgAry(ResId(SID_LANGUAGE_OPTIONS)),
     aInetDlgAry(ResId(SID_INET_DLG)),
+    aLangDlgAry(ResId(SID_LANGUAGE_OPTIONS)),
     aTextDlgAry(ResId(SID_SW_EDITOPTIONS)),
     aHTMLDlgAry(ResId(SID_SW_ONLINEOPTIONS)),
     aCalcDlgAry(ResId(SID_SC_EDITOPTIONS)),
@@ -1609,11 +1608,11 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 
     if( SFX_ITEM_SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, sal_False, &pItem ))
     {
-        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-        while ( pViewFrame )
+        SfxViewFrame* _pViewFrame = SfxViewFrame::GetFirst();
+        while ( _pViewFrame )
         {
-            pViewFrame->GetDispatcher()->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-            pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+            _pViewFrame->GetDispatcher()->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+            _pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
         }
     }
 }
@@ -1679,7 +1678,6 @@ void OfaTreeOptionsDialog::Initialize()
 {
     OfaPageResource aDlgResource;
     sal_uInt16 nGroup = 0;
-    SfxApplication* pApp = SFX_APP();
 
     SvtOptionsDialogOptions aOptionsDlgOpt;
     sal_uInt16 i, nPageId;
@@ -1791,7 +1789,6 @@ void OfaTreeOptionsDialog::Initialize()
             {
                 ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
-                const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
                 const USHORT nCount = static_cast< const USHORT >( rCalcArray.Count() );
                 for ( i = 1; i < nCount; ++i )
                 {
@@ -2012,11 +2009,11 @@ short OfaTreeOptionsDialog::Execute()
                 const OfaPtrItem* pPtr = (const OfaPtrItem*)SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON );
                 if( pPtr )
                 {
-                    XColorTable* pColorTab = (XColorTable*)pPtr->GetValue();
+                    XColorTable* _pColorTab = (XColorTable*)pPtr->GetValue();
 
-                    if( pColorTab &&
-                        pColorTab->GetPath() == GetColorTable()->GetPath() &&
-                        pColorTab->GetName() == GetColorTable()->GetName() )
+                    if( _pColorTab &&
+                        _pColorTab->GetPath() == GetColorTable()->GetPath() &&
+                        _pColorTab->GetName() == GetColorTable()->GetName() )
                         SfxObjectShell::Current()->PutItem( SvxColorTableItem( GetColorTable() ) );
                 }
             }
