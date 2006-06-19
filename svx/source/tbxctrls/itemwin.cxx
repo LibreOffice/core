@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:35:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@
 #include <sfx2/module.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#pragma hdrstop
 
 #define _SVX_ITEMWIN_CXX
 
@@ -164,7 +163,7 @@ void SvxLineBox::Select()
                     SvxDashListItem aItem( *(const SvxDashListItem*)(
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
                     XLineDashItem aLineDashItem( GetSelectEntry(),
-                        aItem.GetDashList()->Get( nPos - 2 )->GetDash() );
+                        aItem.GetDashList()->GetDash( nPos - 2 )->GetDash() );
 
                     Any a;
                     Sequence< PropertyValue > aArgs( 1 );
@@ -384,7 +383,7 @@ SvxColorBox::~SvxColorBox()
 void SvxColorBox::Update( const XLineColorItem* pItem )
 {
     if ( pItem )
-        SelectEntry( pItem->GetValue() );
+        SelectEntry( pItem->GetColorValue() );
     else
         SetNoSelection();
 }
