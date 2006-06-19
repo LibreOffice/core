@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorlist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:35:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ Sequence<OUString> getVendorNames()
 {
     const size_t count = sizeof(gVendorMap) / sizeof (VendorSupportMapEntry) - 1;
     OUString arNames[count];
-    for ( sal_Int32 pos = 0; pos < count; ++pos )
+    for ( size_t pos = 0; pos < count; ++pos )
     {
         OString sVendor(gVendorMap[pos].sVendorName);
         arNames[pos] = OStringToOUString(sVendor, RTL_TEXTENCODING_UTF8);
