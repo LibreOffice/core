@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:51:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ using namespace rtl;
 using namespace comphelper;
 using namespace osl;
 
-DECLARE_LIST( StringList_Impl, OUString* );
+DECLARE_LIST( StringList_Impl, OUString* )
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
@@ -221,7 +221,6 @@ sal_Bool UCBContentHelper::IsDocument( const String& rContent )
 
 Any UCBContentHelper::GetProperty( const String& rContent, const ::rtl::OUString& rName )
 {
-    sal_Bool bRet = sal_False;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
@@ -378,7 +377,6 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
                     xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
                 if ( xDynamicResultSet.is() )
                 {
-                    sal_Int16 nCaps = xDynamicResultSet->getCapabilities();
                     xResultSet = xDynamicResultSet->getStaticResultSet();
                 }
             }
@@ -448,6 +446,7 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
         pProps[1] = OUString::createFromAscii( "ContentType" );
+        // TODO: can be optimized, property never used:
         pProps[2] = OUString::createFromAscii( "IsFolder" );
 
         try
@@ -475,7 +474,6 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
                 {
                     String aTitle( xRow->getString(1) );
                     String aType( xRow->getString(2) );
-                    sal_Bool bFolder = xRow->getBoolean(3);
                     String aRow = aTitle;
                     aRow += '\t';
                     aRow += aType;
@@ -823,7 +821,6 @@ sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName,
 {
     // extract the single folder names from the path variable and try to find the file in one of these folders
     USHORT nTokenCount = rPath.GetTokenCount( cDelim );
-    USHORT nIndex = 0;
     for ( USHORT nToken = 0; nToken < nTokenCount; ++nToken )
     {
         String aPath = rPath.GetToken( nToken, cDelim );
@@ -834,5 +831,5 @@ sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName,
     return FALSE;
 }
 
-};
+}
 
