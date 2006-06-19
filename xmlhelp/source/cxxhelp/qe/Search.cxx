@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Search.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ class EmptyConceptData
 {
 public:
 
-    virtual void generateFillers( std::vector< RoleFiller* >& array, sal_Int32 last ) { }
+    virtual void generateFillers( std::vector< RoleFiller* >& , sal_Int32 ) { }
 
 };  // end class EmptyQuery
 
@@ -78,6 +78,11 @@ public:
                                   double penalty,
                                   sal_Int32 queryNo )
     {
+        (void)col;
+        (void)concept;
+        (void)penalty;
+        (void)queryNo;
+
         return &conceptDataInstance_;
     }
 
@@ -260,13 +265,13 @@ Search::Search( XmlIndex* env )
     : env_( env ),
       queryFactory_( 0 ),
       nextDocGenHeap_(),
-      limit_( 0 ),
       firstGenerator_(),
-      dataL_( 0 ),
-      data_( 0 ),
+      free2_( 0 ),
+      limit_( 0 ),
       base_( 0 ),
       concepts_( new sal_Int32[ ConceptGroupGenerator::NConceptsInGroup ] ),
-      free2_( 0 )
+      dataL_( 0 ),
+      data_( 0 )
 {
 }
 
@@ -277,6 +282,7 @@ Search::~Search()
     sal_uInt32 i;
     Query* stopq = queryFactory_ ? queryFactory_->empty() : 0;
     ConceptData* stopc = stopq ? stopq->makeConceptData( 0,0,0.0,0 ) : 0;
+    (void)stopc;
 
     for( i = 0; i < queries_.size(); ++i )
         if( queries_[i] != stopq )
@@ -468,7 +474,7 @@ void Search::searchDocument()
     }
     while( nextDocGenHeap_.isNonEmpty() );
 
-    for( sal_Int32 i = 0; i < start.size(); ++i )
+    for( sal_uInt32 i = 0; i < start.size(); ++i )
         if( start[i] != RoleFiller::STOP() )
             delete start[i];
 }
@@ -535,23 +541,23 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
             if( openDocumentIndex( document_ ) )
             {   // multi group
                 // set up all needed generators
-                sal_Int32 i = 0;
-                while( ( queryMasks_[i] & voteMask ) == 0 )
-                    ++i;
-                //      assert(i < index);
-                sal_Int32 c = docConcepts_[i];
+                sal_Int32 j = 0;
+                while( ( queryMasks_[j] & voteMask ) == 0 )
+                    ++j;
+                //      assert(j < index);
+                sal_Int32 c = docConcepts_[j];
                 sal_Int32 group = 0;
                 // find first group
                 while( /*group < maxConcepts_.size() &&*/
                     c > maxConcepts_[ group ] && ++group < limit_ )
                     ;
                 gen = makeGenerator( group );
-                gen->addTerms( indexOf(c),conceptData_[i].get() );
+                gen->addTerms( indexOf(c),conceptData_[j].get() );
 
-                for( ++i; i < index; i++ )
-                    if( ( queryMasks_[i] & voteMask ) > 0 )
+                for( ++j; j < index; j++ )
+                    if( ( queryMasks_[j] & voteMask ) > 0 )
                     {
-                        c = docConcepts_[i];
+                        c = docConcepts_[j];
                         if( c > max_ )
                         {   // need to find another group
                             //      assert(group < _limit);
@@ -560,15 +566,15 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
                                 ;
                             gen = makeGenerator( group );
                         }
-                        gen->addTerms( indexOf(c),conceptData_[i].get() );
+                        gen->addTerms( indexOf(c),conceptData_[j].get() );
                     }
                 return 0;
             }
             else
             {           // single group
-                for( sal_Int32 i = 0; i < index; i++ )
-                    if( queryMasks_[i] & voteMask )
-                        firstGenerator_.addTerms( indexOf( docConcepts_[i] ),conceptData_[i].get() );
+                for( sal_Int32 j = 0; j < index; j++ )
+                    if( queryMasks_[j] & voteMask )
+                        firstGenerator_.addTerms( indexOf( docConcepts_[j] ),conceptData_[j].get() );
                 return 1;
             }
         }

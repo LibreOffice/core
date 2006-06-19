@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryProcessor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,9 +121,9 @@ Query* QueryProcessor::processQuery( Search& search,const QueryStatement& ment )
                 // std::vector< rtl::OUString > variants( morph_->getVariants( term ) );
                 std::vector< rtl::OUString > variants;
 
-                for( sal_uInt32 i = 0; i < variants.size(); ++i )
+                for( sal_uInt32 j = 0; j < variants.size(); ++j )
                 {
-                    formID = env_.fetch( variants[i] );
+                    formID = env_.fetch( variants[j] );
                     if( formID > 0 && formID != id )
                         ids.push_back( formID );
                 }
@@ -163,7 +163,7 @@ QueryResults::QueryResults( Query* query, sal_Int32 nHits )
 
 QueryResults::~QueryResults()
 {
-    for( sal_Int32 i = 0; i < queryHits_.size(); ++i )
+    for( sal_uInt32 i = 0; i < queryHits_.size(); ++i )
         delete queryHits_[i];
 }
 
