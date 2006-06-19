@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcols.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,19 +91,6 @@ const ::comphelper::StringSequence& getColumnTypes()
     return aColumnTypes;
 }
 
-//------------------------------------------------------------------
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    NameCompare(const void* pFirst, const void* pSecond)
-{
-    return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
-}
-
 //------------------------------------------------------------------------------
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 {
@@ -116,24 +103,17 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
     else
     {
         sal_Int32 nPrefixPos = aModelName.indexOf(aModelPrefix);
+#if DBG_UTIL
         sal_Int32 nCompatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
-        DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1),
-                "::getColumnTypeByModelName() : wrong servivce !");
+        DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1), "::getColumnTypeByModelName() : wrong servivce !");
+#endif
 
         ::rtl::OUString aColumnType = (nPrefixPos != -1)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
         const ::comphelper::StringSequence& rColumnTypes = getColumnTypes();
-#if SUPD>583
         nTypeId = findPos(aColumnType, rColumnTypes);
-#else
-        const ::rtl::OUString* pStrList = rColumnTypes.getConstArray();
-        ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aColumnType, (void*)pStrList, rColumnTypes.getLength(), sizeof(::rtl::OUString),
-            &NameCompare);
-
-        nTypeId = pResult ? (pResult - pStrList) : -1;
-#endif
     }
     return nTypeId;
 }
