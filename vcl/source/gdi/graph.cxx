@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:59:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,9 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                              const Point& rDestPt, const Size& rDestSize )
 {
     USHORT      nPixel = (USHORT) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
-    USHORT      nWidth = nPixel;
-    Point       aPoint( rDestPt.X() + nWidth, rDestPt.Y() + nWidth );
-    Size        aSize( rDestSize.Width() - ( nWidth << 1 ), rDestSize.Height() - ( nWidth << 1 ) );
+    USHORT      nPixelWidth = nPixel;
+    Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
+    Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
     BOOL        bFilled = ( pBitmap != NULL || pFont != NULL );
     Rectangle   aBorderRect( aPoint, aSize );
 
@@ -115,10 +115,10 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
 
     pOutDev->DrawRect( aBorderRect );
 
-    aPoint.X() += nWidth + 2*nPixel;
-    aPoint.Y() += nWidth + 2*nPixel;
-    aSize.Width() -= 2*nWidth + 4*nPixel;
-    aSize.Height() -= 2*nWidth + 4*nPixel;
+    aPoint.X() += nPixelWidth + 2*nPixel;
+    aPoint.Y() += nPixelWidth + 2*nPixel;
+    aSize.Width() -= 2*nPixelWidth + 4*nPixel;
+    aSize.Height() -= 2*nPixelWidth + 4*nPixel;
 
     if( aSize.Width() > 0 && aSize.Height() > 0 && pBitmap && !!*pBitmap )
     {
@@ -189,7 +189,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                         pOutDev->DrawText( aPoint, *pText, nStart, n );
 
                         aPoint.Y() += nTextHeight;
-                        nStart     += nLen;
+                        nStart      = sal::static_int_cast<USHORT>(nStart + nLen);
                         nLen        = nNext-nLen;
                         while( nStart < pText->Len() && pText->GetChar( nStart ) == ' ' )
                         {
@@ -237,7 +237,8 @@ Graphic::Graphic()
 
 // ------------------------------------------------------------------------
 
-Graphic::Graphic( const Graphic& rGraphic )
+Graphic::Graphic( const Graphic& rGraphic ) :
+SvDataCopyStream()
 {
     if( rGraphic.IsAnimated() )
         mpImpGraphic = new ImpGraphic( *rGraphic.mpImpGraphic );
