@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:06:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:23:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,13 @@
  *
  ************************************************************************/
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <malloc.h>
 
 #ifndef DBGMACROS_HXX_INCLUDED
@@ -44,7 +50,13 @@
 #include "internal/registry.hxx"
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <objbase.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //---------------------------------------
 //
