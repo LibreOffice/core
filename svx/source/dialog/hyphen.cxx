@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:35:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#pragma hdrstop
+
 
 #define _SVX_HYPHEN_CXX
 
@@ -99,7 +99,7 @@ SvxHyphenEdit::SvxHyphenEdit( Window* pParent, const ResId& rResId ) :
 
 void SvxHyphenEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_uInt16 nMod  = rKEvt.GetKeyCode().GetModifier();
+//  sal_uInt16 nMod  = rKEvt.GetKeyCode().GetModifier();
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     switch ( nCode )
@@ -141,21 +141,20 @@ SvxHyphenWordDialog::SvxHyphenWordDialog( const String &rWord, LanguageType nLan
                                           SvxSpellWrapper* pWrapper ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_HYPHENATE ) ),
 
+    aWordFT     ( this, ResId( FT_WORD ) ),
     aWordEdit   ( this, ResId( ED_WORD ) ),
     aLeftBtn    ( this, ResId( BTN_LEFT ) ),
     aRightBtn   ( this, ResId( BTN_RIGHT ) ),
-    aWordFT     ( this, ResId( FT_WORD ) ),
-    aContBtn    ( this, ResId( BTN_HYPH_CONTINUE ) ),
-    aDelBtn     ( this, ResId( BTN_HYPH_DELETE ) ),
     aOkBtn      ( this, ResId( BTN_HYPH_CUT ) ),
     aCancelBtn  ( this, ResId( BTN_HYPH_CANCEL ) ),
+    aContBtn    ( this, ResId( BTN_HYPH_CONTINUE ) ),
+    aDelBtn     ( this, ResId( BTN_HYPH_DELETE ) ),
     aHelpBtn    ( this, ResId( BTN_HYPH_HELP ) ),
-
+    aLabel          ( GetText() ),
     pHyphWrapper    ( pWrapper ),
     xHyphenator     ( xHyphen ),
     aActWord        ( rWord ),
     nActLanguage    ( nLang ),
-    aLabel          ( GetText() ),
     nHyphPos        ( 0 ),
     nOldPos         ( 0 ),
     bBusy           ( sal_False )
@@ -196,7 +195,7 @@ void SvxHyphenWordDialog::SelLeft()
 
     for ( xub_StrLen i = nOldPos + 1;  i-- > 0 ; )
     {
-        DBG_ASSERT(0 <= i && i <= aTxt.Len(), "index out of range");
+        DBG_ASSERT(i <= aTxt.Len(), "index out of range");
         if( aTxt.GetChar( i ) == sal_Unicode( SW_SOFT_HYPHEN ) )
         {
             aTxt.SetChar( i, sal_Unicode( HYPHHERE ) );
@@ -288,7 +287,7 @@ void SvxHyphenWordDialog::SetLabel_Impl( LanguageType nLang )
 
 String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         Reference< XPossibleHyphens >  &rxPossHyph,
-        sal_uInt16 nMaxHyphenationPos )
+        sal_uInt16 _nMaxHyphenationPos )
 {
     // returns a String showing only those hyphen positions which will result
     // in a line break if hyphenation is done there
@@ -312,7 +311,7 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
             sal_Int32 nStart = 0;
             for (sal_Int32 i = 0;  i < nLen;  ++i)
             {
-                if (pHyphenationPos[i] > nMaxHyphenationPos)
+                if (pHyphenationPos[i] > _nMaxHyphenationPos)
                     break;
                 else
                 {
