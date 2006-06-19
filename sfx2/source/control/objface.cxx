@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:29:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include "minarray.hxx"
 #include "objsh.hxx"
 
-DBG_NAME(SfxInterface);
+DBG_NAME(SfxInterface)
 
 //====================================================================
 
@@ -108,7 +108,7 @@ struct SfxObjectUI_Impl
     }
 };
 
-DECL_PTRARRAY(SfxObjectUIArr_Impl, SfxObjectUI_Impl*, 2, 2);
+DECL_PTRARRAY(SfxObjectUIArr_Impl, SfxObjectUI_Impl*, 2, 2)
 
 struct SfxInterface_Impl
 {
@@ -294,7 +294,6 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                     }
                 }
 
-                const SfxSlot *pLastSlot = pIter;
                 const SfxSlot *pCurSlot = pIter;
                 do
                 {
@@ -359,16 +358,16 @@ const SfxSlot* SfxInterface::GetSlot( USHORT nFuncId ) const
 
 const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
 {
-    const char UNO_COMMAND[] = ".uno:";
+    static const char UNO_COMMAND[] = ".uno:";
 
     String aCommand( rCommand );
     if ( aCommand.SearchAscii( UNO_COMMAND ) == 0 )
-        aCommand.Erase( 0, sizeof( UNO_COMMAND )-1 );
+         aCommand.Erase( 0, sizeof( UNO_COMMAND )-1 );
 
-    SfxSlotPool& rPool = SFX_SLOTPOOL();
     for ( USHORT n=0; n<nCount; n++ )
     {
-        if ( (pSlots+n)->pUnoName && aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
+        if ( (pSlots+n)->pUnoName &&
+             aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
             return pSlots+n;
     }
 
@@ -427,7 +426,6 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 
 //--------------------------------------------------------------------
 
-
 void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
         const String *pStr )
 {
@@ -480,8 +478,8 @@ const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+    USHORT nObjBarCount = pImpData->pObjectBars->Count();
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->aResId;
 }
@@ -504,8 +502,8 @@ USHORT SfxInterface::GetObjectBarPos( USHORT nNo ) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+    USHORT nObjBarCount = pImpData->pObjectBars->Count();
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->nPos;
 }
@@ -522,9 +520,9 @@ USHORT SfxInterface::GetObjectBarCount() const
 }
 
 //--------------------------------------------------------------------
-void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* pName)
+void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* pChildWinName)
 {
-    RegisterChildWindow( nId, bContext, 0UL, pName );
+    RegisterChildWindow( nId, bContext, 0UL, pChildWinName );
 }
 
 void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, ULONG nFeature, const String*)
@@ -554,8 +552,8 @@ ULONG SfxInterface::GetChildWindowId (USHORT nNo) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pChildWindows->Count();
-    DBG_ASSERT( nNo<nCount,"ChildWindow ist unbekannt!" );
+    USHORT nCWCount = pImpData->pChildWindows->Count();
+    DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
 #endif
     ULONG nRet = (ULONG) (*pImpData->pChildWindows)[nNo]->aResId.GetId();
     if ( (*pImpData->pChildWindows)[nNo]->bContext )
@@ -577,8 +575,8 @@ ULONG SfxInterface::GetChildWindowFeature (USHORT nNo) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pChildWindows->Count();
-    DBG_ASSERT( nNo<nCount,"ChildWindow ist unbekannt!" );
+    USHORT nCWCount = pImpData->pChildWindows->Count();
+    DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
 #endif
     ULONG nRet = (ULONG) (*pImpData->pChildWindows)[nNo]->nFeature;
     return nRet;
@@ -627,8 +625,8 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+    USHORT nObjBarCount = pImpData->pObjectBars->Count();
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->pName;
 }
@@ -648,8 +646,8 @@ ULONG SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+    USHORT nObjBarCount = pImpData->pObjectBars->Count();
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->nFeature;
 }
@@ -669,8 +667,8 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
     }
 
 #ifdef DEBUG
-    USHORT nCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+    USHORT nObjBarCount = pImpData->pObjectBars->Count();
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->bVisible;
 }
