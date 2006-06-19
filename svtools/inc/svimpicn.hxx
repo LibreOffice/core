@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpicn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:00:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ class SvImpIconView
                     DECL_LINK( MouseMoveTimeoutHdl, Timer* );
                     DECL_LINK( EditTimeoutHdl, Timer* );
                     DECL_LINK( UserEventHdl, void* );
-    void            AdjustScrollBars( BOOL bVirtSizeGrowedOnly = FALSE);
+    void            AdjustScrollBars();
     void            PositionScrollBars( long nRealWidth, long nRealHeight );
     void            CalcDocPos( Point& aMousePos );
     BOOL            GetResizeRect( Rectangle& );
@@ -209,9 +209,9 @@ public:
                         SvIcnVwDataEntry* pViewData = 0 );
     void            PaintEntry( SvLBoxEntry*, const Point&,
                         SvIcnVwDataEntry* pViewData = 0, OutputDevice* pOut = 0);
-    void            SetEntryPos( SvLBoxEntry* pEntry, const Point& rPos,
-                                BOOL bAdjustRow = FALSE,
-                                BOOL bCheckScrollBars = FALSE );
+    void            SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos,
+                                      BOOL bAdjustRow = FALSE,
+                                      BOOL bCheckScrollBars = FALSE );
     void            InvalidateEntry( SvLBoxEntry* );
     void            ViewDataInitialized( SvLBoxEntry* pEntry );
     SvLBoxItem*     GetItem( SvLBoxEntry*, const Point& rAbsPos );
@@ -231,7 +231,7 @@ public:
     SvLBoxEntry*    GetNextEntry( const Point& rDocPos, SvLBoxEntry* pCurEntry );
     SvLBoxEntry*    GetPrevEntry( const Point& rDocPos, SvLBoxEntry* pCurEntry  );
 
-    Point           GetEntryPos( SvLBoxEntry* );
+    Point           GetEntryPosition( SvLBoxEntry* );
     void            MakeVisible( SvLBoxEntry* pEntry );
 
     void            Arrange();
@@ -266,7 +266,7 @@ public:
     BOOL            IsBoundingRectValid( const Rectangle& rRect ) const { return (BOOL)( rRect.Right() != LONG_MAX ); }
 
     void            PaintEmphasis( const Rectangle&, BOOL bSelected,
-                        BOOL bInUse, BOOL bCursored, OutputDevice* pOut = 0 );
+                                   BOOL bCursored, OutputDevice* pOut = 0 );
     void            PaintItem( const Rectangle& rRect, SvLBoxItem* pItem,
                         SvLBoxEntry* pEntry, USHORT nPaintFlags, OutputDevice* pOut = 0 );
     // berechnet alle BoundingRects neu, wenn bMustRecalcBoundingRects == TRUE
@@ -297,8 +297,7 @@ public:
     void            ShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPos );
     void            HideShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPos );
 
-    // HACK(damits kompatibel bleibt)
-    SvLBoxEntry*    pViewData;
+    SvLBoxEntry*    mpViewData;
 
     BOOL            IsOver( SvPtrarr* pSelectedRectList, const Rectangle& rEntryBoundRect ) const;
     void            SelectRect( const Rectangle&, BOOL bAdd = TRUE,
