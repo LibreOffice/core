@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:33:46 $
+#   last change: $Author: hr $ $Date: 2006-06-19 13:50:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,6 @@ OBJFILES+=  $(OBJ)$/stream.obj    \
 .INCLUDE :  target.mk
 
 $(SLO)$/strmsys.obj : \
-    strmos2.cxx \
     strmwnt.cxx \
-    strmmac.cxx \
-    strmunx.cxx \
-    strmstd.cxx
+    strmunx.cxx
 
