@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:54:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
  ************************************************************************/
 
 #include <tools/zcodec.hxx>
-#ifndef _TOOLS_NEW_HXX
-#include <tools/new.hxx>
-#endif
 #ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
 #endif
@@ -217,7 +214,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
 
                 // read coding information
                 rIStm >> nCodedSize >> nUncodedSize >> aHeader.nCompression;
-                pData = (BYTE*) SvMemAlloc( nUncodedSize );
+                pData = (BYTE*) rtl_allocateMemory( nUncodedSize );
 
                 // decode buffer
                 nCodedPos = rIStm.Tell();
@@ -264,7 +261,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
             }
 
             if( pData )
-                SvMemFree( pData );
+                rtl_freeMemory( pData );
 
             delete pMemStm;
             aNewBmp.ReleaseAccess( pAcc );
@@ -433,9 +430,9 @@ BOOL Bitmap::ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, BOOL 
 BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc )
 {
     const ULONG nAlignedWidth = AlignedWidth4Bytes( rHeader.nWidth * rHeader.nBitCount );
-    UINT32      nRMask;
-    UINT32      nGMask;
-    UINT32      nBMask;
+    UINT32      nRMask = 0;
+    UINT32      nGMask = 0;
+    UINT32      nBMask = 0;
     BOOL        bNative;
     BOOL        bTCMask = ( rHeader.nBitCount == 16 ) || ( rHeader.nBitCount == 32 );
     BOOL        bRLE = ( RLE_8 == rHeader.nCompression && rHeader.nBitCount == 8 ) ||
@@ -496,12 +493,12 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                 rIStm.Seek( nOldPos );
             }
 
-            BYTE* pBuffer = (BYTE*) SvMemAlloc( rHeader.nSizeImage );
+            BYTE* pBuffer = (BYTE*) rtl_allocateMemory( rHeader.nSizeImage );
 
             rIStm.Read( (char*) pBuffer, rHeader.nSizeImage );
             ImplDecodeRLE( pBuffer, rHeader, rAcc, RLE_4 == rHeader.nCompression );
 
-            SvMemFree( pBuffer );
+            rtl_freeMemory( pBuffer );
         }
         else
         {
@@ -533,7 +530,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                                 cTmp = *pTmp++;
                             }
 
-                            rAcc.SetPixel( nY, nX, ( cTmp >> --nShift ) & 1 );
+                            rAcc.SetPixel( nY, nX, sal::static_int_cast<BYTE>(( cTmp >> --nShift ) & 1) );
                         }
                     }
                 }
@@ -557,7 +554,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                                 cTmp = *pTmp++;
                             }
 
-                            rAcc.SetPixel( nY, nX, ( cTmp >> ( --nShift << 2UL ) ) & 0x0f );
+                            rAcc.SetPixel( nY, nX, sal::static_int_cast<BYTE>(( cTmp >> ( --nShift << 2UL ) ) & 0x0f) );
                         }
                     }
                 }
@@ -718,7 +715,8 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
         // recent.
         // #i59239# discretize bitcount to 1,4,8,24 (other cases
         // are not written below)
-        const UINT16 nBitCount( (UINT16)rAcc.GetBitCount() );
+        const UINT16 nBitCount( sal::static_int_cast<UINT16>(rAcc.GetBitCount()) );
+
         aHeader.nBitCount = discretizeBitcount( nBitCount );
         aHeader.nSizeImage = rAcc.Height() *
             AlignedWidth4Bytes( rAcc.Width()*aHeader.nBitCount );
@@ -908,7 +906,7 @@ BOOL Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
         // bitmaps is relatively recent.
         // #i59239# discretize bitcount for aligned width to 1,4,8,24
         // (other cases are not written below)
-        const USHORT nBitCount( (USHORT)rAcc.GetBitCount() );
+        const USHORT nBitCount( sal::static_int_cast<USHORT>(rAcc.GetBitCount()) );
         const ULONG  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() *
                                                          discretizeBitcount(nBitCount));
         BOOL         bNative = FALSE;
@@ -1056,7 +1054,7 @@ void Bitmap::ImplDecodeRLE( BYTE* pBuffer, DIBInfoHeader& rHeader,
 
     do
     {
-        if( !( nCountByte = *pRLE++ ) )
+        if( ( nCountByte = *pRLE++ ) == 0 )
         {
             nRunByte = *pRLE++;
 
