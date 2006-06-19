@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectctr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:17:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:27:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@ protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual long        Notify( NotifyEvent& rNEvt );
     virtual long        KeyEventNotify( const KeyEvent& rKEvt );
+    using Control::SetPosSizePixel;
     virtual void        SetPosSizePixel( long nX, long nY,long nWidth, long nHeight,USHORT nFlags);
 
 
@@ -152,6 +153,7 @@ public:
     ULONG               GetHelpId() const
                             { return Control::GetHelpId(); }
 
+    using Control::SetBackground;
     void                SetBackground( const Wallpaper& rBackground ){aWallpaper=rBackground; }
     const Wallpaper&    GetBackground() const { return aWallpaper; }
 
