@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:02:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,8 @@
 
 //-----------------------------------------------------------------------------------
 
+#ifdef OSL_BIGENDIAN
+// currently unused
 static float GetSwapFloat( SvStream& rSt )
 {
     float   fTmp;
@@ -175,6 +177,7 @@ static float GetSwapFloat( SvStream& rSt )
     rSt >> *pPtr-- >> *pPtr-- >> *pPtr-- >> *pPtr;  // Little Endian <-> Big Endian switch
     return fTmp;
 }
+#endif
 
 SvStream& operator>>( SvStream& rIn, XForm& rXForm )
 {
@@ -237,7 +240,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 {
     sal_uInt32  nStretchBltMode = 0;
     sal_uInt32  nRecType, nRecSize, nNextPos,
-                nWidth, nHeight, nPoints, nColor, nIndex,
+                nW, nH, nPoints, nColor, nIndex,
                 nDat32, nNom1, nDen1, nNom2, nDen2;
     sal_Int32   nX32, nY32, nx32, ny32;
     sal_Int16   nX16, nY16;
@@ -399,8 +402,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
             case EMR_SETWINDOWEXTEX :
             {                                                       // #75383#
-                *pWMF >> nWidth >> nHeight;
-                pOut->SetWinExt( Size( nWidth, nHeight ) );
+                *pWMF >> nW >> nH;
+                pOut->SetWinExt( Size( nW, nH ) );
             }
             break;
 
@@ -434,8 +437,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
             case EMR_SETVIEWPORTEXTEX :
             {
-                *pWMF >> nWidth >> nHeight;
-                pOut->SetDevExt( Size( nWidth, nHeight ) );
+                *pWMF >> nW >> nH;
+                pOut->SetDevExt( Size( nW, nH ) );
             }
             break;
 
@@ -697,8 +700,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
             case EMR_ROUNDRECT :
             {
-                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nWidth >> nHeight;
-                Size aSize( Size( nWidth, nHeight ) );
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nW >> nH;
+                Size aSize( Size( nW, nH ) );
                 pOut->DrawRoundRect( ReadRectangle( nX32, nY32, nx32, ny32 ), aSize );
             }
             break;
@@ -799,7 +802,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 UINT32  dwRop, iUsageSrc, offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc;
                 XForm   xformSrc;
 
-                UINT32  nStartPos = pWMF->Tell() - 8;
+                UINT32  nStart = pWMF->Tell() - 8;
 
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
@@ -830,9 +833,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                          << (UINT16)0
                          << (UINT16)0
                          << (UINT32)cbBmiSrc + 14;
-                    pWMF->Seek( nStartPos + offBmiSrc );
+                    pWMF->Seek( nStart + offBmiSrc );
                     pWMF->Read( pBuf + 14, cbBmiSrc );
-                    pWMF->Seek( nStartPos + offBitsSrc );
+                    pWMF->Seek( nStart + offBitsSrc );
                     pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                     aTmp.Seek( 0 );
                     aBitmap.Read( aTmp, TRUE );
@@ -855,7 +858,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             {
                 INT32   xDest, yDest, xSrc, ySrc, cxSrc, cySrc, cxDest, cyDest;
                 UINT32  offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc, iUsageSrc, dwRop;
-                UINT32  nStartPos = pWMF->Tell() - 8;
+                UINT32  nStart = pWMF->Tell() - 8;
 
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> xDest >> yDest >> xSrc >> ySrc >> cxSrc >> cySrc >> offBmiSrc >> cbBmiSrc >> offBitsSrc
@@ -877,9 +880,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                      << (UINT16)0
                      << (UINT16)0
                      << (UINT32)cbBmiSrc + 14;
-                pWMF->Seek( nStartPos + offBmiSrc );
+                pWMF->Seek( nStart + offBmiSrc );
                 pWMF->Read( pBuf + 14, cbBmiSrc );
-                pWMF->Seek( nStartPos + offBitsSrc );
+                pWMF->Seek( nStart + offBitsSrc );
                 pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                 aTmp.Seek( 0 );
                 aBitmap.Read( aTmp, TRUE );
