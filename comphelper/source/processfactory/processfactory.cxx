@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:14:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ Reference< XInterface > createProcessComponentWithArguments( const ::rtl::OUStri
 } // namesapce comphelper
 
 extern "C" {
-uno::Reference<uno::XComponentContext> comphelper_getProcessComponentContext()
+uno::XComponentContext * comphelper_getProcessComponentContext()
 {
     uno::Reference<uno::XComponentContext> xRet;
     uno::Reference<beans::XPropertySet> const xProps(
@@ -127,6 +127,9 @@ uno::Reference<uno::XComponentContext> comphelper_getProcessComponentContext()
         catch (beans::UnknownPropertyException const&) {
         }
     }
-    return xRet;
+    if (xRet.is())
+        xRet->acquire();
+    return xRet.get();
 }
 } // extern "C"
+
