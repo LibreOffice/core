@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltabe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:20:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:59:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,11 @@
 
 #ifndef _XMLOFF_XMLTABE_HXX
 #define _XMLOFF_XMLTABE_HXX
+
+// prevent funny things like "#define sun 1" from the compiler
+#ifndef _SAL_CONFIG_H_
+#include <sal/config.h>
+#endif
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
