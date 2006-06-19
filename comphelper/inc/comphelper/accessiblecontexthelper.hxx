@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:24:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,9 @@ namespace comphelper
 
     public:
         // XAccessibleEventBroadcaster
+        using WeakAggComponentImplHelperBase::addEventListener;
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        using WeakAggComponentImplHelperBase::removeEventListener;
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleContext - still waiting to be overwritten
@@ -218,9 +220,9 @@ namespace comphelper
         };
 
         // ensures that the object is alive
-        inline  void            ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
-        inline  IMutex*         getExternalLock( const OAccessControl& _rAccessControl );
-        inline  ::osl::Mutex&   GetMutex( const OAccessControl& _rAccessControl );
+        inline  void            ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        inline  IMutex*         getExternalLock( const OAccessControl& );
+        inline  ::osl::Mutex&   GetMutex( const OAccessControl& );
 
     protected:
         // OComponentHelper
@@ -290,19 +292,19 @@ namespace comphelper
     };
 
     //---------------------------------------------------------------------
-    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
+    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
     {
         ensureAlive();
     }
 
     //---------------------------------------------------------------------
-    inline  IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& _rAccessControl )
+    inline  IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& )
     {
         return getExternalLock();
     }
 
     //---------------------------------------------------------------------
-    inline  ::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& _rAccessControl )
+    inline  ::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& )
     {
         return GetMutex();
     }
