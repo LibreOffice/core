@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxyaggregation.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:51:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ namespace comphelper
     }
 
     //-------------------------------------------------------------------------
-    void OProxyAggregation::aggregateProxyFor( const Reference< XInterface >& _rxComponent, oslInterlockedCount& _rRefCount,
+    void OProxyAggregation::baseAggregateProxyFor( const Reference< XInterface >& _rxComponent, oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator )
     {
         // first a factory for the proxy
@@ -67,7 +67,7 @@ namespace comphelper
             m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ),
             UNO_QUERY
         );
-        OSL_ENSURE( xFactory.is(), "OProxyAggregation::aggregateProxyFor: could not create a proxy factory!" );
+        OSL_ENSURE( xFactory.is(), "OProxyAggregation::baseAggregateProxyFor: could not create a proxy factory!" );
 
         // then the proxy itself
         if ( xFactory.is() )
@@ -133,15 +133,15 @@ namespace comphelper
     }
 
     //-------------------------------------------------------------------------
-    void OComponentProxyAggregationHelper::aggregateProxyFor(
+    void OComponentProxyAggregationHelper::componentAggregateProxyFor(
         const Reference< XComponent >& _rxComponent, oslInterlockedCount& _rRefCount,
         ::cppu::OWeakObject& _rDelegator )
     {
-        OSL_ENSURE( _rxComponent.is(), "OComponentProxyAggregationHelper::aggregateProxyFor: invalid inner component!" );
+        OSL_ENSURE( _rxComponent.is(), "OComponentProxyAggregationHelper::componentAggregateProxyFor: invalid inner component!" );
         m_xInner = _rxComponent;
 
         // aggregate a proxy for the object
-        OProxyAggregation::aggregateProxyFor( m_xInner.get(), _rRefCount, _rDelegator );
+        baseAggregateProxyFor( m_xInner.get(), _rRefCount, _rDelegator );
 
         // add as event listener to the inner context, because we want to be notified of disposals
         osl_incrementInterlockedCount( &_rRefCount );
@@ -219,7 +219,7 @@ namespace comphelper
     {
         OSL_ENSURE( _rxComponent.is(), "OComponentProxyAggregation::OComponentProxyAggregation: accessible is no XComponent!" );
         if ( _rxComponent.is() )
-            aggregateProxyFor( _rxComponent, m_refCount, *this );
+            componentAggregateProxyFor( _rxComponent, m_refCount, *this );
     }
 
     //-------------------------------------------------------------------------
