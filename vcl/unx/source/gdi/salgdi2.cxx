@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:28:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 
 // -=-= debugging =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifdef DBG_UTIL
+#if 0
 
 static void sal_PrintImage( char *s, XImage*p )
 {
@@ -379,7 +379,7 @@ GC X11SalGraphics::SetMask( int           &nX,
 
 extern "C"
 {
-    static Bool GraphicsExposePredicate( Display* pDisplay, XEvent* pEvent, XPointer pFrameWindow )
+    static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, XPointer pFrameWindow )
     {
         Bool bRet = False;
         if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&
@@ -596,9 +596,9 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
 // --------------------------------------------------------------------------
 
 void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
-                                   long nSrcX,     long nSrcY,
-                                   long nSrcWidth, long nSrcHeight,
-                                   USHORT nFlags )
+                                long nSrcX,     long nSrcY,
+                                long nSrcWidth, long nSrcHeight,
+                                USHORT )
 {
     SalTwoRect aPosAry;
 
@@ -742,9 +742,9 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                                 const SalBitmap& rSalBitmap,
-                                 SalColor nTransparentColor )
+void X11SalGraphics::drawBitmap( const SalTwoRect*,
+                                 const SalBitmap&,
+                                 SalColor )
 {
     DBG_ERROR( "::DrawBitmap with transparent color not supported" );
 }
