@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,8 @@ void OFixedTextModel::fillProperties(
         Sequence< starbeans::Property >& _rProps,
         Sequence< starbeans::Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 0, OControlModel )
-        RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
-    END_DESCRIBE_PROPERTIES();
+    OControlModel::fillProperties( _rProps, _rAggregateProps );
+    RemoveProperty( _rAggregateProps, PROPERTY_TABSTOP );
 }
 
 //------------------------------------------------------------------------------

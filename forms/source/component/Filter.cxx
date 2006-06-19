@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,9 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -174,12 +177,12 @@ namespace frm
     //---------------------------------------------------------------------
     OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
         :m_aTextListeners( *this )
-        ,m_bFilterList( sal_False )
-        ,m_bMultiLine( sal_False )
-        ,m_nControlClass( FormComponentType::TEXTFIELD )
-        ,m_bFilterListFilled( sal_False )
         ,m_xORB( _rxORB )
         ,m_aParser( _rxORB )
+        ,m_nControlClass( FormComponentType::TEXTFIELD )
+        ,m_bFilterList( sal_False )
+        ,m_bMultiLine( sal_False )
+        ,m_bFilterListFilled( sal_False )
     {
     }
 
@@ -252,7 +255,7 @@ namespace frm
     sal_Int64 OFilterControl::getSomething( const Sequence< sal_Int8 > & rId )
     {
         if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
-            return (sal_Int64)this;
+            return reinterpret_cast< sal_Int64 >( this );
 
         return 0;
     }
@@ -541,10 +544,10 @@ namespace frm
                     sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
                     sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
                     aStatement.append( ::dbtools::quoteTableName( xMeta, sTableName, ::dbtools::eInDataManipulation ,bUseCatalogInSelect,bUseSchemaInSelect) );
-                    ::rtl::OUString sStatement( aStatement.makeStringAndClear( ) );
+                    ::rtl::OUString sSelectStatement( aStatement.makeStringAndClear( ) );
 
                     xStatement = xConnection->createStatement();
-                    xListCursor = xStatement->executeQuery( sStatement );
+                    xListCursor = xStatement->executeQuery( sSelectStatement );
 
                     Reference< XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
                     Reference< XIndexAccess >  xFields;
@@ -599,10 +602,9 @@ namespace frm
                 }
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            e; // make compiler happy
-            OSL_ENSURE( sal_False, "OFilterControl::implInitFilterList: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         ::comphelper::disposeComponent( xListCursor );
@@ -611,11 +613,16 @@ namespace frm
 
     // XFocusListener
     //---------------------------------------------------------------------
-    void SAL_CALL OFilterControl::focusGained(const FocusEvent& e)  throw( RuntimeException  )
+    void SAL_CALL OFilterControl::focusGained(const FocusEvent& /*e*/)  throw( RuntimeException  )
     {
         // should we fill the combobox?
         if (m_bFilterList && !m_bFilterListFilled)
             implInitFilterList();
+    }
+
+    //---------------------------------------------------------------------
+    void SAL_CALL OFilterControl::focusLost(const FocusEvent& /*e*/) throw( RuntimeException )
+    {
     }
 
     //---------------------------------------------------------------------
