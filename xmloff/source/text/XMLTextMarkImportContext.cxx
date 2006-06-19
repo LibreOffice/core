@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:23:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -252,7 +252,7 @@ sal_Bool XMLTextMarkImportContext::FindName(
     const Reference<XAttributeList> & xAttrList,
     OUString& sName)
 {
-    sal_Bool bNameOK;
+    sal_Bool bNameOK = sal_False;
 
     // find name attribute first
     sal_Int16 nLength = xAttrList->getLength();
