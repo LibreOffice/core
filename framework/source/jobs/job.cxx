@@ -4,9 +4,9 @@
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
           /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
     : ThreadHelpBase       (&Application::GetSolarMutex())
     , ::cppu::OWeakObject  (                             )
+    , m_aJobCfg            (xSMGR                        )
     , m_xSMGR              (xSMGR                        )
     , m_xFrame             (xFrame                       )
     , m_bListenOnDesktop   (sal_False                    )
@@ -141,7 +142,6 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
     , m_bPendingCloseFrame (sal_False                    )
     , m_bPendingCloseModel (sal_False                    )
     , m_eRunState          (E_NEW                        )
-    , m_aJobCfg            (xSMGR                        )
 {
 }
 
@@ -163,6 +163,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
           /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
     : ThreadHelpBase       (&Application::GetSolarMutex())
     , ::cppu::OWeakObject  (                             )
+    , m_aJobCfg            (xSMGR                        )
     , m_xSMGR              (xSMGR                        )
     , m_xModel             (xModel                       )
     , m_bListenOnDesktop   (sal_False                    )
@@ -171,7 +172,6 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
     , m_bPendingCloseFrame (sal_False                    )
     , m_bPendingCloseModel (sal_False                    )
     , m_eRunState          (E_NEW                        )
-    , m_aJobCfg            (xSMGR                        )
 {
 }
 
@@ -802,7 +802,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     @throw  TerminateVetoException
                 if our internal wrapped job is still running.
  */
-void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& aEvent ) throw(css::frame::TerminationVetoException,
+void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) throw(css::frame::TerminationVetoException,
                                                                                          css::uno::RuntimeException          )
 {
     /* SAFE { */
@@ -849,7 +849,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& aEvent
     @param  aEvent
                 describes the broadcaster and must be the desktop instance
  */
-void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     die();
     // Do nothing else here. Our internal ressources was released ...
@@ -949,7 +949,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     @param  aEvent
             describes the broadcaster and must be the frame or model instance we know
  */
-void SAL_CALL Job::notifyClosing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     die();
     // Do nothing else here. Our internal ressources was released ...
