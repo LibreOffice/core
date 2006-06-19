@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:53:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #include <stdlib.h>
-#include <tools/new.hxx>
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
 #endif
@@ -267,10 +266,10 @@ void ImplCreateDitherMatrix( BYTE (*pDitherMatrix)[16][16] )
     long            i, j, k, l;
     USHORT          pMtx[ 16 ][ 16 ];
     USHORT          nMax = 0;
-    static BYTE     pMagic[4][4] = { 0, 14,  3, 13,
-                                    11,  5,  8,  6,
-                                    12,  2, 15,  1,
-                                    7,  9,  4, 10 };
+    static BYTE     pMagic[4][4] = { { 0, 14,  3, 13, },
+                                     {11,  5,  8,  6, },
+                                     {12,  2, 15,  1, },
+                                     {7,   9,  4, 10 } };
 
     // MagicSquare aufbauen
     for ( i = 0; i < 4; i++ )
@@ -611,7 +610,7 @@ BOOL Bitmap::ImplMakeGreyscales( USHORT nGreys )
                 {
                     for( long nY = 0L; nY < nHeight; nY++ )
                         for( long nX = 0L; nX < nWidth; nX++ )
-                            pWriteAcc->SetPixel( nY, nX, ( pReadAcc->GetPixel( nY, nX ) ).GetLuminance() >> nShift );
+                            pWriteAcc->SetPixel( nY, nX, sal::static_int_cast<BYTE>(( pReadAcc->GetPixel( nY, nX ) ).GetLuminance() >> nShift) );
                 }
 
                 aNewBmp.ReleaseAccess( pWriteAcc );
@@ -804,7 +803,7 @@ BOOL Bitmap::ImplConvertDown( USHORT nBitCount, Color* pExtColor )
 
                 // Zeilenpuffer neu fuellen/kopieren
                 pQLine1 = pQLine2;
-                pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
+                pQLine2 = ( bQ1 = !bQ1 ) != FALSE ? pErrQuad2 : pErrQuad1;
 
                 if( nYTmp < nHeight )
                 {
@@ -1265,10 +1264,8 @@ BOOL Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
 // ------------------------------------------------------------------------
 
-BOOL Bitmap::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
+BOOL Bitmap::Dither( ULONG nDitherFlags )
 {
-    DBG_ASSERT( !pDitherPal, "Sorry, using owner defined palettes is not yet supportet..." );
-
     BOOL bRet = FALSE;
 
     const Size aSizePix( GetSizePixel() );
@@ -1276,9 +1273,9 @@ BOOL Bitmap::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
     if( aSizePix.Width() == 1 || aSizePix.Height() == 1 )
         bRet = TRUE;
     else if( nDitherFlags & BMP_DITHER_MATRIX )
-        bRet = ImplDitherMatrix( pDitherPal );
+        bRet = ImplDitherMatrix();
     else if( nDitherFlags & BMP_DITHER_FLOYD )
-        bRet = ImplDitherFloyd( pDitherPal );
+        bRet = ImplDitherFloyd();
     else if( ( nDitherFlags & BMP_DITHER_FLOYD_16 ) && ( GetBitCount() == 24 ) )
         bRet = ImplDitherFloyd16();
 
@@ -1287,7 +1284,7 @@ BOOL Bitmap::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
 
 // ------------------------------------------------------------------------
 
-BOOL Bitmap::ImplDitherMatrix( const BitmapPalette* pDitherPal )
+BOOL Bitmap::ImplDitherMatrix()
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     Bitmap              aNewBmp( GetSizePixel(), 8 );
@@ -1357,7 +1354,7 @@ BOOL Bitmap::ImplDitherMatrix( const BitmapPalette* pDitherPal )
 
 // ------------------------------------------------------------------------
 
-BOOL Bitmap::ImplDitherFloyd( const BitmapPalette* pDitherPal )
+BOOL Bitmap::ImplDitherFloyd()
 {
     const Size  aSize( GetSizePixel() );
     BOOL        bRet = FALSE;
@@ -1454,7 +1451,7 @@ BOOL Bitmap::ImplDitherFloyd( const BitmapPalette* pDitherPal )
                 pWriteAcc->SetPixel( nYAcc, 0, BitmapColor( (BYTE) ( nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ] ) ) );
 
                 // mittlere Pixel ueber Schleife
-                long nX, nXAcc;
+                long nXAcc;
                 for ( nX = 3L, nXAcc = 1L; nX < nW2; nXAcc++ )
                 {
                     CALC_ERRORS;
@@ -1484,12 +1481,12 @@ BOOL Bitmap::ImplDitherFloyd( const BitmapPalette* pDitherPal )
         if( bRet )
         {
             const MapMode   aMap( maPrefMapMode );
-            const Size      aSize( maPrefSize );
+            const Size      aPrefSize( maPrefSize );
 
             *this = aNewBmp;
 
             maPrefMapMode = aMap;
-            maPrefSize = aSize;
+            maPrefSize = aPrefSize;
         }
     }
 
@@ -1557,7 +1554,7 @@ BOOL Bitmap::ImplDitherFloyd16()
 
             // Zeilenpuffer neu fuellen/kopieren
             pQLine1 = pQLine2;
-            pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
+            pQLine2 = ( bQ1 = !bQ1 ) != FALSE ? pErrQuad2 : pErrQuad1;
 
             if( nYTmp < nHeight )
                 for( nX = 0L; nX < nWidth; nX++ )
@@ -1872,7 +1869,7 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
         if( pWAcc )
         {
             const ULONG nSize = 32768UL * sizeof( ULONG );
-            ULONG*      pColBuf = (ULONG*) SvMemAlloc( nSize );
+            ULONG*      pColBuf = (ULONG*) rtl_allocateMemory( nSize );
             const long  nWidth = pWAcc->Width();
             const long  nHeight = pWAcc->Height();
             long        nIndex = 0L;
@@ -1915,7 +1912,7 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
                 for( long nX = 0L; nX < nWidth; nX++ )
                     pWAcc->SetPixel( nY, nX, (BYTE) aMap.GetBestPaletteIndex( pRAcc->GetColor( nY, nX ) ) );
 
-            SvMemFree( pColBuf );
+            rtl_freeMemory( pColBuf );
             aNewBmp.ReleaseAccess( pWAcc );
             bRet = TRUE;
         }
