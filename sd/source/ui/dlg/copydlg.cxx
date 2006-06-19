@@ -4,9 +4,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:52:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,7 +228,7 @@ IMPL_LINK( CopyDlg, Reset, void*, p )
 
         if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
         {
-            Color aColor = ( ( const XColorItem* ) pPoolItem )->GetValue();
+            Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             aLbStartColor.SelectEntry( aColor );
             aLbEndColor.SelectEntry( aColor );
         }
@@ -342,7 +342,7 @@ IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
     const SfxPoolItem*  pPoolItem = NULL;
     if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
-        Color aColor = ( ( const XColorItem* ) pPoolItem )->GetValue();
+        Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
         aLbStartColor.SelectEntry( aColor );
     }
 
@@ -370,7 +370,7 @@ IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
     const SfxPoolItem*  pPoolItem = NULL;
     if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
-        Color aColor = ( ( const XColorItem* ) pPoolItem )->GetValue();
+        Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
         aLbStartColor.SelectEntry( aColor );
         aLbEndColor.SelectEntry( aColor );
     }
