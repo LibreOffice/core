@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:12:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,8 @@ class DispatchProvider  :   // interfaces
 
     /* interface */
     public:
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
                           const css::uno::Reference< css::frame::XFrame >&              xFrame   );
