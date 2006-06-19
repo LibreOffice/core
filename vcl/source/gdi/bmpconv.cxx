@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpconv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:55:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,12 +121,12 @@ Reference< XIntrospectionAccess > SAL_CALL BmpConverter::getIntrospection() thro
     return Reference< XIntrospectionAccess >();
 }
 
-void SAL_CALL BmpConverter::setValue( const OUString& rProperty, const Any& rValue ) throw( UnknownPropertyException )
+void SAL_CALL BmpConverter::setValue( const OUString&, const Any& ) throw( UnknownPropertyException )
 {
     throw UnknownPropertyException();
 }
 
-Any SAL_CALL BmpConverter::getValue( const OUString& rProperty ) throw( UnknownPropertyException )
+Any SAL_CALL BmpConverter::getValue( const OUString& ) throw( UnknownPropertyException )
 {
     throw UnknownPropertyException();
 }
@@ -136,7 +136,7 @@ sal_Bool SAL_CALL BmpConverter::hasMethod( const OUString& rName ) throw()
     return rName.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) );
 }
 
-sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& rName ) throw()
+sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& ) throw()
 {
     return sal_False;
 }
@@ -144,8 +144,8 @@ sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& rName ) throw()
 Any SAL_CALL BmpConverter::invoke(
                                   const OUString& rFunction,
                                   const Sequence< Any >& rParams,
-                                  Sequence< sal_Int16 >& rOutParamIndex,
-                                  Sequence< Any >& rOutParam )
+                                  Sequence< sal_Int16 >&,
+                                  Sequence< Any >& )
     throw( CannotConvertException, InvocationTargetException )
 {
     Any aRet;
