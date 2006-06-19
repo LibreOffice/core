@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpagentdispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:11:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:50:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,8 +130,8 @@ class HelpAgentDispatcher : public  css::lang::XTypeProvider
 
         HelpAgentDispatcher(const css::uno::Reference< css::frame::XFrame >& xParentFrame);
 
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         // css::frame::XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL&                                  sURL ,
@@ -233,40 +233,6 @@ class HelpAgentDispatcher : public  css::lang::XTypeProvider
         /** @short  callback of our internal timer.
          */
         DECL_LINK(implts_timerExpired, void*);
-
-/*
-        /// switches the agent to a new URL
-        void        switchURL(const css::util::URL& _rURL);
-
-        /// check if the agent window exists
-//TODO      sal_Bool    haveAgentWindow() const { return (NULL != m_pAgentWindow); }
-        /** destroyes the agent window
-            <p>This method has to be called with m_aMutex aqcuired _exactly_ once!</p>
-
-        void        closeAgentWindow();
-
-        /** positions the help agent's window in an optimal position
-            <p>At the moment, this is a lie. The agent's window will always be placed in the
-            lower right corner of the parent window.</p>
-
-        void        positionAgentWindow();
-
-        /// stops the timer which triggers the auto close event
-        void        stopAutoCloseTimer();
-        /// starts the timer which triggers the auto close event
-        void        startAutoCloseTimer();
-
-        /** checks whether or not the given is on the ignore list
-
-        sal_Bool    approveURLRequest(const css::util::URL& _rURL);
-
-        /** mark the given URL as "ignored once more"
-
-        void        markURLIgnored( const ::rtl::OUString& _rURL );
-
-        /// to be called when the agent window has been closed by an external instance
-        void        agentClosedExternally();
-*/
 };
 
 #undef css
