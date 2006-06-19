@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:22:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ XDashEntry* XDashTable::Remove(long nIndex)
 
 /************************************************************************/
 
-XDashEntry* XDashTable::Get(long nIndex) const
+XDashEntry* XDashTable::GetDash(long nIndex) const
 {
     return (XDashEntry*) XPropertyTable::Get(nIndex, 0);
 }
@@ -168,7 +168,7 @@ BOOL XDashTable::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XDashTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XDashTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -308,7 +308,7 @@ XDashEntry* XDashList::Remove(long nIndex)
 
 /************************************************************************/
 
-XDashEntry* XDashList::Get(long nIndex) const
+XDashEntry* XDashList::GetDash(long nIndex) const
 {
     return (XDashEntry*) XPropertyList::Get(nIndex, 0);
 }
@@ -496,7 +496,7 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
     Size aVDSize = pVD->GetOutputSize();
     pVD->DrawRect( Rectangle( aZero, aVDSize ) );
-    pXLSet->GetItemSet().Put( XLineDashItem( String(), Get( nIndex )->GetDash() ) );
+    pXLSet->GetItemSet().Put( XLineDashItem( String(), GetDash( nIndex )->GetDash() ) );
 
 //-/    pXOut->SetLineAttr( *pXLSet );
     pXOut->SetLineAttr( pXLSet->GetItemSet() );
