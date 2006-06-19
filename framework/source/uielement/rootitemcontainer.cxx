@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootitemcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,9 +242,7 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
 sal_Int64 RootItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( RootItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
-    {
-        return (sal_Int64)this;
-    }
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     return 0;
 }
 
@@ -267,7 +265,8 @@ const Sequence< sal_Int8 >& RootItemContainer::GetUnoTunnelId() throw()
 RootItemContainer* RootItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
-    return xUT.is() ? (RootItemContainer*)xUT->getSomething( RootItemContainer::GetUnoTunnelId() ) : NULL;
+    return xUT.is() ? reinterpret_cast< RootItemContainer* >(sal::static_int_cast< sal_IntPtr >(
+                          xUT->getSomething( RootItemContainer::GetUnoTunnelId() ))) : NULL;
 }
 
 // XElementAccess
@@ -351,13 +350,13 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
                                         (OWeakObject *)this, 2 );
 }
 
-Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& Context )
+Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )
 throw ( Exception, RuntimeException)
 {
     return (OWeakObject *)(new ItemContainer( m_aShareMutex ));
 }
 
-Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithArgumentsAndContext( const Sequence< Any >& Arguments, const Reference< XComponentContext >& Context )
+Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithArgumentsAndContext( const Sequence< Any >&, const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
     return (OWeakObject *)(new ItemContainer( m_aShareMutex ));
