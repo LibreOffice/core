@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contnr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:28:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#define private     public
-#define protected   public
 
 #ifndef _LIMITS_H
 #include <limits.h>
@@ -66,8 +63,8 @@
 
 // -----------------------------------------------------------------------
 
-DBG_NAME( CBlock );
-DBG_NAME( Container );
+DBG_NAME( CBlock )
+DBG_NAME( Container )
 
 /*************************************************************************
 |*
@@ -80,7 +77,7 @@ DBG_NAME( Container );
 *************************************************************************/
 
 #ifdef DBG_UTIL
-const char* DbgCheckCBlock( const void* pBlock )
+const char* CBlock::DbgCheckCBlock( const void* pBlock )
 {
     CBlock* p = (CBlock*)pBlock;
 
@@ -204,7 +201,7 @@ void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
     if ( nCount == nSize )
     {
         // Neue Daten anlegen
-        nSize += nReSize;
+        nSize = nSize + nReSize;    // MSVC warns here if += is used
         void** pNewNodes = new PVOID[nSize];
 
         // Wird angehaengt
@@ -276,7 +273,7 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
             if ( nNewSize % nReSize )
                 nNewSize += nReSize - (nNewSize % nReSize);
             else
-                nNewSize += nReSize;
+                nNewSize = nNewSize + nReSize;  // MSVC warns here if += is used
         }
     }
 
@@ -298,7 +295,7 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
         }
         else
         {
-            nIndex -= nMiddle;
+            nIndex = nIndex - nMiddle;  // MSVC warns here if += is used
             // Alles von Mitte bis Index kopieren
             if ( nIndex )
                 memcpy( pNewBlock->pNodes, pNodes+nMiddle, nIndex*sizeof(PVOID) );
@@ -357,7 +354,7 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
             }
 
             pNewBlock->nCount = nMiddle+1;
-            nCount -= nMiddle;
+            nCount = nCount - nMiddle;  // MSVC warns here if += is used
 
             // Die zweite Haelfte in einen neuen Block kopieren
             if ( nSize != nNewSize )
@@ -402,7 +399,7 @@ void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
     if ( nCount == (nSize-nReSize-4) )
     {
         // Neue Daten anlegen
-        nSize -= nReSize;
+        nSize = nSize - nReSize;    // MSVC warns here if += is used
         void** pNewNodes = new PVOID[nSize];
 
         // Wird letzter Eintrag geloescht
@@ -528,7 +525,7 @@ void CBlock::SetSize( USHORT nNewSize )
 *************************************************************************/
 
 #ifdef DBG_UTIL
-const char* DbgCheckContainer( const void* pCont )
+const char* Container::DbgCheckContainer( const void* pCont )
 {
     Container* p = (Container*)pCont;
 
@@ -549,14 +546,14 @@ const char* DbgCheckContainer( const void* pCont )
 |*
 *************************************************************************/
 
-static void ImpCopyContainer( Container* pCont1, const Container* pCont2 )
+void Container::ImpCopyContainer( const Container* pCont2 )
 {
     // Werte vom uebergebenen Container uebernehmen
-    pCont1->nCount     = pCont2->nCount;
-    pCont1->nCurIndex  = pCont2->nCurIndex;
-    pCont1->nInitSize  = pCont2->nInitSize;
-    pCont1->nReSize    = pCont2->nReSize;
-    pCont1->nBlockSize = pCont2->nBlockSize;
+    nCount     = pCont2->nCount;
+    nCurIndex  = pCont2->nCurIndex;
+    nInitSize  = pCont2->nInitSize;
+    nReSize    = pCont2->nReSize;
+    nBlockSize = pCont2->nBlockSize;
 
     // Alle Bloecke kopieren
     if ( pCont2->nCount )
@@ -567,11 +564,11 @@ static void ImpCopyContainer( Container* pCont1, const Container* pCont2 )
 
         // Erstmal ersten Block kopieren
         pBlock2 = pCont2->pFirstBlock;
-        pCont1->pFirstBlock = new CBlock( *pBlock2, NULL );
+        pFirstBlock = new CBlock( *pBlock2, NULL );
         // Ist erster Block der Current-Block, dann Current-Block setzen
         if ( pBlock2 == pCont2->pCurBlock )
-            pCont1->pCurBlock = pCont1->pFirstBlock;
-        pBlock1 = pCont1->pFirstBlock;
+            pCurBlock = pFirstBlock;
+        pBlock1 = pFirstBlock;
         pBlock2 = pBlock2->GetNextBlock();
         while ( pBlock2 )
         {
@@ -582,20 +579,20 @@ static void ImpCopyContainer( Container* pCont1, const Container* pCont2 )
 
             // Current-Block beruecksichtigen
             if ( pBlock2 == pCont2->pCurBlock )
-                pCont1->pCurBlock = pBlock1;
+                pCurBlock = pBlock1;
 
             // Auf naechsten Block weitersetzen
             pBlock2 = pBlock2->GetNextBlock();
         }
 
         // Letzten Block setzen
-        pCont1->pLastBlock = pBlock1;
+        pLastBlock = pBlock1;
     }
     else
     {
-        pCont1->pFirstBlock = NULL;
-        pCont1->pLastBlock  = NULL;
-        pCont1->pCurBlock   = NULL;
+        pFirstBlock = NULL;
+        pLastBlock  = NULL;
+        pCurBlock   = NULL;
     }
 }
 
@@ -739,7 +736,7 @@ Container::Container( const Container& r )
     DBG_CTOR( Container, DbgCheckContainer );
 
     // Daten kopieren
-    ImpCopyContainer( this, &r );
+    ImpCopyContainer( &r );
 }
 
 /*************************************************************************
@@ -814,7 +811,7 @@ void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
                         if ( nIndex <= nCurIndex )
                             nCurIndex++;
                         pCurBlock  = pNewBlock;
-                        nCurIndex -= pBlock->nCount;
+                        nCurIndex = nCurIndex - pBlock->nCount; // MSVC warns here if += is used
                     }
                 }
             }
@@ -830,7 +827,7 @@ void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
                     if ( nIndex <= nCurIndex )
                         nCurIndex++;
                     if ( pNewBlock->nCount <= nCurIndex )
-                        nCurIndex -= pNewBlock->nCount;
+                        nCurIndex = nCurIndex - pNewBlock->nCount;  // MSVC warns here if += is used
                     else
                         pCurBlock = pNewBlock;
                 }
@@ -1695,7 +1692,7 @@ Container& Container::operator =( const Container& r )
     }
 
     // Daten kopieren
-    ImpCopyContainer( this, &r );
+    ImpCopyContainer( &r );
     return *this;
 }
 
