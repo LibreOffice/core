@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recorder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:58:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,8 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 case STATE_CHECK: nMethod = M_Check; break;
                                 case STATE_NOCHECK: nMethod = M_UnCheck; break;
                                 case STATE_DONTKNOW: nMethod = M_TriState; break;
+                                default: nMethod = M_Check;
+                                    DBG_ERROR( "Unknown state in TriStateBox::GetState()" );
                             }
                             StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
                             bSendData = TRUE;
@@ -331,7 +333,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 
                                         // we have to find the current Button ID ourselves since it is not generated at this point :-(
                                         USHORT nCurrentButtonId = 0xffff;    // Some wild value to wak up people
-                                        int i;
+                                        USHORT i;
                                         for ( i = 0; i < pBD->GetButtonCount() ; i++ )
                                         {
                                             if ( pBD->GetPushButton( pBD->GetButtonId(i) ) == pWin )
@@ -366,7 +368,8 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                             case WINDOW_OKBUTTON: nMethod = M_OK; break;
                                             case WINDOW_CANCELBUTTON: nMethod = M_Cancel; break;
                                             case WINDOW_HELPBUTTON: nMethod = M_Help; break;
-                                            default: Sound::Beep();
+                                            default: nMethod = M_OK;
+                                                DBG_ERROR( "Unknown Button" );
                                         }
                                         StatementList::pRet->GenReturn( RET_MacroRecorder, pParent->GetSmartUniqueOrHelpId(), nMethod );
                                         bSendData = TRUE;
@@ -425,6 +428,8 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 case VCLEVENT_SPINFIELD_DOWN: nMethod = M_Less; break;
                                 case VCLEVENT_SPINFIELD_FIRST: nMethod = M_ToMin; break;
                                 case VCLEVENT_SPINFIELD_LAST: nMethod = M_ToMax; break;
+                                default: nMethod = M_ToMin;
+                                    DBG_ERROR( "Unknown EventID in Spinfield" );
                             }
                             StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
                             bSendData = TRUE;
@@ -645,7 +650,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 {
 //                  case 1 .. 0xffff:
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
-                        BOOL bx = ((DockingWindow*)pWin)->IsFloatingMode();
+//                      BOOL bx = ((DockingWindow*)pWin)->IsFloatingMode();
 //                      break;
 /*                  case M_Dock :
                         if ( ((DockingWindow*)pControl)->IsFloatingMode() )
@@ -698,7 +703,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
             case WINDOW_FLOATINGWINDOW:
                 {
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
-                    FloatingWindow *pFW = ((FloatingWindow*)pWin);
+//                    FloatingWindow *pFW = ((FloatingWindow*)pWin);
 /*                  switch( nEventID )
                     {
 
@@ -978,7 +983,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
     }  // if
     else if ( pEvent->ISA( VclMenuEvent ) )
     {
-        VclMenuEvent* pMenuEvent = ( VclMenuEvent* ) pEvent;
+//        VclMenuEvent* pMenuEvent = ( VclMenuEvent* ) pEvent;
     }
 
 
