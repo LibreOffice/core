@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:53:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ void __cdecl SignalHandler( int sig )
   /*
   fprintf( stderr, "Signal %d caught\n", sig );
   signal( sig,  SignalHandler );
-  /**/
+  */
   longjmp( check_env, sig );
 }
 #endif
@@ -316,9 +316,9 @@ struct Description
   int   bStackGrowsDown;
   int   nStackAlignment;
   int   nAlignment[3];  /* 2,4,8 */
-}
+};
 
-Description_Ctor( struct Description* pThis )
+void Description_Ctor( struct Description* pThis )
 {
   pThis->bBigEndian         = IsBigEndian();
   pThis->bStackGrowsDown    = IsStackGrowingDown();
@@ -335,7 +335,7 @@ Description_Ctor( struct Description* pThis )
   pThis->nAlignment[2] = GetAlignment( t_double );
 }
 
-Description_Print( struct Description* pThis, char* name )
+void Description_Print( struct Description* pThis, char* name )
 {
   int i;
   FILE* f = fopen( name, "w" );
@@ -343,7 +343,7 @@ Description_Print( struct Description* pThis, char* name )
            pThis->bBigEndian ? "BIGENDIAN" : "LITTLEENDIAN" );
   for ( i = 0; i < 3; i++ )
     fprintf( f, "#define __ALIGNMENT%d\t%d\n",
-             1 << i+1, pThis->nAlignment[i] );
+             1 << (i+1), pThis->nAlignment[i] );
   fprintf( f, "#define __STACKALIGNMENT wird nicht benutzt\t%d\n", pThis->nStackAlignment );
   fprintf( f, "#define __STACKDIRECTION\t%d\n",
            pThis->bStackGrowsDown ? -1 : 1 );
@@ -357,6 +357,7 @@ Description_Print( struct Description* pThis, char* name )
   fprintf( f, "#define _SOLAR_NODESCRIPTION\n" );
 }
 
+int
 #ifdef WNT
 __cdecl
 #endif
