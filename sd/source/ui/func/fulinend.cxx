@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:59:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ void FuLineEnd::DoExecute( SfxRequest& rReq )
             bDifferent = TRUE;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pLineEndList->Get( i )->GetName() )
+                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = FALSE;
             }
         }
@@ -173,7 +173,7 @@ void FuLineEnd::DoExecute( SfxRequest& rReq )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pLineEndList->Get( i )->GetName() )
+                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = FALSE;
             }
 
