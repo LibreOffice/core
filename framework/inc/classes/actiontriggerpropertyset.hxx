@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actiontriggerpropertyset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:01:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,7 @@ class ActionTriggerPropertySet :    public ThreadHelpBase                       
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::uno::Exception );
 
+        using cppu::OPropertySetHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue( com::sun::star::uno::Any& aValue, sal_Int32 nHandle ) const;
 
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -154,11 +155,11 @@ class ActionTriggerPropertySet :    public ThreadHelpBase                       
         //  members
         //---------------------------------------------------------------------------------------------------------
 
-        rtl::OUString                                                           m_aCommandURL;
-        rtl::OUString                                                           m_aHelpURL;
-        rtl::OUString                                                           m_aText;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >      m_xBitmap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xActionTriggerContainer;
+        rtl::OUString                                                         m_aCommandURL;
+        rtl::OUString                                                         m_aHelpURL;
+        rtl::OUString                                                         m_aText;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >    m_xBitmap;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xActionTriggerContainer;
 };
 
 }
