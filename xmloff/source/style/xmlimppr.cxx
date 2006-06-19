@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:52:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ using ::com::sun::star::beans::PropertyVetoException;
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImp ):
-    maPropMapper  ( rMapper ),
-    rImport(rImp)
+    rImport(rImp),
+    maPropMapper  ( rMapper )
 {
 }
 
