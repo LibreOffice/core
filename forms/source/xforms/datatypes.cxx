@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datatypes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:16:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,10 +111,10 @@ namespace xforms
     //--------------------------------------------------------------------
     OXSDDataType::OXSDDataType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
-        ,m_sName( _rName )
-        ,m_nTypeClass( _nTypeClass )
-        ,m_nWST( WhiteSpaceTreatment::Preserve )
         ,m_bIsBasic( sal_True )
+        ,m_nTypeClass( _nTypeClass )
+        ,m_sName( _rName )
+        ,m_nWST( WhiteSpaceTreatment::Preserve )
         ,m_bPatternMatcherDirty( true )
     {
     }
@@ -492,7 +492,6 @@ namespace xforms
         {
 
             // convert value and check format
-            double nDoubleLimit = 0;
             double f;
             if( ! _getValue( rValue, f ) )
                 nReason = RID_STR_XFORMS_VALUE_IS_NOT_A;
@@ -677,7 +676,7 @@ namespace xforms
     IMPLEMENT_DEFAULT_CLONING( OBooleanType, OBooleanType_Base )
 
     //--------------------------------------------------------------------
-    void OBooleanType::initializeTypedClone( const OBooleanType& _rCloneSource )
+    void OBooleanType::initializeTypedClone( const OBooleanType& /*_rCloneSource*/ )
     {
     }
 
@@ -816,7 +815,7 @@ namespace xforms
                                                                 \
     IMPLEMENT_DEFAULT_CLONING( classname, classname##_Base )    \
                                                                 \
-    void classname::initializeTypedClone( const classname& _rCloneSource )  \
+    void classname::initializeTypedClone( const classname& /*_rCloneSource*/ )  \
     {                                                           \
     }                                                           \
 
@@ -982,7 +981,7 @@ namespace xforms
     IMPLEMENT_DEFAULT_TYPED_CLONING( OShortIntegerType, OShortIntegerType_Base )
 
     //--------------------------------------------------------------------
-    void OShortIntegerType::initializeTypedClone( const OShortIntegerType& _rCloneSource )
+    void OShortIntegerType::initializeTypedClone( const OShortIntegerType& /*_rCloneSource*/ )
     {
     }
 
