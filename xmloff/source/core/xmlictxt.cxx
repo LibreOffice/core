@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlictxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:37:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,10 @@ TYPEINIT0( SvXMLImportContext );
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, USHORT nPrfx,
                               const OUString& rLName ) :
-    rImport( rImp ),
-    nPrefix( nPrfx ),
-    aLocalName( rLName ),
-    pRewindMap( 0 )
+    mrImport( rImp ),
+    mnPrefix( nPrfx ),
+    maLocalName( rLName ),
+    mpRewindMap( 0 )
 {
 }
 
@@ -86,7 +86,7 @@ SvXMLImportContext *SvXMLImportContext::CreateChildContext( USHORT nPrefix,
                                             const OUString& rLocalName,
                                             const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    return rImport.CreateContext( nPrefix, rLocalName, xAttrList );
+    return mrImport.CreateContext( nPrefix, rLocalName, xAttrList );
 }
 
 void SvXMLImportContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& )
@@ -97,7 +97,7 @@ void SvXMLImportContext::EndElement()
 {
 }
 
-void SvXMLImportContext::Characters( const OUString& rChars )
+void SvXMLImportContext::Characters( const OUString& )
 {
 }
 
