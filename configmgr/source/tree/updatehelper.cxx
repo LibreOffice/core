@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:21:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,6 +643,8 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
     protected:
         SubtreeChange&      m_rChangeList;
         ISubtree const *    m_pNewNode;
+
+              using NodeVisitor::handle;
     public:
         BackwardTreeDifferenceBuilder(SubtreeChange& rList, ISubtree const* pNode)
         : m_rChangeList(rList)
@@ -671,8 +673,9 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
         }
 
     private:
-        virtual Result handle(data::ValueNodeAccess const & _aCacheNode)
+        virtual Result handle(data::ValueNodeAccess const & /*_aCacheNode*/)
         {
+#if 0 // do we really need to do nothing here?
             OUString aNodeName = _aCacheNode.getName().toString();
 
             INode const* pNewChild = m_pNewNode->getChild(aNodeName);
@@ -680,6 +683,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
             //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New (value) node is missing !");
 
             // if (!pNewChild) return DONE; // error stop !
+#endif
 
             return CONTINUE;
         }
