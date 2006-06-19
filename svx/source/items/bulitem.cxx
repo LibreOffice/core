@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bulitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:32:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#pragma hdrstop
 
 #include <vcl/outdev.hxx>
 
@@ -130,7 +129,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, USHORT nVer )
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( USHORT nWhich ) : SfxPoolItem( nWhich )
+SvxBulletItem::SvxBulletItem( USHORT _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaultFont_Impl();
     SetDefaults_Impl();
@@ -139,7 +138,7 @@ SvxBulletItem::SvxBulletItem( USHORT nWhich ) : SfxPoolItem( nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( BYTE nNewStyle, const Font& rFont, USHORT nStart, USHORT nWhich ) : SfxPoolItem( nWhich )
+SvxBulletItem::SvxBulletItem( BYTE nNewStyle, const Font& rFont, USHORT /*nStart*/, USHORT _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
     nStyle = nNewStyle;
@@ -149,7 +148,7 @@ SvxBulletItem::SvxBulletItem( BYTE nNewStyle, const Font& rFont, USHORT nStart, 
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, USHORT nWhich ) : SfxPoolItem( nWhich )
+SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, USHORT _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
     aFont   = rFont;
@@ -160,7 +159,7 @@ SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, USHORT nWhic
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, USHORT nWhich ) : SfxPoolItem( nWhich )
+SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, USHORT _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
 
@@ -175,7 +174,7 @@ SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, USHORT nWhich ) : SfxPoolItem(
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, USHORT nWhich ) : SfxPoolItem( nWhich )
+SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, USHORT _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
 
@@ -190,8 +189,8 @@ SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, USHORT nWhich
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT nWhich ) :
-    SfxPoolItem( nWhich ),
+SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
+    SfxPoolItem( _nWhich ),
     pGraphicObject( NULL )
 {
     rStrm >> nStyle;
@@ -269,14 +268,14 @@ SvxBulletItem::~SvxBulletItem()
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxBulletItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxBulletItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxBulletItem( *this );
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, USHORT nVersion ) const
+SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, USHORT /*nVersion*/ ) const
 {
     return new SvxBulletItem( rStrm, Which() );
 }
@@ -305,7 +304,7 @@ void SvxBulletItem::SetDefaults_Impl()
 
 // -----------------------------------------------------------------------
 
-USHORT SvxBulletItem::GetVersion( USHORT nVersion ) const
+USHORT SvxBulletItem::GetVersion( USHORT /*nVersion*/ ) const
 {
     return BULITEM_VERSION;
 }
@@ -314,16 +313,16 @@ USHORT SvxBulletItem::GetVersion( USHORT nVersion ) const
 
 void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 {
-    Font aFont = GetFont();
+    Font _aFont = GetFont();
     Font aNewFont = rCopyFrom.GetFont();
     if ( rCopyFrom.IsValid( VALID_FONTNAME ) )
     {
-        aFont.SetName( aNewFont.GetName() );
-        aFont.SetFamily( aNewFont.GetFamily() );
-        aFont.SetStyleName( aNewFont.GetStyleName() );
+        _aFont.SetName( aNewFont.GetName() );
+        _aFont.SetFamily( aNewFont.GetFamily() );
+        _aFont.SetStyleName( aNewFont.GetStyleName() );
     }
     if ( rCopyFrom.IsValid( VALID_FONTCOLOR ) )
-        aFont.SetColor( aNewFont.GetColor() );
+        _aFont.SetColor( aNewFont.GetColor() );
     if ( rCopyFrom.IsValid( VALID_SYMBOL ) )
         SetSymbol( rCopyFrom.GetSymbol() );
     if ( rCopyFrom.IsValid( VALID_BITMAP ) )
@@ -339,7 +338,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
     if ( rCopyFrom.IsValid( VALID_FOLLOWTEXT ) )
         SetFollowText( rCopyFrom.GetFollowText() );
 
-    SetFont( aFont );
+    SetFont( _aFont );
 }
 
 
@@ -383,7 +382,7 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT nItemVersion ) const
+SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT /*nItemVersion*/ ) const
 {
     // Korrektur bei leerer Bitmap
     if( ( nStyle == BS_BMP ) &&
@@ -404,7 +403,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT nItemVersion ) const
         StoreFont( rStrm, aFont );
     else
     {
-        ULONG nStart = rStrm.Tell();
+        ULONG _nStart = rStrm.Tell();
 
         // Kleine Vorab-Schaetzung der Groesse...
         USHORT nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
@@ -424,8 +423,8 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT nItemVersion ) const
         // Bitmap > 64K verwendet wird, hat das SvxNumBulletItem beim Laden ein Problem,
         // stuerzt aber nicht ab.
 
-        if ( (nEnd-nStart) > 0xFF00 )
-            rStrm.Seek( nStart );
+        if ( (nEnd-_nStart) > 0xFF00 )
+            rStrm.Seek( _nStart );
     }
     rStrm << nWidth;
     rStrm << nStart;
@@ -457,8 +456,8 @@ XubString SvxBulletItem::GetFullText() const
 SfxItemPresentation SvxBulletItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
 )   const
 {
@@ -475,6 +474,7 @@ SfxItemPresentation SvxBulletItem::GetPresentation
             rText = GetFullText();
             eRet = SFX_ITEM_PRESENTATION_COMPLETE;
             break;
+        default: ; //prevent warning
     }
     return eRet;
 }
