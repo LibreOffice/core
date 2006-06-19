@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxdraw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ class SvxPopupWindowTbxMgr : public SfxPopupWindow
 
     DECL_LINK( TbxSelectHdl, ToolBox*);
     DECL_LINK( TbxClickHdl, ToolBox*);
+
+protected:
+    using SfxPopupWindow::StateChanged;
 
 public:
     SvxPopupWindowTbxMgr(   USHORT nId,
