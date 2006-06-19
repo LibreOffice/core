@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optHeaderTabListbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:38:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:20:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,9 @@ void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
                                      const Image& rImg1, const Image& rImg2 )
 {
     SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
-    USHORT nTabCount = TabCount();
+    USHORT _nTabCount = TabCount();
 
-    for ( USHORT nCol = 1; nCol < nTabCount; ++nCol )
+    for ( USHORT nCol = 1; nCol < _nTabCount; ++nCol )
     {
         // alle Spalten mit eigener Klasse initialisieren (Spalte 0 == Bitmap)
         SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
