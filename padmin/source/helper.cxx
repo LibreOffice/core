@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:26:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ void padmin::freePadminRC()
         delete pRC, pRC = NULL;
 }
 
-bool padmin::chooseDirectory( Window* pParent, String& rInOutPath )
+bool padmin::chooseDirectory( String& rInOutPath )
 {
     bool bRet = false;
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
