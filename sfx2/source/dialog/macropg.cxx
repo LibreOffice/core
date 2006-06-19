@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:21:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,7 @@ static long nTabs[] =
 
 IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
+    (void)pBar; // unused
     DBG_ASSERT( pBar == &maHeaderBar, "*_HeaderTabListBox::HeaderEndDrag_Impl: something is wrong here..." );
 
     if( !maHeaderBar.GetCurItemId() )
@@ -138,7 +139,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if( !maHeaderBar.IsItemMode() )
     {
         Size    aSz;
-        USHORT  nTabs = maHeaderBar.GetItemCount();
+        USHORT  nTabsCount = maHeaderBar.GetItemCount();
         long    nTmpSz = 0;
         long    nWidth = maHeaderBar.GetItemSize( ITEMID_EVENT );
         long    nBarWidth = maHeaderBar.GetSizePixel().Width();
@@ -149,12 +150,11 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             maHeaderBar.SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
 
         {
-            long    nWidth;
-            for( USHORT i = 1 ; i < nTabs ; ++i )
+            for( USHORT i = 1 ; i < nTabsCount ; ++i )
             {
-                nWidth = maHeaderBar.GetItemSize( i );
-                aSz.Width() =  nWidth + nTmpSz;
-                nTmpSz += nWidth;
+                long nItemWidth = maHeaderBar.GetItemSize( i );
+                aSz.Width() =  nItemWidth + nTmpSz;
+                nTmpSz += nItemWidth;
                 maListBox.SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width(), MAP_APPFONT );
             }
         }
@@ -218,7 +218,7 @@ void _HeaderTabListBox::Enable( BOOL bEnable, BOOL bChild )
 }
 
 
-String ConvertToUIName_Impl( SvxMacro *pMacro, const String& rLanguage )
+String ConvertToUIName_Impl( SvxMacro *pMacro, const String& /*rLanguage*/ )
 {
     String aName( pMacro->GetMacName() );
     String aEntry;
@@ -300,7 +300,7 @@ void _SfxMacroTabPage::AddEvent( const String & rEventName, USHORT nEventId )
     }
 
     SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().InsertEntry( sTmp );
-    pE->SetUserData( (void*)nEventId );
+    pE->SetUserData( reinterpret_cast< void* >( sal::static_int_cast< sal_IntPtr >( nEventId )) );
 }
 
 void _SfxMacroTabPage::ScriptChanged( const String& aLangName )
@@ -488,8 +488,8 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
     // aus der Tabelle entfernen
     USHORT nEvent = (USHORT)(ULONG)pE->GetUserData();
-    SvxMacro *pMacro = pThis->aTbl.Remove( nEvent );
-    delete pMacro;
+    SvxMacro *pRemoveMacro = pThis->aTbl.Remove( nEvent );
+    delete pRemoveMacro;
 
     String aLanguage = pImpl->pScriptTypeLB->GetSelectEntry();
     String sNew;
@@ -632,7 +632,7 @@ void _SfxMacroTabPage::FillEvents()
     }
 }
 
-void _SfxMacroTabPage::SelectEvent( const String & rEventName, USHORT nEventId )
+void _SfxMacroTabPage::SelectEvent( const String & /*rEventName*/, USHORT nEventId )
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     ULONG               nEntryCnt = rListBox.GetEntryCount();
@@ -650,7 +650,7 @@ void _SfxMacroTabPage::SelectEvent( const String & rEventName, USHORT nEventId )
 }
 
 
-SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* pTbPg, const String& rLanguage )
+SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* /*pTbPg*/, const String& rLanguage )
 {
     SvStringsDtor* pNew = new SvStringsDtor;
     SfxApplication* pSfxApp = SFX_APP();
@@ -712,8 +712,10 @@ SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* pTbPg, const String& 
 }
 
 // besorgen der Funktionen eines Bereiches
-SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage* pTbPg,
-                                const String& rLanguage, const String& rRange )
+SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl(
+    _SfxMacroTabPage* /*pTbPg*/,
+    const String& /*rLanguage*/,
+    const String& /*rRange*/ )
 {
     SvStringsDtor* pNew = new SvStringsDtor;
     return pNew;
