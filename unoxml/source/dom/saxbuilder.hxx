@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxbuilder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:05:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ namespace DOM
     {
 
     private:
+        const Reference< XMultiServiceFactory > m_aServiceManager;
+
         SAXDocumentBuilderState m_aState;
         NodeStack m_aNodeStack;
         NSStack m_aNSStack;
@@ -87,7 +89,7 @@ namespace DOM
         Reference< XDocument > m_aDocument;
         Reference< XDocumentFragment > m_aFragment;
         Reference< XLocator > m_aLocator;
-        const Reference< XMultiServiceFactory > m_aServiceManager;
+
 
     public:
 
@@ -96,7 +98,7 @@ namespace DOM
 
         // static helpers for service info and component management
         static const char* aImplementationName;
-        static const char* aSupportedServiceNames[];
+    static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static Sequence< OUString > _getSupportedServiceNames();
         static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);

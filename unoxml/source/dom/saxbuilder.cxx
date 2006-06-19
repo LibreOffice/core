@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxbuilder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:05:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include "node.hxx"
 #include "saxbuilder.hxx"
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <libxml/tree.h>
@@ -120,8 +121,7 @@ namespace DOM
 
         // some debugging...
 
-        Reference< XUnoTunnel > aTun(m_aDocument, UNO_QUERY);
-        xmlNodePtr pNode = (xmlNodePtr) aTun->getSomething(Sequence< sal_Int8 >());
+    xmlNodePtr pNode = CNode::getNodePtr(m_aDocument.get());
         if( pNode->type == XML_DOCUMENT_NODE )
         {
             xmlDocPtr pDoc = (xmlDocPtr)pNode;
