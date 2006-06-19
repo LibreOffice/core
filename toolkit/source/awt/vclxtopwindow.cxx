@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:14:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ VCLXTopWindow::~VCLXTopWindow()
     }
 }
 
-::com::sun::star::uno::Any VCLXTopWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXTopWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -180,7 +180,7 @@ VCLXTopWindow::~VCLXTopWindow()
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
             {
                 ::com::sun::star::awt::SystemDependentXWindow aSD;
-                aSD.DisplayPointer = (sal_Int64)pSysData->pDisplay;
+                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
                 aSD.WindowHandle = pSysData->aWindow;
                 aRet <<= aSD;
             }
