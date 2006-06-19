@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobqueue.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:49:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,12 @@
 
 namespace cppu_threadpool
 {
+    extern "C" typedef void (SAL_CALL RequestFun)(void *);
+
     struct Job
     {
         void *pThreadSpecificData;
-        void ( SAL_CALL *doRequest ) ( void * );
+        RequestFun * doRequest;
     };
 
     typedef ::std::list < struct Job > JobList;
@@ -60,11 +62,10 @@ namespace cppu_threadpool
     class JobQueue
     {
     public:
-        JobQueue(  sal_Bool bAsynchron );
+        JobQueue();
         ~JobQueue();
 
-        void add( void *pThreadSpecificData ,
-                  void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ) );
+        void add( void *pThreadSpecificData, RequestFun * doRequest );
 
         void *enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob = sal_False );
         void dispose( sal_Int64 nDisposeId );
