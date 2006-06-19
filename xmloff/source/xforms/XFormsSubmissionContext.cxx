@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFormsSubmissionContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:04:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,10 +177,10 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
 
 /** will be called for each child element */
 SvXMLImportContext* XFormsSubmissionContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nNamespace,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+    sal_uInt16,
+    sal_uInt16,
+    const OUString&,
+    const Reference<XAttributeList>& )
 {
     DBG_ERROR( "no children supported" );
     return NULL;
