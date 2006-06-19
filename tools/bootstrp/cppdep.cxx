@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:28:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,8 @@ BOOL CppDep::Search( ByteString aFileName )
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))
     {
-        USHORT nPos;
-        if ( nPos = aReadLine.Search( "include" ) != STRING_NOTFOUND  )
+        USHORT nPos = aReadLine.Search( "include" );
+        if ( nPos != STRING_NOTFOUND  )
         {
 #ifdef DEBUG_VERBOSE
             fprintf( stderr, "found : %d %s\n", nPos, aReadLine.GetBuffer() );
