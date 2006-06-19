@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:11:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,9 +208,10 @@ TYPEINIT1(SdrGrafObj,SdrRectObj);
 
 // -----------------------------------------------------------------------------
 
-SdrGrafObj::SdrGrafObj():
-    bMirrored       ( FALSE ),
-    pGraphicLink    ( NULL )
+SdrGrafObj::SdrGrafObj()
+:   SdrRectObj(),
+    pGraphicLink    ( NULL ),
+    bMirrored       ( FALSE )
 {
     pGraphic = new GraphicObject;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
@@ -231,10 +232,10 @@ SdrGrafObj::SdrGrafObj():
 
 // -----------------------------------------------------------------------------
 
-SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
-    SdrRectObj      ( rRect ),
-    bMirrored       ( FALSE ),
-    pGraphicLink    ( NULL )
+SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
+:   SdrRectObj      ( rRect ),
+    pGraphicLink    ( NULL ),
+    bMirrored       ( FALSE )
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
@@ -255,9 +256,10 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
 
 // -----------------------------------------------------------------------------
 
-SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
-    bMirrored       ( FALSE ),
-    pGraphicLink    ( NULL )
+SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
+:   SdrRectObj(),
+    pGraphicLink    ( NULL ),
+    bMirrored       ( FALSE )
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
@@ -377,10 +379,10 @@ sal_Bool SdrGrafObj::IsAnimated() const
     return pGraphic->IsAnimated();
 }
 
-sal_Bool SdrGrafObj::IsTransparent() const
-{
-    return pGraphic->IsTransparent();
-}
+//sal_Bool SdrGrafObj::IsTransparent() const
+//{
+//  return pGraphic->IsTransparent();
+//}
 
 sal_Bool SdrGrafObj::IsEPS() const
 {
@@ -554,7 +556,7 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bTrans = pGraphic->IsTransparent();
+    //FASTBOOL bTrans = pGraphic->IsTransparent();
     FASTBOOL bAnim = pGraphic->IsAnimated();
     FASTBOOL bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
@@ -901,7 +903,7 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInf
             OutputDevice* pOutDev = rOut.GetOutDev();
             const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
             const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
-            const Color aShadowColor(((SdrShadowColorItem&)GetObjectItem(SDRATTR_SHADOWCOLOR)).GetValue());
+            const Color aShadowColor(((SdrShadowColorItem&)GetObjectItem(SDRATTR_SHADOWCOLOR)).GetColorValue());
             const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)GetObjectItem(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
 
             if(IsObjectTransparent())
@@ -1040,9 +1042,9 @@ sal_Bool SdrGrafObj::DoPaintObject( XOutputDevice& rOut, const SdrPaintInfoRec& 
         const sal_uInt32 nGraphicManagerDrawMode(pView ? pView->GetGraphicManagerDrawMode() : GRFMGR_DRAW_STANDARD);
 
         sal_Int32 nDrehWink(aGeo.nDrehWink);
-        sal_Int32 nShearWink(aGeo.nShearWink);
+        //sal_Int32 nShearWink(aGeo.nShearWink);
         sal_Bool bRotate(nDrehWink != 0 && nDrehWink != 18000);
-        sal_Bool bShear(nShearWink != 0);
+        //sal_Bool bShear(nShearWink != 0);
         sal_Bool bRota180(nDrehWink == 18000);
         sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
         sal_Bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
@@ -1140,7 +1142,7 @@ void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
     {
         case GRAPHIC_BITMAP:
         {
-            const USHORT nId = ( ( IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+            const USHORT nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                  ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
                                  ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
 
@@ -1177,7 +1179,7 @@ void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
     {
         case GRAPHIC_BITMAP:
         {
-            const USHORT nId = ( ( IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+            const USHORT nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                  ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
                                  ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 
@@ -1320,7 +1322,7 @@ void SdrGrafObj::NbcSetSnapRect(const Rectangle& rRect)
 
 void SdrGrafObj::NbcSetLogicRect( const Rectangle& rRect)
 {
-    FASTBOOL bChg=rRect.GetSize()!=aRect.GetSize();
+    //FASTBOOL bChg=rRect.GetSize()!=aRect.GetSize();
     SdrRectObj::NbcSetLogicRect(rRect);
 }
 
@@ -1344,9 +1346,9 @@ void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
-    long        nDrehMerk = aGeo.nDrehWink;
-    long        nShearMerk = aGeo.nShearWink;
-    FASTBOOL    bMirrMerk = bMirrored;
+    //long      nDrehMerk = aGeo.nDrehWink;
+    //long      nShearMerk = aGeo.nShearWink;
+    //FASTBOOL  bMirrMerk = bMirrored;
     Size        aSizMerk( aRect.GetSize() );
 
     SdrRectObj::RestGeoData(rGeo);
@@ -1405,7 +1407,7 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::StartAnimation( OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData )
+void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoint*/, const Size& /*rSize*/, long /*nExtraData*/)
 {
     // #111096#
     // use new graf animation
@@ -1414,7 +1416,7 @@ void SdrGrafObj::StartAnimation( OutputDevice* pOutDev, const Point& rPoint, con
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::StopAnimation(OutputDevice* pOutDev, long nExtraData)
+void SdrGrafObj::StopAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
 {
     // #111096#
     // use new graf animation
@@ -1809,7 +1811,7 @@ void SdrGrafObj::SetGrafAnimationAllowed(sal_Bool bNew)
 sal_Bool SdrGrafObj::IsObjectTransparent() const
 {
     if(((const SdrGrafTransparenceItem&)GetObjectItem(SDRATTR_GRAFTRANSPARENCE)).GetValue()
-        || IsTransparent())
+        || pGraphic->IsTransparent())
     {
         return sal_True;
     }
