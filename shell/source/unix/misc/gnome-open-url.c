@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnome-open-url.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ gchar* gnome_gconf_get_gnome_libs_settings_relative (const gchar *subkey)
 {
     void* handle = dlopen("libglib-2.0.so.0", RTLD_LAZY);
 
+    (void)subkey; /* avoid warning due to unused parameter */
+
     if( NULL != handle )
     {
         gchar* (* g_strdup)(const gchar*) = (gchar* (*)(const gchar*)) dlsym(handle, "g_strdup");
@@ -82,6 +84,8 @@ gboolean gnome_url_show (const char *url, GError **error)
 {
     void* handle = dlopen("libgnomevfs-2.so.0", RTLD_LAZY);
     gboolean ret = 0;
+
+    (void)error; /* avoid warning due to unused parameter */
 
     if( NULL != handle )
     {
@@ -135,9 +139,11 @@ int main(int argc, char *argv[] )
     index = strstr(fallback, "gnome-open-url");
     if ( NULL != index )
     {
-        char *args[3] = { NULL, argv[1], NULL };
+        char *args[3];
         strncpy(index, "open-url", 9);
         args[0] = fallback;
+        args[1] = argv[1];
+        args[2] = NULL;
         return execv(fallback, args);
     }
 
