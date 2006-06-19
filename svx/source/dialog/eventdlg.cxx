@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:03:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 
 #ifndef _SVEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
-#ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
@@ -209,6 +206,8 @@ SvxEventConfigPage::~SvxEventConfigPage()
 
 IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 {
+    (void)pBox;
+
     bool* bApp = (bool*) aSaveInListBox.GetEntryData(
             aSaveInListBox.GetSelectEntryPos());
 
@@ -261,7 +260,7 @@ BOOL SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-void SvxEventConfigPage::Reset( const SfxItemSet& rSet )
+void SvxEventConfigPage::Reset( const SfxItemSet& )
 {
     _SvxMacroTabPage::Reset();
 }
