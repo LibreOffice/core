@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:27:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,15 +140,15 @@ public:
 
     /// isdigit() on ascii values
     static  inline  sal_Bool    isAsciiDigit( sal_Unicode c )
-        { return c < 128 ? (isdigit( (unsigned char) c ) != 0) : 0; }
+        { return c < 128 ? sal_Bool(isdigit( (unsigned char) c ) != 0) : sal_False; }
 
     /// isalpha() on ascii values
     static  inline  sal_Bool    isAsciiAlpha( sal_Unicode c )
-        { return c < 128 ? (isalpha( (unsigned char) c ) != 0) : 0; }
+        { return c < 128 ? sal_Bool(isalpha( (unsigned char) c ) != 0) : sal_False; }
 
     /// isalnum() on ascii values
     static  inline  sal_Bool    isAsciiAlphaNumeric( sal_Unicode c )
-        { return c < 128 ? (isalnum( (unsigned char) c ) != 0) : 0; }
+        { return c < 128 ? sal_Bool(isalnum( (unsigned char) c ) != 0) : sal_False; }
 
     /// isdigit() on ascii values of entire string
     static  sal_Bool            isAsciiNumeric( const String& rStr );
