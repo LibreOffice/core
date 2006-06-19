@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:16:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ SV_DECL_IMPL_REF(SbxTransportMethod);
 class Controls: public SbxObject
 {
 public:
-    Controls( String aName );
+    Controls( String aCName );
     ~Controls();
     void ChangeListener( SbxObject* pParent );
 
@@ -335,10 +335,11 @@ public:
     pLogMsg->aDebugData.nCol2 = nCol2p;                                 \
     pLogMsg->aDebugData.aLogType = aLogTypep;                           \
     aLogHdl.Call( pLogMsg );                                            \
-    if( pLogList )                                                      \
+    void* pDummyForWarningAboutNULL = pLogList;                         \
+    if( pDummyForWarningAboutNULL )                                                     \
     {                                                                   \
         SbxDimArray* pLogArray = (SbxDimArray*)pLogList;                \
-        SbxVariable* pVar = new SbxVariable( SbxSTRING );               \
+        SbxVariable* pLogLine = new SbxVariable( SbxSTRING );               \
         String aCollect;                                                \
         aCollect.Append( pLogMsg->aDebugData.aFilename );               \
         aCollect.AppendAscii( ";" );                                    \
@@ -347,8 +348,8 @@ public:
         aCollect.Append( aRevisionp );              \
         aCollect.AppendAscii( ";" );                                    \
         aCollect.Append( pLogMsg->aDebugData.aMsg );                                        \
-        pVar->PutString( aCollect );                                    \
-        pLogArray->Insert( pVar, pLogArray->Count() );  \
+        pLogLine->PutString( aCollect );                                    \
+        pLogArray->Insert( pLogLine, pLogArray->Count() );  \
     }                                                                   \
     delete pLogMsg;                                                     \
 }                                                                       \
