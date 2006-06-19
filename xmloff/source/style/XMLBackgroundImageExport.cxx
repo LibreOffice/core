@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:31:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,8 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         case GraphicLocation_RIGHT_BOTTOM:
             aOut.append( GetXMLToken(XML_BOTTOM) );
             break;
+        default:
+            break;
         }
 
         if( aOut.getLength() )
@@ -136,6 +138,8 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             case GraphicLocation_RIGHT_TOP:
             case GraphicLocation_RIGHT_BOTTOM:
                 aOut.append( GetXMLToken(XML_RIGHT) );
+                break;
+            default:
                 break;
             }
         }
@@ -169,10 +173,10 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             sal_Int8 nTransparency;
             if( (*pTransparency) >>= nTransparency )
             {
-                OUStringBuffer aOut;
-                SvXMLUnitConverter::convertPercent( aOut, 100-nTransparency );
+                OUStringBuffer aTransOut;
+                SvXMLUnitConverter::convertPercent( aTransOut, 100-nTransparency );
                 GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_OPACITY,
-                                          aOut.makeStringAndClear() );
+                                          aTransOut.makeStringAndClear() );
             }
         }
     }
