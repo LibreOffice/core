@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:22:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,33 +56,25 @@ static RTTypeClass mapTypeClass(TypeClass typeclass) {
     switch(typeclass) {
     case TypeClass_ENUM:
         return RT_TYPE_ENUM;
-        break;
     case TypeClass_TYPEDEF:
         return RT_TYPE_TYPEDEF;
-        break;
     case TypeClass_STRUCT:
         return RT_TYPE_STRUCT;
-        break;
     case TypeClass_UNION:
         return RT_TYPE_UNION;
-        break;
     case TypeClass_EXCEPTION:
         return RT_TYPE_EXCEPTION;
-        break;
     case TypeClass_INTERFACE:
         return RT_TYPE_INTERFACE;
-        break;
     case TypeClass_SERVICE:
         return RT_TYPE_SERVICE;
-        break;
     case TypeClass_MODULE:
         return RT_TYPE_MODULE;
-        break;
     case TypeClass_CONSTANTS:
         return RT_TYPE_CONSTANTS;
-        break;
     case TypeClass_SINGLETON:
         return RT_TYPE_SINGLETON;
+    default:
         break;
     }
     return RT_TYPE_INVALID;
@@ -202,7 +194,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                   const OString& typeName, sal_uInt32* pBlob);
 
 typereg::Reader UnoTypeManager::getTypeReader(
-    const OString& name, sal_Bool * pIsExtraType ) const
+    const OString& name, sal_Bool * /*pIsExtraType*/ ) const
 {
     typereg::Reader reader;
 
