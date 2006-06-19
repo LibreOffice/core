@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:24:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,7 @@ public:
     sal_Bool                DeleteObjectShell();
 };
 
-};
+}
 
 using namespace ::DocTempl;
 
@@ -275,7 +275,7 @@ using namespace ::DocTempl;
 
 class RegionData_Impl
 {
-    DECLARE_LIST( EntryList_Impl, DocTempl_EntryData_Impl* );
+    DECLARE_LIST( EntryList_Impl, DocTempl_EntryData_Impl* )
     const SfxDocTemplate_Impl*  mpParent;
     EntryList_Impl              maEntries;
     OUString                    maTitle;
@@ -317,7 +317,7 @@ public:
     int                 Compare( RegionData_Impl* pCompareWith ) const;
 };
 
-DECLARE_LIST( RegionList_Impl, RegionData_Impl* );
+DECLARE_LIST( RegionList_Impl, RegionData_Impl* )
 
 // ------------------------------------------------------------------------
 
@@ -1418,11 +1418,11 @@ sal_Bool SfxDocumentTemplates::InsertDir
 
     if ( xTemplates->addGroup( rText ) )
     {
-        RegionData_Impl* pRegion = new RegionData_Impl( pImp, rText );
+        RegionData_Impl* pNewRegion = new RegionData_Impl( pImp, rText );
 
-        if ( ! pImp->InsertRegion( pRegion, nRegion ) )
+        if ( ! pImp->InsertRegion( pNewRegion, nRegion ) )
         {
-            delete pRegion;
+            delete pNewRegion;
             return sal_False;
         }
         return sal_True;
@@ -2403,7 +2403,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
 
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
-                                        Content& rParentFolder,
+                                        Content& /*rParentFolder*/,
                                         RegionData_Impl* pRegion )
 {
     Reference< XResultSet > xResultSet;
