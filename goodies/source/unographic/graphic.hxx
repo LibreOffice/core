@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ public:
     Graphic();
     ~Graphic() throw();
 
+    using unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();
 
     static const ::Graphic* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
