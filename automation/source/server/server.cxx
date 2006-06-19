@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:15:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ void RemoteControlCommunicationManager::ConnectionClosed( CommunicationLink* pCL
 }
 
 
-IMPL_LINK( RemoteControlCommunicationManager, SetWinCaption, Timer*, pTimer_ )
+IMPL_LINK( RemoteControlCommunicationManager, SetWinCaption, Timer*, EMPTYARG )
 {
     if ( pTimer )
     {
@@ -426,7 +426,7 @@ void ExtraIdle::Timeout()
 #endif
 
 #ifdef TT_CODE
-            for ( int i = 0 ; i < aStr.Len() ; i++ )
+            for ( USHORT i = 0 ; i < aStr.Len() ; i++ )
             {
                 if ( aStr.GetChar(i) < 32 || aStr.GetChar(i) > 126 )
                 {
@@ -538,7 +538,7 @@ void ExtraIdle::Timeout()
             SvMemoryStream aStream;
 //#endif
             xub_StrLen c;
-            xub_StrLen cRest;
+            xub_StrLen cRest = 0;
 
             xub_StrLen nIndex;
             for ( nIndex = 0 ; nIndex < aData.Len() ; nIndex++ )
@@ -630,7 +630,7 @@ void ExtraIdle::Timeout()
 #endif
 }
 
-IMPL_LINK( ImplRemoteControl, IdleHdl, Application*, pApp )
+IMPL_LINK( ImplRemoteControl, IdleHdl, Application*, EMPTYARG )
 {
     if( StatementList::pFirst )
     {
@@ -876,18 +876,13 @@ SvStream* ImplRemoteControl::GetReturnStream()
     return pTemp;
 }
 
-void ImplRemoteControl::ExecuteURL( String &aURL )
-{   // hier purzeln dann die URLs private:testtool/* rein
-}
-
-
 ImplRemoteControl::ImplRemoteControl()
 : m_bIdleInserted( FALSE )
 , m_bInsideExecutionLoop( FALSE )
-, pRetStream(NULL)
 #if OSL_DEBUG_LEVEL > 1
 , m_pDbgWin(NULL)
 #endif
+, pRetStream(NULL)
 {
 #if OSL_DEBUG_LEVEL > 1
     if ( RemoteControlCommunicationManager::GetPort() != TT_NO_PORT_DEFINED || RemoteControlCommunicationManager::nComm )
