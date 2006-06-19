@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:26:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@
 #endif
 
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -174,14 +174,15 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName,
     sal_Bool bName, sal_Bool bFormula, sal_Bool bFormulaDefault,
-    sal_Bool bDescription, sal_Bool bVisible, sal_Bool bDisplayFormula,
+    sal_Bool bDescription, sal_Bool bVisible, sal_Bool bIsDisplayFormula,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue,
     sal_Bool bPresentation) :
-        XMLTextFieldImportContext(rImport, rHlp, pServiceName,
-                                  nPrfx, rLocalName),
-        sName(),
-        sFormula(),
-        sDescription(),
+        XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, rLocalName),
+        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
+        sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
+        sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
+        sPropertyIsDisplayFormula(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_show_formula)),
+        sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
         aValueHelper(rImport, rHlp, bType, bStyle, bValue, sal_False),
         bDisplayFormula(sal_False),
         bDisplayNone(sal_False),
@@ -194,15 +195,8 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
         bSetFormulaDefault(bFormulaDefault),
         bSetDescription(bDescription),
         bSetVisible(bVisible),
-        bSetDisplayFormula(bDisplayFormula),
-        bSetPresentation(bPresentation),
-        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
-        sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
-        sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
-        sPropertyIsDisplayFormula(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_is_show_formula)),
-        sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_current_presentation))
+        bSetDisplayFormula(bIsDisplayFormula),
+        bSetPresentation(bPresentation)
 {
 }
 
@@ -346,12 +340,12 @@ XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName, VarType eVarType,
     sal_Bool bName, sal_Bool bFormula, sal_Bool bFormulaDefault,
-    sal_Bool bDescription, sal_Bool bVisible, sal_Bool bDisplayFormula,
+    sal_Bool bDescription, sal_Bool bVisible, sal_Bool bIsDisplayFormula,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue, sal_Bool bPresentation) :
         XMLVarFieldImportContext(rImport, rHlp, pServiceName,
                                  nPrfx, rLocalName,
                                  bName, bFormula, bFormulaDefault,
-                                 bDescription, bVisible, bDisplayFormula,
+                                 bDescription, bVisible, bIsDisplayFormula,
                                  bType, bStyle, bValue, bPresentation),
         eFieldType(eVarType)
 {
@@ -438,13 +432,12 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
                                     sal_True, sal_True, sal_True,
                                     sal_False, sal_False, sal_False,
                                     sal_False, sal_False, sal_False, sal_True),
+
+        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
+        sPropertySequenceValue(RTL_CONSTASCII_USTRINGPARAM(sAPI_sequence_value)),
         sNumFormat(OUString::valueOf(sal_Unicode('1'))),
         sNumFormatSync(GetXMLToken(XML_FALSE)),
-        sRefName(),
-        bRefNameOK(sal_False),
-        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
-        sPropertySequenceValue(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_sequence_value))
+        bRefNameOK(sal_False)
 {
 }
 
@@ -478,7 +471,7 @@ void XMLSequenceFieldImportContext::PrepareField(
     XMLSetVarFieldImportContext::PrepareField(xPropertySet);
 
     // set format
-    sal_Int16 nNumType = NumberingType::ARABIC;nNumType;
+    sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat, sNumFormatSync );
     Any aAny;
     aAny <<= nNumType;
@@ -818,8 +811,8 @@ XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
     const OUString& rLocalName, enum VarType eVarType) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rImportHelper(rHlp),
-        eVarDeclsContextType(eVarType)
+        eVarDeclsContextType(eVarType),
+        rImportHelper(rHlp)
 {
 }
 
@@ -881,16 +874,14 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
     const Reference<xml::sax::XAttributeList> & xAttrList,
     enum VarType eVarType) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
-        nNumLevel(-1), cSeparationChar('.'),
         // bug?? which properties for userfield/userfieldmaster
-        aValueHelper(rImport, rHlp, sal_True, sal_False, sal_True, sal_False),
         sPropertyName(RTL_CONSTASCII_USTRINGPARAM(sAPI_name)),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type)),
-        sPropertyNumberingLevel(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_chapter_numbering_level)),
-        sPropertyNumberingSeparator(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_numbering_separator)),
-        sPropertyIsExpression(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_expression))
+        sPropertyNumberingLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_chapter_numbering_level)),
+        sPropertyNumberingSeparator(RTL_CONSTASCII_USTRINGPARAM(sAPI_numbering_separator)),
+        sPropertyIsExpression(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_expression)),
+        aValueHelper(rImport, rHlp, sal_True, sal_False, sal_True, sal_False),
+        nNumLevel(-1), cSeparationChar('.')
 {
     if ( (XML_NAMESPACE_TEXT == nPrfx) &&
          ( ( IsXMLToken( rLocalName, XML_SEQUENCE_DECL )) ||
@@ -1142,19 +1133,14 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
     const OUString& rLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database,
                                       nPrfx, rLocalName, false),
+        sPropertyColumnName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_column_name)),
+        sPropertyDatabaseFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_data_base_format)),
+        sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
+        sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
         aValueHelper(rImport, rHlp, sal_False, sal_True, sal_False, sal_False),
-        sColumnName(),
         bColumnOK(sal_False),
-        sPropertyColumnName(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_column_name)),
-        sPropertyDatabaseFormat(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_is_data_base_format)),
-        sPropertyCurrentPresentation(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
-        sPropertyIsVisible(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
-        bDisplayOK( sal_False ),
-        bDisplay( sal_True )
+        bDisplay( sal_True ),
+        bDisplayOK( sal_False )
 {
 }
 
@@ -1237,7 +1223,6 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         GetImportHelper().InsertTextContent(xTextContent);
 
                         // prepare field: format from database?
-                        Any aAny;
                         sal_Bool bTmp = !aValueHelper.IsFormatOK();
                         aAny.setValue( &bTmp, ::getBooleanCppuType() );
                         xField->setPropertyValue(sPropertyDatabaseFormat,aAny);
@@ -1302,29 +1287,36 @@ XMLValueImportHelper::XMLValueImportHelper(
     SvXMLImport& rImprt,
     XMLTextImportHelper& rHlp,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue, sal_Bool bFormula) :
+        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
+        sPropertyValue(RTL_CONSTASCII_USTRINGPARAM(sAPI_value)),
+        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
+        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language)),
+
         rImport(rImprt),
         rHelper(rHlp),
+
+        fValue(0.0),
+        nFormatKey(0),
+        bIsDefaultLanguage(sal_True),
+
+        bStringType(sal_False),
+        bFormatOK(sal_False),
         bTypeOK(sal_False),
         bStringValueOK(sal_False),
         bFloatValueOK(sal_False),
-        bFormatOK(sal_False),
         bFormulaOK(sal_False),
+
         bSetType(bType),
         bSetValue(bValue),
         bSetStyle(bStyle),
         bSetFormula(bFormula),
-        bStringType(sal_False),
+
         bStringDefault(sal_True),
-        bFormulaDefault(sal_True),
-        bIsDefaultLanguage(sal_True),
-        sValue(),
-        fValue(0.0),
-        nFormatKey(0),
-        sDefault(),
-        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
-        sPropertyValue(RTL_CONSTASCII_USTRINGPARAM(sAPI_value)),
-        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
-        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
+        bFormulaDefault(sal_True)
+{
+}
+
+XMLValueImportHelper::~XMLValueImportHelper()
 {
 }
 
