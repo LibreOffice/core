@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwpfile.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:40:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-/* $Id: hwpfile.cpp,v 1.3 2005-09-07 16:40:49 rt Exp $ */
 
 #include "precompile.h"
 
@@ -165,7 +163,7 @@ int HWPFile::Open(HStream & stream)
 {
     HStreamIODev *hstreamio;
 
-    if (!(hstreamio = new HStreamIODev(stream)))
+    if (0 == (hstreamio = new HStreamIODev(stream)))
     {
         printf(" hstreamio is not instanciate \n");
         return SetState(errno);
@@ -394,11 +392,11 @@ bool HWPFile::TagsRead(void)
                      ReadBlock(_hwpInfo.back_info.reserved1, 8);
                      _hwpInfo.back_info.luminance = Read4b();
                      _hwpInfo.back_info.contrast = Read4b();
-                     _hwpInfo.back_info.effect = Read1b();
+                     _hwpInfo.back_info.effect = sal::static_int_cast<char>(Read1b());
                      ReadBlock(_hwpInfo.back_info.reserved2, 7);
                      ReadBlock(_hwpInfo.back_info.filename, 260);
                      ReadBlock(_hwpInfo.back_info.color, 3);
-                     unsigned short nFlag = Read2b();
+                     unsigned short nFlag = sal::static_int_cast<unsigned short>(Read2b());
                      _hwpInfo.back_info.flag = nFlag >> 8 ;
                      int nRange = Read4b();
                      _hwpInfo.back_info.range = nRange >> 24;
@@ -427,7 +425,7 @@ bool HWPFile::TagsRead(void)
                 SkipBlock(size);
         }
     }
-    return false;
+//    return false;
 }
 
 
@@ -473,7 +471,8 @@ ColumnDef *HWPFile::GetColumnDef(int num)
 int HWPFile::GetPageMasterNum(int page)
 {
     LinkedListIterator<ColumnInfo> it(&columnlist);
-    ColumnInfo *prev = 0;
+    //os: unused
+    //ColumnInfo *prev = 0;
     ColumnInfo *now = 0;
     int i;
 
@@ -602,7 +601,7 @@ void HWPFile::AddParaShape(ParaShape * pshape)
           }
     }
     if( nscount )
-        pshape->tabs[MAXTABS-1].type = nscount;
+        pshape->tabs[MAXTABS-1].type = sal::static_int_cast<char>(nscount);
      int value = compareParaShape(pshape);
     if( value == 0 || nscount )
     {
@@ -644,7 +643,7 @@ void HWPFile::SetColumnDef(ColumnDef *coldef)
 
 void HWPFile::AddDateFormat(DateCode * hbox)
 {
-    hbox->key = ++datecodecount;
+    hbox->key = sal::static_int_cast<char>(++datecodecount);
     datecodes.insert(hbox, -1);
 }
 
