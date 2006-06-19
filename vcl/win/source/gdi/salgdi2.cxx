@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:11:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ void ImplDrawBitmap( HDC hDC,
     {
         HGLOBAL     hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
-        WinSalBitmap*   pTmpSalBmp;
+        WinSalBitmap*   pTmpSalBmp = NULL;
         BOOL        bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
@@ -375,12 +375,12 @@ void ImplDrawBitmap( HDC hDC,
                                         rSalBitmap.ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
             const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
-            int nCount = StretchDIBits( hDC,
-                                        (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
-                                        (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
-                                        (int)pPosAry->mnSrcX, (int)(pBIH->biHeight - pPosAry->mnSrcHeight - pPosAry->mnSrcY),
-                                        (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight,
-                                        pBits, pBI, DIB_RGB_COLORS, nDrawMode );
+            StretchDIBits( hDC,
+                           (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
+                           (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
+                           (int)pPosAry->mnSrcX, (int)(pBIH->biHeight - pPosAry->mnSrcHeight - pPosAry->mnSrcY),
+                           (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight,
+                           pBits, pBI, DIB_RGB_COLORS, nDrawMode );
 
             GlobalUnlock( hDrawDIB );
             SetStretchBltMode( hDC, nOldStretchMode );
@@ -388,8 +388,8 @@ void ImplDrawBitmap( HDC hDC,
         else if( hDrawDDB && !bPrintDDB )
         {
             HDC         hBmpDC = ImplGetCachedDC( CACHED_HDC_DRAW, hDrawDDB );
-            COLORREF    nOldBkColor;
-            COLORREF    nOldTextColor;
+            COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
+            COLORREF    nOldTextColor = RGB(0,0,0);
             BOOL        bMono = ( rSalBitmap.GetBitCount() == 1 );
 
             if( bMono )
@@ -458,7 +458,6 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
     WinSalBitmap*   pMask = new WinSalBitmap;
-    HDC         hDC = mhDC;
     const Point aPoint;
     const Size  aSize( rSalBitmap.GetSize() );
     HBITMAP     hMaskBitmap = CreateBitmap( (int) aSize.Width(), (int) aSize.Height(), 1, 1, NULL );
@@ -634,7 +633,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     BOOL    bRet;
     DWORD err = 0;
 
-    bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY );
+    bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY ) ? TRUE : FALSE;
     ImplReleaseCachedDC( CACHED_HDC_1 );
 
     if( bRet )
@@ -723,8 +722,8 @@ void WinSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nS
     HPEN        hPen;
     HPEN        hOldPen;
     HBRUSH      hBrush;
-    HBRUSH      hOldBrush;
-    COLORREF    nOldTextColor;
+    HBRUSH      hOldBrush = 0;
+    COLORREF    nOldTextColor RGB(0,0,0);
     int         nOldROP = SetROP2( mhDC, R2_NOT );
 
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
