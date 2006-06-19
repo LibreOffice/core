@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:17:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,6 +324,7 @@ void CacheController::implDisposeOne(CacheRef const & _aDisposedCache, RequestOp
     }
     catch (uno::Exception& e)
     {
+        (void)e;
         CFG_TRACE_ERROR_NI("- Failed with exception %s (ignoring here)", OUSTRING2ASCII(e.Message) );
     }
 
@@ -807,7 +808,7 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
 
     try
     {
-        CFG_TRACE_INFO("CacheController: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
+        CFG_TRACE_INFO2("CacheController: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
 
           std::auto_ptr<SubtreeChange> aChangeData = _aCache->releasePendingChanges(_aComponent.getComponentName());
 
@@ -830,6 +831,7 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
     }
     catch(uno::Exception& e)
     {
+            (void)e;
         CFG_TRACE_ERROR_NI("CacheController: saving tree '%s' failed: %s",
                                 OUSTRING2ASCII(_aComponent.getComponentName().toString()),
                                 OUSTRING2ASCII(e.Message) );
