@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:46:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -90,7 +90,7 @@ sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nM
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
@@ -108,7 +108,7 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
                 sal_Int64 nHandle = xTunnel->getSomething( aSeq );
                 if ( nHandle )
                 {
-                    pObjSh = (SfxObjectShell*)(sal_Int32*)nHandle;
+                    pObjSh = reinterpret_cast< SfxObjectShell* >(sal::static_int_cast<sal_IntPtr>( nHandle ));
                     return TRUE;
                 }
             }
@@ -123,8 +123,8 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 
 //=========================================================================
 
-SfxObjectItem::SfxObjectItem( USHORT nWhich, SfxShell *pSh )
-:   SfxPoolItem( nWhich ),
+SfxObjectItem::SfxObjectItem( USHORT nWhichId, SfxShell *pSh )
+:   SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}
 
