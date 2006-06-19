@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:08:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void X11SalOpenGL::ReleaseLib()
 
 // ------------------------------------------------------------------------
 
-void* X11SalOpenGL::GetOGLFnc( const char *pFncName )
+oglFunction X11SalOpenGL::GetOGLFnc( const char *pFncName )
 {
     return resolveSymbol( pFncName );
 }
@@ -261,19 +261,19 @@ void X11SalOpenGL::OGLEntry( SalGraphics* pGraphics )
 
 // ------------------------------------------------------------------------
 
-void X11SalOpenGL::OGLExit( SalGraphics* pGraphics )
+void X11SalOpenGL::OGLExit( SalGraphics* )
 {
 }
 
 // ------------------------------------------------------------------------
 
-void* X11SalOpenGL::resolveSymbol( const char* pSymbol )
+oglFunction X11SalOpenGL::resolveSymbol( const char* pSymbol )
 {
-    void* pSym = NULL;
+    oglFunction pSym = NULL;
     if( mpGLLib )
     {
         OUString aSym = OUString::createFromAscii( pSymbol );
-        pSym = osl_getSymbol( mpGLLib, aSym.pData );
+        pSym = osl_getFunctionSymbol( mpGLLib, aSym.pData );
     }
     return pSym;
 }
@@ -336,7 +336,7 @@ BOOL X11SalOpenGL::ImplInit()
     return bRet;
 }
 
-void X11SalOpenGL::StartScene( SalGraphics* pGraphics )
+void X11SalOpenGL::StartScene( SalGraphics* )
 {
     // flush pending operations which otherwise might be drawn
     // at the wrong time
