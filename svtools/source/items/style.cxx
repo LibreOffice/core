@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:04:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:13:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,14 @@ TYPEINIT1(SfxStyleSheetPoolHint, SfxHint);
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
     USHORT              nAction,        // SFX_STYLESHEET_... (s.o.)
+    const String&       rOldName
+)
+:   SfxStyleSheetHint( nAction ),
+    aName( rOldName )
+{}
+SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
+(
+    USHORT              nAction,        // SFX_STYLESHEET_... (s.o.)
     const String&       rOldName,
     SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
 )
@@ -98,6 +106,14 @@ SfxStyleSheetHint::SfxStyleSheetHint
     SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
 )
 :   pStyleSh( &rStyleSheet ),
+    nHint( nAction )
+{}
+
+SfxStyleSheetHint::SfxStyleSheetHint
+(
+    USHORT              nAction     // SFX_STYLESHEET_... (s.o.)
+)
+:   pStyleSh( NULL ),
     nHint( nAction )
 {}
 
@@ -540,7 +556,8 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r )
 }
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r )
-    : aAppName(r.aAppName)
+    : SfxBroadcaster( r )
+    , aAppName(r.aAppName)
     , rPool(r.rPool)
     , nSearchFamily(r.nSearchFamily)
     , nMask( r.nMask )
@@ -829,8 +846,8 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
         rStream.SetStreamCharSet( eEnc );
 
-        USHORT nCount;
-        for ( nCount = 0; aStylesRec.GetContent(); nCount++ )
+        USHORT nStyles;
+        for ( nStyles = 0; aStylesRec.GetContent(); nStyles++ )
         {
             // kann nicht mehr weiterlesen?
             if ( rStream.GetError() )
@@ -839,16 +856,16 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
             // Globale Teile
             XubString aName, aParent, aFollow;
             String aHelpFile;
-            USHORT nFamily, nMask,nCount;
+            USHORT nFamily, nStyleMask,nCount;
             sal_uInt32 nHelpId;
             rStream.ReadByteString(aName, eEnc );
             rStream.ReadByteString(aParent, eEnc );
             rStream.ReadByteString(aFollow, eEnc );
-            rStream >> nFamily >> nMask;
+            rStream >> nFamily >> nStyleMask;
             SfxPoolItem::readByteString(rStream, aHelpFile);
             rStream >> nHelpId;
 
-            SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nMask);
+            SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nStyleMask);
             rSheet.SetHelpId( aHelpFile, nHelpId );
             // Hier erst einmal Parent und Follow zwischenspeichern
             rSheet.aParent = aParent;
@@ -876,13 +893,13 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         }
 
         //  #72939# only loop through the styles that were really inserted
-        nCount = aStyles.Count();
+        nStyles = aStyles.Count();
 
         //! delete pTmpPool;
         // Jetzt Parent und Follow setzen. Alle Sheets sind geladen.
         // Mit Setxxx() noch einmal den String eintragen, da diese
         // virtuellen Methoden evtl. ueberlagert sind.
-        for ( USHORT i = 0; i < nCount; i++ )
+        for ( USHORT i = 0; i < nStyles; i++ )
         {
             SfxStyleSheetBase* p = aStyles.GetObject( i );
             XubString aText = p->aParent;
@@ -917,27 +934,27 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
     rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eEnc );
 
-    USHORT nCount;
-    rStream >> nCount;
+    USHORT nStyles;
+    rStream >> nStyles;
     USHORT i;
-    for ( i = 0; i < nCount; i++ )
+    for ( i = 0; i < nStyles; i++ )
     {
         // kann nicht mehr weiterlesen?
         if ( rStream.GetError() )
         {
-            nCount = i;
+            nStyles = i;
             break;
         }
 
         // Globale Teile
         XubString aName, aParent, aFollow;
         String aHelpFile;
-        USHORT nFamily, nMask,nCount;
+        USHORT nFamily, nStyleMask,nCount;
         sal_uInt32 nHelpId;
         rStream.ReadByteString(aName, eEnc );
         rStream.ReadByteString(aParent, eEnc );
         rStream.ReadByteString(aFollow, eEnc );
-        rStream >> nFamily >> nMask;
+        rStream >> nFamily >> nStyleMask;
         SfxPoolItem::readByteString(rStream, aHelpFile);
         if(nVersion!=STYLESTREAM_VERSION)
         {
@@ -948,7 +965,7 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
         else
             rStream >> nHelpId;
 
-        SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nMask);
+        SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nStyleMask);
         rSheet.SetHelpId( aHelpFile, nHelpId );
         // Hier erst einmal Parent und Follow zwischenspeichern
         rSheet.aParent = aParent;
@@ -978,7 +995,7 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
     // Jetzt Parent und Follow setzen. Alle Sheets sind geladen.
     // Mit Setxxx() noch einmal den String eintragen, da diese
     // virtuellen Methoden evtl. ueberlagert sind.
-    for ( i = 0; i < nCount; i++ )
+    for ( i = 0; i < nStyles; i++ )
     {
         SfxStyleSheetBase* p = aStyles.GetObject( i );
         XubString aText = p->aParent;
@@ -1147,14 +1164,16 @@ const SfxItemPool& SfxStyleSheetBasePool::GetPool() const
 /////////////////////// SfxStyleSheet /////////////////////////////////
 
 SfxStyleSheet::SfxStyleSheet(const XubString &rName,
-                             SfxStyleSheetBasePool& rPool,
+                             SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,
                              USHORT mask ):
-    SfxStyleSheetBase(rName, rPool, eFam, mask)
+    SfxStyleSheetBase(rName, r_Pool, eFam, mask)
 {}
 
 SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
-    SfxStyleSheetBase(rStyle)
+    SfxStyleSheetBase(rStyle),
+    SfxListener( rStyle ),
+    SfxBroadcaster( rStyle )
 {}
 
 SfxStyleSheet::~SfxStyleSheet()
