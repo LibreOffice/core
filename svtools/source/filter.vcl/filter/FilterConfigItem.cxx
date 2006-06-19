@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:32:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,10 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                         bAvailable = sal_False;
                     else
                     {
-                        Any aAny( xHierarchicalNameAccess->getByHierarchicalName( aNode ) );
+                        Any a( xHierarchicalNameAccess->getByHierarchicalName( aNode ) );
                         try
                         {
-                            aAny >>= xReadAccess;
+                            a >>= xReadAccess;
                         }
                         catch ( ::com::sun::star::uno::Exception& )
                         {
