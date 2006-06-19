@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:23:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -572,7 +572,7 @@ void SdTPAction::OpenFileDialog()
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
             aFileDialog.AddFilter (
-                String (SdResId (STR_FILTERNAME_ALL)),
+                String (SdResId (STR_SFX_FILTERNAME_ALL)),
                 String (RTL_CONSTASCII_USTRINGPARAM("*.*")));
 
 
