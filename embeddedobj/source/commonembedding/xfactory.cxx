@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:50:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:29:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitNew(
                                             const uno::Sequence< sal_Int8 >& aClassID,
-                                            const ::rtl::OUString& aClassName,
+                                            const ::rtl::OUString& /*aClassName*/,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const ::rtl::OUString& sEntName,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -316,7 +316,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceUserInit(
             const uno::Sequence< sal_Int8 >& aClassID,
-            const ::rtl::OUString& aClassName,
+            const ::rtl::OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& xStorage,
             const ::rtl::OUString& sEntName,
             sal_Int32 nEntryConnectionMode,
@@ -378,8 +378,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceLink(
-                                            const uno::Reference< embed::XStorage >& xStorage,
-                                            const ::rtl::OUString& sEntName,
+                                            const uno::Reference< embed::XStorage >& /*xStorage*/,
+                                            const ::rtl::OUString& /*sEntName*/,
                                             const uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
@@ -433,7 +433,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceLinkUserInit(
                                                 const uno::Sequence< sal_Int8 >& aClassID,
-                                                const ::rtl::OUString& aClassName,
+                                                const ::rtl::OUString& /*aClassName*/,
                                                 const uno::Reference< embed::XStorage >& xStorage,
                                                 const ::rtl::OUString& sEntName,
                                                 const uno::Sequence< beans::PropertyValue >& lArguments,
@@ -548,12 +548,12 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
             const uno::Sequence< sal_Int8 >& aClassID,
-            const ::rtl::OUString& aClassName,
-            const uno::Reference< embed::XStorage >& xStorage,
-            const ::rtl::OUString& sEntName,
-            sal_Int32 nEntryConnectionMode,
-            const uno::Sequence< beans::PropertyValue >& lArguments,
-            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+            const ::rtl::OUString& /*aClassName*/,
+            const uno::Reference< embed::XStorage >& /*xStorage*/,
+            const ::rtl::OUString& /*sEntName*/,
+            sal_Int32 /*nEntryConnectionMode*/,
+            const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
+            const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
