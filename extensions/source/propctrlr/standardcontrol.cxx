@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:15:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:46:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -757,7 +757,7 @@ namespace pcr
             {
                 for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
                 {
-                    XColorEntry* pEntry = pColorTbl->Get( i );
+                    XColorEntry* pEntry = pColorTbl->GetColor( i );
                     getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
             }
