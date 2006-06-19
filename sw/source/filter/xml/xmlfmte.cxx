@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:21:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,8 +263,7 @@ void SwXMLExport::_ExportAutoStyles()
             // only master pages are exported => styles for frames bound
             // to frames (but none for frames bound to pages) need to be
             // collected.
-            GetTextParagraphExport()->collectFramesBoundToFrameAutoStyles(
-                                                bShowProgress );
+            GetTextParagraphExport()->collectFramesBoundToFrameAutoStyles();
         }
         else
         {
