@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:09:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ KeyCode::KeyCode( const ResId& rResId )
             ImplGetKeyCode( eFunc, nCode, nDummy, nDummy );
         }
         else
-            nCode = nKeyCode | nModifier;
+            nCode = sal::static_int_cast<USHORT>(nKeyCode | nModifier);
     }
 }
 
