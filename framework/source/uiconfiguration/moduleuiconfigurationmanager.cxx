@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:51:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,7 +590,6 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
-    sal_Int32 nIndex( 0 );
     while ( pIter != rHashMap.end() )
     {
         UIElementData& rElement = pIter->second;
@@ -731,8 +730,6 @@ void ModuleUIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xUserConfigStorage.is() )
     {
-        long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
-
         // Try to access our module sub folder
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -792,18 +789,18 @@ void ModuleUIConfigurationManager::impl_Initialize()
 
 ModuleUIConfigurationManager::ModuleUIConfigurationManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , m_bReadOnly( true )
-    , m_bModified( false )
     , m_xDefaultConfigStorage( 0 )
     , m_xUserConfigStorage( 0 )
+    , m_bReadOnly( true )
+    , m_bInitialized( false )
+    , m_bModified( false )
     , m_bConfigRead( false )
     , m_bDisposed( false )
-    , m_bInitialized( false )
+    , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
     , m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))
     , m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
     , m_xServiceManager( xServiceManager )
-    , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
+    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     for ( int i = 0; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         m_pStorageHandler[i] = 0;
