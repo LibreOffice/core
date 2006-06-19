@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:22:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -830,6 +830,25 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     }
 }
 
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
+{
+    // TODO: place your code here
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
+{
+    // TODO: place your code here
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
+{
+    // TODO: place your code here
+}
+
+
 //==============================================================================
 //= OImageIndicator
 //==============================================================================
@@ -856,31 +875,31 @@ void OImageIndicator::reset()
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::init( sal_Int32 Width, sal_Int32 Height ) throw (RuntimeException)
+void SAL_CALL OImageIndicator::init( sal_Int32 /*Width*/, sal_Int32 /*Height*/ ) throw (RuntimeException)
 {
     m_bIsProducing = sal_True;
     m_bIsEmptyImage = sal_True;
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::setColorModel( sal_Int16 BitCount, const Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw (RuntimeException)
+void SAL_CALL OImageIndicator::setColorModel( sal_Int16 /*BitCount*/, const Sequence< sal_Int32 >& /*RGBAPal*/, sal_Int32 /*RedMask*/, sal_Int32 /*GreenMask*/, sal_Int32 /*BlueMask*/, sal_Int32 /*AlphaMask*/ ) throw (RuntimeException)
 {
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (RuntimeException)
-{
-    m_bIsEmptyImage = sal_False;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (RuntimeException)
+void SAL_CALL OImageIndicator::setPixelsByBytes( sal_Int32 /*nX*/, sal_Int32 /*nY*/, sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/, const Sequence< sal_Int8 >& /*aProducerData*/, sal_Int32 /*nOffset*/, sal_Int32 /*nScanSize*/ ) throw (RuntimeException)
 {
     m_bIsEmptyImage = sal_False;
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::complete( sal_Int32 Status, const Reference< XImageProducer >& xProducer ) throw (RuntimeException)
+void SAL_CALL OImageIndicator::setPixelsByLongs( sal_Int32 /*nX*/, sal_Int32 /*nY*/, sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/, const Sequence< sal_Int32 >& /*aProducerData*/, sal_Int32 /*nOffset*/, sal_Int32 /*nScanSize*/ ) throw (RuntimeException)
+{
+    m_bIsEmptyImage = sal_False;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageIndicator::complete( sal_Int32 /*Status*/, const Reference< XImageProducer >& /*xProducer*/ ) throw (RuntimeException)
 {
     m_bIsProducing = sal_False;
 }
