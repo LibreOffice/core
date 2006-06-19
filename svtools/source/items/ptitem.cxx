@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ptitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:12:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 using namespace ::com::sun::star;
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxPointItem);
+DBG_NAME(SfxPointItem)
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
@@ -100,9 +100,9 @@ SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
 
 SfxItemPresentation SfxPointItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -134,7 +134,7 @@ SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxPointItem::Create(SvStream &rStream, USHORT nVersion ) const
+SfxPoolItem* SfxPointItem::Create(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     Point aStr;
@@ -144,7 +144,7 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, USHORT nVersion ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxPointItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SfxPointItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     rStream << aVal;
