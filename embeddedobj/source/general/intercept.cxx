@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:37:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,8 +142,8 @@ void SAL_CALL Interceptor::dispose()
 
 Interceptor::Interceptor( DocumentHolder* pDocHolder )
     : m_pDocHolder( pDocHolder ),
-      m_pStatCL(0),
-      m_pDisposeEventListeners(0)
+      m_pDisposeEventListeners(0),
+      m_pStatCL(0)
 {
     m_aInterceptedURL[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
