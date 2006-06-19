@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedsrc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:11:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
-#endif
 
 #ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
@@ -45,13 +42,13 @@
 
 //------------------------------------------------------------------------
 
-void SvxEditSource::addRange( SvxUnoTextRangeBase* pNewRange )
+void SvxEditSource::addRange( SvxUnoTextRangeBase* )
 {
 }
 
 //------------------------------------------------------------------------
 
-void SvxEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
+void SvxEditSource::removeRange( SvxUnoTextRangeBase* )
 {
 }
 
@@ -86,7 +83,7 @@ SvxViewForwarder* SvxEditSource::GetViewForwarder()
     return NULL;
 }
 
-SvxEditViewForwarder* SvxEditSource::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* SvxEditSource::GetEditViewForwarder( sal_Bool )
 {
     return NULL;
 }
