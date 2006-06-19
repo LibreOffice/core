@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxgrahicitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:08:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,8 @@
  ************************************************************************/
 #include "svxgrahicitem.hxx"
 TYPEINIT1(SvxGraphicItem,SfxPoolItem);
-SvxGraphicItem::SvxGraphicItem( USHORT nWhich, const Graphic& rGraphic )
-    : SfxPoolItem( nWhich ), aGraphic( rGraphic )
+SvxGraphicItem::SvxGraphicItem( USHORT _nWhich, const Graphic& rGraphic )
+    : SfxPoolItem( _nWhich ), aGraphic( rGraphic )
 {
 
 }
@@ -49,7 +49,7 @@ int SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
     return ((SvxGraphicItem&)rItem).aGraphic == aGraphic;
 }
 
-SfxPoolItem* SvxGraphicItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxGraphicItem::Clone( SfxItemPool * ) const
 {
     return new SvxGraphicItem( *this );
 }
