@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bintitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 
 // STATIC DATA
 
-DBG_NAME(SfxBigIntItem);
+DBG_NAME(SfxBigIntItem)
 
 // RTTI
 TYPEINIT1_AUTOFACTORY(SfxBigIntItem, SfxPoolItem);
@@ -67,16 +67,16 @@ SfxBigIntItem::SfxBigIntItem()
 }
 
 //============================================================================
-SfxBigIntItem::SfxBigIntItem(USHORT nWhich, const BigInt& rValue)
-    : SfxPoolItem(nWhich),
+SfxBigIntItem::SfxBigIntItem(USHORT which, const BigInt& rValue)
+    : SfxPoolItem(which),
         aVal(rValue)
 {
     DBG_CTOR(SfxBigIntItem, 0);
 }
 
 //============================================================================
-SfxBigIntItem::SfxBigIntItem(USHORT nWhich, SvStream &rStream)
-    : SfxPoolItem(nWhich)
+SfxBigIntItem::SfxBigIntItem(USHORT which, SvStream &rStream)
+    : SfxPoolItem(which)
 {
     DBG_CTOR(SfxBigIntItem, 0);
     ByteString sTmp;
@@ -95,9 +95,9 @@ SfxBigIntItem::SfxBigIntItem(const SfxBigIntItem& rItem)
 
 //============================================================================
 SfxItemPresentation SfxBigIntItem::GetPresentation(
-    SfxItemPresentation ePresentation,
-    SfxMapUnit          eCoreMetric,
-    SfxMapUnit          ePresentationMetric,
+    SfxItemPresentation /*ePresentation*/,
+    SfxMapUnit          /*eCoreMetric*/,
+    SfxMapUnit          /*ePresentationMetric*/,
     XubString&           rText,
     const IntlWrapper * ) const
 {
@@ -143,7 +143,7 @@ SfxPoolItem* SfxBigIntItem::Create(SvStream &rStream, USHORT) const
 }
 
 //============================================================================
-SvStream& SfxBigIntItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SfxBigIntItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxBigIntItem, 0);
     rStream.WriteByteString( aVal.GetByteString() );
@@ -159,8 +159,7 @@ SfxFieldUnit SfxBigIntItem::GetUnit() const
 
 //============================================================================
 // virtual
-BOOL SfxBigIntItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                 BYTE nMemberId )
+BOOL SfxBigIntItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     double aValue;
     if ( rVal >>= aValue )
@@ -175,8 +174,7 @@ BOOL SfxBigIntItem::PutValue( const com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL SfxBigIntItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                 BYTE nMemberId ) const
+BOOL SfxBigIntItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     double aValue = GetValue();
     rVal <<= aValue;
