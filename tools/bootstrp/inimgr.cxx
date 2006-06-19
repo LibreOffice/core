@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inimgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:29:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #include <stdio.h>
 
 
-#include "inimgr.hxx"
-#include "appdef.hxx"
+#include "bootstrp/inimgr.hxx"
+#include "bootstrp/appdef.hxx"
 
 /****************************************************************************/
 IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
@@ -194,7 +194,6 @@ void IniManager::ForceUpdate()
                 {
                     FileCopier aFileCopier( aDir[ i ], aDestEntry );
                     aFileCopier.Execute();
-                    BOOL bWorkaround = FALSE;
 
                     while ( !aDestEntry.Exists())
                         aFileCopier.Execute();
