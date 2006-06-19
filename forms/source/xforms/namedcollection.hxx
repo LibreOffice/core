@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedcollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:19:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,10 @@ class NamedCollection : public cppu::ImplInheritanceHelper1<
                             com::sun::star::container::XNameAccess>
 {
     using Collection<T>::maItems;
+    using Collection<T>::getItem;
+    using Collection<T>::hasItem;
 
 public:
-
     NamedCollection() {}
     virtual ~NamedCollection() {}
 
