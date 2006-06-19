@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:32:18 $
+#   last change: $Author: hr $ $Date: 2006-06-19 10:44:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 PRJ=..$/..
 PRJINC=..$/inc
 
-PRJNAME=dbp
+PRJNAME=extensions
 TARGET=dbp
 ENABLE_EXCEPTIONS=TRUE
 
