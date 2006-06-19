@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:34:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#pragma hdrstop
 
 #include "e3ditem.hxx"
 
@@ -69,8 +68,8 @@ SvxVector3DItem::~SvxVector3DItem()
 
 // -----------------------------------------------------------------------
 
-SvxVector3DItem::SvxVector3DItem( USHORT nWhich, const Vector3D& rVal ) :
-    SfxPoolItem( nWhich ),
+SvxVector3DItem::SvxVector3DItem( USHORT _nWhich, const Vector3D& rVal ) :
+    SfxPoolItem( _nWhich ),
     aVal( rVal )
 {
     DBG_CTOR(SvxVector3DItem, 0);
@@ -78,8 +77,8 @@ SvxVector3DItem::SvxVector3DItem( USHORT nWhich, const Vector3D& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SvxVector3DItem::SvxVector3DItem( USHORT nWhich, SvStream& rStream ) :
-    SfxPoolItem( nWhich )
+SvxVector3DItem::SvxVector3DItem( USHORT _nWhich, SvStream& rStream ) :
+    SfxPoolItem( _nWhich )
 {
     DBG_CTOR(SvxVector3DItem, 0);
     rStream >> aVal;
@@ -105,7 +104,7 @@ int SvxVector3DItem::operator==( const SfxPoolItem &rItem ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxVector3DItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxVector3DItem::Clone( SfxItemPool * ) const
 {
     DBG_CHKTHIS(SvxVector3DItem, 0);
     return new SvxVector3DItem( *this );
@@ -113,7 +112,7 @@ SfxPoolItem* SvxVector3DItem::Clone( SfxItemPool *pPool ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxVector3DItem::Create(SvStream &rStream, USHORT nVersion) const
+SfxPoolItem* SvxVector3DItem::Create(SvStream &rStream, USHORT /*nVersion*/) const
 {
     DBG_CHKTHIS(SvxVector3DItem, 0);
     Vector3D aStr;
@@ -123,7 +122,7 @@ SfxPoolItem* SvxVector3DItem::Create(SvStream &rStream, USHORT nVersion) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxVector3DItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SvxVector3DItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) const
 {
     DBG_CHKTHIS(SvxVector3DItem, 0);
 
@@ -135,7 +134,7 @@ SvStream& SvxVector3DItem::Store(SvStream &rStream, USHORT nItemVersion) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxVector3DItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxVector3DItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     drawing::Direction3D aDirection;
 
@@ -150,7 +149,7 @@ sal_Bool SvxVector3DItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxVector3DItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxVector3DItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
