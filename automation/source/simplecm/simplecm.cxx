@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplecm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:31:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,11 @@ CommunicationLink::CommunicationLink( CommunicationManager *pMan )
 , nServiceProtocol( 0 )
 , bIsInsideCallback( FALSE )
 , nTotalBytes( 0 )
-, aApplication("Undefined")
+, maApplication("Undefined")
+#if OSL_DEBUG_LEVEL > 1
 , bFlag( FALSE )
 , nSomething( 0 )
+#endif
 {
 }
 
@@ -138,16 +140,16 @@ BOOL CommunicationLink::TransferDataStream( SvStream *pDataStream, CMProtocol nP
 
 void CommunicationLink::SetApplication( const ByteString& aApp )
 {
-    aApplication = aApp;
+    maApplication = aApp;
 }
 
 
 SimpleCommunicationLinkViaSocket::SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket )
 : CommunicationLink( pMan )
-, pStreamSocket( pSocket )
-, pReceiveStream( NULL )
 , aCommunicationPartner()
 , aMyName()
+, pStreamSocket( pSocket )
+, pReceiveStream( NULL )
 , bIsRequestShutdownPending( FALSE )
 {
     pTCPIO = new TCPIO( pStreamSocket );
@@ -214,7 +216,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetCommunicationPartner( CM_NameTyp
                     delete pPeerAdr;
                     return ByteString( UniString(aDotted), RTL_TEXTENCODING_UTF8 );
                 }
-                break;
+                //break;
             case CM_FQDN:
                 {
                     if ( !aCommunicationPartner.Len() )
@@ -225,7 +227,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetCommunicationPartner( CM_NameTyp
                     }
                     return aCommunicationPartner;
                 }
-                break;
+                //break;
         }
     }
     return CByteString( "Unknown" );
@@ -246,7 +248,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
                     delete pPeerAdr;
                     return ByteString( UniString(aDotted), RTL_TEXTENCODING_UTF8 );
                 }
-                break;
+                //break;
             case CM_FQDN:
                 {
                     if ( !aMyName.Len() )
@@ -257,7 +259,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
                     }
                     return aMyName;
                 }
-                break;
+                //break;
         }
     }
     return CByteString( "Error" );
@@ -301,7 +303,7 @@ void SimpleCommunicationLinkViaSocket::SetApplication( const ByteString& aApp )
 {
     CommunicationLink::SetApplication( aApp );
     SvStream* pData = GetBestCommunicationStream();
-    *pData << aApplication;
+    *pData << aApp;
     SendHandshake( CH_SetApplication, pData );
     delete pData;
 }
@@ -414,10 +416,10 @@ BOOL SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ShutdownCommunication
 
 
 CommunicationManager::CommunicationManager( BOOL bUseMultiChannel )
-: bIsCommunicationRunning( FALSE )
-, nInfoType( CM_NONE )
+: nInfoType( CM_NONE )
+, bIsCommunicationRunning( FALSE )
+, maApplication("Unknown")
 , bIsMultiChannel( bUseMultiChannel )
-, aApplication("Unknown")
 {
 }
 
@@ -426,7 +428,21 @@ CommunicationManager::~CommunicationManager()
     xLastNewLink.Clear();
 }
 
-ByteString CommunicationManager::GetMyName( CM_NameType eType )
+BOOL CommunicationManager::StartCommunication( String aApp, String aParams )
+{
+    (void) aApp; /* avoid warning about unused parameter */
+    (void) aParams; /* avoid warning about unused parameter */
+    return FALSE;
+}
+
+BOOL CommunicationManager::StartCommunication( ByteString aHost, ULONG nPort )
+{
+    (void) aHost; /* avoid warning about unused parameter */
+    (void) nPort; /* avoid warning about unused parameter */
+    return FALSE;
+}
+
+ByteString CommunicationManager::GetMyName( CM_NameType )
 {
     rtl::OUString aHostname;
     NAMESPACE_VOS(OSocketAddr)::getLocalHostname( aHostname );
@@ -439,7 +455,7 @@ void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
     pCL->aStart = DateTime();
     pCL->aLastAccess = pCL->aStart;
     bIsCommunicationRunning = TRUE;
-    pCL->SetApplication( aApplication );
+    pCL->SetApplication( GetApplication() );
 
     xLastNewLink = pCL;
 
@@ -559,7 +575,7 @@ void CommunicationManager::CallInfoMsg( InfoString aMsg )
 
 void CommunicationManager::SetApplication( const ByteString& aApp, BOOL bRunningLinks )
 {
-    aApplication = aApp;
+    maApplication = aApp;
     if ( bRunningLinks )
     {
         USHORT i;
@@ -608,7 +624,7 @@ USHORT SingleCommunicationManager::GetCommunicationLinkCount()
     return IsCommunicationRunning()?1:0;
 }
 
-CommunicationLinkRef SingleCommunicationManager::GetCommunicationLink( USHORT nNr )
+CommunicationLinkRef SingleCommunicationManager::GetCommunicationLink( USHORT )
 {
     return xActiveLink;
 }
