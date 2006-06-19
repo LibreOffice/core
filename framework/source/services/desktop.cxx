@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:57:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:26:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,6 @@
 #ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
 #endif
-
-#include <services/documentlist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -371,15 +369,15 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
         ,   ::cppu::OWeakObject     (                                               )
         // Init member
+        #ifdef ENABLE_ASSERTIONS
+        ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further informations!
+        #endif
         ,   m_xFactory              ( xFactory                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
         ,   m_eLoadState            ( E_NOTSET                                      )
         ,   m_aInteractionRequest   (                                               )
-        ,   m_bSuspendQuickstartVeto( sal_False                                     )
-        #ifdef ENABLE_ASSERTIONS
-        ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further informations!
-        #endif
+     ,   m_bSuspendQuickstartVeto( sal_False                                        )
 {
     // Safe impossible cases
     // We don't accept all incoming parameter.
@@ -1114,7 +1112,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() thr
     @onerror    -
     @threadsafe -
 *//*-*************************************************************************************************************/
-void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& ) throw( css::uno::RuntimeException )
 {
 }
 
@@ -1125,7 +1123,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getContainerWindow() 
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Desktop::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& /*xCreator*/ ) throw( css::uno::RuntimeException )
 {
 }
 
@@ -1183,8 +1181,8 @@ sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException )
 }
 
 //*****************************************************************************************************************
-sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
-                                         const css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
+                                         const css::uno::Reference< css::frame::XController >& /*xController*/      ) throw( css::uno::RuntimeException )
 {
     return sal_False;
 }
@@ -1207,14 +1205,14 @@ void SAL_CALL Desktop::contextChanged() throw( css::uno::RuntimeException )
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException )
 {
 }
 
 //*****************************************************************************************************************
 //   css::frame::XFrame
 //*****************************************************************************************************************
-void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException )
 {
 }
 
@@ -1583,7 +1581,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     @onerror    -
     @threadsafe -
 *//*-*************************************************************************************************************/
-void SAL_CALL Desktop::disposing( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     LOG_ERROR( "Desktop::disposing()", "Algorithm error! Normaly desktop is temp. listener ... not all the time. So this method shouldn't be called." )
 }
