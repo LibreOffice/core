@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:37:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_BORDER_CXX
 
@@ -205,14 +204,15 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
         aFlBorder       ( this, ResId( FL_BORDER ) ),
         aDefaultFT      ( this, ResId( FT_DEFAULT ) ),
-        aUserDefFT      ( this, ResId( FT_USERDEF ) ),
-        aStyleFT        ( this, ResId( FT_STYLE ) ),
-        aColorFT        ( this, ResId( FT_COLOR ) ),
         aWndPresets     ( this, ResId( WIN_PRESETS ) ),
+        aUserDefFT      ( this, ResId( FT_USERDEF ) ),
         aFrameSel       ( this, ResId( WIN_FRAMESEL ) ),
+
         aFlSep1         ( this, ResId( FL_SEPARATOR1 ) ),
         aFlLine         ( this, ResId( FL_LINE ) ),
+        aStyleFT        ( this, ResId( FT_STYLE ) ),
         aLbLineStyle    ( this, ResId( LB_LINESTYLE ) ),
+        aColorFT        ( this, ResId( FT_COLOR ) ),
         aLbLineColor    ( this, ResId( LB_LINECOLOR ) ),
 
         aFlSep2         ( this, ResId( FL_SEPARATOR2 ) ),
@@ -280,6 +280,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
             case FUNIT_KM:
                 eFUnit = FUNIT_MM;
                 break;
+            default: ;//prevent warning
         }
     }
     else
@@ -290,6 +291,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
             case FUNIT_KM:
                 eFUnit = FUNIT_MM;
                 break;
+            default: ; //prevent warning
         }
     }
 
@@ -389,7 +391,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->Get(i);
+            XColorEntry* pEntry = pColorTable->GetColor(i);
             aLbLineColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         aLbLineColor.SetUpdateMode( TRUE );
@@ -663,10 +665,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxBorderTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
 
     return LEAVE_PAGE;
 }
@@ -701,8 +703,8 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                 TBorderPair(svx::FRAMEBORDER_RIGHT,BOX_LINE_RIGHT),
                             };
 
-    for (sal_Int32 i=0; i < sizeof(eTypes1)/sizeof(TBorderPair); ++i)
-        aBoxItem.SetLine( aFrameSel.GetBorderStyle( eTypes1[i].first ), eTypes1[i].second );
+    for (sal_uInt32 i=0; i < sizeof(eTypes1)/sizeof(TBorderPair); ++i)
+        aBoxItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes1[i].first ), eTypes1[i].second );
 
     //--------------------------------
     // Umrandung hor/ver und TableFlag
@@ -711,8 +713,8 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                 TBorderPair(svx::FRAMEBORDER_HOR,BOXINFO_LINE_HORI),
                                 TBorderPair(svx::FRAMEBORDER_VER,BOXINFO_LINE_VERT)
                             };
-    for (sal_Int32 j=0; j < sizeof(eTypes2)/sizeof(TBorderPair); ++j)
-        aBoxInfoItem.SetLine( aFrameSel.GetBorderStyle( eTypes2[j].first ), eTypes2[j].second );
+    for (sal_uInt32 j=0; j < sizeof(eTypes2)/sizeof(TBorderPair); ++j)
+        aBoxInfoItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes2[j].first ), eTypes2[j].second );
 
     aBoxInfoItem.EnableHor( mbHorEnabled );
     aBoxInfoItem.EnableVer( mbVerEnabled );
@@ -734,10 +736,10 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                 if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SW_BORDER_MODE_TABLE)) &&
                         (aLeftMF.IsModified()||aRightMF.IsModified()||
                             aTopMF.IsModified()||aBottomMF.IsModified()) )||
-                     aFrameSel.GetBorderState( svx::FRAMEBORDER_TOP ) != svx::FRAMESTATE_HIDE
-                     || aFrameSel.GetBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_HIDE
-                     || aFrameSel.GetBorderState( svx::FRAMEBORDER_LEFT ) != svx::FRAMESTATE_HIDE
-                     || aFrameSel.GetBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FRAMESTATE_HIDE )
+                     aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_TOP ) != svx::FRAMESTATE_HIDE
+                     || aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_HIDE
+                     || aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_LEFT ) != svx::FRAMESTATE_HIDE
+                     || aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FRAMESTATE_HIDE )
                 {
                     SvxBoxInfoItem* pOldBoxInfoItem = (SvxBoxInfoItem*)GetOldItem(
                                                         rCoreAttrs, SID_ATTR_BORDER_INNER );
@@ -775,12 +777,12 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //------------------------------------------
     // Don't Care Status im Info-Item vermerken:
     //------------------------------------------
-    aBoxInfoItem.SetValid( VALID_TOP,    aFrameSel.GetBorderState( svx::FRAMEBORDER_TOP )    != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_BOTTOM, aFrameSel.GetBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_LEFT,   aFrameSel.GetBorderState( svx::FRAMEBORDER_LEFT )   != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_RIGHT,  aFrameSel.GetBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_HORI,   aFrameSel.GetBorderState( svx::FRAMEBORDER_HOR )    != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_VERT,   aFrameSel.GetBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( VALID_TOP,    aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( VALID_BOTTOM, aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( VALID_LEFT,   aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_LEFT )   != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( VALID_RIGHT,  aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( VALID_HORI,   aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( VALID_VERT,   aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
 
     //
     // Put oder Clear der Umrandung?
@@ -1184,10 +1186,10 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
         {
             if(bLineSet)
             {
-                nValid  = (aFrameSel.GetBorderState( svx::FRAMEBORDER_TOP)    == svx::FRAMESTATE_SHOW) ? VALID_TOP : 0;
-                nValid |= (aFrameSel.GetBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FRAMESTATE_SHOW) ? VALID_BOTTOM : 0;
-                nValid |= (aFrameSel.GetBorderState( svx::FRAMEBORDER_LEFT)   == svx::FRAMESTATE_SHOW) ? VALID_LEFT : 0;
-                nValid |= (aFrameSel.GetBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FRAMESTATE_SHOW) ? VALID_RIGHT : 0;
+                nValid  = (aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_TOP)    == svx::FRAMESTATE_SHOW) ? VALID_TOP : 0;
+                nValid |= (aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FRAMESTATE_SHOW) ? VALID_BOTTOM : 0;
+                nValid |= (aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_LEFT)   == svx::FRAMESTATE_SHOW) ? VALID_LEFT : 0;
+                nValid |= (aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FRAMESTATE_SHOW) ? VALID_RIGHT : 0;
             }
             else
                 nValid = 0;
