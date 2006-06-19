@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:45:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,10 @@ class SvxMSDffCustomShape
         sal_uInt32                  nNumElemVert;
         sal_uInt32                  nNumElemSeg;
 
+        sal_uInt32                  nColorData;
+
         SvxMSDffVertPair*           pVertData;
         sal_uInt16*                 pSegData;
-        sal_uInt32                  nColorData;
 
         sal_uInt32                  nTextRectData;
         SvxMSDffTextRectangles*     pTextRectData;
