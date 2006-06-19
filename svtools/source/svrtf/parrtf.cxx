@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:48:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             aByteString.Append((char)GetHexValue());
 
                             bool bBreak = false;
-                            sal_Char nSlash;
+                            sal_Char nSlash = '\\';
                             while (!bBreak)
                             {
                                 wchar_t __next=GetNextChar();
@@ -439,7 +439,10 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                             String sSave( aToken );
                             nNextCh = '\\';
-                            int nToken = _GetNextToken();
+                            #ifdef DBG_UTIL
+                            int nToken =
+                            #endif
+                                _GetNextToken();
                             DBG_ASSERT( RTF_U == nToken, "doch kein UNI-Code Zeichen" );
                             // dont convert symbol chars
                             aStrBuffer.Append(
