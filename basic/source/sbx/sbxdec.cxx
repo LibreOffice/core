@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:49:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,8 @@ SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
 {
 #ifdef WIN32
     maDec = rDec.maDec;
+#else
+    (void)rDec;
 #endif
     mnRefCount = 0;
     // GnDecCounter++;
@@ -71,6 +73,8 @@ SbxDecimal::SbxDecimal
     maDec.Lo32 = rAutomationDec.LowValue;
     maDec.Mid32 = rAutomationDec.MiddleValue;
     maDec.Hi32 = rAutomationDec.HighValue;
+#else
+    (void)rAutomationDec;
 #endif
     mnRefCount = 0;
     // GnDecCounter++;
@@ -85,6 +89,8 @@ void SbxDecimal::fillAutomationDecimal
     rAutomationDec.LowValue = maDec.Lo32;
     rAutomationDec.MiddleValue = maDec.Mid32;
     rAutomationDec.HighValue = maDec.Hi32;
+#else
+    (void)rAutomationDec;
 #endif
 }
 
@@ -326,21 +332,25 @@ bool SbxDecimal::getUInt( unsigned int& rVal )
 
 bool SbxDecimal::operator -= ( const SbxDecimal &r )
 {
+    (void)r;
     return false;
 }
 
 bool SbxDecimal::operator += ( const SbxDecimal &r )
 {
+    (void)r;
     return false;
 }
 
 bool SbxDecimal::operator /= ( const SbxDecimal &r )
 {
+    (void)r;
     return false;
 }
 
 bool SbxDecimal::operator *= ( const SbxDecimal &r )
 {
+    (void)r;
     return false;
 }
 
@@ -356,31 +366,33 @@ bool SbxDecimal::isZero( void )
 
 SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight )
 {
+    (void)rLeft;
+    (void)rRight;
     return (SbxDecimal::CmpResult)0;
 }
 
-void SbxDecimal::setChar( sal_Unicode val )     {}
-void SbxDecimal::setByte( BYTE val )            {}
-void SbxDecimal::setShort( INT16 val )          {}
-void SbxDecimal::setLong( INT32 val )           {}
-void SbxDecimal::setUShort( UINT16 val )        {}
-void SbxDecimal::setULong( UINT32 val )         {}
-bool SbxDecimal::setSingle( float val )         { return false; }
-bool SbxDecimal::setDouble( double val )        { return false; }
-void SbxDecimal::setInt( int val )              {}
-void SbxDecimal::setUInt( unsigned int val )    {}
-bool SbxDecimal::setString( String* pString )   { return false; }
+void SbxDecimal::setChar( sal_Unicode val )     { (void)val; }
+void SbxDecimal::setByte( BYTE val )            { (void)val; }
+void SbxDecimal::setShort( INT16 val )          { (void)val; }
+void SbxDecimal::setLong( INT32 val )           { (void)val; }
+void SbxDecimal::setUShort( UINT16 val )        { (void)val; }
+void SbxDecimal::setULong( UINT32 val )         { (void)val; }
+bool SbxDecimal::setSingle( float val )         { (void)val; return false; }
+bool SbxDecimal::setDouble( double val )        { (void)val; return false; }
+void SbxDecimal::setInt( int val )              { (void)val; }
+void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
+bool SbxDecimal::setString( String* pString )   { (void)pString;  return false; }
 
-bool SbxDecimal::getChar( sal_Unicode& rVal )   { return false; }
-bool SbxDecimal::getByte( BYTE& rVal )          { return false; }
-bool SbxDecimal::getShort( INT16& rVal )        { return false; }
-bool SbxDecimal::getLong( INT32& rVal )         { return false; }
-bool SbxDecimal::getUShort( UINT16& rVal )      { return false; }
-bool SbxDecimal::getULong( UINT32& rVal )       { return false; }
-bool SbxDecimal::getSingle( float& rVal )       { return false; }
-bool SbxDecimal::getDouble( double& rVal )      { return false; }
-bool SbxDecimal::getInt( int& rVal )            { return false; }
-bool SbxDecimal::getUInt( unsigned int& rVal )  { return false; }
+bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
+bool SbxDecimal::getByte( BYTE& rVal )          { (void)rVal; return false; }
+bool SbxDecimal::getShort( INT16& rVal )        { (void)rVal; return false; }
+bool SbxDecimal::getLong( INT32& rVal )         { (void)rVal; return false; }
+bool SbxDecimal::getUShort( UINT16& rVal )      { (void)rVal; return false; }
+bool SbxDecimal::getULong( UINT32& rVal )       { (void)rVal; return false; }
+bool SbxDecimal::getSingle( float& rVal )       { (void)rVal; return false; }
+bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
+bool SbxDecimal::getInt( int& rVal )            { (void)rVal; return false; }
+bool SbxDecimal::getUInt( unsigned int& rVal )  { (void)rVal; return false; }
 
 #endif
 
@@ -424,6 +436,7 @@ bool SbxDecimal::getString( String& rString )
     }
     return bRet;
 #else
+    (void)rString;
     return false;
 #endif
 }
@@ -442,6 +455,7 @@ SbxDecimal* ImpCreateDecimal( SbxValues* p )
     }
     return rpDecimal;
 #else
+    (void)p;
     return NULL;
 #endif
 }
@@ -575,6 +589,7 @@ start:
     }
     return pnDecRes;
 #else
+    (void)p;
     return NULL;
 #endif
 }
@@ -782,6 +797,9 @@ start:
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
+#else
+    (void)p;
+    (void)pDec;
 #endif
 }
 
