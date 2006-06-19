@@ -4,9 +4,9 @@
  *
  *  $RCSfile: otransactedfilestream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:00:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,15 +137,15 @@ struct TTFileStreamData_Impl
     , m_bDelete( bDelete )
     , m_aURL( aURL )
     , m_xOrigStream( xOrigStream )
-    , m_xOrigInStream( xOrigInStream )
-    , m_xOrigOutStream( xOrigOutStream )
     , m_xOrigTruncate( xOrigTruncate )
     , m_xOrigSeekable( xOrigSeekable )
+    , m_xOrigInStream( xOrigInStream )
+    , m_xOrigOutStream( xOrigOutStream )
     , m_xTempStream( xTempStream )
-    , m_xTempInStream( xTempInStream )
-    , m_xTempOutStream( xTempOutStream )
     , m_xTempTruncate( xTempTruncate )
     , m_xTempSeekable( xTempSeekable )
+    , m_xTempInStream( xTempInStream )
+    , m_xTempOutStream( xTempOutStream )
     , m_bInOpen( sal_False )
     , m_bOutOpen( sal_False )
     , m_bTransacted( sal_True )
@@ -770,7 +770,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OTruncatedTransactedFileStrea
 
 
 // ------------------------------------------------------------------------
-void SAL_CALL OTruncatedTransactedFileStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL OTruncatedTransactedFileStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -807,7 +807,7 @@ uno::Any SAL_CALL OTruncatedTransactedFileStream::getPropertyValue( const ::rtl:
 
 
 // ------------------------------------------------------------------------
-void SAL_CALL OTruncatedTransactedFileStream::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+void SAL_CALL OTruncatedTransactedFileStream::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // not implemented
@@ -815,7 +815,7 @@ void SAL_CALL OTruncatedTransactedFileStream::addPropertyChangeListener( const :
 
 
 // ------------------------------------------------------------------------
-void SAL_CALL OTruncatedTransactedFileStream::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+void SAL_CALL OTruncatedTransactedFileStream::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // not implemented
@@ -823,7 +823,7 @@ void SAL_CALL OTruncatedTransactedFileStream::removePropertyChangeListener( cons
 
 
 // ------------------------------------------------------------------------
-void SAL_CALL OTruncatedTransactedFileStream::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL OTruncatedTransactedFileStream::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // not implemented
@@ -831,7 +831,7 @@ void SAL_CALL OTruncatedTransactedFileStream::addVetoableChangeListener( const :
 
 
 // ------------------------------------------------------------------------
-void SAL_CALL OTruncatedTransactedFileStream::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL OTruncatedTransactedFileStream::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // not implemented
