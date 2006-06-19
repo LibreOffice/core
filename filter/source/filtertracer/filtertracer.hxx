@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtertracer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:47:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _FILTERTRACER_HXX
 #define _FILTERTRACER_HXX
 
-#ifndef __RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
