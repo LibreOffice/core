@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:28:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,14 @@ inline const ::com::sun::star::uno::Type & getVetoableTypeIdentifier() SAL_THROW
     return ::getCppuType( (Reference< XVetoableChangeListener > *)0 );
 }
 
-int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 ) SAL_THROW( () )
+extern "C" {
+
+static int compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
+    SAL_THROW_EXTERN_C()
 {
    return ((OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
+}
+
 }
 
 /**
@@ -709,7 +714,7 @@ void OPropertySetHelper::setFastPropertyValues(
 
         pConvertedValues = new Any[ nHitCount ];
         pOldValues = new Any[ nHitCount ];
-        sal_Int32 nHitCount = 0;
+        sal_Int32 n = 0;
         sal_Int32 i;
 
         {
@@ -725,12 +730,12 @@ void OPropertySetHelper::setFastPropertyValues(
                     throw PropertyVetoException();
                 }
                 // Will the property change?
-                if( convertFastPropertyValue( pConvertedValues[ nHitCount ], pOldValues[nHitCount],
+                if( convertFastPropertyValue( pConvertedValues[ n ], pOldValues[n],
                                             pHandles[i], pValues[i] ) )
                 {
                     // only increment if the property really change
-                    pHandles[nHitCount]         = pHandles[i];
-                    nHitCount++;
+                    pHandles[n]         = pHandles[i];
+                    n++;
                 }
             }
         }
@@ -738,13 +743,13 @@ void OPropertySetHelper::setFastPropertyValues(
         }
 
         // fire vetoable events
-        fire( pHandles, pConvertedValues, pOldValues, nHitCount, sal_True );
+        fire( pHandles, pConvertedValues, pOldValues, n, sal_True );
 
         {
         // must lock the mutex outside the loop.
         MutexGuard aGuard( rBHelper.rMutex );
         // Loop over all changed properties
-        for( i = 0; i < nHitCount; i++ )
+        for( i = 0; i < n; i++ )
         {
             // Will the property change?
             setFastPropertyValue_NoBroadcast( pHandles[i], pConvertedValues[i] );
@@ -753,7 +758,7 @@ void OPropertySetHelper::setFastPropertyValues(
         }
 
         // fire change events
-        fire( pHandles, pConvertedValues, pOldValues, nHitCount, sal_False );
+        fire( pHandles, pConvertedValues, pOldValues, n, sal_False );
     }
     catch( ... )
     {
@@ -809,7 +814,6 @@ Sequence<Any> OPropertySetHelper::getPropertyValues( const Sequence<OUString>& r
     rPH.fillHandles( pHandles, rPropertyNames );
 
     Any * pValues = aValues.getArray();
-    const OUString * pNames = rPropertyNames.getConstArray();
 
     MutexGuard aGuard( rBHelper.rMutex );
     // fill the sequence with the values
@@ -944,9 +948,14 @@ void OPropertySetHelper::removePropertyStateChangeListener( const OUString& aPro
 //      return ow;
 //  }
 
-int SAL_CALL compare_Property_Impl( const void *arg1, const void *arg2 ) SAL_THROW( () )
+extern "C" {
+
+static int compare_Property_Impl( const void *arg1, const void *arg2 )
+    SAL_THROW_EXTERN_C()
 {
    return ((Property *)arg1)->Name.compareTo( ((Property *)arg2)->Name );
+}
+
 }
 
 void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
@@ -958,7 +967,9 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
     {
         if(  pProperties[i-1].Name >= pProperties[i].Name )
         {
-            OSL_ENSURE( !bSorted, "Property array is not sorted" );
+            if (bSorted) {
+                OSL_ENSURE( false, "Property array is not sorted" );
+            }
             // not sorted
             qsort( aInfos.getArray(), nElements, sizeof( Property ),
                     compare_Property_Impl );
