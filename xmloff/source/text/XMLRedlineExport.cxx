@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:15:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,35 +123,34 @@ using ::rtl::OUStringBuffer;
 using ::std::list;
 
 
-XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
-    sDelete(RTL_CONSTASCII_USTRINGPARAM("Delete")),
-    sDeletion(GetXMLToken(XML_DELETION)),
-    sFormat(RTL_CONSTASCII_USTRINGPARAM("Format")),
-    sFormatChange(GetXMLToken(XML_FORMAT_CHANGE)),
-    sInsert(RTL_CONSTASCII_USTRINGPARAM("Insert")),
-    sInsertion(GetXMLToken(XML_INSERTION)),
-    sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
-    sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
-    sRedlineAuthor(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")),
-    sRedlineComment(RTL_CONSTASCII_USTRINGPARAM("RedlineComment")),
-    sRedlineDateTime(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime")),
-    sRedlineSuccessorData(RTL_CONSTASCII_USTRINGPARAM("RedlineSuccessorData")),
-    sRedlineType(RTL_CONSTASCII_USTRINGPARAM("RedlineType")),
-    sRedlineText(RTL_CONSTASCII_USTRINGPARAM("RedlineText")),
-    sStyle(RTL_CONSTASCII_USTRINGPARAM("Style")),
-    sTextTable(RTL_CONSTASCII_USTRINGPARAM("TextTable")),
-    sUnknownChange(RTL_CONSTASCII_USTRINGPARAM("UnknownChange")),
-    sChangePrefix(RTL_CONSTASCII_USTRINGPARAM("ct")),
-    sStartRedline(RTL_CONSTASCII_USTRINGPARAM("StartRedline")),
-    sEndRedline(RTL_CONSTASCII_USTRINGPARAM("EndRedline")),
-    sRedlineIdentifier(RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier")),
-    sIsInHeaderFooter(RTL_CONSTASCII_USTRINGPARAM("IsInHeaderFooter")),
-    sRedlineProtectionKey(RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey")),
-    sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")),
-    sMergeLastPara(RTL_CONSTASCII_USTRINGPARAM("MergeLastPara")),
-    rExport(rExp),
-    aChangeMap(),
-    pCurrentChangesList(NULL)
+XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)
+:   sDelete(RTL_CONSTASCII_USTRINGPARAM("Delete"))
+,   sDeletion(GetXMLToken(XML_DELETION))
+,   sFormat(RTL_CONSTASCII_USTRINGPARAM("Format"))
+,   sFormatChange(GetXMLToken(XML_FORMAT_CHANGE))
+,   sInsert(RTL_CONSTASCII_USTRINGPARAM("Insert"))
+,   sInsertion(GetXMLToken(XML_INSERTION))
+,   sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed"))
+,   sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart"))
+,   sRedlineAuthor(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor"))
+,   sRedlineComment(RTL_CONSTASCII_USTRINGPARAM("RedlineComment"))
+,   sRedlineDateTime(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime"))
+,   sRedlineSuccessorData(RTL_CONSTASCII_USTRINGPARAM("RedlineSuccessorData"))
+,   sRedlineText(RTL_CONSTASCII_USTRINGPARAM("RedlineText"))
+,   sRedlineType(RTL_CONSTASCII_USTRINGPARAM("RedlineType"))
+,   sStyle(RTL_CONSTASCII_USTRINGPARAM("Style"))
+,   sTextTable(RTL_CONSTASCII_USTRINGPARAM("TextTable"))
+,   sUnknownChange(RTL_CONSTASCII_USTRINGPARAM("UnknownChange"))
+,   sStartRedline(RTL_CONSTASCII_USTRINGPARAM("StartRedline"))
+,   sEndRedline(RTL_CONSTASCII_USTRINGPARAM("EndRedline"))
+,   sRedlineIdentifier(RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier"))
+,   sIsInHeaderFooter(RTL_CONSTASCII_USTRINGPARAM("IsInHeaderFooter"))
+,   sRedlineProtectionKey(RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey"))
+,   sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges"))
+,   sMergeLastPara(RTL_CONSTASCII_USTRINGPARAM("MergeLastPara"))
+,   sChangePrefix(RTL_CONSTASCII_USTRINGPARAM("ct"))
+,   rExport(rExp)
+,   pCurrentChangesList(NULL)
 {
 }
 
