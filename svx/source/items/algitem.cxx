@@ -4,9 +4,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:32:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// include ---------------------------------------------------------------
-
-#pragma hdrstop
 
 #include "svxitems.hrc"
 
@@ -122,10 +118,9 @@ SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
 SfxItemPresentation SvxHorJustifyItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&              rText, const IntlWrapper *pIntl
-)   const
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&              rText, const IntlWrapper */*pIntl*/)    const
 {
     switch ( ePres )
     {
@@ -136,6 +131,7 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -144,7 +140,7 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
 
 sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -188,7 +184,7 @@ sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -211,6 +207,7 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case table::CellHoriJustify_RIGHT:    eSvx = SVX_HOR_JUSTIFY_RIGHT;    break;
                     case table::CellHoriJustify_BLOCK:    eSvx = SVX_HOR_JUSTIFY_BLOCK;    break;
                     case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;   break;
+                    default: ; //prevent warning
                 }
                 SetValue( eSvx );
             }
@@ -281,10 +278,10 @@ SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
 SfxItemPresentation SvxVerJustifyItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&              rText, const IntlWrapper *pIntl
-)   const
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&              rText,
+    const IntlWrapper */*pIntl*/)    const
 {
     switch ( ePres )
     {
@@ -295,13 +292,14 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
     switch ( (SvxCellVerJustify)GetValue() )
@@ -310,12 +308,13 @@ sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case SVX_VER_JUSTIFY_TOP:      eUno = table::CellVertJustify_TOP;       break;
         case SVX_VER_JUSTIFY_CENTER:   eUno = table::CellVertJustify_CENTER;    break;
         case SVX_VER_JUSTIFY_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
+        default: ; //prevent warning
     }
     rVal <<= eUno;
     return sal_True;
 }
 
-sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     table::CellVertJustify eUno;
     if(!(rVal >>= eUno))
@@ -333,6 +332,7 @@ sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case table::CellVertJustify_TOP:       eSvx = SVX_VER_JUSTIFY_TOP;      break;
         case table::CellVertJustify_CENTER:   eSvx = SVX_VER_JUSTIFY_CENTER;    break;
         case table::CellVertJustify_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;    break;
+        default: ; //prevent warning
     }
     SetValue( eSvx );
 
@@ -389,10 +389,9 @@ SvxOrientationItem::SvxOrientationItem( INT32 nRotation, BOOL bStacked, const US
 SfxItemPresentation SvxOrientationItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&              rText, const IntlWrapper *pIntl
-)   const
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&              rText, const IntlWrapper */*pIntl*/ ) const
 {
     switch ( ePres )
     {
@@ -403,13 +402,14 @@ SfxItemPresentation SvxOrientationItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxOrientationItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxOrientationItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     table::CellOrientation eUno = table::CellOrientation_STANDARD;
     switch ( (SvxCellOrientation)GetValue() )
@@ -423,7 +423,7 @@ sal_Bool SvxOrientationItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return sal_True;
 }
 
-sal_Bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     table::CellOrientation eOrient;
     if(!(rVal >>= eOrient))
@@ -440,6 +440,7 @@ sal_Bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case table::CellOrientation_TOPBOTTOM:  eSvx = SVX_ORIENTATION_TOPBOTTOM; break;
         case table::CellOrientation_BOTTOMTOP:  eSvx = SVX_ORIENTATION_BOTTOMTOP; break;
         case table::CellOrientation_STACKED:    eSvx = SVX_ORIENTATION_STACKED;   break;
+        default: ; //prevent warning
     }
     SetValue( eSvx );
     return sal_True;
@@ -490,6 +491,7 @@ INT32 SvxOrientationItem::GetRotation( INT32 nStdAngle ) const
     {
         case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;
         case SVX_ORIENTATION_TOPBOTTOM: nAngle = 27000;
+        default: ; //prevent warning
     }
     return nAngle;
 }
@@ -596,6 +598,7 @@ SfxItemPresentation SvxMarginItem::GetPresentation
             rText += SVX_RESSTR(GetMetricId(ePresUnit));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
+        default: ; //prevent warning
     }
 #endif
     return SFX_ITEM_PRESENTATION_NONE;
@@ -637,7 +640,7 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, USHORT ) const
 
 //------------------------------------------------------------------------
 
-SvStream& SvxMarginItem::Store( SvStream &rStream, USHORT nItemVersion) const
+SvStream& SvxMarginItem::Store( SvStream &rStream, USHORT /*nItemVersion*/) const
 {
     rStream << nLeftMargin;
     rStream << nTopMargin;
