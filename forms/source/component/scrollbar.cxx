@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrollbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool OScrollBarModel::commitControlValueToDbColumn( bool _bPostReset )
+    sal_Bool OScrollBarModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         OSL_ENSURE( sal_False, "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
