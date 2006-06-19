@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:13:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@ namespace xmloff
 
     public:
         OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
+        virtual ~OFormLayerXMLExport_Impl();
 
     protected:
         /** exports one single grid column
@@ -336,6 +337,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16.34.1  2005/11/03 17:47:00  cl
+ *  warning free code changes for unxlngi6
+ *
+ *  Revision 1.16  2005/09/09 14:13:10  rt
+ *  INTEGRATION: CWS ooo19126 (1.15.78); FILE MERGED
+ *  2005/09/05 14:39:01 rt 1.15.78.1: #i54170# Change license header: remove SISSL
+ *
  *  Revision 1.15.78.1  2005/09/05 14:39:01  rt
  *  #i54170# Change license header: remove SISSL
  *
