@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:47:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,7 +560,7 @@ SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames )
+void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 {
     DBG_ASSERT( sal_False, "SvtDynamicMenuOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
