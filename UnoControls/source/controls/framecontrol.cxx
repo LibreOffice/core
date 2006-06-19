@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framecontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:17:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,12 +124,12 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeExc
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
-    Reference< XInterface > xDelegator = BaseControl::impl_getDelegator();
-    if ( xDelegator.is() == sal_True )
+    Reference< XInterface > xDel = BaseControl::impl_getDelegator();
+    if ( xDel.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
         // Delegator will ask his own queryAggregation!
-        aReturn = xDelegator->queryInterface( rType );
+        aReturn = xDel->queryInterface( rType );
     }
     else
     {
@@ -248,7 +248,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
 //  XControl
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& xModel ) throw( RuntimeException )
+sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException )
 {
     // We have no model.
     return sal_False ;
@@ -278,7 +278,7 @@ void SAL_CALL FrameControl::dispose() throw( RuntimeException )
 //  XView
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& xDevice ) throw( RuntimeException )
+sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ ) throw( RuntimeException )
 {
     // it is not possible to print this control
     return sal_False ;
