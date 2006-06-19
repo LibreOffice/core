@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storlckb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:32:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORLCKB_CXX_ "$Revision: 1.6 $"
+#define _STORE_STORLCKB_CXX_ "$Revision: 1.7 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -215,7 +215,7 @@ OStoreDirectory::~OStoreDirectory (void)
         osl::MutexGuard aGuard (*m_xManager);
         if (m_pNode)
         {
-            m_xManager->releasePage (m_aDescr, store_AccessReadOnly);
+            m_xManager->releasePage (m_aDescr);
         }
     }
     delete m_pNode;
@@ -391,10 +391,7 @@ OStoreLockBytes::~OStoreLockBytes (void)
         if (m_pNode)
         {
             OStorePageDescriptor aDescr (m_pNode->m_aDescr);
-            if (m_bWriteable)
-                m_xManager->releasePage (aDescr, store_AccessReadWrite);
-            else
-                m_xManager->releasePage (aDescr, store_AccessReadOnly);
+            m_xManager->releasePage (aDescr);
         }
     }
 
@@ -828,8 +825,7 @@ storeError OStoreLockBytes::stat (sal_uInt32 &rnSize)
 /*
  * lockRange.
  */
-storeError OStoreLockBytes::lockRange (
-    sal_uInt32 nOffset, sal_uInt32 nBytes)
+storeError OStoreLockBytes::lockRange (sal_uInt32, sal_uInt32)
 {
     // (NYI).
     return store_E_None;
@@ -838,8 +834,7 @@ storeError OStoreLockBytes::lockRange (
 /*
  * unlockRange.
  */
-storeError OStoreLockBytes::unlockRange (
-    sal_uInt32 nOffset, sal_uInt32 nBytes)
+storeError OStoreLockBytes::unlockRange (sal_uInt32, sal_uInt32)
 {
     // (NYI).
     return store_E_None;
