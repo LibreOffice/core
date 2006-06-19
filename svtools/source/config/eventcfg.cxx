@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:48:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,9 +31,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
-7 ************************************************************************/
-
-#pragma hdrstop
+ ************************************************************************/
 
 #include "eventcfg.hxx"
 
@@ -119,7 +117,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     // We need it to get information about changes outside these class on our used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ));
-    sal_Bool bEnabled  = EnableNotification( aNotifySeq, sal_True );
+    EnableNotification( aNotifySeq, sal_True );
 }
 
 //*****************************************************************************************************************
@@ -137,7 +135,7 @@ GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& lPropertyNames )
+void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 {
     MutexGuard aGuard( GlobalEventConfig::GetOwnStaticMutex() );
 
@@ -162,7 +160,6 @@ void GlobalEventConfig_Impl::Commit()
 {
     //DF need to check it this is correct??
     OSL_TRACE("In GlobalEventConfig_Impl::Commit");
-    sal_Int32 nBindingsCount = m_eventBindingHash.size();
     EventBindingHash::const_iterator it = m_eventBindingHash.begin();
     EventBindingHash::const_iterator it_end = m_eventBindingHash.end();
     // clear the existing nodes
