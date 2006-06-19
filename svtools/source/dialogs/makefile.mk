@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:16:11 $
+#   last change: $Author: hr $ $Date: 2006-06-19 20:59:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,26 +58,27 @@ SRC1FILES=		filedlg2.src	\
 
 
 EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj	\
-                                $(SLO)$/insdlg.obj       \
+                    $(SLO)$/insdlg.obj       \
+                    $(SLO)$/roadmapwizard.obj 	\
                     $(SLO)$/printdlg.obj \
                     $(SLO)$/wizardmachine.obj
 
 
 SLOFILES=	\
-                $(SLO)$/insdlg.obj       \
-                $(SLO)$/roadmapwizard.obj 	\
-                $(SLO)$/wizardmachine.obj 	\
-                $(SLO)$/addresstemplate.obj 	\
-                $(SLO)$/filedlg.obj 	\
-                $(SLO)$/filedlg2.obj	\
-                $(SLO)$/prnsetup.obj	\
-                $(SLO)$/printdlg.obj	\
-                $(SLO)$/colctrl.obj 	\
-                $(SLO)$/colrdlg.obj 	\
-                $(SLO)$/property.obj	\
-                $(SLO)$/wizdlg.obj		\
-                $(SLO)$/mcvmath.obj		\
-                $(SLO)$/logindlg.obj
+                    $(SLO)$/insdlg.obj       \
+                    $(SLO)$/roadmapwizard.obj 	\
+                    $(SLO)$/wizardmachine.obj 	\
+                    $(SLO)$/addresstemplate.obj 	\
+                    $(SLO)$/filedlg.obj 	\
+                    $(SLO)$/filedlg2.obj	\
+                    $(SLO)$/prnsetup.obj	\
+                    $(SLO)$/printdlg.obj	\
+                    $(SLO)$/colctrl.obj 	\
+                    $(SLO)$/colrdlg.obj 	\
+                    $(SLO)$/property.obj	\
+                    $(SLO)$/wizdlg.obj		\
+                    $(SLO)$/mcvmath.obj		\
+                    $(SLO)$/logindlg.obj
 
 # --- Targets ------------------------------------------------------
 
