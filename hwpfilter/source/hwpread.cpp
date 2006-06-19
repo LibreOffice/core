@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwpread.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:41:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: hwpread.cpp,v 1.3 2005-09-07 16:41:46 rt Exp $ */
+/* $Id: hwpread.cpp,v 1.4 2006-06-20 00:55:15 hr Exp $ */
 
 #include "precompile.h"
 
@@ -50,7 +50,7 @@ static short fboxnum = 1;
 static int zindex = 1;
 static int lnnumber = 0;
 
-int HBox::Read(HWPFile & hwpf)
+int HBox::Read(HWPFile & )
 {
 // already read
     return 1;
@@ -127,7 +127,7 @@ int Bookmark::Read(HWPFile & hwpf)
     long len;
 
     hwpf.Read4b(&len, 1);
-    dummy = hwpf.Read2b();
+    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
 
     if (!(len == 34))// 2 * (BMK_COMMENT_LEN + 1) + 2
      {
@@ -149,7 +149,7 @@ int Bookmark::Read(HWPFile & hwpf)
 int DateFormat::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
-    dummy = hwpf.Read2b();
+    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
     if (!(hh == dummy && CH_DATE_FORM == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -163,7 +163,7 @@ int DateCode::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
     hwpf.Read2b(date, 6);
-    dummy = hwpf.Read2b();
+    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
     if (!(hh == dummy && CH_DATE_CODE == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -177,8 +177,8 @@ int DateCode::Read(HWPFile & hwpf)
 int Tab::Read(HWPFile & hwpf)
 {
     width = hwpf.Read2b();
-    leader = hwpf.Read2b();
-    dummy = hwpf.Read2b();
+    leader = sal::static_int_cast<unsigned short>(hwpf.Read2b());
+    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
     if (!(hh == dummy && CH_TAB == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -259,7 +259,7 @@ int TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(&pgy, 1);
     hwpf.Read2b(&pgno, 1);
      if( ( pgno +1 ) != hwpf.getCurrentPage() )
-          pgno = hwpf.getCurrentPage() -1 ;
+          pgno = sal::static_int_cast<short>(hwpf.getCurrentPage() -1) ;
 
     hwpf.Read2b(&showpg, 1);
     hwpf.Read2b(&cap_pos, 1);
@@ -299,7 +299,7 @@ int TxtBox::Read(HWPFile & hwpf)
     for (ii = 0; ii < ncell; ii++)
     {
         cell[ii].Read(hwpf);
-          cell[ii].key = ii;
+          cell[ii].key = sal::static_int_cast<unsigned char>(ii);
     }
     if (ncell == 1)
         style.cell = &cell[0];
@@ -560,7 +560,7 @@ int HeaderFooter::Read(HWPFile & hwpf)
     hwpf.Read1b(&where, 1);
     lnnumber = 0;
     hwpf.ReadParaList(plist, CH_HEADER_FOOTER);
-    linenumber = lnnumber;
+    linenumber = sal::static_int_cast<unsigned char>(lnnumber);
      m_nPageNumber = hwpf.getCurrentPage();
      hwpf.setMaxSettedPage();
      hwpf.AddHeaderFooter(this);
