@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:02:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, NOTINTERESTEDIN )
+IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, EMPTYARG )
 {
     sal_Bool bIsSequenceChecking = m_aSequenceCheckingCB.IsChecked();
     m_aRestrictedCB.Enable( bIsSequenceChecking );
@@ -104,7 +104,7 @@ SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }
 // -----------------------------------------------------------------------------
-BOOL SvxCTLOptionsPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 {
     BOOL bModified = FALSE;
     SvtCTLOptions aCTLOptions;
@@ -151,7 +151,7 @@ BOOL SvxCTLOptionsPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 // -----------------------------------------------------------------------------
-void SvxCTLOptionsPage::Reset( const SfxItemSet& rSet )
+void SvxCTLOptionsPage::Reset( const SfxItemSet& )
 {
     SvtCTLOptions aCTLOptions;
 
