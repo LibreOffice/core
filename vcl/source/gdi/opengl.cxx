@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:32:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,12 +65,6 @@
 // -----------
 // - Defines -
 // -----------
-
-#ifdef WNT
-#define __OPENGL_CALL __stdcall
-#else
-#define __OPENGL_CALL
-#endif
 
 // -----------------------
 // - Fnc-Pointer-Typedef -
@@ -168,7 +162,7 @@ typedef void ( __OPENGL_CALL *OGLFncBlendFunc ) ( GLenum sfactor, GLenum dfactor
 
 #define OGL_INIT() (mpOGL && (mpOutDev->mpGraphics || mpOutDev->ImplGetGraphics()))
 
-#define INIT_OGLFNC( FncName ) static OGLFnc##FncName pImplOpenGLFnc##FncName = NULL;
+#define INIT_OGLFNC( FncName ) static OGLFnc##FncName pImplOpenGLFnc##FncName = NULL
 #define GET_OGLFNC_GL( FncName )                                                    \
 pImplOpenGLFnc##FncName = (OGLFnc##FncName) mpOGL->GetOGLFnc( "gl" #FncName );    \
 if( !pImplOpenGLFnc##FncName ) bRet = FALSE;
