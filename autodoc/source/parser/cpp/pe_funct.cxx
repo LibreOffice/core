@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_funct.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:26:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,32 +419,32 @@ PE_Function::On_afterStdOperatorLeftBracket_RightBracket(const char * i_sText)
 }
 
 void
-PE_Function::On_afterOperator_Cast_Type(const char * i_sText)
+PE_Function::On_afterOperator_Cast_Type(const char *)
 {
     pSpuCastOperatorType->Push(not_done);
 }
 
 void
-PE_Function::On_afterName_Bracket_Left(const char * i_sText)
+PE_Function::On_afterName_Bracket_Left(const char *)
 {
     pSpuParameter->Push(done);
 }
 
 void
-PE_Function::On_expectParameterSeparator_BracketRight(const char * i_sText)
+PE_Function::On_expectParameterSeparator_BracketRight(const char *)
 {
     SetTokenResult(done,stay);
     pStati->SetCur(afterParameters);
 }
 
 void
-PE_Function::On_expectParameterSeparator_Comma(const char * i_sText)
+PE_Function::On_expectParameterSeparator_Comma(const char *)
 {
     pSpuParameter->Push(done);
 }
 
 void
-PE_Function::On_afterParameters_const(const char * i_sText)
+PE_Function::On_afterParameters_const(const char *)
 {
     SetTokenResult(done,stay);
     eConVol = static_cast<E_ConVol>(
@@ -452,7 +452,7 @@ PE_Function::On_afterParameters_const(const char * i_sText)
 }
 
 void
-PE_Function::On_afterParameters_volatile(const char * i_sText)
+PE_Function::On_afterParameters_volatile(const char *)
 {
     SetTokenResult(done,stay);
     eConVol = static_cast<E_ConVol>(
@@ -460,7 +460,7 @@ PE_Function::On_afterParameters_volatile(const char * i_sText)
 }
 
 void
-PE_Function::On_afterParameters_throw(const char * i_sText)
+PE_Function::On_afterParameters_throw(const char *)
 {
     SetTokenResult(done,stay);
     pStati->SetCur(afterThrow);
@@ -468,81 +468,81 @@ PE_Function::On_afterParameters_throw(const char * i_sText)
 }
 
 void
-PE_Function::On_afterParameters_SwBracket_Left(const char * i_sText)
+PE_Function::On_afterParameters_SwBracket_Left(const char *)
 {
     EnterImplementation(1);
 }
 
 void
-PE_Function::On_afterParameters_Semicolon(const char * i_sText)
+PE_Function::On_afterParameters_Semicolon(const char *)
 {
     PerformFinishingPunctuation();
 }
 
 void
-PE_Function::On_afterParameters_Comma(const char * i_sText)
+PE_Function::On_afterParameters_Comma(const char *)
 {
     PerformFinishingPunctuation();
 }
 
 void
-PE_Function::On_afterParameters_Colon(const char * i_sText)
+PE_Function::On_afterParameters_Colon(const char *)
 {
     EnterImplementation(0);
 }
 
 void
-PE_Function::On_afterParameters_Assign(const char * i_sText)
+PE_Function::On_afterParameters_Assign(const char *)
 {
     SetTokenResult(done,stay);
     pStati->SetCur(expectZero);
 }
 
 void
-PE_Function::On_afterThrow_Bracket_Left(const char * i_sText)
+PE_Function::On_afterThrow_Bracket_Left(const char *)
 {
     pSpuException->Push(done);
 }
 
 void
-PE_Function::On_expectExceptionSeparator_BracketRight(const char * i_sText)
+PE_Function::On_expectExceptionSeparator_BracketRight(const char *)
 {
     SetTokenResult(done,stay);
     pStati->SetCur(afterExceptions);
 }
 
 void
-PE_Function::On_expectExceptionSeparator_Comma(const char * i_sText)
+PE_Function::On_expectExceptionSeparator_Comma(const char *)
 {
     pSpuException->Push(done);
 }
 
 void
-PE_Function::On_afterExceptions_SwBracket_Left(const char * i_sText)
+PE_Function::On_afterExceptions_SwBracket_Left(const char *)
 {
     EnterImplementation(1);
 }
 
 void
-PE_Function::On_afterExceptions_Semicolon(const char * i_sText)
+PE_Function::On_afterExceptions_Semicolon(const char *)
 {
     PerformFinishingPunctuation();
 }
 
 void
-PE_Function::On_afterExceptions_Comma(const char * i_sText)
+PE_Function::On_afterExceptions_Comma(const char *)
 {
     PerformFinishingPunctuation();
 }
 
 void
-PE_Function::On_afterExceptions_Colon(const char * i_sText)
+PE_Function::On_afterExceptions_Colon(const char *)
 {
     EnterImplementation(0);
 }
 
 void
-PE_Function::On_afterExceptions_Assign(const char * i_sText)
+PE_Function::On_afterExceptions_Assign(const char *)
 {
     SetTokenResult(done,stay);
     pStati->SetCur(expectZero);
@@ -561,14 +561,14 @@ PE_Function::On_expectZero_Constant(const char * i_sText)
 }
 
 void
-PE_Function::On_inImplementation_SwBracket_Left(const char * i_sText)
+PE_Function::On_inImplementation_SwBracket_Left(const char *)
 {
     SetTokenResult(done,stay);
     nBracketCounterInImplementation++;
 }
 
 void
-PE_Function::On_inImplementation_SwBracket_Right(const char * i_sText)
+PE_Function::On_inImplementation_SwBracket_Right(const char *)
 {
     nBracketCounterInImplementation--;
     if (nBracketCounterInImplementation == 0)
@@ -582,7 +582,7 @@ PE_Function::On_inImplementation_SwBracket_Right(const char * i_sText)
 }
 
 void
-PE_Function::On_inImplementation_Default(const char * i_sText)
+PE_Function::On_inImplementation_Default(const char *)
 {
     SetTokenResult(done,stay);
 }
