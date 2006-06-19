@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:22:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,7 +416,7 @@ void StorageItem::update( const ::rtl::OUString& url, const NamePassRecord& rec 
 
 //-------------------------------------------------------------------------
 
-void StorageItem::Notify( const Sequence< ::rtl::OUString >& aPropertyNames )
+void StorageItem::Notify( const Sequence< ::rtl::OUString >& )
 {
     // this feature still should not be used
     if( mainCont )
@@ -475,7 +475,7 @@ PasswordContainer::~PasswordContainer()
 
 //-------------------------------------------------------------------------
 
-void SAL_CALL PasswordContainer::disposing( const EventObject& Source ) throw(RuntimeException)
+void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( mMutex );
 
@@ -1008,13 +1008,12 @@ void SAL_CALL PasswordContainer::removeAllPersistent(  ) throw(RuntimeException)
 }
 //-------------------------------------------------------------------------
 
-Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
+Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Reference< XInteractionHandler >& ) throw(RuntimeException)
 {
     // this feature still should not be used
     // throw RuntimeException( ::rtl::OUString::createFromAscii( "Not implememted!" ), Reference< XInterface >() );
 
     Sequence< UrlRecord > aResult;
-    sal_Int32 oldLen;
 
     ::osl::MutexGuard aGuard( mMutex );
     for( PassMap::iterator aIter = container.begin(); aIter != container.end(); aIter++ )
@@ -1023,7 +1022,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
         for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
             if( aVIter->mStatus == PERSISTENT_RECORD )
             {
-                oldLen = aUsers.getLength();
+                sal_Int32 oldLen = aUsers.getLength();
                 aUsers.realloc( oldLen + 1 );
                 aUsers[ oldLen ] = UserRecord( aVIter->mName, copyVectorToSequence( aVIter->mPass ) );
             }
