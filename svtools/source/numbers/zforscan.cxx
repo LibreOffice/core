@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:03:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1074,7 +1074,7 @@ BOOL ImpSvNumberformatScan::Is100SecZero( USHORT i, BOOL bHadDecSep )
 }
 
 
-xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
+xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
@@ -1382,7 +1382,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
 
 
 int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
-            USHORT& nAnzResStrings )
+            USHORT& rAnzResStrings )
 {
     if ( sStrArray[i].GetChar(0) == '[' &&
             i < nAnzStrings-1 &&
@@ -1395,7 +1395,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
         nPos += sStrArray[++i].Len();       // ~
         sStrArray[i-1] += sStrArray[i];     // [~
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-        nAnzResStrings--;
+        rAnzResStrings--;
         if ( ++i >= nAnzStrings )
             return -1;      // error
         nPos += sStrArray[i].Len();         // calendarID
@@ -1408,7 +1408,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
             nPos += sStrArray[i].Len();
             rStr += sStrArray[i];
             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-            nAnzResStrings--;
+            rAnzResStrings--;
             i++;
         }
         if ( rStr.Len() && i < nAnzStrings &&
@@ -2236,7 +2236,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             case '#':
                             case '?':
                                 return nPos;
-                            break;
                             case '[':
                             {
                                 if (bThousand)              // doppelt
@@ -2406,7 +2405,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 case '#':
                                 case '?':
                                     return nPos;
-                                break;
                                 default:
                                 {
                                     nPos += sStrArray[i].Len();
