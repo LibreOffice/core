@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:21:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMu
         aNames = Sequence< ::rtl::OUString>( nLen );
         ::rtl::OUString* pNames = aNames.getArray();
         const Property* pProps = aProps.getConstArray();
-        for ( sal_uInt32 n = 0; n < nLen; ++n, ++pProps, ++pNames)
+        for ( sal_Int32 n = 0; n < nLen; ++n, ++pProps, ++pNames)
             *pNames = pProps->Name;
     }
     return aNames;
@@ -295,7 +295,7 @@ void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const An
         mxVclWindowPeer->setProperty( rPropName, rVal );
 }
 
-void UnoControl::PrepareWindowDescriptor( WindowDescriptor& rDesc )
+void UnoControl::PrepareWindowDescriptor( WindowDescriptor& )
 {
 }
 
@@ -1272,12 +1272,12 @@ void SAL_CALL UnoControl::removeModeChangeListener( const Reference< XModeChange
     maModeChangeListeners.removeInterface( _rxListener );
 }
 
-void SAL_CALL UnoControl::addModeChangeApproveListener( const Reference< XModeChangeApproveListener >& _rxListener ) throw (NoSupportException, RuntimeException)
+void SAL_CALL UnoControl::addModeChangeApproveListener( const Reference< XModeChangeApproveListener >& ) throw (NoSupportException, RuntimeException)
 {
     throw NoSupportException( );
 }
 
-void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XModeChangeApproveListener >& _rxListener ) throw (NoSupportException, RuntimeException)
+void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XModeChangeApproveListener >&  ) throw (NoSupportException, RuntimeException)
 {
     throw NoSupportException( );
 }
