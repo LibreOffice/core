@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:18:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,10 +69,10 @@
 
 // Konstruktor für den Process
 Process::Process()
-: bWasGPF( FALSE )
-, pArgumentList( NULL )
+: pArgumentList( NULL )
 , pEnvList( NULL )
 , pProcess( NULL )
+, bWasGPF( FALSE )
 , bHasBeenStarted( FALSE )
 {
 }
