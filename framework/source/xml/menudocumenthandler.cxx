@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:04:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,13 +208,13 @@ throw( RuntimeException )
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::ignorableWhitespace(
-    const OUString& aWhitespaces )
+    const OUString& )
 throw( SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::processingInstruction(
-    const OUString& aTarget, const OUString& aData )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw( SAXException, RuntimeException )
 {
 }
@@ -241,16 +241,14 @@ throw(  SAXException, RuntimeException )
 
 // -----------------------------------------------------------------------------
 
-// #110897#
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer )
-:   // #110897#
-    mxServiceFactory(xServiceFactory),
+:   m_nElementDepth( 0 ),
+    m_bMenuBarMode( sal_False ),
     m_xMenuBarContainer( rMenuBarContainer ),
-    m_xContainerFactory( rMenuBarContainer, UNO_QUERY ),
-    m_nElementDepth( 0 ),
-    m_bMenuBarMode( sal_False )
+      m_xContainerFactory( rMenuBarContainer, UNO_QUERY ),
+    mxServiceFactory(xServiceFactory)
 {
 }
 
@@ -306,7 +304,7 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadMenuDocumentHandler::characters(const rtl::OUString& aChars)
+void SAL_CALL OReadMenuDocumentHandler::characters(const rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
@@ -343,12 +341,11 @@ OReadMenuBarHandler::OReadMenuBarHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer,
     const Reference< XSingleComponentFactory >& rFactory          )
-:   // #110897#
-    mxServiceFactory( xServiceFactory ),
+:   m_nElementDepth( 0 ),
+    m_bMenuMode( sal_False ),
     m_xMenuBarContainer( rMenuBarContainer ),
-    m_xContainerFactory( rFactory ),
-    m_nElementDepth( 0 ),
-    m_bMenuMode( sal_False )
+      m_xContainerFactory( rFactory ),
+    mxServiceFactory( xServiceFactory )
 {
 }
 
@@ -377,15 +374,15 @@ void SAL_CALL OReadMenuBarHandler::endDocument(void)
 
 
 void SAL_CALL OReadMenuBarHandler::startElement(
-    const OUString& aName, const Reference< XAttributeList > &xAttrList )
+    const OUString& rName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     if ( m_bMenuMode )
     {
         ++m_nElementDepth;
-        m_xReader->startElement( aName, xAttrList );
+        m_xReader->startElement( rName, xAttrList );
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
+    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
     {
         ++m_nElementDepth;
 
@@ -457,7 +454,7 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadMenuBarHandler::characters(const rtl::OUString& aChars)
+void SAL_CALL OReadMenuBarHandler::characters(const rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
@@ -493,10 +490,10 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
 OReadMenuHandler::OReadMenuHandler(
     const Reference< XIndexContainer >& rMenuContainer,
     const Reference< XSingleComponentFactory >& rFactory          ) :
-    m_xMenuContainer( rMenuContainer ),
-    m_xContainerFactory( rFactory ),
     m_nElementDepth( 0 ),
-    m_bMenuPopupMode( sal_False )
+    m_bMenuPopupMode( sal_False ),
+    m_xMenuContainer( rMenuContainer ),
+    m_xContainerFactory( rFactory )
 {
 }
 
@@ -543,7 +540,7 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadMenuHandler::characters(const rtl::OUString& aChars)
+void SAL_CALL OReadMenuHandler::characters(const rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
@@ -579,10 +576,10 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
 OReadMenuPopupHandler::OReadMenuPopupHandler(
     const Reference< XIndexContainer >& rMenuContainer,
     const Reference< XSingleComponentFactory >& rFactory          ) :
-    m_xMenuContainer( rMenuContainer ),
-    m_xContainerFactory( rFactory ),
     m_nElementDepth( 0 ),
     m_bMenuMode( sal_False ),
+    m_xMenuContainer( rMenuContainer ),
+    m_xContainerFactory( rFactory ),
     m_nNextElementExpected( ELEM_CLOSE_NONE )
 {
 }
@@ -606,14 +603,14 @@ void SAL_CALL OReadMenuPopupHandler::endDocument(void)
 
 
 void SAL_CALL OReadMenuPopupHandler::startElement(
-    const OUString& aName, const Reference< XAttributeList > &xAttrList )
+    const OUString& rName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     ++m_nElementDepth;
 
     if ( m_bMenuMode )
-        m_xReader->startElement( aName, xAttrList );
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
+        m_xReader->startElement( rName, xAttrList );
+    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
     {
         OUString aHelpId;
         OUString aCommandId;
@@ -671,7 +668,7 @@ throw( SAXException, RuntimeException )
         m_xReader = Reference< XDocumentHandler >( new OReadMenuHandler( xSubItemContainer, m_xContainerFactory ));
         m_xReader->startDocument();
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUITEM )))
+    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUITEM )))
     {
         OUString aHelpId;
         OUString aCommandId;
@@ -710,7 +707,7 @@ throw( SAXException, RuntimeException )
 
         m_nNextElementExpected = ELEM_CLOSE_MENUITEM;
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUSEPARATOR )))
+    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUSEPARATOR )))
     {
         Sequence< PropertyValue > aMenuSeparator( 1 );
         aMenuSeparator[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
@@ -729,7 +726,7 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadMenuPopupHandler::characters(const rtl::OUString& aChars)
+void SAL_CALL OReadMenuPopupHandler::characters(const rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
