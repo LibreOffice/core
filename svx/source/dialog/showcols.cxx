@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showcols.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:02:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ FmShowColsDialog::~FmShowColsDialog()
 }
 
 //--------------------------------------------------------------------------
-IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, pButton )
+IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
 {
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
