@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:05:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@ namespace sdr
                             pRetval = new sdr::animation::AInfoScrollText(rTextObj);
                             break;
                         }
+                        default: break;
                     }
                 }
             }
@@ -204,7 +205,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
 
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
-        sal_Bool ViewContactOfSdrObj::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfSdrObj::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Test layer visibility
             if(!rDisplayInfo.GetProcessLayers().IsSet(GetSdrObject().GetLayer()))
@@ -244,7 +245,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
         // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfSdrObj::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfSdrObj::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             sal_Bool bRetval(sal_False);
 
@@ -268,7 +269,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
 
         // Paint this objects GluePoints. This is after PaitObject() was called.
         // This is temporarily as long as GluePoints are no handles yet.
-        void ViewContactOfSdrObj::PaintGluePoints(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        void ViewContactOfSdrObj::PaintGluePoints(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             const SdrGluePointList* pGluePointList = GetSdrObject().GetGluePointList();
 
@@ -430,7 +431,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
             DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const Rectangle& rUnrotatedRectangle,
             const GeoStat& rGeometric, const XubString& rDraftString, sal_Bool bUnderline)
         {
-            sal_Bool bRetval;
+            sal_Bool bRetval(sal_False);
 
             if(rDraftString.Len())
             {
@@ -671,6 +672,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
                             bRetval = sal_True;
                             break;
                         }
+                        default: break;
                     }
                 }
 
