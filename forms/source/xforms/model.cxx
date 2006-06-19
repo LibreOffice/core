@@ -4,9 +4,9 @@
  *
  *  $RCSfile: model.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:49:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,10 @@ Model::Model() :
     mpBindings( NULL ),
     mpSubmissions( NULL ),
     mpInstances( new InstanceCollection ),
+    mxNamespaces( new NameContainer<OUString>() ),
     mxBindings( mpBindings ),
     mxSubmissions( mpSubmissions ),
     mxInstances( mpInstances ),
-    mxNamespaces( new NameContainer<OUString>() ),
     mbInitialized( false )
 {
     initializePropertySet();
