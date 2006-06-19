@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:44:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ class SbClassFactory : public SbxFactory
 
 public:
     SbClassFactory( void );
+    virtual ~SbClassFactory();
 
     void AddClassModule( SbModule* pClassModule );
     void RemoveClassModule( SbModule* pClassModule );
