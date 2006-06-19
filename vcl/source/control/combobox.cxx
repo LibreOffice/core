@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:56:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText,
         aToken.EraseLeadingAndTrailingChars( ' ' );
         USHORT nPos = pEntryList->FindEntry( aToken );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-            rSelectedPos.Insert( ImplCreateKey( nPos ), (void*)1L );
+            rSelectedPos.Insert( ImplCreateKey( nPos ), (void*)sal_IntPtr(1L) );
     }
 }
 
@@ -100,7 +100,7 @@ static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText,
 ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )
 {
-    ImplInitData();
+    ImplInitComboBoxData();
 }
 
 // -----------------------------------------------------------------------
@@ -108,7 +108,7 @@ ComboBox::ComboBox( WindowType nType ) :
 ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
     Edit( WINDOW_COMBOBOX )
 {
-    ImplInitData();
+    ImplInitComboBoxData();
     ImplInit( pParent, nStyle );
 }
 
@@ -117,7 +117,7 @@ ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
 ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
     Edit( WINDOW_COMBOBOX )
 {
-    ImplInitData();
+    ImplInitComboBoxData();
     rResId.SetRT( RSC_COMBOBOX );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -143,7 +143,7 @@ ComboBox::~ComboBox()
 
 // -----------------------------------------------------------------------
 
-void ComboBox::ImplInitData()
+void ComboBox::ImplInitComboBoxData()
 {
     mpSubEdit           = NULL;
     mpBtn               = NULL;
@@ -318,7 +318,7 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, p )
+IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, EMPTYARG )
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
@@ -386,8 +386,8 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             XubString aText = mpImplLB->GetEntryList()->GetEntryText( nPos );
-            Selection aSel( aText.Len(), aStartText.Len() );
-            pEdit->SetText( aText, aSel );
+            Selection aSelection( aText.Len(), aStartText.Len() );
+            pEdit->SetText( aText, aSelection );
         }
     }
 
@@ -419,7 +419,7 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
                 if ( (nP != LISTBOX_ENTRY_NOTFOUND) && (!mpImplLB->GetEntryList()->IsEntryPosSelected( nP )) )
                 {
                     aText.Erase( nPrevIndex, nTokenLen );
-                    nIndex -= nTokenLen;
+                    nIndex = sal::static_int_cast<xub_StrLen>(nIndex - nTokenLen);
                     if ( (nPrevIndex < aText.Len()) && (aText.GetChar( nPrevIndex ) == mcMultiSep) )
                     {
                         aText.Erase( nPrevIndex, 1 );
@@ -963,8 +963,8 @@ void ComboBox::ImplUpdateFloatSelection()
 USHORT ComboBox::InsertEntry( const XubString& rStr, USHORT nPos )
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
-    nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) nRealPos );
+    nRealPos = sal::static_int_cast<USHORT>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
     return nRealPos;
 }
 
@@ -973,8 +973,8 @@ USHORT ComboBox::InsertEntry( const XubString& rStr, USHORT nPos )
 USHORT ComboBox::InsertEntry( const XubString& rStr, const Image& rImage, USHORT nPos )
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
-    nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) nRealPos );
+    nRealPos = sal::static_int_cast<USHORT>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
     return nRealPos;
 }
 
@@ -990,7 +990,7 @@ void ComboBox::RemoveEntry( const XubString& rStr )
 void ComboBox::RemoveEntry( USHORT nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) nPos );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );
 }
 
 // -----------------------------------------------------------------------
@@ -998,7 +998,7 @@ void ComboBox::RemoveEntry( USHORT nPos )
 void ComboBox::Clear()
 {
     mpImplLB->Clear();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) (-1) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(-1) );
 }
 
 // -----------------------------------------------------------------------
@@ -1007,7 +1007,7 @@ USHORT ComboBox::GetEntryPos( const XubString& rStr ) const
 {
     USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos -= mpImplLB->GetEntryList()->GetMRUCount();
+        nPos = sal::static_int_cast<USHORT>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
     return nPos;
 }
 
@@ -1017,7 +1017,7 @@ USHORT ComboBox::GetEntryPos( const void* pData ) const
 {
     USHORT nPos = mpImplLB->GetEntryList()->FindEntry( pData );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos -= mpImplLB->GetEntryList()->GetMRUCount();
+        nPos = sal::static_int_cast<USHORT>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
     return nPos;
 }
 
@@ -1463,7 +1463,7 @@ USHORT ComboBox::GetSelectEntryPos( USHORT nIndex ) const
     {
         if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
             nPos = mpImplLB->GetEntryList()->FindEntry( mpImplLB->GetEntryList()->GetEntryText( nPos ) );
-        nPos -= mpImplLB->GetEntryList()->GetMRUCount();
+        nPos = sal::static_int_cast<USHORT>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
     }
     return nPos;
 }
