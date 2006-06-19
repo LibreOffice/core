@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtouch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:40:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ void ImpCheckIt(ImpPolyHitCalc& rH, long lx1, long ly1, long lx2, long ly2,
     FASTBOOL bx1,bx2;
     FASTBOOL by1=ly1<=ry1 && ly2>ry1;
     FASTBOOL by2=ly1<=ry2 && ly2>ry2;
-    long dx,dy,a;
+    long dx(0),dy(0),a(0);
     if (by1 || by2) {
         dx=lx2-lx1;
         dy=ly2-ly1;
