@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:20:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,11 +120,11 @@ namespace sdr
             if ( !nWhich )
             {
                 SfxWhichIter aIter( *mpItemSet );
-                sal_uInt16 nWhich = aIter.FirstWhich();
-                while( nWhich )
+                sal_uInt16 nWhich2 = aIter.FirstWhich();
+                while( nWhich2 )
                 {
-                    TextProperties::ClearObjectItem( nWhich );
-                    nWhich = aIter.NextWhich();
+                    TextProperties::ClearObjectItem( nWhich2 );
+                    nWhich2 = aIter.NextWhich();
                 }
             }
             else
@@ -135,11 +135,11 @@ namespace sdr
             if ( !nWhich )
             {
                 SfxWhichIter aIter( *mpItemSet );
-                sal_uInt16 nWhich = aIter.FirstWhich();
-                while( nWhich )
+                sal_uInt16 nWhich2 = aIter.FirstWhich();
+                while( nWhich2 )
                 {
-                    TextProperties::ClearObjectItemDirect( nWhich );
-                    nWhich = aIter.NextWhich();
+                    TextProperties::ClearObjectItemDirect( nWhich2 );
+                    nWhich2 = aIter.NextWhich();
                 }
             }
             else
@@ -163,7 +163,7 @@ namespace sdr
         void CustomShapeProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
-            OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
+            //OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
 
             if( pNewItem && ( SDRATTR_TEXT_AUTOGROWHEIGHT == nWhich ) )
             {
