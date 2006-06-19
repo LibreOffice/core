@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:06:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -368,7 +367,7 @@ Reference< XInterface > cloneUsingProperties(const Reference< ::com::sun::star::
             }
             catch(IllegalArgumentException e)
             {
-                e;
+                (void)e;
 #ifdef DBG_UTIL
                 ::rtl::OString sMessage("cloneUsingProperties : could not transfer the value for property \"");
                 sMessage = sMessage + ::rtl::OString(pResult->Name.getStr(), pResult->Name.getLength(), RTL_TEXTENCODING_ASCII_US);
@@ -676,8 +675,8 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 DBG_NAME(FmXDisposeMultiplexer);
 //------------------------------------------------------------------------------
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
-    :m_pListener(_pListener)
-    ,m_xObject(_rxObject)
+    :m_xObject(_rxObject)
+    ,m_pListener(_pListener)
     ,m_nId(_nId)
 {
     DBG_CTOR(FmXDisposeMultiplexer, NULL);
@@ -999,10 +998,10 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(
             sal_Int16 _nId, Sequence< ::rtl::OUString > _rInterceptedSchemes)
     :FmXDispatchInterceptorImpl_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
     ,m_xIntercepted(_rxToIntercept)
+    ,m_bListening(sal_False)
     ,m_pMaster(_pMaster)
     ,m_nId(_nId)
     ,m_aInterceptedURLSchemes(_rInterceptedSchemes)
-    ,m_bListening(sal_False)
 {
     DBG_CTOR(FmXDispatchInterceptorImpl,NULL);
 
