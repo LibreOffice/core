@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:31:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:20:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@
 #define STR_FRONT                       ( RC_DIALOG_BEGIN + 44)
 #define STR_BASICMACROS                 ( RC_DIALOG_BEGIN + 45)
 #define STR_MENU                        ( RC_DIALOG_BEGIN + 46)
-#define STR_MACROS                      ( RC_DIALOG_BEGIN + 47)
+#define STR_DLG_MACROS                      ( RC_DIALOG_BEGIN + 47)
 
 #define LOGO_IMAGELIST                  ( RC_DIALOG_BEGIN + 45)
 #define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
