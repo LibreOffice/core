@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncfilepicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:39:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@ namespace svt
     //--------------------------------------------------------------------
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
         :m_refCount ( 0        )
-        ,m_pDialog  ( _pDialog )
-        ,m_pView    ( _pView   )
         ,m_eAction  ( _eAction )
+        ,m_pView    ( _pView   )
+        ,m_pDialog  ( _pDialog )
         ,m_bRunning ( false    )
     {
         DBG_CTOR( AsyncPickerAction, NULL );
