@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:55:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,8 +106,8 @@ extern "C" int __LOADONCALLAPI ImplHatchCmpFnc( const void* p1, const void* p2 )
 
 // =======================================================================
 
-DBG_NAMEEX( OutputDevice );
-DBG_NAMEEX( Gradient );
+DBG_NAMEEX( OutputDevice )
+DBG_NAMEEX( Gradient )
 
 // =======================================================================
 
