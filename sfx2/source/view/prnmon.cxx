@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:04:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,10 +144,11 @@ public:
                                         const TypeId& rHintType );
 };
 
-void SfxPrintProgress_Impl::SFX_NOTIFY( SfxBroadcaster& rBC,
-                            const TypeId& rBCType,
-                            const SfxHint& rHint,
-                            const TypeId& rHintType )
+void SfxPrintProgress_Impl::SFX_NOTIFY(
+    SfxBroadcaster& /*rBC*/,
+    const TypeId& rBCType,
+    const SfxHint& rHint,
+    const TypeId& rHintType )
 {
     SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
     if ( pPrintHint )
@@ -160,23 +161,20 @@ void SfxPrintProgress_Impl::SFX_NOTIFY( SfxBroadcaster& rBC,
 //------------------------------------------------------------------------
 
 SfxPrintMonitor_Impl::SfxPrintMonitor_Impl( Window* pParent, SfxViewShell* rpViewShell ) :
-
     ModelessDialog( pParent, SfxResId( DLG_PRINTMONITOR ) ),
-
+    pViewShell  ( rpViewShell ),
     aDocName    ( this, ResId( FT_DOCNAME ) ),
     aPrinting   ( this, ResId( FT_PRINTING ) ),
     aPrinter    ( this, ResId( FT_PRINTER ) ),
     aPrintInfo  ( this, ResId( FT_PRINTINFO ) ),
-    aCancel     ( this, ResId( PB_CANCELPRNMON ) ),
-    pViewShell  ( rpViewShell )
-
+    aCancel     ( this, ResId( PB_CANCELPRNMON ) )
 {
     FreeResource();
 }
 
 //------------------------------------------------------------------------
 
-IMPL_STATIC_LINK( SfxPrintProgress_Impl, DeleteHdl, SfxPrintProgress*, pAntiImpl )
+IMPL_STATIC_LINK_NOINSTANCE( SfxPrintProgress_Impl, DeleteHdl, SfxPrintProgress*, pAntiImpl )
 {
     delete pAntiImpl;
     return 0;
@@ -199,6 +197,7 @@ void actualizePrintCancelState(CancelButton& rButton, const SfxObjectShell* pShe
 SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
                                               SfxPrinter* pThePrinter ) :
 
+    pMonitor            ( 0 ),
     pViewShell          ( pTheViewShell ),
     pPrinter            ( pThePrinter ),
     pOldPrinter         ( NULL ),
@@ -206,13 +205,12 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
     bRunning            ( TRUE ),
     bCancel             ( FALSE ),
     bDeleteOnEndPrint   ( FALSE ),
+    bShow               ( FALSE ),
     bCallbacks          ( FALSE ),
     bOldEnablePrintFile ( FALSE ),
     bOldFlag            ( TRUE ),
     bRestoreFlag        ( FALSE ),
     bAborted            ( FALSE ),
-    bShow               ( FALSE ),
-    pMonitor            ( 0 ),
     aDeleteLink         ( STATIC_LINK( this, SfxPrintProgress_Impl, DeleteHdl ) )
 {
     StartListening( *pViewShell->GetObjectShell() );
@@ -265,7 +263,7 @@ BOOL SfxPrintProgress_Impl::SetPage( USHORT nPage, const String &rPage )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxPrintProgress_Impl, CancelHdl, Button *, pButton )
+IMPL_LINK( SfxPrintProgress_Impl, CancelHdl, Button *, EMPTYARG )
 {
     if ( !pViewShell->GetPrinter()->IsJobActive() )
         // we are still in StartJob, cancelling now might lead to a crash
@@ -356,7 +354,7 @@ SfxPrintProgress::~SfxPrintProgress()
 
 //--------------------------------------------------------------------
 
-BOOL SfxPrintProgress::SetState( ULONG nVal, ULONG nNewRange )
+BOOL SfxPrintProgress::SetState( ULONG nValue, ULONG nNewRange )
 {
     if ( pImp->bShow )
     {
@@ -368,8 +366,8 @@ BOOL SfxPrintProgress::SetState( ULONG nVal, ULONG nNewRange )
         }
     }
 
-    return pImp->SetPage( (USHORT)nVal, GetStateText_Impl() ) &&
-           SfxProgress::SetState( nVal, nNewRange );
+    return pImp->SetPage( (USHORT)nValue, GetStateText_Impl() ) &&
+           SfxProgress::SetState( nValue, nNewRange );
 }
 
 //--------------------------------------------------------------------
@@ -386,7 +384,7 @@ void SfxPrintProgress::SetText( const String& rText )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
+IMPL_LINK_INLINE_START( SfxPrintProgress, PrintErrorNotify, void *, EMPTYARG )
 {
     if ( pImp->pMonitor )
         pImp->pMonitor->Hide();
@@ -407,11 +405,11 @@ IMPL_LINK_INLINE_START( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
+IMPL_LINK_INLINE_END( SfxPrintProgress, PrintErrorNotify, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
+IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, EMPTYARG )
 {
     if ( pImp->pMonitor )
         pImp->pMonitor->Hide();
