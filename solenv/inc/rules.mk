@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 13:59:48 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:12:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,15 +88,16 @@ $(SLO)$/%.obj : %.cxx
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) -E  $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
+    $(CAPTURE_COMMAND) $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx $(CAPTURE_OUTPUT)
+.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"=="" && \
+        "$(CAPTURE_COMMAND)"==""
     $(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE			# "$(GUI)"=="UNX"
     @+-$(RM) $@ >& $(NULLDEV)
-    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
+    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx ) $(CAPTURE_OUTPUT)
     @+$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
 .ENDIF			# "$(GUI)"=="UNX"
