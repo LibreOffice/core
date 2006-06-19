@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:23:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,10 +138,10 @@ void WizardDialog::ImplPosCtrls()
     long    nOffY = aDlgSize.Height();
 
     ImplWizButtonData* pBtnData = mpFirstBtn;
-    int i = 0;
+    int j = 0;
     while ( pBtnData )
     {
-        if (i >= mnLeftAlignCount)
+        if (j >= mnLeftAlignCount)
         {
             Size aBtnSize = pBtnData->mpButton->GetSizePixel();
             long nBtnHeight = aBtnSize.Height();
@@ -151,7 +151,7 @@ void WizardDialog::ImplPosCtrls()
             nBtnWidth += pBtnData->mnOffset;
         }
         pBtnData = pBtnData->mpNext;
-        i++;
+        j++;
     }
 
     if ( nMaxHeight )
