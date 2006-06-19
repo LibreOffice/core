@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:17:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #include <vos/signal.hxx>
 #endif
 
-#ifndef _NEW_HXX
-#include <new.hxx>
-#endif
 #ifndef _DEBUG_HXX
 #include <debug.hxx>
 #endif
@@ -104,8 +101,6 @@
 #include <algorithm>
 #include <hash_map>
 #include <list>
-
-#pragma hdrstop
 
 #ifdef UNX
 #define SEARCH_PATH_DELIMITER_CHAR_STRING ":"
@@ -267,7 +262,9 @@ void ResMgrContainer::init()
 
     // 1. relative to current module (<installation>/program/resource)
     OUString libraryFileUrl;
-    if( Module::getUrlFromAddress((void*)ResMgrContainer::release, libraryFileUrl) )
+    if( Module::getUrlFromAddress(
+            reinterpret_cast< oslGenericFunction >(ResMgrContainer::release),
+            libraryFileUrl) )
         nIndex = libraryFileUrl.lastIndexOf( '/' );
     DBG_ASSERT( nIndex > 0, "module resolution failed" );
     if( nIndex > 0 )
@@ -339,8 +336,6 @@ void ResMgrContainer::init()
                  OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr() );
     }
     #endif
-
-    int dummy = 0;
 }
 
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
@@ -670,9 +665,9 @@ InternalResMgr::~InternalResMgr()
             {
                 sal_uInt64 nKeyId = it->first;
                 aLine.Assign( "Type/Id: " );
-                aLine.Append( ByteString::CreateFromInt32( (nKeyId >> 32) & 0xFFFFFFFF ) );
+                aLine.Append( ByteString::CreateFromInt32( sal::static_int_cast< sal_Int32 >((nKeyId >> 32) & 0xFFFFFFFF) ) );
                 aLine.Append( '/' );
-                aLine.Append( ByteString::CreateFromInt32( nKeyId & 0xFFFFFFFF ) );
+                aLine.Append( ByteString::CreateFromInt32( sal::static_int_cast< sal_Int32 >(nKeyId & 0xFFFFFFFF) ) );
                 aStm.WriteLine( aLine );
             }
         }
@@ -927,19 +922,15 @@ static void RscException_Impl()
     {
         case NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler:
             abort();
-            break;
 
         case NAMESPACE_VOS(OSignalHandler)::TAction_Ignore:
             return;
-            break;
 
         case NAMESPACE_VOS(OSignalHandler)::TAction_AbortApplication:
             abort();
-            break;
 
         case NAMESPACE_VOS(OSignalHandler)::TAction_KillApplication:
             exit(-1);
-            break;
     }
 }
 
@@ -1042,6 +1033,7 @@ void ResMgr::DestroyAllResMgr()
 
 void ResMgr::Init( const OUString& rFileName )
 {
+    (void) rFileName; // avoid warning about unused parameter
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if ( !pImpRes )
@@ -2071,7 +2063,7 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
     RSHEADER_TYPE* pResHeader = (RSHEADER_TYPE*)m_pResImpl->LoadGlobalRes( RSC_STRING, nId, &pResHandle );
     if ( !pResHeader )
     {
-        osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+        osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
 
         // try fallback
         while( ! pResHandle && pFallback )
@@ -2109,7 +2101,7 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
     pFallback->FreeGlobalRes( pResHeader, pResHandle );
     if( m_pResImpl != pFallback )
     {
-        osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+        osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
 
         ResMgrContainer::get().freeResMgr( pFallback );
     }
@@ -2143,7 +2135,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
 
     if ( !pResHeader )
     {
-        osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+        osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
 
         // try fallback
         while( ! pResHandle && pFallback )
@@ -2181,7 +2173,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
     // free an eventual fallback InternalResMgr
     if( m_pResImpl != pFallback )
     {
-        osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+        osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
 
         ResMgrContainer::get().freeResMgr( pFallback );
     }
