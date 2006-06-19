@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagewrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:11:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeExceptio
 sal_Int64 SAL_CALL ImageWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw ( RuntimeException )
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
     else
         return 0;
 }
