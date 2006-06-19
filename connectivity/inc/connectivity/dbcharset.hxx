@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcharset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:00:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ namespace dbtools
         typedef CharsetIterator const_iterator;
 
         OCharsetMap();
-        ~OCharsetMap();
+        virtual ~OCharsetMap();
 
         struct IANA { };
 
