@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,19 +386,19 @@ BOOL GraphicDescriptor::ImpDetectBMP( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectGIF( SvStream& rStm, BOOL bExtendedInfo )
 {
-    UINT32  nTemp32;
-    UINT16  nTemp16;
+    UINT32  n32;
+    UINT16  n16;
     BOOL    bRet = FALSE;
     BYTE    cByte;
 
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStm.Seek( nStmPos );
 
-    rStm >> nTemp32;
-    if ( nTemp32 == 0x38464947 )
+    rStm >> n32;
+    if ( n32 == 0x38464947 )
     {
-        rStm >> nTemp16;
-        if ( ( nTemp16 == 0x6137 ) || ( nTemp16 == 0x6139 ) )
+        rStm >> n16;
+        if ( ( n16 == 0x6137 ) || ( n16 == 0x6139 ) )
         {
             nFormat = GFF_GIF;
             bRet = TRUE;
@@ -560,7 +560,7 @@ BOOL GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectPCD( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPCD( SvStream& rStm, BOOL )
 {
     BOOL    bRet = FALSE;
 
@@ -673,7 +673,7 @@ BOOL GraphicDescriptor::ImpDetectPCX( SvStream& rStm, BOOL bExtendedInfo )
             rStm >> cByte;
             nPlanes = cByte;
 
-            bRet = (nPlanes>=0 && nPlanes<=4);
+            bRet = (nPlanes<=4);
         }
     }
 
@@ -789,7 +789,7 @@ BOOL GraphicDescriptor::ImpDetectPNG( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo )
 {
-    BOOL    bOk = FALSE;
+    BOOL    bDetectOk = FALSE;
     BOOL    bRet = FALSE;
     BYTE    cByte1;
     BYTE    cByte2;
@@ -802,15 +802,15 @@ BOOL GraphicDescriptor::ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo )
         if ( cByte1 == 0x49 )
         {
             rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-            bOk = TRUE;
+            bDetectOk = TRUE;
         }
         else if ( cByte1 == 0x4d )
         {
             rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-            bOk = TRUE;
+            bDetectOk = TRUE;
         }
 
-        if ( bOk )
+        if ( bDetectOk )
         {
             UINT16  nTemp16;
 
@@ -920,7 +920,7 @@ BOOL GraphicDescriptor::ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectXBM( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectXBM( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -937,7 +937,7 @@ BOOL GraphicDescriptor::ImpDetectXBM( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectXPM( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectXPM( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -953,7 +953,7 @@ BOOL GraphicDescriptor::ImpDetectXPM( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectPBM( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPBM( SvStream& rStm, BOOL )
 {
     BOOL bRet = FALSE;
 
@@ -983,7 +983,7 @@ BOOL GraphicDescriptor::ImpDetectPBM( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectPGM( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPGM( SvStream& rStm, BOOL )
 {
     BOOL bRet = FALSE;
 
@@ -1010,7 +1010,7 @@ BOOL GraphicDescriptor::ImpDetectPGM( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectPPM( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPPM( SvStream& rStm, BOOL )
 {
     BOOL bRet = FALSE;
 
@@ -1037,7 +1037,7 @@ BOOL GraphicDescriptor::ImpDetectPPM( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectRAS( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectRAS( SvStream& rStm, BOOL )
 {
     UINT32 nMagicNumber;
     rStm.Seek( nStmPos );
@@ -1058,7 +1058,7 @@ BOOL GraphicDescriptor::ImpDetectRAS( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectTGA( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectTGA( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -1132,7 +1132,7 @@ BOOL GraphicDescriptor::ImpDetectPSD( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL )
 {
     // es wird die EPS mit Vorschaubild Variante und die Extensionuebereinstimmung
     // geprueft
@@ -1163,7 +1163,7 @@ BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectDXF( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectDXF( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -1179,7 +1179,7 @@ BOOL GraphicDescriptor::ImpDetectDXF( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectMET( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectMET( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -1196,7 +1196,7 @@ BOOL GraphicDescriptor::ImpDetectMET( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL )
 {
     BOOL bRet;
 
@@ -1230,7 +1230,7 @@ BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectSGF( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectSGF( SvStream& rStm, BOOL )
 {
     BOOL bRet = FALSE;
 
@@ -1260,7 +1260,7 @@ BOOL GraphicDescriptor::ImpDetectSGF( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectSGV( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectSGV( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -1279,15 +1279,15 @@ BOOL GraphicDescriptor::ImpDetectSGV( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo )
 {
-    UINT32  nTemp32;
+    UINT32  n32;
     BOOL    bRet = FALSE;
     BYTE    cByte;
 
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStm.Seek( nStmPos );
 
-    rStm >> nTemp32;
-    if ( nTemp32 == 0x44475653 )
+    rStm >> n32;
+    if ( n32 == 0x44475653 )
     {
         rStm >> cByte;
         if ( cByte == 0x49 )
@@ -1321,9 +1321,9 @@ BOOL GraphicDescriptor::ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo )
     else
     {
         rStm.SeekRel( -4L );
-        rStm >> nTemp32;
+        rStm >> n32;
 
-        if( nTemp32 == 0x4D4C4356 )
+        if( n32 == 0x4D4C4356 )
         {
             UINT16 nTmp16;
 
@@ -1357,7 +1357,7 @@ BOOL GraphicDescriptor::ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectWMF( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectWMF( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -1373,7 +1373,7 @@ BOOL GraphicDescriptor::ImpDetectWMF( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-BOOL GraphicDescriptor::ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectEMF( SvStream&, BOOL )
 {
     BOOL bRet;
 
@@ -1392,7 +1392,6 @@ BOOL GraphicDescriptor::ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo )
 String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     ByteString          aKeyName;
-    USHORT              nKeyNumber = GRFILTER_FORMAT_NOTFOUND;
 
     switch( nFormat )
     {
