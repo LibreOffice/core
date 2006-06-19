@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:40:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,18 +136,18 @@ const sal_Char sAPI_ImageMapCircleObject[] = "com.sun.star.image.ImageMapCircleO
 const sal_Char sAPI_ImageMapPolygonObject[] = "com.sun.star.image.ImageMapPolygonObject";
 
 XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
-    rExport(rExp),
-    bWhiteSpace(sal_True),
-    sBoundary(RTL_CONSTASCII_USTRINGPARAM("Boundary")),
-    sCenter(RTL_CONSTASCII_USTRINGPARAM("Center")),
-    sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
-    sImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap")),
-    sIsActive(RTL_CONSTASCII_USTRINGPARAM("IsActive")),
-    sName(RTL_CONSTASCII_USTRINGPARAM("Name")),
-    sPolygon(RTL_CONSTASCII_USTRINGPARAM("Polygon")),
-    sRadius(RTL_CONSTASCII_USTRINGPARAM("Radius")),
-    sTarget(RTL_CONSTASCII_USTRINGPARAM("Target")),
-    sURL(RTL_CONSTASCII_USTRINGPARAM("URL"))
+    msBoundary(RTL_CONSTASCII_USTRINGPARAM("Boundary")),
+    msCenter(RTL_CONSTASCII_USTRINGPARAM("Center")),
+    msDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
+    msImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap")),
+    msIsActive(RTL_CONSTASCII_USTRINGPARAM("IsActive")),
+    msName(RTL_CONSTASCII_USTRINGPARAM("Name")),
+    msPolygon(RTL_CONSTASCII_USTRINGPARAM("Polygon")),
+    msRadius(RTL_CONSTASCII_USTRINGPARAM("Radius")),
+    msTarget(RTL_CONSTASCII_USTRINGPARAM("Target")),
+    msURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
+    mrExport(rExp),
+    mbWhiteSpace(sal_True)
 {
 }
 
@@ -159,9 +159,9 @@ XMLImageMapExport::~XMLImageMapExport()
 void XMLImageMapExport::Export(
     const Reference<XPropertySet> & rPropertySet)
 {
-    if (rPropertySet->getPropertySetInfo()->hasPropertyByName(sImageMap))
+    if (rPropertySet->getPropertySetInfo()->hasPropertyByName(msImageMap))
     {
-        Any aAny = rPropertySet->getPropertyValue(sImageMap);
+        Any aAny = rPropertySet->getPropertyValue(msImageMap);
         Reference<XIndexContainer> aContainer;
         aAny >>= aContainer;
 
@@ -179,8 +179,8 @@ void XMLImageMapExport::Export(
         {
             // image map container element
             SvXMLElementExport aImageMapElement(
-                rExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
-                bWhiteSpace, bWhiteSpace);
+                mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
+                mbWhiteSpace, mbWhiteSpace);
 
             // iterate over image map elements and call ExportMapEntry(...)
             // for each
@@ -216,7 +216,6 @@ void XMLImageMapExport::ExportMapEntry(
         Sequence<OUString> sServiceNames =
             xServiceInfo->getSupportedServiceNames();
         sal_Int32 nLength = sServiceNames.getLength();
-        sal_Bool bFound = sal_False;
         for( sal_Int32 i=0; i<nLength; i++ )
         {
             OUString& rName = sServiceNames[i];
@@ -250,44 +249,44 @@ void XMLImageMapExport::ExportMapEntry(
         // now: handle ImageMapObject properties (those for all types)
 
         // XLINK (URL property)
-        Any aAny = rPropertySet->getPropertyValue(sURL);
+        Any aAny = rPropertySet->getPropertyValue(msURL);
         OUString sHref;
         aAny >>= sHref;
         if (sHref.getLength() > 0)
         {
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(sHref));
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(sHref));
         }
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
 
         // Target property (and xlink:show)
-        aAny = rPropertySet->getPropertyValue(sTarget);
+        aAny = rPropertySet->getPropertyValue(msTarget);
         OUString sTargt;
         aAny >>= sTargt;
         if (sTargt.getLength() > 0)
         {
-            rExport.AddAttribute(
+            mrExport.AddAttribute(
                 XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, sTargt);
 
-            rExport.AddAttribute(
+            mrExport.AddAttribute(
                 XML_NAMESPACE_XLINK, XML_SHOW,
                 sTargt.equalsAsciiL( "_blank", sizeof("_blank")-1 )
                                         ? XML_NEW : XML_REPLACE );
         }
 
         // name
-        aAny = rPropertySet->getPropertyValue(sName);
+        aAny = rPropertySet->getPropertyValue(msName);
         OUString sItemName;
         aAny >>= sItemName;
         if (sItemName.getLength() > 0)
         {
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sItemName);
+            mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sItemName);
         }
 
         // is-active
-        aAny = rPropertySet->getPropertyValue(sIsActive);
+        aAny = rPropertySet->getPropertyValue(msIsActive);
         if (! *(sal_Bool*)aAny.getValue())
         {
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
+            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
         }
 
         // call specific rectangle/circle/... method
@@ -303,28 +302,30 @@ void XMLImageMapExport::ExportMapEntry(
             case XML_AREA_POLYGON:
                 ExportPolygon(rPropertySet);
                 break;
+            default:
+                break;
         }
 
         // write element
         DBG_ASSERT(XML_TOKEN_INVALID != eType,
                    "No name?! How did this happen?");
-        SvXMLElementExport aAreaElement(rExport, XML_NAMESPACE_DRAW, eType,
-                                        bWhiteSpace, bWhiteSpace);
+        SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
+                                        mbWhiteSpace, mbWhiteSpace);
 
         // description property (as <svg:desc> element)
-        aAny = rPropertySet->getPropertyValue(sDescription);
+        aAny = rPropertySet->getPropertyValue(msDescription);
         OUString sDescription;
         aAny >>= sDescription;
         if (sDescription.getLength() > 0)
         {
-            SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC,
-                                     bWhiteSpace, sal_False);
-            rExport.GetDocHandler()->characters(sDescription);
+            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC,
+                                     mbWhiteSpace, sal_False);
+            mrExport.GetDocHandler()->characters(sDescription);
         }
 
         // export events attached to this
         Reference<XEventsSupplier> xSupplier(rPropertySet, UNO_QUERY);
-        rExport.GetEventExport().Export(xSupplier, bWhiteSpace);
+        mrExport.GetEventExport().Export(xSupplier, mbWhiteSpace);
     }
     // else: no service info -> can't determine type -> ignore entry
 }
@@ -333,23 +334,23 @@ void XMLImageMapExport::ExportRectangle(
     const Reference<XPropertySet> & rPropertySet)
 {
     // get boundary rectangle
-    Any aAny = rPropertySet->getPropertyValue(sBoundary);
+    Any aAny = rPropertySet->getPropertyValue(msBoundary);
     awt::Rectangle aRectangle;
     aAny >>= aRectangle;
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.X);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.X);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Y);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Y);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Width);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Width);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Height);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Height);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                           aBuffer.makeStringAndClear() );
 }
 
@@ -357,25 +358,25 @@ void XMLImageMapExport::ExportCircle(
     const Reference<XPropertySet> & rPropertySet)
 {
     // get boundary rectangle
-    Any aAny = rPropertySet->getPropertyValue(sCenter);
+    Any aAny = rPropertySet->getPropertyValue(msCenter);
     awt::Point aCenter;
     aAny >>= aCenter;
 
     // parameters svg:cx, svg:cy
     OUStringBuffer aBuffer;
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.X);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_CX,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.X);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CX,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.Y);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_CY,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.Y);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CY,
                           aBuffer.makeStringAndClear() );
 
     // radius
-    aAny = rPropertySet->getPropertyValue(sRadius);
+    aAny = rPropertySet->getPropertyValue(msRadius);
     sal_Int32 nRadius;
     aAny >>= nRadius;
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, nRadius);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_R,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nRadius);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_R,
                           aBuffer.makeStringAndClear() );
 }
 
@@ -386,7 +387,7 @@ void XMLImageMapExport::ExportPolygon(
     // pair sequence. The bounding box is always the entire image.
 
     // get polygon point sequence
-    Any aAny = rPropertySet->getPropertyValue(sPolygon);
+    Any aAny = rPropertySet->getPropertyValue(msPolygon);
     PointSequence aPoly;
     aAny >>= aPoly;
 
@@ -412,29 +413,29 @@ void XMLImageMapExport::ExportPolygon(
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, nWidth);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nWidth);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
-    rExport.GetMM100UnitConverter().convertMeasure(aBuffer, nHeight);
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
+    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nHeight);
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                           aBuffer.makeStringAndClear() );
 
     // svg:viewbox
     SdXMLImExViewBox aViewBox(0, 0, nWidth, nHeight);
-    rExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                aViewBox.GetExportString(rExport.GetMM100UnitConverter()));
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
+                aViewBox.GetExportString(mrExport.GetMM100UnitConverter()));
 
     // export point sequence
     awt::Point aPoint(0, 0);
     awt::Size aSize(nWidth, nHeight);
     SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize,
-                                    rExport.GetMM100UnitConverter() );
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
+                                    mrExport.GetMM100UnitConverter() );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
                           aPoints.GetExportString());
 }
