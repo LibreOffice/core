@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:20:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #endif
 
 #include <osl/socket.h>
-#include <rtl/ustring>
 
 using namespace rtl;
 using namespace vcl_sal;
@@ -697,7 +696,11 @@ void SalDisplay::doDestruct()
         pSalData->SetSalDisplay( NULL );
 }
 
-static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
+static int DisplayHasEvent( int
+#ifdef DBG_UTIL
+fd
+#endif
+, SalX11Display *pDisplay  )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
@@ -709,7 +712,11 @@ static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return pDisplay->IsEvent();
 }
-static int DisplayQueue( int fd, SalX11Display *pDisplay )
+static int DisplayQueue( int
+#ifdef DBG_UTIL
+fd
+#endif
+, SalX11Display *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" )
@@ -719,14 +726,18 @@ static int DisplayQueue( int fd, SalX11Display *pDisplay )
   return XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
 }
-static int DisplayYield( int fd, SalX11Display *pDisplay )
+static int DisplayYield( int
+#ifdef DBG_UTIL
+fd
+#endif
+, SalX11Display *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
   vos::IMutex* pSalInstYieldMutex   =
       GetSalData()->pInstance_->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  pDisplay->Yield( TRUE );
+  pDisplay->Yield();
   return TRUE;
 }
 
@@ -756,7 +767,11 @@ SalX11Display::~SalX11Display()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNotification )
+void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool
+#ifdef HAVE_LIBSN
+bHandleStartupNotification
+#endif
+)
 {
     XVisualInfo aXVI;
 
@@ -821,9 +836,9 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNo
         Visual *pRootVisual = DefaultVisual( pDisp_, nScreen_ );
         if( pRootVisual->visualid != pVisual_->GetVisualId() )
         {
-            XVisualInfo aXVI;
-            sal_GetVisualInfo( pDisp_, pRootVisual->visualid, aXVI );
-            pRootVisual_ = new SalVisual( &aXVI );
+            XVisualInfo aXVInfo;
+            sal_GetVisualInfo( pDisp_, pRootVisual->visualid, aXVInfo );
+            pRootVisual_ = new SalVisual( &aXVInfo );
         }
         else
             pRootVisual_ = pVisual_;
@@ -976,18 +991,6 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNo
                                             invert50_bits,
                                             invert50_width,
                                             invert50_height );
-
-        // - - - - - - - - - - Fonts - - - - - - - - - - - - - - - -
-
-#ifndef USE_BUILTIN_RASTERIZER
-        const char *pFontPath = getenv( "SAL_FONTPATH" );
-        if( pFontPath )
-            AddFontPath( ByteString( pFontPath ) );
-
-        pFontPath = getenv( "SAL_FONTPATH_PRIVATE" );
-        if( pFontPath )
-            AddFontPath( ByteString( pFontPath ) );
-#endif // USE_BUILTIN_RASTERIZER
 
         // - - - - - - - - - - Keyboardmapping - - - - - - - - - - -
 
@@ -2296,84 +2299,6 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
     return 1;
 }
 
-// Fonts
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-#ifndef USE_BUILTIN_RASTERIZER
-static BOOL
-sal_IsValidFontpath( const ByteString &rFontPath,
-                     const srv_vendor_t eServerVendor )
-{
-    // filter fontpath with ':unscaled' attribute for server other
-    // than xfree (e.g.: /opt/Office51/fonts/75dpi:unscaled)
-
-    const char   aAttr[]  = ":unscaled";
-    const USHORT nAttrLen = sizeof( aAttr ) - 1;
-    USHORT       nAttrPos;
-
-    nAttrPos = rFontPath.Search( aAttr, 0 );
-    if ( nAttrPos == (rFontPath.Len() - nAttrLen) )
-        return (eServerVendor == vendor_xfree);
-
-    return TRUE;
-}
-#endif
-
-void SalDisplay::AddFontPath( const ByteString &rPath ) const
-{
-#ifndef USE_BUILTIN_RASTERIZER
-    const char cSeparator = ';' ;
-
-    if( rPath.Len()
-        && (GetServerVendor() != vendor_excursion)
-        && (GetServerVendor() != vendor_hummingbird) )
-    {
-        USHORT nCount = rPath.GetTokenCount( cSeparator );
-        int     i;
-        int     nPaths          = 0;
-        char  **pOldFontPath    = XGetFontPath( pDisp_, &nPaths );
-        int     nOriginalPaths  = nPaths;
-        char  **pNewFontPath    = (char**)alloca(sizeof(char*)*(nPaths+nCount));
-        BOOL    bOld            = pXLib_->GetIgnoreXErrors();
-
-        for( i = 0; i < nPaths; i++ )
-            pNewFontPath[i] = pOldFontPath[i];
-
-        for( USHORT nNew = 0; nNew < nCount; nNew++ )
-        {
-            ByteString aPathName = rPath.GetToken( nNew, cSeparator );
-
-            if( aPathName.Len() )
-            {
-                for( i = 0; i < nPaths; i++ )
-                    if( !strcmp( pNewFontPath[i], aPathName.GetBuffer() ) )
-                        break;
-
-                if (   (i == nPaths)
-                    && sal_IsValidFontpath(aPathName, GetServerVendor()) )
-                {
-                    pNewFontPath[nPaths++] = strdup( aPathName.GetBuffer() );
-                    pXLib_->SetIgnoreXErrors( TRUE ); // reset WasXError
-
-                    XSetFontPath( pDisp_, pNewFontPath, nPaths );
-                    XSync( pDisp_, False );
-                    if( pXLib_->WasXError() )
-                        free( pNewFontPath[--nPaths] );
-                }
-            }
-        }
-
-        while( nPaths-- > nOriginalPaths )
-            free( pNewFontPath[ nPaths ] );
-
-        XFreeFontPath( pOldFontPath );
-
-
-        pXLib_->SetIgnoreXErrors( bOld );
-    }
-#endif
-}
-
 // Events
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -2465,7 +2390,7 @@ bool SalDisplay::DispatchInternalEvent()
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalX11Display::Yield( BOOL bWait )
+void SalX11Display::Yield()
 {
     if( DispatchInternalEvent() )
         return;
@@ -2569,7 +2494,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
         default:
 
             if (   GetKbdExtension()->UseExtension()
-                && GetKbdExtension()->GetEventBase() == sal_uInt32(pEvent->type) )
+                && GetKbdExtension()->GetEventBase() == pEvent->type )
             {
                 GetKbdExtension()->Dispatch( pEvent );
                 return 1;
@@ -3026,7 +2951,6 @@ BOOL SalVisual::Convert( int &n0, int &n1, int &n2, int &n3 )
     {
         case other:
             return FALSE;
-            break;
         case SALCOLOR:
             break;
         case SALCOLORREVERSE:
@@ -3035,7 +2959,6 @@ BOOL SalVisual::Convert( int &n0, int &n1, int &n2, int &n3 )
         case GBR:
         case GRB:
             return Convert( n0, n1, n2 );
-            break;
         case RGBA:
             n  = n0;
             n0 = n1;
@@ -3051,7 +2974,6 @@ BOOL SalVisual::Convert( int &n0, int &n1, int &n2, int &n3 )
         default:
             fprintf( stderr, "SalVisual::Convert %d\n", GetMode() );
             abort();
-            break;
     }
     return TRUE;
 }
@@ -3064,7 +2986,6 @@ BOOL SalVisual::Convert( int &n0, int &n1, int &n2 )
     {
         case other:
             return FALSE;
-            break;
         case SALCOLOR:
             break;
         case RBG:
@@ -3097,7 +3018,6 @@ BOOL SalVisual::Convert( int &n0, int &n1, int &n2 )
         default:
             fprintf( stderr, "SalVisual::Convert %d\n", GetMode() );
             abort();
-            break;
     }
     return TRUE;
 }
