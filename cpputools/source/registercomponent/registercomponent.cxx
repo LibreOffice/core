@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:37:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,11 +104,21 @@ OUString convertToFileUrl(const OUString& fileName)
     if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None) {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(fileName, uUrlFileName) == FileBase::E_None );
+        if (FileBase::getFileURLFromSystemPath(fileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return uUrlFileName;
@@ -441,9 +451,9 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
 
                     parseOptions(rargc, rargv, rOptions, bCmdFile);
 
-                    for (long i=1; i < rargc; i++)
+                    for (long j=1; j < rargc; j++)
                     {
-                        rtl_freeMemory(rargv[i]);
+                        rtl_freeMemory(rargv[j]);
                     }
                     rtl_freeMemory( buffer );
                     rtl_freeMemory( rargv );
