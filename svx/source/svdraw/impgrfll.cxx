@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:39:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,8 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
 {
     const SfxItemSet& rSet = rObj.GetMergedItemSet();
     XFillStyle eFillStyle( ITEMVALUE( rFillItemSet, XATTR_FILLSTYLE, XFillStyleItem ) );
-    XGradient aGradient( ITEMVALUE( rFillItemSet, XATTR_FILLGRADIENT, XFillGradientItem ) );
-    XHatch aHatch( ITEMVALUE( rFillItemSet, XATTR_FILLHATCH, XFillHatchItem ) );
+    XGradient aGradient(((const XFillGradientItem&)rFillItemSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
+    XHatch aHatch(((const XFillHatchItem&)rFillItemSet.Get(XATTR_FILLHATCH)).GetHatchValue());
 
     sal_Int32 nDX( ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue() );
     sal_Int32 nDY( ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue() );
@@ -129,7 +129,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             aPolyPoly.Move( nDX, nDY );
         }
 
-        SvtGraphicFill::FillType eType;
+        SvtGraphicFill::FillType eType(SvtGraphicFill::fillSolid);
         switch( eFillStyle )
         {
             case XFILL_NONE:
@@ -155,7 +155,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
         }
 
         SvtGraphicFill::Transform aTransform;
-        SvtGraphicFill::HatchType eHatch;
+        SvtGraphicFill::HatchType eHatch(SvtGraphicFill::hatchSingle);
         // TODO: Set hatch background color. Do that via multi-texturing
         switch( aHatch.GetHatchStyle() )
         {
@@ -189,7 +189,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             aTransform.matrix[4] *= cos( (double) aHatch.GetAngle() );
         }
 
-        SvtGraphicFill::GradientType eGrad;
+        SvtGraphicFill::GradientType eGrad(SvtGraphicFill::gradientLinear);
         switch( aGradient.GetGradientStyle() )
         {
             case XGRAD_LINEAR:
@@ -223,7 +223,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
 
             if( pOut )
             {
-                Bitmap          aBitmap( ITEMVALUE( rSet, XATTR_FILLBITMAP, XFillBitmapItem ).GetBitmap() );
+                Bitmap          aBitmap(((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue().GetBitmap());
                 Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
                 MapMode         aMap( pOut->GetMapMode().GetMapUnit() );
                 Size            aStartOffset;
@@ -326,8 +326,9 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
 
 //BFS09        SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
         const ::basegfx::B2DPolyPolygon aCandidate(aPolyPoly.getB2DPolyPolygon());
+        const Color aColorSolid = ((const XFillColorItem&) (rFillItemSet.Get(XATTR_FILLCOLOR))).GetColorValue();
         SvtGraphicFill aFill( static_cast<PolyPolygon>(aCandidate),
-                              ITEMVALUE( rFillItemSet, XATTR_FILLCOLOR, XFillColorItem ),
+                              aColorSolid,
                               ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
                               eType,
@@ -338,7 +339,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
                               eGrad,
                               aGradient.GetStartColor(),
                               aGradient.GetEndColor(),
-                              0 == aGradient.GetSteps() ? SvtGraphicFill::gradientStepsInfinite : aGradient.GetSteps(), // 0 means adaptive/infinite step count
+                              0 == aGradient.GetSteps() ? ((int)SvtGraphicFill::gradientStepsInfinite) : aGradient.GetSteps(), // 0 means adaptive/infinite step count
                               aFillGraphic );
 
 #ifdef DBG_UTIL
