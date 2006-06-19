@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:54:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
-
-#define _EXTERN_FORMLAYER_
-
 
 #ifndef _SVXERR_HXX
 #include "svxerr.hxx"
@@ -372,7 +367,6 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
         return NULL;
 
     Reference< XForm >  xForm;
-    Reference< XPropertySet >  xSet;
 
     // Wenn Datenbank und CursorSource gesetzt sind, dann wird
     // die Form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
@@ -404,21 +398,21 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
             pModel->BegUndo(aUndoStr);
             xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
             // a form should always have the command type table as default
-            Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
-            try { xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
+            Reference< ::com::sun::star::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
+            try { xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
             catch(Exception&) { }
 
             if (rDBTitle.getLength())
-                xSet->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
+                xFormProps->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
             else
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xDatabaseProps(rDatabase, UNO_QUERY);
                 Any aDatabaseUrl = xDatabaseProps->getPropertyValue(FM_PROP_URL);
-                xSet->setPropertyValue(FM_PROP_DATASOURCE, aDatabaseUrl);
+                xFormProps->setPropertyValue(FM_PROP_DATASOURCE, aDatabaseUrl);
             }
 
-            xSet->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
-            xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
+            xFormProps->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
+            xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
             Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
             ::rtl::OUString aName;
@@ -432,7 +426,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
                 // ansonsten StandardformName verwenden
                 aName = getUniqueName(::rtl::OUString(String(SVX_RES(RID_STR_STDFORMNAME))), xNamedSet);
 
-            xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
+            xFormProps->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
             Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
             pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
@@ -501,7 +495,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     }
     catch(const Exception& e)
     {
-        e;
+        (void)e;
         OSL_ENSURE(sal_False, "FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
@@ -543,16 +537,14 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
     if (xSet.is())
     {
-        Any aValue = xSet->getPropertyValue(FM_PROP_NAME);
-        sName = ::comphelper::getString(aValue);
+        sName = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_NAME ) );
         Reference< ::com::sun::star::container::XNameAccess >  xNameAcc(xControls, UNO_QUERY);
 
         if (!sName.getLength() || xNameAcc->hasByName(sName))
         {
             // setzen eines default Namens ueber die ClassId
-            Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
-            sal_Int16 nClassId(::com::sun::star::form::FormComponentType::CONTROL);
-            aValue >>= nClassId;
+            sal_Int16 nClassId( FormComponentType::CONTROL );
+            xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
             Reference< XServiceInfo > xSI( xSet, UNO_QUERY );
 
             ::rtl::OUString sDefaultName = getDefaultName( nClassId, xControls, xSI );
@@ -578,9 +570,8 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 
             if (nResId)
             {
-                aValue = xSet->getPropertyValue(FM_PROP_LABEL);
                 ::rtl::OUString aText;
-                aValue >>= aText;
+                xSet->getPropertyValue( FM_PROP_LABEL ) >>= aText;
                 if (!aText.getLength())
                 {
                     aLabel.SearchAndReplace( getDefaultName( nClassId, xSI ), ::rtl::OUString(String(SVX_RES(nResId)) ));
