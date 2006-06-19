@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:22:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ extern "C"
 // - PolyPolygon -
 // ---------------
 
-DBG_NAME( PolyPolygon );
+DBG_NAME( PolyPolygon )
 
 // -----------------------------------------------------------------------
 
@@ -384,7 +384,7 @@ void PolyPolygon::Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData 
 
 // -----------------------------------------------------------------------
 
-void PolyPolygon::GetSimple( PolyPolygon& rResult, long nDelta ) const
+void PolyPolygon::GetSimple( PolyPolygon& rResult ) const
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
@@ -394,7 +394,7 @@ void PolyPolygon::GetSimple( PolyPolygon& rResult, long nDelta ) const
 
     for( USHORT i = 0; i < mpImplPolyPolygon->mnCount; i++ )
     {
-        mpImplPolyPolygon->mpPolyAry[ i ]->GetSimple( aPolygon, nDelta );
+        mpImplPolyPolygon->mpPolyAry[ i ]->GetSimple( aPolygon );
         rResult.Insert( aPolygon );
     }
 }
@@ -503,11 +503,11 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
     for( int i = 0; i < pResult->num_contours; i++ )
     {
         gpc_vertex_list&    rVertexList = pResult->contour[ i ];
-        Polygon             aPoly( rVertexList.num_vertices );
+        Polygon             aPoly( ::sal::static_int_cast< USHORT >( rVertexList.num_vertices ) );
 
         for( int j = 0; j < rVertexList.num_vertices; j++ )
         {
-            Point& rPt = aPoly[ j ];
+            Point& rPt = aPoly[ ::sal::static_int_cast< USHORT >( j ) ];
             rPt.X() = FRound( rVertexList.vertex[ j ].x );
             rPt.Y() = FRound( rVertexList.vertex[ j ].y );
         }
@@ -1156,7 +1156,7 @@ sal_Bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
         {
             if (!GetObject( i ).IsEqual( rPolyPoly.GetObject( i ) ) )
             {
-                sal_Bool bIsEqual = sal_False;
+                bIsEqual = sal_False;
                 break;
             }
         }
