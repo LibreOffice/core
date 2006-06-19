@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenodeaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:21:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressTy
     sharable::ValueNode * node = accessValue(_aValueNode.m_pData,_aUpdater);
 
     using namespace sharable;
-    AnyData::TypeCode aType = node->info.type & Type::mask_valuetype;
+    AnyData::TypeCode aType = AnyData::TypeCode( node->info.type & Type::mask_valuetype );
 
     // release old data
     if (node->info.flags & Flags::valueAvailable)
@@ -102,7 +102,7 @@ void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressTy
             OSL_ASSERT(Type::value_any == 0);
             OSL_ASSERT(aNewType != Type::value_any);
 
-            aType = aNewType & Type::mask_valuetype;
+            aType = AnyData::TypeCode( aNewType & Type::mask_valuetype );
 
             node->info.type |= aType;
         }
@@ -132,7 +132,7 @@ void ValueNodeAccess::setToDefault(memory::UpdateAccessor & _aUpdater, NodeAddre
     // release value data
     if (node->info.flags & Flags::valueAvailable)
     {
-        AnyData::TypeCode aType = node->info.type & Type::mask_valuetype;
+        AnyData::TypeCode aType = AnyData::TypeCode( node->info.type & Type::mask_valuetype );
         OSL_ASSERT(aType != Type::value_any);
 
         freeData(_aUpdater.allocator(),aType,node->value);
@@ -151,7 +151,7 @@ void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddr
     sharable::ValueNode * node = accessValue(_aValueNode.m_pData,_aUpdater);
 
     using namespace sharable;
-    AnyData::TypeCode aType = node->info.type & Type::mask_valuetype;
+    AnyData::TypeCode aType = AnyData::TypeCode( node->info.type & Type::mask_valuetype );
 
     // release old data
     if (node->info.flags & Flags::defaultAvailable)
@@ -177,7 +177,7 @@ void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddr
             OSL_ASSERT(Type::value_any == 0);
             OSL_ASSERT(aNewType != Type::value_any);
 
-            aType = aNewType & Type::mask_valuetype;
+            aType = AnyData::TypeCode( aNewType & Type::mask_valuetype );
 
             node->info.type |= aType;
         }
