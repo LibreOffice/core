@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svicnvw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:54:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ SvIconView::SvIconView( Window* pParent, WinBits nWinStyle ) :
     nWinBits = nWinStyle;
     nIcnVwFlags = 0;
     pImp = new SvImpIconView( this, GetModel(), nWinStyle | WB_ICON );
-    pImp->pViewData = 0;
+    pImp->mpViewData = 0;
     SetSelectionMode( SINGLE_SELECTION );
     SetLineColor();
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -72,7 +72,7 @@ SvIconView::SvIconView( Window* pParent , const ResId& rResId ) :
 {
     pImp = new SvImpIconView( this, GetModel(), WB_BORDER | WB_ICON );
     nIcnVwFlags = 0;
-    pImp->pViewData = 0;
+    pImp->mpViewData = 0;
     SetLineColor();
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
@@ -160,7 +160,7 @@ void SvIconView::SetExpandedEntryBmp(SvLBoxEntry* pEntry, const Image& rBmp)
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     if ( pItem )
     {
-        pItem->SetBitmap2( pEntry, rBmp );
+        pItem->SetBitmap2( rBmp );
         GetModel()->InvalidateEntry( pEntry );
     }
 }
@@ -171,7 +171,7 @@ void SvIconView::SetCollapsedEntryBmp(SvLBoxEntry* pEntry,
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     if ( pItem )
     {
-        pItem->SetBitmap1( pEntry, rBmp );
+        pItem->SetBitmap1( rBmp );
         GetModel()->InvalidateEntry( pEntry );
     }
 }
@@ -296,7 +296,7 @@ void SvIconView::SetUpdateMode( BOOL bUpdate )
         pImp->UpdateAll();
 }
 
-void SvIconView::SetModel( SvLBoxTreeList* pNewModel )
+void SvIconView::SetModel( SvLBoxTreeList* )
 {
 }
 
@@ -362,19 +362,19 @@ void SvIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow )
     pImp->ShowTargetEmphasis( pEntry, bShow );
 }
 
-Point SvIconView::GetEntryPos( SvLBoxEntry* pEntry ) const
+Point SvIconView::GetEntryPosition( SvLBoxEntry* pEntry ) const
 {
-    return ((SvIconView*)this)->pImp->GetEntryPos( pEntry );
+    return ((SvIconView*)this)->pImp->GetEntryPosition( pEntry );
 }
 
-void SvIconView::SetEntryPos( SvLBoxEntry* pEntry, const Point& rPos)
+void SvIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos)
 {
-    pImp->SetEntryPos( pEntry, rPos, FALSE, TRUE );
+    pImp->SetEntryPosition( pEntry, rPos, FALSE, TRUE );
 }
 
-void SvIconView::SetEntryPos( SvLBoxEntry* pEntry, const Point& rPos, BOOL bAdjustAtGrid )
+void SvIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos, BOOL bAdjustAtGrid )
 {
-    pImp->SetEntryPos( pEntry, rPos, bAdjustAtGrid );
+    pImp->SetEntryPosition( pEntry, rPos, bAdjustAtGrid );
 }
 
 void SvIconView::SetFont( const Font& rFont )
@@ -447,10 +447,10 @@ void SvIconView::SetDragDropMode( DragDropMode nDDMode )
     pImp->SetDragDropMode( nDDMode );
 }
 
-void SvIconView::SetSelectionMode( SelectionMode eSelMode )
+void SvIconView::SetSelectionMode( SelectionMode eSelectMode )
 {
-    SvLBox::SetSelectionMode( eSelMode );
-    pImp->SetSelectionMode( eSelMode );
+    SvLBox::SetSelectionMode( eSelectMode );
+    pImp->SetSelectionMode( eSelectMode );
 }
 
 BOOL SvIconView::Select( SvLBoxEntry* pEntry, BOOL bSelect )
@@ -466,7 +466,7 @@ BOOL SvIconView::Select( SvLBoxEntry* pEntry, BOOL bSelect )
     return bRetVal;
 }
 
-void SvIconView::SelectAll( BOOL bSelect, BOOL bPaint )
+void SvIconView::SelectAll( BOOL bSelect, BOOL )
 {
     SvLBoxEntry* pEntry = pImp->GetCurParent();
     pEntry = FirstChild( pEntry );
@@ -642,7 +642,7 @@ SvLBoxEntry* SvIconView::GetCurParent() const
     return pImp->GetCurParent();
 }
 
-SvViewData* SvIconView::CreateViewData( SvListEntry* pEntry )
+SvViewData* SvIconView::CreateViewData( SvListEntry* )
 {
     SvIcnVwDataEntry* pEntryData = new SvIcnVwDataEntry;
     return (SvViewData*)pEntryData;
@@ -697,7 +697,7 @@ void SvIconView::ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
 }
 
 
-void SvIconView::Scroll( long nDeltaX, long nDeltaY )
+void SvIconView::Scroll( long nDeltaX, long nDeltaY, USHORT )
 {
     pImp->Scroll( nDeltaX, nDeltaY, FALSE );
 }
@@ -711,32 +711,32 @@ void SvIconView::StartDrag( sal_Int8 nAction, const Point& rPos )
 {
     pImp->SttDrag( rPos );
     SvLBoxEntry* pEntry = GetEntry( rPos, TRUE );
-    pImp->pViewData = pEntry;
+    pImp->mpViewData = pEntry;
     SvLBox::StartDrag( nAction, rPos );
 }
 
-void SvIconView::DragFinished( sal_Int8 nAction )
+void SvIconView::DragFinished( sal_Int8 )
 {
     pImp->EndDrag();
 }
 
 sal_Int8 SvIconView::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    if( pImp->pViewData )
+    if( pImp->mpViewData )
         pImp->HideDDIcon();
     sal_Int8 nRet = SvLBox::AcceptDrop( rEvt );
     if( DND_ACTION_NONE != nRet )
-        pImp->ShowDDIcon( pImp->pViewData, rEvt.maPosPixel );
+        pImp->ShowDDIcon( pImp->mpViewData, rEvt.maPosPixel );
 
     return nRet;
 }
 
 sal_Int8 SvIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    if( pImp->pViewData )
+    if( pImp->mpViewData )
     {
         pImp->HideDDIcon();
-        pImp->pViewData = 0;
+        pImp->mpViewData = 0;
     }
     return SvLBox::ExecuteDrop( rEvt );
 }
