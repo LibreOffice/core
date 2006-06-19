@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:58:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -91,8 +89,8 @@ Svx3DPreviewControl::Svx3DPreviewControl( Window* pParent, const ResId& rResId )
             Control     ( pParent, rResId ),
             pModel      ( NULL ),
             pFmPage     ( NULL ),
-            pScene      ( NULL ),
             p3DView     ( NULL ),
+            pScene      ( NULL ),
             p3DObj      ( NULL ),
             nObjectType ( PREVIEW_OBJECTTYPE_SPHERE )
 {
@@ -106,8 +104,8 @@ Svx3DPreviewControl::Svx3DPreviewControl( Window* pParent, WinBits nStyle ) :
             Control     ( pParent, nStyle ),
             pModel      ( NULL ),
             pFmPage     ( NULL ),
-            pScene      ( NULL ),
             p3DView     ( NULL ),
+            pScene      ( NULL ),
             p3DObj      ( NULL ),
             nObjectType ( PREVIEW_OBJECTTYPE_SPHERE )
 {
@@ -445,7 +443,7 @@ SvxRectCtl3D::~SvxRectCtl3D()
 |*
 \************************************************************************/
 
-void SvxRectCtl3D::Paint( const Rectangle& rRect )
+void SvxRectCtl3D::Paint( const Rectangle& )
 {
 
     if( IsEnabled() )
@@ -726,7 +724,7 @@ SvxPreviewCtl3D::~SvxPreviewCtl3D()
 {
 }
 
-void SvxPreviewCtl3D::Paint( const Rectangle& rRect )
+void SvxPreviewCtl3D::Paint( const Rectangle& )
 {
     // Base3D anfordern
     Base3D* pBase3D = Base3D::Create(this, nShadeMode == PREVIEW_SHADEMODE_DRAFT);
@@ -1761,7 +1759,7 @@ void SvxLightCtl3D::LoseFocus()
     aLightControl.HideFocus();
 }
 
-IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, pNil)
+IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, EMPTYARG)
 {
     INT32 nHor = aHorScroller.GetThumbPos();
     INT32 nVer = aVerScroller.GetThumbPos();
@@ -1779,14 +1777,14 @@ IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, pNil)
     return 0;
 }
 
-IMPL_LINK( SvxLightCtl3D, ButtonPress, void*, pNil)
+IMPL_LINK( SvxLightCtl3D, ButtonPress, void*, EMPTYARG)
 {
     aLightControl.SetGeometry(bSphereUsed);
     bSphereUsed = !bSphereUsed;
     return 0;
 }
 
-IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, pNil)
+IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, EMPTYARG)
 {
     double fHor, fVer;
 
@@ -1803,7 +1801,7 @@ IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, pNil)
     return 0;
 }
 
-IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, pNil)
+IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, EMPTYARG)
 {
     CheckSelection();
 
@@ -1818,13 +1816,13 @@ IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, pNil)
 
 // ...um Kompatibel zu bleiben, kann spaeter wieder raus
 /*
-IMPL_LINK( SvxLightCtl3D, InteractiveChange, void*, pNil)
+IMPL_LINK( SvxLightCtl3D, InteractiveChange, void*, EMPTYARG)
 {
     return NULL;
 } */
 
 /*
-IMPL_LINK( SvxLightCtl3D, SelectionChange, void*, pNil)
+IMPL_LINK( SvxLightCtl3D, SelectionChange, void*, EMPTYARG)
 {
     return NULL;
 }*/
