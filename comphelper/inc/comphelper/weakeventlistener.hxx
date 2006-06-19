@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weakeventlistener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:41:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,15 +174,36 @@ namespace comphelper
         // in the base class
 
     protected:
+        using OWeakEventListenerAdapter_Base::disposing;
         virtual void SAL_CALL disposing( );
     };
+
+    //=====================================================================
+    //= OWeakListenerAdapter
+    //=====================================================================
+    //---------------------------------------------------------------------
+    template< class BROADCASTER, class LISTENER >
+    OWeakListenerAdapter< BROADCASTER, LISTENER >::OWeakListenerAdapter(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >& _rxListener,
+        const ::com::sun::star::uno::Reference< BROADCASTER >& _rxBroadcaster
+    )
+        : ::cppu::WeakComponentImplHelper1< LISTENER >( m_aMutex )
+        , OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    template< class BROADCASTER, class LISTENER >
+    void SAL_CALL OWeakListenerAdapter< BROADCASTER, LISTENER >::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        ::com::sun::star::uno::Reference< LISTENER > xListener( getListener() );
+        if ( xListener.is() )
+            xListener->disposing( _rSource );
+    }
 
 //.........................................................................
 }   // namespace comphelper
 //.........................................................................
-
-#define INCLUDED_BY_WEAKEVENTLISTENER_HXX
-#include "weakeventlistener_impl.hxx"
 
 #endif// COMPHELPER_WEAKEVENTLISTENER_HXX
 
