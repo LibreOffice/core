@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemprop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ const SfxItemPropertyMap*   SfxItemPropertyMap::GetTolerantByName(
 /* -----------------------------21.02.00 11:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SfxItemPropertySet::FillItem(SfxItemSet& rSet, USHORT nWhich, BOOL bGetProperty) const
+BOOL SfxItemPropertySet::FillItem(SfxItemSet&, USHORT, BOOL) const
 {
     return FALSE;
 }
