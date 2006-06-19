@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 13:51:14 $
+#   last change: $Author: hr $ $Date: 2006-06-19 20:46:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ TARGET=config
 TARGET1=heavyconfig
 LIBTARGET=NO
 
+ENABLE_EXCEPTIONS := TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -46,67 +48,7 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-SLOFILES = \
-    $(SLO)$/accelcfg.obj				\
-    $(SLO)$/xmlaccelcfg.obj				\
-    $(SLO)$/moduleoptions.obj           \
-    $(SLO)$/pathoptions.obj             \
-    $(SLO)$/saveopt.obj					\
-    $(SLO)$/helpopt.obj                 \
-    $(SLO)$/optionsdlg.obj              \
-    $(SLO)$/javaoptions.obj             \
-    $(SLO)$/securityoptions.obj			\
-    $(SLO)$/localisationoptions.obj		\
-    $(SLO)$/workingsetoptions.obj		\
-    $(SLO)$/internaloptions.obj			\
-    $(SLO)$/startoptions.obj			\
-    $(SLO)$/historyoptions.obj			\
-    $(SLO)$/inetoptions.obj				\
-    $(SLO)$/menuoptions.obj				\
-    $(SLO)$/dynamicmenuoptions.obj		\
-    $(SLO)$/options3d.obj				\
-    $(SLO)$/fontoptions.obj				\
-    $(SLO)$/addxmltostorageoptions.obj	\
-    $(SLO)$/miscopt.obj					\
-    $(SLO)$/defaultoptions.obj			\
-    $(SLO)$/searchopt.obj				\
-    $(SLO)$/printwarningoptions.obj		\
-    $(SLO)$/printoptions.obj			\
-    $(SLO)$/cacheoptions.obj            \
-    $(SLO)$/regoptions.obj				\
-    $(SLO)$/cmdoptions.obj				\
-    $(SLO)$/extendedsecurityoptions.obj \
-    $(SLO)$/sourceviewconfig.obj		\
-    $(SLO)$/compatibility.obj           \
-    $(SLO)$/eventcfg.obj    \
-    $(SLO)$/accessibilityoptions.obj	\
-    $(SLO)$/fontsubstconfig.obj				\
-    $(SLO)$/misccfg.obj				\
-    $(SLO)$/apearcfg.obj				\
-    $(SLO)$/fltrcfg.obj				\
-        $(SLO)$/languageoptions.obj     \
-        $(SLO)$/ctloptions.obj          \
-        $(SLO)$/cjkoptions.obj          \
-        $(SLO)$/colorcfg.obj            \
-        $(SLO)$/undoopt.obj                 \
-        $(SLO)$/useroptions.obj      \
-    $(SLO)$/syslocaleoptions.obj \
-    $(SLO)$/lingucfg.obj    \
-    $(SLO)$/itemholder1.obj    \
-    $(SLO)$/itemholder2.obj
-
-EXCEPTIONSFILES = \
-    $(SLO)$/accelcfg.obj				\
-    $(SLO)$/saveopt.obj					\
-    $(SLO)$/lingucfg.obj                \
-    $(SLO)$/inetoptions.obj				\
-    $(SLO)$/xmlaccelcfg.obj             \
-    $(SLO)$/moduleoptions.obj           \
-    $(SLO)$/pathoptions.obj         \
-    $(SLO)$/eventcfg.obj    \
-    $(SLO)$/itemholder1.obj    \
-    $(SLO)$/itemholder2.obj	\
-    $(SLO)$/viewoptions.obj
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # --- config.lib Files --------------------------------------------------------
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -145,7 +87,8 @@ LIB1OBJFILES=  \
     $(SLO)$/compatibility.obj           \
     $(SLO)$/eventcfg.obj                \
     $(SLO)$/optionsdlg.obj              \
-    $(SLO)$/itemholder1.obj
+    $(SLO)$/itemholder1.obj \
+    $(SLO)$/options.obj
 
 # --- heavyconfig.lib Files --------------------------------------------------------
 LIB2TARGET= $(SLB)$/$(TARGET1).lib
