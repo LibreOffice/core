@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transactionmanager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:38:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ class TransactionManager : public  ITransactionManager
     public:
 
                                    TransactionManager           (                                              );
+        virtual                    ~TransactionManager          (                                              );
         virtual void               setWorkingMode               ( EWorkingMode eMode                           );
         virtual EWorkingMode       getWorkingMode               (                                              ) const;
         virtual sal_Bool           isCallRejected               ( ERejectReason& eReason                       ) const;
