@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:28:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     // TODO proper exception handling, should throw
     catch( Exception& e )
     {
-        e;
+        (void)e;
         OSL_TRACE("Caught Exception %s",
             ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         locnBNs.realloc( mspIndex );
@@ -360,7 +360,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         }
         catch( Exception& e )
         {
-            e;
+            (void)e;
             OSL_TRACE("Caught Exception creating MSP for %s exception msg: %s",
                 ::rtl::OUStringToOString( openDocs[ i ] , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                 ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
