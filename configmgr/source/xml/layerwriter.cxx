@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:01:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,20 +74,13 @@ namespace configmgr
             typedef uno::Reference< script::XTypeConverter > TypeConverter;
 
             static inline
-                uno::Reference< uno::XInterface > createTCV(LayerWriter::ServiceFactory const & _xSvcFactory)
+                TypeConverter createTCV(LayerWriter::ServiceFactory const & _xSvcFactory)
             {
                 OSL_ENSURE(_xSvcFactory.is(),"Cannot create Write Formatter without a ServiceManager");
 
                 static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
 
                 return TypeConverter::query(_xSvcFactory->createInstance(k_sTCVService));
-            }
-
-            static inline
-                TypeConverter asTCV(uno::Reference< uno::XInterface > const & _xTCV)
-            {
-                OSL_ASSERT(TypeConverter::query(_xTCV).get() == _xTCV.get());
-                return static_cast< script::XTypeConverter * >(_xTCV.get());
             }
         // -----------------------------------------------------------------------------
             static
@@ -540,7 +533,7 @@ namespace configmgr
             aValueFormatter.addValueAttributes(m_aFormatter);
 
             OUString sTag       = m_aFormatter.getElementTag();
-            OUString sContent   = aValueFormatter.getContent( asTCV(this->m_xTCV) );
+            OUString sContent   = aValueFormatter.getContent( this->m_xTCV );
 
             SaxHandler xOut = getWriteHandler();
             xOut->startElement(sTag, m_aFormatter.getElementAttributes());
