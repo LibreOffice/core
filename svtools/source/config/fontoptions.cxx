@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:48:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,7 @@ SvtFontOptions::SvtFontOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtFontOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtFontOptions_Impl::ctor()");
         m_pDataContainer = new SvtFontOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_FONTOPTIONS);
