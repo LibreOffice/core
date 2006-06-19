@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inplaceobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:34:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     m_aClipRectangle = aClipRect;
 }
 
-void SAL_CALL OCommonEmbeddedObject::enableModeless( sal_Bool bEnable )
+void SAL_CALL OCommonEmbeddedObject::enableModeless( sal_Bool /*bEnable*/ )
         throw ( embed::WrongStateException,
                 uno::Exception,
                 uno::RuntimeException )
@@ -91,7 +91,7 @@ void SAL_CALL OCommonEmbeddedObject::enableModeless( sal_Bool bEnable )
 }
 
 void SAL_CALL OCommonEmbeddedObject::translateAccelerators(
-                    const uno::Sequence< awt::KeyEvent >& aKeys )
+                    const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
