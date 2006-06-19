@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:30:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1091,7 +1091,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
         if(pItem)
         {
-            aPos = SvTreeListBox::GetEntryPos( pEntry );
+            aPos = GetEntryPosition( pEntry );
              Size aSize(pItem->GetSize( this, pEntry ));
             aPos.X() = GetTabPos( pEntry, pTab );
 
