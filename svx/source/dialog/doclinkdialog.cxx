@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:00:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,11 @@ namespace svx
     //------------------------------------------------------------------
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
         :ModalDialog( _pParent, SVX_RES(DLG_DOCUMENTLINK) )
-        ,m_aNameLabel       (this, ResId(FT_NAME))
-        ,m_aName            (this, ResId(ET_NAME))
         ,m_aURLLabel        (this, ResId(FT_URL))
         ,m_aURL             (this, ResId(CMB_URL))
         ,m_aBrowseFile      (this, ResId(PB_BROWSEFILE))
+        ,m_aNameLabel       (this, ResId(FT_NAME))
+        ,m_aName            (this, ResId(ET_NAME))
         ,m_aBottomLine      (this, ResId(FL_BOTTOM))
         ,m_aOK              (this, ResId(BTN_OK))
         ,m_aCancel          (this, ResId(BTN_CANCEL))
@@ -137,7 +137,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( ODocumentLinkDialog, OnOk, void*, NOINTERESTEDIN )
+    IMPL_LINK( ODocumentLinkDialog, OnOk, void*, EMPTYARG )
     {
         // get the current URL
         ::rtl::OUString sURL = m_aURL.GetText();
@@ -185,7 +185,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( ODocumentLinkDialog, OnBrowseFile, void*, NOINTERESTEDIN )
+    IMPL_LINK( ODocumentLinkDialog, OnBrowseFile, void*, EMPTYARG )
     {
         ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
         static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
@@ -230,7 +230,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( ODocumentLinkDialog, OnTextModified, Control*, _pWhich )
+    IMPL_LINK( ODocumentLinkDialog, OnTextModified, Control*, EMPTYARG )
     {
         validate( );
         return 0L;
