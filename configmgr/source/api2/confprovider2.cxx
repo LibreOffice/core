@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:11:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,7 @@ namespace configmgr
         }
         TUNNEL_ALL_EXCEPTIONS()
 
-        return  aRet;
+            return  uno::Reference< uno::XInterface >( aRet, uno::UNO_QUERY );
     }
 
     //-----------------------------------------------------------------------------
