@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:37:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #include <sbx.hxx>
 #include "sbcomp.hxx"
-#pragma hdrstop
 
 // Deklaration einer Variablen
 // Bei Fehlern wird bis zum Komma oder Newline geparst.
@@ -133,8 +132,8 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                         {
                             aCompleteName += aDotStr;
                             Next();
-                            SbiToken eTok = Peek();
-                            if( eTok == SYMBOL || IsKwd( eTok ) )
+                            SbiToken ePeekTok = Peek();
+                            if( ePeekTok == SYMBOL || IsKwd( ePeekTok ) )
                             {
                                 Next();
                                 aCompleteName += aSym;
@@ -265,7 +264,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
     SbiDimList* pDim;
 
     // AB 9.7.97, #40689, Statics -> Modul-Initialisierung, in Sub ueberspringen
-    USHORT nEndOfStaticLbl;
+    USHORT nEndOfStaticLbl = 0;
     if( bStatic )
     {
         nEndOfStaticLbl = aGen.Gen( _JUMP, 0 );
@@ -301,17 +300,17 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             {
                 // Bei REDIM die Attribute vergleichen
                 SbxDataType eDefType;
-                bool bError = false;
+                bool bError_ = false;
                 if( pOld->IsStatic() )
                 {
-                    bError = true;
+                    bError_ = true;
                 }
                 else if( pOld->GetType() != ( eDefType = pDef->GetType() ) )
                 {
                     if( !( eDefType == SbxVARIANT && !pDef->IsDefinedAs() ) )
-                        bError = true;
+                        bError_ = true;
                 }
-                if( bError )
+                if( bError_ )
                     Error( SbERR_VAR_DEFINED, pDef->GetName() );
             }
             else
@@ -327,17 +326,17 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                       && ( !bConst || pDef->GetScope() == SbGLOBAL ) )
         {
             // Variable oder globale Konstante deklarieren
-            SbiOpcode eOp;
+            SbiOpcode eOp2;
             switch ( pDef->GetScope() )
             {
-                case SbGLOBAL:  eOp = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
+                case SbGLOBAL:  eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
                                 goto global;
-                case SbPUBLIC:  eOp = _PUBLIC;
+                case SbPUBLIC:  eOp2 = _PUBLIC;
                                 // AB 9.7.97, #40689, kein eigener Opcode mehr
                                 /*
                                 if( bStatic )
                                 {
-                                    eOp = _STATIC;
+                                    eOp2 = _STATIC;
                                     break;
                                 }
                                 */
@@ -345,9 +344,9 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                                 nGblChain = 0;
                                 bGblDefs = bNewGblDefs = TRUE;
                                 break;
-                default:        eOp = _LOCAL;
+                default:        eOp2 = _LOCAL;
             }
-            aGen.Gen( eOp, pDef->GetId(), pDef->GetType() );
+            aGen.Gen( eOp2, pDef->GetId(), pDef->GetType() );
         }
 
         // Initialisierung fuer selbstdefinierte Datentypen
@@ -392,8 +391,8 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             {
                 SbiExpression aExpr( this, *pDef );
                 aExpr.Gen();
-                SbiOpcode eOp = pDef->IsNew() ? _CREATE : _TCREATE;
-                aGen.Gen( eOp, pDef->GetId(), pDef->GetTypeId() );
+                SbiOpcode eOp_ = pDef->IsNew() ? _CREATE : _TCREATE;
+                aGen.Gen( eOp_, pDef->GetId(), pDef->GetTypeId() );
                 aGen.Gen( _SET );
             }
         }
@@ -523,6 +522,7 @@ void SbiParser::Type()
 void SbiParser::DefType( BOOL bPrivate )
 {
     // TODO: Use bPrivate
+    (void)bPrivate;
 
     // Neues Token lesen, es muss ein Symbol sein
     if (!TestSymbol())
@@ -816,26 +816,26 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
             SbiToken eTok = Next();
             if( eTok != COMMA && eTok != RPAREN )
             {
-                BOOL bError = TRUE;
+                BOOL bError2 = TRUE;
                 if( bOptional && bCompatible && eTok == EQ )
                 {
                     SbiConstExpression* pDefaultExpr = new SbiConstExpression( this );
-                    SbxDataType eType = pDefaultExpr->GetType();
+                    SbxDataType eType2 = pDefaultExpr->GetType();
 
                     USHORT nStringId;
-                    if( eType == SbxSTRING )
-                        nStringId = aGblStrings.Add( pDefaultExpr->GetString(), eType );
+                    if( eType2 == SbxSTRING )
+                        nStringId = aGblStrings.Add( pDefaultExpr->GetString(), eType2 );
                     else
-                        nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType );
+                        nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
 
                     pPar->SetDefaultId( nStringId );
                     delete pDefaultExpr;
 
                     eTok = Next();
                     if( eTok == COMMA || eTok == RPAREN )
-                        bError = FALSE;
+                        bError2 = FALSE;
                 }
-                if( bError )
+                if( bError2 )
                 {
                     Error( SbERR_EXPECTED, RPAREN );
                     break;
@@ -940,7 +940,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
     SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
     if( pOld )
     {
-        bool bError = false;
+        bool bError_ = false;
 
         pProc = pOld->GetProcDef();
         if( !pProc )
@@ -949,7 +949,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
             Error( SbERR_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
             pProc = NULL;
-            bError = true;
+            bError_ = true;
         }
         // #100027: Multiple declaration -> Error
         // #112787: Not for setup, REMOVE for 8
@@ -961,11 +961,11 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
                 Error( SbERR_PROC_DEFINED, pDef->GetName() );
                 delete pDef;
                 pProc = NULL;
-                bError = true;
+                bError_ = true;
             }
         }
 
-        if( !bError )
+        if( !bError_ )
         {
             pDef->Match( pProc );
             pProc = pDef;
