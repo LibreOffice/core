@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:10:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ namespace svxform
         sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getFieldsByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
@@ -209,7 +209,7 @@ namespace svxform
             )   SAL_THROW( ( ) );
 
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >
             getFieldNamesByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
@@ -218,7 +218,7 @@ namespace svxform
             )   SAL_THROW( ( ) );
 
         // ------------------------------------------------
-        virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
+        sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False) const;
 
