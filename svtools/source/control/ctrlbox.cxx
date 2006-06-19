@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:25:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ struct ImplColorListData
                 ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = TRUE; }
 };
 
-DECLARE_LIST( ImpColorList, ImplColorListData* );
+DECLARE_LIST( ImpColorList, ImplColorListData* )
 
 // -----------------------------------------------------------------------
 
@@ -266,7 +266,7 @@ struct ImpLineListData
     long    nDistance;
 };
 
-DECLARE_LIST( ImpLineList, ImpLineListData* );
+DECLARE_LIST( ImpLineList, ImpLineListData* )
 
 // -----------------------------------------------------------------------
 
@@ -608,7 +608,7 @@ struct ImplFontNameListData
                 {}
 };
 
-DECLARE_LIST( ImplFontList, ImplFontNameListData* );
+DECLARE_LIST( ImplFontList, ImplFontNameListData* )
 
 // -------------------------------------------------------------------
 
