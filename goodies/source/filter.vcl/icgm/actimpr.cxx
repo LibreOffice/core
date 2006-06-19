@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actimpr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:47:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,8 @@
 
 //#include <toolkit/unohlp.hxx>
 
-#include <main.hxx>
-#include <outact.hxx>
+#include "main.hxx"
+#include "outact.hxx"
 
 using namespace ::com::sun::star;
 
@@ -872,7 +872,7 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
 
 // ---------------------------------------------------------------
 
-void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 nSize, FinalFlag eFlag )
+void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
 {
     if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.TextShape") ) )
     {
@@ -885,14 +885,14 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         {
             case TAV_HALF :
             {
-                aTextPos.Y -= ( ( mpCGM->pElement->nCharacterHeight * 1.5 ) / 2 );
+                aTextPos.Y -= static_cast<sal_Int32>( ( mpCGM->pElement->nCharacterHeight * 1.5 ) / 2 );
             }
             break;
 
             case TAV_BASE :
             case TAV_BOTTOM :
             case TAV_NORMAL :
-                aTextPos.Y -= ( mpCGM->pElement->nCharacterHeight * 1.5 );
+                aTextPos.Y -= static_cast<sal_Int32>( mpCGM->pElement->nCharacterHeight * 1.5 );
             case TAV_TOP :
                 break;
             case TAV_CAP:
@@ -964,8 +964,8 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
             maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("TextAutoGrowHeight"), aAny );
         }
         uno::Reference< text::XText >  xText;
-        uno::Any aQuery( maXShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0) ));
-        if( aQuery >>= xText )
+        uno::Any aFirstQuery( maXShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0) ));
+        if( aFirstQuery >>= xText )
         {
             String aStr( String::CreateFromAscii( pString ) );
 
@@ -973,8 +973,8 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
             {
                 aXTextCursor->gotoEnd( sal_False );
                 uno::Reference< text::XTextRange >  aCursorText;
-                uno::Any aQuery( aXTextCursor->queryInterface( ::getCppuType((const uno::Reference< text::XTextRange >*)0) ));
-                if ( aQuery >>= aCursorText )
+                uno::Any aSecondQuery( aXTextCursor->queryInterface( ::getCppuType((const uno::Reference< text::XTextRange >*)0) ));
+                if ( aSecondQuery >>= aCursorText )
                 {
                     uno::Reference< beans::XPropertySet >  aCursorPropSet;
 
@@ -1021,7 +1021,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
 
 // ---------------------------------------------------------------
 
-void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 nSize, FinalFlag eFlag )
+void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
 {
     if ( nFinalTextCount )
     {
@@ -1029,8 +1029,8 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 nSize, FinalFlag eF
         if ( aShape.is() )
         {
             uno::Reference< text::XText >  xText;
-            uno::Any aQuery(  aShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0)) );
-            if( aQuery >>= xText )
+            uno::Any aFirstQuery(  aShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0)) );
+            if( aFirstQuery >>= xText )
             {
                 String aStr( String::CreateFromAscii( pString ) );
 
@@ -1039,8 +1039,8 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 nSize, FinalFlag eF
                 {
                     aXTextCursor->gotoEnd( sal_False );
                     uno::Reference< text::XTextRange >  aCursorText;
-                    uno::Any aQuery(aXTextCursor->queryInterface( ::getCppuType((const uno::Reference< text::XTextRange >*)0) ));
-                    if ( aQuery >>= aCursorText )
+                    uno::Any aSecondQuery(aXTextCursor->queryInterface( ::getCppuType((const uno::Reference< text::XTextRange >*)0) ));
+                    if ( aSecondQuery >>= aCursorText )
                     {
                         uno::Reference< beans::XPropertySet >  aPropSet;
                         uno::Any aQuery(aCursorText->queryInterface( ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) ));
@@ -1059,7 +1059,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 nSize, FinalFlag eF
 
 // ---------------------------------------------------------------
 // nCount != 0 -> Append Text
-sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* pTextEntry, NodeFrameSet& rNodeFrameSet, sal_uInt32 nObjCount )
+sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* /*pTextEntry*/, NodeFrameSet& /*rNodeFrameSet*/, sal_uInt32 /*nObjCount*/ )
 {
 
 return 0;
@@ -1180,7 +1180,7 @@ return 0;
 
 // ---------------------------------------------------------------
 
-void CGMImpressOutAct::ImplGetFrameSet( int nNodeNumber, NodeFrameSet& rFrameSet )
+void CGMImpressOutAct::ImplGetFrameSet( int /*nNodeNumber*/, NodeFrameSet& /*rFrameSet*/ )
 {
 /*
     DataNode* pDataNode = &mpCGM->mpChart->mDataNode[ nNodeNumber ];
