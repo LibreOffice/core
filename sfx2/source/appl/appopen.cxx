@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:17:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::dispatchFinished( const DispatchRes
     bFinished = TRUE;
 }
 
-void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
+void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) throw(RuntimeException)
 {
 }
 
@@ -325,10 +325,10 @@ void SetTemplate_Impl( const String &rFileName,
 
 ULONG CheckPasswd_Impl
 (
-    //Window *pWin,       // Parent des Dialogs
-    SfxObjectShell* pDoc,
-    SfxItemPool &rPool, // Pool, falls ein Set erzeugt werden mus
-    SfxMedium *pFile    // das Medium, dessen Passwort gfs. erfragt werden soll
+    //Window *pWin,             // Parent des Dialogs
+    SfxObjectShell*  pDoc,
+    SfxItemPool&     /*rPool*/, // Pool, falls ein Set erzeugt werden mus
+    SfxMedium*       pFile      // das Medium, dessen Passwort gfs. erfragt werden soll
 )
 
 /*  [Beschreibung]
@@ -484,10 +484,10 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
         SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE, pFilter, pSet );
         if(!xDoc->DoLoad(pMedium))
         {
-            ErrCode nErr = xDoc->GetErrorCode();
+            ErrCode nErrCode = xDoc->GetErrorCode();
             xDoc->DoClose();
             xDoc.Clear();
-            return nErr;
+            return nErrCode;
         }
     }
 
@@ -668,7 +668,6 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
 SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxItemSet *pSet )
 {
     SfxObjectShellLock xDoc;
-    const SfxObjectFactory* pFactory = 0;
     String aFact( rFact );
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
@@ -744,10 +743,10 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-
+/*
     SFX_REQUEST_ARG(rReq, pHidden, SfxBoolItem, SID_HIDDEN, FALSE);
 //(mba)/task
-/*
+
     if ( !pHidden || !pHidden->GetValue() )
         Application::GetAppWindow()->EnterWait();
 */
@@ -956,7 +955,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_default") );
         if ( aTemplateFileName.Len() )
         {
-            INetURLObject aObj( aTemplateFileName );
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
 
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -1008,7 +1006,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // get FileName from dialog
         SvStringsDtor* pURLList = NULL;
         String aFilter;
-        void* pDummy = 0; // wegen GCC und C272
         SfxItemSet* pSet = NULL;
         String aPath;
         if ( nSID == SID_OPENTEMPLATE )
@@ -1087,7 +1084,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             css::task::ErrorCodeRequest aRequest;
                             if (aRule.m_xRequest->getRequest() >>= aRequest)
                             {
-                                if (aRequest.ErrCode == ERRCODE_SFX_NOMOREDOCUMENTSALLOWED)
+                                if (aRequest.ErrCode ==
+                                    sal::static_int_cast< sal_Int32 >(
+                                        ERRCODE_SFX_NOMOREDOCUMENTSALLOWED))
                                     break;
                             }
                         }
@@ -1222,11 +1221,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             {
                 if ( aINetProtocol == INET_PROT_FILE )
                 {
+/*!!! pb: #i49802# no security warning any longer
                     // Check if file URL is a directory. This is not insecure!
                     osl::Directory aDir( aURL.Main );
                     sal_Bool bIsDir = ( aDir.open() == osl::Directory::E_None );
 
-/*!!! pb: #i49802# no security warning any longer
                     if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ) )
                     {
                         // Security check for local files depending on the extension
@@ -1550,23 +1549,23 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( xController.is() )
     {
         // try to find the SfxFrame for the controller
-        SfxFrame* pFrame = NULL;
+        SfxFrame* pCntrFrame = NULL;
         for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, FALSE ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, FALSE ) )
         {
             if ( pShell->GetController() == xController )
             {
-                pFrame = pShell->GetViewFrame()->GetFrame();
+                pCntrFrame = pShell->GetViewFrame()->GetFrame();
                 break;
             }
         }
 
-        if ( pFrame )
+        if ( pCntrFrame )
         {
-            SfxObjectShell* pSh = pFrame->GetCurrentDocument();
+            SfxObjectShell* pSh = pCntrFrame->GetCurrentDocument();
             DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
 
             if ( bCreateView )
-                rReq.SetReturnValue( SfxViewFrameItem( 0, pFrame->GetCurrentViewFrame() ) );
+                rReq.SetReturnValue( SfxViewFrameItem( 0, pCntrFrame->GetCurrentViewFrame() ) );
             else
                 rReq.SetReturnValue( SfxObjectItem( 0, pSh ) );
 
@@ -1602,7 +1601,7 @@ SfxViewFrame *SfxApplication::CreateView_Impl
 (
     const SfxItemSet*   pSet,
     SfxObjectShell*     pDoc,
-    FASTBOOL            bNewView,   // neue View erzwingen
+    FASTBOOL            /*bNewView*/,   // neue View erzwingen
     FASTBOOL            bHidden
 )
 {
