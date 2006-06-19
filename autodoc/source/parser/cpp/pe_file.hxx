@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_file.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:26:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ class PE_File : public Cpp_PE
     void                On_in_externC_SwBracket_Left(const char * i_sText);
     void                On_in_externC_NoBlock(const char * i_sText);
 
-    PeEnvironment &     Env()                   { return *pEnv; }
+    PeEnvironment &     access_Env()            { return *pEnv; }
 
 
     // DATA
