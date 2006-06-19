@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:47:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,12 @@ short AppWin::nCount = 0;           // Anzahl Editfenster
 TYPEINIT0(AppWin);
 AppWin::AppWin( BasicFrame* pParent )
 : DockingWindow( pParent, WB_SIZEMOVE | WB_CLOSEABLE | WB_PINABLE )
-, pDataEdit(NULL)
 , nSkipReload(0)
 , bHasFile( FALSE )
 , bReloadAborted( FALSE )
-, bFind( TRUE )
 , pFrame( pParent )
+, bFind( TRUE )
+, pDataEdit(NULL)
 {
     // evtl. den Untitled-String laden:
     if( !pNoName )
@@ -369,7 +369,8 @@ BOOL AppWin::DiskFileChanged( USHORT nWhat )
                 else
                     return DiskFileChanged( SINCE_LAST_ASK_RELOAD );
             }
-            break;
+// uncomment to avoid compiler warning
+//          break;
         case SINCE_LAST_ASK_RELOAD:
             {
                 String aFilename( GetText() );
@@ -380,7 +381,8 @@ BOOL AppWin::DiskFileChanged( USHORT nWhat )
                 return ( !aLastAccess.GetError() != !aStat.GetError() )
                     || aLastAccess.IsYounger( aStat ) || aStat.IsYounger( aLastAccess );
             }
-            break;
+// uncomment to avoid compiler warning
+//          break;
         default:
             DBG_ERROR("Not Implemented in AppWin::DiskFileChanged");
     }
@@ -585,6 +587,9 @@ USHORT AppWin::QuerySave( QueryBits nBits )
         case RET_CANCEL:
             nReturn = SAVE_RES_CANCEL;
             break;
+        default:
+            DBG_ERROR("switch default where no default should be: Interneal error");
+            nReturn = SAVE_RES_CANCEL;
     }
     SkipReload( FALSE );
     return nReturn;
@@ -601,13 +606,16 @@ BOOL AppWin::Close()
             delete this;
             return TRUE;
         }
-    break;
+// uncomment to avoid compiler warning
+//  break;
     case SAVE_RES_ERROR:    // Fehlermeldung schon ausgegeben
         return FALSE;
-        break;
+// uncomment to avoid compiler warning
+//      break;
     case SAVE_RES_CANCEL:
         return FALSE;
-        break;
+// uncomment to avoid compiler warning
+//      break;
     default:
         DBG_ERROR("Not Implemented in AppWin::Close")
         return FALSE;
