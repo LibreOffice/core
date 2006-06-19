@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:49:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,10 @@ namespace toolkit{
 
     public:
         UnoControlRoadmapModel();
-        UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) : UnoControlModel( rModel ), maContainerListeners( *this ) {;}
+        UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) :
+            UnoControlRoadmapModel_Base( rModel ),
+            UnoControlRoadmapModel_IBase( rModel ),
+            maContainerListeners( *this ) {}
         UnoControlModel*    Clone() const { return new UnoControlRoadmapModel( *this ); }
 
 
