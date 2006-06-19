@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:23:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,6 +608,8 @@ extern "C"
     void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
     {
+        (void)ppEnv;
+
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
