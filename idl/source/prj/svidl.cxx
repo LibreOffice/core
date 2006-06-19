@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svidl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:53:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,6 @@
 #include <tools/string.hxx>
 #endif
 
-#pragma hdrstop
-
 #define BR 0x8000
 BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVerschieben )
 {
@@ -65,7 +63,6 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
             BYTE * pBuf2 = new BYTE[ BR ];
             nC1 = aOutStm1.Read( pBuf1, BR );
             nC2 = aOutStm2.Read( pBuf2, BR );
-            BOOL bOk = TRUE;
             while( nC1 == nC2 )
             {
                 if( memcmp( pBuf1, pBuf2, nC1 ) )
@@ -147,7 +144,7 @@ int cdecl main ( int argc, char ** argv)
     String aTmpDocuFile;
 
     SvCommand aCommand( argc, argv );
-    Init( aCommand );
+    Init();
     SvIdlWorkingBase * pDataBase = new SvIdlWorkingBase();
 
     int nExit = 0;
