@@ -4,9 +4,9 @@
  *
  *  $RCSfile: class4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:51:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,8 @@ void CGM::ImplDoClass4()
 
                     if ( mbFigure )
                     {
-                        Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ), Size( ( 2 * fRadius ), (long)( 2 * fRadius) ) );
+                        Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
+                            Size( ( static_cast< long >( 2 * fRadius ) ), (long)( 2 * fRadius) ) );
                         Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), POLY_ARC );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, sal_True );
@@ -548,8 +549,12 @@ void CGM::ImplDoClass4()
 
                 if ( mbFigure )
                 {
-                    Rectangle aBoundingBox( Point( (long)( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ), Size( ( 2 * aRadius.X ), (long)( 2 * aRadius.X ) ) );
-                    Polygon aPolygon( aBoundingBox, Point( (long)vector[ 0 ], (long)vector[ 1 ] ), Point( (long)vector[ 2 ], (long)vector[ 3 ] ), POLY_ARC );
+                    Rectangle aBoundingBox(
+                        Point( (long)( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ),
+                        Size( static_cast< long >( 2 * aRadius.X ), (long)( 2 * aRadius.X ) ) );
+                    Polygon aPolygon( aBoundingBox,
+                        Point( (long)vector[ 0 ], (long)vector[ 1 ] ),
+                        Point( (long)vector[ 2 ], (long)vector[ 3 ] ), POLY_ARC );
                     mpOutAct->RegPolyLine( aPolygon );
                 }
                 else
