@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_tplparam.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:55:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ TemplateParamType::~TemplateParamType()
 }
 
 void
-TemplateParamType::do_Visit( Host & io_rHost ) const
+TemplateParamType::do_Visit( Host & ) const
 {
     // yet unused.
 }
@@ -72,11 +72,11 @@ TemplateParamType::inq_ClassId() const
 }
 
 void
-TemplateParamType::inq_Get_Text( StringVector &      o_module,
+TemplateParamType::inq_Get_Text( StringVector &      ,
                                  String &            o_name,
-                                 Ce_id &             o_nRelatedCe,
-                                 int &               o_nSequenceCount,
-                                 const Gate &        i_rGate ) const
+                                 Ce_id &             ,
+                                 int &               ,
+                                 const Gate &        ) const
 {
     o_name = Name();
 }

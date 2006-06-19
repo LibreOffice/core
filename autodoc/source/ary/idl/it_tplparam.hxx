@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_tplparam.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ class TemplateParamType : public Named_Type
     virtual             ~TemplateParamType();
 
     // INQUIRY
-    Ce_id               StructId(               /// The struct which declares this type.
-                            Ce_id               i_nStruct ) const;
+    Ce_id               StructId() const;       /// The struct which declares this type.
+
     // ACCESS
     void                Set_StructId(
                             Ce_id               i_nStruct );
@@ -88,7 +88,7 @@ class TemplateParamType : public Named_Type
 };
 
 inline Ce_id
-TemplateParamType::StructId( Ce_id i_nStruct ) const
+TemplateParamType::StructId() const
 {
     return nStruct;
 }
