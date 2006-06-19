@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:28:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,23 +206,23 @@ Docu_Display::Display_StdTag( const StdTag & i_rData )
 }
 
 void
-Docu_Display::Display_BaseTag( const BaseTag & i_rData )
+Docu_Display::Display_BaseTag( const BaseTag & )
 {
 
 }
 
 void
-Docu_Display::Display_ExceptionTag( const ExceptionTag & i_rData )
+Docu_Display::Display_ExceptionTag( const ExceptionTag & )
 {
 }
 
 void
-Docu_Display::Display_ImplementsTag( const ImplementsTag & i_rData )
+Docu_Display::Display_ImplementsTag( const ImplementsTag & )
 {
 }
 
 void
-Docu_Display::Display_KeywordTag( const KeywordTag & i_rData )
+Docu_Display::Display_KeywordTag( const KeywordTag & )
 {
 }
 
@@ -288,7 +288,7 @@ Docu_Display::Display_TemplateTag( const TemplateTag & i_rData )
 }
 
 void
-Docu_Display::Display_LabelTag( const LabelTag & i_rData )
+Docu_Display::Display_LabelTag( const LabelTag & )
 {
 }
 
@@ -355,7 +355,7 @@ Docu_Display::Display_DT_Whitespace( const DT_Whitespace & i_rData )
 }
 
 void
-Docu_Display::Display_DT_Eol( const DT_Eol & i_rData )
+Docu_Display::Display_DT_Eol( const DT_Eol & )
 {
     CurOut() << new html::Sbr;
 }
@@ -383,7 +383,7 @@ Docu_Display::Finish_DocuBlock()
 
 void
 Docu_Display::Write_TagTitle( const char *        i_sText,
-                              const char *        i_nFontSize )
+                              const char *        )
 {
     if ( strcmp(i_sText,"ATTENTION!") == 0 )
     {
