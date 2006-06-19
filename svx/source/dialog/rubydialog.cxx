@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:57:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _SVX_RUBYDLG_HXX_
 #include <rubydialog.hxx>
@@ -123,11 +121,11 @@ static const sal_Char cRubies[] = "Rubies";
 /* -----------------------------09.01.01 17:24--------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxRubyChildWindow::SvxRubyChildWindow( Window* pParent, USHORT nId,
+SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, USHORT nId,
     SfxBindings* pBindings, SfxChildWinInfo* pInfo) :
-    SfxChildWindow(pParent, nId)
+    SfxChildWindow(_pParent, nId)
 {
-    pWindow = new SvxRubyDialog( pBindings, this, pParent, SVX_RES( RID_SVXDLG_RUBY ) );
+    pWindow = new SvxRubyDialog( pBindings, this, _pParent, SVX_RES( RID_SVXDLG_RUBY ) );
     SvxRubyDialog* pDlg = (SvxRubyDialog*) pWindow;
 
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
@@ -220,7 +218,7 @@ void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
     }
 }
 //-----------------------------------------------------------------------------
-void SvxRubyData_Impl::selectionChanged( const EventObject& aEvent ) throw (RuntimeException)
+void SvxRubyData_Impl::selectionChanged( const EventObject& ) throw (RuntimeException)
 {
     bHasSelectionChanged = sal_True;
 }
@@ -258,11 +256,11 @@ void  SvxRubyData_Impl::AssertOneEntry()
 
  ---------------------------------------------------------------------------*/
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
-                                    Window* pParent, const ResId& rResId ) :
-    SfxModelessDialog( pBind, pCW, pParent, rResId ),
+                                    Window* _pParent, const ResId& rResId ) :
+    SfxModelessDialog( pBind, pCW, _pParent, rResId ),
     aLeftFT(this,               ResId(FT_LEFT )),
-    aRightFT(this,              ResId(FT_RIGHT  )),
     aLeft1ED(this,              ResId(ED_LEFT_1  )),
+    aRightFT(this,              ResId(FT_RIGHT  )),
     aRight1ED(this,             ResId(ED_RIGHT_1 )),
     aLeft2ED(this,              ResId(ED_LEFT_2  )),
     aRight2ED(this,             ResId(ED_RIGHT_2 )),
@@ -284,9 +282,10 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aApplyPB(this,              ResId(PB_APPLY          )),
     aClosePB(this,              ResId(PB_CLOSE          )),
     aHelpPB(this,               ResId(PB_HELP           )),
-    pBindings(pBind),
     nLastPos(0),
-    nCurrentEdit(0)
+    nCurrentEdit(0),
+    bModified(FALSE),
+    pBindings(pBind)
 {
     xImpl = pImpl = new SvxRubyData_Impl;
     FreeResource();
@@ -476,7 +475,7 @@ void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 //-----------------------------------------------------------------------------
 void SvxRubyDialog::GetText()
 {
-    long nLastPos = GetLastPos();
+    long nTempLastPos = GetLastPos();
     for(int i = 0; i < 8; i+=2)
     {
         if(aEditArr[i]->IsEnabled() &&
@@ -484,9 +483,9 @@ void SvxRubyDialog::GetText()
             aEditArr[i + 1]->GetText() != aEditArr[i + 1]->GetSavedValue()))
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
-            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nLastPos), "wrong index" )
+            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" )
             SetModified(TRUE);
-            Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nLastPos];
+            Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
             PropertyValue* pProps = rProps.getArray();
             for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
             {
@@ -594,8 +593,7 @@ void    SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
 IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nPos = pScroll->GetThumbPos();
-    long nLastPos = GetLastPos();
-    if(nLastPos != nPos)
+    if(GetLastPos() != nPos)
     {
         GetText();
     }
@@ -718,7 +716,7 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
 /* -----------------------------01.02.01 10:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, pBox)
+IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, EMPTYARG )
 {
     AssertOneEntry();
     OUString sStyleName;
@@ -890,7 +888,7 @@ RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
 /* -----------------------------29.01.01 14:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-void RubyPreview::Paint( const Rectangle& rRect )
+void RubyPreview::Paint( const Rectangle& /* rRect */ )
 {
     Font aRubyFont = GetFont();
     Font aSaveFont(aRubyFont);
