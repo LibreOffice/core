@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:26:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,13 @@
 
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
 
-SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParent ,
+SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
                                                 USHORT nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo )
-                    : SfxChildWindow( pParent , nId )
+                    : SfxChildWindow( pParentWnd , nId )
 {
-    pWindow = new SfxNavigator( pBindings, this, pParent,
+    pWindow = new SfxNavigator( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
@@ -64,11 +64,11 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParent ,
     SetHideNotDelete( TRUE );
 }
 
-SfxNavigator::SfxNavigator( SfxBindings* pBindings ,
+SfxNavigator::SfxNavigator( SfxBindings* pBind ,
                                         SfxChildWindow* pChildWin ,
                                         Window* pParent ,
                                         WinBits nBits )
-                        : SfxDockingWindow( pBindings ,
+                        : SfxDockingWindow( pBind ,
                                         pChildWin ,
                                         pParent ,
                                         nBits )
