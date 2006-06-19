@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:31:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@ Reference< XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( const RealSize2D
 
 // XIntegerBitmap
 Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( IntegerBitmapLayout&      bitmapLayout,
-                                                        const IntegerRectangle2D& rect ) throw (IndexOutOfBoundsException,
+                                                        const IntegerRectangle2D& /*rect*/ ) throw (IndexOutOfBoundsException,
                                                                                                 VolatileContentDestroyedException,
                                                                                                 RuntimeException)
 {
@@ -428,13 +428,13 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( IntegerBitmapLayout&    
     return aRet;
 }
 
-void SAL_CALL VclCanvasBitmap::setData( const Sequence< sal_Int8 >& data, const IntegerBitmapLayout& bitmapLayout, const IntegerRectangle2D& rect ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL VclCanvasBitmap::setData( const Sequence< sal_Int8 >& /*data*/, const IntegerBitmapLayout& /*bitmapLayout*/, const IntegerRectangle2D& /*rect*/ ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
 {
     DBG_ERROR( "this XBitmap implementation is readonly" );
     throw IllegalArgumentException();
 }
 
-void SAL_CALL VclCanvasBitmap::setPixel( const Sequence< sal_Int8 >& color, const IntegerBitmapLayout& bitmapLayout, const IntegerPoint2D& pos ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL VclCanvasBitmap::setPixel( const Sequence< sal_Int8 >& /*color*/, const IntegerBitmapLayout& /*bitmapLayout*/, const IntegerPoint2D& /*pos*/ ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
 {
     DBG_ERROR( "this XBitmap implementation is readonly" );
     throw IllegalArgumentException();
@@ -604,7 +604,7 @@ Sequence< double > SAL_CALL VclCanvasBitmap::getPaletteIndex( sal_Int32 nIndex )
     return aRet;
 }
 
-sal_Bool SAL_CALL VclCanvasBitmap::setPaletteIndex( const Sequence< double >& color, sal_Int32 nIndex ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+sal_Bool SAL_CALL VclCanvasBitmap::setPaletteIndex( const Sequence< double >& /*color*/, sal_Int32 /*nIndex*/ ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
 {
     return sal_False; // read only implementation
 }
@@ -625,7 +625,7 @@ sal_Int64 SAL_CALL VclCanvasBitmap::getSomething( const Sequence< sal_Int8 >& aI
         rtl_compareMemory( rTest.getConstArray(), aIdentifier.getConstArray(), rTest.getLength() ) == 0
         )
     {
-        nRet = (sal_Int64)m_pBitmap;
+        nRet = (sal_Int64)sal_IntPtr(m_pBitmap);
     }
     return nRet;
 }
