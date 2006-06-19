@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Filter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,8 +156,8 @@ namespace frm
         virtual sal_Int16       SAL_CALL getMaxTextLen() throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::form::XBoundComponent
-        virtual void            SAL_CALL addUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener > & l) throw( ::com::sun::star::uno::RuntimeException ) {}
-        virtual void            SAL_CALL removeUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener > & l) throw( ::com::sun::star::uno::RuntimeException ) {}
+        virtual void            SAL_CALL addUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener > & /*l*/) throw( ::com::sun::star::uno::RuntimeException ) {}
+        virtual void            SAL_CALL removeUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener > & /*l*/) throw( ::com::sun::star::uno::RuntimeException ) {}
         virtual sal_Bool        SAL_CALL commit() throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::lang::XEventListener
@@ -165,7 +165,7 @@ namespace frm
 
     // ::com::sun::star::awt::XFocusListener
         virtual void            SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void            SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException ){}
+        virtual void            SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::awt::XItemListener
         virtual void            SAL_CALL itemStateChanged(const ::com::sun::star::awt::ItemEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException );
