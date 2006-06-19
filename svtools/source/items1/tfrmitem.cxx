@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tfrmitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@
 
 #include "tfrmitem.hxx"
 
-DBG_NAME( SfxTargetFrameItem );
+DBG_NAME( SfxTargetFrameItem )
 TYPEINIT1( SfxTargetFrameItem, SfxPoolItem );
 
 // -----------------------------------------------------------------------
 
-SfxTargetFrameItem::SfxTargetFrameItem( USHORT nWhich ) :
-    SfxPoolItem( nWhich )
+SfxTargetFrameItem::SfxTargetFrameItem( USHORT which ) :
+    SfxPoolItem( which )
 {
     DBG_CTOR( SfxTargetFrameItem, 0 );
 }
@@ -66,9 +66,9 @@ SfxTargetFrameItem::SfxTargetFrameItem( const SfxTargetFrameItem& rItem ) :
 
 // -----------------------------------------------------------------------
 
-SfxTargetFrameItem::SfxTargetFrameItem( USHORT nWhich,
+SfxTargetFrameItem::SfxTargetFrameItem( USHORT which,
     const String& rOpenSelectFrame, const String& rOpenOpenFrame,
-    const String& rOpenAddTaskFrame ) : SfxPoolItem( nWhich )
+    const String& rOpenAddTaskFrame ) : SfxPoolItem( which )
 {
     DBG_CTOR( SfxTargetFrameItem, 0 );
     _aFrames[ (USHORT)SfxOpenSelect ]  = rOpenSelectFrame;
@@ -155,8 +155,7 @@ SfxPoolItem* SfxTargetFrameItem::Clone( SfxItemPool* ) const
 
 // -----------------------------------------------------------------------
 // virtual
-BOOL SfxTargetFrameItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                      BYTE nMemberId ) const
+BOOL SfxTargetFrameItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     String aVal;
     for ( int i = 0; i <= SfxOpenModeLast; i++ )
@@ -171,8 +170,7 @@ BOOL SfxTargetFrameItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 // -----------------------------------------------------------------------
 // virtual
-BOOL SfxTargetFrameItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId )
+BOOL SfxTargetFrameItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     rtl::OUString aValue;
     if ( rVal >>= aValue )
