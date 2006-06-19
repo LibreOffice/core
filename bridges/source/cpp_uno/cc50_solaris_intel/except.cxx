@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:17:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,7 +321,8 @@ void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr
 static void deleteException(
     void* pExc, unsigned char* thunk, typelib_TypeDescription* pType )
 {
-     uno_destructData( pExc, pType, cpp_release );
+     uno_destructData(
+        pExc, pType, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
      typelib_typedescription_release( pType );
     delete[] thunk;
 }
@@ -391,8 +392,11 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     thunk[14] = 0x04;
     // call deleteException:
     thunk[15] = 0xE8;
+#pragma disable_warn
+    void * d = reinterpret_cast< void * >(deleteException);
+#pragma enable_warn
     *reinterpret_cast< std::ptrdiff_t * >(thunk + 16) =
-        reinterpret_cast< unsigned char * >(deleteException) - (thunk + 20);
+        static_cast< unsigned char * >(d) - (thunk + 20);
     // addl $12, %esp:
     thunk[20] = 0x83;
     thunk[21] = 0xC4;
@@ -400,9 +404,10 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // ret:
     thunk[23] = 0xC3;
 
-    __Crun::ex_throw(
-        pCppExc, (const __Crun::static_type_info*)pRTTI,
-        reinterpret_cast< void (*)(void *) >(thunk) );
+#pragma disable_warn
+    void (* f)(void *) = reinterpret_cast< void (*)(void *) >(thunk);
+#pragma enable_warn
+    __Crun::ex_throw(pCppExc, (const __Crun::static_type_info*)pRTTI, f);
 }
 
 void cc50_solaris_intel_fillUnoException(
