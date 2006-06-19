@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:31:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:13:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddr
 {
 }
 
-sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return( IsDropFormatSupported( FORMAT_STRING ) ? DND_ACTION_COPY : DND_ACTION_NONE );
 }
@@ -507,7 +507,7 @@ BOOL SvxHyperlinkTabPageBase::AskApply ()
 |*
 \************************************************************************/
 
-void SvxHyperlinkTabPageBase::SetMarkStr ( String& aStrMark )
+void SvxHyperlinkTabPageBase::SetMarkStr ( String& /*aStrMark*/ )
 {
     // default-implemtation : do nothing
 }
@@ -519,7 +519,7 @@ void SvxHyperlinkTabPageBase::SetMarkStr ( String& aStrMark )
 |*
 \************************************************************************/
 
-void SvxHyperlinkTabPageBase::SetOnlineMode( BOOL bEnable )
+void SvxHyperlinkTabPageBase::SetOnlineMode( BOOL /*bEnable*/ )
 {
     // default-implemtation : do nothing
 }
@@ -843,7 +843,7 @@ void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
         ShowMarkWnd ();
 }
 
-int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* pSet)
+int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
 {
     // hide mark-wnd
     SetMarkWndShouldOpen( IsMarkWndVisible () );
@@ -858,12 +858,21 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* pSet)
     USHORT nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
-    if( pSet )
+    if( _pSet )
     {
         SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
                                 aStrIntName, eMode, nEvents, pTable );
-        pSet->Put( aItem );
+        _pSet->Put( aItem );
     }
 
     return( LEAVE_PAGE );
+}
+
+BOOL SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()
+{
+    return FALSE;
+}
+
+void SvxHyperlinkTabPageBase::SetMarkWndShouldOpen(BOOL)
+{
 }
