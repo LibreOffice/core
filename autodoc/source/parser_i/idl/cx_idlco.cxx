@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_idlco.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:45:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ Context_UidlCode::PerformStatusFunction( uintt              i_nStatusSignal,
         case nF_fin_Error:
             // KORR
             throw X_AutodocParser(X_AutodocParser::x_InvalidChar);
-            break;
+            // no break, because of throw
         case nF_fin_Ignore:
             pNewToken = 0;
             io_rText.CutToken();
