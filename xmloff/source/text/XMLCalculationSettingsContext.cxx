@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:58:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,12 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrefix,
+                                    sal_uInt16 p_nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
-: nYear( 1930 )
-, SvXMLImportContext ( rImport, nPrefix, rLocalName )
+: SvXMLImportContext ( rImport, p_nPrefix, rLocalName )
+, nYear( 1930 )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
