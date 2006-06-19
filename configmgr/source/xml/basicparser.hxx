@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicparser.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:38:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,10 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+namespace com { namespace sun { namespace star { namespace script {
+    class XTypeConverter;
+} } } }
+
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -79,7 +83,8 @@ namespace configmgr
         {
             struct ValueData;
 
-            uno::Reference< uno::XInterface > m_xTypeConverter;
+            uno::Reference< com::sun::star::script::XTypeConverter >
+                m_xTypeConverter;
             uno::Reference< sax::XLocator > m_xLocator;
             ElementParser                   m_aDataParser;
             Stack< ElementInfo >            m_aNodes;
