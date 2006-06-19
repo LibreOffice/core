@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,6 @@
 
 #ifndef _E3D_GLOBL3D_HXX
 #include "globl3d.hxx"
-#endif
-
-#ifndef _E3D_POLYOB3D_HXX
-#include "polyob3d.hxx"
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
@@ -137,7 +133,7 @@ E3dSphereObj::E3dSphereObj()
 //     laden von Dokumenten. Hier braucht man keinen CreateSphere-Aufruf, denn die wirkliche
 //     Anzahl Segmente ist ja noch nicht bekannt. Dies war bis zum 10.2.97 ein (kleines)
 //     Speicherleck.
-E3dSphereObj::E3dSphereObj(int dummy) // den Parameter braucht es um unterscheiden zu koennen, welcher
+E3dSphereObj::E3dSphereObj(int /*dummy*/) // den Parameter braucht es um unterscheiden zu koennen, welcher
 {                                     // der beiden Konstruktoren gemeint ist. Der obige halt per Default
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -419,7 +415,7 @@ UINT16 E3dSphereObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dSphereObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject *E3dSphereObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
