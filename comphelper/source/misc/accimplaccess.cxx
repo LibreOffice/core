@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accimplaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:48:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ namespace comphelper
     //---------------------------------------------------------------------
     void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const sal_Bool _bSet )
     {
-        OSL_ENSURE( _nState < BITFIELDSIZE, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
+        OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < BITFIELDSIZE, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
 
         sal_uInt64 nBitMask( 1 );
         nBitMask <<= _nState;
