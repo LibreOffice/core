@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSelectionBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:17:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,4 +110,4 @@ namespace accessibility
         ::osl::MutexGuard aGuard( implGetMutex() );
         OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
     }
-};
+}
