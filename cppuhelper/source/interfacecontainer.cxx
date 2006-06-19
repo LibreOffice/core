@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:27:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,10 +316,10 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
 
         if( ((Sequence< Reference< XInterface > >*)pData)->getLength() == 1 )
         {
-            XInterface * pL = ((const Sequence< Reference< XInterface > >*)pData)->getConstArray()[0].get();
-            pL->acquire();
+            XInterface * p = ((const Sequence< Reference< XInterface > >*)pData)->getConstArray()[0].get();
+            p->acquire();
             delete (Sequence< Reference< XInterface > >*)pData;
-            pData = pL;
+            pData = p;
             bIsList = sal_False;
             return 1;
         }
