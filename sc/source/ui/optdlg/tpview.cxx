@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:19:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ void ScTpContentOptions::InitGridOpt()
         long nCount = pColorTable->Count();
         for ( long n=0; n<nCount; n++ )
         {
-            XColorEntry* pEntry = pColorTable->Get(n);
+            XColorEntry* pEntry = pColorTable->GetColor(n);
             aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 
