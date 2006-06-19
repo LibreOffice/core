@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:50:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,10 +134,10 @@ namespace svt
             const Reference< XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill, ::osl::Mutex& _rContentMutex,
             const IContentTitleTranslation* _pTranslator )
-        :m_refCount              ( 0               )
-        ,m_xCommandEnv           ( _rxCommandEnv   )
-        ,m_rContent              ( _rContentToFill )
+        :m_rContent              ( _rContentToFill )
         ,m_rContentMutex         ( _rContentMutex  )
+        ,m_refCount              ( 0               )
+        ,m_xCommandEnv           ( _rxCommandEnv   )
         ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )
         ,m_bCancelled            ( false           )
@@ -269,7 +269,6 @@ namespace svt
             }
             catch( Exception& e )
             {
-                e; // make compiler happy
             }
 
             bool bCancelled = false;
