@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlgimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:48:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ SvtUpButton_Impl::~SvtUpButton_Impl()
 //-----------------------------------------------------------------------------
 void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 {
-    SvtFileView* pBox = GetParent()->GetView();
+    SvtFileView* pBox = GetDialogParent()->GetView();
 
     sal_uInt16 nItemId = 1;
 
@@ -314,11 +314,11 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         aObject.removeSegment();
         String* pParentURL = new String( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if ( GetParent()->isUrlAllowed( *pParentURL ) )
+        if ( GetDialogParent()->isUrlAllowed( *pParentURL ) )
         {
             String aTitle;
             // 97148# --------------------------------
-            if ( !GetParent()->ContentGetTitle( *pParentURL, aTitle ) || aTitle.Len() == 0 )
+            if ( !GetDialogParent()->ContentGetTitle( *pParentURL, aTitle ) || aTitle.Len() == 0 )
                 aTitle = aObject.getName();
 
             Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
@@ -350,14 +350,14 @@ void SvtUpButton_Impl::Select()
         DBG_ASSERT( nId <= _pURLs->Count(), "SvtUpButton_Impl:falscher Index" );
 
         String aURL = *(_pURLs->GetObject( nId ));
-        GetParent()->OpenURL_Impl( aURL );
+        GetDialogParent()->OpenURL_Impl( aURL );
     }
 }
 
 //-----------------------------------------------------------------------------
 void SvtUpButton_Impl::Click()
 {
-    GetParent()->PrevLevel_Impl();
+    GetDialogParent()->PrevLevel_Impl();
 }
 
 //=============================================================================
@@ -394,7 +394,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     _pMenu->Clear();
 
-    sal_Bool bIsHighContrast = GetParent()->GetView()->GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetDisplayBackground().GetColor().IsDark();
 
     USHORT nItemId = 1;
     String sDisplayName;
@@ -402,7 +402,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     ::std::vector< String >::const_iterator aLoop;
     for ( aLoop = m_aFavourites.begin(); aLoop != m_aFavourites.end(); ++aLoop, ++nItemId )
     {
-        if ( GetParent()->isUrlAllowed( *aLoop ) )
+        if ( GetDialogParent()->isUrlAllowed( *aLoop ) )
         {
             Image aImage = SvFileInformationManager::GetImage(
                 INetURLObject(*aLoop), bIsHighContrast );
@@ -430,18 +430,18 @@ void SvtTravelButton_Impl::Select()
 //-----------------------------------------------------------------------------
 void SvtTravelButton_Impl::Click()
 {
-    OpenURL( GetParent()->GetStandardDir() );
+    OpenURL( GetDialogParent()->GetStandardDir() );
 }
 
 //*****************************************************************************
 // SvtExpFileDlg_Impl
 //*****************************************************************************
 
-SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits nBits ) :
+SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
-    _pFilter            ( new SvtFileDialogFilterList_Impl() ),
+    _pLbFilter          ( NULL ),
     _pCurFilter         ( NULL ),
-    _pDefaultFilter     ( NULL ),
+    _pFilter            ( new SvtFileDialogFilterList_Impl() ),
     _pUserFilter        ( NULL ),
     _pFtFileName        ( NULL ),
     _pEdFileName        ( NULL ),
@@ -452,7 +452,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits nBits ) :
     _pFtImageTemplates  ( NULL ),
     _pLbImageTemplates  ( NULL ),
     _pFtFileType        ( NULL ),
-    _pLbFilter          ( NULL ),
     _pBtnFileOpen       ( NULL ),
     _pBtnCancel         ( NULL ),
     _pBtnHelp           ( NULL ),
@@ -466,11 +465,11 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits nBits ) :
     _nState             ( FILEDLG_STATE_REMOTE ),
     _nStyle             ( 0 ),
     _bDoubleClick       ( sal_False ),
+    m_bNeedDelayedFilterExecute ( sal_False ),
+    _pDefaultFilter     ( NULL ),
     _bMultiSelection    ( sal_False ),
-    _bFolderHasOpened   ( sal_False ),
     _nFixDeltaHeight    ( 0 ),
-    m_bNeedDelayedFilterExecute ( sal_False )
-
+    _bFolderHasOpened   ( sal_False )
 {
 }
 
@@ -532,15 +531,15 @@ void SvtExpFileDlg_Impl::ClearFilterList( )
 }
 
 //-----------------------------------------------------------------------------
-void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* _pFilter, const String& _rDisplayName )
+void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const String& rDisplayName )
 {
-    DBG_ASSERT( _pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
-    DBG_ASSERT( ( _rDisplayName == _pFilter->GetName() )
-            ||  ( _rDisplayName == lcl_DecoratedFilter( _pFilter->GetName() ) ),
+    DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
+    DBG_ASSERT( ( rDisplayName == pFilter->GetName() )
+            ||  ( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
             "SvtExpFileDlg_Impl::SetCurFilter: arguments are inconsistent!" );
 
-    _pCurFilter = _pFilter;
-    m_sCurrentFilterDisplayName = _rDisplayName;
+    _pCurFilter = pFilter;
+    m_sCurrentFilterDisplayName = rDisplayName;
 }
 
 //-----------------------------------------------------------------------------
