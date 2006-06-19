@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:39:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,10 +193,6 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     ObjectRemoveListener*   m_pWatchStoredList;
 
     sal_Bool        m_bFirstActivation  : 1;
-
-
-    void AttachControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl, sal_Bool bDetach );
-    void AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&, sal_Bool bDetach );
 
     FmFormShell* GetFormShell() const;
 
