@@ -4,9 +4,9 @@
  *
  *  $RCSfile: systemshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:56:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ namespace SystemShell {
     typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const rtl::OUString&, const rtl::OUString&);
 
     //##############################
-    rtl::OUString get_absolute_library_url(const rtl::OUString& lib_name)
+    rtl::OUString get_absolute_library_url(const rtl::OUString& /*lib_name*/)
     {
         rtl::OUString url;
         if (osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(AddToRecentDocumentList), url))
