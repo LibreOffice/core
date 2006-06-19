@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:08:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     SdrExchangeView aView(pModel);
     Point aPos;
     SdrPageView* pPv = aView.ShowPagePgNum(0,aPos);
-    aView.MarkAll(pPv);
+    aView.MarkAllObj(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
     aObjDesc.maSize = aSrcSize;
 
@@ -445,7 +445,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
             Point aPos;
             SdrPageView* pPv = aView.ShowPagePgNum( 0, aPos );
             DBG_ASSERT( pPv, "pPv not there..." );
-            aView.MarkAll( pPv );
+            aView.MarkAllObj( pPv );
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
                 bOK = SetGDIMetaFile( aView.GetAllMarkedMetaFile( TRUE ), rFlavor );
             else
