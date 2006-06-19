@@ -4,9 +4,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:09:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ class AccessController
         SAL_THROW( (RuntimeException) );
 
     // mode
-    enum mode { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
+    enum Mode { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
 
     PermissionCollection m_defaultPermissions;
     // for single-user mode
@@ -845,6 +845,8 @@ PermissionCollection AccessController::getEffectivePermissions(
 #endif
             break;
         }
+        default:
+            break;
         }
 
         // check postponed
@@ -1088,7 +1090,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue * time )
 }
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** ppEnvTypeName, uno_Environment ** ppEnv )
+    sal_Char const ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
