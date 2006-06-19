@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:52:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 #include <com/sun/star/reflection/XIdlField.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
+#include "com/sun/star/uno/TypeClass.hpp"
 
 #include "base.hxx"
 
@@ -194,8 +195,8 @@ FieldAccessMode IdlCompFieldImpl::getAccessMode()
 Any IdlCompFieldImpl::get( const Any & rObj )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    if (rObj.getValueTypeClass() == typelib_TypeClass_STRUCT ||
-        rObj.getValueTypeClass() == typelib_TypeClass_EXCEPTION)
+    if (rObj.getValueTypeClass() == com::sun::star::uno::TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == com::sun::star::uno::TypeClass_EXCEPTION)
     {
         typelib_TypeDescription * pObjTD = 0;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
@@ -210,8 +211,11 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
             Any aRet;
-            uno_any_destruct( &aRet, cpp_release );
-            uno_any_construct( &aRet, (char *)rObj.getValue() + _nOffset, getTypeDescr(), cpp_acquire );
+            uno_any_destruct(
+                &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
+            uno_any_construct(
+                &aRet, (char *)rObj.getValue() + _nOffset, getTypeDescr(),
+                reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
             return aRet;
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
@@ -219,14 +223,13 @@ Any IdlCompFieldImpl::get( const Any & rObj )
     throw IllegalArgumentException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
         (XWeak *)(OWeakObject *)this, 0 );
-    return Any(); // dummy
 }
 //__________________________________________________________________________________________________
 void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
-    if (rObj.getValueTypeClass() == typelib_TypeClass_STRUCT ||
-        rObj.getValueTypeClass() == typelib_TypeClass_EXCEPTION)
+    if (rObj.getValueTypeClass() == com::sun::star::uno::TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == com::sun::star::uno::TypeClass_EXCEPTION)
     {
         typelib_TypeDescription * pObjTD = 0;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
@@ -262,8 +265,8 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
 void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
-    if (rObj.getValueTypeClass() == typelib_TypeClass_STRUCT ||
-        rObj.getValueTypeClass() == typelib_TypeClass_EXCEPTION)
+    if (rObj.getValueTypeClass() == com::sun::star::uno::TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == com::sun::star::uno::TypeClass_EXCEPTION)
     {
         typelib_TypeDescription * pObjTD = 0;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
