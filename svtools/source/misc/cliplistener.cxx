@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cliplistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:14:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ TransferableClipboardListener::~TransferableClipboardListener()
 {
 }
 
-void SAL_CALL TransferableClipboardListener::disposing( const lang::EventObject& rEventObject )
+void SAL_CALL TransferableClipboardListener::disposing( const lang::EventObject& )
                                                         throw(uno::RuntimeException)
 {
 }
