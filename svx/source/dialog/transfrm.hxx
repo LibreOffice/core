@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:47:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,11 +107,6 @@ private:
     FixedText           maFtSizeReference;
     SvxRectCtl          maCtlSize;
 
-/*  // anchor
-    FixedLine           maAnchorBox;
-    FixedText           maFtAnchor;
-    ListBox             maDdLbAnchor;
-*/
     // protect
     FixedLine           maFlProtect;
     TriStateBox         maTsbPosProtect;
@@ -121,10 +116,6 @@ private:
     FixedLine           maFlAdjust;
     TriStateBox         maTsbAutoGrowWidth;
     TriStateBox         maTsbAutoGrowHeight;
-
-    // ???
-//  FixedText           maFtOrient;
-//  ListBox             maDdLbOrient;
 
     FixedLine           maFlDivider;
 
@@ -276,9 +267,6 @@ private:
     FieldUnit           eDlgUnit;
     MapUnit             eMapUnit;
     //------------------------------------
-#if _SOLAR__PRIVATE
-    DECL_LINK( ModifiedHdl, void * );
-#endif
 public:
          SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
