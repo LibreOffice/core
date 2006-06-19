@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabgrdt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:22:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ XGradientEntry* XGradientTable::Remove(long nIndex)
 
 /************************************************************************/
 
-XGradientEntry* XGradientTable::Get(long nIndex) const
+XGradientEntry* XGradientTable::GetGradient(long nIndex) const
 {
     return (XGradientEntry*) XPropertyTable::Get(nIndex, 0);
 }
@@ -157,7 +157,7 @@ BOOL XGradientTable::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XGradientTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -319,7 +319,7 @@ XGradientEntry* XGradientList::Remove(long nIndex)
 
 /************************************************************************/
 
-XGradientEntry* XGradientList::Get(long nIndex) const
+XGradientEntry* XGradientList::GetGradient(long nIndex) const
 {
     return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
 }
@@ -497,8 +497,7 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, BOOL bDelete )
     }
 
     pXFSet->GetItemSet().Put(
-        XFillGradientItem( pXPool, Get( nIndex )->GetGradient() ) );
-//-/    pXOut->SetFillAttr( *pXFSet );
+    XFillGradientItem( pXPool, GetGradient( nIndex )->GetGradient() ) );
     pXOut->SetFillAttr( pXFSet->GetItemSet() );
 
     // #73550#
