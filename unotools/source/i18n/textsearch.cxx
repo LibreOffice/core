@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:30:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,6 @@
 #include <unotools/textsearch.hxx>
 #endif
 
-#pragma hdrstop
-
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -118,7 +116,7 @@ SearchParam::SearchParam( const SearchParam& rParam )
 //  ( Die Unterscheidung der Gross/Klein-Schreibung kann mit einen Flag
 //  unterdrueckt werden )
 
-TextSearch::TextSearch(const SearchParam & rParam, ULONG eLang )
+TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
 {
     if( LANGUAGE_NONE == eLang )
         eLang = LANGUAGE_SYSTEM;
@@ -235,7 +233,9 @@ TextSearch::~TextSearch()
  * Methoden fuer die normale Suche oder der Suche nach Regular-Expressions
  * ueber die MethodenPointer auf.
  */
+#if ! defined(__GNUC__)
 #pragma optimize("", off)
+#endif
 int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
                             xub_StrLen* pEnde, SearchResult* pRes )
 {
@@ -298,7 +298,9 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
+#if ! defined(__GNUC__)
 #pragma optimize("", on)
+#endif
 
 // ............................................................................
 }   // namespace utl
