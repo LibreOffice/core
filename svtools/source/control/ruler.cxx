@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:59:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include <vcl/i18nhelp.hxx>
 
 #define _SV_RULER_CXX
-#define private public
 #include <ruler.hxx>
 
 // =======================================================================
@@ -328,8 +327,8 @@ Ruler::Ruler( Window* pParent, WinBits nWinStyle ) :
     maVirDev( *this ),
     maMapMode( MAP_100TH_MM ),
     mpSaveData(new ImplRulerData),
-    mpDragData(new ImplRulerData),
-    mpData(0)
+    mpData(0),
+    mpDragData(new ImplRulerData)
 {
     ImplInit( nWinStyle );
 }
@@ -549,7 +548,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     {
         long nTxtWidth2;
         long nTxtHeight2 = GetTextHeight()/2;
-        bool bBreak = true;
         while ( ((nStart-n) >= nMin) || ((nStart+n) <= nMax) )
         {
             // Null-Punkt
@@ -566,8 +564,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                             nX = nStart-nTxtWidth2;
                         else
                             nX = nStart+nTxtWidth2;
-                        long nY = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
-                        ImplVDrawText( nX, nY, aNumStr );
+                        long n_Y = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
+                        ImplVDrawText( nX, n_Y, aNumStr );
                     }
                 }
             }
@@ -937,21 +935,21 @@ void Ruler::ImplDrawIndent( const Polygon& rPoly, USHORT nStyle )
 
 void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom )
 {
-    USHORT  i;
+    USHORT  j;
     long    n;
     long    nIndentHeight = (mnVirHeight/2) - 1;
     long    nIndentWidth2 = nIndentHeight-3;
     Polygon aPoly( 5 );
 
-    for ( i = 0; i < mpData->nIndents; i++ )
+    for ( j = 0; j < mpData->nIndents; j++ )
     {
-        if ( mpData->pIndents[i].nStyle & RULER_STYLE_INVISIBLE )
+        if ( mpData->pIndents[j].nStyle & RULER_STYLE_INVISIBLE )
             continue;
 
-        USHORT  nStyle = mpData->pIndents[i].nStyle;
+        USHORT  nStyle = mpData->pIndents[j].nStyle;
         USHORT  nIndentStyle = nStyle & RULER_INDENT_STYLE;
 
-        n = mpData->pIndents[i].nPos+mpData->nNullVirOff;
+        n = mpData->pIndents[j].nPos+mpData->nNullVirOff;
 
         if ( (n >= nMin) && (n <= nMax) )
         {
