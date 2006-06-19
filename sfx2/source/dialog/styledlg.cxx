@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:39:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 */
 
 {
+    (void)pButton; //unused
     SfxTabPage* pPage = GetTabPage( ID_TABPAGE_MANAGESTYLES );
 
     const SfxItemSet* pInSet = GetInputSetImpl();
