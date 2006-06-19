@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_selem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:49:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:07:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,14 +147,11 @@ PE_StructElement::Process_Identifier( const TokIdentifier & i_rToken )
 }
 
 void
-PE_StructElement::Process_Punctuation( const TokPunctuation & i_rToken )
+PE_StructElement::Process_Punctuation( const TokPunctuation &)
 {
-    if (eState == expect_finish)
-    {
-        SetResult( done, pop_success );
-    }
-    else
-        csv_assert(false);
+    csv_assert(eState == expect_finish);
+
+    SetResult( done, pop_success );
 }
 
 void
