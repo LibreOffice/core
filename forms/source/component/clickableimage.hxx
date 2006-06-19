@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:09:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ namespace frm
 //.........................................................................
 
     class OImageProducerThread_Impl;
-    class SubmissionVetoListeners;
     class ControlFeatureInterception;
     //==================================================================
     // OClickableImageBaseModel
@@ -146,28 +145,30 @@ namespace frm
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
-    // OComponentHelper
+        // OComponentHelper
         virtual void SAL_CALL disposing();
 
-    // ::com::sun::star::form::XImageProducerSupplier
+        // ::com::sun::star::form::XImageProducerSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer> SAL_CALL getImageProducer() throw (::com::sun::star::uno::RuntimeException) { return m_xProducer; }
 
-    // OPropertySetHelper
+        // OPropertySetHelper
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
 
         virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
             throw(::com::sun::star::lang::IllegalArgumentException);
 
-    // OPropertyChangeListener
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
+
+        // OPropertyChangeListener
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent&) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::beans::XPropertyState
+        // XPropertyState
         virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
         virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
-    // XImageProducer
+        // XImageProducer
         virtual void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -178,6 +179,9 @@ namespace frm
 
         // XServiceInfo
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XEventListener
+        using OControlModel::disposing;
 
     public:
         struct GuardAccess { friend class ImageModelMethodGuard; private: GuardAccess() { } };
@@ -225,11 +229,10 @@ namespace frm
         friend class OImageProducerThread_Impl;
 
     private:
-        OImageProducerThread_Impl*  m_pThread;
-        ::std::auto_ptr< SubmissionVetoListeners >
-                                    m_pSubmissionVetoListeners;
+        OImageProducerThread_Impl*          m_pThread;
+        ::cppu::OInterfaceContainerHelper   m_aSubmissionVetoListeners;
         ::std::auto_ptr< ControlFeatureInterception >
-                                    m_pFeatureInterception;
+                                            m_pFeatureInterception;
 
     protected:
         ::cppu::OInterfaceContainerHelper m_aApproveActionListeners;
@@ -244,6 +247,9 @@ namespace frm
 
         // XServiceInfo
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XEventListener
+        using OControl::disposing;
 
     public:
         OClickableImageBaseControl(
@@ -318,6 +324,9 @@ namespace frm
         {}
 
         void addEvent() { ::com::sun::star::lang::EventObject aEvt; OComponentEventThread::addEvent( &aEvt ); }
+
+    protected:
+        using OComponentEventThread::addEvent;
     };
 
 //.........................................................................
