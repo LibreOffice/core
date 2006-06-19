@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:41:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,7 +479,7 @@ main()
                 { "vnd.sun.star.help://swriter?foo",
                   "vnd.sun.star.help://swriter/?foo" },
                 { "vnd.sun.star.help://swriter/?foo", 0 } };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].in);
             if (aUrl.HasError())
@@ -511,7 +511,7 @@ main()
                 /*TODO "wfs:///c|/xyz/",*/
                 /*TODO "wfs://xxx/yyy?zzz",*/
                 /*TODO "wfs:///x/y/z"*/ };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -538,7 +538,7 @@ main()
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx",
                 /*TODO "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx;yy",*/
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx//yy" };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -563,7 +563,7 @@ main()
                 "vnd.sun.star.cmd:log/out",
                 /*TODO "vnd.sun.star.cmd:[logout]",*/
                 "vnd.sun.star.cmd:log[out]" };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -1169,7 +1169,7 @@ main()
                   "http://[0:0:0:0:0:0:13.1.68.3]/" },
                 { "http://[0:0:0:0:0:FFFF:129.144.52.38]/",
                   "http://[0:0:0:0:0:ffff:129.144.52.38]/" } };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
             if (aTest[i].m_pOutput == 0
@@ -1199,7 +1199,7 @@ main()
         static Test const aTest[]
             = { { "file://d:\\dir1\\file1", "file:///d:/dir1/file1" },
                 { "http://as@alaska:8000/test/test.sxw", 0 } };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl = INetURLObject(
                 String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
@@ -1271,7 +1271,7 @@ main()
 
         aUrl = INetURLObject("vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F");
         if (aUrl.GetProtocol() != INET_PROT_VND_SUN_STAR_PKG)
-            printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F>:"
+            printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c%%3Fabc/def%%3F>:"
                    " scheme = %d\n",
                    static_cast< int >(aUrl.GetProtocol()));
         else
@@ -1287,7 +1287,7 @@ main()
                            RTL_TEXTENCODING_UTF8).getStr());
             if (!rtl::OUString(aUrl.GetParam(INetURLObject::NO_DECODE)).
                 equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")))
-                printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F>:"
+                printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c%%3Fabc/def%%3F>:"
                        " query = %s\n",
                        rtl::OUStringToOString(
                            aUrl.GetParam(INetURLObject::NO_DECODE),
@@ -1328,7 +1328,7 @@ main()
                 { INET_PROT_NEWS, "abc@def.ghi@", 0 },
                 { INET_PROT_NEWS, "!\"#@def", "news:!%22%23@def" },
                 { INET_PROT_NEWS, " @def", "news:%20@def" } };
-        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUri;
             bool bOk = aUri.ConcatData(aTest[i].eScheme, String(), String(),
@@ -1401,20 +1401,20 @@ main()
     if (true) { // #112130#
         INetURLObject url1(rtl::OUString::createFromAscii(".uno:abc%3Fdef"));
         if (url1.GetProtocol() != INET_PROT_UNO) {
-            printf("BAD .uno:abc%3Fdef\n");
+            printf("BAD .uno:abc%%3Fdef\n");
             bSuccess = false;
         }
         if (!rtl::OUString(url1.GetURLPath(INetURLObject::NO_DECODE)).
                 equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc%3Fdef"))) {
             printf(
-                "BAD GetURLPath(.uno:abc%3Fdef): %s\n",
+                "BAD GetURLPath(.uno:abc%%3Fdef): %s\n",
                 rtl::OUStringToOString(
                     url1.GetURLPath(INetURLObject::NO_DECODE),
                     osl_getThreadTextEncoding()).getStr());
             bSuccess = false;
         }
         if (url1.HasParam()) {
-            printf("BAD HasParam(.uno:abc%3Fdef)\n");
+            printf("BAD HasParam(.uno:abc%%3Fdef)\n");
             bSuccess = false;
         }
         INetURLObject url2(rtl::OUString::createFromAscii(".uno:abc?def?ghi"));
