@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 15:01:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
 #endif
@@ -42,9 +40,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
-//#include <tools/debug.hxx>
-//#include <editeng.hxx>
 
 #include <unoshtxt.hxx>
 #include <unoedhlp.hxx>
@@ -383,7 +378,7 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 
 //------------------------------------------------------------------------
 
-void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
     const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
@@ -475,12 +470,14 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case HINT_MODELCLEARED:
                 dispose();
                 break;
+            default:
+                break;
         }
     }
 }
 
 /* this is a callback from the attached SdrObject when it is actually deleted */
-void SvxTextEditSourceImpl::ObjectInDestruction(const SdrObject& rObject)
+void SvxTextEditSourceImpl::ObjectInDestruction(const SdrObject&)
 {
     mpObject = 0;
     dispose();
