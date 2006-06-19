@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ void TEParaPortion::MarkInvalid( USHORT nStart, short nDiff )
     mbInvalid = TRUE;
 }
 
-void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
+void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /*nEnd*/ )
 {
     if ( mbInvalid == FALSE )
     {
@@ -323,12 +323,12 @@ void IdleFormatter::ForceTimeout()
 
 TYPEINIT1( TextHint, SfxSimpleHint );
 
-TextHint::TextHint( ULONG nId ) : SfxSimpleHint( nId )
+TextHint::TextHint( ULONG Id ) : SfxSimpleHint( Id )
 {
     mnValue = 0;
 }
 
-TextHint::TextHint( ULONG nId, ULONG nValue ) : SfxSimpleHint( nId )
+TextHint::TextHint( ULONG Id, ULONG nValue ) : SfxSimpleHint( Id )
 {
     mnValue = nValue;
 }
