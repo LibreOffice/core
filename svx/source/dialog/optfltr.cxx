@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:56:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,18 +145,18 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
     aCheckLB            ( this, ResId( CLB_SETTINGS )),
     aHeader1FT          ( this, ResId( FT_HEADER1_EXPLANATION )),
     aHeader2FT          ( this, ResId( FT_HEADER2_EXPLANATION )),
-    sHeader1            ( ResId( ST_HEADER1 )),
-    sHeader2            ( ResId( ST_HEADER2 )),
-    sChgToFromMath      ( ResId( ST_CHG_MATH    )),
-    sChgToFromWriter    ( ResId( ST_CHG_WRITER )),
-    sChgToFromCalc      ( ResId( ST_CHG_CALC )),
-    sChgToFromImpress   ( ResId( ST_CHG_IMPRESS )),
     aChkunBmp           ( ResId( CHKBUT_UNCHECKED )),
     aChkchBmp           ( ResId( CHKBUT_CHECKED )),
     aChkchhiBmp         ( ResId( CHKBUT_HICHECKED )),
     aChkunhiBmp         ( ResId( CHKBUT_HIUNCHECKED )),
     aChktriBmp          ( ResId( CHKBUT_TRISTATE    )),
     aChktrihiBmp        ( ResId( CHKBUT_HITRISTATE )),
+    sHeader1            ( ResId( ST_HEADER1 )),
+    sHeader2            ( ResId( ST_HEADER2 )),
+    sChgToFromMath      ( ResId( ST_CHG_MATH    )),
+    sChgToFromWriter    ( ResId( ST_CHG_WRITER )),
+    sChgToFromCalc      ( ResId( ST_CHG_CALC )),
+    sChgToFromImpress   ( ResId( ST_CHG_IMPRESS )),
     pCheckButtonData(0)
 {
     FreeResource();
@@ -184,7 +184,7 @@ SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
     return new OfaMSFilterTabPage2( pParent, rAttrSet );
 }
 
-BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& rSet )
+BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 {
     BOOL bModified = FALSE;
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
@@ -240,7 +240,7 @@ BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& rSet )
     return TRUE;
 }
 
-void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
+void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 {
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
 
@@ -309,7 +309,7 @@ void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
     pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
 
     pEntry->SetUserData( (void*)_nType );
-    aCheckLB.InsertEntry( pEntry );
+    aCheckLB.Insert( pEntry );
 }
 
 SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
