@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 14:22:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,10 +239,10 @@ List Gallery::aGalleryCache;
 // - Gallery -
 // -----------
 
-Gallery::Gallery( const String& rMultiPath ) :
-        bMultiPath          ( FALSE ),
-        nReadTextEncoding   ( gsl_getSystemTextEncoding() ),
-        nLastFileNumber     ( 0 )
+Gallery::Gallery( const String& rMultiPath )
+:       nReadTextEncoding   ( gsl_getSystemTextEncoding() )
+,       nLastFileNumber     ( 0 )
+,       bMultiPath          ( FALSE )
 {
     ImplLoad( rMultiPath );
 }
