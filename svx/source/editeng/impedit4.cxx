@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:49:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#pragma hdrstop
 
 #include <srchitem.hxx>
 #include <lspcitem.hxx>
