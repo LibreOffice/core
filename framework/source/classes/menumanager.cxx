@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:13:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:14:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,9 +217,9 @@ MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :   // #110897#
-    mxServiceFactory(xServiceFactory),
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    OWeakObject()
+    OWeakObject(),
+    mxServiceFactory(xServiceFactory)
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -276,17 +276,17 @@ MenuManager::MenuManager(
             {
                 // #110897#
                 // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
-                MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+                MenuManager* pSubMenuMgr = new MenuManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
                 // store menu item command as we later have to know which menu is active (see Activate handler)
-                pSubMenuManager->m_aMenuItemCommand = aItemCommand;
+                pSubMenuMgr->m_aMenuItemCommand = aItemCommand;
 
-                REFERENCE< XDISPATCH > aXDispatchRef;
-                MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                REFERENCE< XDISPATCH > aXDispRef;
+                MenuItemHandler* pMenuItemHdl = new MenuItemHandler(
                                                             nItemId,
-                                                            pSubMenuManager,
-                                                            aXDispatchRef );
-                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+                                                            pSubMenuMgr,
+                                                            aXDispRef );
+                m_aMenuItemHandlerVector.push_back( pMenuItemHdl );
 
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                     aQueryLabelItemIdVector.push_back( nItemId );
@@ -481,9 +481,9 @@ MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :   // #110897#
-    mxServiceFactory(xServiceFactory),
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    OWeakObject()
+    OWeakObject(),
+    mxServiceFactory(xServiceFactory)
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -559,9 +559,9 @@ MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :   // #110897#
-    mxServiceFactory(xServiceFactory),
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    OWeakObject()
+    OWeakObject(),
+    mxServiceFactory(xServiceFactory)
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -637,9 +637,9 @@ MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     REFERENCE< XFRAME >& rFrame, AddonPopupMenu* pAddonPopupMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :   // #110897#
-    mxServiceFactory(xServiceFactory),
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    OWeakObject()
+    OWeakObject(),
+    mxServiceFactory(xServiceFactory)
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -778,7 +778,7 @@ throw ( RuntimeException )
 
     if ( pStatusChangedMenu )
     {
-        OGuard  aGuard( Application::GetSolarMutex() );
+        OGuard  aSolarGuard( Application::GetSolarMutex() );
         {
             ResetableGuard aGuard( m_aLock );
 
@@ -1143,7 +1143,6 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
     {
         ResetableGuard aGuard( m_aLock );
 
-        int nRemoveItemCount = 0;
         int nItemCount       = pMenu->GetItemCount();
 
         if ( nItemCount > 0 )
@@ -1406,8 +1405,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                 Reference< XFramesSupplier > xDesktop( getServiceFactory()->createInstance(
                     DESKTOP_SERVICE ), UNO_QUERY );
 
-                USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
-
                 if ( xDesktop.is() )
                 {
                     USHORT nTaskId = START_ITEMID_WINDOWLIST;
@@ -1473,7 +1470,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 }
 
 
-IMPL_LINK( MenuManager, Highlight, Menu *, pMenu )
+IMPL_LINK( MenuManager, Highlight, Menu *, EMPTYARG )
 {
     return 0;
 }
