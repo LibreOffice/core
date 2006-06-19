@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:19:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:44:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,18 @@
 #ifndef _STREAM_HXX
 #include <stream.hxx>
 #endif
+#ifndef _TOOLS_RC_HXX
+#include <rc.hxx>
+#endif
+#ifndef _TOOLS_RCID_H
+#include <rcid.h>
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <resid.hxx>
+#endif
+#ifndef _SV_RC_H
+#include <rc.h>
+#endif
 
 // -----------
 // - Inlines -
@@ -62,6 +74,33 @@ static inline long _FRound( double fVal )
 // - Color -
 // ---------
 
+Color::Color( const ResId& rResId )
+{
+    rResId.SetRT( RSC_COLOR );
+    ResMgr* pResMgr = rResId.GetResMgr();
+    if ( !pResMgr )
+        pResMgr = Resource::GetResManager();
+
+    if ( pResMgr->GetResource( rResId ) )
+    {
+        // Header ueberspringen
+        pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
+
+        // Daten laden
+        USHORT nRed     = pResMgr->ReadShort();
+        USHORT nGreen   = pResMgr->ReadShort();
+        USHORT nBlue    = pResMgr->ReadShort();
+        // one more historical ULONG
+        pResMgr->ReadLong();
+
+        // RGB-Farbe
+        mnColor = RGB_COLORDATA( nRed>>8, nGreen>>8, nBlue>>8 );
+    }
+    else
+    {
+        mnColor = RGB_COLORDATA( 0, 0, 0 );
+    }
+}
 UINT8 Color::GetColorError( const Color& rCompareColor ) const
 {
     const long nErrAbs = labs( (long) rCompareColor.GetRed() - GetRed() ) +
