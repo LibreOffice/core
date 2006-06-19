@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdstrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:59:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:26:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ public:
 private:
     String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
 
-//  CmdBaseStream::Write;
+    using CmdBaseStream::Write;
     void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
     void Write( const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
