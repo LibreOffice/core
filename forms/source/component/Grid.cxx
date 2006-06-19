@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:22:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #ifndef _FRM_COLUMNS_HXX
 #include "Columns.hxx"
 #endif
+#include "findpos.hxx"
 
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -81,38 +82,6 @@
 
 using namespace ::com::sun::star::uno;
 
-// TODO : find a place for this !
-namespace internal
-{
-//------------------------------------------------------------------
-// Vergleichen von Strings
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    NameCompare(const void* pFirst, const void* pSecond)
-{
-    return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
-}
-
-//------------------------------------------------------------------
-sal_Int32 findPos(const ::rtl::OUString& aStr, const StringSequence& rList)
-{
-    const ::rtl::OUString* pStrList = rList.getConstArray();
-    ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
-        &NameCompare);
-
-    if (pResult)
-        return (pResult - pStrList);
-    else
-        return -1;
-}
-
-} // namespace internal
-
 //.........................................................................
 namespace frm
 {
@@ -150,20 +119,20 @@ InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiSer
 DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
 OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OControlModel(_rxFactory, ::rtl::OUString())
-                    ,FontControlModel( false )
-                    ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
-                    ,OErrorBroadcaster( OComponentHelper::rBHelper )
-                    ,m_aSelectListeners(m_aMutex)
-                    ,m_aResetListeners(m_aMutex)
-                    ,m_aDefaultControl( FRM_SUN_CONTROL_GRIDCONTROL )
-                    ,m_bEnable(sal_True)
-                    ,m_bNavigation(sal_True)
-                    ,m_nBorder(1)
-                    ,m_bRecordMarker(sal_True)
-                    ,m_bPrintable(sal_True)
-                    ,m_bAlwaysShowCursor(sal_False)
-                    ,m_bDisplaySynchron(sal_True)
+    :OControlModel(_rxFactory, ::rtl::OUString())
+    ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,FontControlModel( false )
+    ,m_aSelectListeners(m_aMutex)
+    ,m_aResetListeners(m_aMutex)
+    ,m_aDefaultControl( FRM_SUN_CONTROL_GRIDCONTROL )
+    ,m_nBorder(1)
+    ,m_bEnable(sal_True)
+    ,m_bNavigation(sal_True)
+    ,m_bRecordMarker(sal_True)
+    ,m_bPrintable(sal_True)
+    ,m_bAlwaysShowCursor(sal_False)
+    ,m_bDisplaySynchron(sal_True)
 {
     DBG_CTOR(OGridControlModel,NULL);
 
@@ -390,7 +359,7 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const ::rtl::OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     const Sequence< ::rtl::OUString >& rColumnTypes = frm::getColumnTypes();
-    return createColumn(::internal::findPos(ColumnType, rColumnTypes));
+    return createColumn( detail::findPos( ColumnType, rColumnTypes ) );
 }
 
 //------------------------------------------------------------------------------
@@ -1203,8 +1172,8 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 
     if (nAnyMask & FONTDESCRIPTOR)
     {
-        FontDescriptor aFont;
-        _rxInStream >> aFont;
+        FontDescriptor aUNOFont;
+        _rxInStream >> aUNOFont;
         setFont( aFont );
     }
 
