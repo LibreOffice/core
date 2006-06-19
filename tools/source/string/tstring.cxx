@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tstring.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:53:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #include <string.h>
 
+#include "boost/static_assert.hpp"
+
 #include "osl/diagnose.h"
 #ifndef _OSL_INTERLCK_H
 #include <osl/interlck.h>
@@ -52,9 +54,7 @@
 #include <rtl/instance.hxx>
 #endif
 
-#define private public
 #include <string.hxx>
-#undef private
 #include <impstrg.hxx>
 
 // For shared byte convert tables
@@ -66,12 +66,13 @@
 
 // =======================================================================
 
-DBG_NAME( ByteString );
-DBG_NAMEEX( UniString );
+DBG_NAME( ByteString )
+DBG_NAMEEX( UniString )
 
 // -----------------------------------------------------------------------
 
 #define STRCODE         sal_Char
+#define STRCODEU        unsigned char
 #define STRING          ByteString
 #define STRINGDATA      ByteStringData
 #define DBGCHECKSTRING  DbgCheckByteString
@@ -111,7 +112,10 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 ByteString ByteString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 {
     sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
-    return ByteString( aBuf, rtl_str_valueOfInt32( aBuf, n, nRadix ) );
+    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFINT32 <= STRING_MAXLEN);
+    return ByteString(
+        aBuf,
+        static_cast< xub_StrLen >(rtl_str_valueOfInt32( aBuf, n, nRadix )) );
 }
 
 // -----------------------------------------------------------------------
@@ -119,7 +123,10 @@ ByteString ByteString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 ByteString ByteString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 {
     sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
-    return ByteString( aBuf, rtl_str_valueOfInt64( aBuf, n, nRadix ) );
+    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFINT64 <= STRING_MAXLEN);
+    return ByteString(
+        aBuf,
+        static_cast< xub_StrLen >(rtl_str_valueOfInt64( aBuf, n, nRadix )) );
 }
 
 // -----------------------------------------------------------------------
@@ -127,7 +134,9 @@ ByteString ByteString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 ByteString ByteString::CreateFromFloat( float f )
 {
     sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
-    return ByteString( aBuf, rtl_str_valueOfFloat( aBuf, f ) );
+    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFFLOAT <= STRING_MAXLEN);
+    return ByteString(
+        aBuf, static_cast< xub_StrLen >(rtl_str_valueOfFloat( aBuf, f )) );
 }
 
 // -----------------------------------------------------------------------
@@ -135,7 +144,9 @@ ByteString ByteString::CreateFromFloat( float f )
 ByteString ByteString::CreateFromDouble( double d )
 {
     sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-    return ByteString( aBuf, rtl_str_valueOfDouble( aBuf, d ) );
+    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFDOUBLE <= STRING_MAXLEN);
+    return ByteString(
+        aBuf, static_cast< xub_StrLen >(rtl_str_valueOfDouble( aBuf, d )) );
 }
 
 // -----------------------------------------------------------------------
@@ -190,8 +201,8 @@ BOOL ByteString::IsLowerAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    xub_StrLen      nIndex = 0;
-    xub_StrLen      nLen = mpData->mnLen;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLen = mpData->mnLen;
     const sal_Char* pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
@@ -211,8 +222,8 @@ BOOL ByteString::IsUpperAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    xub_StrLen      nIndex = 0;
-    xub_StrLen      nLen = mpData->mnLen;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLen = mpData->mnLen;
     const sal_Char* pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
@@ -232,8 +243,8 @@ BOOL ByteString::IsAlphaAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    xub_StrLen      nIndex = 0;
-    xub_StrLen      nLen = mpData->mnLen;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLen = mpData->mnLen;
     const sal_Char* pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
@@ -254,8 +265,8 @@ BOOL ByteString::IsNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    xub_StrLen      nIndex = 0;
-    xub_StrLen      nLen = mpData->mnLen;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLen = mpData->mnLen;
     const sal_Char* pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
@@ -275,8 +286,8 @@ BOOL ByteString::IsAlphaNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    xub_StrLen      nIndex = 0;
-    xub_StrLen      nLen = mpData->mnLen;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLen = mpData->mnLen;
     const sal_Char* pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
