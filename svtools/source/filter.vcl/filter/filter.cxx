@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:22:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,7 @@
 #include "solar.hrc"
 #include "strings.hrc"
 #include "sgffilt.hxx"
-#ifndef _VOS_MODULE_HXX_
-#include "vos/module.hxx"
-#endif
+#include "osl/module.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -905,9 +903,9 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
                 if( aNewSize.Width() && aNewSize.Height() )
                 {
-                    const Size aPrefSize( aMtf.GetPrefSize() );
-                    aMtf.Scale( Fraction( aNewSize.Width(), aPrefSize.Width() ),
-                                Fraction( aNewSize.Height(), aPrefSize.Height() ) );
+                    const Size aPreferredSize( aMtf.GetPrefSize() );
+                    aMtf.Scale( Fraction( aNewSize.Width(), aPreferredSize.Width() ),
+                                Fraction( aNewSize.Height(), aPreferredSize.Height() ) );
                 }
                 aGraphic = Graphic( aMtf );
             }
@@ -948,7 +946,7 @@ class ImpFilterLibCache;
 struct ImpFilterLibCacheEntry
 {
     ImpFilterLibCacheEntry* mpNext;
-    ::vos::OModule          maLibrary;
+    osl::Module             maLibrary;
     String                  maFiltername;
     PFilterCall             mpfnImport;
     PFilterDlgCall          mpfnImportDlg;
@@ -958,8 +956,8 @@ struct ImpFilterLibCacheEntry
 
     PFilterCall             GetImportFunction();
     PFilterDlgCall          GetImportDlgFunction();
-    PFilterCall             GetExportFunction() { return (PFilterCall) maLibrary.getSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) ); }
-    PFilterDlgCall          GetExportDlgFunction() { return (PFilterDlgCall) maLibrary.getSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) ); }
+    PFilterCall             GetExportFunction() { return (PFilterCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) ); }
+    PFilterDlgCall          GetExportDlgFunction() { return (PFilterDlgCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) ); }
 };
 
 // ------------------------------------------------------------------------
@@ -978,7 +976,7 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const String& rPathname, const S
 PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 {
     if( !mpfnImport )
-        mpfnImport = (PFilterCall) maLibrary.getSymbol( UniString::CreateFromAscii( IMPORT_FUNCTION_NAME ) );
+        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( IMPORT_FUNCTION_NAME ) );
 
     return mpfnImport;
 }
@@ -988,7 +986,7 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 PFilterDlgCall ImpFilterLibCacheEntry::GetImportDlgFunction()
 {
     if( !mpfnImportDlg )
-        mpfnImportDlg = (PFilterDlgCall)maLibrary.getSymbol( UniString::CreateFromAscii( IMPDLG_FUNCTION_NAME ) );
+        mpfnImportDlg = (PFilterDlgCall)maLibrary.getFunctionSymbol( UniString::CreateFromAscii( IMPDLG_FUNCTION_NAME ) );
 
     return mpfnImportDlg;
 }
@@ -1048,7 +1046,7 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath,
         String aPhysicalName( ImpCreateFullFilterPath( rFilterPath, rFilterName ) );
         pEntry = new ImpFilterLibCacheEntry( aPhysicalName, rFilterName );
 
-        if ( pEntry->maLibrary.isLoaded() )
+        if ( pEntry->maLibrary.is() )
         {
             if( !mpFirst )
                 mpFirst = mpLast = pEntry;
@@ -1198,7 +1196,7 @@ String GraphicFilter::GetImportFormatShortName( USHORT nFormat )
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportOSFileType( USHORT nFormat )
+String GraphicFilter::GetImportOSFileType( USHORT )
 {
     String aOSFileType;
     return aOSFileType;
@@ -1283,7 +1281,7 @@ String GraphicFilter::GetExportFormatShortName( USHORT nFormat )
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportOSFileType( USHORT nFormat )
+String GraphicFilter::GetExportOSFileType( USHORT )
 {
     String aOSFileType;
     return aOSFileType;
@@ -1742,7 +1740,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
 // SJ: bIgnoreOptions is not used anymore
 
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
-    SvStream& rOStm, sal_uInt16 nFormat, sal_Bool bIgnoreOptions,
+    SvStream& rOStm, sal_uInt16 nFormat, sal_Bool,
         const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
     USHORT nFormatCount = GetExportFormatCount();
@@ -2057,9 +2055,9 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             for ( i = 0; i < nTokenCount; i++ )
             {
                 String aPhysicalName( ImpCreateFullFilterPath( aFilterPath.GetToken( i ), aFilterName ) );
-                ::vos::OModule aLibrary( aPhysicalName );
+                osl::Module aLibrary( aPhysicalName );
 
-                PFilterCall pFunc = (PFilterCall) aLibrary.getSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
+                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
                 // Dialog in DLL ausfuehren
                 if( pFunc )
                 {
@@ -2092,7 +2090,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
 
 // ------------------------------------------------------------------------
 
-BOOL GraphicFilter::Setup( USHORT nFormat )
+BOOL GraphicFilter::Setup( USHORT )
 {
     return FALSE;
 }
@@ -2101,7 +2099,7 @@ BOOL GraphicFilter::Setup( USHORT nFormat )
     No Import filter has a dialog, so
    the following two methods are obsolete */
 
-BOOL GraphicFilter::HasImportDialog( USHORT nFormat )
+BOOL GraphicFilter::HasImportDialog( USHORT )
 {
     return sal_True;
 //  return pConfig->IsImportDialog( nFormat );
@@ -2109,7 +2107,7 @@ BOOL GraphicFilter::HasImportDialog( USHORT nFormat )
 
 // ------------------------------------------------------------------------
 
-BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
+BOOL GraphicFilter::DoImportDialog( Window*, USHORT )
 {
     return sal_True;
 }
@@ -2128,7 +2126,7 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat )
     return DoExportDialog( pWindow, nFormat, FUNIT_MM );
 }
 
-BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit eFieldUnit )
+BOOL GraphicFilter::DoExportDialog( Window*, USHORT nFormat, FieldUnit )
 {
     sal_Bool bRet = sal_False;
      com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
