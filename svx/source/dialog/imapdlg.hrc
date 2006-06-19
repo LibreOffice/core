@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:20:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@
 #define MN_MOREBACK             5
 #define MN_FRAME_TO_BOTTOM      6
 #define MN_MARK_ALL             7
-#define MN_DELETE               8
+#define MN_DELETE1              8
 #define MN_ACTIVATE             9
 #define MN_MACRO                10
 
@@ -111,7 +111,7 @@
 #define EDT_URL                 2
 #define EDT_NAME                3
 #define BTN_OK                  1
-#define BTN_CANCEL              2
+#define BTN_CANCEL1             2
 #define FL_URL                  1
 #define CBB_TARGETS             1
 
