@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupBox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,10 +130,9 @@ void OGroupBoxModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 0, OControlModel )
-        // don't want to have the TabStop property
-        RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
-    END_DESCRIBE_PROPERTIES();
+    OControlModel::fillProperties( _rProps, _rAggregateProps );
+    // don't want to have the TabStop property
+    RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
 }
 
 //------------------------------------------------------------------------------
