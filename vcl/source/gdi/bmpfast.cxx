@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpfast.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:43:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,9 @@ inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
         nS = rSrc.GetBlue();
         nB = nS + (((nB - nS) * nAlphaVal) >> nAlphaShift);
 
-        rDst.SetColor( nR, nG, nB );
+        rDst.SetColor( sal::static_int_cast<PIXBYTE>(nR),
+                       sal::static_int_cast<PIXBYTE>(nG),
+                       sal::static_int_cast<PIXBYTE>(nB) );
     }
 }
 
@@ -466,7 +468,7 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
 // -----------------------------------------------------------------------
 
 template <ULONG DSTFMT,ULONG SRCFMT>
-static bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
+bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
     // help the compiler to avoid instantiations of unneeded conversions
@@ -547,8 +549,11 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     static int nNotAccelerated = 0;
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
         if( ++nNotAccelerated == 100 )
+        {
+            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
             DBG_WARNING2( "ImplConvertFromBitmap for not accelerated case (0x%04X->0x%04X)",
                 rSrc.mnFormat, rDst.mnFormat );
+        }
 #endif
 
     return false;
@@ -663,9 +668,13 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 #ifdef DEBUG
     static int nNotAccelerated = 0;
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
+    {
         if( ++nNotAccelerated == 100 )
-            DBG_WARNING2( "ImplFastBitmapConversion for not accelerated case (0x%04X->0x%04X)",
-                rSrc.mnFormat, rDst.mnFormat );
+        {
+            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
+            DBG_WARNING2( "ImplFastBitmapConversion for not accelerated case (0x%04X->0x%04X)", rSrc.mnFormat, rDst.mnFormat );
+        }
+    }
 #endif
 
     return false;
@@ -674,7 +683,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 // =======================================================================
 
 template <ULONG DSTFMT,ULONG SRCFMT> //,ULONG MSKFMT>
-static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
+bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
@@ -720,7 +729,7 @@ static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
 // some specializations to reduce the code size
 template <>
 inline bool ImplBlendToBitmap<BMP_FORMAT_24BIT_TC_BGR,BMP_FORMAT_24BIT_TC_BGR>(
-    TrueColorPixelPtr<BMP_FORMAT_24BIT_TC_BGR>& rSrcLine,
+    TrueColorPixelPtr<BMP_FORMAT_24BIT_TC_BGR>&,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
  {
@@ -730,7 +739,7 @@ inline bool ImplBlendToBitmap<BMP_FORMAT_24BIT_TC_BGR,BMP_FORMAT_24BIT_TC_BGR>(
 
 template <>
 inline bool ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_ABGR,BMP_FORMAT_32BIT_TC_ABGR>(
-    TrueColorPixelPtr<BMP_FORMAT_32BIT_TC_ABGR>& rSrcLine,
+    TrueColorPixelPtr<BMP_FORMAT_32BIT_TC_ABGR>&,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
  {
@@ -740,7 +749,7 @@ inline bool ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_ABGR,BMP_FORMAT_32BIT_TC_ABGR>
 
 template <>
 inline bool ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_BGRA,BMP_FORMAT_32BIT_TC_BGRA>(
-    TrueColorPixelPtr<BMP_FORMAT_32BIT_TC_BGRA>& rSrcLine,
+    TrueColorPixelPtr<BMP_FORMAT_32BIT_TC_BGRA>&,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
  {
@@ -751,7 +760,7 @@ inline bool ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_BGRA,BMP_FORMAT_32BIT_TC_BGRA>
 // -----------------------------------------------------------------------
 
 template <ULONG SRCFMT>
-static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const BitmapBuffer& rMsk )
+bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const BitmapBuffer& rMsk )
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
@@ -799,8 +808,11 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
     static int nNotAccelerated = 0;
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
         if( ++nNotAccelerated == 100 )
+        {
+            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
             DBG_WARNING3( "ImplBlendFromBitmap for not accelerated case (0x%04X*0x%04X->0x%04X)",
                 rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
+        }
 #endif
 
     return false;
@@ -924,8 +936,11 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     static int nNotAccelerated = 0;
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
         if( ++nNotAccelerated == 100 )
+        {
+            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
             DBG_WARNING3( "ImplFastBlend for not accelerated case (0x%04X*0x%04X->0x%04X)",
                 rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
+        }
 #endif
 
     return false;
