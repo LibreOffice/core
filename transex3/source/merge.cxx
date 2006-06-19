@@ -4,9 +4,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:27:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
             // DEBUG******************
 */
 
-    BOOL bReturn;
+    BOOL bReturn=TRUE;
     switch ( nTyp ) {
         case STRING_TYP_TEXT :
             rReturn = sText[ nLangIndex ];
@@ -119,17 +119,25 @@ MergeData::~MergeData()
 PFormEntrys* MergeData::GetPFormEntrys( ResData *pResData )
 /*****************************************************************************/
 {
-//    if( pResData->sPForm.Len() && aMap.find( pResData->sPForm ) != aMap.end() ){
-    if( aMap.find( ByteString("HACK") ) != aMap.end() ){
-        return aMap[ ByteString("HACK") ];
-    }
-    else{
-        return 0;
-    }
+
+    (void) pResData;    // FIXME
+    //if( pResData ){
+    //    if( pResData->sPForm.Len() && aMap.find( pResData->sPForm ) != aMap.end() ){
+        if( aMap.find( ByteString("HACK") ) != aMap.end() ){
+            return aMap[ ByteString("HACK") ];
+        }
+        else{
+            return 0;
+        }
+    //}
+    //return 0;
 }
 
 void MergeData::Insert( const ByteString& rPFO , PFormEntrys* pfEntrys ){
 //    aMap.insert( PFormEntrysHashMap::value_type( rPFO , pfEntrys ) );
+    //TEST
+    (void) rPFO;    // FIXME
+    //TEST
     aMap.insert( PFormEntrysHashMap::value_type( ByteString("HACK") , pfEntrys ) );
 
 }
@@ -172,10 +180,15 @@ PFormEntrys *MergeData::InsertEntry( const ByteString &rPForm )
 BOOL MergeData::operator==( ResData *pData )
 /*****************************************************************************/
 {
+    ByteString sResTyp_upper( pData->sResTyp );
+    sResTyp_upper.ToUpperAscii();
+    ByteString sTyp_upper( sTyp );
+    sTyp_upper.ToUpperAscii();
+
     return (( pData->sId == sLID ) &&
             ( pData->sGId == sGID ) &&
-            ( ByteString( pData->sResTyp ).ToUpperAscii() ==
-                ByteString( sTyp ).ToUpperAscii()));
+            ( sResTyp_upper  ==  sTyp_upper )
+            );
 }
 
 //
@@ -201,10 +214,12 @@ BOOL MergeData::operator==( ResData *pData )
 }*/
 /*****************************************************************************/
 MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFile ,BOOL bErrLog,
-                            CharSet aCharSet, BOOL bUTF8 )
+                            CharSet aCharSet
+                            )
 /*****************************************************************************/
                 : bErrorLog( bErrLog )
 {
+
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     aInputStream.SetStreamCharSet( aCharSet );
     ByteString sLine;
@@ -260,7 +275,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
                     InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE , filename );
                     if( nLANG.Len() > 0 ){
                         bool bFound = false;
-                        for( int x = 0; x < aLanguages.size(); x++ ){
+                        for( unsigned int x = 0; x < aLanguages.size(); x++ ){
                             if( aLanguages[ x ].Equals( nLANG ) )
                                 bFound = true;
                         }
@@ -284,11 +299,11 @@ MergeDataFile::~MergeDataFile()
 }
 
 /*****************************************************************************/
-void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
+//void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
 /*****************************************************************************/
-{
+//{
 // DEAD
-}
+//}
 
 ByteString MergeDataFile::Dump(){
     ByteString sRet( "MergeDataFile\n" );
