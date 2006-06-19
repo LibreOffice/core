@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemdel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:58:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ public:
                  ~SfxItemDesruptor_Impl();
 };
 
-SV_DECL_PTRARR( SfxItemDesruptorList_Impl, SfxItemDesruptor_Impl*, 4, 4 );
+SV_DECL_PTRARR( SfxItemDesruptorList_Impl, SfxItemDesruptor_Impl*, 4, 4 )
 
 // ------------------------------------------------------------------------
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
@@ -112,7 +112,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( SfxItemDesruptor_Impl, Delete, void *, pvoid )
+IMPL_LINK( SfxItemDesruptor_Impl, Delete, void *, EMPTYARG )
 {
     {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}
     delete this;
