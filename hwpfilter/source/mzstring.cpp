@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mzstring.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:44:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* NAME $Id: mzstring.cpp,v 1.2 2005-09-07 16:44:02 rt Exp $
+/* NAME $Id: mzstring.cpp,v 1.3 2006-06-20 00:56:11 hr Exp $
  * PURPOSE
  *   supposed to be used instead of std::string
  * NOTES
@@ -51,7 +51,14 @@
 
 #ifndef WIN32
 #else
+
+    #if defined _MSC_VER
+        #pragma warning(push, 1)
+    #endif
 # include <windows.h>
+    #if defined _MSC_VER
+        #pragma warning(pop)
+    #endif
 //# include <crtdbg.h>
 #endif                                            /* WIN32 */
 #include <stdio.h>
