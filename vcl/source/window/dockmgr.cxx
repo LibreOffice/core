@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:56:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ public:
     virtual void    PopupModeEnd();
     virtual void    Resizing( Size& rSize );
     virtual BOOL    Close();
+    using Window::SetPosSizePixel;
     virtual void    SetPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      USHORT nFlags = WINDOW_POSSIZE_ALL );
@@ -159,7 +160,7 @@ ImplDockFloatWin2::~ImplDockFloatWin2()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplDockFloatWin2, DockTimerHdl, ImplDockFloatWin2*, pWin )
+IMPL_LINK( ImplDockFloatWin2, DockTimerHdl, ImplDockFloatWin2*, EMPTYARG )
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -187,7 +188,7 @@ IMPL_LINK( ImplDockFloatWin2, DockTimerHdl, ImplDockFloatWin2*, pWin )
     return 0;
 }
 
-IMPL_LINK( ImplDockFloatWin2, EndDockTimerHdl, ImplDockFloatWin2*, pWin )
+IMPL_LINK( ImplDockFloatWin2, EndDockTimerHdl, ImplDockFloatWin2*, EMPTYARG )
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "enddocktimer called but not floating" );
 
@@ -207,7 +208,7 @@ IMPL_LINK( ImplDockFloatWin2, EndDockTimerHdl, ImplDockFloatWin2*, pWin )
 }
 
 
-IMPL_LINK( ImplDockFloatWin2, DockingHdl, ImplDockFloatWin2*, pWindow )
+IMPL_LINK( ImplDockFloatWin2, DockingHdl, ImplDockFloatWin2*, EMPTYARG )
 {
     // called during move of a floating window
     mnLastUserEvent = 0;
@@ -744,7 +745,7 @@ void ImplPopupFloatWin::DrawGrip()
         SetFillColor();
 }
 
-void ImplPopupFloatWin::Paint( const Rectangle& rRect )
+void ImplPopupFloatWin::Paint( const Rectangle& )
 {
     Point aPt;
     Rectangle aRect( aPt, GetOutputSizePixel() );
@@ -921,129 +922,6 @@ void ImplDockingWindowWrapper::ImplInitData()
     maMaxOutSize        = Size( SHRT_MAX, SHRT_MAX );
 }
 
-// -----------------------------------------------------------------------
-/*
-void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
-{
-    if ( !(nStyle & WB_NODIALOGCONTROL) )
-        nStyle |= WB_DIALOGCONTROL;
-
-    mpWindowImpl->mpParent                = pParent;
-    mbDockable              = (nStyle & WB_DOCKABLE) != 0;
-    mnFloatBits             = WB_BORDER | (nStyle & DOCKWIN_FLOATSTYLES);
-    nStyle                 &= ~(DOCKWIN_FLOATSTYLES | WB_BORDER);
-    if ( nStyle & WB_DOCKBORDER )
-        nStyle |= WB_BORDER;
-
-    Window::ImplInit( pParent, nStyle, NULL );
-
-    ImplInitSettings();
-}
-
-// -----------------------------------------------------------------------
-
-void DockingWindow::ImplInitSettings()
-{
-    // Hack, damit man auch DockingWindows ohne Hintergrund bauen kann
-    // und noch nicht alles umgestellt ist
-    if ( IsBackground() )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else if ( Window::GetStyle() & WB_3DLOOK )
-            aColor = rStyleSettings.GetFaceColor();
-        else
-            aColor = rStyleSettings.GetWindowColor();
-        SetBackground( aColor );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void DockingWindow::ImplLoadRes( const ResId& rResId )
-{
-    Window::ImplLoadRes( rResId );
-
-    USHORT  nMask = ReadShortRes();
-
-    if ( (RSC_DOCKINGWINDOW_XYMAPMODE | RSC_DOCKINGWINDOW_X |
-          RSC_DOCKINGWINDOW_Y) & nMask )
-    {
-        // Groessenangabe aus der Resource verwenden
-        Point   aPos;
-        MapUnit ePosMap = MAP_PIXEL;
-
-        if ( RSC_DOCKINGWINDOW_XYMAPMODE & nMask )
-            ePosMap = (MapUnit)ReadShortRes();
-
-        if ( RSC_DOCKINGWINDOW_X & nMask )
-        {
-            aPos.X() = ReadShortRes();
-            aPos.X() = ImplLogicUnitToPixelX( aPos.X(), ePosMap );
-        }
-
-        if ( RSC_DOCKINGWINDOW_Y & nMask )
-        {
-            aPos.Y() = ReadShortRes();
-            aPos.Y() = ImplLogicUnitToPixelY( aPos.Y(), ePosMap );
-        }
-
-        SetFloatingPos( aPos );
-    }
-
-    if ( nMask & RSC_DOCKINGWINDOW_FLOATING )
-    {
-        if ( (BOOL)ReadShortRes() )
-            SetFloatingMode( TRUE );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-DockingWindow::DockingWindow( WindowType nType ) :
-    Window( nType )
-{
-    ImplInitData();
-}
-
-// -----------------------------------------------------------------------
-
-DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_DOCKINGWINDOW )
-{
-    ImplInitData();
-    ImplInit( pParent, nStyle );
-}
-
-// -----------------------------------------------------------------------
-
-DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_DOCKINGWINDOW )
-{
-    ImplInitData();
-    rResId.SetRT( RSC_DOCKINGWINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
-DockingWindow::~DockingWindow()
-{
-    if ( IsFloatingMode() )
-    {
-        Show( FALSE, SHOW_NOFOCUSCHANGE );
-        SetFloatingMode( FALSE );
-    }
-}
-*/
 // -----------------------------------------------------------------------
 
 void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
