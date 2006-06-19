@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:24:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,8 @@
 #include <svtools/svtreebx.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
-#endif
-
 #include "hlmarkwn_def.hxx" //ADD CHINA001
 class SvxHyperlinkTabPageBase;
-
-//CHINA001 #define LERR_NOERROR     0
-//CHINA001 #define LERR_NOENTRIES       1
-//CHINA001 #define LERR_DOCNOTOPEN      2
 
 //########################################################################
 //#                                                                      #
