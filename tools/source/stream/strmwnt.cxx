@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strmwnt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:35:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
     DWORD nCount = 0;
     if( IsOpen() )
     {
-        BOOL bResult = ReadFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL);
+        bool bResult = ReadFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL);
         if( !bResult )
         {
             ULONG nTestError = GetLastError();
@@ -357,7 +357,7 @@ void SvFileStream::FlushData()
 
 BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
 {
-    BOOL bRetVal = FALSE;
+    bool bRetVal = false;
     if( IsOpen() )
     {
         bRetVal = ::LockFile(pInstanceData->hFile,nByteOffset,0L,nBytes,0L );
@@ -379,7 +379,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
 
 BOOL SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
 {
-    BOOL bRetVal = FALSE;
+    bool bRetVal = false;
     if( IsOpen() )
     {
         bRetVal = ::UnlockFile(pInstanceData->hFile,nByteOffset,0L,nBytes,0L );
@@ -683,7 +683,7 @@ void SvFileStream::SetSize( ULONG nSize )
         {
             if( SetFilePointer(hFile,nSize,NULL,FILE_BEGIN ) != 0xffffffff)
             {
-                BOOL bSucc = SetEndOfFile( hFile );
+                bool bSucc = SetEndOfFile( hFile );
                 if( !bSucc )
                     bError = TRUE;
             }
@@ -694,172 +694,4 @@ void SvFileStream::SetSize( ULONG nSize )
             SetError(::GetSvError( GetLastError() ) );
     }
 }
-
-/*************************************************************************
-|*
-|*    ImpAlloc()
-|*
-|*    Beschreibung      Legt SharedMemory an
-|*    Ersterstellung    OV 28.09.95
-|*    Letzte Aenderung  OV 28.09.95
-|*
-*************************************************************************/
-
-static BYTE* ImpAlloc( ULONG nSize, HANDLE& rHandle )
-{
-    rHandle = 0;
-    HANDLE aHandle = CreateFileMapping((HANDLE)0xffffffff,
-        (LPSECURITY_ATTRIBUTES)0,PAGE_READWRITE,0,nSize,0);
-    if( !aHandle )
-        return 0;
-    BYTE* pBuf = (BYTE*)MapViewOfFile(aHandle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-    if( !pBuf )
-    {
-        CloseHandle( aHandle );
-        return 0;
-    }
-    rHandle = aHandle;
-    return pBuf;
-}
-
-/*************************************************************************
-|*
-|*    ImpFree()
-|*
-|*    Beschreibung      Gibt SharedMemory frei
-|*    Ersterstellung    OV 28.09.95
-|*    Letzte Aenderung  OV 28.09.95
-|*
-*************************************************************************/
-
-static void ImpFree( BYTE* pBuf, HANDLE aHandle )
-{
-    if( pBuf )
-    {
-        UnmapViewOfFile( pBuf );
-        pBuf = 0;
-    }
-    CloseHandle( aHandle );
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::AllocateMemory()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 28.09.95
-|*    Letzte Aenderung  OV 28.09.95
-|*
-*************************************************************************/
-
-BOOL SvSharedMemoryStream::AllocateMemory( ULONG nNewSize )
-{
-    HANDLE aWNTHandle;
-    pBuf = ImpAlloc( nNewSize, aWNTHandle );
-    if( !pBuf )
-        return FALSE;
-    aHandle = (void*)aWNTHandle;
-    return TRUE;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::ReAllocateMemory()
-|*
-|*    Beschreibung      STREAM.SDW  (Bozo-Algorithmus)
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-BOOL SvSharedMemoryStream::ReAllocateMemory( long nDiff )
-{
-    BOOL bRetVal    = FALSE;
-    ULONG nNewSize  = nSize + nDiff;
-    if( nNewSize )
-    {
-        HANDLE aNewHandle;
-        BYTE* pNewBuf = ImpAlloc( nNewSize, aNewHandle );
-        if( pNewBuf )
-        {
-            bRetVal = TRUE; // Success!
-            if( nNewSize < nSize )      // Verkleinern ?
-            {
-                memcpy( pNewBuf, pBuf, (size_t)nNewSize );
-                if( nPos > nNewSize )
-                    nPos = 0L;
-                if( nEndOfData >= nNewSize )
-                    nEndOfData = nNewSize-1L;
-            }
-            else
-                memcpy( pNewBuf, pBuf, (size_t)nSize );
-
-            ImpFree( pBuf, (HANDLE)aHandle );
-            pBuf  = pNewBuf;
-            nSize = nNewSize;
-            aHandle = (void*)aNewHandle;
-        }
-    }
-    else
-    {
-        FreeMemory();
-        bRetVal = TRUE;
-        pBuf = 0;
-        nSize = 0;
-        nEndOfData = 0;
-        nPos = 0;
-        aHandle = 0;
-    }
-    return bRetVal;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::FreeMemory()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-void SvSharedMemoryStream::FreeMemory()
-{
-    ImpFree( pBuf, (HANDLE)aHandle );
-    aHandle = 0;
-}
-
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SetHandle()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 05.10.95
-|*    Letzte Aenderung  OV 05.10.95
-|*
-*************************************************************************/
-
-
-void* SvSharedMemoryStream::SetHandle( void* aNewHandle, ULONG nSize,
-                                       BOOL bOwnsData, ULONG nEOF )
-{
-    void* pLocalBuf = MapViewOfFile(aNewHandle,FILE_MAP_ALL_ACCESS,0,0,0);
-    if( !pLocalBuf )
-    {
-        SetError( SVSTREAM_OUTOFMEMORY );
-        return 0;
-    }
-    if( aNewHandle == aHandle )
-    {
-        // den aktuellen Handle temporaer auf Null setzen, damit FreeMemory
-        // (wird u.U. von SetBuffer aufgerufen) nicht den Handle schliesst,
-        // sondern nur die View loescht
-        aHandle = 0;
-    }
-    pLocalBuf = SetBuffer( pLocalBuf, nSize, bOwnsData, nEOF );
-    aHandle = aNewHandle;
-    return pLocalBuf;
-}
-
 
