@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxy.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:12:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:39:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,26 @@
 
 namespace bridges_remote {
 
-void SAL_CALL remote_release( void * );
+extern "C" typedef void SAL_CALL FreeRemote2UnoProxy(
+    uno_ExtEnvironment * environment, void * proxy);
+FreeRemote2UnoProxy freeRemote2UnoProxy;
+
+// private:
+extern "C" typedef void SAL_CALL AcquireRemote2UnoProxy(uno_Interface *);
+AcquireRemote2UnoProxy acquireRemote2UnoProxy;
+
+// private:
+extern "C" typedef void SAL_CALL ReleaseRemote2UnoProxy(uno_Interface *);
+ReleaseRemote2UnoProxy releaseRemote2UnoProxy;
+
+// private:
+extern "C" typedef void SAL_CALL DispatchRemote2UnoProxy(
+    uno_Interface *, typelib_TypeDescription const *, void *, void **,
+    uno_Any **);
+DispatchRemote2UnoProxy dispatchRemote2UnoProxy;
+
+extern "C" void SAL_CALL remote_release( void * );
+
 class Remote2UnoProxy :
     public uno_Interface
 {
@@ -57,15 +76,6 @@ public:
 
     ~Remote2UnoProxy();
 
-    static void SAL_CALL thisAcquire( uno_Interface * );
-    static void SAL_CALL thisRelease( uno_Interface * );
-    static void SAL_CALL thisDispatch( uno_Interface * pUnoI,
-                                       typelib_TypeDescription * pMemberType,
-                                       void * pReturn,
-                                       void * pArgs[],
-                                       uno_Any ** ppException );
-    static void SAL_CALL thisFree( uno_ExtEnvironment *pEnvUno, void *pProxy );
-
 private:
     ::rtl::OUString m_sOid;
     typelib_InterfaceTypeDescription *m_pType;
@@ -76,6 +86,14 @@ private:
     ::com::sun::star::uno::Mapping m_mapUno2Remote;
 
     oslInterlockedCount m_nRef;
+
+    friend void SAL_CALL acquireRemote2UnoProxy(uno_Interface *);
+
+    friend void SAL_CALL releaseRemote2UnoProxy(uno_Interface *);
+
+    friend void SAL_CALL dispatchRemote2UnoProxy(
+        uno_Interface *, typelib_TypeDescription const *, void *, void **,
+        uno_Any **);
 };
 
 }
