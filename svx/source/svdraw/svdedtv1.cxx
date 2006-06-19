@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:49:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,9 +258,9 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, BOOL b
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetObj();
         AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
-        Point aRef1(rRef1-pM->GetPageView()->GetOffset());
-        Point aRef2(rRef2-pM->GetPageView()->GetOffset());
-        pO->Mirror(aRef1,aRef2);
+        Point aRef1b(rRef1-pM->GetPageView()->GetOffset());
+        Point aRef2b(rRef2-pM->GetPageView()->GetOffset());
+        pO->Mirror(aRef1b,aRef2b);
     }
     EndUndo();
 }
@@ -477,7 +477,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
+void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, BOOL /*bReplaceAll*/)
 {
     // bReplaceAll hat hier keinerlei Wirkung
     Rectangle aAllSnapRect(GetMarkedObjRect());
@@ -552,13 +552,13 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, BOOL bRepla
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         const SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetObj();
-        const SdrPageView* pPV=pM->GetPageView();
+        //const SdrPageView* pPV=pM->GetPageView();
         AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
         pObj->ApplyNotPersistAttr(rAttr);
     }
 }
 
-void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) const
+void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL /*bOnlyHardAttr*/) const
 {
     // bOnlyHardAttr hat hier keinerlei Wirkung
     // Hier muss ausserdem noch der Nullpunkt und
@@ -593,14 +593,14 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHar
             bMovProtect=pObj->IsMoveProtect();
             bSizProtect=pObj->IsResizeProtect();
             bPrintable =pObj->IsPrintable();
-            Rectangle aSnapRect(pObj->GetSnapRect());
-            Rectangle aLogicRect(pObj->GetLogicRect());
-            nSnapPosX=aSnapRect.Left();
-            nSnapPosY=aSnapRect.Top();
-            nSnapWdt=aSnapRect.GetWidth()-1;
-            nSnapHgt=aSnapRect.GetHeight()-1;
-            nLogicWdt=aLogicRect.GetWidth()-1;
-            nLogicHgt=aLogicRect.GetHeight()-1;
+            Rectangle aSnapRect2(pObj->GetSnapRect());
+            Rectangle aLogicRect2(pObj->GetLogicRect());
+            nSnapPosX=aSnapRect2.Left();
+            nSnapPosY=aSnapRect2.Top();
+            nSnapWdt=aSnapRect2.GetWidth()-1;
+            nSnapHgt=aSnapRect2.GetHeight()-1;
+            nLogicWdt=aLogicRect2.GetWidth()-1;
+            nLogicHgt=aLogicRect2.GetHeight()-1;
             bLogicWdtDiff=nLogicWdt!=nSnapWdt;
             bLogicHgtDiff=nLogicHgt!=nSnapHgt;
             nRotAngle=pObj->GetRotateAngle();
@@ -929,13 +929,13 @@ BOOL SdrEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     }
 }
 
-SfxStyleSheet* SdrEditView::GetStyleSheet(BOOL& rOk) const
+SfxStyleSheet* SdrEditView::GetStyleSheet() const // SfxStyleSheet* SdrEditView::GetStyleSheet(BOOL& rOk) const
 {
     if (GetMarkedObjectCount()!=0) {
-        rOk=TRUE;
+        //rOk=TRUE;
         return GetStyleSheetFromMarked();
     } else {
-        return SdrMarkView::GetStyleSheet(rOk);
+        return SdrMarkView::GetStyleSheet(); // SdrMarkView::GetStyleSheet(rOk);
     }
 }
 
@@ -1337,12 +1337,14 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
             case SDRVALIGN_TOP   : ImpTakeDescriptionStr(STR_EditAlignVTop   ,aStr); break;
             case SDRVALIGN_BOTTOM: ImpTakeDescriptionStr(STR_EditAlignVBottom,aStr); break;
             case SDRVALIGN_CENTER: ImpTakeDescriptionStr(STR_EditAlignVCenter,aStr); break;
+            default: break;
         }
     } else if (eVert==SDRVALIGN_NONE) {
         switch (eHor) {
             case SDRHALIGN_LEFT  : ImpTakeDescriptionStr(STR_EditAlignHLeft  ,aStr); break;
             case SDRHALIGN_RIGHT : ImpTakeDescriptionStr(STR_EditAlignHRight ,aStr); break;
             case SDRHALIGN_CENTER: ImpTakeDescriptionStr(STR_EditAlignHCenter,aStr); break;
+            default: break;
         }
     } else if (eHor==SDRHALIGN_CENTER && eVert==SDRVALIGN_CENTER) {
         ImpTakeDescriptionStr(STR_EditAlignCenter,aStr);
@@ -1404,11 +1406,13 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
                 case SDRVALIGN_TOP   : nYMov=aBound.Top()   -aObjRect.Top()       -aOfs.Y(); break;
                 case SDRVALIGN_BOTTOM: nYMov=aBound.Bottom()-aObjRect.Bottom()    -aOfs.Y(); break;
                 case SDRVALIGN_CENTER: nYMov=aCenter.Y()    -aObjRect.Center().Y()-aOfs.Y(); break;
+                default: break;
             }
             switch (eHor) {
                 case SDRHALIGN_LEFT  : nXMov=aBound.Left()  -aObjRect.Left()      -aOfs.X(); break;
                 case SDRHALIGN_RIGHT : nXMov=aBound.Right() -aObjRect.Right()     -aOfs.X(); break;
                 case SDRHALIGN_CENTER: nXMov=aCenter.X()    -aObjRect.Center().X()-aOfs.X(); break;
+                default: break;
             }
             if (nXMov!=0 || nYMov!=0)
             {
