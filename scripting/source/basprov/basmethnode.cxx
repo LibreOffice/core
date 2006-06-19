@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:22:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,10 @@ namespace basprov
         throw (IllegalArgumentException, script::CannotConvertException,
                reflection::InvocationTargetException, RuntimeException)
     {
+        (void)aParams;
+        (void)aOutParamIndex;
+        (void)aOutParam;
+
         if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
         {
             ::rtl::OUString sDocURL, sLibName, sModName;
@@ -340,6 +344,9 @@ namespace basprov
         throw (UnknownPropertyException, script::CannotConvertException,
                reflection::InvocationTargetException, RuntimeException)
     {
+        (void)aPropertyName;
+        (void)aValue;
+
         throw UnknownPropertyException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicMethodNodeImpl::setValue: property name is unknown!" ) ),
             Reference< XInterface >() );
@@ -349,6 +356,8 @@ namespace basprov
 
     Any BasicMethodNodeImpl::getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
+        (void)aPropertyName;
+
         throw UnknownPropertyException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicMethodNodeImpl::getValue: property name is unknown!" ) ),
             Reference< XInterface >() );
@@ -369,6 +378,8 @@ namespace basprov
 
     sal_Bool BasicMethodNodeImpl::hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException)
     {
+        (void)aName;
+
         return sal_False;
     }
 
