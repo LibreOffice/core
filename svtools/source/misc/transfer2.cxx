@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:23:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ DragSourceHelper::DragGestureListener::~DragGestureListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObject& Source ) throw( RuntimeException )
+void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
@@ -144,7 +144,7 @@ DragSourceHelper::~DragSourceHelper()
 
 // -----------------------------------------------------------------------------
 
-void DragSourceHelper::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void DragSourceHelper::StartDrag( sal_Int8, const Point& )
 {
 }
 
@@ -167,7 +167,7 @@ DropTargetHelper::DropTargetListener::~DropTargetListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject& rSource ) throw( RuntimeException )
+void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
@@ -267,7 +267,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& dte ) throw( RuntimeException )
+void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& ) throw( RuntimeException )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -291,7 +291,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const DropTargetDragEvent& dtde ) throw( RuntimeException )
+void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const DropTargetDragEvent& ) throw( RuntimeException )
 {
 }
 
@@ -341,9 +341,6 @@ void DropTargetHelper::ImplConstruct()
 
 void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDataFlavors )
 {
-    DataFlavorEx        aFlavorEx;
-    const DataFlavor*   pFlavor = rSupportedDataFlavors.getConstArray();
-
     mpFormats->clear();
     TransferableDataHelper::FillDataFlavorExVector( rSupportedDataFlavors, *mpFormats );
 }
@@ -357,14 +354,14 @@ void DropTargetHelper::ImplEndDrag()
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 DropTargetHelper::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 DropTargetHelper::AcceptDrop( const AcceptDropEvent& )
 {
     return( DNDConstants::ACTION_NONE );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 {
     return( DNDConstants::ACTION_NONE );
 }
