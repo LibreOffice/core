@@ -4,9 +4,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:10:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -770,7 +770,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
         FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 /*
  *  FLOATWIN_POPUPMODE_NOKEYCLOSE       |
- *  don't set since it diables closing floaters with escape
+ *  don't set since it disables closing floaters with escape
  */
 
     // Flags fuer Positionierung bestimmen
@@ -778,27 +778,10 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
                      FLOATWIN_POPUPMODE_LEFT | FLOATWIN_POPUPMODE_RIGHT |
                      FLOATWIN_POPUPMODE_NOAUTOARRANGE)) )
     {
-         WindowAlign eAlign = pBox->GetAlign();
          if ( pBox->IsHorizontal() )
-         {
              nFlags |= FLOATWIN_POPUPMODE_DOWN;
-             /*
-             if ( pBox->IsFloatingMode() || (eAlign == WINDOWALIGN_TOP) )
-                 nFlags |= FLOATWIN_POPUPMODE_DOWN;
-             else
-                 nFlags |= FLOATWIN_POPUPMODE_UP;
-             */
-         }
          else
-         {
              nFlags |= FLOATWIN_POPUPMODE_RIGHT;
-             /*
-             if ( eAlign == WINDOWALIGN_LEFT )
-                 nFlags |= FLOATWIN_POPUPMODE_RIGHT;
-             else
-                 nFlags |= FLOATWIN_POPUPMODE_LEFT;
-             */
-         }
     }
 
     // FloatingModus starten
