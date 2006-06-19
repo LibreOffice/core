@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 09:48:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,7 +669,7 @@ PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::
 /*
  *  FontCache::getFontCacheFile
  */
-bool FontCache::getFontCacheFile( int nDirID, const OString& rDir, const OString& rFile, list< PrintFontManager::PrintFont* >& rNewFonts ) const
+bool FontCache::getFontCacheFile( int nDirID, const OString& rFile, list< PrintFontManager::PrintFont* >& rNewFonts ) const
 {
     bool bSuccess = false;
 
