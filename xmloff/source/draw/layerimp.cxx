@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:45:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ using ::xmloff::token::XML_NAME;
 TYPEINIT1( SdXMLLayerSetContext, SvXMLImportContext );
 
 SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList)
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>&)
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
     Reference< XLayerSupplier > xLayerSupplier( rImport.GetModel(), UNO_QUERY );
