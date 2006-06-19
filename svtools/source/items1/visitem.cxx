@@ -4,9 +4,9 @@
  *
  *  $RCSfile: visitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:10:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,14 @@
 //
 //============================================================================
 
-DBG_NAME(SfxVisibilityItem);
+DBG_NAME(SfxVisibilityItem)
 
 //============================================================================
 TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
 
 //============================================================================
-SfxVisibilityItem::SfxVisibilityItem(USHORT nWhich, SvStream & rStream):
-    SfxPoolItem(nWhich)
+SfxVisibilityItem::SfxVisibilityItem(USHORT which, SvStream & rStream):
+    SfxPoolItem(which)
 {
     DBG_CTOR(SfxVisibilityItem, 0);
     sal_Bool bValue = 0;
@@ -97,8 +97,7 @@ SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,
-                                   BYTE nMemberId) const
+BOOL SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     rVal <<= m_nValue;
     return TRUE;
@@ -106,8 +105,7 @@ BOOL SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,
-                                 BYTE nMemberId)
+BOOL SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     if (rVal >>= m_nValue)
         return TRUE;
