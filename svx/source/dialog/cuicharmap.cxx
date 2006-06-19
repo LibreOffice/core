@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuicharmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:49:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
