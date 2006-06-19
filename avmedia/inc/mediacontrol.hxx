@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediacontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:34:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ class MediaControl : public Control
 public:
 
                         MediaControl( Window* pParent, MediaControlStyle eControlStyle );
-                        ~MediaControl();
+    virtual             ~MediaControl();
 
     const Size&         getMinSizePixel() const;
 
@@ -106,7 +106,7 @@ private:
     Timer               maTimer;
     MediaItem           maItem;
     ToolBox             maPlayToolBox;
-    Slider              maTimeSlider;;
+    Slider              maTimeSlider;
     ToolBox             maMuteToolBox;
     Slider              maVolumeSlider;
     ToolBox             maZoomToolBox;
