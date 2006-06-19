@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregistersettings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:56:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool *pPool ) const
+    SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool * ) const
     {
         return new DatabaseMapItem(Which(), m_aSettings);
     }
