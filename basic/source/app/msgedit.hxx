@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:17:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,14 +82,14 @@ public:
 
 class MsgEdit : public DataEdit
 {
+    BasicFrame *pBasicFrame;
+
     SvLBoxEntry *pCurrentRun;
     SvLBoxEntry *pCurrentTestCase;
     SvLBoxEntry *pCurrentAssertion;
     SvLBoxEntry *pCurrentError;
-protected:
     BOOL bModified;
     Link lModify;
-    BasicFrame *pBasicFrame;
     BOOL bFileLoading;      // TRUE während eine Datei geladen wird.
     String Impl_MakeText( SvLBoxEntry *pEntry ) const;
     String Impl_MakeSaveText( SvLBoxEntry *pEntry ) const;
