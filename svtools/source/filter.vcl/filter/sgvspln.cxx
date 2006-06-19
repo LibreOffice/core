@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:40:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,8 +487,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
     USHORT  error;
 
     if (n<2) return 1;
-    // FIXME -Wall Margcond is unsigned therefore can never be < zero.
-    if (MargCond<0 || MargCond>3) return 2;
+    if ( (MargCond & ~3) ) return 2;
     a=new double[n+1];
     h=new double[n+1];
     for (i=0;i<n;i++) {
@@ -678,8 +677,7 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
            betX = 0,betY = 0;
 
     if (n<2) return 1;
-    // FIXME -Wall Margcond is unsigned therefore can never be < zero.
-    if (MargCond<0 || MargCond>4) return 2; // ungueltige Randbedingung
+    if ((MargCond & ~3) && (MargCond != 4)) return 2; // ungueltige Randbedingung
     if (CondT==FALSE) {
         T[0]=0.0;
         for (i=0;i<n;i++) {
