@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-22 11:12:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,13 +159,13 @@ uno::Reference< lang::XComponent > ApiTreeImpl::ComponentAdapter::getParent() co
 {
     return this->getComponent( this->xParent );
 }
-void ApiTreeImpl::ComponentAdapter::setProvider(uno::Reference< lang::XComponent > const& xProvider)
+void ApiTreeImpl::ComponentAdapter::setProvider(uno::Reference< lang::XComponent > const& rProvider)
 {
-    this->setComponent( this->xProvider, xProvider);
+    this->setComponent( this->xProvider, rProvider);
 }
-void ApiTreeImpl::ComponentAdapter::setParent(uno::Reference< lang::XComponent > const& xParent)
+void ApiTreeImpl::ComponentAdapter::setParent(uno::Reference< lang::XComponent > const& rParent)
 {
-    this->setComponent( this->xParent, xParent);
+    this->setComponent( this->xParent, rParent);
 }
 //-----------------------------------------------------------------------------
 
@@ -219,15 +219,15 @@ void ApiTreeImpl::ComponentAdapter::clear()
 
     this->pOwner = 0;
 
-    uno::Reference< lang::XComponent > xProvider = this->xProvider;
-    uno::Reference< lang::XComponent > xParent  = this->xParent;
+    uno::Reference< lang::XComponent > aProvider = this->xProvider;
+    uno::Reference< lang::XComponent > aParent   = this->xParent;
     this->xProvider = 0;
     this->xParent = 0;
 
     aGuard.clear();
 
-    if (xParent.is())   try { xParent  ->removeEventListener(this); } catch (uno::Exception & ) {}
-    if (xProvider.is()) try { xProvider->removeEventListener(this); } catch (uno::Exception & ) {}
+    if (aParent.is())   try { aParent  ->removeEventListener(this); } catch (uno::Exception & ) {}
+    if (aProvider.is()) try { aProvider->removeEventListener(this); } catch (uno::Exception & ) {}
 }
 
 //-----------------------------------------------------------------------------
@@ -567,7 +567,7 @@ bool ApiRootTreeImpl::disposeTree()
     if (!m_xOptions.isEmpty())
     {
         OSL_ENSURE(!bDisposed, "Disposing/Releasing should clear the options");
-        CFG_TRACE_INFO("Api Root TreeImpl: data was not released in disposeTree");
+        CFG_TRACE_INFO2("Api Root TreeImpl: data was not released in disposeTree");
     }
 
     return bDisposed;
@@ -633,7 +633,7 @@ void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
     }
 }
 //-------------------------------------------------------------------------
-void ApiTreeImpl::implDisposeNode(data::Accessor const & _anAccessor, NodeRef const& aNode, UnoInterface* pInstance)
+void ApiTreeImpl::implDisposeNode(data::Accessor const & _anAccessor, NodeRef const& aNode, UnoInterface* )
 {
     CFG_TRACE_INFO("ApiTreeImpl: Disposing a single node.");
     OSL_ENSURE(aNode.isValid(),"INTERNAL ERROR: Disposing NULL node");
@@ -752,7 +752,7 @@ uno::Reference<com::sun::star::lang::XComponent> ApiTreeImpl::getProviderCompone
 
 //-------------------------------------------------------------------------
 
-void ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+void ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& ) throw()
 {
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
     CFG_TRACE_INFO("ApiTreeImpl: Providing UNO object is disposed - disposing the tree");
@@ -849,7 +849,7 @@ void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
         pKeepParent->disposing(_pSource);
     }
 }
-void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::disposing(IConfigBroadcaster* /*pSource*/)
 {
     CFG_TRACE_INFO("Api Root TreeImpl at %s: Cache data is disposed - dispose and release own data",
                     OUSTRING2ASCII(m_aLocationPath.toString()));
@@ -940,7 +940,7 @@ void ApiRootTreeImpl::NodeListener::nodeChanged(data::Accessor const& _aChangedD
 // ---------------------------------------------------------------------------------------------------
 
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aChangePath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aChangePath, IConfigBroadcaster* /*pSource*/)
 {
     using configuration::AnyNodeRef;
     using configuration::NodeChanges;
@@ -1062,8 +1062,10 @@ void ApiRootTreeImpl::NodeListener::nodeDeleted(data::Accessor const& _aChangedD
     }
 }
 // ---------------------------------------------------------------------------------------------------
-void ApiRootTreeImpl::nodeDeleted(data::Accessor const& _aChangedDataAccessor, AbsolutePath const& _aDeletedPath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeDeleted(data::Accessor const& /*_aChangedDataAccessor*/, AbsolutePath const& _aDeletedPath, IConfigBroadcaster* /*pSource*/)
 {
+    { (void)_aDeletedPath; }
+
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
     UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
 
