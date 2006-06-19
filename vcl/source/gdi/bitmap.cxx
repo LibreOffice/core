@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:54:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( USHORT nEntries )
 
                 aGreyPalette16.SetEntryCount( 16 );
 
-                for( USHORT i = 0; i < 16; i++, cGrey += cGreyInc )
+                for( USHORT i = 0; i < 16; i++, cGrey = sal::static_int_cast<BYTE>(cGrey + cGreyInc) )
                     aGreyPalette16[ i ] = BitmapColor( cGrey, cGrey, cGrey );
             }
 
