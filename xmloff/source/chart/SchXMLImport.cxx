@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:25:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
     const uno::Reference< frame::XModel > xChartModel,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -527,7 +527,7 @@ SchXMLImport::SchXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     uno::Reference< frame::XModel > xModel,
     uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
-    sal_Bool bLoadDoc, sal_Bool bShowProgress )
+    sal_Bool /*bLoadDoc*/, sal_Bool bShowProgress )
 :   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
     // get status indicator (if requested)
