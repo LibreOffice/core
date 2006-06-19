@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 13:55:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
-#pragma hdrstop
-
 #define _SVX_OPTSAVE_CXX
 
 #include "optsave.hrc"
@@ -146,13 +144,10 @@ class FilterWarningDialog_Impl : public ModalDialog
 // ----------------------------------------------------------------------
 FilterWarningDialog_Impl::FilterWarningDialog_Impl(Window* pParent) :
     ModalDialog(pParent, SVX_RES( RID_SVXDLG_FILTER_WARNING ) ),
-#pragma warning (disable : 4355)
     aOk(                this, ResId(PB_OK               )),
     aCancel(            this, ResId(PB_CANCEL           )),
     aImage(             this, ResId(IMG_WARNING         )),
     aFilterWarningFT(   this, ResId(FT_FILTER_WARNING   ))
-#pragma warning (default : 4355)
-//    ,aDontShowAgainCB(   this, ResId(CB_DONT_SHOW_AGAIN  ))
 {
     FreeResource();
     aImage.SetImage(WarningBox::GetStandardImage());
@@ -253,7 +248,6 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
-#pragma warning (disable : 4355)
     aLoadFL(              this, ResId(  LB_LOAD         ) ),
     aLoadUserSettingsCB(  this, ResId(  CB_LOAD_SETTINGS) ),
     aSaveBox            ( this, ResId( GB_SAVE ) ),
@@ -274,7 +268,6 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aFiltersFI          ( this, ResId( FI_FILTER ) ),
     aFiltersLB          ( this, ResId( LB_FILTER ) ),
     aWarningFT          ( this, ResId( FT_WARN   ) ),
-#pragma warning (default : 4355)
     pImpl(new SvxSaveTabPage_Impl)
 {
     pImpl->m_pNoPrettyPrinting = new CheckBox( this, ResId( BTN_NOPRETTYPRINTING ) );
@@ -385,21 +378,11 @@ bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
         if( pImpl->aDefaultArr[nPos] == pFilters[nFilter] )
         {
             bAlien = pImpl->aAlienArr[nPos][nFilter];
-            OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
             sUIName = pUIFilters[nFilter];;
             break;
         }
     }
     bool bSet = true;
-    /*if(bAlien)
-    {
-        FilterWarningDialog_Impl aDlg(this);
-        aDlg.SetFilterName(sUIName);
-        if(RET_OK != aDlg.Execute())
-        {
-            bSet = false;
-        }
-    } */
     return bSet;
 }
 // -----------------------------------------------------------------------
@@ -507,7 +490,7 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
+void SfxSaveTabPage::Reset( const SfxItemSet& )
 {
     SvtSaveOptions aSaveOpt;
     aLoadUserSettingsCB.Check(aSaveOpt.IsLoadUserSettings());
