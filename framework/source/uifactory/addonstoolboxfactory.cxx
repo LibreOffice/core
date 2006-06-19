@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolboxfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:19:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,6 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
 {
     // Check before we create a toolbar that we have at least one button in
     // the current frame context.
-    sal_Int32 nCount( 0 );
     for ( sal_uInt32 i = 0; i < (sal_uInt32)rPropSeqSeq.getLength(); i++ )
     {
         sal_Bool    bIsButton( sal_True );
@@ -245,8 +244,6 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         // Identify frame and determine document based ui configuration manager/module ui configuration manager
         if ( xFrame.is() )
         {
-            bool bHasSettings( false );
-
             Reference< XController > xController = xFrame->getController();
             if ( xController.is() )
                 xModel = xController->getModel();
