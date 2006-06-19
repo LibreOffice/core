@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:30:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:32:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,7 +486,7 @@ SetResetImpl::~SetResetImpl()
 RelativePath SetResetImpl::doGetChangingNodePath(ChangeCount _ix) const
 {
     OSL_ENSURE( _ix < m_aTreeChanges.size() || _ix == scCommonBase, "Illegal Change index" );
-    OSL_ASSERT( scCommonBase > m_aTreeChanges.size() );
+    OSL_ASSERT( static_cast<size_t>(scCommonBase) > m_aTreeChanges.size() );
 
     if ( _ix < m_aTreeChanges.size() )
         return RelativePath( m_aTreeChanges[_ix].m_aElementName);
