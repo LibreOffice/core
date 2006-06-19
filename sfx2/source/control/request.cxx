@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2006-05-02 16:29:17 $ $Revision: 1.16 $
+// $Author: hr $ $Date: 2006-06-19 22:18:00 $ $Revision: 1.17 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -98,8 +98,8 @@ struct SfxRequest_Impl: public SfxListener
                         , nModifier(0)
                         , bCancelled(FALSE)
                         , nCallMode( SFX_CALLMODE_SYNCHRON )
-                        , pInternalArgs( 0 )
                         , bAllowRecording( FALSE )
+                        , pInternalArgs( 0 )
                         , pViewFrame(0)
                         {}
     ~SfxRequest_Impl() { delete pInternalArgs; }
@@ -113,7 +113,7 @@ struct SfxRequest_Impl: public SfxListener
 
 //====================================================================
 
-void SfxRequest_Impl::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
+void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
 {
     SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
@@ -158,7 +158,8 @@ SfxRequest::SfxRequest
 (
     const SfxRequest& rOrig
 )
-:   nSlot(rOrig.nSlot),
+:   SfxHint( rOrig ),
+    nSlot(rOrig.nSlot),
     pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): 0),
     pImp( new SfxRequest_Impl(this) )
 {
@@ -789,7 +790,6 @@ void SfxRequest::Done_Impl
             for ( const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem() )
             {
                 // die Slot-Id f"ur das einzelne Item ermitteln
-                USHORT nWhich = rPool.GetWhich( pItem->Which() );
                 USHORT nSlotId = rPool.GetSlotId( pItem->Which() );
                 if ( nSlotId == nSlot )
                 {
