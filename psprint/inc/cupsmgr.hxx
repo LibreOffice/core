@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,9 @@ class CUPSManager : public PrinterInfoManager
 
     void getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const;
     void runDests();
-    static void runDestThread(void* pMgr);
 public:
+    // public for stub
+    static void runDestThread(void* pMgr);
 
     static CUPSManager* tryLoadCUPS();
 
