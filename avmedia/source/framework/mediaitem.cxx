@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:37:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,12 @@ TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
 
 // ------------------------------------------------------------------------------
 
-MediaItem::MediaItem( USHORT nWhich, sal_uInt32 nMaskSet ) :
-    SfxPoolItem( nWhich ),
+MediaItem::MediaItem( USHORT _nWhich, sal_uInt32 nMaskSet ) :
+    SfxPoolItem( _nWhich ),
     mnMaskSet( nMaskSet ),
     meState( MEDIASTATE_STOP ),
-    mfDuration( 0.0 ),
     mfTime( 0.0 ),
+    mfDuration( 0.0 ),
     mnVolumeDB( 0 ),
     mbLoop( false ),
     mbMute( false ),
@@ -78,8 +78,8 @@ MediaItem::MediaItem( const MediaItem& rItem ) :
     maURL( rItem.maURL ),
     mnMaskSet( rItem.mnMaskSet ),
     meState( rItem.meState ),
-    mfDuration( rItem.mfDuration ),
     mfTime( rItem.mfTime ),
+    mfDuration( rItem.mfDuration ),
     mnVolumeDB( rItem.mnVolumeDB ),
     mbLoop( rItem.mbLoop ),
     mbMute( rItem.mbMute ),
@@ -111,18 +111,18 @@ int MediaItem::operator==( const SfxPoolItem& rItem ) const
 
 // ------------------------------------------------------------------------------
 
-SfxPoolItem* MediaItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
 {
     return new MediaItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation ePres,
-                                                  SfxMapUnit eCoreUnit,
-                                                  SfxMapUnit ePresUnit,
+SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
+                                                  SfxMapUnit,
+                                                  SfxMapUnit,
                                                   XubString& rText,
-                                                  const IntlWrapper *pIntl ) const
+                                                  const IntlWrapper * ) const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
@@ -130,7 +130,7 @@ SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation ePres,
 
 //------------------------------------------------------------------------
 
-BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     uno::Sequence< uno::Any > aSeq( 9 );
 
@@ -151,7 +151,7 @@ BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) con
 
 //------------------------------------------------------------------------
 
-BOOL MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     uno::Sequence< uno::Any >   aSeq;
     BOOL                        bRet = false;
