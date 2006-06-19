@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:41:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ protected:
                                 int          &nSrcX,
                                 int          &nSrcY,
                                 Pixmap        hClipMask );
+    using SalGraphics::DrawBitmap;
     void            DrawBitmap( const SalTwoRect *pPosAry,
                                 SalGraphics      *pThis,
                                 const SalBitmap  &rSalBitmap,
@@ -211,6 +212,7 @@ public:
     inline  void*           GetXRenderFormat() { return pRenderFormat_; }
     inline  void            SetXRenderFormat( void* pRenderFormat ) { pRenderFormat_ = pRenderFormat; }
     inline  SalColormap    &GetColormap() const { return *m_pColormap; }
+    using SalGraphics::GetPixel;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
     // overload all pure virtual methods
