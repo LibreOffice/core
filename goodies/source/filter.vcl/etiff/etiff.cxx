@@ -4,9 +4,9 @@
  *
  *  $RCSfile: etiff.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:10:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ TIFFWriter::~TIFFWriter()
 
 BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
                       PFilterCallback pCallback, void* pCallerdata,
-                          FilterConfigItem* pConfigItem )
+                          FilterConfigItem* )
 {
     ULONG*  pDummy = new ULONG; delete pDummy; // damit unter OS/2
                                                // das richtige (Tools-)new
