@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:00:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
+//#if OSL_DEBUG_LEVEL > 0
+// currently not used in debug builds
+#if 0
         static void check_if_complete(uno::Reference< uno::XComponentContext > const & _xContext)
         {
             MergedComponentData aData;
@@ -79,6 +82,7 @@ namespace configmgr
             uno::Reference< backenduno::XLayerHandler >
                 test(new LayerMergeHandler(_xContext, aData));
         }
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -99,7 +103,8 @@ struct LayerMergeHandler::Converter
 // -----------------------------------------------------------------------------
 LayerMergeHandler::LayerMergeHandler(Context const & xContext, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider )
 : m_rData(_rData)
-, m_aContext(xContext,static_cast<backenduno::XLayerHandler*>(this),aTemplateProvider )
+//, m_aContext(xContext,static_cast<backenduno::XLayerHandler*>(this),aTemplateProvider )
+, m_aContext(xContext)
 , m_aFactory()
 , m_aLocale()
 , m_pProperty(NULL)
@@ -107,6 +112,7 @@ LayerMergeHandler::LayerMergeHandler(Context const & xContext, MergedComponentDa
 , m_nSkipping(0)
 , m_bSublayer(false)
 {
+    m_aContext = DataBuilderContext(xContext,static_cast<backenduno::XLayerHandler*>(this),aTemplateProvider );
     OSL_ENSURE( m_rData.hasSchema(), "Creating layer merger without default data" );
 }
 // -----------------------------------------------------------------------------
