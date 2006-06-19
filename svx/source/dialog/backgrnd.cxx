@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:34:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@
 #ifndef _CNTIDS_HRC
 #include <sfx2/cntids.hrc>
 #endif
-#pragma hdrstop
 
 #define _SVX_BACKGRND_CXX
 
@@ -329,7 +328,7 @@ void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
 
 //-----------------------------------------------------------------------
 
-void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
+void BackgroundPreviewImpl::Paint( const Rectangle& )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
@@ -398,11 +397,11 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
                             this, ResId( WIN_PREVIEW2 ), TRUE ) ),
     aSelectTxt          ( this, ResId( FT_SELECTOR ) ),
     aLbSelect           ( this, ResId( LB_SELECTOR ) ),
+    aStrBrowse          ( ResId( STR_BROWSE ) ),
+    aStrUnlinked        ( ResId( STR_UNLINKED ) ),
     aTblDesc            ( this, ResId( FT_TBL_DESC ) ),
     aTblLBox            ( this, ResId( LB_TBL_BOX ) ),
     aParaLBox           ( this, ResId( LB_PARA_BOX ) ),
-    aStrBrowse          ( ResId( STR_BROWSE ) ),
-    aStrUnlinked        ( ResId( STR_UNLINKED ) ),
     nHtmlMode           ( 0 ),
     bAllowShowSelector  ( TRUE ),
     bIsGraphicValid     ( FALSE ),
@@ -1103,7 +1102,7 @@ BOOL SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, U
 
 //-----------------------------------------------------------------------
 
-int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 /*  [Beschreibung]
 
@@ -1114,15 +1113,15 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* pSet )
     if ( pPageImpl->bIsImportDlgInExecute )
         return KEEP_PAGE;
 
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
 
     return LEAVE_PAGE;
 }
 
 //-----------------------------------------------------------------------
 
-void SvxBackgroundTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
+void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 
 /*  [Beschreibung]
 
@@ -1226,8 +1225,6 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
-    BOOL bHtmlMode = 0 != (nHtmlMode & HTMLMODE_ON);
-
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
@@ -1249,7 +1246,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
         aBackgroundColorSet.SetStyle( nBits );
         for ( i = 0; i < nCount; i++ )
         {
-            pEntry = pColorTable->Get(i);
+            pEntry = pColorTable->GetColor(i);
             aBackgroundColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
         }
 
@@ -1402,6 +1399,7 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
                 case GPOS_LB:   eNewPos = RP_LB; break;
                 case GPOS_MB:   eNewPos = RP_MB; break;
                 case GPOS_RB:   eNewPos = RP_RB; break;
+                default: ;//prevent warning
             }
             aWndPosition.SetActualRP( eNewPos );
         }
@@ -1446,7 +1444,7 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 // Handler
 //-----------------------------------------------------------------------
 
-IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMTPYARG )
+IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
 /*
     Handler, called when color selection is changed
 */
