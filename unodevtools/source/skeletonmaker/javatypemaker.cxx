@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatypemaker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:19:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,12 @@ void printType(std::ostream & o,
         case codemaker::UnoType::SORT_DOUBLE:
             o << "0";
             return;
+        case codemaker::UnoType::SORT_VOID:
+        case codemaker::UnoType::SORT_STRING:
+        case codemaker::UnoType::SORT_TYPE:
+        case codemaker::UnoType::SORT_ANY:
+        case codemaker::UnoType::SORT_COMPLEX:
+            break;
         }
     }
 
@@ -203,7 +209,7 @@ void printConstructor(std::ostream & o,
 void printMethodParameters(std::ostream & o,
     ProgramOptions const & options, TypeManager const & manager,
     typereg::Reader const & reader, sal_uInt16 method, bool previous,
-    bool withtype, bool shortname)
+    bool withtype, bool /*shortname*/)
 {
     for ( sal_uInt16 i = 0; i < reader.getMethodParameterCount(method); ++i ) {
         if ( previous  )
@@ -432,9 +438,11 @@ void printMethods(std::ostream & o,
           << codemaker::convertString(reader.getFieldName(i)).getStr()
           << "()";
 
+        #if 0
         // DEBUG
         sal_uInt16 mc = reader.getMethodCount();
         RTMethodMode mm = reader.getMethodFlags(method);
+        #endif
         OUString mn = reader.getMethodName(method);
         OUString fn = reader.getFieldName(i);
 
