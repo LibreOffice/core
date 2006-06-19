@@ -4,9 +4,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:55:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,7 @@ const String& SvtUserOptions_Impl::GetFullName()
 
 // -----------------------------------------------------------------------
 
-void SvtUserOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void SvtUserOptions_Impl::Notify( const Sequence<rtl::OUString>& )
 {
     Load();
     Broadcast(SfxSimpleHint(SFX_HINT_USER_OPTIONS_CHANGED));
@@ -539,7 +539,7 @@ SvtUserOptions::SvtUserOptions()
 
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtUserOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtUserOptions_Impl::ctor()");
         pOptions = new SvtUserOptions_Impl;
 
         ItemHolder2::holdConfigItem(E_USEROPTIONS);
@@ -907,7 +907,7 @@ const String&   SvtUserOptions::GetToken(USHORT nToken) const
 /* -----------------07.07.2003 09:30-----------------
 
  --------------------------------------------------*/
-void SvtUserOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvtUserOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
     Broadcast( rHint );
