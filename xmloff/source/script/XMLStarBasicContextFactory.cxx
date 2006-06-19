@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStarBasicContextFactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:20:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,12 +86,12 @@ XMLStarBasicContextFactory::~XMLStarBasicContextFactory()
 
 SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
     const OUString& rApiEventName,
-    const OUString& rApiLanguage)
+    const OUString& /*rApiLanguage*/)
 {
     OUString sLibraryVal;
     OUString sMacroNameVal;
@@ -161,5 +161,5 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     rEvents->AddEventValues(rApiEventName, aValues);
 
     // return dummy context
-    return new SvXMLImportContext(rImport, nPrefix, rLocalName);
+    return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);
 }
