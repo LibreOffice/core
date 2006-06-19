@@ -4,9 +4,9 @@
  *
  *  $RCSfile: complextoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:18:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:36:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ throw ( RuntimeException )
 
 // ------------------------------------------------------------------
 
-IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
@@ -281,7 +281,7 @@ IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExec
 
 // ------------------------------------------------------------------
 
-IMPL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
+IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
 {
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
@@ -345,7 +345,7 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
 
 // --------------------------------------------------------
 
-void ComplexToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+void ComplexToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& )
 {
     // must be implemented by sub class!
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:18:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,7 @@ namespace framework
 
 ButtonToolbarController::ButtonToolbarController(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
-    const uno::Reference< frame::XFrame >&              rFrame,
     ToolBar*                                            pToolBar,
-    USHORT                                              nID,
     const rtl::OUString&                                aCommand ) :
     cppu::OWeakObject(),
     m_bInitialized( sal_False ),
@@ -207,14 +205,14 @@ void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::R
 }
 
 void SAL_CALL ButtonToolbarController::addEventListener(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     // do nothing
 }
 
 void SAL_CALL ButtonToolbarController::removeEventListener(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     // do nothing
@@ -246,7 +244,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
         m_xFrame.clear();
 }
 
-void SAL_CALL ButtonToolbarController::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+void SAL_CALL ButtonToolbarController::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& )
 throw ( ::com::sun::star::uno::RuntimeException )
 {
     // do nothing
@@ -344,7 +342,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createItemWindow(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_bDisposed )
