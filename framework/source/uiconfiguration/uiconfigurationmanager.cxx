@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:51:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:35:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,11 +514,9 @@ void UIConfigurationManager::impl_resetElementTypeData(
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
-    sal_Int16 nType = rDocElementType.nElementType;
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
-    sal_Int32 nIndex( 0 );
     while ( pIter != rHashMap.end() )
     {
         UIElementData& rElement = pIter->second;
@@ -654,17 +652,17 @@ void UIConfigurationManager::impl_Initialize()
 
 UIConfigurationManager::UIConfigurationManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , m_bReadOnly( true )
-    , m_bModified( false )
     , m_xDocConfigStorage( 0 )
+    , m_bReadOnly( true )
+    , m_bInitialized( false )
+    , m_bModified( false )
     , m_bConfigRead( false )
     , m_bDisposed( false )
-    , m_bInitialized( false )
+    , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
     , m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))
     , m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
     , m_xServiceManager( xServiceManager )
-    , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
+    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
