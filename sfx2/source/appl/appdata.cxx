@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:15:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,27 +115,27 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         nRescheduleLocks(0),
         nInReschedule(0),
         nAsynchronCalls(0),
-        bInQuit(sal_False),
-        bInvalidateOnUnlock(sal_False),
         m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(
                                *pApp, comphelper::getProcessServiceFactory()))
-    , pViewFrame( 0 )
-    , pSlotPool( 0 )
-    , pResMgr( 0 )
-    , pAppDispat( 0 )
-    , nInterfaces( 0 )
-    , pInterfaces( 0 )
-    , bDowning( sal_True )
-    , nDocNo(0)
     , pTbxCtrlFac(0)
     , pStbCtrlFac(0)
     , pViewFrames(0)
     , pObjShells(0)
-    , pBasicLibContainer(0)
-    , pDialogLibContainer(0)
     , pSfxResManager(0)
     , pOfaResMgr(0)
     , pSimpleResManager(0)
+    , pBasicLibContainer(0)
+    , pDialogLibContainer(0)
+    , pViewFrame( 0 )
+    , pSlotPool( 0 )
+    , pResMgr( 0 )
+    , pAppDispat( 0 )
+    , pInterfaces( 0 )
+    , nDocNo(0)
+    , nInterfaces( 0 )
+    , bDowning( sal_True ),
+        bInQuit(sal_False),
+        bInvalidateOnUnlock(sal_False)
 {
 }
 
@@ -175,4 +175,3 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
         pTemplates->ReInitFromComponent();
     return pTemplates;
 }
-
