@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:18:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
+#endif
+#if OSL_DEBUG_LEVEL > 0
+#include <rtl/strbuf.hxx>
 #endif
 
 #include <list>
@@ -131,8 +134,8 @@ ConfigManager::ConfigManager() :
 
  ---------------------------------------------------------------------------*/
 ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
-    pMgrImpl(new utl::ConfigMgr_Impl),
-    xConfigurationProvider(xConfigProv)
+    xConfigurationProvider(xConfigProv),
+    pMgrImpl(new utl::ConfigMgr_Impl)
 {
 }
 /* -----------------------------28.08.00 15:35--------------------------------
@@ -204,8 +207,8 @@ namespace
         utl::ConfigManager & rCfgMgr;
         utl::ConfigItem* pCfgItem;
     public:
-        RegisterConfigItemHelper(utl::ConfigManager & rCfgMgr, utl::ConfigItem& rCfgItem)
-        : rCfgMgr(rCfgMgr)
+        RegisterConfigItemHelper(utl::ConfigManager & rMgr, utl::ConfigItem& rCfgItem)
+        : rCfgMgr(rMgr)
         , pCfgItem(&rCfgItem)
         {
             rCfgMgr.RegisterConfigItem(rCfgItem);
@@ -427,9 +430,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
                         "ConfigManager::GetDirectConfigProperty: "
                         "OFFICEINSTALLURL no longer supported." );
             return Any();
+        default:
+            break;
     }
-
-    ConfigManager * pTheConfigManager = GetConfigManager();
 
     Any aRet;
     ::rtl::OUString &rBrandName = BrandName::get();
@@ -497,6 +500,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
         case WRITERCOMPATIBILITYVERSIONOOO11:
             sPath += C2U("Office.Compatibility/WriterCompatibilityVersion"); break;
+        default:
+            break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
@@ -527,6 +532,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case OPENSOURCECONTEXT:                 sProperty = C2U("ooOpenSourceContext"); break;
             case DEFAULTCURRENCY:                   sProperty = C2U("ooSetupCurrency"); break;
             case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = C2U("OOo11"); break;
+            default:
+                break;
         }
         try
         {
@@ -534,14 +541,15 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         }
         catch(Exception&)
         {
-            OSL_ENSURE( sal_False,
-                (   ::rtl::OString( "ConfigManager::GetDirectConfigProperty: could not retrieve the property \"" )
-                +=  ::rtl::OString( sProperty.getStr(), sProperty.getLength(), RTL_TEXTENCODING_ASCII_US )
-                +=  ::rtl::OString( "\" under \"" )
-                +=  ::rtl::OString( sPath.getStr(), sPath.getLength(), RTL_TEXTENCODING_ASCII_US )
-                +=  ::rtl::OString( "\" (caught an exception)!" )
-                ).getStr()
-            );
+            #if OSL_DEBUG_LEVEL > 0
+            rtl::OStringBuffer aBuf(256);
+            aBuf.append( "ConfigManager::GetDirectConfigProperty: could not retrieve the property \"" );
+            aBuf.append( rtl::OUStringToOString( sProperty, RTL_TEXTENCODING_ASCII_US ) );
+            aBuf.append( "\" under \"" );
+            aBuf.append( rtl::OUStringToOString( sPath, RTL_TEXTENCODING_ASCII_US ) );
+            aBuf.append( "\" (caught an exception)!" );
+            OSL_ENSURE( sal_False, aBuf.getStr() );
+            #endif
         }
     }
 
