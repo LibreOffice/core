@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-29 16:17:04 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:42:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..
 
-PRJNAME=BASIC
+PRJNAME=basic
 TARGET=comp
 
 # --- Settings ------------------------------------------------------------
@@ -73,6 +73,8 @@ SLOFILES= \
     $(SLO)$/token.obj		\
     $(SLO)$/symtbl.obj		\
     $(SLO)$/buffer.obj
+
+EXCEPTIONSFILES=$(SLO)$/parser.obj
 
 # --- Targets --------------------------------------------------------------
 
