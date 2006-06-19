@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:17:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,12 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxSetItem);
+DBG_NAME(SfxSetItem)
 
 // --------------------------------------------------------------------------
 
-SfxSetItem::SfxSetItem( USHORT nWhich, const SfxItemSet &rSet) :
-    SfxPoolItem(nWhich),
+SfxSetItem::SfxSetItem( USHORT which, const SfxItemSet &rSet) :
+    SfxPoolItem(which),
     pSet(rSet.Clone(TRUE))
 {
     DBG_CTOR(SfxSetItem, 0);
@@ -60,8 +60,8 @@ SfxSetItem::SfxSetItem( USHORT nWhich, const SfxItemSet &rSet) :
 
 // --------------------------------------------------------------------------
 
-SfxSetItem::SfxSetItem( USHORT nWhich, SfxItemSet *pS) :
-    SfxPoolItem(nWhich),
+SfxSetItem::SfxSetItem( USHORT which, SfxItemSet *pS) :
+    SfxPoolItem(which),
     pSet(pS)
 {
     DBG_CTOR(SfxSetItem, 0);
@@ -98,10 +98,10 @@ int SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 
 SfxItemPresentation SfxSetItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
-    XubString&               rText,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
+    XubString&              /*rText*/,
     const IntlWrapper *
 )   const
 {
@@ -111,7 +111,7 @@ SfxItemPresentation SfxSetItem::GetPresentation
 
 // --------------------------------------------------------------------------
 
-SvStream& SfxSetItem::Store(SvStream& rStream, USHORT nVer) const
+SvStream& SfxSetItem::Store(SvStream& rStream, USHORT) const
 {
     GetItemSet().Store(rStream);
     return rStream;
