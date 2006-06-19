@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:45:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1262,15 +1262,15 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
         Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
         aTmpRect = OutputDevice::LogicToLogic( aTmpRect, m_pData->m_pObjectShell->GetMapUnit(), MAP_100TH_MM );
 
-        Sequence< sal_Int32 > aSize(4);
-        aSize[0] = aTmpRect.Left();
-        aSize[1] = aTmpRect.Top();
-        aSize[2] = aTmpRect.Right();
-        aSize[3] = aTmpRect.Bottom();
+        Sequence< sal_Int32 > aRectSeq(4);
+        aRectSeq[0] = aTmpRect.Left();
+        aRectSeq[1] = aTmpRect.Top();
+        aRectSeq[2] = aTmpRect.Right();
+        aRectSeq[3] = aTmpRect.Bottom();
 
         seqArgsNew.realloc( ++nNewLength );
         seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "WinExtent" );
-        seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
+        seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
 
         if ( m_pData->m_aPreusedFilterName.getLength() )
         {
@@ -1284,15 +1284,15 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
         {
             SvBorder aBorder = pFrame->GetBorderPixelImpl( pFrame->GetViewShell() );
 
-            Sequence< sal_Int32 > aSize(4);
-            aSize[0] = aBorder.Left();
-            aSize[1] = aBorder.Top();
-            aSize[2] = aBorder.Right();
-            aSize[3] = aBorder.Bottom();
+            Sequence< sal_Int32 > aBorderSeq(4);
+            aBorderSeq[0] = aBorder.Left();
+            aBorderSeq[1] = aBorder.Top();
+            aBorderSeq[2] = aBorder.Right();
+            aBorderSeq[3] = aBorder.Bottom();
 
             seqArgsNew.realloc( ++nNewLength );
             seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "DocumentBorder" );
-            seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
+            seqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
         }
 
         // only the values that are not supported by the ItemSet must be cached here
@@ -2547,8 +2547,8 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 // file recovery: restore original filter
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
                 SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-                const SfxFilter* pFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
-                pMedium->SetFilter( pFilter );
+                const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
+                pMedium->SetFilter( pSetFilter );
                 m_pData->m_pObjectShell->SetModified(sal_True);
             }
 
@@ -2556,7 +2556,6 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
             if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-                ::rtl::OUString aFilterName;
                 if ( pFilterItem )
                     m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
             }
@@ -2649,7 +2648,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 aDesc.maTypeName = aFlavor.HumanPresentableName;
 
                 // TODO/LATER: ViewAspect needs to be sal_Int64
-                aDesc.mnViewAspect = embed::Aspects::MSOLE_CONTENT;
+                aDesc.mnViewAspect = sal::static_int_cast< sal_uInt16 >( embed::Aspects::MSOLE_CONTENT );
 
                 //TODO/LATER: status needs to become sal_Int64
                 aDesc.mnOle2Misc = m_pData->m_pObjectShell->GetMiscStatus();
@@ -3990,7 +3989,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     }
 }
 
-awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -4023,7 +4022,7 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 nAspect )
 }
 
 
-sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 nAspect )
+sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 /*nAspect*/ )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
@@ -4037,7 +4036,7 @@ sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 nAspect )
     return VCLUnoHelper::VCL2UnoEmbedMapUnit( m_pData->m_pObjectShell->GetMapUnit() );
 }
 
-embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentation( ::sal_Int64 nAspect )
+embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentation( ::sal_Int64 /*nAspect*/ )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
