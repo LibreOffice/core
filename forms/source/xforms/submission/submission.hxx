@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:25:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,13 +99,13 @@ public:
     CProgressHandlerHelper()
         : m_count(0)
     {}
-    virtual void SAL_CALL push( const com::sun::star::uno::Any& aStatus) throw(com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL push( const com::sun::star::uno::Any& /*aStatus*/) throw(com::sun::star::uno::RuntimeException)
     {
         m_mLock.acquire();
         m_count++;
         m_mLock.release();
     }
-    virtual void SAL_CALL update(const com::sun::star::uno::Any& aStatus) throw(com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL update(const com::sun::star::uno::Any& /*aStatus*/) throw(com::sun::star::uno::RuntimeException)
     {
     }
     virtual void SAL_CALL pop() throw(com::sun::star::uno::RuntimeException)
