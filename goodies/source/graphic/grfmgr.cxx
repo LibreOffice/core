@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:56:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, cons
 // -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
+    SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
     mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
@@ -789,7 +790,7 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
 // -----------------------------------------------------------------------------
 
 BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    long nExtraData, const GraphicAttr* pAttr, ULONG nFlags,
+                                    long nExtraData, const GraphicAttr* pAttr, ULONG /*nFlags*/,
                                     OutputDevice* pFirstFrameOutDev )
 {
     BOOL bRet = FALSE;
@@ -978,7 +979,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     }
     else if( GRAPHIC_BITMAP == eType )
     {
-        BitmapEx    aBmpEx( aTransGraphic.GetBitmapEx() );
+        BitmapEx    aBitmapEx( aTransGraphic.GetBitmapEx() );
 
         // convert crops to pixel
         aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetLeftCrop(),
@@ -1237,7 +1238,7 @@ void GraphicObject::SetSwapState()
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GraphicObject, ImplAutoSwapOutHdl, void*, p )
+IMPL_LINK( GraphicObject, ImplAutoSwapOutHdl, void*, EMPTYARG )
 {
     if( !IsSwappedOut() )
     {
