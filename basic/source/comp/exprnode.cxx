@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 12:47:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 #include <rtl/math.hxx>
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include "expr.hxx"
 
 //////////////////////////////////////////////////////////////////////////
@@ -163,11 +162,7 @@ BOOL SbiExprNode::IsIntConst()
     {
         if( eType >= SbxINTEGER && eType <= SbxDOUBLE )
         {
-#if defined(MAC) && !defined(__powerc)
-            long double n;
-#else
             double n;
-#endif
             if( nVal >= SbxMININT && nVal <= SbxMAXINT && modf( nVal, &n ) == 0 )
             {
                 nVal = (double) (short) nVal;
@@ -206,7 +201,6 @@ short SbiExprNode::GetDepth()
     if( IsOperand() ) return 0;
     else
     {
-        SbiExprNode* p = (SbiExprNode*) this;
         short d1 = pLeft->GetDepth();
         short d2 = pRight->GetDepth();
         return( (d1 < d2 ) ? d2 : d1 ) + 1;
@@ -315,8 +309,8 @@ void SbiExprNode::FoldConstants()
             {
                 double nl = pLeft->nVal;
                 double nr = pRight->nVal;
-                long ll, lr;
-                long llMod, lrMod;
+                long ll = 0, lr = 0;
+                long llMod = 0, lrMod = 0;
                 if( ( eTok >= AND && eTok <= IMP )
                    || eTok == IDIV || eTok == MOD )
                 {
@@ -408,6 +402,7 @@ void SbiExprNode::FoldConstants()
                         nVal = (double) ( ~ll ^ lr ); eType = SbxLONG; break;
                     case IMP:
                         nVal = (double) ( ~ll | lr ); eType = SbxLONG; break;
+                    default: break;
                 }
 
                 if( !::rtl::math::isFinite( nVal ) )
@@ -453,6 +448,7 @@ void SbiExprNode::FoldConstants()
                 nVal = (double) ~((long) nVal);
                 eType = SbxLONG;
                 } break;
+            default: break;
         }
     }
     if( eNodeType == SbxNUMVAL )
