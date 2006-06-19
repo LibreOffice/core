@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:32:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:22:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,10 +219,10 @@ using namespace ::rtl;
 
 // class OfaMiscTabPage --------------------------------------------------
 
-int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet )
+int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( pSet_ )
+        FillItemSet( *pSet_ );
     return LEAVE_PAGE;
 }
 
@@ -498,6 +498,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
+    (void)pEd;
+
     String aOutput( aStrDateInfo );
     String aStr( aYearValueField.GetText() );
     const String& rSep = SvtSysLocale().GetLocaleData().getNumThousandSep();
@@ -719,26 +721,23 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #endif
     aMenuFL             ( this, ResId( FL_MENU ) ),
     aMenuIconsCB        ( this, ResId( CB_MENU_ICONS )),
-    aShowInactiveItemsCB( this ), // #i59119# remove this for next incompatible build
     aFontListsFL        ( this, ResId( FL_FONTLISTS) ),
     aFontShowCB         ( this, ResId( CB_FONT_SHOW ) ),
     aFontHistoryCB      ( this, ResId( CB_FONT_HISTORY ) ),
     aRenderingFL        ( this, ResId( FL_RENDERING ) ),
     aUseHardwareAccell  ( this, ResId( CB_USE_HARDACCELL ) ),
-
-    aMouseFL            ( this, ResId( FL_MOUSE ) ),
-    aMousePosFT         ( this, ResId( FT_MOUSEPOS ) ),
-    aMousePosLB         ( this, ResId( LB_MOUSEPOS ) ),
-    aMouseMiddleFT      ( this, ResId( FT_MOUSEMIDDLE ) ),
-    aMouseMiddleLB      ( this, ResId( LB_MOUSEMIDDLE ) ),
     a3DGB               ( this, ResId( FL_3D ) ),
     a3DOpenGLCB         ( this, ResId( CB_3D_OPENGL ) ),
     a3DOpenGLFasterCB   ( this, ResId( CB_3D_OPENGL_FASTER ) ),
     a3DDitheringCB      ( this, ResId( CB_3D_DITHERING ) ),
     a3DShowFullCB       ( this, ResId( CB_3D_SHOWFULL ) ),
-    aWorkingSetBox      ( this ), // #i59119# remove this for next incompatible build
-    aDocViewBtn         ( this ), // #i59119# remove this for next incompatible build
-    aOpenWinBtn         ( this ), // #i59119# remove this for next incompatible build
+    aMouseFL            ( this, ResId( FL_MOUSE ) ),
+    aMousePosFT         ( this, ResId( FT_MOUSEPOS ) ),
+    aMousePosLB         ( this, ResId( LB_MOUSEPOS ) ),
+    aMouseMiddleFT      ( this, ResId( FT_MOUSEMIDDLE ) ),
+    aMouseMiddleLB      ( this, ResId( LB_MOUSEMIDDLE ) ),
+    nSizeLB_InitialSelection(0),
+    nStyleLB_InitialSelection(0),
     pAppearanceCfg(new SvtTabAppearanceCfg)
 {
 
@@ -805,7 +804,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     // (in the resource, the coordinates are calculated for the AA options beeing present)
     Control* pMiscOptions[] =
     {
-        &aMenuFL, &aFontShowCB, &aShowInactiveItemsCB,
+        &aMenuFL, &aFontShowCB,
         &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB
     };
 
@@ -842,6 +841,8 @@ OfaViewTabPage::~OfaViewTabPage()
 //--- 20.08.01 10:16:12 ---------------------------------------------------
 IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 {
+    (void)NOTINTERESTEDIN;
+
     sal_Bool bAAEnabled = aFontAntiAliasing.IsChecked();
 
     aAAPointLimitLabel.Enable( bAAEnabled );
@@ -865,7 +866,7 @@ SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 --------------------------------------------------*/
 
-BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFontOptions aFontOpt;
     SvtMenuOptions aMenuOpt;
@@ -971,12 +972,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
-    if ( aShowInactiveItemsCB.IsChecked() != aShowInactiveItemsCB.GetSavedValue() )
-    {
-        aMenuOpt.SetEntryHidingState( aShowInactiveItemsCB.IsChecked() );
-        bModified = TRUE;
-    }
-
     if(aMenuIconsCB.IsChecked() != aMenuIconsCB.GetSavedValue())
     {
         aMenuOpt.SetMenuIconsState( aMenuIconsCB.IsChecked() );
@@ -998,16 +993,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         }
 
     // Workingset
-    SvtSaveOptions aSaveOptions;
-    if ( aDocViewBtn.IsChecked() != aDocViewBtn.GetSavedValue() )
-    {
-        aSaveOptions.SetSaveDocView(aDocViewBtn.IsChecked());
-    }
-
-    if ( aOpenWinBtn.IsChecked() != aOpenWinBtn.GetSavedValue() )
-    {
-        aSaveOptions.SetSaveDocWins(aOpenWinBtn.IsChecked() );
-    }
     SvtOptions3D a3DOpt;
     BOOL bTemp = a3DOpt.IsOpenGL();
 
@@ -1064,9 +1049,8 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
 /*-----------------06.12.96 11.50-------------------
 
 --------------------------------------------------*/
-void OfaViewTabPage::Reset( const SfxItemSet& rSet )
+void OfaViewTabPage::Reset( const SfxItemSet& )
 {
-
     SvtOptions3D a3DOpt;
     a3DOpenGLCB.Check( a3DOpt.IsOpenGL() );
     a3DOpenGLFasterCB.Check( a3DOpenGLCB.IsChecked() && a3DOpt.IsOpenGL_Faster() );
@@ -1117,17 +1101,9 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
 #endif
 
     // WorkingSet
-    SvtSaveOptions aSaveOptions;
-    aDocViewBtn.Enable(!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCVIEW));
-    aDocViewBtn.Check( aSaveOptions.IsSaveDocView() );
-
-    aOpenWinBtn.Enable(!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCWINS));
-    aOpenWinBtn.Check( aSaveOptions.IsSaveDocWins() );
-
     SvtFontOptions aFontOpt;
     aFontShowCB.Check( aFontOpt.IsFontWYSIWYGEnabled() );
     SvtMenuOptions aMenuOpt;
-    aShowInactiveItemsCB.Check( aMenuOpt.IsEntryHidingEnabled() );
     aMenuIconsCB.Check(aMenuOpt.IsMenuIconsEnabled());
     aMenuIconsCB.SaveValue();
 
@@ -1140,12 +1116,9 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aAAPointLimit.SaveValue();
 #endif
     aFontShowCB.SaveValue();
-    aShowInactiveItemsCB.SaveValue();
     aFontHistoryCB.SaveValue();
     if ( isHardwareAccelerationAvailable() )
         aUseHardwareAccell.SaveValue();
-    aDocViewBtn.SaveValue();
-    aOpenWinBtn.SaveValue();
 
 #if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );
@@ -1248,17 +1221,15 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aComplexLanguageFT(this,    ResId(FT_COMPLEX_LANG   )),
     aComplexLanguageLB(this,    ResId(LB_COMPLEX_LANG   )),
     aCurrentDocCB(this,         ResId(CB_CURRENT_DOC    )),
-    aAsianSupportFI(this,       ResId(FI_ASIANSUPPORT   )),
     aEnhancedFL(this,           ResId(FL_ENHANCED    )),
+    aAsianSupportFI(this,       ResId(FI_ASIANSUPPORT   )),
     aAsianSupportCB(this,       ResId(CB_ASIANSUPPORT   )),
     aCTLSupportFI(this,         ResId(FI_CTLSUPPORT    )),
     aCTLSupportCB(this,         ResId(CB_CTLSUPPORT   )),
-    pLangConfig(new LanguageConfig_Impl),
-    sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText())
+    sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText()),
+    pLangConfig(new LanguageConfig_Impl)
 {
     FreeResource();
-
-    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
 
     // initialize user interface language selection
     SvxLanguageTable* pLanguageTable = new SvxLanguageTable;
@@ -1340,12 +1311,12 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     for ( USHORT j=1; j < nCurrCount; ++j )
     {
         const NfCurrencyEntry* pCurr = rCurrTab[j];
-        String aStr( pCurr->GetBankSymbol() );
-        aStr += aTwoSpace;
-        aStr += pCurr->GetSymbol();
-        aStr += aTwoSpace;
-        aStr += pLanguageTable->GetString( pCurr->GetLanguage() );
-        USHORT nPos = aCurrencyLB.InsertEntry( aStr );
+        String aStr_( pCurr->GetBankSymbol() );
+        aStr_ += aTwoSpace;
+        aStr_ += pCurr->GetSymbol();
+        aStr_ += aTwoSpace;
+        aStr_ += pLanguageTable->GetString( pCurr->GetLanguage() );
+        USHORT nPos = aCurrencyLB.InsertEntry( aStr_ );
         aCurrencyLB.SetEntryData( nPos, (void*) pCurr );
     }
     delete pLanguageTable;
