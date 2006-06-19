@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:40:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,6 @@ long ZCodec::EndCompression()
 
 long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 {
-    char err;
     long nOldTotal_In = PZSTREAM->total_in;
 
     if ( mbInit == 0 )
@@ -168,8 +167,7 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     {
         if ( PZSTREAM->avail_out == 0 )
             ImplWriteBack();
-        err = deflate( PZSTREAM, Z_NO_FLUSH );
-        if ( err < 0 )
+        if ( deflate( PZSTREAM, Z_NO_FLUSH ) < 0 )
         {
             mbStatus = FALSE;
             break;
@@ -182,7 +180,7 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 
 long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
 {
-    char    err;
+    int err;
     ULONG   nInToRead;
     long    nOldTotal_Out = PZSTREAM->total_out;
 
@@ -256,7 +254,7 @@ long ZCodec::Write( SvStream& rOStm, const BYTE* pData, ULONG nSize )
 
 long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
 {
-    char    err;
+    int err;
     ULONG   nInToRead;
 
     if ( mbFinish )
@@ -301,11 +299,9 @@ long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
 
 // ------------------------------------------------------------------------
 
-#pragma optimize ("",off)
-
 long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
 {
-    char    err = 0;
+    int err = 0;
     ULONG   nInToRead;
 
     if ( mbFinish )
@@ -359,8 +355,6 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
 
     return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
-
-#pragma optimize ("",on)
 
 // ------------------------------------------------------------------------
 
