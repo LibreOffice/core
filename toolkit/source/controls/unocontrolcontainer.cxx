@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:20:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ public:
     }
 };
 
-DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
+DECLARE_LIST( UnoControlHolderList, UnoControlHolder* )
 
 
 //  ----------------------------------------------------
@@ -145,7 +145,7 @@ public:
 
 };
 
-void SAL_CALL DialogStepChangedListener::disposing( const  ::com::sun::star::lang::EventObject& _rSource)
+void SAL_CALL DialogStepChangedListener::disposing( const  ::com::sun::star::lang::EventObject& )
     throw( ::com::sun::star::uno::RuntimeException)
 {
     mxControlContainer.clear();
