@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabbtmp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:21:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ XBitmapEntry* XBitmapTable::Remove(long nIndex)
 
 /************************************************************************/
 
-XBitmapEntry* XBitmapTable::Get(long nIndex) const
+XBitmapEntry* XBitmapTable::GetBitmap(long nIndex) const
 {
     return (XBitmapEntry*) XPropertyTable::Get(nIndex, 0);
 }
@@ -149,7 +149,7 @@ BOOL XBitmapTable::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XBitmapTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -291,7 +291,7 @@ XBitmapEntry* XBitmapList::Remove(long nIndex)
 
 /************************************************************************/
 
-XBitmapEntry* XBitmapList::Get(long nIndex) const
+XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 {
     return (XBitmapEntry*) XPropertyList::Get(nIndex, 0);
 }
@@ -460,7 +460,7 @@ BOOL XBitmapList::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XBitmapList::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XBitmapList::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
