@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:07:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,8 @@ SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
         CUSTOMSHAPE_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aShapePropertyMap_Impl;
@@ -124,7 +125,8 @@ SfxItemPropertyMap* ImplGetSvxTextShapePropertyMap()
         CUSTOMSHAPE_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aTextShapePropertyMap_Impl;
@@ -148,7 +150,8 @@ SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
         FONTWORK_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aConnectorPropertyMap_Impl;
@@ -172,7 +175,8 @@ SfxItemPropertyMap* ImplGetSvxDimensioningPropertyMap()
         FONTWORK_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aDimensioningPropertyMap_Impl;
@@ -197,7 +201,8 @@ SfxItemPropertyMap* ImplGetSvxCirclePropertyMap()
         CUSTOMSHAPE_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aCirclePropertyMap_Impl;
@@ -223,7 +228,8 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
         CUSTOMSHAPE_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aPolyPolygonPropertyMap_Impl;
@@ -249,7 +255,8 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
         CUSTOMSHAPE_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aPolyPolygonBezierPropertyMap_Impl;
@@ -276,7 +283,8 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
         { MAP_CHAR_LEN("IsMirrored"),               OWN_ATTR_MIRRORED           , &::getCppuBooleanType(), 0, 0},
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aGraphicObjectPropertyMap_Impl;
@@ -294,7 +302,8 @@ SfxItemPropertyMap* ImplGetSvx3DSceneObjectPropertyMap()
         MISC_OBJ_PROPERTIES
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return a3DSceneObjectPropertyMap_Impl;
@@ -315,7 +324,8 @@ SfxItemPropertyMap* ImplGetSvx3DCubeObjectPropertyMap()
         SHADOW_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return a3DCubeObjectPropertyMap_Impl;
@@ -336,7 +346,8 @@ SfxItemPropertyMap* ImplGetSvx3DSphereObjectPropertyMap()
         SHADOW_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
     return a3DSphereObjectPropertyMap_Impl;
 }
@@ -361,7 +372,8 @@ SfxItemPropertyMap* ImplGetSvx3DLatheObjectPropertyMap()
         SHADOW_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return a3DLatheObjectPropertyMap_Impl;
@@ -387,7 +399,8 @@ SfxItemPropertyMap* ImplGetSvx3DExtrudeObjectPropertyMap()
         SHADOW_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return a3DExtrudeObjectPropertyMap_Impl;
@@ -408,7 +421,8 @@ SfxItemPropertyMap* ImplGetSvx3DPolygonObjectPropertyMap()
         SHADOW_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return a3DPolygonObjectPropertyMap_Impl;
@@ -451,7 +465,8 @@ SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
         CUSTOMSHAPE_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aAllPropertyMap_Impl;
@@ -464,7 +479,8 @@ SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
         SHAPE_DESCRIPTOR_PROPERTIES
         MISC_OBJ_PROPERTIES
         LINKTARGET_PROPERTIES
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aGroupPropertyMap_Impl;
@@ -491,7 +507,8 @@ SfxItemPropertyMap* ImplGetSvxOle2PropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aOle2PropertyMap_Impl;
@@ -517,7 +534,8 @@ SfxItemPropertyMap* ImplGetSvxPluginPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aPluginPropertyMap_Impl;
@@ -547,7 +565,8 @@ SfxItemPropertyMap* ImplGetSvxFramePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aFramePropertyMap_Impl;
@@ -576,7 +595,8 @@ SfxItemPropertyMap* ImplGetSvxAppletPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aAppletPropertyMap_Impl;
@@ -621,7 +641,8 @@ SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aControlPropertyMap_Impl;
@@ -641,7 +662,8 @@ SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aPageShapePropertyMap_Impl;
@@ -675,7 +697,8 @@ SfxItemPropertyMap* ImplGetSvxCaptionPropertyMap()
         FONTWORK_PROPERTIES
         { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aCaptionPropertyMap_Impl;
@@ -700,7 +723,8 @@ SfxItemPropertyMap* ImplGetSvxCustomShapePropertyMap()
         TEXT_PROPERTIES
         {MAP_CHAR_LEN("UserDefinedAttributes"),     SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS,         &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
     return aCustomShapePropertyMap_Impl;
 }
@@ -724,7 +748,8 @@ SfxItemPropertyMap* ImplGetSvxMediaShapePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT), SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT, &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aMediaShapePropertyMap_Impl;
@@ -744,7 +769,8 @@ comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
         MISC_3D_OBJ_PROPERTIES
         SPECIAL_3DBACKSCALE_PROPERTIES
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aSvxDrawingDefaultsPropertyMap_Impl;
@@ -756,7 +782,8 @@ comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap(
     static comphelper::PropertyMapEntry aSvxAdditionalDefaultsPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("IsFollowingTextFlow"), SID_SW_FOLLOW_TEXT_FLOW, &::getBooleanCppuType(), 0, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
+
     };
 
     return aSvxAdditionalDefaultsPropertyMap_Impl;
@@ -995,7 +1022,9 @@ void SvxServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< ::rtl
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.
-*/
+
+    @cl: for warnings01 I found out that this method never worked so I thin
+         it is not used at all
 sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
 {
     switch( eVcl )
@@ -1017,6 +1046,7 @@ sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
 
     return true;
 }
+*/
 
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
