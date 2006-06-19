@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_dispatch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:45:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@ namespace bridges_urp {
 
     void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote );
 
-    void SAL_CALL urp_sendRequest(
+    extern "C" void SAL_CALL urp_sendRequest(
         uno_Environment *pEnvRemote,
-        typelib_TypeDescription * pMemberType,
+        typelib_TypeDescription const * pMemberType,
         rtl_uString *pOid,
         typelib_InterfaceTypeDescription *pInterfaceType,
         void *pReturn,
