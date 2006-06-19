@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:21:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );
 XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
                        const uno::Reference<
-                            xml::sax::XAttributeList > & xAttrList,
+                            xml::sax::XAttributeList > &,
                         const Reference < XPropertySet > & rPageStylePropSet,
                        sal_Bool bFooter, sal_Bool bLft ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -151,7 +151,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
                     // The content has not to be removed, because the header
                     // or footer is empty already.
-                    bRemoveContent;
+                    bRemoveContent = sal_False;
                 }
 
                 // If a header or footer is not shared, share it now.
@@ -172,8 +172,8 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
             if( bRemoveContent )
             {
-                OUString sText;
-                xText->setString( sText );
+                OUString aText;
+                xText->setString( aText );
             }
 
             UniReference < XMLTextImportHelper > xTxtImport =
