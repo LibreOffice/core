@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:13:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:15:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, InnerElement&) thr
 
 //-----------------------------------------------------------------------------------
 
-Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& rElement) throw(RuntimeException)
+Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& /*rElement*/) throw(RuntimeException)
 {
     Reference<uno::XInterface> xRet;
 
@@ -194,7 +194,7 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& rEleme
 //-----------------------------------------------------------------------------------
 
 // UNSUPPORTED method
-void implSetParent(NodeAccess& rNode, InnerElement& rElement, const Reference< uno::XInterface >& xParent )
+void implSetParent(NodeAccess& rNode, InnerElement& /*rElement*/, const Reference< uno::XInterface >& /*xParent*/ )
     throw(NoSupportException, RuntimeException)
 {
     rNode.checkAlive(); // Does locking internally, checks for disposed nodes
@@ -330,7 +330,7 @@ OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(RuntimeException)
 //-----------------------------------------------------------------------------
 
 // UNSUPPORTED method
-void implSetName(NodeAccess & rNode, NodeElement& rElement, const OUString& aName ) throw(RuntimeException)
+void implSetName(NodeAccess & rNode, NodeElement& /*rElement*/, const OUString& /*aName*/ ) throw(RuntimeException)
 {
     typedef RuntimeException CantRenameException;
 
@@ -463,7 +463,7 @@ lang::Locale implGetLocale( RootElement& rElement ) throw(uno::RuntimeException)
 }
 //-----------------------------------------------------------------------------
 
-void implSetLocale( RootElement& rElement, const css::lang::Locale& eLocale ) throw(uno::RuntimeException)
+void implSetLocale( RootElement& rElement, const css::lang::Locale& /*eLocale*/ ) throw(uno::RuntimeException)
 {
     // TODO: Implement if possible
     rElement.checkAlive();
