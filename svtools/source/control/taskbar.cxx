@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,6 @@ public:
 
 public:
                         ImplTaskBarFloat( TaskBar* pTaskBar );
-
-    void                Paint();
 };
 
 // -----------------------------------------------------------------------
@@ -67,12 +65,6 @@ ImplTaskBarFloat::ImplTaskBarFloat( TaskBar* pTaskBar ) :
     FloatingWindow( pTaskBar, 0 )
 {
     mpTaskBar   = pTaskBar;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplTaskBarFloat::Paint()
-{
 }
 
 // =======================================================================
