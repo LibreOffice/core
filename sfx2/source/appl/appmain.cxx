@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:16:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,11 +99,11 @@
 
 //===================================================================
 
-DBG_NAME(SfxAppMainNewMenu);
-DBG_NAME(SfxAppMainBmkMenu);
-DBG_NAME(SfxAppMainWizMenu);
-DBG_NAME(SfxAppMainOLEReg);
-DBG_NAME(SfxAppMainCHAOSReg);
+DBG_NAME(SfxAppMainNewMenu)
+DBG_NAME(SfxAppMainBmkMenu)
+DBG_NAME(SfxAppMainWizMenu)
+DBG_NAME(SfxAppMainOLEReg)
+DBG_NAME(SfxAppMainCHAOSReg)
 
 //===================================================================
 
@@ -122,7 +122,7 @@ static SfxItemInfo __READONLY_DATA aItemInfos[] =
 //===================================================================
 
 typedef Link* LinkPtr;
-SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4);
+SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4)
 
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
@@ -250,6 +250,7 @@ void SfxApplication::InsertLateInitHdl(const Link& rLink)
 
 IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
 {
+    (void)pvoid; // unused variable
     if ( !SfxViewFrame::GetFirst( 0,0,FALSE ) )
     {
         pAppData_Impl->aLateInitTimer.Start();
