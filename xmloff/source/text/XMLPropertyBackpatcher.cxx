@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPropertyBackpatcher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:14:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #endif
 
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -68,11 +68,11 @@ using ::com::sun::star::beans::XPropertySet;
 
 template<class A>
 XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const ::rtl::OUString& sPropName) :
-        sPropertyName(sPropName),
-        bDefaultHandling(sal_False),
-        bPreserveProperty(sal_False),
-        sPreservePropertyName()
+    const ::rtl::OUString& sPropName)
+:   sPropertyName(sPropName)
+,   bDefaultHandling(sal_False)
+,   bPreserveProperty(sal_False)
+,   sPreservePropertyName()
 {
 }
 
@@ -81,22 +81,20 @@ XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
     const OUString& sPropName,
     const OUString& sPreserveName,
     sal_Bool bDefault,
-    A aDef) :
-        sPropertyName(sPropName),
-        bDefaultHandling(bDefault),
-        aDefault(aDef),
-        sPreservePropertyName(sPreserveName),
-        bPreserveProperty(sPreserveName.getLength()>0)
+    A aDef)
+:   sPropertyName(sPropName)
+,   bDefaultHandling(bDefault)
+,   bPreserveProperty(sPreserveName.getLength()>0)
+,   sPreservePropertyName(sPreserveName)
+,   aDefault(aDef)
 {
 }
 
 template<class A>
 XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const sal_Char* pPropName) :
-        sPropertyName(),
-        bDefaultHandling(sal_False),
-        bPreserveProperty(sal_False),
-        sPreservePropertyName()
+    const sal_Char* pPropName)
+:   bDefaultHandling(sal_False)
+,   bPreserveProperty(sal_False)
 {
     DBG_ASSERT(pPropName != NULL, "need property name");
     sPropertyName = OUString::createFromAscii(pPropName);
@@ -107,12 +105,10 @@ XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
     const sal_Char* pPropName,
     const sal_Char* pPreservePropName,
     sal_Bool bDefault,
-    A aDef) :
-        sPropertyName(),
-        sPreservePropertyName(),
-        bDefaultHandling(bDefault),
-        bPreserveProperty(pPreservePropName != NULL),
-        aDefault(aDef)
+    A aDef)
+:   bDefaultHandling(bDefault)
+,   bPreserveProperty(pPreservePropName != NULL)
+,   aDefault(aDef)
 {
     DBG_ASSERT(pPropName != NULL, "need property name");
     sPropertyName = OUString::createFromAscii(pPropName);
