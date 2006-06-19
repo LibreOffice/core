@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:41:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,9 +166,9 @@ Size WMFReader::ReadYXExt()
 
 // ------------------------------------------------------------------------
 
-void WMFReader::ReadRecordParams( USHORT nFunction )
+void WMFReader::ReadRecordParams( USHORT nFunc )
 {
-    switch( nFunction )
+    switch( nFunc )
     {
         case W_META_SETBKCOLOR:
         {
@@ -584,11 +584,11 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
 
             *pWMF >> nWinROP;
 
-            if( nFunction == W_META_STRETCHDIB )
+            if( nFunc == W_META_STRETCHDIB )
                 *pWMF >> nUsage;
 
             // nSye and nSxe is the number of pixels that has to been used
-            if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
+            if( nFunc == W_META_STRETCHDIB || nFunc == W_META_STRETCHBLT || nFunc == W_META_DIBSTRETCHBLT )
                 *pWMF >> nSye >> nSxe;
             else
                 nSye = nSxe = 0;    // set this to zero as indicator not to scale the bitmap later
@@ -596,7 +596,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             // nSy and nx is the offset of the first pixel
             *pWMF >> nSy >> nSx;
 
-            if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
+            if( nFunc == W_META_STRETCHDIB || nFunc == W_META_DIBBITBLT || nFunc == W_META_DIBSTRETCHBLT )
             {
                 if ( nWinROP == PATCOPY )
                     *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
@@ -833,7 +833,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                     if ( nEscLen <= ( nRecSize * 2 ) )
                     {
 #ifdef OSL_BIGENDIAN
-                        sal_uInt32 i, nTmp = SWAPLONG( nEsc );
+                        sal_uInt32 nTmp = SWAPLONG( nEsc );
                         sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
 #else
                         sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
@@ -911,9 +911,6 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_ENDPAGE:
         case W_META_ABORTDOC:
         case W_META_ENDDOC:
-        {
-            sal_Int32 nFunc = nFunction;
-        }
         break;
     }
 }
@@ -1090,7 +1087,7 @@ const static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableB
     GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );
 }
 
-sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWMF )
+sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {
     sal_Bool bRet = sal_True;
 
@@ -1102,23 +1099,23 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
     sal_Int16 nMapMode = MM_ANISOTROPIC;
 
     sal_uInt16 nFunction;
-    sal_uInt32 nRecSize;
-    sal_uInt32 nPos = pWMF->Tell();
-    sal_uInt32 nEndPos = pWMF->Seek( STREAM_SEEK_TO_END );
+    sal_uInt32 nRSize;
+    sal_uInt32 nPos = pStm->Tell();
+    sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
 
-    pWMF->Seek( nPos );
+    pStm->Seek( nPos );
 
-    if( nEndPos - nPos )
+    if( nEnd - nPos )
     {
         while( bRet )
         {
-            *pWMF >> nRecSize >> nFunction;
+            *pStm >> nRSize >> nFunction;
 
-            if( pWMF->GetError() || ( nRecSize < 3 ) || ( nRecSize==3 && nFunction==0 ) || pWMF->IsEof() )
+            if( pStm->GetError() || ( nRSize < 3 ) || ( nRSize==3 && nFunction==0 ) || pStm->IsEof() )
             {
-                if( pWMF->IsEof() )
+                if( pStm->IsEof() )
                 {
-                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     bRet = sal_False;
                 }
                 break;
@@ -1137,13 +1134,13 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 {
                     Point aPos0( 0, 0 );
                     sal_Int16 nWidth, nHeight;
-                    *pWMF >> nHeight >> nWidth;
+                    *pStm >> nHeight >> nWidth;
                     rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
                 }
                 break;
 
                 case W_META_SETMAPMODE :
-                    *pWMF >> nMapMode;
+                    *pStm >> nMapMode;
                 break;
 
                 case W_META_MOVETO:
@@ -1178,7 +1175,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 case W_META_POLYGON:
                 {
                     USHORT i,nPoints;
-                    *pWMF >> nPoints;
+                    *pStm >> nPoints;
                     for( i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
@@ -1187,11 +1184,11 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 case W_META_POLYPOLYGON:
                 {
                     USHORT  i, nPoly, nPoints = 0;
-                    *pWMF >> nPoly;
+                    *pStm >> nPoly;
                     for( i = 0; i < nPoly; i++ )
                     {
                         sal_uInt16 nP;
-                        *pWMF >> nP;
+                        *pStm >> nP;
                         nPoints += nP;
                     }
                     for ( i = 0; i < nPoints; i++ )
@@ -1202,7 +1199,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 case W_META_POLYLINE:
                 {
                     USHORT i,nPoints;
-                    *pWMF >> nPoints;
+                    *pStm >> nPoints;
                     for( i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
@@ -1218,11 +1215,11 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 case W_META_TEXTOUT:
                 {
                     USHORT nLength;
-                    *pWMF >> nLength;
+                    *pStm >> nLength;
                     // todo: we also have to take care of the text width
                     if ( nLength )
                     {
-                        pWMF->SeekRel( ( nLength + 1 ) &~ 1 );
+                        pStm->SeekRel( ( nLength + 1 ) &~ 1 );
                         GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
                     }
                 }
@@ -1234,14 +1231,13 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                     sal_Int32   nRecordPos, nRecordSize;
                     Point       aPosition;
                     Rectangle   aRect;
-                    sal_Int32*  pDXAry = NULL;
 
-                    pWMF->SeekRel(-6);
-                    nRecordPos = pWMF->Tell();
-                    *pWMF >> nRecordSize;
-                    pWMF->SeekRel(2);
+                    pStm->SeekRel(-6);
+                    nRecordPos = pStm->Tell();
+                    *pStm >> nRecordSize;
+                    pStm->SeekRel(2);
                     aPosition = ReadYX();
-                    *pWMF >> nLen >> nOptions;
+                    *pStm >> nLen >> nOptions;
                     // todo: we also have to take care of the text width
                     if( nLen )
                         GetWinExtMax( aPosition, rPlaceableBound, nMapMode );
@@ -1255,24 +1251,24 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 {
                     sal_Int32   nWinROP;
                     sal_uInt16  nSx, nSy, nSxe, nSye, nUsage;
-                    *pWMF >> nWinROP;
+                    *pStm >> nWinROP;
 
                     if( nFunction == W_META_STRETCHDIB )
-                        *pWMF >> nUsage;
+                        *pStm >> nUsage;
 
                     // nSye and nSxe is the number of pixels that has to been used
                     if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
-                        *pWMF >> nSye >> nSxe;
+                        *pStm >> nSye >> nSxe;
                     else
                         nSye = nSxe = 0;    // set this to zero as indicator not to scale the bitmap later
 
                     // nSy and nx is the offset of the first pixel
-                    *pWMF >> nSy >> nSx;
+                    *pStm >> nSy >> nSx;
 
                     if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
                     {
                         if ( nWinROP == PATCOPY )
-                            *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
+                            *pStm >> nUsage;    // i don't know anything of this parameter, so its called nUsage
                                                 // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
 
                         Size aDestSize( ReadYXExt() );
@@ -1288,18 +1284,18 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 case W_META_PATBLT:
                 {
                     UINT32 nROP;
-                    *pWMF >> nROP;
+                    *pStm >> nROP;
                     Size aSize = ReadYXExt();
                     GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound, nMapMode );
                 }
                 break;
             }
-            nPos += nRecSize * 2;
-             if ( nPos <= nEndPos )
-                 pWMF->Seek( nPos );
+            nPos += nRSize * 2;
+             if ( nPos <= nEnd )
+                 pStm->Seek( nPos );
              else
              {
-                 pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                 pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
                  bRet = sal_False;
              }
 
@@ -1307,7 +1303,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
     }
     else
     {
-        pWMF->SetError( SVSTREAM_GENERALERROR );
+        pStm->SetError( SVSTREAM_GENERALERROR );
         bRet = sal_False;
     }
     return bRet;
