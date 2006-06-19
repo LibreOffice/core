@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_ce2s.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:40:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ Ce_2s::~Ce_2s()
 }
 
 DYN Ce_2s *
-Ce_2s::Create_( RCid i_nCeClass)
+Ce_2s::Create_( RCid )
 {
     return new Ce_2s;
 }

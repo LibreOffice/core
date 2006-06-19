@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_param.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:44:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#if ENABLE_UDM
-#include <udm/tt_incl.hxx>
-#endif // ENABLE_UDM
 
 
 
@@ -72,34 +69,6 @@ Parameter::~Parameter()
 }
 
 
-#if ENABLE_UDM
-namespace
-{
-enum E_Data_Parameter
-{
-    mid_Name,
-    mid_Type,
-    mid_Direction,
-    mid_MAX
-};
-}
-
-void
-Parameter::SetupUdmTraits_( udm::struct_traits<Parameter> & o_rTraits )
-{
-    o_rTraits.reserve( mid_MAX );
-    udm::add_traits_member( o_rTraits, &Parameter::sName, mid_Name );
-    udm::add_traits_member( o_rTraits, &Parameter::nType, mid_Type );
-    udm::add_traits_member( o_rTraits, &Parameter::eDirection, mid_Direction );
-}
-#endif // ENABLE_UDM
-
 
 }   //  namespace   idl
 }   //  namespace   ary
-
-
-
-#if ENABLE_UDM
-IMPL_UDM_GET_TRAITS( ary::idl::Parameter );
-#endif // ENABLE_UDM
