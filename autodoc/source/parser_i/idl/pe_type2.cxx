@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_type2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:50:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ PE_Type::MyTemplateType()
     {
         pPE_TemplateType = new PE_Type(nTemplateType);
         pPE_TemplateType->EstablishContacts( this,
-                                             Gate(),
+                                             MyRepository(),
                                              TokenResult() );
     }
     return *pPE_TemplateType;
@@ -282,7 +282,8 @@ PE_Type::TransferData()
 {
     if (bIsUnsigned)
     {
-        String sName( StreamLock(40)() << "unsigned " << sFullType.LocalName() << c_str );
+        StreamLock sl(40);
+        String sName( sl() << "unsigned " << sFullType.LocalName() << c_str );
         sFullType.SetLocalName(sName);
     }
 
