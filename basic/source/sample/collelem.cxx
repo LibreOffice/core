@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collelem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:43:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <sbx.hxx>
 #endif
-#pragma hdrstop
 #include "collelem.hxx"
 
 // Das Sample-Element ist ein kleines Objekt, das die Properties
@@ -55,9 +54,9 @@ SampleElement::SampleElement( const String& r ) : SbxObject( r )
     SbxVariable* pMeth = Make( String( RTL_CONSTASCII_USTRINGPARAM("Say") ), SbxCLASS_METHOD, SbxEMPTY );
     pMeth->SetUserData( 0x12345678 );
     pMeth->ResetFlag( SBX_FIXED );
-    SbxInfo* pInfo = new SbxInfo;
-    pInfo->AddParam( String( RTL_CONSTASCII_USTRINGPARAM("text") ), SbxSTRING, SBX_READ );
-    pMeth->SetInfo( pInfo );
+    SbxInfo* pInfo_ = new SbxInfo;
+    pInfo_->AddParam( String( RTL_CONSTASCII_USTRINGPARAM("text") ), SbxSTRING, SBX_READ );
+    pMeth->SetInfo( pInfo_ );
 }
 
 void SampleElement::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -67,23 +66,21 @@ void SampleElement::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
-        SbxArray* pPar = pVar->GetParameters();
+        SbxArray* pPar_ = pVar->GetParameters();
         ULONG t = pHint->GetId();
         if( t == SBX_HINT_DATAWANTED && pVar->GetUserData() == 0x12345678 )
         {
             // Die Say-Methode:
             // 1 Parameter + Returnwert
-            if( !pPar || pPar->Count() != 2 )
+            if( !pPar_ || pPar_->Count() != 2 )
                 SetError( SbxERR_WRONG_ARGS );
             else
             {
                 String s( GetName() );
                 s.AppendAscii( " says: " );
-                s += pPar->Get( 1 )->GetString();
-                // Aus Gag: den String zurueckliefern
-                SbxVariable *pRet = pPar->Get( 0 );
-                pPar->Get( 0 )->SetType(SbxSTRING);
-                pPar->Get( 0 )->PutString( s );
+                s += pPar_->Get( 1 )->GetString();
+                pPar_->Get( 0 )->SetType(SbxSTRING);
+                pPar_->Get( 0 )->PutString( s );
                 InfoBox( NULL, s ).Execute();
             }
             return;
