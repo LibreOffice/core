@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_service.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:53:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ HF_IdlService::Produce_byData( const client & i_ce ) const
 
     aNameChain.Produce_CompleteChain(Env().CurPosition(), nameChainLinker);
     produce_Title(aTitle, C_sCePrefix_Service, i_ce);
+
     write_Docu(aTitle.Add_Row(), i_ce);
     CurOut() << new Html::HorizontalLine();
 
