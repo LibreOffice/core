@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:53:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,14 +77,13 @@ BmpCreator::~BmpCreator()
 
 // -----------------------------------------------------------------------------
 
-void BmpCreator::Message( const String& rText, BYTE cExitCode )
+void BmpCreator::Message( const String&, BYTE )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void BmpCreator::ImplCreate( SvStream& rStm,
-                             const ::std::vector< DirEntry >& rInDirs,
+void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
                              const DirEntry& rOut,
                              const String& rName,
                              const LangInfo& rLang )
@@ -333,8 +332,6 @@ void BmpCreator::Create( const String& rSRSName,
                          const String& rOutName,
                          const LangInfo& rLang )
 {
-    const char* pFSysResources = getenv( "BMP_FSYS_RESOURCES" );
-
     DirEntry                    aFileName( ImplGetSystemFileName( rSRSName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
     ::std::vector< DirEntry >   aInDirs;
     BOOL                        bDone = FALSE;
@@ -410,7 +407,7 @@ void BmpCreator::Create( const String& rSRSName,
             if( aText.Len() )
             {
                 bDone = TRUE;
-                ImplCreate( *pSRS, aInDirs, aOutDir, aName, rLang );
+                ImplCreate( aInDirs, aOutDir, aName, rLang );
             }
 /*          else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {
