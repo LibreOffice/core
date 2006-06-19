@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygn3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:41:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,7 +390,7 @@ void E3dPolygonObj::SetPolyTexture3D(const PolyPolygon3D& rNewPolyTexture3D)
 |*
 \************************************************************************/
 
-SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
