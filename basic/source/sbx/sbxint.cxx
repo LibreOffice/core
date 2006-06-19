@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:50:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,11 +297,7 @@ start:
             break;
         }
         case SbxBYREF | SbxCHAR:
-            if( n > SbxMAXCHAR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXCHAR;
-            }
-            else if( n < SbxMINCHAR )
+            if( n < SbxMINCHAR )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCHAR;
             }
@@ -917,19 +913,11 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXCHAR;
             }
-            else if( n < SbxMINCHAR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCHAR;
-            }
             *p->pChar = (xub_Unicode) n; break;
         case SbxBYREF | SbxBYTE:
             if( n > SbxMAXBYTE )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXBYTE;
-            }
-            else if( n < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
             *p->pByte = (BYTE) n; break;
         case SbxBYREF | SbxINTEGER:
@@ -938,10 +926,6 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXINT;
             }
-            else if( n < SbxMININT )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMININT;
-            }
             *p->pInteger = (INT16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
@@ -949,29 +933,17 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXUINT;
             }
-            else if( n < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
-            }
             *p->pUShort = (UINT16) n; break;
         case SbxBYREF | SbxLONG:
             if( n > SbxMAXLNG )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXLNG;
             }
-            else if( n < SbxMINLNG )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINLNG;
-            }
             *p->pLong = (INT32) n; break;
         case SbxBYREF | SbxULONG:
             if( n > SbxMAXULNG )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXULNG;
-            }
-            else if( n < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
             *p->pULong = (UINT32) n; break;
         case SbxBYREF | SbxSINGLE:
