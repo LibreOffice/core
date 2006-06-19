@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:17:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ namespace
         maybeSelect(_aValue);
     }
 //--------------------------------------------------------------------------
-    void OSelectForLocale::handle(ISubtree const&  _aSubtree)
+       void OSelectForLocale::handle(ISubtree const&  /*_aSubtree*/)
     {
         OSL_ENSURE(false, "INTERNAL ERROR: Inconsistent data: Found a Subtree in a set of localized values");
     }
