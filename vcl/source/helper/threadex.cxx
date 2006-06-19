@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:16:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#define THREADEX_IMPLEMENTATION
 #include <threadex.hxx>
 #include <svapp.hxx>
 
@@ -51,6 +52,14 @@ ThreadExecutor::~ThreadExecutor()
         osl_destroyThread( m_aThread );
 }
 
+extern "C"
+{
+    static void call_worker( void* pInstance )
+    {
+        ThreadExecutor::worker( pInstance );
+    }
+}
+
 void ThreadExecutor::worker( void* pInstance )
 {
     ThreadExecutor* pThis = ((ThreadExecutor*)pInstance);
@@ -63,7 +72,7 @@ long ThreadExecutor::execute()
     osl_resetCondition( m_aFinish );
     if( m_aThread )
         osl_destroyThread( m_aThread ), m_aThread = NULL;
-    m_aThread = osl_createThread( worker, this );
+    m_aThread = osl_createThread( call_worker, this );
     while( ! osl_checkCondition( m_aFinish ) )
         Application::Reschedule();
     return m_nReturn;
@@ -80,7 +89,7 @@ SolarThreadExecutor::~SolarThreadExecutor()
     osl_destroyCondition( m_aFinish );
 }
 
-IMPL_LINK( SolarThreadExecutor, worker, void*, pDummy )
+IMPL_LINK( SolarThreadExecutor, worker, void*, EMPTYARG )
 {
     m_nReturn = doIt();
     osl_setCondition( m_aFinish );
