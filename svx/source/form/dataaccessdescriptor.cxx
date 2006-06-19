@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,6 @@ namespace svx
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-    //====================================================================
-    //=
-    //====================================================================
 #define CONST_CHAR( propname ) propname, sizeof(propname) - 1
 
 #ifndef SVX_LIGHT
@@ -88,10 +85,12 @@ namespace svx
         sal_Bool                    m_bSequenceOutOfDate    : 1;
 
     public:
-        DECLARE_STL_STDKEY_MAP( DataAccessDescriptorProperty, Any, DescriptorValues );
+        typedef ::std::map< DataAccessDescriptorProperty, Any >     DescriptorValues;
         DescriptorValues            m_aValues;
         Sequence< PropertyValue >   m_aAsSequence;
         Reference< XPropertySet >   m_xAsSet;
+
+        typedef ::std::map< ::rtl::OUString, PropertyMapEntry* >    MapString2PropertyEntry;
 
     public:
         ODADescriptorImpl();
@@ -115,9 +114,9 @@ namespace svx
         sal_Bool buildFrom( const Reference< XPropertySet >& _rValues );
 
     protected:
-        PropertyValue       buildPropertyValue( const ConstDescriptorValuesIterator& _rPos );
-        PropertyMapEntry*   getPropertyMap( ) const;
-        PropertyMapEntry*   getPropertyMapEntry( const ConstDescriptorValuesIterator& _rPos ) const;
+        static PropertyValue                    buildPropertyValue( const DescriptorValues::const_iterator& _rPos );
+        static const MapString2PropertyEntry&   getPropertyMap( );
+        static PropertyMapEntry*                getPropertyMapEntry( const DescriptorValues::const_iterator& _rPos );
     };
 
     //--------------------------------------------------------------------
@@ -129,9 +128,9 @@ namespace svx
 
     //--------------------------------------------------------------------
     ODADescriptorImpl::ODADescriptorImpl(const ODADescriptorImpl& _rSource)
-        :m_aValues( _rSource.m_aValues )
-        ,m_bSetOutOfDate( _rSource.m_bSetOutOfDate )
+        :m_bSetOutOfDate( _rSource.m_bSetOutOfDate )
         ,m_bSequenceOutOfDate( _rSource.m_bSequenceOutOfDate )
+        ,m_aValues( _rSource.m_aValues )
     {
         if (!m_bSetOutOfDate)
             m_xAsSet = _rSource.m_xAsSet;
@@ -140,31 +139,9 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    // Vergleichen von Strings
-    static int
-    #if defined( WNT )
-     __cdecl
-    #endif
-    #if defined( ICC ) && defined( OS2 )
-    _Optlink
-    #endif
-        PropertySearch(const void* pFirst, const void* pSecond)
-    {
-        return static_cast<const PropertyValue*>(pFirst)->Name.compareToAscii(
-            static_cast<const PropertyMapEntry*>(pSecond)->mpName);
-    }
-
-    //--------------------------------------------------------------------
     sal_Bool ODADescriptorImpl::buildFrom( const Sequence< PropertyValue >& _rValues )
     {
-        PropertyMapEntry* pPropertyMap = getPropertyMap();
-        // determine the size of the map
-        sal_Int32 nMapSize = 0;
-        PropertyMapEntry* pMapLoop = pPropertyMap;
-        while (pMapLoop->mpName)
-        {
-            ++nMapSize; ++pMapLoop;
-        }
+        const MapString2PropertyEntry& rProperties = getPropertyMap();
 
         sal_Bool bValidPropsOnly = sal_True;
 
@@ -173,10 +150,10 @@ namespace svx
         const PropertyValue* pValuesEnd = pValues + _rValues.getLength();
         for (;pValues != pValuesEnd; ++pValues)
         {
-            PropertyMapEntry* pPropPos = static_cast<PropertyMapEntry*>(bsearch(pValues, pPropertyMap, nMapSize, sizeof(*pPropertyMap), PropertySearch));
-            if (pPropPos)
+            MapString2PropertyEntry::const_iterator aPropPos = rProperties.find( pValues->Name );
+            if ( aPropPos != rProperties.end() )
             {
-                DataAccessDescriptorProperty eProperty = (DataAccessDescriptorProperty)pPropPos->mnHandle;
+                DataAccessDescriptorProperty eProperty = (DataAccessDescriptorProperty)aPropPos->second->mnHandle;
                 m_aValues[eProperty] = pValues->Value;
             }
             else
@@ -241,94 +218,72 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    PropertyMapEntry* ODADescriptorImpl::getPropertyMap( ) const
+    const ODADescriptorImpl::MapString2PropertyEntry& ODADescriptorImpl::getPropertyMap( )
     {
         // the properties we know
-        static PropertyMapEntry s_aDesriptorProperties[] =
+        static MapString2PropertyEntry s_aProperties;
+        if ( s_aProperties.empty() )
         {
-            { CONST_CHAR("ActiveConnection"),   daConnection,           &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,    &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Column"),             daColumnObject,         &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("ColumnName"),         daColumnName,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Command"),            daCommand,              &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("CommandType"),        daCommandType,          &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Component"),          daComponent,            &::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("ConnectionResource"), daConnectionResource,   &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Cursor"),             daCursor,               &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("DataSourceName"),     daDataSource,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("DatabaseLocation"),   daDatabaseLocation,     &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing,     &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Filter"),             daFilter,               &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Selection"),          daSelection,            &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { NULL, 0, 0, NULL, 0, 0 }
-        };
-        // MUST be sorted !!
-
-#if OSL_DEBUG_LEVEL > 0
-        PropertyMapEntry* pLoop = s_aDesriptorProperties;
-        if (pLoop->mpName)
-        {
-            ::rtl::OUString sLeft = ::rtl::OUString::createFromAscii(pLoop->mpName);
-            ::rtl::OUString sRight;
-            while ((++pLoop)->mpName)
+            static PropertyMapEntry s_aDesriptorProperties[] =
             {
-                sRight = ::rtl::OUString::createFromAscii(pLoop->mpName);
-                OSL_ENSURE(sLeft < sRight, "ODADescriptorImpl::getPropertyMap: property map not sorted!");
-                sLeft = sRight;
+                { CONST_CHAR("ActiveConnection"),   daConnection,           &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,    &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Column"),             daColumnObject,         &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("ColumnName"),         daColumnName,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Command"),            daCommand,              &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("CommandType"),        daCommandType,          &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Component"),          daComponent,            &::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("ConnectionResource"), daConnectionResource,   &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Cursor"),             daCursor,               &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("DataSourceName"),     daDataSource,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("DatabaseLocation"),   daDatabaseLocation,     &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing,     &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Filter"),             daFilter,               &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Selection"),          daSelection,            &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { NULL, 0, 0, NULL, 0, 0 }
+            };
+
+            PropertyMapEntry* pEntry = s_aDesriptorProperties;
+            while ( pEntry->mpName )
+            {
+                s_aProperties[ ::rtl::OUString::createFromAscii( pEntry->mpName ) ] = pEntry;
+                ++pEntry;
             }
         }
-#endif
 
-        return s_aDesriptorProperties;
+        return s_aProperties;
     }
 
     //--------------------------------------------------------------------
-    PropertyMapEntry* ODADescriptorImpl::getPropertyMapEntry( const ConstDescriptorValuesIterator& _rPos ) const
+    PropertyMapEntry* ODADescriptorImpl::getPropertyMapEntry( const DescriptorValues::const_iterator& _rPos )
     {
-        PropertyMapEntry* pMap = getPropertyMap();
+        const MapString2PropertyEntry& rProperties = getPropertyMap();
 
-        // the index in the map above (depends on the property requested)
         sal_Int32 nNeededHandle = (sal_Int32)(_rPos->first);
 
-        PropertyMapEntry* pSearchHandle = pMap;
-        while (pSearchHandle->mpName)
+        for ( MapString2PropertyEntry::const_iterator loop = rProperties.begin();
+              loop != rProperties.end();
+              ++loop
+            )
         {
-            if (nNeededHandle == pSearchHandle->mnHandle)
-                return pSearchHandle;
-
-            ++pSearchHandle;
+            if ( nNeededHandle == loop->second->mnHandle )
+                return loop->second;
         }
-        OSL_ENSURE(sal_False, "ODADescriptorImpl::getPropertyMapEntry: could not find the property!");
-        return NULL;
+        throw RuntimeException();
     }
 
     //--------------------------------------------------------------------
-    PropertyValue ODADescriptorImpl::buildPropertyValue( const ConstDescriptorValuesIterator& _rPos )
+    PropertyValue ODADescriptorImpl::buildPropertyValue( const DescriptorValues::const_iterator& _rPos )
     {
         // the map entry
-        PropertyMapEntry* pProp = getPropertyMapEntry(_rPos);
+        PropertyMapEntry* pProperty = getPropertyMapEntry( _rPos );
 
         // build the property value
         PropertyValue aReturn;
-        aReturn.Name    = ::rtl::OUString::createFromAscii(pProp->mpName);
-        aReturn.Handle  = pProp->mnHandle;
+        aReturn.Name    = ::rtl::OUString( pProperty->mpName, pProperty->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+        aReturn.Handle  = pProperty->mnHandle;
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;
-
-#if OSL_DEBUG_LEVEL > 0
-        // check for type consistency
-        if (TypeClass_INTERFACE == pProp->mpType->getTypeClass())
-        {
-            Reference< XInterface > xCurrentValue;
-            _rPos->second >>= xCurrentValue;
-            Any aRequestedIFace;
-            if (xCurrentValue.is())
-                aRequestedIFace = xCurrentValue->queryInterface(*pProp->mpType);
-            OSL_ENSURE(aRequestedIFace.hasValue(), "ODADescriptorImpl::buildPropertyValue: invalid property value type (missing the requested interface)!");
-        }
-        else
-            OSL_ENSURE(pProp->mpType->equals(_rPos->second.getValueType()), "ODADescriptorImpl::buildPropertyValue: invalid property value type!");
-#endif
 
         // outta here
         return aReturn;
@@ -344,7 +299,7 @@ namespace svx
         PropertyValue* pValue = m_aAsSequence.getArray();
 
         // loop through all our values
-        for (   ConstDescriptorValuesIterator aLoop = m_aValues.begin();
+        for (   DescriptorValues::const_iterator aLoop = m_aValues.begin();
                 aLoop != m_aValues.end();
                 ++aLoop, ++pValue
             )
@@ -370,12 +325,12 @@ namespace svx
         PropertySetInfo* pPropSetInfo = new PropertySetInfo;
 
         // loop through all our values
-        for (   ConstDescriptorValuesIterator aLoop = m_aValues.begin();
+        for (   DescriptorValues::const_iterator aLoop = m_aValues.begin();
                 aLoop != m_aValues.end();
                 ++aLoop, ++pValuesToSet
             )
         {
-            PropertyMapEntry* pMapEntry = getPropertyMapEntry(aLoop);
+            PropertyMapEntry* pMapEntry = getPropertyMapEntry( aLoop );
             pPropSetInfo->add( pMapEntry, 1 );
 
             *pValuesToSet = buildPropertyValue(aLoop);
