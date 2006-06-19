@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:14:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         //TODO/CLEANUP
         //ist das Mutex-Handling OK?
         static ::osl::Mutex aProtector;
-        ::osl::MutexGuard aGuard( aProtector );
+        ::osl::MutexGuard aGuard2( aProtector );
 
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
         pApp = pNew;
@@ -535,8 +535,9 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
-        BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
-                    pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
+// not used anymore!
+//      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
+//                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
         if ( pAppData_Impl->pViewFrame )
         {
@@ -557,7 +558,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
         pAppData_Impl->pViewFrame = pFrame;
 
-        const SfxObjectShell* pSh = pAppData_Impl->pViewFrame ? pAppData_Impl->pViewFrame->GetObjectShell() : 0;
+        //const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
         //if ( !pSh )
         //{
         //    // otherwise BaseURL is set in activation of document
@@ -596,7 +597,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
 //--------------------------------------------------------------------
 
-short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
+short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave*/ )
 {
     if ( !rDoc.IsModified() )
         return RET_NO;
@@ -778,7 +779,7 @@ void SfxApplication::Invalidate( USHORT nId )
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
 typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
 typedef void* (SAL_CALL *basicide_macro_organizer)(INT16);
-IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pBasic )
+IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
     // get basctl dllname
     String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
@@ -790,10 +791,10 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pBasic )
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_handle_basic_error" ) );
-    basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getSymbol( handleMod, aSymbol.pData );
+    basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_handle_basic_error in basctl
-    long nRet = pSymbol( pBasic );
+    long nRet = pSymbol( pStarBasic );
 
     return nRet;
 }
@@ -876,7 +877,7 @@ SfxApplication::ChooseScript()
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
-    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getSymbol( handleMod, aSymbol.pData );
+    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_choose_macro in basctl
     rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
@@ -898,7 +899,7 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
-    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getSymbol( handleMod, aSymbol.pData );
+    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_choose_macro in basctl
     pSymbol( nTabId );
