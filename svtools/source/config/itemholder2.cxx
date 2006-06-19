@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:50:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:45:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #include <syslocaleoptions.hxx>
 #include <undoopt.hxx>
 #include <useroptions.hxx>
+#include "options.hxx"
 
 #include <tools/debug.hxx>
 
@@ -126,7 +127,7 @@ void ItemHolder2::holdConfigItem(EItem eItem)
 }
 
 //-----------------------------------------------
-void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     impl_releaseAllItems();
@@ -230,6 +231,10 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
         case E_USEROPTIONS :
             rItem.pItem = new SvtUserOptions();
             break;
+
+        default:
+            OSL_ASSERT(false);
+            break;
     }
 }
 
@@ -241,24 +246,4 @@ void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
         delete rItem.pItem;
         rItem.pItem = 0;
     }
-/*
-    switch(rItem.eItem)
-    {
-        case E_SYSLOCALEOPTIONS :
-            delete (SvtSysLocaleOptions*)rItem.pItem;
-            break;
-
-        case E_UNDOOPTIONS :
-            delete (SvtUndoOptions*)rItem.pItem;
-            break;
-
-        case E_USEROPTIONS :
-            delete (SvtUserOptions*)rItem.pItem;
-            break;
-
-        case E_HELPOPTIONS :
-            delete (SvtHelpOptions*)rItem.pItem;
-            break;
-    }
-*/
 }
