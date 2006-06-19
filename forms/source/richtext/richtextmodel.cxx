@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:23:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,22 +93,6 @@ namespace frm
     using namespace ::com::sun::star::util;
 
     //====================================================================
-    //= OModifyListenerContainer
-    //====================================================================
-    //--------------------------------------------------------------------
-    OModifyListenerContainer::OModifyListenerContainer( ::osl::Mutex& _rMutex )
-        :OModifyListenerContainer_Base( _rMutex )
-    {
-    }
-
-    //--------------------------------------------------------------------
-    bool OModifyListenerContainer::implNotify( const Reference< XModifyListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
-    {
-        _rxListener->modified( _rEvent );
-        return true;
-    }
-
-    //====================================================================
     //= ORichTextModel
     //====================================================================
     DBG_NAME( ORichTextModel )
@@ -117,8 +101,8 @@ namespace frm
         :OControlModel       ( _rxFactory, ::rtl::OUString() )
         ,FontControlModel    ( true                          )
         ,m_pEngine           ( RichTextEngine::Create()      )
-        ,m_aModifyListeners  ( m_aMutex                      )
         ,m_bSettingEngineText( false                         )
+        ,m_aModifyListeners  ( m_aMutex                      )
     {
         DBG_CTOR( ORichTextModel, NULL );
         m_nClassId = FormComponentType::TEXTFIELD;
@@ -147,8 +131,8 @@ namespace frm
         :OControlModel       ( _pOriginal, _rxFactory, sal_False )
         ,FontControlModel    ( _pOriginal                        )
         ,m_pEngine           ( NULL                              )
-        ,m_aModifyListeners  ( m_aMutex                          )
         ,m_bSettingEngineText( false                             )
+        ,m_aModifyListeners  ( m_aMutex                          )
     {
         DBG_CTOR( ORichTextModel, NULL );
 
@@ -290,7 +274,7 @@ namespace frm
     //------------------------------------------------------------------------------
     void SAL_CALL ORichTextModel::disposing()
     {
-        m_aModifyListeners.disposing( EventObject( *this ) );
+        m_aModifyListeners.disposeAndClear( EventObject( *this ) );
         OControlModel::disposing();
     }
 
@@ -570,12 +554,11 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( ORichTextModel, OnEngineContentModified, void*, _pNotInterestedIn )
+    IMPL_LINK( ORichTextModel, OnEngineContentModified, void*, /*_pNotInterestedIn*/ )
     {
         if ( !m_bSettingEngineText )
         {
-            EventObject aModifyEvent( *this );
-            m_aModifyListeners.notify( aModifyEvent );
+            m_aModifyListeners.notifyEach( &XModifyListener::modified, EventObject( *this ) );
 
             potentialTextChange();
                 // is this a good idea? It may become expensive in case of larger texts,
@@ -606,13 +589,13 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL ORichTextModel::addModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
-        m_aModifyListeners.addListener( _rxListener );
+        m_aModifyListeners.addInterface( _rxListener );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL ORichTextModel::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
-        m_aModifyListeners.removeListener( _rxListener );
+        m_aModifyListeners.removeInterface( _rxListener );
     }
 
     //--------------------------------------------------------------------
