@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixbrd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:46:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ void FixedBorder::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::Paint( const Rectangle& rRect )
+void FixedBorder::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
