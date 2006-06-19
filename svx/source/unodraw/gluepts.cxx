@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:02:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ SvxUnoGluePointAccess::~SvxUnoGluePointAccess() throw()
         EndListening( *mpObject->GetModel() );
 }
 
-void SvxUnoGluePointAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
+void SvxUnoGluePointAccess::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
@@ -310,7 +310,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
     {
         const USHORT nId = (USHORT)(Identifier - NON_USER_DEFINED_GLUE_POINTS) + 1;
 
-        SdrGluePointList* pList = mpObject->GetGluePointList();
+        SdrGluePointList* pList = const_cast<SdrGluePointList*>(mpObject->GetGluePointList());
         const USHORT nCount = pList ? pList->GetCount() : 0;
         USHORT i;
 
@@ -343,7 +343,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
 
         const USHORT nId = (USHORT)( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
-        SdrGluePointList* pList = mpObject->GetGluePointList();
+        SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
         const USHORT nCount = pList ? pList->GetCount() : 0;
         USHORT i;
         for( i = 0; i < nCount; i++ )
@@ -429,7 +429,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
 /* deprecated */
 
 // XIndexContainer
-void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32 Index, const uno::Any& Element )
+void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& Element )
     throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -497,7 +497,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno:
     Index -= 4;
     if( mpObject && Index >= 0 )
     {
-        SdrGluePointList* pList = mpObject->GetGluePointList();
+        SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
         if( pList && Index < pList->GetCount() )
         {
             SdrGluePoint& rGlue = (*pList)[(USHORT)Index];
