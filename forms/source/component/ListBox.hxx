@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:58:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,9 @@ protected:
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
+    // prevent method hiding
+    using OBoundControlModel::getFastPropertyValue;
+
 protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
@@ -240,15 +243,14 @@ typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XFocusListener
                             >   OListBoxControl_BASE;
 
 class ChangeListeners;
-class ItemListeners;
 
 class OListBoxControl   :public OBoundControl
                         ,public OListBoxControl_BASE
                         ,public IEventProcessor
 {
 private:
-    ::std::auto_ptr< ChangeListeners >      m_pChangeListeners;
-    ::std::auto_ptr< ItemListeners >        m_pItemListeners;
+    ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
+    ::cppu::OInterfaceContainerHelper       m_aItemListeners;
 
     ::com::sun::star::uno::Any              m_aCurrentSelection;
     Timer                                   m_aChangeTimer;
