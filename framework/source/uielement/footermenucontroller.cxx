@@ -4,9 +4,9 @@
  *
  *  $RCSfile: footermenucontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:53:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ void FooterMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 }
 
 // XEventListener
-void SAL_CALL FooterMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL FooterMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -258,7 +258,7 @@ void SAL_CALL FooterMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void SAL_CALL FooterMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL FooterMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -315,11 +315,11 @@ void SAL_CALL FooterMenuController::select( const css::awt::MenuEvent& rEvent ) 
     }
 }
 
-void SAL_CALL FooterMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL FooterMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
-void SAL_CALL FooterMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL FooterMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -392,7 +392,6 @@ void SAL_CALL FooterMenuController::initialize( const Sequence< Any >& aArgument
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
             m_bInitialized = sal_True;
