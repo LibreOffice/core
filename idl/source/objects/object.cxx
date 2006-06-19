@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:50:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@
 #include <object.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#pragma hdrstop
-
 
 /******************** class SvClassElement *******************************/
 SV_IMPL_PERSIST1( SvClassElement, SvPersistBase );
@@ -414,7 +412,6 @@ void SvMetaClass::WriteContextSvIdl
     for( n = 0; n < aClassList.Count(); n++ )
     {
         SvClassElement * pEle = aClassList.GetObject( n );
-        SvMetaClass * pCl = pEle->GetClass();
         WriteTab( rOutStm, nTab );
         rOutStm << SvHash_import()->GetName().GetBuffer() << ' '
                 << pEle->GetPrefix().GetBuffer();
@@ -605,7 +602,7 @@ void SvMetaClass::WriteOdlMembers( ByteStringList & rSuperList,
 *************************************************************************/
 void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                         USHORT nTab,
-                         WriteType nT, WriteAttribute nA )
+                         WriteType nT, WriteAttribute )
 {
     rBase.aIFaceName = GetName();
     switch( nT )
@@ -669,7 +666,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             if ( GetAutomation() )
                 rOutStm << " ( Automation ) ";
             rOutStm << endl;
-            WriteDescription( rBase, rOutStm );
+            WriteDescription( rOutStm );
             rOutStm << "</INTERFACE>" << endl << endl;
 
             // alle Attribute schreiben
@@ -689,6 +686,8 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 
             break;
         }
+        default:
+            break;
     }
 }
 
@@ -706,7 +705,7 @@ USHORT SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
     {
         SvSlotElement *pEle = rSlotList.GetObject( n );
         SvMetaSlot *pAttr = pEle->xSlot;
-        nCount += pAttr->WriteSlotParamArray( rBase, rOutStm );
+        nCount = nCount + pAttr->WriteSlotParamArray( rBase, rOutStm );
     }
 
     return nCount;
@@ -728,7 +727,7 @@ USHORT SvMetaClass::WriteSlots( const ByteString & rShellName,
         rSlotList.Seek(n);
         SvSlotElement * pEle = rSlotList.GetCurObject();
         SvMetaSlot * pAttr = pEle->xSlot;
-        nSCount += pAttr->WriteSlotMap( rShellName, nCount + nSCount,
+        nSCount = nSCount + pAttr->WriteSlotMap( rShellName, nCount + nSCount,
                                         rSlotList, pEle->aPrefix, rBase,
                                         rOutStm );
     }
@@ -889,9 +888,9 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         << '{' << endl;
 
     SvULongs aSuperList;
-    SvMetaClassList aClassList;
+    SvMetaClassList classList;
     SvSlotElementList aSlotList;
-    InsertSlots(aSlotList, aSuperList, aClassList, ByteString(), rBase);
+    InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
     ULONG n;
     for ( n=0; n<aSlotList.Count(); n++ )
     {
@@ -985,8 +984,7 @@ void SvMetaClass::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaClass::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            USHORT nTab )
+void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
 {
     ByteString aSuperName( "SvDispatch" );
     if( GetSuperClass() )
@@ -1016,24 +1014,23 @@ void SvMetaClass::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaClass::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            USHORT nTab )
+void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
 {
     ByteString aSuperName( "SvDispatch" );
     if( GetSuperClass() )
         aSuperName = GetSuperClass()->GetName();
     const char * pSup = aSuperName.GetBuffer();
 
-    ByteString aName = GetSvName();
+    ByteString name = GetSvName();
     // GetTypeName
-    rOutStm << "SvGlobalName " << aName.GetBuffer() << "::GetTypeName() const" << endl
+    rOutStm << "SvGlobalName " << name.GetBuffer() << "::GetTypeName() const" << endl
     << '{' << endl
     << "\treturn ClassName();" << endl
     << '}' << endl;
 
     SvMetaModule * pMod = GetModule();
     // FillTypeLibInfo
-    rOutStm << "BOOL " << aName.GetBuffer() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
+    rOutStm << "BOOL " << name.GetBuffer() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
     << "\t                               USHORT * pMajor," << endl
     << "\t                               USHORT * pMinor ) const" << endl
     << '{' << endl
@@ -1045,7 +1042,7 @@ void SvMetaClass::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
     << '}' << endl;
 
     // FillTypeLibInfo
-    rOutStm << "BOOL " << aName.GetBuffer() << "::FillTypeLibInfo( ByteString * pName,"
+    rOutStm << "BOOL " << name.GetBuffer() << "::FillTypeLibInfo( ByteString * pName,"
     << "\t                               USHORT * pMajor," << endl
     << "\t                               USHORT * pMinor ) const" << endl;
     rOutStm << '{' << endl
@@ -1055,7 +1052,7 @@ void SvMetaClass::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
     << "\treturn TRUE;" << endl
     << '}' << endl;
 
-    rOutStm << "void " << aName.GetBuffer() << "::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )" << endl
+    rOutStm << "void " << name.GetBuffer() << "::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )" << endl
     << '{' << endl
     << "\t" << pSup << "::Notify( rBC, rHint );" << endl
     << '}' << endl;
