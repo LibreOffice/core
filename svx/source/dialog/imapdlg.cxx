@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:20:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -149,8 +148,8 @@ inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cS
 |*
 \************************************************************************/
 
-SvxIMapDlgItem::SvxIMapDlgItem( USHORT nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
-            SfxControllerItem   ( nId, rBindings ),
+SvxIMapDlgItem::SvxIMapDlgItem( USHORT _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
+            SfxControllerItem   ( _nId, rBindings ),
             rIMap               ( rIMapDlg )
 {
 }
@@ -161,7 +160,7 @@ SvxIMapDlgItem::SvxIMapDlgItem( USHORT nId, SvxIMapDlg& rIMapDlg, SfxBindings& r
 |*
 \************************************************************************/
 
-void SvxIMapDlgItem::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxIMapDlgItem::StateChanged( USHORT nSID, SfxItemState /*eState*/,
                                    const SfxPoolItem* pItem )
 {
     if ( ( nSID == SID_IMAP_EXEC ) && pItem )
@@ -181,12 +180,12 @@ void SvxIMapDlgItem::StateChanged( USHORT nSID, SfxItemState eState,
 |*
 \************************************************************************/
 
-SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* pParent, USHORT nId,
+SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* _pParent, USHORT nId,
                                               SfxBindings* pBindings,
                                               SfxChildWinInfo* pInfo ) :
-            SfxChildWindow( pParent, nId )
+            SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SvxIMapDlg( pBindings, this, pParent, SVX_RES( RID_SVXDLG_IMAP ) );
+    pWindow = new SvxIMapDlg( pBindings, this, _pParent, SVX_RES( RID_SVXDLG_IMAP ) );
     SvxIMapDlg* pDlg = (SvxIMapDlg*) pWindow;
 
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
@@ -219,21 +218,22 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
 |*
 \************************************************************************/
 
-SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                        Window* pParent, const ResId& rResId ) :
-        SfxModelessDialog   ( pBindings, pCW, pParent, rResId ),
-        aIMapItem           ( SID_IMAP_EXEC, *this, *pBindings ),
+SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
+                        Window* _pParent, const ResId& rResId ) :
+        SfxModelessDialog   ( _pBindings, pCW, _pParent, rResId ),
+
         aTbxIMapDlg1        ( this, SVX_RES( TBX_IMAPDLG1 ) ),
-        aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
-        pCheckObj           ( NULL ),
         aFtURL              ( this, SVX_RES( FT_URL ) ),
         maURLBox            ( this, SVX_RES( CBB_URL ) ),
         aFtText             ( this, SVX_RES( FT_TEXT ) ),
         aEdtText            ( this, SVX_RES( EDT_TEXT ) ),
         maFtTarget          ( this, SVX_RES( RID_SVXCTL_FT_TARGET ) ),
         maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) ),
+        aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         maImageList         ( SVX_RES( IL_IMAPDLG ) ),
-        maImageListH        ( SVX_RES( ILH_IMAPDLG ) )
+        maImageListH        ( SVX_RES( ILH_IMAPDLG ) ),
+        pCheckObj           ( NULL ),
+        aIMapItem           ( SID_IMAP_EXEC, *this, *_pBindings )
 {
     pIMapWnd = new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ) );
 
@@ -317,17 +317,17 @@ void SvxIMapDlg::Resize()
 
     if ( aNewSize.Height() >= aMinSize.Height() )
     {
-        Size    aSize( aStbStatus.GetSizePixel() );
-        Point   aPoint( 0, aNewSize.Height() - aSize.Height() );
+        Size    _aSize( aStbStatus.GetSizePixel() );
+        Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
 
         // StatusBar positionieren
-        aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), aSize.Height() ) );
+        aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), _aSize.Height() ) );
         aStbStatus.Show();
 
         // EditWindow positionieren
-        aSize.Width() = aNewSize.Width() - 18;
-        aSize.Height() = aPoint.Y() - pIMapWnd->GetPosPixel().Y() - 6;
-        pIMapWnd->SetSizePixel( aSize );
+        _aSize.Width() = aNewSize.Width() - 18;
+        _aSize.Height() = aPoint.Y() - pIMapWnd->GetPosPixel().Y() - 6;
+        pIMapWnd->SetSizePixel( _aSize );
 
         aLastSize = aNewSize;
     }
@@ -899,7 +899,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, p )
+IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
 {
     NotifyInfo  aNewInfo;
 
@@ -919,7 +919,7 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, p )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, p )
+IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
 {
     NotifyInfo      aNewInfo;
     const String    aURLText( maURLBox.GetText() );
@@ -954,7 +954,7 @@ IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, p )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, pTimer )
+IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, EMPTYARG )
 {
     pOwnData->aTimer.Stop();
 
@@ -1053,7 +1053,7 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxIMapDlg, MiscHdl, void*, p )
+IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
 {
        SvtMiscOptions aMiscOptions;
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
