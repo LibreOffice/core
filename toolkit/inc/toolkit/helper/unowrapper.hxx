@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:00:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ private:
 
 public:
     UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit );
+    virtual ~UnoWrapper();
 
     void                                Destroy();
 
