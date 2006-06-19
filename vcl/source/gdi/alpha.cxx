@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alpha.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:51:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:19:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,11 @@ BOOL AlphaMask::Replace( const Bitmap& rMask, BYTE cReplaceTransparency )
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Replace( BYTE cSearchTransparency, BYTE cReplaceTransparency, ULONG nTol )
+BOOL AlphaMask::Replace( BYTE cSearchTransparency, BYTE cReplaceTransparency, ULONG
+#ifdef DBG_UTIL
+nTol
+#endif
+)
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
     BOOL                bRet = FALSE;
