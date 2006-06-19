@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 11:58:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:45:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ protected:
 
 public:
     OGridColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName = ::rtl::OUString());
-    OGridColumn(const OGridColumn* _pOriginal, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory );
+    OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn();
 
     // UNO Anbindung
@@ -125,25 +125,25 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw(::com::sun::star::uno::RuntimeException);
 
-// XTypeProvider
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
 
-// OComponentHelper
+    // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// ::com::sun::star::lang::XEventListener
+    // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::container::XChild
+    // XChild
     virtual InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException){return m_xParent;}
     virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::io::XPersistObject
+    // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
 
-// ::com::sun::star::beans::XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
@@ -152,7 +152,9 @@ public:
                                         throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
 
-// ::com::sun::star::beans::XPropertyState
+    using OPropertySetAggregationHelper::getFastPropertyValue;
+
+    // ::com::sun::star::beans::XPropertyState
     virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
     virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
@@ -176,7 +178,7 @@ class ClassName                                                     \
 {                                                                                   \
 public:                                                                             \
     ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);\
-    ClassName(const ClassName* _pCloneFrom, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);\
+    ClassName(const ClassName* _pCloneFrom);\
                                                                                     \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);  \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();             \
@@ -195,8 +197,8 @@ ClassName::ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::l
     :OGridColumn(_rxFactory, Model) \
 { \
 } \
-ClassName::ClassName( const ClassName* _pCloneFrom, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory ) \
-    :OGridColumn( _pCloneFrom, _rxFactory ) \
+ClassName::ClassName( const ClassName* _pCloneFrom ) \
+    :OGridColumn( _pCloneFrom ) \
 { \
 } \
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException) \
@@ -222,7 +224,7 @@ void ClassName::fillProperties( \
 } \
 OGridColumn* ClassName::createCloneColumn() const \
 { \
-    return new ClassName( this, m_xORB ); \
+    return new ClassName( this ); \
 } \
  \
 // column type ids
