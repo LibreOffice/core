@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:25:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ inline void DisposingForwarder::listen(
     }
 }
 //__________________________________________________________________________________________________
-void DisposingForwarder::disposing( lang::EventObject const & rSource )
+void DisposingForwarder::disposing( lang::EventObject const & )
     throw (RuntimeException)
 {
     m_xTarget->dispose();
@@ -579,8 +579,8 @@ Any ComponentContext::lookupMap( OUString const & rName )
         }
         else
         {
-            Reference< lang::XSingleServiceFactory > xFac;
-            if (usesService >>= xFac)
+            Reference< lang::XSingleServiceFactory > xFac2;
+            if (usesService >>= xFac2)
             {
                 // try via old XSingleServiceFactory
 #if OSL_DEBUG_LEVEL > 0
@@ -589,8 +589,8 @@ Any ComponentContext::lookupMap( OUString const & rName )
                     "### omitting context for service instanciation!\n" );
 #endif
                 xInstance = args.getLength()
-                    ? xFac->createInstanceWithArguments( args )
-                    : xFac->createInstance();
+                    ? xFac2->createInstanceWithArguments( args )
+                    : xFac2->createInstance();
             }
             else if (m_xSMgr.is()) // optionally service name
             {
@@ -636,7 +636,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
     iFind = m_map.find( rName );
     if (iFind != m_map.end())
     {
-        ContextEntry * pEntry = iFind->second;
+        pEntry = iFind->second;
         if (pEntry->lateInit)
         {
             pEntry->value <<= xInstance;
@@ -845,6 +845,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
         }
         catch (Exception & exc)
         {
+            (void) exc; // avoid warning about unused variable
             OSL_ENSURE( 0, OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             return Reference< XComponentContext >();
