@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphhelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:42:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:28:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
 // static
 void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 {
+    (void)pGDIMeta;  // unused
     void* pResult = NULL;
 
 #ifdef WNT
@@ -159,6 +160,8 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 // static
 void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize )
 {
+    (void)pGDIMeta;  // unused
+    (void)aMetaSize; // unused
     void* pResult = NULL;
 
 #ifdef WNT
@@ -317,8 +320,9 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
 
     // determine size that has the same aspect ratio as image size and
     // fits into the rectangle determined by nMaximumExtent
-    if ( aSizePix.Width() && aSizePix.Height()
-      && ( aSizePix.Width() > nMaximumExtent || aSizePix.Height() > nMaximumExtent ) )
+    if ( aSizePix.Width() && aSizePix.Height() &&
+            ( sal::static_int_cast<sal_uInt32>(aSizePix.Width()) > nMaximumExtent ||
+              sal::static_int_cast<sal_uInt32>(aSizePix.Height()) > nMaximumExtent ) )
     {
         const Size  aOldSizePix( aSizePix );
         double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();
@@ -532,7 +536,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
 
 //---------------------------------------------------------------
 // static
-sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::rtl::OUString& aFactoryShortName, sal_Bool bIsTemplate )
+sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::rtl::OUString& aFactoryShortName, sal_Bool /*bIsTemplate*/ )
 {
     sal_uInt16 nResult = 0;
 
