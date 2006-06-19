@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:09:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1534,6 +1534,10 @@ UUIInteractionHandler::executeErrorDialog(
                                     nButtonMask,
                                     aText.makeStringAndClear()));
             break;
+
+        default:
+            OSL_ASSERT(false);
+            break;
         }
     }
     catch (std::bad_alloc const &)
@@ -1929,6 +1933,10 @@ UUIInteractionHandler::handleCookiesRequest(
             case star::ucb::CookiePolicy_IGNORE:
                 xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
                 break;
+
+            default:
+                OSL_ASSERT(false);
+                break;
             }
             aCookies.Insert(xCookie.get(), LIST_APPEND);
             xCookie.release();
@@ -2028,15 +2036,7 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
         return;
     }
 
-    uui::FilterNameList                                 lNames        ;
-    star::uno::Sequence< rtl::OUString >                lFilters      ;
-    sal_Int32                                           nFilterCount  = 0;
-    sal_Int32                                           nPropCount    = 0;
-    star::uno::Sequence< star::beans::PropertyValue >   lProps        ;
-    rtl::OUString                                       sInternalName ;
-    rtl::OUString                                       sUIName       ;
-    sal_Bool                                            bTakeIt       = sal_False;
-    sal_Int8                                            nHandledProps = 0;
+    uui::FilterNameList lNames;
 
     // Note: We look for all filters here which match the following criteria:
     //          - they are import filters as minimum (of course they can support export too)
@@ -2126,7 +2126,6 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
         {
             star::uno::Any                                    aPackedSet    ;
             star::uno::Sequence< star::beans::PropertyValue > lProps        ;
-            sal_Int32                                         nCount        ;
             sal_Int32                                         nStep         ;
             uui::FilterNamePair                               aPair         ;
 
@@ -2139,8 +2138,7 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
                 aPackedSet.clear();
             }
             aPackedSet >>= lProps;
-            nCount       = lProps.getLength();
-            for( nStep=0; nStep<nCount; ++nStep )
+            for( nStep=0; nStep<lProps.getLength(); ++nStep )
             {
                 if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
                 {
@@ -2162,8 +2160,7 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
                 aPackedSet.clear();
             }
             aPackedSet >>= lProps;
-            nCount       = lProps.getLength();
-            for( nStep=0; nStep<nCount; ++nStep )
+            for( nStep=0; nStep<lProps.getLength(); ++nStep )
             {
                 if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
                 {
@@ -2474,8 +2471,7 @@ UUIInteractionHandler::handleErrorRequest(
                 RID_SVX_START + 350, // RID_SVXERRCODE
                 RID_UUI_ERRHDL };
         ErrCode nErrorId = nErrorCode & ~ERRCODE_WARNING_MASK;
-        Source eSource = nErrorId >= ERRCODE_AREA_TOOLS
-                         && nErrorId < ERRCODE_AREA_LIB1 ?
+        Source eSource = nErrorId < ERRCODE_AREA_LIB1 ?
                              SOURCE_DEFAULT :
                          nErrorId >= ERRCODE_AREA_CHAOS
                          && nErrorId < ERRCODE_AREA_CHAOS_END ?
