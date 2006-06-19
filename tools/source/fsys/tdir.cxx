@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdir.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:17:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,11 @@
 #endif
 
 
-DBG_NAME( Dir );
+DBG_NAME( Dir )
 
-DECLARE_LIST( DirEntryList, DirEntry* );
-DECLARE_LIST( FSysSortList, FSysSort* );
-DECLARE_LIST( FileStatList, FileStat* );
+DECLARE_LIST( DirEntryList, DirEntry* )
+DECLARE_LIST( FSysSortList, FSysSort* )
+DECLARE_LIST( FileStatList, FileStat* )
 
 #define APPEND (USHORT) 65535
 
@@ -408,7 +408,7 @@ USHORT Dir::Scan( USHORT nCount )
 
         // weiterlesen...
         while ( nRead <= nCount && !pReader->bReady )
-            nRead += pReader->Read();
+            nRead = nRead + pReader->Read();
 
         // fertig?
         if ( pReader && pReader->bReady )
@@ -571,10 +571,7 @@ FSysError Dir::ImpSetSort( va_list pArgs, int nFirstSort )
         bLast = FSYS_SORT_END == (*pSort & FSYS_SORT_END);
         *pSort &= ~FSYS_SORT_END;
 
-        // Ascending oder Descending?
-        BOOL bAscending = FSYS_SORT_ASCENDING ==
-                    ( *pSort & ( FSYS_SORT_ASCENDING | FSYS_SORT_DESCENDING ) );
-        USHORT nSort = *pSort & ~(USHORT)FSYS_SORT_ASCENDING
+        FSysSort nSort = *pSort & ~(USHORT)FSYS_SORT_ASCENDING
                               &  ~(USHORT)FSYS_SORT_DESCENDING;
 
         // g"utliges Sortierkriterium?
@@ -747,16 +744,16 @@ Dir& Dir::operator+=( const Dir& rDir )
                 bStat = TRUE;
         } while ( !bStat && pSortLst->Next() );
     }
-    FileStat *pStat = NULL;
+    FileStat * stat = NULL;
     for ( USHORT nNr = 0; nNr < rDir.Count(); nNr++ ) {
         if ( bStat )
             if ( rDir.pStatLst )
             {
-                pStat = new FileStat( *rDir.pStatLst->GetObject(nNr) );
+                stat = new FileStat( *rDir.pStatLst->GetObject(nNr) );
             }
             else
-                pStat = new FileStat( rDir[nNr] );
-        ImpSortedInsert( new DirEntry( rDir[nNr] ), pStat );
+                stat = new FileStat( rDir[nNr] );
+        ImpSortedInsert( new DirEntry( rDir[nNr] ), stat );
     }
     return *this;
 }
