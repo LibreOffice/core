@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemconnect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:20:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,11 +326,11 @@ void DummyItemConnection::ApplyFlags( const SfxItemSet& rItemSet )
     ModifyControl( GetEnableState( bKnown ), GetShowState( bKnown ) );
 }
 
-void DummyItemConnection::Reset( const SfxItemSet& rItemSet )
+void DummyItemConnection::Reset( const SfxItemSet& /*rItemSet*/ )
 {
 }
 
-bool DummyItemConnection::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
+bool DummyItemConnection::FillItemSet( SfxItemSet& /*rDestSet*/, const SfxItemSet& /*rOldSet*/ )
 {
     return false;   // item set not changed
 }
