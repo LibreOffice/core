@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:42:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,23 +189,6 @@ void ScrollBar::ImplLoadRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-BOOL ScrollBar::ImplUpdateThumbRect( const Rectangle& rOldRect )
-{
-/* !!! Wegen ueberlappenden Fenstern ... !!!
-    Size aThumbRectSize  = rOldRect.GetSize();
-    if ( aThumbRectSize == maThumbRect.GetSize() )
-    {
-        DrawOutDev( maThumbRect.TopLeft(), aThumbRectSize,
-                    rOldRect.TopLeft(), aThumbRectSize );
-        return TRUE;
-    }
-    else
-*/
-        return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
 void ScrollBar::ImplUpdateRects( BOOL bUpdate )
 {
     USHORT      nOldStateFlags  = mnStateFlags;
@@ -302,10 +285,7 @@ void ScrollBar::ImplUpdateRects( BOOL bUpdate )
         if ( aOldPage2Rect != maPage2Rect )
             nDraw |= SCRBAR_DRAW_PAGE2;
         if ( aOldThumbRect != maThumbRect )
-        {
-            if ( !ImplUpdateThumbRect( aOldThumbRect ) )
-                nDraw |= SCRBAR_DRAW_THUMB;
-        }
+            nDraw |= SCRBAR_DRAW_THUMB;
         ImplDraw( nDraw, this );
     }
 }
@@ -529,10 +509,10 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 
 BOOL ScrollBar::ImplDrawNative( USHORT nDrawFlags )
 {
-    BOOL bNativeOK = FALSE;
     ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
 
-    if( bNativeOK = IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL) )
+    BOOL bNativeOK = IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL);
+    if( bNativeOK )
     {
         BOOL bHorz = (GetStyle() & WB_HORZ ? true : false);
 
@@ -1235,7 +1215,7 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-void ScrollBar::Paint( const Rectangle& rRect )
+void ScrollBar::Paint( const Rectangle& )
 {
     ImplDraw( SCRBAR_DRAW_ALL, this );
 }
@@ -1397,7 +1377,7 @@ long ScrollBar::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
