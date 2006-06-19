@@ -111,11 +111,11 @@ static struct hw_pair aCombine309A[] =
     { 0x30db, 0x30dd }
 };
 
-int ImplReplaceFullWidth( sal_Unicode* pString, int nLen )
+USHORT ImplReplaceFullWidth( sal_Unicode* pString, USHORT nLen )
 {
     sal_Unicode* pRead  = pString;
     sal_Unicode* pWrite = pRead;
-    int nNewLen = nLen;
+    USHORT nNewLen = nLen;
 
     while( (pRead - pString) < nLen )
     {
@@ -164,6 +164,6 @@ int ImplReplaceFullWidth( sal_Unicode* pString, int nLen )
 
 void ConvertHalfwitdhToFullwidth( String& rString )
 {
-    int nNewLen = ImplReplaceFullWidth( rString.GetBufferAccess(), rString.Len() );
+    USHORT nNewLen = ImplReplaceFullWidth( rString.GetBufferAccess(), rString.Len() );
     rString.ReleaseBufferAccess( nNewLen );
 }
