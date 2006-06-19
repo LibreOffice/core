@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:43:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
-#pragma hdrstop
-
 
 #define CHARCLASS_LIBRARYNAME "i18n"
 #define CHARCLASS_SERVICENAME "com.sun.star.i18n.CharacterClassification"
@@ -558,6 +555,8 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         ByteString aMsg( "parseAnyToken: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
         return ParseResult();
     }
@@ -588,6 +587,8 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         ByteString aMsg( "parsePredefinedToken: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
 #endif
         return ParseResult();
     }
