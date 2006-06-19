@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetstrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:23:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,7 @@ class INetMessageEncodeQPStream_Impl : public INetMessageIStream
     INetMessageStreamState  eState;
     BOOL                    bDone;
 
-    virtual int GetMsgLine (
-        sal_Char *pData, ULONG nSize, void *pCtx = NULL);
+    virtual int GetMsgLine (sal_Char *pData, ULONG nSize);
 
 public:
     INetMessageEncodeQPStream_Impl (ULONG nMsgBufferSize = 1024);
@@ -108,8 +107,7 @@ class INetMessageDecodeQPStream_Impl : public INetMessageOStream
     ULONG                   nTokBufLen;
     sal_Char                pTokBuffer[4];
 
-    virtual int PutMsgLine (
-        const sal_Char *pData, ULONG nSize, void *pCtx = NULL);
+    virtual int PutMsgLine (const sal_Char *pData, ULONG nSize);
 
 public:
     INetMessageDecodeQPStream_Impl (void);
@@ -138,8 +136,7 @@ class INetMessageEncode64Stream_Impl : public INetMessageIStream
 
     BOOL       bDone;
 
-    virtual int GetMsgLine (
-        sal_Char *pData, ULONG nSize, void *pCtx = NULL);
+    virtual int GetMsgLine (sal_Char *pData, ULONG nSize);
 
 public:
     INetMessageEncode64Stream_Impl (ULONG nMsgBufferSize = 2048);
@@ -161,8 +158,7 @@ class INetMessageDecode64Stream_Impl : public INetMessageOStream
     sal_Char               *pMsgRead;
     sal_Char               *pMsgWrite;
 
-    virtual int PutMsgLine (
-        const sal_Char *pData, ULONG nSize, void *pCtx = NULL);
+    virtual int PutMsgLine (const sal_Char *pData, ULONG nSize);
 
 public:
     INetMessageDecode64Stream_Impl (ULONG nMsgBufferSize = 128);
@@ -177,7 +173,7 @@ public:
 /*
  * INetIStream.
  */
-INetIStream::INetIStream (ULONG nIBufferSize)
+INetIStream::INetIStream ()
 {
 }
 
@@ -191,9 +187,9 @@ INetIStream::~INetIStream (void)
 /*
  * Read.
  */
-int INetIStream::Read (sal_Char *pData, ULONG nSize, void *pCtx)
+int INetIStream::Read (sal_Char *pData, ULONG nSize)
 {
-    return GetData (pData, nSize, pCtx);
+    return GetData (pData, nSize);
 }
 
 /*
@@ -246,7 +242,7 @@ void INetIStream::Encode64 (SvStream& rIn, SvStream& rOut)
 /*
  * INetOStream.
  */
-INetOStream::INetOStream (ULONG nOBufferSize)
+INetOStream::INetOStream ()
 {
 }
 
@@ -260,9 +256,9 @@ INetOStream::~INetOStream (void)
 /*
  * Write.
  */
-int INetOStream::Write (const sal_Char *pData, ULONG nSize, void *pCtx)
+int INetOStream::Write (const sal_Char *pData, ULONG nSize)
 {
-    return PutData (pData, nSize, pCtx);
+    return PutData (pData, nSize);
 }
 
 /*=========================================================================
@@ -274,8 +270,7 @@ int INetOStream::Write (const sal_Char *pData, ULONG nSize, void *pCtx)
  * INetMessageIStream.
  */
 INetMessageIStream::INetMessageIStream (ULONG nBufferSize)
-    : INetIStream (0),
-      pSourceMsg       (NULL),
+    : pSourceMsg       (NULL),
       bHeaderGenerated (FALSE),
       nBufSiz          (nBufferSize),
       pMsgStrm         (NULL),
@@ -299,7 +294,7 @@ INetMessageIStream::~INetMessageIStream (void)
 /*
  * GetData.
  */
-int INetMessageIStream::GetData (sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMessageIStream::GetData (sal_Char *pData, ULONG nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -323,7 +318,7 @@ int INetMessageIStream::GetData (sal_Char *pData, ULONG nSize, void *pCtx)
             pRead = pWrite = pBuffer;
 
             // Read next message line.
-            int nRead = GetMsgLine (pBuffer, nBufSiz, pCtx);
+            int nRead = GetMsgLine (pBuffer, nBufSiz);
             if (nRead > 0)
             {
                 // Set read pointer.
@@ -352,7 +347,7 @@ int INetMessageIStream::GetData (sal_Char *pData, ULONG nSize, void *pCtx)
 /*
  * GetMsgLine.
  */
-int INetMessageIStream::GetMsgLine (sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMessageIStream::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -420,8 +415,7 @@ int INetMessageIStream::GetMsgLine (sal_Char *pData, ULONG nSize, void *pCtx)
  * INetMessageOStream.
  */
 INetMessageOStream::INetMessageOStream (void)
-    : INetOStream (0),
-      pTargetMsg    (NULL),
+    : pTargetMsg    (NULL),
       bHeaderParsed (FALSE),
       eOState       (INETMSG_EOL_BEGIN),
       pMsgBuffer    (new SvMemoryStream)
@@ -453,8 +447,7 @@ INetMessageOStream::~INetMessageOStream (void)
  * PutData.
  * (Simple Field Parsing (RFC822, Appendix B)).
  */
-int INetMessageOStream::PutData (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMessageOStream::PutData (const sal_Char *pData, ULONG nSize)
 {
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -479,7 +472,8 @@ int INetMessageOStream::PutData (
                 {
                     *pMsgBuffer << '\0';
                     int status = PutMsgLine (
-                        (const sal_Char *) pMsgBuffer->GetData(), pMsgBuffer->Tell(), pCtx);
+                        (const sal_Char *) pMsgBuffer->GetData(),
+                        pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
                 }
 
@@ -504,7 +498,8 @@ int INetMessageOStream::PutData (
                     // Emit buffered header field now.
                     *pMsgBuffer << '\0';
                     int status = PutMsgLine (
-                        (const sal_Char *) pMsgBuffer->GetData(), pMsgBuffer->Tell(), pCtx);
+                        (const sal_Char *) pMsgBuffer->GetData(),
+                        pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
                 }
 
@@ -550,7 +545,7 @@ int INetMessageOStream::PutData (
     if (bHeaderParsed && (pData < pStop))
     {
         // Put message body down-stream.
-        return PutMsgLine (pData, (pStop - pData), pCtx);
+        return PutMsgLine (pData, (pStop - pData));
     }
 
     return INETSTREAM_STATUS_OK;
@@ -559,8 +554,7 @@ int INetMessageOStream::PutData (
 /*
  * PutMsgLine.
  */
-int INetMessageOStream::PutMsgLine (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMessageOStream::PutMsgLine (const sal_Char *pData, ULONG nSize)
 {
     // Check for message container.
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -592,7 +586,7 @@ int INetMessageOStream::PutMsgLine (
         sal_Size nDocSiz = pTargetMsg->GetDocumentSize();
         sal_Size nWrite  = 0;
 
-        ErrCode status = pLB->FillAppend ((sal_Char *)pData, nSize, &nWrite);
+        pLB->FillAppend ((sal_Char *)pData, nSize, &nWrite);
         pTargetMsg->SetDocumentSize (nDocSiz + nWrite);
 
         if (nWrite < nSize) return INETSTREAM_STATUS_ERROR;
@@ -670,8 +664,7 @@ INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl (void)
 /*
  * GetMsgLine.
  */
-int INetMessageEncodeQPStream_Impl::GetMsgLine (
-    sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetSourceMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -892,7 +885,7 @@ INetMessageDecodeQPStream_Impl::~INetMessageDecodeQPStream_Impl (void)
  * PutMsgLine.
  */
 int INetMessageDecodeQPStream_Impl::PutMsgLine (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
+    const sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetTargetMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -905,7 +898,7 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine (
     {
         if (eState == INETMSG_EOL_FESC)
         {
-            *(pTokBuffer + nTokBufLen++) = toupper (*pData);
+            *(pTokBuffer + nTokBufLen++) = static_cast< char >(toupper(*pData));
             pData++;
             if (nTokBufLen == 2)
             {
@@ -1020,8 +1013,7 @@ INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl (void)
 /*
  * GetMsgLine.
  */
-int INetMessageEncode64Stream_Impl::GetMsgLine (
-    sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetSourceMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -1223,7 +1215,7 @@ INetMessageDecode64Stream_Impl::~INetMessageDecode64Stream_Impl (void)
  * PutMsgLine.
  */
 int INetMessageDecode64Stream_Impl::PutMsgLine (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
+    const sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetTargetMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -1388,8 +1380,7 @@ INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
  * GetMsgLine.
  * (Message Generator).
  */
-int INetMIMEMessageStream::GetMsgLine (
-    sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     // Check for message container.
     INetMIMEMessage *pMsg = GetSourceMessage();
@@ -1480,7 +1471,7 @@ int INetMIMEMessageStream::GetMsgLine (
         }
 
         // Generate the message header.
-        int nRead = INetMessageIOStream::GetMsgLine (pData, nSize, pCtx);
+        int nRead = INetMessageIOStream::GetMsgLine (pData, nSize);
         if (nRead <= 0)
         {
             // Reset state.
@@ -1542,7 +1533,7 @@ int INetMIMEMessageStream::GetMsgLine (
                 else
                 {
                     // Read current child stream.
-                    int nRead = pChildStrm->Read (pData, nSize, pCtx);
+                    int nRead = pChildStrm->Read (pData, nSize);
                     if (nRead > 0)
                     {
                         return nRead;
@@ -1571,8 +1562,7 @@ int INetMIMEMessageStream::GetMsgLine (
                 if (eEncoding == INETMSG_ENCODING_7BIT)
                 {
                     // No Encoding.
-                    return INetMessageIOStream::GetMsgLine (
-                        pData, nSize, pCtx);
+                    return INetMessageIOStream::GetMsgLine (pData, nSize);
                 }
                 else
                 {
@@ -1598,7 +1588,7 @@ int INetMIMEMessageStream::GetMsgLine (
                         }
 
                         // Read encoded message.
-                        int nRead = pEncodeStrm->Read (pData, nSize, pCtx);
+                        int nRead = pEncodeStrm->Read (pData, nSize);
                         if (nRead > 0)
                         {
                             return nRead;
@@ -1618,15 +1608,13 @@ int INetMIMEMessageStream::GetMsgLine (
             }
         }
     }
-    return INETSTREAM_STATUS_ERROR; // Never reached.
 }
 
 /*
  * PutMsgLine.
  * (Message Parser).
  */
-int INetMIMEMessageStream::PutMsgLine (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
+int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, ULONG nSize)
 {
     // Check for message container.
     INetMIMEMessage *pMsg = GetTargetMessage();
@@ -1636,7 +1624,7 @@ int INetMIMEMessageStream::PutMsgLine (
     if (!IsHeaderParsed())
     {
         // Parse the message header.
-        int nRet = INetMessageIOStream::PutMsgLine (pData, nSize, pCtx);
+        int nRet = INetMessageIOStream::PutMsgLine (pData, nSize);
         return nRet;
     }
     else
@@ -1668,14 +1656,12 @@ int INetMIMEMessageStream::PutMsgLine (
                 if ( nSize > 0)
                 {
                     // Bytes still in buffer. Put message down-stream.
-                    int status = pChildStrm->Write(
-                        pData, nSize, NULL );
+                    int status = pChildStrm->Write( pData, nSize );
                     if (status != INETSTREAM_STATUS_OK)
                         return status;
                 }
 
-                return INetMessageIOStream::PutMsgLine (
-                    pData, nSize, pCtx);
+                return INetMessageIOStream::PutMsgLine (pData, nSize);
             }
             else
             {
@@ -1744,7 +1730,7 @@ int INetMIMEMessageStream::PutMsgLine (
                             else
                                 DBG_ERRORFILE( "Die Boundary nicht gefunden" );
                             status = INetMessageIOStream::PutMsgLine(
-                                pOldPos, pChar - pOldPos + 1, pCtx );
+                                pOldPos, pChar - pOldPos + 1 );
                             if( status != INETSTREAM_STATUS_OK )
                                 return status;
                             pOldPos = pChar + 1;
@@ -1780,7 +1766,7 @@ int INetMIMEMessageStream::PutMsgLine (
                             }
                             eState = INETMSG_EOL_BEGIN;
                             status = INetMessageIOStream::PutMsgLine(
-                                pOldPos, pChar - pOldPos + 1, pCtx );
+                                pOldPos, pChar - pOldPos + 1 );
                             if( status != INETSTREAM_STATUS_OK )
                                 return status;
                         }
@@ -1831,8 +1817,7 @@ int INetMIMEMessageStream::PutMsgLine (
             if (eEncoding == INETMSG_ENCODING_7BIT)
             {
                 // No decoding necessary.
-                return INetMessageIOStream::PutMsgLine (
-                    pData, nSize, pCtx);
+                return INetMessageIOStream::PutMsgLine (pData, nSize);
             }
             else
             {
@@ -1845,7 +1830,7 @@ int INetMIMEMessageStream::PutMsgLine (
 
                     pDecodeStrm->SetTargetMessage (pMsg);
                 }
-                return pDecodeStrm->Write (pData, nSize, pCtx);
+                return pDecodeStrm->Write (pData, nSize);
             }
         }
     }
