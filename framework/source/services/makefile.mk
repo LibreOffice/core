@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:40:43 $
+#   last change: $Author: hr $ $Date: 2006-06-19 11:28:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\
-                    $(SLO)$/documentlist.obj                        \
                     $(SLO)$/desktop.obj								\
                     $(SLO)$/frame.obj								\
                     $(SLO)$/urltransformer.obj						\
@@ -60,16 +59,6 @@ SLOFILES=			\
                     $(SLO)$/modulemanager.obj                       \
                     $(SLO)$/autorecovery.obj                        \
                     $(SLO)$/sessionlistener.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES=          \
-                    documentlist.src
-
-RESLIB1NAME=		lgd
-RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
-RESLIB1DEPN=        documentlist.src \
-                    documentlist.hrc
-
 
 # --- Targets ------------------------------------------------------
 
