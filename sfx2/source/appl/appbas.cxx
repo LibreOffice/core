@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:14:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ StarBASIC* SfxApplication::GetBasic_Impl() const
 }
 
 //------------------------------------------------------------------------
-String lcl_GetVersionString(ResMgr* pAppData_ImplResMgr)
+String lcl_GetVersionString(ResMgr* /*pAppData_ImplResMgr*/)
 {
     ::rtl::OUString aDefault;
     String aVersion( utl::Bootstrap::getBuildIdData( aDefault ));
@@ -523,9 +523,9 @@ sal_uInt16 SfxApplication::SaveBasicContainer() const
 
 void SfxApplication::RegisterBasicConstants
 (
-    const char*        pPrefix, // Prefix vor Konstanten-Namen
-    const SfxConstant* pConsts, // Array von <SfxConstant> Instanzen
-    sal_uInt16 nCount               // Anahl der Kontanten in pConsts
+    const char*,        // Prefix vor Konstanten-Namen
+    const SfxConstant*, // Array von <SfxConstant> Instanzen
+    sal_uInt16          // Anahl der Kontanten in pConsts
 )
 
 /*  [Beschreibung]
@@ -891,7 +891,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 //-------------------------------------------------------------------------
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
-    SfxViewFrame *pFrame = SfxViewFrame::Current();
+//  SfxViewFrame *pFrame = SfxViewFrame::Current();
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
@@ -964,29 +964,9 @@ void SfxApplication::MacroExec_Impl( SfxRequest& rReq )
 }
 
 //--------------------------------------------------------------------
-void SfxApplication::MacroState_Impl( SfxItemSet& rSet )
+void SfxApplication::MacroState_Impl( SfxItemSet& )
 {
     DBG_MEMTEST();
-
-   // Gestrichen, da zu teuer! Ausserdem waere ein EnterBasicCall noetig
-/*
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
-    while ( *pRanges )
-    {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
-        {
-            sal_Bool bOK = sal_False;
-            if ( SfxMacroConfig::IsMacroSlot( nWhich ) )
-                bOK = GetMacroConfig()->CheckMacro(nWhich);
-
-            if ( !bOK )
-                rSet.DisableItem(nWhich);
-        }
-
-        ++pRanges;
-    }
- */
 }
 
 //-------------------------------------------------------------------------
