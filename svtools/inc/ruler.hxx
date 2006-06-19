@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:12:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,6 +740,7 @@ private:
     SVT_DLLPRIVATE void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
     SVT_DLLPRIVATE void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle );
     SVT_DLLPRIVATE void                ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
+    using Window::ImplInit;
     SVT_DLLPRIVATE void                ImplInit( WinBits nWinBits );
     SVT_DLLPRIVATE void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SVT_DLLPRIVATE void                ImplCalc();
@@ -749,6 +750,7 @@ private:
     SVT_DLLPRIVATE void                ImplDraw();
     SVT_DLLPRIVATE void                ImplDrawExtra( BOOL bPaint = FALSE );
     SVT_DLLPRIVATE void                ImplUpdate( BOOL bMustCalc = FALSE );
+    using Window::ImplHitTest;
     SVT_DLLPRIVATE BOOL                ImplHitTest( const Point& rPos,
                                      ImplRulerHitTest* pHitTest,
                                      BOOL bRequiredStyle = FALSE,
@@ -829,6 +831,7 @@ public:
     long                GetClickPos() const { return mnDragPos; }
     RulerType           GetClickType() const { return meDragType; }
     USHORT              GetClickAryPos() const { return mnDragAryPos; }
+    using Window::GetType;
     RulerType           GetType( const Point& rPos,
                                  USHORT* pAryPos = NULL ) const;
 
