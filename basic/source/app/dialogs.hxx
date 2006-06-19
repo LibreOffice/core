@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:11:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,8 +125,8 @@ public:
 class ConfEdit : public PushButton
 {
     FixedText aText;
-    ByteString aKeyName;
     Edit aEdit;
+    ByteString aKeyName;
 public:
     ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
     void Save( Config &aConf );
@@ -135,7 +135,7 @@ public:
 };
 
 
-class OptionsDialog : public ModelessDialog
+class OptionsDialog : public TabDialog
 {
 private:
     TabControl      aTabCtrl;
@@ -157,6 +157,8 @@ public:
 
 class ProfileOptions : public TabPage
 {
+    Config &rConf;
+
     FixedLine aFlProfile;
     ComboBox aCbProfile;
     PushButton aPbNewProfile;
@@ -170,8 +172,6 @@ class ProfileOptions : public TabPage
     CheckBox aAutoReload;
     CheckBox aAutoSave;
     CheckBox aStopOnSyntaxError;
-
-    Config &rConf;
 
     void LoadData();
 
@@ -232,7 +232,7 @@ public:
 };
 
 
-DECLARE_LIST( StringList, String * );
+DECLARE_LIST( StringList, String * )
 #define C_KEY_ALLE          CByteString("All")
 #define C_KEY_AKTUELL       CByteString("Current")
 #define C_KEY_TYPE          CByteString("Type")
@@ -240,6 +240,8 @@ DECLARE_LIST( StringList, String * );
 
 class GenericOptions : public TabPage
 {
+    Config &aConf;
+
     FixedLine aFlArea;
     ComboBox aCbArea;
     PushButton aPbNewArea;
@@ -256,7 +258,6 @@ class GenericOptions : public TabPage
     AutoTimer aMoveTimer;
     DECL_LINK( MoveButtons, AutoTimer* );
 
-    Config &aConf;
     ByteString aLastGroupName;
 
     String ReadKey( const ByteString &aGroup, const ByteString &aKey );
