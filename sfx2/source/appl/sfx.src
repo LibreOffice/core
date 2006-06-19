@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:00:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ String STR_STANDARD_SHORTCUT
     Text [ en-US ] = "Standard" ;
 };
 
-String STR_FILTERNAME_ALL
+String STR_SFX_FILTERNAME_ALL
 {
     Text [ de ] = "Alle Dateien (*.*)" ;
     Text [ en-US ] = "All files (*.*)" ;
