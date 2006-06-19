@@ -78,13 +78,6 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\goodies
 hedabu: ..\inc\grfmgr.hxx %_DEST%\inc%_EXT%\goodies\grfmgr.hxx
 hedabu: ..\inc\mailenum.hxx %_DEST%\inc%_EXT%\goodies\mailenum.hxx
-hedabu: ..\inc\mailbook.hxx %_DEST%\inc%_EXT%\goodies\mailbook.hxx
-hedabu: ..\inc\mailbody.hxx %_DEST%\inc%_EXT%\goodies\mailbody.hxx
-hedabu: ..\inc\mailsrv.hxx %_DEST%\inc%_EXT%\goodies\mailsrv.hxx
-hedabu: ..\inc\mailread.hxx %_DEST%\inc%_EXT%\goodies\mailread.hxx
-hedabu: ..\inc\mailbrw.hxx %_DEST%\inc%_EXT%\goodies\mailbrw.hxx
-hedabu: ..\inc\mailfmgr.hxx %_DEST%\inc%_EXT%\goodies\mailfmgr.hxx
-hedabu: ..\inc\maillog.hxx %_DEST%\inc%_EXT%\goodies\maillog.hxx
 hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\goodies\vector3d.hxx
 hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\goodies\point3d.hxx
 hedabu: ..\inc\hmatrix.hxx %_DEST%\inc%_EXT%\goodies\hmatrix.hxx
