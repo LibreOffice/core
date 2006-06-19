@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:49:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,9 +121,9 @@ namespace framework
             virtual ~MenuBarFactory();
 
             //  XInterface, XTypeProvider, XServiceInfo
-            DECLARE_XINTERFACE
+            FWK_DECLARE_XINTERFACE
             DECLARE_XSERVICEINFO
-            DECLARE_XTYPEPROVIDER
+            FWK_DECLARE_XTYPEPROVIDER
 
             // XUIElementFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
