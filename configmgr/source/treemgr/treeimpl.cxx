@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:16:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,8 @@ public:
         OSL_DEBUG_ONLY(m_bMemberCheck = false);
         m_rTree.m_xStrategy = _xStrategy;
     }
+protected:
+    using NodeVisitor::handle;
 
 private:
     /// implements the NodeVisitor handler for Value Nodes
