@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:42:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #define Window      XLIB_Window
 #define BYTE        XLIB_BYTE
 #define INT8        XLIB_INT8
+#define INT64       XLIB_INT64
 #define BOOL        XLIB_BOOL
 #define Font        XLIB_Font
 #define Cursor      XLIB_Cursor
@@ -46,8 +47,6 @@
 #define KeyCode     XLIB_KeyCode
 #define Region      XLIB_Region
 #define Icon        XLIB_Icon
-#define class       XLIB_class
-#define new         XLIB_new
 #define Time        XLIB_Time
 #define Region      XLIB_Region
 #define Boolean     XLIB_Boolean
