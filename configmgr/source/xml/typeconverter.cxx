@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:42:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ namespace configmgr
 
     bool parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList)
     {
-        ::rtl::OUString const sSuffix = TEMPLATE_LIST_SUFFIX;
+        ::rtl::OUString const sSuffix( TEMPLATE_LIST_SUFFIX );
 
         sal_Int32 nIndex = sTypeName.lastIndexOf(sSuffix);
         if (nIndex >= 0 && nIndex + sSuffix.getLength() == sTypeName.getLength())
