@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:03:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,8 +287,7 @@ CommandLine::Run() const
            << "\n---------------------"
            << "\n" << Endl();
 
-    ary::n22::Repository &
-        rAry = ary::n22::Repository::Create_();
+    ary::n22::Repository::Create_();
 
     bool ok = true;
     for ( CommandList::const_iterator it = aCommands.begin();
@@ -308,7 +307,7 @@ CommandLine::Run() const
         TheMessages().WriteFile(aDiagnosticMessagesFile.c_str());
     }
 
-    rAry.Destroy_();
+    ary::n22::Repository::Destroy_();
     return ok ? 0 : 1;
 }
 
@@ -409,11 +408,14 @@ CommandLine::do_Init( int                 argc,
             //   Just ignore "-parse".
             ++it;
         else
+        {
+            StreamLock sl(200);
              throw command::X_CommandLine(
-                StreamLock(200)() << "Unknown commandline option \""
-                                  << *it
-                                  << "\"."
-                                  << c_str );
+                            sl() << "Unknown commandline option \""
+                                 << *it
+                                 << "\"."
+                                 << c_str );
+        }
     }   // end for
     sort_Commands();
 
