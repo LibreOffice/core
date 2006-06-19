@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorconfigurationwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:02:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ namespace framework{
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                                                const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   )
     : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_rContainer  (rContainer                   )
     , m_xConfig     (xConfig                      )
+    , m_rContainer  (rContainer                   )
 {
 }
 
