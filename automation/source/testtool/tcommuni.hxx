@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcommuni.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:33:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vos/thread.hxx>
 
 #ifndef _STRING_LIST
-DECLARE_LIST( StringList, String * );
+DECLARE_LIST( StringList, String * )
 #define _STRING_LIST
 #endif
 
@@ -55,6 +55,7 @@ class CommunicationManagerClientViaSocketTT : public CommunicationManagerClientV
 public:
     CommunicationManagerClientViaSocketTT();
 
+    using CommunicationManagerClientViaSocket::StartCommunication;
     virtual BOOL StartCommunication();
     virtual BOOL StartCommunication( String aApp, String aParams, Environment *pChildEnv );
 
