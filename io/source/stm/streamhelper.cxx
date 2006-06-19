@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 #include <rtl/alloc.h>
 
+#include <limits>
 #include <string.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -166,7 +167,7 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
     checkInvariants();
     sal_Int32 nLen = seq.getLength();
 
-    if( nPos > 0x80000000 || nPos < 0 ||  nPos + nLen < 0 || nPos + nLen > 0x80000000 )
+    if( nPos < 0 || nPos > std::numeric_limits< sal_Int32 >::max() - nLen )
     {
         throw IRingBuffer_OutOfBoundsException();
     }
