@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:00:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ protected:
 
     // SvLBox
     virtual BOOL DoubleClickHdl();
+
+    using SvLBox::ExecuteDrop;
 };
 
 //========================================================================
@@ -138,8 +140,8 @@ public:
 
     FmFieldWinData* GetData()  const {return pData;}
 
-    sal_Bool Update(FmFormShell*);
-    sal_Bool Update(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
+    void UpdateContent(FmFormShell*);
+    void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const;
 
     const ::rtl::OUString&      GetDatabaseName() const { return m_aDatabaseName; }
@@ -156,6 +158,8 @@ protected:
 protected:
     inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }
     inline  const   SfxBindings&    GetBindings() const { return SfxControllerItem::GetBindings(); }
+
+    using SfxFloatingWindow::StateChanged;
 };
 
 //========================================================================
