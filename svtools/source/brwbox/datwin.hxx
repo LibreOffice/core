@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #define MIN_COLUMNWIDTH  2
 #define DRAG_CRITICAL    4
 
-DECLARE_LIST( RectangleList, Rectangle* );
+DECLARE_LIST( RectangleList, Rectangle* )
 
 //===================================================================
 
@@ -113,6 +113,7 @@ public:
                         BrowserColumn( USHORT nItemId, const Image &rImage,
                                         const String& rTitle, ULONG nWidthPixel, const Fraction& rCurrentZoom,
                                         HeaderBarItemBits nFlags );
+    virtual            ~BrowserColumn();
 
     USHORT              GetId() const { return _nId; }
 
@@ -138,7 +139,7 @@ class BrowserDataWin
             ,public DragSourceHelper
             ,public DropTargetHelper
 {
-friend class BrowseBox;
+public:
     BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
     Window*         pEventWin;      // Window of forwarded events
     ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
@@ -208,8 +209,10 @@ public:
     void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
-    void            Invalidate();
-    void            Invalidate( const Rectangle& rRect );
+    void            Invalidate( USHORT nFlags = 0 );
+    void            Invalidate( const Rectangle& rRect, USHORT nFlags = 0 );
+    void            Invalidate( const Region& rRegion, USHORT nFlags = 0 )
+                    { Control::Invalidate( rRegion, nFlags ); }
 
 protected:
     void            StartRowDividerDrag( const Point& _rStartPos );
