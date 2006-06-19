@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:11:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,28 +35,15 @@
 
 #define _TOOLS_TIME_CXX
 
-#if defined( OS2 )
-#define INCL_DOSMISC
-#include <svpm.h>
-#elif defined( WNT )
+#if defined WNT
+#pragma warning (push,1)
 #include <svwin.h>
-#elif defined( WIN )
-#include <svwin.h>
-#include <dos.h>
-#elif defined( DOS )
-#include <dos.h>
+#pragma warning (pop)
 #elif defined UNX
 #include <unistd.h>
 #include <limits.h>
 #include <math.h>
 #include <sys/time.h>
-#elif defined( MAC )
-#include "mac_start.h"
-#ifndef __OSUTILS__
-#include "OSUtils.h"
-#include <MAC_Timer.h>
-#include "mac_end.h"
-#endif
 #endif
 
 #include <time.h>
@@ -123,16 +110,7 @@ static Time Sec100ToTime( sal_Int32 nSec100 )
 
 Time::Time()
 {
-#if defined( OS2 )
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Zeit zusammenbauen
-    nTime = (((sal_Int32)aDateTime.hours)*1000000) +
-            (((sal_Int32)aDateTime.minutes)*10000) +
-            (((sal_Int32)aDateTime.seconds)*100) +
-            ((sal_Int32)aDateTime.hundredths);
-#elif defined( WNT )
+#if defined WNT
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
@@ -141,30 +119,6 @@ Time::Time()
             (((sal_Int32)aDateTime.wMinute)*10000) +
             (((sal_Int32)aDateTime.wSecond)*100) +
             ((sal_Int32)aDateTime.wMilliseconds/10);
-#elif ( defined( WIN ) || defined( DOS ) ) && !defined ( BLC )
-    _dostime_t aTime;
-    _dos_gettime( &aTime );
-
-    // Zeit zusammenbauen
-    nTime = (((sal_Int32)aTime.hour)*1000000) +
-            (((sal_Int32)aTime.minute)*10000) +
-            (((sal_Int32)aTime.second)*100) +
-            ((sal_Int32)aTime.hsecond);
-#elif ( defined( WIN ) || defined( DOS ) ) && defined ( BLC )
-    dostime_t aTime;
-    _dos_gettime( &aTime );
-
-    // Zeit zusammenbauen
-    nTime = (((sal_Int32)aTime.hour)*1000000) +
-            (((sal_Int32)aTime.minute)*10000) +
-            (((sal_Int32)aTime.second)*100) +
-            ((sal_Int32)aTime.hsecond);
-#elif defined( MAC )
-    DateTimeRec dt;
-    ::GetTime(&dt);
-    nTime = (((sal_Int32)dt.hour)*1000000) +
-            (((sal_Int32)dt.minute)*10000) +
-            (((sal_Int32)dt.second)*100);
 #else
     time_t     nTmpTime;
     struct tm aTime;
@@ -366,23 +320,7 @@ BOOL Time::IsEqualIgnore100Sec( const Time& rTime ) const
 
 Time Time::GetUTCOffset()
 {
-#if defined( OS2 )
-#undef timezone
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Zeit zusammenbauen
-    if ( aDateTime.timezone != -1  )
-    {
-        short nTempTime = (short)Abs( aDateTime.timezone );
-        Time aTime( 0, (USHORT)nTempTime );
-        if ( aDateTime.timezone > 0 )
-            aTime = -aTime;
-        return aTime;
-    }
-    else
-        return Time( 0 );
-#elif defined( WNT )
+#if defined WNT
     TIME_ZONE_INFORMATION   aTimeZone;
     aTimeZone.Bias = 0;
     DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
@@ -393,34 +331,6 @@ Time Time::GetUTCOffset()
         nTempTime += aTimeZone.DaylightBias;
     Time aTime( 0, (USHORT)Abs( nTempTime ) );
     if ( nTempTime > 0 )
-        aTime = -aTime;
-    return aTime;
-#elif ( defined( WIN ) || defined( DOS ) ) && defined ( BLC )
-    static ULONG    nCacheTicks = 0;
-    static sal_Int32    nCacheSecOffset = -1;
-    ULONG           nTicks = Time::GetSystemTicks();
-    time_t          nTime;
-    tm              aTM;
-    sal_Int32           nLocalTime;
-    sal_Int32           nUTC;
-    short           nTempTime;
-
-    // Evt. Wert neu ermitteln
-    if ( (nCacheSecOffset == -1) || ((nTicks - nCacheTicks) > 360000) )
-    {
-        nTime = time( 0 );
-        tm aTMTmp;
-        aTM = *localtime_r( &nTime, &aTMTmp);
-        nLocalTime = mktime( &aTM );
-        aTM = *gmtime_r( &nTime, &aTMTmp);
-        nUTC = mktime( &aTM );
-        nCacheTicks = nTicks;
-        nCacheSecOffset = (nLocalTime-nUTC) / 60;
-    }
-
-    nTempTime = (short)Abs( nCacheSecOffset );
-    Time aTime( 0, (USHORT)nTempTime );
-    if ( nCacheSecOffset < 0 )
         aTime = -aTime;
     return aTime;
 #else
@@ -470,17 +380,8 @@ Time Time::GetUTCOffset()
 
 ULONG Time::GetSystemTicks()
 {
-#if defined( WIN ) || defined( WNT )
+#if defined WNT
     return (ULONG)GetTickCount();
-#elif defined( OS2 )
-    PM_ULONG nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (ULONG)nClock;
-#elif defined( MAC )
-    long long millisec;
-    Microseconds((UnsignedWide *)&millisec);
-    millisec = ( millisec + 500L ) / 1000L;
-    return (ULONG)millisec;
 #else
     timeval tv;
     gettimeofday (&tv, 0);
@@ -498,17 +399,8 @@ ULONG Time::GetSystemTicks()
 
 ULONG Time::GetProcessTicks()
 {
-#if defined( WIN ) || defined( WNT )
+#if defined WNT
     return (ULONG)GetTickCount();
-#elif defined( OS2 )
-    PM_ULONG nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (ULONG)nClock;
-#elif defined( MAC )
-    long long millisec;
-    Microseconds((UnsignedWide *)&millisec);
-    millisec = ( millisec + 500L ) / 1000L;
-    return (ULONG)millisec;
 #else
     static ULONG    nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
