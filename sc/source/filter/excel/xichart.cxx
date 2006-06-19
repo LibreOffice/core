@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:01:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,7 +551,8 @@ void XclImpChPieFormat::ReadChPieFormat( XclImpStream& rStrm )
 
 void XclImpChPieFormat::Convert( ScfPropertySet& rPropSet ) const
 {
-    sal_Int32 nApiDist = ::std::min< sal_Int32 >( mnPieDist, 100 );
+    sal_Int32 nApiDist = ::std::min< sal_Int32 >(
+        sal::static_int_cast< sal_Int32 >(mnPieDist), 100 );
     rPropSet.SetProperty( EXC_CHPROP_SEGMENTOFFSET, nApiDist );
 }
 
