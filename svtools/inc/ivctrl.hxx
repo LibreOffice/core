@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:50:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ class SvxIconChoiceCtrlColumnInfo
 
 public:
                             SvxIconChoiceCtrlColumnInfo( USHORT nSub, long nWd,
-                                SvxIconChoiceCtrlColumnAlign eAlign ) : nSubItem( nSub ),
-                                nWidth( nWd ), eAlignment( eAlign ) {}
+                                SvxIconChoiceCtrlColumnAlign eAlign ) :
+                                nWidth( nWd ), eAlignment( eAlign ), nSubItem( nSub ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
     void                    SetText( const String& rText ) { aColText = rText; }
@@ -319,6 +319,7 @@ public:
     void                SetClickHdl( const Link& rLink ) { _aClickIconHdl = rLink; }
     const Link&         GetClickHdl() const { return _aClickIconHdl; }
 
+    using OutputDevice::SetBackground;
     void                SetBackground( const Wallpaper& rWallpaper );
 
     void                ArrangeIcons();
@@ -359,6 +360,7 @@ public:
     ULONG                   GetEntryCount() const;
     SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) const;
     ULONG                   GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
+    using Window::SetCursor;
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
 
