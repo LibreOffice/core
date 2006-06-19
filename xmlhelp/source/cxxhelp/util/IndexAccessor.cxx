@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IndexAccessor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:25:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:42:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,9 +70,15 @@ public:
     virtual sal_Int32 readBytes( sal_Int8* data,sal_Int32 num )
     {
         sal_uInt64 nbytesread;
-        osl::FileBase::RC err = file_.read( (void*)(data), sal_uInt64(num),nbytesread );
+
+#ifdef DBG_UTIL
+        osl::FileBase::RC err =
+            file_.read( (void*)(data), sal_uInt64(num),nbytesread );
 
         OSL_ENSURE( err == osl::FileBase::E_None, "RandomAccessStreamImpl::readBytes: -> file not open" );
+#else
+        file_.read( (void*)(data), sal_uInt64(num),nbytesread );
+#endif
 
         return sal_Int32( nbytesread );
     }
