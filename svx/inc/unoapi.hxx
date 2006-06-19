@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:23:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,11 @@ SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const ::rtl::OU
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.
-*/
+
+    @cl: for warnings01 I found out that this method never worked so I thin
+         it is not used at all
 sal_Bool SvxMeasureUnitToMapUnit( const short eApi, short& nVcl ) throw();
+*/
 
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
