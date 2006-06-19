@@ -4,9 +4,9 @@
  *
  *  $RCSfile: octree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:05:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #endif
 #ifndef _SV_IMPOCT_HXX
 #include <impoct.hxx>
-#endif
-#ifndef _NEW_HXX
-#include<tools/new.hxx>
 #endif
 #include <octree.hxx>
 
@@ -362,8 +359,8 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
 
 InverseColorMap::~InverseColorMap()
 {
-    SvMemFree( pBuffer );
-    SvMemFree( pMap );
+    rtl_freeMemory( pBuffer );
+    rtl_freeMemory( pMap );
 }
 
 // ------------------------------------------------------------------------
@@ -373,9 +370,9 @@ void InverseColorMap::ImplCreateBuffers( const ULONG nMax )
     const ULONG nCount = nMax * nMax * nMax;
     const ULONG nSize = nCount * sizeof( ULONG );
 
-    pMap = (BYTE*) SvMemAlloc( nCount );
+    pMap = (BYTE*) rtl_allocateMemory( nCount );
     memset( pMap, 0x00, nCount );
 
-    pBuffer = (BYTE*) SvMemAlloc( nSize );
+    pBuffer = (BYTE*) rtl_allocateMemory( nSize );
     memset( pBuffer, 0xff, nSize );
 }
