@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:57:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 {
                     const XFillColorItem* pItem = ( const XFillColorItem* ) pPoolItem;
                     XColorItem aXColorItem( ATTR_COPY_START_COLOR, pItem->GetName(),
-                                                        pItem->GetValue() );
+                                                        pItem->GetColorValue() );
                     aSet.Put( aXColorItem );
 
                 }
@@ -203,12 +203,12 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         // Startfarbe / Endfarbe
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
         {
-            aStartColor = ( ( const XColorItem* ) pPoolItem )->GetValue();
+            aStartColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             bColor = TRUE;
         }
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_END_COLOR, TRUE, &pPoolItem ) )
         {
-            aEndColor = ( ( const XColorItem* ) pPoolItem )->GetValue();
+            aEndColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             if( aStartColor == aEndColor )
                 bColor = FALSE;
         }
