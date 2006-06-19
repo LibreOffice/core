@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:13:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 
-#if !defined( MAC ) && !defined( UNX )
+#if !defined UNX
 #include <io.h>
 #endif
 
@@ -49,14 +49,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#if defined (WIN) || defined (MAC)
-#include <time.h>
-#endif
-
-#ifdef PM2
-#include <os2.hxx>
-#endif
 
 #ifndef _DEBUG_HXX
 #include <debug.hxx>
@@ -78,17 +70,6 @@
 
 #ifdef UNX
 #define _MAX_PATH 260
-#endif
-
-#ifdef MAC_UNIVERSAL
-#ifndef _UNISTD
-#include <unistd.h>
-#endif
-#endif
-#ifdef MAC
-#ifndef __ERRORS__
-#include "Errors.h"
-#endif
 #endif
 
 #ifndef _STREAM_HXX
@@ -178,12 +159,6 @@ BOOL bInRedirection = FALSE;
 #endif
 static NAMESPACE_VOS( OMutex )* pRedirectMutex = 0;
 
-//========================================================================
-
-FSysRedirector::~FSysRedirector()
-{
-}
-
 //------------------------------------------------------------------------
 void FSysRedirector::Register( FSysRedirector *pRedirector )
 {
@@ -196,27 +171,26 @@ void FSysRedirector::Register( FSysRedirector *pRedirector )
 
 //------------------------------------------------------------------------
 
-BOOL FSysRedirector::DoRedirect( String &rPath )
+void FSysRedirector::DoRedirect( String &rPath )
 {
         String aURL(rPath);
-      String sURL = aURL;
 
         // if redirection is disabled or not even registered do nothing
         if ( !_bEnabled || !pRedirectMutex )
-                return FALSE;
+                return;
 
         // redirect only removable or remote volumes
         if ( !IsRedirectable_Impl( ByteString( aURL, osl_getThreadTextEncoding() ) ) )
-                return FALSE;
+                return;
 
         // Redirection is acessible only by one thread per time
-        // dont move the guard behind the !bInRedirection return FALSE!!!
+        // dont move the guard behind the bInRedirection check!!!
         // think of nested calls (when called from callback)
         NAMESPACE_VOS( OGuard ) aGuard( pRedirectMutex );
 
         // if already in redirection, dont redirect
         if ( bInRedirection )
-                return FALSE;
+                return;
 
         // dont redirect on nested calls
         bInRedirection = TRUE;
@@ -224,65 +198,17 @@ BOOL FSysRedirector::DoRedirect( String &rPath )
         // convert to URL
 #ifndef UNX
         for ( sal_Unicode *p = (sal_Unicode*)aURL.GetBuffer(); *p; ++p )
-#ifndef MAC
                 if ( '\\' == *p ) *p = '/';
                 else if ( ':' == *p ) *p = '|';
-#else
-                if ( ':' == *p ) *p = '/';
-#endif
 #endif
 
         aURL.Insert( String("file:///", osl_getThreadTextEncoding()), 0 );
 
         // do redirection
         Redirector();
-        BOOL bRedirected = Redirector()->Redirect( sURL );
-
-        // if redirected transform URL to file name
-        if ( bRedirected )
-        {
-                rPath = aURL.Copy( 8 );
-                aURL  = rPath;
-#ifndef UNX
-                for ( sal_Unicode *p = (sal_Unicode *)aURL.GetBuffer(); *p; ++p )
-#ifndef MAC
-                        if ( '/' == *p ) *p = '\\';
-                        else if ( '|' == *p ) *p = ':';
-#else
-                        if ( '/' == *p ) *p = ':';
-#endif
-#endif
-        }
 
         bInRedirection = FALSE;
-        return bRedirected;
-}
-
-//------------------------------------------------------------------------
-
-void FSysRedirector::EnableRedirection( BOOL bEnable )
-{
-        if ( !bEnable && pRedirectMutex)
-                pRedirectMutex->acquire();
-        _bEnabled = bEnable;
-        if ( bEnable && pRedirectMutex)
-                pRedirectMutex->release();
-}
-
-//------------------------------------------------------------------------
-
-BOOL FSysRedirector::Redirect( String &rPath )
-{
-#ifdef DBG_MI
-        if ( rPath.Len() && rPath(1) == ':' &&
-                 ( rPath(0) == 'b' || rPath(0) == 'B' ) )
-        {
-                rPath(0) = 'd';
-                rPath.Insert( "\\mi", 2 );
-                return TRUE;
-        }
-#endif
-        return FALSE;
+        return;
 }
 
 //------------------------------------------------------------------------
@@ -649,10 +575,10 @@ FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
     // KI-Division of FSys
     if ( eStyle == FSYS_STYLE_DETECT )
     {
-        sal_Unicode cFirst = rInitName.Copy(0,1).ToLowerAscii().GetChar(0);
+        sal_Unicode cFirst = rInitName.GetChar(0);
         if ( rInitName.Len() == 2 && rInitName.GetChar(1) == ':' &&
-         cFirst >= 'a' &&
-             cFirst <= 'z' )
+             ((cFirst >= 'A' && cFirst <= 'Z') ||
+              (cFirst >= 'a' && cFirst <= 'z')))
            eStyle = FSYS_STYLE_HPFS;
         else if ( rInitName.Len() > 2 && rInitName.GetChar(1) == ':' )
         {
@@ -685,7 +611,7 @@ FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
             return ImpParseUnixName( rbInitName, eStyle );
 
         case FSYS_STYLE_MAC:
-            return ImpParseMacName( rbInitName );
+            return FSYS_ERR_OK;
 
         default:
             return FSYS_ERR_UNKNOWN;
@@ -1141,7 +1067,7 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
         if ( !IsValid() )
                 return FALSE;
 
-#if defined(DOS) || defined(WIN) || defined(WNT) || defined(OS2)
+#if defined WNT
     // spezielle Filenamen sind vom System da
     if ( ( aName.CompareIgnoreCaseToAscii("CLOCK$") == COMPARE_EQUAL ||
            aName.CompareIgnoreCaseToAscii("CON") == COMPARE_EQUAL ||
@@ -1165,7 +1091,7 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
                 return TRUE;
         }
 
-#if defined(WIN) || defined(DOS) || defined(OS2) || defined(WNT)
+#if defined WNT
         if ( 0 != ( eKind & FSYS_KIND_DEV ) )
         {
                 return DRIVE_EXISTS( ImpGetTopPtr()->aName.GetChar(0) );
@@ -1319,8 +1245,10 @@ String DirEntry::GetExtension( char cSep ) const
     p1--;
 
     if ( p1 >= p0 )
-    // es wurde ein cSep an der Position p1 gefunden
-    return String(aName.Copy( p1 - p0 + 1 ), osl_getThreadTextEncoding());
+        // es wurde ein cSep an der Position p1 gefunden
+        return String(
+            aName.Copy( static_cast< xub_StrLen >(p1 - p0 + 1) ),
+            osl_getThreadTextEncoding());
     return String();
 }
 
@@ -1345,7 +1273,9 @@ String DirEntry::GetBase( char cSep ) const
 
     if ( p1 >= p0 )
         // es wurde ein cSep an der Position p1 gefunden
-        return String(aName.Copy( 0, p1 - p0 ), osl_getThreadTextEncoding());
+        return String(
+            aName.Copy( 0, static_cast< xub_StrLen >(p1 - p0) ),
+            osl_getThreadTextEncoding());
 
     else
         // es wurde kein cSep gefunden
@@ -1391,9 +1321,7 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
                     }
                     else
                     {
-#ifndef MAC
                         aRet.Insert( '/', 5 );
-#endif
                     }
                     aRet += "/";
                 }
@@ -1462,7 +1390,7 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
 |*
 *************************************************************************/
 
-BOOL DirEntry::IsAbs() const
+bool DirEntry::IsAbs() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1772,7 +1700,9 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
     if ( p1 >= p0 )
     {
         // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase( p1 - p0 + 1 - ( rExtension.Len() ? 0 : 1 ) );
+        aName.Erase(
+            static_cast< xub_StrLen >(
+                p1 - p0 + 1 - ( rExtension.Len() ? 0 : 1 )) );
         aName += ByteString(rExtension, osl_getThreadTextEncoding());
     }
     else if ( rExtension.Len() )
@@ -1805,7 +1735,7 @@ String DirEntry::CutExtension( char cSep )
     if ( p1 >= p0 )
     {
         // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase( p1-p0 );
+        aName.Erase( static_cast< xub_StrLen >(p1-p0) );
         return String(p1 + 1, osl_getThreadTextEncoding());
     }
 
@@ -1866,25 +1796,16 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
 
         USHORT nTokenCount = rPfad.GetTokenCount( cDelim );
         USHORT nIndex = 0;
-#ifndef MAC
         ByteString aThis = ACCESSDELIM(DEFSTYLE);
         aThis += ByteString(GetFull(), osl_getThreadTextEncoding());
-#else
-        String aThis(GetFull(), osl_getThreadTextEncoding());
-#endif
         for ( USHORT nToken = 0; nToken < nTokenCount; ++nToken )
         {
             ByteString aPath = ByteString(rPfad, osl_getThreadTextEncoding()).GetToken( 0, cDelim, nIndex );
 
             if ( aPath.Len() )
             {
-#ifdef MAC
-                if (aPath[aPath.Len()-1] == ':')
-                        aPath.Cut(aPath.Len()-1);
-#else
                 if (aPath.GetChar(aPath.Len()-1)== ACCESSDELIM(DEFSTYLE)[0])
                         aPath.Erase(aPath.Len()-1);
-#endif
                 aPath += aThis;
                 DirEntry aEntry( String(aPath, osl_getThreadTextEncoding()));
                 if ( aEntry.ToAbs() &&
@@ -2088,7 +2009,7 @@ void DirEntry::SetBase( const String& rBase, char cSep )
     if ( p1 >= p0 )
     {
         // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase( 0, p1 - p0 );
+        aName.Erase( 0, static_cast< xub_StrLen >(p1 - p0) );
         aName.Insert( ByteString(rBase, osl_getThreadTextEncoding()), 0 );
     }
     else
@@ -2142,9 +2063,10 @@ USHORT DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
         case FSYS_STYLE_SYSV:   return  14;
 
         case FSYS_STYLE_BSD:    return 250;
-    }
 
-    return USHRT_MAX;
+        default:
+            return USHRT_MAX;
+    }
 }
 
 /*************************************************************************
@@ -2198,22 +2120,6 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                 return aFactory.TempName();
         }
 
-#ifdef OS2
-        //
-        // resolves long FAT names used by OS2
-        //
-        if (Folder::IsAvailable() && IsLongNameOnFAT())
-        {
-                // in DirEntry mit kurzem Pfad wandeln
-                ItemIDPath      aItemIDPath(GetFull());
-                String          aString(aItemIDPath.GetHostNotationPath());
-                DirEntry        aDirEntry(aString);
-
-                // Aufruf der Methode
-                return aDirEntry.TempName(eKind);
-        }
-#endif
-
         ByteString aDirName; // hiermit hatte MPW C++ Probleme - immmer noch??
         char *ret_val;
         size_t i;
@@ -2266,16 +2172,13 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             strcpy(ret_val,dir);
 
             /* Make sure directory ends with a separator    */
-#if defined(DOS) || defined(PM2) || defined(WIN) || defined(WNT)
+#if defined WNT
             if ( i>0 && ret_val[i-1] != '\\' && ret_val[i-1] != '/' &&
                  ret_val[i-1] != ':')
                 ret_val[i++] = '\\';
-#elif (UNX)
+#elif defined UNX
             if (i>0 && ret_val[i-1] != '/')
                 ret_val[i++] = '/';
-#elif (MAC)
-            if (i>0 && ret_val[i-1] != ':')
-                ret_val[i++] = ':';
 #else
 #error unknown operating system
 #endif
@@ -2287,7 +2190,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             /* Prefix can have 5 chars, leaving 3 for numbers.
                26 ** 3 == 17576
              */
-#if (defined (MSC) || defined (BLC) || defined(ICC) ) && ( defined (WIN) || defined (WNT))
+#if defined MSC && defined WNT
             static unsigned long u = GetTickCount();
 #else
             static unsigned long u = clock();
@@ -2296,7 +2199,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             {
                  u %= (26*26*26);
                  unsigned nTemp = (unsigned)u;
-#if defined(OS2) || defined(WIN) || defined(WNT) || defined(DOS)
+#if defined WNT
                 itoa(nTemp,ret_val + i,26);
 #else
                 // the number needs length 5 not 3 !!!!
@@ -2337,65 +2240,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 }
                                 else
                                 {
-#if defined(MAC)
-                                        OSErr   nErr;
-                                        FSSpec  aFSSpec;
-                                        FInfo   dummyFInfo;
-
-                                        nErr = FSMakeFSSpec( 0, 0, aRedirected.GetPascalStr(), &aFSSpec );
-                                        if (nErr == noErr)
-                                                nErr = FSpGetFInfo(&aFSSpec,&dummyFInfo);
-
-                                        if (nErr == fnfErr) // File Not Found, das ist was wir wollen ...
-                                        {
-                                                aRet = DirEntry( ret_val );
-                                                break;
-                                        }
-                                        else if( nErr != noErr )
-                                        {
-                                                DBG_ASSERT( nErr == noErr, "cannot generate TempName" )
-                                                // keine Chance mehr, etwas zu finden
-                                                break;
-                                        }
-#elif defined(PM2)
-#ifdef POWERPC
-                                        // !!!!! DosQueryPathInfo liefert dezeit (Beta2) immer OK !!!!!
-                                        APIRET      nRet;
-                                        HFILE       hFile = 0;
-                                        PM_ULONG    lAction = 0;
-                                        nRet = DosOpen( (PSZ)ret_val, &hFile, &lAction, 0,
-                                                                        FILE_NORMAL, FILE_OPEN,
-                                                                        OPEN_SHARE_DENYNONE | OPEN_ACCESS_READONLY, 0L );
-                                        if ( !nRet )
-                                                DosClose( hFile );
-                                        else
-                                        {
-                                                aRet = DirEntry( ret_val );
-                                                break;
-                                        }
-#else
-                                        APIRET nRet;
-                                        ULONG nCount = 1;
-                                        HDIR hDirHandle = HDIR_SYSTEM;
-                                        FILEFINDBUF3  aDirEnt;
-                                        nRet = DosFindFirst( (PSZ) aRedirected.GetBuffer(),
-                                                                                 &hDirHandle, 23, (PVOID) &aDirEnt,
-                                                                                 sizeof( FILEFINDBUF3 ),
-                                                                                 &nCount, FIL_STANDARD );
-                                        if( nRet == ERROR_FILE_NOT_FOUND
-                                          || nRet == ERROR_NO_MORE_FILES )
-                                        {
-                                                aRet = DirEntry( String( ret_val ) );
-                                                break;
-                                        }
-                                        else if( nRet != NO_ERROR )
-                                        {
-                                                DBG_ASSERT( nRet == NO_ERROR, "cannot generate TempName" )
-                                                // keine Chance mehr, etwas zu finden
-                                                break;
-                                        }
-#endif
-#elif defined UNX
+#if defined UNX
                                         if( access( ByteString(aRedirected, osl_getThreadTextEncoding()).GetBuffer(), F_OK ) )
                                         {
                                                 aRet = DirEntry( aRetVal );
@@ -2565,102 +2410,6 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
 
 /*************************************************************************
 |*
-|*    DirEntry::ImpParseMacName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 14.10.91
-|*    Letzte Aenderung  MI 26.05.93
-|*
-*************************************************************************/
-
-FSysError DirEntry::ImpParseMacName( const ByteString& rPfad )
-{
-#if 0
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntryStack   aStack;
-    ByteString      aPfad( rPfad );
-
-    //If the Path starts with an ABSROOT ( Volume ) it has to be
-    //pushed. So the Tail can be easier evaluated
-    if (  ( aPfad.Search( ':' ) != STRING_NOTFOUND ) && ( aPfad.GetChar(0) != ':' ) ) {
-            aStack.Push( new DirEntry( aPfad.Cut( 0, aPfad.Search( ':' ) ),
-                         FSYS_FLAG_ABSROOT, FSYS_STYLE_MAC ) );
-            aPfad.Erase( 0, 1 );
-    }
-
-    //Purge Current-Directory
-    if ( aPfad(0) == ':' )
-        aPfad.Erase( 0, 1 );
-
-    //Evaluate the Tail
-    while ( aPfad.Len() ) {
-
-        if ( aPfad.GetChar(0) == ':' ) {
-            //PARENT detected
-            if ( aStack.Count() && (aStack.Top()->eFlag == FSYS_FLAG_ABSROOT) ) {
-                //an ABSROOT couldn't have a PARENT
-                return FSYS_ERR_NOTEXISTS;
-            }
-            else {
-                //Nothing or a Parent at the top?
-                if ( ( aStack.Count() == 0 ) ||
-                     ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) ) {
-                    //put leading Parents on the Top
-                    aStack.Push( new DirEntry( FSYS_FLAG_PARENT ) );
-                    aPfad.Erase( 0, 1 );
-                }
-                else {
-                    delete aStack.Pop();
-                    aPfad.Erase( 0, 1 );
-                }
-            }
-        }
-        else
-                {
-            // Normal entry detected
-                        USHORT nSepPos = aPfad.Search( ':' );
-                        if ( STRING_NOTFOUND == nSepPos )
-                                nSepPos = USHRT_MAX;
-                        DirEntry *pNew = new DirEntry( aPfad.Cut( 0, nSepPos ),
-                                                                FSYS_FLAG_NORMAL, FSYS_STYLE_MAC );
-                        if ( !pNew->IsValid() )
-                        {
-                                aName = rPfad;
-                                ErrCode eErr = pNew->GetError();
-                                delete pNew;
-                                return eErr;
-                        }
-            aStack.Push( pNew );
-                        if ( STRING_NOTFOUND == nSepPos )
-                                aPfad.Erase();
-                        else
-                                aPfad.Erase( 0, 1 );
-        }
-    }
-
-    //assign *this
-    if ( aStack.Count() == 0 ) {
-        eFlag  = FSYS_FLAG_CURRENT;
-        aName.Erase();
-    }
-    else {
-        eFlag = aStack.Top()->eFlag;
-        aName = aStack.Top()->aName;
-        delete aStack.Pop();
-    }
-    //assign the Parent-Entries
-    DirEntry** pTemp = &pParent;
-    while ( aStack.Count() ) {
-        *pTemp = aStack.Pop();
-        pTemp = &( (*pTemp)->pParent );
-    }
-#endif
-    return FSYS_ERR_OK;
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::MakeShortName()
 |*
 |*    Beschreibung
@@ -2822,11 +2571,7 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         // Extension abschneiden und kuerzen
         ByteString aExt;
         ByteString aFName = bLongName;
-#if defined(MAC)
-        if ( TRUE )
-#else
         if ( FSYS_STYLE_MAC != eStyle )
-#endif
         {
             DirEntry aUnparsed;
             aUnparsed.aName = bLongName;
@@ -3006,7 +2751,8 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
         return FSYS_ERR_NOTSUPPORTED;
 #endif
 
-        return FileCopier( *this, rDest ).Execute(nActions);
+        FileCopier fc(*this, rDest);
+        return fc.Execute(nActions);
 }
 
 /*************************************************************************
@@ -3019,7 +2765,7 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 |*
 *************************************************************************/
 
-#if defined(WNT) || defined(DOS) || defined(WIN) || defined(UNX)
+#if defined WNT || defined UNX
 
 FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 {
@@ -3041,13 +2787,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
     {
         return FSYS_ERR_ALREADYEXISTS;
     }
-
-#ifdef WIN
-    if ( FileStat(*this).IsKind(FSYS_KIND_DIR) && aDest.GetPath() != GetPath() )
-    {
-        return FSYS_ERR_NOTSUPPORTED;
-    }
-#endif
 
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
@@ -3124,31 +2863,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         // leads to destruction of file
         if ( ( aFrom != aTo ) && ( 0 != rename( bFrom.GetBuffer(), bTo.GetBuffer() ) ) )
 #ifndef UNX
-#ifdef WIN
-        { // einfaches umbenennen ist fehlgeschlagen, kopieren versuchen
-            FILE *fpIN  = fopen(aFrom.GetBuffer(), "rb");
-            if (!fpIN) return Sys2SolarError_Impl(ENOENT); // Quelle kann nicht zum Lesen geoeffnet werden
-            FILE *fpOUT = fopen(aTo, "wb");
-            if (!fpOUT)
-            {
-                fclose(fpIN);
-                return Sys2SolarError_Impl(EACCES); // Ziel kann nicht zum Schreiben geoeffnet werden
-            }
-
-            char pBuf[16384];
-            int nRead, nWrite, nError = 0;
-            while((nRead = fread(pBuf, 1, 16384, fpIN)) && (!nError))
-            {
-                nWrite = fwrite(pBuf, 1, nRead, fpOUT);
-                if (nWrite != nRead) nError = ENOSPC;
-            }
-            fclose( fpIN );
-            fclose( fpOUT );
-            return Sys2SolarError_Impl(nError);
-        }
-#else
             return Sys2SolarError_Impl( GetLastError() );
-#endif
 #else
         {
                 if( errno == EXDEV )
@@ -3159,24 +2874,24 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
                         if( fpIN && fpOUT )
                         {
                                 char pBuf[ 16384 ];
-                                int nBytes, nWritten, nError = 0;
+                                int nBytes, nWritten, nErr = 0;
                                 errno = 0;
-                                while( ( nBytes = fread( pBuf, 1, sizeof(pBuf), fpIN ) ) && ! nError )
+                                while( ( nBytes = fread( pBuf, 1, sizeof(pBuf), fpIN ) ) && ! nErr )
                                 {
                                     nWritten = fwrite( pBuf, 1, nBytes, fpOUT );
                                     // Fehler im fwrite     ?
                                     if( nWritten < nBytes )
                                     {
-                                        nError = errno;
+                                        nErr = errno;
                                         break;
                                     }
                                 }
                                 fclose( fpIN );
                                 fclose( fpOUT );
-                                if ( nError )
+                                if ( nErr )
                                 {
                                     unlink( bTo.GetBuffer() );
-                                    return Sys2SolarError_Impl( nError );
+                                    return Sys2SolarError_Impl( nErr );
                                 }
                                 else
                                 {
@@ -3246,8 +2961,8 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                         for ( USHORT n = 0; eError == FSYS_ERR_OK && n < aDir.Count(); ++n )
                         {
                                 const DirEntry &rSubDir = aDir[n];
-                                DirEntryFlag eFlag = rSubDir.GetFlag();
-                                if ( eFlag != FSYS_FLAG_CURRENT && eFlag != FSYS_FLAG_PARENT )
+                                DirEntryFlag flag = rSubDir.GetFlag();
+                                if ( flag != FSYS_FLAG_CURRENT && flag != FSYS_FLAG_PARENT )
                                         eError = rSubDir.Kill(nActions);
                         }
                 }
@@ -3290,9 +3005,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         {
                 if ( FSYS_ACTION_USERECYCLEBIN == (nActions & FSYS_ACTION_USERECYCLEBIN) )
                 {
-#ifdef OS2
-                        eError = ApiRet2ToSolarError_Impl( DosDelete( (char*) pName ) );
-#else
 #ifdef WNT
                         SHFILEOPSTRUCT aOp;
                         aOp.hwnd = 0;
@@ -3306,13 +3018,9 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 #else
                         eError = ERRCODE_IO_NOTSUPPORTED;
 #endif
-#endif
                 }
                 else
                 {
-#ifdef OS2
-                    eError = ApiRet2ToSolarError_Impl( DosForceDelete( (PSZ) pName ) );
-#else
 #ifdef WIN32
                     SetLastError(0);
 #endif
@@ -3328,7 +3036,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                     {
                         eError = ERRCODE_NONE;
                     }
-#endif
                 }
         }
 
@@ -3405,11 +3112,7 @@ USHORT DirEntry::Level() const
 
 String DirEntry::ConvertNameToSystem( const String &rName )
 {
-#ifdef MAC
-    return ImpConvertNameToSystem( rName );
-#else
     return rName;
-#endif
 }
 
 /*************************************************************************
@@ -3424,11 +3127,7 @@ String DirEntry::ConvertNameToSystem( const String &rName )
 
 String DirEntry::ConvertSystemToName( const String &rName )
 {
-#ifdef MAC
-    return ImpConvertSystemToName( rName );
-#else
     return rName;
-#endif
 }
 
 /*************************************************************************
@@ -3484,7 +3183,7 @@ BOOL DirEntry::IsLongNameOnFAT() const
         }
 
         // DirEntry-Kette auf lange Dateinamen pr?fen
-        for( int iLevel = this->Level(); iLevel > 0; iLevel-- )
+        for( USHORT iLevel = this->Level(); iLevel > 0; iLevel-- )
         {
             const DirEntry& rEntry = (const DirEntry&) (*this)[iLevel-1];
             String  aBase( rEntry.GetBase() );
