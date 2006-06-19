@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:05:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ void exportXFormsSchemas( SvXMLExport&, const Reference<com::sun::star::xforms::
 typedef OUString (*convert_t)( const Any& );
 typedef struct
 {
-    sal_Char* pPropertyName;
+    const sal_Char* pPropertyName;
     sal_uInt16 nPropertyNameLength;
     sal_uInt16 nNamespace;
     sal_uInt16 nToken;
