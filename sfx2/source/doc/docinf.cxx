@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-16 16:04:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #include <svtools/sfxecode.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#include <tools/new.hxx>
 #include <svtools/saveopt.hxx>
 #include <tools/tenccvt.hxx>
 #include <svtools/useroptions.hxx>
@@ -763,7 +762,7 @@ SfxOleThumbnailProperty::SfxOleThumbnailProperty(
         aBitmap.GetBitmap().Write( maBitmapData, FALSE, FALSE );
 }
 
-void SfxOleThumbnailProperty::ImplLoad( SvStream& rStrm )
+void SfxOleThumbnailProperty::ImplLoad( SvStream& )
 {
     DBG_ERRORFILE( "SfxOleThumbnailProperty::ImplLoad - not implemented" );
     SetError( SVSTREAM_INVALID_ACCESS );
@@ -957,8 +956,8 @@ typedef ::boost::shared_ptr< SfxOleSection > SfxOleSectionRef;
 // ----------------------------------------------------------------------------
 
 SfxOleSection::SfxOleSection() :
-    mnStartPos( 0 ),
-    maDictProp( maCodePageProp )
+    maDictProp( maCodePageProp ),
+    mnStartPos( 0 )
 {
 }
 
@@ -2011,7 +2010,7 @@ const SfxDocumentInfo &SfxDocumentInfo::CopyUserData(const SfxDocumentInfo &rSou
 
     if(pUserData)
     {
-        delete []pUserData;
+        delete [](sal::static_int_cast<char*>( pUserData ));
         pUserData = 0;
     }
     nUserDataSize = rSource.nUserDataSize;
@@ -2039,14 +2038,14 @@ const SfxDocumentInfo &SfxDocumentInfo::CopyUserData(const SfxDocumentInfo &rSou
 
 void SfxDocumentInfo::Free()
 {
-    delete []pUserData;
+    delete [](sal::static_int_cast<char*>( pUserData ));;
     pUserData = 0;
     nUserDataSize = 0;
 }
 
 //-------------------------------------------------------------------------
 
-String SfxDocumentInfo::AdjustTextLen_Impl( const String& rText, USHORT nMax )
+String SfxDocumentInfo::AdjustTextLen_Impl( const String& rText, USHORT /*nMax*/ )
 {
     String aRet = rText;
 /*! pb: dont cut any longer because the new file format has no length limit
@@ -2244,10 +2243,10 @@ void SfxDocumentInfo::SetThumbnailMetaFile (const GDIMetaFile &aMetaFile)
 
 void SfxDocumentInfo::DeleteUserData( BOOL bUseAuthor )
 {
-    SfxStamp aCreated;
-    if ( bUseAuthor  )
-        aCreated.SetName( SvtUserOptions().GetFullName() );
-    SetCreated( aCreated );
+    SfxStamp aCreatedStamp;
+    if ( bUseAuthor )
+        aCreatedStamp.SetName( SvtUserOptions().GetFullName() );
+    SetCreated( aCreatedStamp );
     SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
     SetChanged( aInvalid );
     SetPrinted( aInvalid );
@@ -2295,7 +2294,7 @@ BOOL SfxDocumentInfo::SetCustomProperty(const OUString& aPropertyName, const Any
     aProp.nNameLen = 0;
     aProp.nFlags   = ::com::sun::star::beans::PropertyAttribute::REMOVEABLE;
     aProp.aValue   = aValue;
-    aProp.nWID     = -1;
+    aProp.nWID     = 0xFFFF;
 
     pImp->_lDynamicProps[aPropertyName] = aProp;
     return TRUE;
