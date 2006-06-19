@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:42:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -733,9 +733,9 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
     {
         OUStringBuffer sTmp;
 
-        const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xNode );
-        if( rIdentifier.getLength() )
-            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ID, rIdentifier );
+        const OUString& rExportIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xNode );
+        if( rExportIdentifier.getLength() )
+            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ID, rExportIdentifier );
 
         Any aTemp( xNode->getBegin() );
         if( aTemp.hasValue() )
@@ -1614,7 +1614,7 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
 
     Reference< XInterface > xRef;
 
-    if( rTarget.getValueTypeClass() == typelib_TypeClass_INTERFACE )
+    if( rTarget.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE )
     {
         rTarget >>= xRef;
     }
@@ -1653,7 +1653,7 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
             prepareValue( *pAny );
     }
-    else if( rValue.getValueTypeClass() == typelib_TypeClass_INTERFACE )
+    else if( rValue.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE )
     {
         Reference< XInterface> xRef( rValue, UNO_QUERY );
         if( xRef.is() )
