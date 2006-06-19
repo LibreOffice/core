@@ -29,7 +29,7 @@ using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xforms;
 using namespace com::sun::star::lang;
 
-xmlXPathFunction xforms_lookupFunc(void *ctxt, const xmlChar *xname, const xmlChar *ns_uri)
+xmlXPathFunction xforms_lookupFunc(void */*ctxt*/, const xmlChar *xname, const xmlChar */*ns_uri*/)
 {
 
     const char *name = (char *)xname;
@@ -65,42 +65,6 @@ xmlXPathFunction xforms_lookupFunc(void *ctxt, const xmlChar *xname, const xmlCh
         return xforms_currentFunction;
     else
         return NULL;
-}
-
-static xmlXPathObjectPtr
-_valuePop(xmlXPathParserContextPtr ctxt)
-{
-    xmlXPathObjectPtr ret;
-
-    if (ctxt->valueNr <= 0)
-        return (0);
-    ctxt->valueNr--;
-    if (ctxt->valueNr > 0)
-        ctxt->value = ctxt->valueTab[ctxt->valueNr - 1];
-    else
-        ctxt->value = NULL;
-    ret = ctxt->valueTab[ctxt->valueNr];
-    ctxt->valueTab[ctxt->valueNr] = 0;
-    return (ret);
-}
-
-static int
-_valuePush(xmlXPathParserContextPtr ctxt, xmlXPathObjectPtr value)
-{
-    if (ctxt->valueNr >= ctxt->valueMax) {
-        ctxt->valueMax *= 2;
-        ctxt->valueTab =
-            (xmlXPathObjectPtr *) xmlRealloc(ctxt->valueTab,
-                                             ctxt->valueMax *
-                                             sizeof(ctxt->valueTab[0]));
-        if (ctxt->valueTab == NULL) {
-            xmlGenericError(xmlGenericErrorContext, "realloc failed !\n");
-            return (0);
-        }
-    }
-    ctxt->valueTab[ctxt->valueNr] = value;
-    ctxt->value = value;
-    return (ctxt->valueNr++);
 }
 
 // boolean functions
@@ -221,7 +185,7 @@ void xforms_countNonEmptyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     }
     xmlXPathReturnNumber(ctxt, nNotEmpty);
 }
-void xforms_indexFunction(xmlXPathParserContextPtr ctxt, int nargs)
+void xforms_indexFunction(xmlXPathParserContextPtr /*ctxt*/, int /*nargs*/)
 {
     // function index takes a string argument that is the IDREF of a
     // 'repeat' and returns the current 1-based position of the repeat
@@ -276,7 +240,7 @@ static OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sa
 
 // returns current system date and time in canonical xsd:dateTime
 // format
-void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int nargs)
+void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
 {
     /*
     A single lexical representation, which is a subset of the lexical representations
@@ -533,7 +497,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
             try {
                 // xmlXPathObjectPtr xmlXPathNewNodeSet        (xmlNodePtr val);
                 Reference< XUnoTunnel > aTunnel(aInstance, UNO_QUERY_THROW);
-                xmlNodePtr pNode = (xmlNodePtr)aTunnel->getSomething(Sequence< sal_Int8 >());
+                xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
                 xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
                 xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
             } catch (RuntimeException& e)
@@ -560,7 +524,7 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
     {
         try {
             Reference< XUnoTunnel > aTunnel(aNode, UNO_QUERY_THROW);
-            xmlNodePtr pNode = (xmlNodePtr)aTunnel->getSomething(Sequence< sal_Int8 >());
+            xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
             xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
             xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
         }
