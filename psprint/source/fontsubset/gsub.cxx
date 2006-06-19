@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:07:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,11 @@
  *
  ************************************************************************/
 
-extern "C"
-{
 #include "sft.h"
 #undef true
 #undef false
 
 #include "gsub.h"
-}
 
 #include <vector>
 #include <map>
@@ -122,9 +119,9 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             return false;
         for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const ULONG nTag    = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
+            const ULONG nInnerTag = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
             const USHORT nOffset= NEXT_UShort( pScriptTable );
-            if( (nTag != (USHORT)nRequestedLangsys) && (nRequestedLangsys != 0) )
+            if( (nInnerTag != (USHORT)nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
             nLangsysOffset = nOffset;
             break;
@@ -290,7 +287,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                 break;
             }
 
-            SubstVector::iterator it( aSubstVector.begin() );
+            SubstVector::iterator subst_it( aSubstVector.begin() );
 
             switch( nFmtSubstitution )
             {
@@ -298,20 +295,20 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                 {
                     const USHORT nDeltaGlyphId = NEXT_UShort( pSubLookup );
 
-                    for(; it != aSubstVector.end(); ++it )
-                        (*it).second = (*it).first + nDeltaGlyphId;
+                    for(; subst_it != aSubstVector.end(); ++subst_it )
+                        (*subst_it).second = (*subst_it).first + nDeltaGlyphId;
                 }
                 break;
 
                 case 2:     // Single Substitution Format 2
                 {
                     const USHORT nCntGlyph = NEXT_UShort( pSubLookup );
-                    for( int i = nCntGlyph; (it != aSubstVector.end()) && (--i>=0); ++it )
+                    for( int i = nCntGlyph; (subst_it != aSubstVector.end()) && (--i>=0); ++subst_it )
                     {
                         if( pGsubLimit < pSubLookup + 2 )
                             return false;
                         const USHORT nGlyphId = NEXT_UShort( pSubLookup );
-                        (*it).second = nGlyphId;
+                        (*subst_it).second = nGlyphId;
                     }
                 }
                 break;
@@ -322,8 +319,8 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             {
                 GlyphSubstitution* pGSubstitution = new GlyphSubstitution;
                 pTTFile->pGSubstitution = (void*)pGSubstitution;
-                for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
-                    (*pGSubstitution)[ (*it).first ] =  (*it).second;
+                for( subst_it = aSubstVector.begin(); subst_it != aSubstVector.end(); ++subst_it )
+                    (*pGSubstitution)[ (*subst_it).first ] =  (*subst_it).second;
             }
         }
     }
@@ -331,12 +328,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     return true;
 }
 
-int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int wmode )
+int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int /*wmode*/ )
 {
     GlyphSubstitution* pGlyphSubstitution = (GlyphSubstitution*)pTTFile->pGSubstitution;
     if( pGlyphSubstitution != 0 )
     {
-        GlyphSubstitution::const_iterator it( pGlyphSubstitution->find( nGlyph ) );
+        GlyphSubstitution::const_iterator it( pGlyphSubstitution->find( sal::static_int_cast<USHORT>(nGlyph) ) );
         if( it != pGlyphSubstitution->end() )
             nGlyph = (*it).second;
     }
