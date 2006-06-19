@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:13:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,8 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#include <sbx.hxx>
 #include <svtools/syslocale.hxx>
 #include "runtime.hxx"
-#pragma hdrstop
 #include "sbintern.hxx"
 #include "opcodes.hxx"
 #include "codegen.hxx"
@@ -503,8 +501,8 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
 // Achtung: pMeth kann auch NULL sein (beim Aufruf des Init-Codes)
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, USHORT nStart )
-         : pMeth( pe ), pMod( pm ), pImg( pMod->pImage ),
-           rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST )
+         : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage )
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
     pIosys    = pInst->pIosys;
@@ -1005,7 +1003,7 @@ void SbiRuntime::PushForEach()
         return;
     }
 
-    bool bError = false;
+    bool bError_ = false;
     BasicCollection* pCollection;
     SbxDimArray* pArray;
     SbUnoObject* pUnoObj;
@@ -1044,15 +1042,15 @@ void SbiRuntime::PushForEach()
         }
         else
         {
-            bError = true;
+            bError_ = true;
         }
     }
     else
     {
-        bError = true;
+        bError_ = true;
     }
 
-    if( bError )
+    if( bError_ )
     {
         Error( SbERR_CONVERSION );
         return;
