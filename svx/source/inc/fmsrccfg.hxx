@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrccfg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:19:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ namespace svxform
         sal_Int16       nLevOther;
         sal_Int16       nLevShorter;
         sal_Int16       nLevLonger;
+        sal_Bool        bLevRelaxed;
 
         sal_Bool        bAllFields;
         sal_Bool        bUseFormatter;
@@ -98,9 +99,6 @@ namespace svxform
         sal_Bool        bRegular;
         sal_Bool        bApproxSearch;
             // the last three are mutually exclusive
-
-        // for Levenshtein-search:
-        sal_Bool        bLevRelaxed;
 
         sal_Bool        bSoundsLikeCJK;
 
