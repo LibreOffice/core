@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:51:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,12 +101,12 @@ namespace
 }
 
 void SvXMLAutoStylePoolP::exportStyleAttributes(
-        SvXMLAttributeList& rAttrList,
+        SvXMLAttributeList&,
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap
+        const SvXMLUnitConverter&,
+        const SvXMLNamespaceMap&
         ) const
 {
     if ( XML_STYLE_FAMILY_CONTROL_ID == nFamily )
@@ -217,12 +217,12 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void SvXMLAutoStylePoolP::exportStyleContent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &,
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap
+        const SvXMLUnitConverter&,
+        const SvXMLNamespaceMap&
         ) const
 {
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
@@ -450,9 +450,9 @@ OUString SvXMLAutoStylePoolP::FindAndRemoveCached( sal_Int32 nFamily ) const
 
 
 void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
-    const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap
+    const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &,
+    const SvXMLUnitConverter&,
+    const SvXMLNamespaceMap&
     ) const
 {
     pImpl->exportXML( nFamily,
