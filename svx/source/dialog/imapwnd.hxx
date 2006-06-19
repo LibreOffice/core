@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:21:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ public:
 
                             ~IMapUserData() { delete pObj; }
 
-    virtual SdrObjUserData* Clone( SdrObject *pObj ) const { return new IMapUserData( *this ); }
+    virtual SdrObjUserData* Clone( SdrObject * ) const { return new IMapUserData( *this ); }
 
     void                    SetObject( IMapObject* pIMapObj ) { pObj = pIMapObj; }
     IMapObject*             GetObject() const { return pObj; }
