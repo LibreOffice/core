@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:24:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:53:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ namespace svx
         SdrModel*           mpDoc;
     };
 
-    Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & rSMgr)
+    Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & )
         throw( Exception )
     {
         return (XWeak*)new GraphicExporter();
@@ -413,7 +413,7 @@ void ImplExportCheckVisisbilityRedirector::PaintObject(::sdr::contact::ViewObjec
 using namespace ::svx;
 
 GraphicExporter::GraphicExporter()
-: mpUnoPage( NULL ), mpDoc( NULL ), mnPageNumber(-1), mpCurrentPage(0)
+: mpUnoPage( NULL ), mnPageNumber(-1), mpCurrentPage(0), mpDoc( NULL )
 {
 }
 
@@ -517,7 +517,6 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     pView->SetHlplVisible( FALSE );
     pView->SetGlueVisible( FALSE );
     pView->ShowPage(pPage, aPoint );
-    SdrPageView* pPageView  = pView->GetPageView(pPage);
 
     Region aRegion (Rectangle( aPoint, aPageSize ) );
 
@@ -608,9 +607,9 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             {
                 pValues->Value >>= aFilterData;
 
-                sal_Int32 nArgs = aFilterData.getLength();
+                sal_Int32 nFilterArgs = aFilterData.getLength();
                 PropertyValue* pDataValues = aFilterData.getArray();
-                while( nArgs-- )
+                while( nFilterArgs-- )
                 {
                     if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
                     {
@@ -726,8 +725,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
         else
         {
-            sal_uInt16 nPage = pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0;
-
             const Size aSize( pPage->GetSize() );
 
             // generate a bitmap to convert it to a pixel format.
@@ -770,14 +767,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     }
                 }
 
-                SdrView*        pView;
+                boost::scoped_ptr< SdrView > pLocalView;
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
-                    pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
+                    pLocalView.reset( new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev ) );
                 }
                 else
                 {
-                    pView = new SdrView( mpDoc, &aVDev );
+                    pLocalView.reset( new SdrView( mpDoc, &aVDev ) );
                 }
 
 
@@ -790,8 +787,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     aGraphic.SetPrefSize( aSize );
                     delete pVDev;
                 }
-
-                delete pView;
             }
             // create a metafile to export a vector format
             else
@@ -809,8 +804,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                                           aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
                     const Rectangle aClipRect( aNewOrg, aNewSize );
                     MapMode         aVMap( aMap );
-
-                    SdrPageView* pPageView  = pView->GetPageView( pPage );
 
                     aVDev.Push();
                     aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
@@ -1205,7 +1198,14 @@ OUString SAL_CALL GraphicExporter::getImplementationName(  )
 sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    return sal_True;
+    Sequence< OUString > aSeq( GraphicExporter_getSupportedServiceNames() );
+    sal_Int32 nArgs = aSeq.getLength();
+    const OUString* pService = aSeq.getConstArray();
+    while( nArgs-- )
+        if( *pService++ == ServiceName )
+            return sal_True;
+
+    return sal_False;
 }
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
