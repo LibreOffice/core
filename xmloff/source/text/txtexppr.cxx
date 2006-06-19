@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:28:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::awt;
 
 void XMLTextExportPropertySetMapper::handleElementItem(
-        SvXMLExport& rExport,
+        SvXMLExport& rExp,
         const XMLPropertyState& rProperty,
         sal_uInt16 nFlags,
         const ::std::vector< XMLPropertyState > *pProperties,
@@ -149,19 +149,19 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         break;
 
     case CTF_SECTION_FOOTNOTE_END:
-        XMLSectionFootnoteConfigExport::exportXML(rExport, sal_False,
+        XMLSectionFootnoteConfigExport::exportXML(rExp, sal_False,
                                                   pProperties, nIdx,
                                                   getPropertySetMapper());
         break;
 
     case CTF_SECTION_ENDNOTE_END:
-        XMLSectionFootnoteConfigExport::exportXML(rExport, sal_True,
+        XMLSectionFootnoteConfigExport::exportXML(rExp, sal_True,
                                                   pProperties, nIdx,
                                                   getPropertySetMapper());
         break;
 
     default:
-        SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty, nFlags, pProperties, nIdx );
+        SvXMLExportPropertyMapper::handleElementItem( rExp, rProperty, nFlags, pProperties, nIdx );
         break;
     }
 }
@@ -221,8 +221,8 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
     SvXMLExportPropertyMapper( rMapper ),
     rExport( rExp ),
     bDropWholeWord( sal_False ),
-    maTabStopExport( rExp ),
     maDropCapExport( rExp ),
+    maTabStopExport( rExp ),
     maTextColumnsExport( rExp ),
     maBackgroundImageExport( rExp )
 {
@@ -898,6 +898,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             // wrap through: disable only contour
             if( pWrapContourState )
                 pWrapContourState->mnIndex = -1;
+            break;
+        default:
             break;
         }
         if( pWrapContourModeState  &&
