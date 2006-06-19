@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:49:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,8 +375,9 @@ sal_Int16 lcl_getGroup( sal_Int16 _nFeature )
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
 
+#ifdef WNT
 #pragma warning (disable : 4355)
-
+#endif
         aGeneralBackWN(this),
         aGeneralFT(&aGeneralBackWN,  ResId(        FT_GENERAL              )),
         aDocColorFT(this, ResId(        FT_DOCCOLOR             )),
@@ -417,9 +418,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aWrtIdxShadingBackCB(this, ResId(  CB_WRITERIDXSHADINGS          )),
         aWrtIdxShadingBackLB(this, ResId(  LB_WRITERIDXSHADINGS          )),
         aWrtIdxShadingBackWN(this, ResId(  WN_WRITERIDXSHADINGS          )),
-        aWrtDirectCrsrFT(this, ResId(      FT_WRITERDIRECTCURSOR         )),
-        aWrtDirectCrsrLB(this, ResId(      LB_WRITERDIRECTCURSOR         )),
-        aWrtDirectCrsrWN(this, ResId(      WN_WRITERDIRECTCURSOR         )),
         aWrtNotesIndicatorFT(this, ResId(      FT_WRITERNOTESINDICATOR         )),
         aWrtNotesIndicatorLB(this, ResId(      LB_WRITERNOTESINDICATOR         )),
         aWrtNotesIndicatorWN(this, ResId(      WN_WRITERNOTESINDICATOR         )),
@@ -432,6 +430,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aWrtPageBreaksFT(this, ResId(      FT_WRITERPAGEBREAKS    )),
         aWrtPageBreaksLB(this, ResId(      LB_WRITERPAGEBREAKS    )),
         aWrtPageBreaksWN(this, ResId(      WN_WRITERPAGEBREAKS    )),
+        aWrtDirectCrsrFT(this, ResId(      FT_WRITERDIRECTCURSOR         )),
+        aWrtDirectCrsrLB(this, ResId(      LB_WRITERDIRECTCURSOR         )),
+        aWrtDirectCrsrWN(this, ResId(      WN_WRITERDIRECTCURSOR         )),
         aHTMLBackWN(this),
         aHTMLFT(this, ResId(            FT_HTML                 )),
         aHTMLSGMLFT(this, ResId(        FT_HTMLSGML             )),
@@ -500,9 +501,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aBasicErrorFT(this, ResId( FT_BASICERROR        )),
         aBasicErrorLB(this, ResId( LB_BASICERROR        )),
         aBasicErrorWN(this, ResId( WN_BASICERROR        ))
-
-#pragma warning (default : 4355)
-
+#ifdef WNT
+#pragma warning (enable : 4355)
+#endif
 {
     FreeResource();
     sal_Int16 i;
@@ -741,7 +742,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[0]->InsertAutomaticEntry();
     for( i = 0; i < aColorTable.Count(); i++ )
     {
-        XColorEntry* pEntry = aColorTable.Get(i);
+        XColorEntry* pEntry = aColorTable.GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
     aColorBoxes[0]->SetHelpId(HID_COLORPAGE_LISTBOX_START);
@@ -871,20 +872,17 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
         Window* pParent, const ResId& rResId) :
         Control(pParent, rResId),
 
-#pragma warning (disable : 4355)
 
         aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
         aVScroll(this,      ResId(VB_VSCROLL)),
-        aScrollWindow(this, ResId(WN_SCROLL )),
         sOn(                ResId(ST_ON     )),
         sUIElem(            ResId(ST_UIELEM )),
         sColSetting(        ResId(ST_COLSET )),
         sPreview(           ResId(ST_PREVIEW)),
+        aScrollWindow(this, ResId(WN_SCROLL )),
 
-#pragma warning (default : 4355)
-
-        nScrollPos(0),
-        pColorConfig(0)
+        pColorConfig(0),
+        nScrollPos(0)
 {
     FreeResource();
 
@@ -975,7 +973,7 @@ void ColorConfigCtrl_Impl::Update()
         if(ANCHOR == i)
             continue;
         const ColorConfigValue& rColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
-        if(COL_AUTO == rColorEntry.nColor)
+        if(COL_AUTO == (UINT32)rColorEntry.nColor)
         {
             if(aScrollWindow.aColorBoxes[i])
                 aScrollWindow.aColorBoxes[i]->SelectEntryPos(0);
@@ -1235,20 +1233,21 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
 
+#ifdef WNT
 #pragma warning (disable : 4355)
-
+#endif
        aColorSchemeFL(  this, ResId( FL_COLORSCHEME ) ),
        aColorSchemeFT(  this, ResId( FT_COLORSCHEME ) ),
        aColorSchemeLB(  this, ResId( LB_COLORSCHEME ) ),
        aSaveSchemePB(   this, ResId( PB_SAVESCHEME) ),
        aDeleteSchemePB( this, ResId( PB_DELETESCHEME ) ),
        aCustomColorsFL( this, ResId( FL_CUSTOMCOLORS ) ),
-       pColorConfigCT(  new ColorConfigCtrl_Impl(this, ResId( CT_COLORCONFIG ) )),
-
-#pragma warning (default : 4355)
-
+       bFillItemSetCalled(FALSE),
        pColorConfig(0),
-       bFillItemSetCalled(FALSE)
+       pColorConfigCT(  new ColorConfigCtrl_Impl(this, ResId( CT_COLORCONFIG ) ))
+#ifdef WNT
+#pragma warning (default : 4355)
+#endif
 {
     FreeResource();
     aColorSchemeLB.SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
@@ -1284,7 +1283,7 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
 /* -----------------------------25.03.2002 10:47------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
     bFillItemSetCalled = TRUE;
     if(aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
@@ -1296,7 +1295,7 @@ BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet& rCoreSet )
 /* -----------------------------25.03.2002 10:47------------------------------
 
  ---------------------------------------------------------------------------*/
-void SvxColorOptionsTabPage::Reset( const SfxItemSet& rSet )
+void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
 {
     if(pColorConfig)
     {
@@ -1323,16 +1322,10 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& rSet )
 /* -----------------------------25.03.2002 10:47------------------------------
 
  ---------------------------------------------------------------------------*/
-void SvxColorOptionsTabPage::ActivatePage( const SfxItemSet& rSet )
+int SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-}
-/* -----------------------------25.03.2002 10:47------------------------------
-
- ---------------------------------------------------------------------------*/
-int SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet )
-{
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
 /* -----------------------------25.03.2002 15:32------------------------------
