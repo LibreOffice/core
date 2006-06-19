@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:34:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ extern "C"
 {
 #endif
 
-XMLOFF_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+XMLOFF_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -195,7 +195,7 @@ void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& 
 #define WRITEINFO(className)\
     writeInfo( pKey, className##_getImplementationName(), className##_getSupportedServiceNames() )
 
-XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -300,7 +300,7 @@ XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, 
                 classname##_getSupportedServiceNames() );\
         }
 
-XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
     if( pServiceManager )
