@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scopeguard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:52:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ ScopeGuard::~ScopeGuard()
                 m_func();
             }
             catch (com::sun::star::uno::Exception & exc) {
+                (void) exc; // avoid warning about unused variable
                 OSL_ENSURE(
                     false, rtl::OUStringToOString(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
