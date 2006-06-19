@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-08 09:56:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
 
 typedef ByteStringHashMap ExportListEntry;
 
-DECLARE_LIST( ExportListBase, ExportListEntry * );
+DECLARE_LIST( ExportListBase, ExportListEntry * )
 
 //
 // class ExportList
@@ -140,68 +140,10 @@ public:
 class ResData
 {
 public:
-    ResData( const ByteString &rPF, const ByteString &rGId )
-            : nWidth( 0 ),
-            sPForm( rPF ),
-            sFilename( ByteString("") ),
-            pStringList( NULL ),
-            pFilterList( NULL ),
-            pItemList( NULL ),
-            pPairedList( NULL ),
-            pUIEntries( NULL ),
-            nChildIndex( 0 ),
-            nIdLevel( ID_LEVEL_NULL ),
-            sGId( rGId ),
-            sTextTyp( "Text" ),
-            bText( FALSE ),
-            bList( FALSE ),
-            bQuickHelpText( FALSE ),
-            bHelpText( FALSE ),
-            bTitle( FALSE ),
-            bChild( FALSE ),
-            bChildWithText( FALSE ),
-            nTextRefId( REFID_NONE ),
-            nHelpTextRefId( REFID_NONE ),
-            nQuickHelpTextRefId( REFID_NONE ),
-            nTitleRefId( REFID_NONE ),
-            bRestMerged( FALSE )
-    {
-        sGId.EraseAllChars( '\r' );
-        sPForm.EraseAllChars( '\r' );
-    };
-    ResData( const ByteString &rPF, const ByteString &rGId , const ByteString &rFilename )
-            : nWidth( 0 ),
-            sPForm( rPF ),
-            sFilename( rFilename ),
-            pStringList( NULL ),
-            pFilterList( NULL ),
-            pItemList( NULL ),
-            pPairedList( NULL ),
-            pUIEntries( NULL ),
-            nChildIndex( 0 ),
-            nIdLevel( ID_LEVEL_NULL ),
-            sGId( rGId ),
-            sTextTyp( "Text" ),
-            bText( FALSE ),
-            bList( FALSE ),
-            bQuickHelpText( FALSE ),
-            bHelpText( FALSE ),
-            bTitle( FALSE ),
-            bChild( FALSE ),
-            bChildWithText( FALSE ),
-            nTextRefId( REFID_NONE ),
-            nHelpTextRefId( REFID_NONE ),
-            nQuickHelpTextRefId( REFID_NONE ),
-            nTitleRefId( REFID_NONE ),
-            bRestMerged( FALSE )
-    {
-        sGId.EraseAllChars( '\r' );
-        sPForm.EraseAllChars( '\r' );
-    };
-
     ~ResData();
     BOOL SetId( const ByteString &rId, USHORT nLevel );
 
+    USHORT nWidth;
     USHORT nChildIndex;
     USHORT nIdLevel;
     BOOL bChild;
@@ -215,13 +157,11 @@ public:
 
     BOOL bRestMerged;
 
-    ByteString sPForm;
     ByteString sResTyp;
     ByteString sId;
     ByteString sGId;
     ByteString sHelpId;
     ByteString sFilename;
-    USHORT nWidth;
 
     ByteStringHashMap sText;
     USHORT nTextRefId;
@@ -241,9 +181,11 @@ public:
 
     ExportList  *pStringList;
     ExportList  *pUIEntries;
-    ExportList  *pFilterList;
     ExportList  *pItemList;
+    ExportList  *pFilterList;
     ExportList  *pPairedList;
+
+    ByteString sPForm;
 
     void Dump();
     void addFallbackData( ByteString& sId , const ByteString& sText );
@@ -251,6 +193,67 @@ public:
 
     void addMergedLanguage( ByteString& sLang );
     bool isMerged( ByteString& sLang );
+    ResData( const ByteString &rPF, const ByteString &rGId )
+            :
+            nWidth( 0 ),
+            nChildIndex( 0 ),
+            nIdLevel( ID_LEVEL_NULL ),
+            bChild( FALSE ),
+            bChildWithText( FALSE ),
+            bText( FALSE ),
+            bHelpText( FALSE ),
+            bQuickHelpText( FALSE ),
+            bTitle( FALSE ),
+            bList( FALSE ),
+            bRestMerged( FALSE ),
+            sGId( rGId ),
+            nTextRefId( REFID_NONE ),
+            nHelpTextRefId( REFID_NONE ),
+            nQuickHelpTextRefId( REFID_NONE ),
+            nTitleRefId( REFID_NONE ),
+            sTextTyp( "Text" ),
+            pStringList( NULL ),
+            pUIEntries( NULL ),
+            pItemList( NULL ),
+            pFilterList( NULL ),
+            pPairedList( NULL ),
+            sPForm( rPF )
+    {
+        sGId.EraseAllChars( '\r' );
+        sPForm.EraseAllChars( '\r' );
+    };
+    ResData( const ByteString &rPF, const ByteString &rGId , const ByteString &rFilename )
+            :
+            nChildIndex( 0 ),
+            nIdLevel( ID_LEVEL_NULL ),
+            bChild( FALSE ),
+            bChildWithText( FALSE ),
+            bText( FALSE ),
+            bHelpText( FALSE ),
+            bQuickHelpText( FALSE ),
+            bTitle( FALSE ),
+            bList( FALSE ),
+            bRestMerged( FALSE ),
+            sGId( rGId ),
+            sFilename( rFilename ),
+            nTextRefId( REFID_NONE ),
+            nHelpTextRefId( REFID_NONE ),
+            nQuickHelpTextRefId( REFID_NONE ),
+            nTitleRefId( REFID_NONE ),
+            sTextTyp( "Text" ),
+            pStringList( NULL ),
+            pUIEntries( NULL ),
+            pItemList( NULL ),
+            pFilterList( NULL ),
+            pPairedList( NULL ),
+            sPForm( rPF )
+
+    {
+        sGId.EraseAllChars( '\r' );
+        sPForm.EraseAllChars( '\r' );
+    };
+
+
 };
 
 
@@ -276,7 +279,7 @@ public:
 #define MERGE_MODE_NORMAL           0x0000
 #define MERGE_MODE_LIST             0x0001
 
-DECLARE_LIST( ResStack, ResData * );
+DECLARE_LIST( ResStack, ResData * )
 // forwards
 class WordTransformer;
 class ParserQueue;
@@ -332,16 +335,16 @@ public:
     static bool hasUTF8ByteOrderMarker( const ByteString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
-    static USHORT GetLangIndex( USHORT nLangId );
-    static CharSet GetCharSet( USHORT nLangId );
-    static USHORT GetLangByIsoLang( const ByteString &rIsoLang );
+//    static USHORT GetLangIndex( USHORT nLangId );
+//  static CharSet GetCharSet( USHORT nLangId );
+//  static USHORT GetLangByIsoLang( const ByteString &rIsoLang );
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
 
     static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
-    static bool isAllowed( ByteString &sLanguage );
+    static bool isAllowed( const ByteString &sLanguage );
     static bool isMergingGermanAllowed( const ByteString& rPrj );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
@@ -364,7 +367,7 @@ private:
     static std::vector<ByteString> aLanguages;
     static std::vector<ByteString> aForcedLanguages;
 
-    BOOL CreateRefIds( ResData *pResData ) { /* Dummy !!! */ return TRUE; }
+    //BOOL CreateRefIds( ResData *pResData ) { /* Dummy !!! */ return TRUE; }
     BOOL ListExists( ResData *pResData, USHORT nLst );
 
     BOOL WriteData( ResData *pResData, BOOL bCreateNew = FALSE );// called befor dest. cur ResData
@@ -384,13 +387,14 @@ private:
     void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
     void CleanValue( ByteString &rValue );
-    ByteString GetText( const ByteString &rSource, USHORT nToken );
+    ByteString GetText( const ByteString &rSource, int nToken );
 
     BOOL PrepareTextToMerge( ByteString &rText, USHORT nTyp,
         ByteString &nLangIndex, ResData *pResData );
 
     void MergeRest( ResData *pResData, USHORT nMode = MERGE_MODE_NORMAL );
-    void ConvertMergeContent( ByteString &rText, USHORT nTyp );
+//  void ConvertMergeContent( ByteString &rText, USHORT nTyp );
+    void ConvertMergeContent( ByteString &rText );
 
       void WriteToMerged( const ByteString &rText , bool bSDFContent );
     void SetChildWithText();
@@ -406,7 +410,7 @@ public:
     ~Export();
 
     void Init();
-    int Execute( int nToken, char * pToken );   // called from lexer
+    int Execute( int nToken, const char * pToken ); // called from lexer
     void SetError() { bError = TRUE; }
     BOOL GetError() { return bError; }
 };
@@ -505,7 +509,8 @@ private:
 
 
 public:
-    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, BOOL bUTF8 );
+    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet
+            );
     ~MergeDataFile();
 
 
@@ -523,7 +528,7 @@ public:
     static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename //= ByteString("")
         );
     ByteString Dump();
-    void WriteErrorLog( const ByteString &rFileName );
+//  void WriteErrorLog( const ByteString &rFileName );
     void WriteError( const ByteString &rLine );
 };
 
