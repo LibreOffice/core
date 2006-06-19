@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:33:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -639,7 +639,7 @@ GConfClient* GconfBackend::getGconfClient()
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
-    const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
+    const rtl::OUString& aComponent, const rtl::OUString& /*aTimestamp*/)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
     uno::Reference<backend::XLayer> xLayer;
@@ -696,7 +696,7 @@ uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-GconfBackend::getUpdatableLayer(const rtl::OUString& aComponent)
+GconfBackend::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
     throw (backend::BackendAccessException,lang::NoSupportException,
            lang::IllegalArgumentException)
 {
@@ -707,6 +707,8 @@ GconfBackend::getUpdatableLayer(const rtl::OUString& aComponent)
 
 //------------------------------------------------------------------------------
 
+// currently not used
+#if 0
 static void
 keyChangedCallback(GConfClient* aClient,
                    guint aID,
@@ -721,10 +723,11 @@ keyChangedCallback(GConfClient* aClient,
     aGconfBe->notifyListeners(aGconfKey);
 
 }
+#endif
 
 //------------------------------------------------------------------------------
 
-void GconfBackend::notifyListeners(const rtl::OUString& aGconfKey)
+void GconfBackend::notifyListeners(const rtl::OUString& /*aGconfKey*/)
 {
 /*
     //look up associated component from Map using GconfKey
@@ -872,8 +875,8 @@ void SAL_CALL GconfBackend::addChangesListener(
 }
 //------------------------------------------------------------------------------
 void SAL_CALL GconfBackend::removeChangesListener(
-    const uno::Reference<backend::XBackendChangesListener>& xListener,
-    const rtl::OUString& aComponent)
+    const uno::Reference<backend::XBackendChangesListener>& /*xListener*/,
+    const rtl::OUString& /*aComponent*/)
     throw (::com::sun::star::uno::RuntimeException)
 {
 /*
