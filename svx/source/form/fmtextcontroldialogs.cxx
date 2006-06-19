@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:57:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,11 +139,6 @@ namespace svx
 
     //--------------------------------------------------------------------
     TextControlParaAttribDialog::~TextControlParaAttribDialog()
-    {
-    }
-
-    //--------------------------------------------------------------------
-    void TextControlParaAttribDialog::PageCreated( USHORT _nId, SfxTabPage& _rPage )
     {
     }
 
