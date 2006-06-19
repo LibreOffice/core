@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:00:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:39:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 #include <stdio.h>
 
-#pragma hdrstop
 #include "sb.hxx"
 #include <tools/rcid.h>
 #include <tools/config.hxx>
@@ -77,7 +76,7 @@
 #include <vos/mutex.hxx>
 #endif
 
-#pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
+// #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
 SV_IMPL_VARARR(SbTextPortions,SbTextPortion)
 
@@ -283,7 +282,7 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
-SbxBase* SbOLEFactory::Create( UINT16 nSbxId, UINT32 )
+SbxBase* SbOLEFactory::Create( UINT16, UINT32 )
 {
     // Not supported
     return NULL;
@@ -308,7 +307,7 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
-SbxBase* SbTypeFactory::Create( UINT16 nSbxId, UINT32 )
+SbxBase* SbTypeFactory::Create( UINT16, UINT32 )
 {
     // Not supported
     return NULL;
@@ -386,11 +385,11 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pMethod = PTR_CAST(SbMethod, pVar );
             if( pMethod )
             {
-                USHORT nFlags = pMethod->GetFlags();
+                USHORT nFlags_ = pMethod->GetFlags();
                 pMethod->SetFlag( SBX_NO_BROADCAST );
                 SbMethod* pNewMethod = new SbMethod( *pMethod );
                 pNewMethod->ResetFlag( SBX_NO_BROADCAST );
-                pMethod->SetFlags( nFlags );
+                pMethod->SetFlags( nFlags_ );
                 pNewMethod->pMod = this;
                 pNewMethod->SetParent( this );
                 pMethods->PutDirect( pNewMethod, i );
@@ -439,13 +438,13 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         SbProcedureProperty* pProcedureProp = PTR_CAST( SbProcedureProperty, pVar );
         if( pProcedureProp )
         {
-            USHORT nFlags = pProcedureProp->GetFlags();
+            USHORT nFlags_ = pProcedureProp->GetFlags();
             pProcedureProp->SetFlag( SBX_NO_BROADCAST );
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
                 // ( pProcedureProp->GetName(), pProcedureProp->GetType(), this );
             pNewProp->ResetFlag( SBX_NO_BROADCAST );
-            pProcedureProp->SetFlags( nFlags );
+            pProcedureProp->SetFlags( nFlags_ );
             pProps->PutDirect( pNewProp, i );
             StartListening( pNewProp->GetBroadcaster(), TRUE );
         }
@@ -454,13 +453,13 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbxProperty* pProp = PTR_CAST( SbxProperty, pVar );
             if( pProp )
             {
-                USHORT nFlags = pProp->GetFlags();
+                USHORT nFlags_ = pProp->GetFlags();
                 pProp->SetFlag( SBX_NO_BROADCAST );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
                 pNewProp->ResetFlag( SBX_NO_BROADCAST );
                 pNewProp->SetParent( this );
                 pProps->PutDirect( pNewProp, i );
-                pProp->SetFlags( nFlags );
+                pProp->SetFlags( nFlags_ );
             }
         }
     }
@@ -615,6 +614,9 @@ SbClassFactory::SbClassFactory( void )
     xClassModules = new SbxObject( aDummyName );
 }
 
+SbClassFactory::~SbClassFactory()
+{}
+
 void SbClassFactory::AddClassModule( SbModule* pClassModule )
 {
     SbxObject* pParent = pClassModule->GetParent();
@@ -627,7 +629,7 @@ void SbClassFactory::RemoveClassModule( SbModule* pClassModule )
     xClassModules->Remove( pClassModule );
 }
 
-SbxBase* SbClassFactory::Create( UINT16 nSbxId, UINT32 )
+SbxBase* SbClassFactory::Create( UINT16, UINT32 )
 {
     // Not supported
     return NULL;
@@ -1334,7 +1336,7 @@ void StarBASIC::FatalError( SbError n )
         pINST->FatalError( n );
 }
 
-SbError StarBASIC::GetErr()
+SbError StarBASIC::GetErrBasic()
 {
     if( pINST )
         return pINST->GetErr();
@@ -1472,7 +1474,7 @@ BOOL StarBASIC::StoreData( SvStream& r ) const
     return TRUE;
 }
 
-BOOL StarBASIC::LoadOldModules( SvStream& r )
+BOOL StarBASIC::LoadOldModules( SvStream& )
 {
     return FALSE;
 }
@@ -1483,10 +1485,10 @@ BOOL StarBASIC::LoadOldModules( SvStream& r )
 
 TYPEINIT1(BasicCollection,SbxObject)
 
-static const char pCount[]  = "Count";
-static const char pAdd[]    = "Add";
-static const char pItem[]   = "Item";
-static const char pRemove[] = "Remove";
+static const char pCountStr[]   = "Count";
+static const char pAddStr[]     = "Add";
+static const char pItemStr[]    = "Item";
+static const char pRemoveStr[]  = "Remove";
 static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 BasicCollection::BasicCollection( const XubString& rClass )
@@ -1494,10 +1496,10 @@ BasicCollection::BasicCollection( const XubString& rClass )
 {
     if( !nCountHash )
     {
-        nCountHash  = MakeHashCode( String::CreateFromAscii( pCount ) );
-        nAddHash    = MakeHashCode( String::CreateFromAscii( pAdd ) );
-        nItemHash   = MakeHashCode( String::CreateFromAscii( pItem ) );
-        nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemove ) );
+        nCountHash  = MakeHashCode( String::CreateFromAscii( pCountStr ) );
+        nAddHash    = MakeHashCode( String::CreateFromAscii( pAddStr ) );
+        nItemHash   = MakeHashCode( String::CreateFromAscii( pItemStr ) );
+        nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemoveStr ) );
     }
     Initialize();
 }
@@ -1518,14 +1520,14 @@ void BasicCollection::Initialize()
     SetFlag( SBX_FIXED );
     ResetFlag( SBX_WRITE );
     SbxVariable* p;
-    p = Make( String::CreateFromAscii( pCount ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( String::CreateFromAscii( pCountStr ), SbxCLASS_PROPERTY, SbxINTEGER );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pAdd ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( String::CreateFromAscii( pAddStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pItem ), SbxCLASS_METHOD, SbxVARIANT );
+    p = Make( String::CreateFromAscii( pItemStr ), SbxCLASS_METHOD, SbxVARIANT );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pRemove ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( String::CreateFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
 }
 
@@ -1550,16 +1552,16 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         {
             XubString aVarName( pVar->GetName() );
             if( pVar->GetHashCode() == nCountHash
-                  && aVarName.EqualsIgnoreCaseAscii( pCount ) )
+                  && aVarName.EqualsIgnoreCaseAscii( pCountStr ) )
                 pVar->PutLong( xItemArray->Count32() );
             else if( pVar->GetHashCode() == nAddHash
-                  && aVarName.EqualsIgnoreCaseAscii( pAdd ) )
+                  && aVarName.EqualsIgnoreCaseAscii( pAddStr ) )
                 CollAdd( pArg );
             else if( pVar->GetHashCode() == nItemHash
-                  && aVarName.EqualsIgnoreCaseAscii( pItem ) )
+                  && aVarName.EqualsIgnoreCaseAscii( pItemStr ) )
                 CollItem( pArg );
             else if( pVar->GetHashCode() == nRemoveHash
-                  && aVarName.EqualsIgnoreCaseAscii( pRemove ) )
+                  && aVarName.EqualsIgnoreCaseAscii( pRemoveStr ) )
                 CollRemove( pArg );
             else
                 SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
@@ -1597,16 +1599,16 @@ INT32 BasicCollection::implGetIndexForName( const String& rName )
     return nIndex;
 }
 
-void BasicCollection::CollAdd( SbxArray* pPar )
+void BasicCollection::CollAdd( SbxArray* pPar_ )
 {
-    USHORT nCount = pPar->Count();
+    USHORT nCount = pPar_->Count();
     if( nCount < 2 || nCount > 5 )
     {
         SetError( SbxERR_WRONG_ARGS );
         return;
     }
 
-    SbxVariable* pItem = pPar->Get(1);
+    SbxVariable* pItem = pPar_->Get(1);
     if( pItem )
     {
         int nNextIndex;
@@ -1616,7 +1618,7 @@ void BasicCollection::CollAdd( SbxArray* pPar )
         }
         else
         {
-            SbxVariable* pBefore = pPar->Get(3);
+            SbxVariable* pBefore = pPar_->Get(3);
             if( nCount == 5 )
             {
                 if( !pBefore->IsErr() )
@@ -1624,7 +1626,7 @@ void BasicCollection::CollAdd( SbxArray* pPar )
                     SetError( SbERR_BAD_ARGUMENT );
                     return;
                 }
-                SbxVariable* pAfter = pPar->Get(4);
+                SbxVariable* pAfter = pPar_->Get(4);
                 INT32 nAfterIndex = implGetIndex( pAfter );
                 if( nAfterIndex == -1 )
                 {
@@ -1648,7 +1650,7 @@ void BasicCollection::CollAdd( SbxArray* pPar )
         SbxVariableRef pNewItem = new SbxVariable( *pItem );
         if( nCount >= 3 )
         {
-            SbxVariable* pKey = pPar->Get(2);
+            SbxVariable* pKey = pPar_->Get(2);
             if( !pKey->IsErr() )
             {
                 if( pKey->GetType() != SbxSTRING )
@@ -1675,34 +1677,34 @@ void BasicCollection::CollAdd( SbxArray* pPar )
     }
 }
 
-void BasicCollection::CollItem( SbxArray* pPar )
+void BasicCollection::CollItem( SbxArray* pPar_ )
 {
-    if( pPar->Count() != 2 )
+    if( pPar_->Count() != 2 )
     {
         SetError( SbxERR_WRONG_ARGS );
         return;
     }
     SbxVariable* pRes = NULL;
-    SbxVariable* p = pPar->Get( 1 );
+    SbxVariable* p = pPar_->Get( 1 );
     INT32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < xItemArray->Count32() )
+    if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         pRes = xItemArray->Get32( nIndex );
     if( !pRes )
         SetError( SbxERR_BAD_INDEX );
-    *(pPar->Get(0)) = *pRes;
+    *(pPar_->Get(0)) = *pRes;
 }
 
-void BasicCollection::CollRemove( SbxArray* pPar )
+void BasicCollection::CollRemove( SbxArray* pPar_ )
 {
-    if( pPar == NULL || pPar->Count() != 2 )
+    if( pPar_ == NULL || pPar_->Count() != 2 )
     {
         SetError( SbxERR_WRONG_ARGS );
         return;
     }
 
-    SbxVariable* p = pPar->Get( 1 );
+    SbxVariable* p = pPar_->Get( 1 );
     INT32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < xItemArray->Count32() )
+    if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         xItemArray->Remove32( nIndex );
     else
         SetError( SbxERR_BAD_INDEX );
