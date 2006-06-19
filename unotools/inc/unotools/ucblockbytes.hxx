@@ -52,7 +52,7 @@ namespace com
             }
         }
     }
-};
+}
 
 namespace utl
 {
@@ -201,6 +201,6 @@ public:
 
 SV_IMPL_REF( UcbLockBytes );
 
-};
+}
 
 #endif
