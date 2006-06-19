@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_docw2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:54:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ Tok_EOL::Text() const
 }
 
 void
-Tok_EOF::Trigger( TokenInterpreter &    io_rInterpreter ) const
+Tok_EOF::Trigger( TokenInterpreter & ) const
 {
     csv_assert(false);
 }
