@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleFrameSelector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:42:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,12 +123,12 @@ typedef ::com::sun::star::awt::FocusEvent   AwtFocusEvent;
 
 AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
-    maNames( ResId( ARR_TEXTS ) ),
-    maDescriptions( ResId(ARR_DESCRIPTIONS ) ),
     mpFrameSel( &rFrameSel ),
+    meBorder( eBorder ),
     maFocusListeners( maFocusMutex ),
     maPropertyListeners( maPropertyMutex ),
-    meBorder( eBorder )
+    maNames( ResId( ARR_TEXTS ) ),
+    maDescriptions( ResId(ARR_DESCRIPTIONS ) )
 {
     FreeResource();
 }
