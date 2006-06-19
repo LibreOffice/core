@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:02:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,9 @@ SvxDistributePage::SvxDistributePage(
     maBtnVerCenter      (this, ResId(BTN_VER_CENTER     )),
     maBtnVerDistance    (this, ResId(BTN_VER_DISTANCE   )),
     maBtnVerBottom      (this, ResId(BTN_VER_BOTTOM     )),
-    maVerDistance       (this, ResId(IMG_VER_DISTANCE   )),
     maVerLow            (this, ResId(IMG_VER_LOW        )),
     maVerCenter         (this, ResId(IMG_VER_CENTER     )),
+    maVerDistance       (this, ResId(IMG_VER_DISTANCE   )),
     maVerHigh           (this, ResId(IMG_VER_HIGH       ))
 {
     maHorLow.SetModeImage( Image( ResId( IMG_HOR_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
@@ -174,7 +174,7 @@ UINT16* SvxDistributePage::GetRanges()
 |*
 \************************************************************************/
 
-void SvxDistributePage::PointChanged(Window* pWindow, RECT_POINT eRP)
+void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 {
 }
 
@@ -184,7 +184,7 @@ void SvxDistributePage::PointChanged(Window* pWindow, RECT_POINT eRP)
 |*
 \************************************************************************/
 
-void __EXPORT SvxDistributePage::Reset(const SfxItemSet& rAttrs)
+void __EXPORT SvxDistributePage::Reset(const SfxItemSet& )
 {
     maBtnHorNone.SetState(FALSE);
     maBtnHorLeft.SetState(FALSE);
@@ -223,7 +223,7 @@ void __EXPORT SvxDistributePage::Reset(const SfxItemSet& rAttrs)
 |*
 \************************************************************************/
 
-BOOL SvxDistributePage::FillItemSet( SfxItemSet& rAttrs)
+BOOL SvxDistributePage::FillItemSet( SfxItemSet& )
 {
     SvxDistributeHorizontal eDistributeHor(SvxDistributeHorizontalNone);
     SvxDistributeVertical eDistributeVer(SvxDistributeVerticalNone);
