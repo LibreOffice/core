@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:49:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,22 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PAGE ), rAttr ),
 
+    aPaperSizeFl        ( this, ResId( FL_PAPER_SIZE ) ),
+    aPaperFormatText    ( this, ResId( FT_PAPER_FORMAT ) ),
+    aPaperSizeBox       ( this, ResId( LB_PAPER_SIZE ) ),
+    aPaperWidthText     ( this, ResId( FT_PAPER_WIDTH ) ),
+    aPaperWidthEdit     ( this, ResId( ED_PAPER_WIDTH ) ),
+    aPaperHeightText    ( this, ResId( FT_PAPER_HEIGHT ) ),
+    aPaperHeightEdit    ( this, ResId( ED_PAPER_HEIGHT ) ),
+    aOrientationFT      ( this, ResId( FT_ORIENTATION ) ),
+    aPortraitBtn        ( this, ResId( RB_PORTRAIT ) ),
+    aLandscapeBtn       ( this, ResId( RB_LANDSCAPE ) ),
+    aBspWin             ( this, ResId( WN_BSP ) ),
+    aTextFlowLbl        ( this, ResId( FT_TEXT_FLOW ) ),
+    aTextFlowBox        ( this, ResId( LB_TEXT_FLOW ) ),
+    aPaperTrayLbl       ( this, ResId( FT_PAPER_TRAY ) ),
+    aPaperTrayBox       ( this, ResId( LB_PAPER_TRAY ) ),
+    aMarginFl           ( this, ResId( FL_MARGIN ) ),
     aLeftMarginLbl      ( this, ResId( FT_LEFT_MARGIN ) ),
     aLeftMarginEdit     ( this, ResId( ED_LEFT_MARGIN ) ),
     aRightMarginLbl     ( this, ResId( FT_RIGHT_MARGIN ) ),
@@ -298,25 +314,12 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aTopMarginEdit      ( this, ResId( ED_TOP_MARGIN ) ),
     aBottomMarginLbl    ( this, ResId( FT_BOTTOM_MARGIN ) ),
     aBottomMarginEdit   ( this, ResId( ED_BOTTOM_MARGIN ) ),
-    aMarginFl           ( this, ResId( FL_MARGIN ) ),
+
+    aLayoutFL           ( this, ResId( FL_LAYOUT ) ),
     aLayoutBox          ( this, ResId( LB_LAYOUT ) ),
     aPageText           ( this, ResId( FT_PAGELAYOUT ) ),
     aNumberFormatBox    ( this, ResId( LB_NUMBER_FORMAT ) ),
     aNumberFormatText   ( this, ResId( FT_NUMBER_FORMAT ) ),
-    aLayoutFL           ( this, ResId( FL_LAYOUT ) ),
-    aBspWin             ( this, ResId( WN_BSP ) ),
-    aPaperFormatText    ( this, ResId( FT_PAPER_FORMAT ) ),
-    aPaperSizeBox       ( this, ResId( LB_PAPER_SIZE ) ),
-    aOrientationFT      ( this, ResId( FT_ORIENTATION ) ),
-    aPortraitBtn        ( this, ResId( RB_PORTRAIT ) ),
-    aLandscapeBtn       ( this, ResId( RB_LANDSCAPE ) ),
-    aPaperWidthText     ( this, ResId( FT_PAPER_WIDTH ) ),
-    aPaperWidthEdit     ( this, ResId( ED_PAPER_WIDTH ) ),
-    aPaperHeightText    ( this, ResId( FT_PAPER_HEIGHT ) ),
-    aPaperHeightEdit    ( this, ResId( ED_PAPER_HEIGHT ) ),
-    aPaperTrayLbl       ( this, ResId( FT_PAPER_TRAY ) ),
-    aPaperTrayBox       ( this, ResId( LB_PAPER_TRAY ) ),
-    aPaperSizeFl        ( this, ResId( FL_PAPER_SIZE ) ),
     aBottomSeparatorFl  ( this, ResId( FL_BOTTOM_SEP ) ),
     aTblAlignFT         ( this, ResId( FT_TBL_ALIGN ) ),
     aHorzBox            ( this, ResId( CB_HORZ ) ),
@@ -325,8 +328,6 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aRegisterCB         ( this, ResId( CB_REGISTER ) ),
     aRegisterFT         ( this, ResId( FT_REGISTER ) ),
     aRegisterLB         ( this, ResId( LB_REGISTER ) ),
-    aTextFlowLbl        ( this, ResId( FT_TEXT_FLOW ) ),
-    aTextFlowBox        ( this, ResId( LB_TEXT_FLOW ) ),
 
     aInsideText         (       ResId( STR_INSIDE ) ),
     aOutsideText        (       ResId( STR_OUTSIDE ) ),
@@ -673,6 +674,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
             break;
         }
+        default: ;//prevent warning
     }
 
 
@@ -938,8 +940,8 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             bModified |= TRUE;
             break;
         }
+        default: ;//prevent warning
 
-        // bei Standard tut sich nichts
     }
 
     if(aRegisterCB.IsVisible() &&
@@ -1469,7 +1471,7 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxPageDescPage::DeactivatePage( SfxItemSet* pSet )
+int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 {
     // Abfrage, ob die Seitenr"ander ausserhalb des Druckbereichs liegen
     // Wenn nicht, dann den Anwender fragen, ob sie "ubernommen werden sollen.
@@ -1502,9 +1504,9 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* pSet )
             CheckMarginEdits( false );
     }
 
-    if ( pSet )
+    if ( _pSet )
     {
-        FillItemSet( *pSet );
+        FillItemSet( *_pSet );
 
         // ggf. hoch/quer putten
         USHORT nWh = GetWhich( SID_ATTR_PAGE_SIZE );
@@ -1512,10 +1514,10 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* pSet )
         Size aSize( GetCoreValue( aPaperWidthEdit, eUnit ),
                     GetCoreValue( aPaperHeightEdit, eUnit ) );
 
-        // putten, wenn aktuelle Gr"o/se unterschiedlich zum Wert in pSet
-        const SvxSizeItem* pSize = (const SvxSizeItem*)GetItem( *pSet, SID_ATTR_PAGE_SIZE );
+        // putten, wenn aktuelle Gr"o/se unterschiedlich zum Wert in _pSet
+        const SvxSizeItem* pSize = (const SvxSizeItem*)GetItem( *_pSet, SID_ATTR_PAGE_SIZE );
         if ( aSize.Width() && ( !pSize || !IsEqualSize_Impl( pSize, aSize ) ) )
-            pSet->Put( SvxSizeItem( nWh, aSize ) );
+            _pSet->Put( SvxSizeItem( nWh, aSize ) );
     }
 
     return LEAVE_PAGE;
@@ -1544,17 +1546,17 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
     long nBR = aRightMarginEdit.Denormalize(aRightMarginEdit.GetValue(FUNIT_TWIP));
 
     // Breite Umrandung der Seite berechnen
-    const SfxItemSet* pSet = &GetItemSet();
+    const SfxItemSet* _pSet = &GetItemSet();
     Size aBorder;
 
-    if ( pSet->GetItemState( GetWhich(SID_ATTR_BORDER_SHADOW) ) >=
+    if ( _pSet->GetItemState( GetWhich(SID_ATTR_BORDER_SHADOW) ) >=
             SFX_ITEM_AVAILABLE &&
-         pSet->GetItemState( GetWhich(SID_ATTR_BORDER_OUTER)  ) >=
+         _pSet->GetItemState( GetWhich(SID_ATTR_BORDER_OUTER)  ) >=
             SFX_ITEM_AVAILABLE )
     {
         aBorder = ( GetMinBorderSpace_Impl(
-            (const SvxShadowItem&)pSet->Get(GetWhich(SID_ATTR_BORDER_SHADOW)),
-            (const SvxBoxItem&)pSet->Get(GetWhich(SID_ATTR_BORDER_OUTER))));
+            (const SvxShadowItem&)_pSet->Get(GetWhich(SID_ATTR_BORDER_SHADOW)),
+            (const SvxBoxItem&)_pSet->Get(GetWhich(SID_ATTR_BORDER_OUTER))));
     }
 
     long nH  = aPaperHeightEdit.Denormalize(aPaperHeightEdit.GetValue(FUNIT_TWIP));
@@ -1696,7 +1698,7 @@ void SvxPageDescPage::DisableVerticalPageDir()
     }
 }
 
-IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,  pListBox)
+IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,  EMPTYARG)
 {
     aBspWin.SetFrameDirection( (sal_uInt32) aTextFlowBox.GetSelectEntryValue() );
     aBspWin.Invalidate();
