@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:22:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,6 @@ SvInsertOleDlg::SvInsertOleDlg
     const SvObjectServerList* pServers
 )
     : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OLEOBJECT, DIALOG_MGR() ), xStorage ),
-    m_pServers( pServers ),
     aRbNewObject( this, ResId( RB_NEW_OBJECT ) ),
     aRbObjectFromfile( this, ResId( RB_OBJECT_FROMFILE ) ),
     aLbObjecttype( this, ResId( LB_OBJECTTYPE ) ),
@@ -236,7 +235,8 @@ SvInsertOleDlg::SvInsertOleDlg
     aOKButton1( this, ResId( 1 ) ),
     aCancelButton1( this, ResId( 1 ) ),
     aHelpButton1( this, ResId( 1 ) ),
-    aStrFile( ResId( STR_FILE ) )
+    aStrFile( ResId( STR_FILE ) ),
+    m_pServers( pServers )
 {
     FreeResource();
     _aOldStr = aGbObject.GetText();
@@ -251,7 +251,7 @@ SvInsertOleDlg::SvInsertOleDlg
 
 short SvInsertOleDlg::Execute()
 {
-    short nRet;
+    short nRet = RET_OK;
     SvObjectServerList  aObjS;
     if ( !m_pServers )
     {
@@ -453,8 +453,8 @@ SvInsertPlugInDialog::SvInsertPlugInDialog( Window* pParent, const uno::Referenc
     aGbPluginsOptions( this, ResId( GB_PLUGINS_OPTIONS ) ),
     aOKButton1( this, ResId( 1 ) ),
     aCancelButton1( this, ResId( 1 ) ),
-    m_pURL(0),
-    aHelpButton1( this, ResId( 1 ) )
+    aHelpButton1( this, ResId( 1 ) ),
+    m_pURL(0)
 {
     FreeResource();
     aBtnFileurl.SetClickHdl( LINK( this, SvInsertPlugInDialog, BrowseHdl ) );
@@ -488,7 +488,7 @@ static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequen
 
 short SvInsertPlugInDialog::Execute()
 {
-    short nRet;
+    short nRet = RET_OK;
     m_aCommands.Erase();
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
@@ -600,8 +600,8 @@ SvInsertAppletDialog::SvInsertAppletDialog( Window* pParent, const uno::Referenc
     aGbAppletOptions( this, ResId( GB_APPLET_OPTIONS ) ),
     aOKButton1( this, ResId( 1 ) ),
     aCancelButton1( this, ResId( 1 ) ),
-    m_pURL(0),
-    aHelpButton1( this, ResId( 1 ) )
+    aHelpButton1( this, ResId( 1 ) ),
+    m_pURL(0)
 {
     FreeResource();
     aBtnClass.SetClickHdl( LINK( this, SvInsertAppletDialog, BrowseHdl ) );
@@ -619,8 +619,8 @@ SvInsertAppletDialog::SvInsertAppletDialog( Window* pParent, const uno::Referenc
     aGbAppletOptions( this, ResId( GB_APPLET_OPTIONS ) ),
     aOKButton1( this, ResId( 1 ) ),
     aCancelButton1( this, ResId( 1 ) ),
-    m_pURL(0),
-    aHelpButton1( this, ResId( 1 ) )
+    aHelpButton1( this, ResId( 1 ) ),
+    m_pURL(0)
 {
     m_xObj = xObj;
     FreeResource();
@@ -635,7 +635,7 @@ SvInsertAppletDialog::~SvInsertAppletDialog()
 
 short SvInsertAppletDialog::Execute()
 {
-    short nRet;
+    short nRet = RET_OK;
     m_aClass.Erase();
     m_aCommands.Erase();
 
@@ -821,7 +821,7 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, con
 
 short SfxInsertFloatingFrameDialog::Execute()
 {
-    short nRet;
+    short nRet = RET_OK;
     BOOL bOK = FALSE;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )

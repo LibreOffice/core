@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:26:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,11 +86,8 @@ static long nTabs[] =
 
 
 SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtml )
-    : ModalDialog( pParent, ResId( MD_UPDATE_BASELINKS, DIALOG_MGR() ) )
-    , pLinkMgr( NULL )
-    , bHtmlMode(bHtml)
-    , aTbLinks( this, ResId(TB_LINKS ) )
-    , aFtFiles( this, ResId( FT_FILES ) ),
+    : ModalDialog( pParent, ResId( MD_UPDATE_BASELINKS, DIALOG_MGR() ) ),
+    aFtFiles( this, ResId( FT_FILES ) ),
     aFtLinks( this, ResId( FT_LINKS ) ),
     aFtType( this, ResId( FT_TYPE ) ),
     aFtStatus( this, ResId( FT_STATUS ) ),
@@ -116,7 +113,10 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtm
     aStrButtonclose( ResId( STR_BUTTONCLOSE, DIALOG_MGR() ) ),
     aStrCloselinkmsg( ResId( STR_CLOSELINKMSG, DIALOG_MGR() ) ),
     aStrCloselinkmsgMulti( ResId( STR_CLOSELINKMSG_MULTI, DIALOG_MGR() ) ),
-    aStrWaitinglink( ResId( STR_WAITINGLINK, DIALOG_MGR() ) )
+    aStrWaitinglink( ResId( STR_WAITINGLINK, DIALOG_MGR() ) ),
+    pLinkMgr( NULL ),
+    bHtmlMode(bHtml),
+    aTbLinks( this, ResId(TB_LINKS ) )
 {
     FreeResource();
 
@@ -239,6 +239,8 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 
 IMPL_LINK_INLINE_START( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )
 {
+    (void)pSvTabListBox;
+
     ChangeSourceClickHdl( 0 );
     return 0;
 }
@@ -246,6 +248,8 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTa
 
 IMPL_LINK_INLINE_START( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioButton )
 {
+    (void)pRadioButton;
+
     USHORT nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
@@ -257,6 +261,8 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioBu
 
 IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
 {
+    (void)pRadioButton;
+
     USHORT nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
@@ -268,14 +274,14 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButto
 
 IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, pPushButton )
 {
+    (void)pPushButton;
+
     SvTabListBox& rListBox = Links();
     USHORT nSelCnt = (USHORT)rListBox.GetSelectionCount();
     if( 255 < nSelCnt )
         nSelCnt = 255;
     SvPtrarr aLnkArr( (BYTE)nSelCnt );
     SvUShorts aPosArr( (BYTE)nSelCnt );
-
-    USHORT nFirstPos = USHRT_MAX;
 
     SvLBoxEntry* pE = rListBox.FirstSelected();
     while( pE )
@@ -296,7 +302,6 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, pPushButton )
             SvBaseLinkRef xLink = (SvBaseLink*)aLnkArr[ n ];
 
             // suche erstmal im Array nach dem Eintrag
-            USHORT nFndPos = USHRT_MAX;
             for( USHORT i = 0; i < pLinkMgr->GetLinks().Count(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
@@ -352,6 +357,8 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushBut
 
 IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 {
+    (void)pPushButton;
+
     USHORT nSelectionCount = (USHORT)Links().GetSelectionCount();
     if(nSelectionCount > 1)
     {
@@ -382,9 +389,9 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                 pLink = (SvBaseLink*)pEntry->GetUserData();
                 DBG_ASSERT(pLink,"Wo ist der Link")
                 pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
-                INetURLObject aUrl(sFile);
+                INetURLObject aUrl_(sFile);
                 INetURLObject aUrl2(aPath, INET_PROT_FILE);
-                aUrl2.insertName( aUrl.getName() );
+                aUrl2.insertName( aUrl_.getName() );
                 String sNewLinkName;
                 MakeLnkName( sNewLinkName, 0 ,
                         aUrl2.GetMainURL(INetURLObject::DECODE_TO_IURI), sLinkName, &sFilter);
@@ -442,6 +449,8 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 
 IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 {
+    (void)pPushButton;
+
     BOOL bModified = FALSE;
     if(Links().GetSelectionCount() <= 1)
     {
@@ -533,6 +542,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 
 IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 {
+    (void)pTimer;
 //    for( SvLBoxEntry* pBox = Links().First(); pBox;
 //          pBox = Links().Next( pBox ))
 
@@ -615,7 +625,6 @@ void SvBaseLinksDlg::SetManager( SvLinkManager* pNewMgr )
 void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, USHORT nPos, sal_Bool bSelect )
 {
     String aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
-    const SvLinkSource* pObj = rLink.GetObj();
 
     pLinkMgr->GetDisplayNames( (SvBaseLink*)&rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
 
@@ -643,7 +652,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, USHORT nPos, sal_Bool
     aEntry += '\t';
     aEntry += ImplGetStateStr( rLink );
 
-    SvLBoxEntry * pE = Links().InsertEntry( aEntry, nPos );
+    SvLBoxEntry * pE = Links().InsertEntryToColumn( aEntry, nPos );
     pE->SetUserData( (void*)&rLink );
     if(bSelect)
         Links().Select(pE);
