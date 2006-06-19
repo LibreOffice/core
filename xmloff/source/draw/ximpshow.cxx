@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:01:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,9 +247,9 @@ SdXMLShowsContext::~SdXMLShowsContext()
     delete mpImpl;
 }
 
-SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
-    if( mpImpl && nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
+    if( mpImpl && p_nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
     {
         OUString aName;
         OUString aPages;
@@ -314,6 +314,6 @@ SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT nPrefix, cons
         }
     }
 
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
 }
 
