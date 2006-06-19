@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cacheoptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:11:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
