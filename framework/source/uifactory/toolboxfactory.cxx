@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:14:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,6 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     Reference< XFrame >                  xFrame;
     rtl::OUString                        aResourceURL( ResourceURL );
     sal_Bool                             bPersistent( sal_True );
-    sal_Bool                             bMenuOnly( sal_False );
     sal_Bool                             bPopupMode( sal_False );
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
