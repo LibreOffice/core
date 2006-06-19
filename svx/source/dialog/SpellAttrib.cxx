@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellAttrib.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:29:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ SpellErrorAttrib::~SpellErrorAttrib()
 /*-- 10.09.2003 12:54:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SpellErrorAttrib::SetFont( Font& rFont ) const
+void SpellErrorAttrib::SetFont( Font&  ) const
 {
     //this attribute doesn't have a visual effect
 }
@@ -121,7 +121,7 @@ SpellLanguageAttrib::~SpellLanguageAttrib()
 /*-- 10.09.2003 14:27:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SpellLanguageAttrib::SetFont( Font& rFont ) const
+void SpellLanguageAttrib::SetFont( Font&  ) const
 {
     //no visual effect
 }
