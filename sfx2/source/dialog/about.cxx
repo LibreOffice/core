@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:43:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,7 @@ AboutDialog::~AboutDialog()
 
 IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
 {
+    (void)pTimer; //unused
     // Text scrollen
     nOff -= SCROLL_OFFSET;
     MapMode aMapMode( MAP_PIXEL, Point( 0, nOff ), Fraction( 1, 1 ), Fraction( 1, 1 ) );
@@ -329,6 +330,7 @@ IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
 
 IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
 {
+    (void)pAccelerator; //unused
     // init Timer
     aTimer.SetTimeoutHdl( LINK( this, AboutDialog, TimerHdl ) );
 
@@ -451,7 +453,6 @@ void AboutDialog::Paint( const Rectangle& rRect )
 
     if ( nCount )
     {
-        USHORT nEmptyString = 0;
         for ( USHORT i = 0; i < nCount; ++i )
         {
             String aStr;
