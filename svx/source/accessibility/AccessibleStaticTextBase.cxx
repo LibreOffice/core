@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:18:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //------------------------------------------------------------------------
 //
@@ -438,7 +436,7 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
-            SvxTextForwarder& rCacheTF = mpTextParagraph->GetTextForwarder();   // MUST be after GetEditViewForwarder(), see method docs
+            mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             sal_Bool aRetVal;
 
             // save current selection
@@ -601,13 +599,13 @@ namespace accessibility
         return 0;
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleChild( sal_Int32 /*i*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         // no children at all
         return uno::Reference< XAccessible >();
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleAtPoint( const awt::Point& /*_aPoint*/ ) throw (uno::RuntimeException)
     {
         // no children at all
         return uno::Reference< XAccessible >();
