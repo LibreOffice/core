@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:49:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include <module.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#pragma hdrstop
 
 /****************** SvMetaObject *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaObject, SvRttiBase )
@@ -156,7 +155,7 @@ void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
+BOOL SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
     return FALSE;
 }
@@ -340,8 +339,7 @@ void SvMetaName::DoReadContextSvIdl( SvIdlDataBase & rBase,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaName::ReadContextSvIdl( SvIdlDataBase & rBase,
-                                   SvTokenStream & rInStm )
+void SvMetaName::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
 }
 
@@ -360,9 +358,7 @@ BOOL SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaName::WriteContextSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm,
-                                    USHORT nTab )
+void SvMetaName::WriteContextSvIdl( SvIdlDataBase &, SvStream &, USHORT )
 {
 }
 
@@ -371,22 +367,20 @@ void SvMetaName::WriteContextSvIdl( SvIdlDataBase & rBase,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaName::WriteDescription( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm )
+void SvMetaName::WriteDescription( SvStream & rOutStm )
 {
     rOutStm << "<DESCRIPTION>" << endl;
 
-    ByteString aDescription( GetDescription() );
-    USHORT nPos = aDescription.Search( '\n' );
+    ByteString aDesc( GetDescription() );
+    USHORT nPos = aDesc.Search( '\n' );
     while ( nPos != STRING_NOTFOUND )
     {
-        rOutStm << aDescription.Copy( 0, nPos ).GetBuffer() << endl;
-        aDescription.Erase(0,nPos+1);
-        nPos = aDescription.Search( '\n' );
+        rOutStm << aDesc.Copy( 0, nPos ).GetBuffer() << endl;
+        aDesc.Erase(0,nPos+1);
+        nPos = aDesc.Search( '\n' );
     }
 
-    rOutStm << aDescription.GetBuffer() << endl
-            << "</DESCRIPTION>" << endl;
+    rOutStm << aDesc.GetBuffer() << endl << "</DESCRIPTION>" << endl;
 }
 
 /*************************************************************************
@@ -542,9 +536,9 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaName::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
+void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
                                 USHORT nTab,
-                                 WriteType nT, WriteAttribute nA )
+                                 WriteType, WriteAttribute )
 {
     if( GetHelpText().IsSet() || GetHelpContext().IsSet() )
     {
@@ -571,9 +565,9 @@ void SvMetaName::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaName::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                USHORT nTab,
-                                 WriteType nT, WriteAttribute nA )
+void SvMetaName::WriteContext( SvIdlDataBase &, SvStream &,
+                                USHORT,
+                                 WriteType, WriteAttribute )
 {
 }
 #endif // IDL_COMPILER
