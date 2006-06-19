@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:39:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,8 @@ public:
                                 : _SfxVersionTable( nInitSz, nReSz )
                             {}
 
-                            SfxVersionTableDtor( const SfxVersionTableDtor &rCpy )
+                            SfxVersionTableDtor( const SfxVersionTableDtor &rCpy ) :
+                                _SfxVersionTable( rCpy )
                             { *this = rCpy; }
 
                             SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
@@ -206,8 +207,8 @@ SfxVersionsTabListBox_Impl::SfxVersionsTabListBox_Impl( Window* pParent, const R
 {
 }
 
-SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pFrame, Window *pParent )
-    : SfxModalDialog( pFrame, pParent, SfxResId( DLG_VERSIONS ) )
+SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, Window *pParent )
+    : SfxModalDialog( pVwFrame, pParent, SfxResId( DLG_VERSIONS ) )
     , aNewGroup( this, ResId( GB_NEWVERSIONS ) )
     , aSaveButton( this, ResId( PB_SAVE ) )
     , aSaveCheckBox( this, ResId( CB_SAVEONCLOSE ) )
@@ -222,7 +223,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pFrame, Window *pParent )
     , aDeleteButton( this, ResId( PB_DELETE ) )
     , aCompareButton( this, ResId( PB_COMPARE ) )
     , aHelpButton( this, ResId ( PB_HELP ) )
-    , pViewFrame( pFrame )
+    , pViewFrame( pVwFrame )
     , mpTable( 0 )
 {
     FreeResource();
@@ -330,12 +331,14 @@ void SfxVersionDialog::Open_Impl()
 
 IMPL_LINK( SfxVersionDialog, DClickHdl_Impl, Control*, pControl )
 {
+    (void)pControl; //unused
     Open_Impl();
     return 0L;
 }
 
 IMPL_LINK( SfxVersionDialog, SelectHdl_Impl, Control*, pControl )
 {
+    (void)pControl; //unused
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     aVersionBox.FirstSelected(); // -Wall required??
     aDeleteButton.Enable( !pObjShell->IsReadOnly() );
