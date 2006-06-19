@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formnavigation.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:57:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void OFormNavigationHelper::featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled )
+    void OFormNavigationHelper::featureStateChanged( sal_Int32 /*_nFeatureId*/, sal_Bool /*_bEnabled*/ )
     {
         // not interested in
     }
@@ -124,7 +124,6 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL OFormNavigationHelper::statusChanged( const FeatureStateEvent& _rState ) throw (RuntimeException)
     {
-        sal_Int32 nFeatureId = -1;
         for (   FeatureMap::iterator aFeature = m_aSupportedFeatures.begin();
                 aFeature != m_aSupportedFeatures.end();
                 ++aFeature
