@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:14:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,9 @@ public:
     virtual void    StartScroll();
     virtual void    EndScroll( long nDeltaX, long nDeltaY );
 
-    void            SetMapMode( const MapMode& rNewMapMode );
-    MapMode         GetMapMode() const;
+    using OutputDevice::SetMapMode;
+    virtual void    SetMapMode( const MapMode& rNewMapMode );
+    virtual MapMode GetMapMode() const;
 
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
@@ -107,15 +108,13 @@ public:
     Rectangle       GetVisibleArea() const;
 
     void            SetLineSize( ULONG nHorz, ULONG nVert );
-    void            Scroll( long nDeltaX, long nDeltaY );
-    void            Scroll( long nDeltaX, long nDeltaY,
-                            const Rectangle& rRect );
+    using Window::Scroll;
+    virtual void    Scroll( long nDeltaX, long nDeltaY, USHORT nFlags = 0 );
     void            ScrollLines( long nLinesX, long nLinesY );
     void            ScrollPages( long nPagesX, ULONG nOverlapX,
                                  long nPagesY, ULONG nOverlapY );
 
 private:
-    SVT_DLLPRIVATE void         SetOutputSizePixel( const Size& rSize );
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
     SVT_DLLPRIVATE Size         GetOutputSize() const;
 };
