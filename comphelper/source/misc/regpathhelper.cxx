@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:52:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,8 @@ OUString getPathToSystemRegistry()
     FILE     *f=NULL;
 
     // search in the directory of the executable
-    if( OStartupInfo::E_None == OStartupInfo().getExecutableFile(uBuffer) )
+    OStartupInfo info;
+    if( OStartupInfo::E_None == info.getExecutableFile(uBuffer) )
     {
         sal_uInt32  lastIndex = uBuffer.lastIndexOf(PATH_DELEMITTER);
         if (lastIndex > 0)
