@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:09:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1660,9 +1660,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
 
                 const PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
-                sal_uInt16 i, nCount = rPolyPoly.Count();
+                sal_uInt16 nPolyCount = rPolyPoly.Count();
                 PolyPolygon aSimplePolyPoly( rPolyPoly );
-                for ( i = 0; i < nCount; i++ )
+                for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
                 {
                     if ( aSimplePolyPoly[ i ].HasFlags() )
                     {
