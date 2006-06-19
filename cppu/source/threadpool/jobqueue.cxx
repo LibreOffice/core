@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobqueue.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:49:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ using namespace ::osl;
 
 namespace cppu_threadpool {
 
-    JobQueue::JobQueue(  sal_Bool bAsynchron ) :
+    JobQueue::JobQueue() :
         m_nToDo( 0 ),
         m_bSuspended( sal_False ),
         m_cndWait( osl_createCondition() )
@@ -55,8 +55,7 @@ namespace cppu_threadpool {
     }
 
 
-    void JobQueue::add( void *pThreadSpecificData ,
-                        void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ) )
+    void JobQueue::add( void *pThreadSpecificData, RequestFun * doRequest )
     {
         MutexGuard guard( m_mutex );
         Job job = { pThreadSpecificData , doRequest };
