@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:23:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+    // prevent method hiding
+    using OBoundControlModel::getFastPropertyValue;
 
 protected:
     // OBoundControlModel overridables
