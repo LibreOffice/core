@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:42:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ void parseHexBinary(OUString const& aHexString_, uno::Sequence<sal_Int8>& rBinar
 
     while (nCount--)
     {
-        *pBinary++ = readHexByte(pHex);
+            *pBinary++ = static_cast<sal_Int8>(readHexByte(pHex));
     }
 }
 
@@ -294,6 +294,7 @@ uno::Any ValueConverter::convertListToAny(uno::Sequence< OUString > const& aCont
 bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Sequence<sal_Int8> >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rParser )
         CFG_UNO_THROW1 ( script::CannotConvertException )
 {
+    { (void)aElementTypeClass; }
     OSL_ASSERT(aElementTypeClass == uno::TypeClass_SEQUENCE);
 
     rSequence.realloc(aStringList.size());
@@ -313,9 +314,10 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Se
 // special overload for string sequence
 
 // template<> // use an explicit specialization
-bool convertListToSequence(StringList const& aStringList, uno::Sequence< OUString >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rParser )
+bool convertListToSequence(StringList const& aStringList, uno::Sequence< OUString >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& /*rParser*/ )
         CFG_UNO_THROW1 ( script::CannotConvertException )
 {
+    { (void)aElementTypeClass; }
     OSL_ASSERT(aElementTypeClass == uno::TypeClass_STRING);
 
     stringListToSequence(rSequence, aStringList);
@@ -433,7 +435,7 @@ namespace
             OSL_PRECOND(sSeparator.trim().getLength() > 0, "Invalid empty separator string");
         }
 
-        sal_Int32 findFirstTokenStart(OUString const& sText) const CFG_NOTHROW()
+            sal_Int32 findFirstTokenStart(OUString const& /*sText*/) const CFG_NOTHROW()
         {
             return 0;
         }
@@ -488,18 +490,13 @@ namespace
 void ValueConverter::splitListData(OUString const& aContent, StringList& rContentList) const
     CFG_NOTHROW( )
 {
-    static const char SEPARATOR_WHITESPACE[] = " ";
-
     OUString sSeparator = m_sSeparator;
 
     bool bSeparateByWhitespace = (sSeparator.trim().getLength() == 0);
 
-    OSL_ENSURE( bSeparateByWhitespace == (!sSeparator.getLength() || sSeparator.equalsAscii(SEPARATOR_WHITESPACE)),
-                "Unexpected whitespace-only separator");
-
     if (bSeparateByWhitespace)
     {
-        OSL_ENSURE( sSeparator.getLength()==0 || sSeparator.equalsAscii(SEPARATOR_WHITESPACE),
+        OSL_ENSURE( sSeparator.getLength()==0 || sSeparator.equalsAscii(" "),
                     "Unexpected whitespace-only separator");
 
         tokenizeListData( OTokenizeByWhitespace(), aContent, rContentList );
