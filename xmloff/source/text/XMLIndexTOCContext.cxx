@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:08:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,14 +203,13 @@ SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
 XMLIndexTOCContext::XMLIndexTOCContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        pSourceElementName(NULL),
-        bValid(sal_False),
-        xBodyContextRef(),
-        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
-        sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
-        sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
+    const OUString& rLocalName )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
+,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
+,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
+,   pSourceElementName(NULL)
+,   bValid(sal_False)
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
@@ -218,9 +217,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
         {
             // check for array index:
-            DBG_ASSERT(nTmp >= 0, "index too low");
-            DBG_ASSERT(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)),
-                       "index too high");
+            DBG_ASSERT(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)), "index out of range");
             DBG_ASSERT(sizeof(aIndexServiceMap) ==
                        sizeof(aIndexSourceElementMap),
                        "service and source element maps must be same size");
