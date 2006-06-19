@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcnitm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:49:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ public:
     virtual ~SvXMLAttrContainerItem();
 
     virtual int operator==( const SfxPoolItem& ) const;
+    using SfxPoolItem::Compare;
     virtual int Compare( const SfxPoolItem &rWith ) const;
 
     virtual SfxItemPresentation GetPresentation(
