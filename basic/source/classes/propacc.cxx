@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:10:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/errcode.hxx>
 #include <svtools/svarray.hxx>
-#include <sbx.hxx>
 #include <sbstar.hxx>
 #include <sbunoobj.hxx>
 
@@ -59,10 +58,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#ifdef OS2
-#define CDECL _Optlink
-#endif
-#if defined(UNX)  || defined(MAC)
+#if defined(UNX)
 #define CDECL
 #endif
 
@@ -71,7 +67,7 @@ int CDECL SbCompare_PropertyValues_Impl( const void *arg1, const void *arg2 )
    return ((PropertyValue*)arg1)->Name.compareTo( ((PropertyValue*)arg2)->Name );
 }
 
-int CDECL SbCompare_UString_PropertyValue_Impl( const void *arg1, const void *arg2 )
+extern "C" int CDECL SbCompare_UString_PropertyValue_Impl( const void *arg1, const void *arg2 )
 {
     const OUString *pArg1 = (OUString*) arg1;
     const PropertyValue **pArg2 = (const PropertyValue**) arg2;
@@ -83,7 +79,7 @@ int CDECL SbCompare_Properties_Impl( const void *arg1, const void *arg2 )
    return ((Property*)arg1)->Name.compareTo( ((Property*)arg2)->Name );
 }
 
-int CDECL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
+extern "C" int CDECL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
 {
     const OUString *pArg1 = (OUString*) arg1;
     const Property *pArg2 = (Property*) arg2;
@@ -168,6 +164,7 @@ void SbPropertyValues::addPropertyChangeListener(
                     const Reference< XPropertyChangeListener >& )
                     throw ()
 {
+    (void)aPropertyName;
 }
 
 //----------------------------------------------------------------------------
@@ -177,6 +174,7 @@ void SbPropertyValues::removePropertyChangeListener(
                     const Reference< XPropertyChangeListener >& )
                     throw ()
 {
+    (void)aPropertyName;
 }
 
 //----------------------------------------------------------------------------
@@ -186,6 +184,7 @@ void SbPropertyValues::addVetoableChangeListener(
                     const Reference< XVetoableChangeListener >& )
                     throw()
 {
+    (void)aPropertyName;
 }
 
 //----------------------------------------------------------------------------
@@ -195,6 +194,7 @@ void SbPropertyValues::removeVetoableChangeListener(
                     const Reference< XVetoableChangeListener >& )
                     throw()
 {
+    (void)aPropertyName;
 }
 
 //----------------------------------------------------------------------------
@@ -241,7 +241,7 @@ INT32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
             bsearch( &rPropName, _aProps.getConstArray(), _aProps.getLength(),
                       sizeof( Property ),
                       SbCompare_UString_Property_Impl );
-    return pP ? ( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
+    return pP ? sal::static_int_cast<INT32>( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
 }
 
 Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
@@ -331,12 +331,16 @@ void SbPropertyContainer::addProperty(const OUString& Name,
     throw(  PropertyExistException, IllegalTypeException,
             IllegalArgumentException, RuntimeException )
 {
+    (void)Name;
+    (void)Attributes;
+    (void)DefaultValue;
 }
 
 //----------------------------------------------------------------------------
 void SbPropertyContainer::removeProperty(const OUString& Name)
     throw( UnknownPropertyException, RuntimeException )
 {
+    (void)Name;
 }
 
 //----------------------------------------------------------------------------
@@ -369,12 +373,16 @@ Sequence< PropertyValue > SbPropertyContainer::getPropertyValues(void)
 
 void SbPropertyContainer::setPropertyValues(const Sequence< PropertyValue >& PropertyValues_)
 {
+    (void)PropertyValues_;
 }
 
 //----------------------------------------------------------------------------
 
 void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // Wir brauchen mindestens 1 Parameter
     if ( rPar.Count() < 2 )
     {
