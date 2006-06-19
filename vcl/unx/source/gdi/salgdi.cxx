@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:28:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,18 +37,13 @@
 #include <stdlib.h>
 
 #include <prex.h>
-// [ed] 6/15/02 There's a conflicting definition of INT8 within the Xmd.h header
-// and the solar.h OOo header.  So, wrap the X11 header with a bogus #define
-// to use the OOo definition of the symbol for INT8.
-// [fa] 4/12/04 With 64-bit changes, X11 headers also conflict with INT64
-
-#define INT8 blehBlahFooBarINT8
-#define INT64 blehBlahFooBarINT64
-
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
 #include <X11/Xproto.h>
-
-#undef INT8
-#undef INT64
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
 #include <postx.h>
 
 #include <salunx.h>
@@ -396,14 +391,14 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 {
     static const short nOrdDither8Bit[ 8 ][ 8 ] =
     {
-         0, 38,  9, 48,  2, 40, 12, 50,
-        25, 12, 35, 22, 28, 15, 37, 24,
-         6, 44,  3, 41,  8, 47,  5, 44,
-        32, 19, 28, 16, 34, 21, 31, 18,
-         1, 40, 11, 49,  0, 39, 10, 48,
-        27, 14, 36, 24, 26, 13, 36, 23,
-         8, 46,  4, 43,  7, 45,  4, 42,
-        33, 20, 30, 17, 32, 20, 29, 16
+        { 0, 38,  9, 48,  2, 40, 12, 50},
+        {25, 12, 35, 22, 28, 15, 37, 24},
+        { 6, 44,  3, 41,  8, 47,  5, 44},
+        {32, 19, 28, 16, 34, 21, 31, 18},
+        { 1, 40, 11, 49,  0, 39, 10, 48},
+        {27, 14, 36, 24, 26, 13, 36, 23},
+        { 8, 46,  4, 43,  7, 45,  4, 42},
+        {33, 20, 30, 17, 32, 20, 29, 16}
     };
 
     // test for correct depth (8bit)
@@ -546,7 +541,7 @@ void X11SalGraphics::ResetClipRegion()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::BeginSetClipRegion( ULONG n )
+void X11SalGraphics::BeginSetClipRegion( ULONG )
 {
     if( pClipRegion_ )
         XDestroyRegion( pClipRegion_ );
@@ -878,22 +873,22 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool X11SalGraphics::drawPolyLineBezier( ULONG, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool X11SalGraphics::drawPolygonBezier( ULONG, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                                const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
+                                                const SalPoint* const*, const BYTE* const* )
 {
     return sal_False;
 }
@@ -927,7 +922,7 @@ void X11SalGraphics::invert( ULONG nPoints,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-BOOL X11SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
+BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
 {
     return FALSE;
 }
