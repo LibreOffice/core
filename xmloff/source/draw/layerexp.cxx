@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:44:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aName );
             }
 
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER, sal_True, sal_True );
+            SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, sal_True, sal_True );
         }
     }
 }
