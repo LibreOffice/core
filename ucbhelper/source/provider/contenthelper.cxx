@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:37:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:12:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,8 +228,8 @@ ContentImplHelper::ContentImplHelper(
                     sal_Bool bRegisterAtProvider )
 : m_pImpl( new ContentImplHelper_Impl ),
   m_xSMgr( rxSMgr ),
-  m_xProvider( rxProvider ),
   m_xIdentifier( Identifier ),
+  m_xProvider( rxProvider ),
   m_nCommandId( 0 )
 {
     if ( bRegisterAtProvider )
@@ -968,7 +968,7 @@ Reference< XInterface > SAL_CALL ContentImplHelper::getParent()
 //=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::setParent(
-                                    const Reference< XInterface >& Parent )
+                                    const Reference< XInterface >& )
     throw( NoSupportException, RuntimeException )
 {
     throw NoSupportException();
@@ -1057,7 +1057,7 @@ void ContentImplHelper::notifyPropertiesChange(
                 OInterfaceIteratorHelper aIter( *pPropsContainer );
                 while ( aIter.hasMoreElements() )
                 {
-                    PropertyEventSequence* pEvents = NULL;
+                    PropertyEventSequence* p = NULL;
 
                     XPropertiesChangeListener* pListener =
                         static_cast< XPropertiesChangeListener * >(
@@ -1067,14 +1067,14 @@ void ContentImplHelper::notifyPropertiesChange(
                     if ( it == aListeners.end() )
                     {
                         // Not in map - create and insert new entry.
-                        pEvents = new PropertyEventSequence( nCount );
-                        aListeners[ pListener ] = pEvents;
+                        p = new PropertyEventSequence( nCount );
+                        aListeners[ pListener ] = p;
                     }
                     else
-                        pEvents = (*it).second;
+                        p = (*it).second;
 
-                    if ( pEvents )
-                        pEvents->append( rEvent );
+                    if ( p )
+                        p->append( rEvent );
                 }
             }
         }
