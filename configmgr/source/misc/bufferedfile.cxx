@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bufferedfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 14:44:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ BufferedInputFile::RC BufferedInputFile::open( sal_uInt32 uFlags )
     // still prevent leaks in case of misuse
     delete [] m_pBuffer, m_pBuffer = 0;
 
-    m_pBuffer = new sal_Int8[theSize];
+    m_pBuffer = new sal_Int8[sal::static_int_cast<sal_Int32>(theSize)];
 
     sal_uInt64 nReallyRead = 0;
     rc = theFile.read(m_pBuffer, theSize, nReallyRead);
@@ -156,7 +156,7 @@ BufferedInputFile::RC BufferedInputFile::read( void *pBuffer, sal_uInt64 uBytesR
         // requested size may be greater than the real file size
         rBytesRead = std::min(m_nSize - m_nPointer, uBytesRequested);
 
-        memcpy(pBuffer, m_pBuffer + m_nPointer, rBytesRead);
+        memcpy(pBuffer, m_pBuffer + m_nPointer, sal::static_int_cast<sal_Int32>(rBytesRead));
         m_nPointer += rBytesRead;
     }
     else
@@ -243,7 +243,8 @@ BufferedOutputFile::RC BufferedOutputFile::sync()
     if (written < size)
     {
         // but we try our best to stay consistent
-        m_buffer.erase(m_buffer.begin(),m_buffer.begin()+written);
+        m_buffer.erase(m_buffer.begin(),
+                       m_buffer.end() + sal::static_int_cast<sal_uInt32>( written ));
 
         return E_IO;
     }
