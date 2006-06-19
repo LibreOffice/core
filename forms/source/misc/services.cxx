@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:02:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ DECLARE_SERVICE_INFO(Model)
 DECLARE_SERVICE_INFO(XForms)
 
 // some special handling for the FormattedFieldWrapper which can act as FormattedModel or as EditModel
-DECLARE_SERVICE_INFO(OFormattedFieldWrapper);
+DECLARE_SERVICE_INFO(OFormattedFieldWrapper)
     // this is for a service, which is instantiated through the EditModel service name
     // and which acts mostly as Edit (mostly means : if somebody uses XPersistObject::read immediately after
     // the object was instantiated and the stream contains a FormattedModel, it switches permanently to
@@ -353,7 +353,7 @@ void SAL_CALL createRegistryInfo_FORMS()
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** _ppEnv)
+void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** /*_ppEnv*/)
 {
     *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
