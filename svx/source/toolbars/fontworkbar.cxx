@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:52:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,6 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     sal_Int32   nAlignment = -1;
-    sal_Bool    bChecked = sal_True;
     for( i = 0; i < nCount; i++ )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetObj();
@@ -224,7 +223,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 
 SFX_SLOTMAP(FontworkBar)
 {
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell, SVX_RES(RID_SVX_FONTWORK_BAR))
@@ -308,7 +307,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 }
 }
 
-static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
+static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
     static const rtl::OUString  sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
     static const rtl::OUString  sSameLetterHeights( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
@@ -370,7 +369,7 @@ static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeo
         {
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) == SFX_ITEM_SET ) )
             {
-                sal_Bool bKernCharacterPairs = ((const SfxBoolItem*)rReq.GetArgs()->GetItem(SID_FONTWORK_KERN_CHARACTER_PAIRS))->GetValue();
+                // sal_Bool bKernCharacterPairs = ((const SfxBoolItem*)rReq.GetArgs()->GetItem(SID_FONTWORK_KERN_CHARACTER_PAIRS))->GetValue();
 //TODO:             pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
                 pObj->BroadcastObjectChange();
             }
@@ -428,56 +427,56 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
                         const SdrObject* pSourceObj = aFormModel.GetPage( 0 )->GetObj( 0 );
                         if( pSourceObj )
                         {
-                            PropertyValue aPropVal;
+                            PropertyValue aPropVal_;
                             SdrCustomShapeGeometryItem& rSourceGeometry = (SdrCustomShapeGeometryItem&)pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
                             com::sun::star::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
                             if ( pAny )
                             {
-                                aPropVal.Name = sType;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sType;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                             pAny = rSourceGeometry.GetPropertyValueByName( sAdjustmentValues );
                             if ( pAny )
                             {
-                                aPropVal.Name = sAdjustmentValues;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sAdjustmentValues;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                             pAny = rSourceGeometry.GetPropertyValueByName( sCoordinateOrigin );
                             if ( pAny )
                             {
-                                aPropVal.Name = sCoordinateOrigin;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sCoordinateOrigin;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                             pAny = rSourceGeometry.GetPropertyValueByName( sCoordinateSize );
                             if ( pAny )
                             {
-                                aPropVal.Name = sCoordinateSize;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sCoordinateSize;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                             pAny = rSourceGeometry.GetPropertyValueByName( sEquations );
                             if ( pAny )
                             {
-                                aPropVal.Name = sEquations;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sEquations;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                             pAny = rSourceGeometry.GetPropertyValueByName( sHandles );
                             if ( pAny )
                             {
-                                aPropVal.Name = sHandles;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sHandles;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                             pAny = rSourceGeometry.GetPropertyValueByName( sPath );
                             if ( pAny )
                             {
-                                aPropVal.Name = sPath;
-                                aPropVal.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal );
+                                aPropVal_.Name = sPath;
+                                aPropVal_.Value = *pAny;
+                                rGeometryItem.SetPropertyValue( aPropVal_ );
                             }
                         }
                     }
@@ -600,10 +599,12 @@ void FontworkBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     sal_uInt32 nCheckStatus = 0;
 
+    /*
     if ( rSet.GetItemState( SID_FONTWORK_SHAPE ) != SFX_ITEM_UNKNOWN )
     {
         sal_Bool bBreak = sal_True;
     }
+    */
     if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT_FLOATER ) != SFX_ITEM_UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
