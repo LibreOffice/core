@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_iface.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:48:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ PE_Interface::Process_Default()
 
 
 void
-PE_Interface::On_need_uik_MetaType(const char * i_sText)
+PE_Interface::On_need_uik_MetaType(const char *)
 {
     // Deprecated, data will be ignored
     SetResult(done, stay);
@@ -203,7 +203,7 @@ PE_Interface::On_need_uik_MetaType(const char * i_sText)
 }
 
 void
-PE_Interface::On_uik_Identifier(const char * i_sText)
+PE_Interface::On_uik_Identifier(const char *)
 {
     // Deprecated, data will be ignored
     SetResult(done, stay);
@@ -221,14 +221,14 @@ PE_Interface::On_uik_Punctuation(const char * i_sText)
 }
 
 void
-PE_Interface::On_need_ident_MetaType(const char * i_sText)
+PE_Interface::On_need_ident_MetaType(const char *)
 {
     SetResult(done, stay);
     eState = ident;
 }
 
 void
-PE_Interface::On_ident_Identifier(const char * i_sText)
+PE_Interface::On_ident_Identifier(const char *)
 {
     SetResult(done, stay);
 }
@@ -244,7 +244,7 @@ PE_Interface::On_ident_Punctuation(const char * i_sText)
 }
 
 void
-PE_Interface::On_need_interface_MetaType(const char * i_sText)
+PE_Interface::On_need_interface_MetaType(const char *)
 {
     SetResult(done, stay);
     eState = need_name;
@@ -381,7 +381,7 @@ PE_Interface::On_need_finish_Punctuation(const char * i_sText)
 }
 
 void
-PE_Interface::On_Default(const char * i_sText)
+PE_Interface::On_Default(const char *)
 {
     SetResult(not_done, pop_failure);
 }
