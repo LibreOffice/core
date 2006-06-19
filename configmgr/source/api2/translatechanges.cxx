@@ -4,9 +4,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:21:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,11 +213,11 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
 
             if (aChange.isReplaceSetChange() )
             {
-                Tree aTree = aChange.getOldElementTree(aAccessor);
+                Tree aOldTree = aChange.getOldElementTree(aAccessor);
 
-                aNodeRef = aTree.getRootNode();
-                OSL_ENSURE(!configuration::isStructuralNode(aTree, aNodeRef), "resolveUnoObject types mismatch");
-                aUnoChange.oldValue =  configuration::getSimpleElementValue(aTree, aNodeRef);
+                aNodeRef = aOldTree.getRootNode();
+                OSL_ENSURE(!configuration::isStructuralNode(aOldTree, aNodeRef), "resolveUnoObject types mismatch");
+                aUnoChange.oldValue =  configuration::getSimpleElementValue(aOldTree, aNodeRef);
             }
             bool bFound = aUnoChange.newValue.hasValue() || aUnoChange.oldValue.hasValue();
             return bFound;
