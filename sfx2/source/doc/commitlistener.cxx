@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commitlistener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:36:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,13 +50,13 @@ void OChildCommitListen_Impl::OwnerIsDisposed()
     m_pModel = NULL;
 }
 
-void SAL_CALL OChildCommitListen_Impl::preCommit( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL OChildCommitListen_Impl::preCommit( const ::com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     // not interesting
 }
 
-void SAL_CALL OChildCommitListen_Impl::commited( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL OChildCommitListen_Impl::commited( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
         throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -65,20 +65,20 @@ void SAL_CALL OChildCommitListen_Impl::commited( const ::com::sun::star::lang::E
         m_pModel->StorageIsModified_Impl();
 }
 
-void SAL_CALL OChildCommitListen_Impl::preRevert( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL OChildCommitListen_Impl::preRevert( const ::com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     // not interesting
 }
 
-void SAL_CALL OChildCommitListen_Impl::reverted( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL OChildCommitListen_Impl::reverted( const ::com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::RuntimeException)
 {
     // not interesting
 }
 
 
-void SAL_CALL OChildCommitListen_Impl::disposing( const lang::EventObject& Source )
+void SAL_CALL OChildCommitListen_Impl::disposing( const lang::EventObject& )
         throw ( uno::RuntimeException )
 {
     // not interesting
