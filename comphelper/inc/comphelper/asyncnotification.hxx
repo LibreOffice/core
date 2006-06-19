@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncnotification.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:39:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,10 +75,11 @@ namespace comphelper
         virtual oslInterlockedCount SAL_CALL release();
 
     protected:
-        AnyEvent( const AnyEvent& _rSource );
-        AnyEvent& operator=( const AnyEvent& _rSource );
-
         virtual ~AnyEvent();
+
+    private:
+        AnyEvent( AnyEvent& ); // not defined
+        void operator=( AnyEvent& ); // not defined
     };
 
     //====================================================================
@@ -149,10 +150,10 @@ namespace comphelper
         virtual oslInterlockedCount SAL_CALL release();
 
         /// creates (starts) the thread
-        AsyncEventNotifier_TBASE::create;
+        using AsyncEventNotifier_TBASE::create;
 
-        AsyncEventNotifier_TBASE::operator new;
-        AsyncEventNotifier_TBASE::operator delete;
+        using AsyncEventNotifier_TBASE::operator new;
+        using AsyncEventNotifier_TBASE::operator delete;
 
         /** terminates the thread
 
