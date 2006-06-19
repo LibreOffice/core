@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrlistimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:02:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@ struct TagAttribute
 {
     TagAttribute()
         {}
-    TagAttribute( const OUString &sName, const OUString &sType , const OUString &sValue )
+    TagAttribute( const OUString &aName, const OUString &aType , const OUString &aValue )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        this->sName     = aName;
+        this->sType     = aType;
+        this->sValue    = aValue;
     }
 
     OUString sName;
@@ -87,11 +87,12 @@ struct AttributeListImpl_impl
 
 sal_Int16 AttributeListImpl::getLength(void) throw (RuntimeException)
 {
-    return m_pImpl->vecAttribute.size();
+    return static_cast<sal_Int16>(m_pImpl->vecAttribute.size());
 }
 
 
-AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
+AttributeListImpl::AttributeListImpl( const AttributeListImpl &r ) :
+    cppu::WeakImplHelper2<XAttributeList, XCloneable>()
 {
     m_pImpl = new AttributeListImpl_impl;
     *m_pImpl = *(r.m_pImpl);
@@ -99,7 +100,7 @@ AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
 
 OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( std::vector< TagAttribute >::size_type(i) < m_pImpl->vecAttribute.size() ) {
         return m_pImpl->vecAttribute[i].sName;
     }
     return OUString();
@@ -108,7 +109,7 @@ OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 
 OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( std::vector< TagAttribute >::size_type(i) < m_pImpl->vecAttribute.size() ) {
         return m_pImpl->vecAttribute[i].sType;
     }
     return OUString();
@@ -116,7 +117,7 @@ OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 
 OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( std::vector< TagAttribute >::size_type(i) < m_pImpl->vecAttribute.size() ) {
         return m_pImpl->vecAttribute[i].sValue;
     }
     return OUString();
@@ -203,11 +204,12 @@ void AttributeListImpl::setAttributeList( const Reference<  XAttributeList >  &r
     m_pImpl->vecAttribute.reserve( nMax );
 
     for( int i = 0 ; i < nMax ; i ++ ) {
-        m_pImpl->vecAttribute.push_back( TagAttribute(  r->getNameByIndex( i ) ,
-                                                        r->getTypeByIndex( i ) ,
-                                                        r->getValueByIndex( i ) ) );
+       m_pImpl->vecAttribute.push_back(
+           TagAttribute(
+               r->getNameByIndex( static_cast<sal_Int16>(i) ) ,
+               r->getTypeByIndex( static_cast<sal_Int16>(i) ) ,
+               r->getValueByIndex( static_cast<sal_Int16>(i) ) ) );
     }
-
     assert( nMax == getLength() );
 }
 
