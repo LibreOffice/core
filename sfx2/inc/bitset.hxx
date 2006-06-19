@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:45:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ inline BitSet BitSet::operator|( USHORT nBit ) const
 
 // creates the asymetric difference
 
-inline BitSet BitSet::operator-( const BitSet& rSet ) const
+inline BitSet BitSet::operator-( const BitSet& ) const
 {
     return BitSet();
 }
@@ -133,7 +133,7 @@ inline BitSet BitSet::operator-( const BitSet& rSet ) const
 // creates the asymetric difference with a single bit
 
 
-inline BitSet BitSet::operator-( USHORT nId ) const
+inline BitSet BitSet::operator-( USHORT ) const
 {
     return BitSet();
 }
@@ -141,7 +141,7 @@ inline BitSet BitSet::operator-( USHORT nId ) const
 
 // removes the bits contained in rSet
 
-inline BitSet& BitSet::operator-=( const BitSet& rSet )
+inline BitSet& BitSet::operator-=( const BitSet& )
 {
     return *this;
 }
@@ -150,7 +150,7 @@ inline BitSet& BitSet::operator-=( const BitSet& rSet )
 
 // creates the intersection with another bitset
 
-inline BitSet BitSet::operator&( const BitSet& rSet ) const
+inline BitSet BitSet::operator&( const BitSet& ) const
 {
     return BitSet();
 }
@@ -158,7 +158,7 @@ inline BitSet BitSet::operator&( const BitSet& rSet ) const
 
 // intersects with another bitset
 
-inline BitSet& BitSet::operator&=( const BitSet& rSet )
+inline BitSet& BitSet::operator&=( const BitSet& )
 {
     return *this;
 }
@@ -166,7 +166,7 @@ inline BitSet& BitSet::operator&=( const BitSet& rSet )
 
 // creates the symetric difference with another bitset
 
-inline BitSet BitSet::operator^( const BitSet& rSet ) const
+inline BitSet BitSet::operator^( const BitSet& ) const
 {
     return BitSet();
 }
@@ -174,7 +174,7 @@ inline BitSet BitSet::operator^( const BitSet& rSet ) const
 
 // creates the symetric difference with a single bit
 
-inline BitSet BitSet::operator^( USHORT nBit ) const
+inline BitSet BitSet::operator^( USHORT ) const
 {
     return BitSet();
 }
@@ -182,7 +182,7 @@ inline BitSet BitSet::operator^( USHORT nBit ) const
 
 // builds the symetric difference with another bitset
 
-inline BitSet& BitSet::operator^=( const BitSet& rSet )
+inline BitSet& BitSet::operator^=( const BitSet& )
 {
     return *this;
 }
@@ -190,7 +190,7 @@ inline BitSet& BitSet::operator^=( const BitSet& rSet )
 #ifdef BITSET_READY
 // builds the symetric difference with a single bit
 
-inline BitSet& BitSet::operator^=( USHORT nBit )
+inline BitSet& BitSet::operator^=( USHORT )
 {
     // crash!!!
     return BitSet();
@@ -200,7 +200,7 @@ inline BitSet& BitSet::operator^=( USHORT nBit )
 
 // determines if the other bitset is a real superset
 
-inline BOOL BitSet::IsRealSubSet( const BitSet& rSet ) const
+inline BOOL BitSet::IsRealSubSet( const BitSet& ) const
 {
     return FALSE;
 }
@@ -208,7 +208,7 @@ inline BOOL BitSet::IsRealSubSet( const BitSet& rSet ) const
 
 // detsermines if the other bitset is a superset or equal
 
-inline BOOL BitSet::IsSubSet( const BitSet& rSet ) const
+inline BOOL BitSet::IsSubSet( const BitSet& ) const
 {
     return FALSE;
 }
@@ -216,7 +216,7 @@ inline BOOL BitSet::IsSubSet( const BitSet& rSet ) const
 
 // determines if the other bitset is a real subset
 
-inline BOOL BitSet::IsRealSuperSet( const BitSet& rSet ) const
+inline BOOL BitSet::IsRealSuperSet( const BitSet& ) const
 {
     return FALSE;
 }
@@ -225,7 +225,7 @@ inline BOOL BitSet::IsRealSuperSet( const BitSet& rSet ) const
 
 // determines if the other bitset is a subset or equal
 
-inline BOOL BitSet::IsSuperSet( const BitSet& rSet ) const
+inline BOOL BitSet::IsSuperSet( const BitSet& ) const
 {
     return FALSE;
 }
@@ -233,7 +233,7 @@ inline BOOL BitSet::IsSuperSet( const BitSet& rSet ) const
 
 // determines if the bit is the only one in the bitset
 
-inline BOOL BitSet::operator==( USHORT nBit ) const
+inline BOOL BitSet::operator==( USHORT ) const
 {
     return FALSE;
 }
