@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:49:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
 
 //========================================================================
 TYPEINIT0(FmFilterData);
-Image FmFilterData::GetImage( BmpColorMode _eMode ) const
+Image FmFilterData::GetImage( BmpColorMode /*_eMode*/ ) const
 {
     return Image();
 }
@@ -430,12 +430,12 @@ void FmFilterAdapter::dispose() throw( RuntimeException )
 
 //------------------------------------------------------------------------------
 // delete all items relate to the control
-void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& rItems,
+void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
                                         const Reference< ::com::sun::star::awt::XTextComponent > & xText)
 {
-    for (::std::vector<FmFilterData*>::reverse_iterator i = rItems.rbegin();
+    for (::std::vector<FmFilterData*>::reverse_iterator i = _rItems.rbegin();
         // link problems with operator ==
-        i.base() != rItems.rend().base(); i++)
+        i.base() != _rItems.rend().base(); i++)
     {
         FmFilterItems* pFilterItems = PTR_CAST(FmFilterItems, *i);
         if (pFilterItems)
@@ -469,14 +469,8 @@ void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::containe
         InsertElements(xElement);
 
         // store the filter controls
-        FmXFormController* pController = NULL;
-        //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(xElement, UNO_QUERY));
-        Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(xElement,UNO_QUERY);
-        DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
-        if(xTunnel.is())
-        {
-            pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
-        }
+        FmXFormController* pController = FmXFormController::getImplementation( xElement.get() );
+        DBG_ASSERT( pController, "FmFilterAdapter::InsertElements: no controller!" );
 
         const FmFilterControls& rControls = pController->getFilterControls();
         for (FmFilterControls::const_iterator iter = rControls.begin(); iter != rControls.end(); ++iter )
@@ -521,14 +515,8 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 
     // get the controller of the text component and its filter rows
     FmFormItem* pFormItem = PTR_CAST(FmFormItem,pFilterItem->GetParent()->GetParent());
-    FmXFormController* pController = NULL;
-    Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
-    DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
-    if(xTunnel.is())
-    {
-        pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
-    }
-    //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+    FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+    DBG_ASSERT( pController, "FmFilterAdapter::setText: no controller!" );
     FmFilterRows& rRows = pController->getFilterRows();
 
     DBG_ASSERT(nRowPos < (sal_Int32)rRows.size(), "wrong row pos");
@@ -626,9 +614,9 @@ TYPEINIT1(FmFilterModel, FmParentData);
 FmFilterModel::FmFilterModel(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
               :FmParentData(_rxFactory,NULL, ::rtl::OUString())
               ,OSQLParserClient(_rxFactory)
+              ,m_xORB(_rxFactory)
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
-              ,m_xORB(_rxFactory)
 {
 }
 
@@ -713,14 +701,8 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
         Insert(pParent->GetChilds().end(), pFormItem);
 
         // And now insert the filters for the form
-        FmXFormController* pController = NULL;
-        Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
-        DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
-        if(xTunnel.is())
-        {
-            pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
-        }
-        //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+        FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+        DBG_ASSERT( pController, "FmFilterAdapter::Update: no controller!" );
 
         INT32 nPos = pController->getCurrentFilterPosition();
         pFormItem->SetCurrentPosition(nPos);
@@ -833,14 +815,8 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
     Insert(i, pFilterItems);
 
     // do we need a new row
-    FmXFormController* pController = NULL;
-    Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
-    DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
-    if(xTunnel.is())
-    {
-        pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
-    }
-    //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+    FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+    DBG_ASSERT( pController, "FmFilterAdapter::AppendFilterItems: no controller!" );
     FmFilterRows& rRows = pController->getFilterRows();
 
     // determine the filter position
@@ -874,14 +850,8 @@ void FmFilterModel::Remove(FmFilterData* pData)
     if (pData->ISA(FmFilterItems))
     {
         FmFormItem* pFormItem = (FmFormItem*)pParent;
-        FmXFormController* pController = NULL;
-        Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
-        DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
-        if(xTunnel.is())
-        {
-            pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
-        }
-        //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+        FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+        DBG_ASSERT( pController, "FmFilterAdapter::Remove: no controller!" );
         FmFilterRows& rRows = pController->getFilterRows();
 
         // how many entries do we have
@@ -966,10 +936,10 @@ void FmFilterModel::Remove(FmFilterData* pData)
         else
         {
             // find the position of the father within his father
-            ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetParent()->GetChilds();
-            ::std::vector<FmFilterData*>::iterator j = find(rItems.begin(), rItems.end(), pFilterItem->GetParent());
-            DBG_ASSERT(j != rItems.end(), "FmFilterModel::Remove(): unknown Item");
-            sal_Int32 nParentPos = j - rItems.begin();
+            ::std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChilds();
+            ::std::vector<FmFilterData*>::iterator j = find(rParentParentItems.begin(), rParentParentItems.end(), pFilterItem->GetParent());
+            DBG_ASSERT(j != rParentParentItems.end(), "FmFilterModel::Remove(): unknown Item");
+            sal_Int32 nParentPos = j - rParentParentItems.begin();
 
             // EmptyText removes the filter
             m_pAdapter->setText(nParentPos, pFilterItem, ::rtl::OUString());
@@ -1027,15 +997,11 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
 //------------------------------------------------------------------------
 void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 {
-    ::std::vector<FmFilterData*>& rParentItems = pItems->GetParent()->GetChilds();
-    ::std::vector<FmFilterData*>::iterator i = find(rParentItems.begin(), rParentItems.end(), pItems);
-    sal_Int32 nParentPos = i - rParentItems.begin();
-
     Insert(pItems->GetChilds().end(), pFilterItem);
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::SetText(FmFilterItem* pItem, const ::rtl::OUString& rText)
+void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText)
 {
     ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChilds();
     ::std::vector<FmFilterData*>::iterator i = find(rItems.begin(), rItems.end(), pItem->GetParent());
@@ -1071,14 +1037,8 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
         {
             // determine the filter position
             sal_Int32 nPos = i - rItems.begin();
-            FmXFormController* pController = NULL;
-            Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
-            DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
-            if(xTunnel.is())
-            {
-                pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
-            }
-            //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+            FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+            DBG_ASSERT( pController, "FmFilterAdapter::SetCurrentItems: no controller!" );
             pController->setCurrentFilterPosition(nPos);
             pFormItem->SetCurrentPosition(nPos);
 
@@ -1144,7 +1104,7 @@ public:
 
 const int nxDBmp = 12;
 //------------------------------------------------------------------------
-void FmFilterItemsString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+void FmFilterItemsString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* pEntry )
 {
     FmFilterItems* pRow = (FmFilterItems*)pEntry->GetUserData();
     FmFormItem* pForm = (FmFormItem*)pRow->GetParent();
@@ -1220,7 +1180,7 @@ void FmFilterString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewData
 }
 
 //------------------------------------------------------------------------
-void FmFilterString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+void FmFilterString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
     Font aOldFont( rDev.GetFont());
     Font aFont( aOldFont );
@@ -1241,8 +1201,11 @@ void FmFilterString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, S
 //========================================================================
 FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
-                  ,m_aControlExchange(this)
-                  ,m_pEditingCurrently(NULL)
+                  ,m_pModel( NULL )
+                  ,m_pEditingCurrently( NULL )
+                  ,m_aControlExchange( this )
+                  ,m_aTimerCounter( 0 )
+                  ,m_aDropActionType( DA_SCROLLUP )
 {
     SetHelpId( HID_FILTER_NAVIGATOR );
 
@@ -1290,7 +1253,7 @@ void FmFilterNavigator::Clear()
 }
 
 //------------------------------------------------------------------------
-void FmFilterNavigator::Update(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const Reference< ::com::sun::star::form::XFormController > & xCurrent)
+void FmFilterNavigator::UpdateContent(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const Reference< ::com::sun::star::form::XFormController > & xCurrent)
 {
     if (xCurrent == m_pModel->GetCurrentController())
         return;
@@ -1356,7 +1319,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
             GrabFocus();
             // this will set the text at the FmFilterItem, as well as update any filter controls
             // which are connected to this particular entry
-            m_pModel->SetText( static_cast< FmFilterItem* >( pEntry->GetUserData() ), aText );
+            m_pModel->SetTextForItem( static_cast< FmFilterItem* >( pEntry->GetUserData() ), aText );
 
             SetCursor( pEntry, sal_True );
             SetEntryText( pEntry, aText );
@@ -1390,30 +1353,29 @@ IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
     if (--m_aTimerCounter > 0)
         return 0L;
 
-    if (m_aDropActionType == DA_EXPANDNODE)
+    switch (m_aDropActionType)
     {
-        SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
-        if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
-            // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
-            // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
-            // aber ich denke, die BK sollte es auch so vertragen
-            Expand(pToExpand);
-
-        // nach dem Expand habe ich im Gegensatz zum Scrollen natuerlich nix mehr zu tun
-        m_aDropActionTimer.Stop();
-    }
-    else
-    {
-        switch (m_aDropActionType)
+        case DA_SCROLLUP :
+            ScrollOutputArea(1);
+            m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+            break;
+        case DA_SCROLLDOWN :
+            ScrollOutputArea(-1);
+            m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+            break;
+        case DA_EXPANDNODE:
         {
-            case DA_SCROLLUP :
-                ScrollOutputArea(1);
-                break;
-            case DA_SCROLLDOWN :
-                ScrollOutputArea(-1);
-                break;
+            SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
+            if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
+                // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
+                // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
+                // aber ich denke, die BK sollte es auch so vertragen
+                Expand(pToExpand);
+
+            // nach dem Expand habe ich im Gegensatz zum Scrollen natuerlich nix mehr zu tun
+            m_aDropActionTimer.Stop();
         }
-        m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+        break;
     }
     return 0L;
 }
@@ -1608,7 +1570,7 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 }
 
 //------------------------------------------------------------------------
-void FmFilterNavigator::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(FmFilterInsertedHint))
     {
@@ -1740,13 +1702,13 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
                 m_pModel->Remove(*i);
 
             // now set the text for the new dragged item
-            m_pModel->SetText(pFilterItem, aText);
+            m_pModel->SetTextForItem(pFilterItem, aText);
         }
     }
     m_pModel->CheckIntegrity((FmFormItem*)_pTargetItems->GetParent());
 }
 //------------------------------------------------------------------------------
-void FmFilterNavigator::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     EndSelection();
 
@@ -1792,7 +1754,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 pClicked = GetCurEntry();
                 if (!pClicked)
                     break;
-                aWhere = GetEntryPos(pClicked);
+                aWhere = GetEntryPosition( pClicked );
             }
 
             ::std::vector<FmFilterData*> aSelectList;
@@ -1850,7 +1812,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 
                     m_pModel->ValidateText((FmFilterItem*)pClicked->GetUserData(),
                                             aText, aErrorMsg);
-                    m_pModel->SetText((FmFilterItem*)pClicked->GetUserData(), aText);
+                    m_pModel->SetTextForItem((FmFilterItem*)pClicked->GetUserData(), aText);
                 }   break;
                 case SID_FM_DELETE:
                 {
@@ -1900,7 +1862,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         )
     {
         ::std::vector<FmFilterItem*> aItemList;
-        if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
+        if ( getSelectedFilterItems(aItemList) )
         {
             ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> aGetEntry = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
             if ( rKeyCode.GetCode() == KEY_UP )
@@ -1999,10 +1961,10 @@ void FmFilterNavigator::DeleteSelection()
 //========================================================================
 // class FmFilterNavigatorWin
 //========================================================================
-FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
-                              Window* pParent )
-                     :SfxDockingWindow( pBindings, pMgr, pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
-                     ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *pBindings )
+FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                              Window* _pParent )
+                     :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
+                     ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
 {
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 
@@ -2019,10 +1981,10 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 }
 
 //-----------------------------------------------------------------------
-void FmFilterNavigatorWin::Update(FmFormShell* pFormShell)
+void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 {
     if (!pFormShell)
-        m_pNavigator->Update(Reference< ::com::sun::star::container::XIndexAccess > (), Reference< ::com::sun::star::form::XFormController > ());
+        m_pNavigator->UpdateContent( NULL, NULL );
     else
     {
         Reference< ::com::sun::star::form::XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
@@ -2038,7 +2000,7 @@ void FmFilterNavigatorWin::Update(FmFormShell* pFormShell)
                 xChild = Reference< ::com::sun::star::container::XChild > (xParent, UNO_QUERY);
             }
         }
-        m_pNavigator->Update(xContainer, xController);
+        m_pNavigator->UpdateContent(xContainer, xController);
     }
 }
 
@@ -2051,10 +2013,10 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
     if( eState >= SFX_ITEM_AVAILABLE )
     {
         FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
-        Update( pShell );
+        UpdateContent( pShell );
     }
     else
-        Update( NULL );
+        UpdateContent( NULL );
 }
 
 //-----------------------------------------------------------------------
@@ -2067,7 +2029,7 @@ sal_Bool FmFilterNavigatorWin::Close()
         // the EndEditing was vetoed (perhaps of an syntax error or such)
         return sal_False;
 
-    Update( NULL );
+    UpdateContent( NULL );
     return SfxDockingWindow::Close();
 }
 
@@ -2081,19 +2043,10 @@ void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 //-----------------------------------------------------------------------
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
-    Size aSize = SfxDockingWindow::CalcDockingSize( eAlign );
+    if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
+        return Size();
 
-    switch( eAlign )
-    {
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_BOTTOM:
-            return Size();
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
-            break;
-    }
-
-    return aSize;
+    return SfxDockingWindow::CalcDockingSize( eAlign );
 }
 
 //-----------------------------------------------------------------------
@@ -2105,6 +2058,8 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
         case SFX_ALIGN_RIGHT:
         case SFX_ALIGN_NOALIGNMENT:
             return (eAlign);
+        default:
+            break;
     }
 
     return (eActAlign);
@@ -2141,13 +2096,13 @@ void FmFilterNavigatorWin::GetFocus()
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
 
 //-----------------------------------------------------------------------
-FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *pParent, sal_uInt16 nId,
-                                    SfxBindings *pBindings, SfxChildWinInfo* pInfo )
-                 :SfxChildWindow( pParent, nId )
+FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _nId,
+                                    SfxBindings *_pBindings, SfxChildWinInfo* _pInfo )
+                 :SfxChildWindow( _pParent, _nId )
 {
-    pWindow = new FmFilterNavigatorWin( pBindings, this, pParent );
+    pWindow = new FmFilterNavigatorWin( _pBindings, this, _pParent );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxDockingWindow*)pWindow)->Initialize( pInfo );
+    ((SfxDockingWindow*)pWindow)->Initialize( _pInfo );
 }
 
 //........................................................................
