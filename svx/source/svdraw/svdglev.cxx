@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:49:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,8 @@ SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrPolyEditView(pModel1,pXOut)
+SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrPolyEditView(pModel1,_pXOut)
 {
     ImpClearVars();
 }
@@ -107,7 +107,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*, const void*)
+static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*, const void*)
 {
     USHORT& nRet=*(USHORT*)pnRet;
     BOOL& bFirst=*(BOOL*)pbFirst;
@@ -128,7 +128,7 @@ TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(USHORT nThisEsc) const
     return (TRISTATE)nRet;
 }
 
-static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* pObj, const void* pnThisEsc, const void* pbOn, const void*, const void*, const void*)
+static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pnThisEsc, const void* pbOn, const void*, const void*, const void*)
 {
     USHORT nEsc=rGP.GetEscDir();
     if (*(BOOL*)pbOn) nEsc|=*(USHORT*)pnThisEsc;
@@ -146,7 +146,7 @@ void SdrGlueEditView::SetMarkedGluePointsEscDir(USHORT nThisEsc, BOOL bOn)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbFirst, const void* pnRet, const void*, const void*, const void*)
+static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*, const void*)
 {
     USHORT& nRet=*(USHORT*)pnRet;
     BOOL& bFirst=*(BOOL*)pbFirst;
@@ -183,7 +183,7 @@ void SdrGlueEditView::SetMarkedGluePointsPercent(BOOL bOn)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet, const void*)
+static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet, const void*)
 {
     USHORT& nRet=*(USHORT*)pnRet;
     BOOL& bFirst=*(BOOL*)pbFirst;
@@ -343,7 +343,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpMove(Point& rPt, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
 {
     rPt.X()+=((const Size*)p1)->Width();
     rPt.Y()+=((const Size*)p1)->Height();
@@ -363,7 +363,7 @@ void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, BOOL bCopy)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
     ResizePoint(rPt,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
 }
@@ -382,7 +382,7 @@ void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpRotate(Point& rPt, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
 {
     RotatePoint(rPt,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
 }
