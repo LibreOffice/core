@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: rt $ $Date: 2006-03-09 10:46:10 $
-#*    $Revision: 1.9 $
+#*    last change   $Author: hr $ $Date: 2006-06-19 23:13:09 $
+#*    $Revision: 1.10 $
 #*
 #*    $Logfile: $
 #*
@@ -278,7 +278,7 @@ public:
         TestPolyStruct< sal_Bool > const & arg) throw (RuntimeException)
     { return arg; }
 
-    virtual void SAL_CALL transportPolyHyper(TestPolyStruct< sal_Int64 > & arg)
+    virtual void SAL_CALL transportPolyHyper(TestPolyStruct< sal_Int64 > &)
         throw (RuntimeException) {}
 
     virtual void SAL_CALL transportPolySequence(
@@ -603,7 +603,6 @@ TestData Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMs
     aExc.Message          = _aData.String = rMsg;
     aExc.Context          = _aData.Interface = xContext;
     throw aExc;
-    return TestData(); // for dummy
 }
 
 void Test_Impl::raiseRuntimeExceptionOneway( const OUString & rMsg, const Reference< XInterface > & xContext )
@@ -665,7 +664,7 @@ sal_Int32 Test_Impl::getRuntimeException()
     return 0; // for dummy
 }
 //__________________________________________________________________________________________________
-void Test_Impl::setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException)
+void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
     aExc.Message          = _aData.String;
@@ -1125,7 +1124,7 @@ Sequence< OUString > Test_Impl::getSupportedServiceNames()
 // ...
 
 //==================================================================================================
-static Reference< XInterface > SAL_CALL Test_Impl_create( const Reference< XMultiServiceFactory > & xSMgr )
+static Reference< XInterface > SAL_CALL Test_Impl_create( const Reference< XMultiServiceFactory > & )
 {
     return Reference< XInterface >( (XBridgeTest *)new Test_Impl() );
 }
@@ -1136,13 +1135,12 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -1164,7 +1162,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
 
