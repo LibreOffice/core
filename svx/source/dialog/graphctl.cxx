@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:09:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
 |*
 \************************************************************************/
 
-void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect )
+void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& /*rOldBoundRect*/ )
 {
     switch( eType )
     {
@@ -105,13 +105,13 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
 GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
             Control         ( pParent, nWinBits ),
             aMap100         ( MAP_100TH_MM ),
-            pModel          ( NULL ),
-            pView           ( NULL ),
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
             bEditMode       ( FALSE ),
             bSdrMode        ( FALSE ),
-            mpAccContext    ( NULL )
+            mpAccContext    ( NULL ),
+            pModel          ( NULL ),
+            pView           ( NULL )
 {
     pUserCall = new GraphCtrlUserCall( *this );
     aUpdateTimer.SetTimeout( 200 );
@@ -131,15 +131,15 @@ GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
 GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
             Control         ( pParent, rResId ),
             aMap100         ( MAP_100TH_MM ),
-            pModel          ( NULL ),
-            pView           ( NULL ),
+            nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
             bEditMode       ( FALSE ),
             bSdrMode        ( FALSE ),
             bAnim           ( FALSE ),
-            nWinStyle       ( 0 ),
-            mpAccContext    ( NULL )
+            mpAccContext    ( NULL ),
+            pModel          ( NULL ),
+            pView           ( NULL )
 {
     pUserCall = new GraphCtrlUserCall( *this );
     aUpdateTimer.SetTimeout( 500 );
@@ -360,7 +360,7 @@ void GraphCtrl::Paint( const Rectangle& rRect )
 |*
 \************************************************************************/
 
-void GraphCtrl::SdrObjChanged( const SdrObject& rObj )
+void GraphCtrl::SdrObjChanged( const SdrObject&  )
 {
 }
 
@@ -371,7 +371,7 @@ void GraphCtrl::SdrObjChanged( const SdrObject& rObj )
 |*
 \************************************************************************/
 
-void GraphCtrl::SdrObjCreated( const SdrObject& rObj )
+void GraphCtrl::SdrObjCreated( const SdrObject& )
 {
 }
 
