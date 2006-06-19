@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:39:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,6 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-
-#pragma hdrstop
 
 #define _SVX_CHARDLG_CXX
 
@@ -175,32 +173,6 @@ using namespace ::com::sun::star;
 #define LW_SCHMAL   2
 
 // static ----------------------------------------------------------------
-
-static USHORT pStdRanges[] =
-{
-    SID_ATTR_CHAR_FONT,
-    SID_ATTR_CHAR_SHADOWED,
-    SID_ATTR_CHAR_CONTOUR,
-    SID_ATTR_CHAR_COLOR,
-    SID_ATTR_CHAR_CASEMAP,
-    SID_ATTR_CHAR_FONTLIST,
-    0
-};
-
-static USHORT pExtRanges[] =
-{
-    SID_ATTR_CHAR_WORDLINEMODE,
-    SID_ATTR_CHAR_WORDLINEMODE,
-    SID_ATTR_CHAR_STRIKEOUT,
-    SID_ATTR_CHAR_UNDERLINE,
-    SID_ATTR_CHAR_PROPSIZE,
-    SID_ATTR_CHAR_PROPSIZE,
-    SID_ATTR_CHAR_KERNING,
-    SID_ATTR_CHAR_CASEMAP,
-    SID_ATTR_CHAR_ESCAPEMENT,
-    SID_ATTR_CHAR_ESCAPEMENT,
-    0
-};
 
 static USHORT pNameRanges[] =
 {
@@ -812,7 +784,7 @@ void SvxCharNamePage::Initialize()
     }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->Get(i);
+        XColorEntry* pEntry = pColorTable->GetColor(i);
         m_pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
@@ -1682,10 +1654,10 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxCharNamePage::DeactivatePage( SfxItemSet* pSet )
+int SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -1918,7 +1890,7 @@ void SvxCharEffectsPage::Initialize()
     }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->Get(i);
+        XColorEntry* pEntry = pColorTable->GetColor(i);
         m_aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         m_aFontColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
@@ -2220,10 +2192,10 @@ IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
 }
 // -----------------------------------------------------------------------
 
-int SvxCharEffectsPage::DeactivatePage( SfxItemSet* pSet )
+int SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -3272,7 +3244,7 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, pField )
+IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, EMPTYARG )
 {
     m_aPreviewWin.SetFontWidthScale( USHORT( m_aScaleWidthMF.GetValue() ) );
 
@@ -3302,10 +3274,10 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxCharPositionPage::DeactivatePage( SfxItemSet* pSet )
+int SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -3692,7 +3664,6 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
          m_aFitToLineCB.IsChecked() != m_aFitToLineCB.GetSavedValue() )
     {
         SvxCharRotateItem aItem( 0, m_aFitToLineCB.IsChecked(), nWhich );
-        sal_uInt16 nVal = 0;
         if (m_a90degRB.IsChecked())
             aItem.SetBottomToTop();
         else if (m_a270degRB.IsChecked())
@@ -3863,10 +3834,10 @@ IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
 
 // -----------------------------------------------------------------------
 
-int SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* pSet )
+int SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
