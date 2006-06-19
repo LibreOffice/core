@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PersMixedContentTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:51:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,10 +84,10 @@ XMLPersTextTContext_Impl::~XMLPersTextTContext_Impl()
 }
 
 XMLTransformerContext *XMLPersTextTContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< XAttributeList >& xAttrList )
+        sal_uInt16,
+        const OUString&,
+        const OUString&,
+        const Reference< XAttributeList >& )
 {
     OSL_ENSURE( !this, "illegal call to CreateChildContext" );
     return 0;
