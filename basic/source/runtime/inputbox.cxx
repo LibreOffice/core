@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:02:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#include <sbx.hxx>
 #include "runtime.hxx"
-#pragma hdrstop
 #include "stdobj.hxx"
 #include "rtlproto.hxx"
 
@@ -134,10 +132,10 @@ void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
 {
     if ( rPrompt.Len() == 0 )
         return;
-    String aText( rPrompt );
-    aText.ConvertLineEnd( LINEEND_CR );
+    String aText_( rPrompt );
+    aText_.ConvertLineEnd( LINEEND_CR );
     aPromptText.SetPosPixel( LogicToPixel(Point(5,5)));
-    aPromptText.SetText( aText );
+    aPromptText.SetText( aText_ );
     Size aSize( rDlgSize );
     aSize.Width() -= 70;
     aSize.Height() -= 50;
@@ -147,6 +145,8 @@ void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
 
 IMPL_LINK_INLINE_START( SvRTLInputBox, OkHdl, Button *, pButton )
 {
+    (void)pButton;
+
     aText = aEdit.GetText();
     EndDialog( 1 );
     return 0;
@@ -155,6 +155,8 @@ IMPL_LINK_INLINE_END( SvRTLInputBox, OkHdl, Button *, pButton )
 
 IMPL_LINK_INLINE_START( SvRTLInputBox, CancelHdl, Button *, pButton )
 {
+    (void)pButton;
+
     aText.Erase();
     EndDialog( 0 );
     return 0;
@@ -170,6 +172,9 @@ IMPL_LINK_INLINE_END( SvRTLInputBox, CancelHdl, Button *, pButton )
 
 RTLFUNC(InputBox)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     ULONG nArgCount = rPar.Count();
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
