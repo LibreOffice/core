@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:23:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,10 @@ namespace frm
     // XPropertyChangeListener
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
+    // prevent method hiding
+        using OEditBaseModel::disposing;
+        using OEditBaseModel::getFastPropertyValue;
+
     protected:
         virtual sal_Int16 getPersistenceFlags() const;
             // as we have an own version handling for persistence
@@ -213,6 +217,9 @@ namespace frm
 
     // ::com::sun::star::awt::XControl
         virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException);
+
+    // disambiguation
+        using OBoundControl::disposing;
 
     private:
         DECL_LINK( OnKeyPressed, void* );
