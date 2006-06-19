@@ -4,9 +4,9 @@
  *
  *  $RCSfile: casefolding.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:32:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,16 @@ using namespace com::sun::star::uno;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static Mapping mapping_03a3[] = {{0, 1, 0x03c2, 0, 0 },{0, 1, 0x03c3, 0, 0}};
-static Mapping mapping_0307[] = {{0, 0, 0, 0, 0 },{0, 1, 0x0307, 0, 0}};
-static Mapping mapping_004a[] = {{0, 2, 0x006a, 0x0307, 0},{0, 1, 0x006a, 0, 0}};
-static Mapping mapping_012e[] = {{0, 2, 0x012f, 0x0307, 0},{0, 1, 0x012f, 0, 0}};
-static Mapping mapping_00cc[] = {{0, 3, 0x0069, 0x0307, 0x0300},{0, 1, 0x00ec, 0, 0}};
-static Mapping mapping_00cd[] = {{0, 3, 0x0069, 0x0307, 0x0301},{0, 1, 0x00ed, 0, 0}};
-static Mapping mapping_0128[] = {{0, 3, 0x0069, 0x0307, 0x0303},{0, 1, 0x0129, 0, 0}};
-static Mapping mapping_0049[] = {{0, 2, 0x0069, 0x0307, 0},{0, 1, 0x0131, 0, 0},{0, 1, 0x0069, 0, 0}};
-static Mapping mapping_0069[] = {{0, 1, 0x0130, 0, 0},{0, 1, 0x0049, 0, 0}};
-static Mapping mapping_0130[] = {{0, 1, 0x0069, 0, 0},{0, 1, 0x0130, 0, 0}};
+static Mapping mapping_03a3[] = {{0, 1, {0x03c2, 0, 0}},{0, 1, {0x03c3, 0, 0}}};
+static Mapping mapping_0307[] = {{0, 0, {0, 0, 0}},{0, 1, {0x0307, 0, 0}}};
+static Mapping mapping_004a[] = {{0, 2, {0x006a, 0x0307, 0}},{0, 1, {0x006a, 0, 0}}};
+static Mapping mapping_012e[] = {{0, 2, {0x012f, 0x0307, 0}},{0, 1, {0x012f, 0, 0}}};
+static Mapping mapping_00cc[] = {{0, 3, {0x0069, 0x0307, 0x0300}},{0, 1, {0x00ec, 0, 0}}};
+static Mapping mapping_00cd[] = {{0, 3, {0x0069, 0x0307, 0x0301}},{0, 1, {0x00ed, 0, 0}}};
+static Mapping mapping_0128[] = {{0, 3, {0x0069, 0x0307, 0x0303}},{0, 1, {0x0129, 0, 0}}};
+static Mapping mapping_0049[] = {{0, 2, {0x0069, 0x0307, 0}},{0, 1, {0x0131, 0, 0}},{0, 1, {0x0069, 0, 0}}};
+static Mapping mapping_0069[] = {{0, 1, {0x0130, 0, 0}},{0, 1, {0x0049, 0, 0}}};
+static Mapping mapping_0130[] = {{0, 1, {0x0069, 0, 0}},{0, 1, {0x0130, 0, 0}}};
 
 #define langIs(lang) (aLocale.Language.compareToAscii(lang) == 0)
 
@@ -91,7 +91,7 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
 
 Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, sal_uInt8 nMappingType) throw (RuntimeException)
 {
-        static Mapping dummy = { 0, 1, 0, 0, 0 };
+        static Mapping dummy = { 0, 1, { 0, 0, 0 } };
         sal_Int16 address = CaseMappingIndex[str[pos] >> 8] << 8;
 
         dummy.map[0] = str[pos];
@@ -125,7 +125,7 @@ is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
 {
         sal_Unicode c = 0;
 
-        if ((next == 0x3099 || next == 0x309a) && (c = widthfolding::getCompositionChar(current, next)))
+        if ((next == 0x3099 || next == 0x309a) && ( (c = widthfolding::getCompositionChar(current, next)) != 0 ))
             current = c;
         return c != 0;
 }
