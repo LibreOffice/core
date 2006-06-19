@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubstconfig.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:49:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ const sal_Char cAlways[]        = "Always";
 
 //-----------------------------------------------------------------------------
 typedef SubstitutionStruct* SubstitutionStructPtr;
-SV_DECL_PTRARR_DEL(SubstitutionStructArr, SubstitutionStructPtr, 2, 2);
+SV_DECL_PTRARR_DEL(SubstitutionStructArr, SubstitutionStructPtr, 2, 2)
 SV_IMPL_PTRARR(SubstitutionStructArr, SubstitutionStructPtr);
 //-----------------------------------------------------------------------------
 struct SvtFontSubstConfig_Impl
@@ -93,7 +93,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     bIsEnabled(sal_False),
     pImpl(new SvtFontSubstConfig_Impl)
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtFontSubstConfig::SvtFontSubstConfig()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtFontSubstConfig::SvtFontSubstConfig()");
 
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = C2U(cReplacement);
