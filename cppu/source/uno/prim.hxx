@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:54:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,8 @@ inline typelib_TypeDescriptionReference * _getVoidType()
     ::osl_incrementInterlockedCount( &(pType)->nRefCount );
 
 //--------------------------------------------------------------------------------------------------
-void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * pDestType );
+extern "C" void * binuno_queryInterface(
+    void * pUnoI, typelib_TypeDescriptionReference * pDestType );
 
 //--------------------------------------------------------------------------------------------------
 inline typelib_TypeDescriptionReference * _unionGetSetType(
