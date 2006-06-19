@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,27 +124,27 @@ public:
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp()
-        :m_nTabIndex( 0 )
-        ,m_nPos( -1 )
+    :m_nPos( -1 )
+    ,m_nTabIndex( 0 )
 {
 }
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp(const OGroupComp& _rSource)
-        :m_aName( _rSource.m_aName )
-        ,m_xComponent( _rSource.m_xComponent )
-        ,m_nTabIndex( _rSource.m_nTabIndex )
-        ,m_nPos( _rSource.m_nPos )
-        ,m_xControlModel(_rSource.m_xControlModel)
+    :m_aName( _rSource.m_aName )
+    ,m_xComponent( _rSource.m_xComponent )
+    ,m_xControlModel(_rSource.m_xControlModel)
+    ,m_nPos( _rSource.m_nPos )
+    ,m_nTabIndex( _rSource.m_nTabIndex )
 {
 }
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
-            :m_xComponent( rxSet )
-            ,m_nTabIndex(0)
-            ,m_nPos( nInsertPos )
-            ,m_xControlModel(rxSet,UNO_QUERY)
+    :m_xComponent( rxSet )
+    ,m_xControlModel(rxSet,UNO_QUERY)
+    ,m_nPos( nInsertPos )
+    ,m_nTabIndex(0)
 {
     if (m_xComponent.is())
     {
@@ -196,10 +196,10 @@ OGroup::OGroup( const ::rtl::OUString& rGroupName )
 #ifdef DBG_UTIL
 //------------------------------------------------------------------
 OGroup::OGroup( const OGroup& _rSource )
-    :m_aGroupName(_rSource.m_aGroupName)
-    ,m_nInsertPos(_rSource.m_nInsertPos)
-    ,m_aCompArray(_rSource.m_aCompArray)
+:m_aCompArray(_rSource.m_aCompArray)
     ,m_aCompAccArray(_rSource.m_aCompAccArray)
+    ,m_aGroupName(_rSource.m_aGroupName)
+    ,m_nInsertPos(_rSource.m_nInsertPos)
 {
     DBG_CTOR(OGroup,NULL);
 }
