@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:19:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@ void forceWritable(INode& _rNode)
 //==========================================================================
 
 //--------------------------------------------------------------------------
-void OChangeActionCounter::handle(ValueChange const& aValueNode){ ++nValues; }
+void OChangeActionCounter::handle(ValueChange const& /*aValueNode*/){ ++nValues; }
 
 //--------------------------------------------------------------------------
-void OChangeActionCounter::handle(AddNode const& aAddNode){ ++nAdds; }
+void OChangeActionCounter::handle(AddNode const& /*aAddNode*/){ ++nAdds; }
 
 //--------------------------------------------------------------------------
-void OChangeActionCounter::handle(RemoveNode const& aRemoveNode){ ++nRemoves; }
+void OChangeActionCounter::handle(RemoveNode const& /*aRemoveNode*/){ ++nRemoves; }
 
 //--------------------------------------------------------------------------
 void OChangeActionCounter::handle(SubtreeChange const& aSubtree)
