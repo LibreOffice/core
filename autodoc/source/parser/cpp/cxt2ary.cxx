@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cxt2ary.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:19:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ ContextForAry::do_OpenNamespace( ary::cpp::Namespace & io_rOpenedNamespace )
 }
 
 void
-ContextForAry::do_OpenExternC( bool i_bOnlyForOneDeclaration )
+ContextForAry::do_OpenExternC( bool )
 {
     pOwnerStack->OpenExternC();
     // KORR
@@ -213,7 +213,7 @@ ContextForAry::do_Close_OpenTemplate()
 }
 
 void
-ContextForAry::do_Event_Class_FinishedBase( const udmstri & i_sBaseName )
+ContextForAry::do_Event_Class_FinishedBase( const String & )
 {
     // KORR_FUTURE
 }
@@ -244,7 +244,7 @@ ContextForAry::do_Event_EnterFunction_ParameterList()
 }
 
 void
-ContextForAry::do_Event_Function_FinishedParameter( const udmstri & i_sParameterName )
+ContextForAry::do_Event_Function_FinishedParameter( const String & )
 {
     // KORR_FUTURE
 }
