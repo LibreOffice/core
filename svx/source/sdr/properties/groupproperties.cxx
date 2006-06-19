@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 09:57:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,22 +171,22 @@ namespace sdr
             // DefaultProperties::SetMergedItemSet(rSet, bClearAllItems);
         }
 
-        void GroupProperties::SetObjectItem(const SfxPoolItem& rItem)
+        void GroupProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::SetObjectItem() should never be called (!)");
         }
 
-        void GroupProperties::SetObjectItemDirect(const SfxPoolItem& rItem)
+        void GroupProperties::SetObjectItemDirect(const SfxPoolItem& /*rItem*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::SetObjectItemDirect() should never be called (!)");
         }
 
-        void GroupProperties::ClearObjectItem(const sal_uInt16 nWhich)
+        void GroupProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::ClearObjectItem() should never be called (!)");
         }
 
-        void GroupProperties::ClearObjectItemDirect(const sal_uInt16 nWhich)
+        void GroupProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::ClearObjectItemDirect() should never be called (!)");
         }
@@ -219,28 +219,28 @@ namespace sdr
             //BFS01}
         }
 
-        void GroupProperties::SetObjectItemSet(const SfxItemSet& rSet)
+        void GroupProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::SetObjectItemSet() should never be called (!)");
         }
 
-        void GroupProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void GroupProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::ItemSetChanged() should never be called (!)");
         }
 
-        sal_Bool GroupProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) const
+        sal_Bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             DBG_ASSERT(sal_False, "GroupProperties::AllowItemChange() should never be called (!)");
             return sal_False;
         }
 
-        void GroupProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+        void GroupProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::ItemChange() should never be called (!)");
         }
 
-        void GroupProperties::PostItemChange(const sal_uInt16 nWhich)
+        void GroupProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
         {
             DBG_ASSERT(sal_False, "GroupProperties::PostItemChange() should never be called (!)");
         }
