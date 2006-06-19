@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:18:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess
 
 // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
 //-----------------------------------------------------------------------------------
-Reference< beans::XHierarchicalPropertySetInfo > implGetHierarchicalPropertySetInfo( NodeGroupInfoAccess& rNode )
+Reference< beans::XHierarchicalPropertySetInfo > implGetHierarchicalPropertySetInfo( NodeGroupInfoAccess& /*rNode*/ )
     throw(RuntimeException)
 {
     // TODO: Implement
