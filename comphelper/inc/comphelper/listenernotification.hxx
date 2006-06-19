@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:39:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,8 @@ namespace comphelper
     protected:
                 OListenerContainer( ::osl::Mutex& _rMutex );
 
+        virtual ~OListenerContainer();
+
         void    addListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener );
         void    removeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener );
 
@@ -217,11 +219,11 @@ namespace comphelper
         }
 
         // publish some otherwise hidden base functionality
-        OListenerContainer::disposing;
-        OListenerContainer::clear;
-        OListenerContainer::empty;
-        OListenerContainer::size;
-        OListenerContainer::createIterator;
+        using OListenerContainer::disposing;
+        using OListenerContainer::clear;
+        using OListenerContainer::empty;
+        using OListenerContainer::size;
+        using OListenerContainer::createIterator;
 
         /// typed notification
         bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ));
@@ -273,12 +275,12 @@ namespace comphelper
         {
         }
 
-        inline void addListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
+        inline void addTypedListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
         {
             OListenerContainer::addListener( _rxListener.get() );
         }
 
-        inline void removeListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
+        inline void removeTypedListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
         {
             OListenerContainer::removeListener( _rxListener.get() );
         }
@@ -294,7 +296,7 @@ namespace comphelper
                             const ::com::sun::star::lang::EventObject& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
 
-        virtual bool    implNotify(
+        virtual bool    implTypedNotify(
                             const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener,
                             const EventClass& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) = 0;
@@ -305,7 +307,7 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
             const ::com::sun::star::lang::EventObject& _rEvent )   SAL_THROW( ( ::com::sun::star::uno::Exception ) )
     {
-        return implNotify(
+        return implTypedNotify(
                     ::com::sun::star::uno::Reference< ListenerClass >( static_cast< ListenerClass* >( _rxListener.get() ) ),
                     static_cast< const EventClass& >( _rEvent )
         );
