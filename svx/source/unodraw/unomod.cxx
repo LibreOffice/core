@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:05:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
     if( ServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
         UINT32 nType = aSdrShapeIdentifierMap.getId( ServiceSpecifier );
-        if( nType != UHASHMAP_NOTFOUND )
+        if( nType != (UINT32)UHASHMAP_NOTFOUND )
         {
             UINT16 nT = (UINT16)(nType & ~E3D_INVENTOR_FLAG);
             UINT32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
@@ -319,7 +319,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField(
     return xRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString&, const uno::Sequence< ::com::sun::star::uno::Any >& )
     throw( uno::Exception, uno::RuntimeException )
 {
     throw lang::NoSupportException();
@@ -686,7 +686,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames(
 }
 
 // XAnyCompareFactory
-uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCompareByName( const OUString& PropertyName )
+uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCompareByName( const OUString& )
     throw(uno::RuntimeException)
 {
     return SvxCreateNumRuleCompare();
