@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:59:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,13 +123,13 @@ void FuLine::DoExecute( SfxRequest& rReq )
         XLineStyle           eILineStyle      = rILineStyleItem.GetValue ();
 
         const XLineDashItem  &rILineDashItem  = (const XLineDashItem &) aInputAttr.Get (XATTR_LINEDASH);
-        const XDash          &rIDash          = rILineDashItem.GetValue ();
+        const XDash          &rIDash          = rILineDashItem.GetDashValue ();
 
         const XLineWidthItem &rILineWidthItem = (const XLineWidthItem &) aInputAttr.Get (XATTR_LINEWIDTH);
         long                 nILineWidth      = rILineWidthItem.GetValue ();
 
         const XLineColorItem &rILineColorItem = (const XLineColorItem &) aInputAttr.Get (XATTR_LINECOLOR);
-        const Color          &rIColor         = rILineColorItem.GetValue ();
+        const Color          &rIColor         = rILineColorItem.GetColorValue ();
 
         const SdrObject* pObj = NULL;
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -158,13 +158,13 @@ void FuLine::DoExecute( SfxRequest& rReq )
             XLineStyle           eOLineStyle      = rOLineStyleItem.GetValue ();
 
             const XLineDashItem  &rOLineDashItem  = (const XLineDashItem &) pOutputAttr->Get (XATTR_LINEDASH);
-            const XDash          &rODash          = rOLineDashItem.GetValue ();
+            const XDash          &rODash          = rOLineDashItem.GetDashValue ();
 
             const XLineWidthItem &rOLineWidthItem = (const XLineWidthItem &) pOutputAttr->Get (XATTR_LINEWIDTH);
             long                 nOLineWidth      = rOLineWidthItem.GetValue ();
 
             const XLineColorItem &rOLineColorItem = (const XLineColorItem &) pOutputAttr->Get (XATTR_LINECOLOR);
-            const Color          &rOColor         = rOLineColorItem.GetValue ();
+            const Color          &rOColor         = rOLineColorItem.GetColorValue ();
 
             pView->SetAttributes (*(pDlg->GetOutputItemSet ()));
         }
