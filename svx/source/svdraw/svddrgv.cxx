@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:10:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ SdrDragView::SdrDragView(SdrModel* pModel1, OutputDevice* pOut):
     ImpMakeDragAttr();
 }
 
-SdrDragView::SdrDragView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrExchangeView(pModel1,pXOut)
+SdrDragView::SdrDragView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrExchangeView(pModel1,_pXOut)
 {
     ImpClearVars();
     ImpMakeDragAttr();
@@ -396,7 +396,7 @@ BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos, BOOL bTR ) const
         if (pObj->ISA(SdrCaptionObj)) {
             Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
             BOOL bTail=eDragHdl==HDL_POLY; // Schwanz wird gedraggt (nicht so ganz feine Abfrage hier)
-            BOOL bMove=pDragBla->ISA(SdrDragMove);  // Move des gesamten Obj
+            //BOOL bMove=pDragBla->ISA(SdrDragMove);  // Move des gesamten Obj
             BOOL bOwn=pDragBla->ISA(SdrDragObjOwn); // Objektspeziefisch
             if (!bTail) { // bei bTail liefert TakeActionRect schon das richtige
                 if (bOwn) { // bOwn kann sein MoveTextFrame, ResizeTextFrame aber eben nicht mehr DragTail
@@ -414,7 +414,7 @@ BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos, BOOL bTR ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrDragView::TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const
+BOOL SdrDragView::TakeDragLimit(SdrDragMode /*eMode*/, Rectangle& /*rRect*/) const
 {
     return FALSE;
 }
@@ -750,7 +750,7 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
     if (PickMarkedObj(rPnt,pObj,pPV,&nMarkNum,SDRSEARCH_PASS2BOUND)) {
         BrkAction();
         UnmarkAllGluePoints();
-        SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
+        //SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         pInsPointUndo= dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj) );
         DBG_ASSERT( pInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
         XubString aStr(ImpGetResStr(STR_DragInsertGluePoint));
@@ -958,7 +958,7 @@ BOOL SdrDragView::IsMoveOnlyDragObj(BOOL bAskRTTI) const
     return bRet;
 }
 
-void SdrDragView::ImpDrawEdgeXor(XOutputDevice& rXOut, BOOL bFull) const
+void SdrDragView::ImpDrawEdgeXor(XOutputDevice& rXOut, BOOL /*bFull*/) const
 {
     ULONG nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
     BOOL bNo=(!IsRubberEdgeDragging() && !IsDetailedEdgeDragging()) || nEdgeAnz==0 ||
