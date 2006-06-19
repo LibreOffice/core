@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:25:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@
 #include <image.hxx>
 #endif
 
-DBG_NAME( Image );
-DBG_NAME( ImageList );
+DBG_NAME( Image )
+DBG_NAME( ImageList )
 
 #define IMAGE_FILE_VERSION 100
 
@@ -547,7 +547,7 @@ ImageList::ImageList( const ResId& rResId ) :
         if( nObjMask & RSC_IMAGELIST_IDCOUNT )
             pResMgr->ReadShort();
 
-        ImplInit( aBmpEx, nCount, aIdArray.get(), NULL, 4 );
+        ImplInit( aBmpEx, sal::static_int_cast<USHORT>(nCount), aIdArray.get(), NULL, 4 );
     }
 }
 
@@ -921,7 +921,7 @@ void ImageList::AddImage( USHORT nId, const Image& rImage )
         ImageAryData*   pOldAry  = mpImplData->mpAry;
         USHORT          nOldSize = mpImplData->mnArySize;
 
-        mpImplData->mnArySize += mnGrowSize;
+        mpImplData->mnArySize = sal::static_int_cast<USHORT>(mpImplData->mnArySize + mnGrowSize);
         mpImplData->mpAry = new ImageAryData[mpImplData->mnArySize];
 
         for( USHORT i = 0; i < nOldSize; ++i )
@@ -1047,7 +1047,7 @@ void ImageList::CopyImage( USHORT nId, USHORT nCopyId )
             ImageAryData*   pOldAry  = mpImplData->mpAry;
             USHORT          nOldSize = mpImplData->mnArySize;
 
-            mpImplData->mnArySize += mnGrowSize;
+            mpImplData->mnArySize = sal::static_int_cast<USHORT>(mpImplData->mnArySize + mnGrowSize);
             mpImplData->mpAry = new ImageAryData[mpImplData->mnArySize];
 
             for( USHORT i = 0; i < nOldSize; ++i )
