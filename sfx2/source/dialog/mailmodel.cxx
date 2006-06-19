@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:51:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,11 +155,10 @@ using namespace ::rtl;
 
 namespace css = ::com::sun::star;
 
-
 // class AddressList_Impl ------------------------------------------------
 
 typedef String* AddressItemPtr_Impl;
-DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl );
+DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl )
 
 // class SfxMailModel -----------------------------------------------
 
@@ -356,12 +355,12 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
                                                     ::rtl::OUString::createFromAscii( "ooSetupFactoryDefaultFilter" ),
                                                     ::rtl::OUString() );
-                        css::uno::Reference< css::container::XNameAccess > xNameAccess(
+                        css::uno::Reference< css::container::XNameAccess > xNameAccess2(
                             xContainerQuery, css::uno::UNO_QUERY );
-                        if ( xNameAccess.is() )
+                        if ( xNameAccess2.is() )
                         {
-                            ::comphelper::SequenceAsHashMap aFilterPropsHM( xNameAccess->getByName( aFilterName ) );
-                            aTypeName = aFilterPropsHM.getUnpackedValueOrDefault(
+                            ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess2->getByName( aFilterName ) );
+                            aTypeName = aFilterPropsHM2.getUnpackedValueOrDefault(
                                                         ::rtl::OUString::createFromAscii( "Type" ),
                                                         ::rtl::OUString() );
                         }
@@ -650,7 +649,6 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(
     rtl::OUString sFileName;
 
     SaveResult eSaveResult = SaveDocumentAsFormat( sAttachmentTitle, xFrameOrModel, sDocumentType, sFileName );
-
     if ( eSaveResult == SAVE_SUCCESSFULL && ( sFileName.getLength() > 0 ) )
         maAttachedDocuments.push_back(sFileName);
     return eSaveResult == SAVE_SUCCESSFULL ? SEND_MAIL_OK : SEND_MAIL_ERROR;
@@ -798,7 +796,6 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
     SendMailResult  eResult = SEND_MAIL_ERROR;
     rtl::OUString   aFileName;
 
-    sal_Bool bSuccessfull = sal_False;
     eSaveResult = SaveDocumentAsFormat( rtl::OUString(), xFrame, rTypeName, aFileName );
 
     if ( eSaveResult == SAVE_SUCCESSFULL )
