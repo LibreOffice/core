@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:40:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,12 +203,12 @@ sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentica
 }
 
 //------------------------------------------------------------------
-sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, sal_Char& _rOut)
+sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, sal_Unicode& _rOut)
 {
-    sal_Int8 nDummy;
-    sal_Bool bSuccess = _rValue >>= nDummy;
-    _rOut = (sal_Char)nDummy;
-    _bIdentical = bSuccess && (_rOut == *reinterpret_cast<const sal_Bool*>(_pData));
+    sal_Bool bSuccess = ( _rValue.getValueTypeClass() == TypeClass_CHAR );
+    if ( bSuccess )
+        _rOut = *static_cast< const sal_Unicode* >( _rValue.getValue() );
+    _bIdentical = bSuccess && ( _rOut == *static_cast< const sal_Unicode* >( _pData ) );
     return bSuccess;
 }
 
@@ -254,7 +254,7 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
             }
             case TypeClass_CHAR:
             {
-                sal_Char aDummy;
+                sal_Unicode aDummy(0);
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
@@ -432,9 +432,9 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                     {
                         const Sequence< ::rtl::OUString >& rLeftSeq = *reinterpret_cast<const Sequence< ::rtl::OUString>*>(pData);
                         const Sequence< ::rtl::OUString >& rRightSeq = aTemp;
-                        sal_uInt32 nSeqLen = rLeftSeq.getLength();
+                        sal_Int32 nSeqLen = rLeftSeq.getLength();
                         bRes = ( nSeqLen == rRightSeq.getLength() );
-                        for ( sal_uInt32 n = 0; bRes && ( n < nSeqLen ); n++ )
+                        for ( sal_Int32 n = 0; bRes && ( n < nSeqLen ); n++ )
                         {
                             const ::rtl::OUString& rS1 = rLeftSeq.getConstArray()[n];
                             const ::rtl::OUString& rS2 = rRightSeq.getConstArray()[n];
