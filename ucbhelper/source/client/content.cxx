@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:11:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:11:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ public:
 };
 
 sal_Int32 EmptyInputStream::readBytes(
-    Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead )
+    Sequence< sal_Int8 > & data, sal_Int32 )
     throw (IOException, RuntimeException)
 {
     data.realloc( 0 );
@@ -193,14 +193,14 @@ sal_Int32 EmptyInputStream::readBytes(
 }
 
 sal_Int32 EmptyInputStream::readSomeBytes(
-    Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead )
+    Sequence< sal_Int8 > & data, sal_Int32 )
     throw (IOException, RuntimeException)
 {
     data.realloc( 0 );
     return 0;
 }
 
-void EmptyInputStream::skipBytes( sal_Int32 nBytesToSkip )
+void EmptyInputStream::skipBytes( sal_Int32 )
     throw (IOException, RuntimeException)
 {
 }
