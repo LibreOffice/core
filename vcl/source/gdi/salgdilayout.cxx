@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:39:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,18 +375,18 @@ void    SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
     else
         drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
-sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice *pOutDev )
+sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
     DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyLineBezier - no mirroring implemented");
     return drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
-sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice *pOutDev )
+sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
     DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolygonBezier - no mirroring implemented");
     return drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                                   const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice *pOutDev )
+                                                   const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice* )
 {
     DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygonBezier - no mirroring implemented");
     return drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
@@ -523,7 +523,7 @@ BOOL SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, co
         return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rControlHandle, rIsInside );
 }
 
-void SalGraphics::mirror( ControlType nType, ControlPart nPart, const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
+void SalGraphics::mirror( ControlType nType, const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
 {
     if( rVal.getOptionalVal() )
     {
@@ -557,15 +557,15 @@ void SalGraphics::mirror( ControlType nType, ControlPart nPart, const ImplContro
 
 BOOL SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                                OUString aCaption, const OutputDevice *pOutDev )
+                                                const OUString& aCaption, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
         Region rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        mirror( nType, nPart, aValue, pOutDev );
+        mirror( nType, aValue, pOutDev );
         BOOL bRet = drawNativeControl( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
-        mirror( nType, nPart, aValue, pOutDev, true );
+        mirror( nType, aValue, pOutDev, true );
         return bRet;
     }
     else
@@ -574,15 +574,15 @@ BOOL SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
 
 BOOL SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue,
-                                                SalControlHandle& rControlHandle, OUString aCaption, const OutputDevice *pOutDev )
+                                                SalControlHandle& rControlHandle, const OUString& aCaption, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
         Region rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        mirror( nType, nPart, aValue, pOutDev );
+        mirror( nType, aValue, pOutDev );
         BOOL bRet = drawNativeControlText( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
-        mirror( nType, nPart, aValue, pOutDev, true );
+        mirror( nType, aValue, pOutDev, true );
         return bRet;
     }
     else
@@ -590,25 +590,25 @@ BOOL SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, c
 }
 
 BOOL SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, OUString aCaption,
+                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
         Region rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        mirror( nType, nPart, aValue, pOutDev );
+        mirror( nType, aValue, pOutDev );
         if( getNativeControlRegion( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption,
                                                 rNativeBoundingRegion, rNativeContentRegion ) )
         {
             mirror( rNativeBoundingRegion, pOutDev, true );
             mirror( rNativeContentRegion, pOutDev, true );
-            mirror( nType, nPart, aValue, pOutDev, true );
+            mirror( nType, aValue, pOutDev, true );
             return TRUE;
         }
         else
         {
-            mirror( nType, nPart, aValue, pOutDev, true );
+            mirror( nType, aValue, pOutDev, true );
             return FALSE;
         }
     }
@@ -617,7 +617,7 @@ BOOL SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
                                                 rNativeBoundingRegion, rNativeContentRegion );
 }
 
-bool SalGraphics::filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
+bool SalGraphics::filterText( const String&, String&, xub_StrLen, xub_StrLen&, xub_StrLen&, xub_StrLen& )
 {
     return false;
 }
