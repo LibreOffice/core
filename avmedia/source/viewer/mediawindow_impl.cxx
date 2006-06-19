@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindow_impl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:18:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,10 +179,10 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
 MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bool bInternalMediaControl ) :
     Control( pParent ),
     MediaWindowBaseImpl( pMediaWindow ),
-    maChildWindow( this ),
     DropTargetHelper( this ),
     DragSourceHelper( this ),
     mxEventsIf( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( maChildWindow ) ) ),
+    maChildWindow( this ),
     mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
