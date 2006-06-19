@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:53:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,16 +237,16 @@ USHORT SpellUndoAction_Impl::GetId()const
 SpellDialog::SpellDialog(
         SpellDialogChildWindow* pChildWindow,
         Window * pParent,
-        SfxBindings* pBindings)
-            : SfxModelessDialog (pBindings,
+        SfxBindings* _pBindings)
+            : SfxModelessDialog (_pBindings,
                                     pChildWindow,
                                     pParent,
                                     SVX_RES(RID_SVXDLG_SPELLCHECK)),
 
-    aSuggestionFT   ( this, ResId( FT_SUGGESTION ) ),
-    aSuggestionLB   ( this, ResId( LB_SUGGESTION ) ),
     aNotInDictFT    ( this, ResId( FT_NOTINDICT ) ),
     aSentenceED      ( this, ResId( ED_NEWWORD ) ),
+    aSuggestionFT   ( this, ResId( FT_SUGGESTION ) ),
+    aSuggestionLB   ( this, ResId( LB_SUGGESTION ) ),
     aLanguageFT     ( this, ResId( FT_LANGUAGE ) ),
     aLanguageLB     ( this, ResId( LB_LANGUAGE ) ),
 
@@ -258,20 +258,20 @@ SpellDialog::SpellDialog(
     aChangeAllPB    ( this, ResId( PB_CHANGEALL ) ),
     aAutoCorrPB     ( this, ResId( PB_AUTOCORR ) ),
 
-    aBackgroundGB   ( this, ResId( GB_BACKGROUND ) ),
     aOptionsPB      ( this, ResId( PB_OPTIONS ) ),
     aHelpPB         ( this, ResId( PB_HELP ) ),
     aUndoPB         ( this, ResId( PB_UNDO ) ),
     aClosePB        ( this, ResId( PB_CLOSE ) ),
+    aBackgroundGB   ( this, ResId( GB_BACKGROUND ) ),
 
-    nOldLang        ( LANGUAGE_NONE ),
     aResumeST       ( ResId(ST_RESUME )),
-    aNoSuggestionsST( ResId(ST_NOSUGGESTIONS)),
     aIgnoreOnceST   ( aIgnorePB.GetText()),
-    rParent         ( *pChildWindow ),
+    aNoSuggestionsST( ResId(ST_NOSUGGESTIONS)),
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
-    bFocusLocked( false )
+    bFocusLocked( false ),
+    rParent         ( *pChildWindow ),
+    nOldLang        ( LANGUAGE_NONE )
 {
     FreeResource();
 
@@ -882,7 +882,6 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
         aSuggestionLB.Disable();
         String sNewText( aSentenceED.GetText() );
         aAutoCorrPB.Enable( sNewText != aSentenceED.GetText() );
-        bool bChange = aChangeAllPB.IsEnabled();
         SpellUndoAction_Impl* pSpellAction = new SpellUndoAction_Impl(SPELLUNDO_CHANGE_TEXTENGINE, aDialogUndoLink);
         if(!aChangeAllPB.IsEnabled())
         {
@@ -901,7 +900,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SpellDialog, CancelHdl, Button *, pButton )
+IMPL_LINK(SpellDialog, CancelHdl, Button *, EMPTYARG )
 {
     //apply changes first - if there are any
     if(aSentenceED.IsModified())
@@ -1392,10 +1391,10 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     if(pBackAttrLeft)
                     {
                         TextAttrib* pNewBack =  pBackAttrLeft->GetAttr().Clone();
-                        USHORT nStart = pBackAttrLeft->GetStart();
-                        USHORT nEnd = pBackAttrLeft->GetEnd();
+                        USHORT _nStart = pBackAttrLeft->GetStart();
+                        USHORT _nEnd = pBackAttrLeft->GetEnd();
                         pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
-                        SetAttrib( *pNewBack, 0, nStart, nEnd - nAddedChars);
+                        SetAttrib( *pNewBack, 0, _nStart, _nEnd - nAddedChars);
                         delete pNewBack;
                     }
                 }
@@ -1536,8 +1535,6 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(USHORT nStart, USHORT nEnd)
 void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage)
 {
     //calculate length changes
-    long nOldStart = m_nErrorStart;
-    long nOldEnd = m_nErrorEnd;
     long nDiffLen = rNewWord.Len() - m_nErrorEnd + m_nErrorStart;
     TextSelection aSel(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd));
     //Remove spell errror attribute
