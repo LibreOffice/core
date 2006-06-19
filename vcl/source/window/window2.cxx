@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:21:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 
 // =======================================================================
 
-DBG_NAMEEX( Window );
+DBG_NAMEEX( Window )
 
 // =======================================================================
 
