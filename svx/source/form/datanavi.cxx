@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:39:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,15 +245,15 @@ namespace svxform
         DeleteAndClear();
     }
 
-    sal_Int8 DataTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
+    sal_Int8 DataTreeListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     {
         return DND_ACTION_NONE;
     }
-    sal_Int8 DataTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+    sal_Int8 DataTreeListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
     {
         return DND_ACTION_NONE;
     }
-    void DataTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+    void DataTreeListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
     {
         SvLBoxEntry* pSelected = FirstSelected();
         if ( !pSelected )
@@ -694,8 +694,8 @@ namespace svxform
                 {
                     if ( RET_OK == nReturn )
                     {
-                        SvLBoxEntry* pEntry = AddEntry( xNewBinding );
-                        m_aItemList.Select( pEntry, TRUE );
+                        SvLBoxEntry* pNewEntry = AddEntry( xNewBinding );
+                        m_aItemList.Select( pNewEntry, TRUE );
                         bIsDocModified = true;
                     }
                     else
@@ -1046,7 +1046,6 @@ namespace svxform
             ? m_pNaviWin->GetItemHCImageList()
             : m_pNaviWin->GetItemImageList();
         Image aImage = rImageList.GetImage( IID_ELEMENT );
-        String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
         ItemNode* pNode = new ItemNode( _rEntry );
         rtl::OUString sTemp;
@@ -1094,7 +1093,7 @@ namespace svxform
             try
             {
                 String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                ::rtl::OUString sTemp, sName;
+                ::rtl::OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                 sName += String( sTemp );
                 sName += sDelim;
@@ -1116,7 +1115,6 @@ namespace svxform
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvLBoxEntry* pEntry = NULL;
-        ItemNode* pNode = new ItemNode( _rEntry );
         rtl::OUString sTemp;
 
         if ( DGTSubmission == m_eGroup )
@@ -1430,6 +1428,9 @@ namespace svxform
                 }
                 break;
             }
+            default:
+                DBG_ERROR( "XFormsPage::SetModel: unknown group!" );
+                break;
         }
 
         EnableMenuItems( NULL );
@@ -1466,12 +1467,13 @@ namespace svxform
                         if ( xTarget.is() )
                             m_pNaviWin->AddEventBroadcaster( xTarget );
 
-                        css::xml::dom::NodeType eNodeType = xRoot->getNodeType();
+                    #if OSL_DEBUG_LEVEL > 0
+                        css::xml::dom::NodeType eNodeType = xRoot->getNodeType(); (void)eNodeType;
+                    #endif
                         ::rtl::OUString sNodeName =
                             m_xUIHelper->getNodeDisplayName( xRoot, m_pNaviWin->IsShowDetails() );
                         if ( sNodeName.getLength() == 0 )
                             sNodeName = xRoot->getNodeName();
-                        ItemNode* pNode = new ItemNode( xRoot );
                         if ( xRoot->hasChildNodes() )
                             AddChildren( NULL, _rImgLst, xRoot );
                     }
@@ -1717,12 +1719,12 @@ namespace svxform
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
-        USHORT nPos = m_aModelsBox.GetSelectEntryPos();
-        rtl::OUString sModel( m_aModelsBox.GetEntry( nPos ) );
+        USHORT nSelectedPos = m_aModelsBox.GetSelectEntryPos();
+        ::rtl::OUString sSelectedModel( m_aModelsBox.GetEntry( nSelectedPos ) );
         Reference< css::xforms::XModel > xModel;
         try
         {
-            Any aAny = m_xDataContainer->getByName( sModel );
+            Any aAny = m_xDataContainer->getByName( sSelectedModel );
             if ( aAny >>= xModel )
                 xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( xModel, UNO_QUERY );
         }
@@ -1767,8 +1769,8 @@ namespace svxform
                                         xUIHelper->newModel( m_xFrameModel, sNewName );
                                     if ( xNewModel.is() )
                                     {
-                                        nPos = m_aModelsBox.InsertEntry( sNewName );
-                                        m_aModelsBox.SelectEntryPos( nPos );
+                                        USHORT nNewPos = m_aModelsBox.InsertEntry( sNewName );
+                                        m_aModelsBox.SelectEntryPos( nNewPos );
                                         ModelSelectHdl( &m_aModelsBox );
                                         bIsDocModified = true;
                                     }
@@ -1785,20 +1787,18 @@ namespace svxform
                 case MID_MODELS_EDIT :
                 {
                     AddModelDialog aDlg( this, true );
-                    USHORT nPos = m_aModelsBox.GetSelectEntryPos();
-                    rtl::OUString sModel( m_aModelsBox.GetEntry( nPos ) );
-                    aDlg.SetName( sModel );
+                    aDlg.SetName( sSelectedModel );
                     if ( aDlg.Execute() == RET_OK )
                     {
                         String sNewName = aDlg.GetName();
-                        if ( sNewName.Len() > 0 && ( sNewName != String( sModel ) ) )
+                        if ( sNewName.Len() > 0 && ( sNewName != String( sSelectedModel ) ) )
                         {
                             try
                             {
-                                xUIHelper->renameModel( m_xFrameModel, sModel, sNewName );
-                                m_aModelsBox.RemoveEntry( nPos );
-                                nPos = m_aModelsBox.InsertEntry( sNewName );
-                                m_aModelsBox.SelectEntryPos( nPos );
+                                xUIHelper->renameModel( m_xFrameModel, sSelectedModel, sNewName );
+                                m_aModelsBox.RemoveEntry( nSelectedPos );
+                                nSelectedPos = m_aModelsBox.InsertEntry( sNewName );
+                                m_aModelsBox.SelectEntryPos( nSelectedPos );
                                 bIsDocModified = true;
                             }
                             catch ( Exception& )
@@ -1813,22 +1813,22 @@ namespace svxform
                 {
                     QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_MODEL ) );
                     String sText = aQBox.GetMessText();
-                    sText.SearchAndReplace( MODELNAME, sModel );
+                    sText.SearchAndReplace( MODELNAME, sSelectedModel );
                     aQBox.SetMessText( sText );
                     if ( aQBox.Execute() == RET_YES )
                     {
                         try
                         {
-                            xUIHelper->removeModel( m_xFrameModel, sModel );
+                            xUIHelper->removeModel( m_xFrameModel, sSelectedModel );
                         }
                         catch ( Exception& )
                         {
                             DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                         }
-                        m_aModelsBox.RemoveEntry( nPos );
-                        if ( m_aModelsBox.GetEntryCount() <= nPos )
-                            nPos = m_aModelsBox.GetEntryCount() - 1;
-                        m_aModelsBox.SelectEntryPos( nPos );
+                        m_aModelsBox.RemoveEntry( nSelectedPos );
+                        if ( m_aModelsBox.GetEntryCount() <= nSelectedPos )
+                            nSelectedPos = m_aModelsBox.GetEntryCount() - 1;
+                        m_aModelsBox.SelectEntryPos( nSelectedPos );
                         ModelSelectHdl( &m_aModelsBox );
                         bIsDocModified = true;
                     }
@@ -2191,8 +2191,7 @@ namespace svxform
                             if ( nIdx > nAlreadyLoadedCount )
                             {
                                 Sequence< PropertyValue > xPropSeq;
-                                Any aAny = xNum->nextElement();
-                                if ( aAny >>= xPropSeq )
+                                if ( xNum->nextElement() >>= xPropSeq )
                                     CreateInstancePage( xPropSeq );
                                 else
                                 {
@@ -2392,13 +2391,13 @@ namespace svxform
     //========================================================================
     DBG_NAME(DataNavigator)
     //------------------------------------------------------------------------
-    DataNavigator::DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, Window* pParent ) :
+    DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent ) :
 
-        SfxDockingWindow( pBindings, pMgr, pParent,
+        SfxDockingWindow( _pBindings, _pMgr, _pParent,
                           WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
-        SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *pBindings ),
+        SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *_pBindings ),
 
-        m_aDataWin( this, pBindings )
+        m_aDataWin( this, _pBindings )
 
     {
         DBG_CTOR(DataNavigator,NULL);
@@ -2420,7 +2419,7 @@ namespace svxform
     }
 
     //-----------------------------------------------------------------------
-    void DataNavigator::Update( FmFormShell* pFormShell )
+    void DataNavigator::Update( FmFormShell* /*pFormShell*/ )
     {
     }
     //-----------------------------------------------------------------------
@@ -2454,20 +2453,10 @@ namespace svxform
     //-----------------------------------------------------------------------
     Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
     {
-        Size aSize = SfxDockingWindow::CalcDockingSize( eAlign );
+        if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
+            return Size();
 
-        switch( eAlign )
-        {
-            case SFX_ALIGN_TOP:
-            case SFX_ALIGN_BOTTOM:
-                return Size();
-
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_RIGHT:
-                break;
-        }
-
-        return aSize;
+        return SfxDockingWindow::CalcDockingSize( eAlign );
     }
 
     //-----------------------------------------------------------------------
@@ -2479,8 +2468,9 @@ namespace svxform
             case SFX_ALIGN_RIGHT:
             case SFX_ALIGN_NOALIGNMENT:
                 return eAlign;
+            default:
+                break;
         }
-
         return eActAlign;
     }
 
@@ -2510,15 +2500,15 @@ namespace svxform
 
     //-----------------------------------------------------------------------
     DataNavigatorManager::DataNavigatorManager(
-        Window* pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+        Window* _pParent, sal_uInt16 _nId, SfxBindings* _pBindings, SfxChildWinInfo* _pInfo ) :
 
-        SfxChildWindow( pParent, nId )
+        SfxChildWindow( _pParent, _nId )
 
     {
-        pWindow = new DataNavigator( pBindings, this, pParent );
+        pWindow = new DataNavigator( _pBindings, this, _pParent );
         eChildAlignment = SFX_ALIGN_RIGHT;
         pWindow->SetSizePixel( Size( 250, 400 ) );
-        ( (SfxDockingWindow*)pWindow )->Initialize( pInfo );
+        ( (SfxDockingWindow*)pWindow )->Initialize( _pInfo );
     }
 
     //========================================================================
@@ -2822,6 +2812,9 @@ namespace svxform
                         case css::xml::dom::NodeType_TEXT_NODE:
                             m_eItemType = DITText;
                             break;
+                        default:
+                            DBG_ERROR( "AddDataItemDialog::InitFronNode: cannot handle this node type!" );
+                            break;
                     }
 
                     /** Get binding of the node and clone it
@@ -2936,7 +2929,7 @@ namespace svxform
         if ( DITText == m_eItemType )
         {
             long nDelta = m_aButtonsFL.GetPosPixel().Y() - m_aSettingsFL.GetPosPixel().Y();
-            sal_Int32 i = 0;
+            size_t i = 0;
             Window* pWinsForHide[] =
             {
                 &m_aSettingsFL, &m_aDataTypeFT, &m_aDataTypeLB, &m_aRequiredCB,
@@ -3588,7 +3581,6 @@ namespace svxform
         // is found
         if( !m_xTempBinding.is() )
         {
-            Reference<css::xforms::XModel> xModel( m_xUIHelper, UNO_QUERY_THROW );
             m_xCreatedBinding = m_xUIHelper->getBindingForNode(
                 Reference<css::xml::dom::XNode>(
                     xModel->getDefaultInstance()->getDocumentElement(),
