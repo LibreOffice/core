@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:47:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,22 +254,6 @@ class SpinField;
 class ToolBox;
 class VclSimpleEvent;
 class VclMenuEvent;
-
-static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
-{
-    double n = nValue;
-    for ( sal_uInt16 d = 0; d < nDigits; d++ )
-        n *= 10;
-    return n;
-}
-
-static double ImplCalcDoubleValue( double nValue, sal_uInt16 nDigits )
-{
-    double n = nValue;
-    for ( sal_uInt16 d = 0; d < nDigits; d++ )
-        n /= 10;
-    return n;
-}
 
 //  ----------------------------------------------------
 //  class VCLXImageConsumer
