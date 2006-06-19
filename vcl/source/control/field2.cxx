@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:30:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,7 +866,7 @@ PatternFormatter::PatternFormatter()
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::ImplLoadRes( const ResId& rResId )
+void PatternFormatter::ImplLoadRes( const ResId& )
 {
     ByteString  aEditMask;
     XubString   aLiteralMask;
@@ -1437,7 +1437,6 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
         {
             return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, FALSE, 1, !bShowCentury );
         }
-        break;
         case XTDATEF_SHORT_DDMMYY:
         case XTDATEF_SHORT_DDMMYYYY:
         {
@@ -1644,6 +1643,9 @@ void DateField::ImplDateSpinArea( BOOL bUp )
                             break;
                 }
                 break;
+                default:
+                    DBG_ERROR( "invalid conversion" );
+                    break;
             }
         }
 
@@ -2752,8 +2754,6 @@ void TimeField::ImplTimeSpinArea( BOOL bUp )
     if ( GetField() )
     {
         xub_StrLen nTimeArea = 0;
-        xub_StrLen nPos;
-
         Time aTime( GetTime() );
         XubString aText( GetText() );
         Selection aSelection( GetField()->GetSelection() );
@@ -2777,7 +2777,7 @@ void TimeField::ImplTimeSpinArea( BOOL bUp )
         }
         else
         {
-            nPos = aText.Search( ImplGetLocaleDataWrapper().getTime100SecSep() );
+            xub_StrLen nPos = aText.Search( ImplGetLocaleDataWrapper().getTime100SecSep() );
             if ( nPos == STRING_NOTFOUND || nPos >= (xub_StrLen)aSelection.Max() )
                 nTimeArea = 3;
             else
@@ -2830,8 +2830,8 @@ TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 99 ),
-    maFieldTime( 0, 0 ),
-    mbEnforceValidValue( TRUE )
+    mbEnforceValidValue( TRUE ),
+    maFieldTime( 0, 0 )
 {
     ImplInit();
 }
@@ -2912,7 +2912,7 @@ void TimeFormatter::SetMax( const Time& rNewMax )
 
 void TimeFormatter::SetTimeFormat( TimeFormatter::TimeFormat eNewFormat )
 {
-    mnTimeFormat = eNewFormat;
+    mnTimeFormat = sal::static_int_cast<USHORT>(eNewFormat);
 }
 
 // -----------------------------------------------------------------------
