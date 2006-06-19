@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:27:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
