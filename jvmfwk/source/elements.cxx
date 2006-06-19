@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:33:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:10:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@ xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName)
 
 rtl::OString getElementUpdated()
 {
-    javaFrameworkError errcode = JFW_E_NONE;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
     OSL_ASSERT(sSettingsPath.getLength() > 0);
@@ -247,7 +246,7 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     copyShareSettings(document, root);
 }
 
-void copyShareSettings(xmlDoc * doc, xmlNode * userParent)
+void copyShareSettings(xmlDoc * /*doc*/, xmlNode * /*userParent*/)
 {
     rtl::OString sExcMsg("[Java framework] Error in function copyShareSettings "
                          "(elements.cxx).");
@@ -256,8 +255,9 @@ void copyShareSettings(xmlDoc * doc, xmlNode * userParent)
 
 void prepareSettingsDocument()
 {
-    rtl::OString sExcMsg("[Java framework] Error in function copyShareSettings "
-                         "(elements.cxx).");
+    rtl::OString sExcMsg(
+        "[Java framework] Error in function prepareSettingsDocument"
+        " (elements.cxx).");
     createUserSettingsDocument();
     rtl::OString sSettings = getUserSettingsPath();
     CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
@@ -891,8 +891,8 @@ bool CNodeJava::getJavaInfoAttrAutoSelect() const
 }
 //=====================================================================
 CNodeJavaInfo::CNodeJavaInfo() :
-    nFeatures(0), nRequirements(0), bNil(true),
-    bAutoSelect(true), m_bEmptyNode(false)
+    m_bEmptyNode(false), bNil(true), bAutoSelect(true),
+    nFeatures(0), nRequirements(0)
 {
 }
 
