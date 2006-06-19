@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsupp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:47:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL
                                      String& rLibrary,
                                      String& rModule )
 {
-    const HTMLOptions *pOptions = GetOptions();
+    const HTMLOptions *pScriptOptions = GetOptions();
 
     rLangString.Erase();
     rLang = HTML_SL_JAVASCRIPT;
@@ -75,9 +75,9 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL
     rLibrary.Erase();
     rModule.Erase();
 
-    for( USHORT i = pOptions->Count(); i; )
+    for( USHORT i = pScriptOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[ --i ];
+        const HTMLOption *pOption = (*pScriptOptions)[ --i ];
         switch( pOption->GetToken() )
         {
         case HTML_O_LANGUAGE:
