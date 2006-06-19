@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:01:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ sal_Bool ScDocument::IsChart( const SdrObject* pObject )
 
 IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, USHORT *, pColorIndex )
 {
-    return (long) &((GetColorTable()->Get(*pColorIndex))->GetColor());
+    return (long) &((GetColorTable()->GetColor(*pColorIndex))->GetColor());
 }
 IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, USHORT *, pColorIndex )
 
