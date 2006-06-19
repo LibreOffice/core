@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:21:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,10 +245,10 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 //  ----------------------------------------------------
 UnoEditControl::UnoEditControl()
     :maTextListeners( *this )
-    ,mbSetMaxTextLenInPeer( sal_False )
-    ,mbSetTextInPeer( sal_False )
-    ,mbHasTextProperty( sal_False )
     ,mnMaxTextLen( 0 )
+    ,mbSetTextInPeer( sal_False )
+    ,mbSetMaxTextLenInPeer( sal_False )
+    ,mbHasTextProperty( sal_False )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -408,12 +408,14 @@ namespace
             ::std::swap( _rSel.Min, _rSel.Max );
     }
 
+/*
     static bool lcl_intersect( const awt::Selection& _rLHS, const awt::Selection& _rRHS )
     {
         OSL_PRECOND( _rLHS.Min <= _rLHS.Max, "lcl_intersect: LHS to be normalized!" );
         OSL_PRECOND( _rRHS.Min <= _rRHS.Max, "lcl_intersect: RHS to be normalized!" );
         return !( ( _rLHS.Max < _rRHS.Min ) || ( _rLHS.Min > _rRHS.Max ) );
     }
+*/
 }
 
 void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUString& rNewText ) throw(uno::RuntimeException)
