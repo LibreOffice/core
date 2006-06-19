@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpletextstatusbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 15:12:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,28 +163,28 @@ throw ( RuntimeException )
 }
 
 // XStatusListener
-void SAL_CALL SimpleTextStatusbarController::statusChanged( const FeatureStateEvent& Event )
+void SAL_CALL SimpleTextStatusbarController::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )
 {
 }
 
 // XStatusbarController
 ::sal_Bool SAL_CALL SimpleTextStatusbarController::mouseButtonDown(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL SimpleTextStatusbarController::mouseMove(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL SimpleTextStatusbarController::mouseButtonUp(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
