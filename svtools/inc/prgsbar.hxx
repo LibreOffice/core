@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prgsbar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:05:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ private:
     BOOL                mbCalcNew;
 
 #ifdef _SV_PRGSBAR_CXX
+    using Window::ImplInit;
     SVT_DLLPRIVATE void             ImplInit();
     SVT_DLLPRIVATE void             ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SVT_DLLPRIVATE void             ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc );
