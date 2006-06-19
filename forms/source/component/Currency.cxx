@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ void OCurrencyModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
