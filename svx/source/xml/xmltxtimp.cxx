@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:16:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, const Reference< XText >& xText )
+SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >&, const Reference< XText >& xText )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
 {
 }
@@ -216,7 +216,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         SVX_UNOEDIT_FONT_PROPERTIES,
 //      SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     uno::Reference<text::XText > xParent;
