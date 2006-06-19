@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholderbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:51:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+
+namespace svt { namespace detail { class Options; } }
 
 //-----------------------------------------------
 // definitions
@@ -129,7 +131,7 @@ struct TItemInfo
         : pItem(0)
     {}
 
-    void* pItem;
+    svt::detail::Options * pItem;
     EItem eItem;
 };
 
