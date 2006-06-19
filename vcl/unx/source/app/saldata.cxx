@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:57:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,20 +69,13 @@
 #endif
 
 #include <prex.h>
-
-// [ed] 6/15/02 There's a conflicting definition of INT8 within the Xmd.h header
-// and the solar.h OOo header.  So, wrap the X11 header with a bogus #define
-// to use the OOo definition of the symbol for INT8.
-// [fa] 4/12/04 With 64-bit changes, X11 headers also conflict with INT64
-
-#define INT8 blehBlahFooBarINT8
-#define INT64 blehBlahFooBarINT64
-
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
 #include <X11/Xproto.h>
-
-#undef INT8
-#undef INT64
-
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
 #include <postx.h>
 
 #ifndef _SV_SALDISP_HXX
@@ -141,6 +134,7 @@
 static const struct timeval noyield__ = { 0, 0 };
 static const struct timeval yield__   = { 0, 10000 };
 
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
     NULL,
@@ -272,30 +266,10 @@ static const char* XRequest[] = {
     NULL,
     "X_NoOperation"
 };
+#endif
 
 // -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-BEGIN_C
-
-static oslSignalAction SalSignalHdl (void* pData, oslSignalInfo* pInfo)
-{
-    switch (pInfo->Signal)
-    {
-        case osl_Signal_System :
-            return osl_Signal_ActCallNextHdl;
-        case osl_Signal_Terminate :
-            Application::Quit();
-            return osl_Signal_ActIgnore;
-        case osl_Signal_User :
-            return osl_Signal_ActCallNextHdl;
-        default: break;
-    }
-
-    return osl_Signal_ActAbortApp;
-}
-
-END_C
 
 int SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
@@ -303,7 +277,7 @@ int SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
     return 0;
 }
 
-int SalData::XIOErrorHdl( Display *pDisplay )
+int SalData::XIOErrorHdl( Display* )
 {
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP
@@ -557,7 +531,6 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
     if( m_bHaveSystemChildFrames )
         return;
 
-    char msg[ 120 ] = "";
     if( nIgnoreErrorLevel > 0 )
         return;
 
@@ -580,6 +553,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             return;
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+    char msg[ 120 ] = "";
 #if ! ( defined LINUX && defined PPC )
         XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
 #endif
