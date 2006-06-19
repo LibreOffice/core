@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 14:22:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ BOOL GalleryExplorer::InsertURL( ULONG nThemeId, const String& rURL )
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL, const ULONG nSgaFormat )
+BOOL GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL, const ULONG )
 {
     Gallery*    pGal = ImplGetGallery();
     BOOL        bRet = FALSE;
@@ -382,8 +382,6 @@ BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
 
         if( pTheme )
         {
-            BOOL bFound = FALSE;
-
             for( ULONG i = 0, nCount = pTheme->GetObjectCount(), nActPos = 0; ( i < nCount ) && !bRet; i++ )
             {
                 if( SGA_OBJ_SVDRAW == pTheme->GetObjectKind( i ) )
