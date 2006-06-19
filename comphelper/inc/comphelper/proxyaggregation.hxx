@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxyaggregation.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:37:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,18 +87,18 @@
 
   - wrap a foreign object which is a XComponent
     => use OComponentProxyAggregation
-       - call aggregateProxyFor in your ctor
+       - call componentAggregateProxyFor in your ctor
        - call implEnsureDisposeInDtor in your dtor
 
   - wrap a foreign object which is a XComponent, but already have ref-counting mechanisms
     inherited from somewhere else
     => use OComponentProxyAggregationHelper
        - override dispose - don't forget to call the base class' dispose!
-       - call aggregateProxyFor in your ctor
+       - call componentAggregateProxyFor in your ctor
 
   - wrap a foreign object which is no XComponent
     => use OProxyAggregation
-       - call aggregateProxyFor in your ctor
+       - call baseAggregateProxyFor in your ctor
 */
 
 //.............................................................................
@@ -129,7 +129,7 @@ namespace comphelper
         ~OProxyAggregation();
 
         /// to be called from within your ctor
-        void aggregateProxyFor(
+        void baseAggregateProxyFor(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
@@ -172,13 +172,10 @@ namespace comphelper
 
     protected:
         // OProxyAggregation
-        OProxyAggregation::getORB;
+        using OProxyAggregation::getORB;
 
         // XInterface
         ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
-        // still waiting to be overwritten
-        virtual void SAL_CALL acquire(  ) throw () = 0;
-        virtual void SAL_CALL release(  ) throw () = 0;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
@@ -188,10 +185,10 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             ::cppu::OBroadcastHelper& _rBHelper
         );
-        ~OComponentProxyAggregationHelper( );
+        virtual ~OComponentProxyAggregationHelper( );
 
         /// to be called from within your ctor
-        void aggregateProxyFor(
+        void componentAggregateProxyFor(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
