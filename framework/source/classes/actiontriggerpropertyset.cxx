@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actiontriggerpropertyset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:06:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,13 +77,13 @@ enum EPROPERTIES
 namespace framework
 {
 
-ActionTriggerPropertySet::ActionTriggerPropertySet( const Reference< XMultiServiceFactory >& xServiceManager )
-        :   ThreadHelpBase          ( &Application::GetSolarMutex()                     )
-        ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                    )
-        ,   OPropertySetHelper      ( *SAL_STATIC_CAST( OBroadcastHelper *, this )      )
-        ,   OWeakObject             (                                                   )
-        ,   m_xActionTriggerContainer( 0 )
-        ,   m_xBitmap( 0 )
+ActionTriggerPropertySet::ActionTriggerPropertySet( const Reference< XMultiServiceFactory >& /*xServiceManager*/ )
+    : ThreadHelpBase           ( &Application::GetSolarMutex()               )
+    , OBroadcastHelper         ( m_aLock.getShareableOslMutex()              )
+    ,   OPropertySetHelper       ( *SAL_STATIC_CAST( OBroadcastHelper *, this ))
+    , OWeakObject              ()
+    , m_xBitmap                ( 0 )
+    , m_xActionTriggerContainer( 0 )
 {
 }
 
