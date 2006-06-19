@@ -108,7 +108,6 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
             sal_Int32 nIndex = 0;
             return uno::makeAny( aMailer.getToken( 0, ' ', nIndex ) );
         }
-            break;
 
 #ifdef ENABLE_LOCKDOWN
         // "short" values need to be returned a sal_Int16
@@ -134,13 +133,11 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
             aOriginalValue >>= bBooleanValue;
             return uno::makeAny( rtl::OUString::valueOf( (sal_Bool) bBooleanValue ) );
         }
-            break;
 
         case SETTING_WORK_DIRECTORY:
         {
             return uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$(work)/Documents" ) ) );
         }
-            break;
 
         case SETTING_USER_GIVENNAME:
         {
@@ -155,7 +152,6 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
             return uno::makeAny( aGivenName );
 
         }
-            break;
 
         case SETTING_USER_SURNAME:
         {
@@ -169,7 +165,6 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
 
             return uno::makeAny( aSurname );
         }
-            break;
 
         default:
             fprintf( stderr, "Unhandled setting to translate.\n" );
