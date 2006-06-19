@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oslstream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:17:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,10 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     // Wenn gelesene Zeichen < MaxLength, staruno::Sequence anpassen
-    if (nRead < (sal_uInt32)nBytesToRead)
-        aData.realloc( nRead );
+    if (nRead < (sal_uInt64)nBytesToRead)
+        aData.realloc( sal::static_int_cast<sal_Int32>( nRead ));
 
-    return nRead;
+    return sal::static_int_cast<sal_Int32>( nRead );
 }
 
 //------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
     eError = m_pFile->setPos(Pos_Absolut, nPos);
     if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
-    return nAvailable;
+    return sal::static_int_cast<sal_Int32>( nAvailable );
 }
 
 //------------------------------------------------------------------------------
