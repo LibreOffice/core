@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:27:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,9 +381,9 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 
 uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass()
 {
-    if ( !xCharClass.is() )
-        xCharClass = vcl::unohelper::CreateCharacterClassification();
-    return xCharClass;
+    if ( !mxCharClass.is() )
+        mxCharClass = vcl::unohelper::CreateCharacterClassification();
+    return mxCharClass;
 }
 
 // -----------------------------------------------------------------------
