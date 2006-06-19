@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultiPropertySetHandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:22:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@ public:
     */
     PropertyWrapperBase (const ::rtl::OUString & rName)
         :   msName (rName)
+    {}
+    virtual ~PropertyWrapperBase()
     {}
 
     /** @descr  Abstract interface of a method for setting a variables
