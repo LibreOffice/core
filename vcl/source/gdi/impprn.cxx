@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:02:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,9 +119,9 @@ void ImplQPrinter::Destroy()
 
 // -----------------------------------------------------------------------
 
-void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxBmpDPIY )
+void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nMaxBmpDPIY )
 {
-    for( MetaAction* pAct = rMtf.FirstAction(); pAct && !mbAborted; pAct = rMtf.NextAction() )
+    for( MetaAction* pAct = rPrtMtf.FirstAction(); pAct && !mbAborted; pAct = rPrtMtf.NextAction() )
     {
         const ULONG     nType = pAct->GetType();
         sal_Bool        bExecuted = sal_False;
@@ -133,7 +133,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
 
             if( pComment->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
             {
-                pAct = rMtf.NextAction();
+                pAct = rPrtMtf.NextAction();
 
                 // if next action is a GradientEx action, execute this and
                 // skip actions until a XGRAD_SEQ_END comment is found
@@ -145,7 +145,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
                     // seek to end of this comment
                     do
                     {
-                        pAct = rMtf.NextAction();
+                        pAct = rPrtMtf.NextAction();
                     }
                     while( pAct &&
                            ( ( pAct->GetType() != META_COMMENT_ACTION ) ||
@@ -156,7 +156,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
             }
             else if( pComment->GetComment().CompareIgnoreCaseToAscii( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) == COMPARE_EQUAL )
             {
-                pAct = rMtf.NextAction();
+                pAct = rPrtMtf.NextAction();
 
                 if( pAct && ( pAct->GetType() == META_BMPSCALE_ACTION ) )
                 {
@@ -166,7 +166,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
                     // seek to end of this comment
                     do
                     {
-                        pAct = rMtf.NextAction();
+                        pAct = rPrtMtf.NextAction();
                     }
                     while( pAct &&
                            ( ( pAct->GetType() != META_COMMENT_ACTION ) ||
@@ -188,7 +188,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
             const Bitmap&       rBmp = pBmpScaleAction->GetBitmap();
 
             DrawBitmap( pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
-                        GetPreparedBitmap( pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
+                        GetPreparedBitmap( pBmpScaleAction->GetSize(),
                                            Point(), rBmp.GetSizePixel(),
                                            rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
@@ -200,7 +200,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
             const Bitmap&           rBmp = pBmpScalePartAction->GetBitmap();
 
             DrawBitmap( pBmpScalePartAction->GetDestPoint(), pBmpScalePartAction->GetDestSize(),
-                        GetPreparedBitmap( pBmpScalePartAction->GetDestPoint(), pBmpScalePartAction->GetDestSize(),
+                        GetPreparedBitmap( pBmpScalePartAction->GetDestSize(),
                                            pBmpScalePartAction->GetSrcPoint(), pBmpScalePartAction->GetSrcSize(),
                                            rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
@@ -212,7 +212,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
             const BitmapEx&         rBmpEx = pBmpExScaleAction->GetBitmapEx();
 
             DrawBitmapEx( pBmpExScaleAction->GetPoint(), pBmpExScaleAction->GetSize(),
-                          GetPreparedBitmapEx( pBmpExScaleAction->GetPoint(), pBmpExScaleAction->GetSize(),
+                          GetPreparedBitmapEx( pBmpExScaleAction->GetSize(),
                                                Point(), rBmpEx.GetSizePixel(),
                                                rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
@@ -224,7 +224,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
             const BitmapEx&             rBmpEx = pBmpExScalePartAction->GetBitmapEx();
 
             DrawBitmapEx( pBmpExScalePartAction->GetDestPoint(), pBmpExScalePartAction->GetDestSize(),
-                          GetPreparedBitmapEx( pBmpExScalePartAction->GetDestPoint(), pBmpExScalePartAction->GetDestSize(),
+                          GetPreparedBitmapEx( pBmpExScalePartAction->GetDestSize(),
                                                pBmpExScalePartAction->GetSrcPoint(), pBmpExScalePartAction->GetSrcSize(),
                                                rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
