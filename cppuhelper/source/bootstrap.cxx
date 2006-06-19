@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:12:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,14 +82,14 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 
-static void MyDummySymbolWithinLibrary(){}
+extern "C" { static void SAL_CALL MyDummySymbolWithinLibrary(){} }
 OUString const & get_this_libpath()
 {
     static OUString s_path;
     if (0 == s_path.getLength())
     {
         OUString path;
-        Module::getUrlFromAddress( (void*) MyDummySymbolWithinLibrary, path );
+        Module::getUrlFromAddress( MyDummySymbolWithinLibrary, path );
         path = path.copy( 0, path.lastIndexOf( '/' ) );
         MutexGuard guard( Mutex::getGlobalMutex() );
         if (0 == s_path.getLength())
@@ -201,8 +201,10 @@ Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
 Reference< registry::XSimpleRegistry > SAL_CALL createRegistryWrapper(
     const Reference< XComponentContext >& xContext );
 
+namespace {
+
 template< class T >
-static inline beans::PropertyValue createPropertyValue(
+inline beans::PropertyValue createPropertyValue(
     OUString const & name, T const & value )
     SAL_THROW( () )
 {
@@ -210,7 +212,7 @@ static inline beans::PropertyValue createPropertyValue(
         name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
 }
 
-static OUString findBoostrapArgument(
+OUString findBoostrapArgument(
     const Bootstrap & bootstrap,
     const OUString & arg_name,
     sal_Bool * pFallenBack )
@@ -272,15 +274,14 @@ static OUString findBoostrapArgument(
     return result;
 }
 
-static Reference< registry::XSimpleRegistry > nestRegistries(
+Reference< registry::XSimpleRegistry > nestRegistries(
     const OUString baseDir,
     const Reference< lang::XSingleServiceFactory > & xSimRegFac,
     const Reference< lang::XSingleServiceFactory > & xNesRegFac,
     OUString csl_rdbs,
     const OUString & write_rdb,
     sal_Bool forceWrite_rdb,
-    sal_Bool bFallenBack,
-    Bootstrap const & bootstrap )
+    sal_Bool bFallenBack )
     SAL_THROW((Exception))
 {
     sal_Int32 index;
@@ -377,7 +378,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
     return lastRegistry;
 }
 
-static Reference< XComponentContext >
+Reference< XComponentContext >
 SAL_CALL defaultBootstrap_InitialComponentContext(
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
@@ -416,7 +417,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Reference<registry::XSimpleRegistry> types_xRegistry =
         nestRegistries(
             iniDir, xSimRegFac, xNesRegFac, cls_uno_types,
-            OUString(), sal_False, bFallenback_types, bootstrap );
+            OUString(), sal_False, bFallenback_types );
 
     // ==== bootstrap from services registry ====
 
@@ -435,7 +436,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
 
     Reference<registry::XSimpleRegistry> services_xRegistry = nestRegistries(
         iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb,
-        !fallenBackWriteRegistry, bFallenback_services, bootstrap );
+        !fallenBackWriteRegistry, bFallenback_services );
 
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
@@ -453,6 +454,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     return xContext;
 }
 
+}
 
 Reference< XComponentContext >
 SAL_CALL defaultBootstrap_InitialComponentContext(
