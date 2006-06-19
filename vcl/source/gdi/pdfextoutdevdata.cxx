@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:52:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ struct PDFExtOutDevDataSync
                     EndGroupGfxLink
     };
 
-    sal_Int32   nIdx;
+    sal_uInt32  nIdx;
     Action      eAct;
 };
 
@@ -258,6 +258,10 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             case PDFExtOutDevDataSync::SetStructureBoundingBox:
             case PDFExtOutDevDataSync::SetActualText:
             case PDFExtOutDevDataSync::SetAlternateText:
+            case PDFExtOutDevDataSync::CreateControl:
+            case PDFExtOutDevDataSync::BeginGroup:
+            case PDFExtOutDevDataSync::EndGroup:
+            case PDFExtOutDevDataSync::EndGroupGfxLink:
                 break;
         }
         aIter++;
@@ -712,7 +716,7 @@ void PDFExtOutDevData::SetAlternateText( const String& rText )
     mpPageSyncData->mParaOUStrings.push_back( rText );
 }
 
-void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType, sal_Int32 nPageNr )
+void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType, sal_Int32 /*nPageNr*/ )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::CreateControl );
 
