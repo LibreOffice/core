@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     }
 
     setReferenceValue( sReferenceValue );
-    setDefaultChecked( nDefaultChecked );
+    setDefaultChecked( (CheckState)nDefaultChecked );
 
     // Nach dem Lesen die Defaultwerte anzeigen
     if ( getControlSource().getLength() )
@@ -422,7 +422,7 @@ Any ORadioButtonModel::translateExternalValueToControlValue( ) const
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Reference< XPropertySet > xField( getField() );
     OSL_PRECOND( xField.is(), "ORadioButtonModel::commitControlValueToDbColumn: not bound!" );
