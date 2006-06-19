@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:58:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ namespace validation
 
         // how to procede from END
         {
-            StateTransitions& rRow = m_aTransitions[ EXPONENT_DIGIT ];
+            /*StateTransitions& rRow =*/ m_aTransitions[ EXPONENT_DIGIT ];
             // no valid transition to leave this state
             // (note that we, for consistency, nevertheless want to have a row in the table)
         }
@@ -450,6 +450,15 @@ void FormattedField::SetText(const XubString& rStr)
     DBG_CHKTHIS(FormattedField, NULL);
 
     SpinField::SetText(rStr);
+    m_bValueDirty = TRUE;
+}
+
+//------------------------------------------------------------------------------
+void FormattedField::SetText( const XubString& rStr, const Selection& rNewSelection )
+{
+    DBG_CHKTHIS(FormattedField, NULL);
+
+    SpinField::SetText( rStr, rNewSelection );
     m_bValueDirty = TRUE;
 }
 
