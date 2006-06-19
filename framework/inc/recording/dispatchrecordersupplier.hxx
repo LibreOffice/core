@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchrecordersupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:27:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,8 +157,8 @@ class DispatchRecorderSupplier  :   // interfaces
         //_______________________________________
         // XInterface, XTypeProvider, XServiceInfo
 
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //_______________________________________
