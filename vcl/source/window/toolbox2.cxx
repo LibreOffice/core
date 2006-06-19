@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:28:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,10 +229,9 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         mnHelpId                ( rItem.mnHelpId ),
         maRect                  ( rItem.maRect ),
         maCalcRect              ( rItem.maCalcRect ),
+        maItemSize              ( rItem.maItemSize ),
         mnSepSize               ( rItem.mnSepSize ),
         mnDropDownArrowWidth    ( rItem.mnDropDownArrowWidth ),
-        maItemSize              ( rItem.maItemSize ),
-        mbVisibleText           ( rItem.mbVisibleText ),
         meType                  ( rItem.meType ),
         mnBits                  ( rItem.mnBits ),
         meState                 ( rItem.meState ),
@@ -241,7 +240,8 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         mbVisible               ( rItem.mbVisible ),
         mbEmptyBtn              ( rItem.mbEmptyBtn ),
         mbShowWindow            ( rItem.mbShowWindow ),
-        mbBreak                 ( rItem.mbBreak )
+        mbBreak                 ( rItem.mbBreak ),
+        mbVisibleText           ( rItem.mbVisibleText )
 {
 }
 
@@ -588,7 +588,7 @@ void ToolBox::Customize( const ToolBoxCustomizeEvent& )
 
 // -----------------------------------------------------------------------
 
-void ToolBox::UserDraw( const UserDrawEvent& rUDEvt )
+void ToolBox::UserDraw( const UserDrawEvent& )
 {
 }
 
@@ -606,7 +606,7 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
     nObjMask            = ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_ID )
-        aItem.mnId = ReadLongRes();
+        aItem.mnId = sal::static_int_cast<USHORT>(ReadLongRes());
     else
         aItem.mnId = 1;
 
@@ -681,7 +681,7 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
     ImplInvalidate( bNewCalc );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -701,7 +701,7 @@ void ToolBox::InsertItem( USHORT nItemId, const Image& rImage,
     ImplInvalidate( TRUE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >(nNewPos ) );
 }
 
@@ -722,7 +722,7 @@ void ToolBox::InsertItem( USHORT nItemId, const Image& rImage,
     ImplInvalidate( TRUE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -742,7 +742,7 @@ void ToolBox::InsertItem( USHORT nItemId, const XubString& rText,
     ImplInvalidate( TRUE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -770,7 +770,7 @@ void ToolBox::InsertWindow( USHORT nItemId, Window* pWindow,
     ImplInvalidate( TRUE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -788,7 +788,7 @@ void ToolBox::InsertSpace( USHORT nPos )
     ImplInvalidate( FALSE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -808,7 +808,7 @@ void ToolBox::InsertSeparator( USHORT nPos, USHORT nPixSize )
     ImplInvalidate( FALSE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -826,7 +826,7 @@ void ToolBox::InsertBreak( USHORT nPos )
     ImplInvalidate( FALSE );
 
     // Notify
-    USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
+    USHORT nNewPos = sal::static_int_cast<USHORT>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -893,7 +893,7 @@ void ToolBox::MoveItem( USHORT nItemId, USHORT nNewPos )
             ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, reinterpret_cast< void* >( nPos ) );
         else
         {
-            USHORT nNewPos2 = ( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos;
+            USHORT nNewPos2 = sal::static_int_cast<USHORT>(( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos);
             ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
         }
     }
@@ -924,7 +924,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, USHORT nItemId,
         ImplInvalidate( FALSE );
 
         // Notify
-        USHORT nNewPos2 = ( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos;
+        USHORT nNewPos2 = sal::static_int_cast<USHORT>(( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos);
         ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
     }
 }
@@ -2119,7 +2119,7 @@ void ToolBox::SetMenuType( USHORT aType )
             // the menu button may have to be moved into the decoration which changes the layout
             ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
             if( pWrapper )
-                pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) );
+                pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) ? TRUE : FALSE );
 
             mbFormat = TRUE;
             ImplFormat();
@@ -2374,13 +2374,13 @@ BOOL ToolBox::AlwaysLocked()
                 if( bStatesEnabled == TRUE )
                 {
                     // now read the locking state
-                    utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+                    utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                         vcl::unohelper::GetMultiServiceFactory(),
                         OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensisitive !
 
                     BOOL bLocked;
-                    ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "Locked" ) );
-                    if( aValue >>= bLocked )
+                    ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString::createFromAscii( "Locked" ) );
+                    if( aValue2 >>= bLocked )
                         nAlwaysLocked = (bLocked == TRUE) ? 1 : 0;
                 }
             }
