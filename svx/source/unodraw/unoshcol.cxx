@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshcol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:08:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames_Static()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL SvxShapeCollection_createInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr )
+Reference< XInterface > SAL_CALL SvxShapeCollection_createInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
     return *( new SvxShapeCollection() );
 }
