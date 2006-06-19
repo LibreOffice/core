@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaplayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:38:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,10 @@ namespace avmedia
 // - MediaPlayer -
 // ---------------
 
-MediaPlayer::MediaPlayer( Window* pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
+MediaPlayer::MediaPlayer( Window* _pParent, USHORT nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
+    SfxChildWindow( _pParent, nId )
 {
-    pWindow = new MediaFloater( pBindings, this, pParent );
+    pWindow = new MediaFloater( _pBindings, this, _pParent );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     static_cast< MediaFloater* >( pWindow )->Initialize( pInfo );
 };
@@ -75,8 +75,8 @@ SFX_IMPL_DOCKINGWINDOW( MediaPlayer, SID_AVMEDIA_PLAYER )
 // - MediaFloater -
 // ----------------
 
-MediaFloater::MediaFloater( SfxBindings* pBindings, SfxChildWindow* pCW, Window* pParent ) :
-    SfxDockingWindow( pBindings, pCW, pParent, WB_CLOSEABLE | WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE ),
+MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window* pParent ) :
+    SfxDockingWindow( _pBindings, pCW, pParent, WB_CLOSEABLE | WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE ),
     mpMediaWindow( new MediaWindow( this, true ) )
 {
     const Size aSize( 378, 256 );
