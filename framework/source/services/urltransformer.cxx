@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:47:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,11 +169,11 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
     }
 
     // Try to extract the protocol
-    sal_Int32 nIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
+    sal_Int32 nURLIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
     OUString aProtocol;
-    if ( nIndex > 1 )
+    if ( nURLIndex > 1 )
     {
-        aProtocol = aURL.Complete.copy( 0, nIndex+1 );
+        aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
 
         // If INetURLObject knows this protocol let it parse
         if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INET_PROT_NOT_VALID )
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
             // in framework!
             aURL.Protocol   = aProtocol;
             aURL.Main       = aURL.Complete;
-            aURL.Path       = aURL.Complete.copy( nIndex+1 );;
+            aURL.Path       = aURL.Complete.copy( nURLIndex+1 );;
 
             // Return "URL is parsed".
             return sal_True;
@@ -449,7 +449,7 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
 
         // Convert internal URLs to "praesentation"-URLs!
         rtl::OUString sPraesentationURL;
-        INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
+        INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::DECODE_UNAMBIGUOUS );
 
         return sPraesentationURL;
     }
