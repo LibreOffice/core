@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ary_disp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:10:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,13 +102,13 @@ Display::do_DisplaySlot_Rid( ary::Rid )
 }
 
 void
-Display::do_DisplaySlot_Lid( ary::Lid i_nId )
+Display::do_DisplaySlot_Lid( ary::Lid )
 {
 }
 
 void
-Display::do_DisplaySlot_LocalCe( ary::Rid           i_nId,
-                                 const udmstri &    i_sName )
+Display::do_DisplaySlot_LocalCe( ary::Rid           ,
+                                 const udmstri &    )
 {
 }
 
