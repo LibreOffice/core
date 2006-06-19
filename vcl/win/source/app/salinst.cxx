@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 09:54:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,6 +475,7 @@ SalData::~SalData()
 void InitSalData()
 {
     SalData* pSalData = new SalData;
+    (void)pSalData;
     CoInitialize(0);
 }
 
@@ -721,8 +722,6 @@ void ImplSalYield( BOOL bWait )
     MSG aMsg;
     bool bMsg = false;
 
-    SalData* pSalData = GetSalData();
-    WinSalInstance* pInst = pSalData->mpFirstInstance;
     if ( bWait )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
@@ -1119,7 +1118,7 @@ SalSession* WinSalInstance::CreateSalSession()
 }
 
 // -----------------------------------------------------------------------
-int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo)
+int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
 {
     // Decide if an exception is a c++ (mostly UNO) exception or a process violation.
     // Depending on this information we pass process violations directly to our signal handler ...
