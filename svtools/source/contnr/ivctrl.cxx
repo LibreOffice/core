@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:46:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,11 +203,11 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
     return pEntry;
 }
 
-BOOL SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString& rNewText, BOOL bCancelled )
+BOOL SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString&, BOOL )
 {
     return TRUE;
 }
-BOOL SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* pEntry )
+BOOL SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )
 {
     return TRUE;
 }
@@ -215,7 +215,7 @@ void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Po
 {
     rDev.DrawImage ( rPos, GetDisplayBackground().GetColor().IsDark() ? pEntry->GetImageHC() : pEntry->GetImage() );
 }
-String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, BOOL bInplaceEdit )
+String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, BOOL )
 {
     return pEntry->GetText();
 }
@@ -441,12 +441,8 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( ULONG& rPos ) const
 void SvtIconChoiceCtrl::ClickIcon()
 {
     ULONG nPos;
-    SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
+    GetSelectedEntry ( nPos );
     _aClickIconHdl.Call( this );
-/*
-    if ( pSelectedEntry )
-        _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
-*/
 }
 BOOL SvtIconChoiceCtrl::IsEntryEditing() const
 {
