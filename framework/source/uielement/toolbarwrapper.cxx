@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:14:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 }
 
 // XEventListener
-void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
     // nothing todo
 }
@@ -376,15 +376,15 @@ void SAL_CALL ToolBarWrapper::setSettings( const ::com::sun::star::uno::Referenc
 }
 
 //  XUIConfigurationListener
-void SAL_CALL ToolBarWrapper::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ToolBarWrapper::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ToolBarWrapper::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
