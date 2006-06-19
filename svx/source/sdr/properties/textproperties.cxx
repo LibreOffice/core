@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:29:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ namespace sdr
             OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
 
             // #i25616#
-            sal_Int32 nOldLineWidth;
+            sal_Int32 nOldLineWidth(0L);
 
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {
@@ -295,10 +295,10 @@ namespace sdr
 
                 if(nParaCount)
                 {
-                    SfxItemSet* pTempSet;
-
                     for(sal_uInt32 nPara(0L); nPara < nParaCount; nPara++)
                     {
+                        SfxItemSet* pTempSet = 0L;
+
                         // since setting the stylesheet removes all para attributes
                         if(bDontRemoveHardAttr)
                         {
@@ -337,10 +337,11 @@ namespace sdr
 
                         if(bDontRemoveHardAttr)
                         {
-                            // restore para attributes
-                            rOutliner.SetParaAttribs(nPara, *pTempSet);
-
-                            delete pTempSet;
+                            if(pTempSet)
+                            {
+                                // restore para attributes
+                                rOutliner.SetParaAttribs(nPara, *pTempSet);
+                            }
                         }
                         else
                         {
@@ -366,6 +367,11 @@ namespace sdr
                                     pItem = aIter.NextItem();
                                 }
                             }
+                        }
+
+                        if(pTempSet)
+                        {
+                            delete pTempSet;
                         }
                     }
 
