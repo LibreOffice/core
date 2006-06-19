@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:57:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,14 +370,12 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                             ::rtl::OUString::createFromAscii("Optional list of arguments seem to be corrupted."),
                             xLoader,
                             4);
-                    break;
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
                     throw css::lang::IllegalArgumentException(
                             ::rtl::OUString::createFromAscii("URL seems to be an unsupported one."),
                             xLoader,
                             1);
-                    break;
 
             default: xComponent.clear();
                     break;
@@ -677,7 +675,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 /*-----------------------------------------------
     15.08.2003 11:15
 -----------------------------------------------*/
-void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
+void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
@@ -694,7 +692,7 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
 /*-----------------------------------------------
     14.10.2003 12:23
 -----------------------------------------------*/
-void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
+void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
@@ -743,7 +741,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
 /*-----------------------------------------------
     14.10.2003 12:24
 -----------------------------------------------*/
-void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
@@ -1310,7 +1308,7 @@ sal_Bool LoadEnv::impl_loadContent()
     if (xAsyncLoader.is())
     {
         // SAFE -> -----------------------------------
-        WriteGuard aWriteLock(m_aLock);
+        aWriteLock.lock();
         m_xAsynchronousJob = xAsyncLoader;
         m_pCheck           = this;
         LoadEnvListener* pListener = new LoadEnvListener(m_pCheck, this);
@@ -1806,7 +1804,7 @@ void LoadEnv::impl_reactForLoadingState()
     16.01.2005 13:04
 -----------------------------------------------*/
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
-                                                sal_Bool                                  bForceToFront)
+                                                sal_Bool                                /*bForceToFront*/)
 {
     css::uno::Reference< css::awt::XTopWindow > xTopWindow(xWindow, css::uno::UNO_QUERY);
 
