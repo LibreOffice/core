@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdidlclass.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:29:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public:
     // XIdlClass
     virtual Sequence< Reference< XIdlClass > > SAL_CALL getClasses(  ) throw(RuntimeException)
                                         { return Sequence < Reference < XIdlClass > > (); }
-    virtual Reference< XIdlClass > SAL_CALL getClass( const ::rtl::OUString& aName ) throw(RuntimeException)
+    virtual Reference< XIdlClass > SAL_CALL getClass( const ::rtl::OUString& ) throw(RuntimeException)
                                         { return Reference < XIdlClass > (); }
     virtual sal_Bool SAL_CALL equals( const Reference< XIdlClass >& Type ) throw(RuntimeException)
                                         { return getName() == Type->getName(); }
@@ -102,17 +102,17 @@ public:
 
     virtual Reference< XIdlClass > SAL_CALL getComponentType(  ) throw(RuntimeException)
                                         { return Reference < XIdlClass > (); }
-    virtual Reference< XIdlField > SAL_CALL getField( const ::rtl::OUString& aName ) throw(RuntimeException)
+    virtual Reference< XIdlField > SAL_CALL getField( const ::rtl::OUString& ) throw(RuntimeException)
                                         { return Reference < XIdlField > (); }
     virtual Sequence< Reference< XIdlField > > SAL_CALL getFields(  ) throw(RuntimeException)
                                         { return Sequence< Reference < XIdlField > > (); }
-    virtual Reference< XIdlMethod > SAL_CALL getMethod( const ::rtl::OUString& aName ) throw(RuntimeException)
+    virtual Reference< XIdlMethod > SAL_CALL getMethod( const ::rtl::OUString& ) throw(RuntimeException)
                                         { return Reference < XIdlMethod > (); }
     virtual Sequence< Reference< XIdlMethod > > SAL_CALL getMethods(  ) throw(RuntimeException)
                                         { return Sequence < Reference < XIdlMethod > > (); }
     virtual Reference< XIdlArray > SAL_CALL getArray(  ) throw(RuntimeException)
                                         { return Reference < XIdlArray > (); }
-    virtual void SAL_CALL createObject( Any& obj ) throw(RuntimeException) {}
+    virtual void SAL_CALL createObject( Any& ) throw(RuntimeException) {}
 
 private:
     OUString                                m_sImplementationName;
