@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:51:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -950,8 +950,8 @@ class BrokenRecoveryDialog : public ModalDialog
             RadioButton         maManualBtn;
             FixedText           maProxyServerFT;
             Edit                maProxyServerEd;
-            Edit                maProxyPortEd;
             FixedText           maProxyPortFT;
+            Edit                maProxyPortEd;
             FixedText           maDescriptionFT;
             FixedLine           maButtonsFL;
             OKButton            maOKBtn;
