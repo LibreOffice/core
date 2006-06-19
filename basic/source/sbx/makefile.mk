@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:45:16 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:48:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,11 @@ SLOFILES=	\
     $(SLO)$/sbxuint.obj	\
     $(SLO)$/sbxulng.obj	\
     $(SLO)$/sbxform.obj	\
-    $(SLO)$/sbxscan.obj \
+    $(SLO)$/sbxscan.obj 	\
     $(SLO)$/sbxdec.obj
+
+
+EXCEPTIONSFILES=$(SLO)$/sbxarray.obj
 
 # --- Targets -------------------------------------------------------------
 
