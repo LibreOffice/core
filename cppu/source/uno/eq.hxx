@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:52:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,10 +213,10 @@ inline sal_Bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            uno_Any * pDest = (uno_Any *)pDestElements + nPos;
-            uno_Any * pSource = (uno_Any *)pSourceElements + nPos;
-            if (! ::uno_type_equalData( pDest->pData, pDest->pType,
-                                        pSource->pData, pSource->pType,
+            uno_Any * pDest2 = (uno_Any *)pDestElements + nPos;
+            uno_Any * pSource2 = (uno_Any *)pSourceElements + nPos;
+            if (! ::uno_type_equalData( pDest2->pData, pDest2->pType,
+                                        pSource2->pData, pSource2->pType,
                                         queryInterface, release ))
             {
                 return sal_False;
@@ -254,13 +254,13 @@ inline sal_Bool _equalSequence(
         sal_Int32 nValueOffset = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nValueOffset;
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            char * pDest = (char *)pDestElements + (nPos * nElementSize);
-            char * pSource = (char *)pSourceElements + (nPos * nElementSize);
+            char * pDest2 = (char *)pDestElements + (nPos * nElementSize);
+            char * pSource2 = (char *)pSourceElements + (nPos * nElementSize);
             typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                pDest, pElementTypeDescr );
+                pDest2, pElementTypeDescr );
             sal_Bool bRet = ::uno_type_equalData(
-                pDest + nValueOffset, pSetType,
-                pSource + nValueOffset, pSetType,
+                pDest2 + nValueOffset, pSetType,
+                pSource2 + nValueOffset, pSetType,
                 queryInterface, release );
             ::typelib_typedescriptionreference_release( pSetType );
             if (! bRet)
@@ -303,8 +303,10 @@ inline sal_Bool _equalSequence(
         }
         return sal_True;
     }
+    default:
+        OSL_ASSERT(false);
+        return sal_False;
     }
-    return sal_False;
 }
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool _equalData(
@@ -332,26 +334,14 @@ inline sal_Bool _equalData(
     switch (eDestTypeClass)
     {
     case typelib_TypeClass_VOID:
-        switch (eSourceTypeClass)
-        {
-        case typelib_TypeClass_VOID:
-            return sal_True;
-        }
-        return sal_False;
+        return eSourceTypeClass == typelib_TypeClass_VOID;
     case typelib_TypeClass_CHAR:
-        switch (eSourceTypeClass)
-        {
-        case typelib_TypeClass_CHAR:
-            return (*(sal_Unicode *)pDest == *(sal_Unicode *)pSource);
-        }
-        return sal_False;
+        return eSourceTypeClass == typelib_TypeClass_CHAR
+            && *(sal_Unicode *)pDest == *(sal_Unicode *)pSource;
     case typelib_TypeClass_BOOLEAN:
-        switch (eSourceTypeClass)
-        {
-        case typelib_TypeClass_BOOLEAN:
-            return ((*(sal_Bool *)pDest != sal_False) == (*(sal_Bool *)pSource != sal_False));
-        }
-        return sal_False;
+        return eSourceTypeClass == typelib_TypeClass_BOOLEAN
+            && ((*(sal_Bool *)pDest != sal_False)
+                == (*(sal_Bool *)pSource != sal_False));
     case typelib_TypeClass_BYTE:
         switch (eSourceTypeClass)
         {
@@ -374,8 +364,9 @@ inline sal_Bool _equalData(
             return ((float)*(sal_Int8 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(sal_Int8 *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_SHORT:
         switch (eSourceTypeClass)
         {
@@ -398,8 +389,9 @@ inline sal_Bool _equalData(
             return ((float)*(sal_Int16 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(sal_Int16 *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_UNSIGNED_SHORT:
         switch (eSourceTypeClass)
         {
@@ -421,8 +413,9 @@ inline sal_Bool _equalData(
             return ((float)*(sal_uInt16 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(sal_uInt16 *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_LONG:
         switch (eSourceTypeClass)
         {
@@ -445,8 +438,9 @@ inline sal_Bool _equalData(
             return ((float)*(sal_Int32 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(sal_Int32 *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_UNSIGNED_LONG:
         switch (eSourceTypeClass)
         {
@@ -468,8 +462,9 @@ inline sal_Bool _equalData(
             return ((float)*(sal_uInt32 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(sal_uInt32 *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_HYPER:
         switch (eSourceTypeClass)
         {
@@ -492,8 +487,9 @@ inline sal_Bool _equalData(
             return ((float)*(sal_Int64 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(sal_Int64 *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_UNSIGNED_HYPER:
         switch (eSourceTypeClass)
         {
@@ -523,8 +519,9 @@ inline sal_Bool _equalData(
             if (::floor( *(double *)pSource ) != *(double *)pSource || *(double *)pSource < 0)
                 return sal_False;
             return (*(sal_uInt64 *)pDest == (sal_uInt64)*(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_FLOAT:
         switch (eSourceTypeClass)
         {
@@ -548,8 +545,9 @@ inline sal_Bool _equalData(
             return (*(float *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return ((double)*(float *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_DOUBLE:
         switch (eSourceTypeClass)
         {
@@ -573,30 +571,21 @@ inline sal_Bool _equalData(
             return (*(double *)pDest == (double)*(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return (*(double *)pDest == *(double *)pSource);
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_STRING:
-        switch (eSourceTypeClass)
-        {
-        case typelib_TypeClass_STRING:
-            return ((::rtl::OUString *)pDest)->equals( *(::rtl::OUString const *)pSource );
-        }
-        return sal_False;
+        return eSourceTypeClass == typelib_TypeClass_STRING
+            && ((::rtl::OUString *)pDest)->equals(
+                *(::rtl::OUString const *)pSource );
     case typelib_TypeClass_TYPE:
-        switch (eSourceTypeClass)
-        {
-        case typelib_TypeClass_TYPE:
-            return _type_equals(
+        return eSourceTypeClass == typelib_TypeClass_TYPE
+            && _type_equals(
                 *(typelib_TypeDescriptionReference **)pDest,
                 *(typelib_TypeDescriptionReference **)pSource );
-        }
-        return sal_False;
     case typelib_TypeClass_ENUM:
         return (_type_equals( pDestType, pSourceType ) &&
                 *(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (! _type_equals( pDestType, pSourceType ))
@@ -677,6 +666,10 @@ inline sal_Bool _equalData(
     case typelib_TypeClass_INTERFACE:
         if (typelib_TypeClass_INTERFACE == eSourceTypeClass)
             return _equalObject( *(void **)pDest, *(void **)pSource, queryInterface, release );
+        break;
+    default:
+        OSL_ASSERT(false);
+        break;
     }
     return sal_False;
 }
