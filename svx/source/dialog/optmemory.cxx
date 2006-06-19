@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:47:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,10 +200,10 @@ inline void OfaMemoryOptionsPage::SetNfGraphicObjectCacheLast( long nSizeInBytes
     aNfGraphicObjectCache.SetLast( long( double( nSizeInBytes ) * BYTES2NF ) );
 }
 
-int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* pSet )
+int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -218,14 +218,15 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     aUndoEdit               ( this, ResId( ED_UNDO ) ),
     aGbGraphicCache         ( this, ResId( GB_GRAPHICCACHE ) ),
     aFtGraphicCache         ( this, ResId( FT_GRAPHICCACHE ) ),
-    aFtGraphicCacheUnit     ( this, ResId( FT_GRAPHICCACHE_UNIT         ) ),
-    aFtGraphicObjectCacheUnit(this, ResId( FT_GRAPHICOBJECTCACHE_UNIT ) ),
-    aFtGraphicObjectTimeUnit( this, ResId( FT_GRAPHICOBJECTTIME_UNIT     ) ),
     aNfGraphicCache         ( this, ResId( NF_GRAPHICCACHE ) ),
+    aFtGraphicCacheUnit     ( this, ResId( FT_GRAPHICCACHE_UNIT         ) ),
     aFtGraphicObjectCache   ( this, ResId( FT_GRAPHICOBJECTCACHE ) ),
     aNfGraphicObjectCache   ( this, ResId( NF_GRAPHICOBJECTCACHE ) ),
+    aFtGraphicObjectCacheUnit(this, ResId( FT_GRAPHICOBJECTCACHE_UNIT ) ),
     aFtGraphicObjectTime    ( this, ResId( FT_GRAPHICOBJECTTIME ) ),
     aTfGraphicObjectTime    ( this, ResId( TF_GRAPHICOBJECTTIME ) ),
+    aFtGraphicObjectTimeUnit( this, ResId( FT_GRAPHICOBJECTTIME_UNIT     ) ),
+
     aGbOLECache             ( this, ResId( GB_OLECACHE ) ),
     aFtOLECache             ( this, ResId( FT_OLECACHE ) ),
     aNfOLECache             ( this, ResId( NF_OLECACHE ) ),
@@ -337,7 +338,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, pEd )
+IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, EMPTYARG )
 {
     long    n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );
