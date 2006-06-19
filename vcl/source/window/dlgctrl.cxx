@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:01:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -965,14 +965,14 @@ Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-Window* Window::GetParentLabelFor( const Window* pLabel ) const
+Window* Window::GetParentLabelFor( const Window* ) const
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-Window* Window::GetParentLabeledBy( const Window* pLabeled ) const
+Window* Window::GetParentLabeledBy( const Window* ) const
 {
     return NULL;
 }
