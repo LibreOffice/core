@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:42:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 struct XMLTransformerEventMapEntry
 {
     sal_uInt16 m_nOASISPrefix;
-    sal_Char *m_pOASISName;
-    sal_Char *m_pOOoName;
+    const sal_Char *m_pOASISName;
+    const sal_Char *m_pOOoName;
 };
 
 extern XMLTransformerEventMapEntry aTransformerEventMap[];
