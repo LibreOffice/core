@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 13:55:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:56:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
 #ifndef _SVX_FMVWIMP_HXX
 #include "fmvwimp.hxx"
 #endif
@@ -263,9 +262,6 @@
 
 
 #define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }
-
-
-//extern SfxType0 aSfxVoidItem_Impl;
 
 #define FmFormShell
 #include "svxslots.hxx"
@@ -497,13 +493,13 @@ TYPEINIT1(FmFormShell,SfxShell)
 //------------------------------------------------------------------------
 FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)
+            ,m_pImpl(new FmXFormShell(this, _pParent->GetViewFrame()))
             ,m_pFormView( pView )
             ,m_pFormModel( NULL )
-            ,m_pImpl(new FmXFormShell(this, _pParent->GetViewFrame()))
+            ,m_pParentShell(_pParent)
             ,m_nLastSlot( 0 )
             ,m_bDesignMode( sal_True )
             ,m_bHasForms(sal_False)
-            ,m_pParentShell(_pParent)
 {
     m_pImpl->acquire();
     SetPool( &SFX_APP()->GetPool() );
@@ -860,7 +856,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
     }
 
-    sal_Bool bSortUp = sal_True;
     // Individuelle Aktionen
     switch( nSlot )
     {
