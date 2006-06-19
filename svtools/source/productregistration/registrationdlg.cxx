@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:41:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ namespace svt
     //--------------------------------------------------------------------
     RegistrationDialog::RegistrationDialog( Window* _pWindow, const ResId& _rResId, bool _bEvalVersion )
         :ModalDialog( _pWindow, _rResId )
+        ,m_eResponse        ( urRegisterLater )
         ,m_aLogo            ( this, ResId( FI_LOGO ) )
         ,m_aIntro           ( this, ResId( FT_INTRO ) )
         ,m_aNow             ( this, ResId( RB_NOW ) )
@@ -90,7 +91,6 @@ namespace svt
         ,m_aSeparator       ( this, ResId( FL_SEPARATOR ) )
         ,m_aOK              ( this, ResId( BTN_OK ) )
         ,m_aHelp            ( this, ResId( BTN_HELP ) )
-        ,m_eResponse        ( urRegisterLater )
     {
         if ( _bEvalVersion )
         {   // if we're an eval version, we need to hide two of the options
