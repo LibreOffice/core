@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubtn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:48:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 
 // =======================================================================
 
-void MenuButton::ImplInitData()
+void MenuButton::ImplInitMenuButtonData()
 {
     mnDDStyle       = PUSHBUTTON_DROPDOWN_MENUBUTTON;
 
@@ -119,7 +119,7 @@ void MenuButton::ImplExecuteMenu()
 MenuButton::MenuButton( Window* pParent, WinBits nWinBits ) :
     PushButton( WINDOW_MENUBUTTON )
 {
-    ImplInitData();
+    ImplInitMenuButtonData();
     ImplInit( pParent, nWinBits );
 }
 
@@ -128,7 +128,7 @@ MenuButton::MenuButton( Window* pParent, WinBits nWinBits ) :
 MenuButton::MenuButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_MENUBUTTON )
 {
-    ImplInitData();
+    ImplInitMenuButtonData();
     rResId.SetRT( RSC_MENUBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -199,7 +199,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
-        if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel(), 0 ) )
+        if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
         {
             if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
                 GrabFocus();
