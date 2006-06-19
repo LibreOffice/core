@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profiler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:42:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@
 
 
 TTProfiler::TTProfiler()
-: pStart( NULL )
-, pEnd( NULL )
+: mpStart( NULL )
+, mpEnd( NULL )
 , bIsProfileIntervalStarted( FALSE )
 , bIsProfilingPerCommand( FALSE )
 , bIsPartitioning( FALSE )
@@ -64,10 +64,10 @@ TTProfiler::TTProfiler()
 , pSysDepStatic( NULL )
 {
     InitSysdepProfiler();
-    pStart = new ProfileSnapshot;
-    pStart->pSysdepProfileSnapshot = NewSysdepSnapshotData();
-    pEnd = new ProfileSnapshot;
-    pEnd->pSysdepProfileSnapshot = NewSysdepSnapshotData();
+    mpStart = new ProfileSnapshot;
+    mpStart->pSysdepProfileSnapshot = NewSysdepSnapshotData();
+    mpEnd = new ProfileSnapshot;
+    mpEnd->pSysdepProfileSnapshot = NewSysdepSnapshotData();
     StartProfileInterval();
 }
 
@@ -75,19 +75,19 @@ TTProfiler::~TTProfiler()
 {
     if ( IsAutoProfiling() )
         StopAutoProfiling();
-    if ( pStart )
+    if ( mpStart )
     {
-        if ( pStart->pSysdepProfileSnapshot )
-            DeleteSysdepSnapshotData( pStart->pSysdepProfileSnapshot );
-        delete pStart;
-        pStart = NULL;
+        if ( mpStart->pSysdepProfileSnapshot )
+            DeleteSysdepSnapshotData( mpStart->pSysdepProfileSnapshot );
+        delete mpStart;
+        mpStart = NULL;
     }
-    if ( pEnd )
+    if ( mpEnd )
     {
-        if ( pEnd->pSysdepProfileSnapshot )
-            DeleteSysdepSnapshotData( pEnd->pSysdepProfileSnapshot );
-        delete pEnd;
-        pEnd = NULL;
+        if ( mpEnd->pSysdepProfileSnapshot )
+            DeleteSysdepSnapshotData( mpEnd->pSysdepProfileSnapshot );
+        delete mpEnd;
+        mpEnd = NULL;
     }
     DeinitSysdepProfiler();
 }
@@ -112,8 +112,8 @@ void TTProfiler::StartProfileInterval( BOOL bReadAnyway )
 {
     if ( !bIsProfileIntervalStarted || bReadAnyway )
     {
-        GetProfileSnapshot( pStart );
-        GetSysdepProfileSnapshot( pStart->pSysdepProfileSnapshot, PROFILE_START );
+        GetProfileSnapshot( mpStart );
+        GetSysdepProfileSnapshot( mpStart->pSysdepProfileSnapshot, PROFILE_START );
         bIsProfileIntervalStarted = TRUE;
     }
 }
@@ -147,8 +147,8 @@ String TTProfiler::GetProfileLine( String &aPrefix )
         aProfileString += TabString(35);
 
 
-        aProfileString += GetProfileLine( pStart, pEnd );
-        aProfileString += GetSysdepProfileLine( pStart->pSysdepProfileSnapshot, pEnd->pSysdepProfileSnapshot );
+        aProfileString += GetProfileLine( mpStart, mpEnd );
+        aProfileString += GetSysdepProfileLine( mpStart->pSysdepProfileSnapshot, mpEnd->pSysdepProfileSnapshot );
         aProfileString += '\n';
     }
 
@@ -158,8 +158,8 @@ String TTProfiler::GetProfileLine( String &aPrefix )
 
 void TTProfiler::EndProfileInterval()
 {
-    GetProfileSnapshot( pEnd );
-    GetSysdepProfileSnapshot( pEnd->pSysdepProfileSnapshot, PROFILE_END );
+    GetProfileSnapshot( mpEnd );
+    GetSysdepProfileSnapshot( mpEnd->pSysdepProfileSnapshot, PROFILE_END );
     bIsProfileIntervalStarted = FALSE;
 }
 
@@ -194,7 +194,7 @@ void TTProfiler::StopPartitioning()
 
 ULONG TTProfiler::GetPartitioningTime()
 {
-    return DIFF( pStart, pEnd, nSystemTicks );
+    return DIFF( mpStart, mpEnd, nSystemTicks );
 }
 
 
