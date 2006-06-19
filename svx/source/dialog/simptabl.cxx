@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simptabl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:15:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,9 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
         SvHeaderTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         aPrivContainer(pParent,nBits|WB_DIALOGCONTROL),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
+        nHeaderItemId(1),
         bResizeFlag(FALSE),
-        bPaintFlag(TRUE),
-        nHeaderItemId(1)
+        bPaintFlag(TRUE)
 {
     bSortDirection=TRUE;
     nSortCol=0xFFFF;
@@ -117,9 +117,9 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
         SvHeaderTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         aPrivContainer(pParent,rResId),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
+        nHeaderItemId(1),
         bResizeFlag(TRUE),
-        bPaintFlag(TRUE),
-        nHeaderItemId(1)
+        bPaintFlag(TRUE)
 {
 
     bSortDirection=TRUE;
@@ -288,12 +288,12 @@ void SvxSimpleTable::ClearHeader()
     aHeaderBar.Clear();
 }
 
-void SvxSimpleTable::Show()
+void SvxSimpleTable::ShowTable()
 {
     aPrivContainer.Show();
 }
 
-void SvxSimpleTable::Hide()
+void SvxSimpleTable::HideTable()
 {
     aPrivContainer.Show();
 }
@@ -303,12 +303,12 @@ BOOL SvxSimpleTable::IsVisible() const
     return aPrivContainer.IsVisible();
 }
 
-void SvxSimpleTable::Enable()
+void SvxSimpleTable::EnableTable()
 {
     aPrivContainer.Enable();
 }
 
-void SvxSimpleTable::Disable()
+void SvxSimpleTable::DisableTable()
 {
     aPrivContainer.Disable();
 }
@@ -318,7 +318,7 @@ BOOL SvxSimpleTable::IsEnabled() const
     return aPrivContainer.IsEnabled();
 }
 
-void SvxSimpleTable::ToTop()
+void SvxSimpleTable::TableToTop()
 {
     aPrivContainer.ToTop();
 }
