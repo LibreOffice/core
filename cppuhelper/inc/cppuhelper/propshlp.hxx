@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:19:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,11 +364,6 @@ public:
         OBroadcastHelper & rBHelper, bool bIgnoreRuntimeExceptionsWhileFiring );
 
     /**
-       You must call disposing before destruction.
-     */
-    ~OPropertySetHelper() SAL_THROW( () );
-
-    /**
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
@@ -571,7 +566,23 @@ protected:
 private:
     OPropertySetHelper( const OPropertySetHelper & ) SAL_THROW( () );
     OPropertySetHelper &    operator = ( const OPropertySetHelper & ) SAL_THROW( () );
+
+public:
+// Suppress warning about virtual functions but non-virtual destructor:
+#if defined __GNUC__
+#pragma GCC system_header
+#elif defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4265)
+#endif
+    /**
+       You must call disposing before destruction.
+     */
+    ~OPropertySetHelper() SAL_THROW( () );
 };
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 } // end namespace cppuhelper
 #endif  //
