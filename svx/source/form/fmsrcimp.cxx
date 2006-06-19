@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:06:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void FmRecordCountListener::DisConnect()
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL FmRecordCountListener::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
+void SAL_CALL FmRecordCountListener::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException )
 {
     DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::disposing should never have been called without a propset !");
     DisConnect();
@@ -254,7 +254,7 @@ void FmRecordCountListener::NotifyCurrentCount()
 }
 
 //------------------------------------------------------------------------
-void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
+void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& /*evt*/) throw(::com::sun::star::uno::RuntimeException)
 {
     NotifyCurrentCount();
 }
@@ -304,6 +304,7 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
     {
         case STATE_NOCHECK: return rtl::OUString::createFromAscii("0");
         case STATE_CHECK: return rtl::OUString::createFromAscii("1");
+        default: break;
     }
     return rtl::OUString();
 }
@@ -575,7 +576,6 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUStri
     // --------------------------------------------------------------
     sal_Bool bFound(sal_False);
     sal_Bool bMovedAround(sal_False);
-    ::rtl::OUString sCurrentCheck;
     do
     {
         if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
@@ -772,18 +772,27 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)//CHINA001 const Reference< XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
-    ,m_bUsingTextComponents(sal_False)
-    ,m_bFormatter(sal_False)
-    ,m_bForward(sal_False)
-    ,m_nPosition(MATCHING_ANYWHERE)
-    ,m_nTransliterationFlags(0)
-    ,m_bTransliteration(sal_False)
-    ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
-    ,m_eMode(eMode)
-    ,m_bCancelAsynchRequest(sal_False)
-    ,m_bSearchingCurrently(sal_False)
     ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
+    ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
+    ,m_bUsingTextComponents(sal_False)
+    ,m_eSearchForType(SEARCHFOR_STRING)
+    ,m_srResult(SR_FOUND)
+    ,m_bSearchingCurrently(sal_False)
+    ,m_bCancelAsynchRequest(sal_False)
+    ,m_eMode(eMode)
+    ,m_bFormatter(sal_False)
+    ,m_bForward(sal_False)
+    ,m_bWildcard(sal_False)
+    ,m_bRegular(sal_False)
+    ,m_bLevenshtein(sal_False)
+    ,m_bTransliteration(sal_False)
+    ,m_bLevRelaxed(sal_False)
+    ,m_nLevOther(0)
+    ,m_nLevShorter(0)
+    ,m_nLevLonger(0)
+    ,m_nPosition(MATCHING_ANYWHERE)
+    ,m_nTransliterationFlags(0)
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -800,20 +809,29 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)//CHINA001 const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
-    ,m_xOriginalIterator(xCursor)
-    ,m_xClonedIterator(m_xOriginalIterator, sal_True)
-    ,m_bUsingTextComponents(sal_True)
-    ,m_bFormatter(sal_True)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
-    ,m_bForward(sal_False)
-    ,m_nPosition(MATCHING_ANYWHERE)
-    ,m_nTransliterationFlags(0)
-    ,m_bTransliteration(sal_False)
-    ,m_nCurrentFieldIndex(-2)
-    ,m_eMode(eMode)
-    ,m_bCancelAsynchRequest(sal_False)
-    ,m_bSearchingCurrently(sal_False)
     ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
+    ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
+    ,m_bUsingTextComponents(sal_True)
+    ,m_xOriginalIterator(xCursor)
+    ,m_xClonedIterator(m_xOriginalIterator, sal_True)
+    ,m_eSearchForType(SEARCHFOR_STRING)
+    ,m_srResult(SR_FOUND)
+    ,m_bSearchingCurrently(sal_False)
+    ,m_bCancelAsynchRequest(sal_False)
+    ,m_eMode(eMode)
+    ,m_bFormatter(sal_True)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
+    ,m_bForward(sal_False)
+    ,m_bWildcard(sal_False)
+    ,m_bRegular(sal_False)
+    ,m_bLevenshtein(sal_False)
+    ,m_bTransliteration(sal_False)
+    ,m_bLevRelaxed(sal_False)
+    ,m_nLevOther(0)
+    ,m_nLevShorter(0)
+    ,m_nLevLonger(0)
+    ,m_nPosition(MATCHING_ANYWHERE)
+    ,m_nTransliterationFlags(0)
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -1149,7 +1167,7 @@ void FmSearchEngine::SearchNextImpl()
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, pThread)
+IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
 {
     if (!m_aProgressHandler.IsSet())
         return 0L;
