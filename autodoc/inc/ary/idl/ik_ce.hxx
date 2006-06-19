@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ik_ce.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:14:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ struct attr
     static E_SightLevel SightLevel(
                             const CodeEntity &  i_ce );
     static bool         Search_Member(
-                            const CodeEntity &  i_ce,
-                            const String &      i_memberName )
+                            const CodeEntity &  ,
+                            const String &      )
                             { return true; }    // KORR_FUTURE
 };
 
