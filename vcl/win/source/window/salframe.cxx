@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 09:55:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -852,47 +852,6 @@ static UINT ImplSalGetWheelScrollChars()
 
 // -----------------------------------------------------------------------
 
-static void ImplSalCalcBorder( const WinSalFrame* pFrame,
-                               int& rLeft, int& rTop, int& rRight, int& rBottom )
-{
-    // set window to screen size
-
-    int nFrameX;
-    int nFrameY;
-    int nCaptionY;
-
-    if ( pFrame->mbSizeBorder )
-    {
-        nFrameX = GetSystemMetrics( SM_CXSIZEFRAME );
-        nFrameY = GetSystemMetrics( SM_CYSIZEFRAME );
-    }
-    else if ( pFrame->mbFixBorder )
-    {
-        nFrameX = GetSystemMetrics( SM_CXFIXEDFRAME );
-        nFrameY = GetSystemMetrics( SM_CYFIXEDFRAME );
-    }
-    else if ( pFrame->mbBorder )
-    {
-        nFrameX = GetSystemMetrics( SM_CXBORDER );
-        nFrameY = GetSystemMetrics( SM_CYBORDER );
-    }
-    else
-    {
-        nFrameX = 0;
-        nFrameY = 0;
-    }
-    if ( pFrame->mbCaption )
-        nCaptionY = GetSystemMetrics( SM_CYCAPTION );
-    else
-        nCaptionY = 0;
-
-    rLeft   = nFrameX;
-    rTop    = nFrameY+nCaptionY;
-    rRight  = nFrameX;
-    rBottom = nFrameY;
-}
-
-
 static void ImplSalAddBorder( const WinSalFrame* pFrame, int& width, int& height )
 {
     // transform client size into window size
@@ -1372,7 +1331,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
 // -----------------------------------------------------------------------
 
 
-void WinSalFrame::SetExtendedFrameStyle( SalExtStyle nExtStyle )
+void WinSalFrame::SetExtendedFrameStyle( SalExtStyle )
 {
 }
 
@@ -1665,7 +1624,10 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
     HPEN    hPen    = NULL;
     HBRUSH  hBrush  = NULL;
 
+    #if OSL_DEBUG_LEVEL > 0
     int oldCount = pSalData->mnCacheDCInUse;
+    (void)oldCount;
+    #endif
 
     // Release Cache DC
     if ( pThis->mpGraphics2 &&
@@ -2584,19 +2546,19 @@ XubString WinSalFrame::GetKeyName( USHORT nKeyCode )
         aFBuf[0] = 'F';
         if ( (nCode >= KEY_F1) && (nCode <= KEY_F9) )
         {
-            aFBuf[1] = '1' + (nCode - KEY_F1);
+            aFBuf[1] = sal::static_int_cast<sal_Char>('1' + (nCode - KEY_F1));
             aFBuf[2] = 0;
         }
         else if ( (nCode >= KEY_F10) && (nCode <= KEY_F19) )
         {
             aFBuf[1] = '1';
-            aFBuf[2] = '0' + (nCode - KEY_F10);
+            aFBuf[2] = sal::static_int_cast<sal_Char>('0' + (nCode - KEY_F10));
             aFBuf[3] = 0;
         }
         else
         {
             aFBuf[1] = '2';
-            aFBuf[2] = '0' + (nCode - KEY_F20);
+            aFBuf[2] = sal::static_int_cast<sal_Char>('0' + (nCode - KEY_F20));
             aFBuf[3] = 0;
         }
         pReplace = aFBuf;
@@ -2727,7 +2689,7 @@ XubString WinSalFrame::GetKeyName( USHORT nKeyCode )
     if( !nKeyBufLen )
         return XubString();
 
-    return XubString( aKeyBuf, nKeyBufLen );
+    return XubString( aKeyBuf, sal::static_int_cast< USHORT >(nKeyBufLen) );
 }
 
 // -----------------------------------------------------------------------
@@ -2845,7 +2807,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
     // TODO: once those options vanish: just set bCompBorder to TRUE
     // to have the system colors read
-    int menubarheight = GetSystemMetrics( SM_CYMENU );
     aStyleSettings.SetScrollBarSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
     aStyleSettings.SetSpinSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
@@ -3077,7 +3038,7 @@ SalBitmap* WinSalFrame::SnapShot()
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
     BOOL    bRet;
 
-    bRet = BitBlt( hBmpDC, 0, 0, nDX, nDY, hDC, 0, 0, SRCCOPY );
+    bRet = BitBlt( hBmpDC, 0, 0, nDX, nDY, hDC, 0, 0, SRCCOPY ) ? TRUE : FALSE;
     ImplReleaseCachedDC( CACHED_HDC_1 );
 
     if ( bRet )
@@ -3173,7 +3134,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     }
     SalMouseEvent   aMouseEvt;
     long            nRet;
-    USHORT          nEvent;
+    USHORT          nEvent = 0;
     BOOL            bCall = TRUE;
 
     aMouseEvt.mnX       = (short)LOWORD( lParam );
@@ -3631,11 +3592,11 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         SalKeyEvent aKeyEvt;
 
         if ( (wParam >= '0') && (wParam <= '9') )
-            aKeyEvt.mnCode = KEYGROUP_NUM + wParam - '0';
+            aKeyEvt.mnCode = sal::static_int_cast<USHORT>(KEYGROUP_NUM + wParam - '0');
         else if ( (wParam >= 'A') && (wParam <= 'Z') )
-            aKeyEvt.mnCode = KEYGROUP_ALPHA + wParam - 'A';
+            aKeyEvt.mnCode = sal::static_int_cast<USHORT>(KEYGROUP_ALPHA + wParam - 'A');
         else if ( (wParam >= 'a') && (wParam <= 'z') )
-            aKeyEvt.mnCode = KEYGROUP_ALPHA + wParam - 'a';
+            aKeyEvt.mnCode = sal::static_int_cast<USHORT>(KEYGROUP_ALPHA + wParam - 'a');
         else if ( wParam == 0x0D )    // RETURN
             aKeyEvt.mnCode = KEY_RETURN;
         else if ( wParam == 0x1B )    // ESCAPE
@@ -3675,10 +3636,10 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         if( wParam >= Uni_SupplementaryPlanesStart )
         {
             // character is supplementary char in UTF-32 format - must be converted to UTF-16 supplementary pair
-            sal_Unicode ch = (sal_Unicode) Uni_UTF32ToSurrogate1(wParam);
+            // sal_Unicode ch = (sal_Unicode) Uni_UTF32ToSurrogate1(wParam);
              nLastChar = 0;
              nLastVKChar = 0;
-             long nRet = pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
+             pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
              pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
             wParam = (sal_Unicode) Uni_UTF32ToSurrogate2( wParam );
          }
@@ -3744,6 +3705,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             BOOL            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
             nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
+            aKeyEvt.mnCharCode = 0;
+            aKeyEvt.mnCode = 0;
 
             aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
             if ( !bKeyUp )
@@ -3805,7 +3768,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
-                bIgnoreCharMsg = bCharPeek;
+                bIgnoreCharMsg = bCharPeek ? TRUE : FALSE;
                 long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 // independent part only reacts on keyup but Windows does not send
                 // keyup for VK_HANJA
@@ -4672,7 +4635,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
     return -1;
 }
 
-static int ImplMenuChar( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
 {
     int nRet = MNC_IGNORE;
     HMENU hMenu = (HMENU) lParam;
@@ -4768,7 +4731,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
     return nRet;
 }
 
-static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
+static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 {
     int nRet = 0;
     DWORD err = 0;
@@ -4787,9 +4750,9 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
         COLORREF clrPrevText, clrPrevBkgnd;
         HFONT hfntOld;
         HBRUSH hbrOld;
-        BOOL    fChecked = pDI->itemState & ODS_CHECKED;
-        BOOL    fSelected = pDI->itemState & ODS_SELECTED;
-        BOOL    fDisabled = pDI->itemState & (ODS_DISABLED | ODS_GRAYED);
+        BOOL    fChecked = (pDI->itemState & ODS_CHECKED) ? TRUE : FALSE;
+        BOOL    fSelected = (pDI->itemState & ODS_SELECTED) ? TRUE : FALSE;
+        BOOL    fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED)) ? TRUE : FALSE;
 
         // Set the appropriate foreground and background colors.
         RECT aRect = pDI->rcItem;
@@ -4924,7 +4887,7 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
     return nRet;
 }
 
-static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM )
 {
     // Menu activation
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -4932,8 +4895,8 @@ static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM lParam )
         return 0;
 
     HMENU hMenu = (HMENU) wParam;
-    WORD nPos = LOWORD (lParam);
-    BOOL bWindowMenu = (BOOL) HIWORD(lParam);
+    // WORD nPos = LOWORD (lParam);
+    // BOOL bWindowMenu = (BOOL) HIWORD(lParam);
 
     // Send activate and deactivate together, so we have not keep track of opened menues
     // this will be enough to have the menues updated correctly
@@ -5014,7 +4977,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
             mi.cbSize = sizeof( mi );
             mi.fMask = MIIM_ID;
             if( GetMenuItemInfoW( hMenu, LOWORD(wParam), TRUE, &mi) )
-                nId = mi.wID;
+                nId = sal::static_int_cast<WORD>(mi.wID);
         }
 
         SalMenuEvent aMenuEvt;
@@ -5031,13 +4994,12 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     return (nRet != 0);
 }
 
-static int ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static int ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
         return 0;
 
-    DWORD err=0;
     long nRet = 0;
     if( !HIWORD(wParam) )
     {
@@ -5165,7 +5127,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
 {
     ImplSalYieldMutexAcquireWithWait();
 
@@ -5173,7 +5135,6 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame && pFrame->mbIME && pFrame->mhDefIMEContext )
     {
-        HWND    hWnd = pFrame->mhWnd;
         HKL     hKL = (HKL)lParam;
         UINT    nImeProps = ImmGetProperty( hKL, IGP_PROPERTY );
 
