@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:40:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:50:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,7 @@ namespace vcl_sal {
 
     String getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
     {
-        for( int n = 0; n < sizeof(aKeyboards)/sizeof(aKeyboards[0]); n++ )
+        for( unsigned int n = 0; n < sizeof(aKeyboards)/sizeof(aKeyboards[0]); n++ )
         {
             if( ! strncasecmp( pKeyboard, aKeyboards[n].pKeyboardName, strlen( aKeyboards[n].pKeyboardName ) ) )
             {
