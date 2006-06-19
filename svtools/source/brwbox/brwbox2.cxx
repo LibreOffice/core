@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,13 @@ using namespace ::com::sun::star::datatransfer;
 
 //===================================================================
 
-DBG_NAMEEX(BrowseBox);
+DBG_NAMEEX(BrowseBox)
 
 //===================================================================
 
 extern const char* BrowseBoxCheckInvariants( const void * pVoid );
 
-DECLARE_LIST( BrowserColumns, BrowserColumn* );
+DECLARE_LIST( BrowserColumns, BrowserColumn* )
 
 //===================================================================
 
@@ -103,7 +103,7 @@ sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
 //===================================================================
 
-sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
+sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
@@ -112,7 +112,7 @@ sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 
 //===================================================================
 
-sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
+sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
@@ -291,7 +291,7 @@ void BrowseBox::RowHeightChanged()
 
 //-------------------------------------------------------------------
 
-long BrowseBox::QueryColumnResize( USHORT nId, long nWidth )
+long BrowseBox::QueryColumnResize( USHORT, long nWidth )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     return nWidth;
@@ -299,14 +299,14 @@ long BrowseBox::QueryColumnResize( USHORT nId, long nWidth )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::ColumnResized( USHORT nId )
+void BrowseBox::ColumnResized( USHORT )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 //-------------------------------------------------------------------
 
-void BrowseBox::ColumnMoved( USHORT nId )
+void BrowseBox::ColumnMoved( USHORT )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
@@ -420,7 +420,6 @@ void BrowseBox::ToggleSelection( BOOL bForce )
 
 void BrowseBox::DrawCursor()
 {
-    short nCursorHideCount = GetCursorHideCount();
     BOOL bReallyHide = FALSE;
     if ( SMART_CURSOR_HIDE == bHideCursor )
     {
@@ -787,7 +786,7 @@ void BrowseBox::Paint( const Rectangle& rRect )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::PaintRow( OutputDevice &rDev, const Rectangle &rRect )
+void BrowseBox::PaintRow( OutputDevice&, const Rectangle& )
 {
 }
 
@@ -971,14 +970,13 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     {
         // get row
         // Zur Sicherheit auf zul"assigen Bereich abfragen:
-        DBG_ASSERT( (USHORT)(nTopRow+nRelRow) >= 0 && (USHORT)(nTopRow+nRelRow) < nRowCount,
-                    "BrowseBox::ImplPaintData: invalid seek" );
-        if ( (nTopRow+nRelRow) < 0 || (USHORT)(nTopRow+nRelRow) >= nRowCount )
+        DBG_ASSERT( (USHORT)(nTopRow+nRelRow) < nRowCount, "BrowseBox::ImplPaintData: invalid seek" );
+        if ( (nTopRow+long(nRelRow)) < 0 || (USHORT)(nTopRow+nRelRow) >= nRowCount )
             continue;
 
         // prepare row
-        ULONG nCurRow = nTopRow+nRelRow;
-        if ( !SeekRow( nCurRow) )
+        ULONG nRow = nTopRow+nRelRow;
+        if ( !SeekRow( nRow) )
             DBG_ERROR("BrowseBox::ImplPaintData: SeekRow gescheitert");
         _rOut.SetClipRegion();
         aPos.X() = aOverallAreaPos.X();
@@ -993,7 +991,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
         BOOL bRowAutoHighlight  =   _bDrawSelections
                                 &&  !bHideSelect
                                 &&  ((BrowserDataWin&)GetDataWindow()).bHighlightAuto
-                                &&  IsRowSelected( nCurRow );
+                                &&  IsRowSelected( nRow );
         if ( bRowAutoHighlight )
         {
             _rOut.SetTextColor( rHighlightTextColor );
@@ -1041,7 +1039,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                 _rOut.DrawRect( aFieldRect );
             }
 
-            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nCurRow == (ULONG)GetCurRow()))
+            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == (ULONG)GetCurRow()))
                 DrawCursor();
 
             // draw a single field
@@ -1100,7 +1098,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             // draw horizontal delimitation lines
             _rOut.SetClipRegion();
             Color aOldColor = _rOut.GetLineColor();
-            _rOut.SetLineColor( aLineColor );
+            _rOut.SetLineColor( aGridLineColor );
             long nY = aPos.Y() + nDataRowHeigt - 1;
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
@@ -1144,7 +1142,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     // draw vertical delimitational lines?
     if ( bVLines )
     {
-        _rOut.SetLineColor( aLineColor );
+        _rOut.SetLineColor( aGridLineColor );
         Point aVertPos( aOverallAreaPos.X() - 1, aOverallAreaPos.Y() );
         long nDeltaY = aOverallAreaBRPos.Y();
         for ( USHORT nCol = 0; nCol < pCols->Count(); ++nCol )
@@ -1376,24 +1374,6 @@ void BrowseBox::UpdateScrollbars()
 
 //-------------------------------------------------------------------
 
-void BrowseBox::Invalidate()
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    // readjust cursor and selection
-    if ( bMultiSelection )
-        uRow.pSel->SetTotalRange( Range( 0, nRowCount-1 ) );
-    else
-        uRow.nSel = Min( uRow.nSel, (long)(nRowCount-1) );
-    nCurRow = Min( nCurRow, (long)(nRowCount-1 ));
-
-    // BowseBox::Resize(); if Size not set, last Culumn will be cuttet ?!?
-    Control::Invalidate(INVALIDATE_NOCHILDREN /*OV*/ );
-    getDataWindow()->Invalidate();
-}
-
-//-------------------------------------------------------------------
-
 void BrowseBox::SetUpdateMode( BOOL bUpdate )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -1496,7 +1476,7 @@ IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
 
 //-------------------------------------------------------------------
 
-IMPL_LINK( BrowseBox,EndScrollHdl,ScrollBar*, pBar )
+IMPL_LINK( BrowseBox,EndScrollHdl,ScrollBar*, EMPTYARG )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -1830,7 +1810,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::MouseMove( const BrowserMouseEvent &rEvt )
+void BrowseBox::MouseMove( const BrowserMouseEvent& )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
@@ -1991,8 +1971,8 @@ void BrowseBox::Dispatch( USHORT nId )
             if ( GetRowCount() )
             {
                 DoHideCursor( "BROWSER_SELECTEND" );
-                long nRowCount = GetRowCount();
-                for ( long nRow = GetCurRow(); nRow < nRowCount; ++nRow )
+                long nRows = GetRowCount();
+                for ( long nRow = GetCurRow(); nRow < nRows; ++nRow )
                     SelectRow( nRow );
                 GoToRow( GetRowCount() - 1, TRUE );
                 DoShowCursor( "BROWSER_SELECTEND" );
@@ -2004,10 +1984,10 @@ void BrowseBox::Dispatch( USHORT nId )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row above
-                long nCurRow = GetCurRow();
-                BOOL bLocalSelect = ( !IsRowSelected( nCurRow ) ||
-                                 GetSelectRowCount() == 1 || IsRowSelected( nCurRow - 1 ) );
-                SelectRow( nCurRow, bLocalSelect, TRUE );
+                long nRow = GetCurRow();
+                BOOL bLocalSelect = ( !IsRowSelected( nRow ) ||
+                                 GetSelectRowCount() == 1 || IsRowSelected( nRow - 1 ) );
+                SelectRow( nRow, bLocalSelect, TRUE );
                 bDone = GoToRow( GetCurRow() + 1 , FALSE );
                 if ( bDone )
                     SelectRow( GetCurRow(), TRUE, TRUE );
@@ -2021,11 +2001,11 @@ void BrowseBox::Dispatch( USHORT nId )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row under
-                long nCurRow = GetCurRow();
-                BOOL bLocalSelect = ( !IsRowSelected( nCurRow ) ||
-                                 GetSelectRowCount() == 1 || IsRowSelected( nCurRow + 1 ) );
+                long nRow = GetCurRow();
+                BOOL bLocalSelect = ( !IsRowSelected( nRow ) ||
+                                 GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
                 SelectRow( nCurRow, bLocalSelect, TRUE );
-                if ( bDone = GoToRow( nCurRow - 1 , FALSE ) )
+                if ( bDone = GoToRow( nRow - 1 , FALSE ) )
                     SelectRow( GetCurRow(), TRUE, TRUE );
             }
             break;
