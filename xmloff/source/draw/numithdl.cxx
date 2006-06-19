@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numithdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:46:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:10:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,12 @@ sal_Bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) con
     return mxNumRuleCompare.is() && mxNumRuleCompare->compare( r1, r2 ) == 0;
 }
 
-sal_Bool XMLNumRulePropHdl::importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLNumRulePropHdl::importXML( const ::rtl::OUString& /*rStrImpValue*/, ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return sal_False;
 }
 
-sal_Bool XMLNumRulePropHdl::exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLNumRulePropHdl::exportXML( ::rtl::OUString& /*rStrExpValue*/, const ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return sal_False;
 }
