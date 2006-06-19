@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:51:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,9 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
 
     uno_Sequence ** ppSeq = (uno_Sequence **)rArray.getValue();
     uno_sequence_realloc( ppSeq, (typelib_TypeDescription *)getTypeDescr(),
-                          nLen, cpp_acquire, cpp_release );
+                          nLen,
+                          reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                          reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     rArray.pData = ppSeq;
 }
 //__________________________________________________________________________________________________
@@ -162,9 +164,10 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     Any aRet;
     typelib_TypeDescription * pElemTypeDescr = 0;
     TYPELIB_DANGER_GET( &pElemTypeDescr, getTypeDescr()->pType );
-    uno_any_destruct( &aRet, cpp_release );
+    uno_any_destruct( &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     uno_any_construct( &aRet, &pSeq->elements[nIndex * pElemTypeDescr->nSize],
-                       pElemTypeDescr, cpp_acquire );
+                       pElemTypeDescr,
+                       reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
     TYPELIB_DANGER_RELEASE( pElemTypeDescr );
     return aRet;
 }
@@ -190,7 +193,10 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     }
 
     uno_Sequence ** ppSeq = (uno_Sequence **)rArray.getValue();
-    uno_sequence_reference2One( ppSeq, (typelib_TypeDescription *)getTypeDescr(), cpp_acquire, cpp_release );
+    uno_sequence_reference2One(
+        ppSeq, (typelib_TypeDescription *)getTypeDescr(),
+        reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+        reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     rArray.pData = ppSeq;
     pSeq = *ppSeq;
 
