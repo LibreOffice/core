@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:11:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,13 @@ public:
 
     /// Called from the weak object if the reference count goes to zero.
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-protected:
+
+private:
+    OWeakConnectionPoint(OWeakConnectionPoint &); // not defined
+    void operator =(OWeakConnectionPoint &); // not defined
+
+    virtual ~OWeakConnectionPoint() {}
+
     /// The reference counter.
     oslInterlockedCount         m_aRefCount;
     /// The weak object
@@ -325,7 +331,7 @@ public:
     OWeakRefListener() SAL_THROW( () );
     OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () );
     OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () );
-    ~OWeakRefListener() SAL_THROW( () );
+    virtual ~OWeakRefListener() SAL_THROW( () );
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException);
@@ -350,7 +356,8 @@ OWeakRefListener::OWeakRefListener() SAL_THROW( () )
 }
 
 OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () )
-    : m_aRefCount( 1 )
+    : com::sun::star::uno::XReference()
+    , m_aRefCount( 1 )
 {
     try
     {
