@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:45:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,8 +277,8 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,USHORT _nPos ) :
     mrParent( rParent )
     ,mnId( _nPos )
-    ,m_pParent(_pParent)
     ,m_pItem(NULL)
+    ,m_pParent(_pParent)
 {
 }
 // -----------------------------------------------------------------------
@@ -546,22 +546,22 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumnCount(  ) throw (Runtim
     return COLUMN_COUNT;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleRowDescription( sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException)
+::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleRowDescription( sal_Int32 /*nRow*/ ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleColumnDescription( sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
+::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleColumnDescription( sal_Int32 /*nColumn*/ ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRowExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return 1;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumnExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return 1;
 }
@@ -699,11 +699,10 @@ sal_Int32 SAL_CALL SvxShowCharSetItemAcc::getAccessibleChildCount()
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleChild( sal_Int32 i )
+uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleChild( sal_Int32 /*i*/ )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException();
-    return uno::Reference< accessibility::XAccessible >();
 }
 
 // -----------------------------------------------------------------------------
@@ -843,7 +842,7 @@ awt::Rectangle SAL_CALL SvxShowCharSetItemAcc::implGetBounds(  ) throw (RuntimeE
     return aRet;
 }
 // -----------------------------------------------------------------------------
-uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
     throw (uno::RuntimeException)
 {
     return uno::Reference< accessibility::XAccessible >();
