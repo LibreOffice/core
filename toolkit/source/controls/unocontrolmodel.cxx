@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:26:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:05:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ public:
     void                                SetValue( const ::com::sun::star::uno::Any& rValue )    { aValue = rValue; }
 };
 
-DECLARE_TABLE( ImplPropertyTable, ImplControlProperty* );
+DECLARE_TABLE( ImplPropertyTable, ImplControlProperty* )
 
 #define UNOCONTROL_STREAMVERSION    (short)2
 
@@ -219,48 +219,6 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
     }
 }
 
-static void lcl_determineChangedFontProperties( const FontDescriptor& _rOld, const FontDescriptor& _rNew,
-    Sequence< sal_Int32 >& _out_rHandles, Sequence< Any >& _out_rOldValues, Sequence< Any >& _out_rNewValues )
-{
-    _out_rHandles.realloc( 16 ); _out_rOldValues.realloc( 16 ); _out_rNewValues.realloc( 16 );
-    sal_Int32* pHandles = _out_rHandles.getArray();
-    Any* pOldValues = _out_rOldValues.getArray();
-    Any* pNewValues = _out_rNewValues.getArray();
-
-#define COMPARE_AND_PUT( member, id ) \
-    if ( _rOld.member != _rNew.member ) \
-    { \
-        *pHandles++ = id; \
-        *pOldValues++ <<= _rOld.member; \
-        *pNewValues++ <<= _rNew.member; \
-    }
-
-#define COMPARE_AND_PUT_CAST( member, id, type ) \
-    if ( _rOld.member != _rNew.member ) \
-    { \
-        *pHandles++ = id; \
-        *pOldValues++ <<= (type)_rOld.member; \
-        *pNewValues++ <<= (type)_rNew.member; \
-    }
-
-    COMPARE_AND_PUT     ( Name,             BASEPROPERTY_FONTDESCRIPTORPART_NAME );
-    COMPARE_AND_PUT     ( StyleName,        BASEPROPERTY_FONTDESCRIPTORPART_STYLENAME );
-    COMPARE_AND_PUT     ( Family,           BASEPROPERTY_FONTDESCRIPTORPART_FAMILY );
-    COMPARE_AND_PUT     ( CharSet,          BASEPROPERTY_FONTDESCRIPTORPART_CHARSET );
-    COMPARE_AND_PUT_CAST( Height,           BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT, float );
-    COMPARE_AND_PUT     ( Weight,           BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT );
-    COMPARE_AND_PUT_CAST( Slant,            BASEPROPERTY_FONTDESCRIPTORPART_SLANT, sal_Int16 );
-    COMPARE_AND_PUT     ( Underline,        BASEPROPERTY_FONTDESCRIPTORPART_UNDERLINE );
-    COMPARE_AND_PUT     ( Strikeout,        BASEPROPERTY_FONTDESCRIPTORPART_STRIKEOUT );
-    COMPARE_AND_PUT     ( Width,            BASEPROPERTY_FONTDESCRIPTORPART_WIDTH );
-    COMPARE_AND_PUT     ( Pitch,            BASEPROPERTY_FONTDESCRIPTORPART_PITCH );
-    COMPARE_AND_PUT     ( CharacterWidth,   BASEPROPERTY_FONTDESCRIPTORPART_CHARWIDTH );
-    COMPARE_AND_PUT     ( Orientation,      BASEPROPERTY_FONTDESCRIPTORPART_ORIENTATION );
-    COMPARE_AND_PUT     ( Kerning,          BASEPROPERTY_FONTDESCRIPTORPART_KERNING );
-    COMPARE_AND_PUT     ( WordLineMode,     BASEPROPERTY_FONTDESCRIPTORPART_WORDLINEMODE );
-    COMPARE_AND_PUT     ( Type,             BASEPROPERTY_FONTDESCRIPTORPART_TYPE );
-}
-
 //  ----------------------------------------------------
 //  class UnoControlModel
 //  ----------------------------------------------------
@@ -273,7 +231,18 @@ UnoControlModel::UnoControlModel()
 }
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
-    : OPropertySetHelper( BrdcstHelper ), maDisposeListeners( *this )
+    : XControlModel()
+    , XPropertyState()
+    , XPersistObject()
+    , XComponent()
+    , XServiceInfo()
+    , XTypeProvider()
+    , XUnoTunnel()
+    , XCloneable()
+    , MutexAndBroadcastHelper()
+    , OPropertySetHelper( BrdcstHelper )
+    , OWeakAggObject()
+    , maDisposeListeners( *this )
 {
     mpData = new ImplPropertyTable;
 
@@ -316,7 +285,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
     return mpData->Get( nPropId ) ? sal_True : sal_False;
 }
 
-void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
+void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
 {
 }
 
@@ -685,10 +654,10 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
     OutStream->writeShort( UNOCONTROL_STREAMVERSION );
 
     ImplPropertyTable aProps;
-    sal_uInt32 n;
-    for ( n = mpData->Count(); n; )
+    sal_uInt32 i;
+    for ( i = mpData->Count(); i; )
     {
-        ImplControlProperty* pProp = mpData->GetObject( --n );
+        ImplControlProperty* pProp = mpData->GetObject( --i );
         if ( ( ( GetPropertyAttribs( pProp->GetId() ) & ::com::sun::star::beans::PropertyAttribute::TRANSIENT ) == 0 )
             && ( getPropertyState( GetPropertyName( pProp->GetId() ) ) != ::com::sun::star::beans::PropertyState_DEFAULT_VALUE ) )
         {
@@ -701,12 +670,12 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
     // FontProperty wegen fehlender Unterscheidung zwischen 5.0 / 5.1
     // immer im alten Format mitspeichern.
     OutStream->writeLong( (long) aProps.IsKeyValid( BASEPROPERTY_FONTDESCRIPTOR ) ? ( nProps + 3 ) : nProps );
-    for ( n = 0; n < nProps; n++ )
+    for ( i = 0; i < nProps; i++ )
     {
         sal_Int32 nPropDataBeginMark = xMark->createMark();
         OutStream->writeLong( 0L ); // DataLen
 
-        ImplControlProperty* pProp = aProps.GetObject( n );
+        ImplControlProperty* pProp = aProps.GetObject( i );
         OutStream->writeShort( pProp->GetId() );
 
         sal_Bool bVoid = pProp->GetValue().getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -909,8 +878,8 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     // Fuer den Import der alten ::com::sun::star::awt::FontDescriptor-Teile
     ::com::sun::star::awt::FontDescriptor* pFD = NULL;
 
-    sal_uInt32 n;
-    for ( n = 0; n < nProps; n++ )
+    sal_uInt32 i;
+    for ( i = 0; i < nProps; i++ )
     {
         sal_Int32 nPropDataBeginMark = xMark->createMark();
         sal_Int32 nPropDataLen = InStream->readLong();
@@ -1103,8 +1072,8 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 
         if ( mpData->Get( nPropId ) )
         {
-            aProps.getArray()[n] = GetPropertyName( nPropId );
-            aValues.getArray()[n] = aValue;
+            aProps.getArray()[i] = GetPropertyName( nPropId );
+            aValues.getArray()[i] = aValue;
         }
         else
         {
@@ -1118,13 +1087,13 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     }
     if ( bInvalidEntries )
     {
-        for ( n = 0; n < (sal_uInt32)aProps.getLength(); n++ )
+        for ( i = 0; i < (sal_uInt32)aProps.getLength(); i++ )
         {
-            if ( !aProps.getConstArray()[n].getLength() )
+            if ( !aProps.getConstArray()[i].getLength() )
             {
-                ::comphelper::removeElementAt( aProps, n );
-                ::comphelper::removeElementAt( aValues, n );
-                n--;
+                ::comphelper::removeElementAt( aProps, i );
+                ::comphelper::removeElementAt( aValues, i );
+                i--;
             }
         }
     }
@@ -1285,6 +1254,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                             rConvertedValue = ::cppu::int2enum( nValue, *pDestType );
                     }
                     break;
+                    default: ; // avoid compiler warning
                 }
 
                 if (!bConverted)
@@ -1313,9 +1283,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
     ImplControlProperty* pProp = mpData->Get( nPropId );
     if ( pProp )
     {
-        sal_Bool bVoid = rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
-
-        DBG_ASSERT( !bVoid || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & ::com::sun::star::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
+        DBG_ASSERT( ( rValue.getValueType().getTypeClass() != ::com::sun::star::uno::TypeClass_VOID ) || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & ::com::sun::star::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
         ImplPropertyChanged( (sal_uInt16)nPropId );
         pProp->SetValue( rValue );
     }
@@ -1501,8 +1469,8 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
 
 
-void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
-    uno::Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
+void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*,
+    uno::Any*, sal_Int32* ) const SAL_THROW(())
 {
     // nothing to do here
 }
