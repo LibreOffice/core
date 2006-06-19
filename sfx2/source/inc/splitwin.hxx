@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:12:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ public:
                             bLocked = bLock;
                             SetUpdateMode( !bLock );
                         }
+        using Window::IsLocked;
     BOOL                IsLocked() const { return bLocked; }
     BOOL                GetWindowPos( const SfxDockingWindow* pWindow,
                                       USHORT& rLine, USHORT& rPos ) const;
