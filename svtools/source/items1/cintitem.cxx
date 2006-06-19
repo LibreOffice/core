@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cintitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:05:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,14 @@
 //
 //============================================================================
 
-DBG_NAME(CntByteItem);
+DBG_NAME(CntByteItem)
 
 //============================================================================
 TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
 
 //============================================================================
-CntByteItem::CntByteItem(USHORT nWhich, SvStream & rStream):
-    SfxPoolItem(nWhich)
+CntByteItem::CntByteItem(USHORT which, SvStream & rStream):
+    SfxPoolItem(which)
 {
     DBG_CTOR(CntByteItem, 0);
     rStream >> m_nValue;
@@ -101,8 +101,7 @@ SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId) const
+BOOL CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int8 nValue = m_nValue;
     rVal <<= nValue;
@@ -111,8 +110,7 @@ BOOL CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL CntByteItem::PutValue(const com::sun::star::uno::Any& rVal,
-                           BYTE nMemberId)
+BOOL CntByteItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int8 nValue;
     if (rVal >>= nValue)
@@ -188,8 +186,8 @@ DBG_NAME(CntUInt16Item);
 TYPEINIT1_AUTOFACTORY(CntUInt16Item, SfxPoolItem);
 
 //============================================================================
-CntUInt16Item::CntUInt16Item(USHORT nWhich, SvStream & rStream) :
-    SfxPoolItem(nWhich)
+CntUInt16Item::CntUInt16Item(USHORT which, SvStream & rStream) :
+    SfxPoolItem(which)
 {
     DBG_CTOR(CntUInt16Item, 0);
     USHORT nTheValue = 0;
@@ -238,8 +236,7 @@ SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,
-                               BYTE nMemberId) const
+BOOL CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -248,8 +245,7 @@ BOOL CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId)
+BOOL CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue;
     if (rVal >>= nValue)
@@ -324,8 +320,8 @@ DBG_NAME(CntInt32Item);
 TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
 
 //============================================================================
-CntInt32Item::CntInt32Item(USHORT nWhich, SvStream & rStream) :
-    SfxPoolItem(nWhich)
+CntInt32Item::CntInt32Item(USHORT which, SvStream & rStream) :
+    SfxPoolItem(which)
 {
     DBG_CTOR(CntInt32Item, 0);
     long nTheValue = 0;
@@ -372,8 +368,7 @@ SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,
-                              BYTE nMemberId) const
+BOOL CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -382,8 +377,7 @@ BOOL CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId)
+BOOL CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue;
     if (rVal >>= nValue)
@@ -457,8 +451,8 @@ DBG_NAME(CntUInt32Item);
 TYPEINIT1_AUTOFACTORY(CntUInt32Item, SfxPoolItem);
 
 //============================================================================
-CntUInt32Item::CntUInt32Item(USHORT nWhich, SvStream & rStream) :
-    SfxPoolItem(nWhich)
+CntUInt32Item::CntUInt32Item(USHORT which, SvStream & rStream) :
+    SfxPoolItem(which)
 {
     DBG_CTOR(CntUInt32Item, 0);
     sal_uInt32 nTheValue = 0;
@@ -507,8 +501,7 @@ SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,
-                               BYTE nMemberId) const
+BOOL CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
@@ -518,8 +511,7 @@ BOOL CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId)
+BOOL CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue;
     if (rVal >>= nValue)
