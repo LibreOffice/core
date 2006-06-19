@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:26:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #ifndef _SBX_HXX //autogen
 #include <basic/sbx.hxx>
 #endif
-#pragma hdrstop
 
 #include <svtools/eitem.hxx>
 
@@ -198,9 +197,9 @@ SfxProgress::SfxProgress
     Fortschritts-Anzeige angezeigt.
 */
 
-:   nVal(0),
-    bSuspended(TRUE),
-    pImp( new SfxProgress_Impl( rText ) )
+:   pImp( new SfxProgress_Impl( rText ) ),
+    nVal(0),
+    bSuspended(TRUE)
 {
     pImp->bRunning = TRUE;
     pImp->bAllowRescheduling = Application::IsInExecute();;
@@ -306,7 +305,7 @@ void SfxProgress::Stop()
 
 void SfxProgress::SetText
 (
-    const String&   rText   /*  neuer Text */
+    const String&   /*  neuer Text */
 )
 
 /*  [Beschreibung]
@@ -357,7 +356,7 @@ IMPL_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus*, pStatus )
 // muss in AppDaten
 static ULONG nLastTime = 0;
 
-long TimeOut_Impl( void* pThis, void* pArgV )
+long TimeOut_Impl( void*, void* pArgV )
 {
     Timer *pArg = (Timer*)pArgV;
     if( Time::GetSystemTicks() - nLastTime > 3000 )
@@ -520,7 +519,6 @@ void SfxProgress::Resume()
             }
         }
 
-        SfxBindings *pBindings = 0;
         if ( pImp->xObjSh )
         {
             SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImp->xObjSh);
@@ -564,7 +562,6 @@ void SfxProgress::Suspend()
                     pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
                 pFrame->GetWindow().LeaveWait();
         }
-        SfxBindings *pBindings = 0;
         if ( pImp->xObjSh.Is() )
         {
             SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImp->xObjSh);
@@ -786,7 +783,7 @@ void SfxProgress::LeaveLock()
 
 FASTBOOL SfxProgress::StatusBarManagerGone_Impl
 (
-    SfxStatusBarManager *pStb   // dieser <SfxStatusBarManager> wird zerst"ort
+    SfxStatusBarManager *   // dieser <SfxStatusBarManager> wird zerst"ort
 )
 
 /*  [Beschreibung]
