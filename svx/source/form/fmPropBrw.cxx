@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-17 08:56:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,16 +152,16 @@ using ::com::sun::star::awt::XWindow;
 SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
 //-----------------------------------------------------------------------
-FmPropBrwMgr::FmPropBrwMgr( Window *pParent, sal_uInt16 nId,
-                            SfxBindings *pBindings, SfxChildWinInfo* pInfo)
-              :SfxChildWindow(pParent, nId)
+FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
+                            SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
+              :SfxChildWindow(_pParent, _nId)
 {
     // my UNO representation
-    m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(pParent);
+    m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(_pParent);
 
-    pWindow = new FmPropBrw( ::comphelper::getProcessServiceFactory(), pBindings, this, pParent, pInfo );
+    pWindow = new FmPropBrw( ::comphelper::getProcessServiceFactory(), _pBindings, this, _pParent, _pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
+    ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
 }
 
 //========================================================================
@@ -273,10 +273,10 @@ using namespace ::svxform;
 //========================================================================
 DBG_NAME(FmPropBrw);
 //------------------------------------------------------------------------
-FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* pBindings,
-            SfxChildWindow* pMgr, Window* pParent, const SfxChildWinInfo* _pInfo )
-    :SfxFloatingWindow(pBindings, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
-    ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *pBindings)
+FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings,
+            SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
+    :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
+    ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
     ,m_bInitialStateChange(sal_True)
     ,m_xORB(_xORB)
 {
@@ -304,10 +304,10 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
 
             m_xMeAsFrame->initialize( m_xFrameContainerWindow );
             m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));
-            if ( pBindings->GetDispatcher() )
+            if ( _pBindings->GetDispatcher() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                        xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                        xSupp ( _pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
 //                if ( xSupp.is() )
 //                    xSupp->getFrames()->append( m_xMeAsFrame );
                 // Don't append frame to frame hierachy to prevent UI_DEACTIVATE messages
@@ -323,7 +323,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
 
     if (m_xMeAsFrame.is())
     {
-        pMgr->SetFrame( m_xMeAsFrame );
+        _pMgr->SetFrame( m_xMeAsFrame );
         try
         {
         }
@@ -358,8 +358,8 @@ void FmPropBrw::Resize()
     {
         try
         {
-            ::Size aSize( GetOutputSizePixel() );
-            m_xFrameContainerWindow->setPosSize( 0, 0, aSize.Width(), aSize.Height(), awt::PosSize::POSSIZE );
+            ::Size aOutputSize( GetOutputSizePixel() );
+            m_xFrameContainerWindow->setPosSize( 0, 0, aOutputSize.Width(), aOutputSize.Height(), awt::PosSize::POSSIZE );
         }
         catch( const Exception& )
         {
@@ -524,27 +524,27 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
         if( xLayoutConstrains.is() )
         {
-            ::Size aSize;
-            awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
+            ::Size aConstrainedSize;
+            ::com::sun::star::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
             aMinSize.Height += 4;
             aMinSize.Width += 4;
-            aSize.setHeight( aMinSize.Height );
-            aSize.setWidth( aMinSize.Width );
-            SetMinOutputSizePixel( aSize );
-            aSize = GetOutputSizePixel();
+            aConstrainedSize.setHeight( aMinSize.Height );
+            aConstrainedSize.setWidth( aMinSize.Width );
+            SetMinOutputSizePixel( aConstrainedSize );
+            aConstrainedSize = GetOutputSizePixel();
             sal_Bool bResize = sal_False;
-            if( aSize.Width() < aMinSize.Width )
+            if( aConstrainedSize.Width() < aMinSize.Width )
             {
-                aSize.setWidth( aMinSize.Width );
+                aConstrainedSize.setWidth( aMinSize.Width );
                 bResize = sal_True;
             }
-            if( aSize.Height() < aMinSize.Height )
+            if( aConstrainedSize.Height() < aMinSize.Height )
             {
-                aSize.setHeight( aMinSize.Height );
+                aConstrainedSize.setHeight( aMinSize.Height );
                 bResize = sal_True;
             }
             if( bResize )
-                SetOutputSizePixel( aSize );
+                SetOutputSizePixel( aConstrainedSize );
         }
     }
 }
@@ -557,7 +557,7 @@ void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 }
 
 //-----------------------------------------------------------------------
-IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, NOTINTERESTEDIN )
+IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
 {
     if (m_xBrowserComponentWindow.is())
         m_xBrowserComponentWindow->setFocus();
