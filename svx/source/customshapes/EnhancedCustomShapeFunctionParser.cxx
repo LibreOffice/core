@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:26:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ public:
     {
         return FUNC_CONST;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ )
     {
         EnhancedCustomShapeParameter aRet;
         Fraction aFract( maValue );
@@ -159,9 +159,10 @@ class AdjustmentExpression : public ExpressionNode
 
 public:
 
-    AdjustmentExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex ) :
-        mrCustoShape( rCustoShape ),
-        mnIndex     ( nIndex )
+    AdjustmentExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex )
+    : mnIndex       ( nIndex )
+    , mrCustoShape( rCustoShape )
+
     {
     }
     virtual double operator()() const
@@ -176,7 +177,7 @@ public:
     {
         return ENUM_FUNC_ADJUSTMENT;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ )
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::ADJUSTMENT;
@@ -192,9 +193,9 @@ class EquationExpression : public ExpressionNode
 
 public:
 
-    EquationExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex ) :
-        mrCustoShape( rCustoShape ),
-        mnIndex     ( nIndex )
+    EquationExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex )
+        : mnIndex       ( nIndex )
+        , mrCustoShape( rCustoShape )
     {
     }
     virtual double operator()() const
@@ -209,7 +210,7 @@ public:
     {
         return ENUM_FUNC_EQUATION;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ )
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -225,9 +226,9 @@ class EnumValueExpression : public ExpressionNode
 
 public:
 
-    EnumValueExpression( const EnhancedCustomShape2d& rCustoShape, const ExpressionFunct eFunct ) :
-        mrCustoShape    ( rCustoShape ),
-        meFunct         ( eFunct )
+    EnumValueExpression( const EnhancedCustomShape2d& rCustoShape, const ExpressionFunct eFunct )
+        : meFunct       ( eFunct )
+        , mrCustoShape  ( rCustoShape )
     {
     }
     static double getValue( const EnhancedCustomShape2d& rCustoShape, const ExpressionFunct eFunc )
@@ -266,7 +267,7 @@ public:
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
 
@@ -378,12 +379,12 @@ public:
                 EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
                 if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
                 {   // sumangle needed :-(
-                    EnhancedCustomShapeEquation aEquation;
-                    aEquation.nOperation |= 0xe;    // sumangle
-                    FillEquationParameter( aSource, 1, aEquation );
+                    EnhancedCustomShapeEquation _aEquation;
+                    _aEquation.nOperation |= 0xe;   // sumangle
+                    FillEquationParameter( aSource, 1, _aEquation );
                     aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aSource.Value <<= (sal_Int32)rEquations.size();
-                    rEquations.push_back( aEquation );
+                    rEquations.push_back( _aEquation );
                 }
                 FillEquationParameter( aSource, 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -508,7 +509,7 @@ public:
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
@@ -716,7 +717,7 @@ public:
     {
         return TERNARY_FUNC_IF;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -773,7 +774,7 @@ public:
         mpContext( rContext )
     {
     }
-    void operator()( StringIteratorT rFirst, StringIteratorT rSecond ) const
+    void operator()( StringIteratorT /*rFirst*/, StringIteratorT /*rSecond*/ ) const
     {
         mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( mnValue ) ) );
     }
@@ -804,15 +805,15 @@ class EnumFunctor
 
 public:
 
-    EnumFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
-        mnValue( 0 ),
-        mpContext( rContext ),
-        meFunct( eFunct )
+    EnumFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext )
+    : meFunct( eFunct )
+    , mnValue( 0 )
+    , mpContext( rContext )
     {
     }
     void operator()( StringIteratorT rFirst, StringIteratorT rSecond ) const
     {
-        double nVal = mnValue;
+        /*double nVal = mnValue;*/
         switch( meFunct )
         {
             case ENUM_FUNC_ADJUSTMENT :
