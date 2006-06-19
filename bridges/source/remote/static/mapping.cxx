@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapping.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:42:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,46 +39,19 @@
 #include <bridges/remote/counter.hxx>
 #include <bridges/remote/mapping.hxx>
 
-namespace bridges_remote {
+using namespace bridges_remote;
 
-RemoteMapping::RemoteMapping( uno_Environment *pEnvUno_ ,
-                              uno_Environment *pEnvRemote_,
-                              uno_MapInterfaceFunc func,
-                              const ::rtl::OUString sPurpose) :
-    m_nRef( 1 ),
-    m_sPurpose( sPurpose )
-{
-    pEnvUno = pEnvUno_;
-    pEnvRemote = pEnvRemote_;
+extern "C" {
 
-    pEnvUno->acquire( pEnvUno );
-    pEnvRemote->acquire( pEnvRemote );
-
-    aBase.mapInterface = func;
-    aBase.acquire = thisAcquire;
-    aBase.release = thisRelease;
-}
-
-void RemoteMapping::thisFree( uno_Mapping * p )
-{
-    delete ( RemoteMapping * ) p;
-}
-
-RemoteMapping::~RemoteMapping( )
-{
-    pEnvUno->release( pEnvUno );
-    pEnvRemote->release( pEnvRemote );
-}
-
-void RemoteMapping::thisAcquire( uno_Mapping *pMap )
+static void SAL_CALL thisAcquire( uno_Mapping *pMap )
 {
     RemoteMapping *p = SAL_REINTERPRET_CAST( RemoteMapping * , pMap );
     if( 1 == osl_incrementInterlockedCount( &(p->m_nRef) ) )
     {
-        if( RemoteMapping::remoteToUno  == pMap->mapInterface )
+        if( remoteToUno == pMap->mapInterface )
         {
             uno_registerMapping( &pMap ,
-                                 RemoteMapping::thisFree,
+                                 freeRemoteMapping,
                                  p->pEnvRemote ,
                                  p->pEnvUno ,
                                  p->m_sPurpose.pData );
@@ -86,7 +59,7 @@ void RemoteMapping::thisAcquire( uno_Mapping *pMap )
         else
         {
             uno_registerMapping( &pMap ,
-                                 RemoteMapping::thisFree,
+                                 freeRemoteMapping,
                                  p->pEnvUno ,
                                  p->pEnvRemote ,
                                  p->m_sPurpose.pData );
@@ -95,7 +68,7 @@ void RemoteMapping::thisAcquire( uno_Mapping *pMap )
     }
 }
 
-void RemoteMapping::thisRelease( uno_Mapping *pMap )
+static void SAL_CALL thisRelease( uno_Mapping *pMap )
 {
     RemoteMapping *p = SAL_REINTERPRET_CAST( RemoteMapping * , pMap );
     if (! osl_decrementInterlockedCount( &(p->m_nRef) ))
@@ -104,11 +77,12 @@ void RemoteMapping::thisRelease( uno_Mapping *pMap )
     }
 }
 
+}
 
-void RemoteMapping::remoteToUno(    uno_Mapping *pMapping,
-                                    void **ppUnoI,
-                                    void *pRemoteI,
-                                    typelib_InterfaceTypeDescription *pTypeDescr )
+namespace bridges_remote {
+
+void remoteToUno( uno_Mapping *pMapping, void **ppUnoI, void *pRemoteI,
+                  typelib_InterfaceTypeDescription *pTypeDescr )
 {
     remote_Mapping *pRemoteMapping = ( remote_Mapping * ) pMapping;
 
@@ -154,7 +128,7 @@ void RemoteMapping::remoteToUno(    uno_Mapping *pMapping,
             pRemoteMapping->pEnvUno->pExtEnv->registerProxyInterface(
                 pRemoteMapping->pEnvUno->pExtEnv,
                 ppUnoI,
-                Remote2UnoProxy::thisFree,
+                freeRemote2UnoProxy,
                 pOid,
                 pTypeDescr );
 
@@ -164,11 +138,8 @@ void RemoteMapping::remoteToUno(    uno_Mapping *pMapping,
     }
 }
 
-
-void RemoteMapping::unoToRemote(    uno_Mapping *pMapping,
-                                    void **ppRemoteI,
-                                    void *pUnoI,
-                                    typelib_InterfaceTypeDescription *pTypeDescr )
+void unoToRemote( uno_Mapping *pMapping, void **ppRemoteI, void *pUnoI,
+                  typelib_InterfaceTypeDescription *pTypeDescr )
 {
     remote_Mapping *pRemoteMapping = ( remote_Mapping * ) pMapping;
     OSL_ASSERT( ppRemoteI && pTypeDescr );
@@ -212,13 +183,41 @@ void RemoteMapping::unoToRemote(    uno_Mapping *pMapping,
             pRemoteMapping->pEnvRemote->pExtEnv->registerProxyInterface(
                 pRemoteMapping->pEnvRemote->pExtEnv,
                 (void**) ppRemoteI,
-                Uno2RemoteStub::thisFree,
+                freeUno2RemoteStub,
                 pOid,
                 pTypeDescr );
         }
 
         rtl_uString_release( pOid );
     }
+}
+
+void freeRemoteMapping(uno_Mapping * mapping) {
+    delete reinterpret_cast< RemoteMapping * >(mapping);
+}
+
+RemoteMapping::RemoteMapping( uno_Environment *pEnvUno_ ,
+                              uno_Environment *pEnvRemote_,
+                              uno_MapInterfaceFunc func,
+                              const ::rtl::OUString sPurpose) :
+    m_nRef( 1 ),
+    m_sPurpose( sPurpose )
+{
+    pEnvUno = pEnvUno_;
+    pEnvRemote = pEnvRemote_;
+
+    pEnvUno->acquire( pEnvUno );
+    pEnvRemote->acquire( pEnvRemote );
+
+    aBase.mapInterface = func;
+    aBase.acquire = thisAcquire;
+    aBase.release = thisRelease;
+}
+
+RemoteMapping::~RemoteMapping( )
+{
+    pEnvUno->release( pEnvUno );
+    pEnvRemote->release( pEnvRemote );
 }
 
 }
