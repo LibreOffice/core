@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:15:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,8 +204,8 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
     maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
     mpDocPersist( 0 ),
-    mpStreamMap( 0 ),
-    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ )
+    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
+    mpStreamMap( 0 )
 {
 }
 
@@ -214,8 +214,8 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( SfxObjectShell& rDocPersis
     maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
     maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
     mpDocPersist( 0 ),
-    mpStreamMap( 0 ),
-    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ )
+    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
+    mpStreamMap( 0 )
 {
     Init( 0, rDocPersist, eCreateMode );
 }
@@ -229,7 +229,7 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
     {
         SvXMLEmbeddedObjectHelper_Impl::iterator aIter = mpStreamMap->begin();
         SvXMLEmbeddedObjectHelper_Impl::iterator aEnd = mpStreamMap->end();
-        for( aIter; aIter != aEnd; aIter++ )
+        for( ; aIter != aEnd; aIter++ )
         {
             if( aIter->second )
             {
@@ -268,7 +268,6 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     // currently, path may only consist of a single directory name
     // it is also possible to have additional arguments at the end of URL: <main URL>[?<name>=<value>[,<name>=<value>]*]
 
-    sal_Bool    bRet = sal_False;
     if( pGraphicRepl )
         *pGraphicRepl = sal_False;
 
@@ -425,6 +424,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         const SvGlobalName *pClassId,
         SvStream* pTemp )
 {
+    (void)pClassId;
+
     uno::Reference < embed::XStorage > xDocStor( mpDocPersist->GetStorage() );
     uno::Reference < embed::XStorage > xCntnrStor( ImplGetContainerStorage( rContainerStorageName ) );
 
@@ -616,6 +617,8 @@ SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
         SvXMLEmbeddedObjectHelperMode eCreateMode,
         sal_Bool bDirect )
 {
+    (void)bDirect;
+
     SvXMLEmbeddedObjectHelper* pThis = new SvXMLEmbeddedObjectHelper;
 
     pThis->acquire();
