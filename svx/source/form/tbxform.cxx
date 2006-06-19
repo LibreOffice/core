@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,6 @@
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-
-#pragma hdrstop
 
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
@@ -295,7 +293,7 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
 }
 
 //-----------------------------------------------------------------------
-void SvxFmTbxCtlConfig::Select( USHORT nModifier )
+void SvxFmTbxCtlConfig::Select( USHORT /*nModifier*/ )
 {
     //////////////////////////////////////////////////////////////////////
     // Click auf den Button SID_FM_CONFIG in der ObjectBar
