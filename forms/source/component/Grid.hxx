@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,54 +139,54 @@ protected:
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OGridControlModel );
 
-// UNO Anbindung
+    // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XChild
+    // XChild
     virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(OGridControlModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
-// XTypeProvider
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// OComponentHelper
+    // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// ::com::sun::star::lang::XEventListener
+    // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::form::XLoadListener
+    // XLoadListener
     virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL unloaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL unloading(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL reloading(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL reloaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::form::XReset
+    // XReset
     virtual void SAL_CALL reset() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::view::XSelectionSupplier
+    // XSelectionSupplier
     virtual sal_Bool SAL_CALL select(const ::com::sun::star::uno::Any& aElement) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::form::XGridColumnFactory
+    // XGridColumnFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> SAL_CALL createColumn(const ::rtl::OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual StringSequence SAL_CALL getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException);
 
-// stario::XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::beans::XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
@@ -195,18 +195,22 @@ public:
                                         throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
-// ::com::sun::star::beans::XPropertyState
+    // XPropertyState
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
-// ::com::sun::star::sdb::XSQLErrorListener
+    // XSQLErrorListener
     virtual void SAL_CALL errorOccured( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
-// OAggregationArrayUsageHelper
+    // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+    // prevent method hiding
+    using OControlModel::disposing;
+    using OControlModel::getFastPropertyValue;
 
 protected:
     DECLARE_XCLONEABLE();
