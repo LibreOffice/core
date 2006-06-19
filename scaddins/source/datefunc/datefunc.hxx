@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datefunc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:23:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ public:
     inline                      ScaStringList() : ScaList() {};
     virtual                     ~ScaStringList();
 
-                                ScaList::Count;
+                                using ScaList::Count;
 
     inline const ::rtl::OUString* Get( sal_uInt32 nIndex ) const;
 
@@ -140,6 +140,7 @@ public:
 
     sal_Bool                    Contains( const ::rtl::OUString& rSearch ) const;
 
+    using ScaList::Append;
     inline void                 Append( ::rtl::OUString* pNew );
     inline void                 Append( const ::rtl::OUString& rNew );
 };
@@ -316,13 +317,14 @@ public:
                                 ScaFuncDataList( ResMgr& rResMgr );
     virtual                     ~ScaFuncDataList();
 
-                                ScaList::Count;
+                                using ScaList::Count;
 
     inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
     const ScaFuncData*          Get( const ::rtl::OUString& rProgrammaticName ) const;
     inline ScaFuncData*         First();
     inline ScaFuncData*         Next();
 
+    using ScaList::Append;
     inline void                 Append( ScaFuncData* pNew ) { ScaList::Append( pNew ); }
 };
 
