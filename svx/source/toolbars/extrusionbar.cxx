@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:52:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ using namespace ::com::sun::star::uno;
 
 SFX_SLOTMAP(ExtrusionBar)
 {
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell, SVX_RES(RID_SVX_EXTRUSION_BAR))
@@ -185,7 +185,7 @@ void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const
     *pLighting2Defaults = (const Direction3D *)aLighting2Defaults;
 };
 
-static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
+static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
@@ -258,7 +258,6 @@ static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeo
         {
             sal_Int32 nSkew = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_DIRECTION))->GetValue();
 
-            sal_Bool    bParallel = sal_True;
             Position3D  aViewPoint( 3472, -3472, 25000 );
             double      fOriginX = 0.50;
             double      fOriginY = -0.50;
@@ -711,9 +710,9 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -858,9 +857,9 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
             if( !bHasCustomShape )
             {
                 SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -918,9 +917,9 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -1004,9 +1003,9 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -1090,9 +1089,9 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -1111,13 +1110,13 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             int nDirection = -1;
 
-            int i;
-            for( i = 0; i < 9; i++ )
+            int j;
+            for( j = 0; j < 9; j++ )
             {
-                if( compare_direction( aFirstLightDirection, pLighting1Defaults[i] ) &&
-                    compare_direction( aSecondLightDirection, pLighting2Defaults[i] ))
+                if( compare_direction( aFirstLightDirection, pLighting1Defaults[j] ) &&
+                    compare_direction( aSecondLightDirection, pLighting2Defaults[j] ))
                 {
-                    nDirection = i;
+                    nDirection = j;
                     break;
                 }
             }
@@ -1165,9 +1164,9 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -1235,9 +1234,9 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
             // see if this is an extruded customshape
             if( !bHasCustomShape )
             {
-                Any* pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-                if( pAny )
-                    *pAny >>= bHasCustomShape;
+                Any* pAny_ = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+                if( pAny_ )
+                    *pAny_ >>= bHasCustomShape;
 
                 if( !bHasCustomShape )
                     continue;
@@ -1253,7 +1252,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
             if( bUseColor )
             {
                 const XSecondaryFillColorItem& rItem = *(XSecondaryFillColorItem*)&(pObj->GetMergedItem( XATTR_SECONDARYFILLCOLOR ));
-                aColor = rItem.GetValue();
+                aColor = rItem.GetColorValue();
             }
             else
             {
