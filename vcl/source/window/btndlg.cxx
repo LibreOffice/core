@@ -4,9 +4,9 @@
  *
  *  $RCSfile: btndlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:22:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,11 @@ struct ImplBtnDlgItem
     PushButton*         mpPushButton;
 };
 
-DECLARE_LIST( ImplBtnDlgItemList, ImplBtnDlgItem* );
+DECLARE_LIST( ImplBtnDlgItemList, ImplBtnDlgItem* )
 
 // =======================================================================
 
-void ButtonDialog::ImplInitData()
+void ButtonDialog::ImplInitButtonDialogData()
 {
     mpItemList              = new ImplBtnDlgItemList( 8, 8 );
     mnButtonSize            = 0;
@@ -83,7 +83,7 @@ void ButtonDialog::ImplInitData()
 ButtonDialog::ButtonDialog( WindowType nType ) :
     Dialog( nType )
 {
-    ImplInitData();
+    ImplInitButtonDialogData();
 }
 
 // -----------------------------------------------------------------------
@@ -91,7 +91,7 @@ ButtonDialog::ButtonDialog( WindowType nType ) :
 ButtonDialog::ButtonDialog( Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_BUTTONDIALOG )
 {
-    ImplInitData();
+    ImplInitButtonDialogData();
     ImplInit( pParent, nStyle );
 }
 
@@ -100,7 +100,7 @@ ButtonDialog::ButtonDialog( Window* pParent, WinBits nStyle ) :
 ButtonDialog::ButtonDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_BUTTONDIALOG )
 {
-    ImplInitData();
+    ImplInitButtonDialogData();
     rResId.SetRT( RSC_DIALOG );     // !!!!!!!!!! RSC_BUTTONDIALOG !!!!!!!!
     ImplInit( pParent, ImplInitRes( rResId ) );
     ImplLoadRes( rResId );
