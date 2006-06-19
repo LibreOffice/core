@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:54:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,6 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#ifndef _NEW_HXX
-#include <tools/new.hxx>
-#endif
 #include <impgraph.hxx>
 #ifndef _GFXLINK_HXX
 #include <gfxlink.hxx>
@@ -95,10 +92,10 @@
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
 
-#define SYS_WINMETAFILE             0x00000003
-#define SYS_WNTMETAFILE             0x00000004
-#define SYS_OS2METAFILE             0x00000005
-#define SYS_MACMETAFILE             0x00000006
+#define SYS_WINMETAFILE             0x00000003L
+#define SYS_WNTMETAFILE             0x00000004L
+#define SYS_OS2METAFILE             0x00000005L
+#define SYS_MACMETAFILE             0x00000006L
 
 #define GRAPHIC_FORMAT_50           static_cast<sal_uInt32>(COMPAT_FORMAT( 'G', 'R', 'F', '5' ))
 #define NATIVE_FORMAT_50            static_cast<sal_uInt32>(COMPAT_FORMAT( 'N', 'A', 'T', '5' ))
@@ -1014,7 +1011,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                     {
                         ULONG   nFullLen = nHeaderLen + nLen;
                         ULONG   nPartLen = Min( nFullLen, (ULONG) GRAPHIC_MAXPARTLEN );
-                        BYTE*   pBuffer = (BYTE*) SvMemAlloc( nPartLen );
+                        BYTE*   pBuffer = (BYTE*) rtl_allocateMemory( nPartLen );
 
                           pOStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1033,7 +1030,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                                     nPartLen = nFullLen;
                             }
 
-                            SvMemFree( pBuffer );
+                            rtl_freeMemory( pBuffer );
                             ULONG nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
                             delete pOStm, pOStm = NULL;
 
@@ -1084,7 +1081,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
             Graphic aSysGraphic;
             ULONG   nCvtType;
 
-            switch( meType )
+            switch( sal::static_int_cast<ULONG>(meType) )
             {
                 case( SYS_WINMETAFILE ):
                 case( SYS_WNTMETAFILE ): nCvtType = CVT_WMF; break;
