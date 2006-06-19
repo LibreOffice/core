@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkbridge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 13:31:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,13 @@ void DeInitAtkBridge()
      */
 
 #if ! ( defined AIX || defined HPUX ) // these have no dl* functions
+#if defined __SUNPRO_CC // disable warning: Cannot cast from void* to void(*)()
+#pragma disable_warn
+#endif
     void (* shutdown) ( void ) =  (void (*) (void)) dlsym( RTLD_DEFAULT, "gnome_accessibility_module_shutdown");
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
 
     if( shutdown )
         shutdown();
