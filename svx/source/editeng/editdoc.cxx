@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 09:39:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 #include <eeng_pch.hxx>
-
-#pragma hdrstop
 
 #include <tstpitem.hxx>
 #include <colritem.hxx>
