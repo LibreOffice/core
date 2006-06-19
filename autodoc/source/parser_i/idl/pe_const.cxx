@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_const.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:47:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:06:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ PE_Constant::On_expect_curl_bracket_open_Punctuation(const char * i_sText)
 }
 
 void
-PE_Constant::On_expect_const_Stereotype(const char * i_sText)
+PE_Constant::On_expect_const_Stereotype(const char *)
 {
     SetResult( done, push_sure, pPE_Type.Ptr() );
 }
@@ -187,7 +187,7 @@ PE_Constant::On_expect_const_Punctuation(const char * i_sText)
 }
 
 void
-PE_Constant::On_expect_value_Identifier(const char * i_sText)
+PE_Constant::On_expect_value_Identifier(const char *)
 {
     SetResult( not_done, push_sure, pPE_Value.Ptr() );
 }

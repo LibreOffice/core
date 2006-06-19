@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enum2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:47:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:06:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ PE_Enum::On_expect_value_Punctuation(const char * i_sText)
 }
 
 void
-PE_Enum::On_expect_value_Identifier(const char * i_sText)
+PE_Enum::On_expect_value_Identifier(const char *)
 {
     SetResult( not_done, push_sure, pPE_Value.Ptr() );
 }
