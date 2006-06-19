@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refvaluecomponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:23:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@ namespace frm
     //--------------------------------------------------------------------
     OReferenceValueComponent::OReferenceValueComponent( const Reference< XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _rUnoControlModelTypeName, const ::rtl::OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
-        ,m_eValueExchangeType( eBoolean )
-        ,m_nDefaultChecked( STATE_NOCHECK )
+        ,m_eDefaultChecked( STATE_NOCHECK )
         ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
+        ,m_eValueExchangeType( eBoolean )
     {
     }
 
@@ -68,7 +68,7 @@ namespace frm
     {
         m_sReferenceValue           = _pOriginal->m_sReferenceValue;
         m_sNoCheckReferenceValue    = _pOriginal->m_sNoCheckReferenceValue;
-        m_nDefaultChecked           = _pOriginal->m_nDefaultChecked;
+        m_eDefaultChecked           = _pOriginal->m_eDefaultChecked;
         m_bSupportSecondRefValue    = _pOriginal->m_bSupportSecondRefValue;
 
         calcValueExchangeType();
@@ -100,7 +100,7 @@ namespace frm
         switch ( _nHandle )
         {
         case PROPERTY_ID_REFVALUE:          _rValue <<= m_sReferenceValue; break;
-        case PROPERTY_ID_DEFAULTCHECKED:    _rValue <<= m_nDefaultChecked; break;
+        case PROPERTY_ID_DEFAULTCHECKED:    _rValue <<= (sal_Int16)m_eDefaultChecked; break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
             OSL_ENSURE( m_bSupportSecondRefValue, "OReferenceValueComponent::getFastPropertyValue: not supported!" );
@@ -127,10 +127,14 @@ namespace frm
             OSL_VERIFY( _rValue >>= m_sNoCheckReferenceValue );
             break;
 
-        case PROPERTY_ID_DEFAULTCHECKED :
-            OSL_VERIFY( _rValue >>= m_nDefaultChecked );
+        case PROPERTY_ID_DEFAULTCHECKED:
+        {
+            sal_Int16 nDefaultChecked( (sal_Int16)STATE_NOCHECK );
+            OSL_VERIFY( _rValue >>= nDefaultChecked );
+            m_eDefaultChecked = (CheckState)nDefaultChecked;
             resetNoBroadcast();
-            break;
+        }
+        break;
 
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
@@ -153,7 +157,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULTCHECKED:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_nDefaultChecked );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Int16)m_eDefaultChecked );
             break;
 
         default:
@@ -166,7 +170,7 @@ namespace frm
     //------------------------------------------------------------------------------
     Any OReferenceValueComponent::getDefaultForReset() const
     {
-        return makeAny( (sal_Int16)m_nDefaultChecked );
+        return makeAny( (sal_Int16)m_eDefaultChecked );
     }
 
     //--------------------------------------------------------------------
