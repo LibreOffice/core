@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:18:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include "imappoly.hxx"
 
 
-DBG_NAME( ImageMap );
+DBG_NAME( ImageMap )
 
 
 #define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
@@ -1310,7 +1310,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount, const String& rB
 void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapCompat*             pCompat;
-    String                  aName( GetName() );
+    String                  aImageName( GetName() );
     String                  aDummy;
     USHORT                  nOldFormat = rOStm.GetNumberFormatInt();
     UINT16                  nCount = (UINT16) GetIMapObjectCount();
@@ -1321,10 +1321,10 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
     // MagicCode schreiben
     rOStm << IMAPMAGIC;
     rOStm << GetVersion();
-    rOStm.WriteByteString( ByteString( aName, eEncoding ) );
+    rOStm.WriteByteString( ByteString( aImageName, eEncoding ) );
     rOStm.WriteByteString( ByteString( aDummy, eEncoding ) );
     rOStm << nCount;
-    rOStm.WriteByteString( ByteString( aName, eEncoding ) );
+    rOStm.WriteByteString( ByteString( aImageName, eEncoding ) );
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
