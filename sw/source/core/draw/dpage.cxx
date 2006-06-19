@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:24:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,51 +225,6 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     }
     return pGridLst;
 }
-
-/*************************************************************************
-|*
-|*  String SwDPage::GetLinkData( const String& )
-|*  void SwDPage::SetLinkData( const String&, const String& )
-|*  void SwDPage::UpdateLinkData( const String&, const String& )
-|*
-|*  Ersterstellung      JP 04.09.95
-|*  Letzte Aenderung    JP 04.09.95
-|*
-*************************************************************************/
-
-String SwDPage::GetLinkData( const String& rLinkName )
-{
-    SwDoc& rDoc = ((SwDrawDocument*)GetModel())->GetDoc();
-    SwFieldType* pFTyp = rDoc.GetFldType( RES_USERFLD, rLinkName );
-    if( pFTyp )
-        return ((SwUserFieldType*)pFTyp)->GetContent();
-    return aEmptyStr;
-}
-
-
-void  SwDPage::SetLinkData( const String& rLinkName,
-                                    const String& rLinkData )
-{
-    SwDoc& rDoc = ((SwDrawDocument*)GetModel())->GetDoc();
-    SwFieldType* pFTyp = rDoc.GetFldType( RES_USERFLD, rLinkName );
-    if( pFTyp )
-        ((SwUserFieldType*)pFTyp)->CtrlSetContent( rLinkData );
-}
-
-
-void  SwDPage::RequestBasic()
-{
-    SwDoc& rDoc = ((SwDrawDocument*)GetModel())->GetDoc();
-    if( rDoc.GetDocShell() )
-    {
-        BasicManager *pBasicMgr = rDoc.GetDocShell()->GetBasicManager();
-        ASSERT( pBasicMgr, "wo ist mein BasicManager" )
-        SetBasic( pBasicMgr->GetLib( 0 ) );
-    }
-    else
-        ASSERT( !this, "wo ist meine DocShell" )
-}
-
 
 BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
