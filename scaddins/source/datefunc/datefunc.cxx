@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:17:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ const sal_uInt32 ScaList::nStartSize = 16;
 const sal_uInt32 ScaList::nIncrSize = 16;
 
 ScaList::ScaList() :
-    nSize( nStartSize ),
     pData( new void*[ nStartSize ] ),
+    nSize( nStartSize ),
     nCount( 0 ),
     nCurr( 0 )
 {
@@ -147,8 +147,8 @@ sal_Bool ScaStringList::Contains( const OUString& rSearch ) const
 
 //------------------------------------------------------------------
 
-ScaResId::ScaResId( sal_uInt16 nResId, ResMgr& rResMgr ) :
-    ResId( nResId, &rResMgr )
+ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
+    ResId( nId, &rResMgr )
 {
 }
 
@@ -185,11 +185,11 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
     nUINameID( rBaseData.nUINameID ),
     nDescrID( rBaseData.nDescrID ),
-    bDouble( rBaseData.bDouble ),
-    bWithOpt( rBaseData.bWithOpt ),
-    nParamCount( rBaseData.nParamCount ),
     nCompListID( rBaseData.nCompListID ),
-    eCat( rBaseData.eCat )
+    nParamCount( rBaseData.nParamCount ),
+    eCat( rBaseData.eCat ),
+    bDouble( rBaseData.bDouble ),
+    bWithOpt( rBaseData.bWithOpt )
 {
     ScaResStringArrLoader aArrLoader( RID_DATE_DEFFUNCTION_NAMES, nCompListID, rResMgr );
     const ResStringArray& rArr = aArrLoader.GetStringArray();
@@ -275,13 +275,13 @@ uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
 extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, registry::XRegistryKey * pRegistryKey )
+    void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -310,7 +310,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = 0;
 
@@ -498,7 +498,7 @@ lang::Locale SAL_CALL ScaDateAddIn::getLocale() throw( uno::RuntimeException )
 
 // XAddIn
 
-OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& aDisplayName ) throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
@@ -588,6 +588,8 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
             case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
             case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
             case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
+            default:    // to prevent compiler warnings
+                break;
         }
     }
 
