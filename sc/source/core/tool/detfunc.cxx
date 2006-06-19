@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:42:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,9 +442,9 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
             const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
             BOOL bObjStartAlien =
-                lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetValue() );
+                lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
             BOOL bObjEndAlien =
-                lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetValue() );
+                lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
 
             BOOL bStartHit = bStartAlien ? bObjStartAlien :
                                 ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
@@ -468,9 +468,9 @@ BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )         // static
         const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
         BOOL bObjStartAlien =
-            lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetValue() );
+            lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
         BOOL bObjEndAlien =
-            lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetValue() );
+            lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
 
         return !bObjStartAlien && !bObjEndAlien;
     }
@@ -1990,7 +1990,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
                 FindFrameForObject( pObject, rSource );     // modifies rSource
             }
 
-            ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetValue().GetColor();
+            ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
             if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                 rRedLine = TRUE;
         }
