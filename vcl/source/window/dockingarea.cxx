@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockingarea.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:25:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
 
 // -----------------------------------------------------------------------
 
-void DockingAreaWindow::Paint( const Rectangle& rRect )
+void DockingAreaWindow::Paint( const Rectangle& )
 {
     EnableNativeWidget( TRUE ); // only required because the toolkit curently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
@@ -190,8 +190,8 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
 
             // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
-            int nChildren = GetChildCount();
-            for( int n = 0; n < nChildren; n++ )
+            USHORT nChildren = GetChildCount();
+            for( USHORT n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
                 if ( pChild->IsVisible() )
@@ -215,8 +215,8 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
             // create map to find toolbar lines
             Size aOutSz = GetOutputSizePixel();
             std::map< int, int > ranges;
-            int nChildren = GetChildCount();
-            for( int n = 0; n < nChildren; n++ )
+            USHORT nChildren = GetChildCount();
+            for( USHORT n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
                 Point aPos = pChild->GetPosPixel();
