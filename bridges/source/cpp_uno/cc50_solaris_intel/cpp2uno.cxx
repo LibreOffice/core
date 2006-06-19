@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 11:59:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,9 @@ void cpp2uno_call(
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
-                uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+                uno_destructData(
+                    pCppArgs[nIndex], pParamTypeDescr,
+                    reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
                 uno_copyAndConvertData( pCppArgs[nIndex], pUnoArgs[nIndex], pParamTypeDescr,
                                         pThis->getBridge()->getUno2Cpp() );
             }
@@ -320,7 +322,8 @@ extern "C" void cpp_vtable_call(
                 {
                     ::uno_any_construct(
                         reinterpret_cast< uno_Any * >( pCallStack[1] ),
-                        &pInterface, pTD, cpp_acquire );
+                        &pInterface, pTD,
+                        reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
                     pInterface->release();
                     TYPELIB_DANGER_RELEASE( pTD );
                     *(void **)&nRegReturn = pCallStack[1];
@@ -442,8 +445,11 @@ unsigned char * codeSnippet(
     p += sizeof (sal_Int32);
     // jmp privateSnippetExecutor:
     *p++ = 0xE9;
+#pragma disable_warn
+    void * e = reinterpret_cast< void * >(exec);
+#pragma enable_warn
     *reinterpret_cast< sal_Int32 * >(p)
-        = ((unsigned char *) exec) - p - sizeof (sal_Int32);
+        = static_cast< unsigned char * >(e) - p - sizeof (sal_Int32);
     p += sizeof (sal_Int32);
     OSL_ASSERT(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
@@ -473,7 +479,7 @@ void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     void ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 functionCount, sal_Int32 vtableOffset)
+    sal_Int32, sal_Int32 vtableOffset)
 {
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
