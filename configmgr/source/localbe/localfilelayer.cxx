@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:03:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,8 +225,6 @@ void BasicLocalFileLayer::readData(
             sMsg.appendAscii("LocalFileLayer - Cannot readData: ").append(ioe.Message);
             throw backend::BackendAccessException(sMsg.makeStringAndClear(),pContext,uno::makeAny(ioe));
         }
-        break;
-
     }
 }
 //------------------------------------------------------------------------------
