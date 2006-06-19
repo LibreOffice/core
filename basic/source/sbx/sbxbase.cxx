@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:45:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,13 @@ SbxAppData* GetSbxData_Impl()
 #endif
 }
 
+SbxAppData::~SbxAppData()
+{
+    if( pBasicFormater )
+        delete pBasicFormater;
+}
+
+
 //////////////////////////////// SbxBase /////////////////////////////////
 
 DBG_NAME(SbxBase);
@@ -83,6 +90,7 @@ SbxBase::SbxBase()
 }
 
 SbxBase::SbxBase( const SbxBase& r )
+    : SvRefBase( r )
 {
     DBG_CTOR( SbxBase, 0 );
     nFlags  = r.nFlags;
@@ -167,7 +175,7 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     {
         // Neue Factory vor Factories mit HandleLast einordnen
         while( nPos > 0 &&
-                (SbxFactory*)(p->aFacs.GetObject( nPos-1 ))->IsHandleLast() )
+                (static_cast<SbxFactory*>(p->aFacs.GetObject( nPos-1 )))->IsHandleLast() )
             nPos--;
     }
     p->aFacs.Insert( pTemp, nPos );
