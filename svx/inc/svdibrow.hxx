@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdibrow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:45:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ public:
     virtual void GetFocus();
     void Clear()                                            { aBrowse.Clear(); }
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse.SetAttributes(pAttr,p2ndSet); }
-    void SetFloatingMode(FASTBOOL bOn) {}
+    void SetFloatingMode(FASTBOOL /*bOn*/) {}
     const _SdrItemBrowserControl& GetBrowserControl() const { return aBrowse; }
     _SdrItemBrowserControl& GetBrowserControl()             { return aBrowse; }
 };
