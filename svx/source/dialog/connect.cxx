@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:43:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#pragma hdrstop
 #include "ofaitem.hxx"  // add CHINA001
 #include <sfx2/request.hxx> // add CHINA001
 #define _SVX_CONNECT_CXX
@@ -84,13 +83,13 @@ SvxConnectionDialog::SvxConnectionDialog( Window* pParent, const SfxItemSet& rIn
                                 const SdrView* pSdrView ) :
         SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_CONNECTION )
 {
-    SvxConnectionPage* pPage = new SvxConnectionPage( this, rInAttrs );
+    SvxConnectionPage* _pPage = new SvxConnectionPage( this, rInAttrs );
 
-    pPage->SetView( pSdrView );
-    pPage->Construct();
+    _pPage->SetView( pSdrView );
+    _pPage->Construct();
 
-    SetTabPage( pPage );
-    SetText( pPage->GetText() );
+    SetTabPage( _pPage );
+    SetText( _pPage->GetText() );
 }
 
 /*************************************************************************
@@ -113,21 +112,8 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
                 SfxTabPage      ( pWindow, ResId( RID_SVXPAGE_CONNECTION, DIALOG_MGR() ),
                                   rInAttrs ),
 
-        rOutAttrs               ( rInAttrs ),
-        aAttrSet                ( *rInAttrs.GetPool() ),
-
         aFtType                 ( this, ResId( FT_TYPE ) ),
         aLbType                 ( this, ResId( LB_TYPE ) ),
-
-        aFlDistance             ( this, ResId( FL_DISTANCE ) ),
-        aFtHorz1                ( this, ResId( FT_HORZ_1 ) ),
-        aMtrFldHorz1            ( this, ResId( MTR_FLD_HORZ_1 ) ),
-        aFtHorz2                ( this, ResId( FT_HORZ_2 ) ),
-        aMtrFldHorz2            ( this, ResId( MTR_FLD_HORZ_2 ) ),
-        aFtVert1                ( this, ResId( FT_VERT_1 ) ),
-        aMtrFldVert1            ( this, ResId( MTR_FLD_VERT_1 ) ),
-        aFtVert2                ( this, ResId( FT_VERT_2 ) ),
-        aMtrFldVert2            ( this, ResId( MTR_FLD_VERT_2 ) ),
 
         aFlDelta                ( this, ResId( FL_DELTA ) ),
         aFtLine1                ( this, ResId( FT_LINE_1 ) ),
@@ -137,7 +123,19 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aFtLine3                ( this, ResId( FT_LINE_3 ) ),
         aMtrFldLine3            ( this, ResId( MTR_FLD_LINE_3 ) ),
 
-        aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs )
+        aFlDistance             ( this, ResId( FL_DISTANCE ) ),
+        aFtHorz1                ( this, ResId( FT_HORZ_1 ) ),
+        aMtrFldHorz1            ( this, ResId( MTR_FLD_HORZ_1 ) ),
+        aFtVert1                ( this, ResId( FT_VERT_1 ) ),
+        aMtrFldVert1            ( this, ResId( MTR_FLD_VERT_1 ) ),
+        aFtHorz2                ( this, ResId( FT_HORZ_2 ) ),
+        aMtrFldHorz2            ( this, ResId( MTR_FLD_HORZ_2 ) ),
+        aFtVert2                ( this, ResId( FT_VERT_2 ) ),
+        aMtrFldVert2            ( this, ResId( MTR_FLD_VERT_2 ) ),
+
+        aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs ),
+        rOutAttrs               ( rInAttrs ),
+        aAttrSet                ( *rInAttrs.GetPool() )
 {
     FreeResource();
 
