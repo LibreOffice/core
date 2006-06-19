@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,6 @@
 
 #ifndef _E3D_GLOBL3D_HXX
 #include "globl3d.hxx"
-#endif
-
-#ifndef _E3D_POLYOB3D_HXX
-#include "polyob3d.hxx"
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
