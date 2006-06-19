@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:42:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
 #endif
-#pragma hdrstop
 
 #include "zoomitem.hxx"
 
@@ -65,9 +64,9 @@ SvxZoomItem::SvxZoomItem
 (
     SvxZoomType eZoomType,
     sal_uInt16      nVal,
-    sal_uInt16      nWhich
+    sal_uInt16      _nWhich
 )
-:   SfxUInt16Item( nWhich, nVal ),
+:   SfxUInt16Item( _nWhich, nVal ),
     nValueSet( SVX_ZOOM_ENABLE_ALL ),
     eType( eZoomType )
 {
@@ -90,14 +89,14 @@ SvxZoomItem::~SvxZoomItem()
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxZoomItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxZoomItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxZoomItem( *this );
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
+SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
 {
     sal_uInt16 nValue;
     sal_uInt16 nValSet;
@@ -110,7 +109,7 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm << (sal_uInt16)GetValue()
           << nValueSet
@@ -133,7 +132,7 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 
 sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -161,7 +160,7 @@ sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId
 
 sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
