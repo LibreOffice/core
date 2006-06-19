@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include "buffer.hxx"
 #include <string.h>
 
