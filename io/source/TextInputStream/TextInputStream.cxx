@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:26:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ OUString OTextInputStream::readLine(  )
     return implReadString( aDummySeq, sal_True, sal_True );
 }
 
-OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
+OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool )
         throw(IOException, RuntimeException)
 {
     return implReadString( Delimiters, sal_True, sal_False );
@@ -349,7 +349,7 @@ sal_Int32 OTextInputStream::implReadNext()
             {
                 // read next byte
                 static Sequence< sal_Int8 > aOneByteSeq( 1 );
-                sal_Int32 nRead = mxStream->readSomeBytes( aOneByteSeq, 1 );
+                nRead = mxStream->readSomeBytes( aOneByteSeq, 1 );
                 if( nRead == 0 )
                 {
                     mbReachedEOF = sal_True;
@@ -375,15 +375,13 @@ sal_Int32 OTextInputStream::implReadNext()
         mnCharsInBuffer += nTargetCount;
         return nTargetCount;
     }
-    catch( NotConnectedException& e1 )
+    catch( NotConnectedException& )
     {
-        e1;
         throw IOException();
         //throw IOException( L"OTextInputStream::implReadString failed" );
     }
-    catch( BufferSizeExceededException& e2 )
+    catch( BufferSizeExceededException& )
     {
-        e2;
         throw IOException();
     }
 }
@@ -523,7 +521,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
