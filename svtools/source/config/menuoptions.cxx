@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:51:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ using namespace ::com::sun::star::uno   ;
 
 #include <tools/link.hxx>
 #include <tools/list.hxx>
-DECLARE_LIST( LinkList, Link * );
+DECLARE_LIST( LinkList, Link * )
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -108,7 +108,6 @@ class SvtMenuOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-
         LinkList    aList;
         sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
@@ -438,7 +437,7 @@ SvtMenuOptions::SvtMenuOptions()
     // ... and initialize ouer data container only if it not already!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtMenuOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMenuOptions_Impl::ctor()");
         m_pDataContainer = new SvtMenuOptions_Impl();
 
         ItemHolder1::holdConfigItem(E_MENUOPTIONS);
