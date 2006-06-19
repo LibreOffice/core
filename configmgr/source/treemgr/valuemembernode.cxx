@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuemembernode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:35:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,6 +300,7 @@ std::auto_ptr<ValueChange> ValueMemberNode::DeferredImpl::preCommitChange(data::
 
 void ValueMemberNode::DeferredImpl::finishCommit(ValueChange& rChange, data::Accessor const& _aAccessor)
 {
+    { (void)rChange; }
     OSL_ENSURE(rChange.getNewValue() == this->getNewValue(),"Committed change does not match the intended value");
 
     data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor);
@@ -314,6 +315,7 @@ void ValueMemberNode::DeferredImpl::finishCommit(ValueChange& rChange, data::Acc
 
 void ValueMemberNode::DeferredImpl::revertCommit(ValueChange& rChange, data::Accessor const& )
 {
+    { (void)rChange; }
     //data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor):
 
     OSL_ENSURE(rChange.getNewValue() == this->getNewValue(),"Reverted change does not match the intended value");
