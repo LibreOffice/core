@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChainablePropertySetInfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:55:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ using ::comphelper::GenerateCppuType;
 using ::comphelper::ChainablePropertySetInfo;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Type;
-using ::com::sun::star::uno::XWeak;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
@@ -68,29 +67,6 @@ ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo* pMap )
 ChainablePropertySetInfo::~ChainablePropertySetInfo()
     throw()
 {
-}
-
-//XInterface
-Any SAL_CALL ChainablePropertySetInfo::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                    // OWeakObject interfaces
-                                    reinterpret_cast< XInterface*       > ( this )  ,
-                                    static_cast < XWeak*                > ( this )  ,
-                                    // my own interfaces
-                                    static_cast < XPropertySetInfo*     > ( this ) );
-}
-
-void SAL_CALL ChainablePropertySetInfo::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ChainablePropertySetInfo::release(  )
-    throw()
-{
-    OWeakObject::release();
 }
 
 void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
