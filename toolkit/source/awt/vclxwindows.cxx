@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:24:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,22 @@
 #include <tools/debug.hxx>
 #endif
 
+
+static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
+{
+    double n = nValue;
+    for ( sal_uInt16 d = 0; d < nDigits; d++ )
+        n *= 10;
+    return n;
+}
+
+static double ImplCalcDoubleValue( double nValue, sal_uInt16 nDigits )
+{
+    double n = nValue;
+    for ( sal_uInt16 d = 0; d < nDigits; d++ )
+        n /= 10;
+    return n;
+}
 
 namespace toolkit
 {
@@ -311,7 +327,7 @@ void VCLXImageConsumer::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Wi
     ImplUpdateImage( sal_True );
 }
 
-void VCLXImageConsumer::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & Producer ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXImageConsumer::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -713,7 +729,7 @@ void VCLXImageControl::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Wid
     ImplUpdateImage( sal_True );
 }
 
-void VCLXImageControl::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & Producer ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXImageControl::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -806,7 +822,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
 //  ----------------------------------------------------
 //  class VCLXCheckBox
 //  ----------------------------------------------------
-VCLXCheckBox::VCLXCheckBox() : maItemListeners( *this ), maActionListeners( *this )
+VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *this )
 {
 }
 
@@ -1460,8 +1476,8 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  class VCLXListBox
 //  ----------------------------------------------------
 VCLXListBox::VCLXListBox()
-    : maItemListeners( *this ),
-      maActionListeners( *this )
+    : maActionListeners( *this ),
+      maItemListeners( *this )
 {
 }
 
@@ -1536,7 +1552,7 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStri
         for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
         {
             pBox->InsertEntry( aItems.getConstArray()[n], nP );
-            if ( nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
+            if ( (sal_uInt16)nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
                 nP++;
         }
     }
@@ -3039,7 +3055,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
     return aSz;
 }
 
-::com::sun::star::awt::Size VCLXEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size VCLXEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -3097,8 +3113,7 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  class VCLXComboBox
 //  ----------------------------------------------------
 VCLXComboBox::VCLXComboBox()
-    : maItemListeners( *this ),
-      maActionListeners( *this )
+    : maActionListeners( *this ), maItemListeners( *this )
 {
 }
 
@@ -3187,7 +3202,7 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStr
         for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
         {
             pBox->InsertEntry( aItems.getConstArray()[n], nP );
-            if ( nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
+            if ( (sal_uInt16)nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
                 nP++;
         }
     }
