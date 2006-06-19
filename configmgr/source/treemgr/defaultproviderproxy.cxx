@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:28:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ DefaultProviderProxy::~DefaultProviderProxy()
 
 /// tries to load a default instance of the specified node (which must be within the request range owned)
 std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
-                            memory::UpdateAccessor& _aDestinationSpace,
+                            memory::UpdateAccessor& /*_aDestinationSpace*/,
                             AbsolutePath const& _aLocation
                        ) const CFG_UNO_THROW_ALL()
 {
