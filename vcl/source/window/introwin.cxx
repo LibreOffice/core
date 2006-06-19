@@ -4,9 +4,9 @@
  *
  *  $RCSfile: introwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:26:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 
 // =======================================================================
 
-void IntroWindow::ImplInitData()
+void IntroWindow::ImplInitIntroWindowData()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpIntroWindow = this;
@@ -71,7 +71,7 @@ void IntroWindow::ImplInitData()
 IntroWindow::IntroWindow( ) :
     WorkWindow( WINDOW_INTROWINDOW )
 {
-    ImplInitData();
+    ImplInitIntroWindowData();
     WorkWindow::ImplInit( 0, WB_INTROWIN, NULL );
 }
 
