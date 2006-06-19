@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:18:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,8 @@ using ::xmloff::token::XML_EVENT_LISTENERS;
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp,
                          const XMLEventNameTranslation* pTranslationTable) :
-    rExport(rExp),
-    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType"))
+    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
+    rExport(rExp)
 {
     AddTranslationTable(pTranslationTable);
 }
@@ -343,5 +343,5 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnViewClosed",       XML_NAMESPACE_OFFICE, "view-close" },
     { "OnVisAreaChanged",   XML_NAMESPACE_OFFICE, "visarea-changed" }, // "on-visarea-changed"
 
-    { NULL, NULL }
+    { NULL, 0, 0 }
 };
