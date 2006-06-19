@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sessionlistener.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:41:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 }
 
 
-void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool bCancelable )
+void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelable*/ )
     throw (RuntimeException)
 {
     if (bShutdown)
@@ -295,7 +295,7 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool bCancelable 
 
 
 
-void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted )
+void SAL_CALL SessionListener::approveInteraction( sal_Bool /*bInteractionGranted*/ )
     throw (RuntimeException)
 {
     if (_pcInteract != NULL)
@@ -312,7 +312,7 @@ void SessionListener::shutdownCanceled()
 
 
 void SessionListener::_doInteraction(
-        const OUString& title, const OUString& url, sal_Bool bCanceable, sal_Bool* save, sal_Bool* cancel)
+        const OUString& /*title*/, const OUString& /*url*/, sal_Bool /*bCanceable*/, sal_Bool* /*save*/, sal_Bool* /*cancel*/)
 {
 }
 
