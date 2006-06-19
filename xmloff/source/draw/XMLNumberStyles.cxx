@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:40:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -630,7 +630,10 @@ TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
-    mbAutomatic( sal_False ), mnIndex(0), mrImport( rImport ), mnKey( -1 )
+    mrImport( rImport ),
+    mbAutomatic( sal_False ),
+    mnIndex(0),
+    mnKey( -1 )
 {
     mbTimeStyle = IsXMLToken( rLocalName, XML_TIME_STYLE );
 
