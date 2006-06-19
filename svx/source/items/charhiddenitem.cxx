@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charhiddenitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:32:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #define ITEMID_CHARHIDDEN            0
 
@@ -65,9 +63,9 @@ SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
 SfxItemPresentation SvxCharHiddenItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    XubString&          rText, const IntlWrapper */*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -85,6 +83,7 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
             rText = SVX_RESSTR(nId);
             return ePres;
         }
+        default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
