@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:54:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ MetaAction::~MetaAction()
 
 // ------------------------------------------------------------------------
 
-void MetaAction::Execute( OutputDevice* pOut )
+void MetaAction::Execute( OutputDevice* )
 {
 }
 
@@ -151,19 +151,19 @@ MetaAction* MetaAction::Clone()
 
 // ------------------------------------------------------------------------
 
-void MetaAction::Move( long nHorzMove, long nVertMove )
+void MetaAction::Move( long, long )
 {
 }
 
 // ------------------------------------------------------------------------
 
-void MetaAction::Scale( double fScaleX, double fScaleY )
+void MetaAction::Scale( double, double )
 {
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool MetaAction::Compare( const MetaAction& rMetaAction ) const
+sal_Bool MetaAction::Compare( const MetaAction& ) const
 {
     return sal_True;
 }
@@ -3803,7 +3803,6 @@ sal_Bool MetaEPSAction::Compare( const MetaAction& rMetaAction ) const
            ( maSubst == ((MetaEPSAction&)rMetaAction).maSubst ) &&
            ( maPoint == ((MetaEPSAction&)rMetaAction).maPoint ) &&
            ( maSize == ((MetaEPSAction&)rMetaAction).maSize );
-    return sal_True;
 }
 
 // ------------------------------------------------------------------------
