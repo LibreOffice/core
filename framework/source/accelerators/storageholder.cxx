@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storageholder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:11:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,9 +327,9 @@ void StorageHolder::commitPath(const ::rtl::OUString& sPath)
 }
 
 //-----------------------------------------------
-void StorageHolder::closePath(const ::rtl::OUString& sPath)
+void StorageHolder::closePath(const ::rtl::OUString& rPath)
 {
-    ::rtl::OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
+    ::rtl::OUString sNormedPath = StorageHolder::impl_st_normPath(rPath);
     OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
     /* convert list of pathes in the following way:
