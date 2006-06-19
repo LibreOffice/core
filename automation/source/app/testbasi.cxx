@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testbasi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:15:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ TTBasic::TTBasic() : MyBasic()
     pTTO->SetWriteStringHdl( GenWriteStringHdl() );
     pTTO->SetCErrorHdl( LINK( this, TTBasic, CErrorImpl ) );
 
-    StartListening( pTTO->GetTTBroadcaster() );
+    StartListeningTT( pTTO->GetTTBroadcaster() );
 
     pTestObject = pTTO;
     pTestObject->SetFlag( SBX_EXTSEARCH );
