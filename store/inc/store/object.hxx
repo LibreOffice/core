@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:39:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_OBJECT_HXX_
-#define _STORE_OBJECT_HXX_ "$Revision: 1.4 $"
+#define _STORE_OBJECT_HXX_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -80,8 +80,8 @@ class OStoreObject : public store::IStoreHandle
 {
     /** Template function specialization as dynamic_cast replacement.
      */
-    friend inline OStoreObject*
-    SAL_CALL query (IStoreHandle *pHandle, OStoreObject*);
+    friend OStoreObject*
+    SAL_CALL query<> (IStoreHandle *pHandle, OStoreObject*);
 
 public:
     /** Construction.
@@ -124,7 +124,7 @@ private:
 
 /** Template function specialization as dynamic_cast replacement.
  */
-inline OStoreObject*
+template<> inline OStoreObject*
 SAL_CALL query (IStoreHandle *pHandle, OStoreObject*)
 {
     if (pHandle && pHandle->isKindOf (OStoreObject::m_nTypeId))
