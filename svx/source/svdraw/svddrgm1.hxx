@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:24:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ protected:
 
 public:
     TYPEINFO();
-    SdrDragRotate(SdrDragView& rNewView): SdrDragMethod(rNewView),nWink0(0),nWink(0),nSin(0.0),nCos(1.0),bRight(FALSE) {}
+    SdrDragRotate(SdrDragView& rNewView): SdrDragMethod(rNewView),nSin(0.0),nCos(1.0),nWink0(0),nWink(0),bRight(FALSE) {}
 
     virtual void TakeComment(String& rStr) const;
 
@@ -201,9 +201,10 @@ class SdrDragShear : public SdrDragMethod
 public:
     TYPEINFO();
     SdrDragShear(SdrDragView& rNewView,FASTBOOL bSlant1): SdrDragMethod(rNewView),
-        bSlant(bSlant1),aFact(1,1),
-        nWink0(0),nWink(0),nTan(0.0),
-        bVertical(FALSE),bResize(FALSE),bUpSideDown(FALSE) { }
+        aFact(1,1),nWink0(0),nWink(0),
+        nTan(0.0),
+        bVertical(FALSE),bResize(FALSE),bUpSideDown(FALSE),
+        bSlant(bSlant1) {}
 
     virtual void TakeComment(String& rStr) const;
 
@@ -310,7 +311,7 @@ public:
 
     virtual FASTBOOL Beg();
     virtual void MovAllPoints();
-    void MovPoint(Point& rPnt, const Point& rPvOfs, Point* pC1, Point* pC2);
+    void MovPointCrook(Point& rPnt, const Point& rPvOfs, Point* pC1, Point* pC2); // MovPoint -> MovPointCrook
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
