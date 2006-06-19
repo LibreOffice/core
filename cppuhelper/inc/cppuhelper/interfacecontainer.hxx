@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:19:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,9 @@ template< class key , class hashImpl , class equalImpl >
 inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
     SAL_THROW( () )
 {
-    typename CONT_HASHMAP::size_type nSize;
-
     ::osl::MutexGuard aGuard( rMutex );
-    if( nSize = m_pMap->size() )
+    typename CONT_HASHMAP::size_type nSize = m_pMap->size();
+    if( nSize != 0 )
     {
         ::com::sun::star::uno::Sequence< key > aInterfaceTypes( nSize );
         key * pArray = aInterfaceTypes.getArray();
@@ -84,7 +83,7 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
         typename CONT_HASHMAP::iterator iter = m_pMap->begin();
         typename CONT_HASHMAP::iterator end = m_pMap->end();
 
-        sal_Int32 i = 0;
+        sal_uInt32 i = 0;
         while( iter != end )
         {
             // are interfaces added to this container?
@@ -163,7 +162,8 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
     OInterfaceContainerHelper ** ppListenerContainers = NULL;
     {
         ::osl::MutexGuard aGuard( rMutex );
-        if( nSize = m_pMap->size() )
+        nSize = m_pMap->size();
+        if( nSize )
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
