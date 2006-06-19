@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:04:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ namespace sdr
 
         // For draft object display
         sal_Bool ViewContactOfGraphic::PaintGraphicDraft(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             sal_Bool bRetval(sal_False);
             SdrGrafObj& rGrafObj = GetGrafObject();
@@ -282,7 +282,7 @@ namespace sdr
 
         // For empty Graphic PresObj display
         sal_Bool ViewContactOfGraphic::PaintGraphicPresObj(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             sal_Bool bRetval(sal_False);
             OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
@@ -587,6 +587,7 @@ namespace sdr
         // the event. The parameter allows checking for the correct event.
         void ViewContactOfGraphic::ForgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent)
         {
+            (void) pEvent; // suppress warning
             DBG_ASSERT(mpAsynchLoadEvent,
                 "ViewContactOfGraphic::ForgetAsynchGraphicLoadingEvent: I did not trigger a event, why am i called (?)");
             DBG_ASSERT(mpAsynchLoadEvent == pEvent,
