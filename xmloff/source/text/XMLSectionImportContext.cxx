@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:17:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,31 +158,23 @@ static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
 XMLSectionImportContext::XMLSectionImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        xStartRange(),
-        xEndRange(),
-        xSectionPropertySet(),
-        sTextSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_TextSection)),
-        sIndexHeaderSection(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_IndexHeaderSection)),
-        sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition)),
-        sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
-        sProtectionKey(RTL_CONSTASCII_USTRINGPARAM(sAPI_ProtectionKey)),
-        sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected)),
-        sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCurrentlyVisible)),
-        sStyleName(),
-        sName(),
-        sCond(),
-        sEmpty(),
-        bValid(sal_False),
-        bCondOK(sal_False),
-        bIsVisible(sal_True),
-        bSequenceOK(sal_False),
-        bProtect(sal_False),
-        bHasContent(sal_False),
-        bIsCurrentlyVisible(sal_True),
-        bIsCurrentlyVisibleOK(sal_False)
+    const OUString& rLocalName )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sTextSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_TextSection))
+,   sIndexHeaderSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_IndexHeaderSection))
+,   sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition))
+,   sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible))
+,   sProtectionKey(RTL_CONSTASCII_USTRINGPARAM(sAPI_ProtectionKey))
+,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected))
+,   sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCurrentlyVisible))
+,   bProtect(sal_False)
+,   bCondOK(sal_False)
+,   bIsVisible(sal_True)
+,   bValid(sal_False)
+,   bSequenceOK(sal_False)
+,   bIsCurrentlyVisible(sal_True)
+,   bIsCurrentlyVisibleOK(sal_False)
+,   bHasContent(sal_False)
 {
 }
 
@@ -326,12 +318,12 @@ void XMLSectionImportContext::ProcessAttributes(
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+        sal_uInt16 nNamePrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
         OUString sAttr = xAttrList->getValueByIndex(nAttr);
 
-        switch (aTokenMap.Get(nPrefix, sLocalName))
+        switch (aTokenMap.Get(nNamePrefix, sLocalName))
         {
             case XML_TOK_SECTION_STYLE_NAME:
                 sStyleName = sAttr;
