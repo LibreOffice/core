@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 14:58:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2458,23 +2458,6 @@ void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 
 /*************************************************************************
 |*
-|* BASIC anfordern
-|*
-\************************************************************************/
-
-void SdPage::RequestBasic()
-{
-    ::sd::DrawDocShell* pDocShell =
-          static_cast<SdDrawDocument*>(GetModel())->GetDocSh();
-
-    if (pDocShell)
-    {
-        SetBasic( pDocShell->GetBasicManager()->GetLib(0) );
-    }
-}
-
-/*************************************************************************
-|*
 |* Text des Objektes setzen
 |*
 \************************************************************************/
@@ -2650,8 +2633,7 @@ void SdPage::SetLayoutName(String aName)
         USHORT nPos = aLayoutName.Search( aSep );
         if ( nPos != STRING_NOTFOUND )
         {
-            aPageName = aLayoutName;
-            aPageName.Erase( nPos );
+            FmFormPage::SetName(aLayoutName.Copy(0, nPos));
         }
     }
 }
@@ -2665,7 +2647,7 @@ void SdPage::SetLayoutName(String aName)
 
 const String& SdPage::GetName()
 {
-    if (aPageName.Len() == 0)
+    if (GetRealName().Len() == 0)
     {
         if ((ePageKind == PK_STANDARD || ePageKind == PK_NOTES) &&
             !bMaster)
@@ -2702,7 +2684,7 @@ const String& SdPage::GetName()
     }
     else
     {
-        aCreatedPageName = aPageName;
+        aCreatedPageName = GetRealName();
     }
 
     if (ePageKind == PK_NOTES)
