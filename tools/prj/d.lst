@@ -1,9 +1,9 @@
 mkdir: %_DEST%\inc%_EXT%\bootstrp
 mkdir: %_DEST%\inc%_EXT%\tools
 
-
+..\%__SRC%\misc\_ooo_st_btstrp.pdb %_DEST%\lib%_EXT%\_ooo_st_btstrp.pdb
+..\%__SRC%\bin\testshl.exe %_DEST%\bin%_EXT%\testshl.exe
 ..\%__SRC%\bin\soagent.dll %_DEST%\bin%_EXT%\soagent.dll
-..\%__SRC%\bin\symbol.exe %_DEST%\bin%_EXT%\symbol.exe
 ..\%__SRC%\bin\tl?????.dll %_DEST%\bin%_EXT%\tl?????.dll
 ..\%__SRC%\bin\tl?????.sym %_DEST%\bin%_EXT%\tl?????.sym
 ..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
@@ -21,32 +21,18 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
 ..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
 ..\%__SRC%\lib\tstutil.lib %_DEST%\lib%_EXT%\tstutil.lib
-..\%__SRC%\bin\testshl.exe %_DEST%\bin%_EXT%\testshl.exe
+
 
 
 hedabu: ..\%__SRC%\inc\svconf.h %_DEST%\inc%_EXT%\tools\svconf.h
 hedabu: ..\%__SRC%\inc\toolerr.hxx %_DEST%\inc%_EXT%\tools\toolerr.hxx
-hedabu: ..\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx
-hedabu: ..\bootstrp\minormk.hxx %_DEST%\inc%_EXT%\bootstrp\minormk.hxx
-hedabu: ..\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
-hedabu: ..\bootstrp\bsecode.hxx %_DEST%\inc%_EXT%\bootstrp\bsecode.hxx
-hedabu: ..\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
-hedabu: ..\bootstrp\copyprj.hxx %_DEST%\inc%_EXT%\bootstrp\copyprj.hxx
-hedabu: ..\bootstrp\deliver.hxx %_DEST%\inc%_EXT%\bootstrp\deliver.hxx
-hedabu: ..\bootstrp\drvmap.hxx %_DEST%\inc%_EXT%\bootstrp\drvmap.hxx
-hedabu: ..\bootstrp\envset.hxx %_DEST%\inc%_EXT%\bootstrp\envset.hxx
-hedabu: ..\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
-hedabu: ..\bootstrp\errhdl.hxx %_DEST%\inc%_EXT%\bootstrp\errhdl.hxx
-hedabu: ..\bootstrp\fattr.hxx %_DEST%\inc%_EXT%\bootstrp\fattr.hxx
-hedabu: ..\bootstrp\getopt.h %_DEST%\inc%_EXT%\bootstrp\getopt.h
-hedabu: ..\bootstrp\hedabu.hxx %_DEST%\inc%_EXT%\bootstrp\hedabu.hxx
-hedabu: ..\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
-hedabu: ..\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
-hedabu: ..\bootstrp\revision.hxx %_DEST%\inc%_EXT%\bootstrp\revision.hxx
-hedabu: ..\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx
-hedabu: ..\bootstrp\uierr.hxx %_DEST%\inc%_EXT%\bootstrp\uierr.hxx
-hedabu: ..\bootstrp\updmake.hxx %_DEST%\inc%_EXT%\bootstrp\updmake.hxx
-hedabu: ..\bootstrp\vermap.hxx %_DEST%\inc%_EXT%\bootstrp\vermap.hxx
+hedabu: ..\inc\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
+hedabu: ..\inc\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
+hedabu: ..\inc\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
+hedabu: ..\inc\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
+hedabu: ..\inc\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx
+hedabu: ..\inc\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
+hedabu: ..\inc\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
@@ -80,7 +66,6 @@ hedabu: ..\inc\link.hxx %_DEST%\inc%_EXT%\tools\link.hxx
 hedabu: ..\inc\list.hxx %_DEST%\inc%_EXT%\tools\list.hxx
 hedabu: ..\inc\mempool.hxx %_DEST%\inc%_EXT%\tools\mempool.hxx
 hedabu: ..\inc\multisel.hxx %_DEST%\inc%_EXT%\tools\multisel.hxx
-hedabu: ..\inc\new.hxx %_DEST%\inc%_EXT%\tools\new.hxx
 hedabu: ..\inc\ownlist.hxx %_DEST%\inc%_EXT%\tools\ownlist.hxx
 hedabu: ..\inc\postsys.h %_DEST%\inc%_EXT%\tools\postsys.h
 hedabu: ..\inc\presys.h %_DEST%\inc%_EXT%\tools\presys.h
@@ -98,7 +83,6 @@ hedabu: ..\inc\shl.hxx %_DEST%\inc%_EXT%\tools\shl.hxx
 hedabu: ..\inc\simplerm.hxx %_DEST%\inc%_EXT%\tools\simplerm.hxx
 hedabu: ..\inc\solar.h %_DEST%\inc%_EXT%\tools\solar.h
 hedabu: ..\inc\solmath.hxx %_DEST%\inc%_EXT%\tools\solmath.hxx
-hedabu: ..\inc\solver.h %_DEST%\inc%_EXT%\tools\solver.h
 hedabu: ..\inc\stack.hxx %_DEST%\inc%_EXT%\tools\stack.hxx
 hedabu: ..\inc\stdstrm.hxx %_DEST%\inc%_EXT%\tools\stdstrm.hxx
 hedabu: ..\inc\stream.hxx %_DEST%\inc%_EXT%\tools\stream.hxx
@@ -116,12 +100,8 @@ hedabu: ..\inc\vcompat.hxx %_DEST%\inc%_EXT%\tools\vcompat.hxx
 hedabu: ..\inc\wldcrd.hxx %_DEST%\inc%_EXT%\tools\wldcrd.hxx
 hedabu: ..\inc\zcodec.hxx %_DEST%\inc%_EXT%\tools\zcodec.hxx
 hedabu: ..\inc\tempfile.hxx %_DEST%\inc%_EXT%\tools\tempfile.hxx
-hedabu: ..\os2\inc\svpm.h %_DEST%\inc%_EXT%\tools\svpm.h
-hedabu: ..\win\inc\parser.hxx %_DEST%\inc%_EXT%\tools\parser.hxx
 hedabu: ..\win\inc\postwin.h %_DEST%\inc%_EXT%\tools\postwin.h
 hedabu: ..\win\inc\prewin.h %_DEST%\inc%_EXT%\tools\prewin.h
-hedabu: ..\win\inc\shutil.h %_DEST%\inc%_EXT%\tools\shutil.h
-hedabu: ..\win\inc\winshell.hxx %_DEST%\inc%_EXT%\tools\winshell.hxx
 hedabu: ..\inc\l2txtenc.hxx %_DEST%\inc%_EXT%\tools\l2txtenc.hxx
 hedabu: ..\inc\geninfo.hxx %_DEST%\inc%_EXT%\tools\geninfo.hxx
 hedabu: ..\inc\iparser.hxx %_DEST%\inc%_EXT%\tools\iparser.hxx
