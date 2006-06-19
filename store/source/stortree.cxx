@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stortree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:32:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORTREE_CXX "$Revision: 1.5 $"
+#define _STORE_STORTREE_CXX "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -99,7 +99,12 @@ void OStoreBTreeNodeData::initialize (void)
 /*
  * swap.
  */
-void OStoreBTreeNodeData::swap (const D& rDescr)
+void OStoreBTreeNodeData::swap (
+    const D&
+#ifdef OSL_BIGENDIAN
+        rDescr
+#endif /* OSL_BIGENDIAN */
+)
 {
 #ifdef OSL_BIGENDIAN
     m_aGuard.swap();
@@ -218,7 +223,12 @@ void OStoreBTreeNodeData::truncate (sal_uInt16 n)
 /*
  * swap.
  */
-void OStoreBTreeNodeObject::swap (const D& rDescr)
+void OStoreBTreeNodeObject::swap (
+    const D&
+#ifdef OSL_BIGENDIAN
+        rDescr
+#endif /* OSL_BIGENDIAN */
+)
 {
 #ifdef OSL_BIGENDIAN
     base::swap (rDescr);
@@ -498,8 +508,7 @@ storeError OStoreBTreeRootObject::change (
     STORE_METHOD_ENTER(pMutex);
 
     // Save PageDescriptor.
-    typedef OStorePageDescriptor D;
-    D aDescr (m_rPage.m_aDescr);
+    OStorePageDescriptor aDescr (m_rPage.m_aDescr);
 
     // Acquire Lock.
     storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -549,7 +558,7 @@ storeError OStoreBTreeRootObject::change (
  * split.
  */
 storeError OStoreBTreeRootObject::split (
-    sal_uInt16             nIndexL,
+    sal_uInt16,
     OStoreBTreeNodeData   &rPageL,
     OStoreBTreeNodeData   &rPageR,
     OStorePageBIOS        &rBIOS,
