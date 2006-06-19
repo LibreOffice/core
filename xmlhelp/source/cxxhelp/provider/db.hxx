@@ -4,9 +4,9 @@
  *
  *  $RCSfile: db.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:19:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ extern "C" {
   typedef void *(*db_malloc_fcn_type)(size_t);
   typedef void *(*db_realloc_fcn_type)(void *, size_t);
   typedef void (*db_free_fcn_type)(void *);
-};
+}
 
 
 namespace berkeleydbproxy {
@@ -73,8 +73,8 @@ namespace berkeleydbproxy {
     {
         rtl::OString what_;
     public:
-        explicit DbException(rtl::OString const & what)
-        : what_(what)
+        explicit DbException(rtl::OString const & whatparam)
+        : what_(whatparam)
         {}
 
         const char *what() const
