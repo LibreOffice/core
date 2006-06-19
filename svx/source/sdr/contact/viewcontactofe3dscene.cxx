@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofe3dscene.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:04:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:26:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace sdr
 
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
-        sal_Bool ViewContactOfE3dScene::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfE3dScene::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Test layer visibility, force to flat SdrObject here for 3D (!)
             if(!rDisplayInfo.GetProcessLayers().IsSet(GetSdrObject().SdrObject::GetLayer()))
@@ -100,7 +100,7 @@ namespace sdr
         // When ShouldPaintDrawHierarchy() returns sal_True, the DrawHierarchy of the object is painted.
         // Else, the flags and rectangles of the VOCs of the sub-hierarchy are set to the values of the
         // object's VOC.
-        sal_Bool ViewContactOfE3dScene::ShouldPaintDrawHierarchy(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfE3dScene::ShouldPaintDrawHierarchy(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // 3D Scenes do draw their hierarchy themselves, so switch off
             // painting DrawHierarchy.
@@ -109,7 +109,7 @@ namespace sdr
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
         // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfE3dScene::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfE3dScene::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             sal_Bool bRetval(sal_False);
 
