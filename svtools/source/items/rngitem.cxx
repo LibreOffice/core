@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rngitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:04:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,8 @@ SfxXRangeItem::SfxXRangeItem()
 
 // -----------------------------------------------------------------------
 
-SfxXRangeItem::SfxXRangeItem( USHORT nWhich, NUMTYPE from, NUMTYPE to ):
-    SfxPoolItem( nWhich ),
+SfxXRangeItem::SfxXRangeItem( USHORT which, NUMTYPE from, NUMTYPE to ):
+    SfxPoolItem( which ),
     nFrom( from ),
     nTo( to )
 {
@@ -113,9 +113,9 @@ SfxXRangeItem::SfxXRangeItem( const SfxXRangeItem& rItem ) :
 
 SfxItemPresentation SfxXRangeItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -146,7 +146,7 @@ SfxPoolItem* SfxXRangeItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT nVersion ) const
+SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT) const
 {
     NUMTYPE     nVon, nBis;
     rStream >> nVon;
@@ -156,7 +156,7 @@ SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT nVersion ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxXRangeItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SfxXRangeItem::Store(SvStream &rStream, USHORT) const
 {
     rStream << nFrom;
     rStream << nTo;
@@ -230,10 +230,10 @@ int SfxXRangesItem::operator==( const SfxPoolItem &rItem ) const
 
 //-------------------------------------------------------------------------
 
-SfxItemPresentation SfxXRangesItem::GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    XubString &rText,
+SfxItemPresentation SfxXRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
+                                    SfxMapUnit /*eCoreMetric*/,
+                                    SfxMapUnit /*ePresMetric*/,
+                                    XubString &/*rText*/,
                                     const IntlWrapper * ) const
 {
     HACK(n. i.)
@@ -242,21 +242,21 @@ SfxItemPresentation SfxXRangesItem::GetPresentation( SfxItemPresentation ePres,
 
 //-------------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangesItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SfxXRangesItem::Clone( SfxItemPool * ) const
 {
     return new SfxXRangesItem( *this );
 }
 
 //-------------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangesItem::Create( SvStream &rStream, USHORT nVersion ) const
+SfxPoolItem* SfxXRangesItem::Create( SvStream &rStream, USHORT ) const
 {
     return new SfxXRangesItem( Which(), rStream );
 }
 
 //-------------------------------------------------------------------------
 
-SvStream& SfxXRangesItem::Store( SvStream &rStream, USHORT nItemVersion ) const
+SvStream& SfxXRangesItem::Store( SvStream &rStream, USHORT ) const
 {
     NUMTYPE nCount = Count_Impl( _pRanges );
     rStream >> nCount;
