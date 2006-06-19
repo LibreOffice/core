@@ -1,6 +1,6 @@
 PRJ=..$/..
 
-PRJNAME=stream
+PRJNAME=writerperfect
 TARGET=stream
 ENABLE_EXCEPTIONS=true
 
