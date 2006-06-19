@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:57:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,7 @@ namespace DOM
             while (a != NULL)
             {
                 if (a->atype == XML_ATTRIBUTE_ID) {
-                    if (strcmp((char*)a->children->content, (char*)id) == NULL)
+                    if (strcmp((char*)a->children->content, (char*)id) == 0)
                         return cur;
                 }
                 a = a->next;
@@ -321,8 +321,7 @@ namespace DOM
         // search the tree for an element with the given ID
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar *xId = (xmlChar*)o1.getStr();
-        Reference< XUnoTunnel > tunnel(getDocumentElement(), UNO_QUERY);
-        xmlNodePtr pStart = (xmlNodePtr)tunnel->getSomething(Sequence< sal_Int8>());
+        xmlNodePtr pStart = CNode::getNodePtr(getDocumentElement().get());
         xmlNodePtr aNodePtr = _search_element_by_id(pStart, xId);
         return Reference< XElement >(static_cast< CElement* >(CNode::get(aNodePtr)));
     }
@@ -486,7 +485,6 @@ namespace DOM
         default:
             // can't be imported
             throw RuntimeException();
-            break;
 
         }
         if (deep)
