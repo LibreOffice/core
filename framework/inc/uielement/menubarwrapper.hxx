@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarwrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:45:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase
         virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-        // #110897# com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xMenuBarManager;
-
-        // #110897#
+        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };
 
