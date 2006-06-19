@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmnctl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:19:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,12 +70,12 @@ using namespace com::sun::star;
     in seinen Parent ein.
  */
 
-SfxObjectVerbsControl::SfxObjectVerbsControl(USHORT nId, Menu &rMenu, SfxBindings &rBindings)
-    : SfxMenuControl( nId, rBindings )
+SfxObjectVerbsControl::SfxObjectVerbsControl(USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings)
+    : SfxMenuControl( nSlotId, rBindings )
     , pMenu(new PopupMenu)
     , rParent(rMenu)
 {
-    rMenu.SetPopupMenu(nId, pMenu);
+    rMenu.SetPopupMenu(nSlotId, pMenu);
     pMenu->SetSelectHdl(LINK(this, SfxObjectVerbsControl, MenuSelect));
     FillMenu();
 }
@@ -96,7 +96,7 @@ void SfxObjectVerbsControl::FillMenu()
         const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs =  pView->GetVerbs();
         if ( aVerbs.getLength() )
         {
-            USHORT nId = SID_VERB_START;
+            USHORT nSlotId = SID_VERB_START;
             for (USHORT n=0; n<aVerbs.getLength(); n++)
             {
                 // check for ReadOnly verbs
@@ -107,11 +107,11 @@ void SfxObjectVerbsControl::FillMenu()
                 if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                     continue;
 
-                DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
-                if (nId > SID_VERB_END)
+                DBG_ASSERT(nSlotId <= SID_VERB_END, "Zuviele Verben!");
+                if (nSlotId > SID_VERB_END)
                     break;
 
-                pMenu->InsertItem(nId++, aVerbs[n].VerbName);
+                pMenu->InsertItem(nSlotId++, aVerbs[n].VerbName);
             }
         }
     }
@@ -129,8 +129,10 @@ void SfxObjectVerbsControl::FillMenu()
     Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
  */
 
-void SfxObjectVerbsControl::StateChanged( USHORT nSID, SfxItemState eState,
-                                          const SfxPoolItem* pState )
+void SfxObjectVerbsControl::StateChanged(
+    USHORT /*nSID*/,
+    SfxItemState eState,
+    const SfxPoolItem* /*pState*/ )
 {
     rParent.EnableItem(GetId(), SFX_ITEM_AVAILABLE == eState );
     if ( SFX_ITEM_AVAILABLE == eState )
@@ -144,14 +146,14 @@ void SfxObjectVerbsControl::StateChanged( USHORT nSID, SfxItemState eState,
     das selektierte Verb mit ausgef"uhrt,
  */
 
-IMPL_LINK_INLINE_START( SfxObjectVerbsControl, MenuSelect, Menu *, pMenu )
+IMPL_LINK_INLINE_START( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
 {
-    const USHORT nId = pMenu->GetCurItemId();
-    if( nId )
-        GetBindings().Execute(nId);
+    const USHORT nSlotId = pSelMenu->GetCurItemId();
+    if( nSlotId )
+        GetBindings().Execute(nSlotId);
     return 1;
 }
-IMPL_LINK_INLINE_END( SfxObjectVerbsControl, MenuSelect, Menu *, pMenu )
+IMPL_LINK_INLINE_END( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
 
 //--------------------------------------------------------------------
 
