@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:41:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ void ImpTextPortionHandler::ConvertToPathObj(SdrObjGroup& rGroup, FASTBOOL bPoly
 void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawEffect)
 {
     aFormTextBoundRect=Rectangle();
-    const Rectangle& rBR = rTextObj.GetSnapRect();
+    //const Rectangle& rBR = rTextObj.GetSnapRect();
 
     bDraw = bDrawEffect;
 
@@ -301,8 +301,8 @@ ImpRecordPortion::~ImpRecordPortion()
 }
 
 // #101498# List classes for recording portions
-DECLARE_LIST(ImpRecordPortionList, ImpRecordPortion*);
-DECLARE_LIST(ImpRecordPortionListList, ImpRecordPortionList*);
+DECLARE_LIST(ImpRecordPortionList, ImpRecordPortion*)
+DECLARE_LIST(ImpRecordPortionListList, ImpRecordPortionList*)
 
 // #101498# Draw recorded formtext along Poly
 void ImpTextPortionHandler::DrawFormTextRecordPortions(Polygon aPoly)
@@ -444,16 +444,16 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
 {
     // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
     BOOL bIsVertical(rOutliner.IsVertical());
-    Point aPos(aFormTextBoundRect.TopLeft() + pInfo->rStartPos);
+    Point aPos2(aFormTextBoundRect.TopLeft() + pInfo->rStartPos);
     Color aColor(pInfo->rFont.GetColor());
 
     if(bIsVertical)
-        aPos = aFormTextBoundRect.TopRight() + pInfo->rStartPos;
+        aPos2 = aFormTextBoundRect.TopRight() + pInfo->rStartPos;
 
     // #100318# new for XOutGetCharOutline
     // xub_StrLen nCnt = pInfo->nTextLen;
 
-    Point aStartPos(aPos);
+    Point aStartPos(aPos2);
     SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetObjectItemPool()));
     long nHochTief(pInfo->rFont.GetEscapement());
     FontMetric aFontMetric(aVDev.GetFontMetric());
@@ -490,9 +490,9 @@ aVDev.SetFont( aFont );
 
     if(bIsVertical)
         // #83068#
-        aPos.X() += aFontMetric.GetAscent() + nHochTief;
+        aPos2.X() += aFontMetric.GetAscent() + nHochTief;
     else
-        aPos.Y() -= aFontMetric.GetAscent() + nHochTief;
+        aPos2.Y() -= aFontMetric.GetAscent() + nHochTief;
 
     if (pInfo->rFont.IsOutline())
     {
@@ -534,7 +534,7 @@ aVDev.SetFont( aFont );
                     aXPP.Move(0, aFontMetric.GetAscent());
 
                 // move to output coordinates
-                aXPP.Move(aPos.X(), aPos.Y());
+                aXPP.Move(aPos2.X(), aPos2.Y());
                 SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
 
                 pObj->SetMergedItemSet(aAttrSet);
@@ -605,7 +605,7 @@ aVDev.SetFont( aFont );
     if (eStrk!=STRIKEOUT_NONE) {
         FASTBOOL bDouble=eStrk==STRIKEOUT_DOUBLE;
         long nDescent=aFontMetric.GetDescent();
-        long nAscend=aFontMetric.GetAscent();
+        //long nAscend=aFontMetric.GetAscent();
         long nDick=nDescent / (bDouble ? 5 : 3);
         long nDist=(nDescent-nDick*2)/3; // Linienabstand bei doppelt
 
@@ -650,7 +650,7 @@ void ImpTextPortionHandler::DrawFitText(XOutputDevice& rXOut, const Point& rPos,
     rOutliner.SetDrawPortionHdl(Link());
 }
 
-IMPL_LINK(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,pInfo)
+IMPL_LINK(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,EMPTYARG)
 {
     return 0;
 }
