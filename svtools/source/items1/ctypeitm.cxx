@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctypeitm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:03:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,16 +69,16 @@ CntContentTypeItem::CntContentTypeItem()
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( USHORT nWhich, const XubString& rType )
-: CntUnencodedStringItem( nWhich, rType ),
+CntContentTypeItem::CntContentTypeItem( USHORT which, const XubString& rType )
+: CntUnencodedStringItem( which, rType ),
   _eType( CONTENT_TYPE_NOT_INIT )
 {
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( USHORT nWhich,
+CntContentTypeItem::CntContentTypeItem( USHORT which,
                                         const INetContentType eType )
-: CntUnencodedStringItem( nWhich, INetContentTypes::GetContentType( eType ) ),
+: CntUnencodedStringItem( which, INetContentTypes::GetContentType( eType ) ),
   _eType( eType )
 {
 }
@@ -236,8 +236,7 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId ) const
+BOOL CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     rVal <<= rtl::OUString(GetValue());
     return true;
@@ -245,8 +244,7 @@ BOOL CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                      BYTE nMemberId )
+BOOL CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     rtl::OUString aValue;
     if ( rVal >>= aValue )

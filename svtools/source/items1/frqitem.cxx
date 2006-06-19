@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frqitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:05:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 #include "frqitem.hxx"
 
-DBG_NAME( SfxFrequencyItem );
+DBG_NAME( SfxFrequencyItem )
 
 TYPEINIT1( SfxFrequencyItem, SfxPoolItem );
 
@@ -59,8 +59,8 @@ TYPEINIT1( SfxFrequencyItem, SfxPoolItem );
 
 // -----------------------------------------------------------------------
 
-SfxFrequencyItem::SfxFrequencyItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
+SfxFrequencyItem::SfxFrequencyItem( USHORT which ) :
+    SfxPoolItem     ( which ),
     eFrqMode        ( FRQ_DAILY ),
     eFrqTimeMode    ( FRQ_TIME_AT ),
     nDInterval1     ( 1 ),
@@ -77,10 +77,10 @@ SfxFrequencyItem::SfxFrequencyItem( USHORT nWhich ) :
 
 // -----------------------------------------------------------------------
 
-SfxFrequencyItem::SfxFrequencyItem( USHORT nWhich, FrequencyMode eMode, FrequencyTimeMode eTMode,
+SfxFrequencyItem::SfxFrequencyItem( USHORT which, FrequencyMode eMode, FrequencyTimeMode eTMode,
                                     USHORT nDI1, USHORT nDI2, USHORT nDI3, USHORT nTI1,
                                     const Time& rT1, const Time& rT2 ) :
-    SfxPoolItem     ( nWhich ),
+    SfxPoolItem     ( which ),
     eFrqMode        ( eMode ),
     eFrqTimeMode    ( eTMode ),
     nDInterval1     ( nDI1 ),
@@ -130,7 +130,11 @@ int SfxFrequencyItem::operator==( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-int SfxFrequencyItem::Compare( const SfxPoolItem& rItem ) const
+int SfxFrequencyItem::Compare( const SfxPoolItem&
+#ifdef DBG_UTIL
+rItem
+#endif
+) const
 {
     DBG_CHKTHIS( SfxFrequencyItem, 0 );
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -211,9 +215,9 @@ SfxPoolItem* SfxFrequencyItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxFrequencyItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const

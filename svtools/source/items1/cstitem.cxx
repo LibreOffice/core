@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cstitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:03:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,21 +52,21 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-DBG_NAME( SfxCrawlStatusItem );
+DBG_NAME( SfxCrawlStatusItem )
 TYPEINIT1( SfxCrawlStatusItem, SfxPoolItem );
 
 // -----------------------------------------------------------------------
 
-SfxCrawlStatusItem::SfxCrawlStatusItem( USHORT nWhich ) :
-    SfxPoolItem( nWhich )
+SfxCrawlStatusItem::SfxCrawlStatusItem( USHORT which ) :
+    SfxPoolItem( which )
 {
     DBG_CTOR( SfxCrawlStatusItem, 0 );
 }
 
 // -----------------------------------------------------------------------
 
-SfxCrawlStatusItem::SfxCrawlStatusItem( USHORT nWhich, CrawlStatus eStat ) :
-    SfxPoolItem( nWhich ),
+SfxCrawlStatusItem::SfxCrawlStatusItem( USHORT which, CrawlStatus eStat ) :
+    SfxPoolItem( which ),
     eStatus( eStat )
 {
     DBG_CTOR( SfxCrawlStatusItem, 0 );
@@ -141,9 +141,9 @@ SfxPoolItem* SfxCrawlStatusItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxCrawlStatusItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *   pIntlWrapper
 )   const
@@ -236,8 +236,7 @@ SfxItemPresentation SfxCrawlStatusItem::GetPresentation
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxCrawlStatusItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                      BYTE nMemberId )
+BOOL SfxCrawlStatusItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     sal_Int16 aValue;
     if ( rVal >>= aValue )
@@ -252,8 +251,7 @@ BOOL SfxCrawlStatusItem::PutValue( const com::sun::star::uno::Any& rVal,
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxCrawlStatusItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId ) const
+BOOL SfxCrawlStatusItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     sal_Int16 aValue = GetStatus();
     rVal <<= aValue;
