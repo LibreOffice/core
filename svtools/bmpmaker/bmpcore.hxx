@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpcore.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:53:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,7 @@ private:
     ULONG           nTotCount;
     USHORT          nPos;
 
-    void            ImplCreate( SvStream& rStm,
-                                const ::std::vector< DirEntry >& rInDirs,
+    void            ImplCreate( const ::std::vector< DirEntry >& rInDirs,
                                 const DirEntry& rOut,
                                 const String& rName,
                                 const LangInfo& rLang );
