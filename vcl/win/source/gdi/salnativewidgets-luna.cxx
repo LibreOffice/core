@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,12 +322,12 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-BOOL WinSalGraphics::hitTestNativeControl( ControlType nType,
-                              ControlPart nPart,
-                              const Region& rControlRegion,
-                              const Point& aPos,
-                              SalControlHandle& rControlHandle,
-                              BOOL& rIsInside )
+BOOL WinSalGraphics::hitTestNativeControl( ControlType,
+                              ControlPart,
+                              const Region&,
+                              const Point&,
+                              SalControlHandle&,
+                              BOOL& )
 {
     return FALSE;
 }
@@ -432,7 +432,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlPart nPart,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle,
+                            SalControlHandle&,
                             OUString aCaption )
 {
     // a listbox dropdown is actually a combobox dropdown
@@ -902,10 +902,10 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             SalControlHandle& rControlHandle,
-                            OUString aCaption )
+                            const OUString& aCaption )
 {
     BOOL bOk = false;
-    HTHEME hTheme;
+    HTHEME hTheme = NULL;
 
     switch( nType )
     {
@@ -961,6 +961,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
             break;
         default:
             hTheme = NULL;
+            break;
     }
 
     if( !hTheme )
@@ -1002,13 +1003,13 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
  *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL WinSalGraphics::drawNativeControlText( ControlType nType,
-                                ControlPart nPart,
-                                const Region& rControlRegion,
-                                ControlState nState,
-                                const ImplControlValue& aValue,
-                                SalControlHandle& rControlHandle,
-                                OUString aCaption )
+BOOL WinSalGraphics::drawNativeControlText( ControlType,
+                                ControlPart,
+                                const Region&,
+                                ControlState,
+                                const ImplControlValue&,
+                                SalControlHandle&,
+                                const OUString& )
 {
     return( false );
 }
@@ -1031,10 +1032,10 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType nType,
 BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Region& rControlRegion,
-                                ControlState nState,
-                                const ImplControlValue& aValue,
-                                SalControlHandle& rControlHandle,
-                                OUString aCaption,
+                                ControlState,
+                                const ImplControlValue&,
+                                SalControlHandle&,
+                                const OUString&,
                                 Region &rNativeBoundingRegion,
                                 Region &rNativeContentRegion )
 {
