@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:27:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,7 @@
 #include <vcl/bmpacc.hxx>
 #endif
 
-#ifndef _NEW_HXX
-#include <tools/new.hxx>
-#endif
+#include "rtl/alloc.h"
 
 /*************************************************************************
 |*
@@ -1068,7 +1066,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
 
     // Skalierte Bitmap anlegen
     BOOL bUsesAlpha(!!GetAlphaMask());
-    Bitmap aBitmap(GetBitmap());
+    Bitmap aBmp(GetBitmap());
     AlphaMask aTransAlphaMask;
 
     if(bUsesAlpha)
@@ -1078,7 +1076,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
 
     if(aSize != GetBitmapSize())
     {
-        aBitmap.Scale((double)aSize.Width() / (double)GetBitmapSize().Width(),
+        aBmp.Scale((double)aSize.Width() / (double)GetBitmapSize().Width(),
             (double)aSize.Height() / (double)GetBitmapSize().Height());
 
         if(bUsesAlpha)
@@ -1092,7 +1090,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
     // handelt, lege nun eine mit einem definierten Rand an
     if(GetTextureWrapS() == Base3DTextureSingle || GetTextureWrapT() == Base3DTextureSingle)
     {
-        Bitmap aHelpBitmap(aBitmap);
+        Bitmap aHelpBitmap(aBmp);
         AlphaMask aTransAlphaHelpMask;
 
         if(bUsesAlpha)
@@ -1117,11 +1115,11 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
         aHelpBitmap.Scale((double)aNewSize.Width() / (double)aSize.Width(),
             (double)aNewSize.Height() / (double)aSize.Height());
         Color aEraseCol = GetTextureColor();
-        aBitmap.Erase(aEraseCol);
+        aBmp.Erase(aEraseCol);
         Point aPoint;
         Rectangle aCopySrc(aPoint, aNewSize);
         Rectangle aCopyDest(aNewPos, aNewSize);
-        aBitmap.CopyPixel(aCopyDest, aCopySrc, &aHelpBitmap);
+        aBmp.CopyPixel(aCopyDest, aCopySrc, &aHelpBitmap);
 
         if(bUsesAlpha)
         {
@@ -1133,10 +1131,10 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
     }
 
     // Lesezugriff auf neue Bitmap holen
-    BitmapReadAccess* pReadAccess = aBitmap.AcquireReadAccess();
-    BitmapReadAccess* pAlphaReadAccess = (bUsesAlpha) ? aTransAlphaMask.AcquireReadAccess() : NULL;
+    BitmapReadAccess* pRAccess = aBmp.AcquireReadAccess();
+    BitmapReadAccess* pAlphaRAccess = (bUsesAlpha) ? aTransAlphaMask.AcquireReadAccess() : NULL;
     BOOL bGotReadAccess((bUsesAlpha)
-        ? (pReadAccess != 0 && pAlphaReadAccess != 0) : pReadAccess != 0);
+        ? (pRAccess != 0 && pAlphaRAccess != 0) : pRAccess != 0);
 
     if(bGotReadAccess)
     {
@@ -1153,7 +1151,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             nAllocSize += nSize;
         }
 
-        GL_UINT8 pBuffer = (GL_UINT8)SvMemAlloc(nAllocSize);
+        GL_UINT8 pBuffer = (GL_UINT8) rtl_allocateMemory(nAllocSize);
 
         if(pBuffer)
         {
@@ -1161,20 +1159,20 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             GL_UINT8 pRunner = pBuffer;
             if(GetTextureKind() == Base3DTextureColor)
             {
-                if(pReadAccess->HasPalette())
+                if(pRAccess->HasPalette())
                 {
                     for(long a=0;a<aSize.Height();a++)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pReadAccess->GetPaletteColor(pReadAccess->GetPixel(a, b));
+                            BitmapColor rCol = pRAccess->GetPaletteColor(pRAccess->GetPixel(a, b));
                             *pRunner++ = rCol.GetRed();
                             *pRunner++ = rCol.GetGreen();
                             *pRunner++ = rCol.GetBlue();
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1186,14 +1184,14 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pReadAccess->GetPixel(a, b);
+                            BitmapColor rCol = pRAccess->GetPixel(a, b);
                             *pRunner++ = rCol.GetRed();
                             *pRunner++ = rCol.GetGreen();
                             *pRunner++ = rCol.GetBlue();
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1202,18 +1200,18 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             }
             else
             {
-                if(pReadAccess->HasPalette())
+                if(pRAccess->HasPalette())
                 {
                     for(long a=0;a<aSize.Height();a++)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pReadAccess->GetPaletteColor(pReadAccess->GetPixel(a, b));
+                            BitmapColor rCol = pRAccess->GetPaletteColor(pRAccess->GetPixel(a, b));
                             *pRunner++ = (rCol.GetRed() + rCol.GetGreen() + rCol.GetBlue()) / 3;
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1225,12 +1223,12 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pReadAccess->GetPixel(a, b);
+                            BitmapColor rCol = pRAccess->GetPixel(a, b);
                             *pRunner++ = (rCol.GetRed() + rCol.GetGreen() + rCol.GetBlue()) / 3;
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1296,13 +1294,13 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                 (GLsizei)aSize.Height(),
                 0, nFormat, GL_UNSIGNED_BYTE, pBuffer);
 
-            SvMemFree(pBuffer);
+            rtl_freeMemory(pBuffer);
         }
 
         // Lesezugriff freigeben
-        aBitmap.ReleaseAccess(pReadAccess);
+        aBmp.ReleaseAccess(pRAccess);
         if(bUsesAlpha)
-            aTransAlphaMask.ReleaseAccess(pAlphaReadAccess);
+            aTransAlphaMask.ReleaseAccess(pAlphaRAccess);
     }
 
     // Hinweis auf Veraenderung der Texturart auf jeden Fall elliminieren
