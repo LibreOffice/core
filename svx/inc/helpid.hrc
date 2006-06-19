@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:41:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@
 #define HID_PASSWORD                            (HID_SVX_START +  56)
 #define HID_MULTIPATH                           (HID_SVX_START +  57)
 
-//#define HID_BASICIDE_TOOLBOX                  (HID_SVX_START +  58)
+#define HID_GALLERY_PROPERTIES_GENERAL          (HID_SVX_START +  58)
 //#define HID_BASICIDE_OBJECTS                  (HID_SVX_START +  59)
 //#define HID_MACRO_OPTIONS                     (HID_SVX_START +  60)
 //#define HID_BASICIDE_BRKPNTS                  (HID_SVX_START +  61)
