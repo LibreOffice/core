@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:42:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
 #include "sfxresid.hxx"
 
 #include <tools/debug.hxx>
-#pragma hdrstop
 
 #include <svtools/svdde.hxx>
 
@@ -370,7 +369,7 @@ USHORT SvBaseLink::GetUpdateMode() const
 {
     return ( OBJECT_CLIENT_SO & nObjType )
             ? pImplData->ClientType.nUpdateMode
-            : LINKUPDATE_ONCALL;
+            : sal::static_int_cast< USHORT >( LINKUPDATE_ONCALL );
 }
 
 
