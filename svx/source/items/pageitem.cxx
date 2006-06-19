@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pageitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:38:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#pragma hdrstop
 
 // Erstmal definieren, damit die Klassendeklarionen angezogen werden.
 #define  ITEMID_PAGE        0
@@ -94,7 +93,7 @@ SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     Beschreibung: Clonen
  --------------------------------------------------------------------*/
 
-SfxPoolItem* SvxPageItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
 {
     return new SvxPageItem( *this );
 }
@@ -130,8 +129,8 @@ inline XubString GetUsageText( const USHORT eU )
 SfxItemPresentation SvxPageItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
 )   const
 {
@@ -176,6 +175,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
             rText += GetUsageText( eUse );
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -183,7 +183,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
 //------------------------------------------------------------------------
 sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -251,6 +251,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 case style::PageStyleLayout_RIGHT   : eUse |= SVX_PAGE_RIGHT; break;
                 case style::PageStyleLayout_ALL     : eUse |= SVX_PAGE_ALL  ; break;
                 case style::PageStyleLayout_MIRRORED: eUse |= SVX_PAGE_MIRROR;break;
+                default: ;//prevent warning
             }
         }
         break;
@@ -284,7 +285,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, USHORT ) const
 
 //------------------------------------------------------------------------
 
-SvStream& SvxPageItem::Store( SvStream &rStrm, USHORT nItemVersion ) const
+SvStream& SvxPageItem::Store( SvStream &rStrm, USHORT /*nItemVersion*/ ) const
 {
     // UNICODE: rStrm << aDescName;
     rStrm.WriteByteString(aDescName);
@@ -309,13 +310,13 @@ SvxSetItem::SvxSetItem( const SvxSetItem& rItem ) :
 {
 }
 
-SvxSetItem::SvxSetItem( const USHORT nId, SfxItemSet* pSet ) :
+SvxSetItem::SvxSetItem( const USHORT nId, SfxItemSet* _pSet ) :
 
-    SfxSetItem( nId, pSet )
+    SfxSetItem( nId, _pSet )
 {
 }
 
-SfxPoolItem* SvxSetItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
 {
     return new SvxSetItem(*this);
 }
@@ -324,9 +325,9 @@ SfxPoolItem* SvxSetItem::Clone( SfxItemPool *pPool ) const
 
 SfxItemPresentation SvxSetItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
 )   const
 {
@@ -334,14 +335,14 @@ SfxItemPresentation SvxSetItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, USHORT nVersion) const
+SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, USHORT /*nVersion*/) const
 {
-    SfxItemSet* pSet = new SfxItemSet( *GetItemSet().GetPool(),
+    SfxItemSet* _pSet = new SfxItemSet( *GetItemSet().GetPool(),
                                        GetItemSet().GetRanges() );
 
-    pSet->Load( rStrm );
+    _pSet->Load( rStrm );
 
-    return new SvxSetItem( Which(), *pSet );
+    return new SvxSetItem( Which(), *_pSet );
 }
 
 SvStream& SvxSetItem::Store(SvStream &rStrm, USHORT nItemVersion) const
