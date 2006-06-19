@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:55:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #include "defaultoptions.hxx"
 #include "pathoptions.hxx"
@@ -151,28 +149,28 @@ struct PathToDefaultMapping_Impl
 
 static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
 {
-    SvtPathOptions::PATH_ADDIN,         &SvtDefaultOptions_Impl::m_aAddinPath,
-    SvtPathOptions::PATH_AUTOCORRECT,   &SvtDefaultOptions_Impl::m_aAutoCorrectPath,
-    SvtPathOptions::PATH_AUTOTEXT,      &SvtDefaultOptions_Impl::m_aAutoTextPath,
-    SvtPathOptions::PATH_BACKUP,        &SvtDefaultOptions_Impl::m_aBackupPath,
-    SvtPathOptions::PATH_BASIC,         &SvtDefaultOptions_Impl::m_aBasicPath,
-    SvtPathOptions::PATH_BITMAP,        &SvtDefaultOptions_Impl::m_aBitmapPath,
-    SvtPathOptions::PATH_CONFIG,        &SvtDefaultOptions_Impl::m_aConfigPath,
-    SvtPathOptions::PATH_DICTIONARY,    &SvtDefaultOptions_Impl::m_aDictionaryPath,
-    SvtPathOptions::PATH_FAVORITES,     &SvtDefaultOptions_Impl::m_aFavoritesPath,
-    SvtPathOptions::PATH_FILTER,        &SvtDefaultOptions_Impl::m_aFilterPath,
-    SvtPathOptions::PATH_GALLERY,       &SvtDefaultOptions_Impl::m_aGalleryPath,
-    SvtPathOptions::PATH_GRAPHIC,       &SvtDefaultOptions_Impl::m_aGraphicPath,
-    SvtPathOptions::PATH_HELP,          &SvtDefaultOptions_Impl::m_aHelpPath,
-    SvtPathOptions::PATH_LINGUISTIC,    &SvtDefaultOptions_Impl::m_aLinguisticPath,
-    SvtPathOptions::PATH_MODULE,        &SvtDefaultOptions_Impl::m_aModulePath,
-    SvtPathOptions::PATH_PALETTE,       &SvtDefaultOptions_Impl::m_aPalettePath,
-    SvtPathOptions::PATH_PLUGIN,        &SvtDefaultOptions_Impl::m_aPluginPath,
-    SvtPathOptions::PATH_TEMP,          &SvtDefaultOptions_Impl::m_aTempPath,
-    SvtPathOptions::PATH_TEMPLATE,      &SvtDefaultOptions_Impl::m_aTemplatePath,
-    SvtPathOptions::PATH_USERCONFIG,    &SvtDefaultOptions_Impl::m_aUserConfigPath,
-    SvtPathOptions::PATH_USERDICTIONARY,&SvtDefaultOptions_Impl::m_aUserDictionaryPath,
-    SvtPathOptions::PATH_WORK,          &SvtDefaultOptions_Impl::m_aWorkPath
+    { SvtPathOptions::PATH_ADDIN,           &SvtDefaultOptions_Impl::m_aAddinPath },
+    { SvtPathOptions::PATH_AUTOCORRECT, &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
+    { SvtPathOptions::PATH_AUTOTEXT,        &SvtDefaultOptions_Impl::m_aAutoTextPath },
+    { SvtPathOptions::PATH_BACKUP,      &SvtDefaultOptions_Impl::m_aBackupPath },
+    { SvtPathOptions::PATH_BASIC,           &SvtDefaultOptions_Impl::m_aBasicPath },
+    { SvtPathOptions::PATH_BITMAP,      &SvtDefaultOptions_Impl::m_aBitmapPath },
+    { SvtPathOptions::PATH_CONFIG,      &SvtDefaultOptions_Impl::m_aConfigPath },
+    { SvtPathOptions::PATH_DICTIONARY,  &SvtDefaultOptions_Impl::m_aDictionaryPath },
+    { SvtPathOptions::PATH_FAVORITES,       &SvtDefaultOptions_Impl::m_aFavoritesPath },
+    { SvtPathOptions::PATH_FILTER,      &SvtDefaultOptions_Impl::m_aFilterPath },
+    { SvtPathOptions::PATH_GALLERY,     &SvtDefaultOptions_Impl::m_aGalleryPath },
+    { SvtPathOptions::PATH_GRAPHIC,     &SvtDefaultOptions_Impl::m_aGraphicPath },
+    { SvtPathOptions::PATH_HELP,            &SvtDefaultOptions_Impl::m_aHelpPath },
+    { SvtPathOptions::PATH_LINGUISTIC,  &SvtDefaultOptions_Impl::m_aLinguisticPath },
+    { SvtPathOptions::PATH_MODULE,      &SvtDefaultOptions_Impl::m_aModulePath },
+    { SvtPathOptions::PATH_PALETTE,     &SvtDefaultOptions_Impl::m_aPalettePath },
+    { SvtPathOptions::PATH_PLUGIN,      &SvtDefaultOptions_Impl::m_aPluginPath },
+    { SvtPathOptions::PATH_TEMP,          &SvtDefaultOptions_Impl::m_aTempPath },
+    { SvtPathOptions::PATH_TEMPLATE,        &SvtDefaultOptions_Impl::m_aTemplatePath },
+    { SvtPathOptions::PATH_USERCONFIG,  &SvtDefaultOptions_Impl::m_aUserConfigPath },
+    { SvtPathOptions::PATH_USERDICTIONARY,&SvtDefaultOptions_Impl::m_aUserDictionaryPath },
+    { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath }
 };
 
 // functions -------------------------------------------------------------
@@ -249,7 +247,7 @@ String SvtDefaultOptions_Impl::GetDefaultPath( USHORT nId ) const
 
 SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office.Common/Path/Default") )
 {
-    ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
+    /*ConfigManager* pCfgMgr =*/ ConfigManager::GetConfigManager();
     Sequence< OUString > aNames = GetDefaultPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
     EnableNotification( aNames );
