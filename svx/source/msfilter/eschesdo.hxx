@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:44:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,34 +129,35 @@ class ImplEESdrWriter
 {
 protected:
         EscherEx*           mpEscherEx;
-        BOOL                mbStatus;
-        UINT32              mnStatMaxValue;
         MapMode             maMapModeSrc;
         MapMode             maMapModeDest;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mXStatusIndicator;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >        mXDrawPage;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >          mXShapes;
-        BOOL                mbStatusIndicator;
+
+        SvStream*           mpPicStrm;
+
+        // own extensions
+
+        EscherExHostAppData*    mpHostAppData;
 
         UINT32              mnPagesWritten;
 
         UINT32              mnShapeMasterTitle;
         UINT32              mnShapeMasterBody;
 
-        SvStream*           mpPicStrm;
-
-
-        // own extensions
-
-        EscherExHostAppData*    mpHostAppData;
-
         // per page values
         UINT32              mnIndices;
         UINT32              mnOutlinerCount;
         UINT32              mnPrevTextStyle;
+        UINT32              mnStatMaxValue;
+
         UINT16              mnEffectCount;
+
         BOOL                mbIsTitlePossible;
+        BOOL                mbStatusIndicator;
+        BOOL                mbStatus;
 
 
                                 ImplEESdrWriter( EscherEx& rEx );
