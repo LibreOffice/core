@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.218 $
+ *  $Revision: 1.219 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:12:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,8 +167,8 @@
 
 // =======================================================================
 
-DBG_NAMEEX( OutputDevice );
-DBG_NAMEEX( Font );
+DBG_NAMEEX( OutputDevice )
+DBG_NAMEEX( Font )
 
 // =======================================================================
 
@@ -784,11 +784,11 @@ static String GetNextFontToken( const String& rTokenStr, xub_StrLen& rIndex )
         if( (*pStr == ';') || (*pStr == ',') )
             break;
 
-    int nTokenStart = rIndex;
-    int nTokenLen;
+    xub_StrLen nTokenStart = rIndex;
+    xub_StrLen nTokenLen;
     if( pStr < pEnd )
     {
-        rIndex = pStr - rTokenStr.GetBuffer();
+        rIndex = sal::static_int_cast<xub_StrLen>(pStr - rTokenStr.GetBuffer());
         nTokenLen = rIndex - nTokenStart;
         ++rIndex; // skip over token separator
     }
@@ -1371,10 +1371,10 @@ static void ImplCalcType( ULONG& rType, FontWeight& rWeight, FontWidth& rWidth,
 
 ImplFontData::ImplFontData( const ImplDevFontAttributes& rDFA, int nMagic )
 :   ImplDevFontAttributes( rDFA ),
-    mnMagic( nMagic ),
-    mpNext( NULL ),
     mnWidth(0),
-    mnHeight(0)
+    mnHeight(0),
+    mnMagic( nMagic ),
+    mpNext( NULL )
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !mbSymbolFlag )
@@ -1501,8 +1501,8 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
     if( mbDevice )
         nMatch += 1;
 
-    ULONG nHeightMatch = 0;
-    ULONG nWidthMatch = 0;
+    int nHeightMatch = 0;
+    int nWidthMatch = 0;
 
     if( IsScalable() )
     {
@@ -1571,12 +1571,12 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
 ImplDevFontListData::ImplDevFontListData( const String& rSearchName )
 :   mpFirst( NULL ),
     maSearchName( rSearchName ),
-    meFamily( FAMILY_DONTKNOW ),
-    mePitch( PITCH_DONTKNOW ),
-    meMatchWeight( WEIGHT_DONTKNOW ),
-    meMatchWidth( WIDTH_DONTKNOW ),
     mnTypeFaces( 0 ),
     mnMatchType( 0 ),
+    meMatchWeight( WEIGHT_DONTKNOW ),
+    meMatchWidth( WIDTH_DONTKNOW ),
+    meFamily( FAMILY_DONTKNOW ),
+    mePitch( PITCH_DONTKNOW ),
     mnMinQuality( -1 )
 {}
 
@@ -2044,7 +2044,7 @@ void ImplDevFontList::InitMatchData() const
 // -----------------------------------------------------------------------
 
 ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( ULONG nSearchType,
-    FontWeight eSearchWeight, FontWidth eSearchWidth, FontFamily eSearchFamily,
+    FontWeight eSearchWeight, FontWidth eSearchWidth, FontFamily /*eSearchFamily*/,
     FontItalic eSearchItalic, const String& rSearchFamilyName ) const
 {
     if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW) )
@@ -2567,11 +2567,11 @@ ImplFontEntry::ImplFontEntry( const ImplFontSelectData& rFontSelData )
 :   maFontSelData( rFontSelData ),
     maMetric( rFontSelData ),
     mpConversion( NULL ),
+    mnRefCount( 1 ),
+    mnSetFontFlags( 0 ),
     mnOwnOrientation( 0 ),
     mnOrientation( 0 ),
-    mbInit( false ),
-    mnSetFontFlags( 0 ),
-    mnRefCount( 1 )
+    mbInit( false )
 {
     maFontSelData.mpFontEntry = this;
 }
@@ -3130,7 +3130,6 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
 
 void ImplFontCache::Release( ImplFontEntry* pEntry )
 {
-    static const int FONTCACHE_MIN = 5;
     static const int FONTCACHE_MAX = 50;
 
     DBG_ASSERT( (pEntry->mnRefCount > 0), "ImplFontCache::Release() - font refcount underflow" );
@@ -3295,7 +3294,7 @@ void OutputDevice::ImplInitFont() const
             bool bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             bNonAntialiased |= ((rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0);
-            bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
+            bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontEntry->maFontSelData.mnHeight);
             mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
         }
 
@@ -3385,7 +3384,7 @@ bool OutputDevice::ImplNewFont() const
         {
             pFontEntry->mbInit = true;
 
-            pFontEntry->maMetric.mnOrientation  = pFontEntry->maFontSelData.mnOrientation;
+            pFontEntry->maMetric.mnOrientation  = sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation);
             if( mpPDFWriter && mpPDFWriter->isBuiltinFont( pFontEntry->maFontSelData.mpFontData ) )
                 mpPDFWriter->getFontMetric( &pFontEntry->maFontSelData, &(pFontEntry->maMetric) );
             else
@@ -3400,7 +3399,7 @@ bool OutputDevice::ImplNewFont() const
             && !pFontEntry->maMetric.mnOrientation
             && (meOutDevType != OUTDEV_PRINTER) )
             {
-                pFontEntry->mnOwnOrientation = pFontEntry->maFontSelData.mnOrientation;
+                pFontEntry->mnOwnOrientation = sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation);
                 pFontEntry->mnOrientation = pFontEntry->mnOwnOrientation;
             }
             else
@@ -3482,18 +3481,6 @@ bool OutputDevice::ImplNewFont() const
     }
 
     return true;
-}
-
-// -----------------------------------------------------------------------
-
-// TODO: remove this method in the next incompatible build
-void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKernPairs ) const
-{
-    // dummy implementation, because the actual work is now done in
-    // - OutputDevice::GetKerningPairCount()
-    // - OutputDevice::GetKerningPairs()
-    DBG_ASSERT( false, "OutputDevice::ImplInitKerningPairs() is obsolete");
-    return;
 }
 
 // -----------------------------------------------------------------------
@@ -3644,7 +3631,7 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
 :   ImplFontAttributes( rFontSelData )
 {
     mnWidth        = rFontSelData.mnWidth;
-    mnOrientation  = rFontSelData.mnOrientation;
+    mnOrientation  = sal::static_int_cast<short>(rFontSelData.mnOrientation);
 
     if( rFontSelData.mpFontData )
     {
@@ -4098,11 +4085,11 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
         // calculate approximation of strikeout atom size
         long nStrikeoutWidth = nWidth;
         String aStrikeoutTest( pChars, 4 );
-        SalLayout* pSalLayout = ImplLayout( aStrikeoutTest, 0, 4 );
-        if( pSalLayout )
+        SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, 4 );
+        if( pLayout )
         {
-            nStrikeoutWidth = (pSalLayout->GetTextWidth() + 2) / 4;
-            pSalLayout->Release();
+            nStrikeoutWidth = (pLayout->GetTextWidth() + 2) / 4;
+            pLayout->Release();
         }
         // calculate acceptable strikeout length
         // allow the strikeout to be one pixel larger than the text it strikes out
@@ -4498,7 +4485,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
                                         Rectangle& rRect1, Rectangle& rRect2,
                                         long& rYOff, long& rWidth,
                                         FontEmphasisMark eEmphasis,
-                                        long nHeight, short nOrient )
+                                        long nHeight, short /*nOrient*/ )
 {
     static const BYTE aAccentPolyFlags[24] =
     {
@@ -4790,7 +4777,6 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     Rectangle aBoundRect;
     rSalLayout.DrawBase() = Point( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
-    int nWidthFactor = rSalLayout.GetUnitsPerPixel();
     if( !rSalLayout.GetBoundRect( *mpGraphics, aBoundRect ) )
     {
         // guess vertical text extents if GetBoundRect failed
@@ -5347,7 +5333,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor( rColor );
-    BOOL bTransFill = ImplIsColorTransparent( aColor );
+    BOOL bTransFill = ImplIsColorTransparent( aColor ) ? TRUE : FALSE;
 
     if ( !bTransFill )
     {
@@ -5965,7 +5951,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
                 // translate characters to local preference
                 sal_Unicode cChar = GetLocalizedChar( *pStr, meTextLanguage );
                 if( cChar != *pStr )
-                    rStr.SetChar( (pStr - pBase), cChar );
+                    rStr.SetChar( sal::static_int_cast<USHORT>(pStr - pBase), cChar );
             }
         }
     }
@@ -6255,7 +6241,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
             nCharExtra *= nWidthFactor * nSubPixelFactor;
             nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
         }
-        nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
+        nRetVal = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
 
         pSalLayout->Release();
     }
@@ -6296,7 +6282,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
     }
 
     // calculate un-hyphenated break position
-    xub_StrLen nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
+    xub_StrLen nRetVal = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
 
     // calculate hyphenated break position
     String aHyphenatorStr( &nHyphenatorChar, 1 );
@@ -6313,7 +6299,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
         if( nExtraPixelWidth > 0 )
             nTextPixelWidth -= nExtraPixelWidth;
 
-        rHyphenatorPos = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
+        rHyphenatorPos = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
 
         if( rHyphenatorPos > nRetVal )
             rHyphenatorPos = nRetVal;
@@ -6480,7 +6466,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                         long        nMnemonicWidth;
 
                         sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * nLineLen );
-                        BOOL bRet = GetCaretPositions( aStr, pCaretXArray,
+                        /*BOOL bRet =*/ GetCaretPositions( aStr, pCaretXArray,
                                                 nIndex, nLineLen);
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         long lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
@@ -6551,7 +6537,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
-            BOOL bRet = GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
+            /*BOOL bRet =*/ GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
             nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
@@ -6857,9 +6843,9 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                 nLastContent--;
 
             XubString aLastStr( aStr, nLastContent, aStr.Len() );
-            XubString aTempLastStr( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-            aTempLastStr += aLastStr;
-            if ( GetTextWidth( aTempLastStr ) > nMaxWidth )
+            XubString aTempLastStr1( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            aTempLastStr1 += aLastStr;
+            if ( GetTextWidth( aTempLastStr1 ) > nMaxWidth )
                 aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
             else
             {
@@ -6981,7 +6967,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             }
 
             sal_Int32* pCaretXArray = (sal_Int32*)alloca( 2 * sizeof(sal_Int32) * nLen );
-            BOOL bRet = GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
+            /*BOOL bRet =*/ GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
             nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
@@ -7363,7 +7349,7 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
     Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
     {
-        if( !GetTextBoundRect( aRect, rStr, nBase, nIndex+i, 1 ) )
+        if( !GetTextBoundRect( aRect, rStr, sal::static_int_cast<xub_StrLen>(nBase), sal::static_int_cast<xub_StrLen>(nIndex+i), 1 ) )
             break;
         aRect.Move( rOrigin.X(), rOrigin.Y() );
         rVector.push_back( aRect );
@@ -7462,8 +7448,8 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     long nWidth = pSalLayout->GetTextWidth();
     long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
     Point aOffset( nWidth/2, 8 );
-    Size aSize( nWidth + 2*aOffset.X(), nHeight + 2*aOffset.Y() );
-    if( !nWidth || !aVDev.SetOutputSizePixel( aSize ) )
+    Size aOutSize( nWidth + 2*aOffset.X(), nHeight + 2*aOffset.Y() );
+    if( !nWidth || !aVDev.SetOutputSizePixel( aOutSize ) )
         return false;
 
     // draw text in black
@@ -7475,7 +7461,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     pSalLayout->Release();
 
     // find extents using the bitmap
-    Bitmap aBmp = aVDev.GetBitmap( Point(), aSize );
+    Bitmap aBmp = aVDev.GetBitmap( Point(), aOutSize );
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
     if( !pAcc )
         return FALSE;
@@ -7712,7 +7698,7 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout( rStr, nCharPos, 1, Point(0,0), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout( rStr, static_cast< xub_StrLen >(nCharPos), 1, Point(0,0), nTWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
@@ -7818,7 +7804,7 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     // convert and merge into a tool polypolygon
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
-        for( int i = 0; i < aIt->count(); ++i )
+        for( unsigned int i = 0; i < aIt->count(); ++i )
             rPolyPoly.Insert( (*aIt).getB2DPolygon( i ) );
 
     return TRUE;
