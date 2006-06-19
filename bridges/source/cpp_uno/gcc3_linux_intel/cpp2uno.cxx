@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:01:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,9 @@ void cpp2uno_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
                 pCppStack += sizeof(sal_Int32); // extra long
+                break;
+            default:
+                break;
             }
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -436,7 +439,7 @@ void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     void ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 functionCount, sal_Int32 vtableOffset)
+    sal_Int32 /*functionCount*/, sal_Int32 vtableOffset)
 {
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
