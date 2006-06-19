@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _SVX_FMPAGE_HXX
 #include "fmpage.hxx"
