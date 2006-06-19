@@ -240,7 +240,7 @@ void buildNodeTree(
     }
     aNodeTree.setName(aName);
     sal_Int32 size = aPropertyInfos.getLength();
-    for (sal_uInt32 i =0; i < aPropertyInfos.getLength(); ++i)
+    for (sal_Int32 i =0; i < size; ++i)
     {
         addChildrenToNodeTree(&aNodeTree, nNextToken,aPropertyInfos[i],xContext);
     }
@@ -248,7 +248,7 @@ void buildNodeTree(
 }
 //------------------------------------------------------------------------------
 BackendLayerHelper::BackendLayerHelper(
-        const uno::Reference<uno::XComponentContext>& xContext)
+    const uno::Reference<uno::XComponentContext>& /*xContext*/)
     :BackendBase(mMutex)
 {
 }
