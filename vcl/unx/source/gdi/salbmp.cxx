@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:28:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,14 +768,14 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
 
 // -----------------------------------------------------------------------------
 
-bool X11SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
+bool X11SalBitmap::Create( const SalBitmap&, SalGraphics* )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------------
 
-bool X11SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
+bool X11SalBitmap::Create( const SalBitmap&, USHORT )
 {
     return FALSE;
 }
@@ -841,7 +841,7 @@ USHORT X11SalBitmap::GetBitCount() const
 
 // -----------------------------------------------------------------------------
 
-BitmapBuffer* X11SalBitmap::AcquireBuffer( bool bReadOnly )
+BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
 {
     if( !mpDIB && mpDDB )
     {
@@ -854,7 +854,7 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( bool bReadOnly )
 
 // -----------------------------------------------------------------------------
 
-void X11SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, bool bReadOnly )
 {
     if( !bReadOnly )
     {
@@ -1071,7 +1071,7 @@ void ImplSalDDB::ImplDraw(
                         SalDisplay* pDisplay,
 #endif
                         Drawable aSrcDrawable, long nSrcDrawableDepth,
-                           Drawable aDstDrawable, long nDstDrawableDepth,
+                           Drawable aDstDrawable, long,
                            long nSrcX, long nSrcY,
                            long nDestWidth, long nDestHeight,
                            long nDestX, long nDestY, const GC& rGC )
