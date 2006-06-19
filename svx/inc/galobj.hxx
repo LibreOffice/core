@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:07:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ class SgaObjectAnim : public SgaObjectBmp
 {
 private:
 
-                        SgaObjectAnim( const INetURLObject& rURL ) {};
+                        SgaObjectAnim( const INetURLObject& ) {};
 
 public:
 
@@ -244,7 +244,7 @@ class SgaObjectINet : public SgaObjectAnim
 {
 private:
 
-                        SgaObjectINet( const INetURLObject& rURL ) {};
+                        SgaObjectINet( const INetURLObject& ) {};
 
 public:
 
