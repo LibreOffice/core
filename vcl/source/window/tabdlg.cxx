@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:30:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 // =======================================================================
 
-void TabDialog::ImplInitData()
+void TabDialog::ImplInitTabDialogData()
 {
     mpFixedLine     = NULL;
     mpViewWindow    = NULL;
@@ -233,7 +233,7 @@ void TabDialog::ImplPosControls()
 TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_TABDIALOG )
 {
-    ImplInitData();
+    ImplInitTabDialogData();
     ImplInit( pParent, nStyle );
 }
 
@@ -242,7 +242,7 @@ TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
 TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_TABDIALOG )
 {
-    ImplInitData();
+    ImplInitTabDialogData();
     rResId.SetRT( RSC_TABDIALOG );
     ImplInit( pParent, ImplInitRes( rResId ) );
     ImplLoadRes( rResId );
