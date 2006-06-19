@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interceptedinteraction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:34:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,9 @@ void InterceptedInteraction::setInterceptions(const ::std::vector< InterceptedRe
 /*-----------------------------------------------
     18.03.2004 10:10
 -----------------------------------------------*/
-InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(const InterceptedRequest&                                                              rRequest   ,
-                                                                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xOrgRequest)
+InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
+    const InterceptedRequest&,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >&)
 {
     // default behaviour! see impl_interceptRequest() for further informations ...
     return E_NOT_INTERCEPTED;
@@ -140,7 +141,8 @@ void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Ref
         }
         break;
 
-//      case E_INTERCEPTED:
+        case E_INTERCEPTED:
+        break;
     }
 }
 
