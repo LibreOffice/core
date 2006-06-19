@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:16:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:08:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,11 +244,11 @@ Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeE
 //  XAggregation
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDelegator ) throw( RuntimeException )
+void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDel ) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    m_xDelegator = xDelegator ;
+    m_xDelegator = xDel;
 }
 
 //____________________________________________________________________________________________________________
@@ -766,8 +766,8 @@ sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevic
 //  XView
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::setZoom( float   fZoomX  ,
-                                    float   fZoomY  ) throw( RuntimeException )
+void SAL_CALL BaseControl::setZoom( float   /*fZoomX*/  ,
+                                    float   /*fZoomY*/  ) throw( RuntimeException )
 {
     // Not implemented yet
 }
@@ -798,7 +798,7 @@ Size SAL_CALL BaseControl::getSize() throw( RuntimeException )
 //  XEventListener
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::disposing( const EventObject& aSource ) throw( RuntimeException )
+void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -822,7 +822,7 @@ void SAL_CALL BaseControl::disposing( const EventObject& aSource ) throw( Runtim
 //  XPaintListener
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::windowPaint( const PaintEvent& aEvent ) throw( RuntimeException )
+void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ ) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -871,7 +871,7 @@ void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( Runti
 //  XWindowListener
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::windowShown( const EventObject& aEvent ) throw( RuntimeException )
+void SAL_CALL BaseControl::windowShown( const EventObject& /*aEvent*/ ) throw( RuntimeException )
 {
 }
 
@@ -879,7 +879,7 @@ void SAL_CALL BaseControl::windowShown( const EventObject& aEvent ) throw( Runti
 //  XWindowListener
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::windowHidden( const EventObject& aEvent ) throw( RuntimeException )
+void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ ) throw( RuntimeException )
 {
 }
 
@@ -974,9 +974,9 @@ WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindo
 //  protected method
 //____________________________________________________________________________________________________________
 
-void BaseControl::impl_paint(           sal_Int32               nX          ,
-                                        sal_Int32               nY          ,
-                                const   Reference< XGraphics >& xGraphics   )
+void BaseControl::impl_paint(           sal_Int32               /*nX*/          ,
+                                        sal_Int32               /*nY*/          ,
+                                const   Reference< XGraphics >& /*xGraphics*/   )
 {
     // - one paint method for peer AND view !!!
     //   (see also => "windowPaint()" and "draw()")
@@ -987,7 +987,7 @@ void BaseControl::impl_paint(           sal_Int32               nX          ,
 //  protected method
 //____________________________________________________________________________________________________________
 
-void BaseControl::impl_recalcLayout( const WindowEvent& aEvent )
+void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 {
     // We need as virtual function to support automaticly resizing of derived controls!
     // But we make it not pure virtual because it's not neccessary for all derived classes!
