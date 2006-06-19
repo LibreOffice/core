@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSymbolTypePropertyHdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:29:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:02:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ XMLSymbolTypePropertyHdl::~XMLSymbolTypePropertyHdl()
 {}
 
 sal_Bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
-                                                  uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+                                                  uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     sal_Bool bResult = sal_False;
 
@@ -150,7 +150,7 @@ sal_Bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
 }
 
 sal_Bool XMLSymbolTypePropertyHdl::exportXML( OUString& rStrExpValue,
-                                              const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+                                              const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     sal_Bool bResult = sal_False;
 
