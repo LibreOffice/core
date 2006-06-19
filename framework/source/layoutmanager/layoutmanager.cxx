@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:18:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,8 +278,7 @@ bool LayoutManager::UIElement::operator< ( const UIElement& aUIElement ) const
                 if ( m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_TOP ||
                      m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_BOTTOM )
                 {
-                    bool bEqual = ( m_aDockedData.m_aPos.Y() == aUIElement.m_aDockedData.m_aPos.Y() );
-                    if ( !bEqual )
+                    if ( !( m_aDockedData.m_aPos.Y() == aUIElement.m_aDockedData.m_aPos.Y() ) )
                         return  ( m_aDockedData.m_aPos.Y() < aUIElement.m_aDockedData.m_aPos.Y() );
                     else
                     {
@@ -299,8 +298,7 @@ bool LayoutManager::UIElement::operator< ( const UIElement& aUIElement ) const
                 }
                 else
                 {
-                    bool bEqual = ( m_aDockedData.m_aPos.X() == aUIElement.m_aDockedData.m_aPos.X() );
-                    if ( !bEqual )
+                    if ( !( m_aDockedData.m_aPos.X() == aUIElement.m_aDockedData.m_aPos.X() ) )
                         return ( m_aDockedData.m_aPos.X() < aUIElement.m_aDockedData.m_aPos.X() );
                     else
                     {
@@ -416,19 +414,21 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bMustDoLayout( sal_True )
         ,   m_bAutomaticToolbars( sal_True )
         ,   m_bStoreWindowState( sal_False )
+        ,   m_bGlobalSettings( sal_False )
+        ,   m_eDockOperation( DOCKOP_ON_COLROW )
+        ,   m_pInplaceMenuBar( NULL )
         ,   m_xModuleManager( Reference< XModuleManager >(
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::com::sun::star::ui::XUIElementFactory >(
                 xServiceManager->createInstance( SERVICENAME_UIELEMENTFACTORYMANAGER ), UNO_QUERY ))
         ,   m_xPersistentWindowStateSupplier( Reference< XNameAccess >(
                 xServiceManager->createInstance( SERVICENAME_WINDOWSTATECONFIGURATION ), UNO_QUERY ))
-        ,   m_pAddonOptions( 0 )
+        ,   m_pGlobalSettings( 0 )
         ,   m_aCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "custom_" ))
         ,   m_aFullCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/custom_" ))
         ,   m_aFullAddonTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/addon_" ))
         ,   m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
         ,   m_aProgressBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
-        ,   m_eDockOperation( DOCKOP_ON_COLROW )
         ,   m_aPropDocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKED ))
         ,   m_aPropVisible( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_VISIBLE ))
         ,   m_aPropDockingArea( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
@@ -436,12 +436,11 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_aPropPos( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_POS ))
         ,   m_aPropSize( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_SIZE ))
         ,   m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ))
-        ,   m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
         ,   m_aPropStyle( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_STYLE ))
+        ,   m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
         ,   m_aCustomizeCmd( RTL_CONSTASCII_USTRINGPARAM( "ConfigureDialog" ))
+        ,   m_pAddonOptions( 0 )
         ,   m_aListenerContainer( m_aLock.getShareableOslMutex() )
-        ,   m_pGlobalSettings( 0 )
-        ,   m_bGlobalSettings( sal_False )
 {
     // Initialize statusbar member
     m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
@@ -895,7 +894,6 @@ void LayoutManager::implts_createCustomToolBars()
         if ( implts_isPreviewModel( xModel ))
             return; // no custom toolbars for preview frame!
 
-        sal_Int32 i( 0 );
         Sequence< Sequence< PropertyValue > > aTbxSeq;
         if ( xDocCfgMgr.is() )
         {
@@ -985,7 +983,7 @@ void LayoutManager::implts_createAddonsToolBars()
 
                 OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
 
-                WriteGuard aWriteLock( m_aLock );
+                aWriteLock.lock();
                 UIElement& rElement = impl_findElement( aAddonToolBarName );
                 if ( rElement.m_aName.getLength() > 0 )
                 {
@@ -1146,8 +1144,6 @@ void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive 
                         {
                             pIter->m_bDeactiveHide = sal_False;
                             // we need VCL here to pass special flags to Show()
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
-                            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                             if( pWindow )
                                 pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                             //xWindow->setVisible( sal_True );
@@ -1169,7 +1165,6 @@ void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive 
 
 sal_Bool LayoutManager::implts_findElement( const rtl::OUString& aName, rtl::OUString& aElementType, rtl::OUString& aElementName, Reference< XUIElement >& xUIElement )
 {
-    sal_Int32 nIndex = 0;
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
     {
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
@@ -1269,8 +1264,6 @@ LayoutManager::UIElement& LayoutManager::impl_findElement( const rtl::OUString& 
 
 void LayoutManager::implts_writeNewStateData( const rtl::OUString aName, const Reference< css::awt::XWindow >& xWindow )
 {
-    sal_Bool            bWinData( sal_False );
-    Window*             pWindow( 0 );
     css::awt::Rectangle aPos;
     css::awt::Size      aSize;
     sal_Bool            bVisible( sal_False );
@@ -1466,9 +1459,9 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
             {
                 if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
                 {
-                    WriteGuard aWriteLock( m_aLock );
+                    WriteGuard aWriteLock2( m_aLock );
                     m_bGlobalSettings = sal_True;
-                    aWriteLock.unlock();
+                    aWriteLock2.unlock();
 
                     css::uno::Any aValue;
                     sal_Bool      bValue;
@@ -1528,7 +1521,6 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
     {
         try
         {
-            sal_Bool bValue( sal_False );
             Sequence< PropertyValue > aWindowState( 8 );
 
             aWindowState[0].Name    = m_aPropDocked;
@@ -1809,7 +1801,6 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
     sal_Int32 nMaxSpace( 0 );
     sal_Int32 nNeededSpace( 0 );
     sal_Int32 nTopDockingAreaSize( 0 );
-    sal_Bool  bFoundRowColumn( sal_False );
 
     if (( DockingArea == DockingArea_DOCKINGAREA_TOP ) ||
         ( DockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
@@ -1828,7 +1819,6 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
 
     implts_getDockingAreaElementInfos( DockingArea, aRowColumnsWindowData );
     sal_Int32 nPixelPos( 0 );
-    sal_Int32 nCurrRowCol( 0 );
     for ( sal_Int32 i = 0; i < sal_Int32( aRowColumnsWindowData.size()); i++ )
     {
         SingleRowColumnWindowData& rRowColumnWindowData = aRowColumnsWindowData[i];
@@ -1995,16 +1985,10 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
                 Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                 if ( xWindow.is() )
                 {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
-                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                    if ( pWindow &&
-                         pIter->m_bVisible &&
-                         xDockWindow.is() &&
-                         !pIter->m_bFloating )
+                    if ( xDockWindow.is() && pIter->m_bVisible && !pIter->m_bFloating )
                     {
                         // docked windows
-                        const UIElement& rElement = *pIter;
                         aWindowVector.push_back( *pIter );
                     }
                 }
@@ -2210,7 +2194,6 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
                     if ( pWindow && pIter->m_bVisible && xDockWindow.is() && !pIter->m_bFloating )
                     {
                         // docked windows
-                        const UIElement& rElement = *pIter;
                         aWindowVector.push_back( *pIter );
                     }
                 }
@@ -2232,7 +2215,6 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
 
     // Collect data from windows that are on the same row/column
     sal_Int32 j;
-    sal_Int32 nIndex( 0 );
     sal_Int32 nLastPos( 0 );
 
     for ( j = 0; j < sal_Int32( aWindowVector.size()); j++ )
@@ -2428,7 +2410,6 @@ LayoutManager::implts_determineDockingOperation(
 {
     const sal_Int32 nHorzVerticalRegionSize        = 6;
     const sal_Int32 nHorzVerticalMoveRegion        = 4;
-    const sal_Int32 nHorzVerticalBeforeAfterRegion = 1;
 
     if ( rRowColRect.IsInside( rMousePos ))
     {
@@ -2753,7 +2734,7 @@ void LayoutManager::implts_calcDockingPosSize(
                             sal_Int32 nPosY( 0 );
                             {
                                 vos::OGuard aGuard( Application::GetSolarMutex() );
-                                sal_Int32 nPosY = pDockingAreaWindow->ScreenToOutputPixel(
+                                nPosY = pDockingAreaWindow->ScreenToOutputPixel(
                                                     pContainerWindow->OutputToScreenPixel( aWindowRect.BottomRight() )).Y();
                             }
                             rUIElement.m_aDockedData.m_aPos.X() = nRowCol;
@@ -2937,7 +2918,7 @@ void LayoutManager::implts_calcDockingPosSize(
 
 void LayoutManager::implts_renumberRowColumnData(
     ::com::sun::star::ui::DockingArea eDockingArea,
-    DockingOperation eDockingOperation,
+    DockingOperation /*eDockingOperation*/,
     const UIElement& rUIElement )
 {
     ReadGuard aReadLock( m_aLock );
@@ -3046,7 +3027,7 @@ void LayoutManager::implts_renumberRowColumnData(
     return aSize;
 }
 
-void LayoutManager::implts_sortActiveElement( const UIElement& rActiveUIElement )
+void LayoutManager::implts_sortActiveElement( const UIElement&  )
 {
     implts_sortUIElements();
 }
@@ -3210,12 +3191,12 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     else
     {
         // Set docking area window size to zero
-        ReadGuard aReadLock( m_aLock );
+        ReadGuard aReadLock2( m_aLock );
         Reference< css::awt::XWindow > xTopDockingWindow    = m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP];
         Reference< css::awt::XWindow > xLeftDockingWindow   = m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT];
         Reference< css::awt::XWindow > xRightDockingWindow  = m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT];
         Reference< css::awt::XWindow > xBottomDockingWindow = m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM];
-        aReadLock.unlock();
+        aReadLock2.unlock();
 
         try
         {
@@ -3591,7 +3572,7 @@ throw (RuntimeException)
     implts_reset( sal_True );
 }
 
-void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 pInplaceMenuBarPointer )
+void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 )
 throw (::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
@@ -4024,7 +4005,6 @@ throw (RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    sal_Bool    bFound( sal_False );
     sal_Bool    bMustLayouted( sal_False );
     sal_Bool    bMustBeDestroyed( sal_False );
     sal_Bool    bMustBeSorted( sal_False );
@@ -4933,7 +4913,7 @@ throw (RuntimeException)
                 }
                 else
                 {
-                    ReadGuard aReadLock( m_aLock );
+                    aReadLock.lock();
                     return m_bMenuVisible;
                 }
             }
@@ -5232,7 +5212,6 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
         if ( bGotRequestedBorderSpace )
         {
-            std::vector< UIElement >    aWindowVector[DOCKINGAREAS_COUNT];
             ::Size                      aContainerSize;
             ::Size                      aStatusBarSize;
 
@@ -5314,7 +5293,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
                                                                const ::Size& rContainerSize )
 {
     sal_Int32   nDiff( 0 );
-    sal_Int32   nSpace( rRowColumnWindowData.nSpace );
+    sal_Int32   nRCSpace( rRowColumnWindowData.nSpace );
     sal_Int32   nTopDockingAreaSize;
     sal_Int32   nBottomDockingAreaSize;
     sal_Int32   nContainerClientSize;
@@ -5336,14 +5315,13 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
         nDiff = nContainerClientSize - rRowColumnWindowData.nVarSize;
     }
 
-    if (( nDiff < 0 ) && ( nSpace > 0 ))
+    if (( nDiff < 0 ) && ( nRCSpace > 0 ))
     {
         // First we try to reduce the size of blank space before/behind docked windows
         sal_Int32 i = rRowColumnWindowData.aRowColumnWindowSizes.size()-1;
         while ( i >= 0 )
         {
-            sal_Int32            nSpace   = rRowColumnWindowData.aRowColumnSpace[i];
-            css::awt::Rectangle& rWinRect = rRowColumnWindowData.aRowColumnWindowSizes[i];
+            sal_Int32 nSpace = rRowColumnWindowData.aRowColumnSpace[i];
             if ( nSpace >= -nDiff )
             {
                 if (( nDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
@@ -5665,7 +5643,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
     if ( rBorderSpace.Y >= 0 )
     {
         // Top docking area window
-        ReadGuard aReadLock( m_aLock );
+        aReadLock.lock();
         Reference< css::awt::XWindow > xDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP] );
         aReadLock.unlock();
 
@@ -5680,7 +5658,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
         sal_Int32 nBottomPos = std::max( sal_Int32( aContainerClientSize.Height - rBorderSpace.Height - aStatusBarSize.Height() ), sal_Int32( 0 ));
         sal_Int32 nHeight = ( nBottomPos == 0 ) ? 0 : rBorderSpace.Height;
 
-        ReadGuard aReadLock( m_aLock );
+        aReadLock.lock();
         Reference< css::awt::XWindow > xDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM] );
         aReadLock.unlock();
 
@@ -5693,7 +5671,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
     if ( rBorderSpace.X >= 0 || nLeftRightDockingAreaHeight > 0 )
     {
         // Left docking area window
-        ReadGuard aReadLock( m_aLock );
+        aReadLock.lock();
         Reference< css::awt::XWindow > xDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT] );
         aReadLock.unlock();
 
@@ -5706,7 +5684,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
     if ( rBorderSpace.Width >= 0 || nLeftRightDockingAreaHeight > 0 )
     {
         // Right docking area window
-        ReadGuard aReadLock( m_aLock );
+        aReadLock.lock();
         Reference< css::awt::XWindow > xDockAreaWindow( m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT] );
         aReadLock.unlock();
 
@@ -5863,7 +5841,7 @@ sal_Int16 LayoutManager::implts_getCurrentSymbolsStyle()
     return eOptSymbolsStyle;
 }
 
-IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, pMenu )
+IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )
 {
     ReadGuard aReadLock( m_aLock );
     Reference< XStatusListener > xMenuBarCloseListener = m_xMenuBarCloseListener;
@@ -5881,7 +5859,7 @@ IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, pMenu )
     return 0;
 }
 
-IMPL_LINK( LayoutManager, OptionsChanged, void*, pVoid )
+IMPL_LINK( LayoutManager, OptionsChanged, void*, EMPTYARG )
 {
     sal_Int16 eSymbolsSize( implts_getCurrentSymbolsSize() );
     sal_Int16 eSymbolsStyle( implts_getCurrentSymbolsStyle() );
@@ -5900,7 +5878,7 @@ IMPL_LINK( LayoutManager, OptionsChanged, void*, pVoid )
 
         std::vector< Reference< XUpdatable > > aToolBarVector;
 
-        ReadGuard aReadLock( m_aLock );
+        aReadLock.lock();
         {
             UIElementVector::iterator pIter;
             for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
@@ -5927,7 +5905,7 @@ IMPL_LINK( LayoutManager, OptionsChanged, void*, pVoid )
     return 1;
 }
 
-IMPL_LINK( LayoutManager, SettingsChanged, void*, pVoid )
+IMPL_LINK( LayoutManager, SettingsChanged, void*, EMPTYARG )
 {
     return 1;
 }
@@ -6202,7 +6180,6 @@ void SAL_CALL LayoutManager::endDocking( const ::com::sun::star::awt::EndDocking
 throw (::com::sun::star::uno::RuntimeException)
 {
     sal_Bool    bDockingInProgress( sal_False );
-    sal_Bool    bMustLayout( sal_False );
     sal_Bool    bStartDockFloated( sal_False );
     sal_Bool    bFloating( sal_False );
     UIElement   aUIDockingElement;
@@ -6218,8 +6195,6 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( aUIDockingElement.m_bFloating )
         {
             // Write last position into position data
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            Window* pContainerWindow( VCLUnoHelper::GetWindow( m_xContainerWindow ) );
             Reference< css::awt::XWindow > xWindow( aUIDockingElement.m_xUIElement->getRealInterface(), UNO_QUERY );
             rUIElement.m_aFloatingData = aUIDockingElement.m_aFloatingData;
             css::awt::Rectangle aTmpRect = xWindow->getPosSize();
@@ -6528,7 +6503,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 }
 
-void SAL_CALL LayoutManager::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e )
+void SAL_CALL LayoutManager::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 
@@ -6643,7 +6618,7 @@ throw( css::uno::RuntimeException )
     }
 }
 
-void SAL_CALL LayoutManager::windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL LayoutManager::windowMoved( const css::awt::WindowEvent& ) throw( css::uno::RuntimeException )
 {
 }
 
@@ -6706,7 +6681,7 @@ void SAL_CALL LayoutManager::windowHidden( const css::lang::EventObject& aEvent 
     }
 }
 
-IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, pTimer )
+IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
@@ -6782,7 +6757,7 @@ throw ( RuntimeException )
 
 // ______________________________________________
 
-void SAL_CALL LayoutManager::disposing( const css::lang::EventObject& aEvent )
+void SAL_CALL LayoutManager::disposing( const css::lang::EventObject& rEvent )
 throw( RuntimeException )
 {
     sal_Bool bDisposeAndClear( sal_False );
@@ -6790,7 +6765,7 @@ throw( RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    if ( aEvent.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
+    if ( rEvent.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
     {
         // Our frame gets disposed, release all our references that depends on a working
         // frame reference.
@@ -6855,7 +6830,7 @@ throw( RuntimeException )
 
         bDisposeAndClear = sal_True;
     }
-    else if ( aEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
+    else if ( rEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
     {
         // Our container window gets disposed. Remove all user interface elements.
         m_aUIElements.clear();
@@ -6869,11 +6844,11 @@ throw( RuntimeException )
         m_xInplaceMenuBar.clear();
         m_xContainerWindow.clear();
     }
-    else if ( aEvent.Source == Reference< XInterface >( m_xDocCfgMgr, UNO_QUERY ))
+    else if ( rEvent.Source == Reference< XInterface >( m_xDocCfgMgr, UNO_QUERY ))
     {
         m_xDocCfgMgr.clear();
     }
-    else if ( aEvent.Source == Reference< XInterface >( m_xModuleCfgMgr , UNO_QUERY ))
+    else if ( rEvent.Source == Reference< XInterface >( m_xModuleCfgMgr , UNO_QUERY ))
     {
         m_xModuleCfgMgr.clear();
     }
@@ -6897,14 +6872,14 @@ void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::Config
 
     OUString                aElementType;
     OUString                aElementName;
-    Reference< XUIElement > xUIElement;
+    Reference< XUIElement > xElement;
     Reference< XFrame >     xFrame( m_xFrame );
 
     if ( m_xFrame.is() )
     {
-        implts_findElement( Event.ResourceURL, aElementType, aElementName, xUIElement );
+        implts_findElement( Event.ResourceURL, aElementType, aElementName, xElement );
 
-        Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
+        Reference< XUIElementSettings > xElementSettings( xElement, UNO_QUERY );
         if ( xElementSettings.is() )
         {
             OUString aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
@@ -7235,4 +7210,4 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutMan
     return lPropertyDescriptor;
 }
 
-}; // namespace framework
+} // namespace framework
