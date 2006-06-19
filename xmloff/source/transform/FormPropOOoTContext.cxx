@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormPropOOoTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:45:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ XMLTransformerContext *XMLFormPropOOoTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
-        const Reference< XAttributeList >& xAttrList )
+        const Reference< XAttributeList >& )
 {
     XMLTransformerContext *pContext = 0;
 
