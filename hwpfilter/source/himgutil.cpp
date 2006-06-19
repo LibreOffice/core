@@ -4,9 +4,9 @@
  *
  *  $RCSfile: himgutil.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:35:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,10 +170,11 @@ int ReadFileType(const char *fname)
 const char *GetEmbImgname(const EmPicture * empic)
 {
     static char fname[256];
-    char *ptr, *ext;
+    char *ptr;
+    const char *ext;
 
     tmpnam(fname);
-    if (!empic || !empic->name[0] || !(ptr = strrchr(fname, DIRSEP)))
+    if (!empic || !empic->name[0] || (0 == (ptr = strrchr(fname, DIRSEP))))
         return NULL;
     switch (ImageMagicType((uchar *) empic->data))
     {
@@ -232,6 +233,6 @@ const char *GetEmbImgname(const EmPicture * empic)
             ext = "666";
             break;
     };
-    sprintf(ptr + 1, "mz_%s.%s", empic->name, ext);
+    sprintf(ptr + 1, "mz_%s.%s", empic->name,ext);
     return fname;
 }
