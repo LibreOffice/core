@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:04:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
     return new PADialog( pParent, bAdmin );
 }
 
-PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
+PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
         ModalDialog( pParent, PaResId( RID_PADIALOG ) ),
         m_aDevicesLB( this, PaResId( RID_PA_LB_DEV ) ),
         m_aConfPB( this, PaResId( RID_PA_BTN_CONF ) ),
@@ -276,7 +276,7 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK( PADialog, EndPrintHdl, void*, pNil )
+IMPL_LINK( PADialog, EndPrintHdl, void*, EMPTYARG )
 {
     String aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
     InfoBox aInfoBox( this, aInfoString );
