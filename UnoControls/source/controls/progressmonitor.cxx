@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progressmonitor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:18:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:09:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,12 +175,12 @@ Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType ) throw( Runtime
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
-    Reference< XInterface > xDelegator = BaseContainerControl::impl_getDelegator();
-    if ( xDelegator.is() == sal_True )
+    Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
+    if ( xDel.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
         // Delegator will ask his own queryAggregation!
-        aReturn = xDelegator->queryInterface( rType );
+        aReturn = xDel->queryInterface( rType );
     }
     else
     {
@@ -584,7 +584,7 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
 //  XLayoutConstrains
 //____________________________________________________________________________________________________________
 
-Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& rNewSize ) throw( RuntimeException )
+Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& /*rNewSize*/ ) throw( RuntimeException )
 {
     return getPreferredSize () ;
 }
@@ -611,7 +611,7 @@ void SAL_CALL ProgressMonitor::createPeer ( const Reference< XToolkit > & rToolk
 //  XControl
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL ProgressMonitor::setModel ( const Reference< XControlModel > & rModel ) throw( RuntimeException )
+sal_Bool SAL_CALL ProgressMonitor::setModel ( const Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
 {
     // We have no model.
     return sal_False ;
@@ -1069,7 +1069,7 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, s
 #ifdef DBG_UTIL
 
 // addText, updateText
-sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, const OUString& rText, sal_Bool bbeforeProgress )
+sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, const OUString& rText, sal_Bool /*bbeforeProgress*/ )
 {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
@@ -1086,7 +1086,7 @@ sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, co
 }
 
 // removeText
-sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, sal_Bool bbeforeProgress )
+sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, sal_Bool /*bbeforeProgress*/ )
 {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
