@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventattachermgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:45:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,10 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
             case TypeClass_LONG:            rRet <<= sal_Int32( 0 );    break;
             case TypeClass_UNSIGNED_SHORT:  rRet <<= sal_uInt16( 0 );   break;
             case TypeClass_UNSIGNED_LONG:   rRet <<= sal_uInt32( 0 );   break;
-            break;
+
+            default:
+                OSL_ASSERT(false);
+                break;
         }
     }
     else if( !rRet.getValueType().equals( rRetType ) )
@@ -408,6 +411,10 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                 case TypeClass_LONG:            if( *((sal_Int32*)aRet.getValue()) )    return aRet; break;
                 case TypeClass_UNSIGNED_SHORT:  if( *((sal_uInt16*)aRet.getValue()) )   return aRet; break;
                 case TypeClass_UNSIGNED_LONG:   if( *((sal_uInt32*)aRet.getValue()) )   return aRet; break;
+
+                default:
+                    OSL_ASSERT(false);
+                    break;
             }
         }
         catch( CannotConvertException& )
@@ -469,9 +476,9 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 //-----------------------------------------------------------------------------
 ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                                                     const Reference< XMultiServiceFactory > rSMgr )
-    : mxIntrospection( rIntrospection )
+    : aScriptListeners( aLock )
     , mxSMgr( rSMgr )
-    , aScriptListeners( aLock )
+    , mxIntrospection( rIntrospection )
 {
     if ( rSMgr.is() )
     {
