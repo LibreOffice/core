@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:33:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,7 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
         SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
         if(pItem)
         {
-            aPos = SvTreeListBox::GetEntryPos( pEntry );
+            aPos = GetEntryPosition( pEntry );
             Size aSize(pItem->GetSize( this, pEntry ));
             aPos.X() = GetTabPos( pEntry, pTab );
 
