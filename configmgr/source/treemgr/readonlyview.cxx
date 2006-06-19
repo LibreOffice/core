@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readonlyview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:32:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ void ReadOnlyViewStrategy::doInsertElement(SetNode const& , Name const& , SetNod
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyViewStrategy::doRemoveElement(SetNode const& _aNode, Name const& _aName)
+void ReadOnlyViewStrategy::doRemoveElement(SetNode const& /*_aNode*/, Name const& /*_aName*/)
 {
     failReadOnly();
 }
