@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesdta.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:57:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@ Meaning::Meaning(
             const OUString &rTerm, INT16 nLang) :
 #endif
 
+    aSyn        ( Sequence< OUString >(1) ),
     aTerm       (rTerm),
-    nLanguage   (nLang),
-    aSyn        ( Sequence< OUString >(1) )
+    nLanguage   (nLang)
 
 {
 #if 0
