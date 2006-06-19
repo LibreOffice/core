@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hiodev.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:36:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: hiodev.cpp,v 1.4 2005-09-07 16:36:21 rt Exp $ */
+/* $Id: hiodev.cpp,v 1.5 2006-06-20 00:53:55 hr Exp $ */
 
 #ifdef __GNUG__
 #pragma implementation "hiodev.h"
@@ -89,7 +89,7 @@ int HIODev::read1b(void *ptr, int nmemb)
         return -1;
     for (ii = 0; ii < nmemb; ii++)
     {
-        p[ii] = read1b();
+        p[ii] = sal::static_int_cast<uchar>(read1b());
         if (state())
             break;
     }
@@ -106,7 +106,7 @@ int HIODev::read2b(void *ptr, int nmemb)
         return -1;
     for (ii = 0; ii < nmemb; ii++)
     {
-        p[ii] = read2b();
+        p[ii] = sal::static_int_cast<uchar>(read2b());
         if (state())
             break;
     }
@@ -318,7 +318,7 @@ int HMemIODev::state(void) const
 }
 
 
-bool HMemIODev::setCompressed(bool flag)
+bool HMemIODev::setCompressed(bool )
 {
     return false;
 }
