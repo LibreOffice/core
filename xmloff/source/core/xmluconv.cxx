@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:11:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,7 +704,7 @@ void SvXMLUnitConverter::convertNumber( OUStringBuffer& rBuffer,
 /** convert string to number with optional min and max values */
 sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
                                         const OUString& rString,
-                                        sal_Int32 nMin, sal_Int32 nMax )
+                                        sal_Int32 /*nMin*/, sal_Int32 /*nMax*/ )
 {
     sal_Bool bNeg = sal_False;
     rValue = 0;
@@ -1732,6 +1732,7 @@ void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rt
     sal_Int32 nCharsDecoded = decodeBase64SomeChars( aBuffer, sBuffer );
     OSL_ENSURE( nCharsDecoded == sBuffer.getLength(),
                 "some bytes left in base64 decoding!" );
+    (void)nCharsDecoded;
 }
 
 sal_Int32 SvXMLUnitConverter::decodeBase64SomeChars(
@@ -2374,6 +2375,8 @@ sal_Bool SvXMLUnitConverter::convertAny(      ::rtl::OUStringBuffer&    sValue,
                     SvXMLUnitConverter::convertDateTime(sValue, aDateTime);
                 }
             }
+            break;
+        default:
             break;
     }
 
