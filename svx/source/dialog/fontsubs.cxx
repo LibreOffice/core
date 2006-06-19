@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:55:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #ifdef PRECOMPILED
 #include "svxpch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
@@ -78,12 +76,12 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, ResId(RID_SVX_FONT_SUBSTITUTION, DIALOG_MGR()), rSet),
     aUseTableCB         (this,  ResId(CB_USETABLE)),
-    aCheckLB            (this,  ResId(CLB_SUBSTITUTES)),
     aFont1FT            (this,  ResId(FT_FONT1)),
     aFont1CB            (this,  ResId(CB_FONT1)),
     aFont2FT            (this,  ResId(FT_FONT2)),
     aFont2CB            (this,  ResId(CB_FONT2)),
     aNewDelTBX          (this,  ResId(TBX_SUBSTNEWDEL)),
+    aCheckLB            (this,  ResId(CLB_SUBSTITUTES)),
 
     aSourceViewFontsFL (this,  ResId(FL_SOURCEVIEW  )),
     aFontNameFT        (this,  ResId(FT_FONTNAME    )),
@@ -94,12 +92,14 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
 
     aImageList          (ResId(IL_ICON)),
 
+    sAutomatic          (ResId( STR_AUTOMATIC  )),
+    pConfig(new SvtFontSubstConfig),
+    pSourceViewConfig(new svt::SourceViewConfig),
+
     sHeader1            (ResId( STR_HEADER1     )),
     sHeader2            (ResId( STR_HEADER2     )),
     sHeader3            (ResId( STR_HEADER3     )),
     sHeader4            (ResId( STR_HEADER4     )),
-    sFontGroup          ("FontSubstitution"),
-    sAutomatic          (ResId( STR_AUTOMATIC  )),
 
     aChkunBmp           (ResId( CHKBUT_UNCHECKED)),
     aChkchBmp           (ResId( CHKBUT_CHECKED  )),
@@ -107,9 +107,8 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aChkunhiBmp         (ResId( CHKBUT_HIUNCHECKED)),
     aChktriBmp          (ResId( CHKBUT_TRISTATE )),
     aChktrihiBmp        (ResId( CHKBUT_HITRISTATE)),
-    pCheckButtonData(0),
-    pConfig(new SvtFontSubstConfig),
-    pSourceViewConfig(new svt::SourceViewConfig)
+    sFontGroup          ("FontSubstitution"),
+    pCheckButtonData(0)
 {
     FreeResource();
 
@@ -237,14 +236,13 @@ SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
 /*                                                                   */
 /*********************************************************************/
 
-BOOL  SvxFontSubstTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 {
     pConfig->ClearSubstitutions();// remove all entries
 
     pConfig->Enable(aUseTableCB.IsChecked());
 
     SvLBoxEntry* pEntry = aCheckLB.First();
-    USHORT i = 0;
 
     while (pEntry)
     {
@@ -277,7 +275,7 @@ BOOL  SvxFontSubstTabPage::FillItemSet( SfxItemSet& rSet )
 /*********************************************************************/
 
 
-void  SvxFontSubstTabPage::Reset( const SfxItemSet& rSet )
+void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
 {
     aCheckLB.SetUpdateMode(FALSE);
     aCheckLB.Clear();
@@ -296,7 +294,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& rSet )
         String aTmpStr1(pSubs->sFont);
         String aTmpStr2(pSubs->sReplaceBy);
         SvLBoxEntry* pEntry = CreateEntry(aTmpStr1, aTmpStr2);
-        aCheckLB.InsertEntry(pEntry);
+        aCheckLB.Insert(pEntry);
         aCheckLB.CheckEntry(pEntry, 0, pSubs->bReplaceAlways);
         aCheckLB.CheckEntry(pEntry, 1, pSubs->bReplaceOnScreenOnly);
     }
@@ -348,7 +346,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
                     String sFont2 = aFont2CB.GetText();
 
                     pEntry = CreateEntry(sFont1, sFont2);
-                    aCheckLB.InsertEntry(pEntry);
+                    aCheckLB.Insert(pEntry);
                 }
                 aCheckLB.SelectAll(FALSE);
                 aCheckLB.Select(pEntry);
@@ -471,7 +469,7 @@ void SvxFontSubstTabPage::CheckEnable()
     {
         if (!aCheckLB.IsEnabled())
         {
-            aCheckLB.Enable();
+            aCheckLB.EnableTable();
             aCheckLB.SetTextColor(aTextColor);
             aCheckLB.Invalidate();
             SelectHdl(&aFont1CB);
@@ -481,7 +479,7 @@ void SvxFontSubstTabPage::CheckEnable()
     {
         if (aCheckLB.IsEnabled())
         {
-            aCheckLB.Disable();
+            aCheckLB.DisableTable();
             aCheckLB.SetTextColor(Color(COL_GRAY));
             aCheckLB.Invalidate();
             aCheckLB.SelectAll(FALSE);
