@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:06:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,11 +74,11 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_aClassID( aClassID )
 , m_aClassName( aClassName )
 , m_bWaitSaveCompleted( sal_False )
+, m_bNewVisReplInStream( sal_True )
+, m_bStoreLoaded( sal_False )
 , m_bVisReplInitialized( sal_False )
 , m_bVisReplInStream( sal_False )
-, m_bStoreLoaded( sal_False )
 , m_bStoreVisRepl( sal_False )
-, m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 , m_bHasCachedSize( sal_False )
 , m_nCachedAspect( 0 )
@@ -102,14 +102,14 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bDisposed( sal_False )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
-, m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
+, m_nUpdateMode( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
+, m_bNewVisReplInStream( sal_True )
+, m_bStoreLoaded( sal_False )
 , m_bVisReplInitialized( sal_False )
 , m_bVisReplInStream( sal_False )
-, m_bStoreLoaded( sal_False )
 , m_bStoreVisRepl( sal_False )
-, m_bNewVisReplInStream( sal_True )
 , m_bIsLink( bLink )
 , m_bHasCachedSize( sal_False )
 , m_nCachedAspect( 0 )
@@ -132,14 +132,14 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bDisposed( sal_False )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
-, m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
+, m_nUpdateMode( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
+, m_bNewVisReplInStream( sal_True )
+, m_bStoreLoaded( sal_False )
 , m_bVisReplInitialized( sal_False )
 , m_bVisReplInStream( sal_False )
-, m_bStoreLoaded( sal_False )
 , m_bStoreVisRepl( sal_False )
-, m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 , m_bHasCachedSize( sal_False )
 , m_nCachedAspect( 0 )
@@ -339,7 +339,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 
 //------------------------------------------------------
 void SAL_CALL OleEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
+                const uno::Sequence< sal_Int8 >& /*aClassID*/, const ::rtl::OUString& /*aClassName*/ )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
