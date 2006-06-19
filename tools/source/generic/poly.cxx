@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:18:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,9 @@
 #ifndef _VECTOR2D_H
 #include <vector2d.hxx>
 #endif
-#define private public
 #ifndef _POLY_HXX
 #include <poly.hxx>
 #endif
-#undef private
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -90,7 +88,7 @@
 
 // =======================================================================
 
-DBG_NAME( Polygon );
+DBG_NAME( Polygon )
 
 // -----------------------------------------------------------------------
 
@@ -379,14 +377,14 @@ void ImplPolygon::ImplCreateFlagArray()
 
 // =======================================================================
 
-inline void ImplMakeUnique( Polygon* p )
+inline void Polygon::ImplMakeUnique()
 {
     // Falls noch andere Referenzen bestehen, dann kopieren
-    if ( p->mpImplPolygon->mnRefCount != 1 )
+    if ( mpImplPolygon->mnRefCount != 1 )
     {
-        if ( p->mpImplPolygon->mnRefCount )
-            p->mpImplPolygon->mnRefCount--;
-        p->mpImplPolygon = new ImplPolygon( *(p->mpImplPolygon) );
+        if ( mpImplPolygon->mnRefCount )
+            mpImplPolygon->mnRefCount--;
+        mpImplPolygon = new ImplPolygon( *mpImplPolygon );
     }
 }
 
@@ -504,13 +502,13 @@ Polygon::Polygon( const Rectangle& rRect, ULONG nHorzRound, ULONG nVertRound )
             for( i = 0, nEnd = nSize4; i < nEnd; i++ )
                 ( pDstAry[ i ] = pSrcAry[ i ] ) += aTR;
 
-            for( nEnd += nSize4; i < nEnd; i++ )
+            for( nEnd = nEnd + nSize4; i < nEnd; i++ )
                 ( pDstAry[ i ] = pSrcAry[ i ] ) += aTL;
 
-            for( nEnd += nSize4; i < nEnd; i++ )
+            for( nEnd = nEnd + nSize4; i < nEnd; i++ )
                 ( pDstAry[ i ] = pSrcAry[ i ] ) += aBL;
 
-            for( nEnd += nSize4; i < nEnd; i++ )
+            for( nEnd = nEnd + nSize4; i < nEnd; i++ )
                 ( pDstAry[ i ] = pSrcAry[ i ] ) += aBR;
 
             pDstAry[ nEnd ] = pDstAry[ 0 ];
@@ -620,13 +618,13 @@ Polygon::Polygon( const Rectangle& rBound,
 
         if( POLY_PIE == eStyle )
         {
-            const Point aCenter( FRound( fCenterX ), FRound( fCenterY ) );
+            const Point aCenter2( FRound( fCenterX ), FRound( fCenterY ) );
 
             nStart = 1;
             nEnd = nPoints + 1;
             mpImplPolygon = new ImplPolygon( nPoints + 2 );
-            mpImplPolygon->mpPointAry[ 0 ] = aCenter;
-            mpImplPolygon->mpPointAry[ nEnd ] = aCenter;
+            mpImplPolygon->mpPointAry[ 0 ] = aCenter2;
+            mpImplPolygon->mpPointAry[ nEnd ] = aCenter2;
         }
         else
         {
@@ -710,7 +708,7 @@ Point* Polygon::ImplGetPointAry()
 {
     DBG_CHKTHIS( Polygon, NULL );
 
-    ImplMakeUnique( this );
+    ImplMakeUnique();
     return (Point*)mpImplPolygon->mpPointAry;
 }
 
@@ -720,7 +718,7 @@ BYTE* Polygon::ImplGetFlagAry()
 {
     DBG_CHKTHIS( Polygon, NULL );
 
-    ImplMakeUnique( this );
+    ImplMakeUnique();
     mpImplPolygon->ImplCreateFlagArray();
     return mpImplPolygon->mpFlagAry;
 }
@@ -749,7 +747,7 @@ void Polygon::SetPoint( const Point& rPt, USHORT nPos )
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::SetPoint(): nPos >= nPoints" );
 
-    ImplMakeUnique( this );
+    ImplMakeUnique();
     mpImplPolygon->mpPointAry[nPos] = rPt;
 }
 
@@ -765,7 +763,7 @@ void Polygon::SetFlags( USHORT nPos, PolyFlags eFlags )
     // is at least one flag different to POLY_NORMAL
     if ( mpImplPolygon || ( eFlags != POLY_NORMAL ) )
     {
-        ImplMakeUnique( this );
+        ImplMakeUnique();
         mpImplPolygon->ImplCreateFlagArray();
         mpImplPolygon->mpFlagAry[ nPos ] = (BYTE) eFlags;
     }
@@ -855,7 +853,7 @@ void Polygon::SetSize( USHORT nNewSize )
 
     if( nNewSize != mpImplPolygon->mnPoints )
     {
-        ImplMakeUnique( this );
+        ImplMakeUnique();
         mpImplPolygon->ImplSetSize( nNewSize );
     }
 }
@@ -988,7 +986,7 @@ void Polygon::Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData )
 
 // -----------------------------------------------------------------------
 
-void Polygon::GetSimple( Polygon& rResult, long nDelta ) const
+void Polygon::GetSimple( Polygon& rResult ) const
 {
     if( !mpImplPolygon->mpFlagAry )
         rResult = *this;
@@ -1030,7 +1028,7 @@ void Polygon::GetSimple( Polygon& rResult, long nDelta ) const
         }
 
         // fill result polygon
-        rResult = Polygon( aPointVector.size() );
+        rResult = Polygon( (USHORT)aPointVector.size() );
         ::std::vector< Point >::iterator aIter( aPointVector.begin() ), aEnd( aPointVector.end() );
         Point* pPointArray = rResult.mpImplPolygon->mpPointAry;
 
@@ -1163,7 +1161,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         }
 
         // fill result polygon
-        rResult = Polygon( aPoints.size() ); // ensure sufficient size for copy
+        rResult = Polygon( (USHORT)aPoints.size() ); // ensure sufficient size for copy
         ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
     }
 }
@@ -1311,7 +1309,7 @@ void Polygon::Move( long nHorzMove, long nVertMove )
     if ( !nHorzMove && !nVertMove )
         return;
 
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     // Punkte verschieben
     USHORT nCount = mpImplPolygon->mnPoints;
@@ -1328,7 +1326,7 @@ void Polygon::Move( long nHorzMove, long nVertMove )
 void Polygon::Translate(const Point& rTrans)
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     for ( USHORT i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
         mpImplPolygon->mpPointAry[ i ] += rTrans;
@@ -1339,7 +1337,7 @@ void Polygon::Translate(const Point& rTrans)
 void Polygon::Scale( double fScaleX, double fScaleY )
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     for ( USHORT i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
     {
@@ -1368,7 +1366,7 @@ void Polygon::Rotate( const Point& rCenter, USHORT nAngle10 )
 void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     long nX, nY;
     long nCenterX = rCenter.X();
@@ -1390,7 +1388,7 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 void Polygon::SlantX( long nYRef, double fSin, double fCos )
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     for( USHORT i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
     {
@@ -1407,7 +1405,7 @@ void Polygon::SlantX( long nYRef, double fSin, double fCos )
 void Polygon::SlantY( long nXRef, double fSin, double fCos )
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     for( USHORT i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
     {
@@ -1424,7 +1422,7 @@ void Polygon::SlantY( long nXRef, double fSin, double fCos )
 void Polygon::Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect )
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     long    Xr, Wr, X1, X2, X3, X4;
     long    Yr, Hr, Y1, Y2, Y3, Y4;
@@ -1827,7 +1825,7 @@ BOOL Polygon::IsRightOrientated() const
 void Polygon::Insert( USHORT nPos, const Point& rPt, PolyFlags eFlags )
 {
     DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique( this );
+    ImplMakeUnique();
 
     if( nPos >= mpImplPolygon->mnPoints )
         nPos = mpImplPolygon->mnPoints;
@@ -1851,7 +1849,7 @@ void Polygon::Insert( USHORT nPos, const Polygon& rPoly )
 
     if( nInsertCount )
     {
-        ImplMakeUnique( this );
+        ImplMakeUnique();
 
         if( nPos >= mpImplPolygon->mnPoints )
             nPos = mpImplPolygon->mnPoints;
@@ -1870,7 +1868,7 @@ void Polygon::Remove( USHORT nPos, USHORT nCount )
     DBG_CHKTHIS( Polygon, NULL );
     if( nCount && ( nPos < mpImplPolygon->mnPoints ) )
     {
-        ImplMakeUnique( this );
+        ImplMakeUnique();
         mpImplPolygon->ImplRemove( nPos, nCount );
     }
 }
@@ -1882,7 +1880,7 @@ Point& Polygon::operator[]( USHORT nPos )
     DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints, "Polygon::[]: nPos >= nPoints" );
 
-    ImplMakeUnique( this );
+    ImplMakeUnique();
     return mpImplPolygon->mpPointAry[nPos];
 }
 
