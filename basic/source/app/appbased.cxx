@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:10:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ FileType AppBasEd::GetFileType()
 
 IMPL_LINK_INLINE_START( AppBasEd, EditChange, void *, p )
 {
+    (void) p; /* avoid warning about unused parameter */
     bCompiled = FALSE;
     return TRUE;
 }
@@ -289,8 +290,8 @@ void AppBasEd::Run()
     {
         if ( (pAllModules->Get(i)->GetName()).Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         {
-            SbxVariableRef pMod = pAllModules->Get(i);  // Kleiner Hack um ums basic rumzukommen. Sollte demnächst wieder dirkt gehen.
-            pFrame->Basic().Remove(pMod);
+            SbxVariableRef pRMod = pAllModules->Get(i); // Kleiner Hack um ums basic rumzukommen. Sollte demnächst wieder dirkt gehen.
+            pFrame->Basic().Remove(pRMod);
             i--;
         }
     }
