@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,6 @@ SvColorDialog::SvColorDialog( Window* pWindow ) :
         //maFtRGB           ( this, SvtResId( FT_RGB ) ),
         maCtlColor      ( this, SvtResId( CTL_COLOR ) ),
 
-        maFtRed         ( this, SvtResId( FT_RED ) ),
-        maNumRed        ( this, SvtResId( NUM_RED ) ),
-        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
-        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
-        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
-        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
-
         maFtCyan        ( this, SvtResId( FT_CYAN ) ),
         maNumCyan       ( this, SvtResId( NUM_CYAN ) ),
         maFtMagenta     ( this, SvtResId( FT_MAGENTA ) ),
@@ -70,12 +63,20 @@ SvColorDialog::SvColorDialog( Window* pWindow ) :
         maFtKey         ( this, SvtResId( FT_KEY ) ),
         maNumKey        ( this, SvtResId( NUM_KEY ) ),
 
+        maFtRed         ( this, SvtResId( FT_RED ) ),
+        maNumRed        ( this, SvtResId( NUM_RED ) ),
+        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
+        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
+        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
+        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
+
         maFtHue         ( this, SvtResId( FT_HUE ) ),
         maNumHue        ( this, SvtResId( NUM_HUE ) ),
         maFtSaturation  ( this, SvtResId( FT_SATURATION ) ),
         maNumSaturation ( this, SvtResId( NUM_SATURATION ) ),
         maFtLuminance   ( this, SvtResId( FT_LUMINANCE ) ),
         maNumLuminance  ( this, SvtResId( NUM_LUMINANCE ) ),
+
         maCtlPreview    ( this, SvtResId( CTL_PREVIEW ) ),
         maCtlPreviewOld ( this, SvtResId( CTL_PREVIEW_OLD ) ),
 
@@ -289,7 +290,7 @@ IMPL_LINK( SvColorDialog, ClickBtnHdl, void *, p )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, p )
+IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, EMPTYARG )
 {
     USHORT nPos = maColMixCtrl.GetSelectItemId();
     CMCPosition ePos = maColMixCtrl.GetCMCPosition();
@@ -307,7 +308,7 @@ IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, p )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( SvColorDialog, SelectMixCtrlHdl, void *, p )
+IMPL_LINK( SvColorDialog, SelectMixCtrlHdl, void *, EMPTYARG )
 {
     //USHORT nPos = maColMixCtrl.GetSelectItemId();
     //maFtRGB.SetText( maColMixCtrl.GetItemText( nPos ) );
