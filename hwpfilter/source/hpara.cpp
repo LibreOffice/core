@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hpara.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:37:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: hpara.cpp,v 1.3 2005-09-07 16:37:02 rt Exp $ */
+/* $Id: hpara.cpp,v 1.4 2006-06-20 00:54:17 hr Exp $ */
 
 #include "precompile.h"
 
@@ -46,7 +46,7 @@
 
 bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 {
-    pos = hwpf.Read2b();
+    pos = sal::static_int_cast<unsigned short>(hwpf.Read2b());
     space_width = (short) hwpf.Read2b();
     height = (short) hwpf.Read2b();
 // internal informations
@@ -60,8 +60,8 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
     {
           if( pex & 0x01 )
                 hwpf.AddPage();
-        pPara->pshape.reserved[0] = pex & 0x01;
-        pPara->pshape.reserved[1] = pex & 0x02;
+        pPara->pshape.reserved[0] = sal::static_int_cast<unsigned char>(pex & 0x01);
+        pPara->pshape.reserved[1] = sal::static_int_cast<unsigned char>(pex & 0x02);
     }
 
     return (!hwpf.State());
@@ -185,7 +185,7 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     ii = 0;
     while (ii < nch)
     {
-        if (!(hhstr[ii] = readHBox(hwpf)))
+        if (0 == (hhstr[ii] = readHBox(hwpf)))
             return false;
         if (hhstr[ii]->hh == CH_END_PARA)
             break;
@@ -230,7 +230,7 @@ ParaShape *HWPPara::GetParaShape(void)
 
 HBox *HWPPara::readHBox(HWPFile & hwpf)
 {
-    hchar hh = hwpf.Read2b();
+    hchar hh = sal::static_int_cast<hchar>(hwpf.Read2b());
     HBox *hbox = 0;
 
     if (hwpf.State() != HWP_NoError)
@@ -328,7 +328,10 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
         FBox *fbox = static_cast<FBox *>(hbox);
         if( ( fbox->style.anchor_type == 1) && ( fbox->pgy >= begin_ypos) )
         {
-            fbox->pgy -= begin_ypos;
+            //strange construct to compile without warning
+            int nTemp = fbox->pgy;
+            nTemp -= begin_ypos;
+            fbox->pgy = sal::static_int_cast<short>(nTemp);
         }
     }
     return hbox;
