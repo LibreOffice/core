@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:47:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,6 @@
 #include <sfx2/viewsh.hxx>
 #endif
 #include <rtl/ustring.hxx>
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -271,7 +269,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                 if ( pColorItem )
                 {
                     String aString( pColorItem->GetName() );
-                    Color aColor = pColorItem->GetValue();
+                    Color aColor = pColorItem->GetColorValue();
 
                     pFillAttrLB->SelectEntry( aString );
 
@@ -339,7 +337,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetValue(), aTmpStr );
+                        XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetGradientValue(), aTmpStr );
                         String aEmptyString = String();
                          XGradientList aGradientList( aEmptyString );
                         aGradientList.Insert( pEntry );
@@ -389,7 +387,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetValue(), aTmpStr );
+                        XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetHatchValue(), aTmpStr );
                         String aEmptyString = String();
                         XHatchList aHatchList( aEmptyString );
                         aHatchList.Insert( pEntry );
@@ -446,7 +444,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XBitmapEntry* pEntry = new XBitmapEntry( pBitmapItem->GetValue(), aTmpStr );
+                        XBitmapEntry* pEntry = new XBitmapEntry( pBitmapItem->GetBitmapValue(), aTmpStr );
                         XBitmapList aBitmapList( String::CreateFromAscii("TmpList") );
                         aBitmapList.Insert( pEntry );
                         aBitmapList.SetDirty( FALSE );
@@ -748,7 +746,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
                     if ( nPos < aItem.GetGradientList()->Count() )  // kein temp. Eintrag ?
                     {
-                        XGradient aGradient = aItem.GetGradientList()->Get( nPos )->GetGradient();
+                        XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
 
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
@@ -771,7 +769,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
                     if ( nPos < aItem.GetHatchList()->Count() )  // kein temp. Eintrag ?
                     {
-                        XHatch aHatch = aItem.GetHatchList()->Get( nPos )->GetHatch();
+                        XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
 
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
@@ -795,7 +793,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
                     if ( nPos < aItem.GetBitmapList()->Count() )  // kein temp. Eintrag ?
                     {
-                        XOBitmap aXOBitmap = aItem.GetBitmapList()->Get( nPos )->GetXBitmap();
+                        XOBitmap aXOBitmap = aItem.GetBitmapList()->GetBitmap( nPos )->GetXBitmap();
                         XFillBitmapItem aXFillBitmapItem( pLbFillAttr->GetSelectEntry(), aXOBitmap );
 
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ));
