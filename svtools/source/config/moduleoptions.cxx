@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:52:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
     @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
-void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& lNames )
+void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& )
 {
     OSL_ENSURE( sal_False, "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
@@ -773,6 +773,9 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                   break;
         case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdatabase"));
                                                   break;
+        default:
+            OSL_ASSERT( "unknown factory" );
+            break;
     }
 
     return sShortName;
@@ -835,6 +838,9 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                   break;
         case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase?Interactive"));
                                                   break;
+        default:
+            OSL_ASSERT( "unknown factory" );
+            break;
     }
     return sURL;
 }
@@ -1161,7 +1167,7 @@ SvtModuleOptions::SvtModuleOptions()
     ++m_nRefCount;
     if( m_nRefCount == 1 )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtModuleOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtModuleOptions_Impl::ctor()");
         m_pDataContainer = new SvtModuleOptions_Impl(this);
 
         ItemHolder1::holdConfigItem(E_MODULEOPTIONS);
@@ -1287,69 +1293,60 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsMath( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsMath() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsMath()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SMATH );
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsChart( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsChart() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsChart()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCHART );
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsCalc( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsCalc() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsCalc()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCALC );
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsDraw( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsDraw() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsDraw()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SDRAW );
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsWriter( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsWriter() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsWriter()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SWRITER );
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsImpress( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsImpress() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsImpress()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsBasicIDE( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsBasicIDE() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsBasicIDE()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     return sal_True;
 }
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::IsDataBase( sal_Bool bClient ) const
+sal_Bool SvtModuleOptions::IsDataBase() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsDataBase()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     return sal_True;
 }
 //*****************************************************************************************************************
-sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
+sal_uInt32 SvtModuleOptions::GetFeatures() const
 {
-    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::GetFeatures()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
 
     sal_uInt32 nFeature = 0;
@@ -1414,14 +1411,17 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
-        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); break; }
-        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); break; }
-        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); break; }
-        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); break; }
-        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); break; }
-        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); break; }
-        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString::createFromAscii("Database"); break; }
+        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); }
+        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); }
+        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); }
+        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); }
+        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); }
+        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); }
+        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString::createFromAscii("Database"); }
+        default:
+            OSL_ASSERT( "unknown module" );
+            break;
     }
 
     return ::rtl::OUString();
@@ -1431,16 +1431,19 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
 {
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
-        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
-        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
-        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString::createFromAscii("Calc"); break; }
-        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString::createFromAscii("Draw"); break; }
-        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString::createFromAscii("Impress"); break; }
-        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); break; }
-        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); break; }
-        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); break; }
-        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString::createFromAscii("Database"); break; }
+        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString::createFromAscii("Calc"); }
+        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString::createFromAscii("Draw"); }
+        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString::createFromAscii("Impress"); }
+        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); }
+        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); }
+        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); }
+        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString::createFromAscii("Database"); }
+        default:
+            OSL_ASSERT( "unknown factory" );
+            break;
     }
 
     return ::rtl::OUString();
