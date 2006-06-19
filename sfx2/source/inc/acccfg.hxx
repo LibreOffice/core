@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:53:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ public:
 // class USHORTArr **********************************************************
 
 #if !defined(_MNUCFG_HXX) && !defined(_TBXCFG_HXX)
-DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10);
+DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10)
 #endif
 
 // class SfxAcceleratorConfigDialog **************************************************
