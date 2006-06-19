@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLParagraphContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:25:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ void SchXMLParagraphContext::EndElement()
 SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
     USHORT nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     if( nPrefix == XML_NAMESPACE_TEXT )
     {
