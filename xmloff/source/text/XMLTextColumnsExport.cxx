@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:20:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,8 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 //          case VerticalAlignment_TOP: eStr = XML_TOP;
             case VerticalAlignment_MIDDLE: eStr = XML_MIDDLE; break;
             case VerticalAlignment_BOTTOM: eStr = XML_BOTTOM; break;
+            default:
+                break;
             }
 
             if( eStr != XML_TOKEN_INVALID)
@@ -179,7 +181,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                           XML_VERTICAL_ALIGN, eStr );
 
             // style:column-sep
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+            SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_COLUMN_SEP,
                                       sal_True, sal_True );
         }
@@ -207,7 +209,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                     sValue.makeStringAndClear() );
 
         // style:column
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMN,
+        SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMN,
                                   sal_True, sal_True );
         pColumns++;
     }
