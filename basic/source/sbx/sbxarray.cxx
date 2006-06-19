@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxarray.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:45:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@ SbxArray::SbxArray( SbxDataType t ) : SbxBase()
         SetFlag( SBX_FIXED );
 }
 
-SbxArray::SbxArray( const SbxArray& rArray ) : SbxBase()
+SbxArray::SbxArray( const SbxArray& rArray ) :
+    SvRefBase( rArray ), SbxBase()
 {
     pData = new SbxVarRefs;
     if( rArray.eType != SbxVARIANT )
@@ -101,13 +102,13 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
             *((SbxVariableRef*) pDstRef) = *((SbxVariableRef*) pSrcRef);
             if( pSrcRef->pAlias )
                 pDstRef->pAlias = new XubString( *pSrcRef->pAlias );
-            const SbxVariable* pSrc = *pSrcRef;
-            if( pSrc )
+            const SbxVariable* pSrc_ = *pSrcRef;
+            if( pSrc_ )
             {
                 if( eType != SbxVARIANT )
                     // Keine Objekte konvertieren
-                    if( eType != SbxOBJECT || pSrc->GetClass() != SbxCLASS_OBJECT )
-                        ((SbxVariable*) pSrc)->Convert( eType );
+                    if( eType != SbxOBJECT || pSrc_->GetClass() != SbxCLASS_OBJECT )
+                        ((SbxVariable*) pSrc_)->Convert( eType );
                 pData->push_back( pDstRef );
             }
         }
@@ -447,6 +448,7 @@ SbxVariable* SbxArray::FindUserData( UINT32 nData )
                     case SbxCLASS_ARRAY:
                         p = ((SbxArray*) pVar)->FindUserData( nData );
                         break;
+                    default: break;
                 }
                 if( p )
                 {
@@ -504,6 +506,7 @@ SbxVariable* SbxArray::Find( const XubString& rName, SbxClassType t )
                     case SbxCLASS_ARRAY:
                         p = ((SbxArray*) pVar)->Find( rName, t );
                         break;
+                    default: break;
                 }
                 if( p )
                 {
@@ -593,7 +596,8 @@ SbxDimArray::SbxDimArray( SbxDataType t ) : SbxArray( t )
     nDim = 0;
 }
 
-SbxDimArray::SbxDimArray( const SbxDimArray& rArray ) : SbxArray( rArray.eType )
+SbxDimArray::SbxDimArray( const SbxDimArray& rArray )
+    : SvRefBase( rArray ), SbxArray( rArray.eType )
 {
     pFirst = pLast = NULL;
     nDim = 0;
@@ -797,7 +801,7 @@ UINT32 SbxDimArray::Offset32( SbxArray* pPar )
         INT32 nIdx = pPar->Get( nOff++ )->GetLong();
         if( nIdx < p->nLbound || nIdx > p->nUbound )
         {
-            nPos = SBX_MAXINDEX32+1; break;
+            nPos = (UINT32) SBX_MAXINDEX32+1; break;
         }
         nPos = nPos * p->nSize + nIdx - p->nLbound;
     }
