@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:09:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 {
     const MetaAction* pMA;
 
-    for( ULONG nAction = 0, nCount=pMTF->GetActionCount(); nAction < nCount; nAction++ )
+    for( ULONG nAction = 0, nActionCount=pMTF->GetActionCount(); nAction < nActionCount; nAction++ )
     {
         pMA =  pMTF->GetAction(nAction);
 
@@ -730,7 +730,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
     if (bStatus==FALSE)
         return;
 
-    for ( ULONG nAction = 0, nCount = pMTF->GetActionCount(); nAction < nCount; nAction++)
+    for ( ULONG nAction = 0, nActionCount = pMTF->GetActionCount(); nAction < nActionCount; nAction++)
     {
         pMA = pMTF->GetAction(nAction);
 
