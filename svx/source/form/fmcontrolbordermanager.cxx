@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmcontrolbordermanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:50:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,10 +118,10 @@ namespace svxform
     //====================================================================
     //--------------------------------------------------------------------
     ControlBorderManager::ControlBorderManager()
-        :m_bDynamicBorderColors( false )
-        ,m_nFocusColor    ( 0x000000FF )
+        :m_nFocusColor    ( 0x000000FF )
         ,m_nMouseHoveColor( 0x007098BE )
         ,m_nInvalidColor  ( 0x00FF0000 )
+        ,m_bDynamicBorderColors( false )
     {
     }
 
