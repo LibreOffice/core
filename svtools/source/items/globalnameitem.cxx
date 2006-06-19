@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globalnameitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:57:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
             ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
@@ -115,7 +115,7 @@ BOOL SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
     void* pData = ( void* ) &m_aName.GetCLSID();
