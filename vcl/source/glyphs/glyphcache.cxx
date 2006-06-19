@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:56:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:33:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <bitmap.hxx>
 #include <outfont.hxx>
 
-#include <rtl/ustring>      // used only for string=>hashvalue
+#include <rtl/ustring.hxx>      // used only for string=>hashvalue
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 
@@ -146,15 +146,6 @@ void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
         if( rFontPath.Len() > 0 )
             rGlyphCache.AddFontPath( rFontPath );
     }
-}
-
-// -----------------------------------------------------------------------
-
-// this gets called when someone deletes the related ImplFontData
-void GlyphCache::RemoveFont( sal_IntPtr nFontId )
-{
-    // since the FontList no longer depends on FontData objects there is no
-    // more need to be clean it up when some FontData is about to be deleted
 }
 
 // -----------------------------------------------------------------------
@@ -458,15 +449,13 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
         GlyphData& rGD = it->second;
         if( (nMinLruIndex - rGD.GetLruValue()) > 0 )
         {
+            OSL_ASSERT( mnBytesUsed >= sizeof(GlyphData) );
             mnBytesUsed -= sizeof( GlyphData );
             GlyphCache::GetInstance().RemovingGlyph( *this, rGD, it->first );
             maGlyphList.erase( it );
             it_next = maGlyphList.begin();
         }
     }
-
-    if( mnBytesUsed < 0 )
-        mnBytesUsed = 0;    // shouldn't happen
 }
 
 // -----------------------------------------------------------------------
@@ -500,8 +489,8 @@ ImplServerFontEntry::~ImplServerFontEntry()
 // =======================================================================
 
 ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
-:   mnFontId( nFontId ),
-    mbInitialized( false )
+:   mbInitialized( false ),
+    mnFontId( nFontId )
 {}
 
 //--------------------------------------------------------------------------
