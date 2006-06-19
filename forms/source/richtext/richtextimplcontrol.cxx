@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextimplcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,14 +95,14 @@ namespace frm
     //--------------------------------------------------------------------
     RichTextControlImpl::RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttrListener, ITextSelectionListener* _pSelectionListener )
         :m_pAntiImpl            ( _pAntiImpl          )
-        ,m_pEngine              ( _pEngine            )
-        ,m_pTextAttrListener    ( _pTextAttrListener  )
-        ,m_pSelectionListener   ( _pSelectionListener )
-        ,m_pView                ( NULL                )
         ,m_pViewport            ( NULL                )
-        ,m_pScrollCorner        ( NULL                )
         ,m_pHScroll             ( NULL                )
         ,m_pVScroll             ( NULL                )
+        ,m_pScrollCorner        ( NULL                )
+        ,m_pEngine              ( _pEngine            )
+        ,m_pView                ( NULL                )
+        ,m_pTextAttrListener    ( _pTextAttrListener  )
+        ,m_pSelectionListener   ( _pSelectionListener )
         ,m_bHasEverBeenShown    ( false               )
     {
         OSL_ENSURE( m_pAntiImpl, "RichTextControlImpl::RichTextControlImpl: invalid window!" );
@@ -363,7 +363,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( RichTextControlImpl, OnInvalidateAllAttributes, void*, _pNotInterestedIn )
+    IMPL_LINK( RichTextControlImpl, OnInvalidateAllAttributes, void*, /*_pNotInterestedIn*/ )
     {
         updateAllAttributes();
         return 0L;
@@ -624,7 +624,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags )
+    void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG /*_nFlags*/ )
     {
         // need to normalize the map mode of the device - every paint operation on any device needs
         // to use the same map mode
