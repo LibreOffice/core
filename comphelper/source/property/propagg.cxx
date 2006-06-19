@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:57:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,11 +441,11 @@ namespace internal
 //==================================================================
 
 //------------------------------------------------------------------------------
-OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper )
-    :OPropertyStateHelper( rBHelper )
+OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHlp )
+    :OPropertyStateHelper( rBHlp )
     ,m_bListening( sal_False )
-    ,m_pForwarder( new PropertyForwarder( *this ) )
 {
+    m_pForwarder = new PropertyForwarder( *this );
 }
 
 //------------------------------------------------------------------------------
@@ -801,15 +801,15 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 pHandles = new sal_Int32[ nLen - nAggCount ];
 
                 // get the map table
-                cppu::IPropertyArrayHelper& rPH = getInfoHelper();
+                cppu::IPropertyArrayHelper& rPH2 = getInfoHelper();
 
                 // fill the handle array
-                sal_Int32 nHitCount = rPH.fillHandles( pHandles, DelPropertyNames );
+                sal_Int32 nHitCount = rPH2.fillHandles( pHandles, DelPropertyNames );
                 if (nHitCount != 0)
                 {
 
-                     ::com::sun::star::uno::Any * pConvertedValues = new  ::com::sun::star::uno::Any[ nHitCount ];
-                     ::com::sun::star::uno::Any * pOldValues = new  ::com::sun::star::uno::Any[ nHitCount ];
+                     pConvertedValues = new  ::com::sun::star::uno::Any[ nHitCount ];
+                     pOldValues = new  ::com::sun::star::uno::Any[ nHitCount ];
                     nHitCount = 0;
                     sal_Int32 i;
 
@@ -821,7 +821,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                             if( pHandles[i] != -1 )
                             {
                                 sal_Int16 nAttributes;
-                                rPH.fillPropertyMembersByHandle( NULL, &nAttributes, pHandles[i] );
+                                rPH2.fillPropertyMembersByHandle( NULL, &nAttributes, pHandles[i] );
                                 if( nAttributes &  ::com::sun::star::beans::PropertyAttribute::READONLY )
                                     throw  ::com::sun::star::beans::PropertyVetoException();
                                 // Will the property change?
@@ -996,13 +996,13 @@ void OPropertySetAggregationHelper::declareForwardedProperty( sal_Int32 _nHandle
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::forwardingPropertyValue( sal_Int32 nHandle )
+void SAL_CALL OPropertySetAggregationHelper::forwardingPropertyValue( sal_Int32 )
 {
     // not interested in
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::forwardedPropertyValue( sal_Int32 nHandle, bool _bSuccess )
+void SAL_CALL OPropertySetAggregationHelper::forwardedPropertyValue( sal_Int32, bool )
 {
     // not interested in
 }
