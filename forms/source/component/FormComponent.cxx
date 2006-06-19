@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:32:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,35 +141,6 @@ namespace frm
     using namespace ::com::sun::star::form::validation;
     using namespace ::dbtools;
     using namespace ::comphelper;
-
-    //====================================================================
-    //= OFormComponentListeners
-    //====================================================================
-    typedef ::comphelper::OListenerContainerBase    <   XFormComponentValidityListener
-                                                    ,   EventObject
-                                                    >   OFormComponentListeners_Base;
-
-    class OFormComponentListeners : public OFormComponentListeners_Base
-    {
-    public:
-        OFormComponentListeners( ::osl::Mutex& _rMutex )
-            :OFormComponentListeners_Base( _rMutex )
-        {
-        }
-
-    protected:
-        virtual bool    implNotify(
-                            const Reference< XFormComponentValidityListener >& _rxListener,
-                            const EventObject& _rEvent
-                        )   SAL_THROW( ( Exception ) );
-    };
-
-    //------------------------------------------------------------------------------
-    bool OFormComponentListeners::implNotify( const Reference< XFormComponentValidityListener >& _rxListener, const EventObject& _rEvent )   SAL_THROW( ( Exception ) )
-    {
-        _rxListener->componentValidityChanged( _rEvent );
-        return true;    // continue calling listeners
-    }
 
 //=========================================================================
 //= base class for form layer controls
@@ -597,9 +568,9 @@ OControlModel::OControlModel(
             const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
+    ,m_xServiceFactory(_rxFactory)
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
-    ,m_xServiceFactory(_rxFactory)
     ,m_bNativeLook( sal_False )
         // form controls are usually embedded into documents, not dialogs, and in documents
         // the native look is ugly ....
@@ -640,9 +611,9 @@ OControlModel::OControlModel(
 OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory, const sal_Bool _bCloneAggregate, const sal_Bool _bSetDelegator )
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
+    ,m_xServiceFactory( _rxFactory )
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
     ,m_nClassId( FormComponentType::CONTROL )
-    ,m_xServiceFactory( _rxFactory )
 {
     DBG_CTOR( OControlModel, NULL );
     DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
@@ -686,7 +657,7 @@ OControlModel::~OControlModel()
 }
 
 //------------------------------------------------------------------
-void OControlModel::clonedFrom( const OControlModel* _pOriginal )
+void OControlModel::clonedFrom( const OControlModel* /*_pOriginal*/ )
 {
     // nothing to do in this base class
 }
@@ -1117,24 +1088,24 @@ OBoundControlModel::OBoundControlModel(
         const sal_Bool _bCommitable, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
     ,OPropertyChangeListener( m_aMutex )
+    ,m_nValuePropertyAggregateHandle( -1 )
     ,m_aUpdateListeners(m_aMutex)
     ,m_aResetListeners(m_aMutex)
-    ,m_pFormComponentListeners( new OFormComponentListeners( m_aMutex ) )
+    ,m_aFormComponentListeners( m_aMutex )
+    ,m_pAggPropMultiplexer( NULL )
+    ,m_bLoadListening( sal_False )
     ,m_bLoaded(sal_False)
     ,m_bRequired(sal_False)
     ,m_bCommitable(_bCommitable)
     ,m_bSupportsExternalBinding( _bSupportExternalBinding )
     ,m_bSupportsValidation( _bSupportsValidation )
-    ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
     ,m_bForwardValueChanges(sal_True)
-    ,m_bLoadListening( sal_False )
-    ,m_nValuePropertyAggregateHandle( -1 )
-    ,m_pAggPropMultiplexer( NULL )
-    ,m_eControlValueChangeInstigator( eOther )
-    ,m_bIsCurrentValueValid( sal_True )
     ,m_bTransferingValue( sal_False )
+    ,m_bIsCurrentValueValid( sal_True )
     ,m_bBindingControlsRO( sal_False )
     ,m_bBindingControlsEnable( sal_False )
+    ,m_eControlValueChangeInstigator( eOther )
+    ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
 
@@ -1147,22 +1118,24 @@ OBoundControlModel::OBoundControlModel(
         const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
     ,OPropertyChangeListener( m_aMutex )
+    ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
     ,m_aUpdateListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
-    ,m_pFormComponentListeners( new OFormComponentListeners( m_aMutex ) )
+    ,m_aFormComponentListeners( m_aMutex )
+    ,m_xValidator( _pOriginal->m_xValidator )
+    ,m_pAggPropMultiplexer( NULL )
+    ,m_bLoadListening( sal_False )
     ,m_bLoaded( sal_False )
     ,m_bRequired( sal_False )
     ,m_bCommitable( _pOriginal->m_bCommitable )
     ,m_bSupportsExternalBinding( _pOriginal->m_bSupportsExternalBinding )
     ,m_bSupportsValidation( _pOriginal->m_bSupportsValidation )
     ,m_bForwardValueChanges( sal_True )
-    ,m_bLoadListening( sal_False )
-    ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
-    ,m_pAggPropMultiplexer( NULL )
-    ,m_eControlValueChangeInstigator( eOther )
-    ,m_xValidator( _pOriginal->m_xValidator )
-    ,m_bIsCurrentValueValid( _pOriginal->m_bIsCurrentValueValid )
     ,m_bTransferingValue( sal_False )
+    ,m_bIsCurrentValueValid( _pOriginal->m_bIsCurrentValueValid )
+    ,m_bBindingControlsRO( sal_False )
+    ,m_bBindingControlsEnable( sal_False )
+    ,m_eControlValueChangeInstigator( eOther )
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
 
@@ -1605,7 +1578,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
     OControlModel::read(_rxInStream);
 
     osl::MutexGuard aGuard(m_aMutex);
-    UINT16 nVersion = _rxInStream->readShort();
+    UINT16 nVersion = _rxInStream->readShort(); (void)nVersion;
     ::comphelper::operator>>( _rxInStream, m_aControlSource);
 }
 
@@ -1699,8 +1672,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             break;
         case PROPERTY_ID_BOUNDFIELD:
             DBG_ERROR("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
-                throw com::sun::star::lang::IllegalArgumentException();
-            break;
+            throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
             DBG_ASSERT(!rValue.hasValue() || (rValue.getValueType().getTypeClass() == TypeClass_INTERFACE),
@@ -1742,8 +1714,8 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                     // found my root
                     break;
 
-                Reference<XChild> xAsChild(xMyTopLevel, UNO_QUERY);
-                xMyTopLevel = xAsChild.is() ? xAsChild->getParent() : InterfaceRef();
+                Reference<XChild> xLoopAsChild(xMyTopLevel, UNO_QUERY);
+                xMyTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : InterfaceRef();
             }
             InterfaceRef xNewTopLevel = xAsChild->getParent();
             while (xNewTopLevel.is())
@@ -1752,8 +1724,8 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                 if (!xAsForm.is())
                     break;
 
-                Reference<XChild> xAsChild(xNewTopLevel, UNO_QUERY);
-                xNewTopLevel = xAsChild.is() ? xAsChild->getParent() : InterfaceRef();
+                Reference<XChild> xLoopAsChild(xNewTopLevel, UNO_QUERY);
+                xNewTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : InterfaceRef();
             }
             if (xNewTopLevel != xMyTopLevel)
             {
@@ -1855,34 +1827,30 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
     }
 
     ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
-    EventObject aEvt;
-    aEvt.Source = static_cast< XWeak* >( this );
-    sal_Bool bSucceed = sal_True;
-    while (aIter.hasMoreElements() && bSucceed)
-        bSucceed = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvt );
+    EventObject aEvent;
+    aEvent.Source = static_cast< XWeak* >( this );
+    sal_Bool bSuccess = sal_True;
+    while (aIter.hasMoreElements() && bSuccess)
+        bSuccess = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvent );
 
-    if ( bSucceed )
+    if ( bSuccess )
     {
         osl::MutexGuard aGuard(m_aMutex);
         try
         {
             if ( m_xColumnUpdate.is() )
-                bSucceed = commitControlValueToDbColumn( sal_False );
+                bSuccess = commitControlValueToDbColumn( sal_False );
         }
         catch(Exception&)
         {
-            bSucceed = sal_False;
+            bSuccess = sal_False;
         }
     }
 
-    if ( bSucceed )
-    {
-        cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
-        while ( aIter.hasMoreElements() )
-            static_cast< XUpdateListener* >( aIter.next() )->updated( aEvt );
-    }
+    if ( bSuccess )
+        m_aUpdateListeners.notifyEach( &XUpdateListener::updated, aEvent );
 
-    return bSucceed;
+    return bSuccess;
 }
 
 //------------------------------------------------------------------------------
@@ -1986,6 +1954,7 @@ void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxR
     // consistency checks
     DBG_ASSERT( !( m_xField.is() && !_bFromReload ),
         "OBoundControlModel::connectDatabaseColumn: the form is just *loaded*, but we already have a field!" );
+    (void)_bFromReload;
 
     Reference< XPropertySet >   xOldField = m_xField;
     if ( !m_xField.is() )
@@ -2062,13 +2031,13 @@ void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(Run
 
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloaded: we should never reach this with an external value binding!" );
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloading: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
@@ -2079,7 +2048,7 @@ void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventOb
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& aEvent) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& /*aEvent*/) throw(RuntimeException)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloading: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
@@ -2189,7 +2158,7 @@ void OBoundControlModel::onDisconnectedExternalValue( )
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
+void OBoundControlModel::onConnectedDbColumn( const Reference< XInterface >& /*_rxForm*/ )
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::onConnectedDbColumn: how this? There's an external value binding!" );
 }
@@ -2373,7 +2342,7 @@ void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_
     }
 }
 //--------------------------------------------------------------------
-sal_Bool OBoundControlModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+sal_Bool OBoundControlModel::approveValueBinding( const Reference< XValueBinding >& /*_rxBinding*/ )
 {
     // reject everything. Derived classes need to override this if they want to
     // benefit from this data binding functionality
@@ -2751,7 +2720,7 @@ Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  ) throw (Run
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& /*Source*/ ) throw (RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::validityConstraintChanged: How did you reach this method?" );
@@ -2776,17 +2745,15 @@ Any SAL_CALL OBoundControlModel::getCurrentValue(  ) throw (RuntimeException)
 //--------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::addFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener ) throw (NullPointerException, RuntimeException)
 {
-    if ( !Listener.is() )
-        throw NullPointerException();
-    m_pFormComponentListeners->addListener( Listener );
+    if ( Listener.is() )
+        m_aFormComponentListeners.addInterface( Listener );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::removeFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener ) throw (NullPointerException, RuntimeException)
 {
-    if ( !Listener.is() )
-        throw NullPointerException();
-    m_pFormComponentListeners->removeListener( Listener );
+    if ( Listener.is() )
+        m_aFormComponentListeners.removeInterface( Listener );
 }
 
 //--------------------------------------------------------------------
@@ -2804,7 +2771,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 
             // release our mutex for the notifications
             MutexRelease aRelease( m_aMutex );
-            m_pFormComponentListeners->notify( EventObject( *this ) );
+            m_aFormComponentListeners.notifyEach( &validation::XFormComponentValidityListener::componentValidityChanged, EventObject( *this ) );
         }
     }
     catch( const Exception& )
