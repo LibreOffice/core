@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmitems.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
 #ifndef _SVX_FMITEMS_HXX
 #include "fmitems.hxx"
 #endif
@@ -63,14 +62,16 @@ SfxPoolItem* FmInterfaceItem::Clone( SfxItemPool* ) const
 }
 
 //------------------------------------------------------------------------------
-SvStream& FmInterfaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
+SvStream& FmInterfaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
+    DBG_ERROR( "FmInterfaceItem::Store: not implemented!" );
     return rStrm;
 }
 
 //------------------------------------------------------------------------------
-SfxPoolItem* FmInterfaceItem::Create( SvStream& rStrm, sal_uInt16 ) const
+SfxPoolItem* FmInterfaceItem::Create( SvStream& /*rStrm*/, sal_uInt16 ) const
 {
+    DBG_ERROR( "FmInterfaceItem::Create: not implemented!" );
     return new FmInterfaceItem( *this );
 }
 
