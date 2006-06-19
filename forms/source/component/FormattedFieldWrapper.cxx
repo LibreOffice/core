@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:24:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,8 @@ InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const Reference<XMul
 
 //------------------------------------------------------------------
 OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFactory>& _rxFactory, sal_Bool _bActAsFormatted)
-    :m_pEditPart(NULL)
-    ,m_xServiceFactory(_rxFactory)
+    :m_xServiceFactory(_rxFactory)
+    ,m_pEditPart(NULL)
 {
     DBG_CTOR(OFormattedFieldWrapper, NULL);
 
