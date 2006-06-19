@@ -4,9 +4,9 @@
  *
  *  $RCSfile: store.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:46:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORE_CXX_ "$Revision: 1.5 $"
+#define _STORE_STORE_CXX_ "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -159,7 +159,7 @@ storeError SAL_CALL store_createMemoryFile (
     if (!xManager.is())
         return store_E_OutOfMemory;
 
-    storeError eErrCode = xManager->initialize (
+    storeError eErrCode = xManager->initializeManager (
         &*xLockBytes, store_AccessCreate, nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -198,7 +198,8 @@ storeError SAL_CALL store_openFile (
     if (!xManager.is())
         return store_E_OutOfMemory;
 
-    eErrCode = xManager->initialize (&*xLockBytes, eAccessMode, nPageSize);
+    eErrCode = xManager->initializeManager (
+        &*xLockBytes, eAccessMode, nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
