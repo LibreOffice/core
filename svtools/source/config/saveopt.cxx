@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:53:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,8 +428,8 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROSaveRelINet( CFG_READONLY_DEFAULT )
     , bROSaveRelFSys( CFG_READONLY_DEFAULT )
     , bROSaveUnpacked( CFG_READONLY_DEFAULT )
-    , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
+    , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -732,7 +732,7 @@ void SvtSaveOptions_Impl::Commit()
 
 // -----------------------------------------------------------------------
 
-void SvtSaveOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void SvtSaveOptions_Impl::Notify( const Sequence<rtl::OUString>& )
 {
 }
 
@@ -782,7 +782,7 @@ void SvtLoadOptions_Impl::Commit()
     PutProperties( aNames, aValues );
 }
 // -----------------------------------------------------------------------
-void SvtLoadOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void SvtLoadOptions_Impl::Notify( const Sequence<rtl::OUString>& )
 {
     DBG_ERRORFILE( "properties have been changed" );
 }
@@ -802,7 +802,7 @@ SvtSaveOptions::SvtSaveOptions()
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSaveOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtSaveOptions_Impl::ctor()");
         pOptions = new SvtLoadSaveOptions_Impl;
         pOptions->pSaveOpt = new SvtSaveOptions_Impl;
         pOptions->pLoadOpt = new SvtLoadOptions_Impl;
@@ -956,7 +956,7 @@ SvtSaveOptions::SaveGraphicsMode SvtSaveOptions::GetSaveGraphicsMode() const
     return pImp->pSaveOpt->GetSaveGraphicsMode();
 }
 
-void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )
+void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode )
 {
     // #87097#: don't allow setting of this property (it isn't needed anymore)
     // pImp->pSaveOpt->SetSaveGraphicsMode( eMode );
