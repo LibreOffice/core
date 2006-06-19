@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:11:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ void SAL_CALL DBG_TestToolDebugMessageFilter( const sal_Char *pString )
 {
         TestToolDebugMessageFilter( pString, FALSE );
 }
-void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
+extern "C" void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
 {
     if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
         TestToolDebugMessageFilter( pString, TRUE );
@@ -499,6 +499,7 @@ void BasicApp::SetFocus()
 
 IMPL_LINK( BasicApp, LateInit, void *, pDummy )
 {
+    (void) pDummy; /* avoid warning about unused parameter */
     int i;
     for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
@@ -606,6 +607,7 @@ void FloatingExecutionStatus::SetAdditionalInfo( String aF )
 
 IMPL_LINK(FloatingExecutionStatus, HideNow, FloatingExecutionStatus*, pFLC )
 {
+    (void) pFLC; /* avoid warning about unused parameter */
     Hide();
     return 0;
 }
@@ -619,13 +621,13 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 , bIsAutoRun( FALSE )
 , pDisplayHidDlg( NULL )
 , pEditVar ( 0 )
+, bAutoReload( FALSE )
+, bAutoSave( TRUE )
 , pBasic( NULL )
 , pExecutionStatus( NULL )
 , pStatus( NULL )
 , pList( NULL )
 , pWork( NULL )
-, bAutoReload( FALSE )
-, bAutoSave( TRUE )
 , pPrn( NULL )
 {
 
@@ -1225,9 +1227,9 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     BOOL bNext   = bHasErr & bNormal;
     BOOL bPrev   = bHasErr & bNormal;
     if( bHasErr ) {
-        short n = (short) pBasic->aErrors.GetCurPos();
+        USHORT n = pBasic->aErrors.GetCurPos();
         if( n == 0 ) bPrev = FALSE;
-        if( n ==( pBasic->GetErrors() - 1 ) ) bNext = FALSE;
+        if( USHORT(n+1) == pBasic->GetErrors() ) bNext = FALSE;
     }
     pMenu->EnableItem( RID_RUNNEXTERR, bNext );
     pMenu->EnableItem( RID_RUNPREVERR, bPrev );
@@ -1239,6 +1241,7 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
 
 IMPL_LINK_INLINE_START( BasicFrame, DeInitMenu, Menu *, pMenu )
 {
+    (void) pMenu; /* avoid warning about unused parameter */
 /*  pMenu->EnableItem( RID_RUNCOMPILE );
 
     pMenu->EnableItem( RID_FILECLOSE );
@@ -1285,6 +1288,7 @@ IMPL_LINK_INLINE_END( BasicFrame, Accel, Accelerator*, pAcc )
 
 IMPL_LINK_INLINE_START( BasicFrame, ShowLineNr, AutoTimer *, pTimer )
 {
+    (void) pTimer; /* avoid warning about unused parameter */
     String aPos;
     if ( pWork && pWork->ISA(AppBasEd))
     {
@@ -1537,7 +1541,8 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 
         case RID_OPTIONS:
             {
-                new OptionsDialog( this, ResId(IDD_OPTIONS_DLG) );
+                OptionsDialog *pOptions = new OptionsDialog( this, ResId(IDD_OPTIONS_DLG) );
+                pOptions->Show();
             }
             break;
         case RID_DECLARE_HELPER:
