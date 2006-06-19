@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:32:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ sal_Bool SAL_CALL OStorePageManager::isKindOf (sal_uInt32 nTypeId)
  * initialize (two-phase construction).
  * Precond: none.
  */
-storeError OStorePageManager::initialize (
+storeError OStorePageManager::initializeManager (
     ILockBytes      *pLockBytes,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize)
@@ -359,10 +359,10 @@ storeError OStorePageManager::flush (void)
         return store_E_None;
 
     // Flush cache.
-    storeError eErrCode = m_pCache->flush (*this, NULL);
-    OSL_POSTCOND(
-        eErrCode == store_E_None,
-        "OStorePageManager::flush(): cache::flush() failed");
+    if (m_pCache->flush (*this, NULL) != store_E_None) {
+        OSL_POSTCOND(
+            false, "OStorePageManager::flush(): cache::flush() failed");
+    }
 
     // Flush base.
     return base::flush();
@@ -1236,7 +1236,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         }
 
         // Release page write access.
-        eErrCode = base::releasePage (aDescr, store_AccessReadWrite);
+        eErrCode = base::releasePage (aDescr);
 
         // Release and free directory page.
         eErrCode = base::free (aPage);
@@ -1388,7 +1388,7 @@ storeError OStorePageManager::rebuild (
         return eErrCode;
 
     // Initialize as 'Destination' with 'Source' page size.
-    eErrCode = self::initialize (pDstLB, store_AccessCreate, nPageSize);
+    eErrCode = self::initializeManager (pDstLB, store_AccessCreate, nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
