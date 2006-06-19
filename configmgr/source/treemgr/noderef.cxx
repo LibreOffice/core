@@ -4,9 +4,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:32:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1595,6 +1595,7 @@ bool operator < (SubNodeID const& lhs, SubNodeID const& rhs)
 
 Name validateElementName(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
 {
+    { (void)aTree; (void)aNode; }
     OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
     OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
@@ -1607,6 +1608,7 @@ Name validateElementName(OUString const& sName, Tree const& aTree, NodeRef const
 
 Name validateChildName(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
 {
+    { (void)aTree; (void)aNode; }
     OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
     OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
