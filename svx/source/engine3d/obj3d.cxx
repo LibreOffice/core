@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:40:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:45:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,10 +72,6 @@
 
 #ifndef _E3D_VOLMRK3D_HXX
 #include "volmrk3d.hxx"
-#endif
-
-#ifndef _E3D_POLYOB3D_HXX
-#include "polyob3d.hxx"
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
@@ -297,7 +293,7 @@ SdrObject* E3dObjList::NbcRemoveObject(ULONG nObjNum)
 {
     // Owner holen
     DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "AW: Entfernen 3DObject aus Parent != 3DObject");
-    E3dObject* pOwner = (E3dObject*)GetOwnerObj();
+    //E3dObject* pOwner = (E3dObject*)GetOwnerObj();
 
     // call parent
     SdrObject* pRetval = SdrObjList::NbcRemoveObject(nObjNum);
@@ -313,7 +309,7 @@ SdrObject* E3dObjList::RemoveObject(ULONG nObjNum)
 {
     // Owner holen
     DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "AW: Entfernen 3DObject aus Parent != 3DObject");
-    E3dObject* pOwner = (E3dObject*)GetOwnerObj();
+    //E3dObject* pOwner = (E3dObject*)GetOwnerObj();
 
     // call parent
     SdrObject* pRetval = SdrObjList::RemoveObject(nObjNum);
@@ -1564,7 +1560,7 @@ void E3dObject::ImpCreateWireframePoly(XPolyPolygon& rXPP/*BFS01, E3dDragDetail 
 |*
 \************************************************************************/
 
-void E3dObject::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL bDetail) const
+void E3dObject::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL /*bDetail*/) const
 {
     rXPP.Clear();
     // Const mal wieder weg, da evtl. das BoundVolume neu generiert wird
@@ -2342,7 +2338,7 @@ AlphaMask E3dCompoundObject::GetAlphaMask(const SfxItemSet& rSet, const Size& rS
     XOutputDevice *pXOut = new XOutputDevice( pVD );
     SfxItemSet aFillSet(*rSet.GetPool());
 
-    XGradient aNewGradient(rFloatTrans.GetValue());
+    XGradient aNewGradient(rFloatTrans.GetGradientValue());
 
     Color aStartCol(aNewGradient.GetStartColor());
     if(aNewGradient.GetStartIntens() != 100)
@@ -2412,7 +2408,7 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
 {
     VirtualDevice *pVD = new VirtualDevice();
     const XFillHatchItem* pFillHatchItem = (XFillHatchItem*)&rSet.Get(XATTR_FILLHATCH);
-    const XHatch& rHatch = pFillHatchItem->GetValue();
+    const XHatch& rHatch = pFillHatchItem->GetHatchValue();
     long nDistance = rHatch.GetDistance(); // in 100stel mm
     double fAngle = double(rHatch.GetAngle()) * (F_PI180 / 10.0);
 
@@ -2881,13 +2877,13 @@ void E3dCompoundObject::ScalePoly(
 void E3dCompoundObject::CreateFront(
     const PolyPolygon3D& rPolyPoly3D,
     const PolyPolygon3D& rFrontNormals,
-    BOOL bCreateNormals,
-    BOOL bCreateTexture)
+    BOOL bDoCreateNormals,
+    BOOL bDoCreateTexture)
 {
     // Vorderseite
-    if(bCreateNormals)
+    if(bDoCreateNormals)
     {
-        if(bCreateTexture)
+        if(bDoCreateTexture)
         {
             // Polygon fuer die Textur erzeugen
             PolyPolygon3D aPolyTexture = rPolyPoly3D;
@@ -2949,19 +2945,19 @@ void E3dCompoundObject::AddFrontNormals(
 void E3dCompoundObject::CreateBack(
     const PolyPolygon3D& rPolyPoly3D,
     const PolyPolygon3D& rBackNormals,
-    BOOL bCreateNormals,
-    BOOL bCreateTexture)
+    BOOL bDoCreateNormals,
+    BOOL bDoCreateTexture)
 {
     // PolyPolygon umdrehen
     PolyPolygon3D aLocalPoly = rPolyPoly3D;
     aLocalPoly.FlipDirections();
 
     // Rueckseite
-    if(bCreateNormals)
+    if(bDoCreateNormals)
     {
         PolyPolygon3D aLocalNormals = rBackNormals;
         aLocalNormals.FlipDirections();
-        if(bCreateTexture)
+        if(bDoCreateTexture)
         {
             // Polygon fuer die Textur erzeugen
             PolyPolygon3D aPolyTexture(aLocalPoly);
@@ -3027,19 +3023,19 @@ void E3dCompoundObject::CreateInBetween(
     const PolyPolygon3D& rPolyPolyBack,
     const PolyPolygon3D& rFrontNormals,
     const PolyPolygon3D& rBackNormals,
-    BOOL bCreateNormals,
+    BOOL bDoCreateNormals,
     double fSurroundFactor,
     double fTextureStart,
     double fTextureDepth,
     BOOL bRotateTexture90)
 {
     USHORT nPolyCnt = rPolyPolyFront.Count();
-    BOOL bCreateTexture = (fTextureDepth == 0.0) ? FALSE : TRUE;
-    double fPolyLength, fPolyPos;
-    USHORT nLastIndex;
+    BOOL bDoCreateTexture = (fTextureDepth == 0.0) ? FALSE : TRUE;
+    double fPolyLength(0.0), fPolyPos(0.0);
+    USHORT nLastIndex(0);
 
     // Verbindungsstuecke
-    if(bCreateNormals)
+    if(bDoCreateNormals)
     {
         for(UINT16 a=0;a<nPolyCnt;a++)
         {
@@ -3060,7 +3056,7 @@ void E3dCompoundObject::CreateInBetween(
             aNormal3D[3] = rPolyNormalsFront[nPrefillIndex];
             aNormal3D[2] = rPolyNormalsBack[nPrefillIndex];
 
-            if(bCreateTexture)
+            if(bDoCreateTexture)
             {
                 fPolyLength = rPoly3DFront.GetLength();
                 fPolyPos = 0.0;
@@ -3099,7 +3095,7 @@ void E3dCompoundObject::CreateInBetween(
                 aNormal3D[3] = rPolyNormalsFront[i];
                 aNormal3D[2] = rPolyNormalsBack[i];
 
-                if(bCreateTexture)
+                if(bDoCreateTexture)
                 {
                     // Texturkoordinaten ermitteln
                     Vector3D aPart = rPoly3DFront[i] - rPoly3DFront[nLastIndex];
@@ -3279,7 +3275,7 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D,
+void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBase3D,
     BOOL& bDrawObject, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsFillDraft)
 {
     if(bIsFillDraft)
@@ -3318,7 +3314,7 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D,
             else
             {
                 // get base color
-                Color aColorSolid = ((const XFillColorItem&) (rSet.Get(XATTR_FILLCOLOR))).GetValue();
+                Color aColorSolid = ((const XFillColorItem&) (rSet.Get(XATTR_FILLCOLOR))).GetColorValue();
                 if(bGhosted)
                 {
                     aColorSolid = Color(
@@ -3396,7 +3392,7 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D,
                     if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLBITMAP, TRUE))
                     {
                         // EIndeutige Bitmap, benutze diese
-                        aBmpEx = BitmapEx((((const XFillBitmapItem&) (rSet.Get(XATTR_FILLBITMAP))).GetValue()).GetBitmap());
+                        aBmpEx = BitmapEx((((const XFillBitmapItem&) (rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue()).GetBitmap());
                     }
 
                     // #i29168#
@@ -3430,8 +3426,8 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D,
                         pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
                     }
 
-                    sal_uInt16 nOffX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETX))).GetValue();
-                    sal_uInt16 nOffY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETY))).GetValue();
+                    //sal_uInt16 nOffX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETX))).GetValue();
+                    //sal_uInt16 nOffY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETY))).GetValue();
                     sal_uInt16 nOffPosX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETX))).GetValue();
                     sal_uInt16 nOffPosY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETY))).GetValue();
                     RECT_POINT eRectPoint = (RECT_POINT)((const SfxEnumItem&) (rSet.Get(XATTR_FILLBMP_POS))).GetValue();
@@ -3714,7 +3710,7 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D,
 }
 
 void E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D,
-    BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsLineDraft, BOOL bIsFillDraft)
+    BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL /*bGhosted*/, BOOL bIsLineDraft, BOOL bIsFillDraft)
 {
     // do drawflags allow line drawing at all?
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -3753,7 +3749,7 @@ void E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D,
     // does the outdev use linestyle?
     if(bDrawOutline && !rOut.GetIgnoreLineStyle())
     {
-        Color aColorLine = ((const XLineColorItem&)(aItemSet.Get(XATTR_LINECOLOR))).GetValue();
+        Color aColorLine = ((const XLineColorItem&)(aItemSet.Get(XATTR_LINECOLOR))).GetColorValue();
         sal_Int32 nLineWidth = ((const XLineWidthItem&)(aItemSet.Get(XATTR_LINEWIDTH))).GetValue();
 
         if(pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSLINE)
@@ -3808,7 +3804,7 @@ void E3dCompoundObject::SetBase3DParams(XOutputDevice& rOut, Base3D* pBase3D,
 \************************************************************************/
 
 // #110988# test if given hit candidate point is inside bound volume of object
-sal_Bool E3dCompoundObject::ImpIsInsideBoundVolume(const Vector3D& rFront, const Vector3D& rBack, const Point& rPnt) const
+sal_Bool E3dCompoundObject::ImpIsInsideBoundVolume(const Vector3D& rFront, const Vector3D& rBack, const Point& /*rPnt*/) const
 {
     const Volume3D& rBoundVol = ((E3dCompoundObject*)this)->GetBoundVolume();
 
@@ -3856,7 +3852,7 @@ sal_Bool E3dCompoundObject::ImpIsInsideBoundVolume(const Vector3D& rFront, const
     return sal_False;
 }
 
-SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
+SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* /*pVisiLayer*/) const
 {
     E3dPolyScene* pScene = (E3dPolyScene*)GetScene();
 
@@ -3919,7 +3915,7 @@ void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
 
 Color E3dCompoundObject::GetShadowColor()
 {
-    return ((SdrShadowColorItem&)(GetObjectItem(SDRATTR_SHADOWCOLOR))).GetValue();
+    return ((SdrShadowColorItem&)(GetObjectItem(SDRATTR_SHADOWCOLOR))).GetColorValue();
 }
 
 BOOL E3dCompoundObject::DrawShadowAsOutline()
@@ -4099,8 +4095,8 @@ void E3dCompoundObject::ImpCreateSegment(
     double fSurroundFactor,             // Wertebereich der Texturkoordinaten im Umlauf
     double fTextureStart,               // TexCoor ueber Extrude-Tiefe
     double fTextureDepth,               // TexCoor ueber Extrude-Tiefe
-    BOOL bCreateTexture,
-    BOOL bCreateNormals,
+    BOOL bDoCreateTexture,
+    BOOL bDoCreateNormals,
     BOOL bCharacterExtrude,             // FALSE=exakt, TRUE=ohne Ueberschneidungen
     BOOL bRotateTexture90,              // Textur der Seitenflaechen um 90 Grad kippen
     // #i28528#
@@ -4142,11 +4138,11 @@ void E3dCompoundObject::ImpCreateSegment(
             AddFrontNormals(rFront, aNormalsFront, aOffset);
 
             if(!bSmoothFrontBack)
-                CreateFront(rFront, aNormalsFront, bCreateNormals, bCreateTexture);
+                CreateFront(rFront, aNormalsFront, bDoCreateNormals, bDoCreateTexture);
             if(bSmoothLeft)
                 AddFrontNormals(rFront, aNormalsLeft, aOffset);
             if(bSmoothFrontBack)
-                CreateFront(rFront, aNormalsLeft, bCreateNormals, bCreateTexture);
+                CreateFront(rFront, aNormalsLeft, bDoCreateNormals, bDoCreateTexture);
         }
         else
         {
@@ -4161,11 +4157,11 @@ void E3dCompoundObject::ImpCreateSegment(
             AddBackNormals(rBack, aNormalsBack, aOffset);
 
             if(!bSmoothFrontBack)
-                CreateBack(rBack, aNormalsBack, bCreateNormals, bCreateTexture);
+                CreateBack(rBack, aNormalsBack, bDoCreateNormals, bDoCreateTexture);
             if(bSmoothRight)
                 AddBackNormals(rBack, aNormalsRight, aOffset);
             if(bSmoothFrontBack)
-                CreateBack(rBack, aNormalsRight, bCreateNormals, bCreateTexture);
+                CreateBack(rBack, aNormalsRight, bDoCreateNormals, bDoCreateTexture);
         }
         else
         {
@@ -4176,7 +4172,7 @@ void E3dCompoundObject::ImpCreateSegment(
         // eigentliches Zwischenstueck
         CreateInBetween(rFront, rBack,
             aNormalsLeft, aNormalsRight,
-            bCreateNormals,
+            bDoCreateNormals,
             fSurroundFactor,
             fTextureStart,
             fTextureDepth,
@@ -4205,7 +4201,7 @@ void E3dCompoundObject::ImpCreateSegment(
         // Mit Scraegen, Vorderseite
         PolyPolygon3D aLocalFront = rFront;
         PolyPolygon3D aLocalBack = rBack;
-        double fExtrudeDepth, fDiagLen;
+        double fExtrudeDepth, fDiagLen(0.0);
         double fTexMidStart = fTextureStart;
         double fTexMidDepth = fTextureDepth;
 
@@ -4306,14 +4302,14 @@ void E3dCompoundObject::ImpCreateSegment(
             // vordere Zwischenstuecke erzeugen
             CreateInBetween(aOuterFront, aLocalFront,
                 aNormalsOuterFront, aNormalsLeft,
-                bCreateNormals,
+                bDoCreateNormals,
                 fSurroundFactor,
                 fTextureStart,
                 fTextureDepth * fPercentDiag,
                 bRotateTexture90);
 
             // Vorderseite erzeugen
-            CreateFront(aOuterFront, aNormalsOuterFront, bCreateNormals, bCreateTexture);
+            CreateFront(aOuterFront, aNormalsOuterFront, bDoCreateNormals, bDoCreateTexture);
 
             // Weitere Texturwerte setzen
             fTexMidStart += fTextureDepth * fPercentDiag;
@@ -4415,14 +4411,14 @@ void E3dCompoundObject::ImpCreateSegment(
             // hintere Zwischenstuecke erzeugen
             CreateInBetween(aLocalBack, aOuterBack,
                 aNormalsRight, aNormalsOuterBack,
-                bCreateNormals,
+                bDoCreateNormals,
                 fSurroundFactor,
                 fTextureStart + (fTextureDepth * (1.0 - fPercentDiag)),
                 fTextureDepth * fPercentDiag,
                 bRotateTexture90);
 
             // Rueckseite erzeugen
-            CreateBack(aOuterBack, aNormalsOuterBack, bCreateNormals, bCreateTexture);
+            CreateBack(aOuterBack, aNormalsOuterBack, bDoCreateNormals, bDoCreateTexture);
 
             // Weitere Texturwerte setzen
             fTexMidDepth -= fTextureDepth * fPercentDiag;
@@ -4436,7 +4432,7 @@ void E3dCompoundObject::ImpCreateSegment(
         // eigentliches Zwischenstueck
         CreateInBetween(aLocalFront, aLocalBack,
             aNormalsLeft, aNormalsRight,
-            bCreateNormals,
+            bDoCreateNormals,
             fSurroundFactor,
             fTexMidStart,
             fTexMidDepth,
@@ -4561,7 +4557,7 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
         {
             // create dashed line segments
             ::std::vector<double> aDotDashArray;
-            XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetValue();
+            XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetDashValue();
             double fFullDashDotLen = ImpCreateDotDashArray(aDotDashArray, aDash, nLineWidth);
 
             // convert to new polygon class
@@ -4731,7 +4727,7 @@ void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
 
                     // set line color as color
                     {
-                        Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetValue();
+                        Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetColorValue();
                         sal_uInt16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
 
                         if(bGhosted)
@@ -4965,7 +4961,7 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
     B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
     const SfxItemSet& rSet = GetObjectItemSet();
     XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
-    sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+    //sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
 
     if(!bDrawAsOutline)
     {
@@ -5209,7 +5205,7 @@ void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice
 {
     Color aCol = GetShadowColor();
     OutputDevice *pDevice = rXOut.GetOutDev();
-    BOOL bDrawAsOutline(DrawShadowAsOutline());
+    //BOOL bDrawAsOutline(DrawShadowAsOutline());
     UINT16 nTransparence = GetShadowTransparence();
 
     if(nTransparence)
