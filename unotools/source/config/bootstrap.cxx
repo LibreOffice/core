@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 18:00:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,22 +356,6 @@ PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 }
 // ---------------------------------------------------------------------------------------
 #endif
-
-static
-bool normalizeURL(OUString & _sURL)
-{
-    using namespace osl;
-
-    DirectoryItem aDirItem;
-
-    bool bResult = DirectoryItem::get(_sURL, aDirItem) == DirectoryItem::E_None;
-
-    if ( bResult )
-        bResult = implNormalizeURL(_sURL,aDirItem);
-
-    return bResult;
-}
-// ---------------------------------------------------------------------------------------
 
 static
 PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
@@ -924,6 +908,8 @@ Bootstrap::Status Bootstrap::Impl::initialize()
             case DATA_INVALID:
             case DATA_MISSING:
                 result = INVALID_BASE_INSTALL;
+                break;
+            default:
                 break;
             }
         }
