@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:20:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,18 @@
 
 #define _CONFIG_CXX
 
+#include <cstddef>
+#include <cstdlib>
+#include <limits>
+#include <new>
 #include <string.h>
+
+#ifdef WNT
+#include "stdlib.h"
+#endif
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-#ifndef _NEW_HXX
-#include <new.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <stream.hxx>
@@ -57,8 +62,6 @@
 #ifndef _OSL_SECURITY_H_
 #include <osl/security.h>
 #endif
-
-#pragma hdrstop
 
 #define MAXBUFLEN   1024        // Fuer Buffer bei VOS-Funktionen
 
@@ -136,7 +139,7 @@ static ULONG ImplSysGetConfigTimeStamp( const XubString& rFileName )
 // -----------------------------------------------------------------------
 
 static BYTE* ImplSysReadConfig( const XubString& rFileName,
-                                ULONG& rRead, BOOL& rbRead, ULONG& rTimeStamp )
+                                sal_uInt64& rRead, BOOL& rbRead, ULONG& rTimeStamp )
 {
     BYTE*           pBuf = NULL;
     ::osl::File aFile( rFileName );
@@ -146,7 +149,11 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
         sal_uInt64 nPos = 0, nRead = 0;
         if( aFile.getSize( nPos ) == ::osl::FileBase::E_None )
         {
-            pBuf = (BYTE*)SvMemAlloc( nPos );
+            if (nPos > std::numeric_limits< std::size_t >::max()) {
+                aFile.close();
+                return 0;
+            }
+            pBuf = new BYTE[static_cast< std::size_t >(nPos)];
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
                 rTimeStamp = ImplSysGetConfigTimeStamp( rFileName );
@@ -155,10 +162,11 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
             }
             else
             {
-                SvMemFree( pBuf );
+                delete[] pBuf;
                 pBuf = NULL;
             }
         }
+        aFile.close();
     }
 
     return pBuf;
@@ -240,19 +248,36 @@ static String ImplMakeConfigName( const XubString* pFileName,
 
 // -----------------------------------------------------------------------
 
+namespace {
+
+ByteString makeByteString(BYTE const * p, sal_uInt64 n) {
+    if (n > STRING_MAXLEN) {
+        #ifdef WNT
+        abort();
+        #else
+        ::std::abort(); //TODO: handle this gracefully
+        #endif
+    }
+    return ByteString(
+        reinterpret_cast< char const * >(p),
+        sal::static_int_cast< xub_StrLen >(n));
+}
+
+}
+
 static void ImplMakeConfigList( ImplConfigData* pData,
-                                const BYTE* pBuf, ULONG nLen )
+                                const BYTE* pBuf, sal_uInt64 nLen )
 {
     // kein Buffer, keine Daten
     if ( !nLen )
         return;
 
     // Buffer parsen und Liste zusammenbauen
-    unsigned int    nStart;
-    unsigned int    nLineLen;
-    unsigned int    nNameLen;
-    unsigned int    nKeyLen;
-    unsigned int    i;
+    sal_uInt64 nStart;
+    sal_uInt64 nLineLen;
+    xub_StrLen      nNameLen;
+    xub_StrLen      nKeyLen;
+    sal_uInt64 i;
     const BYTE*     pLine;
     ImplKeyData*    pPrevKey = NULL;
     ImplKeyData*    pKey;
@@ -364,7 +389,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 pPrevKey = pKey;
                 if ( pLine[0] == ';' )
                 {
-                    pKey->maValue = ByteString( (const sal_Char*)pLine, nLineLen );
+                    pKey->maValue = makeByteString(pLine, nLineLen);
                     pKey->mbIsComment = TRUE;
                 }
                 else
@@ -396,7 +421,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                         {
                             while ( (pLine[nLineLen-1] == ' ') || (pLine[nLineLen-1] == '\t') )
                                 nLineLen--;
-                            pKey->maValue = ByteString( (const sal_Char*)pLine, nLineLen );
+                            pKey->maValue = makeByteString(pLine, nLineLen);
                         }
                     }
                 }
@@ -479,7 +504,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
     rLen = nBufLen;
     if ( !nBufLen )
     {
-        pWriteBuf = (BYTE*)SvMemAlloc( nLineEndLen );
+        pWriteBuf = new BYTE[nLineEndLen];
         if ( pWriteBuf )
         {
             pWriteBuf[0] = aLineEndBuf[0];
@@ -492,7 +517,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
     }
 
     // Schreibbuffer anlegen (wird vom Aufrufer zerstoert)
-    pWriteBuf = (BYTE*)SvMemAlloc( nBufLen );
+    pWriteBuf = new BYTE[nBufLen];
     if ( !pWriteBuf )
         return 0;
 
@@ -572,7 +597,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
 static void ImplReadConfig( ImplConfigData* pData )
 {
     ULONG           nTimeStamp = 0;
-    ULONG           nRead = 0;
+    sal_uInt64 nRead = 0;
     BOOL            bRead = FALSE;
     BYTE*           pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, nTimeStamp );
 
@@ -580,7 +605,7 @@ static void ImplReadConfig( ImplConfigData* pData )
     if ( pBuf )
     {
         ImplMakeConfigList( pData, pBuf, nRead );
-        SvMemFree( pBuf );
+        delete[] pBuf;
     }
     pData->mnTimeStamp = nTimeStamp;
     pData->mbModified  = FALSE;
@@ -609,7 +634,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
     {
         if ( ImplSysWriteConfig( pData->maFileName, pBuf, nBufLen, pData->mnTimeStamp ) )
             pData->mbModified = FALSE;
-        SvMemFree( pBuf );
+        delete[] pBuf;
     }
     else
         pData->mbModified = FALSE;
