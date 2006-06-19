@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:38:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,20 +348,20 @@ void Bridge::call_java(
                     // cleanup uno pure out
                     for ( sal_Int32 n = 0; n < nPos; ++n )
                     {
-                        typelib_MethodParameter const & param = params[ n ];
-                        if (! param.bIn)
+                        typelib_MethodParameter const & p = params[ n ];
+                        if (! p.bIn)
                         {
                             uno_type_destructData(
-                                uno_args[ n ], param.pTypeRef, 0 );
+                                uno_args[ n ], p.pTypeRef, 0 );
                         }
                     }
                     // cleanup java temp local refs
                     for ( ; nPos < nParams; ++nPos )
                     {
-                        typelib_MethodParameter const & param = params[ nPos ];
-                        if (param.bOut ||
+                        typelib_MethodParameter const & p = params[ nPos ];
+                        if (p.bOut ||
                             typelib_TypeClass_DOUBLE <
-                              param.pTypeRef->eTypeClass)
+                              p.pTypeRef->eTypeClass)
                         {
                             jni->DeleteLocalRef( java_args[ nPos ].l );
                         }
@@ -391,13 +391,13 @@ void Bridge::call_java(
             catch (...)
             {
                 // cleanup uno pure out
-                for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+                for ( sal_Int32 i = 0; i < nParams; ++i )
                 {
-                    typelib_MethodParameter const & param = params[ nPos ];
+                    typelib_MethodParameter const & param = params[ i ];
                     if (! param.bIn)
                     {
                         uno_type_destructData(
-                            uno_args[ nPos ], param.pTypeRef, 0 );
+                            uno_args[ i ], param.pTypeRef, 0 );
                     }
                 }
                 throw;
@@ -538,7 +538,9 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     UNO_proxy const * that = reinterpret_cast< UNO_proxy const * >( proxy );
     Bridge const * bridge = that->m_bridge;
 
-    OSL_ASSERT( env == bridge->m_uno_env );
+    if ( env != bridge->m_uno_env ) {
+        OSL_ASSERT(false);
+    }
 #if OSL_DEBUG_LEVEL > 1
     OString cstr_msg(
         OUStringToOString(
@@ -560,9 +562,11 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     catch (BridgeRuntimeError & err)
     {
 #if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg(
+        OString cstr_msg2(
             OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_ENSURE( 0, cstr_msg2.getStr() );
+#else
+        (void) err; // unused
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
@@ -745,22 +749,22 @@ void SAL_CALL UNO_proxy_dispatch(
                                 "### different oids!" );
 #endif
                             // refcount initially 1
-                            uno_Interface * pUnoI = new UNO_proxy(
+                            uno_Interface * pUnoI2 = new UNO_proxy(
                                 jni, bridge, jo_ret.get(),
                                 that->m_jo_oid, that->m_oid, info );
 
                             (*bridge->m_uno_env->registerProxyInterface)(
                                 bridge->m_uno_env,
-                                (void **) &pUnoI,
+                                (void **) &pUnoI2,
                                 UNO_proxy_free, that->m_oid.pData,
                                 reinterpret_cast<
                                   typelib_InterfaceTypeDescription * >(
                                       info->m_td.get() ) );
 
                             uno_any_construct(
-                                (uno_Any *)uno_ret, &pUnoI,
+                                (uno_Any *)uno_ret, &pUnoI2,
                                 demanded_td.get(), 0 );
-                            (*pUnoI->release)( pUnoI );
+                            (*pUnoI2->release)( pUnoI2 );
                         }
                         else // object does not support demanded interface
                         {
@@ -831,9 +835,9 @@ void SAL_CALL UNO_proxy_dispatch(
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
 #if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg(
+        OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_ENSURE( 0, cstr_msg2.getStr() );
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
@@ -847,9 +851,9 @@ void SAL_CALL UNO_proxy_dispatch(
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
 #if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg(
+        OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_ENSURE( 0, cstr_msg2.getStr() );
 #endif
     }
 }
