@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dlight.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:26:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,17 +104,14 @@ const Color B3dLight::GetIntensity(Base3DMaterialValue eVal)
         case Base3DMaterialAmbient:
         {
             return aAmbient;
-            break;
         }
         case Base3DMaterialDiffuse:
         {
             return aDiffuse;
-            break;
         }
         default:
         {
             return aSpecular;
-            break;
         }
     }
 }
