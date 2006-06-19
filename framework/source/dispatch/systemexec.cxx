@@ -4,9 +4,9 @@
  *
  *  $RCSfile: systemexec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:20:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,8 @@ SystemExec::~SystemExec()
 //_________________________________________________________________________________________________________________
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
-                                                                                 const ::rtl::OUString& sTarget ,
-                                                                                       sal_Int32        nFlags  ) throw( css::uno::RuntimeException )
+                                                                                 const ::rtl::OUString&,
+                                                                                       sal_Int32 ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
@@ -190,7 +190,7 @@ void SAL_CALL SystemExec::dispatch( const css::util::URL&                       
 //_________________________________________________________________________________________________________________
 
 void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                    const css::uno::Sequence< css::beans::PropertyValue >&,
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
 {
     // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
@@ -233,16 +233,16 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
 
 //_________________________________________________________________________________________________________________
 
-void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                             const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
+                                             const css::util::URL& ) throw( css::uno::RuntimeException )
 {
     // not suported yet
 }
 
 //_________________________________________________________________________________________________________________
 
-void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
+                                                const css::util::URL& ) throw( css::uno::RuntimeException )
 {
     // not suported yet
 }
