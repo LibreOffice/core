@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:39:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttr
 /*-- 09.01.01 13:29:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
 {
     if(aCharKerningRB.IsChecked() != aCharKerningRB.GetSavedValue())
     {
@@ -296,7 +296,7 @@ BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& rSet )
 /*-- 09.01.01 13:29:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SvxAsianLayoutPage::Reset( const SfxItemSet& rSet )
+void SvxAsianLayoutPage::Reset( const SfxItemSet& )
 {
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     SfxObjectShell* pDocSh = pCurFrm ? pCurFrm->GetObjectShell() : 0;
@@ -385,7 +385,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& rSet )
 /* -----------------------------17.01.01 11:02--------------------------------
 
  ---------------------------------------------------------------------------*/
-IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, pBox)
+IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, EMPTYARG )
 {
     //set current value
     Locale aLocale;
