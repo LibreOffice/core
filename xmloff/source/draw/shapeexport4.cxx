@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:52:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,6 +372,8 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                         }
                     }
                     break;
+                    default:
+                        break;
                 }
             }
             SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_HANDLE, sal_True, sal_True );
@@ -538,21 +540,21 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
             const rtl::OUString sCustomShapeType( RTL_CONSTASCII_USTRINGPARAM( "NonPrimitive" ) );
             rtl::OUString aCustomShapeType( sCustomShapeType );
 
-            sal_Int32 i, nCount = aGeoPropSeq.getLength();
-            for ( i = 0; i < nCount; i++ )
+            sal_Int32 j, nGeoPropCount = aGeoPropSeq.getLength();
+            for ( j = 0; j < nGeoPropCount; j++ )
             {
-                const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
-                switch( EASGet( rProp.Name ) )
+                const beans::PropertyValue& rGeoProp = aGeoPropSeq[ j ];
+                switch( EASGet( rGeoProp.Name ) )
                 {
                     case EAS_Type :
                     {
-                        rProp.Value >>= aCustomShapeType;
+                        rGeoProp.Value >>= aCustomShapeType;
                     }
                     break;
                     case EAS_MirroredX :
                     {
                         sal_Bool bMirroredX;
-                        if ( rProp.Value >>= bMirroredX )
+                        if ( rGeoProp.Value >>= bMirroredX )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_HORIZONTAL,
                                 bMirroredX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                     }
@@ -560,7 +562,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     case EAS_MirroredY :
                     {
                         sal_Bool bMirroredY;
-                        if ( rProp.Value >>= bMirroredY )
+                        if ( rGeoProp.Value >>= bMirroredY )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_VERTICAL,
                                 bMirroredY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                     }
@@ -568,7 +570,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     case EAS_ViewBox :
                     {
                         awt::Rectangle aRect;
-                        if ( rProp.Value >>= aRect )
+                        if ( rGeoProp.Value >>= aRect )
                         {
                             SdXMLImExViewBox aViewBox( aRect.X, aRect.Y, aRect.Width, aRect.Height );
                             rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString( rExport.GetMM100UnitConverter() ) );
@@ -578,7 +580,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     case EAS_TextRotateAngle :
                     {
                         double fTextRotateAngle;
-                        if ( rProp.Value >>= fTextRotateAngle )
+                        if ( rGeoProp.Value >>= fTextRotateAngle )
                         {
                             rUnitConverter.convertDouble( aStrBuffer, fTextRotateAngle );
                             aStr = aStrBuffer.makeStringAndClear();
@@ -589,7 +591,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     case EAS_Extrusion :
                     {
                         uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
-                        if ( rProp.Value >>= aExtrusionPropSeq )
+                        if ( rGeoProp.Value >>= aExtrusionPropSeq )
                         {
                             sal_Int32 i, nCount = aExtrusionPropSeq.getLength();
                             for ( i = 0; i < nCount; i++ )
@@ -859,6 +861,8 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         }
                                     }
                                     break;
+                                    default:
+                                        break;
                                 }
                             }
                         }
@@ -867,7 +871,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     case EAS_TextPath :
                     {
                         uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
-                        if ( rProp.Value >>= aTextPathPropSeq )
+                        if ( rGeoProp.Value >>= aTextPathPropSeq )
                         {
                             sal_Int32 i, nCount = aTextPathPropSeq.getLength();
                             for ( i = 0; i < nCount; i++ )
@@ -893,6 +897,8 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL: aStr = GetXMLToken( XML_NORMAL ); break;
                                                 case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH  : aStr = GetXMLToken( XML_PATH );   break;
                                                 case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE : aStr = GetXMLToken( XML_SHAPE );  break;
+                                                default:
+                                                    break;
                                             }
                                             if ( aStr.getLength() )
                                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_MODE, aStr );
@@ -917,6 +923,8 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 bSameLetterHeights ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
+                                    default:
+                                        break;
                                 }
                             }
                         }
@@ -925,7 +933,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     case EAS_Path :
                     {
                         uno::Sequence< beans::PropertyValue > aPathPropSeq;
-                        if ( rProp.Value >>= aPathPropSeq )
+                        if ( rGeoProp.Value >>= aPathPropSeq )
                         {
                             sal_Int32 i, nCount = aPathPropSeq.getLength();
                             for ( i = 0; i < nCount; i++ )
@@ -962,13 +970,13 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                                         if ( rProp.Value >>= aGluePoints )
                                         {
-                                            sal_Int32 j, nElements = aGluePoints.getLength();
+                                            sal_Int32 k, nElements = aGluePoints.getLength();
                                             if ( nElements )
                                             {
-                                                for( j = 0; j < nElements; j++ )
+                                                for( k = 0; k < nElements; k++ )
                                                 {
-                                                    ExportParameter( aStrBuffer, aGluePoints[ j ].First );
-                                                    ExportParameter( aStrBuffer, aGluePoints[ j ].Second );
+                                                    ExportParameter( aStrBuffer, aGluePoints[ k ].First );
+                                                    ExportParameter( aStrBuffer, aGluePoints[ k ].Second );
                                                 }
                                                 aStr = aStrBuffer.makeStringAndClear();
                                             }
@@ -1023,13 +1031,13 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         {
                                             if ( (sal_uInt16)aPathTextFrames.getLength() )
                                             {
-                                                sal_uInt16 j, nElements = (sal_uInt16)aPathTextFrames.getLength();
-                                                for ( j = 0; j < nElements; j++ )
+                                                sal_uInt16 k, nElements = (sal_uInt16)aPathTextFrames.getLength();
+                                                for ( k = 0; k < nElements; k++ )
                                                 {
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ j ].TopLeft.First );
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ j ].TopLeft.Second );
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ j ].BottomRight.First );
-                                                    ExportParameter( aStrBuffer, aPathTextFrames[ j ].BottomRight.Second );
+                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].TopLeft.First );
+                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].TopLeft.Second );
+                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].BottomRight.First );
+                                                    ExportParameter( aStrBuffer, aPathTextFrames[ k ].BottomRight.Second );
                                                 }
                                                 aStr = aStrBuffer.makeStringAndClear();
                                             }
@@ -1037,6 +1045,8 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         }
                                     }
                                     break;
+                                    default:
+                                        break;
                                 }
                             }
                         }
@@ -1044,19 +1054,21 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     break;
                     case EAS_Equations :
                     {
-                        bEquations = ( rProp.Value >>= aEquations );
+                        bEquations = ( rGeoProp.Value >>= aEquations );
                     }
                     break;
                     case EAS_Handles :
                     {
-                        bHandles = ( rProp.Value >>= aHandles );
+                        bHandles = ( rGeoProp.Value >>= aHandles );
                     }
                     break;
                     case EAS_AdjustmentValues :
                     {
-                        rProp.Value >>= aAdjustmentValues;
+                        rGeoProp.Value >>= aAdjustmentValues;
                     }
                     break;
+                    default:
+                        break;
                 }
             }   // for
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TYPE, aCustomShapeType );
@@ -1105,7 +1117,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
 void XMLShapeExport::ImpExportCustomShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint )
+    XmlShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint )
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if ( xPropSet.is() )
@@ -1123,22 +1135,22 @@ void XMLShapeExport::ImpExportCustomShape(
             {
                 uno::Any aEngine( xPropSet->getPropertyValue( sCustomShapeEngine ) );
                 if ( ( aEngine >>= aStr ) && aStr.getLength() )
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
+                    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
             }
             const rtl::OUString sCustomShapeData( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeData" ) );
             if ( xPropSetInfo->hasPropertyByName( sCustomShapeData ) )
             {
                 uno::Any aData( xPropSet->getPropertyValue( sCustomShapeData ) );
                 if ( ( aData >>= aStr ) && aStr.getLength() )
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
+                    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
             }
         }
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
-        SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_CUSTOM_SHAPE, bCreateNewline, sal_True );
+        SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DRAW, XML_CUSTOM_SHAPE, bCreateNewline, sal_True );
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
-        ImpExportEnhancedGeometry( rExport, xPropSet );
+        ImpExportEnhancedGeometry( mrExport, xPropSet );
     }
 }
 
