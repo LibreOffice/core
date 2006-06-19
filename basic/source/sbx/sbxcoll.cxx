@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxcoll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:47:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ SbxCollection::SbxCollection( const XubString& rClass )
 }
 
 SbxCollection::SbxCollection( const SbxCollection& rColl )
-             : SbxObject( rColl )
+    : SvRefBase( rColl ), SbxObject( rColl )
 {}
 
 SbxCollection& SbxCollection::operator=( const SbxCollection& r )
@@ -168,13 +168,13 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
 
 // Default: Argument ist Objekt
 
-void SbxCollection::CollAdd( SbxArray* pPar )
+void SbxCollection::CollAdd( SbxArray* pPar_ )
 {
-    if( pPar->Count() != 2 )
+    if( pPar_->Count() != 2 )
         SetError( SbxERR_WRONG_ARGS );
     else
     {
-        SbxBase* pObj = pPar->Get( 1 )->GetObject();
+        SbxBase* pObj = pPar_->Get( 1 )->GetObject();
         if( !pObj || !( pObj->ISA(SbxObject) ) )
             SetError( SbxERR_NOTIMP );
         else
@@ -184,14 +184,14 @@ void SbxCollection::CollAdd( SbxArray* pPar )
 
 // Default: Index ab 1 oder der Objektname
 
-void SbxCollection::CollItem( SbxArray* pPar )
+void SbxCollection::CollItem( SbxArray* pPar_ )
 {
-    if( pPar->Count() != 2 )
+    if( pPar_->Count() != 2 )
         SetError( SbxERR_WRONG_ARGS );
     else
     {
         SbxVariable* pRes = NULL;
-        SbxVariable* p = pPar->Get( 1 );
+        SbxVariable* p = pPar_->Get( 1 );
         if( p->GetType() == SbxSTRING )
             pRes = Find( p->GetString(), SbxCLASS_OBJECT );
         else
@@ -202,19 +202,19 @@ void SbxCollection::CollItem( SbxArray* pPar )
         }
         if( !pRes )
             SetError( SbxERR_BAD_INDEX );
-        pPar->Get( 0 )->PutObject( pRes );
+        pPar_->Get( 0 )->PutObject( pRes );
     }
 }
 
 // Default: Index ab 1
 
-void SbxCollection::CollRemove( SbxArray* pPar )
+void SbxCollection::CollRemove( SbxArray* pPar_ )
 {
-    if( pPar->Count() != 2 )
+    if( pPar_->Count() != 2 )
         SetError( SbxERR_WRONG_ARGS );
     else
     {
-        short n = pPar->Get( 1 )->GetInteger();
+        short n = pPar_->Get( 1 )->GetInteger();
         if( n < 1 || n > (short) pObjs->Count() )
             SetError( SbxERR_BAD_INDEX );
         else
@@ -238,8 +238,8 @@ SbxStdCollection::SbxStdCollection
 {}
 
 SbxStdCollection::SbxStdCollection( const SbxStdCollection& r )
-                  : SbxCollection( r ), aElemClass( r.aElemClass ),
-                    bAddRemoveOk( r.bAddRemoveOk )
+                  : SvRefBase( r ), SbxCollection( r ),
+                    aElemClass( r.aElemClass ), bAddRemoveOk( r.bAddRemoveOk )
 {}
 
 SbxStdCollection& SbxStdCollection::operator=( const SbxStdCollection& r )
@@ -268,20 +268,20 @@ void SbxStdCollection::Insert( SbxVariable* p )
         SbxCollection::Insert( p );
 }
 
-void SbxStdCollection::CollAdd( SbxArray* pPar )
+void SbxStdCollection::CollAdd( SbxArray* pPar_ )
 {
     if( !bAddRemoveOk )
         SetError( SbxERR_BAD_ACTION );
     else
-        SbxCollection::CollAdd( pPar );
+        SbxCollection::CollAdd( pPar_ );
 }
 
-void SbxStdCollection::CollRemove( SbxArray* pPar )
+void SbxStdCollection::CollRemove( SbxArray* pPar_ )
 {
     if( !bAddRemoveOk )
         SetError( SbxERR_BAD_ACTION );
     else
-        SbxCollection::CollRemove( pPar );
+        SbxCollection::CollRemove( pPar_ );
 }
 
 BOOL SbxStdCollection::LoadData( SvStream& rStrm, USHORT nVer )
