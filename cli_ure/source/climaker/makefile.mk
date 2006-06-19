@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:05:59 $
+#   last change: $Author: hr $ $Date: 2006-06-20 00:57:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,12 @@ UNOTYPES = \
 
 CFLAGS +=-AI$(BIN)
 
+# When compiling for CLR, disable "warning C4339: use of undefined type detected
+# in CLR meta-data - use of this type may lead to a runtime exception":
 .IF "$(COMEX)"=="10"
-CFLAGS += -clr:noAssembly,initialAppDomain
+CFLAGS += -clr:noAssembly,initialAppDomain -wd4339
 .ELSE
-CFLAGS += -clr:noAssembly
+CFLAGS += -clr:noAssembly -wd4339
 .ENDIF
 
 OBJFILES = \
