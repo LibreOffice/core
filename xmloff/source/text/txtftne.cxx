@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:30:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:49:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,8 @@ using namespace ::xmloff::token;
 
 void XMLTextParagraphExport::exportTextFootnote(
     const Reference<XPropertySet> & rPropSet,
-    const OUString& sText,
-    sal_Bool bAutoStyles, sal_Bool bProgress )
+    const OUString& rText,
+    sal_Bool bAutoStyles, sal_Bool bIsProgress )
 {
     // get footnote and associated text
     Any aAny;
@@ -159,8 +159,8 @@ void XMLTextParagraphExport::exportTextFootnote(
         Add( XML_STYLE_FAMILY_TEXT_TEXT, rPropSet );
 
         // handle formatting within footnote
-        exportTextFootnoteHelper(xFootnote, xText, sText,
-                                 bAutoStyles, bIsEndnote, bProgress );
+        exportTextFootnoteHelper(xFootnote, xText, rText,
+                                 bAutoStyles, bIsEndnote, bIsProgress );
     }
     else
     {
@@ -170,7 +170,6 @@ void XMLTextParagraphExport::exportTextFootnote(
         sal_Bool bIsUICharStyle = sal_False;
         OUString sStyle = FindTextStyleAndHyperlink( rPropSet, bHasHyperlink,
                                                      bIsUICharStyle );
-        sal_Bool bHasStyle = (sStyle.getLength() > 0);
         // export hyperlink (if we have one)
         Reference < XPropertySetInfo > xPropSetInfo;
         if( bHasHyperlink )
@@ -191,9 +190,9 @@ void XMLTextParagraphExport::exportTextFootnote(
                 "HyperLinkEvents"));
             if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
             {
-                Any aAny = rPropSet->getPropertyValue(sHyperLinkEvents);
+                Any a = rPropSet->getPropertyValue(sHyperLinkEvents);
                 Reference<XNameReplace> xName;
-                aAny >>= xName;
+                a >>= xName;
                 GetExport().GetEventExport().Export(xName, sal_False);
             }
         }
@@ -210,13 +209,13 @@ void XMLTextParagraphExport::exportTextFootnote(
                                           GetExport().EncodeStyleName( sStyle ) );
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                           XML_SPAN, sal_False, sal_False );
-                exportTextFootnoteHelper(xFootnote, xText, sText,
-                                         bAutoStyles, bIsEndnote, bProgress );
+                exportTextFootnoteHelper(xFootnote, xText, rText,
+                                         bAutoStyles, bIsEndnote, bIsProgress );
             }
             else
             {
-                exportTextFootnoteHelper(xFootnote, xText, sText,
-                                         bAutoStyles, bIsEndnote, bProgress );
+                exportTextFootnoteHelper(xFootnote, xText, rText,
+                                         bAutoStyles, bIsEndnote, bIsProgress );
             }
         }
     }
@@ -226,14 +225,14 @@ void XMLTextParagraphExport::exportTextFootnote(
 void XMLTextParagraphExport::exportTextFootnoteHelper(
     const Reference<XFootnote> & rFootnote,
     const Reference<XText> & rText,
-    const OUString& sText,
+    const OUString& rTextString,
     sal_Bool bAutoStyles,
     sal_Bool bIsEndnote,
-    sal_Bool bProgress )
+    sal_Bool bIsProgress )
 {
     if (bAutoStyles)
     {
-        exportText(rText, bAutoStyles, bProgress, sal_True );
+        exportText(rText, bAutoStyles, bIsProgress, sal_True );
     }
     else
     {
@@ -265,13 +264,13 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
 
             SvXMLElementExport aCite(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_NOTE_CITATION, sal_False, sal_False);
-            GetExport().Characters(sText);
+            GetExport().Characters(rTextString);
         }
 
         {
             SvXMLElementExport aBody(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_NOTE_BODY, sal_False, sal_False);
-            exportText(rText, bAutoStyles, bProgress, sal_True );
+            exportText(rText, bAutoStyles, bIsProgress, sal_True );
         }
     }
 }
