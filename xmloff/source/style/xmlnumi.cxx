@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:12:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,33 +288,34 @@ public:
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList ) :
+        const Reference< xml::sax::XAttributeList > & xAttrList )
 
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    sNumFormat( OUString::createFromAscii( "1" ) ),
-    nLevel( -1L ),
-    nSpaceBefore( 0L ),
-    nMinLabelWidth( 0L ),
-    nMinLabelDist( 0L ),
-    nImageWidth( 0L ),
-    nImageHeight( 0L ),
-    nNumStartValue( 1 ),
-    nNumDisplayLevels( 1 ),
-    eAdjust( HoriOrientation::LEFT ),
-    eBulletFontFamily( FAMILY_DONTKNOW ),
-    eBulletFontPitch( PITCH_DONTKNOW ),
-    eBulletFontEncoding( RTL_TEXTENCODING_DONTKNOW ),
-    cBullet( 0 ),
-    nRelSize(0),
-    bNum( sal_False ),
-    bBullet( sal_False ),
-    bImage( sal_False ),
-    bHasColor( sal_False ),
-    aColor( 0 )
+:   SvXMLImportContext( rImport, nPrfx, rLName )
 #ifdef CONV_STAR_FONTS
-    ,sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) ),
-    sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
+,   sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) )
+,   sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
 #endif
+,   sNumFormat( OUString::createFromAscii( "1" ) )
+,   nLevel( -1L )
+,   nSpaceBefore( 0L )
+,   nMinLabelWidth( 0L )
+,   nMinLabelDist( 0L )
+,   nImageWidth( 0L )
+,   nImageHeight( 0L )
+,   nNumStartValue( 1 )
+,   nNumDisplayLevels( 1 )
+,   eAdjust( HoriOrientation::LEFT )
+,   eBulletFontFamily( FAMILY_DONTKNOW )
+,   eBulletFontPitch( PITCH_DONTKNOW )
+,   eBulletFontEncoding( RTL_TEXTENCODING_DONTKNOW )
+,   eImageVertOrient(0)
+,   cBullet( 0 )
+,   nRelSize(0)
+,   aColor( 0 )
+,   bBullet( sal_False )
+,   bImage( sal_False )
+,   bNum( sal_False )
+,   bHasColor( sal_False )
 {
     if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
         IsXMLToken( rLName, XML_OUTLINE_LEVEL_STYLE )        )
@@ -944,17 +945,16 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
-        sal_Bool bOutl ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST ),
-    pLevelStyles( 0 ),
-    nLevels( 0 ),
-    bConsecutive( sal_False ),
-    bOutline( bOutl ),
-//  bUsed( sal_False ),
-    sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ),
-    sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
-    sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
+        sal_Bool bOutl )
+:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
+,   sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,   sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
+,   sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
+,   sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
+,   pLevelStyles( 0 )
+,   nLevels( 0 )
+,   bConsecutive( sal_False )
+,   bOutline( bOutl )
 {
 }
 
@@ -1017,13 +1017,13 @@ void SvxXMLListStyleContext::FillUnoNumRule(
         if( pLevelStyles && rNumRule.is() )
         {
             sal_uInt16 nCount = pLevelStyles->Count();
-            sal_Int32 nLevels = rNumRule->getCount();
+            sal_Int32 l_nLevels = rNumRule->getCount();
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
                 SvxXMLListLevelStyleContext_Impl *pLevelStyle =
                     (*pLevelStyles)[i];
                 sal_Int32 nLevel = pLevelStyle->GetLevel();
-                if( nLevel >= 0 && nLevel < nLevels )
+                if( nLevel >= 0 && nLevel < l_nLevels )
                 {
                     Sequence<beans::PropertyValue> aProps =
                         pLevelStyle->GetProperties( pI18NMap );
