@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:36:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -853,7 +853,7 @@ void WinSalObject::SetBackground()
 
 // -----------------------------------------------------------------------
 
-void WinSalObject::SetBackground( SalColor nSalColor )
+void WinSalObject::SetBackground( SalColor )
 {
 }
 
