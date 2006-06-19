@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -99,6 +98,7 @@ short SbiStringPool::Add( double n, SbxDataType t )
         case SbxLONG:    snprintf( buf, sizeof(buf), "%ld", (long) n ); break;
         case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g", (float) n ); break;
         case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break;
+        default: break;
     }
     return Add( String::CreateFromAscii( buf ) );
 }
@@ -500,6 +500,9 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
             case PROPERTY_MODE_GET:     aCompleteProcName.AppendAscii( "Get " ); break;
             case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
             case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
+            case PROPERTY_MODE_NONE:
+                DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                break;
         }
         aCompleteProcName += aName;
         aName = aCompleteProcName;
