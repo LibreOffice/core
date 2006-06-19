@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:24:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,23 +40,9 @@
 #include <tools/list.hxx>
 #include <hash_map>
 
-/*struct equalByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
-    }
-};
-
-struct hashByteString{
-    size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
-    }
-};
-*/
 typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
-//=============================================
 
 //
 // class CfgStackData
@@ -85,14 +71,14 @@ public:
     ByteString &GetTagType() { return sTagType; }
     ByteString &GetIdentifier() { return sIdentifier; }
 
-    void FillInFallbacks();
+    //void FillInFallbacks();
 };
 
 //
 // class CfgStack
 //
 
-DECLARE_LIST( CfgStackList, CfgStackData * );
+DECLARE_LIST( CfgStackList, CfgStackData * )
 
 class CfgStack : public CfgStackList
 {
@@ -100,9 +86,8 @@ public:
     CfgStack() : CfgStackList( 10, 10 ) {}
     ~CfgStack();
 
-    ULONG Push( CfgStackData *pStackData ) { Insert( pStackData, LIST_APPEND ); return Count() - 1; }
-    CfgStackData *Push( const ByteString &rTag, const ByteString &rId )
-        { CfgStackData *pD = new CfgStackData( rTag, rId ); Insert( pD, LIST_APPEND ); return pD; }
+    ULONG Push( CfgStackData *pStackData );
+    CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
     CfgStackData *Pop() { return Remove( Count() - 1 ); }
 
     CfgStackData *GetStackData( ULONG nPos = LIST_APPEND );
@@ -130,13 +115,13 @@ protected:
 
     virtual void WorkOnText(
         ByteString &rText,
-        //USHORT nLangIndex,
-        ByteString nLangIndex,
-        const ByteString &rResTyp );
+        const ByteString &nLangIndex
+        //const ByteString &rResTyp
+        )=0;
 
-    virtual void WorkOnRessourceEnd();
+    virtual void WorkOnRessourceEnd()=0;
 
-    virtual void Output( const ByteString& rOutput );
+    virtual void Output( const ByteString& rOutput )=0;
 
     void Error( const ByteString &rError );
 
@@ -181,20 +166,21 @@ private:
     ByteString sPath;
     std::vector<ByteString> aLanguages;
 protected:
-    virtual void WorkOnText(
+    void WorkOnText(
         ByteString &rText,
-        USHORT nLangIndex,
-        const ByteString &rResTyp );
+        const ByteString &rIsoLang
+        //const ByteString &rResTyp
+        );
 
-    virtual void WorkOnRessourceEnd();
-
+    void WorkOnRessourceEnd();
+    void Output( const ByteString& rOutput );
 public:
     CfgExport(
         const ByteString &rOutputFile,
         const ByteString &rProject,
         const ByteString &rFilePath
     );
-    virtual ~CfgExport();
+    ~CfgExport();
 };
 
 //
@@ -207,28 +193,28 @@ private:
     MergeDataFile *pMergeDataFile;
     std::vector<ByteString> aLanguages;
     ResData *pResData;
-    ByteString sFilename;
 
     BOOL bGerman;
+    ByteString sFilename;
     BOOL bEnglish;
 
 protected:
-    virtual void WorkOnText(
+    void WorkOnText(
         ByteString &rText,
-        //USHORT nLangIndex,
-        ByteString nLangIndex,
-        const ByteString &rResTyp );
+        const ByteString &nLangIndex
+        //const ByteString &rResTyp
+        );
 
-    virtual void WorkOnRessourceEnd();
+    void WorkOnRessourceEnd();
 
-    virtual void Output( const ByteString& rOutput );
+    void Output( const ByteString& rOutput );
 public:
     CfgMerge(
         const ByteString &rMergeSource,
         const ByteString &rOutputFile,
-        BOOL bErrorLog , ByteString &rFilename
+        ByteString &rFilename
     );
-    virtual ~CfgMerge();
+    ~CfgMerge();
 };
 
 #endif
