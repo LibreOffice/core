@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:20:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ ImageList* SfxModule::GetImageList_Impl( BOOL bBig, BOOL bHiContrast )
     return pImpl->GetImageList( pResMgr, bBig, bHiContrast );
 }
 
-SfxTabPage* SfxModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )
 {
     return NULL;
 }
@@ -397,7 +397,7 @@ void SfxModule::Invalidate( USHORT nId )
             Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-BOOL SfxModule::IsActive()
+BOOL SfxModule::IsActive() const
 {
     SfxViewFrame* pFrame = SfxViewFrame::Current();
     if ( pFrame && pFrame->GetObjectShell()->GetFactory().GetModule() == this )
