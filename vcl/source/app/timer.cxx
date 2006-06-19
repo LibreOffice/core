@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:33:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,9 @@
 #include <tools/debug.hxx>
 #endif
 
-#define protected public
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
 #endif
-#undef protected
 
 
 
@@ -86,7 +84,7 @@ struct ImplTimerData
 
 // =======================================================================
 
-void ImplDeInitTimer()
+void Timer::ImplDeInitTimer()
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData = pSVData->mpFirstTimerData;
@@ -129,7 +127,7 @@ static void ImplStartTimer( ImplSVData* pSVData, ULONG nMS )
 
 // -----------------------------------------------------------------------
 
-void ImplTimerCallbackProc()
+void Timer::ImplTimerCallbackProc()
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData;
