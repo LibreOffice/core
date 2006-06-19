@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:34:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,19 +178,18 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-        sal_Bool bDefaultStyle ) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
-                         nFamily, bDefaultStyle ),
-    bAutoUpdate( sal_False ),
-    bHasMasterPageName( sal_False ),
-    bHasCombinedCharactersLetter( sal_False ),
-    nOutlineLevel( 0 ),
-    pEventContext( NULL ),
-    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
-    sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) ),
-    sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
-    sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) ),
-    sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
+        sal_Bool bDefaultStyle )
+:   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
+,   sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
+,   sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) )
+,   sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) )
+,   sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
+,   sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) )
+,   nOutlineLevel( 0 )
+,   bAutoUpdate( sal_False )
+,   bHasMasterPageName( sal_False )
+,   bHasCombinedCharactersLetter( sal_False )
+,   pEventContext( NULL )
 {
 }
 
