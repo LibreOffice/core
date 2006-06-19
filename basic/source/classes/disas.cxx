@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:10:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#pragma hdrstop
 #include <sbx.hxx>
 #include "sb.hxx"
 #include "iosys.hxx"
@@ -220,9 +219,7 @@ static const Func pOperand3[] = {
 
 static const char* _crlf()
 {
-#if defined (MAC)
-    return "\n";
-#elif defined (UNX) || defined( PM2 )
+#if defined (UNX) || defined( PM2 )
     return "\n";
 #else
     return "\r\n";
@@ -266,6 +263,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
             case _CASEIS:
             case _CASETO:
             case _ERRHDL: nPos = nOp1; bLbl = TRUE; break;
+            default: break;
         }
         if( bLbl )
             cLabels[ nPos >> 3 ] |= ( 1 << ( nPos & 7 ) );
@@ -590,7 +588,6 @@ void SbiDisas::VarDefOp( String& rText )
     rText += rImg.GetString( nOp1 );
     rText.AppendAscii( "\t; " );
     // Der Typ
-    USHORT n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
 }
@@ -628,7 +625,7 @@ void SbiDisas::TypeOp( String& rText )
     if( nOp1 < 13 )
     {
 #ifndef HP9000
-        static char* pTypes[13] = {
+        static char pTypes[][13] = {
             "Empty","Null","Integer","Long","Single","Double",
             "Currency","Date","String","Object","Error","Boolean",
             "Variant" };
