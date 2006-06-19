@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:46:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,8 +153,10 @@ void test_cache()
     Cache < OUString , equalOUString > cache ( 2 );
 
     sal_Int32 n = cache.put( a );
-    sal_Int32 nR = cache.seek( a );
-    OSL_ASSERT( n == nR );
+    if (cache.seek( a ) != n)
+    {
+        OSL_ASSERT( false );
+    }
     OSL_ASSERT( 0 == n );
 
     n = cache.put( b );
@@ -188,20 +190,6 @@ StaticSingleton singleton;
 #if OSL_DEBUG_LEVEL > 1
 static MyCounter thisCounter( "Remote Environment" );
 #endif
-
-struct RemoteEnvironment
-{
-
-    static void SAL_CALL thisDisposing( uno_Environment *pEnvRemote );
-    static void SAL_CALL thisComputeObjectIdentifier( uno_ExtEnvironment *pEnvRemote,
-                                                      rtl_uString **ppOid,
-                                                      void *pInterface );
-    static void SAL_CALL thisAcquireInterface( uno_ExtEnvironment * pEnvRemote ,
-                                               void *pInterface );
-    static void SAL_CALL thisReleaseInterface( uno_ExtEnvironment * pEnvRemote,
-                                               void *pInterface);
-    static void SAL_CALL thisDispose( uno_Environment *pEnvRemote );
-};
 
 void SAL_CALL allThreadsAreGone( uno_Environment * pEnvRemote )
 {
@@ -246,7 +234,7 @@ void SAL_CALL releaseStubs( uno_Environment *pEnvRemote )
     sal_Int32 i;
     for( i  = 0 ; i < nCount ; i ++ )
     {
-          if( ppInterfaces[i]->acquire == bridges_remote::Uno2RemoteStub::thisAcquire )
+          if( ppInterfaces[i]->acquire == bridges_remote::acquireUno2RemoteStub )
           {
               // these are freed by the environment, so no release necessary
               pEnvRemote->pExtEnv->revokeInterface( pEnvRemote->pExtEnv, ppInterfaces[i] );
@@ -260,7 +248,13 @@ void SAL_CALL releaseStubs( uno_Environment *pEnvRemote )
     rtl_freeMemory( (void*) ppInterfaces );
 }
 
-void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
+} // end namespace bridges_urp
+
+using namespace bridges_urp;
+
+extern "C" {
+
+static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote )
 {
     remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
     urp_BridgeImpl *pImpl = ( urp_BridgeImpl *) pContext->m_pBridgeImpl;
@@ -353,7 +347,8 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
     }
 }
 
-void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
+static void SAL_CALL RemoteEnvironment_thisDisposing(
+    uno_Environment *pEnvRemote )
 {
     remote_Context *pContext = (remote_Context * )pEnvRemote->pContext;
     urp_BridgeImpl *pImpl = ((urp_BridgeImpl*) pContext->m_pBridgeImpl);
@@ -363,7 +358,7 @@ void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
         if( ! pImpl->m_bDisposed )
         {
             guard.clear();
-            thisDispose( pEnvRemote );
+            RemoteEnvironment_thisDispose( pEnvRemote );
         }
     }
     pImpl->m_pPropertyObject->thisRelease();
@@ -379,38 +374,34 @@ void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
 #endif
 }
 
-void RemoteEnvironment::thisComputeObjectIdentifier( uno_ExtEnvironment *pEnvRemote,
-                                                     rtl_uString **ppOid ,
-                                                     void *pInterface)
+static void SAL_CALL RemoteEnvironment_thisComputeObjectIdentifier(
+    uno_ExtEnvironment *, rtl_uString **, void *)
 {
-    OSL_ENSURE( 0, "RemoteEnvironment::thisComputeObjectIdentifier should never be called" );
+    OSL_ENSURE( 0, "RemoteEnvironment_thisComputeObjectIdentifier should never be called" );
 }
 
-void RemoteEnvironment::thisAcquireInterface( uno_ExtEnvironment *pEnvRemote, void *pInterface )
+static void SAL_CALL RemoteEnvironment_thisAcquireInterface(
+    uno_ExtEnvironment *, void *pInterface )
 {
     ((remote_Interface *)pInterface)->acquire( ( remote_Interface *) pInterface );
 }
 
-void RemoteEnvironment::thisReleaseInterface( uno_ExtEnvironment *pEnvRemote, void *pInterface )
+static void SAL_CALL RemoteEnvironment_thisReleaseInterface(
+    uno_ExtEnvironment *, void *pInterface )
 {
     ((remote_Interface *)pInterface)->release( ( remote_Interface *) pInterface );
 }
 
-} // end namespace bridges_urp
-using namespace bridges_urp;
-
-
 //##################################################################################################
-extern "C" void SAL_CALL uno_initEnvironment(
-    uno_Environment * pEnvRemote )
+void SAL_CALL uno_initEnvironment( uno_Environment * pEnvRemote )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     // set C-virtual methods
-    pEnvRemote->environmentDisposing = RemoteEnvironment::thisDisposing;
-    pEnvRemote->pExtEnv->computeObjectIdentifier = RemoteEnvironment::thisComputeObjectIdentifier;
-    pEnvRemote->pExtEnv->acquireInterface = RemoteEnvironment::thisAcquireInterface;
-    pEnvRemote->pExtEnv->releaseInterface = RemoteEnvironment::thisReleaseInterface;
-    pEnvRemote->dispose = RemoteEnvironment::thisDispose;
+    pEnvRemote->environmentDisposing = RemoteEnvironment_thisDisposing;
+    pEnvRemote->pExtEnv->computeObjectIdentifier = RemoteEnvironment_thisComputeObjectIdentifier;
+    pEnvRemote->pExtEnv->acquireInterface = RemoteEnvironment_thisAcquireInterface;
+    pEnvRemote->pExtEnv->releaseInterface = RemoteEnvironment_thisReleaseInterface;
+    pEnvRemote->dispose = RemoteEnvironment_thisDispose;
 
     remote_Context *pContext = ( remote_Context * ) pEnvRemote->pContext;
     pContext->aBase.acquire( ( uno_Context * )  pContext );
@@ -510,7 +501,7 @@ extern "C" void SAL_CALL uno_initEnvironment(
 
 
 //##################################################################################################
-extern "C" void SAL_CALL uno_ext_getMapping(
+void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping,
     uno_Environment * pFrom,
     uno_Environment * pTo )
@@ -531,7 +522,7 @@ extern "C" void SAL_CALL uno_ext_getMapping(
         {
             pMapping =  new bridges_remote::RemoteMapping( pTo, /* Uno */
                                      pFrom, /*remote*/
-                                     bridges_remote::RemoteMapping::remoteToUno,
+                                     bridges_remote::remoteToUno,
                                      OUString() );
         }
         else if ( sFromName.equalsIgnoreAsciiCase( sUno ) &&
@@ -539,21 +530,23 @@ extern "C" void SAL_CALL uno_ext_getMapping(
         {
             pMapping =  new bridges_remote::RemoteMapping( pFrom ,
                                            pTo ,
-                                           bridges_remote::RemoteMapping::unoToRemote,
+                                           bridges_remote::unoToRemote,
                                            OUString() );
         }
 
         *ppMapping = (uno_Mapping * )pMapping;
         OUString dummy;
         uno_registerMapping( ppMapping ,
-                             bridges_remote::RemoteMapping::thisFree,
+                             bridges_remote::freeRemoteMapping,
                              pFrom ,
                              pTo ,
                              dummy.pData );
     }
 }
 
-extern "C" sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 }
