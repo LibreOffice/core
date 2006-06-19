@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:50:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct Rectangle;
     struct Size;
     class XFocusListener;
-} } } };
+} } } }
 
 class Rectangle;
 class SvxRectCtl;
@@ -231,6 +231,11 @@ public:
         getLocale( void )
             throw(  ::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::accessibility::IllegalAccessibleComponentStateException );
+
+    //=====  XComponent  =====================================================
+
+    using ::cppu::WeakAggComponentImplHelperBase::addEventListener;
+    using ::cppu::WeakAggComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleEventBroadcaster  =====================================
 
@@ -494,6 +499,11 @@ public:
         getLocale( void )
             throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::accessibility::IllegalAccessibleComponentStateException );
 
+    //=====  XComponent  =====================================================
+
+    using ::cppu::WeakAggComponentImplHelperBase::addEventListener;
+    using ::cppu::WeakAggComponentImplHelperBase::removeEventListener;
+
     //=====  XAccessibleEventBroadcaster  =====================================
 
     virtual void SAL_CALL
@@ -587,7 +597,7 @@ private:
     const Window&                       mrParentWindow;
 
     /// client id in the AccessibleEventNotifier queue
-    sal_uInt32 mnClientId;
+    sal_uInt32                          mnClientId;
 
     /// index of child in parent
     long                                mnIndexInParent;
