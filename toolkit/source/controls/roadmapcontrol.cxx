@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:27:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
     {
         // Todo: implementation of the arguments handling
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
@@ -218,7 +218,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     Any SAL_CALL UnoControlRoadmapModel::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     {
-        if (( Index >= maRoadmapItems.size()) || (Index < 0))
+        if (( Index >= (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Any aAny;
         aAny = makeAny( maRoadmapItems.at( Index ));
@@ -229,7 +229,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     void UnoControlRoadmapModel::MakeRMItemValidation( sal_Int32 Index, Reference< XInterface > xRoadmapItem )
     {
-        if ((Index > maRoadmapItems.size()) || ( Index < 0 ) )
+        if ((Index > (sal_Int32)maRoadmapItems.size()) || ( Index < 0 ) )
             lcl_throwIndexOutOfBoundsException( );
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
@@ -240,7 +240,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 _Index, Reference< XInterface > xRoadmapItem)
+    void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 , Reference< XInterface > xRoadmapItem)
     {
         Any aAny;
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
@@ -312,7 +312,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& _Element)
                                     throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     {
-        if ( ( Index >= ( maRoadmapItems.size() + 1 ) ) || (Index < 0))
+        if ( ( Index >= ( (sal_Int32)maRoadmapItems.size() + 1 ) ) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Reference< XInterface > xRoadmapItem;
         _Element >>= xRoadmapItem;
@@ -336,7 +336,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
                                                 throw    (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     {
-        if (( Index > maRoadmapItems.size()) || (Index < 0))
+        if (( Index > (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
         Reference< XInterface > xRoadmapItem;
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
@@ -347,7 +347,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         Any aAny;
         if ( Index <= n_CurrentItemID )
         {
-            if ( n_CurrentItemID >= maRoadmapItems.size() )
+            if ( n_CurrentItemID >= (sal_Int32)maRoadmapItems.size() )
             {
                 n_CurrentItemID = maRoadmapItems.size()-1;
                 if ( n_CurrentItemID < 0 )
@@ -522,9 +522,9 @@ void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(Run
 {
     Reference< XInterface > xRoadmapItem;
     rEvent.Element >>= xRoadmapItem;
-    Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
-    if ( xPropertySet.is() )
-        xPropertySet->addPropertyChangeListener( ::rtl::OUString::createFromAscii(""), this );
+    Reference< XPropertySet > xRoadmapPropertySet( xRoadmapItem, UNO_QUERY );
+    if ( xRoadmapPropertySet.is() )
+        xRoadmapPropertySet->addPropertyChangeListener( rtl::OUString(), this );
 
     Reference< XContainerListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )
@@ -532,7 +532,7 @@ void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(Run
         xPeer->elementInserted( rEvent );
         Reference < XPropertySet > xPropertySet( xPeer, UNO_QUERY );
         if ( xPropertySet.is() )
-            xPropertySet->addPropertyChangeListener( ::rtl::OUString::createFromAscii(""), this );
+            xPropertySet->addPropertyChangeListener( rtl::OUString(), this );
     }
 }
 
@@ -546,7 +546,7 @@ void UnoRoadmapControl::elementRemoved( const ContainerEvent& rEvent )throw(Runt
     rEvent.Element >>= xRoadmapItem;
     Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
     if ( xPropertySet.is() )
-        xPropertySet->removePropertyChangeListener( ::rtl::OUString::createFromAscii(""), this );
+        xPropertySet->removePropertyChangeListener( rtl::OUString(), this );
 }
 
 
