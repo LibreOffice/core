@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:11:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ CGM::CGM( sal_uInt32 nMode, Graphic& rGraphic ) :
 
 // ---------------------------------------------------------------
 
-void CGM::ImplComment( sal_uInt32 Level, char* Description )
+void CGM::ImplComment( sal_uInt32 Level, const char* Description )
 {
     if ( mpCommentOut )
     {
@@ -198,7 +198,7 @@ CGM::~CGM()
     {
         mpGDIMetaFile->Stop();
         mpGDIMetaFile->SetPrefMapMode( MapMode() );
-        mpGDIMetaFile->SetPrefSize( Size( mnOutdx, mnOutdy ) );
+        mpGDIMetaFile->SetPrefSize( Size( static_cast< long >( mnOutdx ), static_cast< long >( mnOutdy ) ) );
         delete mpVirDev;
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
@@ -228,7 +228,7 @@ sal_uInt32 CGM::GetBackGroundColor()
 
 // ---------------------------------------------------------------
 
-sal_uInt32 CGM::ImplGetUI16( sal_uInt32 nAlign )
+sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     mnParaSize += 2;
@@ -903,7 +903,7 @@ sal_Bool CGM::Write( sal_uInt8* pSource )
 
 // ---------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rOStm, CGM& rCGM )
+SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
 {
 
     return rOStm;
@@ -924,7 +924,6 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
 
     if( rXModel.is() )
     {
-        SvStream*   pIn = NULL;
         CGM*        pCGM= NULL;
 
         try
@@ -991,7 +990,6 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
             nStatus = 0;
         }
         delete pCGM;
-        delete pIn;
     }
     return nStatus;
 }
