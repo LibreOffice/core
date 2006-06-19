@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlversion.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:18:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,8 @@ XMLVersionListExport::XMLVersionListExport(
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > &rHandler )
-:   maVersions( rVersions ),
-    SvXMLExport( xServiceFactory, rFileName, rHandler )
+:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+    maVersions( rVersions )
 {
     _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_DC), XML_NAMESPACE_DC );
@@ -108,7 +108,7 @@ XMLVersionListExport::XMLVersionListExport(
 }
 
 // ------------------------------------------------------------------------
-sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
+sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
 
@@ -196,7 +196,7 @@ SvXMLImportContext *XMLVersionListImport::CreateContext(
 XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
-                                        const Reference< XAttributeList > & xAttrList )
+                                        const Reference< XAttributeList > & )
     : SvXMLImportContext( rImport, nPrefix, rLocalName )
     , rLocalRef( rImport )
 {
@@ -548,7 +548,7 @@ rtl::OUString SAL_CALL XMLVersionListPersistence_getImplementationName() throw()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLVersionListPersistence_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+        const uno::Reference< lang::XMultiServiceFactory > &)
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new XMLVersionListPersistence;
@@ -569,7 +569,7 @@ rtl::OUString SAL_CALL XMLVersionImExportOOO_getImplementationName() throw()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLVersionImExportOOO_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+        const uno::Reference< lang::XMultiServiceFactory > &)
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new XMLVersionListPersistence;
