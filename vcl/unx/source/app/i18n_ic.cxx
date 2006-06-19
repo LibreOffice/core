@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:07:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,7 +335,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 if (pFontSet != NULL)
                 {
                     mpPreeditAttributes = XVaAddToNestedList( mpPreeditAttributes,
-                                                              XNFontSet, (XPointer)pFontSet);
+                                                              const_cast<char*>(XNFontSet), (XPointer)pFontSet);
                 }
 
                 break;
@@ -365,7 +365,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
-                                                   XNPreeditAttributes, (XPointer)mpPreeditAttributes );
+                                                   const_cast<char*>(XNPreeditAttributes), (XPointer)mpPreeditAttributes );
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
@@ -373,7 +373,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
-                                                   XNStatusAttributes, (XPointer)mpStatusAttributes );
+                                                   const_cast<char*>(XNStatusAttributes), (XPointer)mpStatusAttributes );
         }
         maContext = XCreateIC( pInputMethod->GetMethod(),
                                XNVaNestedList, mpAttributes,
@@ -780,14 +780,14 @@ SalI18N_InputContext::SetPreeditState(Bool aPreeditState)
 }
 
 void
-SalI18N_InputContext::SetLanguage(LanguageType aInputLanguage)
+SalI18N_InputContext::SetLanguage(LanguageType)
 {
     // not yet implemented
     return;
 }
 
 void
-SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
+SalI18N_InputContext::EndExtTextInput( USHORT /*nFlags*/ )
 {
     if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
     {
