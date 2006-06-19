@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:13:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,8 @@ public:
         const SfxChildWinInfo* _pInfo
     );
     virtual ~FmPropBrw();
+
+    using SfxFloatingWindow::StateChanged;
 
 protected:
     virtual void        Resize();
