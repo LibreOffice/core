@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:26:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,12 +133,19 @@
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     nMapScalingOfs(0),
-    pLineAttr(NULL),pFillAttr(NULL),pTextAttr(NULL),pPage(NULL),pModel(NULL),nLayer(0),bFntDirty(TRUE),
-    bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE),nLineWidth(0)
+    pLineAttr(NULL),pFillAttr(NULL),pTextAttr(NULL),
+    pPage(NULL),pModel(NULL),nLayer(0),
+    nLineWidth(0),
+    bFntDirty(TRUE),
+    bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
 {
     aVD.EnableOutput(FALSE);
     aOldLineColor.SetRed( aVD.GetLineColor().GetRed() + 1 ); // invalidate old line color
@@ -366,7 +373,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
                             aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CTL ) );
         pTextAttr->Put(SvxPostureItem(aFnt.GetItalic()));
         pTextAttr->Put(SvxWeightItem(aFnt.GetWeight()));
-        sal_uInt32 nHeight = aFnt.GetSize().Height() * fScaleY;
+        sal_uInt32 nHeight = FRound(aFnt.GetSize().Height() * fScaleY);
         pTextAttr->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
         pTextAttr->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
         pTextAttr->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
@@ -420,11 +427,11 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
 
 /**************************************************************************************************/
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/)
 {
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/)
 {
 }
 
@@ -672,14 +679,14 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
 
     sal_Int32 nTextWidth = (sal_Int32)( aVD.GetTextWidth( rStr ) * fScaleX );
     sal_Int32 nTextHeight = (sal_Int32)( aVD.GetTextHeight() * fScaleY );
-    sal_Int32 nDxWidth = 0;
-    sal_Int32 nLen = rStr.Len();
+    //sal_Int32 nDxWidth = 0;
+    //sal_Int32 nLen = rStr.Len();
 
-    Point aPos( rPos.X() * fScaleX + aOfs.X(), rPos.Y() * fScaleY + aOfs.Y() );
+    Point aPos( FRound(rPos.X() * fScaleX + aOfs.X()), FRound(rPos.Y() * fScaleY + aOfs.Y()) );
     Size aSize( nTextWidth, nTextHeight );
 
     if ( eAlg == ALIGN_BASELINE )
-        aPos.Y() -= aFontMetric.GetAscent() * fScaleY;
+        aPos.Y() -= FRound(aFontMetric.GetAscent() * fScaleY);
     else if ( eAlg == ALIGN_BOTTOM )
         aPos.Y() -= nTextHeight;
 
@@ -850,13 +857,13 @@ void ImpSdrGDIMetaFileImport::MapScaling()
     sal_uInt32 i, nAnz = aTmpList.GetObjCount();
     const MapMode& rMap = aVD.GetMapMode();
     Point aMapOrg( rMap.GetOrigin() );
-    sal_Bool bMov = aMapOrg.X() != 0 || aMapOrg.Y() != 0;
-    if ( bMov )
+    sal_Bool bMov2 = aMapOrg.X() != 0 || aMapOrg.Y() != 0;
+    if ( bMov2 )
     {
         for ( i = nMapScalingOfs; i < nAnz; i++ )
         {
             SdrObject* pObj = aTmpList.GetObj(i);
-            if ( bMov )
+            if ( bMov2 )
                 pObj->NbcMove( Size( aMapOrg.X(), aMapOrg.Y() ) );
         }
     }
