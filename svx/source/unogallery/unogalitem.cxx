@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogalitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:13:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ sal_Int8 SAL_CALL GalleryItem::getType()
         { MAP_CHAR_LEN( "Drawing" ), UNOGALLERY_DRAWING, &::getCppuType( (const uno::Reference< lang::XComponent >*)(0) ),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { 0,0,0,0,0}
+        { 0,0,0,0,0,0}
     };
 
     pRet->acquire();
