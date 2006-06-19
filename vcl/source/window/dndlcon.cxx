@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndlcon.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:24:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,8 +190,8 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
                         xListener->drop( aEvent );
                     else
                     {
-                        DropTargetEvent aEvent( static_cast < XDropTarget * > (this), 0 );
-                        xListener->dragExit( aEvent );
+                        DropTargetEvent aDTEvent( static_cast < XDropTarget * > (this), 0 );
+                        xListener->dragExit( aDTEvent );
                     }
 
                     nRet++;
