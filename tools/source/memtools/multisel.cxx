@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multisel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:29:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@
 
 #include <debug.hxx>
 #include <multisel.hxx>
-
-#pragma hdrstop
 
 #ifdef MI_DEBUG
 #define DBG(x) x
@@ -130,8 +128,8 @@ BOOL MultiSelection::ImplMergeSubSelections( ULONG nPos1, ULONG nPos2 )
 
 MultiSelection::MultiSelection():
     aTotRange( 0, -1 ),
-    nSelCount(0),
     nCurSubSel(0),
+    nSelCount(0),
     bCurValid(FALSE),
     bSelectNew(FALSE)
 {
@@ -141,13 +139,13 @@ MultiSelection::MultiSelection():
 
 MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sal_Unicode cSep ):
     aTotRange(0,RANGE_MAX),
-    nSelCount(0),
     nCurSubSel(0),
+    nSelCount(0),
     bCurValid(FALSE),
     bSelectNew(FALSE)
 {
     // Dies ist nur ein Schnellschuss und sollte bald optimiert,
-    // an die verschiedenen Systeme (MAC, UNIX etc.)
+    // an die verschiedenen Systeme (UNIX etc.)
     // und die gewuenschte Eingabe-Syntax angepasst werden.
 
     UniString           aStr( rString );
@@ -299,8 +297,8 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
 
 MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     aTotRange(rOrig.aTotRange),
-    bCurValid(rOrig.bCurValid),
     nSelCount(rOrig.nSelCount),
+    bCurValid(rOrig.bCurValid),
     bSelectNew(FALSE)
 {
     if ( bCurValid )
@@ -318,8 +316,8 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
 
 MultiSelection::MultiSelection( const Range& rRange ):
     aTotRange(rRange),
-    nSelCount(0),
     nCurSubSel(0),
+    nSelCount(0),
     bCurValid(FALSE),
     bSelectNew(FALSE)
 {
@@ -742,7 +740,7 @@ long MultiSelection::FirstSelected( BOOL bInverse )
 
 // -----------------------------------------------------------------------
 
-long MultiSelection::LastSelected( BOOL bInverse )
+long MultiSelection::LastSelected()
 {
     nCurSubSel = aSels.Count() - 1;
     bCurValid = aSels.Count() > 0;
