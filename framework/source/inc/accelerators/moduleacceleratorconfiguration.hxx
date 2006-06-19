@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleacceleratorconfiguration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:30:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,8 +112,8 @@ class ModuleAcceleratorConfiguration : public AcceleratorConfiguration
         virtual ~ModuleAcceleratorConfiguration();
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XInitialization

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loaddispatchlistener.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:32:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ class LoadDispatchListener : public  css::frame::XDispatchResultListener // => c
 
         //_______________________________________
         // css.uno.XInterface
-        DECLARE_XINTERFACE
+        FWK_DECLARE_XINTERFACE
 
         //_______________________________________
         // css.frame.XDispatchResultListener

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targethelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:32:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-
+#include <targets.h>
 //_______________________________________________
 // namespace
 
@@ -50,7 +50,7 @@ namespace framework{
 
 //_______________________________________________
 // const
-
+/* see definitions in targets.h
 #define SPECIALTARGET_SELF          ::rtl::OUString::createFromAscii("_self"           )
 #define SPECIALTARGET_PARENT        ::rtl::OUString::createFromAscii("_parent"         )
 #define SPECIALTARGET_TOP           ::rtl::OUString::createFromAscii("_top"            )
@@ -60,7 +60,7 @@ namespace framework{
 #define SPECIALTARGET_MENUBAR       ::rtl::OUString::createFromAscii("_menubar"        )
 #define SPECIALTARGET_HELPAGENT     ::rtl::OUString::createFromAscii("_helpagent"      )
 #define SPECIALTARGET_HELPTASK      ::rtl::OUString::createFromAscii("OFFICE_HELP_TASK")
-
+*/
 //_______________________________________________
 // definitions
 
