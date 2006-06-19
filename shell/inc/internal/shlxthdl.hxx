@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlxthdl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:38:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,13 @@
 #ifndef SHLXTHDL_HXX_INCLUDED
 #define SHLXTHDL_HXX_INCLUDED
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <objbase.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 // {087B3AE3-E237-4467-B8DB-5A38AB959AC9}
 const CLSID CLSID_INFOTIP_HANDLER =

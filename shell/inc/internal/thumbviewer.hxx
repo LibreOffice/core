@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thumbviewer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:39:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,16 @@
 #ifndef THUMBVIEWER_HXX_INCLUDED
 #define THUMBVIEWER_HXX_INCLUDED
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable:4917)
+#endif
 #include <objidl.h>
 #include <shlobj.h>
 #include <gdiplus.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <string>
 
 class CThumbviewer : public IPersistFile, public IExtractImage
