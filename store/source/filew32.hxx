@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filew32.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:42:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 #ifndef INCLUDED_STORE_FILEW32_HXX
 #define INCLUDED_STORE_FILEW32_HXX
 
+#pragma warning(push,1) // disable warnings within system headers
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#pragma warning(pop)
 
 typedef HANDLE HSTORE;
 
@@ -120,7 +122,7 @@ inline sal_uInt8* __store_mmap (HSTORE h, sal_uInt32 k, sal_uInt32 n)
 /*
  * __store_munmap.
  */
-inline void __store_munmap (sal_uInt8 *p, sal_uInt32 n)
+inline void __store_munmap (sal_uInt8 *p, sal_uInt32)
 {
     ::UnmapViewOfFile (p);
 }
