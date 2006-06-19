@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:27:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ namespace io_acceptor {
 
     {
     public:
-        SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort, const OUString & sConnectionDescription );
+        SocketConnection( const OUString & sConnectionDescription );
         ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -154,8 +154,8 @@ namespace io_acceptor {
         void operator () (Reference<XStreamListener> xStreamListener);
     };
 
-    callError::callError(const Any & any)
-        : any(any)
+    callError::callError(const Any & aAny)
+        : any(aAny)
     {
     }
 
@@ -170,9 +170,7 @@ namespace io_acceptor {
     }
 
 
-    SocketConnection::SocketConnection( const OUString &s,
-                                        sal_uInt16 nPort,
-                                        const OUString &sConnectionDescription) :
+    SocketConnection::SocketConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription ),
         _started(sal_False),
@@ -182,7 +180,10 @@ namespace io_acceptor {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
         m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
-        m_sDescription += OUString::valueOf( (sal_Int64) &m_socket , 10 );
+        m_sDescription += OUString::valueOf(
+            sal::static_int_cast< sal_Int64 >(
+                reinterpret_cast< sal_IntPtr >(&m_socket)),
+            10 );
     }
 
     SocketConnection::~SocketConnection()
@@ -335,11 +336,11 @@ namespace io_acceptor {
                                     sal_uInt16 nPort,
                                     sal_Bool bTcpNoDelay,
                                     const OUString &sConnectionDescription) :
-        m_bClosed( sal_False ),
         m_sSocketName( sSocketName ),
-        m_nPort( nPort ),
         m_sConnectionDescription( sConnectionDescription ),
-        m_bTcpNoDelay( bTcpNoDelay )
+        m_nPort( nPort ),
+        m_bTcpNoDelay( bTcpNoDelay ),
+        m_bClosed( sal_False )
     {
     }
 
@@ -385,7 +386,7 @@ namespace io_acceptor {
 
     Reference< XConnection > SocketAcceptor::accept( )
     {
-        SocketConnection *pConn = new SocketConnection( m_sSocketName , m_nPort, m_sConnectionDescription );
+        SocketConnection *pConn = new SocketConnection( m_sConnectionDescription );
 
         if( m_socket.acceptConnection( pConn->m_socket )!= osl_Socket_Ok )
         {
