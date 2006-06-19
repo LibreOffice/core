@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,9 @@ namespace svxform
         XFormsPage*             m_pXFormsPage;
         DataGroupType           m_eGroup;
 
+    protected:
+        using SvTreeListBox::ExecuteDrop;
+
     public:
         DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId );
         ~DataTreeListBox();
@@ -349,6 +352,9 @@ namespace svxform
     public:
         DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, Window* pParent );
         virtual ~DataNavigator();
+
+        using Window::Update;
+        using                       SfxDockingWindow::StateChanged;
 
         void                        Update( FmFormShell* pFormShell );
         void                        StateChanged( sal_uInt16 nSID, SfxItemState eState,
