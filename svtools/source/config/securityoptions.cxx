@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:13:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1065,7 +1065,7 @@ SvtSecurityOptions::SvtSecurityOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSecurityOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtSecurityOptions_Impl::ctor()");
         m_pDataContainer = new SvtSecurityOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_SECURITYOPTIONS);
