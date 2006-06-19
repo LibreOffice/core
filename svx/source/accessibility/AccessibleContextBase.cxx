@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:37:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ AccessibleContextBase::AccessibleContextBase (
         mxStateSet (NULL),
         mxRelationSet (NULL),
         mxParent(rxParent),
-        maRole(aRole),
-        mnClientId(0)
+        mnClientId(0),
+        maRole(aRole)
 {
     // Create the state set.
     ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
@@ -380,7 +380,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     }
     else
         return uno::Reference<XAccessibleRelationSet>(NULL);
-    return uno::Reference<XAccessibleRelationSet>();
 }
 
 
