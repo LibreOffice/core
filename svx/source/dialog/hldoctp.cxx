@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:14:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,8 @@ sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 |************************************************************************/
 
 SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   maGrpDocument   ( this, ResId (GRP_DOCUMENT) ),
+    : SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
+    maGrpDocument   ( this, ResId (GRP_DOCUMENT) ),
     maFtPath        ( this, ResId (FT_PATH_DOC) ),
     maCbbPath       ( this, INET_PROT_FILE ),
     maBtFileopen    ( this, ResId (BTN_FILEOPEN) ),
@@ -74,8 +75,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maFtURL         ( this, ResId (FT_URL) ),
     maFtFullURL     ( this, ResId (FT_FULL_URL) ),
     maBtBrowse      ( this, ResId (BTN_BROWSE) ),
-    mbMarkWndOpen   ( FALSE ),
-    SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet )
+    mbMarkWndOpen   ( FALSE )
 {
     // Set HC bitmaps and disable display of bitmap names.
     maBtBrowse.SetModeImage( Image( ResId( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
@@ -378,7 +378,6 @@ void SvxHyperlinkDocTp::SetMarkStr ( String& aStrMark )
 
 SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( String& aStrPath )
 {
-    BOOL bExists = FALSE;
     INetURLObject aURL( aStrPath, INET_PROT_FILE );
 
     if( aURL.HasError() )
