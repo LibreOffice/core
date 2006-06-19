@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hash.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:46:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ protected:
     virtual UINT32          HashFunc( const void * ) const = 0;
 public:
                 SvHashTable( UINT32 nMaxEntries );
-                ~SvHashTable();
+                virtual ~SvHashTable();
 
     UINT32      GetMax() const { return nMax; }
 
@@ -83,8 +83,8 @@ public:
                     SvStringHashEntry( const ByteString & rName, UINT32 nIdx )
                         : aName( rName )
                         , nHashId( nIdx )
-                        , bHasId( TRUE )
-                        , nValue( 0 ) {}
+                        , nValue( 0 )
+                        , bHasId( TRUE ) {}
                     ~SvStringHashEntry();
 
     const ByteString &  GetName() const { return aName; }
@@ -121,7 +121,7 @@ protected:
     virtual StringCompare   Compare( const void * pElement, UINT32 nIndex ) const;
 public:
             SvStringHashTable( UINT32 nMaxEntries );   // max size of hash-tabel
-            ~SvStringHashTable();
+            virtual ~SvStringHashTable();
 
     ByteString          GetNearString( const ByteString & rName ) const;
     virtual BOOL    IsEntry( UINT32 nIndex ) const;
