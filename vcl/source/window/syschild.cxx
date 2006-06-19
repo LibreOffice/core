@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syschild.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:31:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
 
 // =======================================================================
 
-void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle, SystemWindowData *pData )
+void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData )
 {
     mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData );
 
@@ -136,7 +136,7 @@ void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle, SystemWindowD
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
-    ImplInit( pParent, nStyle, NULL );
+    ImplInitSysChild( pParent, nStyle, NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -144,7 +144,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
-    ImplInit( pParent, nStyle, pData );
+    ImplInitSysChild( pParent, nStyle, pData );
 }
 
 // -----------------------------------------------------------------------
@@ -154,7 +154,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle, NULL );
+    ImplInitSysChild( pParent, nStyle, NULL );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
