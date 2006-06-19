@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:59:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 #include "scriptdlg.hrc"
@@ -143,7 +141,6 @@ void SFTreeListBox::delUserData( SvLBoxEntry* pEntry )
 
 void SFTreeListBox::deleteTree( SvLBoxEntry* pEntry )
 {
-    SvLBoxEntry* treeToRemove = pEntry;
 
     delUserData( pEntry );
     pEntry = FirstChild( pEntry );
@@ -276,7 +273,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
-        SvLBoxEntry* pBasicManagerRootEntry =
+        /*SvLBoxEntry* pBasicManagerRootEntry =*/
             insertEntry( uiName, app == true ? IMG_HARDDISK : IMG_DOCUMENT,
                 0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
     }
@@ -299,7 +296,6 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
         desktop->getComponents();
     Reference< container::XEnumeration > components =
         componentsAccess->createEnumeration();
-    sal_Int32 docIndex = 0;
     while (components->hasMoreElements())
     {
         Reference< frame::XModel > model(
@@ -364,7 +360,7 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
     {
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            SvLBoxEntry* container = insertEntry( children[ n ]->getName(), IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ] )));
+            insertEntry( children[ n ]->getName(), IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ] )));
         }
         else
         {
@@ -381,7 +377,7 @@ void SFTreeListBox::UpdateEntries()
 {
 }
 
-SvLBoxEntry* SFTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType )
+SvLBoxEntry* SFTreeListBox::FindEntry( SvLBoxEntry* , const String& , BYTE  )
 {
     return 0;
 }
@@ -634,7 +630,7 @@ short SvxScriptOrgDialog::Execute()
     return nRet;
 }
 
-void SvxScriptOrgDialog::EnableButton( Button& rButton, BOOL bEnable )
+void SvxScriptOrgDialog::EnableButton( Button& , BOOL  )
 {
 }
 
@@ -1579,7 +1575,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 }
 
 SvxScriptErrorDialog::SvxScriptErrorDialog(
-    Window* parent, ::com::sun::star::uno::Any aException )
+    Window* , ::com::sun::star::uno::Any aException )
     : m_sMessage()
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
