@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertystatecontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:59:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,8 @@ namespace comphelper
         sal_Bool bEqual = uno_type_equalData(
                 const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),
                 const_cast< void* >( aDefaultValue.getValue() ), aDefaultValue.getValueType().getTypeLibType(),
-                cpp_queryInterface, cpp_release
+                reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release)
             );
         if ( bEqual )
             return PropertyState_DEFAULT_VALUE;
