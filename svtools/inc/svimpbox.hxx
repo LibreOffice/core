@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 12:54:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ class ImpLBSelEng : public FunctionSet
 public:
     ImpLBSelEng( SvImpLBox* pImp, SelectionEngine* pSelEng,
                  SvTreeListBox* pView );
-    ~ImpLBSelEng();
+    virtual ~ImpLBSelEng();
     void        BeginDrag();
     void        CreateAnchor();
     void        DestroyAnchor();
@@ -310,7 +310,7 @@ public:
     inline void         SelectEntry( SvLBoxEntry* pEntry, BOOL bSelect );
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
-    void                SetAddMode( BOOL bAdd ) { aSelEng.AddAlways(FALSE); }
+    void                SetAddMode( BOOL ) { aSelEng.AddAlways(FALSE); }
     BOOL                IsAddMode() const { return aSelEng.IsAlwaysAdding(); }
 
     SvLBoxEntry*        GetCurrentEntry() const { return pCursor; }
@@ -320,7 +320,7 @@ public:
     SvLBoxEntry*        GetClickedEntry( const Point& ) const;
     SvLBoxEntry*        GetCurEntry() const { return pCursor; }
     void                SetCurEntry( SvLBoxEntry* );
-    Point               GetEntryPos( SvLBoxEntry* ) const;
+    Point               GetEntryPosition( SvLBoxEntry* ) const;
     void                MakeVisible( SvLBoxEntry* pEntry, BOOL bMoveToTop=FALSE );
 
     void                PaintDDCursor( SvLBoxEntry* );
@@ -454,7 +454,7 @@ inline const Image& SvImpLBox::GetDefaultEntryColBmp( BmpColorMode _eMode )
     return implGetImageLocationWithFallback( itEntryDefCollapsed, _eMode );
 }
 
-inline Point SvImpLBox::GetEntryPos( SvLBoxEntry* pEntry ) const
+inline Point SvImpLBox::GetEntryPosition( SvLBoxEntry* pEntry ) const
 {
     return Point( 0, GetEntryLine( pEntry ) );
 }
@@ -473,9 +473,9 @@ inline BOOL SvImpLBox::IsLineVisible( long nY ) const
     return bRet;
 }
 
-inline void SvImpLBox::TreeInserted( SvLBoxEntry* pTree )
+inline void SvImpLBox::TreeInserted( SvLBoxEntry* pInsTree )
 {
-    EntryInserted( pTree );
+    EntryInserted( pInsTree );
 }
 
 #endif // #ifndef _SVIMPLBOX_HXX
