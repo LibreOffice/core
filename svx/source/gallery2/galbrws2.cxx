@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:34:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ void GalleryBrowser2::Resize()
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser2::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
 
@@ -452,7 +452,7 @@ void GalleryBrowser2::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt )
+sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -479,7 +479,7 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt )
+sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -500,7 +500,7 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper& rTarget, const ExecuteD
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser2::StartDrag( Window* pWindow, const Point* pDragPoint )
+void GalleryBrowser2::StartDrag( Window*, const Point* pDragPoint )
 {
     if( mpCurTheme )
     {
@@ -514,7 +514,7 @@ void GalleryBrowser2::StartDrag( Window* pWindow, const Point* pDragPoint )
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser2::TogglePreview( Window* pWindow, const Point* pPreviewPoint )
+void GalleryBrowser2::TogglePreview( Window*, const Point* )
 {
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
     GetViewWindow()->GrabFocus();
@@ -522,7 +522,7 @@ void GalleryBrowser2::TogglePreview( Window* pWindow, const Point* pPreviewPoint
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoint )
+void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
 {
     Point       aSelPos;
     const ULONG nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
@@ -732,6 +732,9 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 }
             }
             break;
+
+            default:
+                break;
         }
 
         GalleryBrowser2::meInitMode = meMode = eMode;
@@ -776,6 +779,8 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
                 case( GALLERYBROWSERTRAVEL_LAST ):      nNewItemId = mpCurTheme->GetObjectCount(); break;
                 case( GALLERYBROWSERTRAVEL_PREVIOUS ):  nNewItemId--; break;
                 case( GALLERYBROWSERTRAVEL_NEXT ):      nNewItemId++; break;
+                default:
+                    break;
             }
 
             if( nNewItemId < 1 )
@@ -1203,7 +1208,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser2, SelectObjectHdl, void*, p )
+IMPL_LINK( GalleryBrowser2, SelectObjectHdl, void*, EMPTYARG )
 {
     ImplUpdateInfoBar();
     return 0L;
@@ -1223,9 +1228,8 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser2, MiscHdl, void*, p )
+IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
 {
-    sal_uInt16      nIconResId, nListResId;
     const sal_Bool  bHC = GALLERY_DLG_COLOR.IsDark();
 
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
