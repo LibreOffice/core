@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,9 +107,9 @@ public:
         const Sequence< OUString > * pServiceNames_ )
         SAL_THROW( () )
         : xSMgr( rServiceManager )
-        , aImplementationName( rImplementationName_ )
         , pCreateFunction( pCreateFunction_ )
         , m_fptr( fptr )
+        , aImplementationName( rImplementationName_ )
         {
             if( pServiceNames_ )
                 aServiceNames = *pServiceNames_;
@@ -121,9 +121,9 @@ public:
         const OUString & rImplementationName_ )
         SAL_THROW( () )
         : xSMgr( rServiceManager )
-        , aImplementationName( rImplementationName_ )
         , pCreateFunction( NULL )
         , m_fptr( 0 )
+        , aImplementationName( rImplementationName_ )
         {}
 
     virtual ~OSingleFactoryHelper();
@@ -608,6 +608,7 @@ public:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle, Any const & rValue )
         throw (Exception);
+    using OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
         Any & rValue, sal_Int32 nHandle ) const;
 
@@ -719,8 +720,7 @@ IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
 
 //______________________________________________________________________________
 sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
-    Any & rConvertedValue, Any & rOldValue,
-    sal_Int32 nHandle, Any const & rValue )
+    Any &, Any &, sal_Int32, Any const & )
     throw (lang::IllegalArgumentException)
 {
     OSL_ENSURE( 0, "unexpected!" );
@@ -729,7 +729,7 @@ sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
 
 //______________________________________________________________________________
 void ORegistryFactoryHelper::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, Any const & rValue )
+    sal_Int32, Any const & )
     throw (Exception)
 {
     throw beans::PropertyVetoException(
