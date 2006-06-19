@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:12:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,9 +31,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
-7 ************************************************************************/
-
-#pragma hdrstop
+ ************************************************************************/
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -309,7 +307,6 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 {
     // Get names and values of all accessable menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further informations.
-    sal_uInt32              nDisabledCount      = 0;
     Sequence< OUString >    lNames              = impl_GetPropertyNames ();
     Sequence< Any >         lValues             = GetProperties         ( lNames         );
 
@@ -339,7 +336,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // We need it to get information about changes outside these class on ouer used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Disabled" ));
-    sal_Bool bEnabled  = EnableNotification( aNotifySeq, sal_True );
+    EnableNotification( aNotifySeq, sal_True );
 }
 
 //*****************************************************************************************************************
@@ -357,7 +354,7 @@ SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames )
+void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 {
     MutexGuard aGuard( SvtCommandOptions::GetOwnStaticMutex() );
 
@@ -469,8 +466,6 @@ sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption
         {
             return m_aDisabledCommands.Lookup( aCommand );
         }
-        break;
-
         default:
             DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::GetList()\nUnknown option type given!\n" );
     }
