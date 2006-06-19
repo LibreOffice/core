@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:49:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ void GraphicManager::ClearCache()
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ReleaseFromCache( const GraphicObject& rObj )
+void GraphicManager::ReleaseFromCache( const GraphicObject& /*rObj*/ )
 {
     // !!!
 }
@@ -631,7 +631,7 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                       const ULONG nFlags, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
+                                       const ULONG /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
 
@@ -1328,7 +1328,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
 // -----------------------------------------------------------------------------
 
 BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
-                                              USHORT nRot10, const Size& rOutSzPix, const Size& rUnrotatedSzPix,
+                                              USHORT nRot10, const Size& /*rOutSzPix*/, const Size& rUnrotatedSzPix,
                                               long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
                                               long nStartX, long nEndX, long nStartY, long nEndY,
                                               BitmapEx& rOutBmpEx )
