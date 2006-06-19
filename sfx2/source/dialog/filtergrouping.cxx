@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:19:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,10 +734,12 @@ namespace sfx2
             FilterGroupEntryReferrer::iterator aBelongsToLocal = aLocalClassesRef.find( sFilterName );
             if ( aLocalClassesRef.end() != aBelongsToLocal )
             {
+/*
 #ifdef DBG_UTIL
                 const ::rtl::OUString& rLocalClassDisplayName = aBelongsToLocal->second->First;
                 const ::rtl::OUString& rLocalClassExtension = aBelongsToLocal->second->Second;
 #endif
+*/
                 // okay, there is a local class which the filter belongs to
                 // -> append the wildcard
                 aExtendWildcard( *aBelongsToLocal );
@@ -824,7 +826,7 @@ namespace sfx2
     {
         ::rtl::OUString sUIName;
         sal_Bool        bHasAll = sal_False;
-        _rAllFilterName = String( SfxResId( STR_FILTERNAME_ALL ) );
+        _rAllFilterName = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
 
         // ===============================================================
         // check if there's already a filter <ALL>
