@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:35:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,7 @@ X11SalObject::Show( BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-void X11SalObject::Enable( BOOL bEnable )
+void X11SalObject::Enable( BOOL )
 {
 }
 
@@ -441,7 +441,7 @@ void X11SalObject::SetBackground()
 
 // -----------------------------------------------------------------------
 
-void X11SalObject::SetBackground( SalColor nSalColor )
+void X11SalObject::SetBackground( SalColor )
 {
 }
 
