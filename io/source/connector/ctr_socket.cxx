@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctr_socket.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:29:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@ namespace stoc_connector {
         void operator () (Reference<XStreamListener> xStreamListener);
     };
 
-    callError::callError(const Any & any)
-        : any(any)
+    callError::callError(const Any & aAny)
+        : any(aAny)
     {
     }
 
@@ -92,7 +92,7 @@ namespace stoc_connector {
     }
 
 
-    SocketConnection::SocketConnection( const OUString &s, sal_uInt16 nPort, const OUString &sConnectionDescription ) :
+    SocketConnection::SocketConnection( const OUString &sConnectionDescription ) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription ),
         _started(sal_False),
@@ -102,7 +102,10 @@ namespace stoc_connector {
         // make it unique
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
-        m_sDescription += OUString::valueOf( (sal_Int64) &m_socket , 10 );
+        m_sDescription += OUString::valueOf(
+            sal::static_int_cast< sal_Int64 >(
+                reinterpret_cast< sal_IntPtr >(&m_socket)),
+            10 );
     }
 
     SocketConnection::~SocketConnection()
