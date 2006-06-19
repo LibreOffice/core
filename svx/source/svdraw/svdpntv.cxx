@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:38:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:46:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ void FrameAnimator::Stop() const
     ((FrameAnimator*)this)->aTim.Stop();
 }
 
-IMPL_LINK(FrameAnimator,Hdl,AutoTimer*,pTim)
+IMPL_LINK(FrameAnimator,Hdl,AutoTimer*,/*pTim*/)
 {
     if (rView.aDragStat.IsShown()) {
         USHORT i=0;
@@ -480,7 +480,7 @@ SdrPaintView::~SdrPaintView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
 {
     BOOL bObjChg=!bSomeObjChgdFlag; // TRUE= auswerten fuer ComeBack-Timer
     if (bObjChg) {
@@ -523,7 +523,7 @@ void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCTyp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPL_LINK_INLINE_START(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
+IMPL_LINK_INLINE_START(SdrPaintView,ImpComeBackHdl,Timer*,EMPTYARG)
 {
     if (bSomeObjChgdFlag) {
         bSomeObjChgdFlag=FALSE;
@@ -535,7 +535,7 @@ IMPL_LINK_INLINE_START(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
 IMPL_LINK_INLINE_END(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
 
 // #111097#
-IMPL_LINK(SdrPaintView,ImpAfterPaintHdl,Timer*,pTimer)
+IMPL_LINK(SdrPaintView,ImpAfterPaintHdl,Timer*,EMPTYARG)
 {
     // refresh outside of paint to get the handles displayed correctly. This
     // will be removed and also the AfterPaintTimer as soon as the handles will
@@ -578,7 +578,7 @@ void SdrPaintView::ModelHasChanged()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPL_LINK_INLINE_START(SdrPaintView,ImpUserMarkerAnimatorHdl,AutoTimer*,pTimer)
+IMPL_LINK_INLINE_START(SdrPaintView,ImpUserMarkerAnimatorHdl,AutoTimer*,EMPTYARG)
 {
     USHORT nAnz=ImpGetUserMarkerCount();
     for (USHORT nNum=0; nNum<nAnz; nNum++) {
@@ -650,7 +650,7 @@ void SdrPaintView::TakeActionRect(Rectangle& rRect) const
     }
 }
 
-void SdrPaintView::ToggleShownXor(OutputDevice* pOut, const Region* pRegion) const
+void SdrPaintView::ToggleShownXor(OutputDevice* pOut, const Region* /*pRegion*/) const
 {
     if (IsEncirclement() && aDragStat.IsShown()) {
         DrawEncirclement(pOut);
@@ -869,7 +869,7 @@ void SdrPaintView::HidePage(SdrPageView* pPV)
 
 void SdrPaintView::HidePagePgNum(USHORT nPgNum)
 {
-    HidePage(pMod->GetPage(nPgNum));
+    HidePage(GetPageView(pMod->GetPage(nPgNum)));
 }
 
 void SdrPaintView::HideAllPages()
@@ -886,7 +886,7 @@ void SdrPaintView::SetPagePos(SdrPageView* pPV, const Point& rOffs)
 
 void SdrPaintView::SetPagePosPgNum(USHORT nPgNum, const Point& rOffs)
 {
-    SetPagePos(pMod->GetPage(nPgNum),rOffs);
+    SetPagePos(GetPageView(pMod->GetPage(nPgNum)),rOffs);
 }
 
 SdrPageView* SdrPaintView::GetPageView(const SdrPage* pPage) const
@@ -1128,9 +1128,9 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT
     USHORT nWinNum=aWinList.Find(pOut);
     if (nWinNum!=SDRVIEWWIN_NOTFOUND) {
         if (IsShownXorVisibleWinNum(nWinNum)) { // Durch Invalidate zerstoerte Handles wiederherstellen
-            OutputDevice* pOut=GetWin(nWinNum);
-            if (pOut!=NULL && pOut->GetOutDevType()!=OUTDEV_PRINTER) {
-                ToggleShownXor(pOut,&rReg);
+            OutputDevice* pOut2=GetWin(nWinNum);
+            if (pOut2!=NULL && pOut2->GetOutDevType()!=OUTDEV_PRINTER) {
+                ToggleShownXor(pOut2,&rReg);
             }
         }
     }
@@ -1198,7 +1198,7 @@ void SdrPaintView::RefreshAllIAOManagers() const
     }
 }
 
-BOOL SdrPaintView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+BOOL SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
 {
     return FALSE;
 }
@@ -1311,7 +1311,7 @@ BOOL SdrPaintView::IsGroupEntered() const
     return bRet;
 }
 
-void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll)
+void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, BOOL /*bReplaceAll*/)
 {
     // bReplaceAll hat hier keinerlei Wirkung
     BOOL bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
@@ -1330,7 +1330,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, BOOL bRepla
     }
 }
 
-void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, BOOL bOnlyHardAttr) const
+void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, BOOL /*bOnlyHardAttr*/) const
 {
     // bOnlyHardAttr hat hier keinerlei Wirkung
     BOOL bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
@@ -1414,9 +1414,9 @@ BOOL SdrPaintView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     return TRUE;
 }
 
-SfxStyleSheet* SdrPaintView::GetStyleSheet(BOOL& rOk) const
+SfxStyleSheet* SdrPaintView::GetStyleSheet() const // SfxStyleSheet* SdrPaintView::GetStyleSheet(BOOL& rOk) const
 {
-    rOk=TRUE;
+    //rOk=TRUE;
     return GetDefaultStyleSheet();
 }
 
@@ -1610,7 +1610,7 @@ void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
     }
 }
 
-void SdrPaintView::DoConnect(SdrOle2Obj* pOleObj)
+void SdrPaintView::DoConnect(SdrOle2Obj* /*pOleObj*/)
 {
 }
 
@@ -1866,7 +1866,7 @@ Color SdrPaintView::CalcBackgroundColor( const Rectangle& rArea,
         for ( USHORT nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
         {
             // Welche Spot-Farbe wurde am haeufigsten gefunden?
-            for ( USHORT i = 0; i < SPOTCOUNT; i++ )
+            for ( i = 0; i < SPOTCOUNT; i++ )
             {
                 if( aMatch[i] == nMatchCount )
                 {
