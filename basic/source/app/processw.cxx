@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:18:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,8 @@ ProcessWrapper::Methods ProcessWrapper::aProcessMethods[] = {
 // Imagedatei des Executables
 { "SetImage",                       SbxEMPTY,  1 | _FUNCTION, MEMBER(ProcessWrapper::PSetImage) },
     // Zwei Named Parameter
-    { "Filename",SbxSTRING },
-    { "Params",SbxSTRING, _OPT },
+    { "Filename",SbxSTRING, 0 , NULL },
+    { "Params",SbxSTRING, _OPT , NULL },
 // Programm wird gestartet
 { "Start",                          SbxBOOL,   0 | _FUNCTION, MEMBER(ProcessWrapper::PStart) },
 // ExitCode des Programms(nachdem es beendet ist)
@@ -114,7 +114,7 @@ ProcessWrapper::Methods ProcessWrapper::aProcessMethods[] = {
 // Programm mit GPF o.ä. abgebrochen
 { "WasGPF",                         SbxBOOL,   0 | _FUNCTION, MEMBER(ProcessWrapper::PWasGPF) },
 
-{ NULL,     SbxNULL,            -1 }};  // Tabellenende
+{ NULL,     SbxNULL,            -1, NULL }};  // Tabellenende
 
 
 
@@ -151,7 +151,7 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
         BOOL bFound = FALSE;
         while( p->nArgs != -1 )
         {
-            if( rName.CompareIgnoreCaseToAscii( p->pName ) == COMPARE_EQUAL )
+            if( rName.EqualsIgnoreCaseAscii( p->pName ) )
             {
                 bFound = TRUE; break;
             }
@@ -163,13 +163,13 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
             // Args-Felder isolieren:
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
-            String aName( p->pName, RTL_TEXTENCODING_ASCII_US );
+            String aMethodName( p->pName, RTL_TEXTENCODING_ASCII_US );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
                 eCT = SbxCLASS_PROPERTY;
             else if( nType & _METHOD )
                 eCT = SbxCLASS_METHOD;
-            pRes = Make( aName, eCT, p->eType );
+            pRes = Make( aMethodName, eCT, p->eType );
             // Wir setzen den Array-Index + 1, da ja noch andere
             // Standard-Properties existieren, die auch aktiviert
             // werden muessen.
@@ -189,7 +189,7 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
-        SbxArray* pPar = pVar->GetParameters();
+        SbxArray* pNotifyPar = pVar->GetParameters();
         USHORT nIndex = (USHORT) pVar->GetUserData();
         // kein Index: weiterreichen!
         if( nIndex )
@@ -207,13 +207,13 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                     // Parameter-Test fuer Methoden:
                     USHORT nPar = pMethods[ --nIndex ].nArgs & 0x00FF;
                     // Element 0 ist der Returnwert
-                    if( ( !pPar && nPar )
-                     || ( pPar && pPar->Count() < nPar+1 ) )
+                    if( ( !pNotifyPar && nPar )
+                     || ( pNotifyPar && pNotifyPar->Count() < nPar+1 ) )
                         SetError( SbxERR_WRONG_ARGS );
                     // Alles klar, man kann den Call ausfuehren
                     else
                     {
-                        (this->*(pMethods[ nIndex ].pFunc))( pVar, pPar, bWrite );
+                        (this->*(pMethods[ nIndex ].pFunc))( pVar, pNotifyPar, bWrite );
                     }
                 }
             }
@@ -228,19 +228,19 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 {
     Methods* p = &pMethods[ nIdx ];
     // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pInfo = new SbxInfo( Hilfedateiname, p->nHelpId );
-    SbxInfo* pInfo = new SbxInfo;
+    // SbxInfo* pResultInfo = new SbxInfo( Hilfedateiname, p->nHelpId );
+    SbxInfo* pResultInfo = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )
     {
         p++;
-        String aName( p->pName, RTL_TEXTENCODING_ASCII_US );
-        USHORT nFlags = ( p->nArgs >> 8 ) & 0x03;
+        String aMethodName( p->pName, RTL_TEXTENCODING_ASCII_US );
+        USHORT nInfoFlags = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
-            nFlags |= SBX_OPTIONAL;
-        pInfo->AddParam( aName, p->eType, nFlags );
+            nInfoFlags |= SBX_OPTIONAL;
+        pResultInfo->AddParam( aMethodName, p->eType, nInfoFlags );
     }
-    return pInfo;
+    return pResultInfo;
 }
 
 
@@ -254,31 +254,41 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 // Element 0 gespeichert.
 
 // Die Methoden:
-void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite )
+void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Imagedatei des Executables
-    if ( pPar->Count() >= 2 )
-        pProcess->SetImage(pPar->Get( 1 )->GetString(), pPar->Get( 2 )->GetString() );
+    (void) pVar; /* avoid warning about unused parameter */
+    (void) bWriteIt; /* avoid warning about unused parameter */
+    if ( pMethodePar->Count() >= 2 )
+        pProcess->SetImage(pMethodePar->Get( 1 )->GetString(), pMethodePar->Get( 2 )->GetString() );
     else
-        pProcess->SetImage(pPar->Get( 1 )->GetString(), String() );
+        pProcess->SetImage(pMethodePar->Get( 1 )->GetString(), String() );
 }
 
-void ProcessWrapper::PStart( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite )
+void ProcessWrapper::PStart( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Programm wird gestartet
+    (void) pMethodePar; /* avoid warning about unused parameter */
+    (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->Start() );
 }
 
-void ProcessWrapper::PGetExitCode( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite )
+void ProcessWrapper::PGetExitCode( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // ExitCode des Programms(nachdem es beendet ist)
+    (void) pMethodePar; /* avoid warning about unused parameter */
+    (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutULong( pProcess->GetExitCode() );
 }
 
-void ProcessWrapper::PIsRunning( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite )
+void ProcessWrapper::PIsRunning( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Programm läuft noch
+    (void) pMethodePar; /* avoid warning about unused parameter */
+    (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->IsRunning() );
 }
 
-void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite )
+void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Programm mit GPF o.ä. abgebrochen
+    (void) pMethodePar; /* avoid warning about unused parameter */
+    (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->WasGPF() );
 }
 
