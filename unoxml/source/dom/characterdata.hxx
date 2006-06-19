@@ -4,9 +4,9 @@
  *
  *  $RCSfile: characterdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:56:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
