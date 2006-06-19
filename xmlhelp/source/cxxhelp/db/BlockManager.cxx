@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BlockManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:16:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:37:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@ using namespace ::xmlsearch::db;
 
 
 BlockManager::BlockManager( DBEnv* dbenv ) throw( IOException )
-    : oldest_( 0 ),
+    : dbenv_( dbenv ),
+      oldest_( 0 ),
       newest_( 0 ),
-      dbenv_( dbenv ),
       blockused_( 0 ),
       blockTable_( dbenv_ ? dbenv_->getBlockCount() : 0 )   // Hardcoded headerlen?
 {
