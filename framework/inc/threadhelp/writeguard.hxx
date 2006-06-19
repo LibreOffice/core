@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writeguard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:38:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,7 @@ class WriteGuard : private INonCopyable
                                             m_eMode = E_WRITELOCK;
                                         }
                                         break;
+                default:                break; // nothing to do
             }
         }
 
@@ -201,6 +202,7 @@ class WriteGuard : private INonCopyable
                                             m_eMode = E_NOLOCK;
                                         }
                                         break;
+                default:                break; // nothing to do
             }
         }
 
