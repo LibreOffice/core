@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nativenumberwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:45:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#pragma hdrstop
-
-
 #define LOCALEDATA_LIBRARYNAME "i18npool"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NativeNumberSupplier"
 
@@ -76,6 +73,7 @@ NativeNumberWrapper::NativeNumberWrapper(
         }
         catch ( uno::Exception& e )
         {
+            (void)e;
             DBG_ERRORFILE( "NativeNumberWrapper ctor: Exception caught!" );
         }
     }
@@ -95,6 +93,7 @@ NativeNumberWrapper::NativeNumberWrapper(
         }
         catch ( uno::Exception& e )
         {
+            (void)e;
             DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
         }
     }
@@ -120,6 +119,7 @@ NativeNumberWrapper::getNativeNumberString(
     }
     catch ( uno::Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "getNativeNumberString: Exception caught!" );
     }
     return ::rtl::OUString();
@@ -138,6 +138,7 @@ NativeNumberWrapper::isValidNatNum(
     }
     catch ( uno::Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "isValidNatNum: Exception caught!" );
     }
     return sal_False;
@@ -156,6 +157,7 @@ NativeNumberWrapper::convertToXmlAttributes(
     }
     catch ( uno::Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "convertToXmlAttributes: Exception caught!" );
     }
     return i18n::NativeNumberXmlAttributes();
@@ -173,6 +175,7 @@ NativeNumberWrapper::convertFromXmlAttributes(
     }
     catch ( uno::Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "convertFromXmlAttributes: Exception caught!" );
     }
     return 0;
