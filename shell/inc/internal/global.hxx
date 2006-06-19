@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:36:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,13 @@
 #ifndef GLOBAL_HXX_INCLUDED
 #define GLOBAL_HXX_INCLUDED
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifndef DBGMACROS_HXX_INCLUDED
 #include "internal/dbgmacros.hxx"
