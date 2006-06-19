@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
 #define _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
 
-#ifndef __RTL_USTRING_
-#include <rtl/ustring>
-#endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
