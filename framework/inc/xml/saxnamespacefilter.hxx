@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxnamespacefilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:53:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 #include <xml/xmlnamespaces.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SV_MENU_HXX
