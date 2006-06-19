@@ -4,9 +4,9 @@
  *
  *  $RCSfile: score.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,12 @@
 
 ScoreWindow::ScoreWindow(Window* Parent, WinBits wBits, ResMgr* pP) :
                     Window(Parent, wBits),
-                    bPaintBack(FALSE),
-                    pRes(pP),
                     nHero(-1),
                     nRockets(5),
                     nLives(3),
-                    nScore(0L)
+                    nScore(0L),
+                    pRes(pP),
+                    bPaintBack(FALSE)
 {
     SetBackground(Wallpaper( Color( COL_GRAY ) ) );
 }
@@ -52,7 +52,7 @@ ScoreWindow::~ScoreWindow()
 {
 }
 
-void ScoreWindow::Paint(const Rectangle& rRect)
+void ScoreWindow::Paint(const Rectangle&)
 {
     Font aFont = GetFont();
     aFont.SetColor(COL_WHITE);
@@ -149,7 +149,7 @@ void ScoreWindow::SetLevel(long nWert)
     Invalidate();
 }
 
-void ScoreWindow::Show()
+void ScoreWindow::ShowMe()
 {
     bPaintBack = TRUE;
 
