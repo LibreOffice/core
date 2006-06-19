@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:00:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addInstanceType(OUString const & _aElementType, OUString const & _aElementTypeModule)
+void ElementFormatter::addInstanceType(OUString const & /*_aElementType*/, OUString const & /*_aElementTypeModule*/)
 {
 }
 // -----------------------------------------------------------------------------
@@ -254,7 +254,8 @@ void ElementFormatter::addPropertyValueType(uno::Type const& _aType)
     uno::TypeClass  aSimpleTypeClass    = aSimpleType.getTypeClass();
     OUString        aSimpleTypeName     = toXmlTypeName(aSimpleTypeClass);
 
-    OUString sNsPrefix = (bList || aSimpleTypeClass == uno::TypeClass_ANY) ? NS_PREFIX_OOR : NS_PREFIX_XS;
+    OUString sNsPrefix = (bList || aSimpleTypeClass == uno::TypeClass_ANY) ?
+                         OUString( NS_PREFIX_OOR ) : OUString( NS_PREFIX_XS );
 
     rtl::OUStringBuffer aTypeNameBuf(sNsPrefix);
 
@@ -293,22 +294,22 @@ OUString ElementFormatter::getElementTag() const
 {
     switch (m_aElementType)
     {
-    case ElementType::schema:    return TAG_SCHEMA;
-    case ElementType::layer:     return TAG_LAYER;
+    case ElementType::schema:    return OUString( TAG_SCHEMA );
+    case ElementType::layer:     return OUString( TAG_LAYER );
 
-    case ElementType::component: return TAG_COMPONENT;
-    case ElementType::templates: return TAG_TEMPLATES;
+    case ElementType::component: return OUString( TAG_COMPONENT );
+    case ElementType::templates: return OUString( TAG_TEMPLATES );
 
-    case ElementType::property:  return TAG_PROP;
-    case ElementType::node:      return TAG_NODE;
-    case ElementType::group:     return TAG_GROUP;
-    case ElementType::set:       return TAG_SET;
+    case ElementType::property:  return OUString( TAG_PROP );
+    case ElementType::node:      return OUString( TAG_NODE );
+    case ElementType::group:     return OUString( TAG_GROUP );
+    case ElementType::set:       return OUString( TAG_SET );
 
-    case ElementType::import:    return TAG_IMPORT;
-    case ElementType::instance:  return TAG_INSTANCE;
-    case ElementType::item_type: return TAG_ITEMTYPE;
-    case ElementType::value:     return TAG_VALUE;
-    case ElementType::uses:      return TAG_USES;
+    case ElementType::import:    return OUString( TAG_IMPORT );
+    case ElementType::instance:  return OUString( TAG_INSTANCE );
+    case ElementType::item_type: return OUString( TAG_ITEMTYPE );
+    case ElementType::value:     return OUString( TAG_VALUE );
+    case ElementType::uses:      return OUString( TAG_USES );
 
     case ElementType::unknown:
         OSL_ENSURE(false, "ElementFormatter: Trying to get Tag for 'unknown' element type");
