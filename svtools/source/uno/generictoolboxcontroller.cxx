@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generictoolboxcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ throw ( RuntimeException )
     m_nID = 0;
 }
 
-void SAL_CALL GenericToolboxController::execute( sal_Int16 KeyModifier )
+void SAL_CALL GenericToolboxController::execute( sal_Int16 /*KeyModifier*/ )
 throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
@@ -216,7 +216,7 @@ throw ( RuntimeException )
     }
 }
 
-IMPL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    try
    {
