@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:02:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,8 +395,8 @@ BOOL ImpSvNumberInputScan::SkipThousands(
 
 void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
 {
-    register const sal_Unicode* pStr = rString.GetBuffer();
-    register const sal_Unicode* const pEnd = pStr + rString.Len();
+    const sal_Unicode* pStr = rString.GetBuffer();
+    const sal_Unicode* const pEnd = pStr + rString.Len();
     while ( pStr < pEnd && nAnzStrings < SV_MAX_ANZ_INPUT_STRINGS )
     {
         if ( NextNumberStringSymbol( pStr, sStrArray[nAnzStrings] ) )
@@ -788,14 +788,12 @@ short ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
             case '+':
                 nPos++;
                 return 1;
-                break;
             case '(':               // '(' aehnlich wie '-' ?!?
                 nNegCheck = 1;
                 //! fallthru
             case '-':
                 nPos++;
                 return -1;
-                break;
             default:
                 break;
         }
@@ -820,11 +818,9 @@ short ImpSvNumberInputScan::GetESign( const String& rString, xub_StrLen& nPos )
             case '+':
                 nPos++;
                 return 1;
-                break;
             case '-':
                 nPos++;
                 return -1;
-                break;
             default:
                 break;
         }
@@ -1930,7 +1926,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         SkipBlanks(rString, nPos);
     }
 
-    xub_StrLen nOldPos = nPos;
+    xub_StrLen nOrigPos = nPos;
     if (GetTimeAmPm(rString, nPos))
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
@@ -1942,7 +1938,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             // If not already scanned as time, 6.78am does not result in 6
             // seconds and 78 hundredths in the morning. Keep as suffix.
             if (eScannedType != NUMBERFORMAT_TIME && nDecPos == 2 && nAnzNums == 2)
-                nPos = nOldPos;     // rewind am/pm
+                nPos = nOrigPos;     // rewind am/pm
             else
             {
                 SkipBlanks(rString, nPos);
@@ -2109,7 +2105,7 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
 
 BOOL ImpSvNumberInputScan::IsNumberFormatMain(
         const String& rString,                  // string to be analyzed
-        double& fOutNumber,                     // OUT: result as number, if possible
+        double& ,                               // OUT: result as number, if possible
         const SvNumberformat* pFormat )         // maybe number format set to match against
 {
     Reset();
@@ -2428,14 +2424,14 @@ void ImpSvNumberInputScan::ChangeIntl()
 //      ChangeNullDate
 
 void ImpSvNumberInputScan::ChangeNullDate(
-        const USHORT nDay,
-        const USHORT nMonth,
-        const USHORT nYear )
+        const USHORT Day,
+        const USHORT Month,
+        const USHORT Year )
 {
     if ( pNullDate )
-        *pNullDate = Date(nDay, nMonth, nYear);
+        *pNullDate = Date(Day, Month, Year);
     else
-        pNullDate = new Date(nDay, nMonth, nYear);
+        pNullDate = new Date(Day, Month, Year);
 }
 
 
