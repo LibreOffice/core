@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_namsp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:27:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ PE_Namespace::On_start_Identifier(const char * i_sText)
 }
 
 void
-PE_Namespace::On_start_SwBracket_Left(const char * i_sText)
+PE_Namespace::On_start_SwBracket_Left(const char * )
 {
     SetTokenResult(done, pop_success);
     pStati->SetCur(size_of_states);
