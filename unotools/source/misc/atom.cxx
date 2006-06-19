@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atom.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:46:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,14 +346,14 @@ const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
         if( ! m_aProvider.hasAtom( atomClass, atom ) )
         {
             // holes may occur by the above procedure!
-            Sequence< AtomClassRequest > aSeq( 1 );
-            aSeq.getArray()[0].atomClass = atomClass;
-            aSeq.getArray()[0].atoms.realloc( 1 );
-            aSeq.getArray()[0].atoms.getArray()[0] = atom;
+            Sequence< AtomClassRequest > aReq( 1 );
+            aReq.getArray()[0].atomClass = atomClass;
+            aReq.getArray()[0].atoms.realloc( 1 );
+            aReq.getArray()[0].atoms.getArray()[0] = atom;
             Sequence< ::rtl::OUString > aRet;
             try
             {
-                aRet = m_xServer->getAtomDescriptions( aSeq );
+                aRet = m_xServer->getAtomDescriptions( aReq );
             }
             catch( RuntimeException& )
             {
