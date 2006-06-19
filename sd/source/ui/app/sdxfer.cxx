@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:40:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,7 +354,7 @@ void SdTransferable::CreateData()
         pSdViewIntern->EndListening(*pSdDrawDocumentIntern );
         pSdViewIntern->SetMarkHdlHidden( TRUE );
         SdrPageView* pPageView = pSdViewIntern->ShowPage(pPage, Point());
-        ((SdrMarkView*)pSdViewIntern)->MarkAll(pPageView);
+        ((SdrMarkView*)pSdViewIntern)->MarkAllObj(pPageView);
     }
     else if( pSdView && !pSdDrawDocumentIntern )
     {
@@ -801,7 +801,7 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
 
             if( pPage )
             {
-                ( (SdrMarkView*) pSdViewIntern )->MarkAll( (SdrPageView*) pSdViewIntern->ShowPage( pPage, Point() ) );
+                ( (SdrMarkView*) pSdViewIntern )->MarkAllObj( (SdrPageView*) pSdViewIntern->ShowPage( pPage, Point() ) );
             }
         }
 
