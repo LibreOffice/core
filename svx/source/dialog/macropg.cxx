@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:29:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
-#endif
-#ifndef GCC
-#pragma hdrstop
 #endif
 
 #define ITEMID_MACRO 0
@@ -122,7 +119,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if( !maHeaderBar.IsItemMode() )
     {
         Size    aSz;
-        USHORT    nTabs = maHeaderBar.GetItemCount();
+        USHORT    _nTabs = maHeaderBar.GetItemCount();
         long    nTmpSz = 0;
         long    nWidth = maHeaderBar.GetItemSize( ITEMID_EVENT );
         long    nBarWidth = maHeaderBar.GetSizePixel().Width();
@@ -133,12 +130,12 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             maHeaderBar.SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
 
         {
-            long    nWidth;
-            for( USHORT i = 1 ; i < nTabs ; ++i )
+            long    _nWidth;
+            for( USHORT i = 1 ; i < _nTabs ; ++i )
             {
-                nWidth = maHeaderBar.GetItemSize( i );
-                aSz.Width() =  nWidth + nTmpSz;
-                nTmpSz += nWidth;
+                _nWidth = maHeaderBar.GetItemSize( i );
+                aSz.Width() =  _nWidth + nTmpSz;
+                nTmpSz += _nWidth;
                 maListBox.SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width(), MAP_APPFONT );
             }
         }
@@ -207,7 +204,7 @@ void _HeaderTabListBox::Enable( BOOL bEnable, BOOL bChild )
 // assign button ("Add Command") is enabled only if it is not read only
 // delete button ("Remove Command") is enabled if a current binding exists
 //     and it is not read only
-void _SvxMacroTabPage::EnableButtons( const String& rLangName )
+void _SvxMacroTabPage::EnableButtons( const String& /*rLangName*/ )
 {
     const SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
@@ -306,7 +303,7 @@ void _SvxMacroTabPage::InitResources()
 
 // the following method is called when the user clicks OK
 // We use the contents of the hashes to replace the settings
-BOOL _SvxMacroTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     try
     {
@@ -469,14 +466,14 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
             continue;
         }
         sTmp += '\t';
-        SvLBoxEntry*    pE = rListBox.InsertEntry( sTmp );
+        SvLBoxEntry*    _pE = rListBox.InsertEntry( sTmp );
         ::rtl::OUString* pEventName = new ::rtl::OUString( eventName );
-        pE->SetUserData( (void*)pEventName );
+        _pE->SetUserData( (void*)pEventName );
         String sNew( eventURL );
-        pE->ReplaceItem( new SvLBoxString( pE, 0, sNew ), LB_MACROS_ITEMPOS );
-        rListBox.GetModel()->InvalidateEntry( pE );
-        rListBox.Select( pE );
-        rListBox.MakeVisible( pE );
+        _pE->ReplaceItem( new SvLBoxString( _pE, 0, sNew ), LB_MACROS_ITEMPOS );
+        rListBox.GetModel()->InvalidateEntry( _pE );
+        rListBox.Select( _pE );
+        rListBox.MakeVisible( _pE );
     }
     pE = rListBox.GetEntry(0);
     if( pE )
