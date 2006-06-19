@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyvalueset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:38:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
 // virtual
 Any SAL_CALL PropertyValueSet::getObject(
                                     sal_Int32 columnIndex,
-                                         const Reference< XNameAccess >& typeMap )
+                                         const Reference< XNameAccess >& )
     throw( SQLException, RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
