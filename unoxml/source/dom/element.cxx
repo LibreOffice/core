@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:36:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include "node.hxx"
 #include "element.hxx"
 #include "attr.hxx"
 #include "elementlist.hxx"
@@ -226,8 +227,7 @@ namespace DOM
         Reference< XAttr > aAttr;
         if(m_aNodePtr != NULL)
         {
-            Reference< XUnoTunnel > tunnel(oldAttr, UNO_QUERY);
-            xmlAttrPtr pAttr = (xmlAttrPtr)tunnel->getSomething(Sequence< sal_Int8 >());
+        xmlAttrPtr pAttr = (xmlAttrPtr) CNode::getNodePtr(oldAttr.get());
 
             if (pAttr->parent != m_aNodePtr)
             {
@@ -271,13 +271,12 @@ namespace DOM
             }
 
             // get the implementation
-            Reference< XUnoTunnel > tunnel(newAttr, UNO_QUERY);
-            xmlAttrPtr pAttr = (xmlAttrPtr)tunnel->getSomething(Sequence< sal_Int8 >());
+        xmlAttrPtr pAttr = (xmlAttrPtr) CNode::getNodePtr(newAttr.get());
 
             // check whether the attribute is not in use by another element
             xmlNsPtr pNs = NULL;
             if (pAttr->parent != NULL)
-                if(strcmp((char*)pAttr->parent->name, "__private") == NULL
+                if(strcmp((char*)pAttr->parent->name, "__private") == 0
                     && pNs && pAttr->ns != NULL)
                 {
                     pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, pAttr->ns->prefix);
