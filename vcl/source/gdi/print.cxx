@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:08:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -746,7 +746,7 @@ ULONG Printer::GetCapabilities( USHORT nType ) const
 
 // -----------------------------------------------------------------------
 
-BOOL Printer::HasSupport( PrinterSupport eFeature, BOOL bInJob ) const
+BOOL Printer::HasSupport( PrinterSupport eFeature ) const
 {
     switch ( eFeature )
     {
@@ -927,8 +927,8 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
         }
 
         // Neuen Printer bauen
-        XubString maDriver = pPrinter->GetDriverName();
-        SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &maDriver );
+        XubString aDriver = pPrinter->GetDriverName();
+        SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
         {
             ImplInit( pInfo );
@@ -1037,10 +1037,10 @@ USHORT Printer::GetPaperBin() const
 static BOOL ImplPaperSizeEqual( unsigned long nPaperWidth1, unsigned long nPaperHeight1,
                                 unsigned long nPaperWidth2, unsigned long nPaperHeight2 )
 {
-    const unsigned long PAPER_ACCURACY = 1; // 1.0 mm accuracy
+    const long PAPER_ACCURACY = 1; // 1.0 mm accuracy
 
-    return ( (Abs( (short)(nPaperWidth1-nPaperWidth2) ) <= PAPER_ACCURACY ) &&
-             (Abs( (short)(nPaperHeight1-nPaperHeight2) ) <= PAPER_ACCURACY ) );
+    return ( (Abs( long(nPaperWidth1)-long(nPaperWidth2) ) <= PAPER_ACCURACY ) &&
+             (Abs( long(nPaperHeight1)-long(nPaperHeight2) ) <= PAPER_ACCURACY ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1215,7 +1215,7 @@ const vcl::PaperInfo& Printer::GetPaperInfo( int nPaper ) const
         return ImplGetEmptyPaper();
     if( ! mpInfoPrinter->m_bPapersInit )
         mpInfoPrinter->InitPaperFormats( maJobSetup.ImplGetConstData() );
-    if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= mpInfoPrinter->m_aPaperFormats.size() )
+    if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= int(mpInfoPrinter->m_aPaperFormats.size()) )
         return ImplGetEmptyPaper();
     return mpInfoPrinter->m_aPaperFormats[nPaper];
 }
@@ -1260,10 +1260,10 @@ const vcl::PaperInfo& Printer::GetCurrentPaperInfo() const
     Size aSize = PixelToLogic( GetPaperSizePixel(), aMap );
     int nMatch = -1;
     long nDelta = 0;
-    for( int i = 0; i < mpInfoPrinter->m_aPaperFormats.size(); i++ )
+    for( unsigned int i = 0; i < mpInfoPrinter->m_aPaperFormats.size(); i++ )
     {
-        unsigned long nW = mpInfoPrinter->m_aPaperFormats[i].m_nPaperWidth;
-        unsigned long nH = mpInfoPrinter->m_aPaperFormats[i].m_nPaperHeight;
+        long nW = mpInfoPrinter->m_aPaperFormats[i].m_nPaperWidth;
+        long nH = mpInfoPrinter->m_aPaperFormats[i].m_nPaperHeight;
         if( nW >= (aSize.Width()-1) && nH >= (aSize.Height()-1) )
         {
             long nCurDelta = (nW - aSize.Width())*(nW - aSize.Width()) + (nH - aSize.Height() )*(nH - aSize.Height() );
@@ -1309,7 +1309,7 @@ XubString Printer::GetPaperBinName( USHORT nPaperBin ) const
 
 // -----------------------------------------------------------------------
 
-BOOL Printer::SetCopyCount( USHORT nCopy, BOOL bCollate )
+BOOL Printer::SetCopyCount( USHORT nCopy, BOOL /*bCollate*/ )
 {
     mnCopyCount = nCopy;
     return TRUE;
@@ -1471,7 +1471,6 @@ BOOL Printer::StartJob( const XubString& rJobName )
             mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
             if ( !mnError )
                 mnError = PRINTER_GENERALERROR;
-            ImplSVData* pSVData = ImplGetSVData();
             pSVData->mpDefInst->DestroyPrinter( mpPrinter );
             mbNewJobSetup       = bSaveNewJobSetup;
             maJobName           = aSaveJobName;
