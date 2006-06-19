@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:11:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,8 +283,6 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     return xLayoutManager;
 }
 
-static void ImplClearPopupMenu( ToolBox *pToolBar );
-
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
@@ -313,15 +311,10 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
                                 ToolBar* pToolBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
-    m_aListenerContainer( m_aLock.getShareableOslMutex() ),
-    m_xServiceManager( rServiceManager ),
-    m_xFrame( rFrame ),
-    m_pToolBar( pToolBar ),
     m_bDisposed( sal_False ),
     m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark() ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
-    m_aResourceName( rResourceName ),
     m_bAddedToTaskPaneList( sal_True ),
     m_bFrameActionRegistered( sal_False ),
     m_bUpdateControllers( sal_False ),
@@ -329,6 +322,11 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_bImageMirrored( sal_False ),
     m_bCanBeCustomized( sal_True ),
     m_lImageRotation( 0 ),
+    m_pToolBar( pToolBar ),
+    m_aResourceName( rResourceName ),
+    m_xFrame( rFrame ),
+    m_aListenerContainer( m_aLock.getShareableOslMutex() ),
+    m_xServiceManager( rServiceManager ),
     m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     Window* pWindow = m_pToolBar;
@@ -369,11 +367,6 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
     OUString  aToolbarName = rResourceName.copy( idx );
     aHelpIdAsString += aToolbarName;
-//    if ( aToolbarName.equalsAscii( "fullscreenbar" ))
-//    {
-//        m_pToolBar->SetStyle( m_pToolBar->GetStyle() & ~WB_CLOSEABLE );
-//        m_pToolBar->SetFloatStyle( m_pToolBar->GetFloatStyle() & ~WB_CLOSEABLE );
-//    }
     m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
@@ -1402,11 +1395,11 @@ void ToolBarManager::RequestImages()
     }
 
     m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark();
-    sal_Int16 j = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
+    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
 
     if ( m_xDocImageManager.is() )
-        aDocGraphicSeq = m_xDocImageManager->getImages( j, aCmdURLSeq );
-    aModGraphicSeq = m_xModuleImageManager->getImages( j, aCmdURLSeq );
+        aDocGraphicSeq = m_xDocImageManager->getImages( p, aCmdURLSeq );
+    aModGraphicSeq = m_xModuleImageManager->getImages( p, aCmdURLSeq );
 
     i = 0;
     pIter = m_aCommandMap.begin();
@@ -1478,7 +1471,7 @@ void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElemen
     }
 }
 
-IMPL_LINK( ToolBarManager, Click, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, Click, ToolBox*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1497,7 +1490,7 @@ IMPL_LINK( ToolBarManager, Click, ToolBox*, pToolBar )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1516,7 +1509,7 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, pToolBar )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, DoubleClick, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1901,7 +1894,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Select, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
 {
     if ( m_bDisposed )
         return 1;
@@ -1916,17 +1909,17 @@ IMPL_LINK( ToolBarManager, Select, ToolBox*, pToolBar )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Highlight, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, Highlight, ToolBox*, EMPTYARG )
 {
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Activate, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, Activate, ToolBox*, EMPTYARG )
 {
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Deactivate, ToolBox*, pToolBar )
+IMPL_LINK( ToolBarManager, Deactivate, ToolBox*, EMPTYARG )
 {
     return 1;
 }
@@ -1986,7 +1979,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, pTimer )
+IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, EMPTYARG )
 {
     // The guard must be in its own context as the we can get destroyed when our
     // own xInterface reference get destroyed!
@@ -2004,7 +1997,7 @@ IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, pTimer )
     return 0;
 }
 
-IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     try
     {
