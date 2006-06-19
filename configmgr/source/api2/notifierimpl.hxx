@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notifierimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:16:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ namespace configmgr
                 typedef data::Accessor const & KeyFinder;
                 configuration::TreeRef aTree;
 
-                SubNodeToIndex( configuration::TreeRef const& aTree ) : aTree(aTree) {}
+                SubNodeToIndex( configuration::TreeRef const& rTree ) : aTree(rTree) {}
 
                 bool findKeysForIndex(KeyFinder _anAccessor, NodeOffset nNode, SubNodeList& aList)
                 {
