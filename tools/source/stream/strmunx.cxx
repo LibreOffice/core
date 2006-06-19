@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:35:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ using namespace osl;
 // ----------------
 
 class InternalStreamLock;
-DECLARE_LIST( InternalStreamLockList, InternalStreamLock* );
+DECLARE_LIST( InternalStreamLockList, InternalStreamLock* )
 namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
 
 #ifndef BOOTSTRAP
@@ -133,7 +133,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
-    for( int i = 0; i < rLockList.Count(); ++i )
+    for( ULONG i = 0; i < rLockList.Count(); ++i )
     {
         pLock = rLockList.GetObject( i );
         if( aStat.st_ino == pLock->m_aStat.st_ino )
@@ -177,7 +177,7 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
     InternalStreamLockList &rLockList = LockList::get();
     if( nStart == 0 && nEnd == 0 )
     {
-        for( int i = 0; i < rLockList.Count(); ++i )
+        for( ULONG i = 0; i < rLockList.Count(); ++i )
         {
             if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream )
             {
@@ -187,7 +187,7 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
         }
         return;
     }
-    for( int i = 0; i < rLockList.Count(); ++i )
+    for( ULONG i = 0; i < rLockList.Count(); ++i )
     {
         if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream &&
             nStart == pLock->m_nStartPos && nEnd == pLock->m_nEndPos )
@@ -279,7 +279,8 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
     SetBufferSize( 1024 );
     // convert URL to SystemPath, if necessary
     ::rtl::OUString aSystemFileName;
-    if( FileBase::getSystemPathFromFileURL( rFileName , aSystemFileName ) != osl_File_E_None )
+    if( FileBase::getSystemPathFromFileURL( rFileName , aSystemFileName )
+        != FileBase::E_None )
     {
         aSystemFileName = rFileName;
     }
@@ -868,19 +869,19 @@ void SvFileStream::SetSize (sal_Size nSize)
         if (::ftruncate (fd, (off_t)nSize) < 0)
         {
             // Save original error.
-            sal_uInt32 nError = ::GetSvError (errno);
+            sal_uInt32 nErr = ::GetSvError (errno);
 
             // Check against current size. Fail upon 'shrink'.
             struct stat aStat;
             if (::fstat (fd, &aStat) < 0)
             {
-                SetError (nError);
+                SetError (nErr);
                 return;
             }
-            if ((0 <= nSize) && (nSize <= aStat.st_size))
+            if ((sal::static_int_cast< sal_sSize >(nSize) <= aStat.st_size))
             {
                 // Failure upon 'shrink'. Return original error.
-                SetError (nError);
+                SetError (nErr);
                 return;
             }
 
@@ -888,14 +889,14 @@ void SvFileStream::SetSize (sal_Size nSize)
             sal_Size nCurPos = (sal_Size)::lseek (fd, (off_t)0, SEEK_CUR);
             if (nCurPos == (sal_Size)(-1))
             {
-                SetError (nError);
+                SetError (nErr);
                 return;
             }
 
             // Try 'expand' via 'lseek()' and 'write()'.
             if (::lseek (fd, (off_t)(nSize - 1), SEEK_SET) < 0)
             {
-                SetError (nError);
+                SetError (nErr);
                 return;
             }
             if (::write (fd, (char*)"", (size_t)1) < 0)
@@ -906,14 +907,14 @@ void SvFileStream::SetSize (sal_Size nSize)
                     // Double failure.
                 }
 
-                SetError (nError);
+                SetError (nErr);
                 return;
             }
 
             // Success. Restore saved position.
             if (::lseek (fd, (off_t)nCurPos, SEEK_SET) < 0)
             {
-                SetError (nError);
+                SetError (nErr);
                 return;
             }
         }
