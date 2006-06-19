@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:05:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:16:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ SfxIntegerListItem::SfxIntegerListItem()
 {
 }
 
-SfxIntegerListItem::SfxIntegerListItem( USHORT nWhich, const SvULongs& rList )
-    : SfxPoolItem( nWhich )
+SfxIntegerListItem::SfxIntegerListItem( USHORT which, const SvULongs& rList )
+    : SfxPoolItem( which )
 {
     m_aList.realloc( rList.Count() );
     for ( USHORT n=0; n<rList.Count(); n++ )
@@ -80,12 +80,12 @@ int SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
     return rItem.m_aList == m_aList;
 }
 
-SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
 {
     return new SfxIntegerListItem( *this );
 }
 
-BOOL SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, BYTE )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
             ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
@@ -100,7 +100,7 @@ BOOL SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, BYTE 
     return ( aNew >>= m_aList );
 }
 
-BOOL SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     rVal <<= m_aList;
     return TRUE;
