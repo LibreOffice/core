@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:31:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,15 +115,15 @@ static ::com::sun::star::uno::Reference<
 
 --------------------------------------------------*/
 
-OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* pSet ) :
-    SfxTabDialog(pParent, ResId( RID_OFA_AUTOCORR_DLG, DIALOG_MGR() ), pSet),
+OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
+    SfxTabDialog(pParent, ResId( RID_OFA_AUTOCORR_DLG, DIALOG_MGR() ), _pSet),
     aLanguageFT(    this, ResId(FT_LANG           )),
     aLanguageLB(    this, ResId(LB_LANG           ))
 {
     BOOL bShowSWOptions = FALSE;
-    if ( pSet )
+    if ( _pSet )
     {
-        SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
+        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
         if ( pItem && pItem->GetValue() )
             bShowSWOptions = TRUE;
     }
@@ -228,14 +228,14 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
     aCheckLB            (this, ResId(CLB_SETTINGS   )),
 
     sInput              (ResId(ST_USE_REPLACE       )),
-    sFirst              (ResId(ST_ORDINAL           )),
     sDoubleCaps         (ResId(ST_CPTL_STT_WORD     )),
     sStartCap           (ResId(ST_CPTL_STT_SENT     )),
-    sURL                (ResId(ST_DETECT_URL        )),
     sBoldUnderline      (ResId(ST_BOLD_UNDER        )),
+    sURL                (ResId(ST_DETECT_URL        )),
+    sNoDblSpaces        (ResId(STR_NO_DBL_SPACES    )),
     sHalf               (ResId(ST_FRACTION          )),
     sDash               (ResId(ST_DASH              )),
-    sNoDblSpaces        (ResId(STR_NO_DBL_SPACES    ))
+    sFirst              (ResId(ST_ORDINAL           ))
 {
     FreeResource();
 
@@ -266,7 +266,7 @@ SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
 --------------------------------------------------*/
 
 
-BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     long nFlags = pAutoCorrect->GetFlags();
@@ -305,7 +305,7 @@ void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
 --------------------------------------------------*/
 
 
-void OfaAutocorrOptionsPage::Reset( const SfxItemSet& rSet )
+void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
@@ -402,7 +402,7 @@ public:
 /*********************************************************************/
 
 
-void __EXPORT OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+void __EXPORT OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, USHORT /*nFlags*/,
     SvLBoxEntry* pEntry )
 {
     rDev.DrawText( rPos, GetText() );
@@ -606,7 +606,7 @@ SfxTabPage* __EXPORT OfaSwAutoFmtOptionsPage::Create( Window* pParent,
 /*                                                                   */
 /*********************************************************************/
 
-BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 {
     BOOL bModified = FALSE;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
@@ -748,7 +748,7 @@ void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 /*********************************************************************/
 
 
-void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& rSet )
+void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -1044,19 +1044,19 @@ void lcl_ClearTable(DoubleStringTable& rTable)
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, ResId( RID_OFAPAGE_AUTOCORR_REPLACE, DIALOG_MGR() ), rSet),
+    aTextOnlyCB(    this, ResId(CB_TEXT_ONLY      )),
     aShortFT  (     this, ResId(FT_SHORT          )),
     aShortED  (     this, ResId(ED_SHORT          )),
     aReplaceFT(     this, ResId(FT_REPLACE        )),
     aReplaceED(     this, ResId(ED_REPLACE        )),
     aReplaceTLB(    this, ResId(TLB_REPLACE       )),
-    aTextOnlyCB(    this, ResId(CB_TEXT_ONLY      )),
     aNewReplacePB(  this, ResId(PB_NEW_REPLACE    )),
     aDeleteReplacePB(this,ResId(PB_DELETE_REPLACE )),
     sModify(ResId(STR_MODIFY)),
     sNew(aNewReplacePB.GetText()),
+    pFormatText(0),
     eLang(eLastDialogLanguage),
     bHasSelectionText(FALSE),
-    pFormatText(0),
     bFirstSelect(TRUE),
     bReplaceEditChanged(FALSE),
     bSWriter(TRUE)
@@ -1124,7 +1124,7 @@ void    OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
 /* -----------------20.11.98 13:26-------------------
  *
  * --------------------------------------------------*/
-int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet* pSet )
+int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 {
     return LEAVE_PAGE;
 }
@@ -1132,7 +1132,7 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet* pSet )
 
 --------------------------------------------------*/
 
-BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     DoubleStringArrayPtr pArray = aDoubleStringTable.Last();
@@ -1380,7 +1380,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(BOOL bFromReset,
 
 --------------------------------------------------*/
 
-void OfaAutocorrReplacePage::Reset( const SfxItemSet& rSet )
+void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
 {
     RefillReplaceBox(TRUE, eLang, eLang);
     aShortED.GrabFocus();
@@ -1452,20 +1452,20 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
 
 IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 {
-    SvLBoxEntry* pEntry = aReplaceTLB.FirstSelected();
+    SvLBoxEntry* _pEntry = aReplaceTLB.FirstSelected();
     if(pBtn == &aDeleteReplacePB)
     {
-        DBG_ASSERT(pEntry, "keine Eintrag selektiert")
-        if(pEntry)
+        DBG_ASSERT(_pEntry, "keine Eintrag selektiert")
+        if(_pEntry)
         {
-            aReplaceTLB.GetModel()->Remove(pEntry);
+            aReplaceTLB.GetModel()->Remove(_pEntry);
             ModifyHdl(&aShortED);
             return 0;
         }
     }
     if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
     {
-        SvLBoxEntry* pEntry = aReplaceTLB.FirstSelected();
+        SvLBoxEntry* _pNewEntry = aReplaceTLB.FirstSelected();
         String sEntry(aShortED.GetText());
         if(sEntry.Len() && ( aReplaceED.GetText().Len() ||
                 ( bHasSelectionText && bSWriter ) ))
@@ -1474,25 +1474,25 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
             USHORT nPos = USHRT_MAX;
             sEntry += '\t';
             sEntry += aReplaceED.GetText();
-            if(pEntry)
+            if(_pNewEntry)
             {
-                nPos = (USHORT)aReplaceTLB.GetModel()->GetAbsPos(pEntry);
-                aReplaceTLB.GetModel()->Remove(pEntry);
+                nPos = (USHORT)aReplaceTLB.GetModel()->GetAbsPos(_pNewEntry);
+                aReplaceTLB.GetModel()->Remove(_pNewEntry);
             }
             else
             {
                 USHORT j;
                 for( j = 0; j < aReplaceTLB.GetEntryCount(); j++ )
                 {
-                    SvLBoxEntry* pEntry = aReplaceTLB.GetEntry(j);
+                    SvLBoxEntry* pReplaceEntry = aReplaceTLB.GetEntry(j);
                     if( 0 >=  pCompareClass->compareString(sEntry,
-                                    aReplaceTLB.GetEntryText(pEntry, 0) ) )
+                                    aReplaceTLB.GetEntryText(pReplaceEntry, 0) ) )
                         break;
                 }
                 nPos = j;
             }
             SvLBoxEntry* pInsEntry =
-                aReplaceTLB.InsertEntry(sEntry,
+                aReplaceTLB.InsertEntry(sEntry, 0,
                                 nPos == USHRT_MAX ? LIST_APPEND : (ULONG)nPos);
             if( !bReplaceEditChanged && !aTextOnlyCB.IsChecked())
                 pInsEntry->SetUserData(&bHasSelectionText); // neuer formatierter Text
@@ -1713,7 +1713,7 @@ void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
 /* -----------------20.11.98 13:26-------------------
  *
  * --------------------------------------------------*/
-int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* pSet )
+int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
 }
@@ -1721,7 +1721,7 @@ int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* pSet )
 
 --------------------------------------------------*/
 
-BOOL OfaAutocorrExceptPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     StringsArraysPtr pArrays = aStringsTable.Last();
@@ -1928,7 +1928,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(BOOL bFromReset,
 
 --------------------------------------------------*/
 
-void OfaAutocorrExceptPage::Reset( const SfxItemSet& rSet )
+void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     RefillReplaceBoxes(TRUE, eLang, eLang);
@@ -2045,25 +2045,28 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, ResId( RID_OFAPAGE_AUTOCORR_QUOTE, DIALOG_MGR() ), rSet),
     aSingleFL           (this, ResId(FL_SINGLE       )),
-    aDoubleFL           (this, ResId(FL_DOUBLE       )),
     aSingleTypoCB       (this, ResId(CB_SGL_TYPO     )),
+    aSglStartQuoteFT    (this, ResId(FT_SGL_STARTQUOTE )),
+    aSglStartQuotePB    (this, ResId(PB_SGL_STARTQUOTE )),
     aSglStartExFT       (this, ResId(FT_SGSTEX       )),
+    aSglEndQuoteFT      (this, ResId(FT_SGL_ENDQUOTE   )),
+    aSglEndQuotePB      (this, ResId(PB_SGL_ENDQUOTE   )),
     aSglEndExFT         (this, ResId(FT_SGENEX       )),
-    aDblStartExFT       (this, ResId(FT_DBSTEX       )),
-    aDblEndExFT         (this, ResId(FT_DBECEX       )),
+    aSglStandardPB      (this, ResId(PB_SGL_STD      )),
+
+    aDoubleFL           (this, ResId(FL_DOUBLE       )),
     aTypoCB             (this, ResId(CB_TYPO         )),
     aStartQuoteFT       (this, ResId(FT_STARTQUOTE   )),
     aStartQuotePB       (this, ResId(PB_STARTQUOTE   )),
+    aDblStartExFT       (this, ResId(FT_DBSTEX       )),
     aEndQuoteFT         (this, ResId(FT_ENDQUOTE     )),
     aEndQuotePB         (this, ResId(PB_ENDQUOTE     )),
+    aDblEndExFT         (this, ResId(FT_DBECEX       )),
     aDblStandardPB      (this, ResId(PB_DBL_STD      )),
-    aSglStartQuoteFT    (this, ResId(FT_SGL_STARTQUOTE )),
-    aSglStartQuotePB    (this, ResId(PB_SGL_STARTQUOTE )),
-    aSglEndQuoteFT      (this, ResId(FT_SGL_ENDQUOTE   )),
-    aSglEndQuotePB      (this, ResId(PB_SGL_ENDQUOTE   )),
-    aSglStandardPB      (this, ResId(PB_SGL_STD      )),
+
     sStartQuoteDlg  (ResId(STR_CHANGE_START)),
     sEndQuoteDlg    (ResId(STR_CHANGE_END)),
+
     sStandard(ResId(ST_STANDARD))
 {
     FreeResource();
@@ -2093,7 +2096,7 @@ SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
 /*-----------------03.07.97 13:18-------------------
 
 --------------------------------------------------*/
-BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
@@ -2140,7 +2143,7 @@ void OfaQuoteTabPage::ActivatePage( const SfxItemSet& )
 /*-----------------03.07.97 13:18-------------------
 
 --------------------------------------------------*/
-void OfaQuoteTabPage::Reset( const SfxItemSet& rSet )
+void OfaQuoteTabPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
@@ -2173,7 +2176,6 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
 {
-    BOOL bStart = pBtn == &aStartQuotePB;
     USHORT nMode = SGL_START;
     if(pBtn == &aSglEndQuotePB)
         nMode = SGL_END;
@@ -2300,16 +2302,16 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
                                                 const SfxItemSet& rSet )
     : SfxTabPage(pParent, ResId( RID_OFAPAGE_AUTOCOMPLETE_OPTIONS, DIALOG_MGR() ), rSet),
     aCBActiv        (this, ResId(CB_ACTIV)),
-    aCBCollect      (this, ResId(CB_COLLECT)),
-    aCBKeepList     (this, ResId(CB_KEEP_LIST)),
     aCBAppendSpace  (this, ResId(CB_APPEND_SPACE)),
     aCBAsTip        (this, ResId(CB_AS_TIP)),
-    aFTMinWordlen   (this, ResId(FT_MIN_WORDLEN)),
-    aFTMaxEntries   (this, ResId(FT_MAX_ENTRIES)),
-    aNFMinWordlen   (this, ResId(NF_MIN_WORDLEN)),
-    aNFMaxEntries   (this, ResId(NF_MAX_ENTRIES)),
+    aCBCollect      (this, ResId(CB_COLLECT)),
+    aCBKeepList     (this, ResId(CB_KEEP_LIST)),
     aFTExpandKey    (this, ResId(FT_EXPAND_KEY)),
     aDCBExpandKey   (this, ResId(DCB_EXPAND_KEY)),
+    aFTMinWordlen   (this, ResId(FT_MIN_WORDLEN)),
+    aNFMinWordlen   (this, ResId(NF_MIN_WORDLEN)),
+    aFTMaxEntries   (this, ResId(FT_MAX_ENTRIES)),
+    aNFMaxEntries   (this, ResId(NF_MAX_ENTRIES)),
     aLBEntries      (*this, ResId(LB_ENTRIES)),
     aPBEntries      (this, ResId(PB_ENTRIES)),
     pAutoCmpltList( 0 ),
@@ -2351,7 +2353,7 @@ SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
     return new OfaAutoCompleteTabPage( pParent, rSet );
 }
 
-BOOL OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
 {
     BOOL bModified = FALSE, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
@@ -2404,7 +2406,7 @@ BOOL OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& rSet )
     return TRUE;
 }
 
-void OfaAutoCompleteTabPage::Reset( const SfxItemSet& rSet )
+void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -2456,7 +2458,7 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( FALSE );
 }
 
-IMPL_LINK( OfaAutoCompleteTabPage, DeleteHdl, PushButton*, pBtn )
+IMPL_LINK( OfaAutoCompleteTabPage, DeleteHdl, PushButton*, EMPTYARG )
 {
     USHORT nSelCnt = pAutoCmpltList ? aLBEntries.GetSelectEntryCount() : 0;
     while( nSelCnt )
