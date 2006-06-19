@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:24:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ ________________________________________________________________________________
 //*****************************************************************************************************************
 #define COMPONENTGETIMPLEMENTATIONENVIRONMENT                                                                                           \
     extern "C" void SAL_CALL component_getImplementationEnvironment( const  sal_Char**          ppEnvironmentTypeName   ,               \
-                                                                             uno_Environment**  ppEnvironment           )               \
+                                                                             uno_Environment**                          )               \
     {                                                                                                                                   \
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;                                                                   \
     }
@@ -169,7 +169,7 @@ ________________________________________________________________________________
 //  define registration of service
 //*****************************************************************************************************************
 #define COMPONENTWRITEINFO( INFOS )                                                                                                     \
-    extern "C" sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager ,                                                       \
+    extern "C" sal_Bool SAL_CALL component_writeInfo(   void* /*pServiceManager*/   ,                                                       \
                                                         void*   pRegistryKey    )                                                       \
     {                                                                                                                                   \
         LOG_REGISTRATION_WRITEINFO( "\t[start]\n" )                                                                                     \
@@ -206,7 +206,7 @@ ________________________________________________________________________________
 #define COMPONENTGETFACTORY( IFFACTORIES )                                                                                              \
     extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementationName ,                                           \
                                                             void*       pServiceManager     ,                                           \
-                                                            void*       pRegistryKey        )                                           \
+                                                            void*     /*pRegistryKey*/      )                                           \
     {                                                                                                                                   \
         LOG_REGISTRATION_GETFACTORY( "\t[start]\n" )                                                                                    \
         /* Set default return value for this operation - if it failed. */                                                               \
