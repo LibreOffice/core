@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateconfiguration.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:41:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,8 +135,8 @@ class WindowStateConfiguration :  public com::sun::star::lang::XTypeProvider    
         virtual ~WindowStateConfiguration();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XNameAccess
