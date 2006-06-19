@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:52:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:35:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,19 +88,19 @@ class SfxWorkWindow;
 
 struct SfxObjectBar_Impl
 {
-    USHORT              nId;    // Resource - und ConfigId der Toolbox
-    USHORT              nMode;  // spezielle Sichtbarkeitsflags
-    USHORT              nPos;
-    USHORT              nIndex;
-    sal_Bool            bDestroy;
-    String              aName;
-    SfxInterface*       pIFace;
+    USHORT        nId;   // Resource - und ConfigId der Toolbox
+    USHORT        nMode; // spezielle Sichtbarkeitsflags
+    USHORT        nPos;
+    USHORT        nIndex;
+    sal_Bool      bDestroy;
+    String        aName;
+    SfxInterface* pIFace;
 
     SfxObjectBar_Impl() :
         nId(0),
         nMode(0),
-        pIFace(0),
-        bDestroy(sal_False)
+        bDestroy(sal_False),
+        pIFace(0)
     {}
 };
 
@@ -202,10 +202,10 @@ enum SfxDockingConfig
     SFX_MOVEDOCKINGWINDOW
 };
 
-DECL_PTRARRAY( SfxChildList_Impl, SfxChild_Impl*, 2, 2 );
-DECL_PTRARRAY( SfxChildWindows_Impl, SfxChildWin_Impl*, 2, 2 );
+DECL_PTRARRAY( SfxChildList_Impl, SfxChild_Impl*, 2, 2 )
+DECL_PTRARRAY( SfxChildWindows_Impl, SfxChildWin_Impl*, 2, 2 )
 
-SV_DECL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl, 1, 2 );
+SV_DECL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl, 1, 2 )
 
 struct SfxObjectBarList_Impl
 {
@@ -318,7 +318,7 @@ protected:
 
 public:
                             SfxWorkWindow( Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
-                            ~SfxWorkWindow();
+    virtual                 ~SfxWorkWindow();
     SystemWindow*           GetTopWindow() const;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
