@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acc_pipe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:27:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:15:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ namespace io_acceptor
         public MyPipeConnection
     {
     public:
-        PipeConnection( const OUString & s , const OUString &sConnectionDescription);
+        PipeConnection( const OUString &sConnectionDescription);
         ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
@@ -81,7 +81,7 @@ namespace io_acceptor
 
 
 
-    PipeConnection::PipeConnection( const OUString &s, const OUString &sConnectionDescription) :
+    PipeConnection::PipeConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription )
     {
@@ -89,7 +89,10 @@ namespace io_acceptor
 
         // make it unique
         m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
-        m_sDescription += OUString::valueOf( (sal_Int64) &m_pipe , 10 );
+        m_sDescription += OUString::valueOf(
+            sal::static_int_cast<sal_Int64 >(
+                reinterpret_cast< sal_IntPtr >(&m_pipe)),
+            10 );
     }
 
     PipeConnection::~PipeConnection()
@@ -112,8 +115,6 @@ namespace io_acceptor
         else {
             throw IOException();
         }
-
-        return 0;
     }
 
     void PipeConnection::write( const Sequence < sal_Int8 > &seq )
@@ -158,9 +159,9 @@ namespace io_acceptor
      * PipeAcceptor
      **************/
     PipeAcceptor::PipeAcceptor( const OUString &sPipeName , const OUString & sConnectionDescription) :
-        m_bClosed( sal_False ),
         m_sPipeName( sPipeName ),
-        m_sConnectionDescription( sConnectionDescription )
+        m_sConnectionDescription( sConnectionDescription ),
+        m_bClosed( sal_False )
     {
     }
 
@@ -189,7 +190,7 @@ namespace io_acceptor
             error += m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > () );
         }
-        PipeConnection *pConn = new PipeConnection( m_sPipeName , m_sConnectionDescription );
+        PipeConnection *pConn = new PipeConnection( m_sConnectionDescription );
 
         oslPipeError status = pipe.accept( pConn->m_pipe );
 
