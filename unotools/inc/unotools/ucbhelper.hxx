@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbhelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:39:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 namespace ucb
 {
     class Content;
-};
+}
 
 namespace utl
 {
@@ -93,7 +93,7 @@ namespace utl
         static sal_Bool             FindInPath( const String& rPath, const String& rName, String& rFile, char cDelim = ';', BOOL bAllowWildCards = TRUE );
         static sal_Bool             Find( const String& rFolder, const String& rName, String& rFile, BOOL bAllowWildCards = FALSE );
     };
-};
+}
 
 #endif
 
