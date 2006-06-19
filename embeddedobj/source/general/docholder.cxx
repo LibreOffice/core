@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:34:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,9 +224,9 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
 //===========================================================================
 DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                 OCommonEmbeddedObject* pEmbObj )
-: m_xFactory( xFactory ),
-  m_pEmbedObj( pEmbObj ),
+: m_pEmbedObj( pEmbObj ),
   m_pInterceptor( NULL ),
+  m_xFactory( xFactory ),
   m_bReadOnly( sal_False ),
   m_bWaitForClose( sal_False ),
   m_bAllowClosing( sal_False ),
@@ -660,10 +660,10 @@ void DocumentHolder::FindConnectPoints(
 //---------------------------------------------------------------------------
 uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
         const uno::Reference< container::XIndexAccess >& xContMenu,
-        const uno::Reference< frame::XDispatchProvider >& xContDisp,
+        const uno::Reference< frame::XDispatchProvider >& /*xContDisp*/,
         const ::rtl::OUString& aContModuleName,
         const uno::Reference< container::XIndexAccess >& xOwnMenu,
-        const uno::Reference< frame::XDispatchProvider >& xOwnDisp )
+        const uno::Reference< frame::XDispatchProvider >& /*xOwnDisp*/ )
     throw ( uno::Exception )
 {
     // TODO/LATER: use dispatch providers on merge
@@ -687,8 +687,6 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
     FindConnectPoints( xContMenu, nContPoints );
     FindConnectPoints( xOwnMenu, nOwnPoints );
 
-    sal_Int32 nContInd = 0;
-    sal_Int32 nOwnInd = 0;
     for ( sal_Int32 nInd = 0; nInd < xOwnMenu->getCount(); nInd++ )
     {
         if ( nOwnPoints[0] == nInd )
@@ -967,8 +965,8 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
 {
     if ( m_xFrame.is() && m_xComponent.is() )
     {
-        uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
-        if ( xDocument.is() )
+        uno::Reference < frame::XModel > xDoc( m_xComponent, uno::UNO_QUERY );
+        if ( xDoc.is() )
         {
             // load new document in to the frame
             uno::Reference< frame::XComponentLoader > xComponentLoader( m_xFrame, uno::UNO_QUERY );
@@ -1283,7 +1281,7 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
 
 
 //---------------------------------------------------------------------------
-void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool bGetsOwnership )
+void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool /*bGetsOwnership*/ )
         throw (util::CloseVetoException, uno::RuntimeException)
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source && !m_bAllowClosing )
@@ -1313,7 +1311,7 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 }
 
 //---------------------------------------------------------------------------
-void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& aSource )
+void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& )
         throw (frame::TerminationVetoException, uno::RuntimeException)
 {
     if ( m_bWaitForClose )
@@ -1333,7 +1331,7 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
 }
 
 //---------------------------------------------------------------------------
-void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
+void SAL_CALL DocumentHolder::modified( const lang::EventObject& )
     throw ( uno::RuntimeException )
 {
     if( m_pEmbedObj )
