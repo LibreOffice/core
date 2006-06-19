@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,8 +194,8 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
-        , m_xFrame      ( xFrame                        )
         , m_xFactory    ( xFactory                      )
+        , m_xFrame      ( xFrame                        )
 {
 }
 
