@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stordata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:32:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORDATA_HXX_
-#define _STORE_STORDATA_HXX_ "$Revision: 1.4 $"
+#define _STORE_STORDATA_HXX_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -116,7 +116,8 @@ struct OStoreDataPageData : public store::OStorePageData
     void initialize (void)
     {
         base::m_aGuard.m_nMagic = STORE_MAGIC_DATAPAGE;
-        base::m_aDescr.m_nUsed += self::size();
+        base::m_aDescr.m_nUsed = sal::static_int_cast< sal_uInt16 >(
+            base::m_aDescr.m_nUsed + self::size());
         rtl_zeroMemory (m_pData, capacity());
     }
 
@@ -640,7 +641,8 @@ struct OStoreDirectoryPageData : public store::OStorePageData
         : base (nPageSize)
     {
         base::m_aGuard.m_nMagic = STORE_MAGIC_DIRECTORYPAGE;
-        base::m_aDescr.m_nUsed += self::size();
+        base::m_aDescr.m_nUsed = sal::static_int_cast< sal_uInt16 >(
+            base::m_aDescr.m_nUsed + self::size());
         rtl_zeroMemory (m_pData, capacity());
     }
 
@@ -655,7 +657,7 @@ struct OStoreDirectoryPageData : public store::OStorePageData
 
     /** swap (internal and external representation).
     */
-    void swap (const D& rDescr)
+    void swap ()
     {
 #ifdef OSL_BIGENDIAN
         m_aNameBlock.swap();
@@ -665,7 +667,7 @@ struct OStoreDirectoryPageData : public store::OStorePageData
 
     /** guard (external representation).
     */
-    void guard (const D& rDescr)
+    void guard ()
     {
         m_aNameBlock.guard();
         m_aDataBlock.guard();
@@ -673,7 +675,7 @@ struct OStoreDirectoryPageData : public store::OStorePageData
 
     /** verify (external representation).
     */
-    storeError verify (const D& rDescr)
+    storeError verify ()
     {
         storeError eErrCode = m_aNameBlock.verify();
         if (eErrCode == store_E_None)
