@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:37:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ class SbiStdObject : public SbxObject
     SbStdFactory* pStdFactory;
 
    ~SbiStdObject();
+    using SbxVariable::GetInfo;
     SbxInfo* GetInfo( short );
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
