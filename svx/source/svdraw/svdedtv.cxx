@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:48:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ SdrEditView::SdrEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrEditView::SdrEditView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrMarkView(pModel1,pXOut)
+SdrEditView::SdrEditView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrMarkView(pModel1,_pXOut)
 {
     ImpClearVars();
 }
@@ -501,7 +501,7 @@ void SdrEditView::CheckPossibilities()
                 // bCombinePossible gruendlicher checken
                 // fehlt noch ...
                 const SdrObject* pObj=GetMarkedObjectByIndex(0);
-                const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
+                //const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
                 BOOL bGroup=pObj->GetSubList()!=NULL;
                 BOOL bHasText=pObj->GetOutlinerParaObject()!=NULL;
                 if (bGroup || bHasText) {
@@ -704,7 +704,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     }
 }
 
-void SdrEditView::DeleteMarked(const SdrMarkList& rMark)
+void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 {
     if (rMark.GetMarkCount()!=0) {
         rMark.ForceSort();
@@ -722,11 +722,14 @@ void SdrEditView::DeleteMarked(const SdrMarkList& rMark)
             nm--;
             SdrMark* pM=rMark.GetMark(nm);
             SdrObject*   pObj=pM->GetObj();
-            SdrPageView* pPV =pM->GetPageView();
+            //SdrPageView* pPV =pM->GetPageView();
             SdrObjList*  pOL =pObj->GetObjList(); //#52680#
             UINT32 nOrdNum=pObj->GetOrdNumDirect();
-            SdrObject* pChkObj=pOL->RemoveObject(nOrdNum);
-            DBG_ASSERT(pChkObj==pObj,"DeleteMarked(MarkList): pChkObj!=pObj beim RemoveObject()");
+#ifdef DBG_UTIL
+            SdrObject* pChkObj=
+#endif
+            pOL->RemoveObject(nOrdNum);
+            DBG_ASSERT(pChkObj==pObj,"DeleteMarkedList(MarkList): pChkObj!=pObj beim RemoveObject()");
         }
         EndUndo();
     }
@@ -739,7 +742,7 @@ void SdrEditView::DeleteMarkedObj()
         BrkAction();
         HideMarkHdl(NULL);
         BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);
-        DeleteMarked(GetMarkedObjectList());
+        DeleteMarkedList(GetMarkedObjectList());
         GetMarkedObjectListWriteAccess().Clear();
         aHdl.Clear();
         EndUndo();
