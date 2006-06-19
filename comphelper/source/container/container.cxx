@@ -4,9 +4,9 @@
  *
  *  $RCSfile: container.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:44:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
 {
     OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
 }
+
+IndexAccessIterator::~IndexAccessIterator() {}
 
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> IndexAccessIterator::Next()
