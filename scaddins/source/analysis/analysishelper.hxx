@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:41:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,10 +223,11 @@ public:
 
     sal_Bool                Contains( const STRING& rSearchString ) const;
 
+    using MyList::Append;
     inline void             Append( STRING* pNew );
     inline void             Append( const STRING& rNew );
 
-    MyList::Count;
+    using MyList::Count;
 };
 
 
@@ -294,9 +295,10 @@ public:
 class CStrList : private MyList
 {
 public:
+    using MyList::Append;
     inline void             Append( const sal_Char* pNew );
     inline const sal_Char*  Get( sal_uInt32 nIndex ) const;
-    MyList::Count;
+    using MyList::Count;
 };
 
 
@@ -309,9 +311,10 @@ class FuncDataList : private MyList
 public:
                             FuncDataList( ResMgr& );
     virtual                 ~FuncDataList();
+    using MyList::Append;
     inline void             Append( FuncData* pNew );
     inline const FuncData*  Get( sal_uInt32 nIndex ) const;
-    MyList::Count;
+    using MyList::Count;
 
     const FuncData*         Get( const ::rtl::OUString& aProgrammaticName ) const;
 };
@@ -351,6 +354,7 @@ public:
 class SortedIndividualInt32List : private MyList
 {
 protected:
+    using MyList::Insert;
     void                        Insert( sal_Int32 nDay );
     void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend );
     void                        Insert( double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
@@ -368,7 +372,7 @@ public:
                                 SortedIndividualInt32List();
     virtual                     ~SortedIndividualInt32List();
 
-                                MyList::Count;
+                                using MyList::Count;
 
                                 /// @return  element on position nIndex or 0 on invalid index
     inline sal_Int32            Get( sal_uInt32 nIndex ) const
@@ -410,6 +414,7 @@ class ScaDoubleList : protected MyList
 protected:
     inline void                 ListAppend( double fValue ) { MyList::Append( new double( fValue ) ); }
 
+    using MyList::Append;
     inline void                 Append( double fValue ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException )
                                     { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
 
@@ -437,7 +442,7 @@ protected:
 public:
     virtual                     ~ScaDoubleList();
 
-                                MyList::Count;
+                                using MyList::Count;
     inline const double*        Get( sal_uInt32 nIndex ) const
                                         { return static_cast< const double* >( MyList::GetObject( nIndex ) ); }
 
@@ -559,8 +564,9 @@ public:
     inline const Complex*   First( void );
     inline const Complex*   Next( void );
 
-    MyList::Count;
+    using MyList::Count;
 
+    using MyList::Append;
     inline void             Append( Complex* pNew );
     void                    Append( const SEQSEQ( STRING )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
     void                    Append( const SEQ( ANY )& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
@@ -597,6 +603,8 @@ public:
                                 double              fConvertConstant,
                                 ConvertDataClass    eClass );
 
+    virtual                 ~ConvertData();
+
     sal_Int16               GetMatchingLevel( const STRING& rRef ) const;
                                     // 0.0 = no equality
                                     // 1.0 = matches exact
@@ -627,6 +635,8 @@ public:
                                 double              fConvertConstant,
                                 double              fConvertOffset,
                                 ConvertDataClass    eClass );
+
+    virtual                 ~ConvertDataLinear();
 
     virtual double          Convert( double fVal, const ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const THROWDEF_RTE_IAE;
