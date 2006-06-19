@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpegc.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:44:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,9 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     long                            nWidth;
     long                            nHeight;
     long                            nAlignedWidth;
-    long                            nLines = 0;
-    long                            bDecompCreated = 0;
-    long                            bRet = 0;
+    // declare bDecompCreated volatile because of gcc
+    // warning: variable 'bDecompCreated' might be clobbered by `longjmp' or `vfork'
+    volatile long                   bDecompCreated = 0;
 
     /* Falls der Stream nicht ausreicht (IO_PENDING)
      wird ueber ein longjmp in der Schleife nach Exit
@@ -154,8 +154,10 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     struct my_error_mgr         jerr;
     void*                       pScanline;
     long                        nY;
-    long                        bCompCreated = 0;
-    long                        bRet = 0;
+    // declare bCompCreated, bRet volatile because of gcc
+    // warning: variable 'bCompCreated' might be clobbered by `longjmp' or `vfork'
+    volatile long               bCompCreated = 0;
+    volatile long               bRet = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
         goto Exit;
