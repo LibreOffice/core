@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:02:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -573,13 +573,13 @@ bool FontImportDialog::isCanceled()
     return m_pProgress->isCanceled();
 }
 
-IMPL_LINK( FontImportDialog, ModifyHdl, Edit*,pEdit )
+IMPL_LINK( FontImportDialog, ModifyHdl, Edit*, EMPTYARG )
 {
     m_aRefreshTimer.Start();
     return 0;
 }
 
-IMPL_LINK( FontImportDialog, RefreshTimeoutHdl, void*, pDummy )
+IMPL_LINK( FontImportDialog, RefreshTimeoutHdl, void*, EMPTYARG )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     std::list< String > aFiles;
@@ -666,7 +666,7 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
     if( pButton == &m_aFromBtn )
     {
         String aPath( m_aFromDirEdt.GetText() );
-        if( chooseDirectory( this, aPath ) )
+        if( chooseDirectory( aPath ) )
         {
             m_aFromDirEdt.SetText( aPath );
             RefreshTimeoutHdl( NULL );
