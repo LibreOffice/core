@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:58:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:19:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
 
 // =======================================================================
 
-void SpinField::ImplInitData()
+void SpinField::ImplInitSpinFieldData()
 {
     mpEdit          = NULL;
     mbSpin          = FALSE;
@@ -362,7 +362,7 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
 SpinField::SpinField( WindowType nTyp ) :
     Edit( nTyp )
 {
-    ImplInitData();
+    ImplInitSpinFieldData();
 }
 
 // --------------------------------------------------------------------
@@ -370,7 +370,7 @@ SpinField::SpinField( WindowType nTyp ) :
 SpinField::SpinField( Window* pParent, WinBits nWinStyle ) :
     Edit( WINDOW_SPINFIELD )
 {
-    ImplInitData();
+    ImplInitSpinFieldData();
     ImplInit( pParent, nWinStyle );
 }
 
@@ -379,7 +379,7 @@ SpinField::SpinField( Window* pParent, WinBits nWinStyle ) :
 SpinField::SpinField( Window* pParent, const ResId& rResId ) :
     Edit( WINDOW_SPINFIELD )
 {
-    ImplInitData();
+    ImplInitSpinFieldData();
     rResId.SetRT( RSC_SPINFIELD );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -906,7 +906,7 @@ long SpinField::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -949,7 +949,7 @@ void SpinField::EndDropDown()
 
 // -----------------------------------------------------------------------
 
-BOOL SpinField::ShowDropDown( BOOL bShow )
+BOOL SpinField::ShowDropDown( BOOL )
 {
     return FALSE;
 }
@@ -982,15 +982,6 @@ Size SpinField::CalcSize( USHORT nChars ) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
-
-USHORT SpinField::GetMaxVisChars() const
-{
-    long nOutWidth = mpEdit->GetOutputSizePixel().Width();
-    long nCharWidth = GetTextWidth( XubString( 'x' ) );
-    return nCharWidth ? (USHORT)(nOutWidth/nCharWidth) : 0;
-}
-
 // --------------------------------------------------------------------
 
 IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
@@ -1016,8 +1007,8 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 {
     Edit::Draw( pDev, rPos, rSize, nFlags );
 
-    WinBits nStyle = GetStyle();
-    if ( !(nFlags & WINDOW_DRAW_NOCONTROLS ) && ( nStyle & (WB_SPIN|WB_DROPDOWN) ) )
+    WinBits nFieldStyle = GetStyle();
+    if ( !(nFlags & WINDOW_DRAW_NOCONTROLS ) && ( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
     {
         Point aPos = pDev->LogicToPixel( rPos );
         Size aSize = pDev->LogicToPixel( rSize );
