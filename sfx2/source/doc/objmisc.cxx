@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:43:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1565,7 +1565,7 @@ ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const St
 ErrCode SfxObjectShell::CallScript(
     const String & rScriptType,
     const String & rCode,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rSource,
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*rSource*/,
     void *pArgs,
     void *pRet
 )
@@ -1604,7 +1604,7 @@ ErrCode SfxObjectShell::CallScript(
     return nErr;
 }
 
-SfxFrame* SfxObjectShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium )
+SfxFrame* SfxObjectShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 {
     return pSelf;
 }
@@ -1859,7 +1859,7 @@ void SfxObjectShell::Invalidate( USHORT nId )
 // nMacroMode == -1 : uninitialized
 // other values as in /com/sun/star/document/MacroExecMode.hxx
 
-void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
+void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
 {
     if( pImp->nMacroMode < 0 )
     {
@@ -2172,7 +2172,6 @@ BOOL SfxObjectShell::IsUIActive()
 void SfxObjectShell::UIActivate( BOOL bActivate )
 {
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    SfxApplication *pApp = SFX_APP();
     //SfxViewFrame *pParent = pFrame->GetParentViewFrame_Impl();
     if ( bActivate )
     {
@@ -2198,7 +2197,7 @@ void SfxObjectShell::UIActivate( BOOL bActivate )
     }
 }
 
-void SfxObjectShell::InPlaceActivate( BOOL bActivate )
+void SfxObjectShell::InPlaceActivate( BOOL /*bActivate*/ )
 {
     /*
     if( bActivate )
