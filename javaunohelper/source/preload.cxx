@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preload.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:42:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,18 +82,21 @@ static bool inited_juhx( JNIEnv * jni_env )
     {
         OUString symbol =
               OUSTR("Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo");
-        s_writeInfo = (fptr_writeInfo)osl_getSymbol( hModule, symbol.pData );
+        s_writeInfo = (fptr_writeInfo)osl_getFunctionSymbol(
+            hModule, symbol.pData );
         symbol =
             OUSTR("Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory");
-        s_getFactory = (fptr_getFactory)osl_getSymbol( hModule, symbol.pData );
+        s_getFactory = (fptr_getFactory)osl_getFunctionSymbol(
+            hModule, symbol.pData );
         symbol =
             OUSTR("Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory");
         s_createRegistryServiceFactory =
-            (fptr_createRegistryServiceFactory)osl_getSymbol( hModule, symbol.pData );
+            (fptr_createRegistryServiceFactory)osl_getFunctionSymbol(
+                hModule, symbol.pData );
         symbol =
             OUSTR("Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap");
         s_bootstrap =
-            (fptr_bootstrap)osl_getSymbol( hModule, symbol.pData );
+            (fptr_bootstrap)osl_getFunctionSymbol( hModule, symbol.pData );
 
         if (0 == s_writeInfo ||
             0 == s_getFactory ||
