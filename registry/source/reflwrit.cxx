@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ struct CPInfo
 
     sal_uInt32 getBlopSize();
 
-    sal_uInt32 toBlop(sal_uInt8* buffer, sal_uInt32 maxLen);
+    sal_uInt32 toBlop(sal_uInt8* buffer);
 };
 
 CPInfo::CPInfo(CPInfoTag tag, struct CPInfo* prev)
@@ -356,7 +356,7 @@ sal_uInt32 CPInfo::getBlopSize()
 }
 
 
-sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer, sal_uInt32 maxLen)
+sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer)
 {
     sal_uInt8* buff = buffer;
 
@@ -791,6 +791,7 @@ TypeWriter::TypeWriter(typereg_Version version,
             RTTypeClass | (published ? RT_TYPE_PUBLISHED : 0)))
      , m_typeName(typeName)
     , m_nSuperTypes(superTypeCount)
+    , m_pUik(NULL)
     , m_doku(documentation)
     , m_fileName(fileName)
     , m_fieldCount(fieldCount)
@@ -798,7 +799,6 @@ TypeWriter::TypeWriter(typereg_Version version,
     , m_referenceCount(referenceCount)
     , m_blop(NULL)
     , m_blopSize(0)
-    , m_pUik(NULL)
 {
     if (m_nSuperTypes > 0)
     {
@@ -855,7 +855,6 @@ void TypeWriter::createBlop()
     sal_uInt32  blopFieldsSize      = 0;
     sal_uInt32  blopMethodsSize     = 0;
     sal_uInt32  blopReferenceSize   = 0;
-    sal_uInt16  i;
 
     CPInfo  root(CP_TAG_INVALID, NULL);
     sal_uInt16  cpIndexThisName = 0;
@@ -929,8 +928,8 @@ void TypeWriter::createBlop()
         sal_uInt16 cpIndexName = 0;
         sal_uInt16 cpIndexTypeName = 0;
         sal_uInt16 cpIndexValue = 0;
-        sal_uInt16 cpIndexDoku = 0;
-        sal_uInt16 cpIndexFileName = 0;
+        sal_uInt16 cpIndexDoku2 = 0;
+        sal_uInt16 cpIndexFileName2 = 0;
 
         // nFieldEntries + n fields
         blopFieldsSize = sizeof(sal_uInt16) + (m_fieldCount * blopFieldEntrySize);
@@ -942,13 +941,13 @@ void TypeWriter::createBlop()
 
         pBuffer += writeUINT16(pBuffer, BLOP_FIELD_N_ENTRIES);
 
-        for (i = 0; i < m_fieldCount; i++)
+        for (sal_uInt16 i = 0; i < m_fieldCount; i++)
         {
             cpIndexName = 0;
             cpIndexTypeName = 0;
             cpIndexValue = 0;
-            cpIndexDoku = 0;
-            cpIndexFileName = 0;
+            cpIndexDoku2 = 0;
+            cpIndexFileName2 = 0;
 
             pBuffer += writeUINT16(pBuffer, m_fields[i].m_access);
 
@@ -980,17 +979,17 @@ void TypeWriter::createBlop()
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_fields[i].m_doku.getStr();
-                cpIndexDoku = pInfo->m_index;
+                cpIndexDoku2 = pInfo->m_index;
             }
-            pBuffer += writeUINT16(pBuffer, cpIndexDoku);
+            pBuffer += writeUINT16(pBuffer, cpIndexDoku2);
 
             if (m_fields[i].m_fileName.getLength())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_fields[i].m_fileName.getStr();
-                cpIndexFileName = pInfo->m_index;
+                cpIndexFileName2 = pInfo->m_index;
             }
-            pBuffer += writeUINT16(pBuffer, cpIndexFileName);
+            pBuffer += writeUINT16(pBuffer, cpIndexFileName2);
         }
     }
 
@@ -1002,12 +1001,12 @@ void TypeWriter::createBlop()
         sal_uInt16* pMethodEntrySize = new sal_uInt16[m_methodCount];
         sal_uInt16  cpIndexName = 0;
         sal_uInt16  cpIndexReturn = 0;
-        sal_uInt16  cpIndexDoku = 0;
+        sal_uInt16  cpIndexDoku2 = 0;
 
         // nMethodEntries + nParamEntries
         blopMethodsSize = (2 * sizeof(sal_uInt16));
 
-        for (i = 0; i < m_methodCount; i++)
+        for (sal_uInt16 i = 0; i < m_methodCount; i++)
         {
             pMethodEntrySize[i] = (sal_uInt16)
                 ( blopMethodEntrySize +                                 // header
@@ -1028,13 +1027,15 @@ void TypeWriter::createBlop()
         pBuffer += writeUINT16(pBuffer, BLOP_METHOD_N_ENTRIES);
         pBuffer += writeUINT16(pBuffer, BLOP_PARAM_N_ENTRIES );
 
-        for (i = 0; i < m_methodCount; i++)
+        for (sal_uInt16 i = 0; i < m_methodCount; i++)
         {
             cpIndexReturn = 0;
-            cpIndexDoku = 0;
+            cpIndexDoku2 = 0;
 
             pBuffer += writeUINT16(pBuffer, pMethodEntrySize[i]);
-            pBuffer += writeUINT16(pBuffer, m_methods[i].m_mode);
+            pBuffer += writeUINT16(
+                pBuffer,
+                sal::static_int_cast< sal_uInt16 >(m_methods[i].m_mode));
 
             if (m_methods[i].m_name.getLength())
             {
@@ -1057,9 +1058,9 @@ void TypeWriter::createBlop()
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_methods[i].m_doku.getStr();
-                cpIndexDoku = pInfo->m_index;
+                cpIndexDoku2 = pInfo->m_index;
             }
-            pBuffer += writeUINT16(pBuffer, cpIndexDoku);
+            pBuffer += writeUINT16(pBuffer, cpIndexDoku2);
 
             sal_uInt16 j;
 
@@ -1076,7 +1077,10 @@ void TypeWriter::createBlop()
                 pBuffer += writeUINT16(pBuffer, cpIndexName);
                 cpIndexName = 0;
 
-                pBuffer += writeUINT16(pBuffer, m_methods[i].m_params[j].m_mode);
+                pBuffer += writeUINT16(
+                    pBuffer,
+                    sal::static_int_cast< sal_uInt16 >(
+                        m_methods[i].m_params[j].m_mode));
 
                 if (m_methods[i].m_params[j].m_name.getLength())
                 {
@@ -1112,7 +1116,7 @@ void TypeWriter::createBlop()
     if (m_referenceCount)
     {
         sal_uInt16 cpIndexName = 0;
-        sal_uInt16 cpIndexDoku = 0;
+        sal_uInt16 cpIndexDoku2 = 0;
 
         // nReferenceEntries + n references
         blopReferenceSize = entrySize + (m_referenceCount * blopReferenceEntrySize);
@@ -1124,12 +1128,14 @@ void TypeWriter::createBlop()
 
         pBuffer += writeUINT16(pBuffer, BLOP_REFERENCE_N_ENTRIES);
 
-        for (i = 0; i < m_referenceCount; i++)
+        for (sal_uInt16 i = 0; i < m_referenceCount; i++)
         {
-            pBuffer += writeUINT16(pBuffer, m_references[i].m_type);
+            pBuffer += writeUINT16(
+                pBuffer,
+                sal::static_int_cast< sal_uInt16 >(m_references[i].m_type));
 
             cpIndexName = 0;
-            cpIndexDoku = 0;
+            cpIndexDoku2 = 0;
 
             if (m_references[i].m_name.getLength())
             {
@@ -1143,9 +1149,9 @@ void TypeWriter::createBlop()
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_references[i].m_doku.getStr();
-                cpIndexDoku = pInfo->m_index;
+                cpIndexDoku2 = pInfo->m_index;
             }
-            pBuffer += writeUINT16(pBuffer, cpIndexDoku);
+            pBuffer += writeUINT16(pBuffer, cpIndexDoku2);
 
             pBuffer += writeUINT16(pBuffer, m_references[i].m_access);
         }
@@ -1207,7 +1213,7 @@ void TypeWriter::createBlop()
     {
         CPInfo* pNextInfo = pInfo->m_next;
 
-        pBuffer += pInfo->toBlop(pBuffer, blopSize - (pBuffer - blop));
+        pBuffer += pInfo->toBlop(pBuffer);
         delete pInfo;
 
         pInfo = pNextInfo;
@@ -1252,6 +1258,8 @@ void TypeWriter::createBlop()
     C-API
 
 **************************************************************************/
+
+extern "C" {
 
 static void TYPEREG_CALLTYPE acquire(TypeWriterImpl hEntry)
 {
@@ -1515,7 +1523,7 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     return t;
 }
 
-extern "C" RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
+RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
 {
     static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)
@@ -1540,4 +1548,6 @@ extern "C" RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(v
     {
         return (&aApi);
     }
+}
+
 }
