@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ccidecom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,7 +768,7 @@ void CCIDecompressor::MakeLookUp(const CCIHuffmanTableEntry * pHufTab,
 }
 
 
-BOOL CCIDecompressor::ReadEOL( UINT32 nMaxFillBits )
+BOOL CCIDecompressor::ReadEOL( UINT32 /*nMaxFillBits*/ )
 {
     USHORT  nCode;
     BYTE    nByte;
