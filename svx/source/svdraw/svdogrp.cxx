@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:33:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,8 +334,8 @@ void SdrObjGroup::SetObjList(SdrObjList* pNewObjList)
 void SdrObjGroup::SetPage(SdrPage* pNewPage)
 {
     //BFS01FASTBOOL bLinked=IsLinkedGroup();
-    FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
-    FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
+    //FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
+    //FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
 
     //BFS01if (bLinked && bRemove) {
     //BFS01 ImpLinkAbmeldung();
@@ -360,7 +360,7 @@ void SdrObjGroup::SetModel(SdrModel* pNewModel)
     // be destroyed (as the bug shows).
     SdrModel* pOldModel = pModel;
     //BFS01const sal_Bool bLinked(IsLinkedGroup());
-    const sal_Bool bChg(pNewModel!=pModel);
+    //const sal_Bool bChg(pNewModel!=pModel);
 
     //BFS01if(bLinked && bChg)
     //BFS01{
@@ -589,13 +589,13 @@ void SdrObjGroup::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
 //}
 
 
-FASTBOOL SdrObjGroup::BegDrag(SdrDragStat& rDrag) const
+FASTBOOL SdrObjGroup::BegDrag(SdrDragStat& /*rDrag*/) const
 {
     return FALSE;
 }
 
 
-FASTBOOL SdrObjGroup::BegCreate(SdrDragStat& rStat)
+FASTBOOL SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }
@@ -607,7 +607,7 @@ long SdrObjGroup::GetRotateAngle() const
 }
 
 
-long SdrObjGroup::GetShearAngle(FASTBOOL bVertical) const
+long SdrObjGroup::GetShearAngle(FASTBOOL /*bVertical*/) const
 {
     return nShearWink;
 }
