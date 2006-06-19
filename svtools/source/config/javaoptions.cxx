@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:51:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,10 @@ void SvtExecAppletsItem_Impl::SetExecuteApplets(sal_Bool bSet)
  ---------------------------------------------------------------------------*/
 SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl() :
         utl::ConfigItem(C2U("Office.Common/Java/Applet")),
-        bRO            (CFG_READONLY_DEFAULT            ),
-        bExecute       (sal_False                       )
+        bExecute       (sal_False                       ),
+        bRO            (CFG_READONLY_DEFAULT            )
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl()");
 
     Sequence< OUString > aNames(1);
     aNames.getArray()[0] = C2U("Enable");
@@ -154,7 +154,7 @@ SvtJavaOptions::SvtJavaOptions() :
     utl::ConfigItem(C2U("Office.Java/VirtualMachine")),
     pImpl(new SvtJavaOptions_Impl)
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtJavaOptions::SvtJavaOptions()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtJavaOptions::SvtJavaOptions()");
 
     Sequence< Any > aValues = GetProperties(pImpl->aPropertyNames);
     Sequence< sal_Bool > aROStates = GetReadOnlyStates(pImpl->aPropertyNames);
