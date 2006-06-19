@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsapi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:05:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,11 @@ static SvXMLTokenMapEntry aTypes[] =
 };
 
 sal_uInt16 lcl_getTypeClass(
-    const Reference<XDataTypeRepository>& xRepository,
+    const Reference<XDataTypeRepository>&
+    #ifdef DBG_UTIL
+    xRepository
+    #endif
+    ,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
 {
