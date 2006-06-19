@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchinformationprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:12:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ class DispatchInformationProvider : public  css::frame::XDispatchInformationProv
 
         virtual ~DispatchInformationProvider();
 
-        DECLARE_XINTERFACE
+        FWK_DECLARE_XINTERFACE
 
         virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups()
             throw (css::uno::RuntimeException);
