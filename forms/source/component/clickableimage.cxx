@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:09:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,35 +126,6 @@ namespace frm
     using ::com::sun::star::awt::MouseEvent;
     using ::com::sun::star::task::XInteractionHandler;
 
-    //====================================================================
-    //= SubmissionVetoListeners
-    //====================================================================
-    typedef ::comphelper::OListenerContainerBase    <   XSubmissionVetoListener
-                                                    ,   EventObject
-                                                    >   SubmissionVetoListeners_Base;
-
-    class SubmissionVetoListeners : public SubmissionVetoListeners_Base
-    {
-    public:
-        SubmissionVetoListeners( ::osl::Mutex& _rMutex )
-            :SubmissionVetoListeners_Base( _rMutex )
-        {
-        }
-
-    protected:
-        virtual bool    implNotify(
-                            const Reference< XSubmissionVetoListener >& _rxListener,
-                            const EventObject& _rEvent
-                        )   SAL_THROW( ( Exception ) );
-    };
-
-    //------------------------------------------------------------------------------
-    bool SubmissionVetoListeners::implNotify( const Reference< XSubmissionVetoListener >& _rxListener, const EventObject& _rEvent )   SAL_THROW( ( Exception ) )
-    {
-        _rxListener->submitting( _rEvent );
-        return true;    // continue calling listeners
-    }
-
     //==================================================================
     // OClickableImageBaseControl
     //==================================================================
@@ -169,12 +140,12 @@ namespace frm
 
     //------------------------------------------------------------------------------
     OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _aService)
-                    :OControl(_rxFactory, _aService)
-                    ,m_aApproveActionListeners(m_aMutex)
-                    ,m_aActionListeners(m_aMutex)
-                    ,m_pThread(NULL)
+        :OControl(_rxFactory, _aService)
+        ,m_pThread(NULL)
+        ,m_aSubmissionVetoListeners( m_aMutex )
+        ,m_aApproveActionListeners( m_aMutex )
+        ,m_aActionListeners( m_aMutex )
     {
-        m_pSubmissionVetoListeners.reset( new SubmissionVetoListeners( m_aMutex ) );
         m_pFeatureInterception.reset( new ControlFeatureInterception( _rxFactory ) );
     }
 
@@ -232,7 +203,7 @@ namespace frm
         EventObject aEvent( static_cast< XWeak* >( this ) );
         m_aApproveActionListeners.disposeAndClear( aEvent );
         m_aActionListeners.disposeAndClear( aEvent );
-        m_pSubmissionVetoListeners->disposing( aEvent );
+        m_aSubmissionVetoListeners.disposeAndClear( aEvent );
         m_pFeatureInterception->dispose();
 
         {
@@ -457,13 +428,13 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
     {
-        m_pSubmissionVetoListeners->addListener( listener );
+        m_aSubmissionVetoListeners.addInterface( listener );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
     {
-        m_pSubmissionVetoListeners->removeListener( listener );
+        m_aSubmissionVetoListeners.removeInterface( listener );
     }
 
     //--------------------------------------------------------------------
@@ -496,7 +467,7 @@ namespace frm
         try
         {
             // allow the veto listeners to join the game
-            m_pSubmissionVetoListeners->notify( EventObject( *this ) );
+            m_aSubmissionVetoListeners.notifyEach( &XSubmissionVetoListener::submitting, EventObject( *this ) );
 
             // see whether there's an "submit interceptor" set at our model
             Reference< submission::XSubmissionSupplier > xSubmissionSupp( getModel(), UNO_QUERY );
@@ -558,11 +529,11 @@ namespace frm
             const ::rtl::OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
-        ,m_pProducer( NULL )
         ,m_pMedium(NULL)
+        ,m_pProducer( NULL )
+        ,m_bDispatchUrlInternal(sal_False)
         ,m_bDownloading(sal_False)
         ,m_bProdStarted(sal_False)
-        ,m_bDispatchUrlInternal(sal_False)
     {
         DBG_CTOR( OClickableImageBaseModel, NULL );
         implConstruct();
@@ -573,11 +544,11 @@ namespace frm
     OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
-        ,m_pProducer( NULL )
         ,m_pMedium( NULL )
+        ,m_pProducer( NULL )
+        ,m_bDispatchUrlInternal(sal_False)
         ,m_bDownloading( sal_False )
         ,m_bProdStarted( sal_False )
-        ,m_bDispatchUrlInternal(sal_False)
     {
         DBG_CTOR( OClickableImageBaseModel, NULL );
         implConstruct();
@@ -870,7 +841,7 @@ namespace frm
                 }
                 if( !pObjSh )
                 {
-                    SfxObjectShell *pTestObjSh = SfxObjectShell::GetFirst();
+                    pTestObjSh = SfxObjectShell::GetFirst();
                     while( !pObjSh && pTestObjSh )
                     {
                         Reference< XModel > xTestModel = pTestObjSh->GetModel();
