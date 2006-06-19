@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fract.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:20:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,6 @@
 #include <stream.hxx>
 #endif
 
-#define private public
-#define bIsLong bIsBig
 #include <bigint.hxx>
 
 /*************************************************************************
@@ -172,7 +170,7 @@ Fraction::Fraction( long nN1, long nN2, long nD1, long nD2 )
     BigInt nD( nD1 );
     nD *= BigInt( nD2 );
 
-    while ( nN.bIsLong || nD.bIsLong )
+    while ( nN.bIsBig || nD.bIsBig )
     {
         BigInt n1 = 1;
         BigInt n2 = 2;
@@ -324,7 +322,7 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 
     Reduce( nN, nD );
 
-    if ( nN.bIsLong || nD.bIsLong )
+    if ( nN.bIsBig || nD.bIsBig )
     {
         nNumerator   = 0;
         nDenominator = -1;
@@ -380,7 +378,7 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 
     Reduce( nN, nD );
 
-    if ( nN.bIsLong || nD.bIsLong )
+    if ( nN.bIsBig || nD.bIsBig )
     {
         nNumerator   = 0;
         nDenominator = -1;
@@ -432,7 +430,7 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
     BigInt nD( nDenominator / nGGT2 );
     nD *= BigInt( rVal.nDenominator / nGGT1 );
 
-    if ( nN.bIsLong || nD.bIsLong )
+    if ( nN.bIsBig || nD.bIsBig )
     {
         nNumerator   = 0;
         nDenominator = -1;
@@ -487,7 +485,7 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
     BigInt nD( nDenominator / nGGT2 );
     nD *= BigInt( rVal.nNumerator / nGGT1 );
 
-    if ( nN.bIsLong || nD.bIsLong )
+    if ( nN.bIsBig || nD.bIsBig )
     {
         nNumerator   = 0;
         nDenominator = -1;
