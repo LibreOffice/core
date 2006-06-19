@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ namespace xmloff
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
         );
+        virtual ~OElementImport();
 
     protected:
         // SvXMLImportContext overridables
