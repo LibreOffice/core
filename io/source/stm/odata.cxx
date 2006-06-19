@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:30:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:17:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,7 +509,7 @@ Sequence< OUString > ODataInputStream::getSupportedServiceNames(void) throw ()
 *
 ****/
 
-Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference < XComponentContext > & rSMgr ) throw( Exception)
+Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference < XComponentContext > & ) throw( Exception)
 {
     ODataInputStream *p = new ODataInputStream;
     return Reference< XInterface > ( (OWeakObject * ) p );
@@ -916,7 +916,7 @@ Sequence< OUString > ODataOutputStream::getSupportedServiceNames(void) throw ()
 
 
 
-Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference < XComponentContext > & rSMgr ) throw(Exception)
+Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference < XComponentContext > & ) throw(Exception)
 {
     ODataOutputStream *p = new ODataOutputStream;
     Reference< XInterface > xService = *p;
@@ -1156,7 +1156,7 @@ void OObjectOutputStream::connectToMarkable(void)
         }
 
         // find the markable stream !
-        Reference< XInterface > rTry = m_output;
+        Reference< XInterface > rTry(m_output);
         while( sal_True ) {
             if( ! rTry.is() )
             {
@@ -1225,7 +1225,7 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
 
 
 
-Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference < XComponentContext > & rCtx )
+Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference < XComponentContext > & )
     throw(Exception)
 {
     OObjectOutputStream *p = new OObjectOutputStream;
@@ -1314,9 +1314,9 @@ class OObjectInputStream :
 {
 public:
     OObjectInputStream( const Reference < XComponentContext > &r)
-        : m_bValidMarkable(sal_False)
+        : m_rSMgr( r->getServiceManager() )
         , m_rCxt( r )
-        , m_rSMgr( r->getServiceManager() )
+        , m_bValidMarkable(sal_False)
         {
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
@@ -1526,7 +1526,7 @@ void OObjectInputStream::connectToMarkable()
         }
 
         // find the markable stream !
-        Reference< XInterface > rTry = m_input;
+        Reference< XInterface > rTry(m_input);
         while( sal_True ) {
             if( ! rTry.is() )
             {
