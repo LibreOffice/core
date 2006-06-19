@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:48:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _XOUTX_HXX //autogen
 #include <xoutx.hxx>
@@ -191,7 +189,7 @@ void ContourWindow::InitSdrModel()
 |*
 \************************************************************************/
 
-void ContourWindow::SdrObjCreated( const SdrObject& rObj )
+void ContourWindow::SdrObjCreated( const SdrObject&  )
 {
     pView->MarkAll();
     pView->CombineMarkedObjects( FALSE );
@@ -252,7 +250,6 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
     if ( bPipetteMode )
     {
         const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
-        const Link& rLink = GetMousePosLink();
 
         aPipetteColor = GetPixel( aLogPt );
         Control::MouseMove( rMEvt );
@@ -301,10 +298,10 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
         {
-            PolyPolygon aPolyPoly( GetPolyPolygon() );
+            PolyPolygon _aPolyPoly( GetPolyPolygon() );
 
-            aPolyPoly.Clip( aWorkRect );
-            SetPolyPolygon( aPolyPoly );
+            _aPolyPoly.Clip( aWorkRect );
+            SetPolyPolygon( _aPolyPoly );
             pView->SetWorkArea( aWorkRect );
         }
         else
@@ -346,14 +343,14 @@ void ContourWindow::Paint( const Rectangle& rRect )
 
     if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
     {
-        PolyPolygon aPolyPoly( 2, 2 );
+        PolyPolygon _aPolyPoly( 2, 2 );
         const Color aOldFillColor( GetFillColor() );
 
-        aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
-        aPolyPoly.Insert( aWorkRect );
+        _aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
+        _aPolyPoly.Insert( aWorkRect );
 
         SetFillColor( COL_LIGHTRED );
-        DrawTransparent( aPolyPoly, 50 );
+        DrawTransparent( _aPolyPoly, 50 );
         SetFillColor( aOldFillColor );
     }
 
