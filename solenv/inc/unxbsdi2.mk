@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsdi2.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 11:32:11 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:13:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe -frtti $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
@@ -111,10 +110,13 @@ CFLAGSOPT=-O1
 CFLAGSNOOPT=-O
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
-# Enable all warnings
-CFLAGSWALL=-Wall -Wfloat-equal -Weffc++ -Wold-style-cast -Woverloaded-virtual -Wshadow -Wpointer-arith -Wcast-align -Wsign-compare -Winline
-# Set default warn level
-CFLAGSDFLTWARN=
+
+CFLAGSWARNCC=
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
