@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:56:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,17 +336,21 @@ void PspGraphics::SetFillColor( SalColor nSalColor )
     m_pPrinterGfx->SetFillColor (aColor);
 }
 
-void PspGraphics::SetROPLineColor( SalROPColor nROPColor )
+void PspGraphics::SetROPLineColor( SalROPColor )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::SetROPLineColor() not implemented" );
 }
 
-void PspGraphics::SetROPFillColor( SalROPColor nROPColor )
+void PspGraphics::SetROPFillColor( SalROPColor )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::SetROPFillColor() not implemented" );
 }
 
-void PspGraphics::SetXORMode( BOOL bSet )
+void PspGraphics::SetXORMode( BOOL
+#ifdef DBG_UTIL
+bSet
+#endif
+)
 {
     DBG_ASSERT( !bSet, "Error: PrinterGfx::SetXORMode() not implemented" );
 }
@@ -414,9 +418,9 @@ sal_Bool PspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
     return sal_True;
 }
 
-void PspGraphics::invert( ULONG nPoints,
-                          const SalPoint* pPtAry,
-                          SalInvert nFlags )
+void PspGraphics::invert( ULONG,
+                          const SalPoint*,
+                          SalInvert )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::Invert() not implemented" );
 }
@@ -425,16 +429,13 @@ BOOL PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
     return m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
 
-void PspGraphics::copyBits( const SalTwoRect *pPosAry,
-                            SalGraphics    *pSSrcGraphics )
+void PspGraphics::copyBits( const SalTwoRect*,
+                            SalGraphics* )
 {
     DBG_ERROR( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
-void PspGraphics::copyArea ( long nDestX,    long nDestY,
-                             long nSrcX,     long nSrcY,
-                             long nSrcWidth, long nSrcHeight,
-                             USHORT nFlags )
+void PspGraphics::copyArea ( long,long,long,long,long,long,USHORT )
 {
     DBG_ERROR( "Error: PrinterGfx::CopyArea() not implemented" );
 }
@@ -454,45 +455,40 @@ void PspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
     const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, sal_True);
 }
 
-void PspGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap,
-                              const SalBitmap& rTransBitmap )
+void PspGraphics::drawBitmap( const SalTwoRect*,
+                              const SalBitmap&,
+                              const SalBitmap& )
 {
     DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
-void PspGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap,
-                              SalColor nTransparentColor )
+void PspGraphics::drawBitmap( const SalTwoRect*,
+                              const SalBitmap&,
+                              SalColor )
 {
     DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent color");
 }
 
-void PspGraphics::drawMask( const SalTwoRect* pPosAry,
-                            const SalBitmap &rSalBitmap,
-                            SalColor nMaskColor )
+void PspGraphics::drawMask( const SalTwoRect*,
+                            const SalBitmap &,
+                            SalColor )
 {
     DBG_ERROR("Error: PrinterGfx::DrawMask() not implemented");
 }
 
-SalBitmap* PspGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap* PspGraphics::getBitmap( long, long, long, long )
 {
     DBG_WARNING ("Warning: PrinterGfx::GetBitmap() not implemented");
     return NULL;
 }
 
-SalColor PspGraphics::getPixel( long nX, long nY )
+SalColor PspGraphics::getPixel( long, long )
 {
     DBG_ERROR ("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
 }
 
-void PspGraphics::invert(
-                         long       nX,
-                         long       nY,
-                         long       nDX,
-                         long       nDY,
-                         SalInvert  nFlags )
+void PspGraphics::invert(long,long,long,long,SalInvert)
 {
     DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
 }
@@ -507,7 +503,6 @@ private:
 
 public:
                             ImplPspFontData( const psp::FastPrintFontInfo& );
-    virtual                 ~ImplPspFontData();
     virtual sal_IntPtr      GetFontId() const { return mnFontId; }
     virtual ImplFontData*   Clone() const { return new ImplPspFontData( *this ); }
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
@@ -520,15 +515,6 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
 :   ImplFontData( PspGraphics::Info2DevFontAttributes(rInfo), PSPFD_MAGIC ),
     mnFontId( rInfo.m_nID )
 {}
-
-//--------------------------------------------------------------------------
-
-ImplPspFontData::~ImplPspFontData()
-{
-    // TODO: better integration with GlyphCache
-    sal_IntPtr nFontId = GetFontId();
-    GlyphCache::GetInstance().RemoveFont( nFontId );
-}
 
 //--------------------------------------------------------------------------
 
@@ -834,7 +820,7 @@ void PspGraphics::SetTextColor( SalColor nSalColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName )
+bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& )
 {
     return false;
 }
@@ -897,7 +883,7 @@ ULONG PspGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
     if( pKernPairs && nPairs )
     {
         ::std::list< ::psp::KernPair >::const_iterator it;
-        int i;
+        unsigned int i;
         int nTextScale = m_pPrinterGfx->GetFontWidth();
         if( ! nTextScale )
             nTextScale = m_pPrinterGfx->GetFontHeight();
@@ -1161,6 +1147,10 @@ FontWidth PspGraphics::ToFontWidth (psp::width::type eWidth)
         case psp::width::Expanded:       return WIDTH_EXPANDED;
         case psp::width::ExtraExpanded:  return WIDTH_EXTRA_EXPANDED;
         case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
+        case psp::width::Unknown:        return WIDTH_DONTKNOW;
+        default:
+            DBG_ERROR( "unknown width mapping" );
+            break;
     }
     return WIDTH_DONTKNOW;
 }
@@ -1179,6 +1169,10 @@ FontWeight PspGraphics::ToFontWeight (psp::weight::type eWeight)
         case psp::weight::Bold:       return WEIGHT_BOLD;
         case psp::weight::UltraBold:  return WEIGHT_ULTRABOLD;
         case psp::weight::Black:      return WEIGHT_BLACK;
+        case psp::weight::Unknown:    return WEIGHT_DONTKNOW;
+        default:
+            DBG_ERROR( "unknown weight mapping" );
+            break;
     }
     return WEIGHT_DONTKNOW;
 }
@@ -1189,6 +1183,10 @@ FontPitch PspGraphics::ToFontPitch (psp::pitch::type ePitch)
     {
         case psp::pitch::Fixed:     return PITCH_FIXED;
         case psp::pitch::Variable:  return PITCH_VARIABLE;
+        case psp::pitch::Unknown:   return PITCH_DONTKNOW;
+        default:
+            DBG_ERROR( "unknown pitch mapping" );
+            break;
     }
     return PITCH_DONTKNOW;
 }
@@ -1200,6 +1198,10 @@ FontItalic PspGraphics::ToFontItalic (psp::italic::type eItalic)
         case psp::italic::Upright:  return ITALIC_NONE;
         case psp::italic::Oblique:  return ITALIC_OBLIQUE;
         case psp::italic::Italic:   return ITALIC_NORMAL;
+        case psp::italic::Unknown:  return ITALIC_DONTKNOW;
+        default:
+            DBG_ERROR( "unknown italic mapping" );
+            break;
     }
     return ITALIC_DONTKNOW;
 }
@@ -1214,6 +1216,10 @@ FontFamily PspGraphics::ToFontFamily (psp::family::type eFamily)
         case psp::family::Script:     return FAMILY_SCRIPT;
         case psp::family::Swiss:      return FAMILY_SWISS;
         case psp::family::System:     return FAMILY_SYSTEM;
+        case psp::family::Unknown:    return FAMILY_DONTKNOW;
+        default:
+            DBG_ERROR( "unknown family mapping" );
+            break;
     }
     return FAMILY_DONTKNOW;
 }
