@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:08:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,8 @@ StreamStr::StreamStr( size_type         i_nGuessedCapacity,
 }
 
 StreamStr::StreamStr( const self & i_rOther )
-    :   nCapacity1( i_rOther.nCapacity1 ),
+    :   bostream(),
+        nCapacity1( i_rOther.nCapacity1 ),
         dpData( new char [i_rOther.nCapacity1] ),
         pEnd( dpData + strlen(i_rOther.dpData) ),
         pCur( dpData + i_rOther.tellp() ),
@@ -661,7 +662,7 @@ StreamStr::to_lower( position_type       i_nStart,
               pChange != pStop;
               ++pChange )
         {
-            *pChange =  (*pChange & char(0x80)) == '\0'
+            *pChange =  (static_cast< unsigned char >(*pChange) & 0x80) == 0
                             ?   cLower[ UINT8(*pChange) ]
                             :   *pChange;
         }
@@ -692,7 +693,7 @@ StreamStr::to_upper( position_type       i_nStart,
               pChange != pStop;
               ++pChange )
         {
-            *pChange =  (*pChange & char(0x80)) == '\0'
+            *pChange =  (static_cast< unsigned char >(*pChange) & 0x80) == 0
                             ?   cUpper[ UINT8(*pChange) ]
                             :   *pChange;
         }
@@ -737,6 +738,9 @@ class StreamStrPool
                         StreamStrPool();
                         ~StreamStrPool();
   private:
+    StreamStrPool(StreamStrPool &); // not defined
+    void operator =(StreamStrPool &); // not defined
+
     // Interface to:
     friend class StreamStrLock;
     static StreamStr &  AcquireFromPool_(
