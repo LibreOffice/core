@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlmenucontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:52:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     if ( pResMgr->IsAvailable( aResId ))
     {
         ImageList aImageList( aResId );
-        for (int i=0; i<sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i)
+      for ( sal_uInt32 i=0; i < sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i )
         {
             // das entsprechende Image dran
             if ( m_bShowMenuImages )
@@ -326,7 +326,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
 }
 
 // XEventListener
-void SAL_CALL ControlMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -346,7 +346,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     ResetableGuard aLock( m_aLock );
 
     USHORT nMenuId = 0;
-    for (int i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
+    for (sal_uInt32 i=0; i < sizeof(aCommands)/sizeof(aCommands[0]); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
         {
@@ -369,7 +369,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
         {
             sal_Int16 nSourcePos = m_pResPopupMenu->GetItemPos(nMenuId);
             sal_Int16 nPrevInSource = nSourcePos;
-            sal_Int16 nPrevInConversion = MENU_ITEM_NOTFOUND;
+            sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
             while (nPrevInSource>0)
             {
                 sal_Int16 nPrevId = m_pResPopupMenu->GetItemId(--nPrevInSource);
@@ -392,19 +392,19 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 }
 
 // XMenuListener
-void SAL_CALL ControlMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ControlMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
 void SAL_CALL ControlMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
+    Reference< XDispatch >              xRefDispatch;
     Reference< XMultiServiceFactory >   xServiceManager;
 
     ResetableGuard aLock( m_aLock );
     xPopupMenu      = m_xPopupMenu;
-    xDispatch       = m_xDispatch;
+    xRefDispatch       = m_xDispatch;
     xServiceManager = m_xServiceManager;
     aLock.unlock();
 
@@ -438,7 +438,7 @@ void SAL_CALL ControlMenuController::select( const css::awt::MenuEvent& rEvent )
     }
 }
 
-void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -469,7 +469,7 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& rEvent
     }
 }
 
-void SAL_CALL ControlMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ControlMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -531,7 +531,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
 
-        for (int i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
+        for (sal_uInt32 i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
         {
             aTargetURL.Complete = rtl::OUString::createFromAscii( aCommands[i] );
             xURLTransformer->parseStrict( aTargetURL );
@@ -575,7 +575,6 @@ void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArgumen
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
             m_bInitialized = sal_True;
