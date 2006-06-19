@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:37:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,9 @@ DBG_NAME( OEditBaseModel )
 OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const ::rtl::OUString& rUnoControlModelName,
         const ::rtl::OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
-    ,m_bFilterProposal(sal_False)
-    ,m_bEmptyIsNull(sal_True)
     ,m_nLastReadVersion(0)
+    ,m_bEmptyIsNull(sal_True)
+    ,m_bFilterProposal(sal_False)
 {
     DBG_CTOR( OEditBaseModel, NULL );
 }
@@ -183,7 +183,9 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
     sal_Bool bHandleCommonProps = (nVersion & PF_HANDLE_COMMON_PROPS) != 0;
     nVersion = nVersion & ~PF_SPECIAL_FLAGS;
 
-    sal_uInt16 nOld     = _rxInStream->readShort();
+    // obsolete
+    _rxInStream->readShort();
+
     _rxInStream >> m_aDefaultText;
 
     if (nVersion >= 0x0003)
@@ -417,10 +419,8 @@ Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         case PROPERTY_ID_DEFAULT_TEXT:
             return makeAny(::rtl::OUString());
-            break;
         case PROPERTY_ID_FILTERPROPOSAL:
             return Any(makeAny((sal_Bool)sal_False));
-            break;
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:
