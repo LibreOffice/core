@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rotmodit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:39:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:14:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
@@ -92,8 +91,8 @@ TYPEINIT1_AUTOFACTORY(SvxRotateModeItem,        SfxEnumItem);
 //  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
 //-----------------------------------------------------------------------
 
-SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, USHORT nWhich )
-    : SfxEnumItem( nWhich, eMode )
+SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, USHORT _nWhich )
+    : SfxEnumItem( _nWhich, eMode )
 {
 }
 
@@ -115,7 +114,7 @@ SfxPoolItem* __EXPORT SvxRotateModeItem::Create( SvStream& rStream, USHORT ) con
 
 SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
-                                SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
+                                SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
                                 String& rText, const IntlWrapper * )  const
 {
     rText.Erase();
@@ -130,6 +129,7 @@ SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += UniString::CreateFromInt32( GetValue() );
             break;
+        default: ;//prevent warning
     }
 
     return ePres;
@@ -164,14 +164,14 @@ SfxPoolItem* __EXPORT SvxRotateModeItem::Clone( SfxItemPool* ) const
     return new SvxRotateModeItem( *this );
 }
 
-USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT nFileVersion ) const
+USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
 {
     return 0;
 }
 
 //  QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
 
-sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
     switch ( (SvxRotateMode)GetValue() )
@@ -185,7 +185,7 @@ sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return sal_True;
 }
 
-sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     table::CellVertJustify eUno;
     if(!(rVal >>= eUno))
@@ -203,6 +203,7 @@ sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case table::CellVertJustify_TOP:       eSvx = SVX_ROTATE_MODE_TOP;      break;
         case table::CellVertJustify_CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;    break;
         case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;    break;
+        default: ;//prevent warning
     }
     SetValue( eSvx );
     return sal_True;
