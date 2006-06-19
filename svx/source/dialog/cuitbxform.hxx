@@ -30,7 +30,7 @@ public:
 public:
     FmInputRecordNoDialog(Window * pParent);
 
-    void SetValue(double dNew) { m_aRecordNo.SetValue(dNew); }
+    void SetValue(long dNew) { m_aRecordNo.SetValue(dNew); }
     long GetValue() const { return m_aRecordNo.GetValue(); }
 };
 
