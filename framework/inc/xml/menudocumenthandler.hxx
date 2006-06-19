@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:53:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-// #110897#
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -184,13 +183,11 @@ class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-        int         m_nElementDepth;
-        sal_Bool    m_bMenuBarMode;
-        com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
-        com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
-
-        // #110897#
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
+          int       m_nElementDepth;
+          sal_Bool  m_bMenuBarMode;
+          com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
+          com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
+          const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };  // OReadMenuDocumentHandler
 
 
