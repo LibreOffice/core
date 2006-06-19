@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:22:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@ void callVirtualMethod(
         case typelib_TypeClass_DOUBLE:
             asm ( "fstpl %0\n\t" : : "m"(*(char *)pRegisterReturn) );
             break;
+        default:
+            break;
     }
 }
 
@@ -217,6 +219,9 @@ static void cpp_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
                 pCppStack += sizeof(sal_Int32); // extra long
+                break;
+            default:
+                break;
             }
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -320,15 +325,15 @@ static void cpp_call(
 
 }
 
-//==================================================================================================
-void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
+namespace bridges { namespace cpp_uno { namespace shared {
+
+void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
     {
@@ -440,3 +445,5 @@ void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
     }
     }
 }
+
+} } }
