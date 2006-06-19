@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycontainerhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:46:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,10 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                 if (    uno_type_assignData(
                             const_cast< void* >( aProperlyTyped.getValue() ), aProperlyTyped.getValueType().getTypeLibType(),
                             const_cast< void* >( aNewRequestedValue.getValue() ), aNewRequestedValue.getValueType().getTypeLibType(),
-                            cpp_queryInterface, cpp_acquire, cpp_release
+                            reinterpret_cast< uno_QueryInterfaceFunc >(
+                                cpp_queryInterface),
+                            reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                            reinterpret_cast< uno_ReleaseFunc >(cpp_release)
                         )
                     )
                 {
@@ -317,7 +320,9 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                 bModified = !uno_type_equalData(
                                 const_cast< void* >( pPropContainer->getValue() ), aPos->aType.getTypeLibType(),
                                 const_cast< void* >( aNewRequestedValue.getValue() ), aPos->aType.getTypeLibType(),
-                                cpp_queryInterface, cpp_release
+                                reinterpret_cast< uno_QueryInterfaceFunc >(
+                                    cpp_queryInterface),
+                                reinterpret_cast< uno_ReleaseFunc >(cpp_release)
                             );
 
             if (bModified)
@@ -347,7 +352,10 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                 if (    uno_type_assignData(
                             const_cast<void*>(aProperlyTyped.getValue()), aProperlyTyped.getValueType().getTypeLibType(),
                             const_cast<void*>(_rValue.getValue()), _rValue.getValueType().getTypeLibType(),
-                            cpp_queryInterface, cpp_acquire, cpp_release
+                            reinterpret_cast< uno_QueryInterfaceFunc >(
+                                cpp_queryInterface),
+                            reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                            reinterpret_cast< uno_ReleaseFunc >(cpp_release)
                         )
                     )
                 {
@@ -366,7 +374,9 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
             bModified = !uno_type_equalData(
                             aPos->aLocation.pDerivedClassMember, aPos->aType.getTypeLibType(),
                             const_cast<void*>(pNewValue->getValue()), aPos->aType.getTypeLibType(),
-                            cpp_queryInterface, cpp_release
+                            reinterpret_cast< uno_QueryInterfaceFunc >(
+                                cpp_queryInterface),
+                            reinterpret_cast< uno_ReleaseFunc >(cpp_release)
                         );
 
             if (bModified)
@@ -414,8 +424,9 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
             uno_type_assignData(
                 aPos->aLocation.pDerivedClassMember,        aPos->aType.getTypeLibType(),
                 const_cast< void* >( _rValue.getValue() ),  _rValue.getValueType().getTypeLibType(),
-                cpp_queryInterface,
-                cpp_acquire, cpp_release );
+                reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+                reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
 
             OSL_ENSURE( bSuccess,
                 "OPropertyContainerHelper::setFastPropertyValue: ooops .... the value could not be assigned!");
