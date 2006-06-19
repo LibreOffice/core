@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hgzip.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:34:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-/* $Id: hgzip.cpp,v 1.2 2005-09-07 16:34:25 rt Exp $ */
 
 #include "precompile.h"
 
@@ -76,11 +74,11 @@ local uLong getLong(gz_stream * s);
 gz_stream *gz_open(HStream & _stream)
 {
     int err;
-    int level = Z_DEFAULT_COMPRESSION;            /* compression level */
+    //int level = Z_DEFAULT_COMPRESSION;            /* compression level */
 
 //  char        *p = (char*)mode;
-    char fmode[80];                               /* copy of mode, without the compression level */
-    char *m = fmode;
+    //char fmode[80];                               /* copy of mode, without the compression level */
+    //char *m = fmode;
     gz_stream *s;
 
     s = (gz_stream *) ALLOC(sizeof(gz_stream));
@@ -387,13 +385,13 @@ int gz_close(gz_stream * file)
 }
 
 
-int gz_seek(gz_stream * file, long offset, int whence)
+int gz_seek(gz_stream * , long , int )
 {
     return -1;
 }
 
 
-long gz_tell(gz_stream * file)
+long gz_tell(gz_stream * )
 {
     return -1;
 }
