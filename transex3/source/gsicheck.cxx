@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-15 19:17:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,8 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
     if ( rLine.GetTokenCount( '\t' ) == 15 )
     {
         aFormat = FORMAT_SDF;
-        aUniqId = rLine.GetToken( 0, '\t' ).Append("/").Append( rLine.GetToken( 1, '\t' ) ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 4, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
+        aUniqId = rLine.GetToken( 0, '\t' );
+        aUniqId.Append("/").Append( rLine.GetToken( 1, '\t' ) ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 4, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
         aLineType = "";
         aLangId = rLine.GetToken( 9, '\t' );
         aText = rLine.GetToken( 10, '\t' );
@@ -438,7 +439,9 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
             if ( pSourceLine && !pSourceLine->Equals( *pReferenceLine ) )
             {
                 xub_StrLen nPos = pSourceLine->Match( *pReferenceLine );
-                PrintError( "Source Language Entry has changed.", "File format", pReferenceLine->Copy( nPos - 5, 15).Append( "\" --> \"" ). Append( pSourceLine->Copy( nPos - 5, 15) ), pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
+                ByteString aContext( pReferenceLine->Copy( nPos - 5, 15) );
+                aContext.Append( "\" --> \"" ).Append( pSourceLine->Copy( nPos - 5, 15) );
+                PrintError( "Source Language Entry has changed.", "File format", aContext, pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
                 pSourceLine->NotOK();
                 bHasError = TRUE;
             }
@@ -507,7 +510,7 @@ void GSIBlock::WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine )
         aOkOut.WriteLine( *pSourceLine );
 }
 
-void GSIBlock::WriteFixed( SvStream &aFixOut, BOOL bRequireSourceLine )
+void GSIBlock::WriteFixed( SvStream &aFixOut, BOOL /*bRequireSourceLine*/ )
 {
     if ( pSourceLine && !pSourceLine->IsFixed() && bCheckSourceLang )
         return;
