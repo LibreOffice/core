@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:52:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@ protected:
     virtual long ExpandingHdl();
     virtual BOOL Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
 
+        using SvLBox::ExecuteDrop;
     // new d&d
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
     virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* );
@@ -101,6 +102,7 @@ protected:
     virtual void            DragFinished( sal_Int8 nDropAction );
 
 public:
+        using SvListView::Select;
     enum DataEnum   { VIEW_TEMPLATES, VIEW_FILES } eViewType;
 
     SfxOrganizeListBox_Impl( SfxOrganizeDlg_Impl* pDlg, Window* pParent, WinBits, DataEnum );
