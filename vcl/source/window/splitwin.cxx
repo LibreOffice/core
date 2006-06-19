@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:34:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:40:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ struct ImplSplitSet
 
 // -----------------------------------------------------------------------
 
-DECLARE_LIST( ImplSplitList, SplitWindow* );
+DECLARE_LIST( ImplSplitList, SplitWindow* )
 
 // =======================================================================
 
@@ -873,7 +873,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
 // -----------------------------------------------------------------------
 
 void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, BOOL bHide,
-                                BOOL bRows, BOOL bDown )
+                                BOOL bRows, BOOL /*bDown*/ )
 {
     USHORT          i;
     USHORT          nItems = pSet->mnItems;
@@ -1182,7 +1182,7 @@ static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
 
 USHORT SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                    long& rMouseOff, ImplSplitSet** ppFoundSet, USHORT& rFoundPos,
-                                   BOOL bRows, BOOL bDown )
+                                   BOOL bRows, BOOL /*bDown*/ )
 {
     if ( !pSet->mpItems )
         return 0;
@@ -2704,7 +2704,7 @@ long SplitWindow::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
