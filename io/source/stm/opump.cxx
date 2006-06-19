@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void Pump::close()
         {
             rInput->closeInput();
         }
-        catch( Exception &e )
+        catch( Exception & )
         {
             // go down calm
         }
@@ -253,7 +253,7 @@ void Pump::close()
         {
             rOutput->closeOutput();
         }
-        catch( Exception &e )
+        catch( Exception & )
         {
             // go down calm
         }
@@ -288,8 +288,7 @@ void Pump::run()
                 throw exception;
             }
             Sequence< sal_Int8 > aData;
-            long nBytes;
-            while( nBytes = rInput->readSomeBytes( aData, 65536 ) )
+            while( rInput->readSomeBytes( aData, 65536 ) )
             {
                 if( ! rOutput.is() )
                 {
@@ -489,7 +488,7 @@ Sequence< OUString > Pump::getSupportedServiceNames(void) throw(  )
 }
 
 
-Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception)
+Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XComponentContext > & ) throw (Exception)
 {
     return Reference< XInterface >( *new Pump );
 }
