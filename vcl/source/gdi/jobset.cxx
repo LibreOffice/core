@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:55:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 // =======================================================================
 
-DBG_NAME( JobSetup );
+DBG_NAME( JobSetup )
 
 #define JOBSET_FILEFORMAT2      3780
 #define JOBSET_FILE364_SYSTEM   ((USHORT)0xFFFF)
@@ -313,7 +313,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     {
         USHORT nLen;
         USHORT nSystem;
-        int nFirstPos = rIStream.Tell();
+        sal_Size nFirstPos = rIStream.Tell();
         rIStream >> nLen;
         if ( !nLen )
             return rIStream;
@@ -433,7 +433,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
                 rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
                 rOStream.WriteByteString( it->second, RTL_TEXTENCODING_UTF8 );
             }
-            nLen = rOStream.Tell() - nPos;
+            nLen = sal::static_int_cast<USHORT>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );
             rOStream << nLen;
             rOStream.Seek( nPos + nLen );
