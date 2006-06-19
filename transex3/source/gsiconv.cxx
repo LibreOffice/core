@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsiconv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:00:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,16 +277,16 @@ int _cdecl main( int argc, char *argv[] )
                     sText += " lines written.";
 
                     fprintf( stdout, "%s\n", sText.GetBuffer());
-                    String sOutput( sBase );
-                    sOutput += String( "_", RTL_TEXTENCODING_ASCII_US );
-                    sOutput += String::CreateFromInt64( nOutputFile );
+                    String sOutput1( sBase );
+                    sOutput1 += String( "_", RTL_TEXTENCODING_ASCII_US );
+                    sOutput1 += String::CreateFromInt64( nOutputFile );
                     if ( sExt.Len()) {
-                        sOutput += String( ".", RTL_TEXTENCODING_ASCII_US );
-                        sOutput += sExt;
+                        sOutput1 += String( ".", RTL_TEXTENCODING_ASCII_US );
+                        sOutput1 += sExt;
                     }
                     nOutputFile ++;
 
-                    aOutput.SetName( sOutput );
+                    aOutput.SetName( sOutput1 );
 
                     aOutputStream.Open( aOutput.GetFull(), STREAM_STD_WRITE | STREAM_TRUNC );
                     nLine = 0;
