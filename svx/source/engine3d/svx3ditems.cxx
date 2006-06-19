@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx3ditems.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:43:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
 {}
 
-sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
@@ -303,7 +303,7 @@ Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
 {}
 
-sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
@@ -328,7 +328,7 @@ Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
 {}
 
-sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
@@ -353,7 +353,7 @@ Svx3DCharacterModeItem::Svx3DCharacterModeItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
 {}
 
-sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
@@ -378,7 +378,7 @@ Svx3DCloseFrontItem::Svx3DCloseFrontItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
 {}
 
-sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
@@ -403,7 +403,7 @@ Svx3DCloseBackItem::Svx3DCloseBackItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
 {}
 
-sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
@@ -424,13 +424,13 @@ SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) 
 //////////////////////////////////////////////////////////////////////////////
 
 // Svx3DNormalsKindItem: use drawing::NormalsKind
-sal_Bool Svx3DNormalsKindItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DNormalsKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::NormalsKind)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DNormalsKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DNormalsKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::NormalsKind eVar;
     if(!(rVal >>= eVar))
@@ -439,19 +439,19 @@ sal_Bool Svx3DNormalsKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     return sal_True;
 }
 
-SfxPoolItem* Svx3DNormalsKindItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DNormalsKindItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DNormalsKindItem(*this);
 }
 
 // Svx3DTextureProjectionXItem: use drawing::TextureProjectionMode
-sal_Bool Svx3DTextureProjectionXItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DTextureProjectionXItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureProjectionMode)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DTextureProjectionXItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DTextureProjectionXItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextureProjectionMode eVar;
     if(!(rVal >>= eVar))
@@ -460,19 +460,19 @@ sal_Bool Svx3DTextureProjectionXItem::PutValue( const uno::Any& rVal, BYTE nMemb
     return sal_True;
 }
 
-SfxPoolItem* Svx3DTextureProjectionXItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DTextureProjectionXItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureProjectionXItem(*this);
 }
 
 // Svx3DTextureProjectionYItem: use drawing::TextureProjectionMode
-sal_Bool Svx3DTextureProjectionYItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DTextureProjectionYItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureProjectionMode)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DTextureProjectionYItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DTextureProjectionYItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextureProjectionMode eVar;
     if(!(rVal >>= eVar))
@@ -481,19 +481,19 @@ sal_Bool Svx3DTextureProjectionYItem::PutValue( const uno::Any& rVal, BYTE nMemb
     return sal_True;
 }
 
-SfxPoolItem* Svx3DTextureProjectionYItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DTextureProjectionYItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureProjectionYItem(*this);
 }
 
 // Svx3DTextureKindItem: use drawing::TextureKind
-sal_Bool Svx3DTextureKindItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DTextureKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureKind)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DTextureKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DTextureKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextureKind eVar;
     if(!(rVal >>= eVar))
@@ -502,19 +502,19 @@ sal_Bool Svx3DTextureKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     return sal_True;
 }
 
-SfxPoolItem* Svx3DTextureKindItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DTextureKindItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureKindItem(*this);
 }
 
 // Svx3DTextureModeItem: use drawing:TextureMode
-sal_Bool Svx3DTextureModeItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DTextureModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureMode)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DTextureModeItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DTextureModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextureMode eVar;
     if(!(rVal >>= eVar))
@@ -523,19 +523,19 @@ sal_Bool Svx3DTextureModeItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     return sal_True;
 }
 
-SfxPoolItem* Svx3DTextureModeItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DTextureModeItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DTextureModeItem(*this);
 }
 
 // Svx3DPerspectiveItem: use drawing::ProjectionMode
-sal_Bool Svx3DPerspectiveItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DPerspectiveItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::ProjectionMode)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DPerspectiveItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DPerspectiveItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::ProjectionMode eVar;
     if(!(rVal >>= eVar))
@@ -544,19 +544,19 @@ sal_Bool Svx3DPerspectiveItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     return sal_True;
 }
 
-SfxPoolItem* Svx3DPerspectiveItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DPerspectiveItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DPerspectiveItem(*this);
 }
 
 // Svx3DShadeModeItem: use drawing::ShadeMode
-sal_Bool Svx3DShadeModeItem::QueryValue( uno::Any& rVal, BYTE nMemberId) const
+sal_Bool Svx3DShadeModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::ShadeMode)GetValue();
     return sal_True;
 }
 
-sal_Bool Svx3DShadeModeItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+sal_Bool Svx3DShadeModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::ShadeMode eVar;
     if(!(rVal >>= eVar))
@@ -565,7 +565,7 @@ sal_Bool Svx3DShadeModeItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     return sal_True;
 }
 
-SfxPoolItem* Svx3DShadeModeItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* Svx3DShadeModeItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new Svx3DShadeModeItem(*this);
 }
