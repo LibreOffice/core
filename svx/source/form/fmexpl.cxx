@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:49:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -677,10 +677,10 @@ namespace svxform
     //========================================================================
     DBG_NAME(NavigatorFrame)
     //------------------------------------------------------------------------
-    NavigatorFrame::NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
-                                  Window* pParent )
-      :SfxDockingWindow( pBindings, pMgr, pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
-      ,SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *pBindings )
+    NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                                  Window* _pParent )
+      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
+      ,SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
     {
         DBG_CTOR(NavigatorFrame,NULL);
         SetHelpId( HID_FORM_NAVIGATOR_WIN );
@@ -699,9 +699,9 @@ namespace svxform
     }
 
     //-----------------------------------------------------------------------
-    void NavigatorFrame::Update( FmFormShell* pFormShell )
+    void NavigatorFrame::UpdateContent( FmFormShell* pFormShell )
     {
-        m_pNavigatorTree->Update( pFormShell );
+        m_pNavigatorTree->UpdateContent( pFormShell );
     }
 
     //-----------------------------------------------------------------------
@@ -713,10 +713,10 @@ namespace svxform
         if( eState >= SFX_ITEM_AVAILABLE )
         {
             FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
-            Update( pShell );
+            UpdateContent( pShell );
         }
         else
-            Update( NULL );
+            UpdateContent( NULL );
     }
 
     //-----------------------------------------------------------------------
@@ -731,7 +731,7 @@ namespace svxform
     //-----------------------------------------------------------------------
     sal_Bool NavigatorFrame::Close()
     {
-        Update( NULL );
+        UpdateContent( NULL );
         return SfxDockingWindow::Close();
     }
 
@@ -745,33 +745,18 @@ namespace svxform
     //-----------------------------------------------------------------------
     Size NavigatorFrame::CalcDockingSize( SfxChildAlignment eAlign )
     {
-        Size aSize = SfxDockingWindow::CalcDockingSize( eAlign );
+        if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
+            return Size();
 
-        switch( eAlign )
-        {
-            case SFX_ALIGN_TOP:
-            case SFX_ALIGN_BOTTOM:
-                return Size();
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_RIGHT:
-                break;
-        }
-
-        return aSize;
+        return SfxDockingWindow::CalcDockingSize( eAlign );
     }
 
     //-----------------------------------------------------------------------
-    SfxChildAlignment NavigatorFrame::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
+    SfxChildAlignment NavigatorFrame::CheckAlignment( SfxChildAlignment _eActAlign, SfxChildAlignment _eAlign )
     {
-        switch (eAlign)
-        {
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_RIGHT:
-            case SFX_ALIGN_NOALIGNMENT:
-                return (eAlign);
-        }
-
-        return (eActAlign);
+        if ( ( _eAlign == SFX_ALIGN_LEFT ) || ( _eAlign == SFX_ALIGN_RIGHT ) || ( _eAlign == SFX_ALIGN_NOALIGNMENT ) )
+            return _eAlign;
+        return _eActAlign;
     }
 
     //------------------------------------------------------------------------
@@ -799,13 +784,13 @@ namespace svxform
     SFX_IMPL_DOCKINGWINDOW( NavigatorFrameManager, SID_FM_SHOW_FMEXPLORER )
 
     //-----------------------------------------------------------------------
-    NavigatorFrameManager::NavigatorFrameManager( Window *pParent, sal_uInt16 nId,
-                                        SfxBindings *pBindings, SfxChildWinInfo* pInfo )
-                     :SfxChildWindow( pParent, nId )
+    NavigatorFrameManager::NavigatorFrameManager( Window* _pParent, sal_uInt16 _nId,
+                                        SfxBindings* _pBindings, SfxChildWinInfo* _pInfo )
+                     :SfxChildWindow( _pParent, _nId )
     {
-        pWindow = new NavigatorFrame( pBindings, this, pParent );
+        pWindow = new NavigatorFrame( _pBindings, this, _pParent );
         eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-        ((SfxDockingWindow*)pWindow)->Initialize( pInfo );
+        ((SfxDockingWindow*)pWindow)->Initialize( _pInfo );
     }
 
 //............................................................................
