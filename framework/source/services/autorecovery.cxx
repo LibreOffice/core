@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:43:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ class DbgListener : private ThreadHelpBase
 {
     public:
 
-        DECLARE_XINTERFACE
+        FWK_DECLARE_XINTERFACE
 
         DbgListener()
         {
@@ -388,7 +388,7 @@ class DbgListener : private ThreadHelpBase
             WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg2.makeStringAndClear()))
         }
 
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+        virtual void SAL_CALL disposing(const css::lang::EventObject&)
             throw(css::uno::RuntimeException)
         {
             WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::dtor()\n\n")
@@ -669,15 +669,15 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFa
     , ::cppu::OPropertySetHelper( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
     , ::cppu::OWeakObject       (                                                   )
     , m_xSMGR                   (xSMGR                                              )
-    , m_nAutoSaveTimeIntervall  (0                                                  )
-    , m_eTimerType              (E_DONT_START_TIMER                                 )
-    , m_lListener               (m_aLock.getShareableOslMutex()                     )
-    , m_nIdPool                 (0                                                  )
-    , m_aAsyncDispatcher        ( LINK( this, AutoRecovery, implts_asyncDispatch )  )
-    , m_eJob                    (AutoRecovery::E_NO_JOB                             )
-    , m_nDocCacheLock           (0                                                  )
     , m_bListenForDocEvents     (sal_False                                          )
     , m_bListenForConfigChanges (sal_False                                          )
+    , m_nAutoSaveTimeIntervall  (0                                                  )
+    , m_eJob                    (AutoRecovery::E_NO_JOB                             )
+    , m_aAsyncDispatcher        ( LINK( this, AutoRecovery, implts_asyncDispatch )  )
+    , m_eTimerType              (E_DONT_START_TIMER                                 )
+    , m_nIdPool                 (0                                                  )
+    , m_lListener               (m_aLock.getShareableOslMutex()                     )
+    , m_nDocCacheLock           (0                                                  )
     , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
     , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
 
@@ -782,7 +782,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         {
             LOG_RECOVERY("... prepare emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
-            implts_prepareEmergencySave(aParams);
+            implts_prepareEmergencySave();
         }
         else
         if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
@@ -1591,7 +1591,7 @@ void AutoRecovery::implts_stopTimer()
 }
 
 //-----------------------------------------------
-IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
+IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
 {
     try
     {
@@ -1693,7 +1693,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
 }
 
 //-----------------------------------------------
-IMPL_LINK(AutoRecovery, implts_asyncDispatch, void*, pVoid)
+IMPL_LINK(AutoRecovery, implts_asyncDispatch, void*, EMPTYARG)
 {
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
@@ -1871,8 +1871,8 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);
 
-    implts_removeTempFile(aInfo.OldTempURL, aInfo.AppModule);
-    implts_removeTempFile(aInfo.NewTempURL, aInfo.AppModule);
+    implts_removeTempFile(aInfo.OldTempURL);
+    implts_removeTempFile(aInfo.NewTempURL);
     implts_flushConfigItem(aInfo, sal_True); // TRUE => remove it from config
 }
 
@@ -1986,8 +1986,6 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     rInfo.UsedForSaving = sal_False;
 
-    ::rtl::OUString sAppModule = rInfo.AppModule;
-
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -1995,8 +1993,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     aCacheLock.unlock();
 
-    implts_removeTempFile(sRemoveURL1, sAppModule);
-    implts_removeTempFile(sRemoveURL2, sAppModule);
+    implts_removeTempFile(sRemoveURL1);
+    implts_removeTempFile(sRemoveURL2);
 }
 
 //-----------------------------------------------
@@ -2372,9 +2370,9 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
                 // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
                 // SAFE ->
-                ReadGuard aReadLock(m_aLock);
+                ReadGuard aReadLock2(m_aLock);
                 sal_Int32 nMinSpaceDocSave = m_nMinSpaceDocSave;
-                aReadLock.unlock();
+                aReadLock2.unlock();
                 // <- SAFE
 
                 if (! impl_enoughDiscSpace(nMinSpaceDocSave))
@@ -2424,7 +2422,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // We must know if the user modifies the document again ...
     implts_startModifyListeningOnDoc(rInfo);
 
-    implts_removeTempFile(sRemoveFile, rInfo.AppModule);
+    implts_removeTempFile(sRemoveFile);
 }
 
 //-----------------------------------------------
@@ -2684,7 +2682,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
 
 //-----------------------------------------------
 void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&               sBackupPath     ,
-                                                   ::comphelper::MediaDescriptor& rMediaDescriptor,
+                                                   ::comphelper::MediaDescriptor& /*rMediaDescriptor*/,
                                                    AutoRecovery::TDocumentInfo&   rInfo           )
 {
     // SAFE -> ----------------------------------
@@ -2726,35 +2724,10 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_removeTempFile(const ::rtl::OUString& sURL      ,
-                                         const ::rtl::OUString& sAppModule)
+void AutoRecovery::implts_removeTempFile(const ::rtl::OUString& sURL)
 {
     if (!sURL.getLength())
         return;
-
-    /* #120150#
-        Normaly the temp files are owned by the model after loading ...
-        So they are removed from disc after closing the model.
-        But this is a new design ... and currently only implemented by
-        SFX based applications.
-
-        For non SFX based applications the AutoRecovery service itself has to make sure
-        that all temp. files will be removed from disc.
-
-        :-) Nice idea ... but taking over the owner ship to the document has one disadvantage ...
-        Only the first temp. file used for recovery load is owned by the document.
-        All further saved temp. files (saved e.g. by an AutoSave) wont be remopved from disc.
-        That can be reached only if the AutoRecovery service own's these files. But then we have to implement
-        a ref counted owner ship for temp files .... not realy the best idea we had .-)
-
-        So we decided to copy all temp files and us copies for loading.
-        And this is done inside the SFX ... and its done only in case a recovery load is forced.
-        That can be detected on the set SALVAGE item inside the MediaDescriptor.
-    */
-    /*
-    if ( ! sAppModule.equalsAscii("com.sun.star.sdb.OfficeDatabaseDocument"))
-        return;
-    */
 
     try
     {
@@ -2920,7 +2893,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_resetHandleStates(sal_Bool bLoadCache)
+void AutoRecovery::implts_resetHandleStates(sal_Bool /*bLoadCache*/)
 {
     CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
@@ -2948,7 +2921,7 @@ void AutoRecovery::implts_resetHandleStates(sal_Bool bLoadCache)
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_prepareEmergencySave(const DispatchParams& aParams)
+void AutoRecovery::implts_prepareEmergencySave()
 {
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
@@ -3131,7 +3104,9 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
             continue; // nothing real to save! An unmodified but new created document.
 
         INetURLObject aParser(sSourceURL);
-        AutoRecovery::EFailureSafeResult eResult = implts_copyFile(sSourceURL, aParams.m_sSavePath, aParser.getName());
+        // AutoRecovery::EFailureSafeResult eResult =
+        implts_copyFile(sSourceURL, aParams.m_sSavePath, aParser.getName());
+
         // TODO: Check eResult and react for errors (InteractionHandler!?)
         // Currently we ignore it ...
         // DONT UPDATE THE CACHE OR REMOVE ANY TEMP. FILES FROM DISK.
@@ -3154,8 +3129,8 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
         if (rInfo.ID != aParams.m_nWorkingEntryID)
             continue;
 
-        implts_removeTempFile(rInfo.OldTempURL, rInfo.AppModule);
-        implts_removeTempFile(rInfo.NewTempURL, rInfo.AppModule);
+        implts_removeTempFile(rInfo.OldTempURL);
+        implts_removeTempFile(rInfo.NewTempURL);
         implts_flushConfigItem(rInfo, sal_True); // TRUE => remove it from xml config!
 
         m_lDocCache.erase(pIt);
@@ -3200,10 +3175,10 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 }
 
 //-----------------------------------------------
-sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& aConvertedValue,
-                                                               css::uno::Any&   aOldValue      ,
-                                                               sal_Int32        nHandle        ,
-                                                         const css::uno::Any&   aValue         )
+sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*aConvertedValue*/,
+                                                               css::uno::Any& /*aOldValue*/      ,
+                                                               sal_Int32      /*nHandle*/        ,
+                                                         const css::uno::Any& /*aValue*/         )
     throw(css::lang::IllegalArgumentException)
 {
     // not needed currently
@@ -3211,8 +3186,8 @@ sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& aC
 }
 
 //-----------------------------------------------
-void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
-                                                             const css::uno::Any& aValue )
+void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
+                                                             const css::uno::Any& /*aValue*/ )
     throw(css::uno::Exception)
 {
     // not needed currently
