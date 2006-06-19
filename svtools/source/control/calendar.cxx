@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:58:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ struct ImplDateInfo
                 ~ImplDateInfo() { delete mpTextColor; delete mpFrameColor; }
 };
 
-DECLARE_TABLE( ImplDateTable, ImplDateInfo* );
+DECLARE_TABLE( ImplDateTable, ImplDateInfo* )
 
 // =======================================================================
 
@@ -1007,8 +1007,8 @@ void Calendar::ImplDraw( BOOL bPaint )
     long        j;
     long        nX;
     long        nY;
-    long        nOffX;
-    long        nOffY;
+    long        nDeltaX;
+    long        nDeltaY;
     long        nDayX;
     long        nDayY;
     ULONG       nToday = Date().GetDate();
@@ -1078,8 +1078,8 @@ void Calendar::ImplDraw( BOOL bPaint )
             nYear   = aDate.GetYear();
 
             // Monat in der Titleleiste ausgeben
-            nOffX = nX;
-            nOffY = nY+TITLE_BORDERY;
+            nDeltaX = nX;
+            nDeltaY = nY+TITLE_BORDERY;
             String aMonthText( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 1));
             aMonthText += ' ';
@@ -1106,16 +1106,16 @@ void Calendar::ImplDraw( BOOL bPaint )
             }
             long nTempOff = (mnMonthWidth-nMonthTextWidth+1)/2;
             if ( nTempOff < nMonthOffX1 )
-                nOffX += nMonthOffX1+1;
+                nDeltaX += nMonthOffX1+1;
             else
             {
                 if ( nTempOff+nMonthTextWidth > mnMonthWidth-nMonthOffX2 )
-                    nOffX += mnMonthWidth-nMonthOffX2-nMonthTextWidth;
+                    nDeltaX += mnMonthWidth-nMonthOffX2-nMonthTextWidth;
                 else
-                    nOffX += nTempOff;
+                    nDeltaX += nTempOff;
             }
             SetTextColor( rStyleSettings.GetButtonTextColor() );
-            DrawText( Point( nOffX, nOffY ), aMonthText );
+            DrawText( Point( nDeltaX, nDeltaY ), aMonthText );
             SetTextColor( rStyleSettings.GetWindowTextColor() );
 
             // Weekleiste ausgeben
@@ -1123,12 +1123,12 @@ void Calendar::ImplDraw( BOOL bPaint )
             {
                 nDayX = nX+mnDaysOffX;
                 nDayY = nY+mnWeekDayOffY;
-                nOffY = nDayY + mnDayHeight;
+                nDeltaY = nDayY + mnDayHeight;
                 SetLineColor( rStyleSettings.GetWindowTextColor() );
-                Point aStartPos( nDayX, nOffY );
+                Point aStartPos( nDayX, nDeltaY );
                 if ( mnWinStyle & WB_WEEKNUMBER )
                     aStartPos.X() -= WEEKNUMBER_OFFX-2;
-                DrawLine( aStartPos, Point( nDayX+(7*mnDayWidth), nOffY ) );
+                DrawLine( aStartPos, Point( nDayX+(7*mnDayWidth), nDeltaY ) );
                 DrawTextArray( Point( nDayX+mnDayOfWeekAry[0], nDayY ), maDayOfWeekText, &(mnDayOfWeekAry[1]) );
             }
 
@@ -1137,12 +1137,12 @@ void Calendar::ImplDraw( BOOL bPaint )
             {
                 nDayX = nX+mnDaysOffX;
                 nDayY = nY+mnWeekDayOffY;
-                nOffY = nDayY + mnDayHeight;
+                nDeltaY = nDayY + mnDayHeight;
                 long nMonthHeight = mnDayHeight*6;
                 if ( bPaint )
-                    DrawLine( Point( nDayX-WEEKNUMBER_OFFX+2, nOffY ), Point( nDayX-WEEKNUMBER_OFFX+2, nOffY+nMonthHeight ) );
+                    DrawLine( Point( nDayX-WEEKNUMBER_OFFX+2, nDeltaY ), Point( nDayX-WEEKNUMBER_OFFX+2, nDeltaY+nMonthHeight ) );
                 else
-                    Erase( Rectangle( nDayX-mnWeekWidth-WEEKNUMBER_OFFX, nOffY, nDayX-WEEKNUMBER_OFFX-1, nOffY+nMonthHeight ) );
+                    Erase( Rectangle( nDayX-mnWeekWidth-WEEKNUMBER_OFFX, nDeltaY, nDayX-WEEKNUMBER_OFFX-1, nDeltaY+nMonthHeight ) );
 
                 Font aOldFont = GetFont();
                 Font aTempFont = aOldFont;
@@ -1182,16 +1182,16 @@ void Calendar::ImplDraw( BOOL bPaint )
                 aTempDate -= nDayIndex;
                 for ( nDay = 0; nDay < nDayIndex; nDay++ )
                 {
-                    nOffX = nDayX + (nDay*mnDayWidth);
-                    ImplDrawDate( nOffX, nDayY, nDay+aTempDate.GetDay(),
+                    nDeltaX = nDayX + (nDay*mnDayWidth);
+                    ImplDrawDate( nDeltaX, nDayY, nDay+aTempDate.GetDay(),
                                   aTempDate.GetMonth(), aTempDate.GetYear(),
                                   (DayOfWeek)((nDay+(USHORT)eStartDay)%7), FALSE, TRUE, nToday );
                 }
             }
             for ( nDay = 1; nDay <= nDaysInMonth; nDay++ )
             {
-                nOffX = nDayX + (nDayIndex*mnDayWidth);
-                ImplDrawDate( nOffX, nDayY, nDay, nMonth, nYear,
+                nDeltaX = nDayX + (nDayIndex*mnDayWidth);
+                ImplDrawDate( nDeltaX, nDayY, nDay, nMonth, nYear,
                               (DayOfWeek)((nDayIndex+(USHORT)eStartDay)%7),
                               FALSE, FALSE, nToday );
                 if ( nDayIndex == 6 )
@@ -1211,8 +1211,8 @@ void Calendar::ImplDraw( BOOL bPaint )
                 aTempDate += nDaysInMonth;
                 for ( nDay = 1; nDay <= nDayCount; nDay++ )
                 {
-                    nOffX = nDayX + (nDayIndex*mnDayWidth);
-                    ImplDrawDate( nOffX, nDayY, nDay,
+                    nDeltaX = nDayX + (nDayIndex*mnDayWidth);
+                    ImplDrawDate( nDeltaX, nDayY, nDay,
                                   aTempDate.GetMonth(), aTempDate.GetYear(),
                                   (DayOfWeek)((nDayIndex+(USHORT)eStartDay)%7),
                                   FALSE, TRUE, nToday );
@@ -1545,7 +1545,7 @@ void Calendar::ImplTracking( const Point& rPos, BOOL bRepeat )
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplEndTracking( const Point& rPos, BOOL bCancel )
+void Calendar::ImplEndTracking( BOOL bCancel )
 {
     BOOL bSelection = mbSelection;
     BOOL bSpinDown = mbSpinDown;
@@ -1613,7 +1613,7 @@ void Calendar::ImplEndTracking( const Point& rPos, BOOL bCancel )
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK( Calendar, ScrollHdl, Timer*, pTimer )
+IMPL_STATIC_LINK( Calendar, ScrollHdl, Timer*, EMPTYARG )
 {
     BOOL bPrevIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_PREV) != 0;
     BOOL bNextIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
@@ -1694,7 +1694,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
 void Calendar::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && mbSelection )
-        ImplEndTracking( rMEvt.GetPosPixel(), FALSE );
+        ImplEndTracking( FALSE );
     else
         Control::MouseButtonUp( rMEvt );
 }
@@ -1716,7 +1716,7 @@ void Calendar::Tracking( const TrackingEvent& rTEvt )
     Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
 
     if ( rTEvt.IsTrackingEnded() )
-        ImplEndTracking( aMousePos, rTEvt.IsTrackingCanceled() );
+        ImplEndTracking( rTEvt.IsTrackingCanceled() );
     else
         ImplTracking( aMousePos, rTEvt.IsTrackingRepeat() );
 }
@@ -1840,7 +1840,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-void Calendar::Paint( const Rectangle& rRect )
+void Calendar::Paint( const Rectangle& )
 {
     ImplDraw( TRUE );
 }
