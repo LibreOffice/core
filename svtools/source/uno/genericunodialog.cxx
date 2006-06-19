@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:37:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,6 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
             }
             return sal_False;
         }
-        break;
     }
     return OPropertyContainer::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
 }
@@ -261,7 +260,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
                 // high on the stack, with no mutex locked above, so we try to behave the same way here
 
             {
-                ::vos::OGuard aGuard(Application::GetSolarMutex());
+                ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
                 pDialogToExecute = createDialog(pParent);
                 OSL_ENSURE( pDialogToExecute, "OGenericUnoDialog::execute: createDialog returned nonsense!" );
                 // do some initialisations
