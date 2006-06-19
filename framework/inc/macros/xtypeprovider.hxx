@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtypeprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:25:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ ________________________________________________________________________________
 //  public
 //  declaration of XTypeProvider
 //*****************************************************************************************************************
-#define DECLARE_XTYPEPROVIDER                                                                                                                               \
+#define FWK_DECLARE_XTYPEPROVIDER                                                                                                                               \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes           () throw( ::com::sun::star::uno::RuntimeException );\
     virtual ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException );
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xinterface.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:24:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,11 +192,13 @@ ________________________________________________________________________________
 //  private
 //  help macros to replace INTERFACES in queryInterface() [see before]
 //*****************************************************************************************************************
-//#ifdef ENABLE_SERVICEDEBUG
-//  #define PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 )                                                                                                                                                    \
-//      static_cast< XSPECIALDEBUGINTERFACE##* >( this ),                                                                                                                                               \
-//      INTERFACE1
-//#else
+/*
+#ifdef ENABLE_SERVICEDEBUG
+    #define PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 )     \
+        static_cast< XSPECIALDEBUGINTERFACE##* >( this ), \
+        INTERFACE1
+#else
+*/
     #define PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 )                                                                                                                                                    \
         INTERFACE1
 //#endif // #ifdef ENABLE_SERVICEDEBUG
@@ -259,7 +261,7 @@ ________________________________________________________________________________
 //  public
 //  declaration of XInterface
 //*****************************************************************************************************************
-#define DECLARE_XINTERFACE                                                                                                                                      \
+#define FWK_DECLARE_XINTERFACE                                                                                                                                      \
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType   ) throw( ::com::sun::star::uno::RuntimeException ); \
     virtual void                        SAL_CALL acquire       (                                            ) throw();  \
     virtual void                        SAL_CALL release       (                                            ) throw();
