@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:04:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,14 @@
 // =======================================================================
 
 ImplFontMetric::ImplFontMetric()
-:   mnRefCount( 1 ),
-    mnMiscFlags( 0 ),
-    mnAscent( 0 ),
+:   mnAscent( 0 ),
     mnDescent( 0 ),
     mnIntLeading( 0 ),
     mnExtLeading( 0 ),
     mnLineHeight( 0 ),
-    mnSlant( 0 )
+    mnSlant( 0 ),
+    mnMiscFlags( 0 ),
+    mnRefCount( 1 )
 {}
 
 // -----------------------------------------------------------------------
