@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:03:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
@@ -174,8 +173,8 @@ sal_Unicode& getSelectedChar()
 
 SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId )
-    ,aVscrollSB( this, WB_VERT)
     ,m_pAccessible(NULL)
+    ,aVscrollSB( this, WB_VERT)
 {
     nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
 
@@ -325,8 +324,9 @@ int SvxShowCharSet::LastInView( void ) const
 {
     ULONG nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    if( nIndex > maFontCharMap.GetCharCount() - 1 )
-        nIndex = maFontCharMap.GetCharCount() - 1;
+    ULONG nCompare = sal::static_int_cast<ULONG>( maFontCharMap.GetCharCount() - 1 );
+    if( nIndex > nCompare )
+        nIndex = nCompare;
     return nIndex;
 }
 
@@ -946,20 +946,20 @@ SvxShowText::~SvxShowText()
 SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
 :   mpDialog( pDialog ),
     aShowSet        ( pDialog, ResId( CT_SHOWSET ) ),
+    aShowText       ( pDialog, ResId( CT_SHOWTEXT ) ),
+    aOKBtn          ( pDialog, ResId( BTN_CHAR_OK ) ),
+    aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL ) ),
+    aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP ) ),
+    aDeleteBtn      ( pDialog, ResId( BTN_DELETE ) ),
     aFontText       ( pDialog, ResId( FT_FONT ) ),
     aFontLB         ( pDialog, ResId( LB_FONT ) ),
     aSubsetText     ( pDialog, ResId( FT_SUBSET ) ),
     aSubsetLB       ( pDialog, ResId( LB_SUBSET ) ),
     aSymbolText     ( pDialog, ResId( FT_SYMBOLE ) ),
-    aShowText       ( pDialog, ResId( CT_SHOWTEXT ) ),
     aShowChar       ( pDialog, ResId( CT_SHOWCHAR ), TRUE ),
     aCharCodeText   ( pDialog, ResId( FT_CHARCODE ) ),
-    aOKBtn          ( pDialog, ResId( BTN_CHAR_OK ) ),
-    aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL ) ),
-    aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP ) ),
-    aDeleteBtn      ( pDialog, ResId( BTN_DELETE ) ),
-    pSubsetMap( NULL ),
-    bOne( bOne_ )
+    bOne( bOne_ ),
+    pSubsetMap( NULL )
 {
     aFont = pDialog->GetFont();
     aFont.SetTransparent( TRUE );
@@ -1123,11 +1123,11 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
         const Subset* s;
         while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
-            USHORT nPos = aSubsetLB.InsertEntry( s->GetName() );
-            aSubsetLB.SetEntryData( nPos, (void*)s );
+            USHORT nPos_ = aSubsetLB.InsertEntry( s->GetName() );
+            aSubsetLB.SetEntryData( nPos_, (void*)s );
             // NOTE: subset must live at least as long as the selected font
             if( bFirst )
-                aSubsetLB.SelectEntryPos( nPos );
+                aSubsetLB.SelectEntryPos( nPos_ );
             bFirst = false;
         }
         if( aSubsetLB.GetEntryCount() <= 1 )
