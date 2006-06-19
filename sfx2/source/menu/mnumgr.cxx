@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:18:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,12 +262,11 @@ BOOL SfxMenuIter_Impl::IsBinding( SfxModule* pMod ) const
 //--------------------------------------------------------------------
 
 SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings )
-:   //SfxConfigItem( rResId.GetId(), pMgr ),
-    nType( rResId.GetId() ),
-    pMenu(0),
+:   pMenu(0),
     pOldMenu(0),
     pBindings(&rBindings),
-    pResMgr(rResId.GetResMgr())
+    pResMgr(rResId.GetResMgr()),
+    nType( rResId.GetId() )
 {
     bAddClipboardFuncs = FALSE;
     DBG_MEMTEST();
@@ -754,12 +753,12 @@ void SfxMenuManager::LeavePopup()
 //--------------------------------------------------------------------
 
 // executes the function for the selected item
-IMPL_LINK( SfxMenuManager, Select, Menu *, pMenu )
+IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
 {
     DBG_MEMTEST();
 
-    USHORT nId = (USHORT) pMenu->GetCurItemId();
-    String aCommand = pMenu->GetItemCommand( nId );
+    USHORT nId = (USHORT) pSelMenu->GetCurItemId();
+    String aCommand = pSelMenu->GetItemCommand( nId );
     if ( aCommand.Len() )
     {
         pBindings->ExecuteCommand_Impl( aCommand );
@@ -1337,11 +1336,11 @@ USHORT SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
 
 //--------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxPopupMenuManager, SelectHdl, void *, pvoid )
+IMPL_LINK_INLINE_START( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
 {
     return 1;
 }
-IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, pvoid )
+IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
 
 
 //--------------------------------------------------------------------
@@ -1350,10 +1349,10 @@ USHORT SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_li
 {
     DBG_MEMTEST();
 
-    PopupMenu* pMenu = ( (PopupMenu*)GetMenu()->GetSVMenu() );
-    pMenu->SetSelectHdl( LINK( this, SfxPopupMenuManager, SelectHdl ) );
-    USHORT nId = pMenu->Execute( pWindow, rPoint );
-    pMenu->SetSelectHdl( Link() );
+    PopupMenu* pPopMenu = ( (PopupMenu*)GetMenu()->GetSVMenu() );
+    pPopMenu->SetSelectHdl( LINK( this, SfxPopupMenuManager, SelectHdl ) );
+    USHORT nId = pPopMenu->Execute( pWindow, rPoint );
+    pPopMenu->SetSelectHdl( Link() );
 
     if ( nId )
         GetBindings().GetDispatcher()->_Execute( nId, SFX_CALLMODE_RECORD, pArgs, pArg1 );
@@ -1482,22 +1481,21 @@ BOOL SfxMenuBarManager::Store( SotStorage& rStorage )
         return StoreMenuBar( *xStream, (MenuBar*) GetMenu()->GetSVMenu() );
 }
 */
-SfxMenuManager::SfxMenuManager( Menu* pMenu, SfxBindings &rBindings )
-:
-    nType(0),
-    pMenu(0),
+SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
+:   pMenu(0),
     pOldMenu(0),
+    pBindings(&rBindings),
     pResMgr(NULL),
-    pBindings(&rBindings)
+    nType(0)
 {
     bAddClipboardFuncs = FALSE;
-    SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenu, FALSE, rBindings, TRUE, TRUE );
+    SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenuArg, FALSE, rBindings, TRUE, TRUE );
     Construct(*pVMenu);
 }
 
-SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenu, SfxBindings& rBindings )
-    : SfxMenuManager( pMenu, rBindings )
-    , pSVMenu( pMenu )
+SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenuArg, SfxBindings& rBindings )
+    : SfxMenuManager( pMenuArg, rBindings )
+    , pSVMenu( pMenuArg )
 {
 }
 
