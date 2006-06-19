@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:22:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ XHatchEntry* XHatchTable::Remove(long nIndex)
 
 /************************************************************************/
 
-XHatchEntry* XHatchTable::Get(long nIndex) const
+XHatchEntry* XHatchTable::GetHatch(long nIndex) const
 {
     return (XHatchEntry*) XPropertyTable::Get(nIndex, 0);
 }
@@ -163,7 +163,7 @@ BOOL XHatchTable::CreateBitmapsForUI()
 
 /************************************************************************/
 
-Bitmap* XHatchTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XHatchTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -301,7 +301,7 @@ XHatchEntry* XHatchList::Remove(long nIndex)
 
 /************************************************************************/
 
-XHatchEntry* XHatchList::Get(long nIndex) const
+XHatchEntry* XHatchList::GetHatch(long nIndex) const
 {
     return (XHatchEntry*) XPropertyList::Get(nIndex, 0);
 }
@@ -503,7 +503,7 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, BOOL bDelete )
     aVDSize.Height() -= (long) ( aVDSize.Height() / aPixelSize.Height() + 1 );
 
     pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_HATCH ) );
-    pXFSet->GetItemSet().Put( XFillHatchItem( String(), Get( nIndex )->GetHatch() ) );
+    pXFSet->GetItemSet().Put( XFillHatchItem( String(), GetHatch( nIndex )->GetHatch() ) );
 
 //-/    pXOut->SetFillAttr( *pXFSet );
     pXOut->SetFillAttr( pXFSet->GetItemSet() );
