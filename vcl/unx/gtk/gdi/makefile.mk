@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:37:10 $
+#   last change: $Author: hr $ $Date: 2006-06-19 19:44:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ dummy:
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE : pkg_config.mk
 
-SLOFILES=\
-            $(SLO)$/salnativewidgets-gtk.obj
+SLOFILES=$(SLO)$/salnativewidgets-gtk.obj
+EXCEPTIONSFILES=$(SLO)$/salnativewidgets-gtk.obj
 
 .ELSE # "$(ENABLE_GTK)" != ""
 dummy:
