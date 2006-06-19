@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loaddispatcher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:20:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,10 +77,10 @@ LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::lang::XMultiServi
                                      sal_Int32                                               nSearchFlags)
     : ThreadHelpBase(            )
     , m_xSMGR       (xSMGR       )
-    , m_aLoader     (xSMGR       )
     , m_xOwnerFrame (xOwnerFrame )
     , m_sTarget     (sTargetName )
     , m_nSearchFlags(nSearchFlags)
+    , m_aLoader     (xSMGR       )
 {
 }
 
@@ -171,8 +171,8 @@ void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                    
 /*-----------------------------------------------
     20.08.2003 10:48
 -----------------------------------------------*/
-void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL&                                     aURL     )
+void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+                                                const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
@@ -180,8 +180,8 @@ void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::
 /*-----------------------------------------------
     20.08.2003 10:49
 -----------------------------------------------*/
-void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                   const css::util::URL&                                     aURL     )
+void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+                                                   const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
