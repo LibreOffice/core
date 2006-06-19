@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:10:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ BOOL RASWriter::ImplCallback( ULONG nYPos )
 
 BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
                             PFilterCallback pCallback, void* pCallerdata,
-                                FilterConfigItem* pConfigItem )
+                                FilterConfigItem* )
 {
     Bitmap  aBmp;
 
