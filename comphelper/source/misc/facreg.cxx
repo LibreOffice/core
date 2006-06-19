@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:10:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,12 +108,12 @@ static void registerSingleton( registry::XRegistryKey * pRegistryKey, const OUSt
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -142,7 +142,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void * pServiceManag
     return sal_True;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
     if( pServiceManager )
