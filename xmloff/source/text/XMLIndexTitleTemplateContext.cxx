@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTitleTemplateContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:12:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,12 @@ XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        sStyleName(),
-        bStyleNameOK(sal_False),
-        sContent(),
-        rTOCPropertySet(rPropSet),
-        sTitle(RTL_CONSTASCII_USTRINGPARAM(sAPI_Title)),
-        sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM(sAPI_ParaStyleHeading))
+    const OUString& rLocalName)
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sTitle(RTL_CONSTASCII_USTRINGPARAM(sAPI_Title))
+,   sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM(sAPI_ParaStyleHeading))
+,   bStyleNameOK(sal_False)
+,   rTOCPropertySet(rPropSet)
 {
 }
 
