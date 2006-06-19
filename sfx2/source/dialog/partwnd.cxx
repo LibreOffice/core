@@ -4,9 +4,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:23:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,15 +165,15 @@ SFX_IMPL_DOCKINGWINDOW( SfxPartChildWnd_Impl, SID_BROWSER );
 
 SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 (
-    Window* pParent,
+    Window* pParentWnd,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo
 )
-    : SfxChildWindow( pParent, nId )
+    : SfxChildWindow( pParentWnd, nId )
 {
     // Window erzeugen
-    pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParent, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
+    pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SFX_ALIGN_TOP;
     if ( pInfo )
         pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
@@ -239,22 +239,22 @@ sal_Bool SfxPartChildWnd_Impl::QueryClose()
 
 SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 (
-    SfxBindings* pBindings,
+    SfxBindings* pBind,
     SfxChildWindow* pChildWin,
     Window* pParent,
     WinBits nBits
 )
-    : SfxDockingWindow( pBindings, pChildWin, pParent, nBits )
+    : SfxDockingWindow( pBind, pChildWin, pParent, nBits )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
             ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
     pChildWin->SetFrame( xFrame );
-    if ( pBindings->GetDispatcher() )
+    if ( pBind->GetDispatcher() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
         if ( xSupp.is() )
             xSupp->getFrames()->append( xFrame );
     }
