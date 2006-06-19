@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:21:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
@@ -114,7 +113,7 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
 
     aFlURL              ( this, ResId( FL_URL ) ),
     aBtnOk              ( this, ResId( BTN_OK ) ),
-    aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
+    aBtnCancel          ( this, ResId( BTN_CANCEL1 ) ),
     aFtURL1             ( this, ResId( FT_URL1 ) ),
     aEdtURL             ( this, ResId( EDT_URL ) ),
     aFtURLDescription   ( this, ResId( FT_URLDESCRIPTION ) ),
@@ -192,7 +191,7 @@ void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 |*
 \************************************************************************/
 
-void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, BOOL bScaleToGraphic )
+void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, BOOL /*bScaleToGraphic*/ )
 {
     SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
     long        nCount = rImageMap.GetIMapObjectCount();
@@ -350,7 +349,6 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             else
             {
                 const Polygon&  rPoly = pIMapPolyObj->GetPolygon( FALSE );
-                USHORT          nCount = rPoly.GetSize();
                 Polygon         aDrawPoly( rPoly );
 
                 // auf Zeichenflaeche clippen
@@ -687,7 +685,6 @@ SdrObject* IMapWindow::GetSdrObj( const IMapObject* pIMapObj ) const
 void IMapWindow::Command(const CommandEvent& rCEvt)
 {
     Region  aRegion;
-    USHORT  nSelId = 0;
 
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
@@ -707,7 +704,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
             aMenu.EnableItem( MN_MOREFRONT, FALSE );
             aMenu.EnableItem( MN_MOREBACK, FALSE );
             aMenu.EnableItem( MN_FRAME_TO_BOTTOM, FALSE );
-            aMenu.EnableItem( MN_DELETE, FALSE );
+            aMenu.EnableItem( MN_DELETE1, FALSE );
         }
         else
         {
@@ -726,7 +723,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
             aMenu.EnableItem( MN_MOREFRONT, TRUE );
             aMenu.EnableItem( MN_MOREBACK, TRUE );
             aMenu.EnableItem( MN_FRAME_TO_BOTTOM, TRUE );
-            aMenu.EnableItem( MN_DELETE, TRUE );
+            aMenu.EnableItem( MN_DELETE1, TRUE );
         }
 
         aMenu.SetSelectHdl( LINK( this, IMapWindow, MenuSelectHdl ) );
@@ -1019,7 +1016,7 @@ IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
                 pView->MarkAll();
             break;
 
-            case( MN_DELETE ):
+            case( MN_DELETE1 ):
                 pView->DeleteMarked();
 
             default :
