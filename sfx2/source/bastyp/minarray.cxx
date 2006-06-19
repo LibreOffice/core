@@ -4,9 +4,9 @@
  *
  *  $RCSfile: minarray.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:57:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ SfxPtrArr& SfxPtrArr::operator=( const SfxPtrArr& rOrig )
 void SfxPtrArr::Append( void* aElem )
 {
     DBG_MEMTEST();
-    DBG_ASSERT( (nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
+    DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
     // musz das Array umkopiert werden?
     if ( nUnused == 0 )
     {
@@ -247,7 +247,7 @@ BOOL SfxPtrArr::Contains( const void* rItem ) const
 void SfxPtrArr::Insert( USHORT nPos, void* rElem )
 {
     DBG_MEMTEST();
-    DBG_ASSERT( (nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
+    DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
     // musz das Array umkopiert werden?
     if ( nUnused == 0 )
     {
