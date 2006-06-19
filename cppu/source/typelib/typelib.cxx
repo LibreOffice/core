@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:11:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,7 +634,6 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     OSL_ASSERT( typelib_TypeClass_TYPEDEF != eTypeClass );
 
     typelib_TypeDescription * pRet;
-    TypeDescriptor_Init_Impl &rInit = Init::get();
     switch( eTypeClass )
     {
         case typelib_TypeClass_ARRAY:
@@ -643,7 +642,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_IndirectTypeDescription * pIndirect = (typelib_IndirectTypeDescription *)pTmp;
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nArrayTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nArrayTypeDescriptionCount );
 #endif
             pIndirect->pType = 0;
             pTmp->nDimensions = 0;
@@ -657,7 +657,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_IndirectTypeDescription * pTmp = new typelib_IndirectTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nIndirectTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nIndirectTypeDescriptionCount );
 #endif
             pTmp->pType = 0;
         }
@@ -669,7 +670,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_UnionTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nUnionTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nUnionTypeDescriptionCount );
 #endif
             pTmp->nMembers = 0;
             pTmp->pDiscriminantTypeRef = 0;
@@ -687,7 +689,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_StructTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nCompoundTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->aBase.pBaseTypeDescription = 0;
             pTmp->aBase.nMembers = 0;
@@ -705,7 +708,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_CompoundTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nCompoundTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = 0;
             pTmp->nMembers = 0;
@@ -720,7 +724,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_EnumTypeDescription * pTmp = new typelib_EnumTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nEnumTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nEnumTypeDescriptionCount );
 #endif
             pTmp->nDefaultEnumValue = 0;
             pTmp->nEnumValues       = 0;
@@ -734,7 +739,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_InterfaceTypeDescription * pTmp = new typelib_InterfaceTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nInterfaceTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nInterfaceTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = 0;
             pTmp->nMembers = 0;
@@ -754,7 +760,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_InterfaceMethodTypeDescription * pTmp = new typelib_InterfaceMethodTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nInterfaceMethodTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nInterfaceMethodTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pReturnTypeRef = 0;
@@ -773,7 +780,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_InterfaceAttributeTypeDescription * pTmp = new typelib_InterfaceAttributeTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nInterfaceAttributeTypeDescriptionCount );
+            osl_incrementInterlockedCount(
+                Init::get().nInterfaceAttributeTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pAttributeTypeRef = 0;
@@ -791,7 +799,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         {
             pRet = new typelib_TypeDescription();
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &rInit.nTypeDescriptionCount );
+            osl_incrementInterlockedCount( Init::get().nTypeDescriptionCount );
 #endif
         }
     }
@@ -907,6 +915,10 @@ void newTypeDescription(
                 }
             }
         }
+        break;
+
+        default:
+        break;
     }
 
     if( !reallyWeak( eTypeClass ) )
@@ -1593,6 +1605,8 @@ static inline void typelib_typedescription_destructExtendedMembers(
         delete [] pEnum->pEnumValues;
     }
     break;
+    default:
+    break;
     }
 }
 
@@ -2071,6 +2085,9 @@ bool createDerivedInterfaceMemberDescription(
                     baseAttribute->ppSetExceptions);
                 return true;
             }
+
+        default:
+            break;
         }
     }
     return false;
@@ -2630,8 +2647,11 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
                     TYPELIB_DANGER_RELEASE( pFromDescr );
                     return bRet;
                 }
+                default:
+                {
+                    return sal_False;
                 }
-                return sal_False;
+                }
             }
         }
         return (eAssignable >= typelib_TypeClass_CHAR && eAssignable <= typelib_TypeClass_DOUBLE &&
