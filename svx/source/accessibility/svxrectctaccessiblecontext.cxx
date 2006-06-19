@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:47:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ static const ChildIndexToPointData* IndexToPoint( long nIndex, sal_Bool bAngleCo
 
 static long PointToIndex( RECT_POINT ePoint, sal_Bool bAngleControl )
 {
-    long    nRet;
+    long    nRet( (long) ePoint );
     if( bAngleControl )
     {   // angle control
         // angles are counted reverse counter clock wise
@@ -201,9 +201,10 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpRepr( &rRepr ),
+    mpChilds( NULL ),
+    mnClientId( 0 ),
     mnSelectedChild( NOCHILDSELECTED ),
-    mbAngleMode( rRepr.GetNumOfChilds() == 8 ),
-    mnClientId( 0 )
+    mbAngleMode( rRepr.GetNumOfChilds() == 8 )
 {
     DBG_CTOR( SvxRectCtlAccessibleContext, NULL );
 
@@ -660,7 +661,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccess
     return getAccessibleChild( mnSelectedChild );
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
+void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*nIndex*/ ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
     OUString    aMessage( RTL_CONSTASCII_USTRINGPARAM( "deselectAccessibleChild is not possible in this context" ) );
 
@@ -854,14 +855,14 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     long                                nIndexInParent ) :
 
     SvxRectCtlChildAccessibleContext_Base( maMutex ),
-    mxParent(rxParent),
-    mrParentWindow( rParentWindow ),
-    mpBoundingBox( new Rectangle( rBoundingBox ) ),
-    msName( rName ),
     msDescription( rDescription ),
-    mbIsChecked( sal_False ),
+    msName( rName ),
+    mxParent(rxParent),
+    mpBoundingBox( new Rectangle( rBoundingBox ) ),
+    mrParentWindow( rParentWindow ),
+    mnClientId( 0 ),
     mnIndexInParent( nIndexInParent ),
-    mnClientId( 0 )
+    mbIsChecked( sal_False )
 {
     DBG_CTOR( SvxRectCtlChildAccessibleContext, NULL );
 }
@@ -894,7 +895,7 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::containsPoint( const awt::Po
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
+Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleAtPoint( const awt::Point& /*rPoint*/ ) throw( RuntimeException )
 {
     return Reference< XAccessible >();
 }
@@ -942,14 +943,16 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( 
     return sal_False;
 }
 
-void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& xListener )
+void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw( RuntimeException )
 {
+    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
 }
 
-void SAL_CALL SvxRectCtlChildAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& xListener )
+void SAL_CALL SvxRectCtlChildAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw (RuntimeException)
 {
+    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeException )
@@ -986,7 +989,7 @@ sal_Int32 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChildCount( vo
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int32 nIndex ) throw ( RuntimeException, lang::IndexOutOfBoundsException )
+Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int32 /*nIndex*/ ) throw ( RuntimeException, lang::IndexOutOfBoundsException )
 {
     throw lang::IndexOutOfBoundsException();
 }
@@ -1113,7 +1116,7 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getCurrentValue() throw( RuntimeE
     return aRet;
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& aNumber ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& /*aNumber*/ ) throw( RuntimeException )
 {
     return sal_False;
 }
@@ -1145,8 +1148,8 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const OUStr
     //  matches the given name.
     ::osl::MutexGuard   aGuard( maMutex );
     Sequence< OUString >    aSupportedServices ( getSupportedServiceNames() );
-    int                         nLength = aSupportedServices.getLength();
-    for( int i = 0 ; i < aSupportedServices.getLength() ; ++i )
+    int                     nLength = aSupportedServices.getLength();
+    for( int i = 0 ; i < nLength; ++i )
     {
         if( sServiceName == aSupportedServices[ i ] )
             return sal_True;
