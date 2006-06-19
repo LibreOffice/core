@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:29:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,19 +99,21 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
             nFil = CTF_PM_FOOTERGRAPHICFILTER;
         }
         break;
+        default:
+            break;
     }
     SvXMLImportContext *pContext = 0;
 
-    switch( xMapper->getPropertySetMapper()
+    switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_PM_GRAPHICURL:
     case CTF_PM_HEADERGRAPHICURL:
     case CTF_PM_FOOTERGRAPHICURL:
         DBG_ASSERT( rProp.mnIndex >= 2 &&
-                    nPos  == xMapper->getPropertySetMapper()
+                    nPos  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
-                    nFil  == xMapper->getPropertySetMapper()
+                    nFil  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
         pContext =
@@ -139,7 +141,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
 #ifndef SVX_LIGHT
         pContext = new XMLFootnoteSeparatorImport(
             GetImport(), nPrefix, rLocalName, rProperties,
-            xMapper->getPropertySetMapper(), rProp.mnIndex);
+            mxMapper->getPropertySetMapper(), rProp.mnIndex);
 #else
         // create default context to skip content
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName);
