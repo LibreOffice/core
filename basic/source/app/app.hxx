@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:09:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@ class FloatingExecutionStatus;
 
 class BasicFrame : public WorkWindow, public SfxBroadcaster, public SfxListener
 {
+using SystemWindow::Notify;
+using Window::Command;
+
 virtual BOOL Close();               // Schliessen
     BOOL CloseAll();                // Alle Fenster schliessen
     BOOL CompileAll();              // Alle Texte compilieren
