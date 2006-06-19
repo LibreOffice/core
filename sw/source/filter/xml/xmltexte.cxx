@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:12:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:42:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,9 +121,6 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
-#ifndef _XMLOFF_XMLBASE64EXPORT_HXX_
-#include <xmloff/XMLBase64Export.hxx>
 #endif
 
 using namespace ::rtl;
