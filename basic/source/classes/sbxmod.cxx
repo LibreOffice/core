@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:11:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#pragma hdrstop
 #include <sbx.hxx>
 #include "sb.hxx"
 #include <sbjsmeth.hxx>
@@ -69,10 +68,7 @@
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#ifdef OS2
-#define CDECL _Optlink
-#endif
-#if defined(UNX)  || defined(MAC)
+#if defined(UNX)
 #define CDECL
 #endif
 #ifdef UNX
@@ -98,7 +94,7 @@ SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
 // ##########################################################################
 // ACHTUNG!!!  Alle Woerter dieser Tabelle müssen KLEIN geschrieben werden!!!
 // ##########################################################################
-static char* strListBasicKeyWords[] = {
+static const char* strListBasicKeyWords[] = {
     "access",
     "alias",
     "and",
@@ -224,9 +220,8 @@ static char* strListBasicKeyWords[] = {
     "xor"
 };
 
-int CDECL compare_strings( const void *arg1, const void *arg2 )
+extern "C" int CDECL compare_strings( const void *arg1, const void *arg2 )
 {
-    char* pCh = *(char**)arg2;
     return strcmp( (char *)arg1, *(char **)arg2 );
 }
 
@@ -559,11 +554,11 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
             USHORT nLine1 = aTok.GetLine();
             if( aTok.Next() == SYMBOL )
             {
-                String aName( aTok.GetSym() );
+                String aName_( aTok.GetSym() );
                 SbxDataType t = aTok.GetType();
                 if( t == SbxVARIANT && eEndTok == ENDSUB )
                     t = SbxVOID;
-                pMeth = GetMethod( aName, t );
+                pMeth = GetMethod( aName_, t );
                 pMeth->nLine1 = pMeth->nLine2 = nLine1;
                 // Die Methode ist erst mal GUELTIG
                 pMeth->bInvalid = FALSE;
@@ -941,10 +936,10 @@ void SbModule::GlobalRunInit( BOOL bBasicStart )
     {
         pBasic->InitAllModules();
 
-        SbxObject* pParent = pBasic->GetParent();
-        if( pParent )
+        SbxObject* pParent_ = pBasic->GetParent();
+        if( pParent_ )
         {
-            StarBASIC * pParentBasic = PTR_CAST(StarBASIC,pParent);
+            StarBASIC * pParentBasic = PTR_CAST(StarBASIC,pParent_);
             if( pParentBasic )
             {
                 pParentBasic->InitAllModules( pBasic );
@@ -969,9 +964,9 @@ void SbModule::GlobalRunDeInit( void )
     {
         pBasic->DeInitAllModules();
 
-        SbxObject* pParent = pBasic->GetParent();
-        if( pParent )
-            pBasic = PTR_CAST(StarBASIC,pParent);
+        SbxObject* pParent_ = pBasic->GetParent();
+        if( pParent_ )
+            pBasic = PTR_CAST(StarBASIC,pParent_);
         if( pBasic )
             pBasic->DeInitAllModules();
     }
@@ -1285,7 +1280,7 @@ class SimpleTokenizer_Impl
         /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
 #endif
 
-    char** ppListKeyWords;
+    const char** ppListKeyWords;
     UINT16 nKeyWordCount;
 
 public:
@@ -1295,7 +1290,7 @@ public:
     UINT16 parseLine( UINT32 nLine, const String* aSource );
     void getHighlightPortions( UINT32 nParseLine, const String& rLine,
                                                     /*out*/HighlightPortions& portions );
-    void setKeyWords( char** ppKeyWords, UINT16 nCount );
+    void setKeyWords( const char** ppKeyWords, UINT16 nCount );
 };
 
 // Hilfsfunktion: Zeichen-Flag Testen
@@ -1314,7 +1309,7 @@ BOOL SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, USHORT nTestFlags )
     return bRet;
 }
 
-void SimpleTokenizer_Impl::setKeyWords( char** ppKeyWords, UINT16 nCount )
+void SimpleTokenizer_Impl::setKeyWords( const char** ppKeyWords, UINT16 nCount )
 {
     ppListKeyWords = ppKeyWords;
     nKeyWordCount = nCount;
@@ -1351,7 +1346,6 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     else if ( (testCharFlags( c, CHAR_START_IDENTIFIER ) == TRUE) )
     {
         BOOL bIdentifierChar;
-        int nPos = 0;
         do
         {
             // Naechstes Zeichen holen
@@ -1445,9 +1439,6 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     else if( testCharFlags( c, CHAR_START_NUMBER ) == TRUE )
     {
         reType = TT_NUMBER;
-
-        // Buffer-Position initialisieren
-        int nPos = 0;
 
         // Zahlensystem, 10 = normal, wird bei Oct/Hex geaendert
         int nRadix = 10;
@@ -1612,9 +1603,9 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
     for( i = 'A' ; i <= 'Z' ; i++ )
         aCharTypeTab[i] |= nHelpMask;
     // '_' extra eintragen
-    aCharTypeTab['_'] |= nHelpMask;
+    aCharTypeTab[(int)'_'] |= nHelpMask;
     // AB 23.6.97: '$' ist auch erlaubt
-    aCharTypeTab['$'] |= nHelpMask;
+    aCharTypeTab[(int)'$'] |= nHelpMask;
 
     // Ziffern (Identifier und Number ist moeglich)
     nHelpMask = (USHORT)( CHAR_IN_IDENTIFIER | CHAR_START_NUMBER |
@@ -1623,10 +1614,10 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
         aCharTypeTab[i] |= nHelpMask;
 
     // e und E sowie . von Hand ergaenzen
-    aCharTypeTab['e'] |= CHAR_IN_NUMBER;
-    aCharTypeTab['E'] |= CHAR_IN_NUMBER;
-    aCharTypeTab['.'] |= (USHORT)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
-    aCharTypeTab['&'] |= CHAR_START_NUMBER;
+    aCharTypeTab[(int)'e'] |= CHAR_IN_NUMBER;
+    aCharTypeTab[(int)'E'] |= CHAR_IN_NUMBER;
+    aCharTypeTab[(int)'.'] |= (USHORT)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
+    aCharTypeTab[(int)'&'] |= CHAR_START_NUMBER;
 
     // Hex-Ziffern
     for( i = 'a' ; i <= 'f' ; i++ )
@@ -1639,42 +1630,42 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
         aCharTypeTab[i] |= CHAR_IN_OCT_NUMBER;
 
     // String-Beginn/End-Zeichen
-    aCharTypeTab['\''] |= CHAR_START_STRING;
-    aCharTypeTab['\"'] |= CHAR_START_STRING;
-    aCharTypeTab['[']  |= CHAR_START_STRING;
+    aCharTypeTab[(int)'\''] |= CHAR_START_STRING;
+    aCharTypeTab[(int)'\"'] |= CHAR_START_STRING;
+    aCharTypeTab[(int)'[']  |= CHAR_START_STRING;
 
     // Operator-Zeichen
-    aCharTypeTab['!'] |= CHAR_OPERATOR;
-    aCharTypeTab['%'] |= CHAR_OPERATOR;
-    // aCharTypeTab['&'] |= CHAR_OPERATOR;      Removed because of #i14140
-    aCharTypeTab['('] |= CHAR_OPERATOR;
-    aCharTypeTab[')'] |= CHAR_OPERATOR;
-    aCharTypeTab['*'] |= CHAR_OPERATOR;
-    aCharTypeTab['+'] |= CHAR_OPERATOR;
-    aCharTypeTab[','] |= CHAR_OPERATOR;
-    aCharTypeTab['-'] |= CHAR_OPERATOR;
-    aCharTypeTab['/'] |= CHAR_OPERATOR;
-    aCharTypeTab[':'] |= CHAR_OPERATOR;
-    aCharTypeTab['<'] |= CHAR_OPERATOR;
-    aCharTypeTab['='] |= CHAR_OPERATOR;
-    aCharTypeTab['>'] |= CHAR_OPERATOR;
-    aCharTypeTab['?'] |= CHAR_OPERATOR;
-    aCharTypeTab['^'] |= CHAR_OPERATOR;
-    aCharTypeTab['|'] |= CHAR_OPERATOR;
-    aCharTypeTab['~'] |= CHAR_OPERATOR;
-    aCharTypeTab['{'] |= CHAR_OPERATOR;
-    aCharTypeTab['}'] |= CHAR_OPERATOR;
-    // aCharTypeTab['['] |= CHAR_OPERATOR;      Removed because of #i17826
-    aCharTypeTab[']'] |= CHAR_OPERATOR;
-    aCharTypeTab[';'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'!'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'%'] |= CHAR_OPERATOR;
+    // aCharTypeTab[(int)'&'] |= CHAR_OPERATOR;     Removed because of #i14140
+    aCharTypeTab[(int)'('] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)')'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'*'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'+'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)','] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'-'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'/'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)':'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'<'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'='] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'>'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'?'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'^'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'|'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'~'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'{'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'}'] |= CHAR_OPERATOR;
+    // aCharTypeTab[(int)'['] |= CHAR_OPERATOR;     Removed because of #i17826
+    aCharTypeTab[(int)']'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)';'] |= CHAR_OPERATOR;
 
     // Space
-    aCharTypeTab[' ' ] |= CHAR_SPACE;
-    aCharTypeTab['\t'] |= CHAR_SPACE;
+    aCharTypeTab[(int)' ' ] |= CHAR_SPACE;
+    aCharTypeTab[(int)'\t'] |= CHAR_SPACE;
 
     // Zeilen-Ende-Zeichen
-    aCharTypeTab['\r'] |= CHAR_EOL;
-    aCharTypeTab['\n'] |= CHAR_EOL;
+    aCharTypeTab[(int)'\r'] |= CHAR_EOL;
+    aCharTypeTab[(int)'\n'] |= CHAR_EOL;
 
     ppListKeyWords = NULL;
 }
@@ -1779,10 +1770,12 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
 const Range SyntaxHighlighter::notifyChange( UINT32 nLine, INT32 nLineCountDifference,
                                 const String* pChangedLines, UINT32 nArrayLength)
 {
-    for (INT32 i=0; i<nArrayLength; i++)
+    (void)nLineCountDifference;
+
+    for( UINT32 i=0 ; i < nArrayLength ; i++ )
         m_pSimpleTokenizer->parseLine(nLine+i, &pChangedLines[i]);
 
-    return Range(nLine, nLine+nArrayLength-1);
+    return Range( nLine, nLine + nArrayLength-1 );
 }
 
 void SyntaxHighlighter::getHighlightPortions( UINT32 nLine, const String& rLine,
@@ -1801,6 +1794,8 @@ SbJScriptModule::SbJScriptModule( const String& rName )
 
 BOOL SbJScriptModule::LoadData( SvStream& rStrm, USHORT nVer )
 {
+    (void)nVer;
+
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return FALSE;
@@ -1841,7 +1836,7 @@ SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
 }
 
 SbMethod::SbMethod( const SbMethod& r )
-    : SbxMethod( r )
+    : SvRefBase( r ), SbxMethod( r )
 {
     pMod         = r.pMod;
     bInvalid     = r.bInvalid;
@@ -1914,11 +1909,11 @@ SbxInfo* SbMethod::GetInfo()
 ErrCode SbMethod::Call( SbxValue* pRet )
 {
     // RefCount vom Modul hochzaehlen
-    SbModule* pMod = (SbModule*)GetParent();
-    pMod->AddRef();
+    SbModule* pMod_ = (SbModule*)GetParent();
+    pMod_->AddRef();
 
     // RefCount vom Basic hochzaehlen
-    StarBASIC* pBasic = (StarBASIC*)pMod->GetParent();
+    StarBASIC* pBasic = (StarBASIC*)pMod_->GetParent();
     pBasic->AddRef();
 
     // Values anlegen, um Return-Wert zu erhalten
@@ -1926,7 +1921,7 @@ ErrCode SbMethod::Call( SbxValue* pRet )
     aVals.eType = SbxVARIANT;
 
     // #104083: Compile BEFORE get
-    if( bInvalid && !pMod->Compile() )
+    if( bInvalid && !pMod_->Compile() )
         StarBASIC::Error( SbERR_BAD_PROP_VALUE );
 
     Get( aVals );
@@ -1938,7 +1933,7 @@ ErrCode SbMethod::Call( SbxValue* pRet )
     SbxBase::ResetError();
 
     // Objekte freigeben
-    pMod->ReleaseRef();
+    pMod_->ReleaseRef();
     pBasic->ReleaseRef();
 
     return nErr;
@@ -1967,10 +1962,10 @@ void SbMethod::Broadcast( ULONG nHintId )
         pCst = NULL;
         SbMethod* pThisCopy = new SbMethod( *this );
         SbMethodRef xHolder = pThisCopy;
-        if( pPar.Is() )
+        if( mpPar.Is() )
         {
             // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
-            pPar->PutDirect( pThisCopy, 0 );
+            mpPar->PutDirect( pThisCopy, 0 );
                SetParameters( NULL );
         }
 
