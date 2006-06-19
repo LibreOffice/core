@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clipfmtitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:33:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
@@ -88,7 +86,7 @@ SvxClipboardFmtItem::~SvxClipboardFmtItem()
     delete pImpl;
 }
 
-BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     USHORT nCount = Count();
 
@@ -106,7 +104,7 @@ BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemb
     return TRUE;
 }
 
-sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
@@ -147,7 +145,7 @@ int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
     return nRet;
 }
 
-SfxPoolItem* SvxClipboardFmtItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SvxClipboardFmtItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     return new SvxClipboardFmtItem( *this );
 }
