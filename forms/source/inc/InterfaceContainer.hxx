@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:54:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:57:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,11 +159,12 @@ typedef ::cppu::ImplHelper7<    ::com::sun::star::container::XNameContainer,
 class OInterfaceContainer : public OInterfaceContainer_BASE
 {
 protected:
+    ::osl::Mutex&                           m_rMutex;
+
     OInterfaceArray                         m_aItems;
     OInterfaceMap                           m_aMap;
     ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
 
-    ::osl::Mutex&                           m_rMutex;
     ::com::sun::star::uno::Type             m_aElementType;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>     m_xServiceFactory;
@@ -275,11 +276,11 @@ protected:
             ) throw(::com::sun::star::lang::IllegalArgumentException);
 
     // called after the object is inserted, but before the "real listeners" are notified
-    virtual void implInserted( const ElementDescription* _pElement ) { }
+    virtual void implInserted( const ElementDescription* /*_pElement*/ ) { }
     // called after the object is removed, but before the "real listeners" are notified
-    virtual void implRemoved(const InterfaceRef& _rxObject) { }
+    virtual void implRemoved(const InterfaceRef& /*_rxObject*/) { }
     // called after an object was replaced, but before the "real listeners" are notified
-    virtual void implReplaced( const InterfaceRef& _rxReplacedObject, const ElementDescription* _pElement ) { }
+    virtual void implReplaced( const InterfaceRef& /*_rxReplacedObject*/, const ElementDescription* /*_pElement*/ ) { }
 
     void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
@@ -352,6 +353,9 @@ public:
 // ::com::sun::star::form::XFormComponent
     virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    // XEventListener
+    using OInterfaceContainer::disposing;
 };
 //.........................................................................
 }   // namespace frm
