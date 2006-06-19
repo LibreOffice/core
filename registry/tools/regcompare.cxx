@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:15:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,22 @@ OUString convertToFileUrl(const OString& fileName)
     if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return uUrlFileName;
@@ -198,7 +209,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     }
 
     char    *s=NULL;
-    for (i; i < ac; i++)
+    for (; i < ac; i++)
     {
         if (av[i][0] == '-')
         {
@@ -355,9 +366,9 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     bRet = initOptions(rargc, rargv, bCmdFile);
 
-                    for (long i=0; i < rargc; i++)
+                    for (long j=0; j < rargc; j++)
                     {
-                        free(rargv[i]);
+                        free(rargv[j]);
                     }
                 }
             } else
@@ -442,7 +453,7 @@ sal_Bool Options::matchedWithExcludeKey( const OUString& keyName)
 
 static Options options;
 
-static sal_Char* getTypeClass(RTTypeClass typeClass)
+static char const * getTypeClass(RTTypeClass typeClass)
 {
     switch (typeClass)
     {
@@ -464,8 +475,9 @@ static sal_Char* getTypeClass(RTTypeClass typeClass)
             return "OBJECT";
         case RT_TYPE_CONSTANTS:
             return "CONSTANTS";
+        default:
+            return "INVALID";
     }
-    return "INVALID";
 }
 
 static OString getFieldAccess(RTFieldAccess fieldAccess)
@@ -530,7 +542,7 @@ static OString getFieldAccess(RTFieldAccess fieldAccess)
     return ret;
 }
 
-static sal_Char* getConstValueType(RTConstValue& constValue)
+static char const * getConstValueType(RTConstValue& constValue)
 {
     switch (constValue.m_type)
     {
@@ -556,8 +568,9 @@ static sal_Char* getConstValueType(RTConstValue& constValue)
             return "double";
         case RT_TYPE_STRING:
             return "sal_Unicode*";
+        default:
+            return "NONE";
     }
-    return "NONE";
 }
 static void printConstValue(RTConstValue& constValue)
 {
@@ -565,28 +578,40 @@ static void printConstValue(RTConstValue& constValue)
     {
         case RT_TYPE_NONE:
             fprintf(stdout, "none");
+            break;
         case RT_TYPE_BOOL:
             fprintf(stdout, "%s", constValue.m_value.aBool ? "TRUE" : "FALSE");
+            break;
         case RT_TYPE_BYTE:
             fprintf(stdout, "%d", constValue.m_value.aByte);
+            break;
         case RT_TYPE_INT16:
             fprintf(stdout, "%d", constValue.m_value.aShort);
+            break;
         case RT_TYPE_UINT16:
             fprintf(stdout, "%d", constValue.m_value.aUShort);
+            break;
         case RT_TYPE_INT32:
             fprintf(stdout, "%d", constValue.m_value.aLong);
+            break;
         case RT_TYPE_UINT32:
             fprintf(stdout, "%d", constValue.m_value.aULong);
+            break;
 //      case RT_TYPE_INT64:
 //          fprintf(stdout, "%d", constValue.m_value.aHyper);
 //      case RT_TYPE_UINT64:
 //          fprintf(stdout, "%d", constValue.m_value.aUHyper);
         case RT_TYPE_FLOAT:
             fprintf(stdout, "%f", constValue.m_value.aFloat);
+            break;
         case RT_TYPE_DOUBLE:
             fprintf(stdout, "%f", constValue.m_value.aDouble);
+            break;
         case RT_TYPE_STRING:
             fprintf(stdout, "%s", constValue.m_value.aString);
+            break;
+        default:
+            break;
     }
 }
 
@@ -595,11 +620,12 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                                   sal_Bool& bDump,
                                   RTConstValue& constValue1,
                                   RTConstValue& constValue2,
-                                  sal_uInt16 index1,
-                                  sal_uInt16 index2)
+                                  sal_uInt16 index1)
 {
     switch (constValue1.m_type)
     {
+        case RT_TYPE_INVALID:
+            break;
         case RT_TYPE_BOOL:
             if (constValue1.m_value.aBool != constValue2.m_value.aBool)
             {
@@ -697,38 +723,58 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 return 1;
             }
             break;
-//      case RT_TYPE_INT64:
-//          if (constValue1.m_value.aHyper != constValue2.m_value.aHyper)
-//          {
-//              if ( options.forceOutput() && !options.unoTypeCheck() )
-//              {
-//                  if ( bDump )
-//                  {
-//                      fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-//                      bDump = sal_False;
-//                  }
-//                  fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
-//                          constValue1.m_value.aHyper, constValue2.m_value.aHyper);
-//              }
-//              return 1;
-//          }
-//          break;
-//      case RT_TYPE_UINT64:
-//          if (constValue1.m_value.aUHyper != constValue2.m_value.aUHyper)
-//          {
-//              if ( options.forceOutput() && !options.unoTypeCheck() )
-//              {
-//                  if ( bDump )
-//                  {
-//                      fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-//                      bDump = sal_False;
-//                  }
-//                  fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
-//                          constValue1.m_value.aUHyper, constValue2.m_value.aUHyper);
-//              }
-//              return 1;
-//          }
-//          break;
+        case RT_TYPE_INT64:
+            if (constValue1.m_value.aHyper != constValue2.m_value.aHyper)
+            {
+                if ( options.forceOutput() && !options.unoTypeCheck() )
+                {
+                    if ( bDump )
+                    {
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        bDump = sal_False;
+                    }
+                    fprintf(
+                        stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n",
+                        index1,
+                        rtl::OUStringToOString(
+                            rtl::OUString::valueOf(constValue1.m_value.aHyper),
+                            RTL_TEXTENCODING_ASCII_US).getStr(),
+                        rtl::OUStringToOString(
+                            rtl::OUString::valueOf(constValue2.m_value.aHyper),
+                            RTL_TEXTENCODING_ASCII_US).getStr());
+                }
+                return 1;
+            }
+            break;
+        case RT_TYPE_UINT64:
+            if (constValue1.m_value.aUHyper != constValue2.m_value.aUHyper)
+            {
+                if ( options.forceOutput() && !options.unoTypeCheck() )
+                {
+                    if ( bDump )
+                    {
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        bDump = sal_False;
+                    }
+                    fprintf(
+                        stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n",
+                        index1,
+                        rtl::OUStringToOString(
+                            rtl::OUString::valueOf(
+                                static_cast< sal_Int64 >(
+                                    constValue1.m_value.aUHyper)),
+                            RTL_TEXTENCODING_ASCII_US).getStr(),
+                        rtl::OUStringToOString(
+                            rtl::OUString::valueOf(
+                                static_cast< sal_Int64 >(
+                                    constValue2.m_value.aUHyper)),
+                            RTL_TEXTENCODING_ASCII_US).getStr());
+                        // printing the unsigned values as signed should be
+                        // acceptable...
+                }
+                return 1;
+            }
+            break;
         case RT_TYPE_FLOAT:
             if (constValue1.m_value.aFloat != constValue2.m_value.aFloat)
             {
@@ -761,22 +807,9 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 return 1;
             }
             break;
-        case RT_TYPE_STRING:
-            if (rtl_ustr_compare(constValue1.m_value.aString, constValue2.m_value.aString) != 0)
-            {
-                if ( options.forceOutput() && !options.unoTypeCheck() )
-                {
-                    if ( bDump )
-                    {
-                        fprintf(stdout, "%s\n", U2S(keyName));
-                        fprintf(stdout, "  TypeClass = %s\n", getTypeClass(typeClass));
-                        bDump = sal_False;
-                    }
-                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
-                            constValue1.m_value.aString, constValue2.m_value.aString);
-                }
-                return 1;
-            }
+        default:
+            OSL_ASSERT(false);
+            break;
     }
     return 0;
 }
@@ -843,7 +876,7 @@ static sal_uInt32 checkField(const OUString& keyName,
             nError++;
         } else
         {
-            nError += checkConstValue(keyName, typeClass, bDump, constValue1, constValue2, index1, index2);
+            nError += checkConstValue(keyName, typeClass, bDump, constValue1, constValue2, index1);
         }
     }
 
@@ -881,7 +914,7 @@ static sal_uInt32 checkField(const OUString& keyName,
     return nError;
 }
 
-static sal_Char* getMethodMode(RTMethodMode methodMode)
+static char const * getMethodMode(RTMethodMode methodMode)
 {
     switch ( methodMode )
     {
@@ -893,11 +926,12 @@ static sal_Char* getMethodMode(RTMethodMode methodMode)
             return "NONE";
         case RT_MODE_TWOWAY_CONST:
             return "CONST";
+        default:
+            return "INVALID";
     }
-    return "INVALID";
 }
 
-static sal_Char* getParamMode(RTParamMode paramMode)
+static char const * getParamMode(RTParamMode paramMode)
 {
     switch ( paramMode )
     {
@@ -907,8 +941,9 @@ static sal_Char* getParamMode(RTParamMode paramMode)
             return "OUT";
         case RT_PARAM_INOUT:
             return "INOUT";
+        default:
+            return "INVALID";
     }
-    return "INVALID";
 }
 
 static sal_uInt32 checkMethod(const OUString& keyName,
@@ -1124,7 +1159,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
     return nError;
 }
 
-static sal_Char* getReferenceType(RTReferenceType refType)
+static char const * getReferenceType(RTReferenceType refType)
 {
     switch (refType)
     {
@@ -1136,8 +1171,9 @@ static sal_Char* getReferenceType(RTReferenceType refType)
             return "RT_REF_EXPORTS";
         case RT_REF_NEEDS:
             return "RT_REF_NEEDS";
+        default:
+            return "RT_REF_INVALID";
     }
-    return "RT_REF_INVALID";
 }
 
 static sal_uInt32 checkReference(const OUString& keyName,
@@ -1396,7 +1432,6 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
     }
     sal_uInt16 nFields1 = (sal_uInt16)reader1.getFieldCount();
     sal_uInt16 nFields2 = (sal_uInt16)reader2.getFieldCount();
-    sal_uInt16 i=0;
     sal_Bool bCheckNormal = sal_True;
 
     if ( (typeClass == RT_TYPE_SERVICE ||
@@ -1421,6 +1456,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
             }
             nError++;
         }
+        sal_uInt16 i;
         for (i=0; i < nFields1 && i < nFields2; i++)
         {
             nError += checkField(keyName, typeClass, bDump, reader1, reader2, i, i);
@@ -1465,6 +1501,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
             }
             nError++;
         }
+        sal_uInt16 i;
         for (i=0; i < nMethods1 && i < nMethods2; i++)
         {
             nError += checkMethod(keyName, typeClass, bDump, reader1, reader2, i);
@@ -1572,6 +1609,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
                 }
                 nError++;
             }
+            sal_uInt16 i;
             for (i=0; i < nReference1 && i < nReference2; i++)
             {
                 nError += checkReference(keyName, typeClass, bDump, reader1, reader2, i, i);
@@ -1630,14 +1668,10 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
     if ( valueType1 == valueType2 )
     {
         sal_Bool bEqual = sal_True;
-        if ( valueType1 == RG_VALUETYPE_LONGLIST ||
-              valueType1 == RG_VALUETYPE_STRINGLIST ||
-              valueType1 == RG_VALUETYPE_UNICODELIST )
+        switch (valueType1)
         {
-            switch (valueType1)
+        case RG_VALUETYPE_LONGLIST:
             {
-            case RG_VALUETYPE_LONGLIST:
-                {
                 RegistryValueList<sal_Int32> valueList1;
                 RegistryValueList<sal_Int32> valueList2;
                 key1.getLongListValue(tmpName, valueList1);
@@ -1657,10 +1691,10 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
                         break;
                     }
                 }
-                }
-                break;
-            case RG_VALUETYPE_STRINGLIST:
-                {
+            }
+            break;
+        case RG_VALUETYPE_STRINGLIST:
+            {
                 RegistryValueList<sal_Char*> valueList1;
                 RegistryValueList<sal_Char*> valueList2;
                 key1.getStringListValue(tmpName, valueList1);
@@ -1680,10 +1714,10 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
                         break;
                     }
                 }
-                }
-                break;
-            case RG_VALUETYPE_UNICODELIST:
-                {
+            }
+            break;
+        case RG_VALUETYPE_UNICODELIST:
+            {
                 RegistryValueList<sal_Unicode*> valueList1;
                 RegistryValueList<sal_Unicode*> valueList2;
                 key1.getUnicodeListValue(tmpName, valueList1);
@@ -1703,9 +1737,10 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
                         break;
                     }
                 }
-                }
-                break;
             }
+            break;
+        default:
+            break;
         }
 
         if ( bEqual)
@@ -1768,7 +1803,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             case RG_VALUETYPE_LONG:
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
                 fprintf(stdout, "                       Size = %d\n", size1);
-                fprintf(stdout, "                       Data = %ld\n", (sal_IntPtr)value1);
+                fprintf(stdout, "                       Data = %p\n", value1);
                 break;
             case RG_VALUETYPE_STRING:
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
@@ -1782,6 +1817,9 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
                 fprintf(stdout, "                       Size = %d\n", size1);
                 fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
                 }
+                break;
+            default:
+                OSL_ASSERT(false);
                 break;
             }
 
@@ -1851,7 +1889,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             case RG_VALUETYPE_LONG:
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
                 fprintf(stdout, "                       Size = %d\n", size2);
-                fprintf(stdout, "                       Data = %ld\n", (sal_IntPtr)value2);
+                fprintf(stdout, "                       Data = %p\n", value2);
                 break;
             case RG_VALUETYPE_STRING:
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
@@ -1865,6 +1903,9 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
                 fprintf(stdout, "                       Size = %d\n", size2);
                 fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
                 }
+                break;
+            default:
+                OSL_ASSERT(false);
                 break;
             }
 
@@ -2212,8 +2253,7 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
-
-void _cdecl main( int argc, char * argv[] )
+int _cdecl main( int argc, char * argv[] )
 #endif
 {
     if ( !options.initOptions(argc, argv) )
@@ -2280,8 +2320,8 @@ void _cdecl main( int argc, char * argv[] )
         key2 = sk2;
     }
 
-    sal_uInt32 nError = 0;
-    if ( nError = compareKeys(key1, key2) )
+    sal_uInt32 nError = compareKeys(key1, key2);
+    if ( nError )
     {
         if ( options.unoTypeCheck() )
         {
@@ -2320,10 +2360,7 @@ void _cdecl main( int argc, char * argv[] )
         exit(10);
     }
 
-    if ( nError > 0 )
-        exit(11);
-    else
-        exit(0);
+    return nError > 0 ? 11 : 0;
 }
 
 
