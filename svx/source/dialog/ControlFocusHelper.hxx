@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControlFocusHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:29:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,4 +55,4 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
 };
 
-#endif SVX_CONTROLL_FUCUS_HELPER_HXX
+#endif  // SVX_CONTROLL_FUCUS_HELPER_HXX
