@@ -4,9 +4,9 @@
  *
  *  $RCSfile: out_position.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:02:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,15 @@ Position::operator-=( intt i_levels )
 {
     csv_assert(pDirectory != 0);
 
-    pDirectory = pDirectory->Parent();
-    if (pDirectory == 0)
-        pDirectory = &Node::Null_();
+    for ( intt i = i_levels; i > 0; --i )
+    {
+        pDirectory = pDirectory->Parent();
+        if (pDirectory == 0)
+        {
+            pDirectory = &Node::Null_();
+            i = 0;
+        }
+    }
     sFile.clear();
 
     return *this;
@@ -143,9 +149,10 @@ Position::LinkTo( Position &        i_destination,
 }
 
 String
-Position::LinkToRoot( const String & i_localLabel ) const
+Position::LinkToRoot( const String & ) const
 {
-    return StreamLock(C_nAssumedMaxLinkLength)() << get_UpLink(Depth()) << c_str;
+    StreamLock sl(C_nAssumedMaxLinkLength);
+    return sl() << get_UpLink(Depth()) << c_str;
 }
 
 void
@@ -187,7 +194,7 @@ Position::Get_LinkTo( StreamStr &         o_result,
 
 void
 Position::Get_LinkToRoot( StreamStr &         o_result,
-                          const String &      i_localLabel ) const
+                          const String &      ) const
 {
     o_result << get_UpLink(Depth());
 }
