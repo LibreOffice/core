@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:54:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,10 +161,8 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
         case XML_ETACTION_COPY_CONTENT:
             return new XMLIgnoreTransformerContext( *this, rQName, sal_False,
                                                 sal_False );
-            break;
         case XML_ETACTION_COPY:
             return new XMLTransformerContext( *this, rQName );
-            break;
         case XML_ETACTION_RENAME_ELEM:
             return new XMLRenameElemTransformerContext( *this, rQName,
                     (*aIter).second.GetQNamePrefixFromParam1(),
@@ -176,13 +174,11 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
                     (*aIter).second.GetQNamePrefixFromParam2(),
                     (*aIter).second.GetQNameTokenFromParam2(),
                        static_cast< XMLTokenEnum >( (*aIter).second.m_nParam3 ) );
-            break;
         case XML_ETACTION_RENAME_ELEM_PROC_ATTRS:
             return new XMLProcAttrTransformerContext( *this, rQName,
                     (*aIter).second.GetQNamePrefixFromParam1(),
                     (*aIter).second.GetQNameTokenFromParam1(),
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
-            break;
         case XML_ETACTION_RENAME_ELEM_ADD_PROC_ATTR:
             return new XMLProcAddAttrTransformerContext( *this, rQName,
                     (*aIter).second.GetQNamePrefixFromParam1(),
@@ -193,7 +189,6 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
                     (*aIter).second.GetQNameTokenFromParam2(),
                        static_cast< XMLTokenEnum >(
                         (*aIter).second.m_nParam3 & 0xffff ) );
-            break;
         case XML_ETACTION_RENAME_ELEM_COND:
             {
                 const XMLTransformerContext *pCurrent = GetCurrentContext();
@@ -219,7 +214,6 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
                     return new XMLProcAttrTransformerContext( *this, rQName,
                             static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
             }
-            break;
         case XML_ETACTION_PROC_ATTRS:
             return new XMLProcAttrTransformerContext( *this, rQName,
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) );
@@ -386,7 +380,11 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     xContext->StartElement( xAttrList );
 }
 
-void SAL_CALL XMLTransformerBase::endElement( const OUString& rName )
+void SAL_CALL XMLTransformerBase::endElement( const OUString&
+#ifndef PRODUCT
+rName
+#endif
+)
     throw(SAXException, RuntimeException)
 {
     if( !m_pContexts->empty() )
@@ -917,7 +915,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         // determine, if it's the transparency of a document style
                         XMLTransformerContext* pFirstContext = (*m_pContexts)[0].get();
                         OUString aFirstContextLocalName;
-                        sal_uInt16 nFirstContextPrefix =
+                        /* sal_uInt16 nFirstContextPrefix = */
                             GetNamespaceMap().GetKeyByAttrName( pFirstContext->GetQName(),
                                                                 &aFirstContextLocalName );
                         bool bIsDocumentStyle(
