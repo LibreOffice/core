@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:28:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@
 Pointer SdrHelpLine::GetPointer() const
 {
     switch (eKind) {
-        case SDRHELPLINE_VERTICAL  : return Pointer(POINTER_ESIZE); break;
-        case SDRHELPLINE_HORIZONTAL: return Pointer(POINTER_SSIZE); break;
-        default                    : return Pointer(POINTER_MOVE);  break;
+        case SDRHELPLINE_VERTICAL  : return Pointer(POINTER_ESIZE);
+        case SDRHELPLINE_HORIZONTAL: return Pointer(POINTER_SSIZE);
+        default                    : return Pointer(POINTER_MOVE);
     } // switch
 }
 
@@ -130,8 +130,8 @@ FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevic
     FASTBOOL bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
     FASTBOOL bYHit=rPnt.Y()>=aPos.Y()-nTolLog && rPnt.Y()<=aPos.Y()+nTolLog+a1Pix.Height();
     switch (eKind) {
-        case SDRHELPLINE_VERTICAL  : return bXHit; break;
-        case SDRHELPLINE_HORIZONTAL: return bYHit; break;
+        case SDRHELPLINE_VERTICAL  : return bXHit;
+        case SDRHELPLINE_HORIZONTAL: return bYHit;
         case SDRHELPLINE_POINT: {
             if (bXHit || bYHit) {
                 Size aRad(rOut.PixelToLogic(Size(SDRHELPLINE_POINT_PIXELSIZE,SDRHELPLINE_POINT_PIXELSIZE)));
