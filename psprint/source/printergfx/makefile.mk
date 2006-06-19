@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 12:03:02 $
+#   last change: $Author: hr $ $Date: 2006-06-19 10:26:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ PRJNAME=psprint
 TARGET=gfx
 
 # --- Settings -----------------------------------------------------
+
+ENABLE_EXCEPTIONS=true
 
 .INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
