@@ -4,9 +4,9 @@
  *
  *  $RCSfile: File.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,11 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(OFileControlModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
-// OComponentHelper
+    // OComponentHelper
     virtual void SAL_CALL disposing();
 
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
@@ -78,26 +78,30 @@ public:
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
         throw(::com::sun::star::lang::IllegalArgumentException);
 
-// ::com::sun::star::beans::XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// ::com::sun::star::io::XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com ::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com ::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::form::XReset
+    // XReset
     virtual void SAL_CALL reset() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
 
-// OAggregationArrayUsageHelper
+    // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+    // prevent method hiding
+    using OControlModel::disposing;
+    using OControlModel::getFastPropertyValue;
 
 protected:
     virtual void _reset();
