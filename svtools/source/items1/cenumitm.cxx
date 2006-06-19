@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cenumitm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ USHORT SfxEnumItemInterface::GetPosByValue(USHORT nValue) const
     return USHRT_MAX;
 }
 
-BOOL SfxEnumItemInterface::IsEnabled(USHORT nValue) const
+BOOL SfxEnumItemInterface::IsEnabled(USHORT) const
 {
     return TRUE;
 }
@@ -167,8 +167,8 @@ void SfxEnumItemInterface::SetBoolValue(BOOL)
 DBG_NAME(CntEnumItem)
 
 //============================================================================
-CntEnumItem::CntEnumItem(USHORT nWhich, SvStream & rStream):
-    SfxEnumItemInterface(nWhich)
+CntEnumItem::CntEnumItem(USHORT which, SvStream & rStream):
+    SfxEnumItemInterface(which)
 {
     m_nValue = 0;
     rStream >> m_nValue;
@@ -211,8 +211,8 @@ DBG_NAME(CntBoolItem)
 TYPEINIT1_AUTOFACTORY(CntBoolItem, SfxPoolItem)
 
 //============================================================================
-CntBoolItem::CntBoolItem(USHORT nWhich, SvStream & rStream):
-    SfxPoolItem(nWhich)
+CntBoolItem::CntBoolItem(USHORT which, SvStream & rStream):
+    SfxPoolItem(which)
 {
     m_bValue = false;
     rStream >> m_bValue;

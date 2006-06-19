@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntwall.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,14 @@
 TYPEINIT1( CntWallpaperItem, SfxPoolItem );
 
 // -----------------------------------------------------------------------
-CntWallpaperItem::CntWallpaperItem( USHORT nWhich )
-    : SfxPoolItem( nWhich ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
+CntWallpaperItem::CntWallpaperItem( USHORT which )
+    : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
 }
 
 // -----------------------------------------------------------------------
-CntWallpaperItem::CntWallpaperItem( USHORT nWhich, SvStream& rStream, USHORT nVersion )
-    : SfxPoolItem( nWhich ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
+CntWallpaperItem::CntWallpaperItem( USHORT which, SvStream& rStream, USHORT nVersion )
+    : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
     UINT32 nMagic = 0;
     rStream >> nMagic;
@@ -158,8 +158,7 @@ SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL CntWallpaperItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                    BYTE nMemberId ) const
+BOOL CntWallpaperItem::QueryValue( com::sun::star::uno::Any&,BYTE ) const
 {
     DBG_ERROR("Not implemented!");
     return FALSE;
@@ -167,8 +166,7 @@ BOOL CntWallpaperItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL CntWallpaperItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                    BYTE nMemberId )
+BOOL CntWallpaperItem::PutValue( const com::sun::star::uno::Any&,BYTE )
 {
     DBG_ERROR("Not implemented!");
     return FALSE;
