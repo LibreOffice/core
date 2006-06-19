@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:16:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,10 +220,11 @@ UnoControlDialogModel::UnoControlDialogModel()
 }
 
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
-    :UnoControlModel( rModel )
-    ,maContainerListeners( *this )
-    ,maChangeListeners ( GetMutex() )
-    ,mbGroupsUpToDate( sal_False )
+    : UnoControlDialogModel_IBase( rModel )
+    , UnoControlDialogModel_Base( rModel )
+    , maContainerListeners( *this )
+    , maChangeListeners ( GetMutex() )
+    , mbGroupsUpToDate( sal_False )
 {
 }
 
@@ -581,7 +582,7 @@ sal_Bool SAL_CALL UnoControlDialogModel::getGroupControl(  ) throw (RuntimeExcep
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL UnoControlDialogModel::setGroupControl( sal_Bool GroupControl ) throw (RuntimeException)
+void SAL_CALL UnoControlDialogModel::setGroupControl( sal_Bool ) throw (RuntimeException)
 {
     DBG_ERROR( "UnoControlDialogModel::setGroupControl: explicit grouping not supported" );
 }
@@ -668,7 +669,7 @@ Sequence< Reference< XControlModel > > SAL_CALL UnoControlDialogModel::getContro
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL UnoControlDialogModel::setGroup( const Sequence< Reference< XControlModel > >& Group, const ::rtl::OUString& GroupName ) throw (RuntimeException)
+void SAL_CALL UnoControlDialogModel::setGroup( const Sequence< Reference< XControlModel > >&, const ::rtl::OUString& ) throw (RuntimeException)
 {
     // not supported. We have only implicit grouping:
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
@@ -936,7 +937,7 @@ void SAL_CALL UnoControlDialogModel::propertyChange( const PropertyChangeEvent& 
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL UnoControlDialogModel::disposing( const EventObject& evt ) throw (RuntimeException)
+void SAL_CALL UnoControlDialogModel::disposing( const EventObject& /*evt*/ ) throw (RuntimeException)
 {
     // TODO
 }
@@ -1390,7 +1391,7 @@ void UnoDialogControl::removingControl( const Reference< XControl >& _rxControl 
 
 }
 
-void SAL_CALL UnoDialogControl::changesOccurred( const ChangesEvent& Event ) throw (RuntimeException)
+void SAL_CALL UnoDialogControl::changesOccurred( const ChangesEvent& ) throw (RuntimeException)
 {
     // a tab controller model may have changed
 
