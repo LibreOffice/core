@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:01:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,13 +306,13 @@ public:
     }
 
     // -------------------------------------------------------------------
-    void AssigmentTransientData::setDatasourceName(const ::rtl::OUString& _rName)
+    void AssigmentTransientData::setDatasourceName(const ::rtl::OUString&)
     {
         DBG_ERROR( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
     // -------------------------------------------------------------------
-    void AssigmentTransientData::setCommand(const ::rtl::OUString& _rCommand)
+    void AssigmentTransientData::setCommand(const ::rtl::OUString&)
     {
         DBG_ERROR( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
@@ -1221,7 +1221,7 @@ public:
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, _pButton)
+    IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, EMPTYARG)
     {
         String sSelectedDS = m_aDatasource.GetText();
         OFileNotation aFileNotation( sSelectedDS ,OFileNotation::N_SYSTEM);
