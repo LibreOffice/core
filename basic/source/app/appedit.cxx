@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:10:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@
 TYPEINIT1(AppEdit,AppWin);
 AppEdit::AppEdit( BasicFrame* pParent )
 : AppWin( pParent )
-, nCurTextWidth(5)
 , pVScroll( NULL )
 , pHScroll( NULL )
+, nCurTextWidth(5)
 {
     String aEmpty;
     // evtl. den Untitled-String laden:
@@ -149,6 +149,7 @@ void AppEdit::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( AppEdit, Scroll, ScrollBar*, pScroll )
 {
+    (void) pScroll; /* avoid warning about unused parameter */
     if ( !pHScroll || !pVScroll )
         return 0;
 
