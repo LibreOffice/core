@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:19:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 // ===================================================================================================
 // Hilfsstrukturen
 
-SV_DECL_OBJARR(SvInt32Array, sal_Int32, 16, 16);
+SV_DECL_OBJARR(SvInt32Array, sal_Int32, 16, 16)
 
 // ===================================================================================================
 // = class FmSearchThread - wie der Name schon sagt
@@ -261,7 +261,7 @@ class SVX_DLLPUBLIC FmSearchEngine
 
     // der Link, dem ich Fortschritte und Ergebnisse mitteile
     Link                m_aProgressHandler;
-    sal_Bool            m_bSearchingCurrently;          // laeuft gerade eine (asynchrone) Suche ?
+    sal_Bool            m_bSearchingCurrently : 1;      // laeuft gerade eine (asynchrone) Suche ?
     sal_Bool            m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
     ::osl::Mutex        m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
                                                         // m_eMode == SM_USETHREAD interesant)
