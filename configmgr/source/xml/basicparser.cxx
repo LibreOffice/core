@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:37:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:35:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ namespace
     typedef uno::Reference< script::XTypeConverter > TypeConverter;
 
     static inline
-    uno::Reference< uno::XInterface > createTCV(BasicParser::Context const & _xContext)
+    TypeConverter createTCV(BasicParser::Context const & _xContext)
     {
         OSL_ENSURE(_xContext.is(),"Cannot create Parser without a Context");
 
@@ -67,13 +67,6 @@ namespace
 
         uno::Reference< lang::XMultiComponentFactory > xSvcFactory = _xContext->getServiceManager();
         return TypeConverter::query(xSvcFactory->createInstanceWithContext(k_sTCVService,_xContext));
-    }
-
-    static inline
-    TypeConverter asTCV(uno::Reference< uno::XInterface > const & _xTCV)
-    {
-        OSL_ASSERT(TypeConverter::query(_xTCV).get() == _xTCV.get());
-        return static_cast< script::XTypeConverter * >(_xTCV.get());
     }
 }
 // -----------------------------------------------------------------------------
@@ -224,7 +217,7 @@ void SAL_CALL BasicParser::ignorableWhitespace( const OUString& aWhitespaces )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicParser::processingInstruction( const OUString& aTarget, const OUString& aData )
+void SAL_CALL BasicParser::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw (sax::SAXException, uno::RuntimeException)
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
@@ -240,8 +233,9 @@ void SAL_CALL BasicParser::setDocumentLocator( const uno::Reference< sax::XLocat
 }
 // -----------------------------------------------------------------------------
 
-void BasicParser::startNode( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
+void BasicParser::startNode( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& /*xAttribs*/ )
 {
+    { (void)aInfo; }
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 
     OSL_ENSURE( !isSkipping(), "While skipping, call startSkipping() instead of startNode()");
@@ -377,7 +371,7 @@ void BasicParser::startValueData(const uno::Reference< sax::XAttributeList >& xA
     if (isInValueData())
         raiseParseException( "Configuration XML Parser - Invalid Data: Unexpected element while parsing value data" );
 
-    m_pValueData = new ValueData(m_aValueType, asTCV(m_xTypeConverter));
+    m_pValueData = new ValueData(m_aValueType, m_xTypeConverter);
 
     m_pValueData->setIsNull( getDataParser().isNull(xAttribs) );
 
@@ -467,7 +461,7 @@ void BasicParser::endValueData()
 }
 // -----------------------------------------------------------------------------
 
-void BasicParser::startSkipping( const OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
+void BasicParser::startSkipping( const OUString& aName, const uno::Reference< sax::XAttributeList >& /*xAttribs*/ )
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 
