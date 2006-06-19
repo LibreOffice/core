@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:54:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,7 +515,7 @@ sal_Bool MediaDescriptor::addInputStream()
                         ::rtl::OUString::createFromAscii("Found invalid PostData."),
                         css::uno::Reference< css::uno::XInterface >());
 
-            return impl_openStreamWithPostData(xPostData);
+            return impl_openStreamWithPostData();
         }
 
         // b) ... or we must get it from the given URL
@@ -548,7 +548,7 @@ sal_Bool MediaDescriptor::addInputStream()
 /*-----------------------------------------------
     25.03.2004 12:38
 -----------------------------------------------*/
-sal_Bool MediaDescriptor::impl_openStreamWithPostData(const css::uno::Reference< css::io::XInputStream >& xPostData)
+sal_Bool MediaDescriptor::impl_openStreamWithPostData()
     throw(::com::sun::star::uno::RuntimeException)
 {
     // PostData cant be used in read/write mode!
