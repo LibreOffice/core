@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml_parser.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:40:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,13 +138,6 @@ public:
 private:
 
     void init();
-
-    //####################################
-    // callback functions
-    static void xml_start_element_handler(void* UserData, const XML_Char* name, const XML_Char** atts);
-    static void xml_end_element_handler(void* UserData, const XML_Char* name);
-    static void xml_character_data_handler(void* UserData, const XML_Char* s, int len);
-    static void xml_comment_handler(void* UserData, const XML_Char* Data);
 
 private:
     i_xml_parser_event_handler* document_handler_;
