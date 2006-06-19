@@ -1,12 +1,13 @@
+
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:17:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +64,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_TPCOLOR_CXX
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
@@ -111,23 +111,18 @@ SvxColorTabPage::SvxColorTabPage
 
     SfxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOutOld             ( &aCtlPreviewOld ),
-    XOutNew             ( &aCtlPreviewNew ),
-    aXFillAttr          ( pXPool ),
-    rXFSet              ( aXFillAttr.GetItemSet() ),
-
-    aXFStyleItem        ( XFILL_SOLID ),
-    aXFillColorItem     ( String(), Color( COL_BLACK ) ),
-
     aFlProp             ( this, ResId( FL_PROP ) ),
-    aValSetColorTable   ( this, ResId( CTL_COLORTABLE ) ),
-//    aGrpColorTable      ( this, ResId( GRP_COLORTABLE ) ),
-    aTableNameFT        ( this, ResId( FT_TABLE_NAME ) ),
     aFtName             ( this, ResId( FT_NAME ) ),
     aEdtName            ( this, ResId( EDT_NAME ) ),
     aFtColor            ( this, ResId( FT_COLOR ) ),
     aLbColor            ( this, ResId( LB_COLOR ) ),
+
+    aTableNameFT        ( this, ResId( FT_TABLE_NAME ) ),
+    aValSetColorTable   ( this, ResId( CTL_COLORTABLE ) ),
+
+    aCtlPreviewOld      ( this, ResId( CTL_PREVIEW_OLD ), &XOutOld ),
+    aCtlPreviewNew      ( this, ResId( CTL_PREVIEW_NEW ), &XOutNew ),
+
     aLbColorModel       ( this, ResId( LB_COLORMODEL ) ),
     aFtColorModel1      ( this, ResId( FT_1 ) ),
     aMtrFldColorModel1  ( this, ResId( MTR_FLD_1 ) ),
@@ -137,19 +132,26 @@ SvxColorTabPage::SvxColorTabPage
     aMtrFldColorModel3  ( this, ResId( MTR_FLD_3 ) ),
     aFtColorModel4      ( this, ResId( FT_4 ) ),
     aMtrFldColorModel4  ( this, ResId( MTR_FLD_4 ) ),
-//    aGrpColorModel      ( this, ResId( GRP_COLORMODEL ) ),
     aBtnAdd             ( this, ResId( BTN_ADD ) ),
     aBtnModify          ( this, ResId( BTN_MODIFY ) ),
     aBtnWorkOn          ( this, ResId( BTN_WORK_ON ) ),
     aBtnDelete          ( this, ResId( BTN_DELETE ) ),
-    aCtlPreviewOld      ( this, ResId( CTL_PREVIEW_OLD ), &XOutOld ),
-    aCtlPreviewNew      ( this, ResId( CTL_PREVIEW_NEW ), &XOutNew ),
-//    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     aBtnLoad            ( this, ResId( BTN_LOAD ) ),
     aBtnSave            ( this, ResId( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
+    pColorTab( NULL ),
+
     bDeleteColorTable   ( TRUE ),
+
+    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    XOutOld             ( &aCtlPreviewOld ),
+    XOutNew             ( &aCtlPreviewNew ),
+    aXFStyleItem        ( XFILL_SOLID ),
+    aXFillColorItem     ( String(), Color( COL_BLACK ) ),
+    aXFillAttr          ( pXPool ),
+    rXFSet              ( aXFillAttr.GetItemSet() ),
+
     eCM                 ( CM_RGB )
 
 {
@@ -205,7 +207,6 @@ SvxColorTabPage::SvxColorTabPage
     aValSetColorTable.SetExtraSpacing( 0 );
     aValSetColorTable.Show();
 
-    pColorTab = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -218,7 +219,7 @@ void SvxColorTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
+void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
@@ -241,7 +242,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
                 {
                     aLbColorModel.SelectEntryPos( CM_RGB );
 
-                    aAktuellColor.SetColor ( ( ( const XFillColorItem* ) pPoolItem )->GetValue().GetColor() );
+                    aAktuellColor.SetColor ( ( ( const XFillColorItem* ) pPoolItem )->GetColorValue().GetColor() );
 
                     aEdtName.SetText( ( ( const XFillColorItem* ) pPoolItem )->GetName() );
 
@@ -298,13 +299,13 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxColorTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( CheckChanges_Impl() == -1L )
         return( KEEP_PAGE );
 
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
 
     return( LEAVE_PAGE );
 }
@@ -322,7 +323,7 @@ long SvxColorTabPage::CheckChanges_Impl()
     USHORT nPos = aLbColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        Color aColor = pColorTab->Get( nPos )->GetColor();
+        Color aColor = pColorTab->GetColor( nPos )->GetColor();
         String aString = aLbColor.GetSelectEntry();
 
         // aNewColor, da COL_USER != COL_irgendwas, auch wenn RGB-Werte gleich
@@ -358,7 +359,7 @@ long SvxColorTabPage::CheckChanges_Impl()
                 case RET_BTN_1: // Aendern
                 {
                     ClickModifyHdl_Impl( this );
-                    aColor = pColorTab->Get( nPos )->GetColor();
+                    aColor = pColorTab->GetColor( nPos )->GetColor();
                 }
                 break;
 
@@ -366,7 +367,7 @@ long SvxColorTabPage::CheckChanges_Impl()
                 {
                     ClickAddHdl_Impl( this );
                     nPos = aLbColor.GetSelectEntryPos();
-                    aColor = pColorTab->Get( nPos )->GetColor();
+                    aColor = pColorTab->GetColor( nPos )->GetColor();
                 }
                 break;
 
@@ -391,7 +392,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( ( *pDlgType != 0 ) ||
         ( *pPageType == PT_COLOR && *pbAreaTP == FALSE ) )
@@ -404,7 +405,7 @@ BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         USHORT nPos = aLbColor.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            aColor  = pColorTab->Get( nPos )->GetColor();
+            aColor  = pColorTab->GetColor( nPos )->GetColor();
             aString = aLbColor.GetSelectEntry();
         }
         else
@@ -413,8 +414,8 @@ BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             if (eCM != CM_RGB)
                 ConvertColorValues (aColor, CM_RGB);
         }
-        rOutAttrs.Put( XFillColorItem( aString, aColor ) );
-        rOutAttrs.Put( XFillStyleItem( XFILL_SOLID ) );
+        rSet.Put( XFillColorItem( aString, aColor ) );
+        rSet.Put( XFillStyleItem( XFILL_SOLID ) );
     }
 
     return( TRUE );
@@ -422,14 +423,14 @@ BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
 // -----------------------------------------------------------------------
 
-void SvxColorTabPage::Reset( const SfxItemSet& rOutAttrs )
+void SvxColorTabPage::Reset( const SfxItemSet& rSet )
 {
-    USHORT nState = rOutAttrs.GetItemState( XATTR_FILLCOLOR );
+    USHORT nState = rSet.GetItemState( XATTR_FILLCOLOR );
 
     if ( nState >= SFX_ITEM_DEFAULT )
     {
-        XFillColorItem aColorItem( (const XFillColorItem&)rOutAttrs.Get( XATTR_FILLCOLOR ) );
-        aLbColor.SelectEntry( aColorItem.GetValue() );
+        XFillColorItem aColorItem( (const XFillColorItem&)rSet.Get( XATTR_FILLCOLOR ) );
+        aLbColor.SelectEntry( aColorItem.GetColorValue() );
         aValSetColorTable.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
         aEdtName.SetText( aLbColor.GetSelectEntry() );
     }
@@ -517,7 +518,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     // Pruefen, ob Name schon vorhanden ist
     for ( long i = 0; i < nCount && bDifferent; i++ )
-        if ( aName == pColorTab->Get( i )->GetName() )
+        if ( aName == pColorTab->GetColor( i )->GetName() )
             bDifferent = FALSE;
 
     // Wenn ja, wird wiederholt ein neuer Name angefordert
@@ -542,7 +543,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pColorTab->Get( i )->GetName() )
+                if( aName == pColorTab->GetColor( i )->GetName() )
                     bDifferent = FALSE;
             }
 
@@ -604,7 +605,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
         // Pruefen, ob Name schon vorhanden ist
         for ( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pColorTab->Get( i )->GetName() && nPos != i )
+            if ( aName == pColorTab->GetColor( i )->GetName() && nPos != i )
                 bDifferent = FALSE;
 
         // Wenn ja, wird wiederholt ein neuer Name angefordert
@@ -628,7 +629,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 bDifferent = TRUE;
 
                 for ( long i = 0; i < nCount && bDifferent; i++ )
-                    if( aName == pColorTab->Get( i )->GetName() &&  nPos != i )
+                    if( aName == pColorTab->GetColor( i )->GetName() && nPos != i )
                         bDifferent = FALSE;
 
                 if( bDifferent )
@@ -642,7 +643,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn nicht vorhanden, wird Eintrag aufgenommen
         if( bDifferent )
         {
-            XColorEntry* pEntry = pColorTab->Get( nPos );
+            XColorEntry* pEntry = pColorTab->GetColor( nPos );
 
             Color aTmpColor (aAktuellColor);
             if (eCM != CM_RGB)
@@ -769,7 +770,7 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 //
 // Button 'Farbtabelle laden'
 //
-IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
+IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     ResMgr* pMgr = DIALOG_MGR();
     USHORT nReturn = RET_YES;
@@ -887,7 +888,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
 //
 // Button 'Farbtabelle speichern'
 //
-IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
+IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
@@ -1148,7 +1149,7 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
     int nPos = aLbColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        XColorEntry* pEntry = pColorTab->Get( nPos );
+        XColorEntry* pEntry = pColorTab->GetColor( nPos );
 
         aAktuellColor.SetColor ( pEntry->GetColor().GetColor() );
         if (eCM != CM_RGB)
@@ -1178,7 +1179,7 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 
     for( long i = 0; i < nCount; i++ )
     {
-        pColorEntry = pColorTab->Get( i );
+        pColorEntry = pColorTab->GetColor( i );
         rVs.InsertItem( (USHORT) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
