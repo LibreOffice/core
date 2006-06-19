@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apiserviceinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:08:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,81 +233,96 @@ const AsciiServiceName c_aRootSetUpdateServices[] =
 ServiceImplementationInfo const aInnerGroupInfoSI =
 {
     "com.sun.star.comp.configuration.OInnerGroupInfoAccess",
-    c_aInnerGroupAccessServices
+    c_aInnerGroupAccessServices,
+    NULL
 };
 ServiceImplementationInfo const aInnerGroupUpdateSI =
 {
     "com.sun.star.comp.configuration.OInnerGroupUpdateAccess",
-    c_aInnerGroupUpdateServices
+    c_aInnerGroupUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aInnerSetInfoSI =
 {
     "com.sun.star.comp.configuration.OInnerSetInfoAccess",
-    c_aInnerSetAccessServices
+    c_aInnerSetAccessServices,
+    NULL
 };
 ServiceImplementationInfo const aInnerTreeSetSI =
 {
     "com.sun.star.comp.configuration.OInnerTreeSetUpdateAccess",
-    c_aInnerSetUpdateServices
+    c_aInnerSetUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aInnerValueSetSI =
 {
     "com.sun.star.comp.configuration.OInnerValueSetUpdateAccess",
-    c_aInnerSetUpdateServices
+    c_aInnerSetUpdateServices,
+    NULL
 };
 //-----------------------------------------------------------------------------
 
 ServiceImplementationInfo const aSetElementGroupInfoSI =
 {
     "com.sun.star.comp.configuration.OSetElementGroupInfoAccess",
-    c_aSetElementGroupUpdateServices
+    c_aSetElementGroupUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aSetElementGroupUpdateSI =
 {
     "com.sun.star.comp.configuration.OSetElementGroupUpdateAccess",
-    c_aSetElementGroupUpdateServices
+    c_aSetElementGroupUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aSetElementSetInfoSI =
 {
     "com.sun.star.comp.configuration.OSetElementSetInfoAccess",
-    c_aSetElementSetAccessServices
+    c_aSetElementSetAccessServices,
+    NULL
 };
 ServiceImplementationInfo const aSetElementTreeSetSI =
 {
     "com.sun.star.comp.configuration.OSetElementTreeSetUpdateAccess",
-    c_aSetElementSetUpdateServices
+    c_aSetElementSetUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aSetElementValueSetSI =
 {
     "com.sun.star.comp.configuration.OSetElementValueSetUpdateAccess",
-    c_aSetElementSetUpdateServices
+    c_aSetElementSetUpdateServices,
+    NULL
 };
 //-----------------------------------------------------------------------------
 
 ServiceImplementationInfo const aRootElementGroupInfoSI =
 {
     "com.sun.star.comp.configuration.ORootElementGroupInfoAccess",
-    c_aRootGroupAccessServices
+    c_aRootGroupAccessServices,
+    NULL
 };
 ServiceImplementationInfo const aRootElementGroupUpdateSI =
 {
     "com.sun.star.comp.configuration.ORootElementGroupUpdateAccess",
-    c_aRootGroupUpdateServices
+    c_aRootGroupUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aRootElementSetInfoSI =
 {
     "com.sun.star.comp.configuration.ORootElementSetInfoAccess",
-    c_aRootSetAccessServices
+    c_aRootSetAccessServices,
+    NULL
 };
 ServiceImplementationInfo const aRootElementTreeSetUpdateSI =
 {
     "com.sun.star.comp.configuration.ORootElementTreeSetUpdateAccess",
-    c_aRootSetUpdateServices
+    c_aRootSetUpdateServices,
+    NULL
 };
 ServiceImplementationInfo const aRootElementValueSetUpdateSI =
 {
     "com.sun.star.comp.configuration.ORootElementValueSetUpdateAccess",
-    c_aRootSetUpdateServices
+    c_aRootSetUpdateServices,
+    NULL
 };
 //-----------------------------------------------------------------------------
 
