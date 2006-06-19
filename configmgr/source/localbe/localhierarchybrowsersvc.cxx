@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localhierarchybrowsersvc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:04:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,11 +198,11 @@ namespace
 
                         if (bGood)
                         {
-                            sal_Int32 const nCount = aComponentList.getLength();
-                            aExcludeList.realloc(nNextIndex + nCount);
+                            sal_Int32 const nCompListCount = aComponentList.getLength();
+                            aExcludeList.realloc(nNextIndex + nCompListCount);
 
                             OUString const * pSrc = aComponentList.getConstArray();
-                            std::copy(pSrc,pSrc+nCount,aExcludeList.getArray());
+                            std::copy(pSrc,pSrc+nCompListCount,aExcludeList.getArray());
                         }
                     }
                     break;
