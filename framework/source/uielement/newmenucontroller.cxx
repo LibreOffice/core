@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newmenucontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:40:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,7 +423,6 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         // copy entries as we have to use the provided popup menu
         *pVCLPopupMenu = *pSubMenu;
 
-        int             nItemCount = pVCLPopupMenu->GetItemCount();
         Image           aImage;
         AddInfo         aAddInfo;
 
@@ -454,7 +453,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 }
 
 // XEventListener
-void SAL_CALL NewMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -468,12 +467,12 @@ void SAL_CALL NewMenuController::disposing( const EventObject& Source ) throw ( 
 }
 
 // XStatusListener
-void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
+void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
 }
 
 // XMenuListener
-void SAL_CALL NewMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL NewMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -533,7 +532,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
     }
 }
 
-void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
     if ( m_xFrame.is() && m_xPopupMenu.is() )
@@ -561,7 +560,7 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& rEvent ) t
     }
 }
 
-void SAL_CALL NewMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL NewMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -659,7 +658,6 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
             m_bInitialized  = sal_True;
@@ -672,7 +670,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-IMPL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument )
+IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument )
 {
 /*  i62706: Don't catch all exceptions. We hide all problems here and are not able
             to handle them on higher levels.
