@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxViewFactory);
+DBG_NAME(SfxViewFactory)
 
 SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldSh )
 {
