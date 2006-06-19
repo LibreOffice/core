@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@ class RootStorageWrapper :  public com::sun::star::lang::XTypeProvider      ,
 {
     public:
         //  XInterface, XTypeProvider
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+      FWK_DECLARE_XTYPEPROVIDER
 
         RootStorageWrapper( const Reference< XTransactedObject >& xRootCommit ) : m_xRootCommit( xRootCommit ) {}
         virtual ~RootStorageWrapper() {}
@@ -265,11 +265,11 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
 
 ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , m_xServiceManager( xServiceManager )
     , m_bDisposed( false )
 //TODO_AS    , m_bInit( false )
     , m_xModuleMgr( Reference< XModuleManager >( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
+    , m_xServiceManager( xServiceManager )
+    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     // Retrieve known modules and insert them into our hash_map to speed-up access time.
     Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY );
