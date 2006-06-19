@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dataedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:14:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,10 @@ public:
     virtual void Update()=0;
     virtual void SetFont( const Font& rNewFont )=0;
 
-    virtual void BuildKontextMenu( PopupMenu *&pMenu ){;}   // Wer will kann hier eigene Einträge hinzufügen
+    virtual void BuildKontextMenu( PopupMenu *&pMenu )
+    {
+        (void) pMenu; /* avoid warning about unused parameter */
+    }   // Wer will kann hier eigene Einträge hinzufügen
 };
 
 #endif
