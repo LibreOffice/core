@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementlist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:36:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ namespace DOM
     // tree mutations can change the list
     void SAL_CALL CElementList::handleEvent(const Reference< XEvent >& evt) throw (RuntimeException)
     {
+      Reference< XEvent > aEvent = evt;
         m_bRebuild = sal_True;
     }
 }
