@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:51:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 {
 }
 
-SdrExchangeView::SdrExchangeView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrObjEditView(pModel1,pXOut)
+SdrExchangeView::SdrExchangeView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrObjEditView(pModel1,_pXOut)
 {
 }
 
@@ -398,7 +398,7 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
         if (bResize) ResizeRect(aR,aPt0,xResize,yResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
-        ULONG nDstObjAnz0=pDstLst->GetObjCount();
+        //ULONG nDstObjAnz0=pDstLst->GetObjCount();
         ULONG nCloneErrCnt=0;
         ULONG nOb,nObAnz=pSrcPg->GetObjCount();
         BOOL bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
@@ -853,7 +853,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
 // -----------------------------------------------------------------------------
 
-BOOL SdrExchangeView::Cut( ULONG nFormat )
+BOOL SdrExchangeView::Cut( ULONG /*nFormat */)
 {
     DBG_ERROR( "SdrExchangeView::Cut: Not supported anymore" );
     return FALSE;
@@ -861,14 +861,14 @@ BOOL SdrExchangeView::Cut( ULONG nFormat )
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::CutMarked( ULONG nFormat )
+void SdrExchangeView::CutMarked( ULONG /*nFormat */)
 {
     DBG_ERROR( "SdrExchangeView::CutMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL SdrExchangeView::Yank(ULONG nFormat)
+BOOL SdrExchangeView::Yank(ULONG /*nFormat*/)
 {
     DBG_ERROR( "SdrExchangeView::Yank: Not supported anymore" );
     return FALSE;
@@ -876,14 +876,14 @@ BOOL SdrExchangeView::Yank(ULONG nFormat)
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::YankMarked(ULONG nFormat)
+void SdrExchangeView::YankMarked(ULONG /*nFormat*/)
 {
     DBG_ERROR( "YankMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL SdrExchangeView::Paste(Window* pWin, ULONG nFormat)
+BOOL SdrExchangeView::Paste(Window* /*pWin*/, ULONG /*nFormat*/)
 {
     DBG_ERROR( "SdrExchangeView::Paste: Not supported anymore" );
     return FALSE;
