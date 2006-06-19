@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:07:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_uInt16 OAttributeMetaData::getBindingAttributeNamespace(sal_Int32 _nId)
+    sal_uInt16 OAttributeMetaData::getBindingAttributeNamespace(sal_Int32)
     {
         // nothing special here
         return XML_NAMESPACE_FORM;
@@ -331,7 +331,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
-            const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& _rDefaultString)
+            const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& /*_rDefaultString*/)
     {
         OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(::rtl::OUString::createFromAscii(_pAttributeName)),
             "OAttribute2Property::implAdd: already have this attribute!");
