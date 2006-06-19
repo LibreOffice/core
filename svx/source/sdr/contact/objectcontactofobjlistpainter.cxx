@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:02:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace sdr
         }
 
         // Update Draw Hierarchy data
-        void ObjectContactPainter::EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo)
+        void ObjectContactPainter::EnsureValidDrawHierarchy(DisplayInfo& /*rDisplayInfo*/)
         {
             const sal_uInt32 nCount(maDrawHierarchy.Count());
 
@@ -111,9 +111,9 @@ namespace sdr
             else
             {
                 // build new hierarchy
-                const sal_uInt32 nCount(GetPaintObjectCount());
+                const sal_uInt32 nCount2(GetPaintObjectCount());
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                for(sal_uInt32 a(0L); a < nCount2; a++)
                 {
                     ViewContact& rViewContact = GetPaintObjectViewContact(a);
                     ViewObjectContact& rViewObjectContact = rViewContact.GetViewObjectContact(*this);
@@ -208,7 +208,7 @@ namespace sdr
             return 1L;
         }
 
-        ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 nIndex) const
+        ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*nIndex*/) const
         {
             DBG_ASSERT(mpStartPage,
                 "ObjectContactOfPagePainter::GetPaintObjectViewContact: no mpStartPage set (!)");
