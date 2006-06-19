@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 08:50:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,8 @@ class ConfigurationAccess_UICommand : // interfaces
         virtual                   ~ConfigurationAccess_UICommand();
 
         //  XInterface, XTypeProvider
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -282,20 +282,20 @@ DEFINE_XTYPEPROVIDER_5  (   ConfigurationAccess_UICommand       ,
 
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( rServiceManager ),
-    m_aPropUILabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_LABEL )),
-    m_aPropUIContextLabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_CONTEXT_LABEL )),
-    m_bConfigAccessInitialized( sal_False ),
-    m_bCacheFilled( sal_False ),
-    m_bGenericDataRetrieved( sal_False ),
     m_aConfigCmdAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
     m_aConfigPopupAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
+    m_aPropUILabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_LABEL )),
+    m_aPropUIContextLabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_CONTEXT_LABEL )),
     m_aPropLabel( RTL_CONSTASCII_USTRINGPARAM( PROPSET_LABEL )),
     m_aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPSET_NAME )),
     m_aPropPopup( RTL_CONSTASCII_USTRINGPARAM( PROPSET_POPUP )),
     m_aPropProperties( RTL_CONSTASCII_USTRINGPARAM( PROPSET_PROPERTIES )),
     m_aPrivateResourceURL( RTL_CONSTASCII_USTRINGPARAM( PRIVATE_RESOURCE_URL )),
-    m_xGenericUICommands( rGenericUICommands )
+    m_xGenericUICommands( rGenericUICommands ),
+    m_xServiceManager( rServiceManager ),
+    m_bConfigAccessInitialized( sal_False ),
+    m_bCacheFilled( sal_False ),
+    m_bGenericDataRetrieved( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigCmdAccess += aModuleName;
@@ -721,15 +721,15 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException)
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
 }
 
@@ -841,10 +841,10 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 
     ResetableGuard aLock( m_aLock );
 
-    ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.find( aName );
-    if ( pIter != m_aModuleToCommandFileMap.end() )
+    ModuleToCommandFileMap::const_iterator pM2CIter = m_aModuleToCommandFileMap.find( aName );
+    if ( pM2CIter != m_aModuleToCommandFileMap.end() )
     {
-        OUString aCommandFile( pIter->second );
+        OUString aCommandFile( pM2CIter->second );
         UICommandsHashMap::iterator pIter = m_aUICommandsHashMap.find( aCommandFile );
         if ( pIter != m_aUICommandsHashMap.end() )
         {
