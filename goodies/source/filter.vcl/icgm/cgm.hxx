@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cgm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:49:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 // ---------------------------------------------------------------
 
 #include <tools/solar.h>
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #include <tools/list.hxx>
 #include "cgmtypes.hxx"
 
@@ -179,7 +179,7 @@ class CGM
         GDIMetaFile*        mpGDIMetaFile;
                             CGM( sal_uInt32 nMode, Graphic& rGraphic );
 #endif
-        void                ImplComment( sal_uInt32, char* );
+        void                ImplComment( sal_uInt32, const char* );
         sal_uInt32              GetBackGroundColor();
         sal_Bool                IsValid() { return mbStatus; };
         sal_Bool                IsFinished() { return mbIsFinished; };
