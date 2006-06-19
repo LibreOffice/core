@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:11:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,13 +107,13 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("IsFixed"),          WID_BOOL1,      &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("NumberFormat"),     WID_INT32,      &::getCppuType((const sal_Int16*)0),    0, 0 },
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     static SfxItemPropertyMap aDateTimeFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     static SfxItemPropertyMap aUrlFieldPropertyMap_Impl[] =
@@ -123,12 +123,12 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("Representation"),   WID_STRING1,    &::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("TargetFrame"),      WID_STRING2,    &::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("URL"),              WID_STRING3,    &::getCppuType((const OUString*)0),     0, 0 },
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     static SfxItemPropertyMap aEmptyPropertyMap_Impl[] =
     {
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     static SfxItemPropertyMap aExtFileFieldPropertyMap_Impl[] =
@@ -136,7 +136,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("FileFormat"),           WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
         { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     static SfxItemPropertyMap aAuthorFieldPropertyMap_Impl[] =
@@ -146,13 +146,13 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("Content"),              WID_STRING2,&::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("AuthorFormat"),         WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
         { MAP_CHAR_LEN("FullName"),             WID_BOOL2,  &::getBooleanCppuType(),                0, 0 },
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     static SfxItemPropertyMap aMeasureFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("Kind"),                 WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     switch( mnId )
@@ -182,11 +182,6 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         return aEmptyPropertyMap_Impl;
     }
 }
-
-static SfxItemPropertyMap aEmptyPropertyMap_Impl[] =
-{
-    {0,0}
-};
 
 static sal_Char* aFieldItemNameMap_Impl[] =
 {
@@ -280,10 +275,10 @@ inline Time setTime( util::DateTime& rDate )
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextField );
 
 SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
-:   OComponentHelper( getMutex() ),
-    mpPropSet(NULL),
-    mpImpl( new SvxUnoFieldData_Impl ),
-    mnServiceId(nServiceId)
+:   OComponentHelper( getMutex() )
+,   mpPropSet(NULL)
+,   mnServiceId(nServiceId)
+,   mpImpl( new SvxUnoFieldData_Impl )
 {
     mpPropSet = new SfxItemPropertySet( ImplGetFieldItemPropertyMap(mnServiceId) );
 
@@ -334,11 +329,11 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 }
 
 SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) throw()
-:   OComponentHelper( getMutex() ),
-    mxAnchor( xAnchor ),
-    mpPropSet(NULL),
-    mpImpl( new SvxUnoFieldData_Impl ),
-    mnServiceId(ID_UNKNOWN)
+:   OComponentHelper( getMutex() )
+,   mxAnchor( xAnchor )
+,   mpPropSet(NULL)
+,   mnServiceId(ID_UNKNOWN)
+,   mpImpl( new SvxUnoFieldData_Impl )
 {
     DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
 
@@ -399,7 +394,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->msString2  = ((SvxAuthorField*)pData)->GetFormatted();
                 mpImpl->mnInt16    = ((SvxAuthorField*)pData)->GetFormat();
                 mpImpl->mbBoolean1 = ((SvxAuthorField*)pData)->GetType() == SVXAUTHORTYPE_FIX;
-                mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetType() != SVXAUTHORFORMAT_SHORTNAME;
+                mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
                 break;
 
             case ID_MEASUREFIELD:
@@ -438,8 +433,6 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         }
         else
         {
-            Time aTime;
-
             if( mnServiceId != ID_TIMEFIELD && mnServiceId != ID_DATEFIELD )
             {
                 Time aTime( setTime( mpImpl->maDateTime ) );
@@ -1028,10 +1021,10 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
 */
 }
 
-void SAL_CALL SvxUnoTextField::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxUnoTextField::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxUnoTextField::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxUnoTextField::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextField::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextField::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextField::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextField::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 // OComponentHelper
 void SvxUnoTextField::disposing()
