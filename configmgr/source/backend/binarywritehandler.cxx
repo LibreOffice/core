@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarywritehandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:27:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,7 +335,7 @@ namespace configmgr
         void BinaryWriteHandler::writeNodeType(NodeType::Type _eType)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            sal_Int8 nValue = _eType;
+            sal_Int8 nValue = static_cast< sal_Int8 >( _eType );
             m_BinaryWriter.write(nValue);
 
         }
@@ -344,7 +344,7 @@ namespace configmgr
         void BinaryWriteHandler::writeAttributes(node::Attributes const& _aAttributes)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            sal_Int8 nValue = _aAttributes.state();
+                    sal_Int8 nValue = static_cast< sal_Int8 >( _aAttributes.state() );
 
             OSL_ASSERT(0 <= nValue && nValue <= 3);
 
