@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorlistener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:08:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,9 @@ DEFINE_XINTERFACE_1( ColorListener                             ,
 ColorListener::ColorListener( const css::uno::Reference< css::awt::XWindow >& xWindow )
     : ThreadHelpBase(&Application::GetSolarMutex())
     , SfxListener   (                             )
+    , m_pConfig     (NULL                         )
     , m_xWindow     (xWindow                      )
     , m_bListen     (sal_False                    )
-    , m_pConfig     (NULL                         )
 {
     impl_startListening();
     impl_applyColor(sal_True);
@@ -141,7 +141,7 @@ ColorListener::~ColorListener()
     @param  rHint
             transport an ID, which identify the broadcasted message
  */
-void ColorListener::Notify(SfxBroadcaster& rBroadCaster, const SfxHint& rHint)
+void ColorListener::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if (((SfxSimpleHint&)rHint).GetId()==SFX_HINT_COLORS_CHANGED)
         impl_applyColor(sal_True);
