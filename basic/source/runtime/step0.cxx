@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:50:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:47:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@
 #include <tools/fsys.hxx>
 #endif
 
-#include <sbx.hxx>
 #include "runtime.hxx"
-#pragma hdrstop
 #include "sbintern.hxx"
 #include "iosys.hxx"
 #include <sb.hrc>
@@ -51,8 +49,6 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <algorithm>
-
-#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
 
 void SbiRuntime::StepNOP()
 {}
@@ -206,7 +202,7 @@ void SbiRuntime::StepPUT()
     SbxVariableRef refVar = PopVar();
     // Store auf die eigene Methode (innerhalb einer Function)?
     BOOL bFlagsChanged = FALSE;
-    USHORT n;
+    USHORT n = 0;
     if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
     {
         bFlagsChanged = TRUE;
@@ -260,7 +256,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar )
         {
             // Store auf die eigene Methode (innerhalb einer Function)?
             BOOL bFlagsChanged = FALSE;
-            USHORT n;
+            USHORT n = 0;
             if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
             {
                 bFlagsChanged = TRUE;
@@ -407,10 +403,10 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
             // Uno-Sequences der Laenge 0 eine Dimension anlegen
             pArray->unoAddDim( 0, -1 );
         }
-        USHORT nFlags = refVar->GetFlags();
+        USHORT nSavFlags = refVar->GetFlags();
         refVar->ResetFlag( SBX_FIXED );
         refVar->PutObject( pArray );
-        refVar->SetFlags( nFlags );
+        refVar->SetFlags( nSavFlags );
         refVar->SetParameters( NULL );
     }
 }
@@ -554,10 +550,10 @@ void SbiRuntime::StepREDIMP_ERASE()
         }
 
         // As in ERASE
-        USHORT nFlags = refVar->GetFlags();
+        USHORT nSavFlags = refVar->GetFlags();
         refVar->ResetFlag( SBX_FIXED );
         refVar->SetType( SbxDataType(eType & 0x0FFF) );
-        refVar->SetFlags( nFlags );
+        refVar->SetFlags( nSavFlags );
         refVar->Clear();
     }
     else
@@ -583,10 +579,10 @@ void SbiRuntime::StepERASE()
         // Typ hart auf den Array-Typ setzen, da eine Variable mit Array
         // SbxOBJECT ist. Bei REDIM entsteht dann ein SbxOBJECT-Array und
         // der ursruengliche Typ geht verloren -> Laufzeitfehler
-        USHORT nFlags = refVar->GetFlags();
+        USHORT nSavFlags = refVar->GetFlags();
         refVar->ResetFlag( SBX_FIXED );
         refVar->SetType( SbxDataType(eType & 0x0FFF) );
-        refVar->SetFlags( nFlags );
+        refVar->SetFlags( nSavFlags );
         refVar->Clear();
     }
     else
@@ -675,7 +671,6 @@ void SbiRuntime::StepINPUT()
         SbxVariableRef pVar = GetTOS();
         // Zuerst versuchen, die Variable mit einem numerischen Wert
         // zu fuellen, dann mit einem Stringwert
-        BOOL bSet = FALSE;
         if( !pVar->IsFixed() || pVar->IsNumeric() )
         {
             USHORT nLen = 0;
@@ -713,7 +708,13 @@ void SbiRuntime::StepINPUT()
         {
             BasicResId aId( IDS_SBERR_START + 4 );
             String aMsg( aId );
-            ErrorBox( NULL, WB_OK, aMsg ).Execute();
+
+            //****** DONT CHECK IN, TEST ONLY *******
+            //****** DONT CHECK IN, TEST ONLY *******
+            // ErrorBox( NULL, WB_OK, aMsg ).Execute();
+            //****** DONT CHECK IN, TEST ONLY *******
+            //****** DONT CHECK IN, TEST ONLY *******
+
             pCode = pRestart;
         }
         else
@@ -869,6 +870,7 @@ void SbiRuntime::StepWRITE()        // write TOS
         case SbxCURRENCY:
         case SbxBOOL:
         case SbxDATE: ch = '#'; break;
+        default: break;
     }
     String s;
     if( ch )
@@ -947,7 +949,7 @@ void SbiRuntime::StepERROR()
 {
     SbxVariableRef refCode = PopVar();
     USHORT n = refCode->GetUShort();
-    SbError nError = StarBASIC::GetSfxFromVBError( n );
-    Error( nError );
+    SbError error = StarBASIC::GetSfxFromVBError( n );
+    Error( error );
 }
 
