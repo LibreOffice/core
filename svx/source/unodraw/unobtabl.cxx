@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:03:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
         const XFillBitmapItem* pBitmapItem = dynamic_cast< const XFillBitmapItem* >( pItem );
         if( pBitmapItem )
         {
-            const GraphicObject& rGraphic = pBitmapItem->GetValue().GetGraphicObject();
+            const GraphicObject& rGraphic = pBitmapItem->GetBitmapValue().GetGraphicObject();
             return rGraphic.GetSizeBytes() > 0;
         }
     }
