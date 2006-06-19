@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progressbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:18:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,12 +117,12 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeExce
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
-    Reference< XInterface > xDelegator = BaseControl::impl_getDelegator();
-    if ( xDelegator.is() == sal_True )
+    Reference< XInterface > xDel = BaseControl::impl_getDelegator();
+    if ( xDel.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
         // Delegator will ask his own queryAggregation!
-        aReturn = xDelegator->queryInterface( rType );
+        aReturn = xDel->queryInterface( rType );
     }
     else
     {
@@ -360,7 +360,7 @@ void SAL_CALL ProgressBar::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nW
 //  XControl
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& xModel ) throw( RuntimeException )
+sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException )
 {
     // A model is not possible for this control.
     return sal_False ;
