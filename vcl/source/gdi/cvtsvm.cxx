@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:53:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
     USHORT          n;
 
     for( n = 0; n < nPoly; n++ )
-        nPoints += rPolyPoly[ n ].GetSize();
+        nPoints = sal::static_int_cast<USHORT>(nPoints + rPolyPoly[ n ].GetSize());
 
     rOStm << (INT16) GDI_POLYPOLYGON_ACTION;
     rOStm << (INT32) ( 8 + ( nPoly << 2 ) + ( nPoints << 3 ) );
@@ -164,9 +164,9 @@ void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
     INT16 nVal;
 
-    rIStm >> nVal; rColor.SetRed( (USHORT) nVal >> 8 );
-    rIStm >> nVal; rColor.SetGreen( (USHORT) nVal >> 8 );
-    rIStm >> nVal; rColor.SetBlue( (USHORT) nVal >> 8 );
+    rIStm >> nVal; rColor.SetRed( sal::static_int_cast<UINT8>((USHORT)nVal >> 8) );
+    rIStm >> nVal; rColor.SetGreen( sal::static_int_cast<UINT8>((USHORT)nVal >> 8) );
+    rIStm >> nVal; rColor.SetBlue( sal::static_int_cast<UINT8>((USHORT)nVal >> 8) );
 }
 
 // ------------------------------------------------------------------------
@@ -305,7 +305,7 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
     rOStm << (INT16) GDI_FONT_ACTION;
     rOStm << (INT32) 78;
 
-    rActualCharSet = GetStoreCharSet( rFont.GetCharSet(), rOStm.GetVersion() );
+    rActualCharSet = GetStoreCharSet( rFont.GetCharSet() );
     ImplWriteColor( rOStm, rFont.GetColor() );
     ImplWriteColor( rOStm, rFont.GetFillColor() );
     rOStm.Write( aName, 32 );
@@ -338,7 +338,7 @@ void ImplWriteRasterOpAction( SvStream& rOStm, INT16 nRasterOp )
 
 sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
 {
-    sal_uInt32 i, nStringLen = rString.Len();
+    xub_StrLen i, nStringLen = rString.Len();
     if ( nStringLen )
     {
         sal_uInt32  nSize = ( nStringLen << 1 ) + 4;
@@ -362,13 +362,14 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, String& rStri
     if ( nStrmPos )
     {
         sal_uInt16  nType;
-        sal_uInt32  nStringLen, nActionSize;
+        sal_uInt32  nActionSize;
+        xub_StrLen  nStringLen;
 
         rIStm.Seek( nStrmPos );
         rIStm   >> nType
                 >> nActionSize;
 
-        nStringLen = ( nActionSize - 4 ) >> 1;
+        nStringLen = sal::static_int_cast<xub_StrLen>(( nActionSize - 4 ) >> 1);
 
         if ( nStringLen && ( nType == GDI_UNICODE_COMMENT ) )
         {
@@ -448,16 +449,16 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
     else
     {
-        Polygon     aPoly;
+        Polygon     aActionPoly;
         Rectangle   aRect;
         Point       aPt, aPt1;
         Size        aSz;
-        Color       aColor;
+        Color       aActionColor;
         INT32       nTmp, nTmp1, nActionSize;
         INT16       nType;
 
         sal_uInt32  nUnicodeCommentStreamPos = 0;
-        sal_uInt32  nUnicodeCommentActionNumber = 0;
+        INT32       nUnicodeCommentActionNumber = 0;
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
@@ -474,8 +475,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_PIXEL_ACTION ):
                 {
                     rIStm >> aPt;
-                    ImplReadColor( rIStm, aColor );
-                    rMtf.AddAction( new MetaPixelAction( aPt, aColor ) );
+                    ImplReadColor( rIStm, aActionColor );
+                    rMtf.AddAction( new MetaPixelAction( aPt, aActionColor ) );
                 }
                 break;
 
@@ -582,29 +583,29 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_POLYLINE_ACTION ):
                 {
-                    ImplReadPoly( rIStm, aPoly );
+                    ImplReadPoly( rIStm, aActionPoly );
 
                     if( bFatLine )
-                        rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
+                        rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
                     else
-                        rMtf.AddAction( new MetaPolyLineAction( aPoly ) );
+                        rMtf.AddAction( new MetaPolyLineAction( aActionPoly ) );
                 }
                 break;
 
                 case( GDI_POLYGON_ACTION ):
                 {
-                    ImplReadPoly( rIStm, aPoly );
+                    ImplReadPoly( rIStm, aActionPoly );
 
                     if( bFatLine )
                     {
                         rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, FALSE ) );
-                        rMtf.AddAction( new MetaPolygonAction( aPoly ) );
+                        rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
-                        rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
+                        rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
                     }
                     else
-                        rMtf.AddAction( new MetaPolygonAction( aPoly ) );
+                        rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
                 }
                 break;
 
@@ -638,8 +639,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     INT16   nCharOrient, nLineOrient;
                     BOOL    bItalic, bOutline, bShadow, bTransparent;
 
-                    ImplReadColor( rIStm, aColor ); aFont.SetColor( aColor );
-                    ImplReadColor( rIStm, aColor ); aFont.SetFillColor( aColor );
+                    ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
+                    ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
                     rIStm.Read( aName, 32 );
                     aFont.SetName( UniString( aName, rIStm.GetStreamCharSet() ) );
                     rIStm >> nWidth >> nHeight;
@@ -706,8 +707,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         pDXAry = new sal_Int32[ Max( nAryLen, nStrLen ) ];
 
-                        for( long i = 0L; i < nAryLen; i++ )
-                            rIStm >> nTmp, pDXAry[ i ] = nTmp;
+                        for( long j = 0L; j < nAryLen; j++ )
+                            rIStm >> nTmp, pDXAry[ j ] = nTmp;
 
                         // #106172# Add last DX array elem, if missing
                         if( nAryLen != nStrLen )
@@ -794,14 +795,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     INT32 nPenWidth;
                     INT16 nPenStyle;
 
-                    ImplReadColor( rIStm, aColor );
+                    ImplReadColor( rIStm, aActionColor );
                     rIStm >> nPenWidth >> nPenStyle;
 
                     aLineInfo.SetStyle( nPenStyle ? LINE_SOLID : LINE_NONE );
                     aLineInfo.SetWidth( nPenWidth );
                     bFatLine = nPenStyle && !aLineInfo.IsDefault();
 
-                    rMtf.AddAction( new MetaLineColorAction( aColor, nPenStyle != 0 ) );
+                    rMtf.AddAction( new MetaLineColorAction( aActionColor, nPenStyle != 0 ) );
                 }
                 break;
 
@@ -809,10 +810,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     INT16 nBrushStyle;
 
-                    ImplReadColor( rIStm, aColor );
+                    ImplReadColor( rIStm, aActionColor );
                     rIStm.SeekRel( 6L );
                     rIStm >> nBrushStyle;
-                    rMtf.AddAction( new MetaFillColorAction( aColor, nBrushStyle != 0 ) );
+                    rMtf.AddAction( new MetaFillColorAction( aActionColor, nBrushStyle != 0 ) );
                     rIStm.SeekRel( 2L );
                 }
                 break;
@@ -854,8 +855,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         case( 2 ):
                         {
-                            ImplReadPoly( rIStm, aPoly );
-                            aRegion = Region( aPoly );
+                            ImplReadPoly( rIStm, aActionPoly );
+                            aRegion = Region( aActionPoly );
                             bClip = TRUE;
                         }
                         break;
@@ -867,10 +868,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                             rIStm >> nPolyCount;
 
-                            for( USHORT i = 0; i < (USHORT) nPolyCount; i++ )
+                            for( USHORT j = 0; j < (USHORT) nPolyCount; j++ )
                             {
-                                ImplReadPoly( rIStm, aPoly );
-                                aPolyPoly.Insert( aPoly );
+                                ImplReadPoly( rIStm, aActionPoly );
+                                aPolyPoly.Insert( aActionPoly );
                             }
 
                             aRegion = Region( aPolyPoly );
