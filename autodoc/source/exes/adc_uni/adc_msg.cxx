@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_msg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:05:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ void
 Messages::WriteParagraph( csv::File &         o_out,
                           const MessageMap &  i_source,
                           const String &      i_title,
-                          const String &      i_firstIntermediateText )
+                          const String &      )
 {
     StreamStr   aLine(2000);
 
