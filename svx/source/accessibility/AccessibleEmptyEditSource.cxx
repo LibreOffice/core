@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEmptyEditSource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:14:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //------------------------------------------------------------------------
 //
@@ -127,29 +125,29 @@ namespace accessibility
 
         // SvxTextForwarder
         USHORT          GetParagraphCount() const { return 1; }
-        USHORT          GetTextLen( USHORT nParagraph ) const { return 0; }
-        String          GetText( const ESelection& rSel ) const { return String(); }
-        SfxItemSet      GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const
+        USHORT          GetTextLen( USHORT /*nParagraph*/ ) const { return 0; }
+        String          GetText( const ESelection& /*rSel*/ ) const { return String(); }
+        SfxItemSet      GetAttribs( const ESelection& /*rSel*/, BOOL /*bOnlyHardAttrib*/ = 0 ) const
         {
             String aDummyStr(RTL_CONSTASCII_USTRINGPARAM("Dummy"));
             SfxItemPool aPool(aDummyStr,0,0,NULL);
             return SfxItemSet(aPool);
         }
-        SfxItemSet      GetParaAttribs( USHORT nPara ) const { return GetAttribs(ESelection()); }
-        void            SetParaAttribs( USHORT nPara, const SfxItemSet& rSet ) {}
-        void            GetPortions( USHORT nPara, SvUShorts& rList ) const {}
+        SfxItemSet      GetParaAttribs( USHORT /*nPara*/ ) const { return GetAttribs(ESelection()); }
+        void            SetParaAttribs( USHORT /*nPara*/, const SfxItemSet& /*rSet*/ ) {}
+        void            GetPortions( USHORT /*nPara*/, SvUShorts& /*rList*/ ) const {}
 
-        USHORT          GetItemState( const ESelection& rSel, USHORT nWhich ) const { return 0; }
-        USHORT          GetItemState( USHORT nPara, USHORT nWhich ) const { return 0; }
+        USHORT          GetItemState( const ESelection& /*rSel*/, USHORT /*nWhich*/ ) const { return 0; }
+        USHORT          GetItemState( USHORT /*nPara*/, USHORT /*nWhich*/ ) const { return 0; }
 
         SfxItemPool*    GetPool() const { return NULL; }
 
-        void            QuickInsertText( const String& rText, const ESelection& rSel ) {}
-        void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) {}
-        void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) {}
-        void            QuickInsertLineBreak( const ESelection& rSel ) {}
+        void            QuickInsertText( const String& /*rText*/, const ESelection& /*rSel*/ ) {}
+        void            QuickInsertField( const SvxFieldItem& /*rFld*/, const ESelection& /*rSel*/ ) {}
+        void            QuickSetAttribs( const SfxItemSet& /*rSet*/, const ESelection& /*rSel*/ ) {}
+        void            QuickInsertLineBreak( const ESelection& /*rSel*/ ) {}
 
-        XubString       CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
+        XubString       CalcFieldValue( const SvxFieldItem& /*rField*/, USHORT /*nPara*/, USHORT /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
         {
             return  XubString();
         }
@@ -157,18 +155,18 @@ namespace accessibility
 
         void            SetNotifyHdl( const Link& ) {}
         LanguageType    GetLanguage( USHORT, USHORT ) const { return LANGUAGE_DONTKNOW; }
-        USHORT          GetFieldCount( USHORT nPara ) const { return 0; }
-        EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const { return EFieldInfo(); }
-        EBulletInfo     GetBulletInfo( USHORT nPara ) const { return EBulletInfo(); }
-        Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const { return Rectangle(); }
-        Rectangle       GetParaBounds( USHORT nPara ) const { return Rectangle(); }
+        USHORT          GetFieldCount( USHORT ) const { return 0; }
+        EFieldInfo      GetFieldInfo( USHORT, USHORT ) const { return EFieldInfo(); }
+        EBulletInfo     GetBulletInfo( USHORT ) const { return EBulletInfo(); }
+        Rectangle       GetCharBounds( USHORT, USHORT ) const { return Rectangle(); }
+        Rectangle       GetParaBounds( USHORT ) const { return Rectangle(); }
         MapMode         GetMapMode() const { return MapMode(); }
         OutputDevice*   GetRefDevice() const { return NULL; }
-        sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const { return sal_False; }
-        sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const { return sal_False; }
-        sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const { return sal_False; }
+        sal_Bool        GetIndexAtPoint( const Point&, USHORT&, USHORT& ) const { return sal_False; }
+        sal_Bool        GetWordIndices( USHORT, USHORT, USHORT&, USHORT& ) const { return sal_False; }
+        sal_Bool        GetAttributeRun( USHORT&, USHORT&, USHORT, USHORT ) const { return sal_False; }
         USHORT          GetLineCount( USHORT nPara ) const { return nPara == 0 ? 1 : 0; }
-        USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const { return 0; }
+        USHORT          GetLineLen( USHORT, USHORT ) const { return 0; }
 
         // the following two methods would, strictly speaking, require
         // a switch to a real EditSource, too. Fortunately, the
@@ -180,13 +178,13 @@ namespace accessibility
         // shapes).
         sal_Bool        Delete( const ESelection& ) { return sal_False; }
         sal_Bool        InsertText( const String&, const ESelection& ) { return sal_False; }
-        sal_Bool        QuickFormatDoc( BOOL bFull=FALSE ) { return sal_True; }
-        USHORT          GetDepth( USHORT nPara ) const { return 0; }
-        sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth ) { return 0; }
+        sal_Bool        QuickFormatDoc( BOOL ) { return sal_True; }
+        USHORT          GetDepth( USHORT ) const { return 0; }
+        sal_Bool        SetDepth( USHORT, USHORT ) { return 0; }
 
         Rectangle       GetVisArea() const { return Rectangle(); }
-        Point           LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const { return rPoint; }
-        Point           PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const { return rPoint; }
+        Point           LogicToPixel( const Point& rPoint, const MapMode& /*rMapMode*/ ) const { return rPoint; }
+        Point           PixelToLogic( const Point& rPoint, const MapMode& /*rMapMode*/ ) const { return rPoint; }
 
     };
 
@@ -331,7 +329,7 @@ namespace accessibility
         return *(const_cast<AccessibleEmptyEditSource*>(this));
     }
 
-    void AccessibleEmptyEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    void AccessibleEmptyEditSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
