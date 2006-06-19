@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seqstream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:00:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,8 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
     if (m_nSize + _rData.getLength() > m_rSequence.getLength())
     {
         sal_Int32 nCurrentLength = m_rSequence.getLength();
-        sal_Int32 nNewLength = nCurrentLength * m_nResizeFactor;
+        sal_Int32 nNewLength = static_cast< sal_Int32 >(
+            nCurrentLength * m_nResizeFactor);
 
         if (m_nMinimumResize > nNewLength - nCurrentLength)
             // we have a minimum so it's not too inefficient for small sequences and small write requests
