@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:07:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,6 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;
     friend class vcl_sal::GnomeWMAdaptor;
-
-    static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 
     static X11SalFrame* s_pSaveYourselfFrame;
 
@@ -262,6 +260,7 @@ public:
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
 
     static void SaveYourselfDone( SalFrame* );
+    static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 };
 
 #ifdef _SV_SALDISP_HXX
