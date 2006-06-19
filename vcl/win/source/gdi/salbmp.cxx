@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:04:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,7 +390,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
     {
         const ULONG nSize = GlobalSize( hHdl );
 
-        if ( hCopy = GlobalAlloc( GHND, nSize  ) )
+        if ( (hCopy = GlobalAlloc( GHND, nSize  )) != 0 )
         {
             memcpy( (LPSTR) GlobalLock( hCopy ), (LPSTR) GlobalLock( hHdl ), nSize );
 
@@ -406,7 +406,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
         WIN_GetObject( hHdl, sizeof( BITMAP ), (LPSTR) &aBmp );
 
         // Destination-Bitmap erzeugen
-        if ( hCopy = CreateBitmapIndirect( &aBmp ) )
+        if ( (hCopy = CreateBitmapIndirect( &aBmp )) != 0 )
         {
             HDC     hBmpDC = CreateCompatibleDC( 0 );
             HBITMAP hBmpOld = (HBITMAP) SelectObject( hBmpDC, hHdl );
@@ -428,7 +428,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 
 // ------------------------------------------------------------------
 
-BitmapBuffer* WinSalBitmap::AcquireBuffer( bool bReadOnly )
+BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 {
     BitmapBuffer* pBuffer = NULL;
 
@@ -570,7 +570,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     {
         do
         {
-            if( !( nCountByte = *pRLE++ ) )
+            if( ( nCountByte = *pRLE++ ) == 0 )
             {
                 nRunByte = *pRLE++;
 
