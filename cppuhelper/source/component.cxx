@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:25:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,8 @@ void OComponentHelper::release() throw()
 #if OSL_DEBUG_LEVEL > 0
                     OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
                     OSL_ENSURE( 0, msg.getStr() );
+#else
+                    (void) exc; // avoid warning about unused variable
 #endif
                 }
 
