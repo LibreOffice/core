@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:29:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@ ExtendedXlfd::EncodingInfo::operator= ( const Xlfd *pXlfd )
 
 ExtendedXlfd::ExtendedXlfd( bool bScalable )
 :   mbScalable( bScalable ),
-    mpEncodingInfo( NULL ),
     mnEncodings( 0 ),
-    mnEncCapacity( 0 )
+    mnEncCapacity( 0 ),
+    mpEncodingInfo( NULL )
 {
     mbOrientation  = false;
     mbDevice       = false;
@@ -288,7 +288,7 @@ ExtendedXlfd::AddEncoding( const Xlfd *pXlfd )
 
 void
 ExtendedXlfd::ToString( ByteString &rString,
-        unsigned short nPixelSize, rtl_TextEncoding nEncoding ) const
+        unsigned short /*nPixelSize*/, rtl_TextEncoding /*nEncoding*/ ) const
 {
     AppendAttribute( mpFactory->RetrieveFoundry(mnFoundry),   rString );
     AppendAttribute( mpFactory->RetrieveFamily(mnFamily),     rString );
@@ -299,7 +299,7 @@ ExtendedXlfd::ToString( ByteString &rString,
 
 void
 ExtendedXlfd::ToString( ByteString &rString,
-        unsigned short nPixelSize, char* pMatricsString, rtl_TextEncoding nEncoding ) const
+        unsigned short /*nPixelSize*/, char* /*pMatricsString*/, rtl_TextEncoding /*nEncoding*/ ) const
 {
     AppendAttribute( mpFactory->RetrieveFoundry(mnFoundry),   rString );
     AppendAttribute( mpFactory->RetrieveFamily(mnFamily),     rString );
@@ -475,10 +475,10 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
                     else
                     {
                         sal_Char cCharsInp[ 0x100 ];
-                        for( int i = 0x20; i < 0x080; ++i )
-                            cCharsInp[ i-0x20 ] = i;
-                        for( int i = 0xA0; i < 0x100; ++i )
-                            cCharsInp[ i-0x40 ] = i;
+                        for( int j = 0x20; j < 0x080; ++j )
+                            cCharsInp[ j-0x20 ] = j;
+                        for( int j = 0xA0; j < 0x100; ++j )
+                            cCharsInp[ j-0x40 ] = j;
 
                         sal_Unicode cCharsOut[ 0x100 ];
                         sal_uInt32 nCvtInfo;
@@ -491,8 +491,8 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
                             | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
                             &nCvtInfo, &nSrcCvtBytes );
 
-                        for( int i = 0; i < nOutLen; ++i )
-                            aRangeSet.insert( CodeRange( cCharsOut[i], cCharsOut[i]+1 ) );
+                        for( int j = 0; j < nOutLen; ++j )
+                            aRangeSet.insert( CodeRange( cCharsOut[j], cCharsOut[j]+1 ) );
 
                         rtl_destroyTextToUnicodeConverter( aCvtContext );
                         rtl_destroyTextToUnicodeConverter( aConverter );
