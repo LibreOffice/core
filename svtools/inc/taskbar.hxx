@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskbar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:52:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ private:
     Link                maContextMenuHdl;
 
 #ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE void                ImplFormat();
+    SVT_DLLPRIVATE void                ImplFormatTaskToolBox();
 #endif
 
     // Forbidden and not implemented.
