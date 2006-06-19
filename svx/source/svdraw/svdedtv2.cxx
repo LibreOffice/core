@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:51:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,17 +108,17 @@ void SdrEditView::ImpBundleVirtObjOfMarkList()
   // ... fehlende Implementation
 }
 
-SdrObject* SdrEditView::GetMaxToTopObj(SdrObject* pObj) const
+SdrObject* SdrEditView::GetMaxToTopObj(SdrObject* /*pObj*/) const
 {
   return NULL;
 }
 
-SdrObject* SdrEditView::GetMaxToBtmObj(SdrObject* pObj) const
+SdrObject* SdrEditView::GetMaxToBtmObj(SdrObject* /*pObj*/) const
 {
   return NULL;
 }
 
-void SdrEditView::ObjOrderChanged(SdrObject* pObj, ULONG nOldPos, ULONG nNewPos)
+void SdrEditView::ObjOrderChanged(SdrObject* /*pObj*/, ULONG /*nOldPos*/, ULONG /*nNewPos*/)
 {
 }
 
@@ -463,7 +463,7 @@ void SdrEditView::ReverseOrderOfMarked()
     SortMarkedObjects();
     ULONG nMarkAnz=GetMarkedObjectCount();
     if (nMarkAnz>0) {
-        BOOL bNeedBundle=FALSE;
+        //BOOL bNeedBundle=FALSE;
         BOOL bChg=FALSE;
         BegUndo(ImpGetResStr(STR_EditRevOrder),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_REVORDER);
         ULONG a=0;
@@ -761,7 +761,7 @@ struct ImpDistributeEntry
     INT32                       mnLength;
 };
 
-DECLARE_LIST(ImpDistributeEntryList, ImpDistributeEntry*);
+DECLARE_LIST(ImpDistributeEntryList, ImpDistributeEntry*)
 
 void SdrEditView::DistributeMarkedObjects()
 {
@@ -827,6 +827,7 @@ void SdrEditView::DistributeMarkedObjects()
                                 pNew->mnPos = pNew->mpObj->GetSnapRect().Right();
                                 break;
                             }
+                            default: break;
                         }
 
                         while(nInsPos < aEntryList.Count() && aEntryList.GetObject(nInsPos)->mnPos < pNew->mnPos)
@@ -915,6 +916,7 @@ void SdrEditView::DistributeMarkedObjects()
                                 pNew->mnPos = pNew->mpObj->GetSnapRect().Bottom();
                                 break;
                             }
+                            default: break;
                         }
 
                         while(nInsPos < aEntryList.Count() && aEntryList.GetObject(nInsPos)->mnPos < pNew->mnPos)
@@ -984,7 +986,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     BegUndo();
 
     UINT32 nInsPos=0xFFFFFFFF;
-    UINT32 nAnz=GetMarkedObjectCount();
+    //UINT32 nAnz=GetMarkedObjectCount();
     const SdrObject* pAttrObj = NULL;
 
     //PolyPolygon3D aMergePolyPolygonA;
@@ -1202,7 +1204,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             break;
         }
     }
-    DeleteMarked(aRemove);
+    DeleteMarkedList(aRemove);
 
     EndUndo();
 }
@@ -1362,7 +1364,7 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
         aRemoveMerker.ForceSort(); // wichtig fuer Remove (s.u.)
         SetUndoComment(ImpGetResStr(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveMerker.GetMarkDescription());
         // die tatsaechlich verwendeten Objekten aus der Liste entfernen
-        DeleteMarked(aRemoveMerker);
+        DeleteMarkedList(aRemoveMerker);
     }
     EndUndo();
     return !bCombineError;
@@ -1580,7 +1582,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
 void SdrEditView::DismantleMarkedObjects(BOOL bMakeLines)
 {
-    UINT32 nCnt(0);
+    //UINT32 nCnt(0);
     // Temporaere Marklist
     SdrMarkList aRemoveMerker;
 
@@ -1699,11 +1701,11 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
             if (pRefObj==NULL) pRefObj=pRefObj1;
             if (pGrp!=NULL) {
                 aNewMark.InsertEntry(SdrMark(pGrp,pPV));
-                ULONG nAnz=pDstLst->GetObjCount();
+                ULONG nAnz2=pDstLst->GetObjCount();
                 SdrInsertReason aReason(SDRREASON_VIEWCALL,pRefObj);
                 pAktLst->InsertObject(pGrp,nInsPos,&aReason);
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pGrp,true)); // Kein Recalc!
-                for (ULONG no=0; no<nAnz; no++) {
+                for (ULONG no=0; no<nAnz2; no++) {
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pDstLst->GetObj(no)));
                 }
             }
