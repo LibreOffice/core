@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:53:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY,
                 XML_ATACTION_RENAME_NEG_PERCENT,
                 XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
-                                                 XML_SHADOW_TRANSPARENCY), 0 },
+                                                 XML_SHADOW_TRANSPARENCY), 0, 0 },
     { XML_NAMESPACE_DRAW, XML_GUIDE_OVERHANG, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_START_GUIDE, XML_ATACTION_IN2INCH,
@@ -151,13 +151,13 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_SVG, XML_Y, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_STROKE_DASH, XML_ATACTION_DECODE_STYLE_NAME_REF,
-        XML_FAMILY_TYPE_STROKE_DASH, 0 },
+        XML_FAMILY_TYPE_STROKE_DASH, 0, 0 },
     { XML_NAMESPACE_DRAW, XML_MARKER_START, XML_ATACTION_DECODE_STYLE_NAME_REF,
-        XML_FAMILY_TYPE_MARKER, 0 },
+        XML_FAMILY_TYPE_MARKER, 0, 0 },
     { XML_NAMESPACE_DRAW, XML_MARKER_END, XML_ATACTION_DECODE_STYLE_NAME_REF,
-        XML_FAMILY_TYPE_MARKER, 0 },
+        XML_FAMILY_TYPE_MARKER, 0, 0 },
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
-        XML_FAMILY_TYPE_GRADIENT, 0 },
+        XML_FAMILY_TYPE_GRADIENT, 0, 0 },
 
     // #i25616#
     { XML_NAMESPACE_DRAW, XML_OPACITY, XML_OPTACTION_OPACITY, NO_PARAMS },
@@ -165,16 +165,16 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
 
     { XML_NAMESPACE_DRAW, XML_STROKE_LINEJOIN, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_SVG,
-                                                 XML_STROKE_LINEJOIN), 0 },
+                                                 XML_STROKE_LINEJOIN), 0, 0 },
     { XML_NAMESPACE_DRAW, XML_OPACITY_NAME,
                 XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF,
                 XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
                                                  XML_TRANSPARENCY_NAME),
-                XML_FAMILY_TYPE_GRADIENT },
+                XML_FAMILY_TYPE_GRADIENT, 0 },
     { XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
-        XML_FAMILY_TYPE_HATCH, 0 },
+        XML_FAMILY_TYPE_HATCH, 0, 0 },
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
-        XML_FAMILY_TYPE_FILL_IMAGE, 0 },
+        XML_FAMILY_TYPE_FILL_IMAGE, 0, 0 },
 
     // Font work properties
     { XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE, XML_ATACTION_IN2INCH, NO_PARAMS },
@@ -184,16 +184,16 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
 
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
-                                                 XML_AUTO_GROW_HEIGHT   ), 0 },
+                                                 XML_AUTO_GROW_HEIGHT   ), 0, 0 },
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
-                                                 XML_AUTO_GROW_WIDTH    ), 0 },
+                                                 XML_AUTO_GROW_WIDTH    ), 0, 0 },
     { XML_NAMESPACE_PRESENTATION, XML_DURATION, XML_ATACTION_RNG2ISO_DATETIME, NO_PARAMS },
     { XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY, XML_ATACTION_RNG2ISO_DATETIME, NO_PARAMS },
 
-    { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_DECODE_PROTECT, 0 },
-    { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OASIS, 0 },
-    { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_GAMMA_OASIS, 0 },
+    { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_DECODE_PROTECT, NO_PARAMS },
+    { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OASIS, NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_GAMMA_OASIS, NO_PARAMS },
     { XML_NAMESPACE_SVG, XML_STROKE_OPACITY, XML_ATACTION_OPACITY_FIX, NO_PARAMS },
 
     { XML_NAMESPACE_STYLE, XML_FLOW_WITH_TEXT, XML_ATACTION_REMOVE,
@@ -280,7 +280,7 @@ XMLTransformerActionInit aPageLayoutPropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_LAYOUT_GRID_RUBY_HEIGHT, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_REGISTER_TRUTH_REF_STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF, XML_FAMILY_TYPE_PARAGRAPH, 0 },
+    { XML_NAMESPACE_STYLE, XML_REGISTER_TRUTH_REF_STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF, XML_FAMILY_TYPE_PARAGRAPH, 0, 0 },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
@@ -375,7 +375,7 @@ XMLTransformerActionInit aTextPropertyOASISAttrActionTable[] =
         XML_OPTACTION_LINE_MODE, NO_PARAMS },
     { XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_STYLE,
-                                                 XML_TEXT_BACKGROUND_COLOR  ), 0 },
+                                                 XML_TEXT_BACKGROUND_COLOR  ), 0, 0 },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
@@ -477,7 +477,7 @@ XMLTransformerActionInit aTableCellPropertyOASISAttrActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_FO,
-                                                 XML_VERTICAL_ALIGN ), 0 },
+                                                 XML_VERTICAL_ALIGN ), 0, 0 },
     { XML_NAMESPACE_FO, XML_BORDER, XML_ATACTION_INS2INCHS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_BORDER_TOP, XML_ATACTION_INS2INCHS,
@@ -520,7 +520,7 @@ XMLTransformerActionInit aTableCellPropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_DIRECTION, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_FO,
-                                                 XML_DIRECTION), 0 },
+                                                 XML_DIRECTION), 0, 0 },
     { XML_NAMESPACE_STYLE, XML_SHADOW, XML_ATACTION_INS2INCHS,
           NO_PARAMS },
     { XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_ATACTION_REMOVE,
@@ -551,17 +551,17 @@ XMLTransformerActionInit aChartPropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_DIRECTION, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_FO,
-                                                 XML_DIRECTION ), 0 },
+                                                 XML_DIRECTION ), 0, 0 },
     { XML_NAMESPACE_CHART, XML_INTERPOLATION, XML_OPTACTION_INTERPOLATION, NO_PARAMS },
     { XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_TEXT,
-                                                 XML_ROTATION_ANGLE ), 0 },
+                                                 XML_ROTATION_ANGLE ), 0, 0 },
     { XML_NAMESPACE_CHART, XML_INTERVAL_MAJOR, XML_OPTACTION_INTERVAL_MAJOR, NO_PARAMS },
     { XML_NAMESPACE_CHART, XML_INTERVAL_MINOR_DIVISOR, XML_OPTACTION_INTERVAL_MINOR_DIVISOR,
       NO_PARAMS },
      { XML_NAMESPACE_CHART, XML_JAPANESE_CANDLE_STICK, XML_ATACTION_RENAME,
       XMLTransformerActionInit::QNameParam( XML_NAMESPACE_CHART,
-                                            XML_STOCK_UPDOWN_BARS ), 0 },
+                                            XML_STOCK_UPDOWN_BARS ), 0, 0 },
     { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_OPTACTION_SYMBOL_TYPE, NO_PARAMS },
     { XML_NAMESPACE_CHART, XML_SYMBOL_NAME, XML_OPTACTION_SYMBOL_NAME, NO_PARAMS },
 
