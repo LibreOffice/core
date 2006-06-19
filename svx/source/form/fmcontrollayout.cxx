@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmcontrollayout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,8 @@ namespace svxform
                 return "XMLFormDocument";
             case eDatabaseForm:
                 return "DatabaseFormDocument";
+            default:
+                break;
             }
             DBG_ERROR( "lcl_getApplikationNodeName: unknown doc type!" );
             return "TextDocument";
