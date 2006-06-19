@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIsPercentagePropertyHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:35:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,16 +60,16 @@ XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler()
 sal_Bool XMLIsPercentagePropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     rValue <<= (sal_Bool)(rStrImpValue.indexOf( sal_Unicode('%') ) != -1);
     return sal_True;
 }
 
 sal_Bool XMLIsPercentagePropertyHandler::exportXML(
-    OUString& rStrExpValue,
-    const Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    OUString&,
+    const Any&,
+    const SvXMLUnitConverter& ) const
 {
     DBG_ERROR( "XMLIsPercentagePropertyHandler is not for export!" );
     return sal_False;
