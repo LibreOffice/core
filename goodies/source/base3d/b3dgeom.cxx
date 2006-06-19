@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:19:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ void B3dGeometry::Transform(const Matrix4D& rMat)
 |*
 \************************************************************************/
 
-sal_Bool B3dGeometry::CheckHit(const Vector3D& rFront, const Vector3D& rBack, sal_uInt16 nTol)
+sal_Bool B3dGeometry::CheckHit(const Vector3D& rFront, const Vector3D& rBack, sal_uInt16 /*nTol*/)
 {
     sal_uInt32 nPolyCounter(0L);
     sal_uInt32 nEntityCounter(0L);
