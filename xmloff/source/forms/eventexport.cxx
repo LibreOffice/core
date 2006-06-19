@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ namespace xmloff
         const ScriptEventDescriptor* pEvents = _rEvents.getConstArray();
         ::rtl::OUString sName;
         ::rtl::OUString sLibrary, sLocalMacroName;
-        sal_Int32 nNameSeparatorPos(-1);
         for (sal_Int32 i=0; i<nEvents; ++i, ++pEvents)
         {
             // the name of the event is build from listener interface and listener method name
@@ -118,7 +117,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OEventDescriptorMapper::replaceByName( const ::rtl::OUString& _rNamee, const Any& _rElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OEventDescriptorMapper::replaceByName( const ::rtl::OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         throw IllegalArgumentException(
             ::rtl::OUString::createFromAscii("replacing is not implemented for this wrapper class."), static_cast< ::cppu::OWeakObject* >(this), 1);
@@ -176,6 +175,16 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7.34.2  2005/11/16 22:47:09  pl
+ *  #i55991# removed warnings
+ *
+ *  Revision 1.7.34.1  2005/11/03 17:46:59  cl
+ *  warning free code changes for unxlngi6
+ *
+ *  Revision 1.7  2005/09/09 14:06:51  rt
+ *  INTEGRATION: CWS ooo19126 (1.6.408); FILE MERGED
+ *  2005/09/05 14:38:56 rt 1.6.408.1: #i54170# Change license header: remove SISSL
+ *
  *  Revision 1.6.408.1  2005/09/05 14:38:56  rt
  *  #i54170# Change license header: remove SISSL
  *
