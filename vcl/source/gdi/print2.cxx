@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:10:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1006,7 +1006,7 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                                     // scale down bitmap, if requested
                                     if( rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency() )
                                     {
-                                        aBandBmp = GetPreparedBitmap( aDstPtPix, aDstSzPix,
+                                        aBandBmp = GetPreparedBitmap( aDstSzPix,
                                                                       Point(), aBandBmp.GetSizePixel(),
                                                                       aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
                                     }
@@ -1111,7 +1111,7 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
 
 // -----------------------------------------------------------------------------
 
-Bitmap Printer::GetPreparedBitmap( const Point& rDstPt, const Size& rDstSz,
+Bitmap Printer::GetPreparedBitmap( const Size& rDstSz,
                                    const Point& rSrcPt, const Size& rSrcSz,
                                    const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY )
 {
@@ -1180,7 +1180,7 @@ Bitmap Printer::GetPreparedBitmap( const Point& rDstPt, const Size& rDstSz,
 
 // -----------------------------------------------------------------------------
 
-BitmapEx Printer::GetPreparedBitmapEx( const Point& rDstPt, const Size& rDstSz,
+BitmapEx Printer::GetPreparedBitmapEx( const Size& rDstSz,
                                        const Point& rSrcPt, const Size& rSrcSz,
                                        const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY )
 {
