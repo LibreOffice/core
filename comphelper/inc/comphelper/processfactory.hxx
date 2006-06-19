@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:12:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XI
 extern "C" {
 /// @internal
 COMPHELPER_DLLPUBLIC
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
+::com::sun::star::uno::XComponentContext *
 comphelper_getProcessComponentContext();
 } // extern "C"
 
