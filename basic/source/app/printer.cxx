@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:17:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
 
 IMPL_LINK_INLINE_START( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
 {
+    (void) pPrinter; /* avoid warning about unused parameter */
     if( pDlg ) pDlg->Show();
     return 0;
 }
@@ -148,6 +149,7 @@ IMPL_LINK_INLINE_END( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
 
 IMPL_LINK_INLINE_START( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
 {
+    (void) pPrinter; /* avoid warning about unused parameter */
     if( pDlg ) pDlg->Hide();
     return 0;
 }
@@ -155,6 +157,7 @@ IMPL_LINK_INLINE_END( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
 
 IMPL_LINK_INLINE_START( BasicPrinter, PrintPageHdl, Printer *, pPrinter )
 {
+    (void) pPrinter; /* avoid warning about unused parameter */
     if( pDlg ) pDlg->ChangeMessage( nPage );
     return 0;
 }
@@ -171,10 +174,10 @@ IMPL_LINK_INLINE( BasicPrinter, Abort , void *, EMPTYARG,
 
 PrintingDialog::PrintingDialog
               ( Window* pParent, BasicPrinter* pPrn, ResId& rId, String& rName )
-             : ModelessDialog( pParent, rId ),
-               aCancel( this, ResId( RID_CANCEL ) ),
-               aText  ( this, ResId( RID_TEXT ) ),
-               aName  ( rName )
+: ModelessDialog( pParent, rId )
+, aName  ( rName )
+, aText  ( this, ResId( RID_TEXT ) )
+, aCancel( this, ResId( RID_CANCEL ) )
 {
     FreeResource();
     aCancel.SetClickHdl( LINK( pPrn, BasicPrinter, Abort ) );
