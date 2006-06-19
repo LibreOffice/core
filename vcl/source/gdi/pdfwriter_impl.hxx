@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:09:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -863,7 +863,7 @@ public:
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
-        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) );
+        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) ? TRUE : FALSE );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextFillColor()
@@ -995,7 +995,11 @@ public:
 
     // helper: eventually begin marked content sequence and
     // emit a comment in debug case
-    void MARK( const char* pString )
+    void MARK( const char*
+#if OSL_DEBUG_LEVEL > 1
+        pString
+#endif
+        )
     {
         beginStructureElementMCSeq();
 #if OSL_DEBUG_LEVEL > 1
