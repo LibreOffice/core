@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbdatacolumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:26:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ namespace svxform
         }
 
         // das normale queryInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
+        ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
         { return m_xColumn->queryInterface(type); }
 
         // ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
