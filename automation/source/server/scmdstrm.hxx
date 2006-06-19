@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmdstrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:25:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ public:
     SCmdStream( SvStream *pIn );
     ~SCmdStream();
 
-//  CmdBaseStream::Read;
+    using CmdBaseStream::Read;
     void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
     void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
 //  void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
