@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:31:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,11 @@ void EditBrowseBox::implCreateActiveAccessible( )
 }
 
 // -----------------------------------------------------------------------------
-Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nIndex )
+Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32
+#ifdef DBG_UTIL
+_nIndex
+#endif
+)
 {
     DBG_ASSERT( 0 == _nIndex, "EditBrowseBox::CreateAccessibleControl: invalid index!" );
 
@@ -171,10 +175,10 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                 &&  ( _nGetFocusFlags & GETFOCUS_TAB )  // using the TAB key
                 )
             {
-                long nRowCount = GetRowCount();
-                USHORT nColCount = ColCount();
+                long nRows = GetRowCount();
+                USHORT nCols = ColCount();
 
-                if ( ( nRowCount > 0 ) && ( nColCount > 0 ) )
+                if ( ( nRows > 0 ) && ( nCols > 0 ) )
                 {
                     if ( _nGetFocusFlags & GETFOCUS_FORWARD )
                     {
@@ -184,13 +188,13 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                         }
                         else
                         {   // the first column is the handle column -> not focussable
-                            if ( nColCount > 1 )
+                            if ( nCols > 1 )
                                 GoToRowColumnId( 0, GetColumnId( 1 ) );
                         }
                     }
                     else if ( _nGetFocusFlags & GETFOCUS_BACKWARD )
                     {
-                        GoToRowColumnId( nRowCount - 1, GetColumnId( nColCount -1 ) );
+                        GoToRowColumnId( nRows - 1, GetColumnId( nCols -1 ) );
                     }
                 }
             }
