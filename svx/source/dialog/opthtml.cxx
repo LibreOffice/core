@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:44:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,9 @@ OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
     aIgnoreFontNamesCB( this, ResId( CB_IGNORE_FONTNAMES ) ),
     aExportGB       ( this, ResId( GB_EXPORT       ) ),
     aExportLB       ( this, ResId( LB_EXPORT       ) ),
-    aPrintExtensionCB( this,ResId(CB_PRINT_EXTENSION )),
     aStarBasicCB    ( this, ResId( CB_STARBASIC    ) ),
     aStarBasicWarningCB(this, ResId( CB_STARBASIC_WARNING    ) ),
+    aPrintExtensionCB( this,ResId(CB_PRINT_EXTENSION )),
     aSaveGrfLocalCB ( this, ResId( CB_LOCAL_GRF    ) ),
     aCharSetFT      ( this, ResId( FT_CHARSET      ) ),
     aCharSetLB      ( this, ResId( LB_CHARSET      ) )
@@ -126,7 +126,7 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
 
 --------------------------------------------------*/
 
-BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     if(aSize1NF.GetSavedValue() != aSize1NF.GetText())
@@ -175,7 +175,7 @@ BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& rSet )
 
 --------------------------------------------------*/
 
-void OfaHtmlTabPage::Reset( const SfxItemSet& rSet )
+void OfaHtmlTabPage::Reset( const SfxItemSet& )
 {
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     aSize1NF.SetValue(pHtmlOpt->GetFontSize(0));
