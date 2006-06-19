@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:09:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ AnnotateSlant( const Attribute& rAttribute )
             { "ot", "Other" }
     };
 
-    for ( int i = 0; i < MembersOf(pTranslation); i++ )
+    for ( unsigned int i = 0; i < MembersOf(pTranslation); i++ )
         if ( strcmp(pStr, pTranslation[i].pFrom) == 0 )
         {
             return new String( pTranslation[i].pTo,
@@ -410,7 +410,7 @@ AnnotateSlant( const Attribute& rAttribute )
 }
 
 String*
-AnnotateNone( const Attribute& rAttribute )
+AnnotateNone( const Attribute& )
 {
     return new String();
 }
