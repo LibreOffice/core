@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strmsys.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:35:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,8 @@
  *
  ************************************************************************/
 
-#if defined( OS2 )
-#include "strmos2.cxx"
-#elif defined( WNT )
+#if defined WNT
 #include "strmwnt.cxx"
-#elif defined( MAC )
-#include "strmmac.cxx"
-#elif defined( UNX )
+#elif defined UNX
 #include "strmunx.cxx"
-#else
-#include "strmstd.cxx"
 #endif
