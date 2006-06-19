@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:12:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,11 +95,6 @@ FileDialog::~FileDialog()
 void FileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
 {
     ((ImpFileDialog*)pImpFileDlg->GetDialog())->AddFilter( rFilter, rMask );
-}
-
-void FileDialog::AddFilter( const UniString& rFilter, const UniString& rMask, const UniString& rSysType )
-{
-  ((ImpFileDialog*)pImpFileDlg->GetDialog())->AddFilter( rFilter, rMask );
 }
 
 void FileDialog::RemoveFilter( const UniString& rFilter )
