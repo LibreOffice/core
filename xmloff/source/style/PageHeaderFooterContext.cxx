@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:25:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "filt_pch.hxx"
 #endif
 
-#pragma hdrstop
+
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -64,16 +64,16 @@ PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       USHORT nPrfx,
                                       const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>&,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
                                       const UniReference < SvXMLImportPropertyMapper > &rTempMap,
                                       sal_Int32 nStart, sal_Int32 nEnd,
                                       const sal_Bool bTempHeader ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rProperties(rTempProperties),
-    rMap(rTempMap),
     nStartIndex(nStart),
-    nEndIndex(nEnd)
+    nEndIndex(nEnd),
+    rMap(rTempMap)
 {
     bHeader = bTempHeader;
 }
