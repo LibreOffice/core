@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unointerfaceproxy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:35:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,24 +43,16 @@
 #include "typelib/typedescription.h"
 #include "uno/dispatcher.h"
 
-using bridges::cpp_uno::shared::UnoInterfaceProxy;
+namespace bridges { namespace cpp_uno { namespace shared {
 
-UnoInterfaceProxy * UnoInterfaceProxy::create(
-    bridges::cpp_uno::shared::Bridge * pBridge,
-    com::sun::star::uno::XInterface * pCppI,
-    typelib_InterfaceTypeDescription * pTypeDescr,
-    rtl::OUString const & rOId) SAL_THROW(())
-{
-    return new UnoInterfaceProxy(pBridge, pCppI, pTypeDescr, rOId);
-}
-
-void UnoInterfaceProxy::free(uno_ExtEnvironment * pEnv, void * pProxy)
-    SAL_THROW(())
+void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
 {
     UnoInterfaceProxy * pThis =
         static_cast< UnoInterfaceProxy * >(
             reinterpret_cast< uno_Interface * >( pProxy ) );
-    OSL_ASSERT( pEnv == pThis->pBridge->getUnoEnv() );
+    if (pEnv != pThis->pBridge->getUnoEnv()) {
+        OSL_ASSERT(false);
+    }
 
     (*pThis->pBridge->getCppEnv()->revokeInterface)(
         pThis->pBridge->getCppEnv(), pThis->pCppI );
@@ -73,6 +65,50 @@ void UnoInterfaceProxy::free(uno_ExtEnvironment * pEnv, void * pProxy)
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
+}
+
+void acquireProxy(uno_Interface * pUnoI)
+{
+    if (1 == osl_incrementInterlockedCount(
+            & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
+    {
+        // rebirth of proxy zombie
+        // register at uno env
+#if OSL_DEBUG_LEVEL > 1
+        void * pThis = pUnoI;
+#endif
+        (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
+         registerProxyInterface)(
+             static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv(),
+             reinterpret_cast< void ** >( &pUnoI ), freeUnoInterfaceProxy,
+             static_cast< UnoInterfaceProxy * >( pUnoI )->oid.pData,
+             static_cast< UnoInterfaceProxy * >( pUnoI )->pTypeDescr );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ASSERT( pThis == pUnoI );
+#endif
+    }
+}
+
+void releaseProxy(uno_Interface * pUnoI)
+{
+    if (! osl_decrementInterlockedCount(
+            & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
+    {
+        // revoke from uno env on last release
+        (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
+         revokeInterface)(
+             static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv(),
+             pUnoI );
+    }
+}
+
+UnoInterfaceProxy * UnoInterfaceProxy::create(
+    bridges::cpp_uno::shared::Bridge * pBridge,
+    com::sun::star::uno::XInterface * pCppI,
+    typelib_InterfaceTypeDescription * pTypeDescr,
+    rtl::OUString const & rOId) SAL_THROW(())
+{
+    return new UnoInterfaceProxy(pBridge, pCppI, pTypeDescr, rOId);
 }
 
 UnoInterfaceProxy::UnoInterfaceProxy(
@@ -102,44 +138,10 @@ UnoInterfaceProxy::UnoInterfaceProxy(
     // uno_Interface
     acquire = acquireProxy;
     release = releaseProxy;
-    pDispatcher = dispatch;
+    pDispatcher = unoInterfaceProxyDispatch;
 }
 
 UnoInterfaceProxy::~UnoInterfaceProxy()
 {}
 
-void UnoInterfaceProxy::acquireProxy(uno_Interface * pUnoI) SAL_THROW(())
-{
-    if (1 == osl_incrementInterlockedCount(
-            & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
-    {
-        // rebirth of proxy zombie
-        // register at uno env
-#if OSL_DEBUG_LEVEL > 1
-        void * pThis = pUnoI;
-#endif
-        (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
-         registerProxyInterface)(
-             static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv(),
-             reinterpret_cast< void ** >( &pUnoI ),
-             free,
-             static_cast< UnoInterfaceProxy * >( pUnoI )->oid.pData,
-             static_cast< UnoInterfaceProxy * >( pUnoI )->pTypeDescr );
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ASSERT( pThis == pUnoI );
-#endif
-    }
-}
-
-void UnoInterfaceProxy::releaseProxy(uno_Interface * pUnoI) SAL_THROW(())
-{
-    if (! osl_decrementInterlockedCount(
-            & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
-    {
-        // revoke from uno env on last release
-        (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
-         revokeInterface)(
-             static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv(),
-             pUnoI );
-    }
-}
+} } }
