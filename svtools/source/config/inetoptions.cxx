@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:49:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,14 +333,14 @@ SvtInetOptions::Impl::Impl():
 }
 
 //============================================================================
-star::uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
+star::uno::Any SvtInetOptions::Impl::getProperty(Index nPropIndex)
 {
     for (int nTryCount = 0; nTryCount < 10; ++nTryCount)
     {
         {
             osl::MutexGuard aGuard(m_aMutex);
-            if (m_aEntries[nIndex].m_eState != Entry::UNKNOWN)
-                return m_aEntries[nIndex].m_aValue;
+            if (m_aEntries[nPropIndex].m_eState != Entry::UNKNOWN)
+                return m_aEntries[nPropIndex].m_aValue;
         }
         star::uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
         int nIndices[ENTRY_COUNT];
@@ -382,7 +382,7 @@ star::uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
                "SvtInetOptions::Impl::getProperty(): Possible life lock");
     {
         osl::MutexGuard aGuard(m_aMutex);
-        return m_aEntries[nIndex].m_aValue;
+        return m_aEntries[nPropIndex].m_aValue;
     }
 }
 
@@ -463,7 +463,7 @@ SvtInetOptions::SvtInetOptions()
     osl::MutexGuard aGuard(LocalSingleton::get());
     if (!m_pImpl)
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInetOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtInetOptions_Impl::ctor()");
         m_pImpl = new Impl;
 
         ItemHolder1::holdConfigItem(E_INETOPTIONS);
