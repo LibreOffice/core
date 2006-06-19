@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:33:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,11 @@ static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
 
 void XMLFootnoteSeparatorExport::exportXML(
     const vector<XMLPropertyState> * pProperties,
-    sal_uInt32 nIdx,
+    sal_uInt32
+    #ifdef DBG_UTIL
+    nIdx
+    #endif
+    ,
     const UniReference<XMLPropertySetMapper> & rMapper)
 {
     DBG_ASSERT(NULL != pProperties, "Need property states");
