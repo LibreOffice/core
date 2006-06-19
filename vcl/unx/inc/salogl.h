@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:46:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ private:
 
     Drawable            maDrawable;
 
-    static void* resolveSymbol( const char* pSym );
+    static oglFunction resolveSymbol( const char* pSym );
 public:
 
     X11SalOpenGL( SalGraphics* pGraphics );
@@ -102,7 +102,7 @@ public:
 
     // overload all pure virtual methods
     virtual bool        IsValid();
-    virtual void*       GetOGLFnc( const char * );
+    virtual oglFunction GetOGLFnc( const char * );
     virtual void        OGLEntry( SalGraphics* pGraphics );
     virtual void        OGLExit( SalGraphics* pGraphics );
     virtual void        StartScene( SalGraphics* pGraphics );
