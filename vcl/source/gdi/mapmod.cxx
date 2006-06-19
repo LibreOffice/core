@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:32:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 // =======================================================================
 
-DBG_NAME( MapMode );
+DBG_NAME( MapMode )
 
 // -----------------------------------------------------------------------
 
