@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:34:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,8 +244,6 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 {
     // setPersistance has no effect on own links, so the complete initialization must be done here
 
-    sal_Bool bIsIFrame = sal_False;
-
     for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
         if ( aMediaDescr[nInd].Name.equalsAscii( "URL" ) )
             aMediaDescr[nInd].Value >>= m_aLinkURL;
@@ -330,7 +328,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
 
 //------------------------------------------------------
 void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
-                                            const uno::Reference< uno::XInterface >& xSource )
+                                            const uno::Reference< uno::XInterface >& /*xSource*/ )
 {
     if ( m_pInterfaceContainer )
     {
@@ -491,7 +489,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
 
 //------------------------------------------------------
 void SAL_CALL OCommonEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
+                const uno::Sequence< sal_Int8 >& /*aClassID*/, const ::rtl::OUString& /*aClassName*/ )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
