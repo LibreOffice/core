@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgejpg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:33:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
-#ifndef GCC
-#   pragma hdrstop
-#endif
-
 #include "dlgejpg.hxx"
 #include "dlgejpg.hrc"
 #include "strings.hrc"
@@ -54,6 +48,7 @@
 
 DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_JPG, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aFiDescr            ( this, ResId( FI_DESCR ) ),
                 aNumFldQuality      ( this, ResId( NUM_FLD_QUALITY ) ),
                 aGrpQuality         ( this, ResId( GRP_QUALITY ) ),
@@ -62,8 +57,7 @@ DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
                 aGrpColors          ( this, ResId( GRP_COLORS ) ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                rFltCallPara        ( rPara )
+                aBtnHelp            ( this, ResId( BTN_HELP ) )
 {
     FreeResource();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
