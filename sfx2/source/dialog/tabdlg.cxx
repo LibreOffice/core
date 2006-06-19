@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:39:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ SfxPoolItem* __EXPORT SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
     return new SfxTabDialogItem( *this, pToPool );
 }
 
-SfxPoolItem* __EXPORT SfxTabDialogItem::Create(SvStream& rStream, USHORT nVersion) const
+SfxPoolItem* __EXPORT SfxTabDialogItem::Create(SvStream& /*rStream*/, USHORT /*nVersion*/) const
 {
     DBG_ERROR( "Use it only in UI!" );
     return NULL;
@@ -137,8 +137,8 @@ class SfxTabDialogController : public SfxControllerItem
     SfxTabDialog*   pDialog;
     const SfxItemSet*     pSet;
 public:
-                    SfxTabDialogController( USHORT nId, SfxBindings& rBindings, SfxTabDialog* pDlg )
-                        : SfxControllerItem( nId, rBindings )
+                    SfxTabDialogController( USHORT nSlotId, SfxBindings& rBindings, SfxTabDialog* pDlg )
+                        : SfxControllerItem( nSlotId, rBindings )
                         , pDialog( pDlg )
                         , pSet( NULL )
                     {}
@@ -156,6 +156,7 @@ SfxTabDialogController::~SfxTabDialogController()
 
 IMPL_LINK( SfxTabDialogController, Execute_Impl, void*, pVoid )
 {
+    (void)pVoid; //unused
     if ( pDialog->OK_Impl() && pDialog->Ok() )
     {
         const SfxPoolItem* aItems[2];
@@ -168,7 +169,7 @@ IMPL_LINK( SfxTabDialogController, Execute_Impl, void*, pVoid )
     return 0;
 }
 
-void SfxTabDialogController::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SfxTabDialogController::StateChanged( USHORT /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )
 {
     const SfxSetItem* pSetItem = PTR_CAST( SfxSetItem, pState );
     if ( pSetItem )
@@ -177,8 +178,8 @@ void SfxTabDialogController::StateChanged( USHORT nSID, SfxItemState eState, con
         BOOL bDialogStarted = FALSE;
         for ( USHORT n=0; n<pDialog->aTabCtrl.GetPageCount(); n++ )
         {
-            USHORT nId = pDialog->aTabCtrl.GetPageId( n );
-            SfxTabPage* pTabPage = (SfxTabPage*) pDialog->aTabCtrl.GetTabPage( nId );
+            USHORT nPageId = pDialog->aTabCtrl.GetPageId( n );
+            SfxTabPage* pTabPage = (SfxTabPage*) pDialog->aTabCtrl.GetTabPage( nPageId );
             if ( pTabPage )
             {
                 pTabPage->Reset( pSetItem->GetItemSet() );
@@ -460,7 +461,10 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
 }
 
 // add CHINA001  begin
-void SfxTabPage::PageCreated (SfxAllItemSet aSet){DBG_ASSERT(0, "SfxTabPage::PageCreated should not be called"); }//CHINA001
+void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
+{
+    DBG_ASSERT(0, "SfxTabPage::PageCreated should not be called");
+}//CHINA001
 // add CHINA001 end
 
 // -----------------------------------------------------------------------
@@ -624,7 +628,7 @@ SfxTabDialog::~SfxTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SfxTabDialog::Init_Impl( BOOL bFmt, const String* pUserButtonText )
+void SfxTabDialog::Init_Impl( BOOL bFmtFlag, const String* pUserButtonText )
 
 /*  [Beschreibung]
 
@@ -653,7 +657,9 @@ void SfxTabDialog::Init_Impl( BOOL bFmt, const String* pUserButtonText )
         pUserBtn->Show();
     }
 
-    if ( bFmt )
+    /* TODO: Check what is up with bFmt/bFmtFlag. Comment below suggests a
+             different behavior than implemented!! */
+    if ( bFmtFlag )
     {
         String aStd( SfxResId( STR_STANDARD_SHORTCUT ) );
         aBaseFmtBtn.SetText( aStd );
@@ -664,10 +670,10 @@ void SfxTabDialog::Init_Impl( BOOL bFmt, const String* pUserButtonText )
         // wenn bFmt == 2, dann auch TRUE,
         // zus"atzlich Ausblendung vom StandardButton,
         // nach der Initialisierung wieder auf TRUE setzen
-        if ( bFmt != 2 )
+        if ( bFmtFlag != 2 )
             aBaseFmtBtn.Show();
         else
-            bFmt = TRUE;
+            bFmtFlag = TRUE;
     }
 
     if ( pSet )
@@ -1088,6 +1094,7 @@ short SfxTabDialog::Ok()
 
 IMPL_LINK( SfxTabDialog, CancelHdl, Button*, pButton )
 {
+    (void)pButton; //unused
     Close();
     return 0;
 }
@@ -1267,8 +1274,8 @@ IMPL_LINK( SfxTabDialog, ResetHdl, Button *, EMPTYARG )
     if ( pDataObject->bOnDemand )
     {
         // CSet auf AIS hat hier Probleme, daher getrennt
-        const SfxItemSet* pSet = &pDataObject->pTabPage->GetItemSet();
-        pDataObject->pTabPage->Reset( *(SfxItemSet*)pSet );
+        const SfxItemSet* pItemSet = &pDataObject->pTabPage->GetItemSet();
+        pDataObject->pTabPage->Reset( *(SfxItemSet*)pItemSet );
     }
     else
         pDataObject->pTabPage->Reset( *pSet );
@@ -1299,17 +1306,17 @@ IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
             pExampleSet = new SfxItemSet( *pSet );
 
         const SfxItemPool* pPool = pSet->GetPool();
-        const USHORT* pRanges = (pDataObject->fnGetRanges)();
+        const USHORT* pTmpRanges = (pDataObject->fnGetRanges)();
         SfxItemSet aTmpSet( *pExampleSet );
 
-        while ( *pRanges )
+        while ( *pTmpRanges )
         {
-            const USHORT* pU = pRanges + 1;
+            const USHORT* pU = pTmpRanges + 1;
 
-            if ( *pRanges == *pU )
+            if ( *pTmpRanges == *pU )
             {
                 // Range mit zwei gleichen Werten -> nur ein Item setzen
-                USHORT nWh = pPool->GetWhich( *pRanges );
+                USHORT nWh = pPool->GetWhich( *pTmpRanges );
                 pExampleSet->ClearItem( nWh );
                 aTmpSet.ClearItem( nWh );
                 // am OutSet mit InvalidateItem,
@@ -1319,7 +1326,7 @@ IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
             else
             {
                 // richtiger Range mit mehreren Werten
-                USHORT nTmp = *pRanges, nTmpEnd = *pU;
+                USHORT nTmp = *pTmpRanges, nTmpEnd = *pU;
                 DBG_ASSERT( nTmp <= nTmpEnd, "Range ist falsch sortiert" );
 
                 if ( nTmp > nTmpEnd )
@@ -1343,7 +1350,7 @@ IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
                 }
             }
             // zum n"achsten Paar gehen
-            pRanges += 2;
+            pTmpRanges += 2;
         }
         // alle Items neu gesetzt -> dann an der aktuellen Page Reset() rufen
         DBG_ASSERT( pDataObject->pTabPage, "die Page ist weg" );
@@ -1576,7 +1583,7 @@ int __cdecl TabDlgCmpUS_Impl( const void* p1, const void* p2 )
 #if defined(OS2) && defined(ICC)
 int _Optlink TabDlgCmpUS_Impl( const void* p1, const void* p2 )
 #else
-int TabDlgCmpUS_Impl( const void* p1, const void* p2 )
+extern "C" int TabDlgCmpUS_Impl( const void* p1, const void* p2 )
 #endif
 #endif
 
