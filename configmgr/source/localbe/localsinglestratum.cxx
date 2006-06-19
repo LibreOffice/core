@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localsinglestratum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:06:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ uno::Reference<backend::XUpdatableLayer> SAL_CALL
 }
 //------------------------------------------------------------------------------
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-    LocalReadonlyStratum::getUpdatableLayer(const rtl::OUString& aComponent)
+    LocalReadonlyStratum::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
         throw (backend::BackendAccessException, lang::IllegalArgumentException,
                 lang::NoSupportException, uno::RuntimeException)
 {
@@ -110,7 +110,7 @@ uno::Reference<backend::XUpdatableLayer> SAL_CALL
     return 0;
 }
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-    LocalResourceStratum::getUpdatableLayer(const rtl::OUString& aComponent)
+    LocalResourceStratum::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
         throw (backend::BackendAccessException, lang::IllegalArgumentException,
                 lang::NoSupportException, uno::RuntimeException)
 {
