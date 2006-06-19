@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-15 09:02:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ void ControlDef::Write( SvStream &aStream )
     else
         aStream << static_cast<comm_ULONG>(pData->aUId.GetNum()); //GetNum() ULONG != comm_ULONG on 64bit
     if ( pSons )
-        for ( int i = 0 ; pSons->Count() > i ; i++ )
+        for ( USHORT i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
 }
 
@@ -372,25 +372,25 @@ SbxTransportMethod::SbxTransportMethod( SbxDataType DT )
 
 TestToolObj::TestToolObj( String aName, String aFilePath )              // Interner Aufruf
 : SbxObject( aName )
-, pControls(NULL)
-, pReverseSlots(NULL)
-, pReverseControls(NULL)
-, pReverseControlsSon(NULL)
-, pReverseUIds(NULL)
-, pSIds(NULL)
-, pCommunicationManager(NULL)
-, bUseIPC(FALSE)
-, IsBlock(FALSE)
-, SingleCommandBlock(TRUE)
-//, bQuietErrors(TRUE)
 , bQuietErrors(FALSE)
+, bUseIPC(FALSE)
+, pFehlerListe(NULL)
 , bReturnOK(TRUE)
 , nSequence(KEEP_SEQUENCES)
 , ProgPath()
-, nIdleCount(0)
-, nWindowHandlerCallLevel(0)
+, IsBlock(FALSE)
+, SingleCommandBlock(TRUE)
+, m_pControls(NULL)
+, m_pNameKontext(NULL)
+, m_pSIds(NULL)
+, m_pReverseSlots(NULL)
+, m_pReverseControls(NULL)
+, m_pReverseControlsSon(NULL)
+, m_pReverseUIds(NULL)
+, pCommunicationManager(NULL)
 , aDialogHandlerName()
-, pFehlerListe(NULL)
+, nWindowHandlerCallLevel(0)
+, nIdleCount(0)
 {
     pImpl = new ImplTestToolObj;
     pImpl->ProgParam = String();
@@ -406,25 +406,25 @@ TestToolObj::TestToolObj( String aName, String aFilePath )              // Inter
 
 TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf im Testtool
 : SbxObject( aName )
-, pControls(NULL)
-, pReverseSlots(NULL)
-, pReverseControls(NULL)
-, pReverseControlsSon(NULL)
-, pReverseUIds(NULL)
-, pSIds(NULL)
-, pCommunicationManager(NULL)
-, bUseIPC(TRUE)
-, IsBlock(FALSE)
-, SingleCommandBlock(TRUE)
-//, bQuietErrors(TRUE)
 , bQuietErrors(FALSE)
+, bUseIPC(TRUE)
+, pFehlerListe(NULL)
 , bReturnOK(TRUE)
 , nSequence(KEEP_SEQUENCES)
 , ProgPath()
-, nIdleCount(0)
-, nWindowHandlerCallLevel(0)
+, IsBlock(FALSE)
+, SingleCommandBlock(TRUE)
+, m_pControls(NULL)
+, m_pNameKontext(NULL)
+, m_pSIds(NULL)
+, m_pReverseSlots(NULL)
+, m_pReverseControls(NULL)
+, m_pReverseControlsSon(NULL)
+, m_pReverseUIds(NULL)
+, pCommunicationManager(NULL)
 , aDialogHandlerName()
-, pFehlerListe(NULL)
+, nWindowHandlerCallLevel(0)
+, nIdleCount(0)
 {
     pImpl = new ImplTestToolObj;
     pImpl->ProgParam = String();
@@ -736,9 +736,9 @@ void TestToolObj::InitTestToolObj()
 
     }
 
-    pControls = new CNames();
-    pSIds = new CNames();
-    pNameKontext = pControls;
+    m_pControls = new CNames();
+    m_pSIds = new CNames();
+    m_pNameKontext = m_pControls;
 
     nMyVar = 0;
 
@@ -796,18 +796,18 @@ TestToolObj::~TestToolObj()
         pImpl->pMyVars[i].Clear();
     }
 
-    if (pControls)
-        delete pControls;
-    if (pReverseSlots)
-        delete pReverseSlots;
-    if (pReverseControls)
-        delete pReverseControls;
-    if (pReverseControlsSon)
-        delete pReverseControlsSon;
-    if (pReverseUIds)
-        delete pReverseUIds;
-    if (pSIds)
-        delete pSIds;
+    if (m_pControls)
+        delete m_pControls;
+    if (m_pReverseSlots)
+        delete m_pReverseSlots;
+    if (m_pReverseControls)
+        delete m_pReverseControls;
+    if (m_pReverseControlsSon)
+        delete m_pReverseControlsSon;
+    if (m_pReverseUIds)
+        delete m_pReverseUIds;
+    if (m_pSIds)
+        delete m_pSIds;
     if (pFehlerListe)
     {
         delete pFehlerListe;
@@ -849,7 +849,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
 
     SvFileStream Stream;
-    String       aLine,aName,aLongname;
+    String       aLine,aShortname,aLongname;
     SmartId      aUId;
     xub_StrLen   nLineNr;
     USHORT       nElement;
@@ -860,12 +860,12 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
     if (! pUIds)
     {
-        String aName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
+        String aFileName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
         {
-            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_LONGNAMES)), aName );
+            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_LONGNAMES)), aFileName );
             GetTTBroadcaster().Broadcast( aHint );
         }
-        ReadFlat( aName ,pUIds, TRUE );
+        ReadFlat( aFileName ,pUIds, TRUE );
         if ( !pUIds )
             return;
         pNewDef = new ControlDef("Active",SmartId(0));
@@ -923,7 +923,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             continue;
         }
 
-        aName = aLine.GetToken(0,cMyDelim);
+        aShortname = aLine.GetToken(0,cMyDelim);
         aLongname = aLine.GetToken(1,cMyDelim);
 
         String aFirstAllowedExtra, aAllowed;
@@ -932,9 +932,9 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         xub_StrLen nIndex = 0;
         BOOL bOK = TRUE;
 
-        while ( bOK && nIndex < aName.Len() )
+        while ( bOK && nIndex < aShortname.Len() )
         {
-            sal_Unicode aChar = aName.GetChar( nIndex );
+            sal_Unicode aChar = aShortname.GetChar( nIndex );
             BOOL bOKThis = FALSE;
             bOKThis |= ( aAllowed.Search( aChar ) != STRING_NOTFOUND );
             if ( !nIndex )
@@ -960,15 +960,15 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( ".HelpId:" ) );
         BOOL bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( ".moz" ) );
 
-        if ( aName.GetChar(0) == '+' )          // Kompletten Eintrag kopieren
+        if ( aShortname.GetChar(0) == '+' )          // Kompletten Eintrag kopieren
         {
-            aName.Erase(0,1);
+            aShortname.Erase(0,1);
             ControlDef WhatName(aLongname,SmartId());
             ControlDef *OldTree;
             if (pNames->Seek_Entry(&WhatName,&nElement))
             {
                 OldTree = (ControlDef*)pNames->GetObject(nElement);
-                pNewDef = new ControlDef(aLongname,aName,OldTree,TRUE);
+                pNewDef = new ControlDef(aLongname,aShortname,OldTree,TRUE);
 
                 if (! pNames->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
                 {
@@ -991,7 +991,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         else
         {
 
-            if (aName.CompareIgnoreCaseToAscii("*Active") == COMPARE_EQUAL)
+            if (aShortname.CompareIgnoreCaseToAscii("*Active") == COMPARE_EQUAL)
                 aUId = SmartId( UID_ACTIVE );
             else if ( !bUnoName && !bMozillaName )
             {   // Bestimmen der ID aus der Hid.Lst
@@ -1018,18 +1018,18 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
 
 
-            if (aName.GetChar(0) == '*' || bIsFlat)     // Globaler Kurzname (Dialogname oder SId)
+            if (aShortname.GetChar(0) == '*' || bIsFlat)     // Globaler Kurzname (Dialogname oder SId)
             {
                 if (!bIsFlat)
-                    aName.Erase(0,1);
+                    aShortname.Erase(0,1);
 
-                   pNewDef = new ControlDef(aName,aUId);
+                   pNewDef = new ControlDef(aShortname,aUId);
 
                 if (!bIsFlat)
                 {
                     pNewDef->Sons( new CNames() );
 
-                       pNewDef2 = new ControlDef(aName,aUId);
+                       pNewDef2 = new ControlDef(aShortname,aUId);
                     if (!pNewDef->SonInsert( pNewDef2 ))         // Dialog in eigenen Namespace eintragen
                     {
                         delete pNewDef2;
@@ -1056,7 +1056,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                 }
                 else
                 {
-                    pNewDef = new ControlDef(aName,aUId);
+                    pNewDef = new ControlDef(aShortname,aUId);
                     if (! pFatherDef->SonInsert(pNewDef))
                     {
                         ADD_WARNING_LOG2( GEN_RES_STR1( S_DOUBLE_NAME, aLine ), Filename, nLineNr );
@@ -1095,7 +1095,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
 //  Wenn bSortByName == FALSE, dann nach UId Sortieren (ControlItemUId statt ControlDef)
 {
     SvFileStream Stream;
-    String       aLine,aName;
+    String       aLine,aLongname;
     SmartId      aUId;
     xub_StrLen   nLineNr;
     ControlItem  *pNewItem;
@@ -1136,13 +1136,13 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
             continue;
         }
 
-        aName = aLine.GetToken(0,cMyDelim);
+        aLongname = aLine.GetToken(0,cMyDelim);
         aUId = SmartId( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
 
         if ( bSortByName )
-            pNewItem = new ControlDef( aName, aUId );
+            pNewItem = new ControlDef( aLongname, aUId );
         else
-            pNewItem = new ControlItemUId( aName, aUId );
+            pNewItem = new ControlItemUId( aLongname, aUId );
         if ( !pNames->C40_PTR_INSERT( ControlItem, pNewItem ) )
         {
             if ( bSortByName )
@@ -1263,7 +1263,7 @@ void TestToolObj::WaitForAnswer ()
 }
 
 
-IMPL_LINK( TestToolObj, IdleHdl, Application*, pApp )
+IMPL_LINK( TestToolObj, IdleHdl, Application*, EMPTYARG )
 {
     if ( !bReturnOK )
         nIdleCount++;
@@ -1275,14 +1275,14 @@ IMPL_LINK( TestToolObj, IdleHdl, Application*, pApp )
     return 0;
 }
 
-IMPL_LINK( TestToolObj, CallDialogHandler, Application*, pApp )
+IMPL_LINK( TestToolObj, CallDialogHandler, Application*, EMPTYARG )
 {
     nWindowHandlerCallLevel++;
-    String aName(aDialogHandlerName);
+    String aHandlerName(aDialogHandlerName);
     aDialogHandlerName.Erase();
 
     ULONG nRememberSequence = nSequence; // Da sich die Sequence im DialogHandler ‰ndert
-    ((StarBASIC*)GetParent())->Call( aName );
+    ((StarBASIC*)GetParent())->Call( aHandlerName );
     nSequence = nRememberSequence;
     // Die Sequenznummern werden dann zwar doppelt vergeben, aber wen k¸mmerts.
 
@@ -1387,10 +1387,10 @@ void TestToolObj::EndBlock()
 }
 
 
-BOOL TestToolObj::Load( String aName, SbModule *pMod )
+BOOL TestToolObj::Load( String aFileName, SbModule *pMod )
 {
     BOOL bOk = TRUE;
-    SvFileStream aStrm( aName, STREAM_STD_READ );
+    SvFileStream aStrm( aFileName, STREAM_STD_READ );
     if( aStrm.IsOpen() )
     {
         String aText, aLine;
@@ -1412,7 +1412,7 @@ BOOL TestToolObj::Load( String aName, SbModule *pMod )
                 bOk = FALSE;
         }
         aText.ConvertLineEnd();
-        pMod->SetName(CUniString("--").Append(aName));
+        pMod->SetName(CUniString("--").Append(aFileName));
 
         pMod->SetComment( GetRevision( aText ) );
 
@@ -1548,7 +1548,6 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
 
     aStream.Close();
     return TRUE;
-return FALSE;
 }
 
 
@@ -1558,7 +1557,7 @@ BOOL TestToolObj::WriteNamesBin( String Filename, CNames *pSIds, CNames *pContro
     SvFileStream aStrm( String(Filename).AppendAscii(".bin"), STREAM_STD_WRITE );
     if( aStrm.IsOpen() )
     {
-        int i;
+        USHORT i;
         if ( pSIds )
         {
             aStrm << pSIds->Count();
@@ -1603,16 +1602,16 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         SbxArray* rPar = pVar->GetParameters();
 
         ULONG nHintId = p->GetId();
-        ULONG nUserData = pVar->GetUserData();
+        ULONG nHintUserData = pVar->GetUserData();
         if( nHintId == SBX_HINT_DATAWANTED )
         {
             nMyVar = 0;
-            switch( nUserData )
+            switch( nHintUserData )
             {
                 case ID_Kontext:
                     if ( !rPar )
                     {
-                        pNameKontext = pControls;
+                        m_pNameKontext = m_pControls;
 
                         // So daﬂ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
                         for (USHORT i=0;i<VAR_POOL_SIZE;i++)
@@ -1626,9 +1625,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         SbxVariableRef pArg = rPar->Get( 1 );
                         String aKontext = pArg->GetString();
                         ControlDef WhatName(aKontext,SmartId());
-                        if (pControls && pControls->Seek_Entry(&WhatName,&nElement))
+                        if (m_pControls && m_pControls->Seek_Entry(&WhatName,&nElement))
                         {
-                            pNameKontext = ((ControlDef*)pControls->GetObject(nElement))->GetSons();
+                            m_pNameKontext = ((ControlDef*)m_pControls->GetObject(nElement))->GetSons();
 
                             // So daﬂ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
                             for (USHORT i=0;i<VAR_POOL_SIZE;i++)
@@ -1656,8 +1655,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         String aTmpStr(ProgPath);
                         aTmpStr += ' ';
                         aTmpStr += pImpl->ProgParam;
-                        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_STARTING_APPLICATION)), aTmpStr );
-                        GetTTBroadcaster().Broadcast( aHint );
+                        {
+                            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_STARTING_APPLICATION)), aTmpStr );
+                            GetTTBroadcaster().Broadcast( aHint );
+                        }
 
                         pImpl->bIsStart = TRUE;
                         BeginBlock();
@@ -1677,7 +1678,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         SbxVariableRef pArg = rPar->Get( 1 );
                         DirEntry FilePath = pImpl->aFileBase + DirEntry(pArg->GetString(),FSYS_STYLE_VFAT);
-                        WriteNamesBin( FilePath.GetFull(), pSIds, pControls );
+                        WriteNamesBin( FilePath.GetFull(), m_pSIds, m_pControls );
                     }
                     else
                         SetError( SbxERR_WRONG_ARGS );
@@ -1730,9 +1731,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_StartUse:
                     if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
                     {
-                        BasicRuntime aRun = BasicRuntimeAccess::GetRuntime();
-                        aLogFileName = DirEntry(aRun.GetModuleName(SbxNAME_NONE)).GetBase().AppendAscii(".res");
-
                         ADD_RUN_LOG();
                         ADD_CASE_LOG(GEN_RES_STR0(S_READING_FILE));
 
@@ -1752,42 +1750,42 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         }
                         nMyVar = 0;
 
-                        if (pControls)
+                        if (m_pControls)
                         {
-                            delete pControls;
-                            pControls = NULL;
+                            delete m_pControls;
+                            m_pControls = NULL;
                         }
-                        if (pReverseSlots)
+                        if (m_pReverseSlots)
                         {
-                            delete pReverseSlots;
-                            pReverseSlots = NULL;
+                            delete m_pReverseSlots;
+                            m_pReverseSlots = NULL;
                         }
-                        if (pReverseControls)
+                        if (m_pReverseControls)
                         {
-                            delete pReverseControls;
-                            pReverseControls = NULL;
+                            delete m_pReverseControls;
+                            m_pReverseControls = NULL;
                         }
-                        if (pReverseControlsSon)
+                        if (m_pReverseControlsSon)
                         {
-                            delete pReverseControlsSon;
-                            pReverseControlsSon = NULL;
+                            delete m_pReverseControlsSon;
+                            m_pReverseControlsSon = NULL;
                         }
-                        if (pSIds)
+                        if (m_pSIds)
                         {
-                            delete pSIds;
-                            pSIds = NULL;
+                            delete m_pSIds;
+                            m_pSIds = NULL;
                         }
                         if (pUIds)
                         {
                             delete pUIds;
                             pUIds = NULL;
                         }
-                        if (pReverseUIds)
+                        if (m_pReverseUIds)
                         {
-                            delete pReverseUIds;
-                            pReverseUIds = NULL;
+                            delete m_pReverseUIds;
+                            m_pReverseUIds = NULL;
                         }
-                        pNameKontext = pControls;
+                        m_pNameKontext = m_pControls;
                         pImpl->bLnaguageExtensionLoaded = FALSE;
                         SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                         GetTTBroadcaster().Broadcast( aHint );
@@ -1824,21 +1822,21 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         String Ext = FilePath.GetExtension();
                         if ( Ext.CompareIgnoreCaseToAscii("Win") == COMPARE_EQUAL )
                         {
-                            ReadNames( FilePath.GetFull(),pControls,pUIds);
+                            ReadNames( FilePath.GetFull(),m_pControls,pUIds);
                             pImpl->bLnaguageExtensionLoaded = TRUE;
                             SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
                         else if ( Ext.CompareIgnoreCaseToAscii("Sid") == COMPARE_EQUAL )
                         {
-                            ReadNames( FilePath.GetFull(),pSIds,pUIds,FLAT);
+                            ReadNames( FilePath.GetFull(),m_pSIds,pUIds,FLAT);
                             pImpl->bLnaguageExtensionLoaded = TRUE;
                             SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
                         else if ( Ext.CompareIgnoreCaseToAscii("Bin") == COMPARE_EQUAL )
                         {
-                            ReadNamesBin( FilePath.GetFull(), pSIds, pControls );
+                            ReadNamesBin( FilePath.GetFull(), m_pSIds, m_pControls );
                             pImpl->bLnaguageExtensionLoaded = TRUE;
                             SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                             GetTTBroadcaster().Broadcast( aHint );
@@ -1887,11 +1885,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
                     {
                         ADD_CASE_LOG( String() );       // Case abschliessen
-                        if (!pControls)
-                            pControls = new CNames();
+                        if (!m_pControls)
+                            m_pControls = new CNames();
 
-                        if (!pSIds)
-                            pSIds = new CNames();
+                        if (!m_pSIds)
+                            m_pSIds = new CNames();
 
                         if (pUIds)
                         {   // save some memory
@@ -1899,7 +1897,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             pUIds = NULL;
                         }
 
-                        pNameKontext = pControls;
+                        m_pNameKontext = m_pControls;
 
                         if ( pImpl->bLnaguageExtensionLoaded )
                         {
@@ -2080,9 +2078,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         SetError( SbxERR_NOTIMP );
                         break;
+
 //                                              Das ist total rotten und muﬂ wohl komplett neu!!
 
-                        BOOL bWasBlock = IsBlock;
+
+/*                      BOOL bWasBlock = IsBlock;
                         if ( !IsBlock )                 // Impliziter call bei Aufruf mit Methode
                             if ( SingleCommandBlock )
                                 BeginBlock();
@@ -2131,7 +2131,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         else
                             pMember->PutString(CUniString("xxx"));
 
-
+                                               */
 
                     }
                     else
@@ -2218,7 +2218,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             }
                             else
                             {
-                                if ( nUserData == ID_Control )
+                                if ( nHintUserData == ID_Control )
                                 {
                                     In->GenCmdControl (pMember->GetULong(),
                                         (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
@@ -2483,8 +2483,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 #ifdef DEBUG
                                 Time aEnd;
                                 Time aDiff = aEnd - aStart;
-                                ULONG aMS = aDiff.GetMSFromTime();
-                                if ( Abs( aDiff.GetMSFromTime() - nWait ) > 100 )
+                                long aMS = long( aDiff.GetMSFromTime() );
+                                if ( Abs( aMS - nWait ) > 100 )
                                 {
                                     DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait )
                                 }
@@ -2631,11 +2631,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             SetError( SbERR_BAD_ARGUMENT );
                     }
                     break;
-            }  //  switch( nUserData )
+            }  //  switch( nHintUserData )
         }  // if( nHintId == SBX_HINT_DATAWANTED )
         else if( nHintId == SBX_HINT_DATACHANGED )
         {
-            switch( nUserData )
+            switch( nHintUserData )
             {
                 case ID_AutoExecute:
                     if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
@@ -2731,32 +2731,32 @@ void TestToolObj::DebugFindNoErrors( BOOL bDebugFindNoErrors )
     pImpl->bDebugFindNoErrors = bDebugFindNoErrors;
 }
 
-SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
+SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 {
     if ( BasicRuntimeAccess::IsRunInit() )            // wegen Find im "Global" Befehl des Basic
         return NULL;
 
-    SbxVariableRef Old = SbxObject::Find(Str, Type );
+    SbxVariableRef Old = SbxObject::Find(aStr, aType );
     // do not return any objects from pMyVars[]
     if (Old && Old->GetUserData() != ID_Dispatch
             && Old->GetUserData() != ID_UNODispatch
             && Old->GetUserData() != ID_ErrorDummy
             && Old->GetUserData() != 0 )
         return Old;
-    else if ( Str.SearchAscii(":") != STRING_NOTFOUND )
+    else if ( aStr.SearchAscii(":") != STRING_NOTFOUND )
     {   // ignore qualified names e.g.  main:FormWizard     If this was removed an error would be generated
     }
     else
     {
 
         USHORT nElement;
-        ControlDef *pWhatName = new ControlDef(Str,SmartId());
+        ControlDef *pWhatName = new ControlDef(aStr,SmartId());
 
         /// nach Controls suchen
-        if (pNameKontext && pNameKontext->Seek_Entry(pWhatName,&nElement))
+        if (m_pNameKontext && m_pNameKontext->Seek_Entry(pWhatName,&nElement))
         {
             delete pWhatName;
-            pWhatName = ((ControlDef*)pNameKontext->GetObject(nElement));
+            pWhatName = ((ControlDef*)m_pNameKontext->GetObject(nElement));
 
 //// new Controls Object every time
             pImpl->pControlsObj = new Controls( pWhatName->pData->Kurzname );
@@ -2796,21 +2796,21 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         }
 
         /// Nach slots suchen
-        if (pSIds && pSIds->Seek_Entry(pWhatName,&nElement))
+        if (m_pSIds && m_pSIds->Seek_Entry(pWhatName,&nElement))
         {
             SbxTransportMethodRef pMyVar;
             pMyVar = pImpl->pMyVars[nMyVar++];
             if ( nMyVar >= VAR_POOL_SIZE )
                 nMyVar = 0;
             delete pWhatName;
-            pWhatName = ( (ControlDef*)pSIds->GetObject( nElement ) );
+            pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
             pMyVar->SetName( pWhatName->pData->Kurzname );
 
             if ( pWhatName->pData->aUId.HasNumeric() )
             {
                 pMyVar->SetUserData( ID_Dispatch );
                 pMyVar->nValue = pWhatName->pData->aUId.GetNum();
-                pShortNames->Insert( Str, pWhatName->pData->aUId, nSequence );
+                pShortNames->Insert( aStr, pWhatName->pData->aUId, nSequence );
             }
             else
             {
@@ -2821,15 +2821,15 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         }
 
         /// es kann sich noch um eine SlotID handeln, die numerisch abgefragt wird, statt ausgef¸hrt zu werden
-        if ( Str.Copy( Str.Len()-3, 3 ).CompareIgnoreCaseToAscii("_ID") == COMPARE_EQUAL && pSIds )
+        if ( aStr.Copy( aStr.Len()-3, 3 ).CompareIgnoreCaseToAscii("_ID") == COMPARE_EQUAL && m_pSIds )
         {
             delete pWhatName;
-            pWhatName = new ControlDef( Str.Copy( 0, Str.Len()-3 ), SmartId() );
-            if ( pSIds->Seek_Entry( pWhatName, &nElement ) )
+            pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), SmartId() );
+            if ( m_pSIds->Seek_Entry( pWhatName, &nElement ) )
             {   // Nach slots suchen
                 SbxVariable *pReturn = new SbxVariable;
                 delete pWhatName;
-                pWhatName = ( (ControlDef*)pSIds->GetObject( nElement ) );
+                pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
                 pReturn->SetName( pWhatName->pData->Kurzname );
 
                 if ( pWhatName->pData->aUId.HasNumeric() )
@@ -2841,10 +2841,10 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         }
         if ( !pImpl->bDebugFindNoErrors )
         {
-            ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, Str) );
+            ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, aStr) );
             if ( bQuietErrors )
             {       // Vorsichtshalber Control, falls noch ¥ne Methode Folgt.
-                pImpl->pControlsObj->SetName(Str);
+                pImpl->pControlsObj->SetName(aStr);
                 pImpl->pControlsObj->SetUserData( ID_ErrorDummy );
                 return pImpl->pControlsObj;
             }
@@ -2855,7 +2855,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.24 $
+    // search $Revision: 1.25 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -3040,7 +3040,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
         CError( SbERR_PROG_TOO_LARGE, CUniString("endcatch"), l, c, c+2 );
     }
 
-    return nEnd + nTotalLength;
+    return xub_StrLen( nEnd + nTotalLength );
 }
 
 
@@ -3186,14 +3186,17 @@ IMPL_LINK( TestToolObj, ReturnResultsLink, CommunicationLink*, pCommLink )
 void TestToolObj::ReadHidLstByNumber()
 {
     // Die Hid.Lst nach Nummern sortiert einlesen
-    if ( !pReverseUIds )
+    if ( !m_pReverseUIds )
     {
         String aName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
 
-        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_LONGNAMES)), aName );
-        GetTTBroadcaster().Broadcast( aHint );
+        {
+            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_LONGNAMES)), aName );
+            GetTTBroadcaster().Broadcast( aHint );
+        }
 
-        ReadFlat( aName, pReverseUIds, FALSE );
+        ReadFlat( aName, m_pReverseUIds, FALSE );
+
         {
             TTExecutionStatusHint aHint( TT_EXECUTION_HIDE_ACTION );
             GetTTBroadcaster().Broadcast( aHint );
@@ -3204,22 +3207,22 @@ void TestToolObj::ReadHidLstByNumber()
 void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
 {
     // Die Controls einmal hirarchisch und einmal alle flach nach nummer sortiert
-    if ( !pReverseControls && !pReverseControlsSon && pControls )
+    if ( !m_pReverseControls && !m_pReverseControlsSon && m_pControls )
     {
-        pReverseControls = new CNames;
-        pReverseControlsSon = new CNames;
+        m_pReverseControls = new CNames;
+        m_pReverseControlsSon = new CNames;
         USHORT nWin,nCont;
         const String aSl('/');
-        for ( nWin = 0 ; nWin < pControls->Count() ; nWin++ )
+        for ( nWin = 0 ; nWin < m_pControls->Count() ; nWin++ )
         {
-            String aFatherName( pControls->GetObject(nWin)->pData->Kurzname );
-            ControlItemUId *pNewFather = new ControlItemUIdSon(aFatherName,pControls->GetObject(nWin)->pData->aUId);
-            AddToListByNr( pReverseControlsSon, pNewFather );
+            String aFatherName( m_pControls->GetObject(nWin)->pData->Kurzname );
+            ControlItemUId *pNewFather = new ControlItemUIdSon(aFatherName,m_pControls->GetObject(nWin)->pData->aUId);
+            AddToListByNr( m_pReverseControlsSon, pNewFather );
             if (! ((ControlItemUIdSon*)pNewFather)->GetSons() )
                 ((ControlItemUIdSon*)pNewFather)->Sons( new CNames );
 
             // Existieren Sˆhne, diese in beide Listen eintragen
-            CNames *pControlList = ((ControlItemSon*)pControls->GetObject(nWin))->GetSons();
+            CNames *pControlList = ((ControlItemSon*)m_pControls->GetObject(nWin))->GetSons();
             if ( pControlList )
                 for ( nCont = 0 ; nCont < pControlList->Count() ; nCont++ )
                 {
@@ -3229,7 +3232,7 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
                     aCombinedName.AppendAscii( ":" );
                     aCombinedName.Append( pControlList->GetObject(nCont)->pData->Kurzname );
                     pNewItem = new ControlItemUId( aCombinedName, pControlList->GetObject(nCont)->pData->aUId );
-                    AddToListByNr( pReverseControls, pNewItem );
+                    AddToListByNr( m_pReverseControls, pNewItem );
 
                     pNewItem = new ControlItemUId( pControlList->GetObject(nCont)->pData->Kurzname, pControlList->GetObject(nCont)->pData->aUId );
                     AddToListByNr( ((ControlItemUIdSon*)pNewFather)->GetSons(), pNewItem );
@@ -3239,14 +3242,14 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
         {
             ControlItem *pZeroItem = new ControlItemUId( UniString(), SmartId(0) );
             USHORT nNr;
-            if ( pReverseControls->Seek_Entry( pZeroItem, &nNr ) )
+            if ( m_pReverseControls->Seek_Entry( pZeroItem, &nNr ) )
             {
-                pReverseControls->DeleteAndDestroy( nNr );
+                m_pReverseControls->DeleteAndDestroy( nNr );
 // um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
             }
-/*          if ( pReverseControlsSon->Seek_Entry( pZeroItem, &nNr ) )
+/*          if ( m_pReverseControlsSon->Seek_Entry( pZeroItem, &nNr ) )
             {
-                pReverseControlsSon->DeleteAndDestroy( nNr );
+                m_pReverseControlsSon->DeleteAndDestroy( nNr );
 // um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
             }*/
             delete pZeroItem;
@@ -3329,7 +3332,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                 case RET_Value:
                     if ( pImpl->pNextReturn )
                     {
-//                                              ULONG nUserData = pImpl->pNextReturn->GetParent()->GetUserData();
+//                                              ULONG nHintUserData = pImpl->pNextReturn->GetParent()->GetUserData();
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
 //                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
                         if ( aNextReturnId.Matches( aUId ) )
@@ -3355,7 +3358,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             ADD_ERROR(SbxERR_BAD_ACTION, GEN_RES_STR0(S_RETURNED_VALUE_ID_MISSMATCH) )
                         }
-//                                              pImpl->pNextReturn->GetParent()->SetUserData(nUserData);
+//                                              pImpl->pNextReturn->GetParent()->SetUserData(nHintUserData);
                         pImpl->pNextReturn = NULL;
                     }
                     else
@@ -3365,22 +3368,22 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                     break;
                 case RET_WinInfo:
                     {
-                        if ( !pReverseControls && !pReverseControlsSon )
+                        if ( !m_pReverseControls && !m_pReverseControlsSon )
                             pReverseControlsKontext = NULL;
 
                         ReadHidLstByNumber();
                         SortControlsByNumber();
 
                         // Alle Slots nach Nummer Sortiert
-                        if ( !pReverseSlots && pSIds )
+                        if ( !m_pReverseSlots && m_pSIds )
                         {
-                            pReverseSlots = new CNames;
+                            m_pReverseSlots = new CNames;
                             USHORT nWin;
                             const String aSl('/');
-                            for ( nWin = 0 ; nWin < pSIds->Count() ; nWin++ )
+                            for ( nWin = 0 ; nWin < m_pSIds->Count() ; nWin++ )
                             {
-                                ControlItemUId *pNewItem = new ControlItemUId(pSIds->GetObject(nWin)->pData->Kurzname,pSIds->GetObject(nWin)->pData->aUId);
-                                AddToListByNr( pReverseSlots, pNewItem );
+                                ControlItemUId *pNewItem = new ControlItemUId(m_pSIds->GetObject(nWin)->pData->Kurzname,m_pSIds->GetObject(nWin)->pData->aUId);
+                                AddToListByNr( m_pReverseSlots, pNewItem );
                             }
                         }
 
@@ -3393,17 +3396,17 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         pWinInfo->aSlotname.Erase();
 
                         // eventuell den Kontext feststellen. Passiert nur beim ersten Eintrag nach reset
-                        if ( !pReverseControlsKontext && pReverseControlsSon )
+                        if ( !pReverseControlsKontext && m_pReverseControlsSon )
                         {
                             USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
-                            if ( pReverseControlsSon->Seek_Entry(pNewItem,&nNr) )
+                            if ( m_pReverseControlsSon->Seek_Entry(pNewItem,&nNr) )
                             {
-                                pReverseControlsKontext = ((ControlItemUIdSon*)pReverseControlsSon->GetObject(nNr))->GetSons();
+                                pReverseControlsKontext = ((ControlItemUIdSon*)m_pReverseControlsSon->GetObject(nNr))->GetSons();
                                 pWinInfo->aKurzname = CUniString("*");
                             }
                             else
-                                pReverseControlsKontext = pReverseControls;
+                                pReverseControlsKontext = m_pReverseControls;
 
                             delete pNewItem;
                         }
@@ -3428,12 +3431,12 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         // Slotname feststellen
-                        if ( pReverseSlots )
+                        if ( m_pReverseSlots )
                         {
                             USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
-                            if ( pReverseSlots->Seek_Entry(pNewItem,&nNr) )
-                                pWinInfo->aSlotname = pReverseSlots->GetObject(nNr)->pData->Kurzname;
+                            if ( m_pReverseSlots->Seek_Entry(pNewItem,&nNr) )
+                                pWinInfo->aSlotname = m_pReverseSlots->GetObject(nNr)->pData->Kurzname;
                             delete pNewItem;
                         }
 
@@ -3444,12 +3447,12 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
                         else
                         {
-                            if ( pReverseUIds )
+                            if ( m_pReverseUIds )
                             {
                                 USHORT nNr;
                                 ControlItem *pNewItem = new ControlItemUId( String(), aUId );
-                                if ( pReverseUIds->Seek_Entry(pNewItem,&nNr) )
-                                    pWinInfo->aLangname = pReverseUIds->GetObject(nNr)->pData->Kurzname;
+                                if ( m_pReverseUIds->Seek_Entry(pNewItem,&nNr) )
+                                    pWinInfo->aLangname = m_pReverseUIds->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
                             }
                         }
@@ -3621,12 +3624,12 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 
                         aControls.Erase();
                         // Kurzname feststellen
-                        if ( pReverseControls )
+                        if ( m_pReverseControls )
                         {
                             USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
-                            if ( pReverseControls->Seek_Entry(pNewItem,&nNr) )
-                                aControls = pReverseControls->GetObject(nNr)->pData->Kurzname;
+                            if ( m_pReverseControls->Seek_Entry(pNewItem,&nNr) )
+                                aControls = m_pReverseControls->GetObject(nNr)->pData->Kurzname;
                             delete pNewItem;
                         }
                         if ( !aControls.Len() )
@@ -3638,12 +3641,12 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         aULongNames.Erase();
                         if( (nParams & PARAM_ULONG_1) && (nNr1 & M_RET_NUM_CONTROL) )
                         {
-                            if ( pReverseControls )
+                            if ( m_pReverseControls )
                             {
                                 USHORT nNr;
                                 ControlItem *pNewItem = new ControlItemUId( String(), SmartId( nLNr1 ) );
-                                if ( pReverseControls->Seek_Entry(pNewItem,&nNr) )
-                                    aULongNames = pReverseControls->GetObject(nNr)->pData->Kurzname;
+                                if ( m_pReverseControls->Seek_Entry(pNewItem,&nNr) )
+                                    aULongNames = m_pReverseControls->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
                             }
                             if ( !aULongNames.Len() )
@@ -3743,15 +3746,15 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 
                         if ( bWriteNewKontext )
                         {
-                            String aCommand = CUniString( "Kontext" );
+                            String aKontextCommand = CUniString( "Kontext" );
                             if ( aLastRecordedKontext.Len() )
                             {
-                                aCommand.AppendAscii ( " \"" );
-                                aCommand += aLastRecordedKontext;
-                                aCommand.AppendAscii ( "\"" );
+                                aKontextCommand.AppendAscii ( " \"" );
+                                aKontextCommand += aLastRecordedKontext;
+                                aKontextCommand.AppendAscii ( "\"" );
                             }
-                            aCommand.AppendAscii( "\n" );
-                            aWriteStringHdl.Call( &aCommand );
+                            aKontextCommand.AppendAscii( "\n" );
+                            aWriteStringHdl.Call( &aKontextCommand );
                         }
 
                         aCommand = aControl;
@@ -3770,7 +3773,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             if ( nNr1 & M_KEY_STRING )
                             {
                                 USHORT nModify = 0;
-                                USHORT nNewModify = 0;
                                 BOOL bIsProsa = FALSE;
                                 xub_StrLen i;
                                 for ( i = 0; i < aString1.Len(); i++ )
@@ -3961,9 +3963,9 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
 #include "res_type.hxx"
 
     static CNames *pRTypes = NULL;
-    xub_StrLen nStart;
-    xub_StrLen nGleich;
-    xub_StrLen nEnd;
+    xub_StrLen nStart = STRING_NOTFOUND;
+    xub_StrLen nGleich = STRING_NOTFOUND;
+    xub_StrLen nEnd = STRING_NOTFOUND;
     xub_StrLen nStartPos = 0;
     ULONG nNumber;
     String aType;
@@ -4076,19 +4078,19 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
     }
 
     // Die Controls durchsuchen
-    if ( pControls )
+    if ( m_pControls )
     {
         USHORT nWin;
 
-        for ( nWin = 0 ; nWin < pControls->Count() ; nWin++ )
+        for ( nWin = 0 ; nWin < m_pControls->Count() ; nWin++ )
         {
-            if ( ((ControlDef*)pControls->GetObject( nWin ))->SonSeek_Entry( &WhatName ) )
+            if ( ((ControlDef*)m_pControls->GetObject( nWin ))->SonSeek_Entry( &WhatName ) )
                 return TT_CONTROL;
         }
     }
 
     // Die Slots durchsuchen
-    if ( pSIds && pSIds->Seek_Entry( &WhatName ) )
+    if ( m_pSIds && m_pSIds->Seek_Entry( &WhatName ) )
         return TT_SLOT;
 
     // Ist es ein RemoteCommand
@@ -4111,8 +4113,8 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
 #undef P_FEHLERLISTE
 #define P_FEHLERLISTE ((TestToolObj*)(GetParent()))->GetFehlerListe()
 
-Controls::Controls( String aName )
-: SbxObject( aName)
+Controls::Controls( String aCName )
+: SbxObject( aCName)
 {
     pMethodVar = new SbxTransportMethod( SbxVARIANT );
     pMethodVar->SetName( CUniString("Dummy") );
@@ -4125,36 +4127,36 @@ Controls::~Controls()
 {}
 
 
-void Controls::ChangeListener( SbxObject* pParent )
+void Controls::ChangeListener( SbxObject* parent )
 {
     EndListening( pMethodVar->GetBroadcaster(), TRUE );
-    pParent->StartListening( pMethodVar->GetBroadcaster(), TRUE );
+    parent->StartListening( pMethodVar->GetBroadcaster(), TRUE );
 }
 
 void Controls::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
-                                const SfxHint& rHint, const TypeId& )
+                                const SfxHint&, const TypeId& )
 {}
 
 
 
-SbxVariable* Controls::Find( const String& Str, SbxClassType Type)
+SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
 {
     if ( !pClasses )                        // Ist static, wird also nur einmal geladen
         ReadFlatArray( arClasses, pClasses );
 
     if ( GetUserData() == ID_ErrorDummy )
     {
-        pMethodVar->SetName(UniString(GetName()).AppendAscii(".").Append(Str));
+        pMethodVar->SetName(UniString(GetName()).AppendAscii(".").Append(aStr));
         pMethodVar->SetUserData( ID_ErrorDummy );
         return pMethodVar;
     }
 
 
     USHORT nElement;
-    ControlDef WhatName(Str,SmartId());
+    ControlDef WhatName(aStr,SmartId());
     if (pClasses && pClasses->Seek_Entry(&WhatName,&nElement))
     {
-        pMethodVar->SetName(Str);
+        pMethodVar->SetName(aStr);
         ULONG nUId = pClasses->GetObject(nElement)->pData->aUId.GetNum();
         pMethodVar->nValue = nUId;
 
@@ -4163,16 +4165,16 @@ SbxVariable* Controls::Find( const String& Str, SbxClassType Type)
     }
     else
     {   // mainly for ID and name
-        SbxVariableRef Old = SbxObject::Find(Str, Type );
+        SbxVariableRef Old = SbxObject::Find(aStr, aType );
         if (Old)
             return Old;
-        else if ( Str.EqualsIgnoreCaseAscii("ID") )
+        else if ( aStr.EqualsIgnoreCaseAscii("ID") )
             return NULL;    // suppress generation of error in this case
     }
-    ADD_ERROR(SbxERR_BAD_METHOD,GEN_RES_STR2(S_UNKNOWN_METHOD, GetName(), Str));
+    ADD_ERROR(SbxERR_BAD_METHOD,GEN_RES_STR2(S_UNKNOWN_METHOD, GetName(), aStr));
     if ( ((TestToolObj*)(GetParent()))->bQuietErrors )
     {
-        pMethodVar->SetName(UniString(GetName()).AppendAscii(".").Append(Str));
+        pMethodVar->SetName(UniString(GetName()).AppendAscii(".").Append(aStr));
         pMethodVar->SetUserData( ID_ErrorDummy );
         pMethodVar->nValue = 0;
         return pMethodVar;
