@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:11:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ HelpAgentDispatcher::~HelpAgentDispatcher()
 
 //--------------------------------------------------------------------
 void SAL_CALL HelpAgentDispatcher::dispatch(const css::util::URL&                                  aURL ,
-                                            const css::uno::Sequence< css::beans::PropertyValue >& lArgs)
+                                            const css::uno::Sequence< css::beans::PropertyValue >&)
     throw(css::uno::RuntimeException)
 {
     // silently drop the request if the new URL was marked to be ignored next time.
@@ -151,44 +151,44 @@ void SAL_CALL HelpAgentDispatcher::dispatch(const css::util::URL&               
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL HelpAgentDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                     const css::util::URL&                                     aURL     )
+void SAL_CALL HelpAgentDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&,
+                                                     const css::util::URL&)
     throw(css::uno::RuntimeException)
 {
     // no status available
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL HelpAgentDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                        const css::util::URL&                                     aURL     )
+void SAL_CALL HelpAgentDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&,
+                                                        const css::util::URL&)
     throw(css::uno::RuntimeException)
 {
     // no status available
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL HelpAgentDispatcher::windowResized(const css::awt::WindowEvent& aEvent)
+void SAL_CALL HelpAgentDispatcher::windowResized(const css::awt::WindowEvent&)
     throw(css::uno::RuntimeException)
 {
     implts_positionAgentWindow();
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL HelpAgentDispatcher::windowMoved(const css::awt::WindowEvent& aEvent)
+void SAL_CALL HelpAgentDispatcher::windowMoved(const css::awt::WindowEvent&)
     throw(css::uno::RuntimeException)
 {
     implts_positionAgentWindow();
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL HelpAgentDispatcher::windowShown(const css::lang::EventObject& aEvent)
+void SAL_CALL HelpAgentDispatcher::windowShown(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     implts_showAgentWindow();
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL HelpAgentDispatcher::windowHidden(const css::lang::EventObject& aEvent)
+void SAL_CALL HelpAgentDispatcher::windowHidden(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     implts_hideAgentWindow();
@@ -346,7 +346,7 @@ void HelpAgentDispatcher::implts_startTimer()
 }
 
 //-----------------------------------------------
-IMPL_LINK(HelpAgentDispatcher, implts_timerExpired, void*, pVoid)
+IMPL_LINK(HelpAgentDispatcher, implts_timerExpired, void*,)
 {
     // This method is called by using a pointer to us.
     // But we must be aware that we can be destroyed hardly
