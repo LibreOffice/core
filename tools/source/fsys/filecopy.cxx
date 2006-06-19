@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filecopy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:16:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,28 +33,17 @@
  *
  ************************************************************************/
 
-#if defined(WIN) || defined(WNT)
+#if defined WNT
 #ifndef _SVWIN_H
 #include <io.h>
 #include <svwin.h>
 #endif
-
-#elif defined(PM2) || defined(DOS)
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <share.h>
-#include <io.h>
 
 #elif defined UNX
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
-#elif defined MAC
-#include <mac_start.h>
-#include <fcntl.h>
-#include <mac_end.h>
 #endif
 
 #include <ctype.h>
@@ -73,9 +62,6 @@
 #endif
 
 #ifndef _STREAM_HXX
-#ifdef UNX
-#define private public
-#endif
 #include "stream.hxx"
 #endif
 
@@ -97,9 +83,9 @@ using namespace ::osl;
 
 FileCopier::FileCopier() :
 
-    nBlockSize  ( 4096 ),
     nBytesTotal ( 0 ),
     nBytesCopied( 0 ),
+    nBlockSize  ( 4096 ),
     pImp        ( new FileCopier_Impl )
 
 {
@@ -111,9 +97,9 @@ FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :
 
     aSource     ( rSource ),
     aTarget     ( rTarget ),
-    nBlockSize  ( 4096 ),
     nBytesTotal ( 0 ),
     nBytesCopied( 0 ),
+    nBlockSize  ( 4096 ),
     pImp        ( new FileCopier_Impl )
 
 {
@@ -125,10 +111,10 @@ FileCopier::FileCopier( const FileCopier& rCopier ) :
 
     aSource         ( rCopier.aSource ),
     aTarget         ( rCopier.aTarget ),
-    nBlockSize      ( 4096 ),
     nBytesTotal     ( 0 ),
     nBytesCopied    ( 0 ),
     aProgressLink   ( rCopier.aProgressLink ),
+    nBlockSize      ( 4096 ),
     pImp            ( new FileCopier_Impl )
 
 {
@@ -258,10 +244,8 @@ const Link& FileCopier::GetErrorHdl() const
 |*
 *************************************************************************/
 
-#ifndef MAC
-
-FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTarget,
-                                                                   BOOL bTop )
+FSysError FileCopier::DoCopy_Impl(
+    const DirEntry &rSource, const DirEntry &rTarget )
 {
     FSysError eRet = FSYS_ERR_OK;
     ErrCode eWarn = FSYS_ERR_OK;
@@ -272,74 +256,25 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
     BOOL bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
 
     // Zieldateiname ggf. kuerzen
-    DirEntry aTarget;
+    DirEntry aTgt;
     if ( bMakeShortNames )
     {
-        aTarget = rTarget.GetPath();
-        aTarget.MakeShortName( rTarget.GetName() );
+        aTgt = rTarget.GetPath();
+        aTgt.MakeShortName( rTarget.GetName() );
     }
     else
-        aTarget = rTarget;
+        aTgt = rTarget;
 
     // kein Move wenn Namen gekuerzt werden muessten
-    if ( bMakeShortNames && FSYS_ACTION_MOVE == ( pImp->nActions & FSYS_ACTION_MOVE ) && aTarget != rTarget )
+    if ( bMakeShortNames && FSYS_ACTION_MOVE == ( pImp->nActions & FSYS_ACTION_MOVE ) && aTgt != rTarget )
         return ERRCODE_IO_NAMETOOLONG;
 
     // source is directory?
     FileStat aSourceFileStat( rSource );
     if ( aSourceFileStat.IsKind( FSYS_KIND_DIR ) )
     {
-#ifdef OS2
-        CHAR szSource[CCHMAXPATHCOMP];
-        HOBJECT hSourceObject;
-
-        strcpy(szSource, rSource.GetFull().GetStr());
-        hSourceObject = WinQueryObject(szSource);
-
-        if ( hSourceObject )
-        {
-            PSZ  pszSourceName;
-            PSZ  pszTargetName;
-            CHAR szTarget[CCHMAXPATHCOMP];
-            HOBJECT hTargetObject;
-            HOBJECT hReturn = NULLHANDLE;
-
-            strcpy(szTarget, rTarget.GetFull().GetStr());
-            pszTargetName = strrchr(szTarget, '\\');
-            pszSourceName = strrchr(szSource, '\\');
-
-            hTargetObject = WinQueryObject(szTarget);
-
-            if ( hTargetObject )
-                WinDestroyObject(hTargetObject);
-
-            if ( pszTargetName && pszSourceName )
-            {
-                *pszTargetName = '\0';
-                pszSourceName++;
-                pszTargetName++;
-
-                if(strcmp(pszSourceName, pszTargetName) == 0)
-                {
-                    hTargetObject = WinQueryObject(szTarget);
-
-                    if(pImp->nActions & FSYS_ACTION_MOVE)
-                    {
-                        hReturn = WinMoveObject(hSourceObject, hTargetObject, 0);
-                    }
-                    else
-                    {
-                        hReturn = WinCopyObject(hSourceObject, hTargetObject, 0);
-                    }
-                    if ( bMakeShortNames && aTarget.Exists() )
-                        aTarget.Kill();
-                    return hReturn ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN;
-                }
-            }
-        }
-#endif
         // recursive copy
-        eRet = Error( aTarget.MakeDir() ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN, 0, &aTarget );
+        eRet = Error( aTgt.MakeDir() ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN, 0, &aTgt );
         Dir aSourceDir( rSource, FSYS_KIND_DIR|FSYS_KIND_FILE );
         for ( USHORT n = 0; ERRCODE_TOERROR(eRet) == FSYS_ERR_OK && n < aSourceDir.Count(); ++n )
         {
@@ -347,9 +282,9 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
             DirEntryFlag eFlag = rSubSource.GetFlag();
             if ( eFlag != FSYS_FLAG_CURRENT && eFlag != FSYS_FLAG_PARENT )
             {
-                DirEntry aSubTarget( aTarget );
+                DirEntry aSubTarget( aTgt );
                 aSubTarget += rSubSource.GetName();
-                eRet = DoCopy_Impl( rSubSource, aSubTarget, FALSE );
+                eRet = DoCopy_Impl( rSubSource, aSubTarget );
                 if ( eRet && !eWarn )
                 eWarn = eRet;
             }
@@ -358,7 +293,7 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
     else if ( aSourceFileStat.IsKind(FSYS_KIND_FILE) )
     {
         if ( ( FSYS_ACTION_KEEP_EXISTING == ( pImp->nActions & FSYS_ACTION_KEEP_EXISTING ) ) &&
-             aTarget.Exists() )
+             aTgt.Exists() )
         {
             // Do not overwrite existing file in target folder.
             return ERRCODE_NONE;
@@ -370,24 +305,24 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
 
         ::rtl::OUString aFileName;
         FileBase::getFileURLFromSystemPath( ::rtl::OUString(rSource.GetFull()), aFileName );
-        SvFileStream aSource( aFileName, STREAM_READ|STREAM_NOCREATE|STREAM_SHARE_DENYNONE );
+        SvFileStream aSrc( aFileName, STREAM_READ|STREAM_NOCREATE|STREAM_SHARE_DENYNONE );
 
-        if ( !aSource.GetError() )
+        if ( !aSrc.GetError() )
         {
 #ifdef UNX
             struct stat buf;
-            if ( fstat( aSource.GetFileHandle(), &buf ) == -1 )
-                eRet = Error( FSYS_ERR_ACCESSDENIED, 0, &aTarget );
+            if ( fstat( aSrc.GetFileHandle(), &buf ) == -1 )
+                eRet = Error( FSYS_ERR_ACCESSDENIED, 0, &aTgt );
 #endif
             ::rtl::OUString aTargetFileName;
-            FileBase::getFileURLFromSystemPath( ::rtl::OUString(aTarget.GetFull()), aTargetFileName );
+            FileBase::getFileURLFromSystemPath( ::rtl::OUString(aTgt.GetFull()), aTargetFileName );
 
             SvFileStream aTargetStream( aTargetFileName, STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYWRITE );
             if ( !aTargetStream.GetError() )
             {
 #ifdef UNX
                 if ( fchmod( aTargetStream.GetFileHandle(), buf.st_mode ) == -1 )
-                    eRet = Error( FSYS_ERR_ACCESSDENIED, 0, &aTarget );
+                    eRet = Error( FSYS_ERR_ACCESSDENIED, 0, &aTgt );
 #endif
                 size_t nAllocSize = 0, nSize = 0;
                 char *pBuf = 0;
@@ -402,10 +337,10 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
                     }
 
                     // copy one block
-                    nSize = aSource.Read( pBuf, nBlockSize );
+                    nSize = aSrc.Read( pBuf, nBlockSize );
                     aTargetStream.Write( pBuf, nSize );
                     if ( aTargetStream.GetError() )
-                        eRet = Error( aTargetStream.GetError(), 0, &aTarget );
+                        eRet = Error( aTargetStream.GetError(), 0, &aTgt );
 
                     // adjust counters
                     nBytesCopied += nSize;
@@ -415,32 +350,18 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
                 delete[] pBuf;
             }
             else
-                eRet = Error( aTargetStream.GetError(), 0, &aTarget );
+                eRet = Error( aTargetStream.GetError(), 0, &aTgt );
 
             // unvollstaendiges File wieder loeschen
             aTargetStream.Close();
 
             if ( nBytesCopied != nBytesTotal )
             {
-                aTarget.Kill();
+                aTgt.Kill();
             }
-#ifdef OS2
-            else
-            {
-                // falls die Source-Target-Filenamen nicht gleich sind und der Target-Filename nicht
-                // 8.3 aber auf FAT ist, dann mu? das EA .longname korrekt gesetzt werden (TPF)
-                // (rSource.GetName()!=rTarget.GetName())
-
-                if ( rTarget.IsLongNameOnFAT() && Folder::IsAvailable() )
-                {
-                    createLongNameEA( (const char*)aTargetStream.GetFileName(),
-                                      FILE_NORMAL, rTarget.GetName() );
-                }
-            }
-#endif
         }
         else
-            eRet = Error( aSource.GetError(), &rSource, 0 );
+            eRet = Error( aSrc.GetError(), &rSource, 0 );
     }
     else if ( aSourceFileStat.IsKind(FSYS_KIND_NONE) )
         eRet = Error( ERRCODE_IO_NOTEXISTS, &rSource, 0 );
@@ -454,7 +375,7 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
     {
         WIN32_FIND_DATA fdSource;
         ByteString aFullSource(aSource.GetFull(), osl_getThreadTextEncoding());
-        ByteString aFullTarget(aTarget.GetFull(), osl_getThreadTextEncoding());
+        ByteString aFullTarget(aTgt.GetFull(), osl_getThreadTextEncoding());
         HANDLE  hFind = FindFirstFile( aFullSource.GetBuffer() , &fdSource );
         if ( hFind != INVALID_HANDLE_VALUE )
         {
@@ -482,7 +403,7 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
         {
             if ( rSource.Exists() )
                 // loeschen ging nicht => dann die Kopie wieder loeschen
-                aTarget.Kill( pImp->nActions );
+                aTgt.Kill( pImp->nActions );
             if ( !eWarn )
                 eWarn = eKillErr;
         }
@@ -490,8 +411,6 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
 
     return !eRet ? eWarn : eRet;
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -524,5 +443,5 @@ FSysError FileCopier::ExecuteExact( FSysAction nActions, FSysExact eExact )
         aAbsTarget += aSource.GetName();
 
     // recursive copy
-    return DoCopy_Impl( aAbsSource, aAbsTarget, TRUE );
+    return DoCopy_Impl( aAbsSource, aAbsTarget );
 }
