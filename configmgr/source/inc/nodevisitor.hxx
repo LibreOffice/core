@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodevisitor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:52:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@ namespace configmgr
             Result visitElements(SetNodeAccess const& _aNode);
 
         protected:
+            using NodeVisitor::handle;
             /// do the operation on <var>aNode</var>. Default implementation call NodeVisitor::visit for the rootnode.
             virtual Result handle(TreeAccessor const& _aElementTree);
 
