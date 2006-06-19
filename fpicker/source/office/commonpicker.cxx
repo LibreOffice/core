@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpicker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:30:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:12:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ namespace svt
             Application::RemoveUserEvent( m_nCancelEvent );
 
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            ::osl::MutexGuard aOwnGuard( m_aMutex );
             if ( m_bExecuting && m_pDlg )
                 m_pDlg->EndDialog( RET_CANCEL );
         }
@@ -382,12 +382,12 @@ namespace svt
             getDialog()->SetText( m_aTitle );
 
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            ::osl::MutexGuard aOwnGuard( m_aMutex );
             m_bExecuting = sal_True;
         }
         sal_Int16 nResult = implExecutePicker();
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            ::osl::MutexGuard aOwnGuard( m_aMutex );
             m_bExecuting = sal_False;
         }
 
@@ -420,7 +420,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OCommonPicker, OnCancelPicker, void*, NOTINTERESTEDIN )
+    IMPL_LINK( OCommonPicker, OnCancelPicker, void*, EMPTYARG )
     {
         // By definition, the solar mutex is locked when we arrive here. Note that this
         // is important, as for instance the consistency of m_pDlg depends on this mutex.
