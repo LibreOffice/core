@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicehandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:21:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,8 @@ ServiceHandler::~ServiceHandler()
     @modified   02.05.2002 15:25, as96863
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
-                                                                                     const ::rtl::OUString& sTarget ,
-                                                                                           sal_Int32        nFlags  ) throw( css::uno::RuntimeException )
+                                                                                     const ::rtl::OUString& /*sTarget*/ ,
+                                                                                           sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
@@ -287,7 +287,7 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
     @modified   02.05.2002 10:51, as96863
 */
 css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL&                                  aURL       ,
-                                                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
+                                                                             const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
 {
     /* SAFE */
     ReadGuard aReadLock( m_aLock );
@@ -357,16 +357,16 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 
     @modified   30.04.2002 14:49, as96863
 */
-void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                 const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+                                                 const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
     // not suported yet
 }
 
 //_________________________________________________________________________________________________________________
 
-void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                    const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+                                                    const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
     // not suported yet
 }
