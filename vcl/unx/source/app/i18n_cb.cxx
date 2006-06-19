@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:56:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@
 // -------------------------------------------------------------------------
 
 int
-PreeditStartCallback ( XIC ic, XPointer client_data, XPointer call_data )
+PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 {
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
     if ( pPreeditData->eState == ePreeditStatusActivationRequired )
@@ -93,7 +93,7 @@ PreeditStartCallback ( XIC ic, XPointer client_data, XPointer call_data )
 // -------------------------------------------------------------------------
 
 void
-PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
+PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
 {
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
      if (pPreeditData->eState == ePreeditStatusActive )
@@ -312,7 +312,7 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<USHORT>
       XIMFeedback nfeedback;
 
       // only work with reasonable length
-      if (nlength > 0 && nlength > rSalAttr.size() )
+      if (nlength > 0 && nlength > sal::static_int_cast<int>(rSalAttr.size()) )
     {
         rSalAttr.reserve( nlength );
         psalattr = &rSalAttr[0];
@@ -476,9 +476,14 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
 //
 // -------------------------------------------------------------------------
 
+#if OSL_DEBUG_LEVEL > 1
 void
 PreeditCaretCallback ( XIC ic, XPointer client_data,
     XIMPreeditCaretCallbackStruct *call_data )
+#else
+void
+PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
+#endif
 {
     #if OSL_DEBUG_LEVEL > 1
     // XXX PreeditCaretCallback is pure debug code for now
@@ -577,13 +582,13 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
 // ----------------------------------------------------------------------------------
 
 void
-StatusStartCallback (XIC ic, XPointer client_data, XPointer call_data)
+StatusStartCallback (XIC, XPointer, XPointer)
 {
     return;
 }
 
 void
-StatusDoneCallback (XIC ic, XPointer client_data, XPointer call_data)
+StatusDoneCallback (XIC, XPointer, XPointer)
 {
     return;
 }
@@ -649,7 +654,7 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
 }
 
 void
-SwitchIMCallback (XIC ic, XPointer client_data, XPointer call_data)
+SwitchIMCallback (XIC, XPointer, XPointer call_data)
 {
     XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
     ::vcl::I18NStatus::get().changeIM( String( ByteString( pCallData->to->name ), RTL_TEXTENCODING_UTF8 ) );
@@ -662,7 +667,7 @@ SwitchIMCallback (XIC ic, XPointer client_data, XPointer call_data)
 // ----------------------------------------------------------------------------------
 
 void
-IC_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data )
+IC_IMDestroyCallback (XIM, XPointer client_data, XPointer)
 {
     SalI18N_InputContext *pContext = (SalI18N_InputContext*)client_data;
     if (pContext != NULL)
@@ -670,7 +675,7 @@ IC_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data )
 }
 
 void
-IM_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data )
+IM_IMDestroyCallback (XIM, XPointer client_data, XPointer)
 {
     SalI18N_InputMethod *pMethod = (SalI18N_InputMethod*)client_data;
     if (pMethod != NULL)
