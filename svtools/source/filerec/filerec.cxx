@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:03:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
-
 #include "filerec.hxx"
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
@@ -535,8 +532,10 @@ SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream )
 :   SfxMiniRecordReader()
 {
     // Startposition merken, um im Fehlerfall zur"uck-seeken zu k"onnen
+    #ifdef DBG_UTIL
     UINT32 nStartPos = pStream->Tell();
     DBG( DbgOutf( "SfxFileRec: reading record at %ul", nStartPos ) );
+    #endif
 
     // Basisklasse initialisieren (nicht via Ctor, da der nur MiniRecs akzept.)
     Construct_Impl( pStream );
@@ -640,7 +639,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
     UINT16          nContentTag,    // Content-Art-Kennung
     BYTE            nContentVer,    // Content-Versions-Kennung
-    UINT32          nContentSize    // Gr"o\se jedes einzelnen Contents in Bytes
+    UINT32                          // Gr"o\se jedes einzelnen Contents in Bytes
 )
 
 /*  [Beschreibung]
@@ -662,7 +661,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
     UINT16          nContentTag,    // Content-Art-Kennung
     BYTE            nContentVer,    // Content-Versions-Kennung
-    UINT32          nContentSize    // Gr"o\se jedes einzelnen Contents in Bytes
+    UINT32                          // Gr"o\se jedes einzelnen Contents in Bytes
 )
 
 /*  [Beschreibung]
@@ -922,7 +921,7 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
 //-------------------------------------------------------------------------
 
 SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream )
-:   _nContentNo(0), _pContentOfs( NULL )
+:   _pContentOfs( NULL ), _nContentNo(0)
 {
     // Position im Stream merken, um im Fehlerfall zur"uck-seeken zu k"onnen
     _nStartPos = pStream->Tell();
