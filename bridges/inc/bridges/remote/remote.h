@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remote.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:13:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,22 +56,22 @@
 #define CURRENT_IIOP_PROTOCOL_MAJOR 1
 #define CURRENT_IIOP_PROTOCOL_MINOR 2
 
+extern "C" {
+
 struct remote_Interface;
 
 /** @internal
  */
-typedef void (SAL_CALL * remote_DispatchMethod)( remote_Interface * pRemoteI,
-                                                 typelib_TypeDescription * pMemberType,
-                                                 void * pReturn,
-                                                 void * pArgs[],
-                                                 uno_Any ** ppException );
+typedef void (SAL_CALL * remote_DispatchMethod)(
+    remote_Interface * pRemoteI, typelib_TypeDescription const * pMemberType,
+    void * pReturn, void * pArgs[], uno_Any ** ppException );
 
 /**
    @internal
  */
 typedef void ( SAL_CALL * requestClientSideDispatcher ) (
     uno_Environment *pEnvRemote,
-    typelib_TypeDescription * pMemberType,
+    typelib_TypeDescription const * pMemberType,
     rtl_uString *pOid,
     typelib_InterfaceTypeDescription *pInterfaceType,
     void *pReturn,
@@ -98,5 +98,7 @@ struct remote_Mapping
     uno_Environment *pEnvRemote;
     uno_Environment *pEnvUno;
 };
+
+}
 
 #endif
