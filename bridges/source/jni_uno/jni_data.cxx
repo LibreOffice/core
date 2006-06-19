@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:36:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,14 @@ namespace jni_uno
 {
 
 //------------------------------------------------------------------------------
-inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
+inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
     auto_ptr< rtl_mem > seq(
         rtl_mem::allocate( SAL_SEQUENCE_HEADER_SIZE + (nElements * nSize) ) );
     uno_Sequence * p = (uno_Sequence *)seq.get();
     p->nRefCount = 1;
     p->nElements = nElements;
-    return seq;
+    return seq.release();
 }
 
 //______________________________________________________________________________
@@ -213,6 +213,10 @@ void createDefaultUnoValue(
             }
         }
         *static_cast< uno_Interface ** >(uno_data) = 0;
+        break;
+
+    default:
+        OSL_ASSERT(false);
         break;
     }
 }
@@ -1033,21 +1037,21 @@ void Bridge::map_to_uno(
         switch (element_type->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
-            seq = seq_allocate( nElements, sizeof (sal_Unicode) );
+            seq.reset( seq_allocate( nElements, sizeof (sal_Unicode) ) );
             jni->GetCharArrayRegion(
                 (jcharArray) java_data.l, 0, nElements,
                 (jchar *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BOOLEAN:
-            seq = seq_allocate( nElements, sizeof (sal_Bool) );
+            seq.reset( seq_allocate( nElements, sizeof (sal_Bool) ) );
             jni->GetBooleanArrayRegion(
                 (jbooleanArray) java_data.l, 0, nElements,
                 (jboolean *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BYTE:
-            seq = seq_allocate( nElements, sizeof (sal_Int8) );
+            seq.reset( seq_allocate( nElements, sizeof (sal_Int8) ) );
             jni->GetByteArrayRegion(
                 (jbyteArray) java_data.l, 0, nElements,
                 (jbyte *) ((uno_Sequence *) seq.get())->elements );
@@ -1055,7 +1059,7 @@ void Bridge::map_to_uno(
             break;
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
-            seq = seq_allocate( nElements, sizeof (sal_Int16) );
+            seq.reset( seq_allocate( nElements, sizeof (sal_Int16) ) );
             jni->GetShortArrayRegion(
                 (jshortArray) java_data.l, 0, nElements,
                 (jshort *) ((uno_Sequence *) seq.get())->elements );
@@ -1063,7 +1067,7 @@ void Bridge::map_to_uno(
             break;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
-            seq = seq_allocate( nElements, sizeof (sal_Int32) );
+            seq.reset( seq_allocate( nElements, sizeof (sal_Int32) ) );
             jni->GetIntArrayRegion(
                 (jintArray) java_data.l, 0, nElements,
                 (jint *) ((uno_Sequence *) seq.get())->elements );
@@ -1071,21 +1075,21 @@ void Bridge::map_to_uno(
             break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-            seq = seq_allocate( nElements, sizeof (sal_Int64) );
+            seq.reset( seq_allocate( nElements, sizeof (sal_Int64) ) );
             jni->GetLongArrayRegion(
                 (jlongArray) java_data.l, 0, nElements,
                 (jlong *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_FLOAT:
-            seq = seq_allocate( nElements, sizeof (float) );
+            seq.reset( seq_allocate( nElements, sizeof (float) ) );
             jni->GetFloatArrayRegion(
                 (jfloatArray) java_data.l, 0, nElements,
                 (jfloat *)((uno_Sequence *)seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_DOUBLE:
-            seq = seq_allocate( nElements, sizeof (double) );
+            seq.reset( seq_allocate( nElements, sizeof (double) ) );
             jni->GetDoubleArrayRegion(
                 (jdoubleArray) java_data.l, 0, nElements,
                 (jdouble *) ((uno_Sequence *) seq.get())->elements );
@@ -1101,7 +1105,7 @@ void Bridge::map_to_uno(
         case typelib_TypeClass_INTERFACE:
         {
             TypeDescr element_td( element_type );
-            seq = seq_allocate( nElements, element_td.get()->nSize );
+            seq.reset( seq_allocate( nElements, element_td.get()->nSize ) );
 
             JNI_type_info const * element_info;
             if (typelib_TypeClass_STRUCT == element_type->eTypeClass ||
@@ -1718,14 +1722,14 @@ void Bridge::map_to_java(
                 break;
             case typelib_TypeClass_SEQUENCE:
             {
-                jvalue java_data;
+                jvalue java_data2;
                 // prefetch sequence td
                 TypeDescr seq_td( pAny->pType );
                 map_to_java(
-                    jni, &java_data, pAny->pData, seq_td.get()->pWeakRef, 0,
+                    jni, &java_data2, pAny->pData, seq_td.get()->pWeakRef, 0,
                     true /* in */, false /* no out */,
                     true /* create integral wrappers */ );
-                jo_any.reset( java_data.l );
+                jo_any.reset( java_data2.l );
 
                 // determine inner element type
                 ::com::sun::star::uno::Type element_type(
@@ -1759,6 +1763,8 @@ void Bridge::map_to_java(
                     jni.ensure_no_exception();
                     break;
                 }
+                default:
+                    break;
                 }
                 break;
             }
@@ -1808,11 +1814,11 @@ void Bridge::map_to_java(
                 {
                     // Box up in com.sun.star.uno.Any:
                     JLocalAutoRef jo_type(jni, create_type(jni, pAny->pType));
-                    jvalue java_data;
+                    jvalue java_data2;
                     map_to_java(
-                        jni, &java_data, pAny->pData, pAny->pType, 0, true,
+                        jni, &java_data2, pAny->pData, pAny->pType, 0, true,
                         false);
-                    jo_any.reset(java_data.l);
+                    jo_any.reset(java_data2.l);
                     jvalue args[2];
                     args[0].l = jo_type.get();
                     args[1].l = jo_any.get();
@@ -1827,12 +1833,12 @@ void Bridge::map_to_java(
             }
             default:
             {
-                jvalue java_data;
+                jvalue java_data2;
                 map_to_java(
-                    jni, &java_data, pAny->pData, pAny->pType, 0,
+                    jni, &java_data2, pAny->pData, pAny->pType, 0,
                     true /* in */, false /* no out */,
                     true /* create integral wrappers */ );
-                jo_any.reset( java_data.l );
+                jo_any.reset( java_data2.l );
                 break;
             }
             }
@@ -2133,11 +2139,11 @@ void Bridge::map_to_java(
                         }
                         default:
                         {
-                            jvalue java_data;
+                            jvalue java_data2;
                             map_to_java(
-                                jni, &java_data, p, member_type, 0,
+                                jni, &java_data2, p, member_type, 0,
                                 true /* in */, false /* no out */ );
-                            JLocalAutoRef jo_obj( jni, java_data.l );
+                            JLocalAutoRef jo_obj( jni, java_data2.l );
                             jni->SetObjectField(
                                 jo_comp.get(), field_id, jo_obj.get() );
                             break;
@@ -2437,11 +2443,11 @@ void Bridge::map_to_java(
                 uno_Sequence ** elements = (uno_Sequence **) seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
-                    jvalue java_data;
+                    jvalue java_data2;
                     map_to_java(
-                        jni, &java_data, elements + nPos, element_type, 0,
+                        jni, &java_data2, elements + nPos, element_type, 0,
                         true /* in */, false /* no out */ );
-                    JLocalAutoRef jo_seq( jni, java_data.l );
+                    JLocalAutoRef jo_seq( jni, java_data2.l );
                     jni->SetObjectArrayElement(
                         (jobjectArray) jo_ar.get(), nPos, jo_seq.get() );
                     jni.ensure_no_exception();
