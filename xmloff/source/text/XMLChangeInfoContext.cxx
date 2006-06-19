@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeInfoContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:00:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,10 @@ XMLChangeInfoContext::XMLChangeInfoContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     XMLChangedRegionImportContext& rPParent,
-    const OUString& rChangeType) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
-        rChangedRegion(rPParent),
-        rType(rChangeType)
+    const OUString& rChangeType)
+:   SvXMLImportContext(rImport, nPrefix, rLocalName)
+,   rType(rChangeType)
+,   rChangedRegion(rPParent)
 {
 }
 
@@ -92,8 +92,7 @@ XMLChangeInfoContext::~XMLChangeInfoContext()
 {
 }
 
-void XMLChangeInfoContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
 {
     // no attributes
 }
