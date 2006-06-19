@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPropertySetInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:23:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #ifndef _COMPHELPER_PROPERTYINFOHASH_HXX_
 #include <comphelper/PropertyInfoHash.hxx>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_TYPEGENERATION_HXX_
 #include <comphelper/TypeGeneration.hxx>
@@ -53,8 +53,9 @@
 
 namespace comphelper
 {
-    class COMPHELPER_DLLPUBLIC MasterPropertySetInfo : public ::com::sun::star::beans::XPropertySetInfo,
-                                  public ::cppu::OWeakObject
+    class COMPHELPER_DLLPUBLIC MasterPropertySetInfo:
+        public ::cppu::WeakImplHelper1<
+        ::com::sun::star::beans::XPropertySetInfo >
     {
         friend class MasterPropertySet;
     protected:
@@ -72,14 +73,6 @@ namespace comphelper
         void add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
             throw();
         void remove( const rtl::OUString& aName )
-            throw();
-
-        // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-            throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire(  )
-            throw();
-        virtual void SAL_CALL release(  )
             throw();
 
         // XPropertySetInfo
