@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamwrap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:38:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ public:
     virtual void SAL_CALL truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 
-};
+}
 // namespace utl
 
 #endif // _UTL_STREAM_WRAPPER_HXX_
