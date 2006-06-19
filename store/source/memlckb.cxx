@@ -4,9 +4,9 @@
  *
  *  $RCSfile: memlckb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:42:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,8 +355,7 @@ storeError OMemoryLockBytes::stat (sal_uInt32 &rnSize)
 /*
  * lockRange.
  */
-storeError OMemoryLockBytes::lockRange (
-    sal_uInt32 nOffset, sal_uInt32 nBytes)
+storeError OMemoryLockBytes::lockRange (sal_uInt32, sal_uInt32)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);
@@ -366,8 +365,7 @@ storeError OMemoryLockBytes::lockRange (
 /*
  * unlockRange.
  */
-storeError OMemoryLockBytes::unlockRange (
-    sal_uInt32 nOffset, sal_uInt32 nBytes)
+storeError OMemoryLockBytes::unlockRange (sal_uInt32, sal_uInt32)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);
