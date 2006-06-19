@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtritem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:01:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,22 +53,22 @@
 #include "dtritem.hxx"
 
 
-DBG_NAME( SfxDateTimeRangeItem );
+DBG_NAME( SfxDateTimeRangeItem )
 TYPEINIT1( SfxDateTimeRangeItem, SfxPoolItem );
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeRangeItem::SfxDateTimeRangeItem( USHORT nWhich ) :
-    SfxPoolItem( nWhich )
+SfxDateTimeRangeItem::SfxDateTimeRangeItem( USHORT which ) :
+    SfxPoolItem( which )
 {
     DBG_CTOR( SfxDateTimeRangeItem, 0 );
 }
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeRangeItem::SfxDateTimeRangeItem( USHORT nWhich, const DateTime& rStartDT,
+SfxDateTimeRangeItem::SfxDateTimeRangeItem( USHORT which, const DateTime& rStartDT,
                                             const DateTime& rEndDT ) :
-    SfxPoolItem( nWhich ),
+    SfxPoolItem( which ),
     aStartDateTime( rStartDT ),
     aEndDateTime( rEndDT )
 {
@@ -168,9 +168,9 @@ SfxPoolItem* SfxDateTimeRangeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxDateTimeRangeItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *   pIntlWrapper
 )   const
@@ -198,8 +198,7 @@ SfxItemPresentation SfxDateTimeRangeItem::GetPresentation
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxDateTimeRangeItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId )
+BOOL SfxDateTimeRangeItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     com::sun::star::util::DateTimeRange aValue;
     if ( rVal >>= aValue )
