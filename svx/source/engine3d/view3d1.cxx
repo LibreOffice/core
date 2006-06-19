@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:43:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,10 +101,6 @@
 
 #ifndef _E3D_LATHE3D_HXX
 #include "lathe3d.hxx"
-#endif
-
-#ifndef _E3D_POLYOB3D_HXX
-#include "polyob3d.hxx"
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
@@ -204,7 +200,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask, B
     }
 }
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL bOnly3DAttr) const
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL /*bOnly3DAttr*/) const
 {
     // ItemSet mit entspr. Bereich anlegen
     SfxItemSet aSet(
