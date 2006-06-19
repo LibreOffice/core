@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:18:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,8 +132,8 @@ namespace framework
             virtual ~PopupMenuControllerBase();
 
             //  XInterface, XTypeProvider, XServiceInfo
-            DECLARE_XINTERFACE
-            DECLARE_XTYPEPROVIDER
+            FWK_DECLARE_XINTERFACE
+            FWK_DECLARE_XTYPEPROVIDER
 
             // XServiceInfo
             virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
