@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:42:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
+#if OSL_DEBUG_LEVEL > 0
+#include <rtl/strbuf.hxx>
+#endif
 
 //........................................................................
 namespace utl
@@ -117,8 +120,8 @@ namespace utl
         :OEventListenerAdapter()
         ,m_xHierarchyAccess(_rSource.m_xHierarchyAccess)
         ,m_xDirectAccess(_rSource.m_xDirectAccess)
-        ,m_xContainerAccess(_rSource.m_xContainerAccess)
         ,m_xReplaceAccess(_rSource.m_xReplaceAccess)
+        ,m_xContainerAccess(_rSource.m_xContainerAccess)
         ,m_xProvider(_rSource.m_xProvider)
         ,m_bEscapeNames(_rSource.m_bEscapeNames)
         ,m_sCompletePath(_rSource.m_sCompletePath)
@@ -230,10 +233,13 @@ namespace utl
             }
             catch (NoSuchElementException&)
             {
-                OSL_ENSURE(sal_False,
-                        ::rtl::OString("OConfigurationNode::removeNode: there is no element named!")
-                    +=  ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("!"));
+                #if OSL_DEBUG_LEVEL > 0
+                rtl::OStringBuffer aBuf( 256 );
+                aBuf.append("OConfigurationNode::removeNode: there is no element named!");
+                aBuf.append( rtl::OUStringToOString( _rName, RTL_TEXTENCODING_ASCII_US ) );
+                aBuf.append( "!" );
+                OSL_ENSURE(sal_False, aBuf.getStr());
+                #endif
             }
             catch (WrappedTargetException&)
             {
@@ -336,11 +342,14 @@ namespace utl
         }
         catch(NoSuchElementException& e)
         {
-            e; // make compiler happy (in the pro version)
-            OSL_ENSURE(sal_False,
-                        ::rtl::OString("OConfigurationNode::openNode: there is no element named ")
-                    +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("!"));
+            (void)e;
+            #if OSL_DEBUG_LEVEL > 0
+            rtl::OStringBuffer aBuf( 256 );
+            aBuf.append("OConfigurationNode::openNode: there is no element named ");
+            aBuf.append( rtl::OUStringToOString( _rPath, RTL_TEXTENCODING_ASCII_US ) );
+            aBuf.append("!");
+            OSL_ENSURE(sal_False, aBuf.getStr());
+            #endif
         }
         catch(Exception&)
         {
@@ -487,11 +496,14 @@ namespace utl
         }
         catch(NoSuchElementException& e)
         {
-            e;  // make compiler happy
-            OSL_ENSURE(sal_False,
-                ::rtl::OString("OConfigurationNode::getNodeValue: caught a NoSuchElementException while trying to open ")
-            +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString("!"));
+            #if OSL_DEBUG_LEVEL > 0
+            rtl::OStringBuffer aBuf( 256 );
+            aBuf.append("OConfigurationNode::getNodeValue: caught a NoSuchElementException while trying to open ");
+            aBuf.append( rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE(sal_False, aBuf.getStr());
+            #else
+            (void)e;
+            #endif
         }
         return aReturn;
     }
@@ -664,11 +676,13 @@ namespace utl
                 }
                 catch(Exception& e)
                 {
-#if OSL_DEBUG_LEVEL > 0
+                #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sMessage( "OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!\nmessage:\n" );
                     sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
                     OSL_ENSURE( sal_False, sMessage.getStr() );
-#endif
+                #else
+                    (void)e;
+                #endif
                 }
             }
             bTryAgain = CM_PREFER_UPDATABLE == _eMode;
