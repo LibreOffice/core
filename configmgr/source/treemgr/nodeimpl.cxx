@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:31:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,20 +185,20 @@ namespace
 {
     struct AbstractNodeCast : data::NodeVisitor
     {
-        virtual Result handle( data::ValueNodeAccess const& rNode)
-        {
-            throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
-            return CONTINUE;
-        }
-        virtual Result handle( data::GroupNodeAccess const& rNode)
-        {
-            throw Exception( "INTERNAL ERROR: Node is not a group node. Cast failing." );
-            return CONTINUE;
-        }
-        virtual Result handle( data::SetNodeAccess const& rNode)
-        {
-            return CONTINUE;
-        }
+           virtual Result handle( data::ValueNodeAccess const& /*rNode*/)
+           {
+               throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
+           }
+           virtual Result handle( data::GroupNodeAccess const& /*rNode*/)
+           {
+               throw Exception( "INTERNAL ERROR: Node is not a group node. Cast failing." );
+           }
+           virtual Result handle( data::SetNodeAccess const& /*rNode*/)
+           {
+               return CONTINUE;
+           }
+        protected:
+            using NodeVisitor::handle;
     };
 
     template <class NodeType>
@@ -221,7 +221,7 @@ namespace
         }
 
         operator NodeType& () const { return get(); }
-    private:
+        private:
         virtual Result handle( DataNodeType& ) { return DONE; }
 
         NodeType* m_pNode;
