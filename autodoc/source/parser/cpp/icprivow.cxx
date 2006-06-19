@@ -4,9 +4,9 @@
  *
  *  $RCSfile: icprivow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:21:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ void
 Owner_Namespace::do_Add_Operation( const udmstri &     i_sLocalName,
                                    OSid                i_nSignature,
                                    Cid                 i_nId,
-                                   bool                i_bIsStatic )
+                                   bool                )
 {
     csv_assert(pScope != 0);
     pScope->Add_LocalOperation(i_sLocalName, i_nSignature, i_nId);
@@ -112,7 +112,7 @@ void
 Owner_Namespace::do_Add_Variable( const udmstri &     i_sLocalName,
                                   Cid                 i_nId,
                                   bool                i_bIsConst,
-                                  bool                i_bIsStatic )
+                                  bool                )
 {
     csv_assert(pScope != 0);
     if (i_bIsConst)
@@ -144,14 +144,14 @@ Owner_Class::SetAnotherClass( ary::cpp::Class & io_rScope )
 }
 
 bool
-Owner_Class::HasClass( const udmstri & i_sLocalName )
+Owner_Class::HasClass( const udmstri & )
 {
     return false;
 }
 
 bool
-Owner_Class::HasOperation( const udmstri &     i_sLocalName,
-                               OSid                i_nSignature )
+Owner_Class::HasOperation( const udmstri &     ,
+                           OSid                )
 {
     return false;
 }
@@ -197,7 +197,7 @@ Owner_Class::do_Add_Operation( const udmstri &     i_sLocalName,
 void
 Owner_Class::do_Add_Variable( const udmstri &     i_sLocalName,
                               Cid                 i_nId,
-                              bool                i_bIsConst,
+                              bool                ,
                               bool                i_bIsStatic )
 {
     csv_assert(pScope != 0);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_base.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:22:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ PE_Base::On_startOfNext_virtual(const char *)
 }
 
 void
-PE_Base::On_startOfNext_Identifier(const char * i_sText)
+PE_Base::On_startOfNext_Identifier(const char * )
 {
     pSpuBaseName->Push(not_done);
 }
@@ -187,7 +187,7 @@ PE_Base::On_startOfNext_DoubleColon(const char *)
 }
 
 void
-PE_Base::On_inName_Identifier(const char * i_sText)
+PE_Base::On_inName_Identifier(const char * )
 {
     pSpuBaseName->Push(not_done);
 }
