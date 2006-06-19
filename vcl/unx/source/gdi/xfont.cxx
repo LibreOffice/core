@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:21:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,16 +235,16 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
     // apply correction factors to better match selected size to available size
     if( mfYScale != 1.0 )
     {
-        *pAscent                *= mfYScale;
-        *pDescent               *= mfYScale;
-        pCharStruct->ascent     *= mfYScale;
-        pCharStruct->descent    *= mfYScale;
+        *pAscent                = int(*pAscent * mfYScale);
+        *pDescent               = int(*pDescent * mfYScale);
+        pCharStruct->ascent     = (short int)(pCharStruct->ascent * mfYScale);
+        pCharStruct->descent    = (short int)(pCharStruct->descent * mfYScale);
     }
     if( mfXScale != 1.0 )
     {
-        pCharStruct->lbearing   *= mfXScale;
-        pCharStruct->rbearing   *= mfXScale;
-        pCharStruct->width      *= mfXScale;
+        pCharStruct->lbearing   = (short int)(pCharStruct->lbearing * mfXScale);
+        pCharStruct->rbearing   = (short int)(pCharStruct->rbearing * mfXScale);
+        pCharStruct->width      = (short int)(pCharStruct->width * mfXScale);
     }
 
     return (pCharStruct->width > 0);
@@ -371,10 +371,10 @@ GetCharinfo( const XFontStruct *pXFontStruct, sal_MultiByte nChar )
     unsigned int nRow = nChar >> 8;
     unsigned int nCol = nChar & 0xFF;
 
-    int nMinRow = pXFontStruct->min_byte1;
-    int nMaxRow = pXFontStruct->max_byte1;
-    int nMinCol = pXFontStruct->min_char_or_byte2;
-    int nMaxCol = pXFontStruct->max_char_or_byte2;
+    unsigned int nMinRow = pXFontStruct->min_byte1;
+    unsigned int nMaxRow = pXFontStruct->max_byte1;
+    unsigned int nMinCol = pXFontStruct->min_char_or_byte2;
+    unsigned int nMaxCol = pXFontStruct->max_char_or_byte2;
 
     if (    nRow >= nMinRow && nRow <= nMaxRow
         &&  nCol >= nMinCol && nCol <= nMaxCol )
@@ -399,6 +399,8 @@ QueryCharWidth16( Display* pDisplay, XLIB_Font nFontID, sal_MultiByte nChar,
     return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
 }
 
+#if 0
+// currently not used
 static sal_Size
 QueryCharWidth8( XFontStruct* pXFontStruct, sal_Char nChar,
     sal_Size nDefaultWidth )
@@ -411,6 +413,7 @@ QueryCharWidth8( XFontStruct* pXFontStruct, sal_Char nChar,
 
     return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
 }
+#endif
 
 sal_Size
 ExtendedFontStruct::GetDefaultWidth()
@@ -558,7 +561,7 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
             // XXX FIXME
             if ((nEnc == RTL_TEXTENCODING_GB_2312) || (nEnc == RTL_TEXTENCODING_EUC_KR))
             {
-                for (int n_char = 0; n_char < nSize; n_char++ )
+                for (unsigned int n_char = 0; n_char < nSize; n_char++ )
                     pBuffer[ n_char ] &= 0x7F;
             }
         }
@@ -635,7 +638,7 @@ ExtendedFontStruct::GetCharWidth( sal_Unicode cChar, sal_Int32 *pPhysicalWidth,
     // convert physical width to logical width, apply correction factor if needed
     *pLogicalWidth = *pPhysicalWidth;
     if( mfXScale != 1.0 )
-        *pLogicalWidth *= mfXScale;
+        *pLogicalWidth = sal_Int32(*pLogicalWidth * mfXScale);
 
     return nConverted;
 }
