@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wntmsc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:19:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,11 @@
  *
  ************************************************************************/
 
+#pragma warning (push,1)
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+#pragma warning (pop)
 
 #include "wntmsc.hxx"
 #include "errinf.hxx"
@@ -85,7 +87,7 @@ DIR *opendir( const char* pPfad )
 
 struct dirent *readdir( DIR *pDir )
 {
-    BOOL bOk = FALSE;
+    bool bOk = false;
     if ( pDir->p )
     {
         char *pBuf = new char[ strlen( pDir->p ) + 5 ];
@@ -374,7 +376,7 @@ String DirEntry::GetVolume() const
 |*
 *************************************************************************/
 
-BOOL DirEntry::SetCWD( BOOL bSloppy )
+BOOL DirEntry::SetCWD( BOOL bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -385,18 +387,15 @@ BOOL DirEntry::SetCWD( BOOL bSloppy )
 
     if ( SetCurrentDirectory(ByteString(GetFull(), osl_getThreadTextEncoding()).GetBuffer()) )
     {
-        nError = FSYS_ERR_OK;
         return TRUE;
     }
 
     if ( bSloppy && pParent &&
          SetCurrentDirectory(ByteString(pParent->GetFull(), osl_getThreadTextEncoding()).GetBuffer()) )
     {
-        nError = FSYS_ERR_OK;
         return TRUE;
     }
 
-    nError = FSYS_ERR_NOTADIRECTORY;
     return FALSE;
 }
 
@@ -474,7 +473,7 @@ USHORT DirReader_Impl::Read()
                     !( pDosEntry->d_type & DOS_DIRECT ) &&
 #endif
                     !( pDosEntry->d_type & DOS_VOLUMEID ) );
-        BOOL bIsHidden = pDosEntry->d_type & _A_HIDDEN;
+        BOOL bIsHidden = (pDosEntry->d_type & _A_HIDDEN) != 0;
         BOOL bWantsHidden = 0 == ( pDir->eAttrMask & FSYS_KIND_VISIBLE );
         if ( ( bIsDirAndWantsDir || bIsFileAndWantsFile ) &&
              ( bWantsHidden || !bIsHidden ) &&
@@ -610,9 +609,10 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 |*
 *************************************************************************/
 
-#include <prewin.h>
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
 #include <shlobj.h>
-#include <postwin.h>
+#pragma warning(pop)
 
 #ifdef UNICODE
 #define lstrchr     wcschr
@@ -700,7 +700,7 @@ HRESULT SHResolvePath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppidl )
     HRESULT hResult = NOERROR;
     LPTSTR  pszPathCopy;
     LPTSTR  pszTrailingPath;
-    TCHAR   cBackup;
+    TCHAR   cBackup = 0;
 
     // First make a copy of the path
 
@@ -851,7 +851,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bForceAccess )
         // Redirect
         String aPath( rDirEntry.GetFull() );
 #ifndef BOOTSTRAP
-        BOOL bRedirected = FSysRedirector::DoRedirect( aPath );
+        FSysRedirector::DoRedirect( aPath );
 #endif
         DirEntry aDirEntry( aPath );
 
@@ -868,8 +868,9 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bForceAccess )
                 bAccess = FALSE;
             else
                 DBG_TRACE( "FSys: will access removable device!" );
-        if ( bAccess && ( aName == "a:" || aName == "b:" ) )
+        if ( bAccess && ( aName == "a:" || aName == "b:" ) ) {
             DBG_WARNING( "floppy will clatter" );
+        }
 
         // Sonderbehandlung, falls es sich um ein Volume handelt
         if ( aDirEntry.eFlag == FSYS_FLAG_VOLUME ||
@@ -893,7 +894,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bForceAccess )
 
             ByteString aRootDir = aDirEntry.aName;
             aRootDir += ByteString( "\\" );
-            USHORT nType = GetDriveType( (char *) aRootDir.GetBuffer() );       //TPF: 2i
+            UINT nType = GetDriveType( (char *) aRootDir.GetBuffer() );       //TPF: 2i
             if ( nType == 1 || nType == 0 )
             {
                 nError = FSYS_ERR_NOTEXISTS;
@@ -917,7 +918,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bForceAccess )
 
         // Statusinformation vom Betriebssystem holen
         HANDLE h; //()
-        _WIN32_FIND_DATAA aEntry;
+        _WIN32_FIND_DATAA aEntry = {};
         DirEntry aAbsEntry( aDirEntry );
         if ( bAccess && aAbsEntry.ToAbs() )
         {
@@ -1020,7 +1021,7 @@ BOOL IsRedirectable_Impl( const ByteString &rPath )
     if ( rPath.Len() >= 3 && ':' == rPath.GetBuffer()[1] )
     {
         ByteString aVolume = rPath.Copy( 0, 3 );
-        USHORT nType = GetDriveType( (char *) aVolume.GetBuffer() );
+        UINT nType = GetDriveType( (char *) aVolume.GetBuffer() );
         SetLastError( ERROR_SUCCESS );
         return DRIVE_FIXED != nType;
     }
@@ -1059,7 +1060,7 @@ ErrCode FileStat::QueryDiskSpace( const String &rPath,
     DWORD nClusters;            /* address of total number of clusters  */
 
     ByteString aVol( DirEntry(rPath).ImpGetTopPtr()->GetName(), osl_getThreadTextEncoding());
-    BOOL bOK = GetDiskFreeSpace( aVol.GetBuffer(),
+    bool bOK = GetDiskFreeSpace( aVol.GetBuffer(),
                         &nSectorsPerCluster, &nBytesPerSector,
                         &nFreeClusters, &nClusters );
     if ( !bOK )
