@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:03:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #define ITEMID_UNDERLINE    0
 #define ITEMID_WEIGHT       0
