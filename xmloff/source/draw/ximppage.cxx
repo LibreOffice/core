@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:59:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList>& xAttrList,
+    const Reference< xml::sax::XAttributeList>&,
     Reference< drawing::XShapes >& rShapes)
 :   SvXMLImportContext( rImport, nPrfx, rLocalName ),
     mxShapes( rShapes )
@@ -118,7 +118,7 @@ SdXMLGenericPageContext::~SdXMLGenericPageContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
 
