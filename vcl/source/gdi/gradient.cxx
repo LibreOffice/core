@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gradient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:58:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 // =======================================================================
 
-DBG_NAME( Gradient );
+DBG_NAME( Gradient )
 
 // -----------------------------------------------------------------------
 
