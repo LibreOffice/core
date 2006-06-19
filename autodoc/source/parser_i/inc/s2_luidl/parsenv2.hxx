@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parsenv2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:59:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,12 +100,12 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual void        EstablishContacts(
-                            UnoIDL_PE *         io_pParentPE,
-                            ary::idl::Gate &
-                                                io_rGate,
-                            TokenProcessing_Result &
-                                                o_rResult );
+//  virtual void        EstablishContacts(
+//                          UnoIDL_PE *         io_pParentPE,
+//                          ary::idl::Gate &
+//                                                io_rGate,
+//                          TokenProcessing_Result &
+//                                              o_rResult );
     virtual void        Enter(
                             E_EnvStackAction    i_eWayOfEntering );
     virtual void        Leave(
@@ -138,7 +138,11 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                         TokenResult() const     { return aMyNode.TokenResult(); }
     DYN ary::info::CodeInformation *
                         ReleaseDocu()           { return pDocu.Release(); }
-
+  protected:
+                        UnoIDL_PE();
+    ary::n22::Repository &
+                        MyRepository()          { csv_assert(pRepository != 0);
+                                                  return *pRepository;  }
   private:
     virtual void        InitData();
     virtual void        TransferData() = 0;
@@ -147,6 +151,8 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
     SemanticNode        aMyNode;
     Dyn<ary::info::CodeInformation>
                         pDocu;
+    ary::n22::Repository *
+                        pRepository;
 };
 
 
