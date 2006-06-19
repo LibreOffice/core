@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 15:19:57 $
+#   last change: $Author: hr $ $Date: 2006-06-19 11:47:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,6 @@ SHL4OBJS=       \
                 $(SLO)$/taskcreator.obj		  		\
                 $(SLO)$/timerhelper.obj				\
                 $(SLO)$/urltransformer.obj			\
-                $(SLO)$/documentlist.obj            \
                 $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/configaccess.obj            \
                 $(SLO)$/job.obj                     \
