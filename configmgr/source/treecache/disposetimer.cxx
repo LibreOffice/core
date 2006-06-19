@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:24:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,12 +354,12 @@ void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
 // should be called guarded only (m_aMutex must be locked)
 TimeStamp OTreeDisposeScheduler::implAddTask(RequestOptions const& _aOptions, TimeStamp const& _aTime)
 {
-    typedef Agenda::value_type Task;
+    typedef Agenda::value_type AgendaType;
 
     // try to insert after euivalent entries (but STL may ignore the hint)
     Agenda::iterator where = m_aAgenda.upper_bound(_aTime);
 
-    m_aAgenda.insert(where, Task(_aTime,_aOptions));
+    m_aAgenda.insert(where, AgendaType(_aTime,_aOptions));
 
     OSL_ASSERT(!m_aAgenda.empty());
 
