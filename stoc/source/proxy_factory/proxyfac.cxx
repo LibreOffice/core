@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:02:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,7 @@ extern "C"
 static void SAL_CALL binuno_proxy_free(
     uno_ExtEnvironment * pEnv, void * pProxy )
 {
+    (void) pEnv; // avoid warning about unused parameter
     binuno_Proxy * proxy = static_cast< binuno_Proxy * >(
         reinterpret_cast< uno_Interface * >( pProxy ) );
     OSL_ASSERT( proxy->m_root->m_factory->m_uno_env.get()->pExtEnv == pEnv );
@@ -525,7 +526,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
 }
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
