@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:01:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
 #include <com/sun/star/configuration/backend/XLayerHandler.hpp>
 #endif
+
+namespace com { namespace sun { namespace star { namespace script {
+    class XTypeConverter;
+} } } }
 
 namespace configmgr
 {
@@ -163,7 +167,7 @@ namespace configmgr
 
         private:
             typedef Stack< OUString > TagStack;
-            uno::Reference< uno::XInterface > m_xTCV;
+            uno::Reference< com::sun::star::script::XTypeConverter > m_xTCV;
             TagStack            m_aTagStack;
             ElementFormatter    m_aFormatter;
             uno::Type           m_aPropertyType;
