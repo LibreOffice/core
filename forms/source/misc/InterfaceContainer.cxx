@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:52:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 #include <algorithm>
 #include <memory>
@@ -112,16 +115,14 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::form;
 
+namespace
+{
     //---------------------------------------------------------------------
     static void lcl_throwIllegalArgumentException()
     {
         throw IllegalArgumentException();
     }
-
-    static void lcl_throwIllegalArgumentException( const ::rtl::OUString& _rMessage, const Reference< XInterface >& _rxObject, sal_Int32 _nArgPos )
-    {
-        throw IllegalArgumentException();
-    }
+}
 
 //==================================================================
 //= ElementDescription
@@ -342,10 +343,9 @@ void OInterfaceContainer::transformEvents( const EventFormat _eTargetFormat )
             }
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        e;  // make compiler happy
-        DBG_ERROR( "OInterfaceContainer::transformEvents: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -457,7 +457,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     if (nLen)
     {
         // 1. Version
-        sal_uInt16 nVersion = _rxInStream->readShort();
+        sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
 
         // 2. Objekte
         for (sal_Int32 i = 0; i < nLen; i++)
@@ -469,7 +469,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             }
             catch(WrongFormatException& e)
             {
-                e;  // make compiler happy
+                (void)e;    // make compiler happy
                 // the object could not be read
                 // create a object (so the readEvents below will assign the events to the right controls)
                 xObj = lcl_createPlaceHolder( m_xServiceFactory );
