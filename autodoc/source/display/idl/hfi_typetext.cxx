@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:49:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ HF_IdlTypeText::HF_IdlTypeText( Environment &       io_rEnv,
 }
 
 HF_IdlTypeText::HF_IdlTypeText( Environment &       io_rEnv,
-                                E_Index             e )
+                                E_Index             )
     :   HtmlFactory_Idl(io_rEnv, 0),
         pReferingCe( 0 ),
         bWithLink(true)
@@ -349,7 +349,7 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
     output::Node &
         rCeNode = Env().OutputTree().Provide_Node(i_module);
     output::Position
-        aDestination(rCeNode);
+        aTargetPos(rCeNode);
     bool
         bShowModule = rCeNode != Env().CurPosition().RelatedNode()
                             ?   i_module.size() > 0
@@ -389,8 +389,8 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
         CurOut() << "::";
         if (bLink2Module)
         {
-            aDestination.Set_File(output::ModuleFileName());
-            Env().Linker().Get_Link2Position(rLink, aDestination);
+            aTargetPos.Set_File(output::ModuleFileName());
+            Env().Linker().Get_Link2Position(rLink, aTargetPos);
             CurOut()
                 >> *new Html::Link( rLink.c_str() )
                     << *itm;
@@ -406,14 +406,14 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
     }   // end if (bShowModule)
 
     // CodeEntity and member:
-    aDestination.Set_File( rLink << i_ce << ".html" << c_str );
+    aTargetPos.Set_File( rLink << i_ce << ".html" << c_str );
     rLink.reset();
 
     if (bHasCeOrName)
     {
         if (bLink2Ce)
         {
-            Env().Linker().Get_Link2Position(rLink, aDestination);
+            Env().Linker().Get_Link2Position(rLink, aTargetPos);
             CurOut()
                 >> *new Html::Link(rLink.c_str())
                     << i_ce;
@@ -446,7 +446,7 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
                 if (bFunction)
                     sMember.assign(i_member.c_str(), sMember.length()-2);
 
-                Env().Linker().Get_Link2Member(rLink, aDestination, sMember);
+                Env().Linker().Get_Link2Member(rLink, aTargetPos, sMember);
                 CurOut()
                     >> *new Html::Link(rLink.c_str())
                         << i_member;
@@ -484,7 +484,7 @@ HF_IdlTypeText::produce_IndexLink( const StringVector & i_module,
     output::Node &
         rCeNode = Env().OutputTree().Provide_Node(i_module);
     output::Position
-        aDestination(rCeNode);
+        aTargetPos(rCeNode);
     bool
         bShowModule = i_bIsOwner OR i_module.size() > 0 AND i_ce.empty();
     bool
@@ -513,8 +513,8 @@ HF_IdlTypeText::produce_IndexLink( const StringVector & i_module,
 
         if (NOT bShowNonModule)
         {
-            aDestination.Set_File(output::ModuleFileName());
-            Env().Linker().Get_Link2Position(rLink, aDestination);
+            aTargetPos.Set_File(output::ModuleFileName());
+            Env().Linker().Get_Link2Position(rLink, aTargetPos);
             CurOut()
                 >> *new Html::Link( rLink.c_str() )
                     >> *new Html::Bold
@@ -525,7 +525,7 @@ HF_IdlTypeText::produce_IndexLink( const StringVector & i_module,
 
     if (bShowNonModule)
     {
-        aDestination.Set_File( rLink << i_ce << ".html" << c_str );
+        aTargetPos.Set_File( rLink << i_ce << ".html" << c_str );
         rLink.reset();
 
         if (bUseMember)
@@ -534,7 +534,7 @@ HF_IdlTypeText::produce_IndexLink( const StringVector & i_module,
             String sMember( i_member );
             if (bFunction)
                 sMember.assign(i_member.c_str(), sMember.length()-2);
-            Env().Linker().Get_Link2Member(rLink, aDestination, sMember);
+            Env().Linker().Get_Link2Member(rLink, aTargetPos, sMember);
             CurOut()
                 >> *new Html::Link(rLink.c_str())
                     >> *new Html::Bold
@@ -543,7 +543,7 @@ HF_IdlTypeText::produce_IndexLink( const StringVector & i_module,
         }
         else
         {
-            Env().Linker().Get_Link2Position(rLink, aDestination);
+            Env().Linker().Get_Link2Position(rLink, aTargetPos);
             if (i_bIsOwner)
             {
                 CurOut()
