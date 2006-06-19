@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:27:29 $
+#   last change: $Author: hr $ $Date: 2006-06-19 18:58:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=.
 
 PRJNAME=xmlsec1
 TARGET=so_xmlsec1
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Settings -----------------------------------------------------
 
