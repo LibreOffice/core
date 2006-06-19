@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sgvtext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:40:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -764,9 +764,15 @@ USHORT GetCharWidth(OutputDevice& rOut, UCHAR c)
             ChrWidth=MulDiv(ChrWidth,DefaultSpace,100);
         }
     } else {
-        if (c>=MinChar && c<=MaxChar) {
+         // with MaxChar == 255 c cannot be greater than MaxChar
+         // assert if MaxChar is ever changed
+        OSL_ENSURE( MaxChar == 255, "MaxChar not 255" );
+        if (c>=MinChar /*&& c<=MaxChar*/)
+        {
             ChrWidth=(USHORT)rOut.GetTextWidth(String((char)c1));
-        } else {
+        }
+        else
+        {
             ChrWidth=(USHORT)rOut.GetTextWidth(String('A'));
         }
     }
@@ -812,7 +818,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
 void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktAtr,
                 USHORT UmbWdt, USHORT AdjWdt,
                 short* Line, USHORT& nChars,
-                double rSn, double rCs,
+                double, double,
                 UCHAR* cLine, BOOL TextFit)
 {
     VirtualDevice vOut;
