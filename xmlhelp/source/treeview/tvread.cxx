@@ -39,9 +39,9 @@ namespace treeview {
     public:
 
         TVDom( TVDom* arent = 0 )
-            : parent( arent ),
-              childs( 0 ),
-              kind( other )
+            : kind( other ),
+              parent( arent ),
+              childs( 0 )
         {
         }
 
@@ -413,7 +413,7 @@ TVRead::hasByHierarchicalName( const rtl::OUString& aName )
 
 
 
-void start_handler(void *userData,
+extern "C" void start_handler(void *userData,
                    const XML_Char *name,
                    const XML_Char **atts)
 {
@@ -451,15 +451,17 @@ void start_handler(void *userData,
 }
 
 
-void end_handler(void *userData,
+extern "C" void end_handler(void *userData,
                  const XML_Char *name )
 {
+    (void)name;
+
     TVDom **tvDom = static_cast< TVDom** >( userData );
     *tvDom = (*tvDom)->getParent();
 }
 
 
-void data_handler( void *userData,
+extern "C" void data_handler( void *userData,
                    const XML_Char *s,
                    int len)
 {
@@ -517,6 +519,7 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
         XML_SetUserData( parser,&pTVDom ); // does not return this
 
         int parsed = XML_Parse( parser,s,int( len ),j==0 );
+        (void)parsed;
 
         XML_ParserFree( parser );
         delete[] s;
@@ -712,7 +715,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     osl::FileStatus aFileStatus( FileStatusMask_FileName | FileStatusMask_FileSize | FileStatusMask_FileURL );
     if( osl::Directory::E_None == aDirectory.open() )
     {
-        int idx = 0,j = 0;
+        int idx_ = 0,j = 0;
         rtl::OUString aFileUrl, aFileName;
         while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
@@ -721,23 +724,23 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
           {
             aFileUrl = aFileStatus.getFileURL();
             aFileName = aFileStatus.getFileName();
-            idx = aFileName.lastIndexOf( sal_Unicode( '.' ) );
-            if( idx == -1 )
+            idx_ = aFileName.lastIndexOf( sal_Unicode( '.' ) );
+            if( idx_ == -1 )
               continue;
 
             const sal_Unicode* str = aFileName.getStr();
 
-            if( aFileName.getLength() == idx + 5                   &&
-                ( str[idx + 1] == 't' || str[idx + 1] == 'T' )    &&
-                ( str[idx + 2] == 'r' || str[idx + 2] == 'R' )    &&
-                ( str[idx + 3] == 'e' || str[idx + 3] == 'E' )    &&
-                ( str[idx + 4] == 'e' || str[idx + 4] == 'E' ) )
+            if( aFileName.getLength() == idx_ + 5                   &&
+                ( str[idx_ + 1] == 't' || str[idx_ + 1] == 'T' )    &&
+                ( str[idx_ + 2] == 'r' || str[idx_ + 2] == 'R' )    &&
+                ( str[idx_ + 3] == 'e' || str[idx_ + 3] == 'E' )    &&
+                ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
               {
                 OSL_ENSURE( j < MAX_MODULE_COUNT,"too many modules installed" );
                 OSL_ENSURE( aFileStatus.isValid( FileStatusMask_FileSize ),
                             "invalid file size" );
 
-                rtl::OUString baseName = aFileName.copy(0,idx).toAsciiLowerCase();
+                rtl::OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();
                 if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
                   continue;
 
