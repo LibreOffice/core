@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskstat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:59:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,39 +76,39 @@ struct ImplTaskSBFldItem
     long                    mnOffX;
 };
 
-DECLARE_LIST( ImplTaskSBItemList, ImplTaskSBFldItem* );
+DECLARE_LIST( ImplTaskSBItemList, ImplTaskSBFldItem* )
 
 // =======================================================================
 
-BOOL ITaskStatusNotify::MouseButtonDown( USHORT nItemd, const MouseEvent& rMEvt )
+BOOL ITaskStatusNotify::MouseButtonDown( USHORT, const MouseEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::MouseButtonUp( USHORT nItemd, const MouseEvent& rMEvt )
+BOOL ITaskStatusNotify::MouseButtonUp( USHORT, const MouseEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::MouseMove( USHORT nItemd, const MouseEvent& rMEvt )
+BOOL ITaskStatusNotify::MouseMove( USHORT, const MouseEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::Command( USHORT nItemd, const CommandEvent& rCEvt )
+BOOL ITaskStatusNotify::Command( USHORT, const CommandEvent& )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::UpdateHelp( USHORT nItemd )
+BOOL ITaskStatusNotify::UpdateHelp( USHORT )
 {
     return FALSE;
 }
@@ -593,7 +593,7 @@ void TaskStatusBar::UserDraw( const UserDrawEvent& rUDEvt )
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::InsertStatusField( long nOffset, USHORT nPos,
+void TaskStatusBar::InsertStatusField( long, USHORT,
                                        USHORT nFlags )
 {
     mnFieldFlags = nFlags;
