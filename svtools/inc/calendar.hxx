@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:47:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,10 +262,12 @@ private:
     USHORT          mnDragScrollHitTest;
 
 #ifdef _SV_CALENDAR_CXX
+    using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void         ImplInitSettings();
     SVT_DLLPRIVATE void         ImplGetWeekFont( Font& rFont ) const;
     SVT_DLLPRIVATE void         ImplFormat();
+    using Window::ImplHitTest;
     SVT_DLLPRIVATE USHORT           ImplHitTest( const Point& rPos, Date& rDate ) const;
     SVT_DLLPRIVATE void         ImplDrawSpin( BOOL bDrawPrev = TRUE, BOOL bDrawNext = TRUE );
     SVT_DLLPRIVATE void         ImplDrawDate( long nX, long nY,
@@ -279,11 +281,12 @@ private:
     SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, USHORT nHitTest,
                                      BOOL bMove, BOOL bExpand, BOOL bExtended );
     SVT_DLLPRIVATE void         ImplUpdate( BOOL bCalcNew = FALSE );
+    using Window::ImplScroll;
     SVT_DLLPRIVATE void         ImplScroll( BOOL bPrev );
     SVT_DLLPRIVATE void         ImplInvertDropPos();
     SVT_DLLPRIVATE void         ImplShowMenu( const Point& rPos, const Date& rDate );
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, BOOL bRepeat );
-    SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, BOOL bCancel );
+    SVT_DLLPRIVATE void         ImplEndTracking( BOOL bCancel );
     SVT_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
 #endif
 
