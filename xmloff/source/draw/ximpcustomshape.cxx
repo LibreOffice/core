@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:57:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,10 +153,10 @@ XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImpo
             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                 sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
                     std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry ) :
-        mrxShape( rxShape ),
-        mrCustomShapeGeometry( rCustomShapeGeometry ),
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
-        SvXMLImportContext( rImport, nPrefix, rLocalName )
+        mrxShape( rxShape ),
+        mrCustomShapeGeometry( rCustomShapeGeometry )
 {
 }
 
@@ -910,7 +910,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
         {
             rtl::OUString aLocalName;
             const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+            /* sven fixme, this must be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
 
             switch( EASGet( aLocalName ) )
             {
@@ -1146,6 +1146,8 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_modifiers :
                     GetAdjustmentValues( mrCustomShapeGeometry, rValue );
                 break;
+                default:
+                    break;
             }
         }
     }
@@ -1315,6 +1317,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     }
                 }
                 break;
+                default:
+                    break;
             }
             aPathIter++;
         }
@@ -1347,6 +1351,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             pValues->Value.getValue())).Second, pH );
                     }
                     break;
+                    default:
+                        break;
                 }
                 pValues++;
             }
@@ -1378,7 +1384,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
             {
                 rtl::OUString aLocalName;
                 const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
-                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+                /* fixme sven, this needs to be chekced! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
 
                 switch( EASGet( aLocalName ) )
                 {
@@ -1388,6 +1394,8 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
                     case EAS_name :
                         aFormulaName = rValue;
                     break;
+                    default:
+                        break;
                 }
             }
             if ( aFormulaName.getLength() || aFormula.getLength() )
@@ -1404,7 +1412,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
         {
             rtl::OUString aLocalName;
             const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+            /* fixme sven, this needs to be chekced! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
             switch( EASGet( aLocalName ) )
             {
                 case EAS_handle_mirror_vertical :
@@ -1440,6 +1448,8 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
                 case EAS_handle_radius_range_maximum :
                     GetEnhancedParameter( aHandle, rValue, EAS_RadiusRangeMaximum );
                 break;
+                default:
+                    break;
             }
         }
         beans::PropertyValues aPropSeq( aHandle.size() );
