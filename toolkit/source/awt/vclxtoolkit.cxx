@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:24:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,6 +400,8 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "workwindow",         WINDOW_WORKWINDOW }
 };
 
+extern "C"
+{
 static int
 #if defined( WNT )
  __cdecl
@@ -411,6 +413,7 @@ _Optlink
 {
     return( strcmp( ((ComponentInfo*)pFirst)->pName,
                     ((ComponentInfo*)pSecond)->pName ) );
+}
 }
 
 sal_uInt16 ImplGetComponentType( const String& rServiceName )
@@ -494,6 +497,8 @@ struct ToolkitThreadData
     }
 };
 
+extern "C"
+{
 static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 {
     ToolkitThreadData * pTTD = (ToolkitThreadData *)pArgs;
@@ -539,7 +544,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
     }
     delete pTTD;
 }
-
+}
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
@@ -686,7 +691,7 @@ void SAL_CALL VCLXToolkit::disposing()
         if ( hSvToolsLib )
         {
             ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
-            fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getSymbol( hSvToolsLib, aFunctionName.pData );
+            fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
         }
     }
     // ask the SvTool creation function
@@ -1127,7 +1132,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 }
 
 // ::com::sun::star::awt::XSystemChildFactory
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
     Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
@@ -1428,7 +1433,7 @@ void SAL_CALL VCLXToolkit::removeFocusListener(
 // virtual
 void SAL_CALL VCLXToolkit::fireFocusGained(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface > const & source)
+    ::com::sun::star::uno::XInterface > const &)
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -1436,7 +1441,7 @@ void SAL_CALL VCLXToolkit::fireFocusGained(
 // virtual
 void SAL_CALL VCLXToolkit::fireFocusLost(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface > const & source)
+    ::com::sun::star::uno::XInterface > const &)
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
