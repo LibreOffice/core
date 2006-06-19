@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:02:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@ namespace svxform
     //========================================================================
     //------------------------------------------------------------------------
     OFormComponentObserver::OFormComponentObserver(NavigatorTreeModel* _pModel)
-                              :m_pNavModel(_pModel)
-                              ,m_bCanUndo(sal_True)
-                              ,m_nLocks(0)
+        :m_pNavModel(_pModel)
+        ,m_nLocks(0)
+        ,m_bCanUndo(sal_True)
     {
     }
 
@@ -127,7 +127,7 @@ namespace svxform
         Reference< XFormComponent >  xFormComponent(evt.Source, UNO_QUERY);
         Reference< XForm >  xForm(evt.Source, UNO_QUERY);
 
-        FmEntryData* pEntryData;
+        FmEntryData* pEntryData( NULL );
         if( xForm.is() )
             pEntryData = m_pNavModel->FindData( xForm, m_pNavModel->GetRootList() );
         else if( xFormComponent.is() )
@@ -732,7 +732,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    void NavigatorTreeModel::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if( rHint.ISA(SdrHint) )
         {
@@ -745,11 +745,13 @@ namespace svxform
                 case HINT_OBJREMOVED:
                     RemoveSdrObj(pSdrHint->GetObject());
                     break;
+                default:
+                    break;
             }
         }
         // hat sich die shell verabschiedet?
         else if ( rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
-            Update((FmFormShell*)NULL);
+            UpdateContent((FmFormShell*)NULL);
 
         // hat sich die Markierung der Controls veraendert ?
         else if (rHint.ISA(FmNavViewMarksChanged))
@@ -860,7 +862,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::Update( const Reference< XNameContainer > & xForms )
+    void NavigatorTreeModel::UpdateContent( const Reference< XNameContainer > & xForms )
     {
         //////////////////////////////////////////////////////////////////////
         // Model von der Root aufwaerts neu fuellen
@@ -878,13 +880,13 @@ namespace svxform
             if(!m_pFormShell) return;       // keine Shell -> wech
 
             FmFormView* pFormView = m_pFormShell->GetFormView();
-            DBG_ASSERT(pFormView != NULL, "NavigatorTreeModel::Update : keine FormView");
+            DBG_ASSERT(pFormView != NULL, "NavigatorTreeModel::UpdateContent : keine FormView");
             BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
         }
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::Update( FmFormShell* pShell )
+    void NavigatorTreeModel::UpdateContent( FmFormShell* pShell )
     {
         //////////////////////////////////////////////////////////////////////
         // Wenn Shell sich nicht veraendert hat, nichts machen
@@ -909,7 +911,7 @@ namespace svxform
         if (m_pFormShell)
         {
             m_pFormPage = pNewPage;
-            Update(m_pFormPage->GetForms());
+            UpdateContent(m_pFormPage->GetForms());
         } else
             m_pFormPage = NULL;
 
