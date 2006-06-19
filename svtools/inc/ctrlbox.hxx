@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:47:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,10 +178,10 @@ class SVT_DLLPUBLIC ColorListBox : public ListBox
     Size            aImageSize;
 
 #ifdef _CTRLBOX_CXX
+    using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplDestroyColorEntries();
 #endif
-
 public:
                     ColorListBox( Window* pParent,
                                   WinBits nWinStyle = WB_BORDER );
@@ -190,20 +190,20 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
-    USHORT          InsertEntry( const XubString& rStr,
+    using ListBox::InsertEntry;
+    virtual USHORT  InsertEntry( const XubString& rStr,
                                  USHORT nPos = LISTBOX_APPEND );
-    USHORT          InsertEntry( const Color& rColor, const XubString& rStr,
+    virtual USHORT  InsertEntry( const Color& rColor, const XubString& rStr,
                                  USHORT nPos = LISTBOX_APPEND );
     void            InsertAutomaticEntry();
-    void            RemoveEntry( USHORT nPos );
-    void            Clear();
+    using ListBox::RemoveEntry;
+    virtual void    RemoveEntry( USHORT nPos );
+    virtual void    Clear();
     void            CopyEntries( const ColorListBox& rBox );
 
-    USHORT          GetEntryPos( const XubString& rStr ) const
-                        { return ListBox::GetEntryPos( rStr ); }
-
-    USHORT          GetEntryPos( const Color& rColor ) const;
-    Color           GetEntryColor( USHORT nPos ) const;
+    using ListBox::GetEntryPos;
+    virtual USHORT  GetEntryPos( const Color& rColor ) const;
+    virtual Color   GetEntryColor( USHORT nPos ) const;
     Size            GetImageSize() const { return aImageSize; }
 
     void            SelectEntry( const XubString& rStr, BOOL bSelect = TRUE )
@@ -222,7 +222,6 @@ private:
                     ColorListBox( const ColorListBox& );
     ColorListBox&   operator =( const ColorListBox& );
 
-    USHORT          GetEntryPos( const void* pData ) const;
     void            SetEntryData( USHORT nPos, void* pNewData );
     void*           GetEntryData( USHORT nPos ) const;
 };
@@ -267,6 +266,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     FieldUnit       eSourceUnit;
 
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance, Bitmap& rBmp, XubString& rStr );
+    using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     void            UpdateLineColors( void );
     BOOL            UpdatePaintLineColor( void );       // returns TRUE if maPaintCol has changed
@@ -278,12 +278,14 @@ public:
                     LineListBox( Window* pParent, const ResId& rResId );
     virtual         ~LineListBox();
 
-    USHORT          InsertEntry( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
-    USHORT          InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0, USHORT nPos = LISTBOX_APPEND );
-    void            RemoveEntry( USHORT nPos );
-    void            Clear();
+    using ListBox::InsertEntry;
+    virtual USHORT  InsertEntry( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
+    virtual USHORT  InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0, USHORT nPos = LISTBOX_APPEND );
+    using ListBox::RemoveEntry;
+    virtual void    RemoveEntry( USHORT nPos );
+    virtual void    Clear();
 
-    inline USHORT   GetEntryPos( const XubString& rStr ) const { return ListBox::GetEntryPos( rStr ); }
+    using ListBox::GetEntryPos;
     USHORT          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
     long            GetEntryLine1( USHORT nPos ) const;
     long            GetEntryLine2( USHORT nPos ) const;
@@ -309,7 +311,6 @@ private:
     // declared as private because some compilers would generate the default methods
                     LineListBox( const LineListBox& );
     LineListBox&    operator =( const LineListBox& );
-    USHORT          GetEntryPos( const void* pData ) const;
     void            SetEntryData( USHORT nPos, void* pNewData );
     void*           GetEntryData( USHORT nPos ) const;
 };
@@ -422,6 +423,8 @@ class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
     XubString       aLastStyle;
 
+private:
+    using ComboBox::SetText;
 public:
                     FontStyleBox( Window* pParent, WinBits nWinStyle = 0 );
                     FontStyleBox( Window* pParent, const ResId& rResId );
@@ -466,6 +469,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
                     bStdSize:1;
 
 #ifdef _CTRLBOX_CXX
+    using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
 #endif
 
