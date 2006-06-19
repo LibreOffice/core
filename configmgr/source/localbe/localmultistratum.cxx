@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localmultistratum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:04:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ LocalMultiStratum::~LocalMultiStratum() {}
 //------------------------------------------------------------------------------
 uno::Sequence< rtl::OUString > SAL_CALL
     LocalMultiStratum::listLayerIds( const rtl::OUString& aComponent,
-                                     const rtl::OUString& aEntity )
+                                     const rtl::OUString& /*aEntity*/ )
         throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     typedef uno::Sequence< rtl::OUString > ResultType;
@@ -166,7 +166,7 @@ uno::Sequence< rtl::OUString > SAL_CALL
 //------------------------------------------------------------------------------
 rtl::OUString SAL_CALL
     LocalMultiStratum::getUpdateLayerId( const rtl::OUString& aComponent,
-                                         const rtl::OUString& aEntity )
+                                         const rtl::OUString& /*aEntity*/ )
         throw (backend::BackendAccessException, lang::NoSupportException,
                 lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -223,7 +223,7 @@ uno::Sequence< uno::Reference< backend::XLayer > > SAL_CALL
 
 //------------------------------------------------------------------------------
 uno::Reference< backend::XUpdatableLayer > SAL_CALL
-    LocalMultiStratum::getUpdatableLayer( const rtl::OUString& aLayerId )
+    LocalMultiStratum::getUpdatableLayer( const rtl::OUString& /*aLayerId*/ )
         throw (backend::BackendAccessException, lang::IllegalArgumentException,
                 lang::NoSupportException, uno::RuntimeException)
 {
