@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitbxform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:58:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,6 @@
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-
-#pragma hdrstop
 
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
