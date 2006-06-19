@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:41:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ struct NamePair_Impl
     OUString maLongName;
 };
 
-DECLARE_LIST( NameList_Impl, NamePair_Impl* );
+DECLARE_LIST( NameList_Impl, NamePair_Impl* )
 
 class Updater_Impl;
 class GroupList_Impl;
@@ -367,7 +367,7 @@ public:
 
 class GroupData_Impl
 {
-    DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* );
+    DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* )
     EntryList_Impl      maEntries;
     OUString            maTitle;
     OUString            maHierarchyURL;
@@ -398,7 +398,7 @@ public:
     DocTemplates_EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
 };
 
-DECLARE_LIST( GroupList_Impl, GroupData_Impl* );
+DECLARE_LIST( GroupList_Impl, GroupData_Impl* )
 
 //=============================================================================
 //=============================================================================
@@ -1014,14 +1014,14 @@ void SfxDocTplService_Impl::doUpdate()
     createFromContent( aGroupList, maRootContent, sal_True );
 
     // get the entries from the template directories
-    sal_Int32   nCount = maTemplateDirs.getLength();
+    sal_Int32   nCountDir = maTemplateDirs.getLength();
     OUString*   pDirs = maTemplateDirs.getArray();
     Content     aDirContent;
 
-    while ( nCount )
+    while ( nCountDir )
     {
-        nCount--;
-        if ( Content::create( pDirs[ nCount ], maCmdEnv, aDirContent ) )
+        nCountDir--;
+        if ( Content::create( pDirs[ nCountDir ], maCmdEnv, aDirContent ) )
         {
             createFromContent( aGroupList, aDirContent, sal_False );
         }
@@ -1249,7 +1249,6 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
                                                const Reference< XSTORABLE >& rStorable )
 {
-    int ind = 0;
     ::osl::MutexGuard aGuard( maMutex );
 
     // Check, wether or not there is a group with this name
@@ -1822,7 +1821,7 @@ WaitWindow_Impl::~WaitWindow_Impl()
 }
 
 //-----------------------------------------------------------------------------
-void WaitWindow_Impl::Paint( const Rectangle& rRect )
+void WaitWindow_Impl::Paint( const Rectangle& /*rRect*/ )
 {
     DrawText( _aRect, _aText, _nTextStyle );
 }
@@ -1910,15 +1909,15 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
         return;
 
     // First, get the long name of the group
-    OUString        aTitle = getLongName( rTitle );
+    OUString        aName = getLongName( rTitle );
     GroupData_Impl *pGroup = rList.First();
 
-    while ( pGroup && pGroup->getTitle() != aTitle )
+    while ( pGroup && pGroup->getTitle() != aName )
         pGroup = rList.Next();
 
     if ( !pGroup )
     {
-        pGroup = new GroupData_Impl( aTitle );
+        pGroup = new GroupData_Impl( aName );
         pGroup->setTargetURL( rOwnURL );
         rList.Insert( pGroup );
     }
