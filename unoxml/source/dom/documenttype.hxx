@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documenttype.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:59:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
