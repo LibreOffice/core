@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:37:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,9 @@ namespace DOM
         static CNode* get(const xmlNodePtr aNode, sal_Bool bCreate = sal_True);
         // remove a wrapper instance
         static void remove(const xmlNodePtr aNode);
+
+        // get the libxml node implementation
+        static xmlNodePtr getNodePtr(const Reference< XNode >& aNode);
 
         //static Sequence< sal_Int8 >
 
