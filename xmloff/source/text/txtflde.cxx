@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:29:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,89 +392,79 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         XMLPropertyState* pCombinedCharState)
     : rExport(rExp),
       pUsedMasters(NULL),
-      sServicePrefix(
-          RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.")),
-      sFieldMasterPrefix(
-          RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FieldMaster.")),
-      sPresentationServicePrefix(
-          RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.")),
-      sPropertyContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
-      sPropertyIsFixed(RTL_CONSTASCII_USTRINGPARAM("IsFixed")),
-      sPropertyFullName(RTL_CONSTASCII_USTRINGPARAM("FullName")),
-      sPropertyFieldSubType(RTL_CONSTASCII_USTRINGPARAM("UserDataType")),
-      sPropertyHint(RTL_CONSTASCII_USTRINGPARAM("Hint")),
-      sPropertyPlaceholder(RTL_CONSTASCII_USTRINGPARAM("PlaceHolder")),
-      sPropertyPlaceholderType(RTL_CONSTASCII_USTRINGPARAM("PlaceHolderType")),
-      sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible")),
-      sPropertyIsShowFormula(RTL_CONSTASCII_USTRINGPARAM("IsShowFormula")),
-      sPropertyIsInput(RTL_CONSTASCII_USTRINGPARAM("Input")),
-      sPropertyIsExpression(RTL_CONSTASCII_USTRINGPARAM("IsExpression")),
-      sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
-      sPropertyVariableName(RTL_CONSTASCII_USTRINGPARAM("VariableName")),
-      sPropertySubType(RTL_CONSTASCII_USTRINGPARAM("SubType")),
-      sPropertyName(RTL_CONSTASCII_USTRINGPARAM("Name")),
-      sPropertyVariableSubType(RTL_CONSTASCII_USTRINGPARAM("VariableSubtype")),
-      sPropertyValue(RTL_CONSTASCII_USTRINGPARAM("Value")),
-      sPropertyChapterNumberingLevel(
-          RTL_CONSTASCII_USTRINGPARAM("ChapterNumberingLevel")),
-      sPropertyNumberingSeparator(
-          RTL_CONSTASCII_USTRINGPARAM("NumberingSeparator")),
-      sPropertyNumberingType(
-          RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-      sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
-      sPropertyUserText(RTL_CONSTASCII_USTRINGPARAM("UserText")),
-      sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM("Offset")),
-      sPropertyDataBaseName(RTL_CONSTASCII_USTRINGPARAM("DataBaseName")),
-      sPropertyDataBaseURL(RTL_CONSTASCII_USTRINGPARAM("DataBaseURL")),
-      sPropertyDataTableName(RTL_CONSTASCII_USTRINGPARAM("DataTableName")),
-      sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
-      sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM("SetNumber")),
-      sPropertyIsDataBaseFormat(RTL_CONSTASCII_USTRINGPARAM("DataBaseFormat")),
-      sPropertyDataColumnName(RTL_CONSTASCII_USTRINGPARAM("DataColumnName")),
-      sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM("DateTime")),
-      sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM("TrueContent")),
-      sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM("FalseContent")),
-      sPropertyRevision(RTL_CONSTASCII_USTRINGPARAM("Revision")),
-      sPropertyFileFormat(RTL_CONSTASCII_USTRINGPARAM("FileFormat")),
-      sPropertyChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat")),
-      sPropertyLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
-      sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM("IsDate")),
-      sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM("Adjust")),
-      sPropertyOn(RTL_CONSTASCII_USTRINGPARAM("On")),
-      sPropertyMacro(RTL_CONSTASCII_USTRINGPARAM("Macro")),
-      sPropertyReferenceFieldPart(
-          RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldPart")),
-      sPropertyReferenceFieldType(
-          RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldType")),
-      sPropertyReferenceFieldSource(
-          RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldSource")),
-      sPropertySequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
-      sPropertySequenceValue(RTL_CONSTASCII_USTRINGPARAM("SequenceValue")),
-      sPropertySourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),
-      sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
-      sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
-      sPropertyDDECommandElement(
-          RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
-      sPropertyIsAutomaticUpdate(
-          RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
-      sPropertyDependentTextFields(
-          RTL_CONSTASCII_USTRINGPARAM("DependentTextFields")),
-      sPropertyURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
-      sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")),
-      sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields")),
-      sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM("ScriptType")),
-      sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM("URLContent")),
-      sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM("Author")),
-      sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date")),
-      sPropertyMeasureKind(RTL_CONSTASCII_USTRINGPARAM("Kind")),
-      sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
-      sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM("IsHidden")),
-      sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
-      sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
-      sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")),
-      sPropertyCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
-      sPropertyItems(RTL_CONSTASCII_USTRINGPARAM("Items")),
-      sPropertySelectedItem(RTL_CONSTASCII_USTRINGPARAM("SelectedItem")),
+      sServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.")),
+      sFieldMasterPrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FieldMaster.")),
+      sPresentationServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.")),
+
+    sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM("Adjust")),
+    sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM("Author")),
+    sPropertyChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat")),
+    sPropertyChapterNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("ChapterNumberingLevel")),
+    sPropertyCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
+    sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
+    sPropertyContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
+    sPropertyDataBaseName(RTL_CONSTASCII_USTRINGPARAM("DataBaseName")),
+    sPropertyDataBaseURL(RTL_CONSTASCII_USTRINGPARAM("DataBaseURL")),
+    sPropertyDataColumnName(RTL_CONSTASCII_USTRINGPARAM("DataColumnName")),
+    sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
+    sPropertyDataTableName(RTL_CONSTASCII_USTRINGPARAM("DataTableName")),
+    sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date")),
+    sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM("DateTime")),
+    sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
+    sPropertyDDECommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
+    sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
+    sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
+    sPropertyDependentTextFields(RTL_CONSTASCII_USTRINGPARAM("DependentTextFields")),
+    sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM("FalseContent")),
+    sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields")),
+    sPropertyFieldSubType(RTL_CONSTASCII_USTRINGPARAM("UserDataType")),
+    sPropertyFileFormat(RTL_CONSTASCII_USTRINGPARAM("FileFormat")),
+    sPropertyFullName(RTL_CONSTASCII_USTRINGPARAM("FullName")),
+    sPropertyHint(RTL_CONSTASCII_USTRINGPARAM("Hint")),
+    sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
+    sPropertyIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
+    sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
+    sPropertyIsDataBaseFormat(RTL_CONSTASCII_USTRINGPARAM("DataBaseFormat")),
+    sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM("IsDate")),
+    sPropertyIsExpression(RTL_CONSTASCII_USTRINGPARAM("IsExpression")),
+    sPropertyIsFixed(RTL_CONSTASCII_USTRINGPARAM("IsFixed")),
+    sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")),
+    sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM("IsHidden")),
+    sPropertyIsInput(RTL_CONSTASCII_USTRINGPARAM("Input")),
+    sPropertyIsShowFormula(RTL_CONSTASCII_USTRINGPARAM("IsShowFormula")),
+    sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible")),
+    sPropertyItems(RTL_CONSTASCII_USTRINGPARAM("Items")),
+    sPropertyLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
+    sPropertyMacro(RTL_CONSTASCII_USTRINGPARAM("Macro")),
+    sPropertyMeasureKind(RTL_CONSTASCII_USTRINGPARAM("Kind")),
+    sPropertyName(RTL_CONSTASCII_USTRINGPARAM("Name")),
+    sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
+    sPropertyNumberingSeparator(RTL_CONSTASCII_USTRINGPARAM("NumberingSeparator")),
+    sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
+    sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM("Offset")),
+    sPropertyOn(RTL_CONSTASCII_USTRINGPARAM("On")),
+    sPropertyPlaceholder(RTL_CONSTASCII_USTRINGPARAM("PlaceHolder")),
+    sPropertyPlaceholderType(RTL_CONSTASCII_USTRINGPARAM("PlaceHolderType")),
+    sPropertyReferenceFieldPart(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldPart")),
+    sPropertyReferenceFieldSource(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldSource")),
+    sPropertyReferenceFieldType(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldType")),
+    sPropertyRevision(RTL_CONSTASCII_USTRINGPARAM("Revision")),
+    sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM("ScriptType")),
+    sPropertySelectedItem(RTL_CONSTASCII_USTRINGPARAM("SelectedItem")),
+    sPropertySequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
+    sPropertySequenceValue(RTL_CONSTASCII_USTRINGPARAM("SequenceValue")),
+    sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM("SetNumber")),
+    sPropertySourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),
+    sPropertySubType(RTL_CONSTASCII_USTRINGPARAM("SubType")),
+    sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")),
+    sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM("TrueContent")),
+    sPropertyURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
+    sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM("URLContent")),
+    sPropertyUserText(RTL_CONSTASCII_USTRINGPARAM("UserText")),
+    sPropertyValue(RTL_CONSTASCII_USTRINGPARAM("Value")),
+    sPropertyVariableName(RTL_CONSTASCII_USTRINGPARAM("VariableName")),
+    sPropertyVariableSubType(RTL_CONSTASCII_USTRINGPARAM("VariableSubtype")),
+
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -515,19 +505,19 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
     // if this is not a normal text field, check if its a presentation text field
     if( sFieldName.getLength() == 0 )
     {
-        const OUString* pNames = aServices.getConstArray();
-        sal_Int32 nCount = aServices.getLength();
+        const OUString* pNames2 = aServices.getConstArray();
+        sal_Int32 nCount2 = aServices.getLength();
         // search for TextField service name
-        while( nCount-- )
+        while( nCount2-- )
         {
-            if( 0 == pNames->compareTo(sPresentationServicePrefix, sPresentationServicePrefix.getLength()))
+            if( 0 == pNames2->compareTo(sPresentationServicePrefix, sPresentationServicePrefix.getLength()))
             {
                 // TextField found => postfix is field type!
-                sFieldName = pNames->copy(sPresentationServicePrefix.getLength());
+                sFieldName = pNames2->copy(sPresentationServicePrefix.getLength());
                 break;
             }
 
-            ++pNames;
+            ++pNames2;
         }
 
         if( sFieldName.getLength() != 0 )
@@ -788,13 +778,11 @@ sal_Bool XMLTextFieldExport::IsStringField(
         // TODO: depends on... ???
         // workaround #no-bug#: no data type
         return 5100 == GetIntProperty(sPropertyNumberFormat, xPropSet);
-        break;
 
     case FIELD_ID_TABLE_FORMULA:
         // legacy field: always a number field (because it always has
         // a number format)
         return sal_False;
-        break;
 
     case FIELD_ID_COUNT_PAGES:
     case FIELD_ID_COUNT_PARAGRAPHS:
@@ -1179,7 +1167,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 void XMLTextFieldExport::ExportFieldHelper(
     const Reference<XTextField> & rTextField,
     const Reference<XPropertySet> & rPropSet,
-    const Reference<XPropertySet> & rRangePropSet,
+    const Reference<XPropertySet> &,
     enum FieldIdEnum nToken)
 {
     // get property set info (because some attributes are not support
@@ -2412,8 +2400,7 @@ void XMLTextFieldExport::ProcessValueAndType(
 
         // number: value-type=..., value...=..., data-style-name=...
 
-        DBG_ASSERT(bExportValueType || ~bExportValue,
-                   "value w/o value type not supported!");
+        DBG_ASSERT(bExportValueType || !bExportValue, "value w/o value type not supported!");
 
         // take care of illegal formats
         // (shouldn't happen, but does if document is corrupted)
