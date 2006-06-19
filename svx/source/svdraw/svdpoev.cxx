@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:51:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,8 @@ SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrEditView(pModel1,pXOut)
+SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrEditView(pModel1,_pXOut)
 {
     ImpClearVars();
 }
@@ -79,7 +79,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
     ImpResetPolyPossibilityFlags();
     ULONG nMarkAnz=GetMarkedObjectCount();
     if (nMarkAnz>0 && !ImpIsFrameHandles()) {
-        BOOL bReadOnly=FALSE;
+        //BOOL bReadOnly=FALSE;
         BOOL b1stSmooth=TRUE;
         BOOL b1stSegm=TRUE;
         BOOL bCurve=FALSE;
@@ -510,7 +510,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
 {
     MovePoint(rPt,*(const Size*)p1);
     if (pC1!=NULL) MovePoint(*pC1,*(const Size*)p1);
@@ -532,7 +532,7 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, BOOL bCopy)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
     ResizePoint(rPt,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
     if (pC1!=NULL) ResizePoint(*pC1,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
@@ -554,7 +554,7 @@ void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFac
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
 {
     RotatePoint(rPt,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
     if (pC1!=NULL) RotatePoint(*pC1,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
