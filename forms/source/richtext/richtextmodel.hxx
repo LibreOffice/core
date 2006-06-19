@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:24:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,25 +78,6 @@ namespace frm
 {
 //........................................................................
 
-    //====================================================================
-    //= OModifyListenerContainer
-    //====================================================================
-    typedef ::comphelper::OListenerContainerBase    <   ::com::sun::star::util::XModifyListener
-                                                    ,   ::com::sun::star::lang::EventObject
-                                                    >   OModifyListenerContainer_Base;
-
-    class OModifyListenerContainer : public OModifyListenerContainer_Base
-    {
-    public:
-        OModifyListenerContainer( ::osl::Mutex& _rMutex );
-
-    protected:
-        virtual bool    implNotify(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& _rxListener,
-                            const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
-    };
-
     class RichTextEngine;
     //====================================================================
     //= ORichTextModel
@@ -148,7 +129,8 @@ namespace frm
         RichTextEngine*             m_pEngine;
         bool                        m_bSettingEngineText;
 
-        OModifyListenerContainer    m_aModifyListeners;
+        ::cppu::OInterfaceContainerHelper
+                                    m_aModifyListeners;
 
     public:
         static  RichTextEngine* getEditEngine( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel );
@@ -161,10 +143,10 @@ namespace frm
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        DECLARE_SERVICE_REGISTRATION( ORichTextModel );
+        DECLARE_SERVICE_REGISTRATION( ORichTextModel )
 
         // XPersistObject
-        DECLARE_XPERSISTOBJECT();
+        DECLARE_XPERSISTOBJECT()
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
@@ -195,6 +177,10 @@ namespace frm
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
             ) const;
         IMPLEMENT_INFO_SERVICE()
+
+        // prevent method hiding
+        using OControlModel::disposing;
+        using OControlModel::getFastPropertyValue;
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
