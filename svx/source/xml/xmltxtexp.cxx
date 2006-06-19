@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:16:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,9 +175,9 @@ public:
 //------------------------------------------------------------------------
 
 SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
-: mpEditEngine( pEditEngine ),
-  mpTextForwarder(NULL),
-  maRefCount(0)
+: maRefCount(0),
+  mpEditEngine( pEditEngine ),
+  mpTextForwarder(NULL)
 {
 }
 
@@ -325,7 +325,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 
 }
 
-Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     return createInstance( ServiceSpecifier );
 }
@@ -340,6 +340,7 @@ Sequence< ::rtl::OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames
 uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxSimpleUnoModel::createAnyCompareByName( const OUString& PropertyName )
     throw(uno::RuntimeException)
 {
+    (void)PropertyName;
     return SvxCreateNumRuleCompare();
 }
 
@@ -354,6 +355,8 @@ uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFam
 // XModel
 sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException)
 {
+    (void)aURL;
+    (void)aArgs;
     return sal_False;
 }
 
@@ -369,11 +372,11 @@ sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const ::rtl::OUString& aURL
     return aSeq;
 }
 
-void SAL_CALL SvxSimpleUnoModel::connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxSimpleUnoModel::connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxSimpleUnoModel::disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -396,7 +399,7 @@ sal_Bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  ) throw (::com::sun:
     return xRet;
 }
 
-void SAL_CALL SvxSimpleUnoModel::setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxSimpleUnoModel::setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -412,11 +415,11 @@ void SAL_CALL SvxSimpleUnoModel::dispose(  ) throw (::com::sun::star::uno::Runti
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxSimpleUnoModel::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -470,7 +473,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
         {MAP_CHAR_LEN(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,&::getBooleanCppuType(), 0, 0 },
         {MAP_CHAR_LEN(UNO_NAME_NUMBERING_LEVEL),        EE_PARA_OUTLLEVEL,  &::getCppuType((const sal_Int16*)0), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {0,0}
+        {0,0,0,0,0,0}
     };
 
     SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, SvxXMLTextExportComponentPropertyMap, mxText );
