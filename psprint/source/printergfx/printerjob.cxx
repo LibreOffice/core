@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:16:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ namespace psp
 
 sal_Bool
 AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
-          sal_uInt64 nBlockSize = nBLOCKSIZE)
+          sal_uInt32 nBlockSize = nBLOCKSIZE)
 {
     if ((pDst == NULL) || (pSrc == NULL))
         return sal_False;
@@ -112,7 +112,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
     {
         pSrc->read  (pBuffer, nBlockSize, nIn);
         if (nIn > 0)
-            nOut = fwrite (pBuffer, 1, nIn, pDst);
+            nOut = fwrite (pBuffer, 1, sal::static_int_cast<sal_uInt32>(nIn), pDst);
     }
     while ((nIn > 0) && (nIn == nOut));
 
@@ -377,7 +377,7 @@ namespace psp
 
 // get locale invariant, 7bit clean current local time string
 sal_Char*
-getLocalTime(sal_Char* pBuffer, sal_uInt32 nBufSize)
+getLocalTime(sal_Char* pBuffer)
 {
     time_t nTime = time (NULL);
     struct tm aTime;
@@ -439,7 +439,7 @@ PrinterJob::StartJob (
     // Creation Date (locale independent local time)
     sal_Char pCreationDate [256];
     WritePS (mpJobHeader, "%%CreationDate: ");
-    WritePS (mpJobHeader, getLocalTime(pCreationDate, sizeof(pCreationDate)));
+    WritePS (mpJobHeader, getLocalTime(pCreationDate));
 
     // Document Title
     aFilterWS = WhitespaceToSpace( rJobName, FALSE );
@@ -637,7 +637,7 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
 
 
 sal_Bool
-PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
+PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
 
