@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:07:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _NEW_HXX
-#include <tools/new.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -277,7 +274,7 @@ void Sound::Beep( SoundType eType, Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-void Sound::SetSoundPath( const XubString& rSoundPath )
+void Sound::SetSoundPath( const XubString& )
 {
 }
 
