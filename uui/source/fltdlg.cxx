@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:19:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:59:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
-#pragma hdrstop
 
 namespace uui
 {
@@ -212,25 +210,6 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 
     return bSelected;
 }
-
-/*-************************************************************************************************************//**
-    @short      handler function for OK button
-    @descr      These method is called, if user press OK button. We end the dialog then.
-
-    @seealso    -
-
-    @param      -
-    @return     -
-
-    @onerror    -
-    @threadsafe no
-*//*-*************************************************************************************************************/
-IMPL_LINK_INLINE_START( FilterDialog, OKHandler, Control*, pControl )
-{
-    EndDialog(RET_OK);
-    return 0;
-}
-IMPL_LINK_INLINE_END( FilterDialog, OKHandler, Control*, pControl )
 
 /*-************************************************************************************************************//**
     @short      helper class to calculate length of given string
