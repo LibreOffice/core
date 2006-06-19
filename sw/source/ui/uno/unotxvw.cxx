@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:48:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 sal_Bool lcl_FindObjInGroup(
     uno::Reference< awt::XControl > & xRet,
     SdrObjGroup* pGroup,
-    const Reference< awt::XControlModel > & xModel,
+    const uno::Reference< awt::XControlModel > & xModel,
     Window* pWin,
     SdrObject*& rpFound)
 {
@@ -231,7 +231,7 @@ sal_Bool lcl_FindObjInGroup(
         SdrObjGroup* pGroup;
         if( pFormObj )
         {
-            Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
+            uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
             if( xCM.is() && xModel == xCM )
             {
                 xRet = pFormObj->GetUnoControl( pWin );
@@ -291,11 +291,11 @@ void SwXTextView::Invalidate()
     m_refCount++; //prevent second d'tor call
     if(nCount)
     {
-        Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
+        uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
         lang::EventObject aEvent(xInt);
         for ( sal_uInt16 i = nCount; i--; )
         {
-            Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+            uno::Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
             (*pObj)->disposing(aEvent);
         }
     }
@@ -316,14 +316,14 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
         aBaseTypes.getLength() + 8 );
 
     uno::Type* pBaseTypes = aBaseTypes.getArray();
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XSelectionSupplier  >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XServiceInfo            >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XControlAccess      >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XTextViewCursorSupplier>*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XViewSettingsSupplier   >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XRubySelection  >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<XPropertySet  >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<datatransfer::XTransferableSupplier >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XSelectionSupplier >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XServiceInfo           >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XControlAccess     >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XTextViewCursorSupplier>*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XViewSettingsSupplier  >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XRubySelection >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XPropertySet  >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<datatransfer::XTransferableSupplier >*)0);
     return aBaseTypes;
 }
 /* -----------------------------18.05.00 10:18--------------------------------
@@ -362,44 +362,44 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     throw (RuntimeException)
 {
     uno::Any aRet;
-    if(aType == ::getCppuType((Reference<view::XSelectionSupplier   >*)0))
+    if(aType == ::getCppuType((uno::Reference<view::XSelectionSupplier  >*)0))
     {
-        Reference<view::XSelectionSupplier> xRet = this;
+        uno::Reference<view::XSelectionSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<lang::XServiceInfo            >*)0))
+    else if(aType == ::getCppuType((uno::Reference<lang::XServiceInfo           >*)0))
     {
-        Reference<lang::XServiceInfo> xRet = this;
+        uno::Reference<lang::XServiceInfo> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<view::XControlAccess      >*)0))
+    else if(aType == ::getCppuType((uno::Reference<view::XControlAccess     >*)0))
     {
-        Reference<view::XControlAccess> xRet = this;
+        uno::Reference<view::XControlAccess> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<text::XTextViewCursorSupplier>*)0))
+    else if(aType == ::getCppuType((uno::Reference<text::XTextViewCursorSupplier>*)0))
     {
-        Reference<text::XTextViewCursorSupplier> xRet = this;
+        uno::Reference<text::XTextViewCursorSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<view::XViewSettingsSupplier   >*)0))
+    else if(aType == ::getCppuType((uno::Reference<view::XViewSettingsSupplier  >*)0))
     {
-        Reference<view::XViewSettingsSupplier> xRet = this;
+        uno::Reference<view::XViewSettingsSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<XRubySelection>*)0))
+    else if(aType == ::getCppuType((uno::Reference<XRubySelection>*)0))
     {
-        Reference<XRubySelection> xRet = this;
+        uno::Reference<XRubySelection> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<XPropertySet>*)0))
+    else if(aType == ::getCppuType((uno::Reference<XPropertySet>*)0))
     {
-        Reference<XPropertySet> xRet = this;
+        uno::Reference<XPropertySet> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((Reference<datatransfer::XTransferableSupplier   >*)0))
+    else if(aType == ::getCppuType((uno::Reference<datatransfer::XTransferableSupplier   >*)0))
     {
-        Reference<datatransfer::XTransferableSupplier> xRet = this;
+        uno::Reference<datatransfer::XTransferableSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
     else
@@ -412,15 +412,15 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
 sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< uno::XInterface >  xInterface;
+    uno::Reference< uno::XInterface >  xInterface;
     if(GetView() && (aInterface >>= xInterface))
     {
         SwWrtShell& rSh = GetView()->GetWrtShell();
         SwDoc* pDoc = GetView()->GetDocShell()->GetDoc();
-        Reference< lang::XUnoTunnel >  xIfcTunnel(xInterface, uno::UNO_QUERY);
-        Reference< text::XTextCursor >  xCrsr(xInterface, uno::UNO_QUERY);
-        Reference< container::XIndexAccess >    xPosN(xInterface, uno::UNO_QUERY);
-        Reference< text::XTextRange >   xPos(xInterface, uno::UNO_QUERY);
+        uno::Reference< lang::XUnoTunnel >  xIfcTunnel(xInterface, uno::UNO_QUERY);
+        uno::Reference< text::XTextCursor >  xCrsr(xInterface, uno::UNO_QUERY);
+        uno::Reference< container::XIndexAccess >   xPosN(xInterface, uno::UNO_QUERY);
+        uno::Reference< text::XTextRange >  xPos(xInterface, uno::UNO_QUERY);
         SwXFrame* pFrame = xIfcTunnel.is() ? (SwXFrame*)
             xIfcTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
 
@@ -485,7 +485,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             }
         }
 
-        Reference< text::XTextTable >  xTbl(xInterface, uno::UNO_QUERY);;
+        uno::Reference< text::XTextTable >  xTbl(xInterface, uno::UNO_QUERY);;
 
         if(xTbl.is() && xIfcTunnel.is())
         {
@@ -534,7 +534,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                 return sal_True;
            }
         }
-        Reference< text::XTextContent >  xBkm(xInterface, uno::UNO_QUERY);;
+        uno::Reference< text::XTextContent >  xBkm(xInterface, uno::UNO_QUERY);;
 
         if(xBkm.is() && xIfcTunnel.is())
         {
@@ -558,10 +558,10 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 
         // detect controls
 
-        Reference< awt::XControlModel > xCtrlModel(xInterface, UNO_QUERY);
+        uno::Reference< awt::XControlModel > xCtrlModel(xInterface, UNO_QUERY);
         if(xCtrlModel.is())
         {
-            Reference<awt::XControl> XControl;
+            uno::Reference<awt::XControl> XControl;
             SdrObject* pObj = GetControl(xCtrlModel, XControl);
             if(pObj)
             {
@@ -577,15 +577,15 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             }
         }
 
-        Reference< drawing::XShapes >  xShapeColl( xInterface, uno::UNO_QUERY );
-        Reference< beans::XPropertySet >  xTmpProp(xInterface, uno::UNO_QUERY);
+        uno::Reference< drawing::XShapes >  xShapeColl( xInterface, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet >  xTmpProp(xInterface, uno::UNO_QUERY);
         SwXShape* pSwXShape = 0;
         if(xIfcTunnel.is())
             pSwXShape = (SwXShape*)xIfcTunnel->getSomething(SwXShape::getUnoTunnelId());
         SvxShape* pSvxShape = 0;
         if(pSwXShape)
         {
-            Reference< uno::XAggregation >  xAgg = pSwXShape->GetAggregationInterface();
+            uno::Reference< uno::XAggregation >     xAgg = pSwXShape->GetAggregationInterface();
             if(xAgg.is())
             {
                 pSvxShape = (SvxShape*)xIfcTunnel->getSomething(SvxShape::getUnoTunnelId());
@@ -621,12 +621,12 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     long nCount = xShapeColl->getCount();
                     for ( long i = 0; i < nCount; i++ )
                     {
-                        Reference< drawing::XShape >  xShapeInt;
+                        uno::Reference< drawing::XShape >  xShapeInt;
                         uno::Any aAny = xShapeColl->getByIndex(i);
                         aAny >>= xShapeInt;
                         if (xShapeInt.is())
                         {
-                            Reference< lang::XUnoTunnel> xShapeTunnel(xShapeInt, uno::UNO_QUERY);
+                            uno::Reference< lang::XUnoTunnel> xShapeTunnel(xShapeInt, uno::UNO_QUERY);
 
                             SvxShape* pShape = xShapeTunnel.is() ?
                                 (SvxShape*)xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) : 0;
@@ -664,7 +664,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< uno::XInterface >  aRef;
+    uno::Reference< uno::XInterface >  aRef;
     SwView* pView = ((SwXTextView*)this)->GetView();
     if(pView)
     {
@@ -680,9 +680,9 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 if(rSh.GetTableCrsr())
                 {
                     DBG_ASSERT(rSh.GetTableFmt(), "kein Tabellenformat?");
-                    Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFmt(),
+                    uno::Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFmt(),
                                                     rSh.GetTableCrsr());
-                    aRef = Reference< uno::XInterface >  (xCrsr, uno::UNO_QUERY);;
+                    aRef = uno::Reference< uno::XInterface >  (xCrsr, uno::UNO_QUERY);;
                     break;
                 }
 
@@ -693,8 +693,8 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
             case SEL_TABLE_LIST_TEXT:
             case SEL_TEXT            :
             {
-                Reference< container::XIndexAccess >  xPos = new SwXTextRanges(rSh.GetCrsr());
-                aRef = Reference< uno::XInterface >(xPos, uno::UNO_QUERY);
+                uno::Reference< container::XIndexAccess >  xPos = new SwXTextRanges(rSh.GetCrsr());
+                aRef = uno::Reference< uno::XInterface >(xPos, uno::UNO_QUERY);
             }
             break;
             case SEL_FRAME           :
@@ -710,23 +710,23 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
 
                     if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
                     {
-                        aRef = Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
+                        aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
                     }
                     else
                     {
                         if(SEL_FRAME == eSelMode)
                         {
-                            Reference< text::XTextFrame >  xFrm =  new SwXTextFrame((SwFrmFmt&)*pFmt);
-                            aRef = Reference< uno::XInterface >(xFrm, uno::UNO_QUERY);
+                            uno::Reference< text::XTextFrame >  xFrm =  new SwXTextFrame((SwFrmFmt&)*pFmt);
+                            aRef = uno::Reference< uno::XInterface >(xFrm, uno::UNO_QUERY);
                         }
                         else if(SEL_GRAPHIC == eSelMode)
                         {
-                            Reference< text::XTextContent >  xFrm = new SwXTextGraphicObject((SwFrmFmt&)*pFmt);
+                            uno::Reference< text::XTextContent >  xFrm = new SwXTextGraphicObject((SwFrmFmt&)*pFmt);
                             aRef = xFrm;
                         }
                         else
                         {
-                            Reference< text::XTextContent >  xFrm =  new SwXTextEmbeddedObject((SwFrmFmt&)*pFmt);
+                            uno::Reference< text::XTextContent >  xFrm =  new SwXTextEmbeddedObject((SwFrmFmt&)*pFmt);
                             aRef = xFrm;
                         }
                     }
@@ -739,40 +739,40 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
             case SEL_DRAWTEXT        :
             case SEL_BEZIER          :
             {
-                Reference< drawing::XDrawPageSupplier >  xPageSupp;
-                Reference< frame::XModel > xModel = pView->GetDocShell()->GetBaseModel();
-                Reference< lang::XUnoTunnel > xModelTunnel(xModel, uno::UNO_QUERY);
+                uno::Reference< drawing::XDrawPageSupplier >  xPageSupp;
+                uno::Reference< frame::XModel > xModel = pView->GetDocShell()->GetBaseModel();
+                uno::Reference< lang::XUnoTunnel > xModelTunnel(xModel, uno::UNO_QUERY);
                 SwXTextDocument* pTextDoc = (SwXTextDocument*)xModelTunnel->
                                 getSomething(SwXTextDocument::getUnoTunnelId());
 
                 SwFmDrawPage* pSvxDrawPage =    pTextDoc->GetDrawPage()->GetSvxPage();
-                Reference< drawing::XShapes >  xShCol = new SvxShapeCollection();
+                uno::Reference< drawing::XShapes >  xShCol = new SvxShapeCollection();
 
                 const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
                 for(sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); i++)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
-                    Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );
-                    Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);;
+                    uno::Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );
+                    uno::Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);;
                     xShCol->add(xShape);
                 }
-                aRef = Reference< uno::XInterface >(xShCol, uno::UNO_QUERY);
+                aRef = uno::Reference< uno::XInterface >(xShCol, uno::UNO_QUERY);
             }
             break;
         }
     }
-    uno::Any aRet(&aRef, ::getCppuType((Reference<uno::XInterface>*)0));
+    uno::Any aRet(&aRef, ::getCppuType((uno::Reference<uno::XInterface>*)0));
     return aRet;
 }
 /*-- 17.12.98 09:34:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextView::addSelectionChangeListener(
-                                    const Reference< view::XSelectionChangeListener > & rxListener)
+                                    const uno::Reference< view::XSelectionChangeListener > & rxListener)
                                     throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< view::XSelectionChangeListener > * pInsert = new Reference< view::XSelectionChangeListener > ;
+    uno::Reference< view::XSelectionChangeListener > * pInsert = new uno::Reference< view::XSelectionChangeListener > ;
     *pInsert = rxListener;
     aSelChangedListeners.Insert(pInsert, aSelChangedListeners.Count());
 }
@@ -780,14 +780,14 @@ void SwXTextView::addSelectionChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXTextView::removeSelectionChangeListener(
-                                        const Reference< view::XSelectionChangeListener > & rxListener)
+                                        const uno::Reference< view::XSelectionChangeListener > & rxListener)
                                         throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     view::XSelectionChangeListener* pLeft = rxListener.get();
     for(sal_uInt16 i = 0; i < aSelChangedListeners.Count(); i++)
     {
-        Reference< view::XSelectionChangeListener > * pElem = aSelChangedListeners.GetObject(i);
+        uno::Reference< view::XSelectionChangeListener > * pElem = aSelChangedListeners.GetObject(i);
          view::XSelectionChangeListener* pRight = pElem->get();
         if(pLeft == pRight)
         {
@@ -801,8 +801,8 @@ void SwXTextView::removeSelectionChangeListener(
 
  ---------------------------------------------------------------------------*/
 SdrObject* SwXTextView::GetControl(
-        const Reference< awt::XControlModel > & xModel,
-        Reference< ::com::sun::star::awt::XControl >& xToFill  )
+        const uno::Reference< awt::XControlModel > & xModel,
+        uno::Reference< ::com::sun::star::awt::XControl >& xToFill  )
 {
     SdrObject* pRet = 0;
     ViewShell *pVSh = 0;
@@ -822,7 +822,7 @@ SdrObject* SwXTextView::GetControl(
                 SdrObjGroup* pGroup;
                 if( pFormObj )
                 {
-                    Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
+                    uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
                     if( xCM.is() && xModel == xCM )
                     {
                         xToFill = pFormObj->GetUnoControl( pWin );
@@ -842,18 +842,18 @@ SdrObject* SwXTextView::GetControl(
 /*-- 17.12.98 09:34:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< awt::XControl >  SwXTextView::getControl(const Reference< awt::XControlModel > & xModel)
+uno::Reference< awt::XControl >  SwXTextView::getControl(const uno::Reference< awt::XControlModel > & xModel)
         throw( container::NoSuchElementException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< awt::XControl >  xRet;
+    uno::Reference< awt::XControl >  xRet;
     GetControl(xModel, xRet);
     return xRet;
 }
 /*-- 17.12.98 09:34:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     SwView* pView = ((SwXTextView*)this)->GetView();
@@ -861,26 +861,26 @@ Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw( uno:
     {
         if(!pxTextViewCursor)
         {
-            ((SwXTextView*)this)->pxTextViewCursor = new Reference< text::XTextViewCursor > ;
+            ((SwXTextView*)this)->pxTextViewCursor = new uno::Reference< text::XTextViewCursor > ;
             *pxTextViewCursor = new  SwXTextViewCursor(pView);
         }
         return *pxTextViewCursor;
     }
     else
         throw uno::RuntimeException();
-    return Reference< text::XTextViewCursor > ();
+    return uno::Reference< text::XTextViewCursor > ();
 }
 /*-- 17.12.98 09:34:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(pView)
     {
         if(!pxViewSettings)
         {
-            ((SwXTextView*)this)->pxViewSettings = new Reference< beans::XPropertySet > ;
+            ((SwXTextView*)this)->pxViewSettings = new uno::Reference< beans::XPropertySet > ;
             *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, pView ) );
         }
     }
@@ -1062,14 +1062,14 @@ void SwXTextView::NotifySelChanged()
         pView->GetTmpSelectionDoc() = 0;
     }
 
-    Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
+    uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
 
      lang::EventObject aEvent(xInt);
 
     sal_uInt16 nCount = aSelChangedListeners.Count();
     for ( sal_uInt16 i = nCount; i--; )
     {
-        Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+        uno::Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
         (*pObj)->selectionChanged(aEvent);
     }
 }
@@ -1084,8 +1084,8 @@ void SwXTextView::NotifyDBChanged()
     sal_uInt16 nCount = aSelChangedListeners.Count();
     for ( sal_uInt16 i = nCount; i--; )
     {
-        Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
-        Reference<XDispatch> xDispatch((*pObj), UNO_QUERY);
+        uno::Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+        uno::Reference<XDispatch> xDispatch((*pObj), UNO_QUERY);
         if(xDispatch.is())
             xDispatch->dispatch(aURL, Sequence<PropertyValue>(0));
     }
@@ -1099,7 +1099,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetIn
     throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    static Reference< XPropertySetInfo > aRef = new SfxItemPropertySetInfo( pMap );
+    static uno::Reference< XPropertySetInfo > aRef = new SfxItemPropertySetInfo( pMap );
     return aRef;
 }
 
@@ -1459,7 +1459,7 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand) throw( u
  *
  * --------------------------------------------------*/
 void SwXTextViewCursor::gotoRange(
-    const Reference< text::XTextRange > & xRange,
+    const uno::Reference< text::XTextRange > & xRange,
     sal_Bool bExpand)
         throw(RuntimeException)
 {
@@ -1490,7 +1490,7 @@ void SwXTextViewCursor::gotoRange(
             *aOwnPaM.GetMark() = *pShellCrsr->GetMark();
         }
 
-        Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
+        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
         SwXTextRange* pRange = 0;
         SwXParagraph* pPara = 0;
         OTextCursorHelper* pCursor = 0;
@@ -1792,10 +1792,10 @@ sal_Bool SwXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
 /*-- 17.12.98 11:59:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeException )
+uno::Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< text::XText >  xRet;
+    uno::Reference< text::XText >  xRet;
     if(pView)
     {
         if (!IsTextSelection( sal_False ))
@@ -1804,7 +1804,7 @@ Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeEx
         SwWrtShell& rSh = pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = pView->GetDocShell()->GetDoc();
-        Reference< text::XTextRange >  xRg = SwXTextRange::CreateTextRangeFromPosition(pDoc,
+        uno::Reference< text::XTextRange >  xRg = SwXTextRange::CreateTextRangeFromPosition(pDoc,
                                     *pShellCrsr->Start(), 0);
         xRet = xRg->getText();
     }
@@ -1815,10 +1815,10 @@ Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeEx
 /*-- 17.12.98 11:59:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XTextRange >  SwXTextViewCursor::getStart(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextViewCursor::getStart(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< text::XTextRange >  xRet;
+    uno::Reference< text::XTextRange >  xRet;
     if(pView)
     {
         if (!IsTextSelection())
@@ -1837,10 +1837,10 @@ Reference< text::XTextRange >  SwXTextViewCursor::getStart(void) throw( uno::Run
 /*-- 17.12.98 11:59:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XTextRange >  SwXTextViewCursor::getEnd(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextViewCursor::getEnd(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< text::XTextRange >  xRet;
+    uno::Reference< text::XTextRange >  xRet;
     if(pView)
     {
         if (!IsTextSelection())
@@ -1922,9 +1922,9 @@ void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeEx
 /*-- 29.06.00 17:33:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo >  SwXTextViewCursor::getPropertySetInfo(  ) throw(RuntimeException)
+uno::Reference< XPropertySetInfo >  SwXTextViewCursor::getPropertySetInfo(  ) throw(RuntimeException)
 {
-    static Reference< XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
     return xRef;
 }
 /*-- 29.06.00 17:33:39---------------------------------------------------
@@ -1970,7 +1970,7 @@ Any  SwXTextViewCursor::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void  SwXTextViewCursor::addPropertyChangeListener(
-    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+    const OUString& aPropertyName, const uno::Reference< XPropertyChangeListener >& xListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -1978,7 +1978,7 @@ void  SwXTextViewCursor::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void  SwXTextViewCursor::removePropertyChangeListener(
-    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+    const OUString& aPropertyName, const uno::Reference< XPropertyChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -1986,14 +1986,14 @@ void  SwXTextViewCursor::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void  SwXTextViewCursor::addVetoableChangeListener(
-    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    const OUString& PropertyName, const uno::Reference< XVetoableChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 /*-- 29.06.00 17:33:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  SwXTextViewCursor::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void  SwXTextViewCursor::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 /*-- 29.06.00 17:33:41---------------------------------------------------
@@ -2276,10 +2276,10 @@ SwPaM*  SwXTextViewCursor::GetPaM()
         rSh.LockView( TRUE );    //lock visible section
         pTransfer->PrepareForCopy();
         rSh.LockView( bLockedView );
-        return Reference< ::com::sun::star::datatransfer::XTransferable >( pTransfer );
+        return uno::Reference< ::com::sun::star::datatransfer::XTransferable >( pTransfer );
     }
 
-    return Reference< ::com::sun::star::datatransfer::XTransferable >();
+    return uno::Reference< ::com::sun::star::datatransfer::XTransferable >();
 }
 
 void SAL_CALL SwXTextView::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException)
