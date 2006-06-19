@@ -4,9 +4,9 @@
  *
  *  $RCSfile: durationhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:40:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ using namespace ::com::sun::star::util;
 sal_Bool XMLDurationMS16PropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     DateTime aTime;
     if( !SvXMLUnitConverter::convertTime( aTime,  rStrImpValue ) )
@@ -78,7 +78,7 @@ sal_Bool XMLDurationMS16PropHdl_Impl::importXML(
 sal_Bool XMLDurationMS16PropHdl_Impl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Int16 nMS;
 
