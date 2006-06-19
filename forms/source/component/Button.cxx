@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory
             xButton->addActionListener(this);
     }
     // Refcount bei 1 fuer Listener
-    sal_Int32 n = decrement(m_refCount);
+    decrement(m_refCount);
 }
 
 //------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 
 // ActionListener
 //------------------------------------------------------------------------------
-void OButtonControl::actionPerformed(const ActionEvent& rEvent) throw ( ::com::sun::star::uno::RuntimeException)
+void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
     // Asynchron fuer starutil::URL-Button
     sal_uInt32 n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
