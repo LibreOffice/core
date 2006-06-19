@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:05:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #define HMENU int
 #define HDC int
 
-#include <rtl/ustring>
+#include "rtl/ustring.hxx"
 #include <rtl/process.h>
 #include <osl/mutex.hxx>
 
@@ -347,7 +347,7 @@ void SjApplet2_Impl::init(Window * pParentWin,
         jobject joParameters = pEnv->AllocObject(jcHashtable);                                                            testJavaException(pEnv);
         pEnv->CallVoidMethod(joParameters, jmHashtable_rinit);                                                            testJavaException(pEnv);
 
-        for(sal_Int64 i = 0; i < rCmdList.Count(); ++i) {
+        for(sal_uInt32 i = 0; i < rCmdList.Count(); ++i) {
             const SvCommand & rCmd = rCmdList[i];
             String aCmd = rCmd.GetCommand();
             String aLoweredCmd = aCmd.ToLowerAscii();
