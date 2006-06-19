@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:46:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -398,7 +396,7 @@ void SvxColorDockingWindow::FillValueSet()
 
         for( long i = 0; i < nCount; i++ )
         {
-            pEntry = pColorTable->Get( i );
+            pEntry = pColorTable->GetColor( i );
             aColorSet.InsertItem( (USHORT)i+2,
                             pEntry->GetColor(), pEntry->GetName() );
         }
