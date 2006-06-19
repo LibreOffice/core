@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:47:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,27 +205,31 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                 UINT32 n1;
                 USHORT n2, n3;
                 BYTE b8, b9, b10, b11, b12, b13, b14, b15;
-            } aGlNmIds[4];
+            }
+            aGlNmIds[4];
         } aArr[] = {
             { OLE_STARMATH_2_MATHTYPE, "MathType 3.x",
-                {SO3_SM_CLASSID_60, SO3_SM_CLASSID_50,
-                 SO3_SM_CLASSID_40, SO3_SM_CLASSID_30 }},
+                {{SO3_SM_CLASSID_60}, {SO3_SM_CLASSID_50},
+                 {SO3_SM_CLASSID_40}, {SO3_SM_CLASSID_30 }}},
             { OLE_STARWRITER_2_WINWORD, "MS Word 97",
-                {SO3_SW_CLASSID_60, SO3_SW_CLASSID_50,
-                 SO3_SW_CLASSID_40, SO3_SW_CLASSID_30 }},
+                {{SO3_SW_CLASSID_60}, {SO3_SW_CLASSID_50},
+                 {SO3_SW_CLASSID_40}, {SO3_SW_CLASSID_30 }}},
             { OLE_STARCALC_2_EXCEL, "MS Excel 97",
-                {SO3_SC_CLASSID_60, SO3_SC_CLASSID_50,
-                 SO3_SC_CLASSID_40, SO3_SC_CLASSID_30 }},
+                {{SO3_SC_CLASSID_60}, {SO3_SC_CLASSID_50},
+                 {SO3_SC_CLASSID_40}, {SO3_SC_CLASSID_30 }}},
             { OLE_STARIMPRESS_2_POWERPOINT, "MS PowerPoint 97",
-                {SO3_SIMPRESS_CLASSID_60, SO3_SIMPRESS_CLASSID_50,
-                 SO3_SIMPRESS_CLASSID_40, SO3_SIMPRESS_CLASSID_30 }},
+                {{SO3_SIMPRESS_CLASSID_60}, {SO3_SIMPRESS_CLASSID_50},
+                 {SO3_SIMPRESS_CLASSID_40}, {SO3_SIMPRESS_CLASSID_30 }}},
             { 0, "",
-                {SO3_SCH_CLASSID_60, SO3_SCH_CLASSID_50,
-                 SO3_SCH_CLASSID_40, SO3_SCH_CLASSID_30 }},
+                {{SO3_SCH_CLASSID_60}, {SO3_SCH_CLASSID_50},
+                 {SO3_SCH_CLASSID_40}, {SO3_SCH_CLASSID_30 }}},
             { 0, "",
-                {SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50,    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
-                 SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50 }}, // ver 5.0, it is purpose to have double entrys here.
-            { 0xffff,0 }
+                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
+                 {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50 }}}, // ver 5.0, it is purpose to have double entrys here.
+
+            { 0xffff,0,
+                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},
+                {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50}}}
         };
 
         for( const _ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
