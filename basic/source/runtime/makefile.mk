@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:39:37 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:45:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..
 
-PRJNAME=BASIC
+PRJNAME=basic
 TARGET=runtime
 
 # --- Settings -----------------------------------------------------------
@@ -78,6 +78,7 @@ SLOFILES+= $(SLO)$/os2.obj
 EXCEPTIONSFILES=$(SLO)$/step0.obj	\
         $(SLO)$/step2.obj	\
         $(SLO)$/methods.obj	\
+        $(SLO)$/methods1.obj	\
         $(SLO)$/iosys.obj	\
         $(SLO)$/runtime.obj
 
