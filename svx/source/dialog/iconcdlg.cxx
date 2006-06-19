@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:19:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ const SfxPoolItem* IconChoicePage::GetItem( const SfxItemSet& rSet,
     const SfxItemPool* pPool = rSet.GetPool();
     USHORT nWh = pPool->GetWhich( nSlot );
     const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rSet.GetItemState( nWh, TRUE, &pItem );
+    rSet.GetItemState( nWh, TRUE, &pItem );
 
     if ( !pItem && nWh != nSlot )
         pItem = &pPool->GetDefaultItem( nWh );
@@ -291,27 +291,27 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
                                      const EIconChoicePos ePos,
                                      const SfxItemSet *pItemSet )//, BOOL bEditFmt, const String *pUserButtonText = 0 )
 :   ModalDialog         ( pParent, rResId ),
+    meChoicePos     ( ePos ),
+    maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
+                            WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                            /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP ),
+    mnCurrentPageId ( USHRT_MAX ),
+
     aOKBtn          ( this, WB_DEFBUTTON ),
     aCancelBtn      ( this, WB_DEFBUTTON ),
     aHelpBtn        ( this ),
     aResetBtn       ( this ),
-    //pUserBtn      ( pUserButtonText? new PushButton(this): 0 ),
-    //aBaseFmtBtn       ( this ),
-    maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
-                            WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP ),
-    meChoicePos     ( ePos ),
-    mnCurrentPageId ( USHRT_MAX ),
     pSet            ( pItemSet ),
-    pExampleSet     ( NULL ),
     pOutSet         ( NULL ),
+    pExampleSet     ( NULL ),
     pRanges         ( NULL ),
+    nResId          ( rResId.GetId() ),
+
     bHideResetBtn   ( FALSE ),
     bModal          ( FALSE ),
     bInOK           ( FALSE ),
     bModified       ( FALSE ),
-    bItemsReset     ( FALSE ),
-    nResId          ( rResId.GetId() )
+    bItemsReset     ( FALSE )
 {
     // IconChoiceCtrl-Settings
     //maIconCtrl.SetBackground ( Wallpaper( Color (146, 146, 186) ) );
@@ -439,7 +439,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& 
                                    const Image& rChoiceIcon,
                                    CreatePage pCreateFunc /* != 0 */,
                                    GetPageRanges pRangesFunc /* darf 0 sein */,
-                                   BOOL bItemsOnDemand, ULONG nPos )
+                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
                                                          pRangesFunc,
@@ -460,7 +460,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& 
                                    const Image& rChoiceIconHC,
                                    CreatePage pCreateFunc /* != 0 */,
                                    GetPageRanges pRangesFunc /* darf 0 sein */,
-                                   BOOL bItemsOnDemand, ULONG nPos )
+                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
                                                          pRangesFunc,
@@ -910,8 +910,8 @@ IMPL_LINK( IconChoiceDialog, ResetHdl, Button *, EMPTYARG )
     if ( pData->bOnDemand )
     {
         // CSet auf AIS hat hier Probleme, daher getrennt
-        const SfxItemSet* pSet = &( pData->pPage->GetItemSet() );
-        pData->pPage->Reset( *(SfxItemSet*)pSet );
+        const SfxItemSet* _pSet = &( pData->pPage->GetItemSet() );
+        pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
     else
         pData->pPage->Reset( *pSet );
@@ -922,7 +922,7 @@ IMPL_LINK( IconChoiceDialog, ResetHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( IconChoiceDialog, CancelHdl, Button*, pButton )
+IMPL_LINK( IconChoiceDialog, CancelHdl, Button*, EMPTYARG )
 {
     Close();
 
@@ -962,7 +962,6 @@ void IconChoiceDialog::ActivatePageImpl ()
             SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
             pData->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
             SetPosSizePages ( pData->nId );
-            PageCreated( mnCurrentPageId, *(pData->pPage) );
 
             if ( pData->bOnDemand )
                 pData->pPage->Reset( (SfxItemSet &)pData->pPage->GetItemSet() );
@@ -1071,17 +1070,11 @@ void IconChoiceDialog::ResetPageImpl ()
     if ( pData->bOnDemand )
     {
         // CSet auf AIS hat hier Probleme, daher getrennt
-        const SfxItemSet* pSet = &pData->pPage->GetItemSet();
-        pData->pPage->Reset( *(SfxItemSet*)pSet );
+        const SfxItemSet* _pSet = &pData->pPage->GetItemSet();
+        pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
     else
         pData->pPage->Reset( *pSet );
-}
-
-// -----------------------------------------------------------------------
-
-void IconChoiceDialog::PageCreated( USHORT nId, IconChoicePage &rPage )
-{
 }
 
 /**********************************************************************
@@ -1355,7 +1348,7 @@ short IconChoiceDialog::Ok()
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
-    BOOL bModified = FALSE;
+    BOOL _bModified = FALSE;
 
     const ULONG nCount = maPageList.Count();
 
@@ -1371,7 +1364,7 @@ short IconChoiceDialog::Ok()
             {
                 SfxItemSet& rSet = (SfxItemSet&)pPage->GetItemSet();
                 rSet.ClearItem();
-                bModified |= pPage->FillItemSet( rSet );
+                _bModified |= pPage->FillItemSet( rSet );
             }
             else if ( pSet && !pPage->HasExchangeSupport() )
             {
@@ -1379,7 +1372,7 @@ short IconChoiceDialog::Ok()
 
                 if ( pPage->FillItemSet( aTmp ) )
                 {
-                    bModified |= TRUE;
+                    _bModified |= TRUE;
                     pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
                 }
@@ -1387,10 +1380,10 @@ short IconChoiceDialog::Ok()
         }
     }
 
-    if ( bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        bModified |= TRUE;
+    if ( _bModified || ( pOutSet && pOutSet->Count() > 0 ) )
+        _bModified |= TRUE;
 
-    return bModified ? RET_OK : RET_CANCEL;
+    return _bModified ? RET_OK : RET_CANCEL;
 }
 
 // -----------------------------------------------------------------------
