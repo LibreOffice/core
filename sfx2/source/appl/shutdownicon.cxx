@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:30:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:13:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,14 +124,14 @@ public:
     virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException );
 };
 
-void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException )
+void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
 {
 #ifdef WNT
     ShutdownIcon::LeaveModalMode();
 #endif
 }
 
-void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& aEvent ) throw( RuntimeException )
+void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
@@ -172,6 +172,8 @@ void ShutdownIcon::SetAutostart( bool bActivate )
     aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
 
     SetAutostartW32( aShortcutName, bActivate );
+#else
+    (void)bActivate; // unused variable
 #endif
 }
 
@@ -487,7 +489,7 @@ void SAL_CALL ShutdownIcon::disposing()
 // ---------------------------------------------------------------------------
 
 // XEventListener
-void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject& Source )
+void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject& )
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
@@ -495,7 +497,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 // ---------------------------------------------------------------------------
 
 // XTerminateListener
-void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
@@ -507,7 +509,7 @@ throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::
 
 // ---------------------------------------------------------------------------
 
-void SAL_CALL ShutdownIcon::notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL ShutdownIcon::notifyTermination( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::uno::RuntimeException)
 {
 }
