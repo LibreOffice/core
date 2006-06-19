@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetforroot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:21:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,6 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< lang::XMultiServiceFac
             if( ! ( cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[i] ) )
                 ;
         }
-        m_nRow = -1;
+        m_nRow = 0xffffffff;
     }
 }
