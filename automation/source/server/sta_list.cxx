@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:58:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -696,7 +696,7 @@ Window* StatementList::GetMouseWin()
     return NULL;
 }
 
-Window* StatementList::GetFocus( WindowType nRT ,BOOL ParentWasRT, BOOL MaybeBase )
+Window* StatementList::GetFocus( WindowType nRT, BOOL MaybeBase )
 {
 
     if ( nRT == WINDOW_TABCONTROL )
@@ -757,7 +757,7 @@ Window* StatementList::GetAnyActive( BOOL MaybeBase )
     }
     if ( !pControl )
     {
-        pControl = GetFocus( WINDOW_TABCONTROL, FALSE, MaybeBase);
+        pControl = GetFocus( WINDOW_TABCONTROL, MaybeBase);
     }
 
     return pControl;
@@ -888,7 +888,6 @@ UniString StatementList::Tree(Window *pBase, int Indent)
         aSep.AssignAscii("============================\n");
         aSep.ConvertLineEnd();
         pBase = Application::GetFirstTopLevelWindow();
-        Window *pControl = NULL;
         while ( pBase )
         {
             Window *pBaseFrame = pBase->GetWindow( WINDOW_OVERLAP );
@@ -993,7 +992,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
     WRITEc("UId : ");
     WRITE(UIdString(pBase->GetSmartUniqueOrHelpId()));
     WRITEc(":0x");
-    WRITE(String::CreateFromInt64( sal_Int64(pBase), 16 ));
+    WRITE(String::CreateFromInt32( sal_Int32(pBase), 16 ));
     WRITEc(":");
     WRITE(pBase->GetQuickHelpText());
     WRITEc(":");
@@ -1062,7 +1061,7 @@ BOOL StatementList::CheckWindowWait()
 
 void StatementList::ReportError(String aMessage)
 {
-    ReportError ( SmartId(-1), aMessage );
+    ReportError ( SmartId(), aMessage );
 }
 
 void StatementList::ReportError(SmartId aUId, String aMessage)
