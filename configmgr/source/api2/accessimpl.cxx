@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:04:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -863,7 +863,7 @@ void implSetToDefaultAsProperty(NodeAccess& rNode)
     throw lang::WrappedTargetException(sWrapMessage + sMessage, rNode.getUnoInstance(), uno::makeAny(aVeto));
 }
 
-Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& rNode)
+Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& )
     throw (css::lang::WrappedTargetException, uno::RuntimeException)
 {
     // not really supported
