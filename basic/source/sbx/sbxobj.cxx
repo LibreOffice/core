@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:10:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:51:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TYPEINIT2(SbxObject,SbxVariable,SfxListener)
 static const char* pNameProp;               // Name-Property
 static const char* pParentProp;             // Parent-Property
 
-static USHORT nNameHash = 0, nParentHash = 0, nApplHash = 0;
+static USHORT nNameHash = 0, nParentHash = 0;
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -74,7 +74,8 @@ SbxObject::SbxObject( const XubString& rClass )
 }
 
 SbxObject::SbxObject( const SbxObject& rObj )
-         : SbxVariable( rObj.GetType() )
+    : SvRefBase( rObj ), SbxVariable( rObj.GetType() ),
+      SfxListener( rObj )
 {
     *this = rObj;
 }
@@ -162,8 +163,8 @@ void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         if( bRead || bWrite )
         {
             XubString aVarName( pVar->GetName() );
-            USHORT nHash = MakeHashCode( aVarName );
-            if( nHash == nNameHash
+            USHORT nHash_ = MakeHashCode( aVarName );
+            if( nHash_ == nNameHash
              && aVarName.EqualsIgnoreCaseAscii( pNameProp ) )
             {
                 if( bRead )
@@ -171,22 +172,14 @@ void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 else
                     SetName( pVar->GetString() );
             }
-            else if( nHash == nParentHash
+            else if( nHash_ == nParentHash
              && aVarName.EqualsIgnoreCaseAscii( pParentProp ) )
             {
-                SbxObject* p = GetParent();
-                if( !p )
-                    p = this;
-                pVar->PutObject( p );
+                SbxObject* p_ = GetParent();
+                if( !p_ )
+                    p_ = this;
+                pVar->PutObject( p_ );
             }
-//          else if( nHash == nApplHash
-//           && aVarName.ICompare( pApplProp ) == COMPARE_EQUAL )
-//          {
-//              SbxObject* p = this;
-//              while( p->GetParent() )
-//                  p = p->GetParent();
-//              pVar->PutObject( p );
-//          }
         }
     }
 }
@@ -295,11 +288,10 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
     nLvl--;
     if( pRes )
     {
-        SbxObject* p = pRes->GetParent() ? pRes->GetParent() : this;
-        ByteString aNameStr1( (const UniString&)rName, RTL_TEXTENCODING_ASCII_US );
-        ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
+        ByteString aNameStr3( (const UniString&)rName, RTL_TEXTENCODING_ASCII_US );
+        ByteString aNameStr4( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
         DbgOutf( "SBX: Found %.*s %s in %s",
-            nLvl, "                              ", aNameStr1.GetBuffer(), aNameStr1.GetBuffer() );
+            nLvl, "                              ", aNameStr3.GetBuffer(), aNameStr4.GetBuffer() );
     }
 #endif
     return pRes;
@@ -429,7 +421,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
             return pRes;
         }
     }
-    SbxVariable* pVar;
+    SbxVariable* pVar = NULL;
     switch( ct )
     {
         case SbxCLASS_VARIABLE:
@@ -442,6 +434,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
         case SbxCLASS_OBJECT:
             pVar = CreateObject( rName );
             break;
+        default: break;
     }
     pVar->SetParent( this );
     pArray->Put( pVar, pArray->Count() );
@@ -634,26 +627,20 @@ void SbxObject::Remove( SbxVariable* pVar )
     if( pArray && nIdx < pArray->Count() )
     {
 #ifdef DBG_UTIL
-    static const char* pCls[] =
-    { "DontCare","Array","Value","Variable","Method","Property","Object" };
     XubString aVarName( pVar->GetName() );
     if ( !aVarName.Len() && pVar->ISA(SbxObject) )
         aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
     ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
     ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
-//    DbgOutf( "SBX: Remove %s %s in %s",
-//        ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
-//          pVar->GetClass() <= SbxCLASS_OBJECT )
-//            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.GetBuffer() );
 #endif
-        SbxVariableRef pVar = pArray->Get( nIdx );
-        if( pVar->IsBroadcaster() )
-            EndListening( pVar->GetBroadcaster(), TRUE );
-        if( (SbxVariable*) pVar == pDfltProp )
+        SbxVariableRef pVar_ = pArray->Get( nIdx );
+        if( pVar_->IsBroadcaster() )
+            EndListening( pVar_->GetBroadcaster(), TRUE );
+        if( (SbxVariable*) pVar_ == pDfltProp )
             pDfltProp = NULL;
         pArray->Remove( nIdx );
-        if( pVar->GetParent() == this )
-            pVar->SetParent( NULL );
+        if( pVar_->GetParent() == this )
+            pVar_->SetParent( NULL );
         SetModified( TRUE );
         Broadcast( SBX_HINT_OBJECTCHANGED );
     }
@@ -667,14 +654,14 @@ void SbxObject::VCPtrRemove( SbxVariable* pVar )
     SbxArray* pArray = VCPtrFindVar( pVar, nIdx );
     if( pArray && nIdx < pArray->Count() )
     {
-        SbxVariableRef pVar = pArray->Get( nIdx );
-        if( pVar->IsBroadcaster() )
-            EndListening( pVar->GetBroadcaster(), TRUE );
-        if( (SbxVariable*) pVar == pDfltProp )
+        SbxVariableRef xVar = pArray->Get( nIdx );
+        if( xVar->IsBroadcaster() )
+            EndListening( xVar->GetBroadcaster(), TRUE );
+        if( (SbxVariable*) xVar == pDfltProp )
             pDfltProp = NULL;
         pArray->Remove( nIdx );
-        if( pVar->GetParent() == this )
-            pVar->SetParent( NULL );
+        if( xVar->GetParent() == this )
+            xVar->SetParent( NULL );
         SetModified( TRUE );
         Broadcast( SBX_HINT_OBJECTCHANGED );
     }
@@ -966,9 +953,9 @@ void SbxObject::Dump( SvStream& rStrm, BOOL bFill )
             XubString aLine( aIndent );
             aLine.AppendAscii( "  - " );
             aLine += pVar->GetName( SbxNAME_SHORT_TYPES );
-            XubString aAttrs;
-            if( CollectAttrs( pVar, aAttrs ) )
-                aLine += aAttrs;
+            XubString aAttrs2;
+            if( CollectAttrs( pVar, aAttrs2 ) )
+                aLine += aAttrs2;
             if( !pVar->IsA( TYPE(SbxMethod) ) )
                 aLine.AppendAscii( "  !! Not a Method !!" );
             rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
@@ -999,9 +986,9 @@ void SbxObject::Dump( SvStream& rStrm, BOOL bFill )
                 XubString aLine( aIndent );
                 aLine.AppendAscii( "  - " );
                 aLine += pVar->GetName( SbxNAME_SHORT_TYPES );
-                XubString aAttrs;
-                if( CollectAttrs( pVar, aAttrs ) )
-                    aLine += aAttrs;
+                XubString aAttrs3;
+                if( CollectAttrs( pVar, aAttrs3 ) )
+                    aLine += aAttrs3;
                 if( !pVar->IsA( TYPE(SbxProperty) ) )
                     aLine.AppendAscii( "  !! Not a Property !!" );
                 rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
@@ -1080,7 +1067,8 @@ void SbxObject::GarbageCollection( ULONG nObjects )
 */
 
 {
-    SbxVarList_Impl &rVars = GetSbxData_Impl()->aVars;
+    (void)nObjects;
+
     static BOOL bInGarbageCollection = FALSE;
     if ( bInGarbageCollection )
         return;
@@ -1135,6 +1123,7 @@ void SbxObject::GarbageCollection( ULONG nObjects )
 // AB 28.10. Zur 507a vorerst raus, da SfxBroadcaster::Enable() wegfaellt
 #if 0
 #ifdef DBG_UTIL
+    SbxVarList_Impl &rVars = GetSbxData_Impl()->aVars;
     DbgOutf( "SBX: garbage collector done, %lu objects remainding",
              rVars.Count() );
     if ( rVars.Count() > 200 && rVars.Count() < 210 )
