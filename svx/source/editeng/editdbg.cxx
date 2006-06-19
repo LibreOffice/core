@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#pragma hdrstop
 
 #include <lspcitem.hxx>
 
