@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:25:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:15:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,7 +825,7 @@ void Button::DataChanged( const DataChangedEvent& rDCEvt )
 
 // =======================================================================
 
-void PushButton::ImplInitData()
+void PushButton::ImplInitPushButtonData()
 {
     mpWindowImpl->mbPushButton    = TRUE;
 
@@ -1070,7 +1070,7 @@ void PushButton::ImplDrawPushButtonFrame( Window* pDev,
 // -----------------------------------------------------------------------
 
 BOOL PushButton::ImplHitTestPushButton( Window* pDev,
-                                        const Point& rPos, USHORT nStyle )
+                                        const Point& rPos )
 {
     Point       aTempPoint;
     Rectangle   aTestRect( aTempPoint, pDev->GetOutputSizePixel() );
@@ -1160,7 +1160,7 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 // -----------------------------------------------------------------------
 
 void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags,
-                                            const Rectangle& rRect, Rectangle& rTextRect,
+                                            const Rectangle& rRect,
                                             bool bLayout )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
@@ -1382,7 +1382,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent( this,
                                    (nState&CTRL_STATE_ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
-                                   aInRect, aTextRect, bLayout );
+                                   aInRect, bLayout );
 
         if ( HasFocus() )
             ShowFocus( ImplGetFocusRect() );
@@ -1395,7 +1395,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
             ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
 
         // draw content
-        ImplDrawPushButtonContent( this, 0, aInRect, aTextRect, bLayout );
+        ImplDrawPushButtonContent( this, 0, aInRect, bLayout );
 
         if( ! bLayout && HasFocus() )
         {
@@ -1479,7 +1479,7 @@ BOOL PushButton::ImplIsDefButton() const
 PushButton::PushButton( WindowType nType ) :
     Button( nType )
 {
-    ImplInitData();
+    ImplInitPushButtonData();
 }
 
 // -----------------------------------------------------------------------
@@ -1487,7 +1487,7 @@ PushButton::PushButton( WindowType nType ) :
 PushButton::PushButton( Window* pParent, WinBits nStyle ) :
     Button( WINDOW_PUSHBUTTON )
 {
-    ImplInitData();
+    ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
 }
 
@@ -1496,7 +1496,7 @@ PushButton::PushButton( Window* pParent, WinBits nStyle ) :
 PushButton::PushButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_PUSHBUTTON )
 {
-    ImplInitData();
+    ImplInitPushButtonData();
     rResId.SetRT( RSC_PUSHBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -1517,7 +1517,7 @@ PushButton::~PushButton()
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() &&
-         ImplHitTestPushButton( this, rMEvt.GetPosPixel(), ImplGetButtonState() ) )
+         ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
     {
         USHORT nTrackFlags = 0;
 
@@ -1577,7 +1577,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        if ( ImplHitTestPushButton( this, rTEvt.GetMouseEvent().GetPosPixel(), ImplGetButtonState() ) )
+        if ( ImplHitTestPushButton( this, rTEvt.GetMouseEvent().GetPosPixel() ) )
         {
             if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
             {
@@ -1674,7 +1674,7 @@ void PushButton::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-void PushButton::Paint( const Rectangle& rRect )
+void PushButton::Paint( const Rectangle& )
 {
     ImplDrawPushButton();
 }
@@ -1721,7 +1721,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         nButtonStyle |= BUTTON_DRAW_CHECKED;
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
-    ImplDrawPushButtonContent( pDev, nFlags, aRect, aTextRect, false );
+    ImplDrawPushButtonContent( pDev, nFlags, aRect, false );
     pDev->Pop();
 }
 
@@ -1819,7 +1819,7 @@ long PushButton::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
@@ -2172,7 +2172,7 @@ void HelpButton::Click()
 
 // =======================================================================
 
-void RadioButton::ImplInitData()
+void RadioButton::ImplInitRadioButtonData()
 {
     mbChecked       = FALSE;
     mbSaveValue     = FALSE;
@@ -2270,7 +2270,7 @@ void RadioButton::DrawRadioButtonState( )
 
 void RadioButton::ImplDrawRadioButtonState()
 {
-    USHORT nStyle = 0;
+    USHORT nButtonStyle = 0;
     BOOL   bNativeOK = FALSE;
 
     // no native drawing for image radio buttons
@@ -2324,8 +2324,8 @@ if ( bNativeOK == FALSE )
         aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
         // Border und Selektionsstatus ausgeben
-        nStyle = FRAME_DRAW_DOUBLEIN;
-        aImageRect = aDecoView.DrawFrame( aImageRect, nStyle );
+        nButtonStyle = FRAME_DRAW_DOUBLEIN;
+        aImageRect = aDecoView.DrawFrame( aImageRect, nButtonStyle );
         if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) || !bEnabled )
             SetFillColor( rStyleSettings.GetFaceColor() );
         else
@@ -2334,9 +2334,9 @@ if ( bNativeOK == FALSE )
         DrawRect( aImageRect );
 
         // Image ausgeben
-        nStyle = 0;
+        nButtonStyle = 0;
         if ( !bEnabled )
-            nStyle |= IMAGE_DRAW_DISABLE;
+            nButtonStyle |= IMAGE_DRAW_DISABLE;
 
         // check for HC mode
         Image *pImage = &maImage;
@@ -2354,9 +2354,9 @@ if ( bNativeOK == FALSE )
         aImagePos.X() += (aImageRect.GetWidth()-aImageSize.Width())/2;
         aImagePos.Y() += (aImageRect.GetHeight()-aImageSize.Height())/2;
         if ( IsZoom() )
-            DrawImage( aImagePos, aImageSize, *pImage, nStyle );
+            DrawImage( aImagePos, aImageSize, *pImage, nButtonStyle );
         else
-            DrawImage( aImagePos, *pImage, nStyle );
+            DrawImage( aImagePos, *pImage, nButtonStyle );
 
         aImageRect.Left()++;
         aImageRect.Top()++;
@@ -2644,7 +2644,7 @@ void RadioButton::ImplCallClick( BOOL bGrabFocus, USHORT nFocusFlags )
 RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
     Button( WINDOW_RADIOBUTTON )
 {
-    ImplInitData();
+    ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
 }
 
@@ -2653,7 +2653,7 @@ RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
 RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_RADIOBUTTON )
 {
-    ImplInitData();
+    ImplInitRadioButtonData();
     rResId.SetRT( RSC_RADIOBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -2785,7 +2785,7 @@ void RadioButton::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-void RadioButton::Paint( const Rectangle& rRect )
+void RadioButton::Paint( const Rectangle& )
 {
     ImplDrawRadioButton();
 }
@@ -2971,7 +2971,7 @@ long RadioButton::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -3225,7 +3225,7 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
 
 // =======================================================================
 
-void CheckBox::ImplInitData()
+void CheckBox::ImplInitCheckBoxData()
 {
     meState         = STATE_NOCHECK;
     meSaveValue     = STATE_NOCHECK;
@@ -3486,7 +3486,7 @@ void CheckBox::ImplCheck()
 CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
     Button( WINDOW_CHECKBOX )
 {
-    ImplInitData();
+    ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
 }
 
@@ -3495,7 +3495,7 @@ CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
 CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_CHECKBOX )
 {
-    ImplInitData();
+    ImplInitCheckBoxData();
     rResId.SetRT( RSC_CHECKBOX );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -3609,7 +3609,7 @@ void CheckBox::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-void CheckBox::Paint( const Rectangle& rRect )
+void CheckBox::Paint( const Rectangle& )
 {
     ImplDrawCheckBox();
 }
@@ -3846,7 +3846,7 @@ long CheckBox::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
