@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 09:47:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ class PrintFontManager
 
     void getFontAttributesFromXLFD( PrintFont* pFont, const std::list< rtl::OString >& rXLFDs ) const;
 
-    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, bool bReadFile, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts ) const;
+    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts ) const;
     rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
     void analyzeTrueTypeFamilyName( void* pTTFont, std::list< rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
