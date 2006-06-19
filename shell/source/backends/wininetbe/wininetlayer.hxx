@@ -33,8 +33,14 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
 #include <wininet.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
