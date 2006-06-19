@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:15:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,13 @@ using namespace                 ::com::sun::star;
 extern "C" {
 
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
+void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, registry::XRegistryKey* pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, registry::XRegistryKey* pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, registry::XRegistr
 }
 
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void*                                   pRet = 0;
 
@@ -224,11 +224,11 @@ void AnalysisAddIn::InitData( void )
 
 
 AnalysisAddIn::AnalysisAddIn( const uno::Reference< lang::XMultiServiceFactory >& xServiceFact ) :
+    pDefLocales( NULL ),
     pFD( NULL ),
-    pResMgr( NULL ),
     pFactDoubles( NULL ),
     pCDL( NULL ),
-    pDefLocales( NULL ),
+    pResMgr( NULL ),
     aAnyConv( xServiceFact )
 {
 }
@@ -381,7 +381,7 @@ lang::Locale SAL_CALL AnalysisAddIn::getLocale() THROWDEF_RTE
 
 // XAddIn
 
-STRING SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const STRING& aDisplayName ) THROWDEF_RTE
+STRING SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const STRING& ) THROWDEF_RTE
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
@@ -690,13 +690,13 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
 
     if( nNewMonth > 12 )
     {
-        nYear += sal_uInt16( nNewMonth / 12 );
+        nYear = sal::static_int_cast<sal_uInt16>( nYear + ( nNewMonth / 12 ) );
         nNewMonth %= 12;
     }
     else if( nNewMonth < 1 )
     {
         nNewMonth = -nNewMonth;
-        nYear += sal_uInt16( nNewMonth / 12 );
+        nYear = sal::static_int_cast<sal_uInt16>( nYear + ( nNewMonth / 12 ) );
         nYear--;
         nNewMonth %= 12;
         nNewMonth = 12 - nNewMonth;
@@ -800,7 +800,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
         sal_Int32       n1, n2;
         sal_Int32       nE1 = aCoeffList.getLength();
         sal_Int32       nE2;
-        sal_Int32       nZ = 0;
+        //sal_Int32     nZ = 0;
 
         for( n1 = 0 ; n1 < nE1 ; n1++ )
         {
@@ -1199,7 +1199,7 @@ STRING SAL_CALL AnalysisAddIn::getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImproduct( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const SEQSEQ( STRING )& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
 {
     ComplexList     z_list;
 
@@ -1247,7 +1247,7 @@ STRING SAL_CALL AnalysisAddIn::getImsub( const STRING& aNum1, const STRING& aNum
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( STRING )& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
     ComplexList     z_list;
 
