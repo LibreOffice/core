@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instancelocker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 16:00:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::impl_staticCreateSel
 // --------------------------------------------------------
 OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWrapper,
                     const uno::Reference< uno::XInterface >& xInstance,
-                    sal_Int8 nMode,
+                    sal_Int32 nMode,
                     const uno::Reference< embed::XActionsApproval > xApproval )
 : m_xInstance( xInstance )
 , m_xApproval( xApproval )
@@ -366,7 +366,7 @@ void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 
 // XCloseListener
 // --------------------------------------------------------
-void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_Bool GetsOwnership )
+void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_Bool )
     throw (util::CloseVetoException, uno::RuntimeException)
 {
     // GetsOwnership parameter is always ignored, the user of the service must close the object always
