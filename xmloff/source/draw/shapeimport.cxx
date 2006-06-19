@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:53:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
-:   mxModel(rModel),
-    mrImporter( rImporter ),
-    mpPageContext(NULL),
+:   mpPageContext(NULL),
+    mxModel(rModel),
 
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
@@ -192,20 +191,12 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mp3DLightAttrTokenMap(0L),
     mpPathShapeAttrTokenMap(0L),
     mpPolygonShapeAttrTokenMap(0L),
-/*
-    mpShapeAttrTokenMap(0L),
-    mpRectShapeAttrTokenMap(0L),
-    mpLineShapeAttrTokenMap(0L),
-    mpEllipseShapeAttrTokenMap(0L),
-    mpTextBoxShapeAttrTokenMap(0L),
-    mpControlShapeAttrTokenMap(0L),
-    mpPageShapeAttrTokenMap(0L),
-    mpGraphicObjectShapeAttrTokenMap(0L),
-*/
     msStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape")),
     msEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape")),
     msStartGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")),
-    msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex"))
+    msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")),
+
+    mrImporter( rImporter )
 {
     mpImpl = new XMLShapeImportHelperImpl();
     mpImpl->mpSortContext = 0;
@@ -688,7 +679,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
 
 SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    USHORT p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
@@ -698,45 +689,36 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     if(rShapes.is())
     {
         const SvXMLTokenMap& rTokenMap = Get3DSceneShapeElemTokenMap();
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-
-        for(sal_Int16 a(0); a < nAttrCount; a++)
-        {
-            const OUString& rAttrName = xAttrList->getNameByIndex(a);
-            OUString aLocalName;
-            sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
-        }
-
-        switch(rTokenMap.Get(nPrefix, rLocalName))
+        switch(rTokenMap.Get(p_nPrefix, rLocalName))
         {
             case XML_TOK_3DSCENE_3DSCENE:
             {
                 // dr3d:3dscene inside dr3d:3dscene context
-                pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False);
+                pContext = new SdXML3DSceneShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DCUBE:
             {
                 // dr3d:3dcube inside dr3d:3dscene context
-                pContext = new SdXML3DCubeObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False);
+                pContext = new SdXML3DCubeObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DSPHERE:
             {
                 // dr3d:3dsphere inside dr3d:3dscene context
-                pContext = new SdXML3DSphereObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False);
+                pContext = new SdXML3DSphereObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DLATHE:
             {
                 // dr3d:3dlathe inside dr3d:3dscene context
-                pContext = new SdXML3DLatheObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False);
+                pContext = new SdXML3DLatheObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
             case XML_TOK_3DSCENE_3DEXTRUDE:
             {
                 // dr3d:3dextrude inside dr3d:3dscene context
-                pContext = new SdXML3DExtrudeObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False);
+                pContext = new SdXML3DExtrudeObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False);
                 break;
             }
         }
@@ -777,7 +759,7 @@ void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    USHORT p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -788,111 +770,111 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     const SvXMLTokenMap& rTokenMap = GetGroupShapeElemTokenMap();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(rTokenMap.Get(p_nPrefix, rLocalName))
     {
         case XML_TOK_GROUP_GROUP:
         {
             // draw:g inside group context (RECURSIVE)
-            pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
+            pContext = new SdXMLGroupShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
             break;
         }
         case XML_TOK_GROUP_3DSCENE:
         {
             // dr3d:3dscene inside group context
-            pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
+            pContext = new SdXML3DSceneShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
             break;
         }
         case XML_TOK_GROUP_RECT:
         {
             // draw:rect inside group context
-            pContext = new SdXMLRectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLRectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_LINE:
         {
             // draw:line inside group context
-            pContext = new SdXMLLineShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLLineShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CIRCLE:
         case XML_TOK_GROUP_ELLIPSE:
         {
             // draw:circle or draw:ellipse inside group context
-            pContext = new SdXMLEllipseShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLEllipseShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_POLYGON:
         case XML_TOK_GROUP_POLYLINE:
         {
             // draw:polygon or draw:polyline inside group context
-            pContext = new SdXMLPolygonShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes,
-                rTokenMap.Get(nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? TRUE : FALSE, bTemporaryShape );
+            pContext = new SdXMLPolygonShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes,
+                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? TRUE : FALSE, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PATH:
         {
             // draw:path inside group context
-            pContext = new SdXMLPathShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
+            pContext = new SdXMLPathShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
             break;
         }
         case XML_TOK_GROUP_FRAME:
         {
             // text:text-box inside group context
-            pContext = new SdXMLFrameShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLFrameShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CONTROL:
         {
             // draw:control inside group context
-            pContext = new SdXMLControlShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLControlShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CONNECTOR:
         {
             // draw:connector inside group context
-            pContext = new SdXMLConnectorShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLConnectorShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_MEASURE:
         {
             // draw:measure inside group context
-            pContext = new SdXMLMeasureShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLMeasureShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PAGE:
         {
             // draw:page inside group context
-            pContext = new SdXMLPageShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLPageShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CAPTION:
         case XML_TOK_GROUP_ANNOTATION:
         {
             // draw:caption inside group context
-            pContext = new SdXMLCaptionShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLCaptionShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CHART:
         {
             // chart:chart inside group context
-            pContext = new SdXMLChartShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
+            pContext = new SdXMLChartShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_CUSTOM_SHAPE:
         {
             // draw:customshape
-            pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
 //      case XML_TOK_GROUP_CUSTOM_SHAPE:
 //      {
 //          // draw:customshape
-//          pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+//          pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
 //          break;
 //      }
         // add other shapes here...
         default:
-            return new SvXMLShapeContext( rImport, nPrefix, rLocalName, bTemporaryShape );
+            return new SvXMLShapeContext( rImport, p_nPrefix, rLocalName, bTemporaryShape );
     }
 
     // now parse the attribute list and call the child context for each unknown attribute
@@ -912,7 +894,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
 // This method is called from SdXMLFrameContext to create children of drawe:frame
 SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    USHORT p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -927,43 +909,43 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     uno::Reference < xml::sax::XAttributeList > xAttrList = pAttrList;
 
 
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(rTokenMap.Get(p_nPrefix, rLocalName))
     {
         case XML_TOK_FRAME_TEXT_BOX:
         {
             // text:text-box inside group context
-            pContext = new SdXMLTextBoxShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLTextBoxShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_IMAGE:
         {
             // office:image inside group context
-            pContext = new SdXMLGraphicObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLGraphicObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_OBJECT:
         case XML_TOK_FRAME_OBJECT_OLE:
         {
             // draw:object or draw:object_ole
-            pContext = new SdXMLObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_PLUGIN:
         {
             // draw:plugin
-            pContext = new SdXMLPluginShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLPluginShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_FLOATING_FRAME:
         {
             // draw:floating-frame
-            pContext = new SdXMLFloatingFrameShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLFloatingFrameShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         case XML_TOK_FRAME_APPLET:
         {
             // draw:applet
-            pContext = new SdXMLAppletShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLAppletShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
         // add other shapes here...
@@ -1009,7 +991,7 @@ SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
     shape to the given XShapes.
 */
 void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
-                                     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+                                     const uno::Reference< xml::sax::XAttributeList >&,
                                      uno::Reference< drawing::XShapes >& rShapes)
 {
     if( rShape.is() && rShapes.is() )
@@ -1025,8 +1007,8 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
 */
 void XMLShapeImportHelper::finishShape(
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >&,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >&)
 {
     // --> OD 2004-08-10 #i28749#, #i36248# - set property <PositionLayoutDir>
     // to <PositionInHoriL2R>, if it exists and the import states that
@@ -1223,15 +1205,13 @@ void XMLShapeImportHelper::popGroupAndSort()
     delete pContext;
 }
 
-void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, sal_Int32 nZIndex )
+void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >&, sal_Int32 nZIndex )
 {
     if( mpImpl->mpSortContext)
     {
         ZOrderHint aNewHint;
         aNewHint.nIs = mpImpl->mpSortContext->mnCurrentZ++;
         aNewHint.nShould = nZIndex;
-
-        sal_Int32 nInsertIndex = 0;
 
         if( nZIndex == -1 )
         {
@@ -1390,7 +1370,11 @@ void XMLShapeImportHelper::startPage( com::sun::star::uno::Reference< com::sun::
 }
 
 /** this method must be calling after the last shape is imported for the given page */
-void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
+void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >&
+#ifdef DBG_UTIL
+rShapes
+#endif
+)
 {
     DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
     if( NULL == mpPageContext )
