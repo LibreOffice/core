@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:45:01 $
+#   last change: $Author: hr $ $Date: 2006-06-19 16:18:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..
 
-PRJNAME=SVX
+PRJNAME=svx
 TARGET=msfilter
 AUTOSEG=true
 
@@ -64,6 +64,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/eschesdo.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/msdffimp.obj	\
+    $(SLO)$/msashape3d.obj	\
+    $(SLO)$/msvbasic.obj	\
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\
     $(SLO)$/svxmsbas.obj	\
