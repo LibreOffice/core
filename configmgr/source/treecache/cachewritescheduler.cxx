@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachewritescheduler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:24:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:31:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ void OCacheWriteScheduler::runWriter()
         }
         catch (uno::Exception& e)
         {
+                    (void)e;
             CFG_TRACE_ERROR_NI("TreeCacheWriteScheduler: Attempt to write data failed - error is '%s' (currently ignored)",OUSTRING2ASCII(e.Message));
         }
     }
