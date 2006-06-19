@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:03:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,7 @@ X2CParser::GetTextTill( Simstr & o_rText,
 
     if (i_bReverseName)
     {
-        const int nMaxLen = 1000;
+        const unsigned int nMaxLen = 1000;
         if (strlen(pResult) < nMaxLen)
         {
             char * sBreak = strrchr(pResult,'.');
