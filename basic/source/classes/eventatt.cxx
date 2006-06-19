@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:10:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
 //==================================================================================================
 
 #include <xmlscript/dynload.hxx>
-#include <sbx.hxx>
 #include <sbunoobj.hxx>
 #include <sbstar.hxx>
 #include <sbmeth.hxx>
@@ -455,7 +454,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         SbxVariableRef xValue = pRet ? new SbxVariable : 0;
         if( xArray.Is() )
             pMeth->SetParameters( xArray );
-        ErrCode nErr = pMeth->Call( xValue );
+        pMeth->Call( xValue );
         if( pRet )
             *pRet = sbxToUnoValue( xValue );
         pMeth->SetParameters( NULL );
@@ -665,11 +664,11 @@ void SAL_CALL DialogEventAttacher::attachEvents
                 sal_Bool bSuccess = sal_False;
                 try
                 {
-                    Reference< XEventListener > xListener = mxEventAttacher->
+                    Reference< XEventListener > xListener_ = mxEventAttacher->
                         attachSingleEventListener( xControlModel, xAllListener, Helper,
                         aDesc.ListenerType, aDesc.AddListenerParam, aDesc.EventMethod );
 
-                    if( xListener.is() )
+                    if( xListener_.is() )
                         bSuccess = sal_True;
                 }
                 catch( IllegalArgumentException& )
@@ -689,8 +688,8 @@ void SAL_CALL DialogEventAttacher::attachEvents
                 // If we had no success, try to attach to the Control
                 if( !bSuccess )
                 {
-                    Reference< XEventListener > xListener;  // Do we need that?!?
-                    xListener = mxEventAttacher->attachSingleEventListener
+                    Reference< XEventListener > xListener_; // Do we need that?!?
+                    xListener_ = mxEventAttacher->attachSingleEventListener
                         ( xControl, xAllListener, Helper, aDesc.ListenerType,
                           aDesc.AddListenerParam, aDesc.EventMethod );
                 }
@@ -711,6 +710,9 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
+    (void)pBasic;
+    (void)bWrite;
+
     static ::xmlscript::XML_script * s_xmlscript = 0;
     if (0 == s_xmlscript)
         s_xmlscript = ::xmlscript::getXmlScript();
