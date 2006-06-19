@@ -4,9 +4,9 @@
  *
  *  $RCSfile: functiondescription.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:02:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ FunctionDescription::getExceptions() const {
     osl::MutexGuard guard(m_mutex);
     if (!m_exceptionsInit) {
         m_exceptions = exceptions;
-        m_exceptionsInit;
+        m_exceptionsInit = true;
     }
     return m_exceptions;
 }
