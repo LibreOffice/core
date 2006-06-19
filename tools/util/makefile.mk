@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 16:17:27 $
+#   last change: $Author: hr $ $Date: 2006-06-19 13:55:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,62 +48,16 @@ ENABLE_EXCEPTIONS=true
 
 # --- Allgemein ----------------------------------------------------
 
-# --- TOOLS.HXX ---
-
-HXX1FILES=  $(INC)$/debug.hxx       \
-            $(INC)$/new.hxx         \
-            $(INC)$/shl.hxx         \
-            $(INC)$/link.hxx        \
-            $(INC)$/fract.hxx       \
-            $(INC)$/string.hxx      \
-            $(INC)$/contnr.hxx      \
-            $(INC)$/list.hxx        \
-            $(INC)$/table.hxx       \
-            $(INC)$/unqidx.hxx      \
-            $(INC)$/unqid.hxx       \
-            $(INC)$/mempool.hxx     \
-            $(INC)$/stream.hxx      \
-            $(INC)$/cachestr.hxx    \
-            $(INC)$/errcode.hxx     \
-            $(INC)$/ref.hxx         \
-            $(INC)$/tools.h
-HXX2FILES=  $(INC)$/solar.h
-#HXX4FILES= $(INC)$/stdstrm.hxx
-HXX5FILES=  $(INC)$/ref.hxx
-HXX6FILES=  $(INC)$/pstm.hxx  \
-            $(INC)$/globname.hxx
-HXX7FILES=  $(INC)$/rtti.hxx
-HXX8FILES=  $(INC)$/solver.h
-.IF "$(GUIBASE)" == "WIN"
-HXX9FILES=  $(INCGUI)$/svwin.h       \
-            $(INCGUI)$/postwin.h \
-            $(INCGUI)$/prewin.h
-.ENDIF
-HXX10FILES= $(INC)$/errinf.hxx $(INC)$/errcode.hxx $(INC)$/string.hxx
-HXX11FILES= $(INC)$/urlobj.hxx
-HXX12FILES= $(INC)$/bigint.hxx
-HXX13FILES= $(INC)$/multisel.hxx
-HXX14FILES= $(INC)$/date.hxx $(INC)$/time.hxx $(INC)$/datetime.hxx $(INC)$/timestamp.hxx
-HXX15FILES= $(INC)$/wldcrd.hxx $(INC)$/fsys.hxx
-HXX16FILES= $(INC)$/queue.hxx $(INC)$/dynary.hxx $(INC)$/stack.hxx
-HXX17FILES= $(INC)$/stream.hxx $(INC)$/cachestr.hxx
-HXX18FILES= $(HXX1FILES)
-HXX19FILES= $(INC)$/zcodec.hxx
-
 # --- STDSTRM.LIB ---
 LIB3TARGET= $(LB)$/stdstrm.lib
 LIB3ARCHIV= $(LB)$/libstdstrm.a
 LIB3FILES=  $(LB)$/stream.lib
-
-MEMMGRLIB=$(LB)$/memmgr.lib
-MEMMGRSLB=$(SLB)$/memmgr.lib
 
 LIB7TARGET= $(LB)$/a$(TARGET).lib
 LIB7ARCHIV= $(LB)$/liba$(TARGET).a
 LIB7FILES=  $(LB)$/gen.lib          \
             $(LB)$/str.lib          \
             $(LB)$/mtools.lib       \
-            $(MEMMGRLIB)            \
             $(LB)$/datetime.lib     \
             $(LB)$/timestamp.lib    \
             $(LB)$/fsys.lib         \
@@ -120,7 +74,6 @@ LIB7FILES+= $(LB)$/dll.lib
 # --- TOOLS.LIB ---
 LIB1TARGET:= $(SLB)$/$(TARGET).lib
 LIB1FILES+=  \
-            $(MEMMGRSLB)            \
             $(SLB)$/gen.lib         \
             $(SLB)$/str.lib         \
             $(SLB)$/mtools.lib      \
