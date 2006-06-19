@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPentry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:22:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ extern "C"
 //------------------------------------------------
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -123,7 +123,7 @@ void SAL_CALL component_getImplementationEnvironment(
 //
 //------------------------------------------------
 
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     sal_Bool bRetVal = sal_True;
 
@@ -150,7 +150,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
 //------------------------------------------------
 
 void* SAL_CALL component_getFactory(
-    const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
+    const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
 
