@@ -4,9 +4,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:53:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ class SvtSearchOptions_Impl : public ConfigItem
 
 protected:
     BOOL            IsModified() const { return bModified; }
+    using ConfigItem::SetModified;
     void            SetModified( BOOL bVal );
     BOOL            Load();
     BOOL            Save();
@@ -100,7 +101,7 @@ public:
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString::createFromAscii( "Office.Common/SearchOptions" ) )
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
     nFlags = 0x0003FFFF;    // set all options values to 'true'
     Load();
     SetModified( FALSE );
