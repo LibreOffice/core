@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:41:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //------------------------------------------------------------------------
 //
@@ -259,9 +257,10 @@ namespace accessibility
         }
     }
 
-    void AccessibleEditableTextPara::implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    void AccessibleEditableTextPara::implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 /*nIndex*/ )
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+        DBG_WARNING( "AccessibleEditableTextPara::implGetParagraphBoundary: only a base implementation, ignoring the index" );
 
         rBoundary.startPos = 0;
         rBoundary.endPos = GetTextLen();
@@ -406,8 +405,6 @@ namespace accessibility
     void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
-        SvxEditSource* pOldEditSource = mpEditSource;
 
         mpEditSource = pEditSource;
 
@@ -1045,7 +1042,7 @@ namespace accessibility
             }
 
             // relation CONTENT_FLOWS_TO
-            if ( (nMyParaIndex + 1) < mpParaManager->GetNum() &&
+            if ( (nMyParaIndex + 1) < (sal_Int32)mpParaManager->GetNum() &&
                  mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
             {
                 uno::Sequence<uno::Reference<XInterface> > aSequence(1);
@@ -1305,14 +1302,20 @@ namespace accessibility
         return OCommonAccessibleText::getCharacter( nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /*aRequestedAttributes*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
-        USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
+        #if OSL_DEBUG_LEVEL > 0
+        SvxAccessibleTextAdapter& rCacheTF =
+        #endif
+            GetTextForwarder();
+
+        #if OSL_DEBUG_LEVEL > 0
+        (void)rCacheTF;
+        #endif
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
@@ -1698,7 +1701,13 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
-            SvxTextForwarder& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            #if OSL_DEBUG_LEVEL > 0
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            (void)rCacheTF;
+            #else
+            GetTextForwarder();                                         // MUST be after GetEditViewForwarder(), see method docs
+            #endif
+
             sal_Bool aRetVal;
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -1793,7 +1802,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -1826,7 +1835,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -1861,7 +1870,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -1896,7 +1905,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
 
