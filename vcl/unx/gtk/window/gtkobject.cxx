@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkobject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 11:40:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ USHORT GtkSalObject::GetClipRegionType()
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-void GtkSalObject::BeginSetClipRegion( ULONG nRects )
+void GtkSalObject::BeginSetClipRegion( ULONG )
 {
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
@@ -157,7 +157,7 @@ void GtkSalObject::Show( BOOL bVisible )
     }
 }
 
-void GtkSalObject::Enable( BOOL nEnable )
+void GtkSalObject::Enable( BOOL )
 {
 }
 
@@ -169,7 +169,7 @@ void GtkSalObject::SetBackground()
 {
 }
 
-void GtkSalObject::SetBackground( SalColor nSalColor )
+void GtkSalObject::SetBackground( SalColor )
 {
 }
 
@@ -179,7 +179,7 @@ const SystemEnvData* GtkSalObject::GetSystemData() const
 }
 
 
-gboolean GtkSalObject::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, gpointer object )
+gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer object )
 {
     GtkSalObject* pThis = (GtkSalObject*)object;
 
@@ -192,7 +192,7 @@ gboolean GtkSalObject::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent,
     return FALSE;
 }
 
-gboolean GtkSalObject::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gpointer object )
+gboolean GtkSalObject::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer object )
 {
     GtkSalObject* pThis = (GtkSalObject*)object;
 
