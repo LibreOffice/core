@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 11:32:40 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:13:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
@@ -102,6 +101,13 @@ CFLAGSOPT=-O2
 CFLAGSNOOPT=-O
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
+
+CFLAGSWARNCC=
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
