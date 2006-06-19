@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:43:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ SFX_IMPL_INTERFACE(SfxObjectShell,SfxShell,SfxResId(0))
 {
 }
 
-long SfxObjectShellClose_Impl( void* pObj, void* pArg )
+long SfxObjectShellClose_Impl( void* /*pObj*/, void* pArg )
 {
     SfxObjectShell *pObjSh = (SfxObjectShell*) pArg;
     if ( pObjSh->Get_Impl()->bHiddenLockedByAPI )
@@ -268,7 +268,7 @@ SfxClosePreventer_Impl::SfxClosePreventer_Impl()
 {
 }
 
-void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject&, sal_Bool bDeliverOwnership )
         throw ( uno::RuntimeException, util::CloseVetoException )
 {
     if ( m_bPreventClose )
@@ -280,10 +280,10 @@ void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject& aEv
     }
 }
 
-void SAL_CALL SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+void SAL_CALL SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& ) throw ( uno::RuntimeException )
 {}
 
-void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& ) throw ( uno::RuntimeException )
 {}
 
 //=========================================================================
@@ -495,7 +495,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 rReq.AppendItem( SfxBoolItem( nId, bSet ) );
             rReq.Done();
             return;
-            break;
         }
         case SID_VERSION:
         {
@@ -518,7 +517,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             pDlg->Execute();
             delete pDlg;
             return;
-            break;
         }
 
 //REMOVE            case SID_LOAD_LIBRARY:
@@ -1411,7 +1409,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::StateView_Impl(SfxItemSet &rSet)
+void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)
 {
 }
 
