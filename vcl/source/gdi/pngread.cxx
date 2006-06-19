@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:38:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,19 +248,19 @@ public:
 // ------------------------------------------------------------------------------
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNG ) :
+    mpBmp           ( NULL ),
     mpAcc           ( NULL ),
+    mpMaskBmp       ( NULL ),
+    mpAlphaMask     ( NULL ),
     mpMaskAcc       ( NULL ),
+    mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
     mpInflateInBuf  ( NULL ),
     mpScanprior     ( NULL ),
     mpTransTab      ( NULL ),
-    mpBmp           ( NULL ),
-    mpMaskBmp       ( NULL ),
-    mpAlphaMask     ( NULL ),
-    mbGamma         ( sal_False ),
-    mbzCodecInUse   ( sal_False ),
-    mbpHYs          ( sal_False ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
-    mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) )
+    mbzCodecInUse   ( sal_False ),
+    mbGamma         ( sal_False ),
+    mbpHYs          ( sal_False )
 {
     mbStatus = InitChunkSeq( rPNG, maChunkSeq );
 }
@@ -407,10 +407,10 @@ BOOL PNGReaderImpl::ImplReadHeader()
     mnBitDepth = *maDataIter++;
     mnColorType = *maDataIter++;
 
-    if ( mnCompressionType = *maDataIter++ )
+    if ( (mnCompressionType = *maDataIter++) != 0 )
         return FALSE;
 
-    if ( mnFilterType = *maDataIter++ )
+    if ( (mnFilterType = *maDataIter++) != 0 )
         return FALSE;
 
     switch ( mnInterlaceType = *maDataIter++ )  // filter type valid ?
@@ -570,7 +570,7 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt32 nDepth )
 {
     sal_uInt32 nAdd, nStart = 0;
 
-    mpAcc->SetPaletteEntryCount( 1 << nDepth );
+    mpAcc->SetPaletteEntryCount( sal::static_int_cast<USHORT>(1 << nDepth) );
 
     switch ( nDepth )
     {
@@ -764,7 +764,7 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
 
 void PNGReaderImpl::ImplReadIDAT()
 {
-    sal_uInt32 nToRead, nRead;
+    sal_Int32 nToRead, nRead;
     if ( mnChunkLen )       // Chunk empty ?
     {
         if ( mbzCodecInUse == FALSE )
@@ -991,7 +991,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 p2 = pTmp;
 
                 while ( p1 < pTmp + mnScansize - 1 )
-                    ( *p1++ ) += ( *p2++ );
+                    ( *p1++ ) = sal::static_int_cast<BYTE>(*p1 + ( *p2++ ));
             }
             break;
 
@@ -1001,7 +1001,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 p2 = mpScanprior+1;
 
                 while ( p1 < pTmp + mnScansize - 1 )
-                    ( *p1++ ) += ( *p2++ );
+                    ( *p1++ ) = sal::static_int_cast<BYTE>(*p1 + ( *p2++ ));
             }
             break;
 
@@ -1016,7 +1016,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     n1 = (BYTE)( *p2++ );
                     n2 = ( p3 >= pTmp ) ? (BYTE)*p3 : 0;
                     p3++;
-                    ( *p1++ ) += (BYTE)( ( n1 + n2 ) >> 1 );
+                    ( *p1++ ) = sal::static_int_cast<BYTE>(*p1 + (BYTE)( ( n1 + n2 ) >> 1 ));
                 }
             }
             break;
@@ -1053,11 +1053,11 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         npc =-npc;
 
                     if ( ( npa <= npb ) && ( npa <= npc ) )
-                        *p1++ += (BYTE)na;
+                        *p1++ = sal::static_int_cast<BYTE>(*p1 + (BYTE)na);
                     else if ( npb <= npc )
-                        *p1++ += (BYTE)nb;
+                        *p1++ = sal::static_int_cast<BYTE>(*p1 + (BYTE)nb);
                     else
-                        *p1++ += (BYTE)nc;
+                        *p1++ = sal::static_int_cast<BYTE>(*p1 + (BYTE)nc);
 
                     p2++;
                     p4++;
@@ -1081,7 +1081,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                             if ( nShift == 0 )
                                 nCol = ( *pTmp++ ) & 1;
                             else
-                                nCol = ( *pTmp >> nShift ) & 1;
+                                nCol = sal::static_int_cast<BYTE>(( *pTmp >> nShift ) & 1);
 
                             ImplSetPixel( nY, nX, nCol, mpTransTab[ nCol ] < PNG_TRANS_VAL );
                         }
@@ -1095,7 +1095,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                             if ( nShift == 0 )
                                 ImplSetPixel( nY, nX, ( *pTmp++ & 1 ), FALSE );
                             else
-                                ImplSetPixel( nY, nX, ( *pTmp >> nShift ) & 1, FALSE );
+                                ImplSetPixel( nY, nX, sal::static_int_cast<BYTE>(( *pTmp >> nShift ) & 1), FALSE );
                         }
                     }
                 }
