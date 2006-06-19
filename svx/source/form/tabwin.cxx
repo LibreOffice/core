@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:06:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,13 +180,13 @@ FmFieldWinListBox::~FmFieldWinListBox()
 }
 
 //------------------------------------------------------------------------------
-sal_Int8 FmFieldWinListBox::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 FmFieldWinListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
 
 //------------------------------------------------------------------------------
-sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
@@ -201,7 +201,7 @@ BOOL FmFieldWinListBox::DoubleClickHdl()
 }
 
 //------------------------------------------------------------------------------
-void FmFieldWinListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     SvLBoxEntry* pSelected = FirstSelected();
     if (!pSelected)
@@ -247,9 +247,9 @@ FmFieldWinData::~FmFieldWinData()
 //========================================================================
 DBG_NAME(FmFieldWin);
 //-----------------------------------------------------------------------
-FmFieldWin::FmFieldWin(SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent)
-            :SfxFloatingWindow(pBindings, pMgr, pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
-            ,SfxControllerItem(SID_FM_FIELDS_CONTROL, *pBindings)
+FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent)
+            :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
+            ,SfxControllerItem(SID_FM_FIELDS_CONTROL, *_pBindings)
             ,::comphelper::OPropertyChangeListener(m_aMutex)
             ,pData(new FmFieldWinData)
             ,m_nObjectType(0)
@@ -261,7 +261,7 @@ FmFieldWin::FmFieldWin(SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pPa
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     pListBox = new FmFieldWinListBox( this );
     pListBox->Show();
-    Update(NULL);
+    UpdateContent(NULL);
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 }
 
@@ -344,7 +344,7 @@ sal_Bool FmFieldWin::Close()
 void FmFieldWin::_propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(evt.Source, ::com::sun::star::uno::UNO_QUERY);
-    Update(xForm);
+    UpdateContent(xForm);
 }
 
 //-----------------------------------------------------------------------
@@ -356,31 +356,29 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
     if (eState >= SFX_ITEM_AVAILABLE)
     {
         FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
-        Update(pShell);
+        UpdateContent(pShell);
     }
     else
-        Update(NULL);
+        UpdateContent(NULL);
 }
 
 //-----------------------------------------------------------------------
-sal_Bool FmFieldWin::Update(FmFormShell* pShell)
+void FmFieldWin::UpdateContent(FmFormShell* pShell)
 {
     pListBox->Clear();
     String aTitle( SVX_RES( RID_STR_FIELDSELECTION ) );
     SetText( aTitle );
 
     if (!pShell || !pShell->GetImpl())
-        return sal_False;
+        return;
 
     Reference< XForm >  xForm = pShell->GetImpl()->getCurrentForm();
-    if (!xForm.is())
-        return sal_False;
-
-    return Update(xForm);
+    if ( xForm.is() )
+        UpdateContent( xForm );
 }
 
 //-----------------------------------------------------------------------
-sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm)
+void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm)
 {
     try
     {
@@ -390,7 +388,7 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
         SetText(aTitle);
 
         if (!xForm.is())
-            return sal_False;
+            return;
 
         Reference< XPreparedStatement >  xStatement;
         Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
@@ -458,10 +456,8 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FmTabWin::Update: caught an exception!" );
+        DBG_ERROR( "FmTabWin::UpdateContent: caught an exception!" );
     }
-
-    return sal_True;
 }
 
 //-----------------------------------------------------------------------
@@ -470,13 +466,13 @@ void FmFieldWin::Resize()
     SfxFloatingWindow::Resize();
 
     Point aPos(GetPosPixel());
-    Size aSize( GetOutputSizePixel() );
+    Size aOutputSize( GetOutputSizePixel() );
 
     //////////////////////////////////////////////////////////////////////
 
     // Groesse der ::com::sun::star::form::ListBox anpassen
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
-    Size aLBSize( aSize );
+    Size aLBSize( aOutputSize );
     aLBSize.Width() -= (2*LISTBOX_BORDER);
     aLBSize.Height() -= (2*LISTBOX_BORDER);
 
@@ -493,14 +489,14 @@ void FmFieldWin::FillInfo( SfxChildWinInfo& rInfo ) const
 SFX_IMPL_FLOATINGWINDOW(FmFieldWinMgr, SID_FM_ADD_FIELD)
 
 //-----------------------------------------------------------------------
-FmFieldWinMgr::FmFieldWinMgr(Window *pParent, sal_uInt16 nId,
-               SfxBindings *pBindings, SfxChildWinInfo* pInfo)
-              :SfxChildWindow(pParent, nId)
+FmFieldWinMgr::FmFieldWinMgr(Window* _pParent, sal_uInt16 _nId,
+               SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
+              :SfxChildWindow(_pParent, _nId)
 {
-    pWindow = new FmFieldWin(pBindings, this, pParent);
+    pWindow = new FmFieldWin(_pBindings, this, _pParent);
     SetHideNotDelete(sal_True);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
+    ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
 }
 
 
