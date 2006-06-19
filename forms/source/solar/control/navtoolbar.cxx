@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:27:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,9 +144,9 @@ namespace frm
     //---------------------------------------------------------------------
     NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle )
         :Window( _pParent, _nStyle )
-        ,m_pToolbar( NULL )
         ,m_pDispatcher( NULL )
         ,m_eImageSize( eSmall )
+        ,m_pToolbar( NULL )
     {
         DBG_CTOR( NavigationToolBar, NULL );
         implInit( );
