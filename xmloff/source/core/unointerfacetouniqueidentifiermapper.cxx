@@ -139,5 +139,5 @@ bool UnoInterfaceToUniqueIdentifierMapper::findIdentifier( const OUString& rIden
     return rIter != maEntries.end();
 }
 
-};
+}
 
