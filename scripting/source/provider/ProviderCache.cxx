@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
 
 
 ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< ::rtl::OUString >& blackList )
-    throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext ), m_sBlackList( blackList )
+    throw ( RuntimeException ) : m_sBlackList( blackList ), m_Sctx( scriptContext ), m_xContext( xContext )
 
 {
     // initialise m_hProviderDetailsCache with details of ScriptProviders
