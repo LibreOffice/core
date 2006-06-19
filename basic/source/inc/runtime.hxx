@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:12:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _SBRUNTIME_HXX
 #define _SBRUNTIME_HXX
 
+#ifndef _SBX_HXX
+#include "sbx.hxx"
+#endif
+
 #include "sb.hxx"
 
 // Define activates class UCBStream in iosys.cxx
@@ -43,7 +47,7 @@
 
 #ifdef _USE_UNO
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -464,7 +468,7 @@ class SbiRuntime
     void StepOPEN( USHORT, USHORT ),    StepSTATIC( USHORT, USHORT );
     void StepTCREATE(USHORT,USHORT),    StepDCREATE(USHORT,USHORT);
     void StepGLOBAL_P( USHORT, USHORT ),StepFIND_G( USHORT, USHORT );
-    void StepDCREATE_REDIMP(USHORT,USHORT), StepDCREATE_IMPL(USHORT,USHORT,BOOL);
+    void StepDCREATE_REDIMP(USHORT,USHORT), StepDCREATE_IMPL(USHORT,USHORT);
     void StepFIND_CM( USHORT, USHORT );
 public:
     USHORT      GetImageFlag( USHORT n ) const;
