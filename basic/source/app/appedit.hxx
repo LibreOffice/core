@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appedit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:11:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@
 class BasicFrame;
 
 class AppEdit : public AppWin    {  // Editor-Window:
+using Window::Scroll;
+
 public:
     ScrollBar *pVScroll;
     ScrollBar *pHScroll;
