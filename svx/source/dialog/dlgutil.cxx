@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:00:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,6 @@
 #include <svtools/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -118,6 +116,7 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
             case FUNIT_MILE:
                 eUnit = FUNIT_INCH;
                 break;
+            default: ;//prevent warning
         }
     }
     rField.SetUnit( eUnit );
@@ -169,6 +168,7 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, BOOL bAll )
             case FUNIT_MILE:
                 eUnit = FUNIT_INCH;
                 break;
+            default: ;//prevent warning
         }
     }
     rBox.SetUnit( eUnit );
@@ -204,9 +204,9 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet )
             SfxModule* pModule = pSh->GetModule();
             if ( pModule )
             {
-                const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-                if ( pItem )
-                    eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+                const SfxPoolItem* _pItem = pModule->GetItem( SID_ATTR_METRIC );
+                if ( _pItem )
+                    eUnit = (FieldUnit)( (SfxUInt16Item*)_pItem )->GetValue();
             }
             else
             {
@@ -353,6 +353,7 @@ long CalcToUnit( float nIn, SfxMapUnit eUnit )
         case SFX_MAPUNIT_10TH_MM:   nTmp *= 10;  break;
         case SFX_MAPUNIT_MM:                     break;
         case SFX_MAPUNIT_CM:        nTmp /= 10;  break;
+        default: ;//prevent warning
     }
 
     nTmp *= 20;
@@ -413,6 +414,7 @@ long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
             nOut = TransformMetric( nIn, FUNIT_TWIP, (FieldUnit)eCtrl );
         }
         break;
+        default: ;//prevent warning
     }
     return nOut;
 }
@@ -449,13 +451,14 @@ FieldUnit MapToFieldUnit( const SfxMapUnit eUnit )
 
         case SFX_MAPUNIT_TWIP:
             return FUNIT_TWIP;
+        default: ;//prevent warning
     }
     return FUNIT_NONE;
 }
 
 // -----------------------------------------------------------------------
 
-MapUnit FieldToMapUnit( const SfxFieldUnit eUnit )
+MapUnit FieldToMapUnit( const SfxFieldUnit /*eUnit*/ )
 {
     return MAP_APPFONT;
 }
@@ -480,6 +483,7 @@ long ConvertValueToMap( long nVal, SfxMapUnit eUnit )
 
         case SFX_MAPUNIT_1000TH_INCH:
             nNew *= 1000;
+        default: ;//prevent warning
     }
     return nNew;
 }
@@ -504,6 +508,8 @@ long ConvertValueToUnit( long nVal, SfxMapUnit eUnit )
 
         case SFX_MAPUNIT_1000TH_INCH:
             nNew /= 1000;
+        break;
+        default: ;//prevent warning
     }
     return nNew;
 }
@@ -531,6 +537,7 @@ long CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor )
         case SFX_MAPUNIT_10TH_MM:   nRet /= 10;  break;
         case SFX_MAPUNIT_MM:                     break;
         case SFX_MAPUNIT_CM:        nRet *= 10;  break;
+        default: ;//prevent warning
     }
 
     // ggf. aufrunden
@@ -898,6 +905,7 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
             nOld = 4; break;
         case FUNIT_TWIP:
             nOld = 5; break;
+        default: ;//prevent warning
     }
 
     switch ( aNew )
@@ -914,6 +922,7 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
             nNew = 4; break;
         case FUNIT_TWIP:
             nNew = 5; break;
+        default: ;//prevent warning
     }
     return ConvertTable[nOld][nNew]( nVal );
 }
