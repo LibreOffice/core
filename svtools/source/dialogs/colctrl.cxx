@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:58:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void SvColorControl::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 // -----------------------------------------------------------------------
-void SvColorControl::MouseButtonUp( const MouseEvent& rMEvt )
+void SvColorControl::MouseButtonUp( const MouseEvent& )
 {
     //ShowPointer( TRUE );
     if( IsMouseCaptured() )
