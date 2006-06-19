@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:39:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,16 @@
  *
  ************************************************************************/
 
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <osl/mutex.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 
@@ -60,13 +62,13 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 void SAL_CALL
-component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **ppEnvironment)
+component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment ** /*ppEnvironment */)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
+component_writeInfo(void * /*pServiceManager*/, void* pRegistryKey )
 {
     Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey* >(pRegistryKey));
     Reference< XRegistryKey > xNewKey;
@@ -105,7 +107,7 @@ component_writeInfo(void *pServiceManager, void *pRegistryKey)
 }
 
 void* SAL_CALL
-component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *pRegistryKey)
+component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void * /*pRegistryKey*/)
 {
     void* pReturn = NULL ;
     if  ( pImplementationName && pServiceManager )
