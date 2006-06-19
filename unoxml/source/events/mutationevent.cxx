@@ -97,3 +97,4 @@ namespace DOM { namespace events
         CEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);
     }
 }}
+
