@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 15:05:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1581,7 +1581,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
 {
     const XubString aEntryStr( getEntryString( pInfo ) );
-    InsertEntry( aEntryStr, LIST_APPEND, 0xffff, (void*)pInfo );
+    InsertEntryToColumn( aEntryStr, LIST_APPEND, 0xffff, (void*)pInfo );
 }
 
 // -----------------------------------------------------------------------
