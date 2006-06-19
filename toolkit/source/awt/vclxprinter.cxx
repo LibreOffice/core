@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxprinter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:13:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ IMPL_XTYPEPROVIDER_START( VCLXPrinter )
     VCLXPrinterPropertySet::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-sal_Bool VCLXPrinter::start( const ::rtl::OUString& rJobName, sal_Int16 nCopies, sal_Bool bCollate ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXPrinter::start( const ::rtl::OUString& rJobName, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
