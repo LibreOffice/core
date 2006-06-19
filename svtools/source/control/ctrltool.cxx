@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:58:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,6 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
-
-#define private public
 
 #include <svtools.hrc>
 #include <svtdata.hxx>
@@ -185,8 +183,8 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, ULONG* p
     // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
     // sehr gross ist.
     StringCompare eComp;
-    ULONG nCount = Count();
-    if ( !nCount )
+    ULONG nCnt = Count();
+    if ( !nCnt )
     {
         if ( pIndex )
             *pIndex = LIST_APPEND;
@@ -194,7 +192,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, ULONG* p
     }
     else
     {
-        ImplFontListNameInfo* pCmpData = (ImplFontListNameInfo*)List::GetObject( nCount-1 );
+        ImplFontListNameInfo* pCmpData = (ImplFontListNameInfo*)List::GetObject( nCnt-1 );
         eComp = rSearchName.CompareTo( pCmpData->maSearchName );
         if ( eComp == COMPARE_GREATER )
         {
@@ -210,7 +208,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, ULONG* p
     ImplFontListNameInfo*   pCompareData;
     ImplFontListNameInfo*   pFoundData = NULL;
     ULONG                   nLow = 0;
-    ULONG                   nHigh = nCount-1;
+    ULONG                   nHigh = nCnt-1;
     ULONG                   nMid;
 
     do
