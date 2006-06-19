@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:55:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ SvxXMLTabStopContext_Impl::~SvxXMLTabStopContext_Impl()
 SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
                                    sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
-                                   const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+                                   const uno::Reference< xml::sax::XAttributeList > & )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
