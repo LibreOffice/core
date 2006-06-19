@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imageproducer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:16:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,6 @@ pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
 Image SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
-};
+}
 
 #endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_

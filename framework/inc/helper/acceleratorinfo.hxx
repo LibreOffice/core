@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:15:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,6 @@ pfunc_getKeyCodeFromCommandURL SAL_CALL SetKeyCodeFromCommandURL( pfunc_getKeyCo
 ::rtl::OUString SAL_CALL GetCommandURLFromKeyCode( const KeyCode& aKeyCode );
 KeyCode GetKeyCodeFromCommandURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& aCommandURL );
 
-};
+}
 
 #endif // __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
