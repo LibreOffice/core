@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsethelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:40:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,16 +78,13 @@ using namespace ucb;
 //=========================================================================
 //=========================================================================
 
-#define RESULTSETHELPER_INIT()      \
-     m_xSMgr( rxSMgr ),             \
-      m_pDisposeEventListeners( 0 ),  \
-      m_bInitDone( sal_False ),       \
-      m_bStatic( sal_False )
-
 //=========================================================================
 ResultSetImplHelper::ResultSetImplHelper(
                       const Reference< XMultiServiceFactory >& rxSMgr )
-: RESULTSETHELPER_INIT()
+: m_pDisposeEventListeners( 0 ),
+  m_bStatic( sal_False ),
+  m_bInitDone( sal_False ),
+  m_xSMgr( rxSMgr )
 {
 }
 
@@ -95,8 +92,11 @@ ResultSetImplHelper::ResultSetImplHelper(
 ResultSetImplHelper::ResultSetImplHelper(
                       const Reference< XMultiServiceFactory >& rxSMgr,
                       const OpenCommandArgument2& rCommand )
-: RESULTSETHELPER_INIT(),
-  m_aCommand( rCommand )
+: m_pDisposeEventListeners( 0 ),
+  m_bStatic( sal_False ),
+  m_bInitDone( sal_False ),
+  m_aCommand( rCommand ),
+  m_xSMgr( rxSMgr )
 {
 }
 
