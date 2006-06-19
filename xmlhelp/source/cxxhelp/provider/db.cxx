@@ -4,9 +4,9 @@
  *
  *  $RCSfile: db.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:19:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,12 @@ namespace berkeleydbproxy {
 //----------------------------------------------------------------------------
     namespace db_internal
     {
-        static void raise_error(int dberr, const char * where);
+        // static void raise_error(int dberr, const char * where);
 
         static inline int check_error(int dberr, const char * where)
         {
+            (void)where;
+
             // if (dberr) raise_error(dberr,where);
             return dberr;
         }
@@ -267,6 +269,7 @@ void Dbt::set_flags(u_int32_t value)
 }
 
 //----------------------------------------------------------------------------
+/*
 void db_internal::raise_error(int dberr, const char * where)
 {
     if (!where) where = "<unknown>";
@@ -280,6 +283,7 @@ void db_internal::raise_error(int dberr, const char * where)
 
     throw DbException(msg);
 }
+*/
 
 //----------------------------------------------------------------------------
 } // namespace ecomp
