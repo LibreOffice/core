@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:10:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,21 +209,21 @@ namespace sdr
 
         // Invalidate given rectangle at the window/output which is represented by
         // this ObjectContact.
-        void ObjectContact::InvalidatePartOfView(const Rectangle& rRectangle) const
+        void ObjectContact::InvalidatePartOfView(const Rectangle& /*rRectangle*/) const
         {
             // nothing to do here in the default version
         }
 
         // Non-painted object was changed. Test for potentially
         // getting visible
-        void ObjectContact::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
+        void ObjectContact::ObjectGettingPotentiallyVisible(const ViewObjectContact& /*rVOC*/) const
         {
             // nothing to do here in the default version
         }
 
         // #i42815#
         // Get info if given Rectangle is visible in this view
-        sal_Bool ObjectContact::IsAreaVisible(const Rectangle& rRectangle) const
+        sal_Bool ObjectContact::IsAreaVisible(const Rectangle& /*rRectangle*/) const
         {
             // always visible in default version
             return sal_True;
