@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 17:59:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:22:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,17 +124,12 @@ private:
 
     FixedLine       aMenuFL;
     CheckBox        aMenuIconsCB;
-    CheckBox        aShowInactiveItemsCB;
 
     FixedLine       aFontListsFL;
     CheckBox        aFontShowCB;
     CheckBox        aFontHistoryCB;
     FixedLine       aRenderingFL;
     CheckBox        aUseHardwareAccell;
-
-    FixedLine       aWorkingSetBox;
-    CheckBox        aDocViewBtn;
-    CheckBox        aOpenWinBtn;
 
     FixedLine       a3DGB;
     CheckBox        a3DOpenGLCB;
