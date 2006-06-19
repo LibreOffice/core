@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:17:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,8 +229,8 @@ namespace framework
             virtual ~LayoutManager();
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
-            DECLARE_XINTERFACE
-            DECLARE_XTYPEPROVIDER
+            FWK_DECLARE_XINTERFACE
+            FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
             //---------------------------------------------------------------------------------------------------------
@@ -297,6 +297,7 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             //  XEventListener
             //---------------------------------------------------------------------------------------------------------
+            using cppu::OPropertySetHelper::disposing;
             virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
             //---------------------------------------------------------------------------------------------------------
@@ -381,18 +382,19 @@ namespace framework
                               m_bCreateNewRowCol0( sal_False ),
                               m_bDeactiveHide( sal_False ),
                               m_bMasterHide( sal_False ),
+                              m_bContextSensitive( sal_False ),
                               m_bContextActive( sal_True ),
-                              m_nStyle( BUTTON_SYMBOL ),
                               m_bNoClose( sal_False ),
-                              m_bSoftClose( sal_False )
+                              m_bSoftClose( sal_False ),
+                              m_nStyle( BUTTON_SYMBOL )
                               {}
 
                 UIElement( const rtl::OUString& rName,
                            const rtl::OUString& rType,
                            const com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& rUIElement,
                            sal_Bool bFloating = sal_False
-                           ) : m_aName( rName ),
-                               m_aType( rType ),
+                           ) : m_aType( rType ),
+                               m_aName( rName ),
                                m_xUIElement( rUIElement ),
                                m_bFloating( bFloating ),
                                m_bVisible( sal_True ),
@@ -543,6 +545,7 @@ namespace framework
                                                                                                                 const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException );
             virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                 const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception                 );
+            using cppu::OPropertySetHelper::getFastPropertyValue;
             virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
                                                                                                     sal_Int32                    nHandle         ) const;
             virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
