@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:40:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,8 @@ struct PropertyInfo
     const com::sun::star::uno::Type& (*pGetCppuType)();
 };
 
-static const com::sun::star::uno::Type& sal_uInt32_getCppuType()
+static const com::sun::star::uno::Type& sal_Int32_getCppuType()
 {
-    // ! uInt -> Int, because of Java !!!
     return getCppuType( static_cast< const sal_Int32 * >( 0 ) );
 }
 
@@ -98,7 +97,7 @@ static PropertyInfo aPropertyTable[] =
     { "RowCount",
       1001,
       PropertyAttribute::BOUND | PropertyAttribute::READONLY,
-      &sal_uInt32_getCppuType
+      &sal_Int32_getCppuType
     },
     { 0,
       0,
@@ -127,7 +126,7 @@ private:
 public:
     PropertySetInfo( const Reference< XMultiServiceFactory >& rxSMgr,
                      const PropertyInfo* pProps,
-                     sal_uInt32 nProps );
+                     sal_Int32 nProps );
     virtual ~PropertySetInfo();
 
     // XInterface
@@ -183,8 +182,8 @@ typedef OMultiTypeInterfaceContainerHelperVar
 class PropertyChangeListeners : public PropertyChangeListenerContainer
 {
 public:
-    PropertyChangeListeners( osl::Mutex& rMutex )
-    : PropertyChangeListenerContainer( rMutex ) {}
+    PropertyChangeListeners( osl::Mutex& rMtx )
+    : PropertyChangeListenerContainer( rMtx ) {}
 };
 
 } // namespace ucb_impl
@@ -496,7 +495,7 @@ sal_Bool SAL_CALL ResultSet::isLast()
         return sal_False;
     }
 
-    sal_uInt32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+    sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
     if ( !nCount )
     {
         m_pImpl->m_xDataSupplier->validate();
@@ -552,7 +551,7 @@ sal_Bool SAL_CALL ResultSet::first()
 sal_Bool SAL_CALL ResultSet::last()
     throw( SQLException, RuntimeException )
 {
-    sal_uInt32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+    sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
     if ( nCount )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -605,7 +604,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 */
     if ( row < 0 )
     {
-        sal_uInt32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
 
         if ( ( row * -1 ) > nCount )
         {
@@ -632,7 +631,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
     }
     else // row > 0
     {
-        sal_uInt32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
 
         if ( row <= nCount )
         {
@@ -703,7 +702,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     }
     else // rows > 0
     {
-        sal_uInt32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
         if ( ( m_pImpl->m_nPos + rows ) <= nCount )
         {
             osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -738,7 +737,7 @@ sal_Bool SAL_CALL ResultSet::previous()
     if ( m_pImpl->m_bAfterLast )
     {
         m_pImpl->m_bAfterLast = sal_False;
-        sal_uInt32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
         m_pImpl->m_nPos = nCount;
     }
     else if ( m_pImpl->m_nPos )
@@ -1356,7 +1355,7 @@ Reference< XPropertySetInfo > SAL_CALL ResultSet::getPropertySetInfo()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
-                                           const Any& aValue )
+                                           const Any& )
     throw( UnknownPropertyException,
            PropertyVetoException,
            IllegalArgumentException,
@@ -1469,8 +1468,8 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::addVetoableChangeListener(
-                        const OUString& PropertyName,
-                        const Reference< XVetoableChangeListener >& aListener )
+                        const OUString&,
+                        const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -1481,8 +1480,8 @@ void SAL_CALL ResultSet::addVetoableChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::removeVetoableChangeListener(
-                        const OUString& PropertyName,
-                        const Reference< XVetoableChangeListener >& aListener )
+                        const OUString&,
+                        const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -1536,7 +1535,7 @@ void ResultSet::propertyChanged( const PropertyChangeEvent& rEvt )
 }
 
 //=========================================================================
-void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
+void ResultSet::rowCountChanged( sal_Int32 nOld, sal_Int32 nNew )
 {
     VOS_ENSURE( nOld < nNew, "ResultSet::rowCountChanged - nOld >= nNew!" );
 
@@ -1594,7 +1593,7 @@ const Reference< XCommandEnvironment >& ResultSet::getEnvironment()
 PropertySetInfo::PropertySetInfo(
                         const Reference< XMultiServiceFactory >& rxSMgr,
                         const PropertyInfo* pProps,
-                        sal_uInt32 nProps )
+                        sal_Int32 nProps )
 : m_xSMgr( rxSMgr )
 {
     m_pProps = new Sequence< Property >( nProps );
@@ -1604,7 +1603,7 @@ PropertySetInfo::PropertySetInfo(
         const PropertyInfo* pEntry = pProps;
         Property* pProperties = m_pProps->getArray();
 
-        for ( sal_uInt32 n = 0; n < nProps; ++n )
+        for ( sal_Int32 n = 0; n < nProps; ++n )
         {
             Property& rProp = pProperties[ n ];
 
@@ -1683,9 +1682,9 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
 sal_Bool PropertySetInfo::queryProperty(
                                 const OUString& aName, Property& rProp )
 {
-    sal_uInt32 nCount = m_pProps->getLength();
+    sal_Int32 nCount = m_pProps->getLength();
     const Property* pProps = m_pProps->getConstArray();
-    for ( sal_uInt32 n = 0; n < nCount; ++n )
+    for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const Property& rCurr = pProps[ n ];
         if ( rCurr.Name == aName )
