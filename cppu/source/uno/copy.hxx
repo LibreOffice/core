@@ -4,9 +4,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:51:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,9 +266,6 @@ inline void _copyConstructAnyFromData(
         // enum is forced to 32bit long
         *(sal_Int32 *)&pDestAny->pReserved = *(sal_Int32 *)pSource;
         break;
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
@@ -353,6 +350,9 @@ inline void _copyConstructAnyFromData(
         {
             _acquire( pDestAny->pReserved = *(void **)pSource, acquire );
         }
+        break;
+    default:
+        OSL_ASSERT(false);
         break;
     }
 }
@@ -479,9 +479,6 @@ inline void _copyConstructAny(
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
-            case typelib_TypeClass_TYPEDEF:
-                OSL_ENSURE( 0, "### unexpected typedef!" );
-                break;
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
                 if (pTypeDescr)
@@ -536,6 +533,9 @@ inline void _copyConstructAny(
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
                 pDestAny->pReserved = 0; // either cpp or c-uno interface
+                break;
+            default:
+                OSL_ASSERT(false);
                 break;
             }
         }
@@ -651,17 +651,17 @@ inline uno_Sequence * icopyConstructSequence(
                     char * pSourceElements = pSource->elements;
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
-                        char * pDest =
+                        char * pDest2 =
                             pElements + (nPos * nElementSize);
-                        char * pSource =
+                        char * pSource2 =
                             pSourceElements + (nPos * nElementSize);
 
                         typelib_TypeDescriptionReference * pSetType =
-                            _unionGetSetType( pSource, pElementTypeDescr );
+                            _unionGetSetType( pSource2, pElementTypeDescr );
                         ::uno_type_copyAndConvertData(
-                            pDest + nValueOffset, pSource + nValueOffset,
+                            pDest2 + nValueOffset, pSource2 + nValueOffset,
                             pSetType, mapping );
-                        *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
+                        *(sal_Int64 *)pDest2 = *(sal_Int64 *)pSource2;
                         ::typelib_typedescriptionreference_release( pSetType );
                     }
                 }
@@ -803,9 +803,6 @@ inline void _copyConstructData(
     case typelib_TypeClass_ENUM:
         *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
         break;
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
@@ -886,6 +883,8 @@ inline void _copyConstructData(
             *(void **)pDest = _map( *(void **)pSource, pType, pTypeDescr, mapping );
         else
             _acquire( *(void **)pDest = *(void **)pSource, acquire );
+        break;
+    default:
         break;
     }
 }
