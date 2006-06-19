@@ -119,8 +119,6 @@ sal_Bool ToolBoxConfiguration::LoadToolBox(
     {
         return sal_False;
     }
-
-    return sal_False;
 }
 
 
@@ -153,8 +151,6 @@ sal_Bool ToolBoxConfiguration::StoreToolBox(
     {
         return sal_False;
     }
-
-    return sal_False;
 }
 
 }
