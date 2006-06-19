@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:51:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ struct SdrModelImpl
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DBG_NAME(SdrModel);
+DBG_NAME(SdrModel)
 TYPEINIT1(SdrModel,SfxBroadcaster);
 void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     FASTBOOL bUseExtColorTable, FASTBOOL bLoadRefCounts)
@@ -304,8 +304,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefCounts):
-    maPages(1024,32,32),
-    maMaPag(1024,32,32)
+    maMaPag(1024,32,32),
+    maPages(1024,32,32)
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -316,8 +316,8 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefC
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefCounts):
-    maPages(1024,32,32),
     maMaPag(1024,32,32),
+    maPages(1024,32,32),
     aTablePath(rPath)
 {
 #ifdef TIMELOG
@@ -329,8 +329,8 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPer
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
-    maPages(1024,32,32),
-    maMaPag(1024,32,32)
+    maMaPag(1024,32,32),
+    maPages(1024,32,32)
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -341,8 +341,8 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtCo
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
-    maPages(1024,32,32),
     maMaPag(1024,32,32),
+    maPages(1024,32,32),
     aTablePath(rPath)
 {
 #ifdef TIMELOG
@@ -353,9 +353,11 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPer
     ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const SdrModel& rSrcModel):
-    maPages(1024,32,32),
-    maMaPag(1024,32,32)
+SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
+    SfxBroadcaster(),
+    tools::WeakBase< SdrModel >(),
+    maMaPag(1024,32,32),
+    maPages(1024,32,32)
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -455,12 +457,12 @@ const SvNumberFormatter& SdrModel::GetNumberFormatter() const
 }
 
 // noch nicht implementiert:
-void SdrModel::operator=(const SdrModel& rSrcModel)
+void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
 {
     DBG_ERROR("SdrModel::operator=() ist noch nicht implementiert");
 }
 
-FASTBOOL SdrModel::operator==(const SdrModel& rCmpModel) const
+FASTBOOL SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
 {
     DBG_ERROR("SdrModel::operator==() ist noch nicht implementiert");
     return FALSE;
@@ -991,7 +993,7 @@ void SdrModel::ImpReformatAllEdgeObjects()
     }
 }
 
-SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
+SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& /*rStreamInfo*/) const
 {
     return NULL;
 }
@@ -1063,6 +1065,7 @@ void SdrModel::ImpSetUIUnit()
         case MAP_SYSFONT    : break;
         case MAP_APPFONT    : break;
         case MAP_RELATIVE   : break;
+        default: break;
     } // switch
 
     // 1 mile    =  8 furlong = 63.360" = 1.609.344,0mm
@@ -1632,24 +1635,24 @@ void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
     USHORT nDestNum=nDestPos;
     for (nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++) {
         SdrPage* pPg=pPagePtrs[nCopyNum];
-        USHORT nPageNum=pPg->GetPageNum();
+        USHORT nPageNum2=pPg->GetPageNum();
         if (!bMoveNoCopy) {
-            const SdrPage* pPg1=GetPage(nPageNum);
+            const SdrPage* pPg1=GetPage(nPageNum2);
             pPg=pPg1->Clone();
             InsertPage(pPg,nDestNum);
             if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
             nDestNum++;
         } else {
             // Move ist nicht getestet!
-            if (nDestNum>nPageNum) nDestNum--;
-            if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum),nPageNum,nDestNum));
-            pPg=RemovePage(nPageNum);
+            if (nDestNum>nPageNum2) nDestNum--;
+            if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum2),nPageNum2,nDestNum));
+            pPg=RemovePage(nPageNum2);
             InsertPage(pPg,nDestNum);
             nDestNum++;
         }
 
-        if (bReverse) nPageNum--;
-        else nPageNum++;
+        if (bReverse) nPageNum2--;
+        else nPageNum2++;
     }
 
     delete[] pPagePtrs;
