@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:22:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:40:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,8 @@ using namespace chelp;
 URLParameter::URLParameter( const rtl::OUString& aURL,
                             Databases* pDatabases )
     throw( com::sun::star::ucb::IllegalIdentifierException )
-    : m_aURL( aURL ),
-      m_pDatabases( pDatabases )
+    : m_pDatabases( pDatabases ),
+      m_aURL( aURL )
 {
     init( false );
     parse();
@@ -164,9 +164,9 @@ URLParameter::URLParameter( const rtl::OUString&  aURL,
                             const rtl::OUString& aDefaultLanguage,
                             Databases* pDatabases )
     throw( com::sun::star::ucb::IllegalIdentifierException )
-    : m_aURL( aURL ),
-      m_aDefaultLanguage( aDefaultLanguage ),
-      m_pDatabases( pDatabases )
+    : m_pDatabases( pDatabases ),
+      m_aURL( aURL ),
+      m_aDefaultLanguage( aDefaultLanguage )
 {
     init( true );
     parse();
@@ -281,6 +281,8 @@ rtl::OUString URLParameter::get_program()
 
 void URLParameter::init( bool bDefaultLanguageIsInitialized )
 {
+    (void)bDefaultLanguageIsInitialized;
+
     m_bBerkeleyRead = false;
     m_bStart = false;
     m_bUseDB = true;
@@ -366,6 +368,7 @@ void URLParameter::readBerkeley()
     Dbt data;
 
     int err = db->get( 0,&key,&data,0 );
+    (void)err;
 
     DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
                                     data.get_size() );
@@ -453,6 +456,11 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XOutputStream >& xDataSink )
 {
+    (void)rxSMgr;
+    (void)aCommand;
+    (void)CommandId;
+    (void)Environment;
+
     if( ! xDataSink.is() )
         return;
 
@@ -521,6 +529,11 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XActiveDataSink >& xDataSink )
 {
+    (void)rxSMgr;
+    (void)aCommand;
+    (void)CommandId;
+    (void)Environment;
+
     if( isPicture() )
     {
         Reference< XInputStream > xStream;
@@ -654,12 +667,12 @@ bool URLParameter::name( bool modulePresent )
 
 bool URLParameter::query()
 {
-    rtl::OUString query;
+    rtl::OUString query_;
 
     if( ! m_aExpr.getLength() )
         return true;
     else if( (m_aExpr.getStr())[0] == sal_Unicode( '?' ) )
-        query = m_aExpr.copy( 1 ).trim();
+        query_ = m_aExpr.copy( 1 ).trim();
     else
         return false;
 
@@ -668,20 +681,20 @@ bool URLParameter::query()
     sal_Int32 delimIdx,equalIdx;
     rtl::OUString parameter,value;
 
-    while( query.getLength() != 0 )
+    while( query_.getLength() != 0 )
     {
-        delimIdx = query.indexOf( sal_Unicode( '&' ) );
-        equalIdx = query.indexOf( sal_Unicode( '=' ) );
-        parameter = query.copy( 0,equalIdx ).trim();
+        delimIdx = query_.indexOf( sal_Unicode( '&' ) );
+        equalIdx = query_.indexOf( sal_Unicode( '=' ) );
+        parameter = query_.copy( 0,equalIdx ).trim();
         if( delimIdx == -1 )
         {
-            value = query.copy( equalIdx + 1 ).trim();
-            query = rtl::OUString();
+            value = query_.copy( equalIdx + 1 ).trim();
+            query_ = rtl::OUString();
         }
         else
         {
-            value = query.copy( equalIdx+1,delimIdx - equalIdx - 1 ).trim();
-            query = query.copy( delimIdx+1 ).trim();
+            value = query_.copy( equalIdx+1,delimIdx - equalIdx - 1 ).trim();
+            query_ = query_.copy( delimIdx+1 ).trim();
         }
 
         if( parameter.compareToAscii( "Language" ) == 0 )
@@ -765,8 +778,8 @@ struct UserData {
               URLParameter*           pInitial,
               Databases*              pDatabases )
         : m_pTransformer( pTransformer ),
-          m_pInitial( pInitial ),
-          m_pDatabases( pDatabases )
+          m_pDatabases( pDatabases ),
+          m_pInitial( pInitial )
     {
     }
 
@@ -898,18 +911,24 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             RTL_TEXTENCODING_ASCII_US/*osl_getThreadTextEncoding()*/);
         xslURLascii += "main_transform.xsl";
 
+        const char aVndPkgConstStr[] = "vnd.sun.star.pkg:/";
+        const char aVndResConstStr[] = "vnd.sun.star.resultat:/";
+        char aVndPkgStr[ sizeof( aVndPkgConstStr ) ];
+        strcpy( aVndPkgStr, aVndPkgConstStr );
+        char aVndResStr[ sizeof( aVndResConstStr ) ];
+        strcpy( aVndResStr, aVndResConstStr );
 #ifdef SYSTEM_SABLOT
         SablotRunProcessor( p,
                             xslURLascii.getStr(),
-                            "vnd.sun.star.pkg:/",
-                            "vnd.sun.star.resultat:/",
+                            aVndPkgStr,
+                            aVndResStr,
                             parameter,
                             0);
 #else
         SablotRunProcessor( p,
                             const_cast<char*>(xslURLascii.getStr()),
-                            "vnd.sun.star.pkg:/",
-                            "vnd.sun.star.resultat:/",
+                            aVndPkgStr,
+                            aVndResStr,
                             const_cast<char**>(parameter),
                             0);
 #endif
@@ -958,11 +977,11 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    int curr,available = len-pos;
-    if( nBytesToRead <= available )
+    int curr,available_ = len-pos;
+    if( nBytesToRead <= available_ )
         curr = nBytesToRead;
     else
-        curr = available;
+        curr = available_;
 
     if( 0 <= curr && aData.getLength() < curr )
         aData.realloc( curr );
@@ -1022,7 +1041,7 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
     if( location < 0 )
         throw IllegalArgumentException();
     else
-        pos = location;
+        pos = sal::static_int_cast<sal_Int32>( location );
 
     if( pos > len )
         pos = len;
@@ -1079,6 +1098,8 @@ int schemehandlergetall( void *userData,
                          char **buffer,
                          int *byteCount )
 {
+    (void)processor_;
+
     rtl::OUString language,jar,path;
     UserData *uData = reinterpret_cast< UserData* >( userData );
 
@@ -1168,6 +1189,9 @@ int schemehandlerfreememory( void *userData,
                              SablotHandle processor_,
                              char *buffer )
 {
+    (void)userData;
+    (void)processor_;
+
     delete[] buffer;
     return 0;
 }
@@ -1185,6 +1209,11 @@ int schemehandleropen( void *userData,
                        const char *rest,
                        int *handle )
 {
+    (void)userData;
+    (void)processor_;
+    (void)scheme;
+    (void)rest;
+
     *handle = 0;
     return 0;
 }
@@ -1202,6 +1231,11 @@ int schemehandlerget( void *userData,
                       char *buffer,
                       int *byteCount )
 {
+    (void)userData;
+    (void)processor_;
+    (void)handle;
+    (void)buffer;
+
     *byteCount = 0;
     return 0;
 }
@@ -1218,6 +1252,9 @@ int schemehandlerput( void *userData,
                       const char *buffer,
                       int *byteCount )
 {
+    (void)processor_;
+    (void)handle;
+
     UserData *uData = reinterpret_cast< UserData* >( userData );
     uData->m_pTransformer->addToBuffer( buffer,*byteCount );
     return 0;
@@ -1231,6 +1268,10 @@ int schemehandlerclose( void *userData,
                         SablotHandle processor_,
                         int handle )
 {
+    (void)userData;
+    (void)processor_;
+    (void)handle;
+
     return 0;
 }
 
