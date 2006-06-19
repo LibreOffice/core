@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:43:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,10 +270,8 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     else
         return NULL;
 
-    BOOL bOldFormat = TRUE;             // old format : not in StarDesktop 5.x
     SfxViewFrame *pActiveFrame = 0;
     String aWinData;
-    char cToken =',';
     SfxItemSet *pSet = GetMedium()->GetItemSet();
 
     pImp->bLoadingWindows = TRUE;
@@ -611,16 +609,18 @@ SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 }
 
 void SfxObjectShell::SetOrganizerSearchMask(
-    SfxStyleSheetBasePool* pPool) const
+    SfxStyleSheetBasePool* pStylePool) const
 {
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_ALL,
-                         SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED);
+    pStylePool->SetSearchMask(
+        SFX_STYLE_FAMILY_ALL,
+        SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED);
 }
 
 //--------------------------------------------------------------------
 
-USHORT SfxObjectShell::GetContentCount(USHORT nIdx1,
-                                         USHORT nIdx2)
+USHORT SfxObjectShell::GetContentCount(
+    USHORT nIdx1,
+    USHORT /*nIdx2*/)
 {
     switch(nIdx1)
     {
@@ -628,11 +628,11 @@ USHORT SfxObjectShell::GetContentCount(USHORT nIdx1,
             return DEF_CONTENT_COUNT;
         case CONTENT_STYLE:
         {
-            SfxStyleSheetBasePool *pPool = GetStyleSheetPool();
-            if(!pPool)
+            SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
+            if(!pStylePool)
                 return 0;
-            SetOrganizerSearchMask(pPool);
-            return pPool->Count();
+            SetOrganizerSearchMask(pStylePool);
+            return pStylePool->Count();
         }
         case CONTENT_MACRO:
             break;
@@ -649,14 +649,14 @@ USHORT SfxObjectShell::GetContentCount(USHORT nIdx1,
 
 //--------------------------------------------------------------------
 //TODO/CLEANUP: remove this method (it's virtual)
-void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT nIdx3)
+void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
 {
     if(nIdx1==CONTENT_STYLE && nIdx2 != INDEX_IGNORE) //StyleSheets
     {
-        SfxStyleSheetBasePool *pPool = GetStyleSheetPool();
-        SetOrganizerSearchMask(pPool);
+        SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
+        SetOrganizerSearchMask(pStylePool);
 #ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxStyleSheetBase *pStyle = (*pPool)[nIdx2];
+        SfxStyleSheetBase *pStyle = (*pStylePool)[nIdx2];
         if(pStyle)
         {
             String aHelpFile;
@@ -711,7 +711,7 @@ void   SfxObjectShell::GetContent(String &rText,
                                   BOOL &bCanDel,
                                   USHORT i,
                                   USHORT nIdx1,
-                                  USHORT nIdx2 )
+                                  USHORT /*nIdx2*/ )
 {
     bCanDel=TRUE;
 
@@ -770,9 +770,9 @@ void   SfxObjectShell::GetContent(String &rText,
 
         case CONTENT_STYLE:
         {
-            SfxStyleSheetBasePool *pPool = GetStyleSheetPool();
-            SetOrganizerSearchMask(pPool);
-            SfxStyleSheetBase *pStyle = (*pPool)[i];
+            SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
+            SetOrganizerSearchMask(pStylePool);
+            SfxStyleSheetBase *pStyle = (*pStylePool)[i];
             rText = pStyle->GetName();
             bCanDel=((pStyle->GetMask() & SFXSTYLEBIT_USERDEF)
                      == SFXSTYLEBIT_USERDEF);
@@ -841,11 +841,11 @@ Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode
 BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                               USHORT nSourceIdx1,
                               USHORT nSourceIdx2,
-                              USHORT nSourceIdx3,
+                              USHORT /*nSourceIdx3*/,
                               USHORT &nIdx1,
                               USHORT &nIdx2,
-                              USHORT &nIdx3,
-                              USHORT &nDeleted)
+                              USHORT &/*nIdx3*/,
+                              USHORT &/*nDeleted*/)
 {
     BOOL bRet = FALSE;
 
@@ -997,7 +997,7 @@ BOOL SfxObjectShell::Remove
 (
     USHORT nIdx1,
     USHORT nIdx2,
-    USHORT nIdx3
+    USHORT /*nIdx3*/
 )
 {
     BOOL bRet = FALSE;
@@ -1060,8 +1060,8 @@ BOOL SfxObjectShell::Print
 (
     Printer&        rPrt,
     USHORT          nIdx1,
-    USHORT          nIdx2,
-    USHORT          nIdx3,
+    USHORT          /*nIdx2*/,
+    USHORT          /*nIdx3*/,
     const String*   pObjectName
 )
 
@@ -1073,10 +1073,10 @@ BOOL SfxObjectShell::Print
     {
       case CONTENT_STYLE:
         {
-            SfxStyleSheetBasePool *pPool = GetStyleSheetPool();
-            SetOrganizerSearchMask(pPool);
-            SfxStyleSheetIterator* pIter = pPool->CreateIterator(
-                pPool->GetSearchFamily(), pPool->GetSearchMask() );
+            SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
+            SetOrganizerSearchMask(pStylePool);
+            SfxStyleSheetIterator* pIter = pStylePool->CreateIterator(
+                pStylePool->GetSearchFamily(), pStylePool->GetSearchMask() );
             USHORT nStyles = pIter->Count();
             SfxStyleSheetBase *pStyle = pIter->First();
             if ( !pStyle )
