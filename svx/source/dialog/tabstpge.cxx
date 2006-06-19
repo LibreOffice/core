@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:12:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
 
 // class TabWin_Impl -----------------------------------------------------
 
-void TabWin_Impl::Paint( const Rectangle& rRect )
+void TabWin_Impl::Paint( const Rectangle& )
 {
     // Tabulatoren malen
     Point aPnt;
@@ -147,8 +147,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     pRightWin       ( new TabWin_Impl( this, ResId( WIN_TABRIGHT ), RULER_TAB_RIGHT|WB_HORZ ) ),
     pCenterWin      ( new TabWin_Impl( this, ResId( WIN_TABCENTER ), RULER_TAB_CENTER|WB_HORZ ) ),
     pDezWin         ( new TabWin_Impl( this, ResId( WIN_TABDECIMAL ), RULER_TAB_DECIMAL|WB_HORZ ) ),
-    aDezChar        ( this, ResId( ED_TABTYPE_DECCHAR ) ),
     aDezCharLabel   ( this, ResId( FT_TABTYPE_DECCHAR ) ),
+    aDezChar        ( this, ResId( ED_TABTYPE_DECCHAR ) ),
     aTabTypeLabel   ( this, ResId( FL_TABTYPE ) ),
     aNoFillChar     ( this, ResId( BTN_FILLCHAR_NO ) ),
     aFillPoints     ( this, ResId( BTN_FILLCHAR_POINTS ) ),
@@ -161,9 +161,10 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     aDelAllBtn      ( this, ResId( BTN_DELALL ) ),
     aDelBtn         ( this, ResId( BTN_DEL ) ),
 
-    aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
     aAktTab     ( 0 ),
+    aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
     nDefDist    ( 0 ),
+    eDefUnit( FUNIT_100TH_MM ),
     bCheck      ( FALSE )
 
 {
@@ -177,7 +178,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    eDefUnit = FUNIT_100TH_MM;
 
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
@@ -399,10 +399,10 @@ void SvxTabulatorTabPage::DisableControls( const USHORT nFlag )
 
 // -----------------------------------------------------------------------
 
-int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -717,7 +717,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 {
     String aChar( pEdit->GetText() );
-    if ( aChar.Len() > 0 && ( aChar.GetChar( 0 ) >= ' ' || aChar.GetChar( 0 ) < -1 ) )
+    if ( aChar.Len() > 0 && ( aChar.GetChar( 0 ) >= ' '))
         aAktTab.GetDecimal() = aChar.GetChar( 0 );
 
     USHORT nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
