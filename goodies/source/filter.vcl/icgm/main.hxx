@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:45:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef CGM_MAIN_HXX
 #define CGM_MAIN_HXX
 
-#include <cgm.hxx>
+#include "cgm.hxx"
 
 // ---------------------------------------------------------------
 
