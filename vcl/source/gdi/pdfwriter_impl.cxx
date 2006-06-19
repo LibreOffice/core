@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:55:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -900,7 +900,6 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
                 pStyle = "Wipe"; pDi = "270"; break;
             case PDFWriter::Dissolve:
                 pStyle = "Dissolve"; break;
-                break;
             case PDFWriter::GlitterLeftToRight:
                 pStyle = "Glitter"; pDi = "0"; break;
             case PDFWriter::GlitterTopToBottom:
@@ -1035,7 +1034,7 @@ void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect ) const
 
 void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
-    int nPoints = rPoly.GetSize();
+    USHORT nPoints = rPoly.GetSize();
     /*
      *  #108582# applications do weird things
      */
@@ -1053,7 +1052,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
         const BYTE* pFlagArray = rPoly.GetConstFlagAry();
         appendPoint( rPoly[0], rBuffer, false, pFakePoint );
         rBuffer.append( " m\n" );
-        for( int i = 1; i < nPoints; i++ )
+        for( USHORT i = 1; i < nPoints; i++ )
         {
             if( pFlagArray && pFlagArray[i] == POLY_CONTROL && nPoints-i > 2 )
             {
@@ -1088,8 +1087,8 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
 
 void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
-    int nPolygons = rPolyPoly.Count();
-    for( int n = 0; n < nPolygons; n++ )
+    USHORT nPolygons = rPolyPoly.Count();
+    for( USHORT n = 0; n < nPolygons; n++ )
         appendPolygon( rPolyPoly[n], rBuffer, bClose );
 }
 
@@ -1385,7 +1384,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
     {
         m_aOutputStreams.front().m_pStream->Seek( STREAM_SEEK_TO_END );
-        m_aOutputStreams.front().m_pStream->Write( pBuffer, nBytes );
+        m_aOutputStreams.front().m_pStream->Write( pBuffer, sal::static_int_cast<sal_Size>(nBytes) );
         return true;
     }
 
@@ -1447,7 +1446,7 @@ inline const ImplPdfBuiltinFontData* GetPdfFontData( const ImplFontData* pFontDa
 {
     const ImplPdfBuiltinFontData* pFD = NULL;
     if( pFontData && pFontData->CheckMagic( ImplPdfBuiltinFontData::PDF_FONT_MAGIC ) )
-        pFD = reinterpret_cast<const ImplPdfBuiltinFontData*>( pFontData );
+        pFD = static_cast<const ImplPdfBuiltinFontData*>( pFontData );
     return pFD;
 }
 
@@ -1509,7 +1508,7 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
         return;
     const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
 
-    pMetric->mnOrientation  = pSelect->mnOrientation;
+    pMetric->mnOrientation  = sal::static_int_cast<short>(pSelect->mnOrientation);
     pMetric->meFamily       = pBuiltinFont->m_eFamily;
     pMetric->mePitch        = pBuiltinFont->m_ePitch;
     pMetric->meWeight       = pBuiltinFont->m_eWeight;
@@ -1567,7 +1566,7 @@ PDFSalLayout::PDFSalLayout( PDFWriterImpl& rPDFWriterImpl,
 
 bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    const String aText( rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos );
+    const String aText( rArgs.mpStr+rArgs.mnMinCharPos, sal::static_int_cast<xub_StrLen>(rArgs.mnEndCharPos-rArgs.mnMinCharPos) );
     SetText( aText );
     SetUnitsPerPixel( 1000 );
 
@@ -1636,7 +1635,7 @@ void PDFSalLayout::InitFont() const
 
 // -----------------------------------------------------------------------
 
-void PDFSalLayout::DrawText( SalGraphics& rSalGraphics ) const
+void PDFSalLayout::DrawText( SalGraphics& ) const
 {
     mrPDFWriterImpl.drawLayout( *const_cast<PDFSalLayout*>(this), maOrigText, true );
 }
@@ -1743,7 +1742,7 @@ void PDFWriterImpl::endPage()
 
 sal_Int32 PDFWriterImpl::createObject()
 {
-    m_aObjects.push_back( ~0 );
+    m_aObjects.push_back( ~0U );
     return m_aObjects.size();
 }
 
@@ -1752,7 +1751,7 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
     if( ! m_bOpen )
         return false;
 
-    sal_uInt64 nOffset = ~0;
+    sal_uInt64 nOffset = ~0U;
     oslFileError aError = osl_getFilePos( m_aFile, &nOffset );
     DBG_ASSERT( aError == osl_File_E_None, "could not register object" );
     if( aError != osl_File_E_None )
@@ -2281,7 +2280,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
     const unsigned char* pFontData = NULL;
     long nFontLen = 0;
     sal_Int32 nLength1, nLength2;
-    if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) )
+    if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
     {
         if( aInfo.m_nFontType != SAL_FONTSUBSETINFO_TYPE_TYPE1 )
             goto streamend;
@@ -2662,7 +2661,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                 String aStr( str_it->m_aUnicode );
                 aEncWidths[nEncoded] = pRef->GetTextWidth( aStr ) * 10;
                 nEncodedCodes[nEncoded] = str_it->m_aUnicode;
-                nEncoding[nEncoded] = nEncoded;
+                nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
 
                 aLine.append( " /" );
                 aLine.append( str_it->m_aName );
@@ -3564,7 +3563,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( ~0 );
+    push( sal::static_int_cast<sal_uInt16>(~0U) );
 
     // transform relative to control's coordinates since an
     // appearance stream is a form XObject
@@ -3667,7 +3666,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     SvMemoryStream* pEditStream = new SvMemoryStream( 1024, 1024 );
 
-    push( ~0 );
+    push( sal::static_int_cast<sal_uInt16>(~0U) );
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
@@ -3704,7 +3703,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     SvMemoryStream* pListBoxStream = new SvMemoryStream( 1024, 1024 );
 
-    push( ~0 );
+    push( sal::static_int_cast<sal_uInt16>(~0U) );
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
@@ -3767,7 +3766,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( ~0 );
+    push( sal::static_int_cast<sal_uInt16>(~0U) );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -3869,7 +3868,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( ~0 );
+    push( sal::static_int_cast<sal_uInt16>(~0U) );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -3933,7 +3932,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     rBox.m_aRect = aCheckRect;
 
     // create appearance streams
-    push( ~0 );
+    push( sal::static_int_cast<sal_uInt16>(~0U) );
     SvMemoryStream* pCheckStream = new SvMemoryStream( 256, 256 );
 
     beginRedirect( pCheckStream, aCheckRect );
@@ -4055,9 +4054,9 @@ bool PDFWriterImpl::emitWidgetAnnotations()
     ensureUniqueRadioOnValues();
 
     int nAnnots = m_aWidgets.size();
-    for( int i = 0; i < nAnnots; i++ )
+    for( int a = 0; a < nAnnots; a++ )
     {
-        PDFWidget& rWidget = m_aWidgets[i];
+        PDFWidget& rWidget = m_aWidgets[a];
 
         OStringBuffer aLine( 1024 );
         OStringBuffer aValue( 256 );
@@ -4482,12 +4481,12 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "/AcroForm<</Fields[\n" );
         int nWidgets = m_aWidgets.size();
         int nOut = 0;
-        for( int i = 0; i < nWidgets; i++ )
+        for( int j = 0; j < nWidgets; j++ )
         {
             // output only root fields
-            if( m_aWidgets[i].m_nParent < 1 )
+            if( m_aWidgets[j].m_nParent < 1 )
             {
-                aLine.append( m_aWidgets[i].m_nObject );
+                aLine.append( m_aWidgets[j].m_nObject );
                 aLine.append( (nOut++ % 5)==4 ? " 0 R\n" : " 0 R " );
             }
         }
@@ -4871,7 +4870,7 @@ void PDFWriterImpl::registerGlyphs(
                 // copy font id
                 pMappedFontObjects[i] = rSubset.m_aSubsets.back().m_nFontID;
                 // create new glyph in subset
-                sal_uInt8 nNewId = rSubset.m_aSubsets.back().m_aMapping.size()+1;
+                sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(rSubset.m_aSubsets.back().m_aMapping.size()+1);
                 pMappedGlyphs[i] = nNewId;
 
                 // add new glyph to emitted font subset
@@ -5068,7 +5067,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     sal_Int32 nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
-    Point aPos, aLastPos(0, 0), aCumulativePos(0,0), aGlyphPos;
+    Point aCurPos, aLastPos(0, 0), aCumulativePos(0,0), aGlyphPos;
     bool bFirst = true, bWasYChange = false;
     int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
@@ -5189,23 +5188,23 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
 
     sal_Int32 nLastMappedFont = -1;
-    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
+    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aCurPos, nIndex, pAdvanceWidths, pCharPosAry )) != 0 )
     {
-        bWasYChange = (aGlyphPos.Y() != aPos.Y());
-        aGlyphPos = aPos;
+        bWasYChange = (aGlyphPos.Y() != aCurPos.Y());
+        aGlyphPos = aCurPos;
         // back transformation to current coordinate system
-        aPos = m_pReferenceDevice->PixelToLogic( aPos );
+        aCurPos = m_pReferenceDevice->PixelToLogic( aCurPos );
 
-        Point aDiff;
+        Point aOffset;
         if ( eAlign == ALIGN_BOTTOM )
-            aDiff.Y() -= aRefDevFontMetric.GetDescent();
+            aOffset.Y() -= aRefDevFontMetric.GetDescent();
         else if ( eAlign == ALIGN_TOP )
-            aDiff.Y() += aRefDevFontMetric.GetAscent();
+            aOffset.Y() += aRefDevFontMetric.GetAscent();
 
-        if( aDiff.X() || aDiff.Y() )
+        if( aOffset.X() || aOffset.Y() )
         {
-            aDiff = aRotScale.transform( aDiff );
-            aPos += aDiff;
+            aOffset = aRotScale.transform( aOffset );
+            aCurPos += aOffset;
         }
 
         for( int i = 0; i < nGlyphs; i++ )
@@ -5226,7 +5225,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             pGlyphs[i] &= GF_IDXMASK;
 #endif
             if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
-                pUnicodes[i] = rText.GetChar( pCharPosAry[i] );
+                pUnicodes[i] = rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) );
             else
                 pUnicodes[i] = 0;
             // note: in case of ctl one character may result
@@ -5282,7 +5281,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     aMat.skew( fSkewA, fSkewB );
                 aMat.scale( fTempXScale, fYScale );
                 aMat.rotate( fAngle+fDeltaAngle );
-                aMat.translate( aPos.X()+aDeltaPos.X(), aPos.Y()+aDeltaPos.Y() );
+                aMat.translate( aCurPos.X()+aDeltaPos.X(), aCurPos.Y()+aDeltaPos.Y() );
                 aMat.append( m_aPages.back(), aLine );
                 aLine.append( " Tm" );
                 if( nLastMappedFont != pMappedFontObjects[n] )
@@ -5306,14 +5305,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             {
                 if( bFirst )
                 {
-                    m_aPages.back().appendPoint( aPos, aLine, false, &aCumulativePos );
+                    m_aPages.back().appendPoint( aCurPos, aLine, false, &aCumulativePos );
                     bFirst = false;
-                    aLastPos = aPos;
+                    aLastPos = aCurPos;
                 }
                 else
                 {
                     sal_Int32 nDiffL = 0;
-                    Point aDiff = aPos - aLastPos;
+                    Point aDiff = aCurPos - aLastPos;
                     m_aPages.back().appendMappedLength( (sal_Int32)aDiff.X(), aLine, false, &nDiffL );
                     aCumulativePos.X() += nDiffL;
                     aLine.append( ' ' );
@@ -5347,10 +5346,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     aMat.skew( 0.0, fSkew );
                 aMat.scale( fXScale, 1.0 );
                 aMat.rotate( fAngle );
-                aMat.translate( aPos.X(), aPos.Y() );
+                aMat.translate( aCurPos.X(), aCurPos.Y() );
                 aMat.append( m_aPages.back(), aLine, &aCumulativePos );
                 aLine.append( " Tm\n" );
-                aLastPos = aPos;
+                aLastPos = aCurPos;
                 bFirst = false;
             }
             int nLast = 0;
@@ -6728,7 +6727,7 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
 {
     MARK( "drawPolyLine" );
 
-    int nPoints = rPoly.GetSize();
+    USHORT nPoints = rPoly.GetSize();
     if( nPoints < 2 )
         return;
 
@@ -6937,7 +6936,7 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
     if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) && ! pColors )
         return;
 
-    int nPoints = rPoints.GetSize();
+    USHORT nPoints = rPoints.GetSize();
     OStringBuffer aLine( nPoints*40 );
     aLine.append( "q " );
     if( ! pColors )
@@ -6953,7 +6952,7 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
     appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aPixel );
     OString aPixelStr = aPixel.makeStringAndClear();
 
-    for( int i = 0; i < nPoints; i++ )
+    for( USHORT i = 0; i < nPoints; i++ )
     {
         if( pColors )
         {
@@ -7372,7 +7371,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( "[ /Indexed/DeviceRGB " );
             aLine.append( (sal_Int32)(pAccess->GetPaletteEntryCount()-1) );
             aLine.append( " <\n" );
-            for( int i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+            for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
             {
                 const BitmapColor& rColor = pAccess->GetPaletteColor( i );
                 appendHex( rColor.GetRed(), aLine );
@@ -7951,7 +7950,7 @@ void PDFWriterImpl::updateGraphicsState()
                 aLine.append( "Q " );
                 // invalidate everything but the clip region
                 m_aCurrentPDFState = GraphicsState();
-                rNewState.m_nUpdateFlags = ~GraphicsState::updateClipRegion;
+                rNewState.m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~GraphicsState::updateClipRegion);
             }
             if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
             {
@@ -8110,7 +8109,7 @@ void PDFWriterImpl::pop()
         // what ?
     }
     // invalidate graphics state
-    m_aGraphicsStack.front().m_nUpdateFlags = ~0;
+    m_aGraphicsStack.front().m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~0U);
 }
 
 void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
