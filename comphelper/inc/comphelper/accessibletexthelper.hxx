@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibletexthelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:26:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace comphelper
 
     protected:
         OCommonAccessibleText();
-        ~OCommonAccessibleText();
+        virtual ~OCommonAccessibleText();
 
         ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >             implGetBreakIterator();
         ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification >   implGetCharacterClassification();
