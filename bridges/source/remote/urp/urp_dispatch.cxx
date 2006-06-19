@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:45:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@ void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote )
         pImpl->m_pWriter->abort();
     }
 }
-void SAL_CALL urp_sendRequest(
+extern "C" void SAL_CALL urp_sendRequest(
     uno_Environment *pEnvRemote,
-    typelib_TypeDescription * pMemberType,
+    typelib_TypeDescription const * pMemberType,
     rtl_uString *pOid,
     typelib_InterfaceTypeDescription *pInterfaceType,
     void *pReturn,
