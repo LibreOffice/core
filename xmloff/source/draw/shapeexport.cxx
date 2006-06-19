@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:04:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,11 +147,11 @@ using namespace ::xmloff::token;
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
-:   rExport( rExp ),
-    // #88546# init to FALSE
-    mbHandleProgressBar( sal_False ),
+:   mrExport( rExp ),
     mnNextUniqueShapeId(1),
     mbExportLayer( sal_False ),
+    // #88546# init to FALSE
+    mbHandleProgressBar( sal_False ),
     msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
@@ -173,14 +173,14 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") )
 {
     // construct PropertyHandlerFactory
-    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExp );
+    mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), rExp );
 
     // construct PropertySetMapper
-    xPropertySetMapper = CreateShapePropMapper( rExport );
+    mxPropertySetMapper = CreateShapePropMapper( mrExport );
     if( pExtMapper )
     {
         UniReference < SvXMLExportPropertyMapper > xExtMapper( pExtMapper );
-        xPropertySetMapper->ChainExportMapper( xExtMapper );
+        mxPropertySetMapper->ChainExportMapper( xExtMapper );
     }
 
 /*
@@ -188,12 +188,12 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 */
 
-    rExport.GetAutoStylePool()->AddFamily(
+    mrExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)),
         GetPropertySetMapper(),
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX)));
-    rExport.GetAutoStylePool()->AddFamily(
+    mrExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_PRESENTATION_ID,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
         GetPropertySetMapper(),
@@ -343,14 +343,14 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // ------------------------------
     if( xPropSet.is() )
     {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo( xPropSet->getPropertySetInfo() );
 
         OUString aParentName;
         uno::Reference< style::XStyle > xStyle;
 
         if( bObjSupportsStyle )
         {
-            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
+            if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
                 xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) >>= xStyle;
 
             if(xStyle.is())
@@ -403,7 +403,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     uno::Reference< beans::XPropertySet > xControlModel(xControl->getControl(), uno::UNO_QUERY);
                     DBG_ASSERT(xControlModel.is(), "XMLShapeExport::collectShapeAutoStyles: no control model on the control shape!");
 
-                    ::rtl::OUString sNumberStyle = rExport.GetFormExport()->getControlNumberStyle(xControlModel);
+                    ::rtl::OUString sNumberStyle = mrExport.GetFormExport()->getControlNumberStyle(xControlModel);
                     if (0 != sNumberStyle.getLength())
                     {
                         sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
@@ -436,12 +436,12 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             // there are filtered properties -> hard attributes
             // try to find this style in AutoStylePool
-            aShapeInfo.msStyleName = rExport.GetAutoStylePool()->Find(aShapeInfo.mnFamily, aParentName, xPropStates);
+            aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Find(aShapeInfo.mnFamily, aParentName, xPropStates);
 
             if(!aShapeInfo.msStyleName.getLength())
             {
                 // Style did not exist, add it to AutoStalePool
-                aShapeInfo.msStyleName = rExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
+                aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
             }
         }
 
@@ -498,11 +498,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             if( nCount )
             {
                 const OUString aEmpty;
-                aShapeInfo.msTextStyleName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates );
+                aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates );
                 if(!aShapeInfo.msTextStyleName.getLength())
                 {
                     // Style did not exist, add it to AutoStalePool
-                    aShapeInfo.msTextStyleName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates);
+                    aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates);
                 }
             }
         }
@@ -512,7 +512,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // prepare animation informations if needed
     // ----------------------------------------
     if( mxAnimationsExporter.is() )
-        mxAnimationsExporter->prepare( xShape, rExport );
+        mxAnimationsExporter->prepare( xShape, mrExport );
 
     // -------------------
     // check for connector
@@ -524,11 +524,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         // create shape ids for export later
         xPropSet->getPropertyValue( msStartShape ) >>= xConnection;
         if( xConnection.is() )
-            rExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
+            mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
 
         xPropSet->getPropertyValue( msEndShape ) >>= xConnection;
         if( xConnection.is() )
-            rExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
+            mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
     }
 
     maShapeInfos.push_back( aShapeInfo );
@@ -604,7 +604,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // collect animation informations if needed
     // ----------------------------------------
     if( mxAnimationsExporter.is() )
-        mxAnimationsExporter->collect( xShape, rExport );
+        mxAnimationsExporter->collect( xShape, mrExport );
 
     // -------------------------------
     // export shapes name if he has one
@@ -629,7 +629,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             {
                 const OUString aName( xNamed->getName() );
                 if( aName.getLength() )
-                    rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
+                    mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
             }
         }
         // <--
@@ -641,9 +641,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( aShapeInfo.msStyleName.getLength() != 0 )
     {
         if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, rExport.EncodeStyleName( aShapeInfo.msStyleName) );
+            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
         else
-            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, rExport.EncodeStyleName( aShapeInfo.msStyleName) );
+            mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
     }
 
     // ------------------
@@ -651,7 +651,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // ------------------
     if( aShapeInfo.msTextStyleName.getLength() != 0 )
     {
-        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName );
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName );
     }
 
     // --------------------------
@@ -659,9 +659,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // --------------------------
     {
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
-        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
         if( rShapeId.getLength() )
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, rShapeId );
+            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, rShapeId );
     }
 
     // --------------------------
@@ -678,7 +678,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 OUString aLayerName;
                 xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
-                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
             catch( uno::Exception e )
@@ -690,9 +690,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     // #82003# test export count
     // #91587# ALWAYS increment since now ALL to be exported shapes are counted.
-    if(rExport.GetShapeExport()->IsHandleProgressBarEnabled())
+    if(mrExport.GetShapeExport()->IsHandleProgressBarEnabled())
     {
-        rExport.GetProgressBarHelper()->Increment();
+        mrExport.GetProgressBarHelper()->Increment();
     }
 
     onExport( xShape );
@@ -872,8 +872,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // set on the next exported element, which can result in corrupt
     // xml files due to duplicate attributes
 
-    rExport.CheckAttrList();    // asserts in non pro if we have attributes left
-    rExport.ClearAttrList();    // clears the attributes
+    mrExport.CheckAttrList();   // asserts in non pro if we have attributes left
+    mrExport.ClearAttrList();   // clears the attributes
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1040,7 +1040,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         rtl::OUString sCLSID;
                         if (aAny >>= sCLSID)
                         {
-                            if (sCLSID.equals(rExport.GetChartExport()->getChartCLSID()))
+                            if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()))
                             {
                                 eShapeType = XmlShapeTypeDrawChartShape;
                             }
@@ -1145,47 +1145,47 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
             // export only user defined glue points
 
             const OUString sId( OUString::valueOf( nIdentifier ) );
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
+            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
 
-            rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.X);
-            rExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, msBuffer.makeStringAndClear());
+            mrExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.X);
+            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, msBuffer.makeStringAndClear());
 
-            rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.Y);
-            rExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, msBuffer.makeStringAndClear());
+            mrExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.Y);
+            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, msBuffer.makeStringAndClear());
 
             if( !aGluePoint.IsRelative )
             {
                 SvXMLUnitConverter::convertEnum( msBuffer, aGluePoint.PositionAlignment, aXML_GlueAlignment_EnumMap );
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ALIGN, msBuffer.makeStringAndClear() );
+                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ALIGN, msBuffer.makeStringAndClear() );
             }
 
             if( aGluePoint.Escape != drawing::EscapeDirection_SMART )
             {
                 SvXMLUnitConverter::convertEnum( msBuffer, aGluePoint.Escape, aXML_GlueEscapeDirection_EnumMap );
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ESCAPE_DIRECTION, msBuffer.makeStringAndClear() );
+                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ESCAPE_DIRECTION, msBuffer.makeStringAndClear() );
             }
 
-            SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_DRAW, XML_GLUE_POINT, sal_True, sal_True);
+            SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_DRAW, XML_GLUE_POINT, sal_True, sal_True);
         }
     }
 }
 
 void XMLShapeExport::ExportGraphicDefaults()
 {
-    XMLStyleExport aStEx(rExport, OUString(), rExport.GetAutoStylePool().get());
+    XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
     // construct PropertySetMapper
-    UniReference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( rExport ) );
+    UniReference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( mrExport ) );
     ((XMLShapeExportPropertyMapper*)xPropertySetMapper.get())->SetAutoStyles( sal_False );
 
     // chain text attributes
-    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExport));
+    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(mrExport));
 
     // chain special Writer/text frame default attributes
-    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaDefaultExtPropMapper(rExport));
+    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaDefaultExtPropMapper(mrExport));
 
     // write graphic family default style
-    uno::Reference< lang::XMultiServiceFactory > xFact( rExport.GetModel(), uno::UNO_QUERY );
+    uno::Reference< lang::XMultiServiceFactory > xFact( mrExport.GetModel(), uno::UNO_QUERY );
     if( xFact.is() )
     {
         try
@@ -1205,7 +1205,7 @@ void XMLShapeExport::ExportGraphicDefaults()
     }
 }
 
-void XMLShapeExport::onExport( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
+void XMLShapeExport::onExport( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& )
 {
 }
 
