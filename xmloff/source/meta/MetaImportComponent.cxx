@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaImportComponent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:17:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ public:
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
                         USHORT nPrfx, const rtl::OUString& rLName,
-                        const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                        const uno::Reference<xml::sax::XAttributeList>&,
                         const uno::Reference<document::XDocumentInfo>& rDocInfo) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xDocInfo(rDocInfo)
@@ -91,7 +91,7 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext( USHORT nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                          ::com::sun::star::xml::sax::XAttributeList>& )
 {
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken(rLocalName, XML_META) )
