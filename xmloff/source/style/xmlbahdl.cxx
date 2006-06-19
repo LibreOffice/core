@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:51:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,7 +581,7 @@ XMLStringPropHdl::~XMLStringPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
 
@@ -591,7 +591,7 @@ sal_Bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
     return bRet;
 }
 
-sal_Bool XMLStringPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLStringPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
 
@@ -731,7 +731,7 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bValue = ( (rStrImpValue == sTransparent) == bTransPropValue);
     rValue.setValue( &bValue, ::getBooleanCppuType() );
@@ -739,7 +739,7 @@ sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& 
     return sal_True;
 }
 
-sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
 
@@ -862,13 +862,13 @@ XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLCompareOnlyPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCompareOnlyPropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
 {
     DBG_ASSERT( !this, "importXML called for compare-only-property" );
     return sal_False;
 }
 
-sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString&, const Any&, const SvXMLUnitConverter& ) const
 {
     DBG_ASSERT( !this, "exportXML called for compare-only-property" );
     return sal_False;
