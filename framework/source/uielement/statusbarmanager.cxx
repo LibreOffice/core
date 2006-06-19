@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,15 +189,15 @@ StatusBarManager::StatusBarManager(
     StatusBar* pStatusBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
-    m_aListenerContainer( m_aLock.getShareableOslMutex() ),
-    m_xServiceManager( rServiceManager ),
-    m_xFrame( rFrame ),
     m_bDisposed( sal_False ),
     m_bModuleIdentified( sal_False ),
     m_bFrameActionRegistered( sal_False ),
     m_bUpdateControllers( sal_False ),
+    m_pStatusBar( pStatusBar ),
     m_aResourceName( rResourceName ),
-    m_pStatusBar( pStatusBar )
+    m_xFrame( rFrame ),
+    m_aListenerContainer( m_aLock.getShareableOslMutex() ),
+    m_xServiceManager( rServiceManager )
 {
 
     if ( m_xServiceManager.is() )
@@ -304,7 +304,7 @@ void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang:
 }
 
 // XUIConfigurationListener
-void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -313,7 +313,7 @@ void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEve
         return;
 }
 
-void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -322,7 +322,7 @@ void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEven
         return;
 }
 
-void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -641,7 +641,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     UpdateControllers();
 }
 
-void StatusBarManager::StateChanged( StateChangedType nType )
+void StatusBarManager::StateChanged( StateChangedType )
 {
 }
 
@@ -721,7 +721,7 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
     }
 }
 
-IMPL_LINK( StatusBarManager, Click, StatusBar*, pStatusBar )
+IMPL_LINK( StatusBarManager, Click, StatusBar*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -740,7 +740,7 @@ IMPL_LINK( StatusBarManager, Click, StatusBar*, pStatusBar )
     return 1;
 }
 
-IMPL_LINK( StatusBarManager, DoubleClick, StatusBar*, pStatusBar )
+IMPL_LINK( StatusBarManager, DoubleClick, StatusBar*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
 
