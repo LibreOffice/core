@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wntmsc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:19:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,11 @@
 #include <direct.h>
 
 #include <svwin.h>
+#pragma warning (push,1)
 #include <winbase.h>
+#pragma warning (pop)
 #include <solar.h>
+
 #include <string.hxx>
 
 //--------------------------------------------------------------------
@@ -87,7 +90,6 @@ typedef struct
 #define MKDIR( p )      mkdir( p )
 #define CMP_LOWER(s)    ( ByteString(s).ToLowerAscii() )
 
-#include <svwin.h>
 #define START_DRV 'a'
 
 inline BOOL DRIVE_EXISTS(char c)
