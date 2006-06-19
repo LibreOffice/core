@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remote.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:13:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,14 @@
 
 namespace bridges_remote {
 
+extern "C" typedef void SAL_CALL AcquireRemote2RemoteStub(
+    remote_Interface * pThis);
+AcquireRemote2RemoteStub acquireRemote2RemoteStub;
+
+extern "C" typedef void SAL_CALL FreeRemote2RemoteStub(
+    uno_ExtEnvironment * environment, void * stub);
+FreeRemote2RemoteStub freeRemote2RemoteStub;
+
 class Remote2RemoteStub :
     public remote_Interface
 {
@@ -58,15 +66,6 @@ public:
                       uno_Environment *pEnvRemote,
                       requestClientSideDispatcher dispatch );
     ~Remote2RemoteStub();
-
-    static void SAL_CALL thisAcquire( remote_Interface *pThis );
-    static void SAL_CALL thisRelease( remote_Interface *pThis );
-    static void SAL_CALL thisDispatch( remote_Interface * pUnoI,
-                                       typelib_TypeDescription * pMemberType,
-                                       void * pReturn,
-                                       void * pArgs[],
-                                       uno_Any ** ppException );
-    static void SAL_CALL thisFree( uno_ExtEnvironment *pEnvRemote , void * );
 
     void releaseRemote();
 public:
