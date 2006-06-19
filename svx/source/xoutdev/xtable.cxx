@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:22:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #include "xtable.hxx"
 #include "xpool.hxx"
@@ -65,10 +63,10 @@ Color RGB_Color( ColorData nColorName )
 XPropertyTable::XPropertyTable( const String& rPath,
                                 XOutdevItemPool* pInPool,
                                 USHORT nInitSize, USHORT nReSize ) :
-            aTable          ( nInitSize, nReSize ),
-            aPath           ( rPath ),
             aName           ( pszStandard, 8 ),
+            aPath           ( rPath ),
             pXPool          ( pInPool ),
+            aTable          ( nInitSize, nReSize ),
             pBmpTable       ( NULL ),
             bTableDirty     ( TRUE ),
             bBitmapsDirty   ( TRUE ),
@@ -88,7 +86,7 @@ XPropertyTable::XPropertyTable( const String& rPath,
 |*
 *************************************************************************/
 
-XPropertyTable::XPropertyTable( SvStream& rIn ) :
+XPropertyTable::XPropertyTable( SvStream& /*rIn*/) :
             pBmpTable   ( NULL )
 {
 }
@@ -160,7 +158,7 @@ long XPropertyTable::Count() const
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyTable::Get( long nIndex, USHORT nDummy ) const
+XPropertyEntry* XPropertyTable::Get( long nIndex, USHORT /*nDummy*/) const
 {
     if( bTableDirty )
     {
@@ -262,7 +260,7 @@ XPropertyEntry* XPropertyTable::Replace( long nIndex, XPropertyEntry* pEntry )
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyTable::Remove( long nIndex, USHORT nDummy )
+XPropertyEntry* XPropertyTable::Remove( long nIndex, USHORT /*nDummy*/)
 {
     if( pBmpTable && !bBitmapsDirty )
     {
@@ -297,10 +295,10 @@ void XPropertyTable::SetName( const String& rString )
 XPropertyList::XPropertyList( const String& rPath,
                                 XOutdevItemPool* pInPool,
                                 USHORT nInitSize, USHORT nReSize ) :
-            aList           ( nInitSize, nReSize ),
-            aPath           ( rPath ),
             aName           ( pszStandard, 8 ),
+            aPath           ( rPath ),
             pXPool          ( pInPool ),
+            aList           ( nInitSize, nReSize ),
             pBmpList        ( NULL ),
             bListDirty      ( TRUE ),
             bBitmapsDirty   ( TRUE ),
@@ -320,7 +318,7 @@ XPropertyList::XPropertyList( const String& rPath,
 |*
 *************************************************************************/
 
-XPropertyList::XPropertyList( SvStream& rIn ) :
+XPropertyList::XPropertyList( SvStream& /*rIn*/) :
             pBmpList    ( NULL )
 {
 }
@@ -392,7 +390,7 @@ long XPropertyList::Count() const
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyList::Get( long nIndex, USHORT nDummy ) const
+XPropertyEntry* XPropertyList::Get( long nIndex, USHORT /*nDummy*/) const
 {
     if( bListDirty )
     {
@@ -493,7 +491,7 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyList::Remove( long nIndex, USHORT nDummy )
+XPropertyEntry* XPropertyList::Remove( long nIndex, USHORT /*nDummy*/)
 {
     if( pBmpList && !bBitmapsDirty )
     {
