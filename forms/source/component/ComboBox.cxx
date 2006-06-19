@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:57:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -185,11 +188,11 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
     ,OEntryListHelper( m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_eListSourceType(ListSourceType_TABLE)
-    ,m_bEmptyIsNull(sal_True)
     ,m_aNullDate(DBTypeConversion::getStandardDate())
-    ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_nFormatKey(0)
     ,m_nFieldType(DataType::OTHER)
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_bEmptyIsNull(sal_True)
 {
     DBG_CTOR( OComboBoxModel, NULL );
 
@@ -202,17 +205,16 @@ OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Referenc
     :OBoundControlModel( _pOriginal, _rxFactory )
     ,OEntryListHelper( *_pOriginal, m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,m_aListSource( _pOriginal->m_aListSource )
+    ,m_aDefaultText( _pOriginal->m_aDefaultText )
+    ,m_eListSourceType( _pOriginal->m_eListSourceType )
     ,m_aNullDate(DBTypeConversion::getStandardDate())
-    ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_nFormatKey(0)
     ,m_nFieldType(DataType::OTHER)
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_bEmptyIsNull( _pOriginal->m_bEmptyIsNull )
 {
     DBG_CTOR( OComboBoxModel, NULL );
-
-    m_eListSourceType = _pOriginal->m_eListSourceType;
-    m_bEmptyIsNull = _pOriginal->m_bEmptyIsNull;
-    m_aListSource = _pOriginal->m_aListSource;
-    m_aDefaultText = _pOriginal->m_aDefaultText;
 }
 
 //------------------------------------------------------------------
@@ -484,9 +486,9 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
             m_aListSource += *pToken;
     }
 
-    sal_Int16 nValue;
-    _rxInStream >> nValue;
-    m_eListSourceType = (ListSourceType)nValue;
+    sal_Int16 nListSourceType;
+    _rxInStream >> nListSourceType;
+    m_eListSourceType = (ListSourceType)nListSourceType;
 
     if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
     {
@@ -669,9 +671,9 @@ void OComboBoxModel::loadData()
         disposeComponent(xStmt);
         return;
     }
-    catch(Exception& eUnknown)
+    catch( const Exception& )
     {
-        eUnknown;
+        DBG_UNHANDLED_EXCEPTION();
         disposeComponent(xListCursor);
         disposeComponent(xStmt);
         return;
@@ -694,7 +696,7 @@ void OComboBoxModel::loadData()
             {
                 // die XDatabaseVAriant der ersten Spalte
                 Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
-                DBG_ASSERT(xSupplyCols.is(), "OComboBoxModel::loadData : cursor supports the row set service but is no column supplier ??!");
+                DBG_ASSERT(xSupplyCols.is(), "OComboBoxModel::loadData : cursor supports the row set service but is no column supplier?!");
                 Reference<XIndexAccess> xColumns;
                 if (xSupplyCols.is())
                 {
@@ -738,6 +740,9 @@ void OComboBoxModel::loadData()
                 }
             }
             break;
+            default:
+                OSL_ENSURE( false, "OComboBoxModel::loadData: unreachable!" );
+                break;
         }
     }
     catch(SQLException& eSQL)
@@ -747,9 +752,9 @@ void OComboBoxModel::loadData()
         disposeComponent(xStmt);
         return;
     }
-    catch(Exception& eUnknown)
+    catch( const Exception& )
     {
-        eUnknown;
+        DBG_UNHANDLED_EXCEPTION();
         disposeComponent(xListCursor);
         disposeComponent(xStmt);
         return;
@@ -877,9 +882,8 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
             if (i >= aStringItemList.getLength())
             {
                 sal_Int32 nOldLen = aStringItemList.getLength();
-                aStringItemList.realloc(nOldLen + 1);
-                ::rtl::OUString* pStringItems = aStringItemList.getArray() + nOldLen;
-                *pStringItems = aNewValue;
+                aStringItemList.realloc( nOldLen + 1 );
+                aStringItemList.getArray()[ nOldLen ] = aNewValue;
 
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
             }
