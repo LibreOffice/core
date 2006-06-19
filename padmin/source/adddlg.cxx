@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:25:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,7 @@ IMPL_LINK( APCommandPage, ClickBtnHdl, PushButton*, pButton )
     else if( pButton == &m_aPdfDirBtn )
     {
         String aPath( m_aPdfDirEdt.GetText() );
-        if( chooseDirectory( this, aPath ) )
+        if( chooseDirectory( aPath ) )
             m_aPdfDirEdt.SetText( aPath );
     }
     return 0;
@@ -682,7 +682,7 @@ bool APOldPrinterPage::check()
     return m_aOldPrinterBox.GetEntryCount() > 0;
 }
 
-void APOldPrinterPage::fill( PrinterInfo& rInfo )
+void APOldPrinterPage::fill( PrinterInfo& )
 {
 }
 
