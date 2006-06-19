@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:38:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ struct SfxDock_Impl
 };
 
 typedef SfxDock_Impl* SfxDockPtr;
-SV_DECL_PTRARR_DEL( SfxDockArr_Impl, SfxDockPtr, 4, 4);
+SV_DECL_PTRARR_DEL( SfxDockArr_Impl, SfxDockPtr, 4, 4)
 SV_IMPL_PTRARR( SfxDockArr_Impl, SfxDockPtr);
 
 class SfxEmptySplitWin_Impl : public SplitWindow
@@ -1039,16 +1039,16 @@ BOOL SfxSplitWindow::CursorIsOverRect( BOOL bForceAdding ) const
 
     if ( bVisible )
     {
-        Point aPos = GetPosPixel();
-        Size aSize = GetSizePixel();
+        Point aVisPos = GetPosPixel();
+        Size aVisSize = GetSizePixel();
 
         // Um +/- ein paar Pixel erweitern, sonst ist es zu nerv"os
-        aPos.X() -= nPixel;
-        aPos.Y() -= nPixel;
-        aSize.Width() += 2 * nPixel;
-        aSize.Height() += 2 * nPixel;
+        aVisPos.X() -= nPixel;
+        aVisPos.Y() -= nPixel;
+        aVisSize.Width() += 2 * nPixel;
+        aVisSize.Height() += 2 * nPixel;
 
-        Rectangle aVisRect( aPos, aSize );
+        Rectangle aVisRect( aVisPos, aVisSize );
         aRect = aRect.GetUnion( aVisRect );
     }
 
