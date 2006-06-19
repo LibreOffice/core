@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:52:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,21 +277,16 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
 
     case typelib_TypeClass_TYPE:
         return new IdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
-#if OSL_DEBUG_LEVEL > 1
-    case typelib_TypeClass_INTERFACE_METHOD:
-    case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-    case typelib_TypeClass_SERVICE:
-    case typelib_TypeClass_MODULE:
-    case typelib_TypeClass_UNKNOWN:
-    case typelib_TypeClass_TYPEDEF:
+
     default:
+#if OSL_DEBUG_LEVEL > 1
         OSL_TRACE( "### corereflection type unsupported: " );
         OString aName( OUStringToOString( pTypeDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( aName.getStr() );
         OSL_TRACE( "\n" );
 #endif
+        return Reference< XIdlClass >();
     }
-    return Reference< XIdlClass >();
 }
 //__________________________________________________________________________________________________
 Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rTypeName )
@@ -419,7 +414,6 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
     throw RuntimeException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("IdlReflectionServiceImpl::forType() failed!") ),
         (XWeak *)(OWeakObject *)this );
-    return Reference< XIdlClass >(); // dummy
 }
 
 //__________________________________________________________________________________________________
@@ -518,7 +512,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -544,6 +538,8 @@ sal_Bool SAL_CALL component_writeInfo(
 #if OSL_DEBUG_LEVEL > 0
             OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, cstr.getStr() );
+#else
+            (void) exc; // unused
 #endif
         }
     }
