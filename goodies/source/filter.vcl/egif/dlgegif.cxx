@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgegif.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:29:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 
 DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_GIF, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aCbxInterlaced      ( this, ResId( CBX_INTERLACED ) ),
                 aCbxTranslucent     ( this, ResId( CBX_TRANSLUCENT ) ),
                 aGrpMode            ( this, ResId( GRP_MODE ) ),
@@ -57,8 +58,7 @@ DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pMgr                ( rPara.pResMgr ),
-                rFltCallPara        ( rPara )
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
