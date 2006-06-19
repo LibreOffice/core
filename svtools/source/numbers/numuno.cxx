@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:01:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
     pImpl->pFormatter = pNew;
 }
 
-void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32 nKey)
+void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32)
 {
     //  Basis-Implementierung tut nix...
 }
@@ -128,7 +128,7 @@ sal_Int64 SAL_CALL SvNumberFormatsSupplierObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -157,7 +157,7 @@ SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
     SvNumberFormatsSupplierObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (SvNumberFormatsSupplierObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<SvNumberFormatsSupplierObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( getUnoTunnelId() )));
     return pRet;
 }
 
