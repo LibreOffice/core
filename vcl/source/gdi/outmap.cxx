@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:19:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,10 +88,10 @@
 
 // =======================================================================
 
-DBG_NAMEEX( OutputDevice );
-DBG_NAMEEX( Polygon );
-DBG_NAMEEX( PolyPolygon );
-DBG_NAMEEX( Region );
+DBG_NAMEEX( OutputDevice )
+DBG_NAMEEX( Polygon )
+DBG_NAMEEX( PolyPolygon )
+DBG_NAMEEX( Region )
 
 // =======================================================================
 
@@ -306,6 +306,9 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             rMapRes.mnMapScNumY   = pSVData->maGDIData.mnAppFontY;;
             rMapRes.mnMapScDenomY = nDPIY * 80;
             }
+            break;
+        default:
+            DBG_ERROR( "unhandled MapUnit" );
             break;
     }
 
@@ -1856,8 +1859,6 @@ static long fn5( const long n1,
             } // of else
         } // of else
     } // of else
-
-    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1895,8 +1896,6 @@ static long fn3( const long n1, const long n2, const long n3 )
 
         return n4 / n3;
     } // of else
-
-    return 0;
 }
 
 // -----------------------------------------------------------------------
