@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:38:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,8 +328,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     : DocumentState   (E_UNKNOWN)
                     , UsedForSaving   (sal_False)
                     , ListenForModify (sal_False)
-                    , ID              (-1       )
                     , IgnoreClosing   (sal_False)
+                    , ID              (-1       )
                 {}
 
                 //-------------------------------
@@ -528,8 +528,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         virtual ~AutoRecovery(                                                                   );
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------
@@ -572,6 +572,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // css.lang.XEventListener
+        using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
 
@@ -592,7 +593,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
                                                                const css::uno::Any& aValue )
             throw(css::uno::Exception);
-
+        using cppu::OPropertySetHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& aValue ,
                                                    sal_Int32      nHandle) const;
 
@@ -871,8 +872,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_removeTempFile(const ::rtl::OUString& sURL      ,
-                                   const ::rtl::OUString& sAppModule);
+        void implts_removeTempFile(const ::rtl::OUString& sURL);
 
         //---------------------------------------
         /** @short  notifies all interested listener about the current state
@@ -932,7 +932,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_prepareEmergencySave(const DispatchParams& aParams);
+        void implts_prepareEmergencySave();
 
         //---------------------------------------
         // TODO document me
