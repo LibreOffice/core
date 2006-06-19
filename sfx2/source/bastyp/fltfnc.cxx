@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:22:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,7 +384,7 @@ public:
                         {}
 };
 
-DECL_PTRARRAY( SfxFilterMatcherArr_Impl, SfxFilterMatcher_Impl*, 2, 2 );
+DECL_PTRARRAY( SfxFilterMatcherArr_Impl, SfxFilterMatcher_Impl*, 2, 2 )
 
 SfxFilterMatcher::SfxFilterMatcher( const String& rName )
     : pImpl( 0 )
@@ -479,7 +479,11 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
 
 //----------------------------------------------------------------
 
-sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
+    SfxMedium& rMedium,
+    const SfxFilter**ppFilter,
+    SfxFilterFlags /*nMust*/,
+    SfxFilterFlags /*nDont*/ ) const
 {
     Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
     ::rtl::OUString sTypeName;
@@ -520,7 +524,6 @@ if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )       \
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     const SfxFilter* pOldFilter = *ppFilter;
-    const SfxFilter* pFilter = pOldFilter;
 
     // no detection service -> nothing to do !
     Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
@@ -620,7 +623,7 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 }
 
 
-sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, sal_Bool bPlugIn, sal_Bool bAPI ) const
+sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, sal_Bool /*bPlugIn*/, sal_Bool bAPI ) const
 /*  [Beschreibung]
 
     Hier wird noch die Filterauswahlbox hochgezogen. Sonst GuessFilter
@@ -988,9 +991,8 @@ IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
 SfxFilterMatcherIter::SfxFilterMatcherIter(
     const SfxFilterMatcher* pMatchP,
     SfxFilterFlags nOrMaskP, SfxFilterFlags nAndMaskP )
-    : pMatch( pMatchP->pImpl)
-    , nOrMask( nOrMaskP ), nAndMask( nAndMaskP )
-    , nCurrent(0)
+    : nOrMask( nOrMaskP ), nAndMask( nAndMaskP ),
+      nCurrent(0), pMatch( pMatchP->pImpl)
 {
     if( nOrMask == 0xffff ) //Wg. Fehlbuild auf s
         nOrMask = 0;
