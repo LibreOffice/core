@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weakagg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:23:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,9 @@ protected:
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:
     /** @internal */
-    OWeakAggObject( const OWeakObject & rObj ) SAL_THROW( () );
+    OWeakAggObject( const OWeakAggObject & rObj ) SAL_THROW( () );
     /** @internal */
-    OWeakObject &  operator = ( const OWeakObject & rObj ) SAL_THROW( () );
+    OWeakAggObject & operator = ( const OWeakAggObject & rObj ) SAL_THROW( () );
 };
 
 }
