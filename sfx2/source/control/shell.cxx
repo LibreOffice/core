@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:29:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 
 //====================================================================
 
-DBG_NAME(SfxShell);
+DBG_NAME(SfxShell)
 
 //====================================================================
 
@@ -93,7 +93,7 @@ TYPEINIT0(SfxShell);
 
 //====================================================================
 typedef SfxSlot* SfxSlotPtr;
-SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4, 4);
+SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4, 4)
 SV_IMPL_PTRARR( SfxVerbSlotArr_Impl, SfxSlotPtr);
 
 using namespace com::sun::star;
@@ -669,7 +669,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, USHORT nId )
 
 //--------------------------------------------------------------------
 
-void SfxShell::DoActivate( SfxViewFrame *pFrame, BOOL bMDI )
+void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 
 /*  [Beschreibung]
 
@@ -711,7 +711,7 @@ void SfxShell::DoActivate( SfxViewFrame *pFrame, BOOL bMDI )
 
 //--------------------------------------------------------------------
 
-void SfxShell::DoDeactivate( SfxViewFrame *pFrame, BOOL bMDI )
+void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 
 /*  [Beschreibung]
 
@@ -764,7 +764,7 @@ BOOL SfxShell::IsActive() const
 
 void SfxShell::Activate
 (
-    BOOL    bMDI        /*  TRUE
+    BOOL    /*bMDI*/        /*  TRUE
                             der <SfxDispatcher>, auf dem die SfxShell sich
                             befindet, ist aktiv geworden oder die SfxShell
                             Instanz wurde auf einen aktiven SfxDispatcher
@@ -797,7 +797,7 @@ void SfxShell::Activate
 
 void SfxShell::Deactivate
 (
-    BOOL    bMDI        /*  TRUE
+    BOOL    /*bMDI*/        /*  TRUE
                             der <SfxDispatcher>, auf dem die SfxShell sich
                             befindet, ist inaktiv geworden oder die SfxShell
                             Instanz wurde auf einen aktiven SfxDispatcher
@@ -1145,14 +1145,15 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
 
     // Zun"achst alle Statecaches dirty machen, damit keiner mehr versucht,
     // die Slots zu benutzen
-
-    SfxBindings *pBindings =
-        pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
-    USHORT nCount = pImp->aSlotArr.Count();
-    for (USHORT n1=0; n1<nCount ; n1++)
     {
-        USHORT nId = SID_VERB_START + n1;
-        pBindings->Invalidate(nId, FALSE, TRUE);
+        SfxBindings *pBindings =
+            pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
+        USHORT nCount = pImp->aSlotArr.Count();
+        for (USHORT n1=0; n1<nCount ; n1++)
+        {
+            USHORT nId = SID_VERB_START + n1;
+            pBindings->Invalidate(nId, FALSE, TRUE);
+        }
     }
 
     USHORT nr=0;
@@ -1244,7 +1245,7 @@ void SfxShell::VerbExec(SfxRequest& rReq)
 
 //--------------------------------------------------------------------
 
-void SfxShell::VerbState(SfxItemSet &rSet)
+void SfxShell::VerbState(SfxItemSet& )
 {
 }
 
@@ -1295,7 +1296,7 @@ BOOL SfxShell::HasUIFeature( ULONG )
     return FALSE;
 }
 
-long DispatcherUpdate_Impl( void* pObj, void* pArg )
+long DispatcherUpdate_Impl( void*, void* pArg )
 {
     ((SfxDispatcher*) pArg)->Update_Impl( TRUE );
     ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(FALSE);
@@ -1328,12 +1329,12 @@ ULONG SfxShell::GetDisableFlags() const
     return pImp->nDisableFlags;
 }
 
-SfxItemSet* SfxShell::CreateItemSet( USHORT nId )
+SfxItemSet* SfxShell::CreateItemSet( USHORT )
 {
     return NULL;
 }
 
-void SfxShell::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
+void SfxShell::ApplyItemSet( USHORT, const SfxItemSet& )
 {
 }
 
