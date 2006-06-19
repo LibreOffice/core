@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorlistener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:03:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ class ColorListener : public  css::lang::XEventListener
 
     public:
 
-        DECLARE_XINTERFACE
+        FWK_DECLARE_XINTERFACE
 
          ColorListener( const css::uno::Reference< css::awt::XWindow >& xWindow );
         ~ColorListener(                                                         );
