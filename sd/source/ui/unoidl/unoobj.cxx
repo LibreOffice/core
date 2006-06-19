@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:07:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,9 +320,7 @@ void SdXShape::dispose()
 uno::Any SAL_CALL SdXShape::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-    mpShape->queryAggregation( rType, aAny );
-    return aAny;
+    return mpShape->queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
