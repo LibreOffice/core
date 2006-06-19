@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:49:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,9 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
 void SAL_CALL OInputStreamHelper::seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_nActPos = location;
+    // cast is truncating, but position would be truncated as soon as
+    // put into SvLockBytes anyway
+    m_nActPos = sal::static_int_cast<sal_uInt32>(location);
 }
 
 sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -174,7 +176,7 @@ void SAL_CALL OOutputStreamHelper::writeBytes(const staruno::Sequence< sal_Int8 
     m_nActPos += (sal_uInt32)nWritten;
 
     if (nError != ERRCODE_NONE ||
-        nWritten != aData.getLength())
+        sal::static_int_cast<sal_Int32>(nWritten) != aData.getLength())
     {
         throw stario::IOException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
     }
