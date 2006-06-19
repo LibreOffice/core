@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:03:55 $
+#   last change: $Author: hr $ $Date: 2006-06-19 20:55:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@ SRC1FILES=	ctrltool.src		\
 
 EXCEPTIONSFILES=\
             $(SLO)$/filectrl2.obj \
+            $(SLO)$/roadmap.obj \
+            $(SLO)$/scriptedtext.obj\
+            $(SLO)$/fmtfield.obj \
             $(SLO)$/inettbc.obj \
             $(SLO)$/valueacc.obj
 
@@ -60,7 +63,6 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/asynclink.obj \
             $(SLO)$/urlcontrol.obj \
             $(SLO)$/fileurlbox.obj \
-            $(SLO)$/roadmap.obj \
             $(SLO)$/wizardheader.obj \
             $(SLO)$/ctrltool.obj  \
             $(SLO)$/ctrlbox.obj  \
@@ -81,8 +83,6 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/reginfo.obj	\
             $(SLO)$/collatorres.obj \
             $(SLO)$/indexentryres.obj \
-            $(SLO)$/fmtfield.obj \
-            $(SLO)$/scriptedtext.obj\
             $(SLO)$/hyperlabel.obj			
 
 # --- Targets ------------------------------------------------------
