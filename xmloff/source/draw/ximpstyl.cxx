@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:43:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+
 
 #ifndef _XIMPSTYLE_HXX
 #include "ximpstyl.hxx"
@@ -163,6 +163,7 @@ public:
 
     virtual ~SdXMLDrawingPagePropertySetContext();
 
+    using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
@@ -188,7 +189,7 @@ SdXMLDrawingPagePropertySetContext::~SdXMLDrawingPagePropertySetContext()
 }
 
 SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
-                   sal_uInt16 nPrefix,
+                   sal_uInt16 p_nPrefix,
                    const OUString& rLocalName,
                    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
                    ::std::vector< XMLPropertyState > &rProperties,
@@ -196,7 +197,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    switch( xMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_PAGE_SOUND_URL:
     {
@@ -218,7 +219,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
     }
 
     if( !pContext )
-        pContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
+        pContext = SvXMLPropertySetContext::CreateChildContext( p_nPrefix, rLocalName,
                                                             xAttrList,
                                                             rProperties, rProp );
 
@@ -306,7 +307,7 @@ void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
     const UniReference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-    for (property; property != rProperties.end(); property++)
+    for(; property != rProperties.end(); property++)
     {
         if( property->mnIndex == -1 )
             continue;
@@ -1093,9 +1094,9 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLStyleContext* pContext = 0;
-    const SvXMLTokenMap& rTokenMap = GetSdImport().GetStylesElemTokenMap();
+    const SvXMLTokenMap& rStyleTokenMap = GetSdImport().GetStylesElemTokenMap();
 
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(rStyleTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_STYLES_PAGE_MASTER:
         {
