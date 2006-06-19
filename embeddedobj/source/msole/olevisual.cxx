@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:23:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,11 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     m_nCachedAspect = nAspect;
 }
 
-awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64
+#if defined WNT || OSL_DEBUG_LEVEL > 0
+nAspect
+#endif
+)
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -309,7 +313,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     return aResult;
 }
 
-embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
+embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 /*nAspect*/ )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -391,7 +395,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
 }
 
-sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
+sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 /*nAspect*/ )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
