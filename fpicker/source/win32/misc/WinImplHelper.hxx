@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinImplHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:52:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #endif
 
 #ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #include <windows.h>
