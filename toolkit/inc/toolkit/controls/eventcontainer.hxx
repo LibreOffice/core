@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventcontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:48:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,9 +91,9 @@ class NameContainer_Impl : public NameContainerHelper
 
 public:
     NameContainer_Impl( ::com::sun::star::uno::Type const & aType )
-        : mType( aType )
-        , mnElementCount( 0 )
-        , maContainerListeners( *this )
+        : mnElementCount( 0 ),
+          mType( aType ),
+          maContainerListeners( *this )
     {
     }
 
