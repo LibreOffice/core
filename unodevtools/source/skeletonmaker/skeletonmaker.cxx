@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonmaker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:21:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:51:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ static const char usageText[] =
 "    -h, --help             print this help and exit\n\n"
 " Sun Microsystems (R) ";
 
-void printUsageAndExit(char* programname, char* version)
+void printUsageAndExit(const char* programname, const char* version)
 {
     std::cerr
         << "\n using: " << programname
@@ -133,10 +133,10 @@ void printUsageAndExit(char* programname, char* version)
 
 }
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
 {
-    char* version = "0.3";
-    char* programname = "uno-skeletonmaker";
+    const char* version = "0.3";
+    const char* programname = "uno-skeletonmaker";
 
     if ( argc <= 1 ) {
         printUsageAndExit(programname, version);
