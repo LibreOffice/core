@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:02:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,13 @@
 
 #define VCL_NEED_BASETSD
 #include <tools/presys.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tools/postsys.h>
 
 #include <tools/string.hxx>
@@ -76,7 +82,7 @@ bool WinSalSystem::GetSalSystemDisplayInfo( DisplayInfo& rInfo )
     ImplSalGetWorkArea( NULL, &aRect, NULL );
 
     HDC hDC;
-    if( hDC = GetDC( NULL ) )
+    if( (hDC = GetDC( NULL )) != 0 )
     {
         rInfo.nWidth    = aRect.right - aRect.left;
         rInfo.nHeight   = aRect.bottom - aRect.top;
