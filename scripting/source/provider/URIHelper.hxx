@@ -4,9 +4,9 @@
  *
  *  $RCSfile: URIHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:31:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 namespace func_provider
