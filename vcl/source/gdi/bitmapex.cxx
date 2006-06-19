@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:51:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -693,9 +693,9 @@ BOOL BitmapEx::Erase( const Color& rFillColor )
 
 // ------------------------------------------------------------------
 
-BOOL BitmapEx::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
+BOOL BitmapEx::Dither( ULONG nDitherFlags )
 {
-    return( !!aBitmap ? aBitmap.Dither( nDitherFlags, pDitherPal ) : FALSE );
+    return( !!aBitmap ? aBitmap.Dither( nDitherFlags ) : FALSE );
 }
 
 // ------------------------------------------------------------------
