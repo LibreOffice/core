@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:13:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,6 +245,7 @@ public:
 protected:
 
 
+    using SvBaseEventDescriptor::replaceByName;
     virtual void replaceByName(
         const sal_uInt16 nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
@@ -254,6 +255,7 @@ protected:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
+    using SvBaseEventDescriptor::getByName;
     virtual void getByName(
         SvxMacro& rMacros,          /// macro to be filled with values
         const sal_uInt16 nEvent )       /// item ID of event
@@ -301,6 +303,7 @@ protected:
 
     sal_Int16 getIndex(const sal_uInt16 nID);
 
+    using SvBaseEventDescriptor::replaceByName;
     virtual void replaceByName(
         const sal_uInt16 nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
@@ -310,6 +313,7 @@ protected:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
+    using SvBaseEventDescriptor::getByName;
     virtual void getByName(
         SvxMacro& rMacro,           /// macro to be filled
         const sal_uInt16 nEvent )       /// item ID of event
@@ -322,6 +326,7 @@ protected:
     /// return sal_True: we have a macro for the event
     /// return sal_False: no macro; getByName() will return an empty macro
     /// IllegalArgumentException: the event is not supported
+    using SvBaseEventDescriptor::hasByName;
     virtual const sal_Bool hasByName(
         const sal_uInt16 nEvent )       /// item ID of event
              throw(
