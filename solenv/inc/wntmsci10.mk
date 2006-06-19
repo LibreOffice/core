@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 12:09:46 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:18:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,7 @@ CXX+= /NMttNoLines
 
 # Flags for COMEX == 10
 
-# disable "warning C4675: resolved overload was found by argument-dependent
-# lookup":
-CFLAGS+=-Zm500 -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR
+CFLAGS+=-Zm500 -Zc:forScope -GR
 CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
 
 CDEFS+= -D_X86_=1
@@ -161,9 +159,108 @@ CFLAGSNOOPT=
 .ENDIF			#  "$(VC_STANDARD)"==""
 CFLAGSOUTOBJ=-Fo
 
-# Flags for COMEX == 10
-CFLAGSWALL=-Wall -wd4294 -wd4640
-CFLAGSDFLTWARN=-W3
+# For C and C++, certain warnings are disabled globally, as they result in
+# spurious warnings and are hard or impossible to workaround:
+# - "warning C4061: enumerate in switch of enum is not explicitly handled by a
+#   case label",
+# - "warning C4127: conditional expression is constant",
+# - "warning C4191: unsafe conversion from function type to function type",
+# - "warning C4217: member template functions cannot be used for copy-assignment
+#   or copy-construction",
+# - "warning C4355: 'this' used in base member initializer list",
+# - "warning C4511: copy constructor could not be generated",
+# - "warning C4512: assignment operator could not be generated",
+# - "warning C4514: unreferenced inline function has been removed",
+# - "warning C4611: interaction between '_setjmp' and C++ object destruction is
+#   non-portable",
+# - "warning C4625: copy constructor could not be generated because a base class
+#   copy constructor is inaccessible",
+# - "warning C4626: assignment operator could not be generated because a base
+#   class assignment operator is inaccessible",
+# - "warning C4675: resolved overload was found by argument-dependent lookup",
+# - "warning C4710: function not inlined",
+# - "warning C4711: function selected for automatic inline expansion",
+# - "warning C4820: padding added after member".
+# - "warning C4503: 'identifier' : decorated name length exceeded, name was truncated"
+#   (http://msdn2.microsoft.com/en-us/library/074af4b6.aspx)
+# For C, certain warnings from system headers (stdlib.h etc.) have to be
+# disabled globally (for C++, this is not necessary, as the system headers are
+# wrapped by STLport):
+# - "warning C4255: no function prototype given: converting
+#   '()' to '(void)'".
+CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4251 -wd4275 -wd4290 \
+    -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 -wd4640 \
+    -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503
+CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-WX
+
+# Once all modules on this platform compile without warnings, set
+# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
+# settings.mk):
+MODULES_WITH_WARNINGS := \
+    automation \
+    avmedia \
+    b_server \
+    basctl \
+    basic \
+    binfilter \
+    canvas \
+    chart2 \
+    connectivity \
+    cppcanvas \
+    customres \
+    databaseext \
+    dbaccess \
+    desktop \
+    devtools \
+    dxcanvas \
+    embeddedobj \
+    extensions \
+    extras_full \
+    filter \
+    finalize \
+    forms \
+    fpicker \
+    framework \
+    glcanvas \
+    goodies \
+    helpcontent2 \
+    instset_native \
+    instsetoo_native \
+    lingu \
+    lingucomponent \
+    linguistic \
+    macromigration \
+    migrationanalysis \
+    officecfg \
+    postprocess \
+    r_tools \
+    sc \
+    sch \
+    scripting \
+    sd \
+    sfx2 \
+    sj2 \
+    slideshow \
+    smoketest_native \
+    smoketestoo_native \
+    so3 \
+    starmath \
+    svtools \
+    svx \
+    sw \
+    tab \
+    toolkit \
+    top \
+    uui \
+    wizards \
+    writerperfect \
+    xmlhelp \
+    xmloff \
+    xmlsecurity
+
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
 
