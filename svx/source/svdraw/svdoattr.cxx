@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:51:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // syntactical sugar for ItemSet accesses
 
-void __EXPORT SdrAttrObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
+void __EXPORT SdrAttrObj::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
     const SfxHint& rHint, const TypeId& rHintType)
 {
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
@@ -535,7 +535,7 @@ INT32 SdrAttrObj::ImpGetLineEndAdd() const
     if(bSttCenter)
     {
         // Linienende steht um die Haelfe ueber
-        XPolygon aSttPoly(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue());
+        XPolygon aSttPoly(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
         nSttHgt = XOutputDevice::InitLineStartEnd(aSttPoly, nSttWdt, bSttCenter);
         // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
     }
@@ -562,7 +562,7 @@ INT32 SdrAttrObj::ImpGetLineEndAdd() const
     if(bEndCenter)
     {
         // Linienende steht um die Haelfe ueber
-        XPolygon aEndPoly(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue());
+        XPolygon aEndPoly(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
         nEndHgt = XOutputDevice::InitLineStartEnd(aEndPoly, nEndWdt, bEndCenter);
         // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
     }
@@ -676,7 +676,7 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes( const SfxItemSet& rSet, SfxItemSet&
 //      {
 
         const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-        Color aShadCol(rShadColItem.GetValue());
+        Color aShadCol(rShadColItem.GetColorValue());
         sal_uInt16 nTransp = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
         XFillStyle eStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
         BOOL bFillBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
@@ -684,7 +684,7 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes( const SfxItemSet& rSet, SfxItemSet&
         if(eStyle==XFILL_HATCH && !bFillBackground)
         {
             // #41666#
-            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetValue();
+            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue();
             aHatch.SetColor(aShadCol);
             rShadowSet.Put(XFillHatchItem(String(), aHatch));
         }
