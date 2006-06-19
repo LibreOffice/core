@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:16:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ inline XInterface * BaseReference::iquery(
         Any aRet( pInterface->queryInterface( rType ) );
         if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
         {
-            XInterface * pRet = reinterpret_cast< XInterface * >( aRet.pReserved );
+            XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
             aRet.pReserved = 0;
             return pRet;
         }
@@ -132,7 +132,7 @@ inline Reference< interface_type >::Reference( const Reference< interface_type >
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface ) SAL_THROW( () )
 {
-    _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    _pInterface = castToXInterface(pInterface);
     if (_pInterface)
         _pInterface->acquire();
 }
@@ -140,13 +140,13 @@ inline Reference< interface_type >::Reference( interface_type * pInterface ) SAL
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () )
 {
-    _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    _pInterface = castToXInterface(pInterface);
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface, UnoReference_NoAcquire ) SAL_THROW( () )
 {
-    _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    _pInterface = castToXInterface(pInterface);
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -165,7 +165,7 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Query ) SAL_THROW( (RuntimeException) )
 {
     _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
-                   ? iquery( reinterpret_cast< XInterface * >( rAny.pReserved ) ) : 0);
+                   ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : 0);
 }
 #ifndef EXCEPTIONS_OFF
 //__________________________________________________________________________________________________
@@ -185,7 +185,7 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) )
 {
     _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
-                                ? reinterpret_cast< XInterface * >( rAny.pReserved ) : 0 );
+                                ? static_cast< XInterface * >( rAny.pReserved ) : 0 );
 }
 #endif
 
@@ -206,9 +206,9 @@ inline sal_Bool Reference< interface_type >::set(
     interface_type * pInterface ) SAL_THROW( () )
 {
     if (pInterface)
-        reinterpret_cast< XInterface * >(pInterface)->acquire();
+        castToXInterface(pInterface)->acquire();
     XInterface * const pOld = _pInterface;
-    _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
     return (0 != pInterface);
@@ -219,7 +219,7 @@ inline sal_Bool Reference< interface_type >::set(
     interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () )
 {
     XInterface * const pOld = _pInterface;
-    _pInterface = reinterpret_cast< XInterface * >(pInterface);
+    _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
     return (0 != pInterface);
@@ -237,25 +237,21 @@ template< class interface_type >
 inline sal_Bool Reference< interface_type >::set(
     const Reference< interface_type > & rRef ) SAL_THROW( () )
 {
-    return set( reinterpret_cast< interface_type * >( rRef._pInterface ) );
+    return set( castFromXInterface( rRef._pInterface ) );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline sal_Bool Reference< interface_type >::set(
     XInterface * pInterface, UnoReference_Query ) SAL_THROW( (RuntimeException) )
 {
-    return set(
-        reinterpret_cast< interface_type * >(iquery( pInterface )),
-        SAL_NO_ACQUIRE );
+    return set( castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline sal_Bool Reference< interface_type >::set(
     const BaseReference & rRef, UnoReference_Query ) SAL_THROW( (RuntimeException) )
 {
-    return set(
-        reinterpret_cast< interface_type * >(iquery( rRef.get() )),
-        SAL_NO_ACQUIRE );
+    return set( castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
 }
 
 //______________________________________________________________________________
@@ -264,10 +260,10 @@ inline bool Reference< interface_type >::set(
     Any const & rAny, UnoReference_Query )
 {
     return set(
-        reinterpret_cast< interface_type * >(
+        castFromXInterface(
             iquery(
                 rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
-                ? reinterpret_cast< XInterface * >( rAny.pReserved ) : 0 )),
+                ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
         SAL_NO_ACQUIRE );
 }
 
@@ -277,16 +273,14 @@ template< class interface_type >
 inline void Reference< interface_type >::set(
     XInterface * pInterface, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) )
 {
-    set( reinterpret_cast< interface_type * >(iquery_throw( pInterface )),
-         SAL_NO_ACQUIRE );
+    set( castFromXInterface(iquery_throw( pInterface )), SAL_NO_ACQUIRE );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline void Reference< interface_type >::set(
     const BaseReference & rRef, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) )
 {
-    set( reinterpret_cast< interface_type * >(iquery_throw( rRef.get() )),
-         SAL_NO_ACQUIRE );
+    set( castFromXInterface(iquery_throw( rRef.get() )), SAL_NO_ACQUIRE );
 }
 
 //______________________________________________________________________________
@@ -294,10 +288,10 @@ template< class interface_type >
 inline void Reference< interface_type >::set(
     Any const & rAny, UnoReference_QueryThrow )
 {
-    set( reinterpret_cast< interface_type * >(
+    set( castFromXInterface(
              iquery_throw(
                  rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
-                 ? reinterpret_cast< XInterface * >( rAny.pReserved ) : 0 )),
+                 ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
          SAL_NO_ACQUIRE );
 }
 
@@ -316,7 +310,7 @@ template< class interface_type >
 inline Reference< interface_type > & Reference< interface_type >::operator = (
     const Reference< interface_type > & rRef ) SAL_THROW( () )
 {
-    set( reinterpret_cast< interface_type * >( rRef._pInterface ) );
+    set( castFromXInterface( rRef._pInterface ) );
     return *this;
 }
 
@@ -326,8 +320,7 @@ inline Reference< interface_type > Reference< interface_type >::query(
     const BaseReference & rRef ) SAL_THROW( (RuntimeException) )
 {
     return Reference< interface_type >(
-        reinterpret_cast< interface_type * >(iquery( rRef.get() )),
-        SAL_NO_ACQUIRE );
+        castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -335,8 +328,7 @@ inline Reference< interface_type > Reference< interface_type >::query(
     XInterface * pInterface ) SAL_THROW( (RuntimeException) )
 {
     return Reference< interface_type >(
-        reinterpret_cast< interface_type * >(iquery( pInterface )),
-        SAL_NO_ACQUIRE );
+        castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
 }
 
 //##################################################################################################
