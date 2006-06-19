@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:31:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     return true;
 }
 
-int GnuInfo::compareVersions(const rtl::OUString& sSecond) const
+int GnuInfo::compareVersions(const rtl::OUString&) const
 {
     return 0;
 }
