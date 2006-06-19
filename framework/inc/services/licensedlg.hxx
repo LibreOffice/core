@@ -4,9 +4,9 @@
  *
  *  $RCSfile: licensedlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:20:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:00:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ public:
     void SetScrolledHdl( const Link& rHdl )  { maScrolledHdl = rHdl; }
     const Link& GetScrolledHdl() const { return maScrolledHdl; }
 
+    using MultiLineEdit::Notify;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
