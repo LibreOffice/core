@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoNamespaceMap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:01:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ namespace svx
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
     };
 
-    Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 )
+    Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* )
     {
         return (XWeak*)new NamespaceMap( pWhichIds, pPool1 );
     }
@@ -331,7 +331,7 @@ OUString SAL_CALL NamespaceMap::getImplementationName(  )
     return NamespaceMap_getImplementationName();
 }
 
-sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& )
     throw(RuntimeException)
 {
     return sal_True;
