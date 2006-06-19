@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localisationoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:51:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,7 +390,7 @@ SvtLocalisationOptions::SvtLocalisationOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtLocalisationOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtLocalisationOptions_Impl::ctor()");
         m_pDataContainer = new SvtLocalisationOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_LOCALISATIONOPTIONS);
