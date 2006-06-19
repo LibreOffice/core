@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:17:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_TPHATCH_CXX
 
@@ -103,13 +102,6 @@ SvxHatchTabPage::SvxHatchTabPage
 
     SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_HATCH ), rInAttrs ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
-    aXFillAttr          ( pXPool ),
-    rXFSet              ( aXFillAttr.GetItemSet() ),
-    aXFStyleItem        ( XFILL_HATCH ),
-    aXHatchItem         ( String(), XHatch() ),
-
     aFtDistance         ( this, ResId( FT_LINE_DISTANCE ) ),
     aMtrDistance        ( this, ResId( MTR_FLD_DISTANCE ) ),
     aFtAngle            ( this, ResId( FT_LINE_ANGLE ) ),
@@ -128,7 +120,17 @@ SvxHatchTabPage::SvxHatchTabPage
     aBtnDelete          ( this, ResId( BTN_DELETE ) ),
     aBtnLoad            ( this, ResId( BTN_LOAD ) ),
     aBtnSave            ( this, ResId( BTN_SAVE ) ),
-    rOutAttrs           ( rInAttrs )
+
+    rOutAttrs           ( rInAttrs ),
+    pColorTab( NULL ),
+    pHatchingList( NULL ),
+
+    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    XOut                ( &aCtlPreview ),
+    aXFStyleItem        ( XFILL_HATCH ),
+    aXHatchItem         ( String(), XHatch() ),
+    aXFillAttr          ( pXPool ),
+    rXFSet              ( aXFillAttr.GetItemSet() )
 
 {
     aBtnLoad.SetModeImage( Image( ResId( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
@@ -148,6 +150,7 @@ SvxHatchTabPage::SvxHatchTabPage
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
+        default: ;//prevent warning
     }
     SetFieldUnit( aMtrDistance, eFUnit );
 
@@ -182,10 +185,6 @@ SvxHatchTabPage::SvxHatchTabPage
         LINK( this, SvxHatchTabPage, ClickDeleteHdl_Impl ) );
     aBtnLoad.SetClickHdl( LINK( this, SvxHatchTabPage, ClickLoadHdl_Impl ) );
     aBtnSave.SetClickHdl( LINK( this, SvxHatchTabPage, ClickSaveHdl_Impl ) );
-
-    pColorTab = NULL;
-    pHatchingList = NULL;
-
 
     aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 }
@@ -272,13 +271,13 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxHatchTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( CheckChanges_Impl() == -1L )
         return KEEP_PAGE;
 
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
 
     return LEAVE_PAGE;
 }
@@ -343,7 +342,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( *pDlgType == 0 && *pbAreaTP == FALSE ) // Flaechen-Dialog
     {
@@ -356,7 +355,7 @@ BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             USHORT  nPos = aLbHatchings.GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                pXHatch = new XHatch( pHatchingList->Get( nPos )->GetHatch() );
+                pXHatch = new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() );
                 aString = aLbHatchings.GetSelectEntry();
             }
             // Farbverlauf wurde (unbekannt) uebergeben
@@ -368,8 +367,8 @@ BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                                  aMtrAngle.GetValue() * 10 );
             }
             DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
-            rOutAttrs.Put( XFillStyleItem( XFILL_HATCH ) );
-            rOutAttrs.Put( XFillHatchItem( aString, *pXHatch ) );
+            rSet.Put( XFillStyleItem( XFILL_HATCH ) );
+            rSet.Put( XFillHatchItem( aString, *pXHatch ) );
 
             delete pXHatch;
         }
@@ -379,7 +378,7 @@ BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
 // -----------------------------------------------------------------------
 
-void SvxHatchTabPage::Reset( const SfxItemSet& rOutAttrs )
+void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
 {
     // aLbHatchings.SelectEntryPos( 0 );
     ChangeHatchHdl_Impl( this );
@@ -398,8 +397,8 @@ void SvxHatchTabPage::Reset( const SfxItemSet& rOutAttrs )
         aBtnSave.Disable();
     }
 
-    rXFSet.Put ( ( XFillColorItem& )    rOutAttrs.Get(XATTR_FILLCOLOR) );
-    rXFSet.Put ( ( XFillBackgroundItem&)rOutAttrs.Get(XATTR_FILLBACKGROUND) );
+    rXFSet.Put ( ( XFillColorItem& )    rSet.Get(XATTR_FILLCOLOR) );
+    rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
     XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 }
@@ -407,9 +406,9 @@ void SvxHatchTabPage::Reset( const SfxItemSet& rOutAttrs )
 // -----------------------------------------------------------------------
 
 SfxTabPage* SvxHatchTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+                const SfxItemSet& rSet )
 {
-    return new SvxHatchTabPage( pWindow, rOutAttrs );
+    return new SvxHatchTabPage( pWindow, rSet );
 }
 
 //------------------------------------------------------------------------
@@ -454,7 +453,7 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
     int nPos = aLbHatchings.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pHatch = new XHatch( ( (XHatchEntry*) pHatchingList->Get( nPos ) )->GetHatch() );
+        pHatch = new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() );
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
@@ -463,7 +462,7 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
             if( ( XFILL_HATCH == (XFillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
                 ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), TRUE, &pPoolItem ) ) )
             {
-                pHatch = new XHatch( ( ( const XFillHatchItem* ) pPoolItem )->GetValue() );
+                pHatch = new XHatch( ( ( const XFillHatchItem* ) pPoolItem )->GetHatchValue() );
             }
         }
         if( !pHatch )
@@ -471,7 +470,7 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
             aLbHatchings.SelectEntryPos( 0 );
             nPos = aLbHatchings.GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pHatch = new XHatch( ( (XHatchEntry*) pHatchingList->Get( nPos ) )->GetHatch() );
+                pHatch = new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() );
         }
     }
     if( pHatch )
@@ -553,7 +552,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = TRUE;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == pHatchingList->Get( i )->GetName() )
+            if( aName == pHatchingList->GetHatch( i )->GetName() )
                 bDifferent = FALSE;
     }
 
@@ -572,7 +571,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = TRUE;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == pHatchingList->Get( i )->GetName() )
+            if( aName == pHatchingList->GetHatch( i )->GetName() )
                 bDifferent = FALSE;
 
         if( bDifferent ) {
@@ -646,7 +645,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         ResMgr* pMgr = DIALOG_MGR();
         String aNewName( ResId( RID_SVXSTR_HATCH, pMgr ) );
         String aDesc( ResId( RID_SVXSTR_DESC_HATCH, pMgr ) );
-        String aName( pHatchingList->Get( nPos )->GetName() );
+        String aName( pHatchingList->GetHatch( nPos )->GetName() );
         String aOldName = aName;
 
         //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
@@ -665,7 +664,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pHatchingList->Get( i )->GetName() &&
+                if( aName == pHatchingList->GetHatch( i )->GetName() &&
                     aName != aOldName )
                     bDifferent = FALSE;
             }
@@ -746,7 +745,7 @@ IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
+IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     ResMgr* pMgr = DIALOG_MGR();
     USHORT nReturn = RET_YES;
@@ -839,7 +838,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
+IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soh" ) );
@@ -914,6 +913,7 @@ void SvxHatchTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
             case RP_LB: aMtrAngle.SetValue( 225 ); break;
             case RP_MB: aMtrAngle.SetValue( 270 ); break;
             case RP_RB: aMtrAngle.SetValue( 315 ); break;
+            case RP_MM: break;
         }
         ModifiedHdl_Impl( this );
     }
