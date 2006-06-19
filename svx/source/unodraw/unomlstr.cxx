@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomlstr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:05:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 }
 
 // ::com::sun::star::util::XModifyListener
-void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& aEvent) throw( uno::RuntimeException )
+void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) throw( uno::RuntimeException )
 {
     if( mpObj )
     {
@@ -61,7 +61,7 @@ void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& aEven
 }
 
 // ::com::sun::star::lang::XEventListener
-void SvxUnoShapeModifyListener::disposing(const lang::EventObject& Source) throw( uno::RuntimeException )
+void SvxUnoShapeModifyListener::disposing(const lang::EventObject& ) throw( uno::RuntimeException )
 {
     invalidate();
 }
