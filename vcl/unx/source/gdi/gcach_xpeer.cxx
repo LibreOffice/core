@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:21:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 #ifndef XRENDER_LINK
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
-    // => load them dynamically when they are there
+    // => load them dynamically when they are available
 #ifdef MACOSX
     OUString xrenderLibraryName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.dylib" ));
 #else
@@ -120,63 +120,63 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     }
 
     OUString queryExtensionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryExtension"));
-    void *pFunc;
-    pFunc=osl_getSymbol(pRenderLib, queryExtensionFuncName.pData);
+    oslGenericFunction pFunc;
+    pFunc=osl_getFunctionSymbol(pRenderLib, queryExtensionFuncName.pData);
     if( !pFunc ) return;
     pXRenderQueryExtension          = (Bool(*)(Display*,int*,int*))pFunc;
 
     OUString queryVersionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryVersion"));
-    pFunc=osl_getSymbol(pRenderLib, queryVersionFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, queryVersionFuncName.pData);
     if( !pFunc ) return;
     pXRenderQueryVersion            = (void(*)(Display*,int*,int*))pFunc;
 
     OUString visFormatFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindVisualFormat"));
-    pFunc=osl_getSymbol(pRenderLib, visFormatFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, visFormatFuncName.pData);
     if( !pFunc ) return;
     pXRenderFindVisualFormat        = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
 
     OUString fmtFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindFormat"));
-    pFunc=osl_getSymbol(pRenderLib, fmtFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, fmtFuncName.pData);
     if( !pFunc ) return;
     pXRenderFindFormat              = (XRenderPictFormat*(*)(Display*,unsigned long,XRenderPictFormat*,int))pFunc;
 
     OUString creatGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreateGlyphSet"));
-    pFunc=osl_getSymbol(pRenderLib, creatGlyphFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, creatGlyphFuncName.pData);
     if( !pFunc ) return;
     pXRenderCreateGlyphSet          = (GlyphSet(*)(Display*,XRenderPictFormat*))pFunc;
 
     OUString freeGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphSet"));
-    pFunc=osl_getSymbol(pRenderLib, freeGlyphFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, freeGlyphFuncName.pData);
     if( !pFunc ) return;
     pXRenderFreeGlyphSet            = (void(*)(Display*,GlyphSet))pFunc;
 
     OUString addGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderAddGlyphs"));
-    pFunc=osl_getSymbol(pRenderLib, addGlyphFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, addGlyphFuncName.pData);
     if( !pFunc ) return;
     pXRenderAddGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int))pFunc;
 
     OUString freeGlyphsFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphs"));
-    pFunc=osl_getSymbol(pRenderLib, freeGlyphsFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, freeGlyphsFuncName.pData);
     if( !pFunc ) return;
     pXRenderFreeGlyphs              = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
 
     OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString32"));
-    pFunc=osl_getSymbol(pRenderLib, compStringFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, compStringFuncName.pData);
     if( !pFunc ) return;
     pXRenderCompositeString32       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned*,int))pFunc;
 
     OUString creatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
-    pFunc=osl_getSymbol(pRenderLib, creatPicFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, creatPicFuncName.pData);
     if( !pFunc ) return;
     pXRenderCreatePicture           = (Picture(*)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*))pFunc;
 
     OUString setClipFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderSetPictureClipRegion"));
-    pFunc=osl_getSymbol(pRenderLib, setClipFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, setClipFuncName.pData);
     if( !pFunc ) return;
     pXRenderSetPictureClipRegion    = (void(*)(Display*,Picture,XLIB_Region))pFunc;
 
     OUString freePicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreePicture"));
-    pFunc=osl_getSymbol(pRenderLib, freePicFuncName.pData);
+    pFunc=osl_getFunctionSymbol(pRenderLib, freePicFuncName.pData);
     if( !pFunc ) return;
     pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
 
@@ -262,7 +262,7 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
 // ---------------------------------------------------------------------------
 
 // notification to clean up GlyphPeer resources for this glyph
-void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData, int nGlyphIndex )
+void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
 {
     // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
     if( rGlyphData.GetExtInfo() == EMPTY_KIND )
