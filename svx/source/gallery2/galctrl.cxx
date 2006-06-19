@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 // ------------------------------------------------------------------------
 
-void GalleryPreview::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void GalleryPreview::StartDrag( sal_Int8, const Point& )
 {
     if( mpTheme )
         ( (GalleryBrowser2*) GetParent() )->StartDrag( this );
@@ -278,7 +278,7 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( GalleryPreview, SoundEndHdl, Sound*, pSound )
+IMPL_LINK( GalleryPreview, SoundEndHdl, Sound*, EMPTYARG )
 {
     aSound.SetSoundName( String() );
     return 0L;
@@ -442,7 +442,7 @@ sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 // ------------------------------------------------------------------------
 
-void GalleryIconView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
     const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, TRUE );
     Region              aRegion;
@@ -676,7 +676,7 @@ void GalleryListView::Select()
 
 // ------------------------------------------------------------------------
 
-sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
+sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -704,7 +704,7 @@ sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
 // ------------------------------------------------------------------------
 
-void GalleryListView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void GalleryListView::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     ( (GalleryBrowser2*) GetParent() )->StartDrag( this, &rPosPixel );
 }
