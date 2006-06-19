@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:03:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,9 +377,9 @@ BasicManager* SfxMacroInfo::GetBasicManager() const
     }
     else
     {
-        SfxObjectShell *pDocShell = SfxObjectShell::Current();
-        return pDocShell ? pDocShell->GetBasicManager() :
-                       SFX_APP()->GetBasicManager();
+        SfxObjectShell *pCurrDocShell = SfxObjectShell::Current();
+        return pCurrDocShell ? pCurrDocShell->GetBasicManager() :
+                               SFX_APP()->GetBasicManager();
     }
 }
 
@@ -393,9 +393,9 @@ String SfxMacroInfo::GetBasicName() const
     }
     else
     {
-        SfxObjectShell *pDocShell = SfxObjectShell::Current();
-        if ( pDocShell )
-            return pDocShell->GetTitle();
+        SfxObjectShell *pCurrDocShell = SfxObjectShell::Current();
+        if ( pCurrDocShell )
+            return pCurrDocShell->GetTitle();
         else
             return SFX_APP()->GetName();
     }
@@ -635,8 +635,8 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                 pImp->aArr.Remove(i);
 
                 // SlotId wieder freigeben
-                sal_uInt16 nCount = aIdArray.Count();
-                for (sal_uInt16 n=0; n<nCount; n++)
+                sal_uInt16 nIdCount = aIdArray.Count();
+                for (sal_uInt16 n=0; n<nIdCount; n++)
                 {
                     if (aIdArray[n] == nId)
                     {
@@ -720,7 +720,7 @@ sal_Bool SfxMacroConfig::ExecuteMacro( sal_uInt16 nId, const String& rArgs ) con
     return bRet;
 }
 
-sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMacro, const String& rArgs ) const
+sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMacro, const String& /*rArgs*/ ) const
 {
     SfxApplication *pApp = SFX_APP();
 
@@ -858,6 +858,7 @@ sal_Bool SfxMacroConfig::CheckMacro( sal_uInt16 nId ) const
 
 IMPL_LINK( SfxMacroConfig, CallbackHdl_Impl, SfxMacroConfig*, pConfig )
 {
+    (void)pConfig; // unused
     pImp->bWaitingForCallback = sal_False;
     return 0;
 }
@@ -869,7 +870,10 @@ IMPL_LINK( SfxMacroConfig, EventHdl_Impl, SfxMacroInfo*, pInfo )
     return 0;
 }
 
-sal_Bool SfxMacroConfig::IsBasic( SbxObject* pVCtrl, const String& rCode, BasicManager* pMgr )
+sal_Bool SfxMacroConfig::IsBasic(
+    SbxObject* /*pVCtrl*/,
+    const String& rCode,
+    BasicManager* pMgr )
 {
     sal_Bool bFound;
     SFX_APP()->EnterBasicCall();
@@ -878,8 +882,12 @@ sal_Bool SfxMacroConfig::IsBasic( SbxObject* pVCtrl, const String& rCode, BasicM
     return bFound;
 }
 
-ErrCode SfxMacroConfig::Call( SbxObject* pVCtrl,
-    const String& rCode, BasicManager* pMgr, SbxArray *pArgs, SbxValue *pRet )
+ErrCode SfxMacroConfig::Call(
+    SbxObject* /*pVCtrl*/,
+    const String& rCode,
+    BasicManager* pMgr,
+    SbxArray *pArgs,
+    SbxValue *pRet )
 {
     SfxApplication *pApp = SFX_APP();
     pApp->EnterBasicCall();
