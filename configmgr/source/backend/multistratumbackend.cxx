@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:42:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,6 @@ sal_Int32 MultiStratumBackend::findSupportingStratum(const rtl::OUString& aEntit
     sMsg.append(aEntity);
     throw lang::IllegalArgumentException(sMsg.makeStringAndClear(),
                                          *this, 0) ;
-    return 0;
 }
 //------------------------------------------------------------------------------
 typedef std::vector<uno::Reference<backenduno::XLayer> > BackendLayers;
@@ -891,7 +890,7 @@ void SAL_CALL MultiStratumBackend::addChangesListener( const uno::Reference<back
     }
 }
 //------------------------------------------------------------------------------
-void SAL_CALL MultiStratumBackend::removeChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& xListner,
+void SAL_CALL MultiStratumBackend::removeChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& /*xListner*/,
                                                           const rtl::OUString& aComponent)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -940,7 +939,7 @@ void MultiStratumBackend::componentDataChanged(const backenduno::ComponentChange
      }
 }
 //------------------------------------------------------------------------------
-void MultiStratumBackend::disposing( lang::EventObject const & rSource )
+void MultiStratumBackend::disposing( lang::EventObject const & /*rSource*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {}
 //------------------------------------------------------------------------------
