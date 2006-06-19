@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnostics.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,19 @@
 namespace jfw_plugin
 {
 
-inline void jfw_ensure(bool condition, const sal_Char * pzFile, sal_Int32 line, const rtl::OUString& message)
+inline void jfw_ensure(bool
+                       #if OSL_DEBUG_LEVEL > 0 /* prevent warning in pro version */
+                       condition
+                       #endif
+                       , const sal_Char *
+                       #if OSL_DEBUG_LEVEL > 0 /* prevent warning in pro version */
+                       pzFile
+                       #endif
+                       , sal_Int32
+                       #if OSL_DEBUG_LEVEL > 0 /* prevent warning in pro version */
+                       line
+                       #endif
+                       , const rtl::OUString& message )
 {
     rtl::OString oMsg = rtl::OUStringToOString(message, osl_getThreadTextEncoding());
     _OSL_ENSURE(condition, pzFile, line, oMsg.getStr());
