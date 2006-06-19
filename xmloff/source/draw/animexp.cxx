@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:43:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,8 +303,8 @@ public:
         msSoundOn( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ),
         msSpeed( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ),
         msTextEffect( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ),
-        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) ),
-        msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) )
+        msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) ),
+        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) )
     {}
 };
 
@@ -320,7 +320,7 @@ XMLAnimationsExporter::~XMLAnimationsExporter()
     mpImpl = NULL;
 }
 
-void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& rExport )
+void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& )
 {
     try
     {
@@ -494,7 +494,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 
     if( aIter != aEnd )
     {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, sal_True, sal_True );
+        SvXMLElementExport aElement( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, sal_True, sal_True );
 
         do
         {
@@ -571,7 +571,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                         eLocalName = XML_HIDE_SHAPE;
                 }
 
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, eLocalName, sal_True, sal_True );
+                SvXMLElementExport aEle( rExport, XML_NAMESPACE_PRESENTATION, eLocalName, sal_True, sal_True );
                 if( rEffect.maSoundURL.getLength() != 0 )
                 {
                     rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(rEffect.maSoundURL) );
