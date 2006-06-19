@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:16:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,8 +198,8 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 
 void SfxApplication::InitializeDisplayName_Impl()
 {
-    SfxAppData_Impl* pAppData_Impl = Get_Impl();
-    if ( !pAppData_Impl->pLabelResMgr )
+    SfxAppData_Impl* pAppData = Get_Impl();
+    if ( !pAppData->pLabelResMgr )
         return;
 
     String aTitle = Application::GetDisplayName();
@@ -215,7 +215,7 @@ void SfxApplication::InitializeDisplayName_Impl()
         aVersion += ( String::CreateFromInt32( nProductVersion % 10 ) );
 */
         // load application title
-        aTitle = String( ResId( RID_APPTITLE, pAppData_Impl->pLabelResMgr ) );
+        aTitle = String( ResId( RID_APPTITLE, pAppData->pLabelResMgr ) );
         // merge version into title
         aTitle.SearchAndReplaceAscii( "$(VER)", String() /*aVersion*/ );
 
