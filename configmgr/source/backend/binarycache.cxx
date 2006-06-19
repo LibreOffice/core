@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarycache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:25:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,27 +156,28 @@ namespace configmgr
             OUString sCacheUrl;
             if (!aReader.isAdminService())
             {
-                mbCacheEnabled = (aReader.getBestContext()->getValueByName(aSettingName) >>= sCacheUrl)
+                        mbCacheEnabled = (aReader.getBestContext()->getValueByName(aSettingName) >>= sCacheUrl)
                                         && implEnsureAbsoluteURL(sCacheUrl);
-            }
+                    }
 
-            if (mbCacheEnabled)
-            {
-                mBaseURL = sCacheUrl;
+                    if (mbCacheEnabled)
+                    {
+                        mBaseURL = sCacheUrl;
                 if (!FileHelper::dirExists(sCacheUrl))
                 {
-                    if (osl::File::RC errorCode = FileHelper::mkdirs(sCacheUrl))
-                    {
+                    osl::File::RC errorCode = FileHelper::mkdirs(sCacheUrl);
+                    if (errorCode)
+                                {
 #if (OSL_DEBUG_LEVEL > 0)
-                        rtl::OString sURL = rtl::OUStringToOString(sCacheUrl,RTL_TEXTENCODING_ASCII_US);
+                                    rtl::OString sURL = rtl::OUStringToOString(sCacheUrl,RTL_TEXTENCODING_ASCII_US);
                         rtl::OString sErr = rtl::OUStringToOString(FileHelper::createOSLErrorString(errorCode),RTL_TEXTENCODING_ASCII_US);
-                        ::osl_trace("Configuration: Cannot create cache directory \"%s\". "
-                                    "Error is %s [%d]",sURL.getStr(),sErr.getStr(),int(errorCode)) ;
+                                        ::osl_trace("Configuration: Cannot create cache directory \"%s\". "
+                                   "Error is %s [%d]",sURL.getStr(),sErr.getStr(),int(errorCode)) ;
 #endif
-                        mbCacheEnabled = false;
+                                    mbCacheEnabled = false;
                     }
                 }
-            }
+                }
         }
         // -----------------------------------------------------------------------------
 
