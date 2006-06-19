@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:36:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,7 @@ namespace
     String GetFsysExtension_Impl( const String& rFile, const String& rLastFilterExt )
     {
         xub_StrLen nDotPos = rFile.SearchBackward( '.' );
-        if ( nDotPos >= 0 )
+        if ( nDotPos != STRING_NOTFOUND )
         {
             if ( rLastFilterExt.Len() )
             {
@@ -523,7 +523,7 @@ struct ControlChain_Impl
     ControlChain_Impl* _pNext;
     BOOL               _bHasOwnerShip;
 
-    ControlChain_Impl( Window* pControl, ControlChain_Impl* pNext, BOOL bFlag );
+    ControlChain_Impl( Window* pControl, ControlChain_Impl* pNext );
     ~ControlChain_Impl();
 };
 
@@ -532,8 +532,7 @@ struct ControlChain_Impl
 ControlChain_Impl::ControlChain_Impl
 (
     Window* pControl,
-    ControlChain_Impl* pNext,
-    BOOL bHasOwnerShip
+    ControlChain_Impl* pNext
 )
     : _pControl( pControl ),
       _pNext( pNext ),
@@ -577,7 +576,7 @@ namespace
     {
         SvtResId (USHORT nId) : ResId (nId, ResMgrHolder::getOrCreate()) {}
     };
-};
+}
 
 //*****************************************************************************
 // SvtFileDialog
@@ -590,7 +589,7 @@ SvtFileDialog::SvtFileDialog
 ) :
     ModalDialog( _pParent, SvtResId( DLG_SVT_EXPLORERFILE ) )
 
-    ,_pFileView( NULL )
+    ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
     ,_pCbPreviewBox( NULL )
@@ -598,11 +597,11 @@ SvtFileDialog::SvtFileDialog
     ,_pPbPlay( NULL )
     ,_pPrevWin( NULL )
     ,_pPrevBmp( NULL )
-    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
+    ,_pFileView( NULL )
     ,_pFileNotifier( NULL )
+    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
     ,_nExtraBits( nExtraBits )
     ,_bIsInExecute( FALSE )
-    ,_pUserControls( NULL )
     ,m_bInExecuteAsync( false )
     ,m_bHasFilename( false )
 {
@@ -613,7 +612,7 @@ SvtFileDialog::SvtFileDialog
 
 SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     :ModalDialog( _pParent, SvtResId( DLG_SVT_EXPLORERFILE ) )
-    ,_pFileView( NULL )
+    ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
     ,_pCbPreviewBox( NULL )
@@ -621,11 +620,11 @@ SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     ,_pPbPlay( NULL )
     ,_pPrevWin( NULL )
     ,_pPrevBmp( NULL )
-    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
+    ,_pFileView( NULL )
     ,_pFileNotifier( NULL )
+    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
     ,_nExtraBits( 0L )
     ,_bIsInExecute( FALSE )
-    ,_pUserControls( NULL )
     ,m_bHasFilename( false )
 {
     Init_Impl( nBits );
@@ -709,7 +708,7 @@ void SvtFileDialog::Init_Impl
 
     // in save mode, don't use the autocompletion as selection in the edit part
     bool bSaveMode = ( FILEDLG_MODE_SAVE == _pImp->_eMode );
-    pURLBox->SetNoSelection( bSaveMode );
+    pURLBox->SetNoURLSelection( bSaveMode );
 
     _pImp->_pEdFileName->SetHelpId( HID_FILEDLG_AUTOCOMPLETEBOX );
 
@@ -965,7 +964,7 @@ void SvtFileDialog::Init_Impl
 
 //*****************************************************************************
 
-IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, pBtn )
+IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
 {
     pThis->_pFileView->EndInplaceEditing( false );
 
@@ -987,7 +986,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, pBtn )
 
 //*****************************************************************************
 
-IMPL_STATIC_LINK( SvtFileDialog, ViewHdl_Impl, ImageButton*, pBtn )
+IMPL_STATIC_LINK_NOINSTANCE( SvtFileDialog, ViewHdl_Impl, ImageButton*, EMPTYARG )
 {
     return 0;
 }
@@ -1109,7 +1108,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const String& _rFilter )
 }
 
 //-----------------------------------------------------------------------------
-IMPL_LINK( SvtFileDialog, CancelHdl_Impl, void*, pVoid )
+IMPL_LINK( SvtFileDialog, CancelHdl_Impl, void*, EMPTYARG )
 {
     if ( m_pCurrentAsyncAction.is() )
     {
@@ -1238,7 +1237,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     }
 
     // Pr"ufen, ob es sich um einen Ordner handelt.
-    BOOL bFolder = FALSE;
+    BOOL bIsFolder = FALSE;
 
     // first thing before doing anyhing with the content: Reset it. When the user presses "open" (or "save" or "export",
     // for that matter), s/he wants the complete handling, including all possible error messages, even if s/he
@@ -1260,7 +1259,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             pThis->m_aContent.enableOwnInteractionHandler(
                 OFilePickerInteractionHandler::E_NOINTERCEPTION );
 
-        bFolder = pThis->m_aContent.isFolder( aFileName );
+        bIsFolder = pThis->m_aContent.isFolder( aFileName );
 
         // access denied to the given resource - and interaction was already
         // used => break following operations
@@ -1288,7 +1287,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             pThis->m_aContent.enableDefaultInteractionHandler();
      }
 
-    if  (   !bFolder                                        // no existent folder
+    if  (   !bIsFolder                                      // no existent folder
         &&  pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
         &&  pThis->_pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
         &&  pThis->GetDefaultExt().Len()                    // there is a default extension
@@ -1327,7 +1326,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
     BOOL bOpenFolder = ( FILEDLG_TYPE_PATHDLG == pThis->_pImp->_eDlgType ) &&
                        !pThis->_pImp->_bDoubleClick && pVoid != pThis->_pImp->_pEdFileName;
-    if ( bFolder )
+    if ( bIsFolder )
     {
         if ( bOpenFolder )
         {
@@ -1596,7 +1595,6 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
         SvtFileDialogFilter_Impl* pFilter = pList->GetObject( nFilter );
         const String& rType = pFilter->GetType();
         String aSingleType = rType;
-        USHORT nWildCard = rType.GetTokenCount( FILEDIALOG_DEF_EXTSEP );
 
         if ( _bMultiExt )
         {
@@ -2206,7 +2204,6 @@ short SvtFileDialog::Execute()
             sal_Int32 nLevel = aURL.getSegmentCount();
             // #97148# & #102204# ------
             sal_Bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            BOOL bClassPath = ( ( _pImp->_nStyle & SFXWB_CLASSPATH ) == SFXWB_CLASSPATH );
             if ( nLevel > 1 && ( FILEDLG_TYPE_FILEDLG == _pImp->_eDlgType || !bDir ) )
                 aURL.removeSegment();
         }
@@ -2624,7 +2621,7 @@ void SvtFileDialog::implArrangeControls()
     // loop through all these controls and adjust the z-order
     Window* pPreviousWin = NULL;
     Control** pCurrent = pControls;
-    for ( sal_Int32 i = 0; i < sizeof( pControls ) / sizeof( pControls[ 0 ] ); ++i, ++pCurrent )
+    for ( sal_Int32 i = 0; i < sal_Int32(sizeof( pControls ) / sizeof( pControls[ 0 ] )); ++i, ++pCurrent )
     {
         if ( !*pCurrent )
             // this control is not available in the current operation mode -> skip
@@ -3146,8 +3143,7 @@ sal_Int32 SvtFileDialog::getAvailableHeight()
 }
 
 // -----------------------------------------------------------------------
-void SvtFileDialog::setImage( sal_Int16 aImageFormat,
-                                   const Any& rImage )
+void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 {
     if ( ! _pPrevBmp || ! _pPrevBmp->IsVisible() )
         return;
@@ -3172,7 +3168,7 @@ void SvtFileDialog::setImage( sal_Int16 aImageFormat,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvtFileDialog::setShowState( sal_Bool bShowState )
+sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
 {
     // #97633 for the system filedialog it's
     // usefull to make the preview switchable
@@ -3378,7 +3374,7 @@ BOOL SvtFileDialog::AddControl( Window* pControl, BOOL bNewLine )
     }
     pControl->SetPosPixel( aNewControlPos );
     pControl->Show();
-    _pUserControls = new ControlChain_Impl( pControl, _pUserControls, TRUE );
+    _pUserControls = new ControlChain_Impl( pControl, _pUserControls );
 
     return TRUE;
 }
