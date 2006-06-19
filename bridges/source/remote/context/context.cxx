@@ -4,9 +4,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:44:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 
-#include <rtl/ustring>
+#include "rtl/ustring.hxx"
 
 #include <bridges/remote/context.h>
 #include <bridges/remote/remote.h>
@@ -50,6 +50,12 @@
 using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
+
+namespace {
+
+extern "C" typedef void * (SAL_CALL * MemAlloc)(sal_Size);
+
+}
 
 namespace remote_context
 {
@@ -160,15 +166,15 @@ public:
     uno_Context *get( rtl_uString *pHost );
 
     rtl_uString ** getConnectionList(
-        sal_Int32 *pnStringCount ,
-        void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) );
+        sal_Int32 *pnStringCount, MemAlloc memAlloc );
 
 private:
     ::osl::Mutex          m_mutex;
 
     ContextMap m_mapContext;
 
-    ::std::list< ::std::pair< void *, void *> > m_lstListener;
+    typedef std::list< std::pair< remote_contextListenerFunc, void * > > List;
+    List m_lstListener;
 };
 
 ContextAdmin *ContextAdmin::getInstance()
@@ -188,20 +194,17 @@ void ContextAdmin::addContextListener( remote_contextListenerFunc listener , voi
 {
     ::osl::MutexGuard guard( m_mutex );
 
-    m_lstListener.push_back( ::std::pair< void * , void * > ( (void*) listener , pObject ) );
+    m_lstListener.push_back( std::make_pair( listener, pObject ) );
 }
 
 void ContextAdmin::removeContextListener( remote_contextListenerFunc listener , void *pObject )
 {
     ::osl::MutexGuard guard( m_mutex );
 
-    for( ::std::list< ::std::pair< void *, void *> >::iterator ii = m_lstListener.begin() ;
-         ii != m_lstListener.end() ;
-         ++ii )
+    for (List::iterator ii(m_lstListener.begin()); ii != m_lstListener.end();
+         ++ii)
     {
-        if( (*ii).first == (void*)listener  &&
-            (*ii).second == (void*)pObject )
-        {
+        if (ii->first == listener && ii->second == pObject) {
             m_lstListener.erase( ii );
             break;
         }
@@ -213,15 +216,13 @@ void ContextAdmin::fire(
     rtl_uString *pName,
     rtl_uString *sDescription )
 {
-    ::osl::MutexGuard guard( m_mutex );
-    ::std::list< ::std::pair< void *, void *> > lstListener = m_lstListener;
-
-    for( ::std::list< ::std::pair< void *, void *> >::iterator ii = lstListener.begin() ;
-         ii != lstListener.end();
-         ++ii)
+    List lst;
     {
-        remote_contextListenerFunc listener = (remote_contextListenerFunc) (*ii).first;
-        listener( (*ii).second , nRemoteContextMode , pName, sDescription );
+        ::osl::MutexGuard guard( m_mutex );
+        lst = m_lstListener;
+    }
+    for (List::iterator i(lst.begin()); i != lst.end(); ++i) {
+        (i->first)(i->second, nRemoteContextMode, pName, sDescription);
     }
 }
 
@@ -286,8 +287,7 @@ uno_Context *ContextAdmin::get( rtl_uString *pHost )
 
 
 rtl_uString ** ContextAdmin::getConnectionList(
-    sal_Int32 *pnStringCount ,
-    void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) )
+    sal_Int32 *pnStringCount, MemAlloc memAlloc )
 {
     ::osl::MutexGuard guard( m_mutex );
 
@@ -518,9 +518,7 @@ remote_removeContextListener( remote_contextListenerFunc listener , void *pObjec
 }
 
 extern "C" rtl_uString ** SAL_CALL
-remote_getContextList(
-    sal_Int32 *pnStringCount,
-    void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) )
+remote_getContextList( sal_Int32 *pnStringCount, MemAlloc memAlloc )
 {
     return ContextAdmin::getInstance()->getConnectionList( pnStringCount , memAlloc );
 }
