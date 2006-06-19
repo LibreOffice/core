@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:11:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
-#endif
 
 #include <algorithm>
 
@@ -337,7 +334,7 @@ EFieldInfo SvxEditEngineForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) c
     return rEditEngine.GetFieldInfo( nPara, nField );
 }
 
-EBulletInfo SvxEditEngineForwarder::GetBulletInfo( USHORT nPara ) const
+EBulletInfo SvxEditEngineForwarder::GetBulletInfo( USHORT ) const
 {
     return EBulletInfo();
 }
@@ -476,7 +473,7 @@ USHORT SvxEditEngineForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rEditEngine.GetLineLen(nPara, nLine);
 }
 
-sal_Bool SvxEditEngineForwarder::QuickFormatDoc( BOOL bFull )
+sal_Bool SvxEditEngineForwarder::QuickFormatDoc( BOOL )
 {
     rEditEngine.QuickFormatDoc();
 
@@ -499,13 +496,13 @@ sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelectio
     return sal_True;
 }
 
-USHORT SvxEditEngineForwarder::GetDepth( USHORT nPara ) const
+USHORT SvxEditEngineForwarder::GetDepth( USHORT ) const
 {
     // EditEngine does not support outline depth
     return 0;
 }
 
-sal_Bool SvxEditEngineForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
+sal_Bool SvxEditEngineForwarder::SetDepth( USHORT, USHORT nNewDepth )
 {
     // EditEngine does not support outline depth
     return nNewDepth == 0 ? sal_True : sal_False;
