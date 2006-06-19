@@ -4,9 +4,9 @@
  *
  *  $RCSfile: structpg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:05:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,8 @@ SvLBoxEntry* ScStructListBox::InsertStaticEntry(
     SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, FALSE, nPos, pToken );
     SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
     DBG_ASSERT( pBmpItem, "ScStructListBox::InsertStaticEntry - missing item" );
-    pBmpItem->SetBitmap1( pEntry, rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
-    pBmpItem->SetBitmap2( pEntry, rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
+    pBmpItem->SetBitmap1( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
+    pBmpItem->SetBitmap2( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
     return pEntry;
 }
 
