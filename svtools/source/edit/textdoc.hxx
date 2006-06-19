@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,14 @@
 #endif
 
 typedef TextCharAttrib* TextCharAttribPtr;
-SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 );
+SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 )
 
 class TextCharAttribList : private TextCharAttribs
 {
 private:
     BOOL            mbHasEmptyAttribs;
 
-                    TextCharAttribList( const TextCharAttribList& ) {;}
+                    TextCharAttribList( const TextCharAttribList& ) : TextCharAttribs() {}
 
 public:
                     TextCharAttribList();
