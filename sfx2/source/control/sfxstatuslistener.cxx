@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxstatuslistener.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:29:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SfxStatusListener::StateChanged( USHORT, SfxItemState, const SfxPoolItem* )
 {
     // must be implemented by sub class
 }
@@ -203,13 +203,13 @@ void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::Runtime
     m_xDispatchProvider.clear();
 }
 
-void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& xListener )
+void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& )
 throw ( RuntimeException )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
-void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& aListener )
+void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& )
 throw ( RuntimeException )
 {
     // do nothing - this is a wrapper class which does not support listeners
@@ -239,7 +239,7 @@ throw( RuntimeException )
         if ( xTunnel.is() )
         {
             sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-            pDisp = (SfxOfficeDispatch*)(nImplementation);
+            pDisp = reinterpret_cast< SfxOfficeDispatch* >(sal::static_int_cast< sal_IntPtr >( nImplementation ));
         }
 
         if ( pDisp )
