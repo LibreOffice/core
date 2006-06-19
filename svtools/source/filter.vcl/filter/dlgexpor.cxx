@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:21:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 
 DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_PIX, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aBtnOK              ( this, ResId( BTN_OK_PIX ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL_PIX ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP_PIX ) ),
@@ -71,8 +72,7 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 aGrpMode            ( this, ResId( GRP_MODE_PIX ) ),
                 aCbbRes             ( this, ResId( CBB_RES_PIX ) ),
                 pMgr                ( rPara.pResMgr ),
-                aExt                ( rPara.aFilterExt ),
-                rFltCallPara        ( rPara )
+                aExt                ( rPara.aFilterExt )
 {
     aExt.ToUpperAscii();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
@@ -294,6 +294,7 @@ IMPL_LINK( DlgExportPix, SelectLbColors, void*, EMPTYARG )
 
 DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_VEC, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aBtnOK              ( this, ResId( BTN_OK_VEC ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL_VEC ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP_VEC ) ),
@@ -306,8 +307,7 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
                 aMtfSizeY           ( this, ResId( MTF_SIZEY_VEC ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE_VEC ) ),
                 pMgr                ( rPara.pResMgr ),
-                aExt                ( rPara.aFilterExt ),
-                rFltCallPara        ( rPara )
+                aExt                ( rPara.aFilterExt )
 {
     aExt.ToUpperAscii();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
