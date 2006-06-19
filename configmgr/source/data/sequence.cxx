@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:39:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ void freeBinary(memory::Allocator const& _anAllocator, Sequence _aSeq)
 static inline
 sal_Sequence * implCreateSequence(void const * _pElements, TypeCode _aElementType, sal_Int32 _nElements)
 {
-    uno::Type aUnoType = getUnoType( _aElementType | Type::flag_sequence );
+    uno::Type aUnoType = getUnoType( TypeCode( _aElementType | Type::flag_sequence ));
 
     sal_Sequence * pResult = NULL;
     ::uno_type_sequence_construct( &pResult, aUnoType.getTypeLibType(),
@@ -388,7 +388,6 @@ sal_Sequence * readSeqData(Accessor const & _anAccessor, Address _aDataAddr, Typ
             ++pRet->nRefCount;
             return pRet;
         }
-        break;
 
     case Type::value_any:
     default:
@@ -479,7 +478,7 @@ uno::Any readAnySequence(Accessor const& _anAccessor, TypeCode _aElementType, Se
             break;
         }
 
-    OSL_ASSERT(!aResult.hasValue() || aResult.getValueType() == getUnoType(_aElementType | Type::flag_sequence));
+    OSL_ASSERT(!aResult.hasValue() || aResult.getValueType() == getUnoType(TypeCode(_aElementType | Type::flag_sequence)));
 
     return aResult;
 }
