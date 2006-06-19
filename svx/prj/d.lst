@@ -216,7 +216,7 @@ hedabu: ..\inc\pmdlitem.hxx %_DEST%\inc%_EXT%\svx\pmdlitem.hxx
 hedabu: ..\inc\pntobj3d.hxx %_DEST%\inc%_EXT%\svx\pntobj3d.hxx
 hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\svx\point3d.hxx
 hedabu: ..\inc\poly3d.hxx %_DEST%\inc%_EXT%\svx\poly3d.hxx
-hedabu: ..\inc\polyob3d.hxx %_DEST%\inc%_EXT%\svx\polyob3d.hxx
+#hedabu: ..\inc\polyob3d.hxx %_DEST%\inc%_EXT%\svx\polyob3d.hxx
 hedabu: ..\inc\polysc3d.hxx %_DEST%\inc%_EXT%\svx\polysc3d.hxx
 hedabu: ..\inc\postattr.hxx %_DEST%\inc%_EXT%\svx\postattr.hxx
 #hedabu: ..\inc\postdlg.hxx %_DEST%\inc%_EXT%\svx\postdlg.hxx
@@ -669,12 +669,12 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
 ..\inc\svx\sdr\properties\textproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\textproperties.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
-..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
+hedabu: ..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
 ..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
 ..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
 ..\inc\svx\sdr\contact\objectcontactofpageview.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofpageview.hxx
 ..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
-..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
+hedabu: ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
 ..\inc\svx\sdr\contact\viewcontactofsdrmediaobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrmediaobj.hxx
 ..\inc\svx\sdr\contact\viewcontactofe3dscene.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofe3dscene.hxx
 ..\inc\svx\sdr\contact\viewcontactofgraphic.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgraphic.hxx
@@ -687,7 +687,6 @@ hedabu: ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr
 ..\inc\svx\sdr\contact\viewobjectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
 ..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
-..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
 ..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
 ..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactredirector.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactredirector.hxx
@@ -695,7 +694,7 @@ hedabu: ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\inc\svx\sdr\animation\ainfographic.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfographic.hxx
-..\inc\svx\sdr\animation\ainfoscrolltext.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfoscrolltext.hxx
+hedabu: ..\inc\svx\sdr\animation\ainfoscrolltext.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfoscrolltext.hxx
 ..\inc\svx\sdr\animation\ainfotext.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfotext.hxx
 ..\inc\svx\sdr\animation\animationinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\animationinfo.hxx
 ..\inc\svx\sdr\animation\animationstate.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\animationstate.hxx
