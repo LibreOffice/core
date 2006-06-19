@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:42:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ void SAL_CALL remote_createStub (
     typelib_TypeDescription *pType = 0;
     typelib_typedescriptionreference_getDescription( &pType, pTypeRef );
 
-    pEnvRemote->pExtEnv->getRegisteredInterface(
+    (void) pEnvRemote->pExtEnv->getRegisteredInterface(
         pEnvRemote->pExtEnv,
         (void **)ppRemoteI,
         pOid,
@@ -67,7 +67,7 @@ void SAL_CALL remote_createStub (
 
     if( *ppRemoteI )
     {
-        if( (*ppRemoteI)->acquire == ::bridges_remote::Remote2RemoteStub::thisAcquire ) {
+        if( (*ppRemoteI)->acquire == acquireRemote2RemoteStub ) {
 
               if( releaseRemoteCallback )
               {
@@ -99,7 +99,7 @@ void SAL_CALL remote_createStub (
         pEnvRemote->pExtEnv->registerProxyInterface(
             pEnvRemote->pExtEnv,
             (void **) ppRemoteI,
-            ::bridges_remote::Remote2RemoteStub::thisFree,
+            freeRemote2RemoteStub,
             pOid,
             (typelib_InterfaceTypeDescription * ) pType );
     }
@@ -196,7 +196,7 @@ void SAL_CALL remote_retrieveOidFromProxy(
     remote_Interface *pRemoteI,
     rtl_uString **ppOid )
 {
-    if( pRemoteI->acquire == ::bridges_remote::Remote2RemoteStub::thisAcquire )
+    if( pRemoteI->acquire == acquireRemote2RemoteStub )
     {
         // Remote2RemoteStub
         ::bridges_remote::Remote2RemoteStub *pStub = (::bridges_remote::Remote2RemoteStub * ) pRemoteI;
