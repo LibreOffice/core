@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxscan.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:52:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,7 @@
 
 #include "svtools/syslocale.hxx"
 
-#pragma hdrstop
-#if defined ( WTC ) || defined ( ICC ) || defined ( MAC ) || defined ( UNX )
+#if defined ( UNX )
 #include <stdlib.h>
 #endif
 
@@ -435,7 +434,6 @@ BOOL ImpConvStringExt( XubString& rSrc, SbxDataType eTargetType )
         case SbxCURRENCY:
         {
             ByteString aBStr( rSrc, RTL_TEXTENCODING_ASCII_US );
-            const char* pChar = aBStr.GetBuffer();
 
             // Komma besorgen
             sal_Unicode cDecimalSep, cThousandSep;
@@ -471,6 +469,7 @@ BOOL ImpConvStringExt( XubString& rSrc, SbxDataType eTargetType )
             }
             break;
         }
+        default: break;
     }
     // String bei Aenderung uebernehmen
     if( bChanged )
@@ -653,7 +652,7 @@ public:
 
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {
-    short nComma;
+    short nComma = 0;
     double d;
     SbxDataType eType = GetType();
     switch( eType )
