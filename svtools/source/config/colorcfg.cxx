@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:47:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,46 +182,46 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
-        RTL_CONSTASCII_USTRINGPARAM("/DocColor")        ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/DocBoundaries")   ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/AppBackground")   ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/ObjectBoundaries"),sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/TableBoundaries") ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/FontColor")       ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/Links")           ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterNotesIndicator")    ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/HTMLKeyword")     ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/HTMLUnknown")     ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcGrid")        ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreak"), sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakManual"), sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakAutomatic"), sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcDetective")   ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcDetectiveError")   ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,sal_True,
-        RTL_CONSTASCII_USTRINGPARAM("/DrawDrawing")     ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/DrawFill")        ,sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICString")    ,  sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICOperator")  ,  sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICKeyword")   ,  sal_False,
-        RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  sal_False
+        { RTL_CONSTASCII_USTRINGPARAM("/DocColor")        ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/DocBoundaries")   ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/AppBackground")   ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/ObjectBoundaries"),sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/TableBoundaries") ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/FontColor")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/Links")           ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterNotesIndicator")    ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLKeyword")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLUnknown")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcGrid")        ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreak"), sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakManual"), sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakAutomatic"), sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetective")   ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetectiveError")   ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/DrawDrawing")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/DrawFill")        ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICString")    ,  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICOperator")  ,  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICKeyword")   ,  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  sal_False }
     };
     int nIndex = 0;
     OUString sColor = C2U(cColor);
@@ -251,8 +251,8 @@ sal_Bool ColorConfig_Impl::m_bLockBroadcast = sal_False;
 sal_Bool ColorConfig_Impl::m_bBroadcastWhenUnlocked = sal_False;
 ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     ConfigItem(C2U("Office.UI/ColorScheme")),
-    m_sIsVisible(C2U("/IsVisible")),
     m_bEditMode(bEditMode),
+    m_sIsVisible(C2U("/IsVisible")),
     m_bIsBroadcastEnabled(sal_True)
 {
     if(!m_bEditMode)
@@ -332,7 +332,7 @@ void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
 /* -----------------------------22.03.2002 14:38------------------------------
 
  ---------------------------------------------------------------------------*/
-void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& rPropertyNames)
+void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
 {
     //loading via notification always uses the default setting
     Load(::rtl::OUString());
@@ -362,7 +362,7 @@ void ColorConfig_Impl::Commit()
     {
         pPropValues[nIndex].Name = pColorNames[nIndex];
         //save automatic colors as void value
-        if(COL_AUTO != m_aConfigValues[i/2].nColor)
+        if(COL_AUTO != sal::static_int_cast<ColorData>(m_aConfigValues[i/2].nColor))
             pPropValues[nIndex].Value <<= m_aConfigValues[i/2].nColor;
 
         nIndex++;
@@ -501,7 +501,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
         StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
 
         ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
-        if(COL_AUTO == aRet.nColor)
+        if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
             aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR).GetColor();
 
         Color aFontColor(aRet.nColor);
@@ -632,7 +632,7 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bS
     ColorConfigValue aRet = m_pImpl->GetColorConfigValue(eEntry);
     if(bSmart)
     {
-        if(COL_AUTO == aRet.nColor)
+        if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
             aRet.nColor = ColorConfig::GetDefaultColor(eEntry).GetColor();
         //#103495# don't allow grey between 40% and 60% as application background
         const UINT8 nRed = COLORDATA_RED( aRet.nColor);
@@ -650,7 +650,7 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bS
 /* -----------------------------12.04.2002 09:25------------------------------
 
  ---------------------------------------------------------------------------*/
-void ColorConfig::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ColorConfig::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
