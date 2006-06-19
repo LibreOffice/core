@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:33:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,6 @@
 
 #include <sfx2/app.hxx>
 
-#pragma hdrstop
-
 #define _SVX_SRCHDLG_CXX
 #include "srchdlg.hxx"
 
@@ -153,7 +151,7 @@ using namespace comphelper;
 
 SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 
-//#define NotifyApp( nId )                                        \
+//#define NotifyApp( nId )
 //    rBindings.ExecuteSynchron( nId, (const SfxPoolItem**)&pSearchItem, 0L )
 
 #define GetCheckBoxValue( rBox )                                \
@@ -233,11 +231,11 @@ SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
 
 {
     SrchAttrItemList::Insert( &rList, 0 );
-    SearchAttrItem* pData = (SearchAttrItem*)GetData();
+    SearchAttrItem* _pData = (SearchAttrItem*)GetData();
 
-    for ( USHORT i = Count(); i; --i, ++pData )
-        if ( !IsInvalidItem( pData->pItem ) )
-            pData->pItem = pData->pItem->Clone();
+    for ( USHORT i = Count(); i; --i, ++_pData )
+        if ( !IsInvalidItem( _pData->pItem ) )
+            _pData->pItem = _pData->pItem->Clone();
 }
 
 // -----------------------------------------------------------------------
@@ -288,13 +286,13 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
-    SearchAttrItem* pData = (SearchAttrItem*)GetData();
+    SearchAttrItem* _pData = (SearchAttrItem*)GetData();
 
-    for ( USHORT i = Count(); i; --i, ++pData )
-        if ( IsInvalidItem( pData->pItem ) )
-            rSet.InvalidateItem( pPool->GetWhich( pData->nSlot ) );
+    for ( USHORT i = Count(); i; --i, ++_pData )
+        if ( IsInvalidItem( _pData->pItem ) )
+            rSet.InvalidateItem( pPool->GetWhich( _pData->nSlot ) );
         else
-            rSet.Put( *pData->pItem );
+            rSet.Put( *_pData->pItem );
     return rSet;
 }
 
@@ -302,11 +300,11 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 
 void SearchAttrItemList::Clear()
 {
-    SearchAttrItem* pData = (SearchAttrItem*)GetData();
+    SearchAttrItem* _pData = (SearchAttrItem*)GetData();
 
-    for ( USHORT i = Count(); i; --i, ++pData )
-        if ( !IsInvalidItem( pData->pItem ) )
-            delete pData->pItem;
+    for ( USHORT i = Count(); i; --i, ++_pData )
+        if ( !IsInvalidItem( _pData->pItem ) )
+            delete _pData->pItem;
     SrchAttrItemList::Remove( 0, Count() );
 }
 
@@ -317,11 +315,11 @@ void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
 {
     if ( nPos + nLen > Count() )
         nLen = Count() - nPos;
-    SearchAttrItem* pData = (SearchAttrItem*)GetData() + nPos;
+    SearchAttrItem* _pData = (SearchAttrItem*)GetData() + nPos;
 
-    for ( USHORT n = nLen; n; --n, ++pData )
-        if ( !IsInvalidItem( pData->pItem ) )
-            delete pData->pItem;
+    for ( USHORT n = nLen; n; --n, ++_pData )
+        if ( !IsInvalidItem( _pData->pItem ) )
+            delete _pData->pItem;
 
     SrchAttrItemList::Remove( nPos, nLen );
 }
@@ -412,7 +410,6 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     aRowsBtn        ( this, ResId( RB_CALC_ROWS ) ),                        \
     aColumnsBtn     ( this, ResId( RB_CALC_COLUMNS ) ),                     \
     aAllSheetsCB    ( this, ResId( CB_ALL_SHEETS ) ),                       \
-    aCalcStr        (       ResId( STR_WORDCALC ) ),                        \
     rBindings       ( rBind ),                                              \
     bWriter         ( FALSE ),                                              \
     bSearch         ( TRUE ),                                               \
@@ -422,6 +419,7 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     bReadOnly       ( FALSE ),                                              \
     bConstruct      ( TRUE ),                                               \
     nModifyFlag     ( 0 ),                                                  \
+    aCalcStr        ( ResId( STR_WORDCALC ) ),                              \
     pImpl           ( NULL ),                                               \
     pSearchList     ( NULL ),                                               \
     pReplaceList    ( NULL ),                                               \
@@ -554,7 +552,6 @@ void SvxSearchDialog::Construct_Impl()
     }
     //component extension - show component search buttons if the commands
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
-    SfxBindings& rBindings = GetBindings();
     const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();
     const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
     rtl::OUString sTarget = rtl::OUString::createFromAscii("_self");
@@ -896,7 +893,7 @@ void SvxSearchDialog::CalculateDelta_Impl()
             &aRowsBtn, &aColumnsBtn, &aAllSheetsCB
         };
         Window** pCurrent = pWins;
-        sal_Int32 i;
+        sal_uInt32 i;
         if ( nOffset > 0 )
         {
             long nH = LogicToPixel( Size( 0, nOffset ), MAP_APPFONT ).Height();
@@ -1700,13 +1697,13 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SvxSearchDialog::Remember_Impl( const String &rStr,BOOL bSearch )
+void SvxSearchDialog::Remember_Impl( const String &rStr,BOOL _bSearch )
 {
     if ( !rStr.Len() )
         return;
 
-    SvStringsDtor* pArr = bSearch ? &aSearchStrings : &aReplaceStrings;
-    ComboBox* pListBox = bSearch ? &aSearchLB : &aReplaceLB;
+    SvStringsDtor* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
+    ComboBox* pListBox = _bSearch ? &aSearchLB : &aReplaceLB;
 
     // identische Strings ignorieren
     for ( USHORT i = 0; i < pArr->Count(); ++i )
@@ -2290,6 +2287,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
         case FUNIT_FOOT:
         case FUNIT_MILE:        eMapUnit = SFX_MAPUNIT_INCH; break;
         case FUNIT_100TH_MM:    eMapUnit = SFX_MAPUNIT_100TH_MM; break;
+        default: ;//prevent warning
     }
 
     for ( USHORT i = 0; i < pList->Count(); ++i )
@@ -2442,13 +2440,13 @@ SFX_IMPL_CHILDWINDOW(SvxSearchDialogWrapper, SID_SEARCH_DLG)
 
 // -----------------------------------------------------------------------
 
-SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* pParent, USHORT nId,
+SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, USHORT nId,
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
+    SfxChildWindow( _pParent, nId )
 
 {
-    pWindow = new SvxSearchDialog( pParent, this, *pBindings );
+    pWindow = new SvxSearchDialog( _pParent, this, *pBindings );
     ( (SvxSearchDialog*)pWindow )->Initialize( pInfo );
 
     pBindings->Update( SID_SEARCH_ITEM );
