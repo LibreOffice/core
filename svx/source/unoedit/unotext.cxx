@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:36:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:02:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,11 +111,6 @@ using namespace ::com::sun::star;
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         return uno::makeAny(uno::Reference< xint >(this))
-
-SfxItemPropertyMap aEmptyPropMap[] =
-{
-    {0,0}
-};
 
 extern const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap();
 
@@ -242,7 +237,7 @@ static check_me gNumRanges;
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SfxItemPropertyMap* _pMap ) throw()
-: pEditSource(NULL) , aPropSet(_pMap)
+: mpEditSource(NULL) , maPropSet(_pMap)
 {
 #ifdef DEBUG
     gNumRanges.add(this);
@@ -250,40 +245,47 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SfxItemPropertyMap* _pMap ) thro
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const SfxItemPropertyMap* _pMap ) throw()
-: aPropSet(_pMap)
+: maPropSet(_pMap)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
 
-    pEditSource = pSource->Clone();
+    mpEditSource = pSource->Clone();
     ESelection aSelection;
-    ::GetSelection( aSelection, pEditSource->GetTextForwarder() );
+    ::GetSelection( aSelection, mpEditSource->GetTextForwarder() );
     SetSelection( aSelection );
 
-    if( pEditSource )
-        pEditSource->addRange( this );
+    if( mpEditSource )
+        mpEditSource->addRange( this );
 #ifdef DEBUG
     gNumRanges.add(this);
 #endif
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw()
-: aPropSet(rRange.getPropertyMap())
+:   text::XTextRange()
+,   beans::XPropertySet()
+,   beans::XMultiPropertySet()
+,   beans::XPropertyState()
+,   lang::XServiceInfo()
+,   text::XTextRangeCompare()
+,   lang::XUnoTunnel()
+,   maPropSet(rRange.getPropertyMap())
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    pEditSource = rRange.pEditSource ? rRange.pEditSource->Clone() : NULL;
+    mpEditSource = rRange.mpEditSource ? rRange.mpEditSource->Clone() : NULL;
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        aSelection  = rRange.aSelection;
-        CheckSelection( aSelection, pForwarder );
+        maSelection  = rRange.maSelection;
+        CheckSelection( maSelection, pForwarder );
     }
 
-    if( pEditSource )
-        pEditSource->addRange( this );
+    if( mpEditSource )
+        mpEditSource->addRange( this );
 
 #ifdef DEBUG
     gNumRanges.add(this);
@@ -296,23 +298,23 @@ SvxUnoTextRangeBase::~SvxUnoTextRangeBase() throw()
     gNumRanges.remove(this);
 #endif
 
-    if( pEditSource )
-        pEditSource->removeRange( this );
+    if( mpEditSource )
+        mpEditSource->removeRange( this );
 
-    delete pEditSource;
+    delete mpEditSource;
 }
 
 void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
 {
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
-    DBG_ASSERT(pEditSource==NULL,"SvxUnoTextRangeBase::SetEditSource called while SvxEditSource already set" );
+    DBG_ASSERT(mpEditSource==NULL,"SvxUnoTextRangeBase::SetEditSource called while SvxEditSource already set" );
 
-    pEditSource = pSource;
+    mpEditSource = pSource;
 
-    aSelection.nStartPara = 0xffff;
+    maSelection.nStartPara = 0xffff;
 
-    if( pEditSource )
-        pEditSource->addRange( this );
+    if( mpEditSource )
+        mpEditSource->addRange( this );
 }
 
 /** puts a field item with a copy of the given FieldData into the itemset
@@ -323,11 +325,11 @@ void SvxUnoTextRangeBase::attachField( const SvxFieldData* pData ) throw()
 
     if( pData )
     {
-        SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+        SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
         if( pForwarder )
         {
             SvxFieldItem aField( *pData );
-            pForwarder->QuickInsertField( aField, aSelection );
+            pForwarder->QuickInsertField( aField, maSelection );
         }
     }
 }
@@ -336,8 +338,8 @@ void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    aSelection = rSelection;
-    CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+    maSelection = rSelection;
+    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 }
 
 // Interface XTextRange ( XText )
@@ -349,11 +351,11 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
 
     uno::Reference< text::XTextRange > xRange;
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
 
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
         SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( getText() );
 
@@ -363,7 +365,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
         SvxUnoTextRange* pRange = new SvxUnoTextRange( *pText );
         xRange = pRange;
 
-        ESelection aNewSel = aSelection;
+        ESelection aNewSel = maSelection;
         aNewSel.nEndPara = aNewSel.nStartPara;
         aNewSel.nEndPos  = aNewSel.nStartPos;
         pRange->SetSelection( aNewSel );
@@ -379,10 +381,10 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd(void)
 
     uno::Reference< text::XTextRange > xRet;
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
         SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( getText() );
 
@@ -392,7 +394,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd(void)
         SvxUnoTextRange* pNew = new SvxUnoTextRange( *pText );
         xRet = pNew;
 
-        ESelection aNewSel = aSelection;
+        ESelection aNewSel = maSelection;
         aNewSel.nStartPara = aNewSel.nEndPara;
         aNewSel.nStartPos  = aNewSel.nEndPos;
         pNew->SetSelection( aNewSel );
@@ -405,12 +407,12 @@ OUString SAL_CALL SvxUnoTextRangeBase::getString(void)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
-        return pForwarder->GetText( aSelection );
+        return pForwarder->GetText( maSelection );
     }
     else
     {
@@ -424,16 +426,16 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
         String aConverted( aString );
         aConverted.ConvertLineEnd( LINEEND_LF );        // Zeilenenden nur einfach zaehlen
 
-        pForwarder->QuickInsertText( aConverted, aSelection );
-        pEditSource->UpdateData();
+        pForwarder->QuickInsertText( aConverted, maSelection );
+        mpEditSource->UpdateData();
 
         //  Selektion anpassen
         //! Wenn die EditEngine bei QuickInsertText die Selektion zurueckgeben wuerde,
@@ -450,7 +452,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextRangeBase::getPropertySetInfo(void)
     throw( uno::RuntimeException )
 {
-    return aPropSet.getPropertySetInfo();
+    return maPropSet.getPropertySetInfo();
 }
 
 void SAL_CALL SvxUnoTextRangeBase::setPropertyValue(const OUString& PropertyName, const uno::Any& aValue)
@@ -464,13 +466,13 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
 
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName );
+        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName );
         if ( pMap )
         {
             ESelection aSel( GetSelection() );
@@ -482,7 +484,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
                 // we have a selection and no para attribute
                 SfxItemSet aNewSet( *aOldSet.GetPool(), aOldSet.GetRanges() );
 
-                setPropertyValue( pMap, aValue, aSelection, aOldSet, aNewSet );
+                setPropertyValue( pMap, aValue, maSelection, aOldSet, aNewSet );
 
 
                 pForwarder->QuickSetAttribs( aNewSet, GetSelection() );
@@ -506,7 +508,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
                 {
                     // we have a paragraph
                     SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
-                    setPropertyValue( pMap, aValue, aSelection, aSet, aSet );
+                    setPropertyValue( pMap, aValue, maSelection, aSet, aSet );
                     pForwarder->SetParaAttribs( (USHORT)nPara, aSet );
                     nPara++;
                 }
@@ -527,11 +529,11 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertyMap* pMap, cons
         //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
         //  muss vorher das alte Item aus dem Dokument geholt werden
         rNewSet.Put(rOldSet.Get(pMap->nWID));           // altes Item in neuen Set
-        aPropSet.setPropertyValue(pMap, rValue, rNewSet);
+        maPropSet.setPropertyValue(pMap, rValue, rNewSet);
     }
 }
 
-sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertyMap* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxTextEditSource* pEditSource /* = NULL*/ ) throw( uno::RuntimeException )
+sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertyMap* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxTextEditSource* pEditSource /* = NULL*/ ) throw( uno::RuntimeException )
 {
     switch( pMap->nWID )
     {
@@ -605,10 +607,10 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
 
     uno::Any aAny;
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName );
+        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName );
         if( pMap )
         {
             SfxItemSet* pAttribs = NULL;
@@ -646,8 +648,8 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMap* pMap, uno:
             Color* pTColor = NULL;
             Color* pFColor = NULL;
 
-            SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-            OUString aPresentation( pForwarder->CalcFieldValue( *pData, aSelection.nStartPara, aSelection.nStartPos, pTColor, pFColor ) );
+            SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
+            OUString aPresentation( pForwarder->CalcFieldValue( *pData, maSelection.nStartPara, maSelection.nStartPos, pTColor, pFColor ) );
 
             delete pTColor;
             delete pFColor;
@@ -671,8 +673,8 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMap* pMap, uno:
         break;
 
     default:
-        if(!GetPropertyValueHelper( *((SfxItemSet*)(&rSet)), pMap, rAny, &aSelection, (SvxTextEditSource*)GetEditSource() ))
-            rAny = aPropSet.getPropertyValue(pMap, rSet);
+        if(!GetPropertyValueHelper( *((SfxItemSet*)(&rSet)), pMap, rAny, &maSelection, (SvxTextEditSource*)GetEditSource() ))
+            rAny = maPropSet.getPropertyValue(pMap, rSet);
     }
 }
 
@@ -735,10 +737,10 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
 }
 
 // wird (noch) nicht unterstuetzt
-void SAL_CALL SvxUnoTextRangeBase::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxUnoTextRangeBase::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxUnoTextRangeBase::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxUnoTextRangeBase::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextRangeBase::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextRangeBase::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextRangeBase::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxUnoTextRangeBase::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 // XMultiPropertySet
 void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
@@ -750,14 +752,12 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
         ESelection aSel( GetSelection() );
-
-        sal_Bool bUnknownProperty = sal_False;
 
         const OUString* pPropertyNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
@@ -778,7 +778,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
         SfxItemSet* pOldParaSet = NULL;
         SfxItemSet* pNewParaSet = NULL;
 
-        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pMap = maPropSet.getPropertyMap();
 
         const OUString* pLastPropertyName = 0;
 
@@ -792,11 +792,11 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
                     if(pMap)
                         pMap++;
                     else
-                        pMap = aPropSet.getPropertyMap();
+                        pMap = maPropSet.getPropertyMap();
                 }
                 else if( nComp > 0 )
                 {
-                    pMap = aPropSet.getPropertyMap();
+                    pMap = maPropSet.getPropertyMap();
                 }
                 else
                 {
@@ -906,7 +906,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
 
     uno::Sequence< uno::Any > aValues( nCount );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
         SfxItemSet* pAttribs = NULL;
@@ -920,7 +920,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
         const OUString* pPropertyNames = aPropertyNames.getConstArray();
         uno::Any* pValues = aValues.getArray();
 
-        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pMap = maPropSet.getPropertyMap();
 
         const OUString* pLastPropertyName = 0;
 
@@ -934,11 +934,11 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
                     if(pMap)
                         pMap++;
                     else
-                        pMap = aPropSet.getPropertyMap();
+                        pMap = maPropSet.getPropertyMap();
                 }
                 else if( nComp > 0 )
                 {
-                    pMap = aPropSet.getPropertyMap();
+                    pMap = maPropSet.getPropertyMap();
                 }
                 else
                 {
@@ -961,313 +961,17 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
     return aValues;
 }
 
-void SAL_CALL SvxUnoTextRangeBase::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL SvxUnoTextRangeBase::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL SvxUnoTextRangeBase::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
 {
 }
-
-/*
-// XTolerantMultiPropertySet
-uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextRangeBase::setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-{
-    return _setPropertyValuesTolerant(aPropertyNames, aValues, -1);
-}
-
-uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextRangeBase::_setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    sal_Int32 nCount(aPropertyNames.getLength());
-
-    if (nCount != aValues.getLength())
-        throw lang::IllegalArgumentException();
-
-    uno::Sequence< beans::SetPropertyTolerantFailed > aResults(nCount);
-    beans::SetPropertyTolerantFailed* pResults = aResults.getArray();
-
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
-    if( pForwarder )
-    {
-        CheckSelection( aSelection, pForwarder );
-
-        ESelection aSel( GetSelection() );
-
-        sal_Bool bUnknownProperty = sal_False;
-
-        const OUString* pPropertyNames = aPropertyNames.getConstArray();
-        const uno::Any* pValues = aValues.getConstArray();
-
-        sal_Int32 nEndPara = nPara;
-        sal_Int32 nTempPara = nPara;
-
-        if( nTempPara == -1 )
-        {
-            nTempPara = aSel.nStartPara;
-            nEndPara = aSel.nEndPara;
-        }
-
-        SfxItemSet* pOldAttrSet = NULL;
-        SfxItemSet* pNewAttrSet = NULL;
-
-        SfxItemSet* pOldParaSet = NULL;
-        SfxItemSet* pNewParaSet = NULL;
-
-        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
-        const SfxItemPropertyMap* pTempMap = pMap;
-
-        sal_Int32 nFailed(0);
-
-        for(sal_Int32 i = 0; i < nCount; pPropertyNames++, pValues++ )
-        {
-            pTempMap = pMap;
-            pMap = SfxItemPropertyMap::GetTolerantByName(pMap, *pPropertyNames );
-            if( NULL == pMap )
-            {
-                pResults[nFailed].Name = *pPropertyNames;
-                pResults[nFailed++].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
-            }
-            else
-            {
-                sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
-
-                if( (nPara == -1) && !bParaAttrib )
-                {
-                    if( NULL == pNewAttrSet )
-                    {
-                        const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
-                        pOldAttrSet = new SfxItemSet( aSet );
-                        pNewAttrSet = new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
-                    }
-
-                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
-
-                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
-                    {
-                        const SfxPoolItem* pItem;
-                        if( pNewAttrSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
-                        {
-                            pOldAttrSet->Put( *pItem );
-                        }
-                    }
-                }
-                else
-                {
-                    if( NULL == pNewParaSet )
-                    {
-                        const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
-                        pOldParaSet = new SfxItemSet( aSet );
-                        pNewParaSet = new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
-                    }
-
-                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
-
-                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
-                    {
-                        const SfxPoolItem* pItem;
-                        if( pNewParaSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
-                        {
-                            pOldParaSet->Put( *pItem );
-                        }
-                    }
-
-                }
-            }
-
-            if (pMap)
-                pMap++;
-            else
-                pMap = pTempMap;
-        }
-
-        if( nFailed < nCount )
-        {
-            sal_Bool bNeedsUpdate = sal_False;
-
-            if( pNewParaSet )
-            {
-
-                if( pNewParaSet->Count() )
-                {
-                    while( nTempPara <= nEndPara )
-                    {
-                        SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
-                        aSet.Put( *pNewParaSet );
-                        pForwarder->SetParaAttribs( (USHORT)nTempPara, aSet );
-                        nTempPara++;
-                    }
-                    bNeedsUpdate = sal_True;
-                }
-
-                delete pNewParaSet;
-                delete pOldParaSet;
-            }
-
-            if( pNewAttrSet )
-            {
-                if( pNewAttrSet->Count() )
-                {
-                    pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
-                    bNeedsUpdate = sal_True;
-                }
-                delete pNewAttrSet;
-                delete pOldAttrSet;
-
-            }
-
-            if( bNeedsUpdate )
-                GetEditSource()->UpdateData();
-        }
-        aResults.realloc(nFailed);
-    }
-
-    return aResults;
-}
-
-uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
-{
-    return _getPropertyValuesTolerant(aPropertyNames, -1);
-}
-
-uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::_getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    sal_Int32 nCount(aPropertyNames.getLength());
-    uno::Sequence< beans::GetPropertyTolerantResult > aResults(nCount);
-    beans::GetPropertyTolerantResult* pResults = aResults.getArray();
-
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
-    if( pForwarder )
-    {
-        SfxItemSet* pAttribs = NULL;
-        if( nPara != -1 )
-            pAttribs = new SfxItemSet(pForwarder->GetParaAttribs( (USHORT)nPara ));
-        else
-            pAttribs = new SfxItemSet(pForwarder->GetAttribs( GetSelection() ));
-
-        pAttribs->ClearInvalidItems();
-
-        const OUString* pPropertyNames = aPropertyNames.getConstArray();
-
-        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
-        const SfxItemPropertyMap* pTempMap = pMap;
-
-        for( ; nCount > 0; --nCount, ++pPropertyNames, ++pResults )
-        {
-            pTempMap = pMap;
-//              pMap = SfxItemPropertyMap::GetTolerantByName(pMap, *pPropertyNames );
-            pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
-
-            if (pMap)
-            {
-                if (_getOnePropertyStates(pAttribs, pMap, pResults->State))
-                {
-                    getPropertyValue( pMap, pResults->Value, *pAttribs );
-                    pResults->Result = beans::TolerantPropertySetResultType::SUCCESS;
-                }
-                else
-                    pResults->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
-
-                pMap++;
-            }
-            else
-            {
-                pResults->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
-                pMap = pTempMap;
-            }
-        }
-
-        delete pAttribs;
-
-    }
-
-    return aResults;
-}
-
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
-    throw (uno::RuntimeException)
-{
-    return _getDirectPropertyValuesTolerant(aPropertyNames, -1);
-}
-
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::_getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
-    if( pForwarder )
-    {
-        SfxItemSet* pAttribs = NULL;
-        if( nPara != -1 )
-            pAttribs = new SfxItemSet(pForwarder->GetParaAttribs( (USHORT)nPara ));
-        else
-            pAttribs = new SfxItemSet(pForwarder->GetAttribs( GetSelection() ));
-
-        pAttribs->ClearInvalidItems();
-
-//        USHORT nAttribCount(pAttribs->Count());
-
-//        if (nAttribCount)
-        {
-            sal_Int32 nCount(aPropertyNames.getLength());
-//            uno::Sequence< beans::GetDirectPropertyTolerantResult > aResults(nAttribCount);
-            uno::Sequence< beans::GetDirectPropertyTolerantResult > aResults(nCount);
-            beans::GetDirectPropertyTolerantResult* pResults = aResults.getArray();
-
-            const OUString* pPropertyNames = aPropertyNames.getConstArray();
-
-            const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
-            const SfxItemPropertyMap* pTempMap = pMap;
-
-            sal_Int32 nDirectCount = 0;
-
-            for( ; (nCount > 0)
-            //&& (nAttribCount > 0)
-            ; --nCount, ++pPropertyNames )
-            {
-                pTempMap = pMap;
-//              pMap = SfxItemPropertyMap::GetTolerantByName(pMap, *pPropertyNames );
-                pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
-
-                if (pMap)
-                {
-                    if (_getOnePropertyStates(pAttribs, pMap, pResults->State))
-                    {
-                        if (pResults->State == beans::PropertyState_DIRECT_VALUE)
-                        {
-//                            --nAttribCount;
-
-                            getPropertyValue( pMap, pResults->Value, *pAttribs );
-                            pResults->Result = beans::TolerantPropertySetResultType::SUCCESS;
-                            pResults->Name = *pPropertyNames;
-
-                            ++pResults;
-                            ++nDirectCount;
-                        }
-                    }
-                    pMap++;
-                }
-                else
-                    pMap = pTempMap;
-            }
-            delete pAttribs;
-            aResults.realloc(nDirectCount);
-            return aResults;
-        }
-//        else
-            delete pAttribs;
-    }
-
-    return uno::Sequence< beans::GetDirectPropertyTolerantResult >();
-}*/
-
 
 // beans::XPropertyState
 beans::PropertyState SAL_CALL SvxUnoTextRangeBase::getPropertyState( const OUString& PropertyName )
@@ -1285,7 +989,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
 {
     if ( pMap )
     {
-        SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+        SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
         if( pForwarder )
         {
             SfxItemState eItemState = SFX_ITEM_UNKNOWN;
@@ -1374,7 +1078,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    return _getPropertyState(SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName ), nPara);
+    return _getPropertyState(SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName ), nPara);
 }
 
 uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextRangeBase::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
@@ -1392,7 +1096,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     uno::Sequence< beans::PropertyState > aRet( nCount );
     beans::PropertyState* pState = aRet.getArray();
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
         SfxItemSet* pSet = NULL;
@@ -1408,7 +1112,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         }
 
         sal_Bool bUnknownPropertyFound = sal_False;
-        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pMap = maPropSet.getPropertyMap();
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
             pMap = SfxItemPropertyMap::GetByName(pMap, *pNames++ );
@@ -1423,7 +1127,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
             if (pMap)
                 pMap++;
             else
-                pMap = aPropSet.getPropertyMap();
+                pMap = maPropSet.getPropertyMap();
         }
 
         delete pSet;
@@ -1532,14 +1236,14 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
 
     do
     {
-        SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+        SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
 
         if( NULL == pForwarder )
             break;
 
-        CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+        CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName );
+        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName );
         if( NULL == pMap )
             break;
 
@@ -1552,7 +1256,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         else if( pMap->nWID == WID_NUMLEVEL )
         {
             // #101004# Call interface method instead of unsafe cast
-            pForwarder->SetDepth( aSelection.nStartPara, 0 );
+            pForwarder->SetDepth( maSelection.nStartPara, 0 );
             return;
         }
         else
@@ -1579,10 +1283,10 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), aPropertyName );
+        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), aPropertyName );
         if( pMap )
         {
             SfxItemPool* pPool = pForwarder->GetPool();
@@ -1605,7 +1309,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                     {
                         SfxItemSet aSet( *pPool,    pMap->nWID, pMap->nWID);
                         aSet.Put(pPool->GetDefaultItem(pMap->nWID));
-                        return aPropSet.getPropertyValue(pMap, aSet);
+                        return maPropSet.getPropertyValue(pMap, aSet);
                     }
                 }
             }
@@ -1617,35 +1321,35 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
 // internal
 void SvxUnoTextRangeBase::CollapseToStart(void) throw()
 {
-    CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 
-    aSelection.nEndPara = aSelection.nStartPara;
-    aSelection.nEndPos  = aSelection.nStartPos;
+    maSelection.nEndPara = maSelection.nStartPara;
+    maSelection.nEndPos  = maSelection.nStartPos;
 }
 
 void SvxUnoTextRangeBase::CollapseToEnd(void) throw()
 {
-    CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 
-    aSelection.nStartPara = aSelection.nEndPara;
-    aSelection.nStartPos  = aSelection.nEndPos;
+    maSelection.nStartPara = maSelection.nEndPara;
+    maSelection.nStartPos  = maSelection.nEndPos;
 }
 
 sal_Bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
 {
-    CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 
-    return ( aSelection.nStartPara == aSelection.nEndPara &&
-             aSelection.nStartPos  == aSelection.nEndPos );
+    return ( maSelection.nStartPara == maSelection.nEndPara &&
+             maSelection.nStartPos  == maSelection.nEndPos );
 }
 
 sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
 {
-    CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 
     //  #75098# use end position, as in Writer (start is anchor, end is cursor)
-    sal_uInt16 nNewPos = aSelection.nEndPos;
-    sal_uInt16 nNewPar = aSelection.nEndPara;
+    sal_uInt16 nNewPos = maSelection.nEndPos;
+    sal_uInt16 nNewPar = maSelection.nEndPara;
 
     sal_Bool bOk = sal_True;
     SvxTextForwarder* pForwarder = NULL;
@@ -1656,7 +1360,7 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
         else
         {
             if ( !pForwarder )
-                pForwarder = pEditSource->GetTextForwarder();   // erst hier, wenn's noetig ist...
+                pForwarder = mpEditSource->GetTextForwarder();  // erst hier, wenn's noetig ist...
 
             --nNewPar;
             nCount -= nNewPos + 1;
@@ -1667,8 +1371,8 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
     if ( bOk )
     {
         nNewPos -= nCount;
-        aSelection.nStartPara = nNewPar;
-        aSelection.nStartPos  = nNewPos;
+        maSelection.nStartPara = nNewPar;
+        maSelection.nStartPos  = nNewPos;
     }
 
     if (!Expand)
@@ -1679,14 +1383,14 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
 
 sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw()
 {
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        CheckSelection( aSelection, pForwarder );
+        CheckSelection( maSelection, pForwarder );
 
 
-        sal_uInt16 nNewPos = aSelection.nEndPos + nCount;           //! Ueberlauf ???
-        sal_uInt16 nNewPar = aSelection.nEndPara;
+        sal_uInt16 nNewPos = maSelection.nEndPos + nCount;          //! Ueberlauf ???
+        sal_uInt16 nNewPar = maSelection.nEndPara;
 
         sal_Bool bOk = sal_True;
         sal_uInt16 nParCount = pForwarder->GetParagraphCount();
@@ -1705,8 +1409,8 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
 
         if (bOk)
         {
-            aSelection.nEndPara = nNewPar;
-            aSelection.nEndPos  = nNewPos;
+            maSelection.nEndPara = nNewPar;
+            maSelection.nEndPos  = nNewPos;
         }
 
         if (!Expand)
@@ -1719,8 +1423,8 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
 
 void SvxUnoTextRangeBase::GotoStart(sal_Bool Expand) throw()
 {
-    aSelection.nStartPara = 0;
-    aSelection.nStartPos  = 0;
+    maSelection.nStartPara = 0;
+    maSelection.nStartPos  = 0;
 
     if (!Expand)
         CollapseToStart();
@@ -1728,9 +1432,9 @@ void SvxUnoTextRangeBase::GotoStart(sal_Bool Expand) throw()
 
 void SvxUnoTextRangeBase::GotoEnd(sal_Bool Expand) throw()
 {
-    CheckSelection( aSelection, pEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
 
@@ -1738,8 +1442,8 @@ void SvxUnoTextRangeBase::GotoEnd(sal_Bool Expand) throw()
         if (nPar)
             --nPar;
 
-        aSelection.nEndPara = nPar;
-        aSelection.nEndPos  = pForwarder->GetTextLen( nPar );
+        maSelection.nEndPara = nPar;
+        maSelection.nEndPos  = pForwarder->GetTextLen( nPar );
 
         if (!Expand)
             CollapseToEnd();
@@ -1775,11 +1479,11 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionStarts( const uno::Referenc
     SvxUnoTextRangeBase* pR1 = SvxUnoTextRangeBase::getImplementation( xR1 );
     SvxUnoTextRangeBase* pR2 = SvxUnoTextRangeBase::getImplementation( xR2 );
 
-    if( (pR1 == 0) || (pR2 == 0) || (pR1->pEditSource != pEditSource) || (pR2->pEditSource != pEditSource) )
+    if( (pR1 == 0) || (pR2 == 0) || (pR1->mpEditSource != mpEditSource) || (pR2->mpEditSource != mpEditSource) )
         throw lang::IllegalArgumentException();
 
-    const ESelection& r1 = pR1->aSelection;
-    const ESelection& r2 = pR2->aSelection;
+    const ESelection& r1 = pR1->maSelection;
+    const ESelection& r2 = pR2->maSelection;
 
     if( r1.nStartPara == r2.nStartPara )
     {
@@ -1799,11 +1503,11 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference<
     SvxUnoTextRangeBase* pR1 = SvxUnoTextRangeBase::getImplementation( xR1 );
     SvxUnoTextRangeBase* pR2 = SvxUnoTextRangeBase::getImplementation( xR2 );
 
-    if( (pR1 == 0) || (pR2 == 0) || (pR1->pEditSource->GetTextForwarder() != pEditSource->GetTextForwarder()) || (pR2->pEditSource->GetTextForwarder() != pEditSource->GetTextForwarder()) )
+    if( (pR1 == 0) || (pR2 == 0) || (pR1->mpEditSource->GetTextForwarder() != mpEditSource->GetTextForwarder()) || (pR2->mpEditSource->GetTextForwarder() != mpEditSource->GetTextForwarder()) )
         throw lang::IllegalArgumentException();
 
-    const ESelection& r1 = pR1->aSelection;
-    const ESelection& r2 = pR2->aSelection;
+    const ESelection& r1 = pR1->maSelection;
+    const ESelection& r2 = pR2->maSelection;
 
     if( r1.nEndPara == r2.nEndPara )
     {
@@ -1971,7 +1675,11 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SfxItemPrope
 }
 
 SvxUnoTextBase::SvxUnoTextBase( const SvxUnoTextBase& rText ) throw()
-:SvxUnoTextRangeBase( rText )
+:   SvxUnoTextRangeBase( rText )
+,   text::XText()
+,   container::XEnumerationAccess()
+,   text::XTextRangeMover()
+,   lang::XTypeProvider()
 {
     xParentText = rText.xParentText;
 }
@@ -2247,15 +1955,15 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
 
         pField->SetAnchor( uno::Reference< text::XTextRange >::query( (cppu::OWeakObject*)this ) );
 
-        aSelection.nEndPos += 1;
-        aSelection.nStartPos = aSelection.nEndPos;
+        maSelection.nEndPos += 1;
+        maSelection.nStartPos = aSelection.nEndPos;
         pRange->SetSelection( aSelection );
 
         delete pFieldData;
     }
 }
 
-void SAL_CALL SvxUnoTextBase::removeTextContent( const uno::Reference< text::XTextContent >& xContent ) throw(container::NoSuchElementException, uno::RuntimeException)
+void SAL_CALL SvxUnoTextBase::removeTextContent( const uno::Reference< text::XTextContent >& ) throw(container::NoSuchElementException, uno::RuntimeException)
 {
 }
 
@@ -2331,7 +2039,7 @@ sal_Bool SAL_CALL SvxUnoTextBase::hasElements(  ) throw(uno::RuntimeException)
 }
 
 // text::XTextRangeMover
-void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nParagraphs )
+void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRange >&, sal_Int16 )
     throw(uno::RuntimeException)
 {
 }
@@ -2377,7 +2085,7 @@ SvxUnoTextBase* SvxUnoTextBase::getImplementation( uno::Reference< uno::XInterfa
 {
     uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )
-        return (SvxUnoTextBase*)xUT->getSomething( SvxUnoTextBase::getUnoTunnelId() );
+        return reinterpret_cast<SvxUnoTextBase*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SvxUnoTextBase::getUnoTunnelId())));
     else
         return NULL;
 }
@@ -2387,7 +2095,7 @@ sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     else
     {
@@ -2413,6 +2121,7 @@ SvxUnoText::SvxUnoText( const SvxEditSource* pSource, const SfxItemPropertyMap* 
 
 SvxUnoText::SvxUnoText( const SvxUnoText& rText ) throw()
 : SvxUnoTextBase( rText )
+, cppu::OWeakAggObject()
 {
 }
 
@@ -2471,7 +2180,7 @@ SvxUnoText* SvxUnoText::getImplementation( uno::Reference< uno::XInterface > xIn
 {
     uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )
-        return (SvxUnoText*)xUT->getSomething( SvxUnoText::getUnoTunnelId() );
+        return reinterpret_cast<SvxUnoText*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SvxUnoText::getUnoTunnelId())));
     else
         return NULL;
 }
@@ -2497,7 +2206,7 @@ sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rI
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     else
     {
@@ -2531,42 +2240,42 @@ sal_uInt16 SvxDummyTextSource::GetParagraphCount() const
     return 0;
 }
 
-sal_uInt16 SvxDummyTextSource::GetTextLen( sal_uInt16 nParagraph ) const
+sal_uInt16 SvxDummyTextSource::GetTextLen( sal_uInt16 ) const
 {
     return 0;
 }
 
-String SvxDummyTextSource::GetText( const ESelection& rSel ) const
+String SvxDummyTextSource::GetText( const ESelection& ) const
 {
     return String();
 }
 
-SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
+SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection&, BOOL ) const
 {
     String aDummyStr(RTL_CONSTASCII_USTRINGPARAM("Dummy"));
     SfxItemPool aPool(aDummyStr,0,0,NULL);
     return SfxItemSet(aPool);
 }
 
-SfxItemSet SvxDummyTextSource::GetParaAttribs( sal_uInt16 nPara ) const
+SfxItemSet SvxDummyTextSource::GetParaAttribs( sal_uInt16 ) const
 {
     return GetAttribs(ESelection());
 }
 
-void SvxDummyTextSource::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
+void SvxDummyTextSource::SetParaAttribs( sal_uInt16, const SfxItemSet& )
 {
 }
 
-void SvxDummyTextSource::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
+void SvxDummyTextSource::GetPortions( sal_uInt16, SvUShorts& ) const
 {
 }
 
-sal_uInt16 SvxDummyTextSource::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
+sal_uInt16 SvxDummyTextSource::GetItemState( const ESelection&, sal_uInt16 ) const
 {
     return 0;
 }
 
-sal_uInt16 SvxDummyTextSource::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const
+sal_uInt16 SvxDummyTextSource::GetItemState( sal_uInt16, sal_uInt16 ) const
 {
     return 0;
 }
@@ -2576,23 +2285,23 @@ SfxItemPool* SvxDummyTextSource::GetPool() const
     return NULL;
 }
 
-void SvxDummyTextSource::QuickInsertText( const String& rText, const ESelection& rSel )
+void SvxDummyTextSource::QuickInsertText( const String&, const ESelection& )
 {
 }
 
-void SvxDummyTextSource::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
+void SvxDummyTextSource::QuickInsertField( const SvxFieldItem&, const ESelection& )
 {
 }
 
-void SvxDummyTextSource::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
+void SvxDummyTextSource::QuickSetAttribs( const SfxItemSet&, const ESelection& )
 {
 }
 
-void SvxDummyTextSource::QuickInsertLineBreak( const ESelection& rSel )
+void SvxDummyTextSource::QuickInsertLineBreak( const ESelection& )
 {
 };
 
-XubString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+XubString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
 {
     return XubString();
 }
@@ -2606,32 +2315,32 @@ void SvxDummyTextSource::SetNotifyHdl( const Link& )
 {
 }
 
-LanguageType SvxDummyTextSource::GetLanguage( USHORT nPara, USHORT nIndex ) const
+LanguageType SvxDummyTextSource::GetLanguage( USHORT, USHORT ) const
 {
     return LANGUAGE_DONTKNOW;
 }
 
-USHORT SvxDummyTextSource::GetFieldCount( USHORT nPara ) const
+USHORT SvxDummyTextSource::GetFieldCount( USHORT ) const
 {
     return 0;
 }
 
-EFieldInfo SvxDummyTextSource::GetFieldInfo( USHORT nPara, USHORT nField ) const
+EFieldInfo SvxDummyTextSource::GetFieldInfo( USHORT, USHORT ) const
 {
     return EFieldInfo();
 }
 
-EBulletInfo SvxDummyTextSource::GetBulletInfo( USHORT nPara ) const
+EBulletInfo SvxDummyTextSource::GetBulletInfo( USHORT ) const
 {
     return EBulletInfo();
 }
 
-Rectangle SvxDummyTextSource::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+Rectangle SvxDummyTextSource::GetCharBounds( USHORT, USHORT ) const
 {
     return Rectangle();
 }
 
-Rectangle SvxDummyTextSource::GetParaBounds( USHORT nPara ) const
+Rectangle SvxDummyTextSource::GetParaBounds( USHORT ) const
 {
     return Rectangle();
 }
@@ -2646,42 +2355,42 @@ OutputDevice* SvxDummyTextSource::GetRefDevice() const
     return NULL;
 }
 
-sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, USHORT&, USHORT& ) const
 {
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
+sal_Bool SvxDummyTextSource::GetWordIndices( USHORT, USHORT, USHORT&, USHORT& ) const
 {
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+sal_Bool SvxDummyTextSource::GetAttributeRun( USHORT&, USHORT&, USHORT, USHORT ) const
 {
     return sal_False;
 }
 
-USHORT SvxDummyTextSource::GetLineCount( USHORT nPara ) const
+USHORT SvxDummyTextSource::GetLineCount( USHORT ) const
 {
     return 0;
 }
 
-USHORT SvxDummyTextSource::GetLineLen( USHORT nPara, USHORT nLine ) const
+USHORT SvxDummyTextSource::GetLineLen( USHORT, USHORT ) const
 {
     return 0;
 }
 
-sal_Bool SvxDummyTextSource::QuickFormatDoc( BOOL bFull )
+sal_Bool SvxDummyTextSource::QuickFormatDoc( BOOL )
 {
     return sal_False;
 }
 
-USHORT SvxDummyTextSource::GetDepth( USHORT nPara ) const
+USHORT SvxDummyTextSource::GetDepth( USHORT ) const
 {
     return 0;
 }
 
-sal_Bool SvxDummyTextSource::SetDepth( USHORT nPara, USHORT nNewDepth )
+sal_Bool SvxDummyTextSource::SetDepth( USHORT, USHORT nNewDepth )
 {
     return nNewDepth == 0 ? sal_True : sal_False;
 }
