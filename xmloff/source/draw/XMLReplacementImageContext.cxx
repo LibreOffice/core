@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLReplacementImageContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:41:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,6 @@ void XMLReplacementImageContext::EndElement()
     OUString sHRef;
     if( m_sHRef.getLength() )
     {
-        UniReference < XMLTextImportHelper > xTxtImport =
-            GetImport().GetTextImport();
         sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
                               xTxtImport->IsBlockMode() ||
                               xTxtImport->IsStylesOnlyMode() ||
