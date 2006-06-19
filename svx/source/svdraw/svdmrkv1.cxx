@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:31:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:40:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
         } else return FALSE; // Fehlerfall!
     }
     BOOL bVis=IsMarkHdlShown();
-    USHORT nWinAnz=GetWinCount();
+    //USHORT nWinAnz=GetWinCount();
 //    if (bVis) for (nw=0; nw<nWinAnz; nw++) pHdl->Draw(*GetWin(nw));
     pHdl->SetSelected(!bUnmark);
 //    if (bVis) for (nw=0; nw<nWinAnz; nw++) pHdl->Draw(*GetWin(nw));
@@ -299,7 +299,7 @@ BOOL SdrMarkView::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
     return bChgd;
 }
 
-BOOL SdrMarkView::MarkNextPoint(BOOL bPrev)
+BOOL SdrMarkView::MarkNextPoint(BOOL /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
     BOOL bChgd=FALSE;
@@ -311,7 +311,7 @@ BOOL SdrMarkView::MarkNextPoint(BOOL bPrev)
     return bChgd;
 }
 
-BOOL SdrMarkView::MarkNextPoint(const Point& rPnt, BOOL bPrev)
+BOOL SdrMarkView::MarkNextPoint(const Point& /*rPnt*/, BOOL /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
     BOOL bChgd=FALSE;
@@ -581,15 +581,24 @@ BOOL SdrMarkView::MarkGluePoints(const Rectangle* pRect, BOOL bUnmark)
 BOOL SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, USHORT& rnId, SdrPageView*& rpPV, ULONG nOptions) const
 {
     SdrObject* pObj0=rpObj;
-    SdrPageView* pPV0=rpPV;
+    //SdrPageView* pPV0=rpPV;
     USHORT nId0=rnId;
     rpObj=NULL; rpPV=NULL; rnId=0;
     if (!IsGluePointEditMode()) return FALSE;
     BOOL bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
     BOOL bNext=(nOptions & SDRSEARCH_NEXT) !=0;
-    const OutputDevice* pOut=(const OutputDevice*)pActualOutDev;
-    if (pOut==NULL) const OutputDevice* pOut=GetWin(0);
-    if (pOut==NULL) return FALSE;
+    const OutputDevice* pOut = pActualOutDev;
+
+    if(!pOut)
+    {
+        pOut=GetWin(0);
+    }
+
+    if (!pOut)
+    {
+        return FALSE;
+    }
+
     SortMarkedObjects();
     ULONG nMarkAnz=GetMarkedObjectCount();
     ULONG nMarkNum=bBack ? 0 : nMarkAnz;
@@ -628,7 +637,7 @@ BOOL SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, USHORT& rn
     return FALSE;
 }
 
-BOOL SdrMarkView::MarkGluePoint(const SdrObject* pObj, USHORT nId, const SdrPageView* pPV, BOOL bUnmark)
+BOOL SdrMarkView::MarkGluePoint(const SdrObject* pObj, USHORT nId, const SdrPageView* /*pPV*/, BOOL bUnmark)
 {
     if (!IsGluePointEditMode()) return FALSE;
     ForceUndirtyMrkPnt();
@@ -696,7 +705,7 @@ SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, USHORT nId) const
     return NULL;
 }
 
-BOOL SdrMarkView::MarkNextGluePoint(BOOL bPrev)
+BOOL SdrMarkView::MarkNextGluePoint(BOOL /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
     BOOL bChgd=FALSE;
@@ -708,7 +717,7 @@ BOOL SdrMarkView::MarkNextGluePoint(BOOL bPrev)
     return bChgd;
 }
 
-BOOL SdrMarkView::MarkNextGluePoint(const Point& rPnt, BOOL bPrev)
+BOOL SdrMarkView::MarkNextGluePoint(const Point& /*rPnt*/, BOOL /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
     BOOL bChgd=FALSE;
