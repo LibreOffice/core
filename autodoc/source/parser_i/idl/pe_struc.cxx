@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_struc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:50:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ PE_Struct::State_WaitForTemplateParam::Process_Identifier( const TokIdentifier &
 }
 
 void
-PE_Struct::State_WaitForTemplateEnd::Process_Punctuation( const TokPunctuation & i_rToken )
+PE_Struct::State_WaitForTemplateEnd::Process_Punctuation( const TokPunctuation & )
 {
     // Assume:  TokPunctuation::Greater
     MoveState( Stati().aGotName );
