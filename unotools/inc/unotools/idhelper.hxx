@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:32:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ void classname::release()   \
     ::osl::MutexGuard aGuard(s_aMutex); \
     if (!--s_nReferenced)   \
     {   \
-        delete s_pMap;  \
+        delete static_cast< ::utl::MapType2Id *>( s_pMap ); \
         s_pMap = NULL;  \
     }   \
 }   \
@@ -218,7 +218,7 @@ void classname::release()   \
     \
     implCreateMap();    \
     \
-    ::utl::MapType2Id* pMap = reinterpret_cast< ::utl::MapType2Id *>(s_pMap);   \
+    ::utl::MapType2Id* pMap = static_cast< ::utl::MapType2Id *>(s_pMap);    \
     \
     ::cppu::OImplementationId& rId = (*pMap)[_rTypes];  \
     /* this will create an entry for the given type sequence, if neccessary */  \
