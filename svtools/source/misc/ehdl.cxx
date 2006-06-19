@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:02:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,8 +436,8 @@ BOOL SfxErrorHandler::GetErrorString(
 //-------------------------------------------------------------------------
 
 SfxErrorContext::SfxErrorContext(
-    USHORT nCtxIdP, Window *pWin, USHORT nResIdP, ResMgr *pMgrP)
-:   ErrorContext(pWin), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP)
+    USHORT nCtxIdP, Window *pWindow, USHORT nResIdP, ResMgr *pMgrP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP)
 {
     if( nResId==USHRT_MAX )
         nResId=RID_ERRCTX;
@@ -446,9 +446,9 @@ SfxErrorContext::SfxErrorContext(
 //-------------------------------------------------------------------------
 
 SfxErrorContext::SfxErrorContext(
-    USHORT nCtxIdP, const String &aArg1P, Window *pWin,
+    USHORT nCtxIdP, const String &aArg1P, Window *pWindow,
     USHORT nResIdP, ResMgr *pMgrP)
-:   ErrorContext(pWin), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
     aArg1(aArg1P)
 {
     if( nResId==USHRT_MAX )
