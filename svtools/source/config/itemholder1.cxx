@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:50:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@
 #include <viewoptions.hxx>
 #include <workingsetoptions.hxx>
 #include <xmlaccelcfg.hxx>
+#include "options.hxx"
 
 //-----------------------------------------------
 // namespaces
@@ -135,7 +136,7 @@ void ItemHolder1::holdConfigItem(EItem eItem)
 }
 
 //-----------------------------------------------
-void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
@@ -323,6 +324,9 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_XMLACCELCFG :
             // ??? TODO
+            break;
+        default:
+            OSL_ASSERT( "unknown item type" );
             break;
     }
 }
