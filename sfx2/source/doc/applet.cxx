@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:36:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,11 @@ SfxItemPropertyMap aAppletPropertyMap_Impl[] =
 {
     { "AppletCode"    , 10, 1, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "AppletCodeBase", 14, 2, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "AppletCommands", 14, 3, &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0},
+    { "AppletCommands", 14, 3, &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0 },
     { "AppletDocBase",  13, 4, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "AppletIsScript", 14, 5, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
     { "AppletName"    , 10, 6, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    {0,0,0,0,0}
+    {0,0,0,0,0,0}
 };
 
 SFX_IMPL_XSERVICEINFO( AppletObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.AppletObject" )
@@ -100,8 +100,8 @@ SFX_IMPL_SINGLEFACTORY( AppletObject );
 AppletObject::AppletObject( const uno::Reference < lang::XMultiServiceFactory >& rFact )
     : mxFact( rFact )
     , maPropSet( aAppletPropertyMap_Impl )
-    , mbMayScript( FALSE )
     , mpApplet( NULL )
+    , mbMayScript( FALSE )
 {
 }
 
@@ -115,8 +115,10 @@ void SAL_CALL AppletObject::initialize( const uno::Sequence< uno::Any >& aArgume
         aArguments[0] >>= mxObj;
 }
 
-sal_Bool SAL_CALL AppletObject::load( const uno::Sequence < com::sun::star::beans::PropertyValue >& lDescriptor,
-            const uno::Reference < frame::XFrame >& xFrame ) throw( uno::RuntimeException )
+sal_Bool SAL_CALL AppletObject::load(
+    const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
+    const uno::Reference < frame::XFrame >& xFrame )
+throw( uno::RuntimeException )
 {
     if ( SvtJavaOptions().IsExecuteApplets() && SvtMiscOptions().IsPluginsEnabled() )
     {
@@ -135,7 +137,7 @@ sal_Bool SAL_CALL AppletObject::load( const uno::Sequence < com::sun::star::bean
 
         if( maCodeBase.getLength() )
         {
-            for ( sal_Int32 nParams=0; nParams<maCmdList.Count(); nParams++ )
+            for ( sal_uInt32 nParams=0; nParams<maCmdList.Count(); nParams++ )
             {
                 if ( maCmdList[nParams].GetCommand().EqualsAscii("codebase") )
                 {
@@ -176,19 +178,19 @@ void SAL_CALL AppletObject::cancel() throw( com::sun::star::uno::RuntimeExceptio
     }
 }
 
-void SAL_CALL AppletObject::close( sal_Bool bDeliverOwnership ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL AppletObject::addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL AppletObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL AppletObject::disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
+void SAL_CALL AppletObject::disposing( const com::sun::star::lang::EventObject& ) throw (com::sun::star::uno::RuntimeException)
 {
     cancel();
 }
@@ -268,19 +270,19 @@ uno::Any SAL_CALL AppletObject::getPropertyValue(const ::rtl::OUString& aPropert
     return aAny;
 }
 
-void SAL_CALL AppletObject::addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::addPropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL AppletObject::removePropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::removePropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL AppletObject::addVetoableChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::addVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL AppletObject::removeVetoableChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL AppletObject::removeVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
@@ -294,7 +296,7 @@ void SAL_CALL AppletObject::removeVetoableChangeListener(const ::rtl::OUString& 
     return 0;
 }
 
-void SAL_CALL AppletObject::setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AppletObject::setTitle( const ::rtl::OUString& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
