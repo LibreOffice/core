@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instancelocker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:10:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:48:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ class OLockListener : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XC
 public:
     OLockListener(  const ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XComponent >& xWrapper,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInstance,
-                    sal_Int8 nMode,
+                    sal_Int32 nMode,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XActionsApproval > xApproval );
 
     ~OLockListener();
