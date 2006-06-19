@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:13:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,9 +134,9 @@ class FmFilterData
 public:
     TYPEINFO();
     FmFilterData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent = NULL, const ::rtl::OUString& rText = ::rtl::OUString())
-        :m_pParent(pParent)
-        ,m_aText(rText)
-        ,m_xORB()
+        :m_xORB( _rxFactory )
+        ,m_pParent( pParent )
+        ,m_aText( rText )
     {}
     virtual ~FmFilterData(){}
 
@@ -240,7 +240,7 @@ public:
     void Clear();
     sal_Bool ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
-    void SetText(FmFilterItem* pItem, const ::rtl::OUString& rText);
+    void SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText);
 
     FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? (FmFormItem*)m_pCurrentItems->GetParent() : NULL;}
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
@@ -325,10 +325,12 @@ public:
     FmFilterNavigator( Window* pParent );
     virtual ~FmFilterNavigator();
 
-    void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xCurrent);
+    void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xCurrent);
     FmFilterModel* const GetFilterModel() const {return m_pModel;}
 
 protected:
+    using Control::Notify;
+
     virtual void KeyInput( const KeyEvent& rKEvt );
     virtual void Command( const CommandEvent& rEvt );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -370,6 +372,10 @@ private:
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
     SvLBoxEntry* getPrevEntry(SvLBoxEntry* _pStartWith = NULL);
     SvLBoxEntry* getNextEntry(SvLBoxEntry* _pStartWith = NULL);
+
+    using SvTreeListBox::Select;
+    using SvTreeListBox::ExecuteDrop;
+    using SvTreeListBox::Insert;
 };
 
 //========================================================================
@@ -389,9 +395,11 @@ public:
                    Window* pParent );
     virtual ~FmFilterNavigatorWin();
 
-    void Update( FmFormShell* pFormShell );
+    void UpdateContent( FmFormShell* pFormShell );
     void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void FillInfo( SfxChildWinInfo& rInfo ) const;
+
+    using SfxDockingWindow::StateChanged;
 
     virtual void GetFocus();
 };
