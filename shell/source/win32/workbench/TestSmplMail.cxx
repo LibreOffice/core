@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestSmplMail.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:11:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,13 @@
 #endif
 
 #include <stdio.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <osl/file.hxx>
 

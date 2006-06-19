@@ -4,9 +4,9 @@
  *
  *  $RCSfile: systemshell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:11:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,14 @@
 #include <osl/file.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable:4917)
+#endif
 #include <Shlobj.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 namespace SystemShell
 {
@@ -57,7 +64,7 @@ namespace SystemShell
           @param aFileUrl
                     The file url of the document.
     */
-    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& aMimeType)
+    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& /*aMimeType*/)
     {
         rtl::OUString system_path;
         osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(aFileUrl, system_path);
