@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage
     nRet = ((int)aWarn.Execute()) - 1;
 
     // normalize behaviour, actually this should never happen
-    if( nRet < -1 || nRet >= rButtons.size() )
+    if( nRet < -1 || nRet >= int(rButtons.size()) )
         nRet = -1;
 
     return nRet;
