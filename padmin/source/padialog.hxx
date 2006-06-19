@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:41:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:16:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <list>
 #endif
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
