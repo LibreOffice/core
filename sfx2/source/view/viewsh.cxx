@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:10:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ using namespace ::com::sun::star::beans;
 namespace css = ::com::sun::star;
 
 //=========================================================================
-DBG_NAME(SfxViewShell);
+DBG_NAME(SfxViewShell)
 
 #define SfxViewShell
 #include "sfxslots.hxx"
@@ -323,22 +323,22 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             // ausfuehren
             if ( !pShowItem || bActive != pImp->bPlugInsActive )
             {
-                SfxFrame *pFrame = GetFrame()->GetTopFrame();
-                if ( pFrame != GetFrame()->GetFrame() )
+                SfxFrame* pTopFrame = GetFrame()->GetTopFrame();
+                if ( pTopFrame != GetFrame()->GetFrame() )
                 {
                     // FramesetDocument
-                    SfxViewShell *pShell = pFrame->GetCurrentViewFrame()->GetViewShell();
+                    SfxViewShell *pShell = pTopFrame->GetCurrentViewFrame()->GetViewShell();
                     if ( pShell->GetInterface()->GetSlot( nId ) )
                         pShell->ExecuteSlot( rReq );
                     break;
                 }
 
-                SfxFrameIterator aIter( *pFrame );
-                while ( pFrame )
+                SfxFrameIterator aIter( *pTopFrame );
+                while ( pTopFrame )
                 {
-                    if ( pFrame->GetCurrentViewFrame() )
+                    if ( pTopFrame->GetCurrentViewFrame() )
                     {
-                        SfxViewShell *pView = pFrame->GetCurrentViewFrame()->GetViewShell();
+                        SfxViewShell *pView = pTopFrame->GetCurrentViewFrame()->GetViewShell();
                         if ( pView )
                         {
                             pView->pImp->bPlugInsActive = bActive;
@@ -359,10 +359,10 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         }
                     }
 
-                    if ( !pFrame->GetParentFrame() )
-                        pFrame = aIter.FirstFrame();
+                    if ( !pTopFrame->GetParentFrame() )
+                        pTopFrame = aIter.FirstFrame();
                     else
-                        pFrame = aIter.NextFrame( *pFrame );
+                        pTopFrame = aIter.NextFrame( *pTopFrame );
                 }
             }
 
@@ -464,7 +464,7 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
 }
 
 //--------------------------------------------------------------------
-ErrCode SfxViewShell::DoVerb(long nVerb)
+ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 
 /*  [Beschreibung]
 
@@ -480,7 +480,7 @@ ErrCode SfxViewShell::DoVerb(long nVerb)
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* pClient )
+void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
     if ( !bActive )
         GetFrame()->GetFrame()->Appear();
@@ -488,7 +488,7 @@ void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* pClien
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::InplaceActivating( SfxInPlaceClient* pClient )
+void SfxViewShell::InplaceActivating( SfxInPlaceClient* /*pClient*/ )
 {
     // TODO/LATER: painting of the bitmap can be stopped, it is required if CLIPCHILDREN problem #i25788# is not solved,
     // but may be the bug will not affect the real office vcl windows, then it is not required
@@ -496,14 +496,14 @@ void SfxViewShell::InplaceActivating( SfxInPlaceClient* pClient )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* pClient )
+void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     // TODO/LATER: paint the replacement image in normal way if the painting was stopped
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::UIActivating( SfxInPlaceClient* pClient )
+void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
     uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
     uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
@@ -516,7 +516,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* pClient )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::UIDeactivated( SfxInPlaceClient* pClient )
+void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     if ( !pFrame->GetFrame()->IsClosing_Impl() ||
         SfxViewFrame::Current() != pFrame )
@@ -610,8 +610,8 @@ void SfxViewShell::Deactivate(BOOL bMDI)
 
 void SfxViewShell::AdjustPosSizePixel
 (
-    const Point&    rToolOffset,// linke obere Ecke der Tools im Frame-Window
-    const Size&     rSize       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
+    const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
 )
 
 {
@@ -645,8 +645,8 @@ void SfxViewShell::Move()
 
 void SfxViewShell::OuterResizePixel
 (
-    const Point&    rToolOffset,// linke obere Ecke der Tools im Frame-Window
-    const Size&     rSize       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
+    const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
 )
 
 /*  [Beschreibung]
@@ -700,8 +700,8 @@ void SfxViewShell::OuterResizePixel
 
 void SfxViewShell::InnerResizePixel
 (
-    const Point&    rToolOffset,// linke obere Ecke der Tools im Frame-Window
-    const Size&     rSize       // dem Edit-Win zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
+    const Size&     /*rSize*/       // dem Edit-Win zur Verf"ugung stehende Gr"o\se
 )
 
 /*  [Beschreibung]
@@ -922,8 +922,8 @@ SfxViewShell::~SfxViewShell()
 
 USHORT SfxViewShell::PrepareClose
 (
-    BOOL    bUI,     // TRUE: Dialoge etc. erlaubt, FALSE: silent-mode
-    BOOL bForBrowsing
+    BOOL bUI,     // TRUE: Dialoge etc. erlaubt, FALSE: silent-mode
+    BOOL /*bForBrowsing*/
 )
 {
     SfxPrinter *pPrinter = GetPrinter();
@@ -975,7 +975,7 @@ SdrView* SfxViewShell::GetDrawView() const
 
 String SfxViewShell::GetSelectionText
 (
-    BOOL bCompleteWords     /*  FALSE (default)
+    BOOL /*bCompleteWords*/     /*  FALSE (default)
                                 Nur der tats"achlich selektierte Text wird
                                 zur"uckgegeben.
 
@@ -1125,20 +1125,20 @@ void SfxViewShell::PushSubShells_Impl( BOOL bPush )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::WriteUserData( String &, BOOL bBrowse )
+void SfxViewShell::WriteUserData( String&, BOOL )
 {
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ReadUserData(const String &, BOOL bBrowse )
+void SfxViewShell::ReadUserData(const String&, BOOL )
 {
 }
 
-void SfxViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse )
+void SfxViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool )
 {
 }
-void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse )
+void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool )
 {
 }
 
@@ -1239,8 +1239,8 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                     SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
                     for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
                     {
-                        SfxViewFrame *pFrame = rFrames.GetObject(n);
-                        if ( pFrame == GetViewFrame() && &rBC == GetObjectShell() )
+                        SfxViewFrame *frame = rFrames.GetObject(n);
+                        if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                         {
                             SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
                             SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
@@ -1310,7 +1310,7 @@ FASTBOOL SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ShowCursor( FASTBOOL bOn )
+void SfxViewShell::ShowCursor( FASTBOOL /*bOn*/ )
 
 /*  [Beschreibung]
 
@@ -1412,7 +1412,7 @@ void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::VisAreaChanged(const Rectangle& rVisArea)
+void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 {
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
@@ -1552,7 +1552,7 @@ BOOL SfxViewShell::IsShowView_Impl() const
 
 //--------------------------------------------------------------------
 
-SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium )
+SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 {
     return pSelf;
 }
@@ -1674,7 +1674,6 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
                 case ::com::sun::star::ui::ContextMenuInterceptorAction_CANCELLED :
                     // interceptor does not want execution
                     return FALSE;
-                    break;
                 case ::com::sun::star::ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED :
                     // interceptor wants his modified menu to be executed
                     bModified = TRUE;
@@ -1683,15 +1682,12 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
                     // interceptor has modified menu, but allows for calling other interceptors
                     bModified = TRUE;
                     continue;
-                    break;
                 case ::com::sun::star::ui::ContextMenuInterceptorAction_IGNORED :
                     // interceptor is indifferent
                     continue;
-                    break;
                 default:
                     DBG_ERROR("Wrong return value of ContextMenuInterceptor!");
                     continue;
-                    break;
             }
         }
         catch( ::com::sun::star::uno::RuntimeException& )
