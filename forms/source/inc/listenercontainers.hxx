@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenercontainers.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ namespace frm
         }
 
         // still waiting to be overwritten
-        virtual bool    implNotify(
+        virtual bool    implTypedNotify(
                             const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener,
                             const EventClass& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) = 0;
@@ -97,6 +97,9 @@ namespace frm
             ::com::sun::star::lang::EventObject aEvent( m_rInstigator );
             EventListeners_Base::disposing( aEvent );
         }
+    protected:
+        using EventListeners_Base::notify;
+        using EventListeners_Base::disposing;
     };
 
     //=====================================================================
@@ -138,7 +141,7 @@ namespace frm
         }
 
     protected:
-        virtual bool    implNotify(
+        virtual bool    implTypedNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
