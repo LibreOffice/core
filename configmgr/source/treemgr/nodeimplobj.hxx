@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:32:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,7 @@ namespace configmgr
             typedef ValueMemberNode::DeferredImplRef MemberChange;
             MemberChange findValueChange(Name const& aName);
 
+            using GroupNodeImpl::makeValueMember;
             ValueMemberNode makeValueMember(data::Accessor const& _aAccessor, Name const& _aName, bool _bForUpdate);
 
         private:
