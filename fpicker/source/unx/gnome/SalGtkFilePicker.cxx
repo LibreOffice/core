@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 07:41:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ static void expandexpanders(GtkContainer *pWidget)
     g_list_free(pChildren);
 }
 
-void SalGtkFilePicker::dialog_mapped_cb(GtkWidget *widget, SalGtkFilePicker *pobjFP)
+void SalGtkFilePicker::dialog_mapped_cb(GtkWidget *, SalGtkFilePicker *pobjFP)
 {
     pobjFP->InitialMapping();
 }
@@ -168,16 +168,16 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         lang::XEventListener,
         lang::XServiceInfo>( m_rbHelperMtx ),
     m_xServiceMgr( xServiceMgr ),
-    m_pVBox ( NULL ),
     m_pFilterList( NULL ),
+    m_pVBox ( NULL ),
+    mnHID_FolderChange( 0 ),
+    mnHID_SelectionChange( 0 ),
     bVersionWidthUnset( false ),
     mbPreviewState( sal_False ),
     mHID_Preview( 0 ),
     m_pPreview( NULL ),
     m_PreviewImageWidth( 256 ),
-    m_PreviewImageHeight( 256 ),
-    mnHID_FolderChange( 0 ),
-    mnHID_SelectionChange( 0 )
+    m_PreviewImageHeight( 256 )
 {
     int i;
 
@@ -341,7 +341,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     GtkTreeViewColumn *column;
     GtkCellRenderer *cell;
 
-    for (int i = 0; i < 2; ++i)
+    for (i = 0; i < 2; ++i)
     {
         column = gtk_tree_view_column_new ();
         cell = gtk_cell_renderer_text_new ();
@@ -396,7 +396,7 @@ void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFil
     m_xListener = xListener;
 }
 
-void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
+void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
     throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -550,7 +550,7 @@ sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 }
 
 static bool
-isFilterString( const rtl::OUString &rFilterString, char *pMatch )
+isFilterString( const rtl::OUString &rFilterString, const char *pMatch )
 {
         sal_Int32 nIndex = 0;
         rtl::OUString aToken;
@@ -813,7 +813,7 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeE
 // XFilterGroupManager functions
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL SalGtkFilePicker::appendFilterGroup( const rtl::OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters )
+void SAL_CALL SalGtkFilePicker::appendFilterGroup( const rtl::OUString& /*sGroupTitle*/, const uno::Sequence<beans::StringPair>& aFilters )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
@@ -1056,7 +1056,6 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
             G_CALLBACK( selection_changed_cb ), ( gpointer )this );
 
     int btn = GTK_RESPONSE_NO;
-    int nRes = GTK_RESPONSE_CANCEL;
 
     while( GTK_RESPONSE_NO == btn )
     {
@@ -1126,8 +1125,8 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
 GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
 {
     OSL_TRACE("control id is %d", nControlId);
-    GType      tType;
-    GtkWidget *pWidget;
+    GType      tType = GTK_TYPE_TOGGLE_BUTTON; //prevent waring by initializing
+    GtkWidget *pWidget = 0;
 
 #define MAP_TOGGLE( elem ) \
         case ExtendedFilePickerElementIds::CHECKBOX_##elem: \
@@ -1481,7 +1480,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight() throw( uno::RuntimeExc
     return m_PreviewImageHeight;
 }
 
-void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 aImageFormat, const uno::Any& aImage )
+void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno::Any& /*aImage*/ )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
@@ -1527,7 +1526,7 @@ void SalGtkFilePicker::expander_changed_cb( GtkExpander *expander, SalGtkFilePic
         pobjFP->unselect_type();
 }
 
-void SalGtkFilePicker::filter_changed_cb( GtkFileChooser *file_chooser, GParamSpec *pspec,
+void SalGtkFilePicker::filter_changed_cb( GtkFileChooser *, GParamSpec *,
     SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
@@ -1536,14 +1535,14 @@ void SalGtkFilePicker::filter_changed_cb( GtkFileChooser *file_chooser, GParamSp
     pobjFP->controlStateChanged( evt );
 }
 
-void SalGtkFilePicker::folder_changed_cb( GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP )
+void SalGtkFilePicker::folder_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
     OSL_TRACE( "folder_changed, isn't it great %x\n", pobjFP );
     pobjFP->directoryChanged( evt );
 }
 
-void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP )
+void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
     OSL_TRACE( "selection_changed, isn't it great %x\n", pobjFP );
@@ -1649,7 +1648,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     aAny >>= templateId;
 
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-    gchar *first_button_text = GTK_STOCK_OPEN;
+    const gchar *first_button_text = GTK_STOCK_OPEN;
 
 
     //   TODO: extract full semantic from
@@ -1855,6 +1854,8 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
     g_slist_free( filters );
 }
 
+extern "C"
+{
 static gboolean
 case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 {
@@ -1881,6 +1882,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 #endif
 
     return bRetval;
+}
 }
 
 int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rType )
@@ -1948,7 +1950,7 @@ int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rT
     return nAdded;
 }
 
-int SalGtkFilePicker::implAddFilterGroup( const OUString& _rFilter, const Sequence< StringPair >& _rFilters )
+int SalGtkFilePicker::implAddFilterGroup( const OUString& /*_rFilter*/, const Sequence< StringPair >& _rFilters )
 {
     // Gtk+ has no filter group concept I think so ...
     // implAddFilter( _rFilter, String() );
