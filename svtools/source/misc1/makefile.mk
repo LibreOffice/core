@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:27:55 $
+#   last change: $Author: hr $ $Date: 2006-06-19 21:22:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ TARGET=misc1
 
 EXCEPTIONSFILES=\
     $(SLO)$/fstathelper.obj \
+    $(SLO)$/folderrestriction.obj \
     $(SLO)$/strmadpt.obj \
     $(SLO)$/svtdata.obj
 
@@ -54,7 +55,6 @@ SLOFILES=\
     $(SLO)$/adrparse.obj \
     $(SLO)$/docpasswdrequest.obj \
     $(SLO)$/filenotation.obj \
-    $(SLO)$/folderrestriction.obj \
     $(SLO)$/inethist.obj \
     $(SLO)$/inettype.obj \
     $(SLO)$/iniadrtk.obj \
