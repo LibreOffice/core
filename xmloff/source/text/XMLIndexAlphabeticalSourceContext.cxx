@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:02:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:39:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,33 +124,28 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_False),
-        sMainEntryStyleName(),
-        bMainEntryStyleNameOK(sal_False),
-        bSeparators(sal_False),
-        bCombineEntries(sal_True),
-        bCaseSensitive(sal_True),
-        bEntry(sal_False),
-        bUpperCase(sal_False),
-        bCombineDash(sal_False),
-        bCombinePP(sal_True),
-        bCommaSeparated(sal_False),
-        sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_MainEntryCharacterStyleName)),
-        sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_UseAlphabeticalSeparators)),
-        sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_UseCombinedEntries)),
-        sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCaseSensitive)),
-        sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseKeyAsEntry)),
-        sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase)),
-        sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash)),
-        sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP)),
-        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm)),
-        sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale)),
-        sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
+    Reference<XPropertySet> & rPropSet)
+:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_False)
+,   sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM(sAPI_MainEntryCharacterStyleName))
+,   sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseAlphabeticalSeparators))
+,   sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseCombinedEntries))
+,   sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCaseSensitive))
+,   sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseKeyAsEntry))
+,   sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase))
+,   sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash))
+,   sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP))
+,   sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
+,   sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm))
+,   sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale))
+,   bMainEntryStyleNameOK(sal_False)
+,   bSeparators(sal_False)
+,   bCombineEntries(sal_True)
+,   bCaseSensitive(sal_True)
+,   bEntry(sal_False)
+,   bUpperCase(sal_False)
+,   bCombineDash(sal_False)
+,   bCombinePP(sal_True)
+,   bCommaSeparated(sal_False)
 {
 }
 
