@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:35:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@ protected:
                             )
                             throw (::com::sun::star::uno::Exception);
 
+    using OPropertyContainer_Base::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
                                 ::com::sun::star::uno::Any& rValue,
                                 sal_Int32 nHandle
@@ -101,9 +102,6 @@ protected:
     // disambiguate a base class method (XFastPropertySet)
     virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    // still waiting to be overridden
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException) = 0;
 };
 
 //.........................................................................
