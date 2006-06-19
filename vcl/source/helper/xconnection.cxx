@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xconnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:17:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,14 +76,14 @@ DisplayConnection::~DisplayConnection()
 }
 
 
-void SAL_CALL DisplayConnection::addEventHandler( const Any& window, const Reference< XEventHandler >& handler, sal_Int32 eventMask ) throw()
+void SAL_CALL DisplayConnection::addEventHandler( const Any& /*window*/, const Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeEventHandler( const Any& window, const Reference< XEventHandler >& handler ) throw()
+void SAL_CALL DisplayConnection::removeEventHandler( const Any& /*window*/, const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
