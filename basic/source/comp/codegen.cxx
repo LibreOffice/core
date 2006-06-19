@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:11:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 #include <sbx.hxx>
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include "image.hxx"
 
 // nInc ist die Inkrementgroesse der Puffer
@@ -126,10 +125,6 @@ USHORT SbiCodeGen::Gen( SbiOpcode eOpcode, UINT16 nOpnd1, UINT16 nOpnd2 )
 void SbiCodeGen::Save()
 {
     SbiImage* p = new SbiImage;
-    if( !p )
-    {
-        SbERR_NO_MEMORY; return;
-    }
     rMod.StartDefinitions();
     // OPTION BASE-Wert:
     p->nDimBase = pParser->nBase;
@@ -207,7 +202,7 @@ void SbiCodeGen::Save()
                     }
                 }
             }
-            SbMethod* pMeth;
+            SbMethod* pMeth = NULL;
             for( USHORT nPass = 0 ; nPass < nPassCount ; nPass++ )
             {
                 if( nPass == 1 )
@@ -216,7 +211,7 @@ void SbiCodeGen::Save()
                 PropertyMode ePropMode = pProc->getPropertyMode();
                 if( ePropMode != PROPERTY_MODE_NONE )
                 {
-                    SbxDataType ePropType;
+                    SbxDataType ePropType = SbxEMPTY;
                     switch( ePropMode )
                     {
                         case PROPERTY_MODE_GET:
@@ -238,18 +233,20 @@ void SbiCodeGen::Save()
                         case PROPERTY_MODE_SET:
                             ePropType = SbxOBJECT;
                             break;
+                        case PROPERTY_MODE_NONE:
+                            DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                            break;
                     }
                     String aPropName = pProc->GetPropName();
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
-                    SbProcedureProperty* pProcedureProperty =
-                        rMod.GetProcedureProperty( aPropName, ePropType );
-                        // rMod.GetProcedureProperty( pProc->GetPropName(), ePropType );
+                    SbProcedureProperty* pProcedureProperty = NULL;
+                    pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
                 {
-                    SbIfaceMapperMethod* pMapperMeth =
-                        rMod.GetIfaceMapperMethod( aProcName, pMeth );
+                    SbIfaceMapperMethod* pMapperMeth = NULL;
+                    pMapperMeth = rMod.GetIfaceMapperMethod( aProcName, pMeth );
                 }
                 else
                 {
