@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:20:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
-#endif
-
 //_________________________________________________________________________________________________________________
 //  includes
 //_________________________________________________________________________________________________________________
@@ -114,7 +110,7 @@ using namespace ::com::sun::star;
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
-DECLARE_LIST( LinkList, Link * );
+DECLARE_LIST( LinkList, Link * )
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -658,7 +654,7 @@ SvtMiscOptions::SvtMiscOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-       RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtMiscOptions_Impl::ctor()");
+       RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMiscOptions_Impl::ctor()");
        m_pDataContainer = new SvtMiscOptions_Impl;
        ItemHolder1::holdConfigItem(E_MISCOPTIONS);
     }
