@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compbase11.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 17:14:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,13 @@ __DEF_COMPIMPLHELPER_EX( 11 )
 
 namespace cppu
 {
+
+// Suppress warnings about hidden functions in case any of the IfcN has
+// functions named dispose, addEventListener, or removeEventListener:
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
+
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.
 
@@ -91,6 +98,11 @@ namespace cppu
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
+
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
+
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.
 
