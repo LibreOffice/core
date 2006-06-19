@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:01:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OWizardPage::commitPage(IWizardPage::COMMIT_REASON)
     {
         return sal_True;
     }
@@ -217,7 +217,7 @@ namespace svt
     {
         sal_Int32 nMask = 1;
         sal_Int32 nRightAlignedButtonCount = -1;
-        for (int i = 0; i < 8*sizeof(_nButtonFlags); i++ )
+        for (unsigned int i = 0; i < 8*sizeof(_nButtonFlags); i++ )
         {
             if( ( _nButtonFlags & nMask ) != 0 )
                 nRightAlignedButtonCount++;
@@ -536,7 +536,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardMachine::leaveState(WizardState _nState)
+    sal_Bool OWizardMachine::leaveState(WizardState)
     {
         // no need to ask the page here.
         // If we reach this point, we already gave the current page the chance to commit it's data,
@@ -552,7 +552,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OWizardMachine, OnFinish, PushButton*, NOINTERESTEDIN)
+    IMPL_LINK(OWizardMachine, OnFinish, PushButton*, EMPTYARG)
     {
         if( IsInCallOfLink() )
             return 0;
@@ -761,7 +761,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OWizardMachine, OnPrevPage, PushButton*, NOINTERESTEDIN)
+    IMPL_LINK(OWizardMachine, OnPrevPage, PushButton*, EMPTYARG)
     {
         if( IsInCallOfLink() )
             return 0;
@@ -772,7 +772,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OWizardMachine, OnNextPage, PushButton*, NOINTERESTEDIN)
+    IMPL_LINK(OWizardMachine, OnNextPage, PushButton*, EMPTYARG)
     {
         if( IsInCallOfLink() )
             return 0;
