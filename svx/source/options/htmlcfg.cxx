@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:48:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 #endif
 
 #include <sfx2/viewfrm.hxx>
-
-#pragma hdrstop
 
 #include "svxids.hrc"
 #include "txencbox.hxx"
