@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,12 +199,17 @@ namespace xmloff
     OElementImport::OElementImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :OPropertyImport(_rImport, _nPrefix, _rName)
-        ,m_xParentContainer(_rxParentContainer)
         ,m_rFormImport(_rImport)
         ,m_rEventManager(_rEventManager)
         ,m_pStyleElement( NULL )
+        ,m_xParentContainer(_rxParentContainer)
     {
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::OElementImport: invalid parent container!");
+    }
+
+    //---------------------------------------------------------------------
+    OElementImport::~OElementImport()
+    {
     }
 
     //---------------------------------------------------------------------
@@ -410,7 +415,9 @@ namespace xmloff
                         aPropValues->Value <<=
                             static_cast< sal_Int64 >( nVal );
                         break;
-
+                    default:
+                        OSL_ENSURE( false, "OElementImport::EndElement: unsupported value type!" );
+                        break;
                     }
                 }
                 m_xElement->setPropertyValue(aPropValues->Name,
@@ -991,7 +998,7 @@ namespace xmloff
     OReferredControlImport::OReferredControlImport(
             IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
-            OControlElement::ElementType _eType)
+            OControlElement::ElementType )
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
     {
     }
@@ -1703,14 +1710,14 @@ namespace xmloff
     OColumnWrapperImport::OColumnWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
-        ,m_rFormImport(_rImport)
         ,m_xParentContainer(_rxParentContainer)
+        ,m_rFormImport(_rImport)
         ,m_rEventManager(_rEventManager)
     {
     }
     //---------------------------------------------------------------------
     SvXMLImportContext* OColumnWrapperImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList)
+        const Reference< sax::XAttributeList >&)
     {
         OControlImport* pReturn = implCreateChildContext(_nPrefix, _rLocalName, OElementNameMap::getElementType(_rLocalName));
         if (pReturn)
@@ -1934,14 +1941,12 @@ namespace xmloff
         SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     {
         OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-        const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
 
         sal_Int16 nLength = (_xElement.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
             ::rtl::OUString sLocalName;
             ::rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
-            sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
             ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
             if ( sLocalName.equalsAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)) )
