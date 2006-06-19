@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:21:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 
 // =======================================================================
 
-DECLARE_TABLE( ImplAccelTable, ImplAccelEntry* );
-DECLARE_LIST( ImplAccelList, ImplAccelEntry* );
+DECLARE_TABLE( ImplAccelTable, ImplAccelEntry* )
+DECLARE_LIST( ImplAccelList, ImplAccelEntry* )
 
 #define ACCELENTRY_NOTFOUND     ((USHORT)0xFFFF)
 
@@ -76,7 +76,7 @@ public:
 
 // =======================================================================
 
-DBG_NAME( Accelerator );
+DBG_NAME( Accelerator )
 
 // =======================================================================
 
@@ -300,6 +300,7 @@ Accelerator::Accelerator()
 // -----------------------------------------------------------------------
 
 Accelerator::Accelerator( const Accelerator& rAccel ) :
+    Resource(),
     maHelpStr( rAccel.maHelpStr ),
     maCurKeyCode( rAccel.maCurKeyCode )
 {
@@ -388,14 +389,14 @@ void Accelerator::InsertItem( const ResId& rResId )
     DBG_CHKTHIS( Accelerator, NULL );
 
     ULONG               nObjMask;
-    ULONG               nAccelKeyId;
+    USHORT              nAccelKeyId;
     USHORT              bDisable;
     KeyCode             aKeyCode;
     Accelerator*        pAutoAccel  = NULL;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
     nObjMask        = ReadLongRes();
-    nAccelKeyId     = ReadLongRes();
+    nAccelKeyId     = sal::static_int_cast<USHORT>(ReadLongRes());
     bDisable        = ReadShortRes();
 
     if ( nObjMask & ACCELITEM_KEY )
