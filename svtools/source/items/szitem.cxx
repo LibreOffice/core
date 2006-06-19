@@ -4,9 +4,9 @@
  *
  *  $RCSfile: szitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:01:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxSizeItem);
+DBG_NAME(SfxSizeItem)
 
 // -----------------------------------------------------------------------
 
@@ -99,9 +99,9 @@ SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
 
 SfxItemPresentation SfxSizeItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -133,7 +133,7 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, USHORT nVersion ) const
+SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     Size aStr;
@@ -143,7 +143,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, USHORT nVersion ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     rStream << aVal;
