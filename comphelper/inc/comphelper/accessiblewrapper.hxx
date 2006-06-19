@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblewrapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:26:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,9 +239,6 @@ namespace comphelper
     protected:
         // XInterface
         ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
-        // still waiting to be overwritten
-        virtual void SAL_CALL acquire(  ) throw () = 0;
-        virtual void SAL_CALL release(  ) throw () = 0;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
@@ -337,7 +334,9 @@ namespace comphelper
         virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
         // XAccessibleEventBroadcaster
+        using WeakComponentImplHelperBase::addEventListener;
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        using WeakComponentImplHelperBase::removeEventListener;
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // OAccessibleContextWrapper
@@ -347,6 +346,7 @@ namespace comphelper
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
         // OComponentHelper
+        using OAccessibleContextWrapperHelper::disposing;
         virtual void SAL_CALL disposing()  throw (::com::sun::star::uno::RuntimeException);
 
     protected:
