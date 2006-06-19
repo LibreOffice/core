@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 12:54:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,7 +413,7 @@ SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 //-----------------------------------------------
 void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
                                            SvLBox&      rDevice,
-                                           USHORT       nFlags ,
+                                           USHORT       /*nFlags*/,
                                            SvLBoxEntry* pEntry )
 {
     /*/ ??? realy needed !!!
@@ -497,8 +497,11 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(      Window*     pParent,
                                                    const SfxItemSet& aSet   )
 
     : SfxTabPage              (pParent, SfxResId(TP_CONFIG_ACCEL), aSet)
+    , m_pMacroInfoItem        ()
     , aEntriesBox             (this   , this, ResId(BOX_ACC_ENTRIES   ))
     , aKeyboardGroup          (this   , ResId(GRP_ACC_KEYBOARD        ))
+    , aOfficeButton           (this   , ResId(RB_OFFICE               ))
+    , aModuleButton           (this   , ResId(RB_MODULE               ))
     , aChangeButton           (this   , ResId(BTN_ACC_CHANGE          ))
     , aRemoveButton           (this   , ResId(BTN_ACC_REMOVE          ))
     , aGroupText              (this   , ResId(TXT_ACC_GROUP           ))
@@ -511,13 +514,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(      Window*     pParent,
     , aLoadButton             (this   , ResId(BTN_LOAD                ))
     , aSaveButton             (this   , ResId(BTN_SAVE                ))
     , aResetButton            (this   , ResId(BTN_RESET               ))
-    , aOfficeButton           (this   , ResId(RB_OFFICE               ))
-    , aModuleButton           (this   , ResId(RB_MODULE               ))
-    , m_xAct                  ()
-    , m_xModule               ()
-    , m_xGlobal               ()
-    , m_pMacroInfoItem        ()
     , m_bStylesInfoInitialized(sal_False)
+    , m_xGlobal               ()
+    , m_xModule               ()
+    , m_xAct                  ()
 {
     FreeResource();
 
@@ -765,7 +765,7 @@ void SfxAcceleratorConfigPage::ResetConfig()
     aEntriesBox.Clear();
 }
 
-String FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
+String FileDialog_Impl( Window* /*pParent*/, WinBits nBits, const String& rTitle )
 {
     BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
     short nDialogType = bSave? ::sfx2::FILESAVE_SIMPLE : ::sfx2::FILEOPEN_SIMPLE;
@@ -773,7 +773,7 @@ String FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
     aFileDlg.SetTitle( rTitle );
 //  aFileDlg.SetDialogHelpId( bSave? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
-    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+    aFileDlg.AddFilter( String(SfxResId(STR_SFX_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
     if ( ERRCODE_NONE == aFileDlg.Execute() )
         return aFileDlg.GetPath();
@@ -784,6 +784,7 @@ String FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 //-----------------------------------------------
 IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
 {
+    (void)pButton; // unused
     // ask for filename, where we should load the new config data from
     ::rtl::OUString sCfgName = FileDialog_Impl(this, WB_OPEN | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_LOADACCELCONFIG)));
     if (!sCfgName.getLength())
@@ -864,6 +865,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
 //-----------------------------------------------
 IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
 {
+    (void)pButton; // unused
     ::rtl::OUString sCfgName = FileDialog_Impl(this, WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_SAVEACCELCONFIG)));
     if (!sCfgName.getLength())
         return 0;
@@ -961,6 +963,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
 //-----------------------------------------------
 IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, pPushButton)
 {
+    (void)pPushButton; // unused
     css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
     if (xReset.is())
         xReset->reset();
@@ -978,6 +981,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, pPushButton)
 //-----------------------------------------------
 IMPL_LINK(SfxAcceleratorConfigPage, ChangeHdl, Button*, pButton)
 {
+    (void)pButton; // unused
     USHORT    nPos        = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
     String    sNewCommand = aFunctionBox.GetCurCommand();
@@ -996,6 +1000,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, ChangeHdl, Button*, pButton)
 //-----------------------------------------------
 IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, pButton )
 {
+    (void)pButton; // unused
     // get selected entry
     USHORT    nPos   = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
@@ -1104,6 +1109,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 //-----------------------------------------------
 IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )
 {
+    (void)pBtn; //unused
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
 
     if (aOfficeButton.IsChecked())
@@ -1211,6 +1217,8 @@ String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
         case KEYFUNC_FRONT :
                 sName.append( String( SfxResId( STR_FRONT )));
                 break;
+        default:
+            break;
     }
     sName.appendAscii("\"");
     return String(sName.makeStringAndClear());
@@ -1350,7 +1358,7 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const String& sName)
+css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const String& /*sName*/)
 {
     return css::uno::Reference< css::frame::XModel >();
 }
