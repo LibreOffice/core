@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Query.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,12 @@ sal_Int32* QueryHit::getMatches( sal_Int32& matchesL )
 
 
 HitStore::HitStore( double initialStandard,sal_Int32 limit,sal_Int32 nColumns )
-    : standard_( initialStandard ),
-      limit_( limit ),
-      heap_( limit ),
+    : limit_( limit ),
       nColumns_( nColumns ),
+      index_( 0 ),
       free_( 0 ),
-      index_( 0 )
+      standard_( initialStandard ),
+      heap_( limit )
 {
     for( sal_uInt32 i = 0; i < heap_.size(); ++i )
         heap_[i] = 0;
@@ -223,19 +223,19 @@ Query::Query( XmlIndex* env,
               double* missingPenalties )
     : env_( env ),
       ctx_( env ? env->getContextInfo() : 0 ),
-      nColumns_( nColumns ),
-      nHitsRequested_( nHits ),
-      missingPenaltyL_( nColumns ),
-      missingPenalty_( new double[ nColumns ] ),
-      upperboundTemplateL_( nColumns ),
-      upperboundTemplate_( new double[ nColumns ] ),
-      penaltiesL_( missingPenaltiesL ),
-      penalties_( missingPenalties ),
-      currentStandard_( nColumns * MissingTermPenalty - 0.0001 ),
-      missingTermsPenalty_( 0.0 ),
       store_( nColumns * MissingTermPenalty - 0.0001,nHits,nColumns ),
+      nHitsRequested_( nHits ),
+      nColumns_( nColumns ),
+      currentStandard_( nColumns * MissingTermPenalty - 0.0001 ),
+      missingPenaltyL_( nColumns ),
+      upperboundTemplateL_( nColumns ),
+      penaltiesL_( missingPenaltiesL ),
+      missingPenalty_( new double[ nColumns ] ),
+      upperboundTemplate_( new double[ nColumns ] ),
+      penalties_( missingPenalties ),
       ignoredElementsL_( 0 ),
-      ignoredElements_( 0 )
+      ignoredElements_( 0 ),
+      missingTermsPenalty_( 0.0 )
 {
     // for the EmptyQuery case (awaits arch improvement pass)
 
@@ -378,8 +378,8 @@ void Query::updateEstimate( sal_Int32 role,double penalty )
 
 
 QueryHitIterator::QueryHitIterator( const QueryResults* result )
-    : result_( result ),
-      index_( -1 )
+    : index_( -1 ),
+      result_( result )
 {
 }
 
