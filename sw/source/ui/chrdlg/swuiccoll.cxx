@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:32:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ void __EXPORT SwCondCollPage::Reset(const SfxItemSet &rSet)
             aEntry += pCond->GetTxtFmtColl()->GetName();
         }
 
-        SvLBoxEntry* pE = aTbLinks.InsertEntry( aEntry, n );
+        SvLBoxEntry* pE = aTbLinks.InsertEntryToColumn( aEntry, n );
         if(0 == n)
             aTbLinks.Select(pE);
     }
@@ -309,7 +309,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 
     aTbLinks.SetUpdateMode(FALSE);
     aTbLinks.GetModel()->Remove(pE);
-    pE = aTbLinks.InsertEntry(sSel, nPos);
+    pE = aTbLinks.InsertEntryToColumn(sSel, nPos);
     aTbLinks.Select(pE);
     aTbLinks.MakeVisible(pE);
     aTbLinks.SetUpdateMode(TRUE);
