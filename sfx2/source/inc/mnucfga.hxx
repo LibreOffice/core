@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnucfga.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:06:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ struct SfxMenuCfgItem
     SfxMenuCfgItemArr* pPopup;     // pointer to a popup menu (if any)
 };
 
-DECL_PTRARRAY(SfxMenuCfgItemArr, SfxMenuCfgItem*, 4, 4 );
+DECL_PTRARRAY(SfxMenuCfgItemArr, SfxMenuCfgItem*, 4, 4 )
 
 
 #endif
