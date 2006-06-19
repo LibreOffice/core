@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:33:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ ImplDockFloatWin::~ImplDockFloatWin()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
+IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, EMPTYARG )
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -196,7 +196,7 @@ IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
     return 0;
 }
 
-IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
+IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, EMPTYARG )
 {
     PointerState aState = mpDockWin->GetParent()->GetPointerState();
 
@@ -369,7 +369,7 @@ BOOL DockingWindow::ImplStartDocking( const Point& rPos )
 
 // =======================================================================
 
-void DockingWindow::ImplInitData()
+void DockingWindow::ImplInitDockingWindowData()
 {
     mpImplData              = new ImplData;
     mpWindowImpl->mbDockWin               = TRUE;
@@ -470,7 +470,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
 DockingWindow::DockingWindow( WindowType nType ) :
     Window( nType )
 {
-    ImplInitData();
+    ImplInitDockingWindowData();
 }
 
 // -----------------------------------------------------------------------
@@ -478,7 +478,7 @@ DockingWindow::DockingWindow( WindowType nType ) :
 DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_DOCKINGWINDOW )
 {
-    ImplInitData();
+    ImplInitDockingWindowData();
     ImplInit( pParent, nStyle );
 }
 
@@ -487,7 +487,7 @@ DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
 DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_DOCKINGWINDOW )
 {
-    ImplInitData();
+    ImplInitDockingWindowData();
     rResId.SetRT( RSC_DOCKINGWINDOW );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -561,14 +561,14 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             aMousePos = ImplFrameToOutput( aFrameMousePos );
             aMousePos.X() -= maMouseOff.X();
             aMousePos.Y() -= maMouseOff.Y();
-            Point aPos = ImplOutputToFrame( aMousePos );
-            Rectangle aTrackRect( aPos, Size( mnTrackWidth, mnTrackHeight ) );
+            Point aFramePos = ImplOutputToFrame( aMousePos );
+            Rectangle aTrackRect( aFramePos, Size( mnTrackWidth, mnTrackHeight ) );
             Rectangle aCompRect = aTrackRect;
-            aPos.X()    += maMouseOff.X();
-            aPos.Y()    += maMouseOff.Y();
+            aFramePos.X()    += maMouseOff.X();
+            aFramePos.Y()    += maMouseOff.Y();
             if ( mbDragFull )
                 StartDocking();
-            BOOL bFloatMode = Docking( aPos, aTrackRect );
+            BOOL bFloatMode = Docking( aFramePos, aTrackRect );
             mbDockPrevented = FALSE;
             mbFloatPrevented = FALSE;
             if ( mbLastFloatMode != bFloatMode )
@@ -619,8 +619,8 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
 
                 // Maus-Offset neu berechnen, da Rechteck veraendert werden
                 // konnte
-                maMouseOff.X()  = aPos.X() - aTrackRect.Left();
-                maMouseOff.Y()  = aPos.Y() - aTrackRect.Top();
+                maMouseOff.X()  = aFramePos.X() - aTrackRect.Left();
+                maMouseOff.Y()  = aFramePos.Y() - aTrackRect.Top();
             }
 
             mnTrackX        = aTrackRect.Left();
