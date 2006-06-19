@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:59:55 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:16:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX=-fguiding-decls -frtti $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 CFLAGSOBJGUIST=$(PICSWITCH)
 CFLAGSOBJCUIST=$(PICSWITCH)
@@ -67,6 +66,13 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-O2
 CFLAGSNOOPT=-O
 CFLAGSOUTOBJ=-o
+
+CFLAGSWARNCC=
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
