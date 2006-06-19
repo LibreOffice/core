@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:12:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:38:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,19 @@ typedef struct _uno_Environment uno_Environment;
 
 namespace bridges_remote
 {
+    extern "C" typedef void SAL_CALL RemoteToUno(
+        uno_Mapping *pMapping, void **ppOut, void *pInterface,
+        typelib_InterfaceTypeDescription *pInterfaceTypeDescr );
+    RemoteToUno remoteToUno;
+
+    extern "C" typedef void SAL_CALL UnoToRemote(
+        uno_Mapping *pMapping, void **ppOut, void *pInterface,
+        typelib_InterfaceTypeDescription *pInterfaceTypeDescr );
+    UnoToRemote unoToRemote;
+
+    extern "C" typedef void SAL_CALL FreeRemoteMapping(uno_Mapping * mapping);
+    FreeRemoteMapping freeRemoteMapping;
+
     class RemoteMapping :
         public remote_Mapping
     {
@@ -55,22 +68,6 @@ namespace bridges_remote
                        uno_MapInterfaceFunc func ,
                        const ::rtl::OUString sPurpose);
         ~RemoteMapping();
-
-        static void SAL_CALL thisFree( uno_Mapping * pMapping );
-        static void SAL_CALL remoteToUno(
-            uno_Mapping *pMapping,
-            void **ppOut,
-            void *pInterface,
-            typelib_InterfaceTypeDescription *pInterfaceTypeDescr );
-
-        static void SAL_CALL unoToRemote(
-            uno_Mapping *pMapping,
-            void **ppOut,
-            void *pInterface,
-            typelib_InterfaceTypeDescription *pInterfaceTypeDescr );
-
-        static void SAL_CALL thisAcquire( uno_Mapping *pMapping );
-        static void SAL_CALL thisRelease( uno_Mapping *pMapping );
 
         oslInterlockedCount m_nRef;
         ::rtl::OUString m_sPurpose;
