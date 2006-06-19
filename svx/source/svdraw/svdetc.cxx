@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:09:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,14 +219,14 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
     {
         // more objects than configured cache size try to remove objects
         // of course not the freshly inserted one at nIndex=0
-        ULONG nCount = Count();
-        ULONG nIndex = nCount-1;
-        while( nIndex && nCount > nSize )
+        ULONG nCount2 = Count();
+        ULONG nIndex = nCount2-1;
+        while( nIndex && nCount2 > nSize )
         {
             SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(nIndex--);
             if ( UnloadObj(pCacheObj) )
                 // object was successfully unloaded
-                nCount--;
+                nCount2--;
         }
     }
 }
@@ -259,17 +259,17 @@ BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
     return bUnloaded;
 }
 
-IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, pTim)
+IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, /*pTim*/)
 {
     if ( nSize < Count() )
     {
-        ULONG nCount = Count();
-        ULONG nIndex = nCount;
-        while ( nCount > nSize )
+        ULONG nCount2 = Count();
+        ULONG nIndex = nCount2;
+        while ( nCount2 > nSize )
         {
             SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject( --nIndex );
             if ( UnloadObj(pCacheObj) )
-                nCount--;
+                nCount2--;
 
             if ( !nIndex )
                 break;
@@ -287,7 +287,7 @@ void ContainerSorter::DoSort(ULONG a, ULONG b) const
     if (a<b) ImpSubSort(a,b);
 }
 
-void ContainerSorter::Is1stLessThan2nd(const void* pElem1, const void* pElem2) const
+void ContainerSorter::Is1stLessThan2nd(const void* /*pElem1*/, const void* /*pElem2*/) const
 {
 }
 
@@ -527,21 +527,21 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
     {
         case XFILL_SOLID:
         {
-            rCol = ((XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetValue();
+            rCol = ((XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetColorValue();
             bRetval = TRUE;
 
             break;
         }
         case XFILL_HATCH:
         {
-            Color aCol1(((XFillHatchItem&)rSet.Get(XATTR_FILLHATCH)).GetValue().GetColor());
+            Color aCol1(((XFillHatchItem&)rSet.Get(XATTR_FILLHATCH)).GetHatchValue().GetColor());
             Color aCol2(COL_WHITE);
 
             // #97870# when hatch background is activated, use object fill color as hatch color
             sal_Bool bFillHatchBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
             if(bFillHatchBackground)
             {
-                aCol2 = ((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetValue();
+                aCol2 = ((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetColorValue();
             }
 
             ((B3dColor&)rCol).CalcMiddle(aCol1, aCol2);
@@ -550,7 +550,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             break;
         }
         case XFILL_GRADIENT: {
-            const XGradient& rGrad=((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetValue();
+            const XGradient& rGrad=((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
             Color aCol1(rGrad.GetStartColor());
             Color aCol2(rGrad.GetEndColor());
             ((B3dColor&)rCol).CalcMiddle(aCol1, aCol2);
@@ -560,7 +560,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
         }
         case XFILL_BITMAP:
         {
-            const Bitmap& rBitmap = ((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetValue().GetBitmap();
+            const Bitmap& rBitmap = ((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetBitmapValue().GetBitmap();
             const Size aSize(rBitmap.GetSizePixel());
             const sal_uInt32 nWidth = aSize.Width();
             const sal_uInt32 nHeight = aSize.Height();
@@ -581,13 +581,13 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 {
                     for(sal_uInt32 nX(0L); nX < nWidth; nX += nXStep)
                     {
-                        const BitmapColor& rCol = (pAccess->HasPalette())
+                        const BitmapColor& rCol2 = (pAccess->HasPalette())
                             ? pAccess->GetPaletteColor((BYTE)pAccess->GetPixel(nY, nX))
                             : pAccess->GetPixel(nY, nX);
 
-                        nRt += rCol.GetRed();
-                        nGn += rCol.GetGreen();
-                        nBl += rCol.GetBlue();
+                        nRt += rCol2.GetRed();
+                        nGn += rCol2.GetGreen();
+                        nBl += rCol2.GetBlue();
                         nAnz++;
                     }
                 }
@@ -608,6 +608,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
             break;
         }
+        default: break;
     }
 
     return bRetval;
@@ -653,7 +654,7 @@ void SdrEngineDefaults::LanguageHasChanged()
 
 SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
 {
-    SdrEngineDefaults& rDefaults = SdrEngineDefaults::GetDefaults();
+    //SdrEngineDefaults& rDefaults = SdrEngineDefaults::GetDefaults();
 
 /*
     MapUnit  eUn( (pMod==NULL) ? rDefaults.eMapUnit : pMod->GetScaleUnit());
