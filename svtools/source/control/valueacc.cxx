@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:24:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #define _SV_VALUESET_CXX
-#define private public
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
@@ -165,7 +164,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
     try
     {
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? ( (ValueSetAcc*)(void*) xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ) ) : NULL );
+        return( xUnoTunnel.is() ? reinterpret_cast<ValueSetAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ))) : NULL );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -646,8 +645,6 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
 {
     ThrowIfDisposed();
     const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    sal_Bool            bDone = sal_False;
-
     // Because of the single selection we can reset the whole selection when
     // the specified child is currently selected.
     if (isAccessibleChildSelected(nChildIndex))
@@ -843,7 +840,7 @@ ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInter
     try
     {
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? ( (ValueItemAcc*)(void*) xUnoTunnel->getSomething( ValueItemAcc::getUnoTunnelId() ) ) : NULL );
+        return( xUnoTunnel.is() ? reinterpret_cast<ValueItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueItemAcc::getUnoTunnelId() ))) : NULL );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -869,11 +866,10 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleChildCount()
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleChild( sal_Int32 i )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleChild( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException();
-    return uno::Reference< accessibility::XAccessible >();
 }
 
 // -----------------------------------------------------------------------------
@@ -1097,7 +1093,7 @@ sal_Bool SAL_CALL ValueItemAcc::containsPoint( const awt::Point& aPoint )
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
     throw (uno::RuntimeException)
 {
     uno::Reference< accessibility::XAccessible > xRet;
