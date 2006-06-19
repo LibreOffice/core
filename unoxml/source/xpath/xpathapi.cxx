@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpathapi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:08:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "xpathapi.hxx"
 #include "nodelist.hxx"
 #include "xpathobject.hxx"
+#include "../dom/node.hxx"
 
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
@@ -137,9 +138,17 @@ namespace XPath
         {
             Libxml2ExtensionHandle aHandle = (*i)->getLibxml2ExtensionHandle();
             if ( aHandle.functionLookupFunction != 0 )
-                xmlXPathRegisterFuncLookup(ctx, (xmlXPathFuncLookupFunc) aHandle.functionLookupFunction, (void*)(aHandle.functionData));
+                xmlXPathRegisterFuncLookup(ctx,
+                        reinterpret_cast<xmlXPathFuncLookupFunc>(sal::static_int_cast<sal_IntPtr>(aHandle.functionLookupFunction)),
+                        /* (xmlXPathFuncLookupFunc) aHandle.functionLookupFunction, */
+                        reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(aHandle.functionData)));
+                        /* (void*)(aHandle.functionData));*/
             if ( aHandle.variableLookupFunction != 0 )
-                xmlXPathRegisterVariableLookup(ctx, (xmlXPathVariableLookupFunc) aHandle.variableLookupFunction, (void*)(aHandle.variableData));
+                xmlXPathRegisterVariableLookup(ctx,
+                        /* (xmlXPathVariableLookupFunc) aHandle.variableLookupFunction, */
+                        reinterpret_cast<xmlXPathVariableLookupFunc>(sal::static_int_cast<sal_IntPtr>(aHandle.variableLookupFunction)),
+                        /*(void*)(aHandle.variableData));*/
+                        reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(aHandle.variableData)));
             i++;
         }
     }
@@ -157,8 +166,7 @@ namespace XPath
         xmlXPathObjectPtr xpathObj;
 
         // get the node and document
-        Reference< XUnoTunnel > tunnel(contextNode, UNO_QUERY);
-        xmlNodePtr pNode = (xmlNodePtr)tunnel->getSomething(Sequence< sal_Int8 >());
+        xmlNodePtr pNode = DOM::CNode::getNodePtr(contextNode);
         xmlDocPtr pDoc = pNode->doc;
 
         /* Create xpath evaluation context */
@@ -184,9 +192,9 @@ namespace XPath
     Use an XPath string to select a nodelist.
     */
     Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeListNS(
-            const Reference< XNode >& contextNode,
-            const OUString& str,
-            const Reference< XNode >&  namespaceNode)
+            const Reference< XNode >& /* contextNode */,
+            const OUString& /* str */,
+            const Reference< XNode >&  /* namespaceNode */)
         throw (RuntimeException)
     {
         return Reference< XNodeList>();
@@ -209,9 +217,9 @@ namespace XPath
     Use an XPath string to select a single node.
     */
     Reference< XNode > SAL_CALL CXPathAPI::selectSingleNodeNS(
-            const Reference< XNode >& contextNode,
-            const OUString& str,
-            const Reference< XNode >&  namespaceNode)
+            const Reference< XNode >& /* contextNode */,
+            const OUString& /* str */,
+            const Reference< XNode >&  /* namespaceNode*/ )
         throw (RuntimeException)
     {
         return Reference< XNode >();
@@ -225,8 +233,7 @@ namespace XPath
         xmlXPathObjectPtr xpathObj;
 
         // get the node and document
-        Reference< XUnoTunnel > tunnel(contextNode, UNO_QUERY);
-        xmlNodePtr pNode = (xmlNodePtr)tunnel->getSomething(Sequence< sal_Int8 >());
+        xmlNodePtr pNode = DOM::CNode::getNodePtr(contextNode);
         xmlDocPtr pDoc = pNode->doc;
 
         /* Create xpath evaluation context */
@@ -255,7 +262,7 @@ namespace XPath
         return aObj;
     }
 
-    Reference< XXPathObject > SAL_CALL CXPathAPI::evalNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
+    Reference< XXPathObject > SAL_CALL CXPathAPI::evalNS(const Reference< XNode >& /* contextNode */, const OUString& /* str */, const Reference< XNode >&  /* namespaceNode */)
             throw (RuntimeException)
     {
         return Reference< XXPathObject>();
