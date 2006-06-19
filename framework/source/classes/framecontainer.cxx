@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:53:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
     @threadsafe yes
     @modified   30.01.2003 11:26,as96863
  *****************************************************************************************************************/
-void FrameContainer::enableQuitTimer( const css::uno::Reference< css::frame::XDesktop >& xDesktop )
+void FrameContainer::enableQuitTimer( const css::uno::Reference< css::frame::XDesktop >& )
 {
 /*DEPRECATEME
     // SAFE {
