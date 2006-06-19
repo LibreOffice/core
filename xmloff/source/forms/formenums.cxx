@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:09:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,8 +240,8 @@ namespace xmloff
                         { XML_START,        TextAlign::LEFT },
                         { XML_CENTER,       TextAlign::CENTER },
                         { XML_END,          TextAlign::RIGHT },
-                        { XML_JUSTIFY,      -1 },
-                        { XML_JUSTIFIED,    -1 },
+                        { XML_JUSTIFY,      (sal_uInt16)-1 },
+                        { XML_JUSTIFIED,    (sal_uInt16)-1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aTextAlignMap;
@@ -340,7 +340,7 @@ namespace xmloff
                         { XML_END,    1 },
                         { XML_TOP,    2 },
                         { XML_BOTTOM, 3 },
-                        { XML_CENTER, -1 },
+                        { XML_CENTER, (sal_uInt16)-1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aImagePositionMap;
@@ -359,6 +359,8 @@ namespace xmloff
                     rReturn = aImageAlignMap;
                 }
                 break;
+                case KNOWN_ENUM_PROPERTIES:
+                    break;
             }
         }
 
