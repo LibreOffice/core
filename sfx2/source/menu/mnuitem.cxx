@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:56:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,10 +173,12 @@ void SfxMenuControl::SetOwnMenu( SfxVirtualMenu* pMenu )
 
 // binds the instance to the specified id and assignes the title
 
-void SfxMenuControl::Bind( SfxVirtualMenu* pOwn,
-                           USHORT nId, const String& rTitle,
-                           const String &rHelpText,
-                           SfxBindings &rBindings )
+void SfxMenuControl::Bind(
+    SfxVirtualMenu* pOwn,
+    USHORT nSlotId,
+    const String& rTitle,
+    const String &rHelpText,
+    SfxBindings &rBindings )
 {
     DBG_MEMTEST();
 
@@ -185,9 +187,9 @@ void SfxMenuControl::Bind( SfxVirtualMenu* pOwn,
     pOwnMenu = pOwn;
     pSubMenu = 0;
     if ( pOwn )
-        SfxControllerItem::Bind(nId, &rBindings);
+        SfxControllerItem::Bind(nSlotId, &rBindings);
     else
-        SetId( nId );
+        SetId( nSlotId );
 
     DBG( CheckConfigure_Impl(SFX_SLOT_MENUCONFIG) );
 }
@@ -197,13 +199,16 @@ void SfxMenuControl::Bind( SfxVirtualMenu* pOwn,
 
 // binds the item to the specified menu and assignes the title
 
-void SfxMenuControl::Bind( SfxVirtualMenu* pOwn,
-                           USHORT nId, SfxVirtualMenu& rMenu,
-                           const String& rTitle, const String &rHelpText,
-                           SfxBindings &rBindings )
+void SfxMenuControl::Bind(
+    SfxVirtualMenu* pOwn,
+    USHORT nSlotId,
+    SfxVirtualMenu& rMenu,
+    const String& rTitle,
+    const String &rHelpText,
+    SfxBindings &rBindings )
 {
     DBG_MEMTEST();
-    SetId( nId );
+    SetId( nSlotId );
     SetBindings(rBindings);
     pOwnMenu = pOwn;
     pSubMenu = &rMenu;
@@ -237,8 +242,8 @@ SfxMenuControl::SfxMenuControl():
 
 //--------------------------------------------------------------------
 
-SfxMenuControl::SfxMenuControl(USHORT nId, SfxBindings& rBindings):
-    SfxControllerItem(nId, rBindings),
+SfxMenuControl::SfxMenuControl(USHORT nSlotId, SfxBindings& rBindings):
+    SfxControllerItem(nSlotId, rBindings),
     pOwnMenu(0),
     pSubMenu(0),
     b_ShowStrings(FALSE)
@@ -280,6 +285,7 @@ void SfxMenuControl::StateChanged
     const SfxPoolItem*  pState
 )
 {
+    (void)nSID; //unused
     DBG_MEMTEST();
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
@@ -361,7 +367,7 @@ void SfxMenuControl::StateChanged
 
 //--------------------------------------------------------------------
 
-SfxMenuControl* SfxMenuControl::CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings )
+SfxMenuControl* SfxMenuControl::CreateImpl( USHORT /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
 {
     return new SfxMenuControl( TRUE );
 }
@@ -523,9 +529,9 @@ SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
     delete pMenu;
 }
 
-IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pMenu )
+IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
 {
-    if ( pMenu )
+    if ( pActMenu )
     {
         BOOL bShowMenuImages = SvtMenuOptions().IsMenuIconsEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -537,18 +543,18 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pMenu )
             m_bWasHiContrastMode    = bIsHiContrastMode;
             m_bShowMenuImages       = bShowMenuImages;
 
-            USHORT nCount = pMenu->GetItemCount();
+            USHORT nCount = pActMenu->GetItemCount();
             for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
             {
-                USHORT nId = pMenu->GetItemId( nSVPos );
-                if ( pMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
+                USHORT nItemId = pActMenu->GetItemId( nSVPos );
+                if ( pActMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
                 {
                     if ( bShowMenuImages )
                     {
                         sal_Bool        bImageSet = sal_False;
                         ::rtl::OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
 
                         if ( pMenuAttributes )
                             aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -560,21 +566,21 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pMenu )
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
-                                pMenu->SetItemImage( nId, aImage );
+                                pActMenu->SetItemImage( nItemId, aImage );
                             }
                         }
 
-                        String aCmd( pMenu->GetItemCommand( nId ) );
+                        String aCmd( pActMenu->GetItemCommand( nItemId ) );
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
                                 INetURLObject(aCmd), FALSE, bIsHiContrastMode );
                             if ( !!aImage )
-                                pMenu->SetItemImage( nId, aImage );
+                                pActMenu->SetItemImage( nItemId, aImage );
                         }
                     }
                     else
-                        pMenu->SetItemImage( nId, Image() );
+                        pActMenu->SetItemImage( nItemId, Image() );
                 }
             }
         }
@@ -591,12 +597,12 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
     return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
-SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nId,
+SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
-    : SfxMenuControl( nId, rBindings )
+    : SfxMenuControl( nSlotId, rBindings )
 {
-    Bind( pVirt, nId, rMenu.GetItemText(nId),
-                        rMenu.GetHelpText(nId), rBindings);
+    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId),
+                        rMenu.GetHelpText(nSlotId), rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();
