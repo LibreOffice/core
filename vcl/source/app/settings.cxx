@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:10:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ using namespace rtl;
 
 // =======================================================================
 
-DBG_NAME( AllSettings );
+DBG_NAME( AllSettings )
 
 // =======================================================================
 
@@ -483,6 +483,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveColor2( rData.maActiveColor2 ),
     maActiveTextColor( rData.maActiveTextColor ),
     maButtonTextColor( rData.maButtonTextColor ),
+    maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
     maCheckedColor( rData.maCheckedColor ),
     maDarkShadowColor( rData.maDarkShadowColor ),
     maDeactiveBorderColor( rData.maDeactiveBorderColor ),
@@ -495,6 +496,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFaceColor( rData.maFaceColor ),
     maFieldColor( rData.maFieldColor ),
     maFieldTextColor( rData.maFieldTextColor ),
+    maFieldRolloverTextColor( rData.maButtonRolloverTextColor ),
     maFontColor( rData.maFontColor ),
     maGroupTextColor( rData.maGroupTextColor ),
     maHelpColor( rData.maHelpColor ),
@@ -513,13 +515,13 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMenuHighlightColor( rData.maMenuHighlightColor ),
     maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
     maMenuTextColor( rData.maMenuTextColor ),
+    maMonoColor( rData.maMonoColor ),
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
     maVisitedLinkColor( rData.maLinkColor ),
     maWindowColor( rData.maWindowColor ),
     maWindowTextColor( rData.maWindowTextColor ),
     maWorkspaceColor( rData.maWorkspaceColor ),
-    maMonoColor( rData.maMonoColor ),
     maAppFont( rData.maAppFont ),
     maHelpFont( rData.maAppFont ),
     maTitleFont( rData.maTitleFont ),
@@ -527,14 +529,12 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMenuFont( rData.maMenuFont ),
     maToolFont( rData.maToolFont ),
     maLabelFont( rData.maLabelFont ),
-    maGroupFont( rData.maGroupFont ),
     maInfoFont( rData.maInfoFont ),
     maRadioCheckFont( rData.maRadioCheckFont ),
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
-    maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
-    maFieldRolloverTextColor( rData.maButtonRolloverTextColor )
+    maGroupFont( rData.maGroupFont )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -1026,8 +1026,8 @@ ImplMiscData::ImplMiscData()
 {
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = 1930;
-    mnEnableATT                 = ~0;
-    mnDisablePrinting           = ~0;
+    mnEnableATT                 = sal::static_int_cast<USHORT>(~0U);
+    mnDisablePrinting           = sal::static_int_cast<USHORT>(~0U);
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != NULL) ? TRUE : FALSE;
 }
