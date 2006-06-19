@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:59:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,10 +172,10 @@ String CmdStream::WandleKeyEventString( String aKeys )
 void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
 {
     USHORT nParams = PARAM_NONE;
-    USHORT nNr1,nNr2,nNr3,nNr4;
-    comm_ULONG nLNr1;
+    USHORT nNr1=0,nNr2=0,nNr3=0,nNr4=0;
+    comm_ULONG nLNr1=0;
     String aString1,aString2;
-    BOOL bBool1,bBool2;
+    BOOL bBool1=FALSE,bBool2=FALSE;
 
     if ( rPar )
     {
