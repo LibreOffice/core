@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:21:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,16 +80,16 @@ BOOL MsgEdit::bLimitLogLen = FALSE;
 #define LOGTYPE( pEntry ) ((pEntry && pEntry->GetUserData())?((TTDebugData*)pEntry->GetUserData())->aLogType:LOG_ERROR)
 
 MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
-: aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
-, pBasicFrame(pBF)
+: pBasicFrame(pBF)
 , pCurrentRun(NULL)
 , pCurrentTestCase(NULL)
 , pCurrentAssertion( NULL )
 , pCurrentError(NULL)
-, nVersion(0)
-, bFileLoading(FALSE)
 , bModified(FALSE)
+, bFileLoading(FALSE)
+, nVersion(0)
 , pAppError( pParent )
+, aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
 {
 //  SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
     aEditTree.SetNodeBitmaps( Bitmap( ResId (MBP_PLUS) ), Bitmap( ResId (MBP_MINUS) ) );
@@ -280,7 +280,7 @@ void MsgEdit::AddCallStack( String aMsg, TTDebugData aDebugData )
     if ( pCurrentError )
     {
         COPY_TTDEBUGDATA( LOG_CALL_STACK );
-        SvLBoxEntry *pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentError, FALSE, LIST_APPEND, pTTDebugData );
+        aEditTree.InsertEntry( aMsg, pCurrentError, FALSE, LIST_APPEND, pTTDebugData );
     }
 }
 
@@ -563,7 +563,13 @@ USHORT MsgEdit::GetLineNr() const
         return 0;
 }
 
-void MsgEdit::ReplaceSelected( const String& rStr ){ Sound::Beep();DBG_ERROR("Not Implemented"); }
+void MsgEdit::ReplaceSelected( const String& rStr )
+{
+    (void) rStr; /* avoid warning about unused parameter */
+    Sound::Beep();
+    DBG_ERROR("Not Implemented");
+}
+
 BOOL MsgEdit::IsModified(){ return bModified; }
 void MsgEdit::SetModifyHdl( Link l ){ lModify = l; }
 
@@ -581,7 +587,12 @@ String MsgEdit::GetText() const
     return aRet;
 }
 
-/**/void MsgEdit::SetText( const String& rStr ){ DBG_ERROR("Not Implemented"); }
+void MsgEdit::SetText( const String& rStr )
+{
+    (void) rStr; /* avoid warning about unused parameter */
+    Sound::Beep();
+    DBG_ERROR("Not Implemented");
+}
 
 BOOL MsgEdit::HasText() const { return aEditTree.First() != NULL; }
 
@@ -924,8 +935,8 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
         {
             aFont.SetFillColor( aCol );
             aFont.SetTransparent( FALSE );
-            Color aCol( COL_BLACK );
-            aFont.SetColor( aCol );
+            Color aCol2( COL_BLACK );
+            aFont.SetColor( aCol2 );
         }
 
         rDev.SetFont( aFont );
