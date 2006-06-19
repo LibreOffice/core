@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:00:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 typedef TextView* TextViewPtr;
-SV_DECL_PTRARR( TextViews, TextViewPtr, 0, 1 );
+SV_DECL_PTRARR( TextViews, TextViewPtr, 0, 1 )
 // SV_IMPL_PTRARR( TextViews, TextViewPtr );
 
-SV_DECL_VARARR_SORT( TESortedPositions, ULONG, 16, 8 );
-SV_IMPL_VARARR_SORT( TESortedPositions, ULONG );
+SV_DECL_VARARR_SORT( TESortedPositions, ULONG, 16, 8 )
+SV_IMPL_VARARR_SORT( TESortedPositions, ULONG )
 
 #define RESDIFF     10
 #define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
@@ -388,12 +388,6 @@ void TextEngine::SetUpdateMode( BOOL bUpdate )
     }
 }
 
-void TextEngine::SetWordDelimiters( const String& rDelimiters )
-{
-    // Only used in basic project, should be removed (I18N)
-    DBG_ERROR( "TextEngine::SetWordDelimiters is not longer supported, since we have I18N" );
-}
-
 BOOL TextEngine::DoesKeyMoveCursor( const KeyEvent& rKeyEvent )
 {
     BOOL bDoesMove = FALSE;
@@ -588,7 +582,7 @@ void TextEngine::CursorMoved( ULONG nNode )
         pNode->GetCharAttribs().DeleteEmptyAttribs();
 }
 
-void TextEngine::ImpRemoveChars( const TextPaM& rPaM, USHORT nChars, SfxUndoAction* pCurUndo )
+void TextEngine::ImpRemoveChars( const TextPaM& rPaM, USHORT nChars, SfxUndoAction* )
 {
     DBG_ASSERT( nChars, "ImpRemoveChars - 0 Chars?!" );
     if ( IsUndoEnabled() && !IsInUndo() )
@@ -828,7 +822,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
                 rtl::OUString aNewText( aOldText );
                 if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
-                    const xub_StrLen nPrevPos = static_cast< xub_StrLen >( xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode ) );
+                    xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
 
                     // find position of first character that has changed
                     sal_Int32 nOldLen = aOldText.getLength();
@@ -1242,7 +1236,7 @@ USHORT TextEngine::ImpFindIndex( ULONG nPortion, const Point& rPosInPara, BOOL b
     return nCurIndex;
 }
 
-USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL bSmart )
+USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL )
 {
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
@@ -1329,7 +1323,6 @@ ULONG TextEngine::CalcTextWidth()
     if ( mnCurTextWidth == 0xFFFFFFFF )
     {
         mnCurTextWidth = 0;
-        ULONG nParas = mpTEParaPortions->Count();
         for ( ULONG nPara = mpTEParaPortions->Count(); nPara; )
         {
             ULONG nParaWidth = CalcTextWidth( --nPara );
@@ -1482,7 +1475,7 @@ void TextEngine::UndoActionStart( USHORT nId )
     }
 }
 
-void TextEngine::UndoActionEnd( USHORT nId )
+void TextEngine::UndoActionEnd( USHORT )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
         GetUndoManager().LeaveListAction();
@@ -1512,10 +1505,12 @@ void TextEngine::InsertContent( TextNode* pNode, ULONG nPara )
 
 TextPaM TextEngine::SplitContent( ULONG nNode, USHORT nSepPos )
 {
+    #ifdef DBG_UTIL
     TextNode* pNode = mpDoc->GetNodes().GetObject( nNode );
     DBG_ASSERT( pNode, "Ungueltiger Node in SplitContent" );
     DBG_ASSERT( IsInUndo(), "SplitContent nur fuer Undo()!" );
     DBG_ASSERT( nSepPos <= pNode->GetText().Len(), "Index im Wald: SplitContent" );
+    #endif
     TextPaM aPaM( nNode, nSepPos );
     return ImpInsertParaBreak( aPaM );
 }
@@ -1699,7 +1694,6 @@ void TextEngine::FormatDoc()
 
     long nY = 0;
     BOOL bGrow = FALSE;
-    ULONG nOldCurTextWidth = mnCurTextWidth;
 
     maInvalidRec = Rectangle(); // leermachen
     for ( ULONG nPara = 0; nPara < mpTEParaPortions->Count(); nPara++ )
@@ -1806,15 +1800,17 @@ void TextEngine::CreateAndInsertEmptyLine( ULONG nPara )
     if ( bLineBreak == TRUE )
     {
         // -2: Die neue ist bereits eingefuegt.
+        #ifdef DBG_UTIL
         TextLine* pLastLine = pTEParaPortion->GetLines().GetObject( pTEParaPortion->GetLines().Count()-2 );
         DBG_ASSERT( pLastLine, "Weicher Umbruch, keine Zeile ?!" );
+        #endif
         USHORT nPos = (USHORT) pTEParaPortion->GetTextPortions().Count() - 1 ;
         pTmpLine->SetStartPortion( nPos );
         pTmpLine->SetEndPortion( nPos );
     }
 }
 
-void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion* pPortion, USHORT nPortionStart, long nRemainingWidth )
+void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion*, USHORT nPortionStart, long nRemainingWidth )
 {
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
 
@@ -1980,7 +1976,10 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
     aPositions.Insert( nPortionStart );
 
     USHORT nInvPos;
-    BOOL bFound = aPositions.Seek_Entry( nPortionStart, &nInvPos );
+    #ifdef DBG_UTIL
+    BOOL bFound =
+    #endif
+        aPositions.Seek_Entry( nPortionStart, &nInvPos );
     DBG_ASSERT( bFound && ( nInvPos < (aPositions.Count()-1) ), "InvPos ?!" );
     for ( USHORT i = nInvPos+1; i < aPositions.Count(); i++ )
     {
@@ -3160,7 +3159,6 @@ BYTE TextEngine::ImpGetRightToLeft( ULONG nPara, USHORT nPos, USHORT* pStart, US
         if ( !pParaPortion->GetWritingDirectionInfos().Count() )
             ImpInitWritingDirections( nPara );
 
-        BYTE nType = 0;
         TEWritingDirectionInfos& rDirInfos = pParaPortion->GetWritingDirectionInfos();
         for ( USHORT n = 0; n < rDirInfos.Count(); n++ )
         {
