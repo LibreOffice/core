@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 15:42:42 $
+#   last change: $Author: hr $ $Date: 2006-06-20 00:27:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..
 
-PRJNAME=AUTOMATION
+PRJNAME=automation
 TARGET=automation
 TARGETTYPE=GUI
 
@@ -170,7 +170,6 @@ APP1STDLIBS+= \
             $(SALLIB) \
             $(SJLIB) \
             $(VOSLIB) \
-            $(SO2LIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
             $(SOTLIB) \
@@ -235,8 +234,8 @@ APP3STDLIBS= \
             $(TOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLIB) \
-            $(SJLIB) \
-            $(SO2LIB)
+            $(SJLIB)
+
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
 APP3STDLIBS+= \
