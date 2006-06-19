@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:26:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,7 +580,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                 String sEntry = pSect->GetLinkFileName().GetToken(0, sfx2::cTokenSeperator);
                 if(!pSect->IsConnectFlag())
                     sEntry.Insert(aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST], 0 );
-                Point aPos = GetEntryPos( pEntry );
+                Point aPos = GetEntryPosition( pEntry );
 
                 aPos.X() = GetTabPos( pEntry, pTab );
                 Size aSize( pItem->GetSize( this, pEntry ) );
