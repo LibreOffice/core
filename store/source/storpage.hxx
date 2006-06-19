@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:47:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORPAGE_HXX_
-#define _STORE_STORPAGE_HXX_ "$Revision: 1.4 $"
+#define _STORE_STORPAGE_HXX_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -78,10 +78,10 @@ public:
 
     /** Initialization (two-phase construction).
      */
-    virtual storeError initialize (
+    storeError initializeManager (
         ILockBytes      *pLockBytes,
         storeAccessMode  eAccessMode,
-        sal_uInt16       nPageSize = STORE_DEFAULT_PAGESIZE);
+        sal_uInt16       nPageSize);
 
     /** isValid.
      *  @return sal_True  upon successful initialization,
@@ -190,8 +190,8 @@ private:
 
     /** IStoreHandle query() template function specialization.
      */
-    friend inline OStorePageManager*
-    SAL_CALL query (IStoreHandle *pHandle, OStorePageManager*);
+    friend OStorePageManager*
+    SAL_CALL query<> (IStoreHandle *pHandle, OStorePageManager*);
 
     /** Representation.
     */
@@ -228,7 +228,7 @@ inline sal_Bool OStorePageManager::isValid (void) const
     return (base::isValid() && (m_nPageSize > 0));
 }
 
-inline OStorePageManager*
+template<> inline OStorePageManager*
 SAL_CALL query (IStoreHandle *pHandle, OStorePageManager*)
 {
     if (pHandle && pHandle->isKindOf (OStorePageManager::m_nTypeId))
