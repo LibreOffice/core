@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actiontriggerseparatorpropertyset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:01:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ class ActionTriggerSeparatorPropertySet :   public ThreadHelpBase               
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::uno::Exception );
 
+        using cppu::OPropertySetHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue( com::sun::star::uno::Any& aValue, sal_Int32 nHandle ) const;
 
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
