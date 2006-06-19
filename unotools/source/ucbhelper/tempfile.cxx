@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:28:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ String ConstructTempDir_Impl( const String* pParent )
     }
 
     // Make sure that directory ends with a separator
-    sal_Int32 i = aName.Len();
+    xub_StrLen i = aName.Len();
     if( i>0 && aName.GetChar(i-1) != '/' )
         aName += '/';
 
@@ -210,7 +210,6 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     const unsigned nRadix = 26;
     String aName( rName );
     aName += String::CreateFromAscii( "sv" );
-    sal_Int32 i = aName.Len();
 
     rName.Erase();
     static unsigned long u = Time::GetSystemTicks();
@@ -481,4 +480,4 @@ String TempFile::GetTempNameBaseDirectory()
     return aTmp;
 }
 
-};
+}
