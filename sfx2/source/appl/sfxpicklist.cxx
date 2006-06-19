@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:33:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,7 @@ String SfxPickList::GetMenuEntryTitle( sal_uInt32 nIndex )
         return String();
 }
 
-void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE( SfxStringHint )))
     {
