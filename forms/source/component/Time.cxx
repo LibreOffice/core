@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:23:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTimeModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
@@ -325,7 +325,7 @@ void OTimeModel::impl_translateControlValueToUNOTime( Any& _rUNOValue ) const
         OSL_VERIFY( _rUNOValue >>= nTime );
         if ( nTime == ::Time( 99, 99, 99 ).GetTime() )
             // "invalid time" in VCL is different from "invalid time" in UNO
-            _rUNOValue <<= util::Time( -1, -1, -1, -1 );
+            _rUNOValue.clear();
         else
             _rUNOValue <<= DBTypeConversion::toTime( nTime );
     }
