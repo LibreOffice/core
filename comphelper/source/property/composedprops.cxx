@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composedprops.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:56:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    Any SAL_CALL OComposedPropertySet::getPropertyDefault( const ::rtl::OUString& _rPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OComposedPropertySet::getPropertyDefault( const ::rtl::OUString& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         return Any();
     }
@@ -294,7 +294,7 @@ namespace comphelper
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OComposedPropertySet::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OComposedPropertySet::addPropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         // TODO:
         // hold the single property sets weak
@@ -305,19 +305,19 @@ namespace comphelper
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OComposedPropertySet::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OComposedPropertySet::removePropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         // TODO
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OComposedPropertySet::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OComposedPropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OSL_ENSURE(sal_False, "OComposedPropertySet::addVetoableChangeListener: no implemented (yet)!");
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OComposedPropertySet::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OComposedPropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OSL_ENSURE(sal_False, "OComposedPropertySet::removeVetoableChangeListener: no implemented (yet)!");
     }
