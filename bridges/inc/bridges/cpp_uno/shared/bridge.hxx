@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:09:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,30 @@
 
 namespace bridges { namespace cpp_uno { namespace shared {
 
+// private:
+extern "C" typedef void SAL_CALL FreeMapping(uno_Mapping *);
+FreeMapping freeMapping;
+
+// private:
+extern "C"
+typedef void SAL_CALL AcquireMapping(uno_Mapping *);
+AcquireMapping acquireMapping;
+
+// private:
+extern "C"
+typedef void SAL_CALL ReleaseMapping(uno_Mapping *);
+ReleaseMapping releaseMapping;
+
+// private:
+extern "C" typedef void SAL_CALL Cpp2unoMapping(
+    uno_Mapping *, void **, void *, typelib_InterfaceTypeDescription *);
+Cpp2unoMapping cpp2unoMapping;
+
+// private:
+extern "C" typedef void SAL_CALL Uno2cppMapping(
+    uno_Mapping *, void **, void *, typelib_InterfaceTypeDescription *);
+Uno2cppMapping uno2cppMapping;
+
 /**
  * Holding environments and mappings.
  */
@@ -54,8 +78,6 @@ public:
     static uno_Mapping * createMapping(
         uno_ExtEnvironment * pCppEnv, uno_ExtEnvironment * pUnoEnv,
         bool bExportCpp2Uno) SAL_THROW(());
-
-    static void SAL_CALL freeMapping(uno_Mapping * pMapping) SAL_THROW(());
 
     // Interface for Cpp/UnoInterfaceProxy:
 
@@ -84,15 +106,6 @@ private:
         Bridge * pBridge;
     };
 
-    static void SAL_CALL acquireMapping(uno_Mapping * pMapping) SAL_THROW(());
-    static void SAL_CALL releaseMapping(uno_Mapping * pMapping) SAL_THROW(());
-    static void SAL_CALL cpp2unoMapping(
-        uno_Mapping * pMapping, void ** ppUnoI, void * pCppI,
-        typelib_InterfaceTypeDescription * pTypeDescr) SAL_THROW(());
-    static void SAL_CALL uno2cppMapping(
-        uno_Mapping * pMapping, void ** ppCppI, void * pUnoI,
-        typelib_InterfaceTypeDescription * pTypeDescr) SAL_THROW(());
-
     oslInterlockedCount nRef;
 
     uno_ExtEnvironment * pCppEnv;
@@ -102,6 +115,20 @@ private:
     Mapping aUno2Cpp;
 
     bool bExportCpp2Uno;
+
+    friend void SAL_CALL freeMapping(uno_Mapping * pMapping);
+
+    friend void SAL_CALL acquireMapping(uno_Mapping * pMapping);
+
+    friend void SAL_CALL releaseMapping(uno_Mapping * pMapping);
+
+    friend void SAL_CALL cpp2unoMapping(
+        uno_Mapping * pMapping, void ** ppUnoI, void * pCppI,
+        typelib_InterfaceTypeDescription * pTypeDescr);
+
+    friend void SAL_CALL uno2cppMapping(
+        uno_Mapping * pMapping, void ** ppCppI, void * pUnoI,
+        typelib_InterfaceTypeDescription * pTypeDescr);
 };
 
 } } }
