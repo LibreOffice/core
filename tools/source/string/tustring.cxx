@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tustring.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:53:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #include <string.h>
 
+#include "boost/static_assert.hpp"
+
 #ifndef _OSL_INTERLCK_H
 #include <osl/interlck.h>
 #endif
@@ -51,21 +53,20 @@
 #include <rtl/instance.hxx>
 #endif
 
-#define private public
 #include <string.hxx>
-#undef private
 #include <impstrg.hxx>
 
 #include <debug.hxx>
 
 // =======================================================================
 
-DBG_NAME( UniString );
-DBG_NAMEEX( ByteString );
+DBG_NAME( UniString )
+DBG_NAMEEX( ByteString )
 
 // -----------------------------------------------------------------------
 
 #define STRCODE         sal_Unicode
+#define STRCODEU        sal_Unicode
 #define STRING          UniString
 #define STRINGDATA      UniStringData
 #define DBGCHECKSTRING  DbgCheckUniString
@@ -87,7 +88,10 @@ UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 {
     sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
-    return UniString( aBuf, rtl_ustr_valueOfInt32( aBuf, n, nRadix ) );
+    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFINT32 <= STRING_MAXLEN);
+    return UniString(
+        aBuf,
+        static_cast< xub_StrLen >(rtl_ustr_valueOfInt32( aBuf, n, nRadix )) );
 }
 
 // -----------------------------------------------------------------------
@@ -95,7 +99,10 @@ UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 UniString UniString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 {
     sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
-    return UniString( aBuf, rtl_ustr_valueOfInt64( aBuf, n, nRadix ) );
+    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFINT64 <= STRING_MAXLEN);
+    return UniString(
+        aBuf,
+        static_cast< xub_StrLen >(rtl_ustr_valueOfInt64( aBuf, n, nRadix )) );
 }
 
 // -----------------------------------------------------------------------
@@ -103,7 +110,9 @@ UniString UniString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 UniString UniString::CreateFromFloat( float f )
 {
     sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
-    return UniString( aBuf, rtl_ustr_valueOfFloat( aBuf, f ) );
+    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFFLOAT <= STRING_MAXLEN);
+    return UniString(
+        aBuf, static_cast< xub_StrLen >(rtl_ustr_valueOfFloat( aBuf, f )) );
 }
 
 // -----------------------------------------------------------------------
@@ -111,7 +120,9 @@ UniString UniString::CreateFromFloat( float f )
 UniString UniString::CreateFromDouble( double d )
 {
     sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
-    return UniString( aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
+    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFDOUBLE <= STRING_MAXLEN);
+    return UniString(
+        aBuf, static_cast< xub_StrLen >(rtl_ustr_valueOfDouble( aBuf, d )) );
 }
 
 // -----------------------------------------------------------------------
