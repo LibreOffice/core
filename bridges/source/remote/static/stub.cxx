@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stub.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:44:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:51:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,78 +51,11 @@ static MyCounter thisCounter( "DEBUG : Uno2RemoteStub");
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace bridges_remote;
 
-namespace bridges_remote {
+extern "C" {
 
-Uno2RemoteStub::Uno2RemoteStub( uno_Interface *pUnoI,
-                                rtl_uString *pOid,
-                                typelib_InterfaceTypeDescription *pType,
-                                uno_Environment *pEnvUno,
-                                uno_Environment *pEnvRemote ) :
-    m_sOid( pOid ),
-    m_pType(  pType ),
-    m_pUnoI( pUnoI ),
-    m_nRef( 1 ),
-    m_pEnvUno( pEnvUno ),
-    m_pEnvRemote( pEnvRemote ),
-    m_mapRemote2Uno( pEnvRemote, pEnvUno ),
-    m_mapUno2Remote( pEnvUno, pEnvRemote )
-{
-    typelib_typedescription_acquire( (typelib_TypeDescription * )m_pType );
-    m_pEnvUno->acquire( m_pEnvUno );
-    m_pEnvRemote->acquire( m_pEnvRemote );
-
-    acquire = thisAcquire;
-    release = thisRelease;
-    pDispatcher = thisDispatch;
-
-    m_pEnvUno->pExtEnv->registerInterface( m_pEnvUno->pExtEnv,
-                                           (void **)&m_pUnoI,
-                                           m_sOid.pData,
-                                           m_pType );
-    m_pUnoI->acquire( m_pUnoI );
-#if OSL_DEBUG_LEVEL > 1
-    thisCounter.acquire();
-#endif
-}
-
-Uno2RemoteStub::~Uno2RemoteStub()
-{
-    m_pEnvUno->pExtEnv->revokeInterface( m_pEnvUno->pExtEnv , m_pUnoI );
-
-    typelib_typedescription_release( (typelib_TypeDescription * )m_pType );
-    m_pUnoI->release( m_pUnoI );
-    m_pEnvUno->release( m_pEnvUno );
-    m_pEnvRemote->release( m_pEnvRemote );
-#if OSL_DEBUG_LEVEL > 1
-    thisCounter.release();
-#endif
-}
-
-
-void Uno2RemoteStub::thisFree( uno_ExtEnvironment *pEnvRemote, void *pThis )
-{
-    delete ( Uno2RemoteStub * ) pThis;
-}
-
-void Uno2RemoteStub::thisAcquire( remote_Interface *pThis )
-{
-    Uno2RemoteStub *p = ( Uno2RemoteStub * ) pThis;
-    if( 1 == osl_incrementInterlockedCount( &(p->m_nRef) ) )
-    {
-
-        p->m_pEnvRemote->pExtEnv->registerProxyInterface(
-            p->m_pEnvRemote->pExtEnv,
-            (void**)&pThis,
-            Uno2RemoteStub::thisFree,
-            p->m_sOid.pData,
-            p->m_pType );
-
-        OSL_ASSERT( (remote_Interface*) p == pThis );
-    }
-}
-
-void Uno2RemoteStub::thisRelease( remote_Interface *pThis )
+void SAL_CALL thisRelease( remote_Interface *pThis )
 {
     Uno2RemoteStub *p = ( Uno2RemoteStub * ) pThis;
     if (! osl_decrementInterlockedCount( &(p->m_nRef) ))
@@ -131,9 +64,9 @@ void Uno2RemoteStub::thisRelease( remote_Interface *pThis )
     }
 }
 
-void Uno2RemoteStub::thisDispatch(
+void SAL_CALL thisDispatch(
     remote_Interface * pRemoteI,
-    typelib_TypeDescription * pType,
+    typelib_TypeDescription const * pType,
     void * pReturn,
     void * ppArgs[],
     uno_Any ** ppException )
@@ -335,5 +268,74 @@ void Uno2RemoteStub::thisDispatch(
     }
 }
 
+}
+
+namespace bridges_remote {
+
+void acquireUno2RemoteStub( remote_Interface *pThis )
+{
+    Uno2RemoteStub *p = ( Uno2RemoteStub * ) pThis;
+    if( 1 == osl_incrementInterlockedCount( &(p->m_nRef) ) )
+    {
+
+        p->m_pEnvRemote->pExtEnv->registerProxyInterface(
+            p->m_pEnvRemote->pExtEnv,
+            (void**)&pThis,
+            freeUno2RemoteStub,
+            p->m_sOid.pData,
+            p->m_pType );
+
+        OSL_ASSERT( (remote_Interface*) p == pThis );
+    }
+}
+
+void freeUno2RemoteStub(uno_ExtEnvironment *, void * stub) {
+    delete static_cast< Uno2RemoteStub * >(stub);
+}
+
+Uno2RemoteStub::Uno2RemoteStub( uno_Interface *pUnoI,
+                                rtl_uString *pOid,
+                                typelib_InterfaceTypeDescription *pType,
+                                uno_Environment *pEnvUno,
+                                uno_Environment *pEnvRemote ) :
+    m_sOid( pOid ),
+    m_pType(  pType ),
+    m_pUnoI( pUnoI ),
+    m_nRef( 1 ),
+    m_pEnvUno( pEnvUno ),
+    m_pEnvRemote( pEnvRemote ),
+    m_mapRemote2Uno( pEnvRemote, pEnvUno ),
+    m_mapUno2Remote( pEnvUno, pEnvRemote )
+{
+    typelib_typedescription_acquire( (typelib_TypeDescription * )m_pType );
+    m_pEnvUno->acquire( m_pEnvUno );
+    m_pEnvRemote->acquire( m_pEnvRemote );
+
+    acquire = acquireUno2RemoteStub;
+    release = thisRelease;
+    pDispatcher = thisDispatch;
+
+    m_pEnvUno->pExtEnv->registerInterface( m_pEnvUno->pExtEnv,
+                                           (void **)&m_pUnoI,
+                                           m_sOid.pData,
+                                           m_pType );
+    m_pUnoI->acquire( m_pUnoI );
+#if OSL_DEBUG_LEVEL > 1
+    thisCounter.acquire();
+#endif
+}
+
+Uno2RemoteStub::~Uno2RemoteStub()
+{
+    m_pEnvUno->pExtEnv->revokeInterface( m_pEnvUno->pExtEnv , m_pUnoI );
+
+    typelib_typedescription_release( (typelib_TypeDescription * )m_pType );
+    m_pUnoI->release( m_pUnoI );
+    m_pEnvUno->release( m_pEnvUno );
+    m_pEnvRemote->release( m_pEnvRemote );
+#if OSL_DEBUG_LEVEL > 1
+    thisCounter.release();
+#endif
+}
 
 } // end namespace bridges_remote
