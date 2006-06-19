@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:43:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,10 +110,13 @@ using namespace ::com::sun::star::frame         ;
 
 // license file name
 static const char *szLicensePath = "/share/readme";
+#ifdef UNX
 static const char *szUNXLicenseName = "/LICENSE";
 static const char *szUNXLicenseExt = "";
+#elif defined WNT
 static const char *szWNTLicenseName = "/license";
 static const char *szWNTLicenseExt = ".txt";
+#endif
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -180,7 +183,7 @@ DEFINE_INIT_SERVICE                 (   License,
 
 
 
-IMPL_STATIC_LINK( License, Terminate, void*, pvoid )
+IMPL_STATIC_LINK_NOINSTANCE( License, Terminate, void*, EMPTYARG )
 {
     /*
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -274,7 +277,7 @@ static OUString _getCurrentDateString()
 }
 
 // execution of license check...
-css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::NamedValue >& args)
+css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::NamedValue >& )
     throw( css::lang::IllegalArgumentException, css::uno::Exception)
 {
     // return value
@@ -420,16 +423,16 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
     return aRet;
 }
 
-void SAL_CALL License::close(sal_Bool bDeliverOwnership) throw (css::util::CloseVetoException)
+void SAL_CALL License::close(sal_Bool /*bDeliverOwnership*/) throw (css::util::CloseVetoException)
 {
     if (!m_bTerminate)
         throw CloseVetoException();
 }
-void SAL_CALL License::addCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener)
+void SAL_CALL License::addCloseListener(const css::uno::Reference< css::util::XCloseListener >&)
     throw (css::uno::RuntimeException)
 {
 }
-void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener)
+void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util::XCloseListener >&)
     throw (css::uno::RuntimeException)
 {
 }
@@ -449,11 +452,11 @@ LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
     aInfo3_1FT(this, ResId(FT_INFO3_1, pResMgr)),
     aFixedLine(this, ResId(FL_DIVIDE, pResMgr)),
     aPBPageDown(this, ResId(PB_PAGEDOWN, pResMgr)),
+    aPBDecline( this, ResId(PB_DECLINE, pResMgr) ),
+    aPBAccept( this, ResId(PB_ACCEPT, pResMgr) ),
     aArrow(this, ResId(IMG_ARROW, pResMgr)),
     aStrAccept( ResId(LICENSE_ACCEPT, pResMgr) ),
     aStrNotAccept( ResId(LICENSE_NOTACCEPT, pResMgr) ),
-    aPBAccept( this, ResId(PB_ACCEPT, pResMgr) ),
-    aPBDecline( this, ResId(PB_DECLINE, pResMgr) ),
     bEndReached(FALSE)
 {
     FreeResource();
@@ -616,7 +619,7 @@ BOOL LicenseView::IsEndReached() const
     return bEndReached;
 }
 
-void LicenseView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
