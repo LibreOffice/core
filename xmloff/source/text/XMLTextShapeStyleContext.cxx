@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:26:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ public:
 
     virtual ~XMLTextShapePropertySetContext_Impl();
 
+    using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
@@ -123,7 +124,7 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    switch( xMapper->getPropertySetMapper()
+    switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TEXTCOLUMNS:
@@ -135,11 +136,11 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
     case CTF_BACKGROUND_URL:
         DBG_ASSERT( rProp.mnIndex >= 3 &&
                     CTF_BACKGROUND_TRANSPARENCY ==
-                        xMapper->getPropertySetMapper()
+                        mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-3 ) &&
-                    CTF_BACKGROUND_POS  == xMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_POS  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
-                    CTF_BACKGROUND_FILTER  == xMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_FILTER  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
         pContext =
@@ -184,11 +185,11 @@ XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-        sal_Bool bDefaultStyle ) :
+        sal_Bool /*bDefaultStyle*/ ) :
     XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
                           nFamily ),
-    bAutoUpdate( sal_False ),
-    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
+    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
+    bAutoUpdate( sal_False )
 {
 }
 
