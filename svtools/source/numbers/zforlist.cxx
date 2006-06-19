@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:22:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,12 +172,12 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 }
 
 
-void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
+void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* p = PTR_CAST( SfxSimpleHint, &rHint );
-    if( p )
+    const SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
+    if( pHint )
     {
-        if ( p->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE )
+        if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
             for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
@@ -187,7 +187,7 @@ void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster& rBC, const SfxHint&
             }
             eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
         }
-        if ( p->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
+        if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
             for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
@@ -1507,7 +1507,6 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
                     return GetStandardFormat( eType, eLnge );
             }
         }
-        break;
         default:
             return GetStandardFormat( eType, eLnge );
     }
@@ -3090,7 +3089,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry(
 
 
 // static
-IMPL_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void*, pNull )
+IMPL_STATIC_LINK_NOINSTANCE( SvNumberFormatter, CurrencyChangeLink, void*, EMPTYARG )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     String aAbbrev;
@@ -4077,8 +4076,11 @@ void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr,
 
 
 // static
-USHORT NfCurrencyEntry::GetEffectivePositiveFormat( USHORT nIntlFormat,
-            USHORT nCurrFormat, BOOL bBank )
+USHORT NfCurrencyEntry::GetEffectivePositiveFormat( USHORT
+#if ! NF_BANKSYMBOL_FIX_POSITION
+            nIntlFormat
+#endif
+            , USHORT nCurrFormat, BOOL bBank )
 {
     if ( bBank )
     {
@@ -4117,7 +4119,6 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
         case 14 :                                       // ($ 1)
         case 15 :                                       // (1 $)
             return nCurrFormat;
-        break;
         case 1:                                         // -$1
         case 5:                                         // -1$
         case 8:                                         // -1 $
@@ -4128,8 +4129,8 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
         case 6:                                         // 1-$
         case 11 :                                       // $ -1
         case 13 :                                       // 1- $
-        break;
             nSign = 1;
+        break;
         case 3:                                         // $1-
         case 7:                                         // 1$-
         case 10:                                        // 1 $-
@@ -4145,13 +4146,10 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
             {
                 case 0:
                     return 1;                           // -$1
-                break;
                 case 1:
                     return 2;                           // $-1
-                break;
                 case 2:
                     return 3;                           // $1-
-                break;
             }
         break;
         case 4:                                         // (1$)
@@ -4159,13 +4157,10 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
             {
                 case 0:
                     return 5;                           // -1$
-                break;
                 case 1:
                     return 6;                           // 1-$
-                break;
                 case 2:
                     return 7;                           // 1$-
-                break;
             }
         break;
         case 14 :                                       // ($ 1)
@@ -4173,13 +4168,10 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
             {
                 case 0:
                     return 9;                           // -$ 1
-                break;
                 case 1:
                     return 11;                          // $ -1
-                break;
                 case 2:
                     return 12;                          // $ 1-
-                break;
             }
         break;
         case 15 :                                       // (1 $)
@@ -4187,13 +4179,10 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
             {
                 case 0:
                     return 8;                           // -1 $
-                break;
                 case 1:
                     return 13;                          // 1- $
-                break;
                 case 2:
                     return 10;                          // 1 $-
-                break;
             }
         break;
     }
@@ -4332,16 +4321,12 @@ sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
         case RTL_TEXTENCODING_MS_1252 :         // WNT Ansi
         case RTL_TEXTENCODING_ISO_8859_1 :      // UNX for use with TrueType fonts
             return '\x80';
-        break;
         case RTL_TEXTENCODING_ISO_8859_15 :     // UNX real
             return '\xA4';
-        break;
         case RTL_TEXTENCODING_IBM_850 :         // OS2
             return '\xD5';
-        break;
         case RTL_TEXTENCODING_APPLE_ROMAN :     // MAC
             return '\xDB';
-        break;
         default:                                // default system
 #if WNT
             return '\x80';
