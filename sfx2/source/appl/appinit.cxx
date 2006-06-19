@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:15:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,11 +156,11 @@ public:
     virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException );
 };
 
-void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& Source ) throw( RuntimeException )
+void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
-void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& aEvent ) throw(TerminationVetoException, RuntimeException )
+void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !SFX_APP()->QueryExit_Impl() )
@@ -189,9 +189,9 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     css::uno::Reference< css::document::XEventListener > xGlobalBroadcaster(xSMGR->createInstance(SERVICE_GLOBALEVENTBROADCASTER), css::uno::UNO_QUERY);
     if (xGlobalBroadcaster.is())
     {
-        css::document::EventObject aEvent;
-        aEvent.EventName = EVENT_QUIT_APP;
-        xGlobalBroadcaster->notifyEvent(aEvent);
+        css::document::EventObject aEvent2;
+        aEvent2.EventName = EVENT_QUIT_APP;
+        xGlobalBroadcaster->notifyEvent(aEvent2);
     }
 
     //pApp->Deinitialize();
@@ -229,7 +229,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
         // get symbol
         ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "GetSpecialCharsForEdit" ) );
-        pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getSymbol( handleMod, aSymbol.pData );
+        pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getFunctionSymbol( handleMod, aSymbol.pData );
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
     }
 
@@ -370,7 +370,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     return sal_True;
 }
 
-IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
+IMPL_LINK( SfxApplication, SpecialService_Impl, void*, )
 {
     // StarOffice registration
     INetURLObject aORegObj( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
