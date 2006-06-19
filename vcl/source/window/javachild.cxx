@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javachild.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:26:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,6 @@ sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
     {
         try
         {
-            JavaVM*                                         pJVM;
             ::rtl::Reference< ::jvmaccess::VirtualMachine > xVM;
             uno::Reference< java::XJavaVM >                 xJavaVM( xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine") ) ), uno::UNO_QUERY );
             uno::Sequence< sal_Int8 >                       aProcessID( 17 );
