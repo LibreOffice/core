@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:47:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #include "sbcomp.hxx"
-#pragma hdrstop
 #include <sbx.hxx>      // w.g. ...IMPL_REF(...sbxvariable)
 #include "expr.hxx"
 
