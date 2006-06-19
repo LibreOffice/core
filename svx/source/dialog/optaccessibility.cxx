@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optaccessibility.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:38:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxIt
     return new SvxAccessibilityOptionsTabPage(pParent, rAttrSet);
 }
 
-BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     //aConfig.Set... from controls
 
@@ -168,7 +168,7 @@ BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     return FALSE;
 }
 
-void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& rSet )
+void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
 {
     //set controls from aConfig.Get...
 
