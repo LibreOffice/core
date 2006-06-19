@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:50:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ namespace cppu_threadpool
         const ByteSequence &aThreadId ,
         sal_Bool bAsynchron,
         void *pThreadSpecificData,
-        void ( SAL_CALL * doRequest ) ( void * ) )
+        RequestFun * doRequest )
     {
         sal_Bool bCreateThread = sal_False;
         JobQueue *pQueue = 0;
@@ -312,7 +312,7 @@ namespace cppu_threadpool
             {
                 if( ! (*ii).second.second )
                 {
-                    (*ii).second.second = new JobQueue( bAsynchron );
+                    (*ii).second.second = new JobQueue();
                     bCreateThread = sal_True;
                 }
                 pQueue = (*ii).second.second;
@@ -321,7 +321,7 @@ namespace cppu_threadpool
             {
                 if( ! (*ii).second.first )
                 {
-                    (*ii).second.first = new JobQueue( bAsynchron );
+                    (*ii).second.first = new JobQueue();
                     bCreateThread = sal_True;
                 }
                 pQueue = (*ii).second.first;
@@ -348,12 +348,12 @@ namespace cppu_threadpool
 
         if( ii == m_mapQueue.end() )
         {
-            JobQueue *p = new JobQueue( sal_False );
+            JobQueue *p = new JobQueue();
             m_mapQueue[ aThreadId ] = pair< JobQueue * , JobQueue * > ( p , 0 );
         }
         else if( 0 == (*ii).second.first )
         {
-            (*ii).second.first = new JobQueue( sal_False );
+            (*ii).second.first = new JobQueue();
         }
     }
 
@@ -430,7 +430,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
 }
 
 extern "C" void SAL_CALL
-uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
+uno_threadpool_attach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
@@ -446,20 +446,23 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
     *ppJob =
-        ThreadPool::getInstance()->enter( pThreadId , (sal_Int64 ) hPool );
+        ThreadPool::getInstance()->enter(
+            pThreadId,
+            sal::static_int_cast< sal_Int64 >(
+                reinterpret_cast< sal_IntPtr >(hPool)) );
     rtl_byte_sequence_release( pThreadId );
     uno_releaseIdFromCurrentThread();
 }
 
 extern "C" void SAL_CALL
-uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
+uno_threadpool_detach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
 {
     // we might do here some tiding up in case a thread called attach but never detach
 }
 
 extern "C" void SAL_CALL
 uno_threadpool_putJob(
-    uno_ThreadPool hPool,
+    uno_ThreadPool,
     sal_Sequence *pThreadId,
     void *pJob,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
@@ -471,13 +474,17 @@ uno_threadpool_putJob(
 extern "C" void SAL_CALL
 uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->dispose( (sal_Int64 ) hPool );
+    ThreadPool::getInstance()->dispose(
+        sal::static_int_cast< sal_Int64 >(
+            reinterpret_cast< sal_IntPtr >(hPool)) );
 }
 
 extern "C" void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->stopDisposing( (sal_Int64) hPool );
+    ThreadPool::getInstance()->stopDisposing(
+        sal::static_int_cast< sal_Int64 >(
+            reinterpret_cast< sal_IntPtr >(hPool)) );
 
     if( hPool )
     {
