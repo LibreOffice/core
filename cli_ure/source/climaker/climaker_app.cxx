@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:00:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,6 +322,9 @@ using namespace ::climaker;
 //##############################################################################
 SAL_IMPLEMENT_MAIN()
 {
+    (void) argc; // unused
+    (void) argv; // unused
+
     sal_uInt32 nCount = osl_getCommandArgCount();
     if (0 == nCount)
     {
@@ -411,8 +414,11 @@ SAL_IMPLEMENT_MAIN()
                      !read_argument( &keyfile, info_keyfile, &nPos ) &&
                      !read_argument( &delaySign, info_delaySign, &nPos ))
             {
-                oslProcessError rc = osl_getCommandArg( nPos, &cmd_arg.pData );
-                OSL_ASSERT( rc == osl_Process_E_None );
+                if ( osl_getCommandArg( nPos, &cmd_arg.pData ) !=
+                     osl_Process_E_None )
+                {
+                    OSL_ASSERT( false );
+                }
                 ++nPos;
                 cmd_arg = cmd_arg.trim();
                 if (cmd_arg.getLength() > 0)
