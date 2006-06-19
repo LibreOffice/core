@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loops.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:02:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,14 +34,13 @@
  ************************************************************************/
 
 #include "sbcomp.hxx"
-#pragma hdrstop
 
 // Single-line IF und Multiline IF
 
 void SbiParser::If()
 {
     USHORT nEndLbl;
-    SbiToken eTok;
+    SbiToken eTok = NIL;
     // Ende-Tokens ignorieren:
     SbiExpression aCond( this );
     aCond.Gen();
@@ -163,7 +162,6 @@ void SbiParser::NoIf()
 void SbiParser::DoLoop()
 {
     USHORT nStartLbl = aGen.GetPC();
-    USHORT nEndChain = 0;
     OpenBlock( DO );
     SbiToken eTok = Next();
     if( IsEoln( eTok ) )
@@ -323,7 +321,8 @@ void SbiParser::OnGoto()
     short nLbl = 0;
     do
     {
-        SbiToken eTok2 = Next();    // Label holen
+        SbiToken eTok2 = NIL;
+        eTok2 = Next(); // Label holen
         if( MayBeLabel() )
         {
             USHORT nOff = pProc->GetLabels().Reference( aSym );
@@ -371,7 +370,7 @@ void SbiParser::Select()
 {
     TestToken( CASE );
     SbiExpression aCase( this );
-    SbiToken eTok;
+    SbiToken eTok = NIL;
     aCase.Gen();
     aGen.Gen( _CASE );
     TestEoln();
@@ -400,19 +399,19 @@ void SbiParser::Select()
             {
                 if( bElse )
                     Error( SbERR_SYNTAX );
-                SbiToken eTok = Peek();
-                if( eTok == IS || ( eTok >= EQ && eTok <= GE ) )
+                SbiToken eTok2 = Peek();
+                if( eTok2 == IS || ( eTok2 >= EQ && eTok2 <= GE ) )
                 {   // CASE [IS] operator expr
-                    if( eTok == IS )
+                    if( eTok2 == IS )
                         Next();
-                    eTok = Peek();
-                    if( eTok < EQ || eTok > GE )
+                    eTok2 = Peek();
+                    if( eTok2 < EQ || eTok2 > GE )
                         Error( SbERR_SYNTAX );
                     else Next();
                     SbiExpression aCompare( this );
                     aCompare.Gen();
                     nTrueTarget = aGen.Gen( _CASEIS, nTrueTarget,
-                                  SbxEQ + ( eTok - EQ ) );
+                                  SbxEQ + ( eTok2 - EQ ) );
                 }
                 else
                 {   // CASE expr | expr TO expr
@@ -490,7 +489,7 @@ void SbiParser::On()
         {
             // ON ERROR GOTO label|0
             Next();
-            bool bError = false;
+            bool bError_ = false;
             if( MayBeLabel() )
             {
                 if( eCurTok == NUMBER && !nVal )
@@ -507,9 +506,9 @@ void SbiParser::On()
                 if( eCurTok == NUMBER && nVal == 1 )
                     aGen.Gen( _STDERROR );
                 else
-                    bError = true;
+                    bError_ = true;
             }
-            if( bError )
+            if( bError_ )
                 Error( SbERR_LABEL_EXPECTED );
         }
         else if( eCurTok == RESUME )
