@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:52:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XTypeProvider;
-using cppu::OWeakObject;
 using rtl::OUString;
 using osl::FileBase;
 using osl::MutexGuard;
@@ -149,84 +148,6 @@ uno::Sequence< beans::Property > XTempFile::GetProps()
     return *pProps;
 }
 
-// XInterface
-Any SAL_CALL XTempFile::queryInterface( const Type& rType )
-    throw (RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                // OWeakObject interfaces
-                                reinterpret_cast< XInterface*> ( this ),
-                                static_cast< XWeak*         > ( this ),
-                                // my own interfaces
-                                static_cast< XTypeProvider* > ( this ),
-                                static_cast< XInputStream*  > ( this ),
-                                static_cast< XOutputStream* > ( this ),
-                                static_cast< XStream*       > ( this ),
-                                static_cast< XTruncate*     > ( this ),
-                                static_cast< XPropertySet*  > ( this ),
-                                static_cast< XPropertySetInfo*  > ( this ),
-                                static_cast< XServiceInfo*  > ( this ),
-                                static_cast< XSeekable*     > ( this ) );
-}
-void SAL_CALL XTempFile::acquire(  )
-    throw ()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL XTempFile::release(  )
-        throw ()
-{
-    OWeakObject::release();
-}
-
-// XTypeProvider
-Sequence< Type > SAL_CALL XTempFile::getTypes()
-        throw( RuntimeException )
-{
-    static ::cppu::OTypeCollection* pTypeCollection = NULL;
-    if ( pTypeCollection == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pTypeCollection == NULL )
-        {
-            static ::cppu::OTypeCollection aTypeCollection
-                                    ( ::getCppuType( ( const Reference< XTypeProvider >* )NULL )
-                                    , ::getCppuType( ( const Reference< XWeak >* )NULL )
-                                    , ::getCppuType( ( const Reference< XInputStream >* )NULL )
-                                    , ::getCppuType( ( const Reference< XOutputStream >* )NULL )
-                                    , ::getCppuType( ( const Reference< XStream >* )NULL )
-                                    , ::getCppuType( ( const Reference< XTruncate >* )NULL )
-                                    , ::getCppuType( ( const Reference< XPropertySet >* )NULL )
-                                    , ::getCppuType( ( const Reference< XPropertySetInfo >* )NULL )
-                                    , ::getCppuType( ( const Reference< XServiceInfo >* )NULL )
-                                    , ::getCppuType( ( const Reference< XSeekable >* )NULL ) );
-            pTypeCollection = &aTypeCollection;
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
-}
-
-Sequence< sal_Int8 > SAL_CALL XTempFile::getImplementationId()
-        throw( RuntimeException )
-{
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pID == NULL )
-        {
-            static ::cppu::OImplementationId aID( sal_False ) ;
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
-}
-
 // XInputStream
 
 sal_Int32 SAL_CALL XTempFile::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -248,7 +169,7 @@ sal_Int32 SAL_CALL XTempFile::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 
     if (nRead < static_cast < sal_uInt32 > ( nBytesToRead ) )
         aData.realloc( nRead );
 
-    if ( nBytesToRead > nRead )
+    if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )
     {
         // usually that means that the stream was read till the end
         // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
@@ -451,7 +372,7 @@ void XTempFile::checkConnected ()
         mpStream = mpTempFile->GetStream( STREAM_STD_READWRITE );
         if ( mpStream && mbHasCachedPos )
         {
-            mpStream->Seek( mnCachedPos );
+            mpStream->Seek( sal::static_int_cast<sal_Size>(mnCachedPos) );
             if ( mpStream->SvStream::GetError () == ERRCODE_NONE )
             {
                 mbHasCachedPos = sal_False;
@@ -474,13 +395,13 @@ void XTempFile::checkConnected ()
 Reference< XInputStream > SAL_CALL XTempFile::getInputStream()
     throw (RuntimeException)
 {
-    return Reference< XInputStream >( static_cast< OWeakObject* >( this ), ::com::sun::star::uno::UNO_QUERY );
+    return Reference< XInputStream >( *this, ::com::sun::star::uno::UNO_QUERY );
 }
 
 Reference< XOutputStream > SAL_CALL XTempFile::getOutputStream()
     throw (RuntimeException)
 {
-    return Reference< XOutputStream >( static_cast< OWeakObject* >( this ), ::com::sun::star::uno::UNO_QUERY );
+    return Reference< XOutputStream >( *this, ::com::sun::star::uno::UNO_QUERY );
 }
 
 // XTruncate
@@ -590,22 +511,22 @@ Any SAL_CALL XTempFile::getPropertyValue( const OUString& PropertyName )
         throw UnknownPropertyException();
     return aRet;
 }
-void SAL_CALL XTempFile::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void SAL_CALL XTempFile::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_ASSERT ( sal_False, "Listeners not implemented" );
 }
-void SAL_CALL XTempFile::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+void SAL_CALL XTempFile::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_ASSERT ( sal_False, "Listeners not implemented" );
 }
-void SAL_CALL XTempFile::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL XTempFile::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_ASSERT ( sal_False, "Listeners not implemented" );
 }
-void SAL_CALL XTempFile::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL XTempFile::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_ASSERT ( sal_False, "Listeners not implemented" );
@@ -621,7 +542,8 @@ void SAL_CALL XTempFile::removeVetoableChangeListener( const OUString& PropertyN
 sal_Bool SAL_CALL XTempFile::supportsService(rtl::OUString const & rServiceName)
         throw (com::sun::star::uno::RuntimeException)
 {
-    return rServiceName == getSupportedServiceNames_Static()[0];
+    Sequence< OUString > aServices(getSupportedServiceNames_Static());
+    return rServiceName == aServices[0];
 }
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL XTempFile::getSupportedServiceNames()
@@ -643,7 +565,7 @@ Sequence < OUString > XTempFile::getSupportedServiceNames_Static()
     return aNames;
 }
 Reference < XInterface >SAL_CALL XTempFile_createInstance(
-    const Reference< XMultiServiceFactory > & xMgr )
+    const Reference< XMultiServiceFactory > & /*xMgr*/ )
 {
     return Reference< XInterface >( *new XTempFile );
 }
@@ -695,7 +617,7 @@ static sal_Bool writeInfo( void * pRegistryKey,
 // C functions to implement this as a component
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+                const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -706,7 +628,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
  * @param pServiceManager generic uno interface providing a service manager
  * @param pRegistryKey generic uno interface providing registry key to write
  */
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     return pRegistryKey &&
     writeInfo (pRegistryKey,
@@ -723,7 +645,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* pSe
  * @return a component factory (generic uno interface)
  */
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
     Reference< XMultiServiceFactory > xSMgr(
