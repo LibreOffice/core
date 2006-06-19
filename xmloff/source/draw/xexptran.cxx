@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:15:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
@@ -163,7 +161,6 @@ sal_Int32 Imp_GetNumberChar(const OUString& rStr, sal_Int32& rPos, const sal_Int
     const SvXMLUnitConverter& rConv, sal_Int32 nRetval)
 {
     OUStringBuffer sNumberString;
-    BOOL bCharValid(TRUE);
     BOOL bSignAllowed(TRUE);
 
     while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignAllowed))
@@ -198,7 +195,7 @@ void Imp_PutNumberCharWithSpace(OUString& rStr, const SvXMLUnitConverter& rConv,
 //////////////////////////////////////////////////////////////////////////////
 // parsing help functions for double numbers
 
-void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32)
 {
     sal_Unicode aChar(rStr[rPos]);
 
@@ -1200,11 +1197,11 @@ SdXMLImExViewBox::SdXMLImExViewBox(sal_Int32 nX, sal_Int32 nY, sal_Int32 nW, sal
 
 // #100617# Asked vincent hardy: svg:viewBox values may be double precision.
 SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverter& rConv)
-:   mnX( 0L ),
+:   msString(rNew),
+    mnX( 0L ),
     mnY( 0L ),
     mnW( 1000L ),
-    mnH( 1000L ),
-    msString(rNew)
+    mnH( 1000L )
 {
     if(msString.getLength())
     {
@@ -2494,8 +2491,8 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         // set pointers back
         pOuterSequence = maPoly.getArray();
         pOuterFlags = (IsCurve()) ? maFlag.getArray() : 0L;
-        awt::Point* pInnerSequence = 0L;
-        drawing::PolygonFlags* pInnerFlags = 0L;
+        awt::Point* pNotSoInnerSequence = 0L;
+        drawing::PolygonFlags* pNotSoInnerFlags = 0L;
         sal_uInt32 nInnerIndex(0L);
 
         // prepare new loop, read points
@@ -2537,12 +2534,12 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     // #104076# end-process current poly
                     if(mbIsClosed)
                     {
-                        if(pInnerSequence)
+                        if(pNotSoInnerSequence)
                         {
                             // closed: add first point again
-                            sal_Int32 nX(pInnerSequence[0].X);
-                            sal_Int32 nY(pInnerSequence[0].Y);
-                            Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                            sal_Int32 nX(pNotSoInnerSequence[0].X);
+                            sal_Int32 nY(pNotSoInnerSequence[0].Y);
+                            Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
                         }
 
                         // reset closed flag for next to be started polygon
@@ -2550,12 +2547,12 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     }
 
                     // next poly
-                    pInnerSequence = pOuterSequence->getArray();
+                    pNotSoInnerSequence = pOuterSequence->getArray();
                     pOuterSequence++;
 
                     if(pOuterFlags)
                     {
-                        pInnerFlags = pOuterFlags->getArray();
+                        pNotSoInnerFlags = pOuterFlags->getArray();
                         pOuterFlags++;
                     }
 
@@ -2581,7 +2578,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                         // calc transform and add point and flag
                         Imp_PrepareCoorImport(nX, nY, rObjectPos, rObjectSize, mrViewBox, bScale, bTranslate);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
                     }
                     break;
                 }
@@ -2612,7 +2609,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                         // calc transform and add point and flag
                         Imp_PrepareCoorImport(nX, nY, rObjectPos, rObjectSize, mrViewBox, bScale, bTranslate);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
                     }
                     break;
                 }
@@ -2639,7 +2636,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                         // calc transform and add point and flag
                         Imp_PrepareCoorImport(nX, nY, rObjectPos, rObjectSize, mrViewBox, bScale, bTranslate);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
                     }
                     break;
                 }
@@ -2666,7 +2663,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                         // calc transform and add point and flag
                         Imp_PrepareCoorImport(nX, nY, rObjectPos, rObjectSize, mrViewBox, bScale, bTranslate);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
                     }
                     break;
                 }
@@ -2711,25 +2708,25 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                         nY1 = nY2;
                         if(nInnerIndex)
                         {
-                            awt::Point aPPrev1 = pInnerSequence[nInnerIndex - 1];
+                            awt::Point aPPrev1 = pNotSoInnerSequence[nInnerIndex - 1];
 
                             if(nInnerIndex > 1)
                             {
-                                awt::Point aPPrev2 = pInnerSequence[nInnerIndex - 2];
+                                awt::Point aPPrev2 = pNotSoInnerSequence[nInnerIndex - 2];
                                 nX1 = aPPrev1.X -(aPPrev2.X - aPPrev1.X);
                                 nY1 = aPPrev1.Y -(aPPrev2.Y - aPPrev1.Y);
                             }
 
                             // set curve point to symmetric
-                            pInnerFlags[nInnerIndex - 1] = drawing::PolygonFlags_SYMMETRIC;
+                            pNotSoInnerFlags[nInnerIndex - 1] = drawing::PolygonFlags_SYMMETRIC;
                         }
 
                         // add calculated control point
-                        Imp_AddExportPoints(nX1, nY1, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX1, nY1, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
 
                         // add new points and set flags
-                        Imp_AddExportPoints(nX2, nY2, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
+                        Imp_AddExportPoints(nX2, nY2, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
                     }
                     break;
                 }
@@ -2772,12 +2769,12 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                         Imp_PrepareCoorImport(nX, nY, rObjectPos, rObjectSize, mrViewBox, bScale, bTranslate);
 
                         // correct polygon flag for previous point
-                        Imp_CorrectPolygonFlag(nInnerIndex, pInnerSequence, pInnerFlags, nX1, nY1);
+                        Imp_CorrectPolygonFlag(nInnerIndex, pNotSoInnerSequence, pNotSoInnerFlags, nX1, nY1);
 
                         // add new points and set flags
-                        Imp_AddExportPoints(nX1, nY1, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX2, nY2, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
+                        Imp_AddExportPoints(nX1, nY1, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX2, nY2, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
                     }
                     break;
                 }
@@ -2816,19 +2813,19 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                         Imp_PrepareCoorImport(nX, nY, rObjectPos, rObjectSize, mrViewBox, bScale, bTranslate);
 
                         // calculate X1,X2
-                        awt::Point aPPrev1 = (nInnerIndex) ? pInnerSequence[nInnerIndex-1] : pInnerSequence[0];
+                        awt::Point aPPrev1 = (nInnerIndex) ? pNotSoInnerSequence[nInnerIndex-1] : pNotSoInnerSequence[0];
                         sal_Int32 nX1 = FRound((double)((nXX * 2) + aPPrev1.X) / 3.0);
                         sal_Int32 nY1 = FRound((double)((nYY * 2) + aPPrev1.Y) / 3.0);
                         sal_Int32 nX2 = FRound((double)((nXX * 2) + nX) / 3.0);
                         sal_Int32 nY2 = FRound((double)((nYY * 2) + nY) / 3.0);
 
                         // correct polygon flag for previous point
-                        Imp_CorrectPolygonFlag(nInnerIndex, pInnerSequence, pInnerFlags, nX1, nY1);
+                        Imp_CorrectPolygonFlag(nInnerIndex, pNotSoInnerSequence, pNotSoInnerFlags, nX1, nY1);
 
                         // add new points and set flags
-                        Imp_AddExportPoints(nX1, nY1, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX2, nY2, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
+                        Imp_AddExportPoints(nX1, nY1, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX2, nY2, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
                     }
                     break;
                 }
@@ -2867,22 +2864,22 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                         // and the Point X1,Y1 can be constructed by mirroring the point before it.
                         nXX = nX;
                         nYY = nY;
-                        awt::Point aPPrev1 = pInnerSequence[0];
+                        awt::Point aPPrev1 = pNotSoInnerSequence[0];
 
                         if(nInnerIndex)
                         {
-                            aPPrev1 = pInnerSequence[nInnerIndex - 1];
+                            aPPrev1 = pNotSoInnerSequence[nInnerIndex - 1];
 
                             if(nInnerIndex > 1)
                             {
-                                awt::Point aPPrev2 = pInnerSequence[nInnerIndex - 2];
+                                awt::Point aPPrev2 = pNotSoInnerSequence[nInnerIndex - 2];
                                 nXX = aPPrev1.X -(aPPrev2.X - aPPrev1.X);
                                 nYY = aPPrev1.Y -(aPPrev2.Y - aPPrev1.Y);
                             }
 
                             // set curve point to smooth here, since length
                             // is changed and thus only c1 can be used.
-                            pInnerFlags[nInnerIndex - 1] = drawing::PolygonFlags_SMOOTH;
+                            pNotSoInnerFlags[nInnerIndex - 1] = drawing::PolygonFlags_SMOOTH;
                         }
 
                         // calculate X1,X2
@@ -2892,12 +2889,12 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                         sal_Int32 nY2 = FRound((double)((nYY * 2) + nY) / 3.0);
 
                         // correct polygon flag for previous point
-                        Imp_CorrectPolygonFlag(nInnerIndex, pInnerSequence, pInnerFlags, nX1, nY1);
+                        Imp_CorrectPolygonFlag(nInnerIndex, pNotSoInnerSequence, pNotSoInnerFlags, nX1, nY1);
 
                         // add new points and set flags
-                        Imp_AddExportPoints(nX1, nY1, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX2, nY2, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
-                        Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
+                        Imp_AddExportPoints(nX1, nY1, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX2, nY2, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_CONTROL);
+                        Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_SMOOTH);
                     }
                     break;
                 }
@@ -2935,12 +2932,12 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         // #104076# end-process closed state of last poly
         if(mbIsClosed)
         {
-            if(pInnerSequence)
+            if(pNotSoInnerSequence)
             {
                 // closed: add first point again
-                sal_Int32 nX(pInnerSequence[0].X);
-                sal_Int32 nY(pInnerSequence[0].Y);
-                Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
+                sal_Int32 nX(pNotSoInnerSequence[0].X);
+                sal_Int32 nY(pNotSoInnerSequence[0].Y);
+                Imp_AddExportPoints(nX, nY, pNotSoInnerSequence, pNotSoInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
             }
         }
 
