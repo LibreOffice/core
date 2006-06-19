@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:43:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,6 @@
 #include <svtools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/storagehelper.hxx>
-#pragma hdrstop
 
 #include "helpid.hrc"
 #include "docvor.hxx"
@@ -788,7 +787,7 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
             if(nIdxDeleted != INDEX_IGNORE)
             {
                 pChildIter = FirstChild(pParentIter);
-                for(USHORT i = 0; i < nIdxDeleted; ++i)
+                for(USHORT j = 0; j < nIdxDeleted; ++j)
                     pChildIter = NextSibling(pChildIter);
                 if( pChildIter && pChildIter != pSource )
                 {
@@ -1009,10 +1008,12 @@ BOOL SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rTe
         ErrorBox( this, aResId ).Execute();
         return FALSE;
     }
+/*
     else
     {
         SfxTemplateOrganizeDlg* pDlg = (SfxTemplateOrganizeDlg*)Window::GetParent();
     }
+*/
     return TRUE;
 }
 
@@ -1528,16 +1529,17 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL            bHC = GetBackground().GetColor().IsDark();
-    const Image*    pRet = NULL;
+    BOOL         bHC = GetBackground().GetColor().IsDark();
+    const Image* pRet = NULL;
 
     switch( nLevel )
     {
-        case 0:     pRet = bHC? &aOpenedFolderBmpHC : &aOpenedFolderBmp;        break;
-        case 1:     pRet = bHC? &aOpenedDocBmpHC : &aOpenedDocBmp;              break;
+        case 0:
+           pRet = bHC ? &aOpenedFolderBmpHC : &aOpenedFolderBmp; break;
+        case 1:
+           pRet = bHC ? &aOpenedDocBmpHC : &aOpenedDocBmp; break;
         default:
-                    pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;        break;
-                    DBG_ERROR( "Bitmaps ueberindiziert" );
+            pRet = bHC ? &aClosedFolderBmpHC : &aClosedFolderBmp; break;
     }
 
     return *pRet;
@@ -1575,7 +1577,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0L );
 
     // add "All" filter
-    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
+    aFileDlg.AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
                         DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     // add template filter
     String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
@@ -1683,7 +1685,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     sfx2::FileDialogHelper aFileDlg( ::sfx2::FILEOPEN_SIMPLE , SFXWB_MULTISELECTION );
 
     // add "All" filter
-    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
+    aFileDlg.AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
                         DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     // add template filter
     String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
@@ -1904,7 +1906,6 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                     }
                     USHORT nRegion = 0, nIndex = 0;
                     GetIndices_Impl(pFocusBox, pEntry, nRegion, nIndex);
-                    BOOL bResetDef=FALSE;
 
                     if ( !aMgr.Delete(
                         pFocusBox, nRegion,
@@ -2138,7 +2139,6 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AccelSelect_Impl, Accelerator *, pAccel )
         pFocusBox->FirstSelected() : NULL ;
     return pEntry && ( pAccel->GetCurItemId() == ID_NEW  || !DontDelete_Impl( pEntry ) ) ?
         Dispatch_Impl( pAccel->GetCurItemId(), NULL ) : 0;
-    return 0;
 }
 
 //-------------------------------------------------------------------------
@@ -2343,6 +2343,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, RightListBoxSelect_Impl, ListBox *, pBox )
 
 IMPL_LINK( SfxOrganizeDlg_Impl, OnAddressTemplateClicked, Button *, pButton )
 {
+    (void)pButton; //unused
     svt::AddressBookSourceDialog aDialog(pDialog, ::comphelper::getProcessServiceFactory());
     aDialog.Execute();
     return 0L;
@@ -2362,7 +2363,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 */
 {
-    void* pDummy = NULL;
+    (void)pButton; //unused
     sfx2::FileDialogHelper aFileDlg( WB_OPEN, String() );
 
     // add config and basic filter
@@ -2384,7 +2385,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
     aFileDlg.AddFilter( sFilterName, sBasicExt );
 
     // set "All" filter as current
-    aFileDlg.SetCurrentFilter( String( SfxResId( STR_FILTERNAME_ALL ) ) );
+    aFileDlg.SetCurrentFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ) );
 
     if ( aLastDir.Len() )
         aFileDlg.SetDisplayDirectory( aLastDir );
