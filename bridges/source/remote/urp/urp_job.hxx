@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:46:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ public:
     inline ClientJob( uno_Environment *pEnvRemote, // weak !
                       struct urp_BridgeImpl *pBridgeImpl,
                       rtl_uString *pOid,  // weak
-                      typelib_TypeDescription * pMemberType, // weak
+                      typelib_TypeDescription const * pMemberType, // weak
                       typelib_InterfaceTypeDescription *pInterfaceType, // weak
                       void *pReturn,
                       void *ppArgs[],
@@ -177,9 +177,6 @@ public:
                     sal_Int32 nMaxMessages );
     ~ServerMultiJob();
 public:
-    // doit method is used only for ServerJobs, calls execute and pack
-    static void  SAL_CALL doit( void *pThreadSpecificData );
-
     sal_Bool extract( );
     void initiate();
     void execute();
@@ -285,7 +282,7 @@ inline ClientJob::ClientJob(
     uno_Environment *pEnvRemote,
     struct urp_BridgeImpl *pBridgeImpl,
     rtl_uString *pOid,
-    typelib_TypeDescription * pMemberType,
+    typelib_TypeDescription const * pMemberType,
     typelib_InterfaceTypeDescription *pInterfaceType,
     void *pReturn,
     void *ppArgs[],
