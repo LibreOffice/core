@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navbarcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,9 @@ namespace frm
 
         // XVclWindowPeer
         virtual void SAL_CALL setDesignMode( sal_Bool _bOn ) throw( ::com::sun::star::uno::RuntimeException );
+
+        // XWindow2
+        using VCLXWindow::isEnabled;
 
     protected:
         // XTypeProvider
