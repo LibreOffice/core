@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:51:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,8 +350,8 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > xMediaPlayer;
 
-    virtual void        Reset( const SfxItemSet& rSet ) {}
-    virtual BOOL        FillItemSet( SfxItemSet& rSet ) { return TRUE; }
+    virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
+    virtual BOOL        FillItemSet( SfxItemSet& /*rSet*/ ) { return TRUE; }
     ::rtl::OUString     addExtension( const ::rtl::OUString&, const ::rtl::OUString& );
     void                FillFilterList();
 
