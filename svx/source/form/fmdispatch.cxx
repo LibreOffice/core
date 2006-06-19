@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@ namespace svx
         ,m_rController( _rController )
         ,m_aFeatureURL( _rFeatureURL )
         ,m_nFeatureId( _nFeatureId )
-        ,m_bDisposed( sal_False )
         ,m_bLastKnownEnabled( sal_False )
+        ,m_bDisposed( sal_False )
     {
     }
 
@@ -165,6 +165,7 @@ namespace svx
         checkAlive();
 
         OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::dispatch: not responsible for this URL!" );
+        (void)_rURL;
 
         if ( m_rController.getSimpleState( m_nFeatureId ) )
         {
@@ -186,6 +187,8 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL OSingleFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
+        (void)_rURL;
+        OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::addStatusListener: unexpected URL!" );
         OSL_ENSURE( _rxControl.is(), "OSingleFeatureDispatcher::addStatusListener: senseless call!" );
         if ( !_rxControl.is() )
             return;
@@ -208,6 +211,8 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL OSingleFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
+        (void)_rURL;
+        OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::removeStatusListener: unexpected URL!" );
         OSL_ENSURE( _rxControl.is(), "OSingleFeatureDispatcher::removeStatusListener: senseless call!" );
         if ( !_rxControl.is() )
             return;
