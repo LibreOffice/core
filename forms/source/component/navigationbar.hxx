@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigationbar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ namespace frm
                                             throw(::com::sun::star::lang::IllegalArgumentException);
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
-        // ::com::sun::star::beans::XPropertyState
+        // XPropertyState
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
         // OAggregationArrayUsageHelper
@@ -150,6 +150,10 @@ namespace frm
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
             ) const;
         IMPLEMENT_INFO_SERVICE()
+
+        // prevent method hiding
+        using OControlModel::disposing;
+        using OControlModel::getFastPropertyValue;
 
     protected:
         DECLARE_XCLONEABLE();
