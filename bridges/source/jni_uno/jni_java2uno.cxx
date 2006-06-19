@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-09 09:47:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,20 +76,20 @@ jobject Bridge::map_to_java(
             oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
 
         // create java and register java proxy
-        jvalue args[ 6 ];
+        jvalue args2[ 6 ];
         acquire();
-        args[ 0 ].j = reinterpret_cast< sal_Int64 >( this );
+        args2[ 0 ].j = reinterpret_cast< sal_Int64 >( this );
         (*pUnoI->acquire)( pUnoI );
-        args[ 1 ].l = m_jni_info->m_object_java_env;
-        args[ 2 ].j = reinterpret_cast< sal_Int64 >( pUnoI );
+        args2[ 1 ].l = m_jni_info->m_object_java_env;
+        args2[ 2 ].j = reinterpret_cast< sal_Int64 >( pUnoI );
         typelib_typedescription_acquire( info->m_td.get() );
-        args[ 3 ].j = reinterpret_cast< sal_Int64 >( info->m_td.get() );
-        args[ 4 ].l = info->m_type;
-        args[ 5 ].l = jo_oid.get();
-        args[ 6 ].l = info->m_proxy_ctor;
+        args2[ 3 ].j = reinterpret_cast< sal_Int64 >( info->m_td.get() );
+        args2[ 4 ].l = info->m_type;
+        args2[ 5 ].l = jo_oid.get();
+        args2[ 6 ].l = info->m_proxy_ctor;
         jo_iface = jni->CallStaticObjectMethodA(
             m_jni_info->m_class_JNI_proxy,
-            m_jni_info->m_method_JNI_proxy_create, args );
+            m_jni_info->m_method_JNI_proxy_create, args2 );
         jni.ensure_no_exception();
     }
 
@@ -222,7 +222,8 @@ jobject Bridge::call_uno(
             typelib_TypeClass_EXCEPTION == type->eTypeClass)
         {
             TypeDescr td( type );
-            if (td.get()->nSize > sizeof (largest))
+            if (sal::static_int_cast< sal_uInt32 >(td.get()->nSize)
+                > sizeof (largest))
                 uno_args[ nPos ] = alloca( td.get()->nSize );
         }
 
@@ -245,11 +246,11 @@ jobject Bridge::call_uno(
                 // cleanup uno in args
                 for ( sal_Int32 n = 0; n < nPos; ++n )
                 {
-                    typelib_MethodParameter const & param = pParams[ n ];
-                    if (param.bIn)
+                    typelib_MethodParameter const & p = pParams[ n ];
+                    if (p.bIn)
                     {
                         uno_type_destructData(
-                            uno_args[ n ], param.pTypeRef, 0 );
+                            uno_args[ n ], p.pTypeRef, 0 );
                     }
                 }
                 throw;
@@ -353,9 +354,8 @@ extern "C"
 //------------------------------------------------------------------------------
 JNIEXPORT jobject
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
-    JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle,
-    jstring jo_decl_class, jstring jo_method,
-    jobjectArray jo_args /* may be 0 */ )
+    JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring,
+    jstring jo_method, jobjectArray jo_args /* may be 0 */ )
     SAL_THROW_EXTERN_C()
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
@@ -593,9 +593,11 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_JAVA_UTF8 ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
-        jint res = jni->ThrowNew(
-            jni_info->m_class_RuntimeException, cstr_msg.getStr() );
-        OSL_ASSERT( 0 == res );
+        if (jni->ThrowNew(jni_info->m_class_RuntimeException, cstr_msg.getStr())
+            != 0)
+        {
+            OSL_ASSERT( false );
+        }
         return 0;
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
@@ -607,9 +609,11 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             OUStringToOString(
                 jni.get_stack_trace(), RTL_TEXTENCODING_JAVA_UTF8 ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
-        jint res = jni->ThrowNew(
-            jni_info->m_class_RuntimeException, cstr_msg.getStr() );
-        OSL_ASSERT( 0 == res );
+        if (jni->ThrowNew(jni_info->m_class_RuntimeException, cstr_msg.getStr())
+            != 0)
+        {
+            OSL_ASSERT( false );
+        }
         return 0;
     }
 }
