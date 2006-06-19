@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numinf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:37:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
-
-#pragma hdrstop
-
 #define _SVX_NUMINF_CXX
 #define ITEMID_NUMBERINFO   0
 
@@ -53,8 +49,8 @@ TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
                                         \
     pFormatter      ( pNum ),           \
     eValueType      ( eVal ),           \
-    nDoubleVal      ( nDouble ),        \
     aStringVal      ( rStr ),           \
+    nDoubleVal      ( nDouble ),        \
     pDelFormatArr   ( NULL ),           \
     nDelCount       ( 0 )
 
@@ -116,8 +112,8 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 
     pFormatter   ( rItem.pFormatter ),
     eValueType   ( rItem.eValueType ),
-    nDoubleVal   ( rItem.nDoubleVal ),
     aStringVal   ( rItem.aStringVal ),
+    nDoubleVal   ( rItem.nDoubleVal ),
     pDelFormatArr( NULL ),
     nDelCount    ( rItem.nDelCount )
 
@@ -143,9 +139,9 @@ SvxNumberInfoItem::~SvxNumberInfoItem()
 
 SfxItemPresentation SvxNumberInfoItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     String&             rText, const IntlWrapper *
 )   const
 {
@@ -197,14 +193,14 @@ SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 // Laden/Speichern wird nicht gebraucht!
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxNumberInfoItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) const
 {
     return new SvxNumberInfoItem( *this );
 }
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 nItemVersion ) const
+SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
