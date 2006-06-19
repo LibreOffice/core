@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:51:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -600,7 +600,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 }
 
 //===============================================
-void SAL_CALL RecoveryCore::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL RecoveryCore::disposing(const css::lang::EventObject& /*aEvent*/)
     throw(css::uno::RuntimeException)
 {
     m_xRealCore.clear();
@@ -722,19 +722,19 @@ void SAL_CALL PluginProgress::dispose()
 }
 
 //===============================================
-void SAL_CALL PluginProgress::addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
+void SAL_CALL PluginProgress::addEventListener(const css::uno::Reference< css::lang::XEventListener >& )
     throw(css::uno::RuntimeException)
 {
 }
 
 //===============================================
-void SAL_CALL PluginProgress::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
+void SAL_CALL PluginProgress::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
     throw(css::uno::RuntimeException)
 {
 }
 
 //===============================================
-void SAL_CALL PluginProgress::start(const ::rtl::OUString& sText ,
+void SAL_CALL PluginProgress::start(const ::rtl::OUString&,
                                           sal_Int32        nRange)
     throw(css::uno::RuntimeException)
 {
@@ -905,7 +905,7 @@ void SaveProgressDialog::updateItems()
 }
 
 //===============================================
-void SaveProgressDialog::stepNext(TURLInfo* pItem)
+void SaveProgressDialog::stepNext(TURLInfo* )
 {
     /* TODO
 
@@ -937,7 +937,7 @@ RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
 //===============================================
 void RecovDocListEntry::Paint(const Point&       aPos   ,
                                     SvLBox&      aDevice,
-                                    USHORT       nFlags ,
+                                    USHORT       /*nFlags */,
                                     SvLBoxEntry* pEntry )
 {
     const Image*        pImg  = 0;
@@ -1010,17 +1010,17 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
 RecovDocList::RecovDocList(      Window* pParent,
                            const ResId&  rResId )
     : SvxSimpleTable      ( pParent, rResId            )
-    , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV   ) )
-    , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV   ) )
-    , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED    ) )
-    , m_aRecovInProgrStr  ( ResId(STR_RECOVINPROGR   ) )
-    , m_aNotRecovYetStr   ( ResId(STR_NOTRECOVYET    ) )
     , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK     ) )
     , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK    ) )
     , m_aRedCrossImg      ( ResId(IMG_REDCROSS       ) )
     , m_aGreenCheckImgHC  ( ResId(IMG_GREENCHECK_HC  ) )
     , m_aYellowCheckImgHC ( ResId(IMG_YELLOWCHECK_HC ) )
     , m_aRedCrossImgHC    ( ResId(IMG_REDCROSS_HC    ) )
+    , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV   ) )
+    , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV   ) )
+    , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED    ) )
+    , m_aRecovInProgrStr  ( ResId(STR_RECOVINPROGR   ) )
+    , m_aNotRecovYetStr   ( ResId(STR_NOTRECOVYET    ) )
 {
     //SetEntryHeight( short( maGreenCheckImg.GetSizePixel().Height() ) );
 }
@@ -1073,12 +1073,12 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     , m_aTitleRecoveryInProgress(              ResId  ( STR_RECOVERY_INPROGRESS        ) )
     , m_aRecoveryOnlyDescr  (                  ResId  ( STR_RECOVERYONLY_DESCR         ) )
     , m_aRecoveryOnlyFinish (                  ResId  ( STR_RECOVERYONLY_FINISH        ) )
-    , m_pCore               ( pCore                                                      )
     , m_pDefButton          ( NULL                                                       )
+    , m_pCore               ( pCore                                                      )
     , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
     , m_bWaitForUser        (sal_False)
-    , m_bUserDecideNext     (sal_False)
     , m_bWaitForCore        (sal_False)
+    , m_bUserDecideNext     (sal_False)
     , m_bWasRecoveryStarted (sal_False)
     , m_bRecoveryOnly       (sal_False)
 {
@@ -1839,7 +1839,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             {
                 const long nMinDelta = 10;
                 long nDelta = Max( nTxtW - nBtnW, nMinDelta );
-                sal_Int32 i = 0;
+                sal_uInt32 i = 0;
                 Window* pWins[] =
                 {
                     &maShowRepBtn, &maOptBtn,
@@ -1848,7 +1848,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 };
                 // the first two buttons need a new size (wider) and position (more left)
                 Window** pCurrent = pWins;
-                const sal_Int32 nBtnCount = 2;
+                const sal_uInt32 nBtnCount = 2;
                 for ( ; i < nBtnCount; ++i, ++pCurrent )
                 {
                     Size aNewSize = (*pCurrent)->GetSizePixel();
@@ -1931,7 +1931,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 &maProxyServerEd, &maProxyPortFT, &maProxyPortEd, &maDescriptionFT
             };
             Window** pCurrent = pWins;
-            for ( sal_Int32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
             {
                 Point aPos = (*pCurrent)->GetPosPixel();
                 aPos.Y() -= nDelta;
@@ -2053,25 +2053,25 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 #define PRVFILE ".crash_report_preview"
 #endif
 
-        static ::rtl::OUString GetChecksumURL()
-        {
-            ::rtl::OUString aURL = GetCrashConfigDir();
+//      static ::rtl::OUString GetChecksumURL()
+//      {
+//          ::rtl::OUString aURL = GetCrashConfigDir();
 
-            aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-            aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHKFILE ) );
+//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHKFILE ) );
 
-            return aURL;
-        }
+//          return aURL;
+//      }
 
-        static ::rtl::OUString GetStackURL()
-        {
-            ::rtl::OUString aURL = GetCrashConfigDir();
+//      static ::rtl::OUString GetStackURL()
+//      {
+//          ::rtl::OUString aURL = GetCrashConfigDir();
 
-            aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-            aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STKFILE ) );
+//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STKFILE ) );
 
-            return aURL;
-        }
+//          return aURL;
+//      }
 
         static ::rtl::OUString GetPreviewURL()
         {
