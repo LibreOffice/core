@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipsd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:07:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:48:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,10 +309,7 @@ BOOL PSDReader::ImplReadHeader()
         break;
 
         default:
-        {
             return FALSE;
-        }
-        break;
     }
     *mpPSD >> nResourceLength;
     sal_uInt32 nLayerPos = mpPSD->Tell() + nResourceLength;
