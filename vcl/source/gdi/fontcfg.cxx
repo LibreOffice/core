@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:11:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,33 +97,32 @@ static const char* getKeyType( int nKeyType )
 {
     switch( nKeyType )
     {
-    case DEFAULTFONT_CJK_DISPLAY: return "CJK_DISPLAY";break;
-    case DEFAULTFONT_CJK_HEADING: return "CJK_HEADING";break;
-    case DEFAULTFONT_CJK_PRESENTATION: return "CJK_PRESENTATION";break;
-    case DEFAULTFONT_CJK_SPREADSHEET: return "CJK_SPREADSHEET";break;
-    case DEFAULTFONT_CJK_TEXT: return "CJK_TEXT";break;
-    case DEFAULTFONT_CTL_DISPLAY: return "CTL_DISPLAY";break;
-    case DEFAULTFONT_CTL_HEADING: return "CTL_HEADING";break;
-    case DEFAULTFONT_CTL_PRESENTATION: return "CTL_PRESENTATION";break;
-    case DEFAULTFONT_CTL_SPREADSHEET: return "CTL_SPREADSHEET";break;
-    case DEFAULTFONT_CTL_TEXT: return "CTL_TEXT";break;
-    case DEFAULTFONT_FIXED: return "FIXED";break;
-    case DEFAULTFONT_LATIN_DISPLAY: return "LATIN_DISPLAY";break;
-    case DEFAULTFONT_LATIN_FIXED: return "LATIN_FIXED";break;
-    case DEFAULTFONT_LATIN_HEADING: return "LATIN_HEADING";break;
-    case DEFAULTFONT_LATIN_PRESENTATION: return "LATIN_PRESENTATION";break;
-    case DEFAULTFONT_LATIN_SPREADSHEET: return "LATIN_SPREADSHEET";break;
-    case DEFAULTFONT_LATIN_TEXT: return "LATIN_TEXT";break;
-    case DEFAULTFONT_SANS: return "SANS";break;
-    case DEFAULTFONT_SANS_UNICODE: return "SANS_UNICODE";break;
-    case DEFAULTFONT_SERIF: return "SERIF";break;
-    case DEFAULTFONT_SYMBOL: return "SYMBOL";break;
-    case DEFAULTFONT_UI_FIXED: return "UI_FIXED";break;
-    case DEFAULTFONT_UI_SANS: return "UI_SANS";break;
+    case DEFAULTFONT_CJK_DISPLAY: return "CJK_DISPLAY";
+    case DEFAULTFONT_CJK_HEADING: return "CJK_HEADING";
+    case DEFAULTFONT_CJK_PRESENTATION: return "CJK_PRESENTATION";
+    case DEFAULTFONT_CJK_SPREADSHEET: return "CJK_SPREADSHEET";
+    case DEFAULTFONT_CJK_TEXT: return "CJK_TEXT";
+    case DEFAULTFONT_CTL_DISPLAY: return "CTL_DISPLAY";
+    case DEFAULTFONT_CTL_HEADING: return "CTL_HEADING";
+    case DEFAULTFONT_CTL_PRESENTATION: return "CTL_PRESENTATION";
+    case DEFAULTFONT_CTL_SPREADSHEET: return "CTL_SPREADSHEET";
+    case DEFAULTFONT_CTL_TEXT: return "CTL_TEXT";
+    case DEFAULTFONT_FIXED: return "FIXED";
+    case DEFAULTFONT_LATIN_DISPLAY: return "LATIN_DISPLAY";
+    case DEFAULTFONT_LATIN_FIXED: return "LATIN_FIXED";
+    case DEFAULTFONT_LATIN_HEADING: return "LATIN_HEADING";
+    case DEFAULTFONT_LATIN_PRESENTATION: return "LATIN_PRESENTATION";
+    case DEFAULTFONT_LATIN_SPREADSHEET: return "LATIN_SPREADSHEET";
+    case DEFAULTFONT_LATIN_TEXT: return "LATIN_TEXT";
+    case DEFAULTFONT_SANS: return "SANS";
+    case DEFAULTFONT_SANS_UNICODE: return "SANS_UNICODE";
+    case DEFAULTFONT_SERIF: return "SERIF";
+    case DEFAULTFONT_SYMBOL: return "SYMBOL";
+    case DEFAULTFONT_UI_FIXED: return "UI_FIXED";
+    case DEFAULTFONT_UI_SANS: return "UI_SANS";
     default:
         DBG_ERROR( "unmatched type" );
         return "";
-        break;
     }
 }
 
@@ -698,7 +697,7 @@ static bool ImplKillLeading( String& rName, const char* const* ppStr )
         }
         if ( !*pStr )
         {
-            xub_StrLen nLen = pNameStr - rName.GetBuffer();
+            xub_StrLen nLen = sal::static_int_cast<xub_StrLen>(pNameStr - rName.GetBuffer());
             rName.Erase( 0, nLen );
             return true;
         }
@@ -1241,7 +1240,7 @@ void SettingsConfigItem::Commit()
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
         String aKeyName( group->first );
-        sal_Bool bAdded = AddNode( OUString(), aKeyName );
+        /*sal_Bool bAdded =*/ AddNode( OUString(), aKeyName );
         Sequence< PropertyValue > aValues( group->second.size() );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
@@ -1265,7 +1264,7 @@ void SettingsConfigItem::Commit()
  *  SettingsConfigItem::Notify
  */
 
-void SettingsConfigItem::Notify( const Sequence< OUString >& rPropertyNames )
+void SettingsConfigItem::Notify( const Sequence< OUString >& )
 {
     getValues();
 }
