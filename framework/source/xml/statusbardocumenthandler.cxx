@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,11 +413,14 @@ throw(  SAXException, RuntimeException )
                             }
                             break;
 
-                            case SB_ATTRIBUTE_HELPURL:
-                            {
-                                aHelpURL = xAttribs->getValueByIndex( n );
-                            }
-                            break;
+                                          case SB_ATTRIBUTE_HELPURL:
+                                          {
+                                                aHelpURL = xAttribs->getValueByIndex( n );
+                                          }
+                                          break;
+
+                                          default:
+                                              break;
                         }
                     }
                 } // for
@@ -428,27 +431,30 @@ throw(  SAXException, RuntimeException )
                     aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute statusbar:url must have a value!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
-                else
-                {
-                    Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                    aStatusbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                    aStatusbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
-                    aStatusbarItemProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_OFFSET ));
-                    aStatusbarItemProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
-                    aStatusbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_WIDTH ));
-                    aStatusbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+                        else
+                        {
+                            Sequence< PropertyValue > aStatusbarItemProp( 6 );
+                            aStatusbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+                            aStatusbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+                            aStatusbarItemProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_OFFSET ));
+                            aStatusbarItemProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
+                            aStatusbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_WIDTH ));
+                            aStatusbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
 
-                    aStatusbarItemProp[0].Value = makeAny( aCommandURL );
-                    aStatusbarItemProp[1].Value = makeAny( aHelpURL );
-                    aStatusbarItemProp[2].Value = makeAny( nOffset );
-                    aStatusbarItemProp[3].Value = makeAny( nItemBits );
-                    aStatusbarItemProp[4].Value = makeAny( nWidth );
-                    aStatusbarItemProp[5].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
+                            aStatusbarItemProp[0].Value = makeAny( aCommandURL );
+                            aStatusbarItemProp[1].Value = makeAny( aHelpURL );
+                            aStatusbarItemProp[2].Value = makeAny( nOffset );
+                            aStatusbarItemProp[3].Value = makeAny( nItemBits );
+                            aStatusbarItemProp[4].Value = makeAny( nWidth );
+                            aStatusbarItemProp[5].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
 
-                    m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
-                }
+                            m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
+                       }
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
@@ -488,22 +494,25 @@ throw(  SAXException, RuntimeException )
                 m_bStatusBarItemStartFound = sal_False;
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::characters(const OUString& aChars)
+void SAL_CALL OReadStatusBarDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString& aWhitespaces)
+void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
-    const OUString& aTarget, const OUString& aData )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
@@ -623,7 +632,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     const rtl::OUString& rCommandURL,
-    const rtl::OUString& rHelpURL,
+    const rtl::OUString& /*rHelpURL*/,
     sal_Int16            nOffset,
     sal_Int16            nStyle,
     sal_Int16            nWidth )
