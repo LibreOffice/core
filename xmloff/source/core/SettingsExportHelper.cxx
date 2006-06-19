@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 14:57:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:04:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,8 @@ XMLSettingsExportHelper::XMLSettingsExportHelper(SvXMLExport& rTempExport)
 , msPrinterIndependentLayout( RTL_CONSTASCII_USTRINGPARAM( "PrinterIndependentLayout" ) )
 , msColorTableURL( RTL_CONSTASCII_USTRINGPARAM( "ColorTableURL" ) )
 , msLineEndTableURL( RTL_CONSTASCII_USTRINGPARAM( "LineEndTableURL" ) )
-, msDashTableURL( RTL_CONSTASCII_USTRINGPARAM( "DashTableURL" ) )
 , msHatchTableURL( RTL_CONSTASCII_USTRINGPARAM( "HatchTableURL" ) )
+, msDashTableURL( RTL_CONSTASCII_USTRINGPARAM( "DashTableURL" ) )
 , msGradientTableURL( RTL_CONSTASCII_USTRINGPARAM( "GradientTableURL" ) )
 , msBitmapTableURL( RTL_CONSTASCII_USTRINGPARAM( "BitmapTableURL" ) )
 {
