@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryFolderName.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:02:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,20 @@
  ************************************************************************/
 #ifndef SVT_QUERYFOLDER_HXX
 #define SVT_QUERYFOLDER_HXX
+
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
+#endif
+
 //-------------------------------------------------------------------------
 namespace svtools {
 
