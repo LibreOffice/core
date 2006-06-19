@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:31:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 // include ---------------------------------------------------------------
 
 #include <svxenum.hxx>
-#pragma hdrstop
 
 #include "dialogs.hrc"
 #include "align.hrc"
@@ -250,10 +249,10 @@ void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
     UpdateEnableControls();
 }
 
-int AlignmentTabPage::DeactivatePage( SfxItemSet* pSet )
+int AlignmentTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
