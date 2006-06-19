@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:42:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_CHECKLBX_CXX
 
