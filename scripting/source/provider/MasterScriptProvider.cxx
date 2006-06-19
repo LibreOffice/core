@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:29:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ void MasterScriptProvider::createPkgProvider()
     }
     catch ( Exception& e )
     {
-        e;
+        (void)e;
         OSL_TRACE("Exception creating MasterScriptProvider for uno_packages in context %s: %s",
                 ::rtl::OUStringToOString( m_sCtxString,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer,
@@ -248,9 +248,6 @@ throw ( provider::ScriptFrameworkErrorException,
             OUSTR( "MasterScriptProvider not initialised" ), Reference< XInterface >(),
             scriptURI, OUSTR(""),
             provider::ScriptFrameworkErrorType::UNKNOWN );
-        throw RuntimeException(
-            OUSTR( "MasterScriptProvider::getScript(), service object not initialised properly." ),
-            Reference< XInterface >() );
     }
 
     // need to get the language from the string
@@ -367,12 +364,12 @@ throw ( provider::ScriptFrameworkErrorException,
     }
     else
     {
-        Reference< provider::XScriptProviderFactory > xFac(
+        Reference< provider::XScriptProviderFactory > xFac_(
             m_xContext->getValueByName(
                 OUSTR( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
         Reference< provider::XScriptProvider > xSP(
-            xFac->createScriptProvider( makeAny( location ) ), UNO_QUERY_THROW );
+            xFac_->createScriptProvider( makeAny( location ) ), UNO_QUERY_THROW );
         xScript = xSP->getScript( scriptURI );
     }
 
@@ -666,6 +663,9 @@ MasterScriptProvider::removeByName( const ::rtl::OUString& Name ) throw ( contai
 void SAL_CALL
 MasterScriptProvider::replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
+    (void)aName;
+    (void)aElement;
+
     // TODO needs implementing
     if ( true )
     {
@@ -677,6 +677,8 @@ MasterScriptProvider::replaceByName( const ::rtl::OUString& aName, const Any& aE
 Any SAL_CALL
 MasterScriptProvider::getByName( const ::rtl::OUString& aName ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
+    (void)aName;
+
     // TODO needs to be implemented
     Any result;
     if ( true )
@@ -959,6 +961,7 @@ extern "C"
     void SAL_CALL component_getImplementationEnvironment(
             const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
     {
+        (void)ppEnv;
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
