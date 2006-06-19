@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderconn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:38:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ private:
 
 bool FrameSelectorWrapper::IsControlDontKnow() const
 {
-    return GetControl().GetBorderState( meBorder ) == FRAMESTATE_DONTCARE;
+    return GetControl().GetFrameBorderState( meBorder ) == FRAMESTATE_DONTCARE;
 }
 
 void FrameSelectorWrapper::SetControlDontKnow( bool bSet )
@@ -115,7 +115,7 @@ void FrameSelectorWrapper::SetControlDontKnow( bool bSet )
 
 const SvxBorderLine* FrameSelectorWrapper::GetControlValue() const
 {
-    return GetControl().GetBorderStyle( meBorder );
+    return GetControl().GetFrameBorderStyle( meBorder );
 }
 
 void FrameSelectorWrapper::SetControlValue( const SvxBorderLine* pLine )
@@ -308,8 +308,8 @@ sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
     return new FrameLineConnection( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
 }
 
-sfx::ItemConnectionBase* CreateFrameBoxConnection( USHORT nBoxSlot, USHORT nBoxInfoSlot,
-        FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
+sfx::ItemConnectionBase* CreateFrameBoxConnection( USHORT /*nBoxSlot*/, USHORT /*nBoxInfoSlot*/,
+        FrameSelector& /*rFrameSel*/, FrameBorderType /*eBorder*/, sfx::ItemConnFlags /*nFlags*/ )
 {
     DBG_ERRORFILE( "svx::CreateFrameBoxConnection - not implemented" );
     return 0;
