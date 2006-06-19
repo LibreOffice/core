@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:57:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _SFXRECTITEM_HXX
 #include <svtools/rectitem.hxx>
 #endif
-#pragma hdrstop
 
 #define ITEMID_LRSPACE  0
 #define ITEMID_ULSPACE  0
@@ -60,8 +59,8 @@
 
 // class SvxRulerItem ----------------------------------------------------
 
-SvxRulerItem::SvxRulerItem(USHORT nId, SvxRuler &rRul, SfxBindings &rBindings)
-: SfxControllerItem(nId, rBindings),
+SvxRulerItem::SvxRulerItem(USHORT _nId, SvxRuler &rRul, SfxBindings &rBindings)
+: SfxControllerItem(_nId, rBindings),
   rRuler(rRul)
 {
 }
