@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlxthdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:59:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,7 +437,7 @@ extern "C" STDAPI DllCanUnloadNow(void)
     return S_OK;
 }
 
-BOOL WINAPI DllMain(HINSTANCE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
+BOOL WINAPI DllMain(HINSTANCE hInst, ULONG /*ul_reason_for_call*/, LPVOID /*lpReserved*/)
 {
     g_hModule = hInst;
     return TRUE;
