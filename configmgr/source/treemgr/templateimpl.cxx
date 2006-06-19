@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:34:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,13 +99,13 @@ UnoType TemplateName::resolveSimpleTypeName(Name const& aName)
 
 Name TemplateName::makeNativeTypeModuleName()
 {
-    OUString aModuleName = TEMPLATE_MODULE_NATIVE_VALUE;
+    OUString aModuleName( TEMPLATE_MODULE_NATIVE_VALUE );
     return makeName(aModuleName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
 Name TemplateName::makeLocalizedTypeModuleName()
 {
-    OUString aModuleName = TEMPLATE_MODULE_LOCALIZED_VALUE;
+    OUString aModuleName( TEMPLATE_MODULE_LOCALIZED_VALUE );
     return makeName(aModuleName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
@@ -252,6 +252,9 @@ namespace
         UnoType type;
 
         TypeDetector() : result(NotFound), type() {}
+
+       protected:
+            using SetVisitor::handle;
 
     private: // NodeAction implementation
         Result handle(ValueNodeAccess const& _aValueNode);
@@ -413,6 +416,7 @@ namespace
 //-----------------------------------------------------------------------------
     TypeDetector::Result TypeDetector::handle(NodeAccessRef const& _aNonValueNode)
     {
+            { (void)_aNonValueNode; }
         OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValueNode),"Value node dipatched to wrong handler");
         switch (this->result) // transition depends on previous state
         {
