@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexSimpleEntryContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:07:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,13 +93,12 @@ XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     const OUString& rEntry,
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rTemplateContext(rTemplate),
-        rEntryType(rEntry),
-        sCharStyleName(),
-        bCharStyleNameOK(sal_False),
-        nValues(1)
+    const OUString& rLocalName )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   rEntryType(rEntry)
+,   bCharStyleNameOK(sal_False)
+,   rTemplateContext(rTemplate)
+,   nValues(1)
 {
 }
 
