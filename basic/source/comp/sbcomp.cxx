@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbcomp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#pragma hdrstop
 #include <sbx.hxx>
 #include "sbcomp.hxx"
 #include "image.hxx"
@@ -147,9 +143,9 @@ BOOL SbModule::Compile()
         // #i31510 Init other libs only if Basic isn't running
         if( pINST == NULL )
         {
-            SbxObject* pParent = pBasic->GetParent();
-            if( pParent )
-                pBasic = PTR_CAST(StarBASIC,pParent);
+            SbxObject* pParent_ = pBasic->GetParent();
+            if( pParent_ )
+                pBasic = PTR_CAST(StarBASIC,pParent_);
             if( pBasic )
                 pBasic->ClearAllModuleVars();
         }
