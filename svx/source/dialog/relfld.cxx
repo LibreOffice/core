@@ -4,9 +4,9 @@
  *
  *  $RCSfile: relfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:56:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
-
-#pragma hdrstop
 
 #include <tools/ref.hxx>
 #include "relfld.hxx"
@@ -145,11 +143,7 @@ void SvxRelativeField::SetRelative( BOOL bNewRelative )
     {
         bRelative = FALSE;
         SetDecimalDigits( 2 );
-#if SUPD>629
         SetMin( bNegativeEnabled ? -9999 : 0 );
-#else
-        SetMin( 0 );
-#endif
         SetMax( 9999 );
         SetUnit( FUNIT_CM );
     }
