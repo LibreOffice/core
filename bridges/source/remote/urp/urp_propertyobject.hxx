@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_propertyobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:48:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ public:
             }
         }
 
-    void SAL_CALL thisDispatch( typelib_TypeDescription * pMemberType,
+    void SAL_CALL thisDispatch( typelib_TypeDescription const * pMemberType,
                                 void * pReturn,
                                 void * pArgs[],
                                 uno_Any ** ppException );
@@ -129,31 +129,6 @@ protected:
     void SAL_CALL     implGetProperties( uno_Sequence **ppReturnValue );
     sal_Int32 SAL_CALL implRequestChange( sal_Int32 nRandomNumber, uno_Any **ppException );
     void SAL_CALL     implCommitChange( uno_Sequence *seqOfProperties, uno_Any **ppException );
-
-
-    // static helper methods
-public:
-    static void SAL_CALL staticAcquire( remote_Interface *pRemoteI )
-        {
-            PropertyObject *pProperties = (PropertyObject *) pRemoteI;
-            pProperties->thisAcquire();
-        }
-
-    static void SAL_CALL staticRelease( remote_Interface *pRemoteI )
-        {
-            PropertyObject *pProperties = (PropertyObject *) pRemoteI;
-            pProperties->thisRelease();
-        }
-
-    static void SAL_CALL staticDispatch( remote_Interface * pRemoteI,
-                                         typelib_TypeDescription * pMemberType,
-                                         void * pReturn,
-                                         void * pArgs[],
-                                         uno_Any ** ppException )
-        {
-            PropertyObject *pProperties = (PropertyObject *) pRemoteI;
-            pProperties->thisDispatch( pMemberType, pReturn, pArgs, ppException );
-        }
 };
 
 }
