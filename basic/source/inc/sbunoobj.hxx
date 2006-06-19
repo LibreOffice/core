@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:30:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #endif
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 using namespace com::sun::star::uno;
@@ -97,7 +97,7 @@ class SbUnoObject: public SbxObject
 
 public:
     TYPEINFO();
-    SbUnoObject( const String& aName, const Any& aUnoObj_ );
+    SbUnoObject( const String& aName_, const Any& aUnoObj_ );
     ~SbUnoObject();
 
     // #76470 Introspection on Demand durchfuehren
@@ -140,7 +140,7 @@ class SbUnoMethod : public SbxMethod
 public:
     TYPEINFO();
 
-    SbUnoMethod( const String& aName, SbxDataType eSbxType, Reference< XIdlMethod > xUnoMethod_,
+    SbUnoMethod( const String& aName_, SbxDataType eSbxType, Reference< XIdlMethod > xUnoMethod_,
         bool bInvocation );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo();
@@ -158,15 +158,15 @@ class SbUnoProperty : public SbxProperty
 
     // Daten der Uno-Property
     Property aUnoProp;
-    UINT32 nId;
+    INT32 nId;
 
     bool mbInvocation;      // Property is based on invocation
 
     virtual ~SbUnoProperty();
 public:
     TYPEINFO();
-    SbUnoProperty( const String& aName, SbxDataType eSbxType,
-        const Property& aUnoProp_, UINT32 nId_, bool bInvocation );
+    SbUnoProperty( const String& aName_, SbxDataType eSbxType,
+        const Property& aUnoProp_, INT32 nId_, bool bInvocation );
 
     bool isInvocationBased( void )
         { return mbInvocation; }
@@ -187,11 +187,11 @@ class SbUnoClass: public SbxObject
 
 public:
     TYPEINFO();
-    SbUnoClass( const String& aName )
-        : SbxObject( aName )
+    SbUnoClass( const String& aName_ )
+        : SbxObject( aName_ )
     {}
-    SbUnoClass( const String& aName, const Reference< XIdlClass >& xClass_ )
-        : SbxObject( aName )
+    SbUnoClass( const String& aName_, const Reference< XIdlClass >& xClass_ )
+        : SbxObject( aName_ )
         , m_xClass( xClass_ )
     {}
     //~SbUnoClass();
@@ -274,9 +274,9 @@ class BasicCollection : public SbxObject
                              const SfxHint& rHint, const TypeId& rHintType );
     INT32 implGetIndex( SbxVariable* pIndexVar );
     INT32 implGetIndexForName( const String& rName );
-    void CollAdd( SbxArray* pPar );
-    void CollItem( SbxArray* pPar );
-    void CollRemove( SbxArray* pPar );
+    void CollAdd( SbxArray* pPar_ );
+    void CollItem( SbxArray* pPar_ );
+    void CollRemove( SbxArray* pPar_ );
 
 public:
     TYPEINFO();
