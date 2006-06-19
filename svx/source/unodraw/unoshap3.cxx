@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:30:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@
 #include "poly3d.hxx"
 #include "svdmodel.hxx"
 
+using ::rtl::OUString;
 using namespace ::vos;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -95,7 +95,8 @@ using namespace ::com::sun::star::container;
 
 //----------------------------------------------------------------------
 Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT) ), pPage( pDrawPage )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT) )
+,   mxPage( pDrawPage )
 {
 }
 
@@ -108,12 +109,11 @@ Svx3DSceneObject::~Svx3DSceneObject() throw()
 void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 {
     SvxShape::Create( pNewObj, pNewPage );
-    pPage = pNewPage;
+    mxPage = pNewPage;
 }
 
 //----------------------------------------------------------------------
-uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
 
@@ -121,7 +121,7 @@ uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType )
     else QUERYINT( container::XIndexAccess );
     else QUERYINT( container::XElementAccess );
     else
-        SvxShape::queryAggregation( rType, aAny );
+        return SvxShape::queryAggregation( rType );
 
     return aAny;
 }
@@ -169,18 +169,17 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     OGuard aGuard( Application::GetSolarMutex() );
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject == NULL || pPage == NULL || pShape == NULL || NULL != pShape->GetSdrObject() )
+    if(!mpObj.is() || !mxPage.is() || pShape == NULL || NULL != pShape->GetSdrObject() )
         throw uno::RuntimeException();
 
-    SdrObject* pSdrShape = pPage->_CreateSdrObject( xShape );
+    SdrObject* pSdrShape = mxPage->_CreateSdrObject( xShape );
     if( pSdrShape->ISA(E3dObject) )
     {
-        pObject->GetSubList()->NbcInsertObject( pSdrShape );
+        mpObj->GetSubList()->NbcInsertObject( pSdrShape );
 
         if(pShape)
-            pShape->Create( pSdrShape, pPage );
+            pShape->Create( pSdrShape, mxPage.get()  );
     }
     else
     {
@@ -189,8 +188,8 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
         throw uno::RuntimeException();
     }
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
@@ -200,13 +199,12 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
     OGuard aGuard( Application::GetSolarMutex() );
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject == NULL || pShape == NULL)
+    if(!mpObj.is() || pShape == NULL)
         throw uno::RuntimeException();
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
-    if(pSdrShape == NULL || pSdrShape->GetObjList()->GetOwnerObj() != pObject)
+    if(pSdrShape == NULL || pSdrShape->GetObjList()->GetOwnerObj() != mpObj.get())
     {
         throw uno::RuntimeException();
     }
@@ -240,12 +238,11 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
     sal_Int32 nRetval = 0;
 
-    if(pObject && pObject->ISA(E3dPolyScene) && pObject->GetSubList())
-        nRetval = pObject->GetSubList()->GetObjCount();
+    if(mpObj.is() && mpObj->ISA(E3dPolyScene) && mpObj->GetSubList())
+        nRetval = mpObj->GetSubList()->GetObjCount();
     return nRetval;
 }
 
@@ -255,15 +252,14 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if( pObject == NULL || pObject->GetSubList() == NULL )
+    if( !mpObj.is() || mpObj->GetSubList() == NULL )
         throw uno::RuntimeException();
 
-    if( pObject->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
+    if( mpObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
         throw lang::IndexOutOfBoundsException();
 
-    SdrObject* pDestObj = pObject->GetSubList()->GetObj( Index );
+    SdrObject* pDestObj = mpObj->GetSubList()->GetObj( Index );
     if(pDestObj == NULL)
         throw lang::IndexOutOfBoundsException();
 
@@ -287,9 +283,8 @@ sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    return pObject && pObject->GetSubList() && (pObject->GetSubList()->GetObjCount() > 0);
+    return mpObj.is() && mpObj->GetSubList() && (mpObj->GetSubList()->GetObjCount() > 0);
 }
 
 //----------------------------------------------------------------------
@@ -313,12 +308,12 @@ sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
         aMat[3][1] = m.Line4.Column2; \
         aMat[3][2] = m.Line4.Column3; \
         aMat[3][3] = m.Line4.Column4; \
-        ((E3dObject*)pObject)->SetTransform(aMat); \
+        ((E3dObject*)mpObj.get())->SetTransform(aMat); \
     }
 
 #define OBJECT_TO_HOMOGEN_MATRIX \
     drawing::HomogenMatrix aHomMat; \
-    const Matrix4D& rMat = ((E3dObject*)pObject)->GetTransform(); \
+    const Matrix4D& rMat = ((E3dObject*)mpObj.get())->GetTransform(); \
     aHomMat.Line1.Column1 = rMat[0][0]; \
     aHomMat.Line1.Column2 = rMat[0][1]; \
     aHomMat.Line1.Column3 = rMat[0][2]; \
@@ -352,19 +347,16 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObject
-        && pObject->ISA(E3dScene)
-        && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_CAMERA_GEOMETRY)) )
+    else if(mpObj.is() && mpObj->ISA(E3dScene) && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_CAMERA_GEOMETRY)) )
     {
         // set CameraGeometry at scene
-        E3dScene* pScene = (E3dScene*)pObject;
+        E3dScene* pScene = (E3dScene*)mpObj.get();
         drawing::CameraGeometry aCamGeo;
 
         if(aValue >>= aCamGeo)
@@ -466,19 +458,16 @@ uno::Any SAL_CALL Svx3DSceneObject::getPropertyValue( const OUString& PropertyNa
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Objekt in eine homogene 4x4 Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObject
-        && pObject->ISA(E3dScene)
-        && PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_CAMERA_GEOMETRY)) )
+    else if(mpObj.is() && mpObj->ISA(E3dScene) && PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_CAMERA_GEOMETRY)) )
     {
         // get CameraGeometry from scene
-        E3dScene* pScene = (E3dScene*)pObject;
+        E3dScene* pScene = (E3dScene*)mpObj.get();
         drawing::CameraGeometry aCamGeo;
 
         // fill Vectors from scene camera
@@ -535,40 +524,39 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
     {
         // Position in das Objekt packen
         drawing::Position3D aUnoPos;
         if( aValue >>= aUnoPos )
         {
             Vector3D aPos(aUnoPos.PositionX, aUnoPos.PositionY, aUnoPos.PositionZ);
-            ((E3dCubeObj*)pObject)->SetCubePos(aPos);
+            ((E3dCubeObj*)mpObj.get())->SetCubePos(aPos);
         }
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
     {
         // Groesse in das Objekt packen
         drawing::Direction3D aDirection;
         if( aValue >>= aDirection )
         {
             Vector3D aSize(aDirection.DirectionX, aDirection.DirectionY, aDirection.DirectionZ);
-            ((E3dCubeObj*)pObject)->SetCubeSize(aSize);
+            ((E3dCubeObj*)mpObj.get())->SetCubeSize(aSize);
         }
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
     {
         // sal_Bool bPosIsCenter in das Objekt packen
         if( aValue.getValueType() == ::getCppuBooleanType() )
         {
             sal_Bool bNew = *(sal_Bool*)aValue.getValue();
-            ((E3dCubeObj*)pObject)->SetPosIsCenter(bNew);
+            ((E3dCubeObj*)mpObj.get())->SetPosIsCenter(bNew);
         }
     }
     else
@@ -582,17 +570,16 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
     {
         // Position packen
-        const Vector3D& rPos = ((E3dCubeObj*)pObject)->GetCubePos();
+        const Vector3D& rPos = ((E3dCubeObj*)mpObj.get())->GetCubePos();
         drawing::Position3D aPos;
 
         aPos.PositionX = rPos.X();
@@ -601,10 +588,10 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
 
         return uno::Any( &aPos, ::getCppuType((const drawing::Position3D*)0) );
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
     {
         // Groesse packen
-        const Vector3D& rSize = ((E3dCubeObj*)pObject)->GetCubeSize();
+        const Vector3D& rSize = ((E3dCubeObj*)mpObj.get())->GetCubeSize();
         drawing::Direction3D aDir;
 
         aDir.DirectionX = rSize.X();
@@ -613,10 +600,10 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
 
         return uno::Any( &aDir, ::getCppuType((const drawing::Direction3D*)0) );
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
     {
         // sal_Bool bPosIsCenter packen
-        sal_Bool bIsCenter = ((E3dCubeObj*)pObject)->GetPosIsCenter();
+        sal_Bool bIsCenter = ((E3dCubeObj*)mpObj.get())->GetPosIsCenter();
         return uno::Any( &bIsCenter, ::getCppuBooleanType() );
     }
     else
@@ -655,31 +642,30 @@ void SAL_CALL Svx3DSphereObject::setPropertyValue( const OUString& aPropertyName
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)))
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)))
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
     {
         // Position in das Objekt packen
         drawing::Position3D aUnoPos;
         if( aValue >>= aUnoPos )
         {
             Vector3D aPos(aUnoPos.PositionX, aUnoPos.PositionY, aUnoPos.PositionZ);
-            ((E3dSphereObj*)pObject)->SetCenter(aPos);
+            ((E3dSphereObj*)mpObj.get())->SetCenter(aPos);
         }
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
     {
         // Groesse in das Objekt packen
         drawing::Direction3D aDir;
         if( aValue >>= aDir )
         {
             Vector3D aPos(aDir.DirectionX, aDir.DirectionY, aDir.DirectionZ);
-            ((E3dSphereObj*)pObject)->SetSize(aPos);
+            ((E3dSphereObj*)mpObj.get())->SetSize(aPos);
         }
     }
     else
@@ -693,17 +679,16 @@ uno::Any SAL_CALL Svx3DSphereObject::getPropertyValue( const OUString& aProperty
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)))
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)))
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
     {
         // Position packen
-        const Vector3D& rPos = ((E3dSphereObj*)pObject)->Center();
+        const Vector3D& rPos = ((E3dSphereObj*)mpObj.get())->Center();
         drawing::Position3D aPos;
 
         aPos.PositionX = rPos.X();
@@ -712,10 +697,10 @@ uno::Any SAL_CALL Svx3DSphereObject::getPropertyValue( const OUString& aProperty
 
         return uno::Any( &aPos, ::getCppuType((const drawing::Position3D*)0) );
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
     {
         // Groesse packen
-        const Vector3D& rSize = ((E3dSphereObj*)pObject)->Size();
+        const Vector3D& rSize = ((E3dSphereObj*)mpObj.get())->Size();
         drawing::Direction3D aDir;
 
         aDir.DirectionX = rSize.X();
@@ -842,14 +827,13 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
@@ -857,17 +841,17 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
         // #105127# SetPolyPoly3D sets the Svx3DVerticalSegmentsItem to the number
         // of points of the polygon. Thus, value gets lost. To avoid this, rescue
         // item here and re-set after setting the polygon.
-        const sal_uInt32 nPrevVerticalSegs(((E3dLatheObj*)pObject)->GetVerticalSegments());
+        const sal_uInt32 nPrevVerticalSegs(((E3dLatheObj*)mpObj.get())->GetVerticalSegments());
 
         // Polygon setzen
-        ((E3dLatheObj*)pObject)->SetPolyPoly3D(aNewPolyPolygon);
+        ((E3dLatheObj*)mpObj.get())->SetPolyPoly3D(aNewPolyPolygon);
 
-        const sal_uInt32 nPostVerticalSegs(((E3dLatheObj*)pObject)->GetVerticalSegments());
+        const sal_uInt32 nPostVerticalSegs(((E3dLatheObj*)mpObj.get())->GetVerticalSegments());
 
         if(nPrevVerticalSegs != nPostVerticalSegs)
         {
             // restore the vertical segment count
-            ((E3dLatheObj*)pObject)->SetMergedItem(Svx3DVerticalSegmentsItem(nPrevVerticalSegs));
+            ((E3dLatheObj*)mpObj.get())->SetMergedItem(Svx3DVerticalSegmentsItem(nPrevVerticalSegs));
         }
     }
     else
@@ -881,16 +865,15 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         drawing::HomogenMatrix aHomMat;
-        Matrix4D aMat = ((E3dObject*)pObject)->GetTransform();
+        Matrix4D aMat = ((E3dObject*)mpObj.get())->GetTransform();
 
         // test for transformed PolyPolygon3D
-        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)pObject)->GetExtrudePolygon();
+        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
         if(rPolyPoly.Count() && rPolyPoly[0].GetPointCount())
         {
             const Vector3D& rFirstPoint = rPolyPoly[0][0];
@@ -928,9 +911,9 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
 
         return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
-        const PolyPolygon3D& rPolyPoly = ((E3dLatheObj*)pObject)->GetPolyPoly3D();
+        const PolyPolygon3D& rPolyPoly = ((E3dLatheObj*)mpObj.get())->GetPolyPoly3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
@@ -969,20 +952,19 @@ void SAL_CALL Svx3DExtrudeObject::setPropertyValue( const OUString& aPropertyNam
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
 
         // Polygon setzen
-        ((E3dExtrudeObj*)pObject)->SetExtrudePolygon(aNewPolyPolygon);
+        ((E3dExtrudeObj*)mpObj.get())->SetExtrudePolygon(aNewPolyPolygon);
     }
     else
     {
@@ -995,16 +977,15 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         drawing::HomogenMatrix aHomMat;
-        Matrix4D aMat = ((E3dObject*)pObject)->GetTransform();
+        Matrix4D aMat = ((E3dObject*)mpObj.get())->GetTransform();
 
         // test for transformed PolyPolygon3D
-        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)pObject)->GetExtrudePolygon();
+        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
         if(rPolyPoly.Count() && rPolyPoly[0].GetPointCount())
         {
             const Vector3D& rFirstPoint = rPolyPoly[0][0];
@@ -1042,10 +1023,10 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
 
         return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)pObject)->GetExtrudePolygon();
+        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
@@ -1085,44 +1066,43 @@ void SAL_CALL Svx3DPolygonObject::setPropertyValue( const OUString& aPropertyNam
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
 
         // Polygon setzen
-        ((E3dPolygonObj*)pObject)->SetPolyPolygon3D(aNewPolyPolygon);
+        ((E3dPolygonObj*)mpObj.get())->SetPolyPolygon3D(aNewPolyPolygon);
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
     {
         // Normalendefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
 
         // Polygon setzen
-        ((E3dPolygonObj*)pObject)->SetPolyNormals3D(aNewPolyPolygon);
+        ((E3dPolygonObj*)mpObj.get())->SetPolyNormals3D(aNewPolyPolygon);
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
     {
         // Texturdefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
 
         // Polygon setzen
-        ((E3dPolygonObj*)pObject)->SetPolyTexture3D(aNewPolyPolygon);
+        ((E3dPolygonObj*)mpObj.get())->SetPolyTexture3D(aNewPolyPolygon);
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
     {
         // sal_Bool bLineOnly in das Objekt packen
         if( aValue.getValueType() == ::getCppuBooleanType() )
         {
             sal_Bool bNew = *(sal_Bool*)aValue.getValue();
-            ((E3dPolygonObj*)pObject)->SetLineOnly(bNew);
+            ((E3dPolygonObj*)mpObj.get())->SetLineOnly(bNew);
         }
     }
     else
@@ -1136,38 +1116,37 @@ uno::Any SAL_CALL Svx3DPolygonObject::getPropertyValue( const OUString& aPropert
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)pObject)->GetPolyPolygon3D();
+        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyPolygon3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
     {
         // Normalendefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)pObject)->GetPolyNormals3D();
+        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyNormals3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
     {
         // Texturdefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)pObject)->GetPolyTexture3D();
+        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyTexture3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
-    else if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
+    else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
     {
         // sal_Bool bLineOnly packen
-        sal_Bool bNew = ((E3dPolygonObj*)pObject)->GetLineOnly();
+        sal_Bool bNew = ((E3dPolygonObj*)mpObj.get())->GetLineOnly();
         return uno::Any( &bNew, ::getCppuBooleanType() );
     }
     else
