@@ -4,9 +4,9 @@
  *
  *  $RCSfile: openclose.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:55:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,14 +66,19 @@ enum E_ShareMode
     These combinations are the only ones, guaranteed to be supported.
 */
 const UINT32    CFM_RW      = rwReadWrite;
-const UINT32    CFM_CREATE  = rwReadWrite | omCreate;
-const UINT32    CFM_READ    = rwRead | omCreateNot | shmShareRead;
+const UINT32    CFM_CREATE  =
+    static_cast< UINT32 >(rwReadWrite) | static_cast< UINT32 >(omCreate);
+const UINT32    CFM_READ    =
+    static_cast< UINT32 >(rwRead) | static_cast< UINT32 >(omCreateNot) |
+    static_cast< UINT32 >(shmShareRead);
 
 
 
 class OpenClose
 {
   public:
+    virtual ~OpenClose() {}
+
     bool                open(
                             UINT32          in_nOpenModeInfo = 0 ); /// Combination of values of E_RWMode and E_ShareMode und E_OpenMode. 0 := Keep existing mode.
     void                close();
