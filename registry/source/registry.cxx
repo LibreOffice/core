@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:16:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #ifndef _REGKEY_HXX_
 #include "keyimpl.hxx"
 #endif
+#include "regkey.hxx"
 
 #if defined(WIN32) || defined(WNT) || defined(__OS2__)
 #include <io.h>
@@ -92,7 +93,9 @@ OString getTempName()
     if ( uTmpPattern.getLength() )
     {
         OString aOStr( OUStringToOString(uTmpPattern, RTL_TEXTENCODING_UTF8) );
-        OSL_ASSERT( sizeof(tmpPattern) > aOStr.getLength() );
+        OSL_ASSERT(
+            sizeof(tmpPattern)
+            > sal::static_int_cast< sal_uInt32 >(aOStr.getLength()) );
         strncpy(tmpPattern, aOStr.getStr(), sizeof(tmpPattern)-1);
     }
 
@@ -120,6 +123,8 @@ OString getTempName()
 
     return OString(pTmpName);
 }
+
+extern "C" {
 
 //*********************************************************************
 //  acquire
@@ -301,8 +306,8 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
         if (!pReg->isOpen())
             return REG_INVALID_REGISTRY;
 
-        RegError ret = REG_NO_ERROR;
-        if (!(ret = pReg->destroyRegistry(registryName)))
+        RegError ret = pReg->destroyRegistry(registryName);
+        if (!ret)
         {
             if (!registryName->length)
             {
@@ -541,36 +546,7 @@ static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
 //*********************************************************************
 //  initRegistry_Api
 //
-void REGISTRY_CALLTYPE acquireKey(RegKeyHandle);
-void REGISTRY_CALLTYPE releaseKey(RegKeyHandle);
-sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle);
-RegError REGISTRY_CALLTYPE getKeyName(RegKeyHandle, rtl_uString**);
-RegError REGISTRY_CALLTYPE createKey(RegKeyHandle, rtl_uString*, RegKeyHandle*);
-RegError REGISTRY_CALLTYPE openKey(RegKeyHandle, rtl_uString*, RegKeyHandle*);
-RegError REGISTRY_CALLTYPE openSubKeys(RegKeyHandle, rtl_uString*, RegKeyHandle**, sal_uInt32*);
-RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle*, sal_uInt32);
-RegError REGISTRY_CALLTYPE deleteKey(RegKeyHandle, rtl_uString*);
-RegError REGISTRY_CALLTYPE closeKey(RegKeyHandle);
-RegError REGISTRY_CALLTYPE setValue(RegKeyHandle, rtl_uString*, RegValueType, RegValue, sal_uInt32);
-RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle, rtl_uString*, sal_Int32*, sal_uInt32);
-RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle, rtl_uString*, sal_Char**, sal_uInt32);
-RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle, rtl_uString*, sal_Unicode**, sal_uInt32);
-RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle, rtl_uString*, RegValueType*, sal_uInt32*);
-RegError REGISTRY_CALLTYPE getValue(RegKeyHandle, rtl_uString*, RegValue);
-RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle, rtl_uString*, sal_Int32**, sal_uInt32*);
-RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle, rtl_uString*, sal_Char***, sal_uInt32*);
-RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
-RegError REGISTRY_CALLTYPE freeValueList(RegValueType, RegValue, sal_uInt32);
-RegError REGISTRY_CALLTYPE createLink(RegKeyHandle, rtl_uString*, rtl_uString*);
-RegError REGISTRY_CALLTYPE deleteLink(RegKeyHandle, rtl_uString*);
-RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle, rtl_uString*, RegKeyType*);
-RegError REGISTRY_CALLTYPE getLinkTarget(RegKeyHandle, rtl_uString*, rtl_uString**);
-RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle, rtl_uString*, sal_Bool, rtl_uString**);
-RegError REGISTRY_CALLTYPE getKeyNames(RegKeyHandle, rtl_uString*, rtl_uString***, sal_uInt32*);
-RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString**, sal_uInt32);
-
-
-extern "C" Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
+Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
 {
     static Registry_Api aApi= {&acquire,
                                &release,
@@ -616,6 +592,7 @@ extern "C" Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
     return (&aApi);
 }
 
+}
 
 //*********************************************************************
 //  reg_loadRegKey
