@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarmanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:46:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         virtual ~StatusBarManager();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         StatusBar* GetStatusBar() const;
 
