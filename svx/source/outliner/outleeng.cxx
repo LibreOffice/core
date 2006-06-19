@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:25:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 #include <outl_pch.hxx>
-
-#pragma hdrstop
 
 #define _OUTLINER_CXX
 #include <outliner.hxx>
