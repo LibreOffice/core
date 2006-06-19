@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 15:48:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ class XMLElement;
 typedef void (*Sigfunc)(int);
 Sigfunc signal(int, Sigfunc*);
 */
-typedef void Sigfunc(int);
-Sigfunc* signal(int, Sigfunc*);
+//typedef void Sigfunc(int);
+//Sigfunc* signal(int, Sigfunc*);
 
 using namespace ::rtl;
 using namespace std;
@@ -114,7 +114,7 @@ public:
     }
 };
 
-DECLARE_LIST( XMLAttributeList, XMLAttribute * );
+DECLARE_LIST( XMLAttributeList, XMLAttribute * )
 
 //-------------------------------------------------------------------------
 
@@ -124,12 +124,12 @@ class XMLNode
 {
 protected:
     XMLNode() {}
-    XMLNode( const XMLNode& obj);
-    XMLNode& operator=(const XMLNode& obj);
+    //XMLNode( const XMLNode& obj);
+    //XMLNode& operator=(const XMLNode& obj);
 
 public:
     virtual USHORT GetNodeType() = 0;
-    virtual ~XMLNode(){};
+    virtual ~XMLNode() {}
 };
 
 //-------------------------------------------------------------------------
@@ -155,7 +155,7 @@ public:
     virtual ~XMLChildNode(){};
 };
 
-DECLARE_LIST( XMLChildNodeList, XMLChildNode * );
+DECLARE_LIST( XMLChildNodeList, XMLChildNode * )
 
 //-------------------------------------------------------------------------
 
@@ -200,7 +200,8 @@ public:
     void AddChild(
         XMLChildNode *pChild , int pos  /// the new child
     );
-    int GetPos( ByteString id );
+
+    virtual int GetPosition( ByteString id );
     int RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChilds();
 
@@ -212,7 +213,7 @@ public:
 
 //-------------------------------------------------------------------------
 
-DECLARE_LIST( XMLStringList, XMLElement* );
+DECLARE_LIST( XMLStringList, XMLElement* )
 
 /// Mapping numeric Language code <-> XML Element
 typedef std::hash_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
@@ -254,7 +255,7 @@ public:
     BOOL        Write( ByteString &rFilename );
     BOOL        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
-    bool        CheckExportStatus( XMLParentNode *pCur = NULL , int pos = 0 );
+    bool        CheckExportStatus( XMLParentNode *pCur = NULL );// , int pos = 0 );
 
     XMLFile&    operator=(const XMLFile& obj);
 
@@ -276,7 +277,7 @@ private:
     // DATA
     String      sFileName;
 
-    const ByteString ID,XML_LANG,OLDREF;
+    const ByteString ID,OLDREF,XML_LANG;
 
     //HashMap nodes_include,nodes_localize,nodes_print;
     TagMap      nodes_localize;
@@ -297,7 +298,7 @@ public:
     static void         UnQuotHTML  ( String &rString );
 
     /// Return the numeric iso language code
-    USHORT              GetLangByIsoLang( const ByteString &rIsoLang );
+    //USHORT                GetLangByIsoLang( const ByteString &rIsoLang );
 
     /// Return the alpha strings representation
     ByteString          GetIsoLangByIndex( USHORT nIndex );
@@ -349,8 +350,8 @@ public:
     XMLElement(){}
     XMLElement(
         const String &rName,    // the element name
-        XMLParentNode *pParent  // parent node of this element
-    ):          XMLParentNode( pParent ),
+        XMLParentNode *Parent   // parent node of this element
+    ):          XMLParentNode( Parent ),
                 sElementName( rName ),
                 pAttributes( NULL ),
                 project(""),
@@ -400,7 +401,7 @@ public:
     void SetPos             ( int nPos_in           ){ nPos = nPos_in;       }
     void SetOldRef          ( ByteString sOldRef_in ){ sOldRef = sOldRef_in; }
 
-    int        GetPos()         { return nPos;         }
+    virtual int        GetPos()         { return nPos;         }
     ByteString GetProject()     { return project;      }
     ByteString GetFileName()    { return filename;     }
     ByteString GetId()          { return id;           }
@@ -425,15 +426,15 @@ public:
     /// craete a data node
     XMLData(
         const String &rData,    // the initial data
-        XMLParentNode *pParent  // the parent node of this data, typically a element node
+        XMLParentNode *Parent   // the parent node of this data, typically a element node
     )
-                : XMLChildNode( pParent ), sData( rData ) , isNewCreated ( false ){}
+                : XMLChildNode( Parent ), sData( rData ) , isNewCreated ( false ){}
     XMLData(
         const String &rData,    // the initial data
-        XMLParentNode *pParent, // the parent node of this data, typically a element node
+        XMLParentNode *Parent,  // the parent node of this data, typically a element node
         bool newCreated
     )
-                : XMLChildNode( pParent ), sData( rData ) , isNewCreated ( newCreated ){}
+                : XMLChildNode( Parent ), sData( rData ) , isNewCreated ( newCreated ){}
 
     XMLData(const XMLData& obj);
 
@@ -467,9 +468,9 @@ public:
     /// create a comment node
     XMLComment(
         const String &rComment, // the comment
-        XMLParentNode *pParent  // the parent node of this comemnt, typically a element node
+        XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
-                : XMLChildNode( pParent ), sComment( rComment ) {}
+                : XMLChildNode( Parent ), sComment( rComment ) {}
 
     /// returns node type XML_NODE_TYPE_COMMENT
     virtual USHORT GetNodeType();
@@ -495,9 +496,9 @@ public:
     /// create a comment node
     XMLDefault(
         const String &rDefault, // the comment
-        XMLParentNode *pParent  // the parent node of this comemnt, typically a element node
+        XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
-                : XMLChildNode( pParent ), sDefault( rDefault ) {}
+                : XMLChildNode( Parent ), sDefault( rDefault ) {}
 
     XMLDefault(const XMLDefault& obj);
 
@@ -537,11 +538,13 @@ private:
     XMLParentNode *pCurNode;
     XMLData *pCurData;
 
+
     static void StartElementHandler( void *userData, const XML_Char *name, const XML_Char **atts );
     static void EndElementHandler( void *userData, const XML_Char *name );
     static void CharacterDataHandler( void *userData, const XML_Char *s, int len );
     static void CommentHandler( void *userData, const XML_Char *data );
     static void DefaultHandler( void *userData, const XML_Char *s, int len );
+
 
     void StartElement( const XML_Char *name, const XML_Char **atts );
     void EndElement( const XML_Char *name );
