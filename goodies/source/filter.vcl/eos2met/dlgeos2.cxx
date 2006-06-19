@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgeos2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:32:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 
 DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EMET, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
@@ -63,8 +64,7 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE ) ),
-                pMgr                ( rPara.pResMgr ),
-                rFltCallPara        ( rPara )
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
