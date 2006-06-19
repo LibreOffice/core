@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncnotification.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:04:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,19 +67,6 @@ namespace comphelper
     AnyEvent::AnyEvent()
         :m_refCount( 0 )
     {
-    }
-
-    //--------------------------------------------------------------------
-    AnyEvent::AnyEvent( const AnyEvent& _rSource )
-        :m_refCount( 0 )
-    {
-        *this = _rSource;
-    }
-
-    //--------------------------------------------------------------------
-    AnyEvent& AnyEvent::operator=( const AnyEvent& _rSource )
-    {
-        return *this;
     }
 
     //--------------------------------------------------------------------
