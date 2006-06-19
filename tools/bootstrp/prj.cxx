@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:31:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,44 +34,22 @@
  ************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include <sstring.hxx>
+#include "bootstrp/sstring.hxx"
 #include <vos/mutex.hxx>
 
 #include "stream.hxx"
 #include "geninfo.hxx"
-#include "prj.hxx"
-#include "inimgr.hxx"
-
-#pragma hdrstop
+#include "bootstrp/prj.hxx"
+#include "bootstrp/inimgr.hxx"
 
 //#define TEST  1
 
-#ifdef MAC
-#define putenv(x)
-#endif
-
-#if defined(DOS) || defined(WNT) || defined(OS2)
+#if defined WNT
 #define LIST_DELIMETER ';'
-#else
-#ifdef UNX
-#define LIST_DELIMETER ':'
-#else
-#ifdef MAC
-#define LIST_DELIMETER ','
-#endif
-#endif
-#endif
-
-#if defined(DOS) || defined(WNT) || defined(OS2) || defined(WIN)
 #define PATH_DELIMETER '\\'
-#else
-#ifdef UNX
+#elif defined UNX
+#define LIST_DELIMETER ':'
 #define PATH_DELIMETER '/'
-#else
-#ifdef MAC
-#define PATH_DELIMETER ':'
-#endif
-#endif
 #endif
 
 Link Star::aDBNotFoundHdl;
@@ -129,7 +107,6 @@ ByteString  SimpleConfig::GetNextLine()
 /*****************************************************************************/
 {
     ByteString aSecStr;
-    USHORT iret = 0;
     nLine++;
 
     aFileStream.ReadLine ( aTmpStr );
@@ -139,19 +116,10 @@ ByteString  SimpleConfig::GetNextLine()
     aTmpStr = aTmpStr.EraseTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND );
     int nLength = aTmpStr.Len();
-    USHORT nPos = 0;
     BOOL bFound = FALSE;
     ByteString aEraseString;
     for ( USHORT i = 0; i<= nLength; i++)
     {
-#ifdef MAC
-        if ( aTmpStr.GetChar( i ) == '"')
-        {
-            if ( bFound) bFound = FALSE;
-            else bFound = TRUE;
-            aTmpStr.SetChar( i, '\t' );
-        }
-#endif
         if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
             aTmpStr.SetChar( i, 0x09 );
     }
@@ -177,7 +145,6 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
     aTmpStr = aTmpStr.EraseTrailingChars();
 //  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
     int nLength = aTmpStr.Len();
-    USHORT nPos = 0;
     ByteString aEraseString;
     BOOL bFirstTab = TRUE;
     for ( USHORT i = 0; i<= nLength; i++)
@@ -295,7 +262,7 @@ ByteString CommandData::GetCommandTypeString()
 }
 
 /*****************************************************************************/
-CommandData* Prj::GetDirectoryList ( USHORT nWhatOS, USHORT nCommand )
+CommandData* Prj::GetDirectoryList ( USHORT, USHORT )
 /*****************************************************************************/
 {
     return (CommandData *)NULL;
@@ -306,8 +273,8 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 /*****************************************************************************/
 {
     CommandData *pData = NULL;
-    ULONG nCount = Count();
-    for ( ULONG i=0; i<nCount; i++ )
+    ULONG nObjCount = Count();
+    for ( ULONG i=0; i<nObjCount; i++ )
     {
         pData = GetObject(i);
         if ( pData->GetLogFile() == aLogFileName )
@@ -322,23 +289,23 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 
 /*****************************************************************************/
 Prj::Prj() :
-    pPrjDepList(0),
+    bVisited( FALSE ),
     pPrjInitialDepList(0),
-    bSorted( FALSE ),
+    pPrjDepList(0),
     bHardDependencies( FALSE ),
-    bVisited( FALSE )
+    bSorted( FALSE )
 /*****************************************************************************/
 {
 }
 
 /*****************************************************************************/
 Prj::Prj( ByteString aName ) :
+    bVisited( FALSE ),
     aProjectName( aName ),
-    pPrjDepList(0),
     pPrjInitialDepList(0),
-    bSorted( FALSE ),
+    pPrjDepList(0),
     bHardDependencies( FALSE ),
-    bVisited( FALSE )
+    bSorted( FALSE )
 /*****************************************************************************/
 {
 }
@@ -429,12 +396,12 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 /*****************************************************************************/
 {
-    ULONG nCount = Count();
+    ULONG nCountMember = Count();
     CommandData* pData;
     CommandData* pDataFound = NULL;
     SByteStringList* pDataDeps;
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCountMember; i++ )
     {
         pData = GetObject( i );
         if ( pData->GetLogFile() == aLogFileName )
@@ -522,9 +489,9 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
         sPath = rVersion;
         sPath += "/drives";
 
-        GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
-        if ( pInfo && pInfo->GetSubList())  {
-            GenericInformationList *pDrives = pInfo->GetSubList();
+        GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
+        if ( pInfo2 && pInfo2->GetSubList())  {
+            GenericInformationList *pDrives = pInfo2->GetSubList();
             for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
                 GenericInformation *pDrive = pDrives->GetObject( i );
                 if ( pDrive ) {
@@ -574,8 +541,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
-                                    ByteString sProject( *pProjects->GetObject( i ));
+                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
+                                    ByteString sProject( *pProjects->GetObject( j ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
@@ -765,7 +732,7 @@ void Star::InsertToken ( char *yytext )
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
     static BOOL bPrjDep = FALSE;
     static BOOL bHardDep = FALSE;
-    static int nCommandType, nOSType;
+    static USHORT nCommandType, nOSType;
     CommandData* pCmdData;
     static SByteStringList *pStaticDepList;
     Prj* pPrj;
@@ -804,7 +771,8 @@ void Star::InsertToken ( char *yytext )
                         nCommandType = COMMAND_GET;
                     else {
                         ULONG nOffset = aWhat.Copy( 3 ).ToInt32();
-                        nCommandType = COMMAND_USER_START + nOffset - 1;
+                        nCommandType = sal::static_int_cast< USHORT >(
+                            COMMAND_USER_START + nOffset - 1);
                     }
                 }
                 break;
@@ -952,14 +920,14 @@ BOOL Star::HasProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
     Prj *pPrj;
-    int nCount;
+    int nCountMember;
 
-    nCount = Count();
+    nCountMember = Count();
 
-    for ( int i=0; i<nCount; i++)
+    for ( int i=0; i<nCountMember; i++)
     {
         pPrj = GetObject(i);
-        if ( pPrj->GetProjectName().ToLowerAscii() == aProjectName.ToLowerAscii() )
+        if ( pPrj->GetProjectName().EqualsIgnoreCaseAscii(aProjectName) )
             return TRUE;
     }
     return FALSE;
@@ -970,11 +938,11 @@ Prj* Star::GetPrj ( ByteString aProjectName )
 /*****************************************************************************/
 {
     Prj* pPrj;
-    int nCount = Count();
-    for ( int i=0;i<nCount;i++)
+    int nCountMember = Count();
+    for ( int i=0;i<nCountMember;i++)
     {
         pPrj = GetObject(i);
-        if ( pPrj->GetProjectName().ToLowerAscii() == aProjectName.ToLowerAscii() )
+        if ( pPrj->GetProjectName().EqualsIgnoreCaseAscii(aProjectName) )
             return pPrj;
     }
 //  return (Prj*)NULL;
@@ -988,8 +956,8 @@ ByteString Star::GetPrjName( DirEntry &aPath )
     ByteString aRetPrj, aDirName;
     ByteString aFullPathName = ByteString( aPath.GetFull(), gsl_getSystemTextEncoding());
 
-    USHORT nToken = aFullPathName.GetTokenCount(PATH_DELIMETER);
-    for ( int i=0; i< nToken; i++ )
+    xub_StrLen nToken = aFullPathName.GetTokenCount(PATH_DELIMETER);
+    for ( xub_StrLen i=0; i< nToken; i++ )
     {
         aDirName = aFullPathName.GetToken( i, PATH_DELIMETER );
         if ( HasProject( aDirName ))
@@ -1054,9 +1022,9 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
         sPath = rVersion;
         sPath += "/drives";
 
-        GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
-        if ( pInfo && pInfo->GetSubList())  {
-            GenericInformationList *pDrives = pInfo->GetSubList();
+        GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
+        if ( pInfo2 && pInfo2->GetSubList())  {
+            GenericInformationList *pDrives = pInfo2->GetSubList();
             for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
                 GenericInformation *pDrive = pDrives->GetObject( i );
                 if ( pDrive ) {
@@ -1106,8 +1074,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
-                                    ByteString sProject( *pProjects->GetObject( i ));
+                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
+                                    ByteString sProject( *pProjects->GetObject( j ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
@@ -1211,13 +1179,13 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
     ByteString aSpace(' ');
     ByteString aEmptyString("");
     SByteStringList* pCmdDepList;
-    SByteStringList* pPrjDepList;
 
     CommandData* pCmdData = NULL;
     if ( pPrj->Count() > 0 )
     {
         pCmdData = pPrj->First();
-        if ( pPrjDepList = pPrj->GetDependencies( FALSE ))
+        SByteStringList* pPrjDepList = pPrj->GetDependencies( FALSE );
+        if ( pPrjDepList != 0 )
         {
             aDataString = pPrj->GetPreFix();
             aDataString += aTab;
@@ -1357,8 +1325,8 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     static  ByteString aDirName;
     BOOL bPrjDep = FALSE;
     BOOL bHardDep = FALSE;
-    int nCommandType = 0;
-    int nOSType = 0;
+    USHORT nCommandType = 0;
+    USHORT nOSType = 0;
     CommandData* pCmdData;
     SByteStringList *pDepList2 = NULL;
     Prj* pPrj;
@@ -1414,7 +1382,8 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             nCommandType = COMMAND_GET;
                         else {
                             ULONG nOffset = aWhat.Copy( 3 ).ToInt32();
-                            nCommandType = COMMAND_USER_START + nOffset - 1;
+                            nCommandType = sal::static_int_cast< USHORT >(
+                                COMMAND_USER_START + nOffset - 1);
                         }
                     }
                     break;
@@ -1559,7 +1528,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
 }
 
 /*****************************************************************************/
-BOOL StarWriter::InsertProject ( Prj* pNewPrj )
+BOOL StarWriter::InsertProject ( Prj* )
 /*****************************************************************************/
 {
     return FALSE;
@@ -1569,12 +1538,12 @@ BOOL StarWriter::InsertProject ( Prj* pNewPrj )
 Prj* StarWriter::RemoveProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
-    ULONG nCount = Count();
+    ULONG nCountMember = Count();
     Prj* pPrj;
     Prj* pPrjFound = NULL;
     SByteStringList* pPrjDeps;
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCountMember; i++ )
     {
         pPrj = GetObject( i );
         if ( pPrj->GetProjectName() == aProjectName )
