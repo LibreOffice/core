@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:48:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
                 sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue)
             throw (::com::sun::star::uno::Exception);
 
+        using comphelper::OPropertySetAggregationHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue(
             ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle) const;
 
@@ -187,6 +188,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) = 0;
 
         // XComponent
+        using comphelper::OPropertySetAggregationHelper::disposing;
         virtual void SAL_CALL disposing();
 
     private:
