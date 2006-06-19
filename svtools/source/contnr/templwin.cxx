@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:38:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,8 +224,8 @@ struct FolderHistory
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
 };
 
-DECLARE_LIST( HistoryList_Impl, FolderHistory* );
-DECLARE_LIST( NewDocList_Impl, ::rtl::OUString* );
+DECLARE_LIST( HistoryList_Impl, FolderHistory* )
+DECLARE_LIST( NewDocList_Impl, ::rtl::OUString* )
 
 enum SvtDocInfoType
 {
@@ -415,11 +415,11 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aDummyHeaderBar( this ),
     aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                      WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN ),
-    nMaxTextLength( 0 ),
     aNewDocumentRootURL( ASCII_STR("private:newdoc") ),
     aMyDocumentsRootURL( SvtPathOptions().GetWorkPath() ),
     aSamplesFolderRootURL( SvtPathOptions().
-        SubstituteVariable( String( ASCII_STR("$(insturl)/share/samples/$(vlang)") ) ) )
+        SubstituteVariable( String( ASCII_STR("$(insturl)/share/samples/$(vlang)") ) ) ),
+    nMaxTextLength( 0 )
 
 {
     aDummyHeaderBar.Show();
@@ -577,8 +577,7 @@ void SvtIconWindow_Impl::InvalidateIconControl()
 
 ULONG SvtIconWindow_Impl::GetCursorPos() const
 {
-    // FIXME -Wall cannot really return -1 actually returns high values.
-    ULONG nPos = -1;
+    ULONG nPos = ~0;
 
     SvxIconChoiceCtrlEntry* pCursorEntry = aIconCtrl.GetCursor( );
     if ( pCursorEntry )
@@ -591,7 +590,7 @@ ULONG SvtIconWindow_Impl::GetSelectEntryPos() const
 {
     ULONG nPos;
     if ( !aIconCtrl.GetSelectedEntry( nPos ) )
-        nPos = -1;
+        nPos = ~0;
     return nPos;
 }
 
@@ -633,7 +632,7 @@ sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
 
 ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
 {
-    ULONG nPos = -1;
+    ULONG nPos = ~0;
     if ( aNewDocumentRootURL.Match( rURL ) == STRING_MATCH )
         nPos = 0;
     else if ( aTemplateRootURL.Match( rURL ) == STRING_MATCH )
@@ -683,10 +682,9 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
 
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
+    rParent             ( *pParent ),
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
-
-    bIsTemplateFolder   ( sal_False ),
-    rParent             ( *pParent )
+    bIsTemplateFolder   ( sal_False )
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
@@ -965,7 +963,7 @@ void SvtFrameWindow_Impl::ViewNonEmptyWin()
         ViewTextWin();
 }
 
-IMPL_STATIC_LINK( SvtFrameWindow_Impl, ExecuteHdl_Impl, SvtExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( SvtFrameWindow_Impl, ExecuteHdl_Impl, SvtExecuteInfo*, pExecuteInfo )
 {
     try
     {
@@ -1209,7 +1207,7 @@ SvtTemplateWindow::~SvtTemplateWindow()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
+IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, EMPTYARG )
 {
     String aURL = pIconWin->GetSelectedIconURL();
     if ( !aURL.Len() )
@@ -1225,7 +1223,7 @@ IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, pView )
+IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, EMPTYARG )
 {
     aSelectTimer.Start();
     return 0;
@@ -1233,7 +1231,7 @@ IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, pView )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
+IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, EMPTYARG )
 {
     if ( aSelectTimer.IsActive() )
         aSelectTimer.Stop();
@@ -1252,7 +1250,7 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
+IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, EMPTYARG )
 {
     pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
@@ -1923,7 +1921,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
+IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, EMPTYARG )
 {
     Window* pOldDefWin = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
