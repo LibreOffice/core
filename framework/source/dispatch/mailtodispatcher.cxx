@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailtodispatcher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:20:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,8 +176,8 @@ MailToDispatcher::~MailToDispatcher()
     @modified   02.05.2002 15:25, as96863
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
-                                                                                       const ::rtl::OUString& sTarget ,
-                                                                                             sal_Int32        nFlags  ) throw( css::uno::RuntimeException )
+                                                                                       const ::rtl::OUString& /*sTarget*/ ,
+                                                                                             sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
@@ -292,7 +292,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     @modified   30.04.2002 14:49, as96863
 */
 sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
-                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
+                                            const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
 {
     sal_Bool bSuccess = sal_False;
 
@@ -339,16 +339,16 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 
     @modified   30.04.2002 14:49, as96863
 */
-void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                   const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+                                                   const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
     // not suported yet
 }
 
 //_________________________________________________________________________________________________________________
 
-void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                      const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+                                                      const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
     // not suported yet
 }
