@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:26:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 case STATE_NON: {
                     return FALSE;   // no valid command line
                 }
-                break;
+                //break;
                 case STATE_INPUT: {
                     sInputFile = argv[ i ];
                     bInput = TRUE; // source file found
@@ -238,7 +238,8 @@ int _cdecl main( int argc, char *argv[] )
         {
 
             //sal_uInt64 startreadloc = Export::startMessure();
-            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
+            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252 );
+            //MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
             //Export::stopMessure( ByteString("read localize.sdf") , startreadloc );
 
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
@@ -270,7 +271,9 @@ int _cdecl main( int argc, char *argv[] )
 
             aFStream.close();
             ByteString sHelpFile(""); // dummy
-            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
+            //MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
+            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252 );
+
             //aMergeDataFile.Dump();
             std::vector<ByteString> aLanguages;
             HelpParser::parse_languages( aLanguages , aMergeDataFile );
