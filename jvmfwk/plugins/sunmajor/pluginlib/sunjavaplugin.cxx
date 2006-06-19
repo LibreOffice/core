@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:55:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,6 @@ OString getPluginJarPath(
         OUString sName(sLocation + OUSTR("/lib/") + sName1);
         OUString sPath1;
         OUString sPath2;
-        bool bOk = false;
         if (osl_getSystemPathFromFileURL(sName.pData, & sPath1.pData)
             == osl_File_E_None)
         {
@@ -292,9 +291,9 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         if (arExcludeList > 0)
         {
             bool bExclude = false;
-            for (int i = 0; i < nLenList; i++)
+            for (int j = 0; j < nLenList; j++)
             {
-                rtl::OUString sExVer(arExcludeList[i]);
+                rtl::OUString sExVer(arExcludeList[j]);
                 try
                 {
                     if (cur->compareVersions(sExVer) == 0)
@@ -462,7 +461,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JNIEnv ** ppEnv)
 {
     osl::MutexGuard guard(getPluginMutex());
-    javaPluginError errcode = JFW_PLUGIN_E_NONE;
+    // unless errcode is volatile the following warning occurs on gcc:
+    // warning: variable 'errcode' might be clobbered by `longjmp' or `vfork'
+    volatile javaPluginError errcode = JFW_PLUGIN_E_NONE;
     if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
     //Check if the Vendor (pInfo->sVendor) is supported by this plugin
@@ -507,7 +508,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     rtl::OUString sSymbolCreateJava(
             RTL_CONSTASCII_USTRINGPARAM("JNI_CreateJavaVM"));
 
-    JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *) osl_getSymbol(
+    JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *) osl_getFunctionSymbol(
         moduleRt, sSymbolCreateJava.pData);
     if (!pCreateJavaVM)
     {
@@ -549,8 +550,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
     options[0].optionString= (char *) "abort";
-    options[0].extraInfo= (void* )abort_handler;
-    int index = 1;
+    options[0].extraInfo= (void* )(sal_IntPtr)abort_handler;
     rtl::OString sClassPathProp("-Djava.class.path=");
     rtl::OString sClassPathOption;
     for (int i = 0; i < cOptions; i++)
@@ -596,7 +596,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     */
     g_bInGetJavaVM = 1;
     jint err;
-    JavaVM * pJavaVM;
+    JavaVM * pJavaVM = 0;
     memset( jmp_jvm_abort, 0, sizeof(jmp_jvm_abort));
     int jmpval= setjmp( jmp_jvm_abort );
     /* If jmpval is not "0" then this point was reached by a longjmp in the
