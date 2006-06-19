@@ -146,8 +146,7 @@ namespace DOM { namespace events {
 
         // build the path from target node to the root
         NodeVector captureVector;
-        Reference< XUnoTunnel > aTunnel(xEvent->getTarget(), UNO_QUERY_THROW);
-        xmlNodePtr cur = (xmlNodePtr)aTunnel->getSomething(Sequence< sal_Int8 >());
+        xmlNodePtr cur = DOM::CNode::getNodePtr(Reference< XNode >(xEvent->getTarget(), UNO_QUERY_THROW));
         while (cur != NULL)
         {
             captureVector.push_back(cur);
