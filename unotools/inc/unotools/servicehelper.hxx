@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:37:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ classname* classname::getImplementation( uno::Reference< uno::XInterface > xInt 
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY ); \
     if( xUT.is() ) \
-        return (classname*)xUT->getSomething( classname::getUnoTunnelId() ); \
+        return reinterpret_cast<classname*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( classname::getUnoTunnelId() ))); \
     else \
         return NULL; \
 }
@@ -88,7 +88,7 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), \
                                                          rId.getConstArray(), 16 ) ) \
     { \
-        return (sal_Int64)this; \
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
     } \
     return 0; \
 }
@@ -100,7 +100,7 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), \
                                                          rId.getConstArray(), 16 ) ) \
     { \
-        return (sal_Int64)this; \
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
     } \
     else \
     { \
