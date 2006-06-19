@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:17:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxPoolItem);
-DBG_NAME(SfxVoidItem);
+DBG_NAME(SfxPoolItem)
+DBG_NAME(SfxVoidItem)
 // @@@ DBG_NAME(SfxInvalidItem);
-DBG_NAME(SfxItemHandle);
+DBG_NAME(SfxItemHandle)
 
 BYTE nSfxFlag8Val[8] =
 {
@@ -78,13 +78,11 @@ TYPEINIT1(SfxSetItem, SfxPoolItem);
 // @@@ TYPEINIT1(SfxItemChangedHint, SfxHint);
 
 // ------------------------------------------------------------------------
-static ULONG nItemCount=0;
-
-char* pw1 = "Wow! 10.000 items!";
-char* pw2 = "Wow! 100.000 items!";
-char* pw3 = "Wow! 1.000.000 items!";
-char* pw4 = "Wow! 50.000.000 items!";
-char* pw5 = "Wow! 10.000.000 items!";
+const char* pw1 = "Wow! 10.000 items!";
+const char* pw2 = "Wow! 100.000 items!";
+const char* pw3 = "Wow! 1.000.000 items!";
+const char* pw4 = "Wow! 50.000.000 items!";
+const char* pw5 = "Wow! 10.000.000 items!";
 
 IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
 
@@ -174,18 +172,16 @@ SfxPoolItem::~SfxPoolItem()
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::Compare( const SfxPoolItem& rWith ) const
+int SfxPoolItem::Compare( const SfxPoolItem& ) const
 {
     return 0;
 }
 
 // ------------------------------------------------------------------------
-#if SUPD>=565
 int SfxPoolItem::Compare( const SfxPoolItem& rWith, const IntlWrapper& ) const
 {
     return Compare( rWith );
 }
-#endif
 
 // ------------------------------------------------------------------------
 int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
@@ -205,21 +201,21 @@ int SfxPoolItem::IsPoolable() const
 #endif
 
 // -----------------------------------------------------------------------
-SfxPoolItem* SfxPoolItem::Create(SvStream &, USHORT nVersion) const
+SfxPoolItem* SfxPoolItem::Create(SvStream &, USHORT) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return Clone(0);
 }
 
 // -----------------------------------------------------------------------
-USHORT SfxPoolItem::GetVersion( USHORT nFileFormatVersion ) const
+USHORT SfxPoolItem::GetVersion( USHORT ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return 0;
 }
 
 // -----------------------------------------------------------------------
-SvStream& SfxPoolItem::Store(SvStream &rStream, USHORT nItemVersion ) const
+SvStream& SfxPoolItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return rStream;
@@ -263,10 +259,10 @@ void SfxPoolItem::writeUnicodeString(SvStream & rStream,
 // ------------------------------------------------------------------------
 SfxItemPresentation SfxPoolItem::GetPresentation
 (
-    SfxItemPresentation ePresentation,       // IN:  wie formatiert werden soll
-    SfxMapUnit          eCoreMetric,         // IN:  Ma\seinheit des SfxPoolItems
-    SfxMapUnit          ePresentationMetric, // IN:  Wunsch-Ma\einheit der Darstellung
-    XubString&          rText,               // OUT: textuelle Darstellung
+    SfxItemPresentation /*ePresentation*/,       // IN:  wie formatiert werden soll
+    SfxMapUnit          /*eCoreMetric*/,         // IN:  Ma\seinheit des SfxPoolItems
+    SfxMapUnit          /*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
+    XubString&          /*rText*/,               // OUT: textuelle Darstellung
     const IntlWrapper *
 )   const
 
@@ -320,8 +316,8 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 }
 
 // SfxVoidItem ------------------------------------------------------------
-SfxVoidItem::SfxVoidItem( USHORT nWhich ):
-    SfxPoolItem(nWhich)
+SfxVoidItem::SfxVoidItem( USHORT which ):
+    SfxPoolItem(which)
 {
     DBG_CTOR(SfxVoidItem, 0);
 }
@@ -334,7 +330,11 @@ SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
 }
 
 // ------------------------------------------------------------------------
-int SfxVoidItem::operator==( const SfxPoolItem& rCmp) const
+int SfxVoidItem::operator==( const SfxPoolItem&
+#ifdef DBG_UTIL
+rCmp
+#endif
+) const
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
@@ -344,9 +344,9 @@ int SfxVoidItem::operator==( const SfxPoolItem& rCmp) const
 // ------------------------------------------------------------------------
 SfxItemPresentation SfxVoidItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -508,7 +508,7 @@ void SfxPoolItem::Store(SvStream &rStream) const
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPoolItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
 {
     DBG_ERROR("There is no implementation for QueryValue for this item!");
     return FALSE;
@@ -516,7 +516,7 @@ BOOL SfxPoolItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) c
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPoolItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL SfxPoolItem::PutValue( const com::sun::star::uno::Any&, BYTE )
 {
     DBG_ERROR("There is no implementation for PutValue for this item!");
     return FALSE;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slstitm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxStringListItem);
+DBG_NAME(SfxStringListItem)
 
 // -----------------------------------------------------------------------
 
@@ -139,8 +139,8 @@ SfxStringListItem::SfxStringListItem() :
 
 //------------------------------------------------------------------------
 
-SfxStringListItem::SfxStringListItem( USHORT nWhich, const List* pList ) :
-    SfxPoolItem( nWhich ),
+SfxStringListItem::SfxStringListItem( USHORT which, const List* pList ) :
+    SfxPoolItem( which ),
     pImp(NULL)
 {
     // PB: das Putten einer leeren Liste funktionierte nicht,
@@ -162,8 +162,8 @@ SfxStringListItem::SfxStringListItem( USHORT nWhich, const List* pList ) :
 
 //------------------------------------------------------------------------
 
-SfxStringListItem::SfxStringListItem( USHORT nWhich, SvStream& rStream ) :
-    SfxPoolItem( nWhich ),
+SfxStringListItem::SfxStringListItem( USHORT which, SvStream& rStream ) :
+    SfxPoolItem( which ),
     pImp(NULL)
 {
     long nEntryCount;
@@ -239,9 +239,9 @@ int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 
 SfxItemPresentation SfxStringListItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -266,14 +266,14 @@ SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, USHORT nVersion ) const
+SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, USHORT ) const
 {
     return new SfxStringListItem( Which(), rStream );
 }
 
 //------------------------------------------------------------------------
 
-SvStream& SfxStringListItem::Store( SvStream & rStream, USHORT nItemVersion ) const
+SvStream& SfxStringListItem::Store( SvStream & rStream, USHORT ) const
 {
     if( !pImp )
     {
@@ -333,7 +333,7 @@ void SfxStringListItem::SetString( const XubString& rStr )
     // Kein Leerstring am Ende
     if( pImp->aList.Last() &&
         !((XubString*)pImp->aList.Last())->Len() )
-        delete pImp->aList.Remove( pImp->aList.Count()-1 );
+        delete (XubString*)pImp->aList.Remove( pImp->aList.Count()-1 );
 }
 
 //------------------------------------------------------------------------
@@ -409,8 +409,7 @@ void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< rtl::OUStr
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                     BYTE nMemberId )
+BOOL SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     com::sun::star::uno::Sequence< rtl::OUString > aValue;
     if ( rVal >>= aValue )
@@ -425,8 +424,7 @@ BOOL SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                     BYTE nMemberId ) const
+BOOL SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     // GetString() is not const!!!
     SfxStringListItem* pThis = const_cast< SfxStringListItem * >( this );
