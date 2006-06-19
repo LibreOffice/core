@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:59:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,9 +240,9 @@ SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SvxMacroItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText,
     const IntlWrapper *
 )   const
@@ -267,7 +267,7 @@ SfxItemPresentation SvxMacroItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxMacroItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
+SvStream& SvxMacroItem::Store( SvStream& rStrm , USHORT ) const
 {
     return aMacroTable.Write( rStrm );
 }
