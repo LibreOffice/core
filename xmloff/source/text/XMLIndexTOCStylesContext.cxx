@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTOCStylesContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:10:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,13 +108,10 @@ XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rTOCPropertySet(rPropSet),
-        aStyleNames(),
-        nOutlineLevel(-1),
-        sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_LevelParagraphStyles))
+    const OUString& rLocalName )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(sAPI_LevelParagraphStyles))
+,   rTOCPropertySet(rPropSet)
 {
 }
 
@@ -176,12 +173,12 @@ void XMLIndexTOCStylesContext::EndElement()
 }
 
 SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
     // check for index-source-style
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
+    if ( (XML_NAMESPACE_TEXT == p_nPrefix) &&
          IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLE ) )
     {
         // find text:style-name attribute and record in aStyleNames
@@ -201,6 +198,6 @@ SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
     }
 
     // always return default context; we already got the interesting info
-    return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+    return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
                                                   xAttrList);
 }
