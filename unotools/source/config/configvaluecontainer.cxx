@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configvaluecontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:42:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 #include <uno/data.h>
 #endif
 #include <algorithm>
+
+#ifdef DBG_UTIL
+#include <rtl/strbuf.hxx>
+#endif
 
 //.........................................................................
 namespace utl
@@ -161,14 +165,15 @@ namespace utl
                     uno_type_assignData(
                         _rAccessor.getLocation(), _rAccessor.getDataType().getTypeLibType(),
                         const_cast< void* >( _rData.getValue() ), _rData.getValueType().getTypeLibType(),
-                        cpp_queryInterface, cpp_acquire, cpp_release
+                        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release
                     );
-                    DBG_ASSERT( bSuccess,
-                        (   ::rtl::OString( "::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: " )
-                        +=  ::rtl::OString( _rAccessor.getPath().getStr(), _rAccessor.getPath().getLength(), RTL_TEXTENCODING_ASCII_US )
-                        +=  ::rtl::OString( " !" )
-                        ).getStr()
-                    );
+                    #ifdef DBG_UTIL
+                    rtl::OStringBuffer aBuf( 256 );
+                    aBuf.append("::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: ");
+                    aBuf.append( rtl::OUStringToOString( _rAccessor.getPath(), RTL_TEXTENCODING_ASCII_US ) );
+                    aBuf.append( " !" );
+                    DBG_ASSERT( bSuccess, aBuf.getStr() );
+                    #endif
                 }
                 else
                     DBG_WARNING( "::utl::lcl_copyData: NULL value lost!" );
@@ -177,6 +182,8 @@ namespace utl
             case ltAnyInstance:
                 // a simple assignment of an Any ...
                 *static_cast< Any* >( _rAccessor.getLocation() ) = _rData;
+                break;
+            default:
                 break;
         }
     }
@@ -202,6 +209,8 @@ namespace utl
             case ltAnyInstance:
                 // a simple assignment of an Any ...
                 _rData = *static_cast< Any* >( _rAccessor.getLocation() );
+                break;
+            default:
                 break;
         }
     }
@@ -340,13 +349,13 @@ namespace utl
             ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_PREFER_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
             ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? sal_False : sal_True
         );
-
-        DBG_ASSERT( m_pImpl->aConfigRoot.isValid(),
-                (   ::rtl::OString( "Could not access the configuration node located at " )
-                +=  ::rtl::OString( _rConfigLocation.getStr(), _rConfigLocation.getLength(), RTL_TEXTENCODING_ASCII_US )
-                +=  ::rtl::OString( " !" )
-                ).getStr()
-        );
+        #ifdef DBG_UTIL
+        rtl::OStringBuffer aBuf(256);
+        aBuf.append("Could not access the configuration node located at ");
+        aBuf.append( rtl::OUStringToOString( _rConfigLocation, RTL_TEXTENCODING_ASCII_US ) );
+        aBuf.append( " !" );
+        DBG_ASSERT( m_pImpl->aConfigRoot.isValid(), aBuf.getStr() );
+        #endif
     }
 
     //---------------------------------------------------------------------
@@ -463,6 +472,16 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4.16.2  2005/10/27 10:51:15  pl
+ *  #i55991# removed warnings for solaris platform
+ *
+ *  Revision 1.4.16.1  2005/10/21 09:48:54  dbo
+ *  #i53898# warning free code
+ *
+ *  Revision 1.4  2005/09/09 09:42:42  rt
+ *  INTEGRATION: CWS ooo19126 (1.3.250); FILE MERGED
+ *  2005/09/05 14:01:02 rt 1.3.250.1: #i54170# Change license header: remove SISSL
+ *
  *  Revision 1.3.250.1  2005/09/05 14:01:02  rt
  *  #i54170# Change license header: remove SISSL
  *
