@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:43:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,14 +60,22 @@ static MyCounter thisCounter( "DEBUG : Remote2UnoProxy");
 using namespace ::bridges_remote;
 using namespace ::com::sun::star::uno;
 
-namespace bridges_remote {
+extern "C" {
 
-void Remote2UnoProxy::thisFree( uno_ExtEnvironment *pEnvUno , void *pThis )
+void SAL_CALL remote_release( void *pRemoteI )
 {
-    delete (Remote2UnoProxy*) pThis;
+    ((remote_Interface * )pRemoteI)->release( (remote_Interface * ) pRemoteI );
 }
 
-void Remote2UnoProxy::thisAcquire( uno_Interface *pThis )
+}
+
+namespace bridges_remote {
+
+void freeRemote2UnoProxy(uno_ExtEnvironment *, void * proxy) {
+    delete static_cast< Remote2UnoProxy * >(proxy);
+}
+
+void acquireRemote2UnoProxy( uno_Interface *pThis )
 {
     Remote2UnoProxy *p = ( Remote2UnoProxy * ) pThis;
     if( 1 == osl_incrementInterlockedCount( &(p->m_nRef) ) )
@@ -75,14 +83,14 @@ void Remote2UnoProxy::thisAcquire( uno_Interface *pThis )
         p->m_pEnvUno->pExtEnv->registerProxyInterface(
             p->m_pEnvUno->pExtEnv,
             (void**)&pThis,
-            Remote2UnoProxy::thisFree,
+            freeRemote2UnoProxy,
             p->m_sOid.pData,
             p->m_pType );
         assert( (uno_Interface *)p == pThis );
     }
 }
 
-void Remote2UnoProxy::thisRelease( uno_Interface *pThis )
+void releaseRemote2UnoProxy( uno_Interface *pThis )
 {
     Remote2UnoProxy *p = ( Remote2UnoProxy * ) pThis;
     if ( 0 == osl_decrementInterlockedCount( &(p->m_nRef) ))
@@ -91,14 +99,9 @@ void Remote2UnoProxy::thisRelease( uno_Interface *pThis )
     }
 }
 
-void SAL_CALL remote_release( void *pRemoteI )
-{
-    ((remote_Interface * )pRemoteI)->release( (remote_Interface * ) pRemoteI );
-}
-
-void Remote2UnoProxy::thisDispatch(
+void SAL_CALL dispatchRemote2UnoProxy(
     uno_Interface * pUnoI,
-    typelib_TypeDescription * pType,
+    typelib_TypeDescription const * pType,
     void * pReturn,
     void * ppArgs[],
     uno_Any ** ppException )
@@ -225,31 +228,31 @@ void Remote2UnoProxy::thisDispatch(
             uno_destructData( pRemoteReturn , pReturnType , remote_release );
         }
 
-        sal_Int32 i;
-        for( i = 0 ; i < nArgCount ; i ++ )
+        sal_Int32 j;
+        for( j = 0 ; j < nArgCount ; j ++ )
         {
-            if( pbConversionNeeded[i] )
+            if( pbConversionNeeded[j] )
             {
-                if( pbIsIn[i] ) {
-                    if( pbIsOut[i] ) {
-                        uno_destructData( ppArgs[i] ,
-                                          ppArgType[i] ,
+                if( pbIsIn[j] ) {
+                    if( pbIsOut[j] ) {
+                        uno_destructData( ppArgs[j] ,
+                                          ppArgType[j] ,
                                           0 );
-                        uno_copyAndConvertData( ppArgs[i] ,
-                                                ppRemoteArgs[i],
-                                                ppArgType[i],
+                        uno_copyAndConvertData( ppArgs[j] ,
+                                                ppRemoteArgs[j],
+                                                ppArgType[j],
                                                 p->m_mapRemote2Uno.get()  );
                     }
                 }
                 else // pure out
                 {
-                    uno_copyAndConvertData( ppArgs[i] ,
-                                            ppRemoteArgs[i],
-                                            ppArgType[i],
+                    uno_copyAndConvertData( ppArgs[j] ,
+                                            ppRemoteArgs[j],
+                                            ppArgType[j],
                                             p->m_mapRemote2Uno.get() );
                 }
-                uno_destructData( ppRemoteArgs[i],
-                                  ppArgType[i],
+                uno_destructData( ppRemoteArgs[j],
+                                  ppArgType[j],
                                   remote_release );
             }
         }
@@ -313,9 +316,9 @@ Remote2UnoProxy::Remote2UnoProxy( remote_Interface *pRemoteI,
     m_pEnvUno->acquire( m_pEnvUno );
     m_pEnvRemote->acquire( m_pEnvRemote );
 
-    acquire = thisAcquire;
-    release = thisRelease;
-    pDispatcher = ( uno_DispatchMethod ) thisDispatch;
+    acquire = acquireRemote2UnoProxy;
+    release = releaseRemote2UnoProxy;
+    pDispatcher = dispatchRemote2UnoProxy;
 
     m_pEnvRemote->pExtEnv->registerInterface(
         m_pEnvRemote->pExtEnv,
