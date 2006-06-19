@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:40:27 $
+#   last change: $Author: hr $ $Date: 2006-06-19 15:45:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ SLOFILES= \
         $(SLO)$/pntobj3d.obj     \
         $(SLO)$/label3d.obj		\
         $(SLO)$/light3d.obj 		\
-        $(SLO)$/polyob3d.obj		\
         $(SLO)$/scene3d.obj		\
         $(SLO)$/polysc3d.obj		\
         $(SLO)$/cube3d.obj		\
