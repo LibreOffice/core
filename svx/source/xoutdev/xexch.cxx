@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:19:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
 |*
 *************************************************************************/
 XFillExchangeData::XFillExchangeData() :
-    pPool( NULL ),
-    pXFillAttrSetItem( NULL )
+    pXFillAttrSetItem( NULL ),
+    pPool( NULL )
 {
 }
 
@@ -81,8 +81,8 @@ XFillExchangeData::XFillExchangeData() :
 |*
 *************************************************************************/
 XFillExchangeData::XFillExchangeData( const XFillAttrSetItem rXFillAttrSetItem ) :
-    pPool( rXFillAttrSetItem.GetItemSet().GetPool() ),
-    pXFillAttrSetItem( (XFillAttrSetItem*) rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) )
+    pXFillAttrSetItem( (XFillAttrSetItem*) rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ),
+    pPool( rXFillAttrSetItem.GetItemSet().GetPool() )
 {
 }
 
@@ -117,8 +117,6 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 {
     if( rData.pXFillAttrSetItem )
     {
-        USHORT nItemVersion = rData.pXFillAttrSetItem->GetVersion( (USHORT) rOStm.GetVersion() );
-
         SfxWhichIter        aIter( rData.pXFillAttrSetItem->GetItemSet() );
         USHORT              nWhich = aIter.FirstWhich();
         const SfxPoolItem*  pItem;
@@ -132,10 +130,10 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
             if( SFX_ITEM_SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, FALSE, &pItem ) )
             {
                 VersionCompat   aCompat( rOStm, STREAM_WRITE );
-                const USHORT    nItemVersion = pItem->GetVersion( (USHORT) rOStm.GetVersion() );
+                const USHORT    nItemVersion2 = pItem->GetVersion( (USHORT) rOStm.GetVersion() );
 
-                rOStm << nWhich << nItemVersion;
-                pItem->Store( rOStm, nItemVersion );
+                rOStm << nWhich << nItemVersion2;
+                pItem->Store( rOStm, nItemVersion2 );
 
                 nItemCount++;
             }
