@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ bool WinSalOpenGL::IsValid()
     {
         if( ImplInitLib() )
         {
-            USHORT nBitCount = GetDeviceCaps( mhOGLLastDC, BITSPIXEL );
+            int nBitCount = GetDeviceCaps( mhOGLLastDC, BITSPIXEL );
             PIXELFORMATDESCRIPTOR pfd =
             {
                 sizeof( PIXELFORMATDESCRIPTOR ),
@@ -210,12 +210,12 @@ void WinSalOpenGL::Release()
 
 // ------------------------------------------------------------------------
 
-void* WinSalOpenGL::GetOGLFnc( const char* pFncName )
+oglFunction WinSalOpenGL::GetOGLFnc( const char* pFncName )
 {
     if ( hImplOGLLib )
     {
         OUString queryFuncName = OUString::createFromAscii( pFncName );
-        return (void*)osl_getSymbol( hImplOGLLib, queryFuncName.pData );
+        return (oglFunction)osl_getSymbol( hImplOGLLib, queryFuncName.pData );
     }
     else
         return NULL;
@@ -237,7 +237,7 @@ void WinSalOpenGL::OGLEntry( SalGraphics* pSGraphics )
             1,
             PFD_DRAW_TO_WINDOW | PFD_SUPPORT_GDI | PFD_SUPPORT_OPENGL,
             PFD_TYPE_RGBA,
-            GetDeviceCaps( pGraphics->mhDC, BITSPIXEL ),
+            (BYTE)GetDeviceCaps( pGraphics->mhDC, BITSPIXEL ),
             0, 0, 0, 0, 0, 0,
             0,
             0,
@@ -281,13 +281,13 @@ void WinSalOpenGL::OGLEntry( SalGraphics* pSGraphics )
 
 // ------------------------------------------------------------------------
 
-void WinSalOpenGL::OGLExit( SalGraphics* pGraphics )
+void WinSalOpenGL::OGLExit( SalGraphics* )
 {
 }
 
 // ------------------------------------------------------------------------
 
-void WinSalOpenGL::StartScene( SalGraphics* pGraphics )
+void WinSalOpenGL::StartScene( SalGraphics* )
 {
 }
 
