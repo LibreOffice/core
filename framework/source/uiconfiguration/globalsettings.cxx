@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globalsettings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:21:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,15 +110,6 @@ static const char GLOBALSETTINGS_PROPERTY_LOCKED[]          = "Locked";
 static const char GLOBALSETTINGS_PROPERTY_DOCKED[]          = "Docked";
 static const char GLOBALSETTINGS_PROPERTY_STATESENABLED[]   = "StatesEnabled";
 
-// Order must be the same as WindowStateMask!!
-static const char* CONFIGURATION_PROPERTIES[]           =
-{
-    "Toolbars",
-    "DockWindow",
-    "Statusbar",
-    0
-};
-
 namespace framework
 {
 
@@ -136,7 +127,7 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
         virtual ~GlobalSettings_Access();
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
+        FWK_DECLARE_XINTERFACE
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -176,14 +167,14 @@ DEFINE_XINTERFACE_2     (   GlobalSettings_Access                           ,
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( rServiceManager ),
-    m_bConfigRead( sal_False ),
     m_bDisposed( sal_False ),
+    m_bConfigRead( sal_False ),
     m_aConfigSettingsAccess( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_ROOT_ACCESS )),
+    m_aNodeRefStates( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_NODEREF_STATES )),
     m_aPropStatesEnabled( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_STATESENABLED )),
     m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_LOCKED )),
     m_aPropDocked( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_DOCKED )),
-    m_aNodeRefStates( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_NODEREF_STATES ))
+    m_xServiceManager( rServiceManager )
 {
 }
 
@@ -202,18 +193,18 @@ throw ( css::uno::RuntimeException )
     m_bDisposed = sal_True;
 }
 
-void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
 throw (css::uno::RuntimeException)
 {
 }
 
-void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
 throw (css::uno::RuntimeException)
 {
 }
 
 // XEventListener
-void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& Source )
+void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
 throw (css::uno::RuntimeException)
 {
     // SAFE
