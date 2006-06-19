@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngmerge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:55:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 // local includes
 #include "export.hxx"
 
-DECLARE_LIST( LngLineList, ByteString * );
+DECLARE_LIST( LngLineList, ByteString * )
 
 #define LNG_OK              0x0000
 #define LNG_FILE_NOTFOUND   0x0001
@@ -63,7 +63,8 @@ private:
     bool isNextGroup(  ByteString &sGroup_out , ByteString &sLine_in);
     void ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout );
     void WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
-                    const ByteString &rSDFFile, const ByteString &rPrj ,
+                    //const ByteString &rSDFFile,
+                    const ByteString &rPrj ,
                     const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
     LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat, bool bQuiet_in );
