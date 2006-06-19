@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impvect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:02:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 #include <stdlib.h>
-#include <tools/new.hxx>
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
 #endif
@@ -217,7 +216,7 @@ ImplPointArray::ImplPointArray() :
 ImplPointArray::~ImplPointArray()
 {
     if( mpArray )
-        SvMemFree( mpArray );
+        rtl_freeMemory( mpArray );
 }
 
 // -----------------------------------------------------------------------------
@@ -230,9 +229,9 @@ void ImplPointArray::ImplSetSize( ULONG nSize )
     mnRealSize = 0UL;
 
     if( mpArray )
-        SvMemFree( mpArray );
+        rtl_freeMemory( mpArray );
 
-    mpArray = (Point*) SvMemAlloc( nTotal );
+    mpArray = (Point*) rtl_allocateMemory( nTotal );
     memset( (HPBYTE) mpArray, 0, nTotal );
 }
 
@@ -256,7 +255,7 @@ inline const Point& ImplPointArray::operator[]( ULONG nPos ) const
 
 void ImplPointArray::ImplCreatePoly( Polygon& rPoly ) const
 {
-    rPoly = Polygon( mnRealSize, mpArray );
+    rPoly = Polygon( sal::static_int_cast<USHORT>(mnRealSize), mpArray );
 }
 
 // ---------------
@@ -299,10 +298,10 @@ ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
 {
     const long  nWidthAl = ( nWidth >> 2L ) + 1L;
     const long  nSize = nWidthAl * nHeight;
-    Scanline    pTmp = mpBuf = (Scanline) SvMemAlloc( nSize );
+    Scanline    pTmp = mpBuf = (Scanline) rtl_allocateMemory( nSize );
 
     memset( mpBuf, 0, nSize );
-    mpScan = (Scanline*) SvMemAlloc( nHeight * sizeof( Scanline ) );
+    mpScan = (Scanline*) rtl_allocateMemory( nHeight * sizeof( Scanline ) );
 
     for( long nY = 0L; nY < nHeight; pTmp += nWidthAl )
         mpScan[ nY++ ] = pTmp;
@@ -313,15 +312,15 @@ ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
 
 ImplVectMap::~ImplVectMap()
 {
-    SvMemFree( mpBuf );
-    SvMemFree( mpScan );
+    rtl_freeMemory( mpBuf );
+    rtl_freeMemory( mpScan );
 }
 
 // -----------------------------------------------------------------------------
 
 inline void ImplVectMap::Set( long nY, long nX, BYTE cVal )
 {
-    const BYTE cShift = 6 - ( ( nX & 3 ) << 1 );
+    const BYTE cShift = sal::static_int_cast<BYTE>(6 - ( ( nX & 3 ) << 1 ));
     ( ( mpScan[ nY ][ nX >> 2 ] ) &= ~( 3 << cShift ) ) |= ( cVal << cShift );
 }
 
@@ -329,7 +328,7 @@ inline void ImplVectMap::Set( long nY, long nX, BYTE cVal )
 
 inline BYTE ImplVectMap::Get( long nY, long nX ) const
 {
-    return( ( ( mpScan[ nY ][ nX >> 2 ] ) >> ( 6 - ( ( nX & 3 ) << 1 ) ) ) & 3 );
+    return sal::static_int_cast<BYTE>( ( ( mpScan[ nY ][ nX >> 2 ] ) >> ( 6 - ( ( nX & 3 ) << 1 ) ) ) & 3 );
 }
 
 // -----------------------------------------------------------------------------
