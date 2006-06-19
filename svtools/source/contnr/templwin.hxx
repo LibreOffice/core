@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:14:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,9 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } };
-namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } };
-namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } };
+namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
+namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } }
 namespace svtools
 {
     class ODocumentInfoPreview;
