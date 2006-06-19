@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:23:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@
 #define STATUS_SAVEAS_STANDARDNAME  3
 
 const ::rtl::OUString aFilterOptionsString = ::rtl::OUString::createFromAscii( "FilterOptions" );
-const ::rtl::OUString aFilterDataString = ::rtl::OUString::createFromAscii( "FilterData" );
+const ::rtl::OUString aFilterDataString    = ::rtl::OUString::createFromAscii( "FilterData" );
 
 using namespace ::com::sun::star;
 
@@ -279,9 +279,9 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
                                 const uno::Sequence< beans::PropertyValue >& aMediaDescr )
 : m_pOwner( &aOwner )
 , m_xModel( xModel )
-, m_aMediaDescrHM( aMediaDescr )
 , m_pDocumentPropsHM( NULL )
 , m_pDocServicePropsHM( NULL )
+, m_aMediaDescrHM( aMediaDescr )
 {
     CheckInteractionHandler();
 }
@@ -504,13 +504,12 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
           uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
            if ( aAny >>= aProps )
            {
-               ::rtl::OUString aServiceName;
                sal_Int32 nPropertyCount = aProps.getLength();
                for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
                    if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
                    {
                     ::rtl::OUString aServiceName;
-                   aProps[nProperty].Value >>= aServiceName;
+                       aProps[nProperty].Value >>= aServiceName;
                     if( aServiceName.getLength() )
                     {
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
@@ -779,7 +778,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     sal_Int16  aDialogMode = bAllowOptions ?
                                 ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
                                 ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD;
-    sal_uInt32 aDialogFlags = 0;
+    sal_Int64 aDialogFlags = 0;
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
@@ -796,7 +795,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     ::rtl::OUString aPrefix = ::rtl::OUString::createFromAscii( "private:factory/" );
     if ( aDocServiceShortName.match( aPrefix ) )
         aDocServiceShortName = aDocServiceShortName.copy( aPrefix.getLength() );
-    sal_uInt32 nParamPos = aDocServiceShortName.indexOf( '?' );
+    sal_Int32 nParamPos = aDocServiceShortName.indexOf( '?' );
     if ( nParamPos != -1 )
         aDocServiceShortName = aDocServiceShortName.copy( 0, nParamPos );
 
@@ -1008,13 +1007,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         {
             // merge filter option of the document filter
 
-            ::rtl::OUString aFilterOptionsString = ::rtl::OUString::createFromAscii( "FilterOptions" );
             ::comphelper::SequenceAsHashMap::const_iterator aIter =
                                 GetDocProps().find( aFilterOptionsString );
             if ( aIter != GetDocProps().end() )
                 GetMediaDescr()[aIter->first] = aIter->second;
 
-            ::rtl::OUString aFilterDataString = ::rtl::OUString::createFromAscii( "FilterData" );
             aIter = GetDocProps().find( aFilterDataString );
             if ( aIter != GetDocProps().end() )
                 GetMediaDescr()[aIter->first] = aIter->second;
@@ -1601,8 +1598,8 @@ void SfxStoringHelper::FillCopy( const uno::Reference< frame::XModel >& xModel,
     aVal = xPropSet->getPropertyValue( aStringModifiedBy );
     if ( aVal >>= aStrVal )
     {
-        const SfxStamp& rStamp = aDocInfoToFill.GetChanged();
-        aDocInfoToFill.SetChanged( SfxStamp( aStrVal, rStamp.GetTime() ) );
+        const SfxStamp& rChangedStamp = aDocInfoToFill.GetChanged();
+        aDocInfoToFill.SetChanged( SfxStamp( aStrVal, rChangedStamp.GetTime() ) );
     }
     else
         DBG_ERROR( "The type of parameter \"ModifiedBy\" is wrong!\n" );
@@ -1625,8 +1622,8 @@ void SfxStoringHelper::FillCopy( const uno::Reference< frame::XModel >& xModel,
     aVal = xPropSet->getPropertyValue( aStringPrintedBy );
     if ( aVal >>= aStrVal )
     {
-        const SfxStamp& rStamp = aDocInfoToFill.GetPrinted();
-        aDocInfoToFill.SetPrinted( SfxStamp( aStrVal, rStamp.GetTime() ) );
+        const SfxStamp& rPrintedStamp = aDocInfoToFill.GetPrinted();
+        aDocInfoToFill.SetPrinted( SfxStamp( aStrVal, rPrintedStamp.GetTime() ) );
     }
     else
         DBG_ERROR( "The type of parameter \"PrintedBy\" is wrong!\n" );
@@ -1879,8 +1876,8 @@ void SfxStoringHelper::ExecuteInfoDlg( const ::rtl::OUString& aTargetURL,
 // static
 sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
                                                     ::rtl::OUString aOldUIName,
-                                                    ::rtl::OUString aDefUIName,
-                                                    sal_Bool bCanProceedFurther )
+                                                    ::rtl::OUString /*aDefUIName*/,
+                                                    sal_Bool /*bCanProceedFurther*/ )
 {
     if ( !SvtSaveOptions().IsWarnAlienFormat() )
         return sal_True;
