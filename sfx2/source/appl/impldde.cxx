@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impldde.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ String SvDDELinkEditDialog::GetCmd() const
 
 IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
 {
+    (void)pEdit; // unused variable
     pThis->aOKButton1.Enable( pThis->aEdDdeApp.GetText().Len() &&
                               pThis->aEdDdeTopic.GetText().Len() &&
                               pThis->aEdDdeItem.GetText().Len() );
@@ -135,7 +136,7 @@ IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
 
 
 SvDDEObject::SvDDEObject()
-    : pConnection( 0 ), pLink( 0 ), nError( 0 ), pGetData( 0 ), pRequest( 0 )
+    : pConnection( 0 ), pLink( 0 ), pRequest( 0 ), pGetData( 0 ), nError( 0 )
 {
     SetUpdateTimeout( 100 );
     bWaitForData = FALSE;
@@ -215,8 +216,9 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
 BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
+#if defined(WIN) || defined(WNT)
     static BOOL bInWinExec = FALSE;
-
+#endif
     USHORT nLinkType = pSvLink->GetUpdateMode();
     if( pConnection )       // Verbindung steht ja schon
     {
@@ -323,11 +325,11 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
     return TRUE;
 }
 
-String SvDDEObject::Edit( Window* pParent, SvBaseLink * pLink )
+String SvDDEObject::Edit( Window* pParent, SvBaseLink * pBaseLink )
 {
     String aRet;
 
-    SvDDELinkEditDialog aDlg( pParent, pLink );
+    SvDDELinkEditDialog aDlg( pParent, pBaseLink );
     if( RET_OK == aDlg.Execute() )
         aRet = aDlg.GetCmd();
 
