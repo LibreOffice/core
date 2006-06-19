@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recentfilesmenucontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 }
 
 // XEventListener
-void SAL_CALL RecentFilesMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -296,7 +296,7 @@ void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent&
 }
 
 // XMenuListener
-void SAL_CALL RecentFilesMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL RecentFilesMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -381,14 +381,14 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
     }
 }
 
-void SAL_CALL RecentFilesMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL RecentFilesMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
     if ( m_xPopupMenu.is() )
         fillPopupMenu( m_xPopupMenu );
 }
 
-void SAL_CALL RecentFilesMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL RecentFilesMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -415,7 +415,6 @@ void SAL_CALL RecentFilesMenuController::setPopupMenu( const Reference< css::awt
         xURLTransformer->parseStrict( aTargetURL );
         m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
-        ResetableGuard aLock( m_aLock );
         if ( m_xPopupMenu.is() )
             fillPopupMenu( m_xPopupMenu );
     }
@@ -470,7 +469,6 @@ void SAL_CALL RecentFilesMenuController::initialize( const Sequence< Any >& aArg
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
             m_bInitialized = sal_True;
@@ -478,7 +476,7 @@ void SAL_CALL RecentFilesMenuController::initialize( const Sequence< Any >& aArg
     }
 }
 
-IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
+IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
 {
     try
     {
