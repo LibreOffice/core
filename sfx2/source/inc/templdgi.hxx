@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:13:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,25 +84,25 @@ class DropListBox_Impl : public SvTreeListBox
 private:
     DECL_LINK( OnAsyncExecuteDrop, SvLBoxEntry* );
     DECL_LINK( OnAsyncExecuteError, void* );
+
 protected:
-    SfxCommonTemplateDialog_Impl*   pDialog;
-    USHORT                          nModifier;
+    SfxCommonTemplateDialog_Impl* pDialog;
+    USHORT                        nModifier;
 
 public:
     DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, rId ), pDialog( pD )
-            {}
+        SvTreeListBox( pParent, rId ), pDialog( pD ) {}
     DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, nWinBits ), pDialog( pD )
-            {}
+        SvTreeListBox( pParent, nWinBits ), pDialog( pD ) {}
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void     MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    using SvLBox::ExecuteDrop;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    USHORT              GetModifier() const { return nModifier; }
+    USHORT           GetModifier() const { return nModifier; }
 
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual long     Notify( NotifyEvent& rNEvt );
 };
 
 // class SfxActionListBox ------------------------------------------------
@@ -192,9 +192,9 @@ protected:
     DECL_LINK( TimeOut, Timer * );
 
 
-    virtual void        EnableItem( USHORT nMesId, BOOL bCheck = TRUE ) {}
-    virtual void        CheckItem( USHORT nMesId, BOOL bCheck = TRUE ) {}
-    virtual BOOL        IsCheckedItem( USHORT nMesId ) { return TRUE; }
+    virtual void        EnableItem( USHORT /*nMesId*/, BOOL /*bCheck*/ = TRUE ) {}
+    virtual void        CheckItem( USHORT /*nMesId*/, BOOL /*bCheck*/ = TRUE ) {}
+    virtual BOOL        IsCheckedItem( USHORT /*nMesId*/ ) { return TRUE; }
     virtual void        LoadedFamilies() {}
     virtual void        Update() { UpdateStyles_Impl(UPDATE_FAMILY_LIST); }
     virtual void        InvalidateBindings();
@@ -203,7 +203,7 @@ protected:
     virtual void        ClearFamilyList() = 0;
     virtual void        ReplaceUpdateButtonByMenu();
 
-    void                NewHdl( void* );
+        void                NewHdl( void* );
     void                EditHdl( void* );
     void                DeleteHdl( void* );
 
@@ -368,6 +368,7 @@ protected:
     virtual void    EnableDel( BOOL = TRUE );
     virtual void    EnableNew( BOOL = TRUE );
 
+        using SfxCommonTemplateDialog_Impl::NewHdl;
     DECL_LINK( FamListSelect, ListBox * );
     DECL_LINK( OkHdl, Button * );
     DECL_LINK( CancelHdl, Button * );
