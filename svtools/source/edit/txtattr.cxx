@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:30:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ TextAttribProtect::TextAttribProtect() :
 /*-- 24.06.2004 14:49:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-TextAttribProtect::TextAttribProtect( const TextAttribProtect& rAttr ) :
+TextAttribProtect::TextAttribProtect( const TextAttribProtect&) :
     TextAttrib( TEXTATTR_PROTECTED )
 {
 }
@@ -183,7 +183,7 @@ TextAttribProtect::~TextAttribProtect()
 /*-- 24.06.2004 14:49:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void TextAttribProtect::SetFont( Font& rFont ) const
+void TextAttribProtect::SetFont( Font& ) const
 {
 }
 /*-- 24.06.2004 14:49:44---------------------------------------------------
