@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localstratumbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:07:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,15 +122,10 @@ void SAL_CALL LocalStratumBase::initialize(const uno::Sequence<uno::Any>& aParam
 
     }
 
-    //OSL_TRACE ( " Url is %s " ,rtl::OUStringToOString(mStrataDataUrl, RTL_TEXTENCODING_ASCII_US).getStr());
-    //validate DefaultDataUrls
-    bool bOptional = checkOptionalArg(mStrataDataUrl);
-
     // get modified base for special layer implementations (e.g. resources)
     this->adjustBaseURL(mStrataDataUrl);
 
     validateFileURL(mStrataDataUrl, *this);
-    //NormalizeURL
     implEnsureAbsoluteURL(mStrataDataUrl);
     normalizeURL(mStrataDataUrl,*this, true);
 
