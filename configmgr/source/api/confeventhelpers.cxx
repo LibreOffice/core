@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:03:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,7 @@ void ConfigChangesBroadcasterImpl::dispatchOuter
     IConfigBroadcaster* pSource
 )
 {
+    { (void)_aTargetPath; }
     OSL_ASSERT(pTarget.is());
     OSL_ASSERT( Path::hasPrefix( _aChangeLocation, _aTargetPath) );
 
