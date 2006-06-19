@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:21:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,7 +777,10 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 #endif
         aSrcPicture = aSrc;
         aSrcPixmap = aPixmap;
-    } else if( pVisualFormat && pVisualFormat->depth != nDepth ) {
+    } else if( pVisualFormat &&
+               (sal::static_int_cast< unsigned int >(pVisualFormat->depth)
+                != nDepth) )
+    {
         aSrcPixmap = XCreatePixmap( pDisplay, hDrawable_, 1, 1, pVisualFormat->depth );
 
         XRenderPictureAttributes aAttr;
@@ -1370,8 +1373,9 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
 // ----------------------------------------------------------------------------
 
-void X11SalGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
-{}
+void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
+{
+}
 
 // ----------------------------------------------------------------------------
 
