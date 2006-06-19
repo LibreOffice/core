@@ -4,9 +4,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:55:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) con
 /* -----------------30.04.2003 11:03-----------------
 
  --------------------------------------------------*/
-void SvtLanguageOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvtLanguageOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
     Broadcast( rHint );
