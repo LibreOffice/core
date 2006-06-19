@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:11:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_TABLINE_CXX
 #include "dialogs.hrc"
@@ -96,14 +95,20 @@ SvxLineTabDialog::SvxLineTabDialog
     SfxTabDialog    ( pParent, SVX_RES( RID_SVXDLG_LINE ), pAttr ),
     pDrawModel      ( pModel ),
     pObj            ( pSdrObj ),
-    bObjSelected    ( bHasObj ),
+    rOutAttrs       ( *pAttr ),
     pColorTab       ( pModel->GetColorTable() ),
     pDashList       ( pModel->GetDashList() ),
-    pLineEndList    ( pModel->GetLineEndList() ),
     pNewDashList    ( pModel->GetDashList() ),
+    pLineEndList    ( pModel->GetLineEndList() ),
     pNewLineEndList ( pModel->GetLineEndList() ),
-    rOutAttrs       ( *pAttr )
-
+    bObjSelected    ( bHasObj ),
+    nLineEndListState( CT_NONE ),
+    nDashListState( CT_NONE ),
+    nPageType( 0 ), // wird hier in erster Linie benutzt, um mit FillItemSet
+                   // die richtigen Attribute zu erhalten ( noch Fragen? )
+    nDlgType( 0 ),
+    nPosDashLb( 0 ),
+    nPosLineEndLb( 0 )
 {
     FreeResource();
 
@@ -111,14 +116,7 @@ SvxLineTabDialog::SvxLineTabDialog
     AddTabPage( RID_SVXPAGE_LINE_DEF, SvxLineDefTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_LINEEND_DEF, SvxLineEndDefTabPage::Create, 0);
 
-    nLineEndListState = CT_NONE;
-    nDashListState = CT_NONE;
 
-    nDlgType = 0;
-    nPageType = 0; // wird hier in erster Linie benutzt, um mit FillItemSet
-                   // die richtigen Attribute zu erhalten ( noch Fragen? )
-    nPosDashLb = 0;
-    nPosLineEndLb = 0;
 
     SetCurPageId( RID_SVXPAGE_LINE );
 
@@ -189,14 +187,14 @@ short SvxLineTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxLineTabDialog, CancelHdl, void *, p )
+IMPL_LINK_INLINE_START( SvxLineTabDialog, CancelHdl, void *, EMPTYARG )
 {
     SavePalettes();
 
     EndDialog( RET_CANCEL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdl, void *, p )
+IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
