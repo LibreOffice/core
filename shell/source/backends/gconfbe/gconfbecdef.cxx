@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbecdef.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:23:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,19 +105,19 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         NULL,
         0
     },
-    { NULL }
+    { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 //------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                                             const sal_Char **aEnvTypeName,
-                                            uno_Environment **aEnvironment) {
+                                            uno_Environment **/*aEnvironment*/) {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *pServiceManager,
+extern "C" sal_Bool SAL_CALL component_writeInfo(void */*pServiceManager*/,
                                                  void *pRegistryKey) {
 
     using namespace ::com::sun::star::registry;
