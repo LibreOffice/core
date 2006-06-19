@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventsdocumenthandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,6 +293,9 @@ throw(  SAXException, RuntimeException )
                                 aLibrary = xAttribs->getValueByIndex( n );
                             }
                             break;
+
+                                          default:
+                                              break; // nothing to do
                         }
                     }
                 } // for
@@ -350,6 +353,9 @@ throw(  SAXException, RuntimeException )
                 m_aEventItems.aEventsProperties[ nIndex ] = a;
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
@@ -389,22 +395,25 @@ throw(  SAXException, RuntimeException )
                 m_bEventStartFound = sal_False;
             }
             break;
+
+                  default:
+                      break; // impossible case
         }
     }
 }
 
-void SAL_CALL OReadEventsDocumentHandler::characters(const OUString& aChars)
+void SAL_CALL OReadEventsDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadEventsDocumentHandler::ignorableWhitespace(const OUString& aWhitespaces)
+void SAL_CALL OReadEventsDocumentHandler::ignorableWhitespace(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadEventsDocumentHandler::processingInstruction(
-    const OUString& aTarget, const OUString& aData )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
