@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LogLevel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:41:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ published constants LogLevel
     const long  FINE      =        500;
     const long  FINER     =        400;
     const long  FINEST    =        300;
-    const long  ALL       = 0x80000000;
+    const long  ALL       = -0x80000000;
 };
 
 //=============================================================================
