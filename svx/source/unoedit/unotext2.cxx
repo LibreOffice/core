@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:39:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,19 +67,19 @@ using namespace ::com::sun::star;
 // ====================================================================
 
 SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw()
-: rText( _rText )
+: mrText( _rText )
 {
-    xParentText = const_cast<SvxUnoTextBase*>(&rText);
-    if( rText.GetEditSource() )
-        pEditSource = rText.GetEditSource()->Clone();
+    mxParentText = const_cast<SvxUnoTextBase*>(&_rText);
+    if( mrText.GetEditSource() )
+        mpEditSource = mrText.GetEditSource()->Clone();
     else
-        pEditSource = NULL;
-    nNextParagraph = 0;
+        mpEditSource = NULL;
+    mnNextParagraph = 0;
 }
 
 SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
 {
-    delete pEditSource;
+    delete mpEditSource;
 }
 
 // container::XEnumeration
@@ -87,8 +87,8 @@ sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements(void)
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    if( pEditSource && pEditSource->GetTextForwarder() )
-        return nNextParagraph < pEditSource->GetTextForwarder()->GetParagraphCount();
+    if( mpEditSource && mpEditSource->GetTextForwarder() )
+        return mnNextParagraph < mpEditSource->GetTextForwarder()->GetParagraphCount();
     else
         return sal_False;
 }
@@ -102,19 +102,19 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
 
     SvxUnoTextContent* pContent = 0;
 
-    const SvxUnoTextRangeBaseList& rRanges( pEditSource->getRanges() );
+    const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
     SvxUnoTextRangeBaseList::const_iterator aIter;
     for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == 0); aIter++ )
     {
         SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( (*aIter ) );
-        if( pIterContent && (pIterContent->nParagraph == nNextParagraph) )
+        if( pIterContent && (pIterContent->mnParagraph == mnNextParagraph) )
             pContent = pIterContent;
     }
 
     if( pContent == 0 )
-     pContent = new SvxUnoTextContent( rText, nNextParagraph );
+     pContent = new SvxUnoTextContent( mrText, mnNextParagraph );
 
-    nNextParagraph++;
+    mnNextParagraph++;
 
     uno::Reference< text::XTextContent > xRef( pContent );
     return uno::makeAny( xRef );
@@ -135,34 +135,38 @@ static SvxUnoText* getDummyText() throw()
 }
 
 SvxUnoTextContent::SvxUnoTextContent() throw()
-:   SvxUnoTextRangeBase(*getDummyText()),
-    nParagraph(0),
-    rParentText(*getDummyText()),
-    aDisposeListeners(aDisposeContainerMutex),
-    bDisposing( sal_False )
+:   SvxUnoTextRangeBase(*getDummyText())
+,   mnParagraph(0)
+,   mrParentText(*getDummyText())
+,   maDisposeListeners(maDisposeContainerMutex)
+,   mbDisposing( false )
 {
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
-:   SvxUnoTextRangeBase(rText),
-    nParagraph(nPara),
-    rParentText(rText),
-    aDisposeListeners(aDisposeContainerMutex),
-    bDisposing( sal_False )
+:   SvxUnoTextRangeBase(rText)
+,   mnParagraph(nPara)
+,   mrParentText(rText)
+,   maDisposeListeners(maDisposeContainerMutex)
+,   mbDisposing( false )
 {
-    xParentText = const_cast<SvxUnoTextBase*>(&rText);
+    mxParentText = const_cast<SvxUnoTextBase*>(&rText);
     if( GetEditSource() && GetEditSource()->GetTextForwarder() )
-        SetSelection( ESelection( nParagraph,0, nParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( nParagraph ) ) );
+        SetSelection( ESelection( mnParagraph,0, mnParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( mnParagraph ) ) );
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
-:   SvxUnoTextRangeBase(rContent),
-    rParentText(rContent.rParentText),
-    aDisposeListeners(aDisposeContainerMutex),
-    bDisposing( sal_False )
+:   SvxUnoTextRangeBase(rContent)
+,   text::XTextContent()
+,   container::XEnumerationAccess()
+,   lang::XTypeProvider()
+,   cppu::OWeakAggObject()
+,   mrParentText(rContent.mrParentText)
+,   maDisposeListeners(maDisposeContainerMutex)
+,   mbDisposing( false )
 {
-    xParentText = rContent.xParentText;
-    nParagraph  = rContent.nParagraph;
+    mxParentText = rContent.mxParentText;
+    mnParagraph  = rContent.mnParagraph;
     SetSelection( rContent.GetSelection() );
 }
 
@@ -249,18 +253,18 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
 uno::Reference< text::XText > SAL_CALL SvxUnoTextContent::getText()
     throw(uno::RuntimeException)
 {
-    return xParentText;
+    return mxParentText;
 }
 
 // text::XTextContent
-void SAL_CALL SvxUnoTextContent::attach( const uno::Reference< text::XTextRange >& xTextRange )
+void SAL_CALL SvxUnoTextContent::attach( const uno::Reference< text::XTextRange >& )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextContent::getAnchor() throw( uno::RuntimeException )
 {
-    return uno::Reference< text::XTextRange >::query( xParentText );
+    return uno::Reference< text::XTextRange >::query( mxParentText );
 }
 
 // XComponent
@@ -270,29 +274,29 @@ void SAL_CALL SvxUnoTextContent::dispose()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( bDisposing )
+    if( mbDisposing )
         return; // catched a recursion
 
-    bDisposing = sal_True;
+    mbDisposing = true;
 
     lang::EventObject aEvt;
     aEvt.Source = *(OWeakAggObject*) this;
-    aDisposeListeners.disposeAndClear(aEvt);
+    maDisposeListeners.disposeAndClear(aEvt);
 
-    if( xParentText.is() )
-        xParentText->removeTextContent( this );
+    if( mxParentText.is() )
+        mxParentText->removeTextContent( this );
 }
 
 void SAL_CALL SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException)
 {
-    aDisposeListeners.addInterface(xListener);
+    maDisposeListeners.addInterface(xListener);
 }
 
 void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
     throw(uno::RuntimeException)
 {
-   aDisposeListeners.removeInterface(aListener);
+   maDisposeListeners.removeInterface(aListener);
 }
 
 // XEnumerationAccess
@@ -302,7 +306,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnum
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    return new SvxUnoTextRangeEnumeration( rParentText, nParagraph );
+    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph );
 }
 
 // XElementAccess ( container::XEnumerationAccess )
@@ -322,7 +326,7 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
     if( pForwarder )
     {
         SvUShorts aPortions;
-        pForwarder->GetPortions( nParagraph, aPortions );
+        pForwarder->GetPortions( mnParagraph, aPortions );
         return aPortions.Count() > 0;
     }
     else
@@ -336,60 +340,60 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
 void SAL_CALL SvxUnoTextContent::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    _setPropertyValue( aPropertyName, aValue, nParagraph );
+    _setPropertyValue( aPropertyName, aValue, mnParagraph );
 }
 
 uno::Any SAL_CALL SvxUnoTextContent::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return _getPropertyValue( PropertyName, nParagraph );
+    return _getPropertyValue( PropertyName, mnParagraph );
 }
 
 // XMultiPropertySet
 void SAL_CALL SvxUnoTextContent::setPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    _setPropertyValues( aPropertyNames, aValues, nParagraph );
+    _setPropertyValues( aPropertyNames, aValues, mnParagraph );
 }
 
 uno::Sequence< uno::Any > SAL_CALL SvxUnoTextContent::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
 {
-    return _getPropertyValues( aPropertyNames, nParagraph );
+    return _getPropertyValues( aPropertyNames, mnParagraph );
 }
 
 /*// XTolerantMultiPropertySet
 uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextContent::setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    return _setPropertyValuesTolerant(aPropertyNames, aValues, nParagraph);
+    return _setPropertyValuesTolerant(aPropertyNames, aValues, mnParagraph);
 }
 
 uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
 {
-    return _getPropertyValuesTolerant(aPropertyNames, nParagraph);
+    return _getPropertyValuesTolerant(aPropertyNames, mnParagraph);
 }
 
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
     throw (uno::RuntimeException)
 {
-    return _getDirectPropertyValuesTolerant(aPropertyNames, nParagraph);
+    return _getDirectPropertyValuesTolerant(aPropertyNames, mnParagraph);
 }*/
 
 // beans::XPropertyState
 beans::PropertyState SAL_CALL SvxUnoTextContent::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    return _getPropertyState( PropertyName, nParagraph );
+    return _getPropertyState( PropertyName, mnParagraph );
 }
 
 uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextContent::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    return _getPropertyStates( aPropertyName, nParagraph );
+    return _getPropertyStates( aPropertyName, mnParagraph );
 }
 
 void SAL_CALL SvxUnoTextContent::setPropertyToDefault( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    _setPropertyToDefault( PropertyName, nParagraph );
+    _setPropertyToDefault( PropertyName, mnParagraph );
 }
 
 // lang::XServiceInfo
@@ -417,28 +421,28 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 // ====================================================================
 
 SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
-:   xParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
-    rParentText( rText ),
-    nParagraph( nPara ),
-    nNextPortion( 0 )
+:   mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
+    mrParentText( rText ),
+    mnParagraph( nPara ),
+    mnNextPortion( 0 )
 {
-    pEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : NULL;
+    mpEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : NULL;
 
-    if( pEditSource && pEditSource->GetTextForwarder() )
+    if( mpEditSource && mpEditSource->GetTextForwarder() )
     {
-        pPortions = new SvUShorts;
-        pEditSource->GetTextForwarder()->GetPortions( nPara, *pPortions );
+        mpPortions = new SvUShorts;
+        mpEditSource->GetTextForwarder()->GetPortions( nPara, *mpPortions );
     }
     else
     {
-        pPortions = NULL;
+        mpPortions = NULL;
     }
 }
 
 SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() throw()
 {
-    delete pEditSource;
-    delete pPortions;
+    delete mpEditSource;
+    delete mpPortions;
 }
 
 // container::XEnumeration
@@ -448,7 +452,7 @@ sal_Bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    return pPortions ? nNextPortion < pPortions->Count() : 0;
+    return mpPortions ? mnNextPortion < mpPortions->Count() : 0;
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
@@ -456,18 +460,18 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( pPortions == NULL || nNextPortion >= pPortions->Count() )
+    if( mpPortions == NULL || mnNextPortion >= mpPortions->Count() )
         throw container::NoSuchElementException();
 
     sal_uInt16 nStartPos = 0;
-    if (nNextPortion > 0)
-        nStartPos = pPortions->GetObject(nNextPortion-1);
-    sal_uInt16 nEndPos = pPortions->GetObject(nNextPortion);
-    ESelection aSel( nParagraph, nStartPos, nParagraph, nEndPos );
+    if (mnNextPortion > 0)
+        nStartPos = mpPortions->GetObject(mnNextPortion-1);
+    sal_uInt16 nEndPos = mpPortions->GetObject(mnNextPortion);
+    ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
 
     uno::Reference< text::XTextRange > xRange;
 
-    const SvxUnoTextRangeBaseList& rRanges( pEditSource->getRanges() );
+    const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
 
     SvxUnoTextRange* pRange = 0;
 
@@ -475,19 +479,19 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == 0); aIter++ )
     {
         SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( (*aIter ) );
-        if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->aSelection ) ) )
+        if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->maSelection ) ) )
             pRange = pIterRange;
     }
 
     if( pRange == 0 )
     {
-        pRange = new SvxUnoTextRange( rParentText, sal_True );
+        pRange = new SvxUnoTextRange( mrParentText, sal_True );
         pRange->SetSelection(aSel);
     }
 
     xRange = pRange;
 
-    nNextPortion++;
+    mnNextPortion++;
 
     return uno::makeAny( xRange );
 }
@@ -508,13 +512,16 @@ uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw()
 :   SvxUnoTextRangeBase(rText),
-    xParentText( const_cast<SvxUnoTextBase*>(&rText) )
+    mxParentText( const_cast<SvxUnoTextBase*>(&rText) )
 {
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw()
-:   SvxUnoTextRangeBase(rCursor),
-    xParentText(rCursor.xParentText)
+:   SvxUnoTextRangeBase(rCursor)
+,   text::XTextCursor()
+,   lang::XTypeProvider()
+,   cppu::OWeakAggObject()
+,   mxParentText(rCursor.mxParentText)
 {
 }
 
@@ -671,7 +678,7 @@ void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRang
 // text::XTextRange (rest in SvxTextRange)
 uno::Reference< text::XText > SAL_CALL SvxUnoTextCursor::getText(void) throw( uno::RuntimeException )
 {
-    return xParentText;
+    return mxParentText;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextCursor::getStart()
