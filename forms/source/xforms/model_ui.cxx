@@ -4,9 +4,9 @@
  *
  *  $RCSfile: model_ui.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:19:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ OUString Model::getNodeName( const XNode_t& xNode )
 }
 
 OUString Model::getBindingName( const XPropertySet_t& xBinding,
-                                sal_Bool bDetail )
+                                sal_Bool /*bDetail*/ )
     throw( RuntimeException )
 {
     OUString sID;
@@ -392,7 +392,7 @@ OUString Model::getBindingName( const XPropertySet_t& xBinding,
 }
 
 OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
-                                   sal_Bool bDetail )
+                                   sal_Bool /*bDetail*/ )
     throw( RuntimeException )
 {
     OUString sID;
@@ -830,9 +830,11 @@ OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
                 sResult += lcl_serializeForDisplay( xAttr );
                 ++nAttributeNodes;
             }
-            continue;
         }
-        break;
+        continue;
+
+        default:
+            break;
         }
 
         // append node
