@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:18:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ namespace accessibility
             The total number of paragraphs the EditEngine currently
             has (_not_ the number of currently visible children)
          */
-        void SetNum( sal_uInt32 nNumParas );
+        void SetNum( sal_Int32 nNumParas );
 
         /** Get the number of paragraphs currently possible */
         sal_uInt32 GetNum() const;
