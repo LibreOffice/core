@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lockhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:47:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,16 +92,16 @@ namespace framework{
     @onerror    -
 *//*-*************************************************************************************************************/
 LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
-    :   m_pOwnMutex         ( NULL )
+    :   m_pFairRWLock       ( NULL )
+    ,   m_pOwnMutex         ( NULL )
     ,   m_pSolarMutex       ( NULL )
-    ,   m_pFairRWLock       ( NULL )
     ,   m_pShareableOslMutex( NULL )
     ,   m_bDummySolarMutex  ( sal_False )
 {
     m_eLockType = implts_getLockType();
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex = new ::osl::Mutex;
                                 }
@@ -195,7 +195,7 @@ void LockHelper::acquire()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex->acquire();
                                 }
@@ -232,7 +232,7 @@ void LockHelper::release()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex->release();
                                 }
@@ -269,7 +269,7 @@ void LockHelper::acquireReadAccess()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex->acquire();
                                 }
@@ -305,7 +305,7 @@ void LockHelper::releaseReadAccess()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex->release();
                                 }
@@ -343,7 +343,7 @@ void LockHelper::acquireWriteAccess()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex->acquire();
                                 }
@@ -379,7 +379,7 @@ void LockHelper::releaseWriteAccess()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
+        case E_NOTHING      :   break; // There is nothing to do ...
         case E_OWNMUTEX     :   {
                                     m_pOwnMutex->release();
                                 }
@@ -423,9 +423,9 @@ void LockHelper::downgradeWriteAccess()
 {
     switch( m_eLockType )
     {
-        //case E_NOTHING    :   // There is nothing to do ...
-        //case E_OWNMUTEX   :   // Not supported for mutex!
-        //case E_SOLARMUTEX :   // Not supported for mutex!
+        case E_NOTHING      :   break; // There is nothing to do ...
+        case E_OWNMUTEX     :   break; // Not supported for mutex!
+        case E_SOLARMUTEX   :   break; // Not supported for mutex!
         case E_FAIRRWLOCK   :   m_pFairRWLock->downgradeWriteAccess();
                                 break;
     }
