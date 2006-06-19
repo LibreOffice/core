@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:35:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,6 +446,7 @@ namespace configmgr
             virtual void disposeData();
 
         // rebuilding
+            using TreeImpl::rebuild;
             void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::TreeAccessor const & _aNewData,
                             data::Accessor const & _aOldAccessor);
 
