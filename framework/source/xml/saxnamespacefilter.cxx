@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxnamespacefilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:04:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,9 @@ namespace framework{
 
 SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler >& rSax1DocumentHandler ) :
     ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject(),
-    xDocumentHandler( rSax1DocumentHandler ),
-    m_xLocator( 0 ),
-    m_nDepth( 0 )
+     m_xLocator( 0 ),
+     xDocumentHandler( rSax1DocumentHandler ),
+     m_nDepth( 0 )
 {
 }
 
@@ -92,7 +92,7 @@ void SAL_CALL SaxNamespaceFilter::endDocument(void)
 }
 
 void SAL_CALL SaxNamespaceFilter::startElement(
-    const rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
+    const rtl::OUString& rName, const Reference< XAttributeList > &xAttribs )
     throw(  SAXException, RuntimeException )
 {
     XMLNamespaces aXMLNamespaces;
@@ -138,7 +138,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
 
     try
     {
-         aNamespaceElementName = aXMLNamespaces.applyNSToElementName( aName );
+         aNamespaceElementName = aXMLNamespaces.applyNSToElementName( rName );
     }
     catch ( SAXException& e )
     {
