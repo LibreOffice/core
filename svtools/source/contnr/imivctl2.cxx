@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ void IcnCursor_Impl::Clear()
 }
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
-    USHORT nPref, BOOL bDown, BOOL bSimple  )
+    USHORT, BOOL bDown, BOOL bSimple  )
 {
     DBG_ASSERT(pCurEntry,"SearchCol: No reference entry");
     SvPtrarr* pList = &(pColumns[ nCol ]);
@@ -211,7 +211,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(USHORT nCol,USHORT nTop,USHORT
 }
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
-    USHORT nPref, BOOL bRight, BOOL bSimple )
+    USHORT, BOOL bRight, BOOL bSimple )
 {
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
     SvPtrarr* pList = &(pRows[ nRow ]);
@@ -304,13 +304,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(USHORT nRow,USHORT nLeft,USHOR
     a,b,c : 2., 3., 4. Suchrechteck
 */
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pEntry, BOOL bRight )
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCtrlEntry, BOOL bRight )
 {
     SvxIconChoiceCtrlEntry* pResult;
-    pCurEntry = pEntry;
+    pCurEntry = pCtrlEntry;
     Create();
-    USHORT nY = pEntry->nY;
-    USHORT nX = pEntry->nX;
+    USHORT nY = pCtrlEntry->nY;
+    USHORT nX = pCtrlEntry->nX;
     DBG_ASSERT(nY< nRows,"GoLeftRight:Bad column");
     DBG_ASSERT(nX< nCols,"GoLeftRight:Bad row");
     // Nachbar auf gleicher Zeile ?
@@ -411,11 +411,11 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
     return 0;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pEntry, BOOL bDown)
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlEntry, BOOL bDown)
 {
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
-        ULONG nPos = pView->GetEntryListPos( pEntry );
+        ULONG nPos = pView->GetEntryListPos( pCtrlEntry );
         if( bDown && nPos < (pView->aEntries.Count() - 1) )
             return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nPos + 1 );
         else if( !bDown && nPos > 0 )
@@ -424,10 +424,10 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pEntry
     }
 
     SvxIconChoiceCtrlEntry* pResult;
-    pCurEntry = pEntry;
+    pCurEntry = pCtrlEntry;
     Create();
-    USHORT nY = pEntry->nY;
-    USHORT nX = pEntry->nX;
+    USHORT nY = pCtrlEntry->nY;
+    USHORT nX = pCtrlEntry->nX;
     DBG_ASSERT(nY<nRows,"GoUpDown:Bad column");
     DBG_ASSERT(nX<nCols,"GoUpDown:Bad row");
 
@@ -499,12 +499,12 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
 {
     if( !pRefEntry )
     {
-        USHORT nRows = (USHORT)(pView->aVirtOutputSize.Height() / pView->nGridDY);
-        nRows++; // wg. Abrundung!
+        USHORT nGridRows = (USHORT)(pView->aVirtOutputSize.Height() / pView->nGridDY);
+        nGridRows++; // wg. Abrundung!
 
-        if( !nRows )
+        if( !nGridRows )
             return;
-        for( USHORT nCurList = 0; nCurList < nRows; nCurList++ )
+        for( USHORT nCurList = 0; nCurList < nGridRows; nCurList++ )
         {
             SvPtrarr* pRow = new SvPtrarr;
             rLists.Insert( (void*)pRow, nCurList );
@@ -728,7 +728,6 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( BOOL bOccupyFound )
         Expand();
         nStart = nCount;
     }
-    return 0;
 }
 
 // ein Eintrag belegt nur das unter seinem Zentrum liegende GridRect
