@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:37:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,8 @@ public:
     void                    SetHelpId( sal_uInt32 nHelpId );
     sal_uInt32              GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
-    void                    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
+    using Window::SetPosSizePixel;
+    virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
 
     /** initialize the view with the content of a folder given by URL, and aply an immediate filter
 
