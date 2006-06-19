@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_linkhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:52:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:00:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,11 +95,12 @@ namespace
 LinkHelper::OutPosition
 LinkHelper::PositionOf_CurXRefs( const String & i_ceName ) const
 {
+    StreamLock sl(100);
     return OutPosition( rEnv.CurPosition(),
-                        StreamLock(100)() << i_ceName
-                                              << C_sXrefsSuffix
-                                              << ".html"
-                                              << c_str );
+                        sl()    << i_ceName
+                                << C_sXrefsSuffix
+                                << ".html"
+                                << c_str );
 }
 
 const String &
