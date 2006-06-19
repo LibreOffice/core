@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:36:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ namespace DOM
         nodemap_t::iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
         {
-            CNode *pNode = i->second;
+      // CNode *pNode = i->second;
             CNode::theNodeMap.erase(i);
         }
     }
@@ -169,6 +169,18 @@ namespace DOM
         return pNode;
     }
 
+    xmlNodePtr CNode::getNodePtr(const Reference< XNode >& aNode)
+    {
+      xmlNodePtr aNodePtr = 0;
+      try {
+    Reference< XUnoTunnel > aTunnel(aNode, UNO_QUERY_THROW);
+    sal_Int64 rawPtr = aTunnel->getSomething(Sequence<sal_Int8>());
+    aNodePtr = reinterpret_cast<xmlNodePtr>(sal::static_int_cast<sal_IntPtr>(rawPtr));
+      } catch ( ... ) {
+      }
+      return aNodePtr;
+    }
+
     CNode::CNode()
         : m_aNodePtr(0)
     {
@@ -249,8 +261,7 @@ namespace DOM
     {
         Reference< XNode> aNode;
         if (m_aNodePtr != NULL) {
-            Reference< XUnoTunnel > tun(newChild, UNO_QUERY);
-            xmlNodePtr cur = (xmlNodePtr)(tun->getSomething(Sequence <sal_Int8>()));
+        xmlNodePtr cur = CNode::getNodePtr(newChild.get());
 
             // error checks:
             // from other document
@@ -280,7 +291,7 @@ namespace DOM
                 if (cur->parent != NULL)
                 {
                     if (m_aNodePtr->type != XML_ELEMENT_NODE ||
-                        strcmp((char*)cur->parent->name, "__private") != NULL)
+                        strcmp((char*)cur->parent->name, "__private") != 0)
                     {
                         DOMException e;
                         e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
@@ -618,10 +629,8 @@ namespace DOM
             throw e;
         }
 
-        Reference< XUnoTunnel > tref(refChild, UNO_QUERY);
-        Reference< XUnoTunnel > tnew(newChild, UNO_QUERY);
-        xmlNodePtr pRefChild = (xmlNodePtr)tref->getSomething(Sequence< sal_Int8>());
-        xmlNodePtr pNewChild = (xmlNodePtr)tnew->getSomething(Sequence< sal_Int8>());
+    xmlNodePtr pRefChild = CNode::getNodePtr(refChild.get());
+        xmlNodePtr pNewChild = CNode::getNodePtr(newChild.get());
         xmlNodePtr cur = m_aNodePtr->children;
 
         //search cild before which to insert
@@ -644,7 +653,7 @@ namespace DOM
     Tests whether the DOM implementation implements a specific feature and
     that feature is supported by this node.
     */
-    sal_Bool SAL_CALL CNode::isSupported(const OUString& feature, const OUString& ver)
+  sal_Bool SAL_CALL CNode::isSupported(const OUString& /*feature*/, const OUString& /*ver*/)
         throw (RuntimeException)
     {
         // XXX
@@ -680,12 +689,11 @@ namespace DOM
 
         Reference<XNode> xReturn( oldChild );
 
-        Reference< XUnoTunnel > told(oldChild, UNO_QUERY);
-        xmlNodePtr old = (xmlNodePtr)told->getSomething(Sequence< sal_Int8>());
+        xmlNodePtr old = CNode::getNodePtr(oldChild);
 
         if( old->type == XML_ATTRIBUTE_NODE )
         {
-            xmlAttrPtr pAttr = (xmlAttrPtr)told->getSomething(Sequence< sal_Int8 >());
+          xmlAttrPtr pAttr = (xmlAttrPtr) old;
             xmlRemoveProp( pAttr );
             xReturn.clear();
         }
@@ -761,10 +769,8 @@ namespace DOM
         Reference< XNode > aNode = removeChild(oldChild);
         appendChild(newChild);
 */
-        Reference< XUnoTunnel > tOld(oldChild, UNO_QUERY);
-        xmlNodePtr pOld = (xmlNodePtr)tOld->getSomething(Sequence< sal_Int8>());
-        Reference< XUnoTunnel > tNew(newChild, UNO_QUERY);
-        xmlNodePtr pNew = (xmlNodePtr)tNew->getSomething(Sequence< sal_Int8>());
+    xmlNodePtr pOld = CNode::getNodePtr(oldChild);
+        xmlNodePtr pNew = CNode::getNodePtr(newChild);
 
         if( pOld->type == XML_ATTRIBUTE_NODE )
         {
@@ -776,7 +782,7 @@ namespace DOM
                 throw e;
             }
 
-            xmlAttrPtr pAttr = (xmlAttrPtr)tOld->getSomething(Sequence< sal_Int8 >());
+            xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
             xmlRemoveProp( pAttr );
             appendChild( newChild );
         }
@@ -830,7 +836,7 @@ namespace DOM
     /**
     The value of this node, depending on its type; see the table above.
     */
-    void SAL_CALL CNode::setNodeValue(const OUString& nodeValue)
+  void SAL_CALL CNode::setNodeValue(const OUString& /*nodeValue*/)
         throw (DOMException)
     {
         // use specific node implememntation
@@ -857,10 +863,11 @@ namespace DOM
 
     }
 
-    sal_Int64 SAL_CALL CNode::getSomething(const Sequence< sal_Int8 >& id) throw (RuntimeException)
+    sal_Int64 SAL_CALL CNode::getSomething(const Sequence< sal_Int8 >& /*id*/) throw (RuntimeException)
     {
         // XXX check ID
-        return (sal_Int64)m_aNodePtr;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_aNodePtr));
+        // return (sal_Int64)m_aNodePtr;
     }
 
 
