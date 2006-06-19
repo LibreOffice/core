@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imestatuswindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:40:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ ImeStatusWindow::~ImeStatusWindow()
         }
 }
 
-void SAL_CALL ImeStatusWindow::disposing(css::lang::EventObject const & rSource)
+void SAL_CALL ImeStatusWindow::disposing(css::lang::EventObject const & )
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -162,7 +162,7 @@ void SAL_CALL ImeStatusWindow::disposing(css::lang::EventObject const & rSource)
 }
 
 void SAL_CALL
-ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & rEvent)
+ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & )
     throw (css::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
