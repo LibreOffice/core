@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:16:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -97,136 +97,150 @@ namespace connectivity
         void free();
 
     public:
-        ORowSetValue() :
-             m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
-            ,m_bBound(sal_True)
+        ORowSetValue()
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
         }
 
-        ORowSetValue(const ORowSetValue& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
-            ,m_bBound(sal_True)
+        ORowSetValue(const ORowSetValue& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bNull(sal_True)
-            ,m_bSigned(sal_True)
-        {
-            m_aValue.m_pString = NULL;
-            operator=(_rRH);
-        }
-
-        ORowSetValue(const ::rtl::OUString& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bBound(sal_True)
-            ,m_bNull(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const double& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::DOUBLE)
-            ,m_bBound(sal_True)
+        ORowSetValue(const ::rtl::OUString& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const float& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::FLOAT)
-            ,m_bBound(sal_True)
+        ORowSetValue(const double& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::DOUBLE)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const sal_Int8& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::TINYINT)
-            ,m_bBound(sal_True)
+        ORowSetValue(const float& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::FLOAT)
             ,m_bNull(sal_True)
-            ,m_bSigned(sal_True)
-        {
-            m_aValue.m_pString = NULL;
-            operator=(_rRH);
-        }
-        ORowSetValue(const sal_Int16& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
             ,m_bBound(sal_True)
-            ,m_bNull(sal_True)
-            ,m_bSigned(sal_True)
-        {
-            m_aValue.m_pString = NULL;
-            operator=(_rRH);
-        }
-        ORowSetValue(const sal_Int32& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::INTEGER)
-            ,m_bBound(sal_True)
-            ,m_bNull(sal_True)
-            ,m_bSigned(sal_True)
-        {
-            m_aValue.m_pString = NULL;
-            operator=(_rRH);
-        }
-        ORowSetValue(const sal_Int64& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
-            ,m_bBound(sal_True)
-            ,m_bNull(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const sal_Bool& _rRH) :
-             m_eTypeKind(::com::sun::star::sdbc::DataType::BIT)
-            ,m_bBound(sal_True)
+        ORowSetValue(const sal_Int8& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::TINYINT)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_True)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
+        ORowSetValue(const sal_Int16& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_True)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
+        ORowSetValue(const sal_Int32& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::INTEGER)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_True)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
+        ORowSetValue(const sal_Int64& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::util::Date& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::DATE)
-            ,m_bBound(sal_True)
+        ORowSetValue(const sal_Bool& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::BIT)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::util::Time& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::TIME)
-            ,m_bBound(sal_True)
+        ORowSetValue(const ::com::sun::star::util::Date& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::DATE)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::util::DateTime& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::TIMESTAMP)
-            ,m_bBound(sal_True)
+        ORowSetValue(const ::com::sun::star::util::Time& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::TIME)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::LONGVARBINARY)
-            ,m_bBound(sal_True)
+        ORowSetValue(const ::com::sun::star::util::DateTime& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::TIMESTAMP)
             ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_True)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
+
+        ORowSetValue(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::LONGVARBINARY)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
@@ -240,11 +254,11 @@ namespace connectivity
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t,void* _pHint ) SAL_THROW( () )
             { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
             {  }
 
         ORowSetValue& operator=(const ORowSetValue& _rRH);
