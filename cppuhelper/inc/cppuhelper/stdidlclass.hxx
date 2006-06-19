@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdidlclass.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:21:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1
+                         const Interface1 *
                      )
     SAL_THROW( () )
 {
@@ -93,8 +93,8 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2
+                         const Interface1 *,
+                         const Interface2 *
                      )
     SAL_THROW( () )
 {
@@ -119,9 +119,9 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *
                      )
     SAL_THROW( () )
 {
@@ -147,10 +147,10 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *
                      )
     SAL_THROW( () )
 {
@@ -179,11 +179,11 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4 ,
-                         const Interface5 *p5
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *,
+                         const Interface5 *
                      )
     SAL_THROW( () )
 {
@@ -211,12 +211,12 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4 ,
-                         const Interface5 *p5 ,
-                         const Interface6 *p6
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *,
+                         const Interface5 *,
+                         const Interface6 *
                      )
     SAL_THROW( () )
 {
@@ -246,13 +246,13 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4 ,
-                         const Interface5 *p5 ,
-                         const Interface6 *p6 ,
-                         const Interface7 *p7
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *,
+                         const Interface5 *,
+                         const Interface6 *,
+                         const Interface7 *
                      )
     SAL_THROW( () )
 {
@@ -284,14 +284,14 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4 ,
-                         const Interface5 *p5 ,
-                         const Interface6 *p6 ,
-                         const Interface7 *p7 ,
-                         const Interface8 *p8
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *,
+                         const Interface5 *,
+                         const Interface6 *,
+                         const Interface7 *,
+                         const Interface8 *
                      )
     SAL_THROW( () )
 {
@@ -322,15 +322,15 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4 ,
-                         const Interface5 *p5 ,
-                         const Interface6 *p6 ,
-                         const Interface7 *p7 ,
-                         const Interface8 *p8 ,
-                         const Interface9 *p9
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *,
+                         const Interface5 *,
+                         const Interface6 *,
+                         const Interface7 *,
+                         const Interface8 *,
+                         const Interface9 *
                      )
     SAL_THROW( () )
 {
@@ -360,16 +360,16 @@ inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
-                         const Interface1 *p1 ,
-                         const Interface2 *p2 ,
-                         const Interface3 *p3 ,
-                         const Interface4 *p4 ,
-                         const Interface5 *p5 ,
-                         const Interface6 *p6 ,
-                         const Interface7 *p7 ,
-                         const Interface8 *p8 ,
-                         const Interface9 *p9 ,
-                         const Interface10 *p10
+                         const Interface1 *,
+                         const Interface2 *,
+                         const Interface3 *,
+                         const Interface4 *,
+                         const Interface5 *,
+                         const Interface6 *,
+                         const Interface7 *,
+                         const Interface8 *,
+                         const Interface9 *,
+                         const Interface10 *
                      )
     SAL_THROW( () )
 {
