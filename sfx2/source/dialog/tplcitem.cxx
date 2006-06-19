@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplcitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:39:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 // Konstruktor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
-        USHORT nId,                 // ID
+        USHORT nSlotId,                 // ID
         SfxCommonTemplateDialog_Impl &rDlg, // Controller-Instanz, dem dieses Item zugeordnet ist.
         SfxBindings &rBindings):
-    SfxControllerItem(nId, rBindings),
+    SfxControllerItem(nSlotId, rBindings),
     rTemplateDlg(rDlg),
     nWaterCanState(0xff),
     nUserEventId(0)
