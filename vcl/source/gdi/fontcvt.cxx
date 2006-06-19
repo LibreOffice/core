@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:11:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1331,7 +1331,7 @@ String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
         }
         sRet.AssignAscii(SymbolFontToString(nI));
 
-        xub_StrLen nSize = aPossibilities.size();
+        xub_StrLen nSize = sal::static_int_cast<xub_StrLen>(aPossibilities.size());
         for(xub_StrLen nPos = 0; nPos < nSize; ++nPos)
         {
             const Result &rResult = aPossibilities[nPos];
@@ -1435,7 +1435,10 @@ static RecodeTable aRecodeTable[] =
 };
 
 static ImplCvtChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
+#if 0
+// not used
 static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "StarSymbol", NULL };
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -1504,7 +1507,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
 
 // -----------------------------------------------------------------------
 
-void DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter )
+void DestroyFontToSubsFontConverter( FontToSubsFontConverter )
 {
     // nothing to do for now, because we use static ImplCvtChars
 }
