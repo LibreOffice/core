@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:31:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,16 +163,15 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
 |************************************************************************/
 
 SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   maGrpNewDoc     ( this, ResId (GRP_NEWDOCUMENT) ),
+:   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
+    maGrpNewDoc     ( this, ResId (GRP_NEWDOCUMENT) ),
     maRbtEditNow    ( this, ResId (RB_EDITNOW) ),
     maRbtEditLater  ( this, ResId (RB_EDITLATER) ),
     maFtPath        ( this, ResId (FT_PATH_NEWDOC) ),
     maCbbPath       ( this, INET_PROT_FILE ),
-    maFtDocTypes    ( this, ResId (FT_DOCUMENT_TYPES) ),
-    maLbDocTypes    ( this, ResId (LB_DOCUMENT_TYPES) ),
     maBtCreate      ( this, ResId (BTN_CREATE) ),
-    SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ),
-                              rItemSet )
+    maFtDocTypes    ( this, ResId (FT_DOCUMENT_TYPES) ),
+    maLbDocTypes    ( this, ResId (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
     maBtCreate.SetModeImage( Image( ResId( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
@@ -214,7 +213,7 @@ SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 |************************************************************************/
 
 
-void SvxHyperlinkNewDocTp::FillDlgFields ( String& aStrURL )
+void SvxHyperlinkNewDocTp::FillDlgFields ( String& /*aStrURL*/ )
 {
 }
 
@@ -270,16 +269,16 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
 
         rtl::OUString aDocumentUrl, aTitle, aImageId, aTargetName;
 
-           for ( int i = 0; i < rDynamicMenuEntry.getLength(); i++ )
+           for ( int e = 0; e < rDynamicMenuEntry.getLength(); e++ )
         {
-            if ( rDynamicMenuEntry[ i ].Name == DYNAMICMENU_PROPERTYNAME_URL )
-                rDynamicMenuEntry[ i ].Value >>= aDocumentUrl;
-            else if ( rDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
-                rDynamicMenuEntry[i].Value >>= aTitle;
-            else if ( rDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
-                rDynamicMenuEntry[i].Value >>= aImageId;
-            else if ( rDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
-                rDynamicMenuEntry[i].Value >>= aTargetName;
+            if ( rDynamicMenuEntry[ e ].Name == DYNAMICMENU_PROPERTYNAME_URL )
+                rDynamicMenuEntry[ e ].Value >>= aDocumentUrl;
+            else if ( rDynamicMenuEntry[e].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
+                rDynamicMenuEntry[e].Value >>= aTitle;
+            else if ( rDynamicMenuEntry[e].Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
+                rDynamicMenuEntry[e].Value >>= aImageId;
+            else if ( rDynamicMenuEntry[e].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
+                rDynamicMenuEntry[e].Value >>= aTargetName;
         }
 
         // Insert into listbox
