@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emptyproperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:14:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,53 +113,53 @@ namespace sdr
             return *mpEmptyItemSet;
         }
 
-        void EmptyProperties::SetObjectItem(const SfxPoolItem& rItem)
+        void EmptyProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::SetObjectItem() should never be called (!)");
         }
 
-        void EmptyProperties::SetObjectItemDirect(const SfxPoolItem& rItem)
+        void EmptyProperties::SetObjectItemDirect(const SfxPoolItem& /*rItem*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::SetObjectItemDirect() should never be called (!)");
         }
 
-        void EmptyProperties::ClearObjectItem(const sal_uInt16 nWhich)
+        void EmptyProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::ClearObjectItem() should never be called (!)");
         }
 
-        void EmptyProperties::ClearObjectItemDirect(const sal_uInt16 nWhich)
+        void EmptyProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::ClearObjectItemDirect() should never be called (!)");
         }
 
-        void EmptyProperties::SetObjectItemSet(const SfxItemSet& rSet)
+        void EmptyProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::SetObjectItemSet() should never be called (!)");
         }
 
-        void EmptyProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void EmptyProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::ItemSetChanged() should never be called (!)");
         }
 
-        sal_Bool EmptyProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) const
+        sal_Bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             DBG_ASSERT(sal_False, "EmptyProperties::AllowItemChange() should never be called (!)");
             return sal_True;
         }
 
-        void EmptyProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+        void EmptyProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::ItemChange() should never be called (!)");
         }
 
-        void EmptyProperties::PostItemChange(const sal_uInt16 nWhich)
+        void EmptyProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::PostItemChange() should never be called (!)");
         }
 
-        void EmptyProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::SetStyleSheet() should never be called (!)");
         }
