@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlemgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:40:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ struct ImplIdleData
     BOOL        mbTimeout;
 };
 
-DECLARE_LIST( ImplIdleList, ImplIdleData* );
+DECLARE_LIST( ImplIdleList, ImplIdleData* )
 
 #define IMPL_IDLETIMEOUT         350
 
