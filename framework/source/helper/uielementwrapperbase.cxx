@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uielementwrapperbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:27:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,18 +186,18 @@ void SAL_CALL UIElementWrapperBase::update() throw (::com::sun::star::uno::Runti
 }
 
 // XPropertySet helper
-sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       aConvertedValue ,
-                                                                  Any&       aOldValue       ,
-                                                                  sal_Int32  nHandle         ,
-                                                                  const Any& aValue             ) throw( com::sun::star::lang::IllegalArgumentException )
+sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConvertedValue*/ ,
+                                                                  Any&       /*aOldValue*/       ,
+                                                                  sal_Int32  /*nHandle*/         ,
+                                                                  const Any& /*aValue*/             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
     //  Initialize state with FALSE !!!
     //  (Handle can be invalid)
     return sal_False ;
 }
 
-void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
-                                                                        const com::sun::star::uno::Any&    aValue  ) throw( com::sun::star::uno::Exception )
+void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               /*nHandle*/ ,
+                                                                        const com::sun::star::uno::Any&    /*aValue*/  ) throw( com::sun::star::uno::Exception )
 {
 }
 
