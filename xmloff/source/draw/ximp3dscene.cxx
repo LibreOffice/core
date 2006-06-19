@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:55:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _XIMP3DSCENE_HXX
 #include "ximp3dscene.hxx"
