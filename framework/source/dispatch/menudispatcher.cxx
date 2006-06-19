@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:21:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,9 +160,9 @@ MenuDispatcher::MenuDispatcher(   const   Reference< XMultiServiceFactory >&  xF
         ,   m_xOwnerWeak            ( xOwner                         )
         ,   m_xFactory              ( xFactory                       )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
-        ,   m_pMenuManager          ( NULL                           )
         ,   m_bAlreadyDisposed      ( sal_False                      )
         ,   m_bActivateListener     ( sal_False                      )
+        ,   m_pMenuManager          ( NULL                           )
 {
     // Safe impossible cases
     // We need valid informations about ouer ownerfor work.
@@ -204,8 +204,8 @@ DEFINE_XTYPEPROVIDER_4  (   MenuDispatcher     ,
 //*****************************************************************************************************************
 //  XDispatch
 //*****************************************************************************************************************
-void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        aURL            ,
-                                            const   Sequence< PropertyValue >&  seqProperties   ) throw( RuntimeException )
+void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /*aURL*/            ,
+                                            const   Sequence< PropertyValue >&  /*seqProperties*/   ) throw( RuntimeException )
 {
     // PL: according to CD this is dead code
     #if 0
@@ -494,7 +494,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 //*****************************************************************************************************************
 //   XEventListener
 //*****************************************************************************************************************
-void SAL_CALL MenuDispatcher::disposing( const EventObject& aEvent ) throw( RuntimeException )
+void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -619,59 +619,53 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 
             if ( m_pMenuManager )
             {
-                OGuard aSolarGuard( Application::GetSolarMutex() );
-                {
-                    // remove old menu from our system window if it was set before
-                     if ( m_pMenuManager->GetMenu() == (Menu *)pSysWindow->GetMenuBar() )
-                        pSysWindow->SetMenuBar( NULL );
+                // remove old menu from our system window if it was set before
+                if ( m_pMenuManager->GetMenu() == (Menu *)pSysWindow->GetMenuBar() )
+                    pSysWindow->SetMenuBar( NULL );
 
-                    // remove listener before we destruct ourself, so we cannot be called back afterwards
-                    m_pMenuManager->RemoveListener();
+                // remove listener before we destruct ourself, so we cannot be called back afterwards
+                m_pMenuManager->RemoveListener();
 
-                    SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)m_pMenuManager )->release();
-                }
+                SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)m_pMenuManager )->release();
 
                 m_pMenuManager = 0;
             }
 
             if ( pMenuBar != NULL )
             {
-                OGuard aSolarGuard( Application::GetSolarMutex() );
+                USHORT nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
+                if ( nPos != MENU_ITEM_NOTFOUND )
                 {
-                    USHORT nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
-                    if ( nPos != MENU_ITEM_NOTFOUND )
-                    {
-                        OUString aNoContext;
+                    OUString aNoContext;
 
-                        Reference< XModel >         xModel;
-                        Reference< XController >    xController( xFrame->getController(), UNO_QUERY );
+                    Reference< XModel >         xModel;
+                    Reference< XController >    xController( xFrame->getController(), UNO_QUERY );
 
-                        if ( xController.is() )
-                            xModel = Reference< XModel >( xController->getModel(), UNO_QUERY );
+                    if ( xController.is() )
+                        xModel = Reference< XModel >( xController->getModel(), UNO_QUERY );
 
-                        // retrieve addon popup menus and add them to our menu bar
-                        AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
+                    // retrieve addon popup menus and add them to our menu bar
+                    AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
 
-                        // retrieve addon help menu items and add them to our help menu
-                        AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar );
-                    }
-
-                    // set new menu on our system window and create new menu manager
-                    if ( bMenuFromResource )
-                    {
-                        // #110897#
-                        // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );
-                        m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_False );
-                    }
-                    else
-                    {
-                        // #110897#
-                        // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_True );
-                        m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_True );
-                    }
-
-                    pSysWindow->SetMenuBar( pMenuBar );
+                    // retrieve addon help menu items and add them to our help menu
+                    AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar );
                 }
+
+                // set new menu on our system window and create new menu manager
+                if ( bMenuFromResource )
+                {
+                    // #110897#
+                    // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );
+                    m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_False );
+                }
+                else
+                {
+                    // #110897#
+                    // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_True );
+                    m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_True );
+                }
+
+                pSysWindow->SetMenuBar( pMenuBar );
             }
 
             return sal_True;
@@ -681,7 +675,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
     return sal_False;
 }
 
-IMPL_LINK( MenuDispatcher, Close_Impl, void*, pVoid )
+IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
 {
     css::uno::Reference < css::frame::XFrame > xFrame( m_xOwnerWeak.get(), css::uno::UNO_QUERY );
     if ( !xFrame.is() )
