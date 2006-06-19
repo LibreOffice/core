@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vari.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:30:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,50 +140,50 @@ PE_Variable::SpReturn_InitExpression()
 }
 
 void
-PE_Variable::On_afterName_ArrayBracket_Left(const char * i_sText)
+PE_Variable::On_afterName_ArrayBracket_Left(const char *)
 {
     pSpuArraySizeExpression->Push(done);
 }
 
 void
-PE_Variable::On_afterName_Semicolon(const char * i_sText)
+PE_Variable::On_afterName_Semicolon(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Variable::On_afterName_Comma(const char * i_sText)
+PE_Variable::On_afterName_Comma(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Variable::On_afterName_Assign(const char * i_sText)
+PE_Variable::On_afterName_Assign(const char *)
 {
     pSpuInitExpression->Push(done);
 }
 
 void
-PE_Variable::On_afterSize_ArrayBracket_Right(const char * i_sText)
+PE_Variable::On_afterSize_ArrayBracket_Right(const char *)
 {
     SetTokenResult(done, stay);
     pStati->SetCur(afterName);
 }
 
 void
-PE_Variable::On_expectFinish_Semicolon(const char * i_sText)
+PE_Variable::On_expectFinish_Semicolon(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Variable::On_expectFinish_Comma(const char * i_sText)
+PE_Variable::On_expectFinish_Comma(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Variable::On_expectFinish_Bracket_Right(const char * i_sText)
+PE_Variable::On_expectFinish_Bracket_Right(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
