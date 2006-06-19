@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:51:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 //  #define TEST_LIST_CLASSES
 //  #define TRACE(x) OSL_TRACE(x)
 #define TRACE(x)
@@ -427,7 +426,9 @@ inline sal_Bool extract(
             return ::uno_type_assignData(
                 &rDest, ((typelib_TypeDescription *)pTo)->pWeakRef,
                 const_cast< void * >( rObj.getValue() ), rObj.getValueTypeRef(),
-                cpp_queryInterface, cpp_acquire, cpp_release );
+                reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+                reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
         }
         else if (rObj.getValueTypeClass() == TypeClass_TYPE)
         {
@@ -449,7 +450,8 @@ inline sal_Bool coerce_assign(
         {
             if (*(XInterface **)pDest)
                 (*(XInterface **)pDest)->release();
-            if (*(XInterface **)pDest = xVal.get())
+            *(XInterface **)pDest = xVal.get();
+            if (*(XInterface **)pDest)
                 (*(XInterface **)pDest)->acquire();
             return sal_True;
         }
@@ -460,14 +462,18 @@ inline sal_Bool coerce_assign(
         return uno_assignData(
             pDest, pTD,
             (void *)&rSource, pTD,
-            cpp_queryInterface, cpp_acquire, cpp_release );
+            reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+            reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+            reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     }
     else
     {
         return uno_type_assignData(
             pDest, pTD->pWeakRef,
             (void *)rSource.getValue(), rSource.getValueTypeRef(),
-            cpp_queryInterface, cpp_acquire, cpp_release );
+            reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+            reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+            reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     }
 }
 
