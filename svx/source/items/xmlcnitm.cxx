@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:42:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ using namespace ::com::sun::star::xml;
 
 TYPEINIT1(SvXMLAttrContainerItem, SfxPoolItem);
 
-SvXMLAttrContainerItem::SvXMLAttrContainerItem( USHORT nWhich ) :
-    SfxPoolItem( nWhich )
+SvXMLAttrContainerItem::SvXMLAttrContainerItem( USHORT _nWhich ) :
+    SfxPoolItem( _nWhich )
 {
     pImpl = new SvXMLAttrContainerData;
 }
@@ -83,7 +83,7 @@ int SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
     return *pImpl == *((const SvXMLAttrContainerItem&)rItem).pImpl;
 }
 
-int SvXMLAttrContainerItem::Compare( const SfxPoolItem &rWith ) const
+int SvXMLAttrContainerItem::Compare( const SfxPoolItem &/*rWith*/ ) const
 {
     DBG_ASSERT( !this, "not yet implemented" );
 
@@ -91,22 +91,22 @@ int SvXMLAttrContainerItem::Compare( const SfxPoolItem &rWith ) const
 }
 
 SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
-                    SfxItemPresentation ePresentation,
-                    SfxMapUnit eCoreMetric,
-                    SfxMapUnit ePresentationMetric,
-                    XubString &rText,
-                    const IntlWrapper *pIntlWrapper ) const
+                    SfxItemPresentation /*ePresentation*/,
+                    SfxMapUnit /*eCoreMetric*/,
+                    SfxMapUnit /*ePresentationMetric*/,
+                    XubString &/*rText*/,
+                    const IntlWrapper */*pIntlWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-USHORT SvXMLAttrContainerItem::GetVersion( USHORT nFileFormatVersion ) const
+USHORT SvXMLAttrContainerItem::GetVersion( USHORT /*nFileFormatVersion*/ ) const
 {
     // This item should never be stored
     return USHRT_MAX;
 }
 
-BOOL  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
@@ -114,7 +114,7 @@ BOOL  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE n
     rVal.setValue( &xContainer, ::getCppuType((Reference<XNameContainer>*)0) );
     return TRUE;
 }
-BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
     SvUnoAttributeContainer* pContainer = NULL;
@@ -124,7 +124,7 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
         xRef = *(Reference<XInterface>*)rVal.getValue();
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
         if( xTunnel.is() )
-            pContainer = (SvUnoAttributeContainer*)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
+            pContainer = (SvUnoAttributeContainer*)(ULONG)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
     }
 
     if( pContainer )
@@ -159,7 +159,7 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 
                 pData = (AttributeData*)aAny.getValue();
                 USHORT pos = aName.indexOf( sal_Unicode(':') );
-                if( pos != -1 )
+                if( pos != USHRT_MAX )
                 {
                     const OUString aPrefix( aName.copy( 0, pos ));
                     const OUString aLName( aName.copy( pos+1 ));
