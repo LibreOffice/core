@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:09:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:39:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ namespace css = ::com::sun::star;
 #include "minfitem.hxx"
 #include "../appl/app.hrc"
 //-------------------------------------------------------------------------
-DBG_NAME(SfxViewFrame);
+DBG_NAME(SfxViewFrame)
 
 #define SfxViewFrame
 #include "sfxslots.hxx"
@@ -689,7 +689,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 String aURL = pURLItem ? pURLItem->GetValue() :
                                 pMedium->GetName();
 
-                sal_uInt16 nModifier = rReq.GetModifier();
                 sal_Bool bHandsOff = pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE;
 
                 // bestehende SfxMDIFrames f"ur dieses Doc leeren
@@ -735,8 +734,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         // Reload of file opened for writing
                         pNewSet->ClearItem( SID_DOC_READONLY );
                 }
-
-                const SfxObjectFactory* pFactory = 0;
 
                 // Falls eine salvagede Datei vorliegt, nicht nochmals die
                 // OrigURL mitschicken, denn die Tempdate ist nach Reload
@@ -878,21 +875,21 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 const sal_uInt16 nCount = aFrames.Count();
                 for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
-                    SfxViewFrame *pView = aFrames.GetObject( i );
+                    SfxViewFrame *pCurrView = aFrames.GetObject( i );
                     if ( xNewObj.Is() )
                     {
                         //if( /*!bHandsOff &&*/ this != pView   )
-                        pView->ReleaseObjectShell_Impl( bRestoreView );
-                        pView->SetRestoreView_Impl( bRestoreView );
+                        pCurrView->ReleaseObjectShell_Impl( bRestoreView );
+                        pCurrView->SetRestoreView_Impl( bRestoreView );
                         //if( pView != this || !xNewObj.Is() )
                         {
-                            SfxFrame *pFrame = pView->GetFrame();
+                            SfxFrame *pFrame = pCurrView->GetFrame();
                             pFrame->InsertDocument(xNewObj.Is() ? xNewObj : xOldObj );
                         }
                     }
 
-                    pView->GetBindings().LEAVEREGISTRATIONS();
-                    pView->GetDispatcher()->LockUI_Impl( sal_False );
+                    pCurrView->GetBindings().LEAVEREGISTRATIONS();
+                    pCurrView->GetDispatcher()->LockUI_Impl( sal_False );
                 }
 
                 if ( xNewObj.Is() )
@@ -981,11 +978,11 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     // Wenn irgendein ChildFrame reloadable ist, wird der Slot
                     // enabled, damit man CTRL-Reload machen kann
                     sal_Bool bReloadAvailable = sal_False;
-                    SfxFrameIterator aIter( *pFrame, sal_True );
-                    for( SfxFrame* pNextFrame = aIter.FirstFrame();
+                    SfxFrameIterator aFrameIter( *pFrame, sal_True );
+                    for( SfxFrame* pNextFrame = aFrameIter.FirstFrame();
                             pFrame;
                             pNextFrame = pNextFrame ?
-                                aIter.NextFrame( *pNextFrame ) : 0 )
+                                aFrameIter.NextFrame( *pNextFrame ) : 0 )
                     {
                         SfxObjectShell *pShell = pFrame->GetCurrentDocument();
                         if( pShell && pShell->Get_Impl()->bReloadAvailable )
@@ -1011,32 +1008,32 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 {
     // gibt es an der obersten Shell einen Undo-Manager?
     SfxShell *pSh = GetDispatcher()->GetShell(0);
-    SfxUndoManager *pUndoMgr = pSh->GetUndoManager();
+    SfxUndoManager* pShUndoMgr = pSh->GetUndoManager();
     sal_Bool bOK = sal_False;
-    if ( pUndoMgr )
+    if ( pShUndoMgr )
     {
         switch ( rReq.GetSlot() )
         {
             case SID_CLEARHISTORY:
-                pUndoMgr->Clear();
+                pShUndoMgr->Clear();
                 bOK = sal_True;
                 break;
 
             case SID_UNDO:
-                pUndoMgr->Undo(0);
+                pShUndoMgr->Undo(0);
                 GetBindings().InvalidateAll(sal_False);
                 bOK = sal_True;
                 break;
 
             case SID_REDO:
-                pUndoMgr->Redo(0);
+                pShUndoMgr->Redo(0);
                 GetBindings().InvalidateAll(sal_False);
                 bOK = sal_True;
                 break;
 
             case SID_REPEAT:
                 if ( pSh->GetRepeatTarget() )
-                    pUndoMgr->Repeat( *pSh->GetRepeatTarget(), 0);
+                    pShUndoMgr->Repeat( *pSh->GetRepeatTarget(), 0);
                 bOK = sal_True;
                 break;
         }
@@ -1062,8 +1059,8 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         // Ich bin gerade am Reloaden und Yielde so vor mich hin ...
         return;
 
-    SfxUndoManager *pUndoMgr = pSh->GetUndoManager();
-    if ( !pUndoMgr )
+    SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
+    if ( !pShUndoMgr )
     {
         // der SW hat eigenes Undo an der ::com::sun::star::sdbcx::View
         SfxWhichIter aIter( rSet );
@@ -1074,34 +1071,34 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         return;
     }
 
-    if ( pUndoMgr->GetUndoActionCount() == 0 &&
-         pUndoMgr->GetRedoActionCount() == 0 &&
-         pUndoMgr->GetRepeatActionCount() == 0 )
+    if ( pShUndoMgr->GetUndoActionCount() == 0 &&
+         pShUndoMgr->GetRedoActionCount() == 0 &&
+         pShUndoMgr->GetRepeatActionCount() == 0 )
         rSet.DisableItem( SID_CLEARHISTORY );
 
-    if ( pUndoMgr && pUndoMgr->GetUndoActionCount() )
+    if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
     {
         String aTmp( SfxResId( STR_UNDO ) );
-        aTmp += pUndoMgr->GetUndoActionComment(0);
+        aTmp += pShUndoMgr->GetUndoActionComment(0);
         rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
     }
     else
         rSet.DisableItem( SID_UNDO );
 
-    if ( pUndoMgr && pUndoMgr->GetRedoActionCount() )
+    if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
     {
         String aTmp( SfxResId(STR_REDO) );
-        aTmp += pUndoMgr->GetRedoActionComment(0);
+        aTmp += pShUndoMgr->GetRedoActionComment(0);
         rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
     }
     else
         rSet.DisableItem( SID_REDO );
     SfxRepeatTarget *pTarget = pSh->GetRepeatTarget();
-    if ( pUndoMgr && pTarget && pUndoMgr->GetRepeatActionCount() &&
-         pUndoMgr->CanRepeat(*pTarget, 0) )
+    if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
+         pShUndoMgr->CanRepeat(*pTarget, 0) )
     {
         String aTmp( SfxResId(STR_REPEAT) );
-        aTmp += pUndoMgr->GetRepeatActionComment(*pTarget, 0);
+        aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget, 0);
         rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
     }
     else
@@ -1521,7 +1518,7 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
 //------------------------------------------------------------------------
 sal_Bool SfxViewFrame::SetBorderPixelImpl
 (
-    const SfxViewShell* pSh,
+    const SfxViewShell* /*pSh*/,
     const SvBorder&     rBorder
 )
 
@@ -1533,7 +1530,7 @@ sal_Bool SfxViewFrame::SetBorderPixelImpl
 //------------------------------------------------------------------------
 const SvBorder& SfxViewFrame::GetBorderPixelImpl
 (
-    const SfxViewShell* pSh
+    const SfxViewShell* /*pSh*/
 )   const
 
 {
@@ -1541,7 +1538,7 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     {DBG_CHKTHIS(SfxViewFrame, 0);}
     if ( !xObjSh.Is() )
@@ -1912,7 +1909,7 @@ SfxProgress* SfxViewFrame::GetProgress() const
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::ShowStatusText( const String& rText)
+void SfxViewFrame::ShowStatusText( const String& /*rText*/)
 {
 /* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
              framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
@@ -2198,7 +2195,6 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
             if ( GetViewShell() )
             {
                 BOOL bPreview = FALSE;
-                SfxApplication *pSfxApp = SFX_APP();
                 if ( GetObjectShell()->IsPreview() )
                 {
                     bPreview = TRUE;
@@ -3189,7 +3185,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 
         pSfxApp->EnterBasicCall();
 
-        SfxObjectShell* pShell = 0;
         BasicManager* pBasMgr = 0;
         if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
         {
@@ -3314,11 +3309,11 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
             if ( pViewShell->GetName().EqualsAscii( "BasicIDE" ) )
             {
                 SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-                if ( pDispatcher )
+                SfxDispatcher* pDispat = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+                if ( pDispat )
                 {
                     SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, String(), String() );
-                    pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
+                    pDispat->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
                 }
             }
         }
@@ -3395,7 +3390,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                         xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.frame.DispatchRecorder")),
                         com::sun::star::uno::UNO_QUERY);
 
-                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier(
+                xSupplier = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >(
                         xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.frame.DispatchRecorderSupplier")),
                         com::sun::star::uno::UNO_QUERY);
 
@@ -3746,7 +3741,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 }
 
 //--------------------------------------------------------------------
-SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
+SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT /*nId*/ )
 {
     SfxWorkWindow* pWork = 0;
     pWork = GetFrame()->GetWorkWindow_Impl();
