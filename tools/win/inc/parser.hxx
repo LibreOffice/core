@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:44:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:55:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _PARSER_HXX
 #define _PARSER_HXX
 
+#if defined WNT
+
 #include <string.hxx>
 #include <winshell.hxx>
 
@@ -48,5 +50,7 @@ String GetHostNotationFromURL( const String & rURL );
 
 CItemIDList MakeIDToken( const String &rToken );
 CItemIDList ParseSpecialURL( const String & rURL );
+
+#endif
 
 #endif // _PARSER_HXX
