@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:59:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (
     _rxOutStream->writeShort( _rFont.Pitch );
     _rxOutStream->writeDouble( _rFont.CharacterWidth );
     _rxOutStream->writeDouble( _rFont.Weight );
-    _rxOutStream->writeShort( _rFont.Slant );
+    _rxOutStream->writeShort( static_cast< sal_Int16 >(_rFont.Slant) );
     _rxOutStream->writeShort( _rFont.Underline );
     _rxOutStream->writeShort( _rFont.Strikeout );
     _rxOutStream->writeDouble( _rFont.Orientation );
@@ -80,12 +80,12 @@ const staruno::Reference<stario::XObjectInputStream>& operator >> (
     _rFont.Family = _rxInStream->readShort();
     _rFont.CharSet = _rxInStream->readShort();
     _rFont.Pitch = _rxInStream->readShort();
-    _rFont.CharacterWidth = _rxInStream->readDouble();
-    _rFont.Weight = _rxInStream->readDouble();
+    _rFont.CharacterWidth = static_cast< float >(_rxInStream->readDouble());
+    _rFont.Weight = static_cast< float >(_rxInStream->readDouble());
     _rFont.Slant = (starawt::FontSlant)_rxInStream->readShort();
     _rFont.Underline = _rxInStream->readShort();
     _rFont.Strikeout = _rxInStream->readShort();
-    _rFont.Orientation = _rxInStream->readDouble();
+    _rFont.Orientation = static_cast< float >(_rxInStream->readDouble());
     _rFont.Kerning = _rxInStream->readBoolean();
     _rFont.WordLineMode = _rxInStream->readBoolean();
     _rFont.Type = _rxInStream->readShort();
