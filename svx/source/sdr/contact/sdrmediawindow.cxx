@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrmediawindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:03:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,29 @@
 
 #include "sdrmediawindow.hxx"
 
-#undef protected
-#define protected public
+#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#undef protected
-#define protected protected
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// Added wrappers to replace the '#define protected public' hack embracing
+// the svtools/transfer include. Need to ask KA if it makes more sense to
+// change the used protected methods to public in the used svtoosl classes.
+
+class WrappedDropTargetHelper : DropTargetHelper
+{
+public:
+    sal_Int8 WrappedAcceptDrop( const AcceptDropEvent& rEvt ) { return AcceptDrop(rEvt); }
+    sal_Int8 WrappedExecuteDrop( const ExecuteDropEvent& rEvt ) { return ExecuteDrop(rEvt); }
+};
+
+class WrappedDragSourceHelper : DragSourceHelper
+{
+public:
+    void WrappedStartDrag( sal_Int8 nAction, const Point& rPosPixel ) { StartDrag(nAction, rPosPixel); }
+};
+
+//////////////////////////////////////////////////////////////////////////////
 
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <vcl/window.hxx>
@@ -155,7 +173,9 @@ sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
         DropTargetHelper* pDropTargetHelper = dynamic_cast< DropTargetHelper* >( pWindow );
 
         if( pDropTargetHelper )
-            nRet = pDropTargetHelper->AcceptDrop( rEvt );
+        {
+            nRet = ((WrappedDropTargetHelper*)pDropTargetHelper)->WrappedAcceptDrop( rEvt );
+        }
     }
 
     return( nRet );
@@ -173,7 +193,9 @@ sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         DropTargetHelper* pDropTargetHelper = dynamic_cast< DropTargetHelper* >( pWindow );
 
         if( pDropTargetHelper )
-            nRet = pDropTargetHelper->ExecuteDrop( rEvt );
+        {
+            nRet = ((WrappedDropTargetHelper*)pDropTargetHelper)->WrappedExecuteDrop( rEvt );
+        }
     }
 
     return( nRet );
@@ -190,7 +212,9 @@ void SdrMediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         DragSourceHelper* pDragSourceHelper = dynamic_cast< DragSourceHelper* >( pWindow );
 
         if( pDragSourceHelper )
-            pDragSourceHelper->StartDrag( nAction, rPosPixel );
+        {
+            ((WrappedDragSourceHelper*)pDragSourceHelper)->WrappedStartDrag( nAction, rPosPixel );
+        }
     }
 }
 
