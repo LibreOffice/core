@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:05:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:07:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,11 +167,11 @@ class SaxWriterHelper
     inline void FinishStartElement() throw( SAXException );
 public:
     SaxWriterHelper(Reference< XOutputStream > m_TempOut) :
-        m_Sequence(SEQUENCESIZE),
         m_out(m_TempOut),
-        nCurrentPos(0),
-        nLastLineFeedPos(0),
+        m_Sequence(SEQUENCESIZE),
         mp_Sequence(NULL),
+        nLastLineFeedPos(0),
+        nCurrentPos(0),
         m_bStartElementFinished(sal_True)
     {
         OSL_ENSURE(SEQUENCESIZE > 50, "Sequence cache size to small");
@@ -300,7 +300,6 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                         sal_Int8 *pTarget,
                         sal_uInt32& rPos ) throw( SAXException )
 {
-    sal_Int32 nOutputLength(0);
     sal_Bool bRet(sal_True);
     sal_uInt32 nSurrogate = 0;
 
@@ -622,8 +621,8 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const rtl::OUStrin
     if (!writeString(rName, sal_False, sal_False))
         eRet = SAX_ERROR;
 
-    sal_Int8 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
-    for(sal_Int8 i = 0 ; i < nAttribCount ; i++ )
+    sal_Int16 nAttribCount = xAttribs.is() ? static_cast<sal_Int16>(xAttribs->getLength()) : 0;
+    for(sal_Int16 i = 0 ; i < nAttribCount ; i++ )
     {
         mp_Sequence[nCurrentPos] = ' ';
         nCurrentPos++;
@@ -929,10 +928,10 @@ class SAXWriter :
 {
 public:
     SAXWriter( ) :
-        m_bForceLineBreak(sal_False),
-        m_bAllowLineBreak(sal_False),
         m_seqStartElement(),
-        mp_SaxWriterHelper( NULL )
+        mp_SaxWriterHelper( NULL ),
+        m_bForceLineBreak(sal_False),
+        m_bAllowLineBreak(sal_False)
         {}
     ~SAXWriter()
     {
@@ -1016,7 +1015,7 @@ private:
 // the extern interface
 //---------------------------------------
 Reference < XInterface > SAL_CALL SaxWriter_CreateInstance(
-    const Reference < XMultiServiceFactory >  & rSMgr )
+    const Reference < XMultiServiceFactory >  &  )
     throw (Exception)
 {
     SAXWriter *p = new SAXWriter;
@@ -1156,8 +1155,8 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
         nLength += calcXMLByteLength( aName.getStr() , aName.getLength(),
                                   sal_False, sal_False ); // the tag name
 
-        int n;
-        for( n = 0 ; n < nAttribCount ; n ++ ) {
+        sal_Int16 n;
+        for( n = 0 ; n < static_cast<sal_Int16>(nAttribCount) ; n ++ ) {
             nLength ++; // " "
             OUString tmp =  xAttribs->getNameByIndex( n );
 
@@ -1270,7 +1269,6 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
                 nIndentPrefix = getIndentPrefixLength(nLength);
 
             // insert indentation
-            sal_Int32 nPos = 0;
             if( nIndentPrefix >= 0 )
             {
                 if( isFirstCharWhitespace( aChars.getStr() ) )
@@ -1290,7 +1288,7 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
 }
 
 
-void SAXWriter::ignorableWhitespace(const OUString& aWhitespaces) throw(SAXException, RuntimeException)
+void SAXWriter::ignorableWhitespace(const OUString&) throw(SAXException, RuntimeException)
 {
     if( ! m_bDocStarted )
     {
@@ -1335,7 +1333,7 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
 }
 
 
-void SAXWriter::setDocumentLocator(const Reference< XLocator >& xLocator)
+void SAXWriter::setDocumentLocator(const Reference< XLocator >&)
         throw (SAXException, RuntimeException)
 {
 
