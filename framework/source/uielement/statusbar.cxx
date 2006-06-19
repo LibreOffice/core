@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,9 @@ FrameworkStatusBar::FrameworkStatusBar(
     Window*           pParent,
     WinBits           nWinBits ) :
     StatusBar( pParent, nWinBits ),
+    m_pMgr( NULL ),
     m_bShow( sal_False ),
-    m_bLock( sal_False ),
-    m_pMgr( NULL )
+    m_bLock( sal_False )
 {
     // set optimal size
     SetOutputSizePixel( CalcWindowSizePixel() );
