@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 12:43:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ typedef USHORT TokenId;
 
 class ParserMessage;
 
-DECLARE_LIST( Impl_ParserMessageList, ParserMessage* );
+DECLARE_LIST( Impl_ParserMessageList, ParserMessage* )
 class ParserMessageList;
 
 
@@ -79,7 +79,6 @@ struct hashByteString{
 typedef std::hash_map<ByteString , String , hashByteString,equalByteString>
                                 StringHashMap;
 
-
 class TokenInfo
 {
 private:
@@ -101,9 +100,9 @@ public:
     TokenId nId;
     USHORT nPos;            // Position in String
 
-    TokenInfo():nId( 0 ),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),bClosed(FALSE),bCloseTag(FALSE){;}
-explicit    TokenInfo( TokenId pnId, USHORT nP ):nId( pnId ),nPos(nP),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),bClosed(FALSE),bCloseTag(FALSE){;}
-explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr ):nId( pnId ), nPos(nP), aTokenString( paStr ),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),bClosed(FALSE),bCloseTag(FALSE){;}
+    TokenInfo():bClosed(FALSE),bCloseTag(FALSE),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),nId( 0 ){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP ):bClosed(FALSE),bCloseTag(FALSE),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),nId( pnId ),nPos(nP){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr ):bClosed(FALSE),bCloseTag(FALSE),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),aTokenString( paStr ),nId( pnId ),nPos(nP) {;}
 explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &rErrorList );
 
     String GetTagName() const;
@@ -229,7 +228,7 @@ public:
 
 #define TAG_UNKNOWN_TAG             ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x800 )
 
-DECLARE_LIST( TokenListImpl, TokenInfo* );
+DECLARE_LIST( TokenListImpl, TokenInfo* )
 
 class TokenList : private TokenListImpl
 {
@@ -240,7 +239,7 @@ private:
 
 
 public:
-    TokenListImpl::Count;
+    using TokenListImpl::Count;
 
 
     TokenList() : TokenListImpl(){};
@@ -295,7 +294,6 @@ class ParserMessage
 
 protected:
     ParserMessage( USHORT PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
-
 public:
 
     USHORT GetErrorNr() { return nErrorNr; }
@@ -304,6 +302,7 @@ public:
     USHORT GetTagBegin() { return nTagBegin; }
     USHORT GetTagLength() { return nTagLength; }
 
+    virtual ~ParserMessage() {}
     virtual BOOL IsError() =0;
     virtual ByteString Prefix() =0;
 };
