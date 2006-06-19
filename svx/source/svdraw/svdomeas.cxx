@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:34:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,18 +226,18 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
 
                 if(rStr.Search(cDec) != STRING_NOTFOUND)
                 {
-                    xub_StrLen nLen(rStr.Len() - 1);
+                    xub_StrLen nLen2(rStr.Len() - 1);
 
-                    while(rStr.GetChar(nLen) == sal_Unicode('0'))
+                    while(rStr.GetChar(nLen2) == sal_Unicode('0'))
                     {
-                        rStr.Erase(nLen);
-                        nLen--;
+                        rStr.Erase(nLen2);
+                        nLen2--;
                     }
 
-                    if(rStr.GetChar(nLen) == cDec)
+                    if(rStr.GetChar(nLen2) == cDec)
                     {
-                        rStr.Erase(nLen);
-                        nLen--;
+                        rStr.Erase(nLen2);
+                        nLen2--;
                     }
 
                     if(!rStr.Len())
@@ -344,7 +344,7 @@ UINT16 SdrMeasureObj::GetObjIdentifier() const
     return (UINT16)OBJ_MEASURE;
 }
 
-struct ImpMeasureRec
+struct ImpMeasureRec : public SdrDragStatUserData
 {
     Point                       aPt1;
     Point                       aPt2;
@@ -469,8 +469,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     if(nArrow2Wdt < 0)
         nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relativ
 
-    XPolygon aPol1(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue());
-    XPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue());
+    XPolygon aPol1(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
+    XPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
     bArrow1Center = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
     bArrow2Center = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
     nArrow1Len = XOutputDevice::InitLineStartEnd(aPol1, nArrow1Wdt, bArrow1Center) - 1;
@@ -777,13 +777,13 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     ImpCalcGeometrics(aRec,aMPol);
 
     // TextSize ermitteln inkl. Textrahmenabstaende
-    Size aTextSize(aMPol.aTextSize);
-    if (aTextSize.Width()<1) aTextSize.Width()=1;
-    if (aTextSize.Height()<1) aTextSize.Height()=1;
-    aTextSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
-    aTextSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
+    Size aTextSize2(aMPol.aTextSize);
+    if (aTextSize2.Width()<1) aTextSize2.Width()=1;
+    if (aTextSize2.Height()<1) aTextSize2.Height()=1;
+    aTextSize2.Width()+=GetTextLeftDistance()+GetTextRightDistance();
+    aTextSize2.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
 
-    Point aPt1(aMPol.aMainline1.aP1);
+    Point aPt1b(aMPol.aMainline1.aP1);
     long nLen=aMPol.nLineLen;
     long nLWdt=aMPol.nLineWdt2;
     long nArr1Len=aMPol.nArrow1Len;
@@ -803,56 +803,56 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
     if (!bRota90) {
         switch (eMH) {
-            case SDRMEASURE_TEXTLEFTOUTSIDE: aTextPos.X()=aPt1.X()-aTextSize.Width()-nArr1Len-nLWdt; break;
-            case SDRMEASURE_TEXTRIGHTOUTSIDE: aTextPos.X()=aPt1.X()+nLen+nArr2Len+nLWdt; break;
-            default: aTextPos.X()=aPt1.X(); aTextSize.Width()=nLen;
+            case SDRMEASURE_TEXTLEFTOUTSIDE: aTextPos.X()=aPt1b.X()-aTextSize2.Width()-nArr1Len-nLWdt; break;
+            case SDRMEASURE_TEXTRIGHTOUTSIDE: aTextPos.X()=aPt1b.X()+nLen+nArr2Len+nLWdt; break;
+            default: aTextPos.X()=aPt1b.X(); aTextSize2.Width()=nLen;
         }
         switch (eMV) {
             case SDRMEASURETEXT_VERTICALCENTERED:
-            case SDRMEASURETEXT_BREAKEDLINE: aTextPos.Y()=aPt1.Y()-aTextSize.Height()/2; break;
+            case SDRMEASURETEXT_BREAKEDLINE: aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
             case SDRMEASURE_BELOW: {
-                if (!bUpsideDown) aTextPos.Y()=aPt1.Y()+nLWdt;
-                else aTextPos.Y()=aPt1.Y()-aTextSize.Height()-nLWdt;
+                if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()+nLWdt;
+                else aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
             } break;
             default: {
-                if (!bUpsideDown) aTextPos.Y()=aPt1.Y()-aTextSize.Height()-nLWdt;
-                else aTextPos.Y()=aPt1.Y()+nLWdt;
+                if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
+                else aTextPos.Y()=aPt1b.Y()+nLWdt;
             }
         }
         if (bUpsideDown) {
-            aTextPos.X()+=aTextSize.Width();
-            aTextPos.Y()+=aTextSize.Height();
+            aTextPos.X()+=aTextSize2.Width();
+            aTextPos.Y()+=aTextSize2.Height();
         }
     } else { // also wenn bTextRota90==TRUE
         switch (eMH) {
-            case SDRMEASURE_TEXTLEFTOUTSIDE: aTextPos.X()=aPt1.X()-aTextSize.Height()-nArr1Len; break;
-            case SDRMEASURE_TEXTRIGHTOUTSIDE: aTextPos.X()=aPt1.X()+nLen+nArr2Len; break;
-            default: aTextPos.X()=aPt1.X(); aTextSize.Height()=nLen;
+            case SDRMEASURE_TEXTLEFTOUTSIDE: aTextPos.X()=aPt1b.X()-aTextSize2.Height()-nArr1Len; break;
+            case SDRMEASURE_TEXTRIGHTOUTSIDE: aTextPos.X()=aPt1b.X()+nLen+nArr2Len; break;
+            default: aTextPos.X()=aPt1b.X(); aTextSize2.Height()=nLen;
         }
         switch (eMV) {
             case SDRMEASURETEXT_VERTICALCENTERED:
-            case SDRMEASURETEXT_BREAKEDLINE: aTextPos.Y()=aPt1.Y()+aTextSize.Width()/2; break;
+            case SDRMEASURETEXT_BREAKEDLINE: aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
             case SDRMEASURE_BELOW: {
-                if (!bBelowRefEdge) aTextPos.Y()=aPt1.Y()+aTextSize.Width()+nLWdt;
-                else aTextPos.Y()=aPt1.Y()-nLWdt;
+                if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
+                else aTextPos.Y()=aPt1b.Y()-nLWdt;
             } break;
             default: {
-                if (!bBelowRefEdge) aTextPos.Y()=aPt1.Y()-nLWdt;
-                else aTextPos.Y()=aPt1.Y()+aTextSize.Width()+nLWdt;
+                if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()-nLWdt;
+                else aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
             }
         }
         if (bUpsideDown) {
-            aTextPos.X()+=aTextSize.Height();
-            aTextPos.Y()-=aTextSize.Width();
+            aTextPos.X()+=aTextSize2.Height();
+            aTextPos.Y()-=aTextSize2.Width();
         }
     }
     if (aMPol.nTextWink!=aGeo.nDrehWink) {
         ((SdrMeasureObj*)this)->aGeo.nDrehWink=aMPol.nTextWink;
         ((SdrMeasureObj*)this)->aGeo.RecalcSinCos();
     }
-    RotatePoint(aTextPos,aPt1,aMPol.nLineSin,aMPol.nLineCos);
-    aTextSize.Width()++; aTextSize.Height()++; // wg. des komischen Verhaltens beim Rect-Ctor
-    rRect=Rectangle(aTextPos,aTextSize);
+    RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
+    aTextSize2.Width()++; aTextSize2.Height()++; // wg. des komischen Verhaltens beim Rect-Ctor
+    rRect=Rectangle(aTextPos,aTextSize2);
     rRect.Justify();
     ((SdrMeasureObj*)this)->aRect=rRect;
 
@@ -916,7 +916,7 @@ void SdrMeasureObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralMEASURE);
 }
 
-void SdrMeasureObj::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL bDetail) const
+void SdrMeasureObj::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL /*bDetail*/) const
 {
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
@@ -943,7 +943,7 @@ SdrHdl* SdrMeasureObj::GetHdl(USHORT nHdlNum) const
     aRec.nHelplineDist=0;
     ImpCalcGeometrics(aRec,aMPol);
     Point aPt;
-    SdrHdlKind eHdl=HDL_POLY;
+    //SdrHdlKind eHdl=HDL_POLY;
     switch (nHdlNum) {
         case 0: aPt=aMPol.aHelpline1.aP1; break;
         case 1: aPt=aMPol.aHelpline2.aP1; break;
@@ -1064,7 +1064,7 @@ void SdrMeasureObj::BrkDrag(SdrDragStat& rDrag) const
     }
 }
 
-XubString SdrMeasureObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
+XubString SdrMeasureObj::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bUndoDragComment*/, FASTBOOL /*bCreateComment*/) const
 {
     XubString aStr;
     return aStr;
@@ -1179,16 +1179,16 @@ FASTBOOL SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-FASTBOOL SdrMeasureObj::BckCreate(SdrDragStat& rStat)
+FASTBOOL SdrMeasureObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }
 
-void SdrMeasureObj::BrkCreate(SdrDragStat& rStat)
+void SdrMeasureObj::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-void SdrMeasureObj::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+void SdrMeasureObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/, XPolyPolygon& rXPP) const
 {
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
@@ -1511,7 +1511,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     {
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
-        INT32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
+        //INT32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
         INT32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
 
         aSet.Put(XLineEndWidthItem(0L));
@@ -1543,7 +1543,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     else if(nCount == 5)
     {
         // five lines, first two are the outer ones
-        INT32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
+        //INT32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
         INT32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
 
         aSet.Put(XLineEndWidthItem(0L));
@@ -1655,7 +1655,7 @@ USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
     SdrMeasureTextHPos eMH=aMPol.eUsedTextHPos;
     SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
     FASTBOOL bTextRota90=aRec.bTextRota90;
-    FASTBOOL bTextUpsideDown=aRec.bTextUpsideDown;
+    //FASTBOOL bTextUpsideDown=aRec.bTextUpsideDown;
     FASTBOOL bBelowRefEdge=aRec.bBelowRefEdge;
 
     // bTextUpsideDown muss hier noch ausgewertet werden!!!!
