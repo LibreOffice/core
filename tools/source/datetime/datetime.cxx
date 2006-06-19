@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datetime.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:02:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,13 +141,13 @@ BOOL DateTime::operator <=( const DateTime& rDateTime ) const
 |*
 *************************************************************************/
 
-ULONG DateTime::GetSecFromDateTime( const Date& rDate ) const
+long DateTime::GetSecFromDateTime( const Date& rDate ) const
 {
     if ( Date::operator<( rDate ) )
         return 0;
     else
     {
-        ULONG nSec = *this- (DateTime) rDate;
+        long nSec = Date( *this ) - rDate;
         nSec *= 24UL*60*60;
         long nHour = GetHour();
         long nMin  = GetMin();
@@ -171,7 +171,7 @@ void DateTime::MakeDateTimeFromSec( const Date& rDate, ULONG nSec )
     long nDays = nSec / (24UL*60*60);
     ((Date*)this)->operator=( rDate );
     nSec -= nDays * (24UL*60*60);
-    USHORT nMin = nSec / 60;
+    USHORT nMin = (USHORT)(nSec / 60);
     nSec -= nMin * 60;
     ((Time*)this)->operator=( Time( 0, nMin, (USHORT)nSec ) );
     operator+=( nDays );
@@ -427,14 +427,18 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
     nDays -= nYears * 365 + nYears / 4 - nYears / 100 + nYears / 400;
 
     USHORT nMonths = 0;
-    for( long nDaysCount = nDays; nDaysCount >= 0; )
+    for( sal_Int64 nDaysCount = nDays; nDaysCount >= 0; )
     {
         nDays = nDaysCount;
         nMonths ++;
-        nDaysCount -= Date( 1, nMonths, 1601 + nYears ).GetDaysInMonth();
+        nDaysCount -= Date(
+            1, nMonths, sal::static_int_cast< USHORT >(1601 + nYears) ).
+            GetDaysInMonth();
     }
 
-    Date _aDate( (USHORT)( nDays + 1 ), nMonths, nYears + 1601 );
+    Date _aDate(
+        (USHORT)( nDays + 1 ), nMonths,
+        sal::static_int_cast< USHORT >(nYears + 1601) );
     Time _aTime( ULONG( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
             ULONG( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
             ULONG( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
