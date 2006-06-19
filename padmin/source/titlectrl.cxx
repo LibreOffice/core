@@ -4,9 +4,9 @@
  *
  *  $RCSfile: titlectrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:30:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ void TitleImage::arrange()
 
 // -----------------------------------------------------------------------
 
-void TitleImage::Paint( const Rectangle& rRect )
+void TitleImage::Paint( const Rectangle& )
 {
     if( ! m_bArranged )
         arrange();
