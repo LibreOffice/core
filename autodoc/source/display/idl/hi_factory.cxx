@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:57:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,8 +246,8 @@ HtmlFactory_Idl::write_ManualLinks( Xml::Element &  o_screen,
 }
 
 void
-HtmlFactory_Idl::produce_MemberDetails(  HF_SubTitleTable &  o_table,
-                                         const client &      ce ) const
+HtmlFactory_Idl::produce_MemberDetails(  HF_SubTitleTable &  ,
+                                         const client &      ) const
 {
     // Dummy, which does not need to do anything.
 }
@@ -298,7 +298,7 @@ HtmlFactory_Idl::recursive_ShowBases( Xml::Element &     o_screen,
 }
 
 HtmlFactory_Idl::type_id
-HtmlFactory_Idl::inq_BaseOf( const client & i_ce ) const
+HtmlFactory_Idl::inq_BaseOf( const client & ) const
 {
     // Unused dummy.
     return type_id(0);
