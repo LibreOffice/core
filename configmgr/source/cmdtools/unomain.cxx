@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomain.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:38:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,8 @@ bool unoapp::g_bQuiet = false;
 
 SAL_IMPLEMENT_MAIN()
 {
+    { (void)argc; (void)argv; }
+
     AutoDispose aDisposer;
     try
     {
