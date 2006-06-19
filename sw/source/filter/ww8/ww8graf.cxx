@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:41:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1837,8 +1837,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     {
         // Now, that we know there is a line style we will make use the
         // parameter given to us when calling the method...  :-)
-        const Color aLineColor = WW8ITEMVALUE(rOldSet, XATTR_LINECOLOR,
-            XLineColorItem);
+        const Color aLineColor = static_cast< XLineColorItem const & >(
+            rOldSet.Get(XATTR_LINECOLOR)).GetColorValue();
         nLineThick = WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH, XLineWidthItem);
 
         if( !nLineThick )
@@ -1935,8 +1935,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     {
         SvxShadowItem aShadow;
 
-        const Color aShdColor = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWCOLOR,
-            SdrShadowColorItem);
+        const Color aShdColor = static_cast< SdrShadowColorItem const & >(
+            rOldSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue();
         const INT32 nShdDistX = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWXDIST,
             SdrShadowXDistItem);
         const INT32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
@@ -2007,8 +2007,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             break;
             case XFILL_SOLID:
                 {
-                    const Color aColor = WW8ITEMVALUE(rOldSet, XATTR_FILLCOLOR,
-                        XFillColorItem);
+                    const Color aColor = static_cast< XFillColorItem const & >(
+                        rOldSet.Get(XATTR_FILLCOLOR)).GetColorValue();
                     aBrushItem.SetColor(aColor);
 
                     if (bBrushItemOk) //has trans
@@ -2023,8 +2023,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             break;
             case XFILL_BITMAP:
                 {
-                    const Graphic aGraphic(WW8ITEMVALUE(rOldSet,
-                        XATTR_FILLBITMAP, XFillBitmapItem).GetBitmap());
+                    const Graphic aGraphic(
+                        static_cast< XFillBitmapItem const & >(
+                            rOldSet.Get(XATTR_FILLBITMAP)).
+                        GetBitmapValue().GetBitmap());
                     bool bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE,
                         SfxBoolItem) ? true: false;
                     GraphicObject aGrfObj(aGraphic);
