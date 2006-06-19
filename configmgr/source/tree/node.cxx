@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:18:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ Offset implGetNextChildOffset(GroupNode const * _pParent, Node const * _pChild)
     Offset next = 1;
     if ( _pChild->isGroup())
     {
-        next += _pChild->group.numDescendants;
+        next = next + _pChild->group.numDescendants;
     }
 
     if (_pChild->node.info.parent + next > _pParent->numDescendants)
@@ -362,7 +362,7 @@ bool ValueNode::hasUsableDefault() const
 
 uno::Type   ValueNode::getValueType()  const
 {
-    AnyData::TypeCode aType = info.type & Type::mask_valuetype;
+    AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
 
     return getUnoType(aType);
 }
@@ -382,7 +382,7 @@ uno::Any    ValueNode::getUserValue(memory::Accessor const & _aAccessor)      co
 {
     if (info.flags & Flags::valueAvailable)
     {
-        AnyData::TypeCode aType = info.type & Type::mask_valuetype;
+        AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
 
         return readData(_aAccessor,aType,this->value);
     }
@@ -395,7 +395,7 @@ uno::Any    ValueNode::getDefaultValue(memory::Accessor const & _aAccessor)    c
 {
     if (info.flags & Flags::defaultAvailable)
     {
-        AnyData::TypeCode aType = info.type & Type::mask_valuetype;
+        AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
 
         return readData(_aAccessor,aType,this->defaultValue);
     }
@@ -515,7 +515,7 @@ static Offset getFragmentIndex(Node const * pNode)
     Offset result = 0;
     while (Offset step = pNode->node.info.parent)
     {
-        result += step;
+        result = result + step;
         pNode  -= step;
     }
     return result;
