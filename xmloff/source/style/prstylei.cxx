@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:47:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_FAMILY ) )
     {
-        DBG_ASSERT( GetFamily() == ((SvXMLStylesContext *)&xStyles)->GetFamily( rValue ), "unexpected style family" );
+        DBG_ASSERT( GetFamily() == ((SvXMLStylesContext *)&mxStyles)->GetFamily( rValue ), "unexpected style family" );
     }
     else
     {
@@ -112,11 +112,11 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-        sal_Bool bDefault ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault ),
-    xStyles( &rStyles ),
-    sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+        sal_Bool bDefault )
+:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
+,   msIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,   msFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,   mxStyles( &rStyles )
 {
 }
 
@@ -160,13 +160,13 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     if( nFamily )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            ((SvXMLStylesContext *)&xStyles)->GetImportPropertyMapper(
+            ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                         GetFamily() );
         if( xImpPrMap.is() )
             pContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
                                                     nFamily,
-                                                    aProperties,
+                                                    maProperties,
                                                     xImpPrMap );
     }
 
@@ -181,11 +181,11 @@ void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
     UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-        ((SvXMLStylesContext *)&xStyles)->GetImportPropertyMapper(
+        ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                                 GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
-        xImpPrMap->FillPropertySet( aProperties, rPropSet );
+        xImpPrMap->FillPropertySet( maProperties, rPropSet );
 }
 
 void XMLPropStyleContext::SetDefaults()
@@ -197,7 +197,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
     Reference < XStyle > xNewStyle;
 
     OUString sServiceName(
-        ((SvXMLStylesContext *)&xStyles)->GetServiceName( GetFamily() ) );
+        ((SvXMLStylesContext *)&mxStyles)->GetServiceName( GetFamily() ) );
     if( sServiceName.getLength() )
     {
         Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
@@ -223,7 +223,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         return;
 
     Reference < XNameContainer > xFamilies =
-            ((SvXMLStylesContext *)&xStyles)->GetStylesContainer( GetFamily() );
+            ((SvXMLStylesContext *)&mxStyles)->GetStylesContainer( GetFamily() );
     if( !xFamilies.is() )
         return;
 
@@ -231,26 +231,26 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     if( xFamilies->hasByName( rName ) )
     {
         Any aAny = xFamilies->getByName( rName );
-        aAny >>= xStyle;
+        aAny >>= mxStyle;
     }
     else
     {
-        xStyle = Create();
-        if( !xStyle.is() )
+        mxStyle = Create();
+        if( !mxStyle.is() )
             return;
 
         Any aAny;
-        aAny <<= xStyle;
+        aAny <<= mxStyle;
         xFamilies->insertByName( rName, aAny );
         bNew = sal_True;
     }
 
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
-    if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
+    if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
     {
-        Any aAny = xPropSet->getPropertyValue( sIsPhysical );
+        Any aAny = xPropSet->getPropertyValue( msIsPhysical );
         bNew = !*(sal_Bool *)aAny.getValue();
     }
     SetNew( bNew );
@@ -263,7 +263,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 
         UniReference < XMLPropertySetMapper > xPrMap;
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            ((SvXMLStylesContext *)&xStyles)->GetImportPropertyMapper(
+            ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                                 GetFamily() );
         DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
         if( xImpPrMap.is() )
@@ -283,9 +283,9 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 sal_Int32 i;
                 for( i = 0; i < nCount; i++ )
                 {
-                    const OUString& rName = xPrMap->GetEntryAPIName( i );
-                    if( xPropSetInfo->hasPropertyByName( rName ) )
-                        aNameSet.insert( rName );
+                    const OUString& rPrName = xPrMap->GetEntryAPIName( i );
+                    if( xPropSetInfo->hasPropertyByName( rPrName ) )
+                        aNameSet.insert( rPrName );
                 }
 
                 nCount = aNameSet.size();
@@ -308,8 +308,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
             }
         }
 
-        if (xStyle.is())
-            xStyle->setParentStyle(OUString());
+        if (mxStyle.is())
+            mxStyle->setParentStyle(OUString());
 
         FillPropertySet( xPropSet );
     }
@@ -321,11 +321,11 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 
 void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 {
-    if( xStyle.is() && (IsNew() || bOverwrite) )
+    if( mxStyle.is() && (IsNew() || bOverwrite) )
     {
         // The families cintaner must exist
         Reference < XNameContainer > xFamilies =
-            ((SvXMLStylesContext *)&xStyles)->GetStylesContainer( GetFamily() );
+            ((SvXMLStylesContext *)&mxStyles)->GetStylesContainer( GetFamily() );
         DBG_ASSERT( xFamilies.is(), "Families lost" );
         if( !xFamilies.is() )
             return;
@@ -337,14 +337,14 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
         if( sParent.getLength() && !xFamilies->hasByName( sParent ) )
             sParent = OUString();
 
-        if( sParent != xStyle->getParentStyle() )
+        if( sParent != mxStyle->getParentStyle() )
         {
             // this may except if setting the parent style forms a
             // circle in the style depencies; especially if the parent
             // style is the same as the current style
             try
             {
-                xStyle->setParentStyle( sParent );
+                mxStyle->setParentStyle( sParent );
             }
             catch( uno::Exception e )
             {
@@ -359,7 +359,7 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
                 Sequence<OUString> aSequence(2);
 
                 // getName() throws no non-Runtime exception:
-                aSequence[0] = xStyle->getName();
+                aSequence[0] = mxStyle->getName();
                 aSequence[1] = sParent;
 
                 GetImport().SetError(
@@ -373,20 +373,20 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
         if( sFollow.getLength() )
             sFollow = GetImport().GetStyleDisplayName( GetFamily(), sFollow );
         if( !sFollow.getLength() || !xFamilies->hasByName( sFollow ) )
-            sFollow = xStyle->getName();
+            sFollow = mxStyle->getName();
 
-        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+        Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
-        if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
+        if( xPropSetInfo->hasPropertyByName( msFollowStyle ) )
         {
-            Any aAny = xPropSet->getPropertyValue( sFollowStyle );
+            Any aAny = xPropSet->getPropertyValue( msFollowStyle );
             OUString sCurrFollow;
             aAny >>= sCurrFollow;
             if( sCurrFollow != sFollow )
             {
                 aAny <<= sFollow;
-                xPropSet->setPropertyValue( sFollowStyle, aAny );
+                xPropSet->setPropertyValue( msFollowStyle, aAny );
             }
         }
     }
