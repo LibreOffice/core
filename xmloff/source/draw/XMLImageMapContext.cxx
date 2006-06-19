@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:40:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,9 +250,6 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     Reference<XIndexContainer> xMap,
     const sal_Char* pServiceName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        xImageMap(xMap),
-        bIsActive(sal_True),
-        bValid(sal_False),
         sBoundary(RTL_CONSTASCII_USTRINGPARAM("Boundary")),
         sCenter(RTL_CONSTASCII_USTRINGPARAM("Center")),
         sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
@@ -262,7 +259,10 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
         sPolygon(RTL_CONSTASCII_USTRINGPARAM("Polygon")),
         sRadius(RTL_CONSTASCII_USTRINGPARAM("Radius")),
         sTarget(RTL_CONSTASCII_USTRINGPARAM("Target")),
-        sURL(RTL_CONSTASCII_USTRINGPARAM("URL"))
+        sURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
+        xImageMap(xMap),
+        bIsActive(sal_True),
+        bValid(sal_False)
 {
     DBG_ASSERT(NULL != pServiceName,
                "Please supply the image map object service name");
@@ -364,6 +364,9 @@ void XMLImageMapObjectContext::ProcessAttribute(
 
         case XML_TOK_IMAP_NAME:
             sNam = rValue;
+            break;
+        default:
+            // do nothing
             break;
     }
 }
