@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:04:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 
         if ((maMethod == (XIM)NULL) && (getenv("XMODIFIERS") != NULL))
         {
-                putenv ("XMODIFIERS");
+                putenv (strdup("XMODIFIERS"));
                 XSetLocaleModifiers("");
                 maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
                 mbMultiLingual = False;
@@ -609,7 +609,7 @@ InputMethod_HandleNextEvent(int nFileDescriptor, void *pData)
 
 extern "C" void
 InputMethod_ConnectionWatchProc (Display *pDisplay, XPointer pClientData,
-    int nFileDescriptor, Bool bOpening, XPointer *pWatchData)
+    int nFileDescriptor, Bool bOpening, XPointer*)
 {
     SalXLib *pConnectionHandler = (SalXLib*)pClientData;
 
