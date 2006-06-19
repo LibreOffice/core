@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:34:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,19 @@
  ************************************************************************/
 
 #if OSL_DEBUG_LEVEL == 0
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 #endif
 
 #include <tools/presys.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tools/postsys.h>
 
 #define VCL_NEED_BASETSD
@@ -331,8 +339,8 @@ void add_group_entries(
 
     for (size_t i = 0; i < key_count; i++)
     {
-        ByteString iso_lang = aConfig.GetKeyName(i);
-        ByteString key_value_utf8 = aConfig.ReadKey(i);
+        ByteString iso_lang = aConfig.GetKeyName(sal::static_int_cast<USHORT>(i));
+        ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<USHORT>(i));
 
         Substitutor.set_language(iso_lang_identifier(iso_lang));
 
@@ -355,7 +363,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
     // UTF8 files starting with a byte-order-mark we create a copy of the
     // original file without the byte-order-mark
     rtl::OUString tmpfile_url;
-    oslFileError osl_error = osl_createTempFile(NULL, NULL, &tmpfile_url.pData);
+    osl_createTempFile(NULL, NULL, &tmpfile_url.pData);
 
     rtl::OUString tmpfile_sys;
     osl::FileBase::getSystemPathFromFileURL(tmpfile_url, tmpfile_sys);
@@ -380,7 +388,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
         while (std::getline(in, line))
             out << line << std::endl;
     }
-    catch (const std::ios::failure& ex)
+    catch (const std::ios::failure&)
     {
         if (!in.eof())
             throw;
@@ -393,7 +401,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
     Config config(tmpfile_url.getStr());
     size_t grpcnt = config.GetGroupCount();
     for (size_t i = 0; i < grpcnt; i++)
-        add_group_entries(config, config.GetGroupName(i), Substitutor);
+        add_group_entries(config, config.GetGroupName(sal::static_int_cast<USHORT>(i)), Substitutor);
 }
 
 //###########################################
@@ -565,11 +573,13 @@ int main(int argc, char* argv[])
         read_file(RC_TEMPLATE(cmdline), rc_tmpl);
 
         std::ofstream rc_file(RC_FILE(cmdline));
-        concatenate_files(rc_file, std::ifstream(RC_HEADER(cmdline)));
+        std::ifstream in_header(RC_HEADER(cmdline));
+        concatenate_files(rc_file, in_header);
 
         inflate_rc_template_to_file(rc_file, rc_tmpl, substitutor);
 
-        concatenate_files(rc_file, std::ifstream(RC_FOOTER(cmdline)));
+        std::ifstream in_footer(RC_FOOTER(cmdline));
+        concatenate_files(rc_file, in_footer);
     }
     catch(const std::ios::failure& ex)
     {
