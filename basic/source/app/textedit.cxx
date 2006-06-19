@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 15:57:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ BOOL TextEditImp::ViewMoved()
 
 void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    (void) rBC; /* avoid warning about unused parameter */
     if ( rHint.ISA( TextHint ) )
     {
         const TextHint& rTextHint = (const TextHint&)rHint;
@@ -275,8 +276,10 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
         // optimiert das die EditEngine.
         xub_StrLen nLastEnd = 0;
+#ifdef DBG_UTIL
         xub_StrLen nLine = aPortionList[0].nLine;
-        for ( USHORT i = 0; i < nCount; i++ )
+#endif
+        for ( i = 0; i < nCount; i++ )
         {
             SbTextPortion& r = aPortionList[i];
             DBG_ASSERT( r.nLine == nLine, "doch mehrere Zeilen ?" );
@@ -689,6 +692,8 @@ Variant(Empty)
                         pMenu->InsertItem( RID_POPUPEDITVAR, ((BasicFrame*)GetpApp()->GetAppWindow())->GenRealString( GEN_RES_STR1( IDS_EDIT_VAR, aWord ) ) );
                     }
                     break;
+                default:
+                    ;
             }
         }
     }
@@ -700,10 +705,10 @@ Variant(Empty)
 DBG_NAME(TextEdit)
 
 TextEdit::TextEdit( AppEdit* pParent, const WinBits& aBits )
-: aEdit( pParent, aBits | WB_NOHIDESELECTION )
-, pBreakpointWindow( NULL )
+: pBreakpointWindow( NULL )
 , bFileWasUTF8( FALSE )
 , bSaveAsUTF8( FALSE )
+, aEdit( pParent, aBits | WB_NOHIDESELECTION )
 {
 DBG_CTOR(TextEdit,0);
 }
