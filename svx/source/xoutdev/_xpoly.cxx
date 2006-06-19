@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:18:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,6 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
-
-#pragma hdrstop
 
 #include "xoutx.hxx"
 #include "xpoly.hxx"
@@ -87,13 +85,13 @@ DBG_NAME(XPolyPolygon);
 |*
 *************************************************************************/
 
-ImpXPolygon::ImpXPolygon( USHORT nInitSize, USHORT nResize )
+ImpXPolygon::ImpXPolygon( USHORT nInitSize, USHORT _nResize )
 {
     pPointAry               = NULL;
     pFlagAry                = NULL;
     bDeleteOldPoints        = FALSE;
     nSize                   = 0;
-    ImpXPolygon::nResize    = nResize;
+    nResize                 = _nResize;
     nPoints                 = 0;
     nRefCount               = 1;
 
@@ -245,8 +243,6 @@ void ImpXPolygon::Resize( USHORT nNewSize, BOOL bDeletePoints )
 
 void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
 {
-    USHORT nOldSize = nSize;
-
     CheckPointDelete();
 
     if ( nPos > nPoints )
@@ -1111,7 +1107,7 @@ void XPolygon::CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt)
 {
     CheckReference();
 
-    USHORT  nMaxPnt = pImpXPolygon->nPoints - 1;
+//  USHORT  nMaxPnt = pImpXPolygon->nPoints - 1;
 
 //  if ( nCenter == nMaxPnt )   nPnt = 1;
 //  else if ( nCenter == 0 )    nPnt = nMaxPnt - 1;
