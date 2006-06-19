@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxdr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:41:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,15 +151,15 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         } else { // Scheitelpunkthandles
             if ((bLft || bRgt) && nXDiv!=0) {
-                long nHgt0=aRect.Bottom()-aRect.Top();
-                long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
-                aTmpRect.Top()-=(nNeed-nHgt0)/2;
+                long nHgt0b=aRect.Bottom()-aRect.Top();
+                long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
+                aTmpRect.Top()-=(nNeed-nHgt0b)/2;
                 aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
             }
             if ((bTop || bBtm) && nYDiv!=0) {
-                long nWdt0=aRect.Right()-aRect.Left();
-                long nNeed=long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
-                aTmpRect.Left()-=(nNeed-nWdt0)/2;
+                long nWdt0b=aRect.Right()-aRect.Left();
+                long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
+                aTmpRect.Left()-=(nNeed-nWdt0b)/2;
                 aTmpRect.Right()=aTmpRect.Left()+nNeed;
             }
         }
@@ -169,9 +169,8 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     return aTmpRect;
 }
 
-class ImpTextDragUser
+struct ImpTextDragUser : public SdrDragStatUserData
 {
-public:
     Rectangle aR;
 };
 
@@ -200,7 +199,7 @@ FASTBOOL SdrTextObj::MovDrag(SdrDragStat& rDrag) const
     {
          Rectangle aOldRect(pUser->aR);
         pUser->aR=ImpDragCalcRect(rDrag);
-        pUser->aR != aOldRect;
+        return pUser->aR != aOldRect;
     }
     return bRet;
 }
@@ -218,10 +217,10 @@ FASTBOOL SdrTextObj::EndDrag(SdrDragStat& rDrag)
         aNewRect.SetPos(aNewPos);
     }
     if (aNewRect!=aRect) {
-        long nHgt0=aRect.Bottom()-aRect.Top();
-        long nHgt1=aNewRect.Bottom()-aNewRect.Top();
-        long nWdt0=aRect.Right()-aRect.Left();
-        long nWdt1=aNewRect.Right()-aNewRect.Left();
+        //long nHgt0=aRect.Bottom()-aRect.Top();
+        //long nHgt1=aNewRect.Bottom()-aNewRect.Top();
+        //long nWdt0=aRect.Right()-aRect.Left();
+        //long nWdt1=aNewRect.Right()-aNewRect.Left();
         SetLogicRect(aNewRect);
     }
     delete pUser;
@@ -235,7 +234,7 @@ void SdrTextObj::BrkDrag(SdrDragStat& rDrag) const
     rDrag.SetUser(NULL);
 }
 
-XubString SdrTextObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
+XubString SdrTextObj::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bUndoDragComment*/, FASTBOOL bCreateComment) const
 {
     XubString aStr;
     if (!bCreateComment) ImpTakeDescriptionStr(STR_DragRectResize,aStr);
@@ -307,11 +306,11 @@ FASTBOOL SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-void SdrTextObj::BrkCreate(SdrDragStat& rStat)
+void SdrTextObj::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-FASTBOOL SdrTextObj::BckCreate(SdrDragStat& rStat)
+FASTBOOL SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return TRUE;
 }
