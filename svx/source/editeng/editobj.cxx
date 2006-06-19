@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:11:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 
 #include <eeng_pch.hxx>
-
-#pragma hdrstop
 
 #define ENABLE_STRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
