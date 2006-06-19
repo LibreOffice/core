@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NotesTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:49:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,9 @@ XMLNotesTransformerContext::XMLNotesTransformerContext(
         const OUString& rQName,
         XMLTokenEnum eToken, sal_Bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName ),
-    m_eTypeToken( eToken ),
     m_bEndNote( sal_False ),
-    m_bPersistent( bPersistent )
+    m_bPersistent( bPersistent ),
+    m_eTypeToken( eToken )
 {
 }
 
