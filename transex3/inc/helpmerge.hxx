@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:25:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,9 @@
 class HelpParser
 {
 private:
+    ByteString sHelpFile;
     bool       bUTF8;
     bool       bHasInputList;
-    ByteString sHelpFile;
 
 /// Copy fallback language String (ENUS,DE) into position of the numeric language iso code
 /// @PRECOND 0 < langIdx_in < MAX_IDX
@@ -85,7 +85,7 @@ public:
 private:
     ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
     bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage , ByteString sPath );
-;
+
     void Process( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void MakeDir( const ByteString& sPath );
