@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actiontriggerhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:17:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                     if ( nPointer )
                                     {
                                         // This is our own optimized implementation of menu images!
-                                        ImageWrapper* pImageWrapper = (ImageWrapper *)nPointer;
+                                        ImageWrapper* pImageWrapper = reinterpret_cast< ImageWrapper * >( nPointer );
                                         Image aMenuImage = pImageWrapper->GetImage();
 
                                         if ( !!aMenuImage )
@@ -399,7 +399,6 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
                 if ( pPopupMenu )
                 {
                     // recursive call to build next sub menu
-                    Any a;
                     Reference< XIndexContainer > xSubContainer = CreateActionTriggerContainer( rActionTriggerContainer );
 
                     a <<= xSubContainer;
