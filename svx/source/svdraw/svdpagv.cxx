@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:16:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,10 @@
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #endif
 
+#ifndef _SVX_FMVIEW_HXX
+#include <fmview.hxx>
+#endif
+
 // for search on vector
 #include <algorithm>
 
@@ -130,13 +134,13 @@ TYPEINIT1(SdrPageView, SfxListener);
 // festzuhalten
 //------------------------------------------------------------------------------
 SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > _xControl) throw()
-:   pObj(_pObj)
-    ,xControl(_xControl)
+:   pParent(_pParent)
+    ,pObj(_pObj)
     ,bVisible(TRUE)
-    ,bIsListening(FALSE)
     ,bDisposed(FALSE)
-    ,pParent(_pParent)
+    ,bIsListening(FALSE)
     ,mnPaintLevel( 0 )
+    ,xControl(_xControl)
 {
     DBG_ASSERT( xControl.is(), "SdrUnoControlRec::SdrUnoControlRec: invalid control, this will crash!" );
 
@@ -281,17 +285,17 @@ void SAL_CALL SdrUnoControlRec::disposing( const ::com::sun::star::lang::EventOb
 //------------------------------------------------------------------------------
 
 // XWindowListener
-void SAL_CALL SdrUnoControlRec::windowResized( const ::com::sun::star::awt::WindowEvent& e )
+void SAL_CALL SdrUnoControlRec::windowResized( const ::com::sun::star::awt::WindowEvent& /*e*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SdrUnoControlRec::windowMoved( const ::com::sun::star::awt::WindowEvent& e )
+void SAL_CALL SdrUnoControlRec::windowMoved( const ::com::sun::star::awt::WindowEvent& /*e*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SdrUnoControlRec::windowShown( const ::com::sun::star::lang::EventObject& e )
+void SAL_CALL SdrUnoControlRec::windowShown( const ::com::sun::star::lang::EventObject& /*e*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
     if ( !mnPaintLevel )
@@ -304,7 +308,7 @@ void SAL_CALL SdrUnoControlRec::windowShown( const ::com::sun::star::lang::Event
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL SdrUnoControlRec::windowHidden( const ::com::sun::star::lang::EventObject& e )
+void SAL_CALL SdrUnoControlRec::windowHidden( const ::com::sun::star::lang::EventObject& /*e*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
     bVisible = FALSE;
@@ -355,30 +359,30 @@ void SAL_CALL SdrUnoControlRec::propertyChange( const ::com::sun::star::beans::P
 
 // XImageConsumer
 //------------------------------------------------------------------------------
-void SAL_CALL SdrUnoControlRec::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer )
+void SAL_CALL SdrUnoControlRec::complete( sal_Int32 /*Status*/, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& /*xProducer*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL SdrUnoControlRec::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrUnoControlRec::init( sal_Int32 /*Width*/, sal_Int32 /*Height*/) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SdrUnoControlRec::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrUnoControlRec::setColorModel( sal_Int16 /*BitCount*/, const ::com::sun::star::uno::Sequence< sal_Int32 >& /*RGBAPal*/, sal_Int32 /*RedMask*/, sal_Int32 /*GreenMask*/, sal_Int32 /*BlueMask*/, sal_Int32 /*AlphaMask*/) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SdrUnoControlRec::setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrUnoControlRec::setPixelsByBytes( sal_Int32 /*nX*/, sal_Int32 /*nY*/, sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/, const ::com::sun::star::uno::Sequence< sal_Int8 >& /*aProducerData*/, sal_Int32 /*nOffset*/, sal_Int32 /*nScanSize*/) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL SdrUnoControlRec::setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdrUnoControlRec::setPixelsByLongs( sal_Int32 /*nX*/, sal_Int32 /*nY*/, sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/, const ::com::sun::star::uno::Sequence< sal_Int32 >& /*aProducerData*/, sal_Int32 /*nOffset*/, sal_Int32 /*nScanSize*/) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL SdrUnoControlRec::modeChanged( const util::ModeChangeEvent& _rSource ) throw (uno::RuntimeException)
+void SAL_CALL SdrUnoControlRec::modeChanged( const util::ModeChangeEvent& /*_rSource*/) throw (uno::RuntimeException)
 {
     // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
     // 2003-06-03 - #110592# - fs@openoffice.org
@@ -628,7 +632,9 @@ void SdrPageViewWindow::CreateControlContainer()
             }
         }
 
-        rView.InsertControlContainer(mxControlContainer);
+        FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
+        if ( pViewAsFormView )
+            pViewAsFormView->InsertControlContainer(mxControlContainer);
     }
 }
 
@@ -657,7 +663,9 @@ SdrPageViewWindow::~SdrPageViewWindow()
         SdrView& rView = GetPageView().GetView();
 
         // notify derived views
-        rView.RemoveControlContainer(mxControlContainer);
+        FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
+        if ( pViewAsFormView )
+            pViewAsFormView->RemoveControlContainer(mxControlContainer);
 
         // clear the control place holders
         mpControlList->Clear(sal_False);
@@ -1056,15 +1064,15 @@ SdrPageViewWindow& SdrPageView::ImpMakePageViewWinRec(OutputDevice& rOut)
                 // Gruppenobjekt: sind Uno-Objekte enthalten?
                 SdrObjListIter aIter(*((SdrObjGroup*) pObj)->GetSubList(), IM_DEEPNOGROUPS);
 
-                SdrObject* pObj = NULL;
+                SdrObject* pObj2 = NULL;
 
                 while (aIter.IsMore())
                 {
-                    pObj = aIter.Next();
+                    pObj2 = aIter.Next();
 
-                    if (pObj && pObj->IsUnoObj())
+                    if (pObj2 && pObj2->IsUnoObj())
                     {
-                        SdrUnoObj* pSdrUnoObj = PTR_CAST(SdrUnoObj, pObj);
+                        SdrUnoObj* pSdrUnoObj = PTR_CAST(SdrUnoObj, pObj2);
                         ImpInsertControl(pSdrUnoObj, rWindow);
                     }
                 }
@@ -1227,7 +1235,7 @@ void SdrPageView::ImpUnoRemoved(const SdrObject* pObj)
     }
 }
 
-void __EXPORT SdrPageView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrPageView::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
 {
     if(IsVisible())
     {
@@ -1257,25 +1265,25 @@ void __EXPORT SdrPageView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType
                     // Gruppenobjekt: sind Uno-Objekte enthalten?
                     SdrObjListIter aIter(*((SdrObjGroup*) pObj)->GetSubList(), IM_DEEPNOGROUPS);
 
-                    SdrObject* pObj = NULL;
+                    SdrObject* pObj2 = NULL;
 
                     while (aIter.IsMore())
                     {
-                        pObj = aIter.Next();
+                        pObj2 = aIter.Next();
 
-                        if (pObj && pObj->IsUnoObj())
+                        if (pObj2 && pObj2->IsUnoObj())
                         {
                             if (eKind == HINT_OBJINSERTED ||
                                 eKind == HINT_CONTROLINSERTED)
 
                             {
-                                ImpUnoInserted(pObj);
+                                ImpUnoInserted(pObj2);
                             }
                             else if (eKind == HINT_OBJREMOVED ||
                                      eKind == HINT_CONTROLREMOVED)
 
                             {
-                                ImpUnoRemoved(pObj);
+                                ImpUnoRemoved(pObj2);
                             }
                         }
                     }
@@ -1369,9 +1377,9 @@ void SdrPageView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
 void SdrPageView::PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) const
 {
     if (GetView().pTextEditOutliner==NULL) return;
-    const SdrObject* pTextObjTmp=GetView().GetTextEditObject();
-    const SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextObjTmp);
-    FASTBOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
+    //const SdrObject* pTextObjTmp=GetView().GetTextEditObject();
+    //const SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextObjTmp);
+    //FASTBOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
     ULONG nViewAnz=GetView().pTextEditOutliner->GetViewCount();
     for (ULONG i=0; i<nViewAnz; i++) {
         OutlinerView* pOLV=GetView().pTextEditOutliner->GetView(i);
@@ -1592,7 +1600,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aCo
         long y1=GetPage()->GetUppBorder()+1+nWrX;
         long y2=GetPage()->GetHgt()-GetPage()->GetLwrBorder()-1+nWrY;
         const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,NULL);
-        USHORT nBufSiz=1024; // 4k Buffer = max. 512 Punkte
+        //USHORT nBufSiz=1024; // 4k Buffer = max. 512 Punkte
         // #90353# long* pBuf = NULL;
         unsigned nGridPaintAnz=1;
         if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
@@ -1612,10 +1620,10 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aCo
                 Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
                 long nX1Pix=a1PixSiz.Width();  // 1 Pixel Toleranz drauf
                 long nY1Pix=a1PixSiz.Height();
-                if (x1<rRect.Left()  -nX1Pix/*-nWrX/**/) x1=rRect.Left()  -nX1Pix/*-nWrX/**/;
-                if (x2>rRect.Right() +nX1Pix/*-nWrX/**/) x2=rRect.Right() +nX1Pix/*-nWrX/**/;
-                if (y1<rRect.Top()   -nY1Pix/*-nWrY/**/) y1=rRect.Top()   -nY1Pix/*-nWrY/**/;
-                if (y2>rRect.Bottom()+nY1Pix/*-nWrY/**/) y2=rRect.Bottom()+nY1Pix/*-nWrY/**/;
+                if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
+                if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
+                if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
+                if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
             }
             Point aPnt;
 
@@ -1868,6 +1876,7 @@ void SdrPageView::SetHelpLine(USHORT nNum, const SdrHelpLine& rNewHelpLine)
             switch (rNewHelpLine.GetKind()) {
                 case SDRHELPLINE_VERTICAL  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw=FALSE; break;
                 case SDRHELPLINE_HORIZONTAL: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw=FALSE; break;
+                default: break;
             } // switch
         }
         if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
