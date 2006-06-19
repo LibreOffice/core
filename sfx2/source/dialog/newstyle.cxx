@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newstyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:27:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 
 IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 {
+    (void)pControl; //unused
     const String aName( aColBox.GetText() );
     SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily(), SFXSTYLEBIT_ALL );
     if ( pStyle )
