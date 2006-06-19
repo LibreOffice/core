@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:53:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 #include <stdlib.h>
 #include <vos/macros.hxx>
-#include <tools/new.hxx>
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
 #endif
@@ -118,7 +117,7 @@ BOOL Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
 // -----------------------------------------------------------------------------
 
 BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
-                             const BmpFilterParam* pFilterParam, const Link* pProgress )
+                             const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     BOOL                bRet = FALSE;
@@ -265,7 +264,7 @@ BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     BOOL                bRet = FALSE;
@@ -393,7 +392,7 @@ BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* p
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BOOL bRet = ImplMakeGreyscales( 256 );
 
@@ -521,7 +520,7 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pPro
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     BOOL bRet = ImplMakeGreyscales( 256 );
 
@@ -635,7 +634,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pPr
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     BOOL                bRet = FALSE;
     BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
@@ -685,7 +684,7 @@ BOOL Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProg
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     BOOL                bRet = FALSE;
@@ -699,7 +698,7 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgres
 
         DBG_ASSERT( nSepiaPercent <= 100, "Bitmap::ImplSepia(): sepia value out of range; defaulting to 100%" );
 
-        for( long i = 0; i < 256; i++ )
+        for( USHORT i = 0; i < 256; i++ )
         {
             BitmapColor&    rCol = aSepiaPal[ i ];
             const BYTE      cSepiaValue = (BYTE) ( ( nSepia * i ) / 10000 );
@@ -772,7 +771,7 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgres
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     ULONG               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                      pFilterParam->maMosaicTileSize.mnTileWidth : 4;
@@ -955,7 +954,7 @@ extern "C" int __LOADONCALLAPI ImplPopArtCmpFnc( const void* p1, const void* p2 
 
 // ------------------------------------------------------------------------
 
-BOOL Bitmap::ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress )
+BOOL Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BOOL bRet = ( GetBitCount() > 8 ) ? Convert( BMP_CONVERSION_8BIT_COLORS ) : TRUE;
 
@@ -997,13 +996,13 @@ BOOL Bitmap::ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgre
                     nLastEntry = n;
 
             // rotate palette (one entry)
-            const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( pPopArtTable[ 0 ].mnIndex ) );
+            const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ 0 ].mnIndex) ) );
             for( nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++ )
             {
-                pWriteAcc->SetPaletteColor( pPopArtTable[ nFirstEntry ].mnIndex,
-                                            pWriteAcc->GetPaletteColor( pPopArtTable[ nFirstEntry + 1 ].mnIndex ) );
+                pWriteAcc->SetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ nFirstEntry ].mnIndex),
+                                            pWriteAcc->GetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ nFirstEntry + 1 ].mnIndex) ) );
             }
-            pWriteAcc->SetPaletteColor( pPopArtTable[ nLastEntry ].mnIndex, aFirstCol );
+            pWriteAcc->SetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ nLastEntry ].mnIndex), aFirstCol );
 
             // cleanup
             delete[] pPopArtTable;
