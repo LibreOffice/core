@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:52:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:53:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,10 @@
 
 // =======================================================================
 
-void UniString::InitStringRes( const char* pUTF8Str, xub_StrLen nLen )
+void UniString::InitStringRes( const char* pUTF8Str, sal_Int32 nLen )
 {
     DBG_CTOR( UniString, DbgCheckUniString );
+    OSL_ENSURE(nLen <= STRING_MAXLEN, "Overflowing UniString");
 
     mpData = NULL;
     rtl_string2UString( (rtl_uString **)(&mpData),
@@ -75,9 +76,9 @@ UniString::UniString( const ByteString& rByteStr, xub_StrLen nPos, xub_StrLen nL
     else
     {
         // Laenge korrigieren, wenn noetig
-        xub_StrLen nMaxLen = rByteStr.mpData->mnLen-nPos;
+        sal_Int32 nMaxLen = rByteStr.mpData->mnLen-nPos;
         if ( nLen > nMaxLen )
-            nLen = nMaxLen;
+            nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
     mpData = NULL;
@@ -186,10 +187,11 @@ UniString::UniString( const ResId& rResId )
         RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
         //sal_uInt32 nLen = pResHdr->GetLocalOff() - sizeof( RSHEADER_TYPE );
 
-        sal_uInt32 nStringLen = strlen( (char*)(pResHdr+1) );
+        sal_Int32 nStringLen = rtl_str_getLength( (char*)(pResHdr+1) );
         InitStringRes( (const char*)(pResHdr+1), nStringLen );
 
-        sal_uInt32 nSize = sizeof( RSHEADER_TYPE ) + nStringLen + 1;
+        sal_uInt32 nSize = sizeof( RSHEADER_TYPE )
+            + sal::static_int_cast< sal_uInt32 >(nStringLen) + 1;
         nSize += nSize % 2;
         pResMgr->Increment( nSize );
     }
