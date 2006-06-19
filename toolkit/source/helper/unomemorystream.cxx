@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomemorystream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:23:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 //  ----------------------------------------------------
 //  class UnoMemoryStream
 //  ----------------------------------------------------
-UnoMemoryStream::UnoMemoryStream( sal_uInt32 nInitSize, sal_uInt32 nResize )
-    : SvMemoryStream( nInitSize, nResize )
+UnoMemoryStream::UnoMemoryStream( sal_uInt32 nInitSize, sal_uInt32 nInitResize )
+    : SvMemoryStream( nInitSize, nInitResize )
 {
 }
 
@@ -96,10 +96,10 @@ sal_Int32 UnoMemoryStream::available() throw(::com::sun::star::io::NotConnectedE
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_uInt32 nPos = Tell();
+    sal_uInt32 nStreamPos = Tell();
     sal_uInt32 nEnd = Seek( STREAM_SEEK_TO_END );
-    Seek( nPos );
-    return nEnd - nPos;
+    Seek( nStreamPos );
+    return nEnd - nStreamPos;
 }
 
 void UnoMemoryStream::closeInput() throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
