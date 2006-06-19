@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsstorage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:48:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:09:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ FSStorage_Impl::~FSStorage_Impl()
 //-----------------------------------------------
 FSStorage::FSStorage( const ::ucb::Content& aContent,
                     sal_Int32 nMode,
-                    uno::Sequence< beans::PropertyValue > xProperties,
+                    uno::Sequence< beans::PropertyValue >,
                     uno::Reference< lang::XMultiServiceFactory > xFactory )
 : m_pImpl( new FSStorage_Impl( aContent, nMode, xFactory ) )
 {
@@ -256,7 +256,7 @@ FSStorage::~FSStorage()
 }
 
 //-----------------------------------------------
-sal_Bool FSStorage::MakeFolderNoUI( const String& rFolder, sal_Bool bNewOnly )
+sal_Bool FSStorage::MakeFolderNoUI( const String& rFolder, sal_Bool )
 {
        INetURLObject aURL( rFolder );
     ::rtl::OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -634,7 +634,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
 
 //-----------------------------------------------
 uno::Reference< io::XStream > SAL_CALL FSStorage::openEncryptedStreamElement(
-    const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode, const ::rtl::OUString& aPass )
+    const ::rtl::OUString&, sal_Int32, const ::rtl::OUString& )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::NoEncryptionException,
@@ -814,8 +814,8 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
 
 //-----------------------------------------------
 uno::Reference< io::XStream > SAL_CALL FSStorage::cloneEncryptedStreamElement(
-    const ::rtl::OUString& aStreamName,
-    const ::rtl::OUString& aPass )
+    const ::rtl::OUString&,
+    const ::rtl::OUString& )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::NoEncryptionException,
@@ -1393,7 +1393,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL FSStorage::getPropertySetInfo
 
 
 //-----------------------------------------------
-void SAL_CALL FSStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL FSStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& )
         throw ( beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
@@ -1434,8 +1434,8 @@ uno::Any SAL_CALL FSStorage::getPropertyValue( const ::rtl::OUString& aPropertyN
 
 //-----------------------------------------------
 void SAL_CALL FSStorage::addPropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& xListener )
+            const ::rtl::OUString& /*aPropertyName*/,
+            const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -1451,8 +1451,8 @@ void SAL_CALL FSStorage::addPropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL FSStorage::removePropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& aListener )
+            const ::rtl::OUString& /*aPropertyName*/,
+            const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -1468,8 +1468,8 @@ void SAL_CALL FSStorage::removePropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL FSStorage::addVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+            const ::rtl::OUString& /*PropertyName*/,
+            const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -1485,8 +1485,8 @@ void SAL_CALL FSStorage::addVetoableChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL FSStorage::removeVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+            const ::rtl::OUString& /*PropertyName*/,
+            const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
