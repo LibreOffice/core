@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoutl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:30:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:45:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,9 @@
 |* Ctor
 |*
 \************************************************************************/
-SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode ):
-Outliner( pItemPool, nMode ),
-mpPaintInfoRec( NULL )
+SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
+:   Outliner( pItemPool, nMode ),
+    mpPaintInfoRec( NULL )
 {
 }
 
@@ -90,10 +90,10 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
     if( pObj && pObj != mpTextObj.get() )
     {
         SetUpdateMode(FALSE);
-        USHORT nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
+        USHORT nOutlinerMode2 = OUTLINERMODE_OUTLINEOBJECT;
         if ( !pObj->IsOutlText() )
-            nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
-        Init( nOutlinerMode );
+            nOutlinerMode2 = OUTLINERMODE_TEXTOBJECT;
+        Init( nOutlinerMode2 );
 
         SetGlobalCharStretching(100,100);
 
