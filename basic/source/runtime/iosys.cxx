@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 12:57:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,6 @@ using namespace com::sun::star::bridge;
 
 #endif /* _USE_UNO */
 
-#pragma hdrstop
 #include "iosys.hxx"
 #include "sbintern.hxx"
 
@@ -154,6 +153,8 @@ SbiInputDialog::SbiInputDialog( Window* pParent, const String& rPrompt )
 
 IMPL_LINK_INLINE_START( SbiInputDialog, Ok, Window *, pWindow )
 {
+    (void)pWindow;
+
     aText = aInput.GetText();
     EndDialog( 1 );
     return 0;
@@ -162,6 +163,8 @@ IMPL_LINK_INLINE_END( SbiInputDialog, Ok, Window *, pWindow )
 
 IMPL_LINK_INLINE_START( SbiInputDialog, Cancel, Window *, pWindow )
 {
+    (void)pWindow;
+
     EndDialog( 0 );
     return 0;
 }
@@ -419,21 +422,22 @@ OslStream::OslStream( const String& rName, short nStrmMode )
 
 OslStream::~OslStream()
 {
-    FileBase::RC nRet = maFile.close();
+    maFile.close();
 }
 
 ULONG OslStream::GetData( void* pData, ULONG nSize )
 {
-
     sal_uInt64 nBytesRead = nSize;
-    FileBase::RC nRet = maFile.read( pData, nBytesRead, nBytesRead );
+    FileBase::RC nRet = FileBase::E_None;
+    nRet = maFile.read( pData, nBytesRead, nBytesRead );
     return (ULONG)nBytesRead;
 }
 
 ULONG OslStream::PutData( const void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesWritten;
-    FileBase::RC nRet = maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
+    FileBase::RC nRet = FileBase::E_None;
+    nRet = maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
     return (ULONG)nBytesWritten;
 }
 
@@ -450,7 +454,7 @@ ULONG OslStream::SeekPos( ULONG nPos )
     }
     sal_uInt64 nRealPos;
     nRet = maFile.getPos( nRealPos );
-    return nRealPos;
+    return sal::static_int_cast<ULONG>(nRealPos);
 }
 
 void OslStream::FlushData()
@@ -459,7 +463,8 @@ void OslStream::FlushData()
 
 void OslStream::SetSize( ULONG nSize )
 {
-    FileBase::RC nRet = maFile.setSize( (sal_uInt64)nSize );
+    FileBase::RC nRet = FileBase::E_None;
+    nRet = maFile.setSize( (sal_uInt64)nSize );
 }
 
 #endif
@@ -548,9 +553,9 @@ UCBStream::~UCBStream()
             xOS->closeOutput();
         else if( xS.is() )
         {
-            Reference< XInputStream > xIS = xS->getInputStream();
-            if( xIS.is() )
-                xIS->closeInput();
+            Reference< XInputStream > xIS_ = xS->getInputStream();
+            if( xIS_.is() )
+                xIS_->closeInput();
         }
     }
     catch( Exception & )
@@ -621,7 +626,7 @@ ULONG   UCBStream::SeekPos( ULONG nPos )
     {
         if( xSeek.is() )
         {
-            sal_Int32 nLen = xSeek->getLength();
+            ULONG nLen = sal::static_int_cast<ULONG>( xSeek->getLength() );
             if( nPos > nLen )
                 nPos = nLen;
             xSeek->seek( nPos );
@@ -657,6 +662,8 @@ void    UCBStream::FlushData()
 
 void    UCBStream::SetSize( ULONG nSize )
 {
+    (void)nSize;
+
     DBG_ERROR( "not allowed to call from basic" )
     SetError( ERRCODE_IO_GENERAL );
 }
@@ -826,12 +833,12 @@ SbError SbiStream::Write( const ByteString& rBuf, USHORT n )
         aLine += rBuf;
         // Raus damit, wenn das Ende ein LF ist, aber CRLF vorher
         // strippen, da der SvStrm ein CRLF anfuegt!
-        USHORT n = aLine.Len();
-        if( n && aLine.GetBuffer()[ --n ] == 0x0A )
+        USHORT nLineLen = aLine.Len();
+        if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0A )
         {
-            aLine.Erase( n );
-            if( n && aLine.GetBuffer()[ --n ] == 0x0D )
-                aLine.Erase( n );
+            aLine.Erase( nLineLen );
+            if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0D )
+                aLine.Erase( nLineLen );
             pStrm->WriteLines( aLine );
             aLine.Erase();
         }
