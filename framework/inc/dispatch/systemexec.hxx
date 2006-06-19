@@ -4,9 +4,9 @@
  *
  *  $RCSfile: systemexec.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:20:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,8 @@ class SystemExec : // interfaces
         virtual ~SystemExec(                                                                        );
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XDispatchProvider
