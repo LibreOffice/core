@@ -4,9 +4,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:08:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ DropTargetListener::~DropTargetListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::disposing( const css::lang::EventObject& rSource ) throw( css::uno::RuntimeException )
+void SAL_CALL DropTargetListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     m_xTargetFrame = css::uno::WeakReference< css::frame::XFrame >();
     m_xFactory     = css::uno::Reference< css::lang::XMultiServiceFactory >();
@@ -148,7 +148,6 @@ void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTarget
         if ( css::datatransfer::dnd::DNDConstants::ACTION_NONE != nAction )
         {
             TransferableDataHelper aHelper( dtde.Transferable );
-            sal_uInt32 nFormatCount = aHelper.GetFormatCount();
             sal_Bool bFormatFound = sal_False;
             FileList aFileList;
 
@@ -190,7 +189,7 @@ void SAL_CALL DropTargetListener::dragEnter( const css::datatransfer::dnd::DropT
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw( css::uno::RuntimeException )
+void SAL_CALL DropTargetListener::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw( css::uno::RuntimeException )
 {
     try
     {
@@ -222,7 +221,7 @@ void SAL_CALL DropTargetListener::dragOver( const css::datatransfer::dnd::DropTa
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw( css::uno::RuntimeException )
+void SAL_CALL DropTargetListener::dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& ) throw( css::uno::RuntimeException )
 {
 }
 
