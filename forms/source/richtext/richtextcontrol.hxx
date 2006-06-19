@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,6 @@ namespace frm
                 a new ORichTextPeer instance, which has been aquired once!
         */
         static ORichTextPeer* Create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >&         _rxModel,
             Window* _pParentWindow,
             WinBits _nStyle
@@ -158,7 +157,7 @@ namespace frm
         DECLARE_XINTERFACE( )
 
     protected:
-        ORichTextPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        ORichTextPeer();
         ~ORichTextPeer();
 
         // XVclWindowPeer

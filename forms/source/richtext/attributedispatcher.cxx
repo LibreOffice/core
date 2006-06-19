@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributedispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:04:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:58:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@ namespace frm
     OAttributeDispatcher::OAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
         :ORichTextFeatureDispatcher( _rView, _rURL )
-        ,m_nAttributeId( _nAttributeId )
         ,m_pMasterDispatcher( _pMasterDispatcher )
+        ,m_nAttributeId( _nAttributeId )
     {
         OSL_ENSURE( m_pMasterDispatcher, "OAttributeDispatcher::OAttributeDispatcher: invalid master dispatcher!" );
     }
@@ -110,10 +110,13 @@ namespace frm
     void SAL_CALL OAttributeDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OAttributeDispatcher::dispatch: invalid URL!" );
 
         checkDisposed();
 
+        (void)_rURL;
+        (void)_rArguments;
+
+        OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OAttributeDispatcher::dispatch: invalid URL!" );
 #if OSL_DEBUG_LEVEL > 0
         if ( _rArguments.getLength() )
         {
@@ -130,9 +133,10 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& _rState )
+    void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& /*_rState*/ )
     {
         OSL_ENSURE( _nAttributeId == m_nAttributeId, "OAttributeDispatcher::onAttributeStateChanged: wrong attribute!" );
+        (void)_nAttributeId;
 
         FeatureStateEvent aEvent( buildStatusEvent() );
         ::cppu::OInterfaceIteratorHelper aIter( getStatusListeners() );

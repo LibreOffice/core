@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clipboarddispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:04:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OClipboardDispatcher::dispatch( const URL& URL, const Sequence< PropertyValue >& Arguments ) throw (RuntimeException)
+    void SAL_CALL OClipboardDispatcher::dispatch( const URL& /*_rURL*/, const Sequence< PropertyValue >& /*Arguments*/ ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !getEditView() )

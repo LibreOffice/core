@@ -4,9 +4,9 @@
  *
  *  $RCSfile: featuredispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:05:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@ namespace frm
     //====================================================================
     //--------------------------------------------------------------------
     ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, const URL&  _rURL )
-        :m_aStatusListeners( m_aMutex )
-        ,m_aFeatureURL( _rURL )
+        :m_aFeatureURL( _rURL )
+        ,m_aStatusListeners( m_aMutex )
         ,m_pEditView( &_rView )
         ,m_bDisposed( false )
     {
@@ -84,7 +84,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void ORichTextFeatureDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
+    void ORichTextFeatureDispatcher::disposing( ::osl::ClearableMutexGuard& /*_rClearBeforeNotify*/ )
     {
         m_pEditView = NULL;
     }
@@ -106,7 +106,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ORichTextFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
+    void SAL_CALL ORichTextFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& /*_rURL*/ ) throw (RuntimeException)
     {
         m_aStatusListeners.removeInterface( _rxControl );
     }

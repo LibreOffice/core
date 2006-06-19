@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parametrizedattributedispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,6 @@ namespace frm
         if ( aParameterSet.Count() )
         {
             OSL_ENSURE( aParameterSet.Count() == 1, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: Arguments which form more than 1 item? How this?" );
-            const SfxItemPool& rPool = *aParameterSet.GetPool();
             WhichId nAttributeWhich = aParameterSet.GetPool()->GetWhich( nSlotId );
             pArgument = aParameterSet.GetItem( nAttributeWhich );
             OSL_ENSURE( pArgument, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: suspicious: there were arguments, but they're not for my slot!" );
@@ -155,6 +154,7 @@ namespace frm
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OParametrizedAttributeDispatcher::dispatch: invalid URL!" );
+        (void)_rURL;
         if ( m_pMasterDispatcher )
         {
             const SfxPoolItem* pConvertedArgument = convertDispatchArgsToItem( _rArguments );
