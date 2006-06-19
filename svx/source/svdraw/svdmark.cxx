@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:41:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,8 +596,8 @@ const XubString& SdrMarkList::GetMarkDescription() const
 
             for(sal_uInt32 i = 1; i < GetMarkCount() && bEq; i++)
             {
-                SdrMark* pMark = GetMark(i);
-                pMark->GetObj()->TakeObjNamePlural(aStr1);
+                SdrMark* pMark2 = GetMark(i);
+                pMark2->GetObj()->TakeObjNamePlural(aStr1);
                 bEq = aNam.Equals(aStr1);
             }
 
@@ -684,12 +684,12 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 
             for(sal_uInt32 i(n1stMarkNum + 1L); i < GetMarkCount() && bEq; i++)
             {
-                const SdrMark* pMark = GetMark(i);
-                const SdrUShortCont* pPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
+                const SdrMark* pMark2 = GetMark(i);
+                const SdrUShortCont* pPts = bGlue ? pMark2->GetMarkedGluePoints() : pMark2->GetMarkedPoints();
 
                 if(pPts && pPts->GetCount())
                 {
-                    pMark->GetObj()->TakeObjNamePlural(aStr1);
+                    pMark2->GetObj()->TakeObjNamePlural(aStr1);
                     bEq = aNam.Equals(aStr1);
                 }
             }
