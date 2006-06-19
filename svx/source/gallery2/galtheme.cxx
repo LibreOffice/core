@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:50:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/new.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
@@ -264,7 +263,6 @@ const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rU
 {
     GalleryObject*  pEntry = aObjectList.First();
     GalleryObject*  pFoundEntry = NULL;
-    ULONG           nUpdatePos = LIST_APPEND;
 
     for( ; pEntry && !pFoundEntry; pEntry = aObjectList.Next() )
         if( pEntry->aURL == rURL )
@@ -440,7 +438,6 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
     {
         GalleryObject*  pEntry = aObjectList.First();
         GalleryObject*  pFoundEntry = NULL;
-        ULONG           nUpdatePos = LIST_APPEND;
 
         for( ; pEntry && !pFoundEntry; pEntry = aObjectList.Next() )
             if( pEntry->aURL == rObj.GetURL() )
@@ -805,7 +802,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, BO
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryTheme::GetThumb( ULONG nPos, Bitmap& rBmp, BOOL bProgress )
+BOOL GalleryTheme::GetThumb( ULONG nPos, Bitmap& rBmp, BOOL )
 {
     SgaObject*  pObj = AcquireObject( nPos );
     BOOL        bRet = FALSE;
@@ -916,6 +913,8 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
                 case( GFX_LINK_TYPE_NATIVE_WMF ): nExportFormat = CVT_WMF; break;
                 case( GFX_LINK_TYPE_NATIVE_MET ): nExportFormat = CVT_MET; break;
                 case( GFX_LINK_TYPE_NATIVE_PCT ): nExportFormat = CVT_PCT; break;
+                default:
+                    break;
             }
         }
         else
@@ -971,7 +970,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryTheme::GetModel( ULONG nPos, FmFormModel& rModel, BOOL bProgress )
+BOOL GalleryTheme::GetModel( ULONG nPos, FmFormModel& rModel, BOOL )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     BOOL                    bRet = FALSE;
@@ -1050,7 +1049,7 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStream, BOOL bProgress )
+BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStream, BOOL )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     BOOL                    bRet = FALSE;
@@ -1138,7 +1137,7 @@ BOOL GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, 
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryTheme::GetURL( ULONG nPos, INetURLObject& rURL, BOOL bProgress )
+BOOL GalleryTheme::GetURL( ULONG nPos, INetURLObject& rURL, BOOL )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     BOOL                    bRet = FALSE;
@@ -1483,15 +1482,15 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         {
             pObj = new GalleryObject;
 
-            ByteString  aTmpStr;
+            ByteString  aTempFileName;
             String      aFileName;
             String      aPath;
             sal_uInt16  nTemp;
 
-            rIStm >> bRel >> aTmpStr >> pObj->nOffset;
+            rIStm >> bRel >> aTempFileName >> pObj->nOffset;
             rIStm >> nTemp; pObj->eObjKind = (SgaObjKind) nTemp;
 
-            aFileName = String( aTmpStr.GetBuffer(), gsl_getSystemTextEncoding() );
+            aFileName = String( aTempFileName.GetBuffer(), gsl_getSystemTextEncoding() );
 
             if( bRel )
             {
