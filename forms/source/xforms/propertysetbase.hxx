@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:20:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ public:
     The <type>PropertySetBase</type> bridges various implementations,
     so you have the best of both worlds.
  */
-class PropertySetBase : public comphelper::OStatefulPropertySet
+class PropertySetBase : public ::comphelper::OStatefulPropertySet
 {
 private:
     typedef com::sun::star::uno::Any    Any_t;
@@ -307,6 +307,8 @@ public:
     {
         const_cast< PropertySetBase* >( this )->firePropertyChange( nHandle, rNewValue, rOldValue );
     }
+
+    using ::comphelper::OStatefulPropertySet::getFastPropertyValue;
 
 private:
     /** locates a property given by handle
