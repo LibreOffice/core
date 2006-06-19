@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:24:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,10 +102,7 @@ namespace svt
             aFind = _raHeaderCells.insert( BrowseBoxImpl::THeaderCellMap::value_type(_nPos,pNew) ).first;
         }
         if ( aFind != _raHeaderCells.end() )
-        {
-            sal_Int32 nId = aFind->first;
             xRet = aFind->second;
-        }
         return xRet;
     }
 
@@ -193,7 +190,7 @@ sal_Int32 BrowseBox::GetAccessibleControlCount() const
 }
 // -----------------------------------------------------------------------------
 
-Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 nIndex )
+Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 {
     DBG_ASSERT( FALSE, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
     return NULL;
@@ -242,7 +239,7 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 
 // Object data and state ------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition ) const
+OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
 {
     OUString aRetText;
     switch( eObjType )
@@ -296,7 +293,7 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
 }
 // -----------------------------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition ) const
+OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
 {
     OUString aRetText;
     switch( eObjType )
@@ -322,12 +319,14 @@ OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType 
         case ::svt::BBTYPE_COLUMNHEADERCELL:
             //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
             break;
+        case ::svt::BBTYPE_CHECKBOXCELL:
+            break;
     }
     return aRetText;
 }
 // -----------------------------------------------------------------------------
 
-OUString BrowseBox::GetRowDescription( sal_Int32 nRow ) const
+OUString BrowseBox::GetRowDescription( sal_Int32 ) const
 {
     return OUString();
 }
@@ -383,17 +382,18 @@ void BrowseBox::FillAccessibleStateSet(
             break;
         case ::svt::BBTYPE_TABLECELL:
             {
-                sal_Int32 nCurRow = GetCurRow();
-                sal_uInt16 nCurColumn = GetCurColumnId();
-                if ( IsFieldVisible(nCurRow,nCurColumn) )
+                sal_Int32 nRow = GetCurRow();
+                sal_uInt16 nColumn = GetCurColumnId();
+                if ( IsFieldVisible(nRow,nColumn) )
                     rStateSet.AddState( AccessibleStateType::VISIBLE );
-                if ( !IsFrozen( nCurColumn ) )
+                if ( !IsFrozen( nColumn ) )
                     rStateSet.AddState( AccessibleStateType::FOCUSABLE );
                 rStateSet.AddState( AccessibleStateType::TRANSIENT );
             }
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
         case ::svt::BBTYPE_COLUMNHEADERCELL:
+        case ::svt::BBTYPE_CHECKBOXCELL:
             OSL_ENSURE(0,"Illegal call here!");
             break;
     }
@@ -417,7 +417,7 @@ void BrowseBox::GrabTableFocus()
     GrabFocus();
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetCellText(long _nRow, USHORT _nColId) const
+String BrowseBox::GetCellText(long, USHORT ) const
 {
     DBG_ASSERT(0,"This method has to be implemented by the derived classes! BUG!!");
     return String();
@@ -503,8 +503,8 @@ sal_Int32 BrowseBox::GetSelectedRowCount() const
 // -----------------------------------------------------------------------------
 sal_Int32 BrowseBox::GetSelectedColumnCount() const
 {
-    const MultiSelection* pColSel = GetColumnSelection();
-    return pColSel ? pColSel->GetSelectCount() : 0;
+    const MultiSelection* pColumnSel = GetColumnSelection();
+    return pColumnSel ? pColumnSel->GetSelectCount() : 0;
 }
 // -----------------------------------------------------------------------------
 void BrowseBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const
@@ -523,17 +523,17 @@ void BrowseBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >
 // -----------------------------------------------------------------------------
 void BrowseBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const
 {
-    const MultiSelection* pColSel = GetColumnSelection();
+    const MultiSelection* pColumnSel = GetColumnSelection();
     sal_Int32 nCount = GetSelectedColumnCount();
-    if( pColSel && nCount )
+    if( pColumnSel && nCount )
     {
         _rColumns.realloc( nCount );
 
         sal_Int32 nIndex = 0;
-        sal_uInt32 nRangeCount = pColSel->GetRangeCount();
+        sal_uInt32 nRangeCount = pColumnSel->GetRangeCount();
         for( sal_uInt32 nRange = 0; nRange < nRangeCount; ++nRange )
         {
-            const Range& rRange = pColSel->GetRange( nRange );
+            const Range& rRange = pColumnSel->GetRange( nRange );
             // loop has to include aRange.Max()
             for( sal_Int32 nCol = rRange.Min(); nCol <= rRange.Max(); ++nCol )
             {
@@ -582,7 +582,7 @@ Window* BrowseBox::GetAccessibleParentWindow() const
     return Control::GetAccessibleParentWindow();
 }
 // -----------------------------------------------------------------------------
-Window* BrowseBox::GetWindow() const
+Window* BrowseBox::GetWindowInstance()
 {
-    return const_cast< BrowseBox* >( this );
+    return this;
 }
