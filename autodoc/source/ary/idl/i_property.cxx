@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_property.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:44:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:50:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,10 +177,3 @@ attr::Type( const CodeEntity & i_ce )
 
 }   //  namespace   idl
 }   //  namespace   ary
-
-
-
-
-#if ENABLE_UDM
-IMPL_UDM_GET_TRAITS( ary::idl::Property );
-#endif // ENABLE_UDM
