@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:17:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:54:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,9 @@ AccessibleShape::AccessibleShape (
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
       mnIndex (rShapeInfo.mnIndex),
+      m_nIndexInParent(-1),
       mpText (NULL),
-      mpParent (rShapeInfo.mpChildrenManager),
-      m_nIndexInParent(-1)
+      mpParent (rShapeInfo.mpChildrenManager)
 {
     m_pShape = GetSdrObjectFromXShape(mxShape);
 }
@@ -916,7 +916,6 @@ void SAL_CALL
     {
         if (aEvent.Source ==  maShapeTreeInfo.GetModelBroadcaster())
         {
-            ::osl::MutexGuard aGuard (maMutex);
             // Remove reference to model broadcaster to allow it to pass
             // away.
             maShapeTreeInfo.SetModelBroadcaster(NULL);
