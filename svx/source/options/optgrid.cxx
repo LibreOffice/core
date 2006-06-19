@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:52:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_OPTGRID_CXX
 
