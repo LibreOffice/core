@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:00:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -88,7 +86,7 @@ XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 sal_Bool XMLDurationPropertyHdl::importXML(
     const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     util::DateTime aTime;
     SvXMLUnitConverter::convertTime( aTime,  rStrImpValue );
@@ -102,7 +100,7 @@ sal_Bool XMLDurationPropertyHdl::importXML(
 sal_Bool XMLDurationPropertyHdl::exportXML(
     OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     sal_Int32 nVal;
 
@@ -281,13 +279,13 @@ XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
 {
 }
 
-sal_Bool XMLDateTimeFormatHdl::importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLDateTimeFormatHdl::importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     rValue <<= rStrImpValue;
     return true;
 }
 
-sal_Bool XMLDateTimeFormatHdl::exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLDateTimeFormatHdl::exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nNumberFormat = 0;
     if( mpExport && (rValue >>= nNumberFormat) )
