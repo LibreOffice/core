@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collatorwrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:44:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ CollatorWrapper::CollatorWrapper (
         }
         catch (uno::Exception& rException)
         {
+            (void)rException;
             DBG_ERRORFILE ("CollatorWrapper: failed to create instance");
         }
     }
@@ -91,6 +92,7 @@ CollatorWrapper::CollatorWrapper (
         }
         catch (uno::Exception& rException)
         {
+            (void)rException;
             DBG_ERRORFILE ("CollatorWrapper: failed to get component instance!");
         }
     }
@@ -115,6 +117,7 @@ CollatorWrapper::compareSubstring (
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: compareSubstring failed");
     }
 
@@ -131,6 +134,7 @@ CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: compareString failed");
     }
 
@@ -147,6 +151,7 @@ CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: listCollatorAlgorithms failed");
     }
 
@@ -163,6 +168,7 @@ CollatorWrapper::listCollatorOptions (const ::rtl::OUString& rAlgorithm) const
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: listCollatorOptions failed");
     }
 
@@ -179,6 +185,7 @@ CollatorWrapper::loadDefaultCollator (const lang::Locale& rLocale, sal_Int32 nOp
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: loadDefaultCollator failed");
     }
 
@@ -197,6 +204,7 @@ CollatorWrapper::loadCollatorAlgorithm (const ::rtl::OUString& rAlgorithm,
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: loadCollatorAlgorithm failed");
     }
 
@@ -217,6 +225,7 @@ CollatorWrapper::loadCollatorAlgorithmWithEndUserOption (
     }
     catch (uno::RuntimeException& rRuntimeException)
     {
+        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: loadCollatorAlgorithmWithEndUserOption failed");
     }
 }
