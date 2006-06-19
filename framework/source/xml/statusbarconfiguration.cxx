@@ -79,16 +79,16 @@ static Reference< XDocumentHandler > GetSaxWriter(
 }
 
 sal_Bool StatusBarConfiguration::LoadStatusBar(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rInStream, StatusBarDescriptor& aItems )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+    SvStream&, StatusBarDescriptor& )
 {
     // obsolete - only support linkage of binary filters!
     return sal_True;
 }
 
 sal_Bool StatusBarConfiguration::StoreStatusBar(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rOutStream, const StatusBarDescriptor& aItems )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+    SvStream&, const StatusBarDescriptor& )
 {
     // obsolete - only support linkage of binary filters!
     return sal_True;
@@ -129,8 +129,6 @@ sal_Bool StatusBarConfiguration::LoadStatusBar(
     {
         return sal_False;
     }
-
-    return sal_False;
 }
 
 sal_Bool StatusBarConfiguration::StoreStatusBar(
@@ -160,7 +158,5 @@ sal_Bool StatusBarConfiguration::StoreStatusBar(
     {
         return sal_False;
     }
-
-    return sal_False; }
-
+}
 }
