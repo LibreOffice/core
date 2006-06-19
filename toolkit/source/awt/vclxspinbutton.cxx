@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxspinbutton.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:14:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,9 +273,7 @@ namespace toolkit
         ::vos::OGuard aGuard( GetMutex() );
 
         sal_Int32 nValue = 0;
-        sal_Bool  bValue = sal_True;
         sal_Bool  bIsLongValue = ( Value >>= nValue );
-        sal_Bool  bIsBoolValue = ( Value >>= bValue );
 
         if ( GetWindow() )
         {
