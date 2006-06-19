@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:11:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:47:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,7 +657,7 @@ void OS2METReader::PopAttr()
     delete p;
 }
 
-void OS2METReader::ChangeBrush(const Color& rPatColor, const Color& rBGColor, BOOL bFill )
+void OS2METReader::ChangeBrush(const Color& rPatColor, const Color& /*rBGColor*/, BOOL bFill )
 {
     Color aColor;
 
@@ -2256,7 +2256,7 @@ void OS2METReader::ReadFont(USHORT nFieldSize)
 {
     ULONG nPos, nMaxPos;
     USHORT nLen;
-    BYTE nbyte, nTripType, nTripType2;
+    BYTE nByte, nTripType, nTripType2;
     OSFont * pF=new OSFont;
     pF->pSucc=pFontList; pFontList=pF;
     pF->nID=0;
@@ -2267,7 +2267,7 @@ void OS2METReader::ReadFont(USHORT nFieldSize)
     nMaxPos=nPos+(ULONG)nFieldSize;
     pOS2MET->SeekRel(2); nPos+=2;
     while (nPos<nMaxPos && pOS2MET->GetError()==0) {
-        *pOS2MET >> nbyte; nLen =((USHORT)nbyte) & 0x00ff;
+        *pOS2MET >> nByte; nLen =((USHORT)nByte) & 0x00ff;
         *pOS2MET >> nTripType;
         switch (nTripType) {
             case 0x02:
@@ -2292,8 +2292,8 @@ void OS2METReader::ReadFont(USHORT nFieldSize)
                 *pOS2MET >> nTripType2;
                 switch (nTripType2) {
                     case 0x05:   //Icid
-                        *pOS2MET >> nbyte;
-                        pF->nID=((ULONG)nbyte)&0xff;
+                        *pOS2MET >> nByte;
+                        pF->nID=((ULONG)nByte)&0xff;
                         break;
                 }
                 break;
