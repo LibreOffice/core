@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flbytes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,14 +387,14 @@ ErrCode SvCompositeLockBytes::Flush() const
 }
 
 //============================================================================
-ErrCode SvCompositeLockBytes::SetSize( ULONG nSize )
+ErrCode SvCompositeLockBytes::SetSize( ULONG )
 {
     DBG_ERROR( "not implemented" );
     return ERRCODE_IO_NOTSUPPORTED;
 }
 
 //============================================================================
-ErrCode SvCompositeLockBytes::LockRegion( ULONG nPos, ULONG nCount, LockType )
+ErrCode SvCompositeLockBytes::LockRegion( ULONG, ULONG, LockType )
 {
     DBG_ERROR( "not implemented" );
     return ERRCODE_IO_NOTSUPPORTED;
@@ -402,7 +402,7 @@ ErrCode SvCompositeLockBytes::LockRegion( ULONG nPos, ULONG nCount, LockType )
 
 //============================================================================
 ErrCode SvCompositeLockBytes::UnlockRegion(
-    ULONG nPos, ULONG nCount, LockType )
+    ULONG, ULONG, LockType )
 {
     DBG_ERROR( "not implemented" );
     return ERRCODE_IO_NOTSUPPORTED;
