@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:08:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
  * Close the connection to the input manager, and free the XIM structure
  */
 
-Status XvaCloseIM(XIM im)
+Status XvaCloseIM(XIM)
 {
       Status s = False;
 
