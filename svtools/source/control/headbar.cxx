@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:56:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ struct ImplHeadItem
     void*               mpUserData;
 };
 
-DECLARE_LIST( ImplHeadItemList, ImplHeadItem* );
+DECLARE_LIST( ImplHeadItemList, ImplHeadItem* )
 
 // =======================================================================
 
@@ -347,7 +347,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               USHORT nPos, BOOL bHigh, BOOL bDrag,
                               const Rectangle& rItemRect,
                               const Rectangle* pRect,
-                              ULONG nFlags )
+                              ULONG )
 {
     Rectangle aRect = rItemRect;
 
