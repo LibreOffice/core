@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextimplcontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:08:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,6 @@ namespace frm
         EditView*               m_pView;
         ITextAttributeListener* m_pTextAttrListener;
         ITextSelectionListener* m_pSelectionListener;
-        bool                    m_bLockedPaperSize;
         bool                    m_bHasEverBeenShown;
 
     public:
