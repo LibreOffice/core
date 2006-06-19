@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ class CGMOutAct
 
     public:
                                 CGMOutAct( CGM& rCGM );
-                                ~CGMOutAct();
+    virtual                     ~CGMOutAct();
     virtual void                FirstOutPut() { mpCGM->mbFirstOutPut = sal_False; } ;
     virtual void                InsertPage() { mnCurrentPage++; } ;
     virtual void                BeginGroup() {} ;
@@ -107,16 +107,16 @@ class CGMOutAct
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
     void                        SetGradientStyle( sal_uInt32 nStyle, double fRatio );
     virtual void                DrawRectangle( FloatRect& ) {} ;
-    virtual void                DrawEllipse( FloatPoint& center, FloatPoint& size, double& orientation ) {} ;
-    virtual void                DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
-                                    sal_uInt32 etype, double& startangle, double& endangle ) {} ;
+    virtual void                DrawEllipse( FloatPoint&, FloatPoint&, double& ) {} ;
+    virtual void                DrawEllipticalArc( FloatPoint&, FloatPoint&, double&,
+                                    sal_uInt32, double&, double&) {} ;
     virtual void                DrawBitmap( CGMBitmapDescriptor* ) {} ;
     virtual void                DrawPolygon( Polygon& ) {} ;
     virtual void                DrawPolyLine( Polygon& ) {} ;
     virtual void                DrawPolybezier( Polygon& ) {} ;
     virtual void                DrawPolyPolygon( PolyPolygon& ) {} ;
-    virtual void                DrawText( ::com::sun::star::awt::Point& TextRectPos, ::com::sun::star::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) {} ;
-    virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) {} ;
+    virtual void                DrawText( ::com::sun::star::awt::Point&, ::com::sun::star::awt::Size&, char*, sal_uInt32, FinalFlag ) {} ;
+    virtual void                AppendText( char*, sal_uInt32, FinalFlag ) {} ;
     virtual sal_uInt32              DrawText( TextEntry*, NodeFrameSet&, sal_uInt32 ) { return 0; } ;
     virtual void                DrawChart(){} ;
 };
