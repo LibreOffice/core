@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:41:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,17 +274,19 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper);
 
 class SfxPoolCancelManager_Impl  :   public SfxCancelManager ,
-                                public SfxCancellable   ,
-                                public SfxListener      ,
-                                public SvRefBase
+                                     public SfxCancellable   ,
+                                     public SfxListener      ,
+                                     public SvRefBase
 {
-    SfxCancelManagerWeak    wParent;
+    SfxCancelManagerWeak wParent;
 
-                            ~SfxPoolCancelManager_Impl();
+                 ~SfxPoolCancelManager_Impl();
 public:
-                            SfxPoolCancelManager_Impl( SfxCancelManager* pParent, const String& rName );
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void            Cancel();
+                 SfxPoolCancelManager_Impl( SfxCancelManager* pParent, const String& rName );
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    using SfxCancelManager::Cancel;
+    virtual void Cancel();
 };
 
 SV_DECL_IMPL_REF( SfxPoolCancelManager_Impl )
@@ -317,7 +319,7 @@ SfxPoolCancelManager_Impl::~SfxPoolCancelManager_Impl()
 
 
 //----------------------------------------------------------------
-void SfxPoolCancelManager_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxPoolCancelManager_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/ )
 {
     if( !GetCancellableCount() ) SetManager( 0 );
     else if( !GetManager() )
@@ -435,21 +437,27 @@ SfxPoolCancelManager_Impl* SfxMedium_Impl::GetCancelManager()
 
 //------------------------------------------------------------------
 SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
- :
-    SvCompatWeakBase( pAntiImplP ),
-    bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
-    aExpireTime( Date() + 10, Time() ),
-    bForceSynchron( sal_False ), bIsStorage( sal_False ),
-    pAntiImpl( pAntiImplP ),
-    bDontCreateCancellable( sal_False ), pTempDir( NULL ),
-    bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pTempFile( NULL ),
-    nLastStorageError( 0 ),
-    bIsCharsetInitialized( sal_False ),
+ :  SvCompatWeakBase( pAntiImplP ),
+    bUpdatePickList(sal_True),
+    bIsTemp( sal_False ),
+    bForceSynchron( sal_False ),
+    bDontCreateCancellable( sal_False ),
+    bDownloadDone( sal_True ),
+    bDontCallDoneLinkOnSharingError( sal_False ),
+    bIsStorage( sal_False ),
     bUseInteractionHandler( sal_True ),
     bAllowDefaultIntHdl( sal_False ),
-    m_bRemoveBackup( sal_False ),
+    bIsCharsetInitialized( sal_False ),
     bStorageBasedOnInStream( sal_False ),
     m_bSalvageMode( sal_False ),
+    pAntiImpl( pAntiImplP ),
+    nFileVersion( 0 ),
+    pOrigFilter( 0 ),
+    aExpireTime( Date() + 10, Time() ),
+    pTempDir( NULL ),
+    pTempFile( NULL ),
+    nLastStorageError( 0 ),
+    m_bRemoveBackup( sal_False ),
     m_nSignatureState( SIGNATURESTATE_NOSIGNATURES )
 {
     aDoneLink.CreateMutex();
@@ -972,7 +980,6 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
     DBG_ASSERT( !pOutStream, "OutStream in a readonly Medium?!" );
 
     // medium based on OutputStream: must work with TempFile
-    USHORT nState = GetItemSet()->GetItemState( SID_STREAM );
     if( aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL
       || !::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
         CreateTempFileNoCopy();
@@ -1068,7 +1075,6 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
         return pImp->xStorage;
 
     uno::Sequence< uno::Any > aArgs( 2 );
-    sal_Int32 nArgsLen = 2;
 
     String aStorageName;
     if ( pImp->pTempFile || pImp->pTempDir )
@@ -2180,8 +2186,6 @@ void SfxMedium::GetMedium_Impl()
         pImp->bDownloadDone = sal_False;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
 
-        BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
-
         //TODO/MBA: need support for SID_STREAM
         SFX_ITEMSET_ARG( pSet, pWriteStreamItem, SfxUnoAnyItem, SID_STREAM, sal_False);
         SFX_ITEMSET_ARG( pSet, pInStreamItem, SfxUnoAnyItem, SID_INPUTSTREAM, sal_False);
@@ -2482,7 +2486,8 @@ SfxMedium::SfxMedium()
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
-:   IMPL_CTOR( sal_True,    // bRoot, pURLObj
+:   SvRefBase(),
+    IMPL_CTOR( sal_True,    // bRoot, pURLObj
         rMedium.pURLObj ? new INetURLObject(*rMedium.pURLObj) : 0 ),
     pImp(new SfxMedium_Impl( this ))
 {
@@ -2547,7 +2552,7 @@ SfxMedium::GetInteractionHandler()
 
 //----------------------------------------------------------------
 
-void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool bResetOrig )
+void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool /*bResetOrig*/ )
 {
     pFilter = pFilterP;
     pImp->nFileVersion = 0;
@@ -2560,9 +2565,9 @@ const SfxFilter* SfxMedium::GetOrigFilter( sal_Bool bNotCurrent ) const
 }
 //----------------------------------------------------------------
 
-void SfxMedium::SetOrigFilter_Impl( const SfxFilter* pFilter )
+void SfxMedium::SetOrigFilter_Impl( const SfxFilter* pOrigFilter )
 {
-    pImp->pOrigFilter = pFilter;
+    pImp->pOrigFilter = pOrigFilter;
 }
 //------------------------------------------------------------------
 
@@ -2802,7 +2807,7 @@ sal_Bool SfxMedium::IsTemporary() const
 
 //------------------------------------------------------------------
 
-sal_Bool SfxMedium::Exists( sal_Bool bForceSession )
+sal_Bool SfxMedium::Exists( sal_Bool /*bForceSession*/ )
 {
     DBG_ERROR( "Not implemented!" );
     return sal_True;
@@ -2964,7 +2969,7 @@ const String& SfxMedium::GetPreRedirectedURL() const
 }
 //----------------------------------------------------------------
 
-sal_uInt32 SfxMedium::GetMIMEAndRedirect( String &rName )
+sal_uInt32 SfxMedium::GetMIMEAndRedirect( String& /*rName*/ )
 {
 /* dv !!!! not needed any longer ?
     INetProtocol eProt = GetURLObject().GetProtocol();
@@ -3176,10 +3181,10 @@ sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
             if ( aLongs[nKey] > ( ULONG ) nKey+1 )
                 break;
 
-        String aName = DEFINE_CONST_UNICODE( "Version" );
-        aName += String::CreateFromInt32( nKey + 1 );
+        String aRevName = DEFINE_CONST_UNICODE( "Version" );
+        aRevName += String::CreateFromInt32( nKey + 1 );
         pImp->aVersions.realloc( nLength+1 );
-        rRevision.Identifier = aName;
+        rRevision.Identifier = aRevName;
         pImp->aVersions[nLength] = rRevision;
         return nKey;
     }
@@ -3218,7 +3223,7 @@ sal_Bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
     return sal_False;
 }
 
-sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
+sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool /*bUseXML*/ )
 {
     if ( GetStorage().is() )
     {
@@ -3587,7 +3592,7 @@ sal_Bool SfxMedium::EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OU
     return bResult;
 }
 
-SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4);
+SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4)
 SV_IMPL_PTRARR(SvKeyValueList_Impl, SvKeyValue*);
 
 /*
