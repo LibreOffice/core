@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:55:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ struct SvLBoxButtonData_Impl
 };
 
 
-DBG_NAME(SvLBoxButtonData);
+DBG_NAME(SvLBoxButtonData)
 
 void SvLBoxButtonData::InitData( BOOL bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
 {
@@ -450,7 +450,7 @@ struct SvLBoxContextBmp_Impl
 };
 
 // ***************************************************************
-DBG_NAME(SvLBoxContextBmp);
+DBG_NAME(SvLBoxContextBmp)
 
 SvLBoxContextBmp::SvLBoxContextBmp( SvLBoxEntry* pEntry, USHORT nItemFlags,
     Image aBmp1, Image aBmp2, USHORT nEntryFlags )
@@ -516,11 +516,9 @@ Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst, BmpColorMode _eMod
     {
         case BMP_COLOR_NORMAL:
             return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
-            break;
 
         case BMP_COLOR_HIGHCONTRAST:
             return _bFirst ? m_pImpl->m_aImage1_hc : m_pImpl->m_aImage2_hc;
-            break;
 
         default:
             DBG_ERROR( "SvLBoxContextBmp::implGetImageStore: unexpected mode!");
