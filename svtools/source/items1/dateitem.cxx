@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dateitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:01:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxDateTimeItem);
+DBG_NAME(SfxDateTimeItem)
 
 
 // -----------------------------------------------------------------------
@@ -73,20 +73,16 @@ TYPEINIT1(SfxDateTimeItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( USHORT nWhich ) :
-
-    SfxPoolItem( nWhich )
-
+SfxDateTimeItem::SfxDateTimeItem( USHORT which ) :
+    SfxPoolItem( which )
 {
     DBG_CTOR(SfxDateTimeItem, 0);
 }
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( USHORT nWhich, const DateTime& rDT ) :
-
-    SfxPoolItem( nWhich ),
-
+SfxDateTimeItem::SfxDateTimeItem( USHORT which, const DateTime& rDT ) :
+    SfxPoolItem( which ),
     aDateTime( rDT )
 
 {
@@ -96,9 +92,7 @@ SfxDateTimeItem::SfxDateTimeItem( USHORT nWhich, const DateTime& rDT ) :
 // -----------------------------------------------------------------------
 
 SfxDateTimeItem::SfxDateTimeItem( const SfxDateTimeItem& rItem ) :
-
     SfxPoolItem( rItem ),
-
     aDateTime( rItem.aDateTime )
 {
     DBG_CTOR(SfxDateTimeItem, 0);
@@ -165,9 +159,9 @@ SfxPoolItem* SfxDateTimeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxDateTimeItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *   pIntlWrapper
 )   const
@@ -200,7 +194,6 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
 BOOL SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::util::DateTime aValue;
     if ( rVal >>= aValue )
@@ -224,7 +217,6 @@ BOOL SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
 BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::util::DateTime aValue( aDateTime.Get100Sec(),
                                            aDateTime.GetSec(),
@@ -244,12 +236,12 @@ BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
 TYPEINIT1(SfxColumnDateTimeItem, SfxDateTimeItem);
 
 
-SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT nWhich ) :
-    SfxDateTimeItem( nWhich )
+SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT which ) :
+    SfxDateTimeItem( which )
 {}
 
-SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT nWhich, const DateTime& rDT ) :
-    SfxDateTimeItem( nWhich, rDT )
+SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT which, const DateTime& rDT ) :
+    SfxDateTimeItem( which, rDT )
 {}
 
 SfxColumnDateTimeItem::SfxColumnDateTimeItem( const SfxDateTimeItem& rCpy ) :
@@ -263,9 +255,9 @@ SfxPoolItem* SfxColumnDateTimeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxColumnDateTimeItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *   pIntlWrapper
 )   const
