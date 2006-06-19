@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:18:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,7 +325,8 @@ void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr
 static void deleteException(
     void* pExc, unsigned int* thunk, typelib_TypeDescription* pType )
 {
-     uno_destructData( pExc, pType, cpp_release );
+     uno_destructData(
+        pExc, pType, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
      typelib_typedescription_release( pType );
     delete[] thunk;
 }
@@ -399,9 +400,10 @@ void cc50_solaris_sparc_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
         | (reinterpret_cast< unsigned int >(pTypeDescr) & 0x3FF);
     bridges::cpp_uno::cc50_solaris_sparc::flushCode(thunk, thunk + 6);
 
-    __Crun::ex_throw(
-        pCppExc, (const __Crun::static_type_info*)pRTTI,
-        reinterpret_cast< void (*)(void *) >(thunk) );
+#pragma disable_warn
+    void (* f)(void *) = reinterpret_cast< void (*)(void *) >(thunk);
+#pragma enable_warn
+    __Crun::ex_throw(pCppExc, (const __Crun::static_type_info*)pRTTI, f);
 }
 
 void cc50_solaris_sparc_fillUnoException(
