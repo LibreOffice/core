@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:28:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,9 @@ struct SfxSlotType_Impl
     {}
 };
 
-DECL_2BYTEARRAY(SfxSlotGroupArr_Impl, USHORT, 6, 4);
-DECL_PTRARRAY(SfxInterfaceArr_Impl, SfxInterface*, 6, 3);
-DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8);
+DECL_2BYTEARRAY(SfxSlotGroupArr_Impl, USHORT, 6, 4)
+DECL_PTRARRAY(SfxInterfaceArr_Impl, SfxInterface*, 6, 3)
+DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8)
 
 
 //====================================================================
@@ -379,8 +379,6 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
 
 //--------------------------------------------------------------------
-
-// SlotName erfragen, gfs. mit HilfeText
 
 // SlotName erfragen, gfs. mit HilfeText
 
