@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:24:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ AcceleratorExecute::AcceleratorExecute()
 }
 
 //-----------------------------------------------
-AcceleratorExecute::AcceleratorExecute(const AcceleratorExecute& rCopy)
+AcceleratorExecute::AcceleratorExecute(const AcceleratorExecute&)
     : TMutexInit      (                                                     )
     , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
 {
@@ -404,7 +404,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 }
 
 //-----------------------------------------------
-IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
+IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, EMPTYARG)
 {
     // replaced by AsyncAccelExec!
     return 0;
@@ -434,7 +434,7 @@ void AsyncAccelExec::execAsync()
 }
 
 //-----------------------------------------------
-IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*, pVoid)
+IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
 {
     if (! m_xDispatch.is())
         return 0;
