@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:16:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:13:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,9 +184,6 @@ inline sal_Bool _assignArray(
         }
         bRet = sal_True;
         break;
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         for (i=0; i < nTotalElements; i++)
@@ -232,6 +229,9 @@ inline sal_Bool _assignArray(
         }
         bRet = sal_True;
         break;
+    default:
+        OSL_ASSERT(false);
+        break;
     }
 
     TYPELIB_DANGER_RELEASE( pElementTypeDescr );
@@ -267,36 +267,34 @@ inline sal_Bool _assignData(
     switch (pDestType->eTypeClass)
     {
     case typelib_TypeClass_VOID:
-        switch (pSourceType->eTypeClass)
-        {
-        case typelib_TypeClass_VOID:
-            return sal_True;
-        }
-        return sal_False;
+        return pSourceType->eTypeClass == typelib_TypeClass_VOID;
     case typelib_TypeClass_CHAR:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
             *(sal_Unicode *)pDest = *(sal_Unicode *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_BOOLEAN:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BOOLEAN:
             *(sal_Bool *)pDest = (*(sal_Bool *)pSource != sal_False);
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_BYTE:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_Int8 *)pDest = *(sal_Int8 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_SHORT:
         switch (pSourceType->eTypeClass)
         {
@@ -307,8 +305,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_Int16 *)pDest = *(sal_Int16 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_UNSIGNED_SHORT:
         switch (pSourceType->eTypeClass)
         {
@@ -319,8 +318,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_uInt16 *)pDest = *(sal_uInt16 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_LONG:
         switch (pSourceType->eTypeClass)
         {
@@ -337,8 +337,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_UNSIGNED_LONG:
             *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_UNSIGNED_LONG:
         switch (pSourceType->eTypeClass)
         {
@@ -355,8 +356,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_UNSIGNED_LONG:
             *(sal_uInt32 *)pDest = *(sal_uInt32 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_HYPER:
         switch (pSourceType->eTypeClass)
         {
@@ -379,8 +381,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_UNSIGNED_HYPER:
             *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_UNSIGNED_HYPER:
         switch (pSourceType->eTypeClass)
         {
@@ -403,8 +406,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_UNSIGNED_HYPER:
             *(sal_uInt64 *)pDest = *(sal_uInt64 *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_FLOAT:
         switch (pSourceType->eTypeClass)
         {
@@ -420,8 +424,9 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_FLOAT:
             *(float *)pDest = *(float *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_DOUBLE:
         switch (pSourceType->eTypeClass)
         {
@@ -446,16 +451,18 @@ inline sal_Bool _assignData(
         case typelib_TypeClass_DOUBLE:
             *(double *)pDest = *(double *)pSource;
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_STRING:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_STRING:
             ::rtl_uString_assign( (rtl_uString **)pDest, *(rtl_uString **)pSource );
             return sal_True;
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_TYPE:
         switch (pSourceType->eTypeClass)
         {
@@ -467,8 +474,9 @@ inline sal_Bool _assignData(
             TYPE_ACQUIRE( *pp );
             return sal_True;
         }
+        default:
+            return sal_False;
         }
-        return sal_False;
     case typelib_TypeClass_ANY:
         _destructAny( (uno_Any *)pDest, release );
         _copyConstructAny( (uno_Any *)pDest, pSource, pSourceType, pSourceTypeDescr, acquire, 0 );
@@ -479,9 +487,6 @@ inline sal_Bool _assignData(
             *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
             return sal_True;
         }
-        return sal_False;
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
         return sal_False;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -549,7 +554,6 @@ inline sal_Bool _assignData(
             }
             return bRet;
         }
-        return sal_False;
     case typelib_TypeClass_UNION:
         if (_type_equals( pDestType, pSourceType ))
         {
@@ -628,8 +632,10 @@ inline sal_Bool _assignData(
             }
             return (pQueried != 0);
         }
+    default:
+        OSL_ASSERT(false);
+        return sal_False;
     }
-    return sal_False;
 }
 
 }
