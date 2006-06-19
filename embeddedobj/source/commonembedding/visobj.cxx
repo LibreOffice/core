@@ -4,9 +4,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:50:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 
 }
 
-embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
+embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 /*nAspect*/ )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
