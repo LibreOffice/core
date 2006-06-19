@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:53:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ using ::xmloff::token::XML_EMBEDDED_VISIBLE_AREA;
 
 //------------------------------------------------------------------
 
-SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
+SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
