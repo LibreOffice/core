@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datecode.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:29:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ static hchar defaultform[] =
 {
     '1', 0x9165, 32, '2', 0xB6A9, 32, '3', 0xB7A9, 0
 };
+#ifdef _DATECODE_WEEK_DEFINES_
 static hchar kor_week[] =
 {
     0xB7A9, 0xB6A9, 0xD1C1, 0xAE81, 0xA1A2, 0x8B71, 0xC9A1
@@ -60,4 +61,5 @@ static const char *en_week[] =
     "Sunday", "Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday"
 };
+#endif //_DATECODE_WEEK_DEFINES_
 #endif
