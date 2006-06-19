@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:33:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
-#pragma hdrstop
 
 #include <vcl/svapp.hxx>
 
@@ -144,6 +143,8 @@ void SfxDockingWindow::Resize()
                 case SFX_ALIGN_LOWESTBOTTOM:
                     pImp->nVerticalSize = aSize.Height();
                     pImp->aSplitSize = aSize;
+                    break;
+                default:
                     break;
             }
         }
@@ -421,6 +422,8 @@ BOOL SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
                 if ( pImp->GetDockAlignment() == GetAlignment() )
                     aPos.Y() += aSize.Height();
                 break;
+                     default:
+                         break;
         }
 
         rRect.SetPos(aPos);
@@ -509,7 +512,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
 
 //-------------------------------------------------------------------------
 
-void SfxDockingWindow::Resizing( Size& rSize )
+void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 
 /*  [Beschreibung]
 
@@ -533,9 +536,9 @@ void SfxDockingWindow::Resizing( Size& rSize )
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     Window* pParent, WinBits nWinBits) :
+    DockingWindow (pParent, nWinBits),
     pBindings(pBindinx),
-    pMgr(pCW),
-    DockingWindow (pParent, nWinBits)
+    pMgr(pCW)
 
 /*  [Beschreibung]
 
@@ -572,9 +575,9 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     Window* pParent, const ResId& rResId) :
+    DockingWindow(pParent, rResId),
     pBindings(pBindinx),
-    pMgr(pCW),
-    DockingWindow(pParent, rResId)
+    pMgr(pCW)
 
 /*  [Beschreibung]
 
@@ -1004,8 +1007,8 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         aNewPos.X() -= aSmallDockingRect.GetWidth()/2;
         aNewPos.Y() -= aSmallDockingRect.GetHeight()/2;
         aSmallDockingRect.SetPos(rPos);
-        Rectangle aIntersect = aInRect.GetIntersection( aSmallDockingRect );
-        if ( aIntersect == aSmallDockingRect )
+        Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
+        if ( aIntersectRect == aSmallDockingRect )
             // docking rectangle completely inside (shrinked) inner area -> floating mode
             bBecomesFloating = TRUE;
     }
@@ -1262,6 +1265,8 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                     aDockingRect.SetSize( aHorizontalSize );
                     break;
                 }
+                        default:
+                            break;
             }
         }
     }
@@ -1315,6 +1320,8 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
             break;
         case SFX_ALIGN_NOALIGNMENT:
             break;
+              default:
+                  break;
     }
 
     return aSize;
@@ -1363,7 +1370,7 @@ BOOL SfxDockingWindow::Close()
 
 //-------------------------------------------------------------------------
 
-void SfxDockingWindow::Paint(const Rectangle& rRect)
+void SfxDockingWindow::Paint(const Rectangle& /*rRect*/)
 
 /*  [Beschreibung]
 
@@ -1406,6 +1413,8 @@ void SfxDockingWindow::Paint(const Rectangle& rRect)
             aRect.Left()++;
             break;
         }
+              default:
+                  break;
     }
 
     DecorationView aView( this );
@@ -1572,7 +1581,7 @@ SfxSplitWindow* SfxDockingWindow::GetSplitWindow_Impl() const
     return pImp->pSplitWin;
 }
 
-void SfxDockingWindow::FadeIn( BOOL bFadeIn )
+void SfxDockingWindow::FadeIn( BOOL /*bFadeIn*/ )
 {
 }
 
