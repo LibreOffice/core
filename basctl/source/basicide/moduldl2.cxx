@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:44:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void BasicCheckBox::SetMode( USHORT n )
 
 SvLBoxEntry* BasicCheckBox::InsertEntry( const String& rStr, ULONG nPos )
 {
-    return SvTabListBox::InsertEntry( rStr, nPos, 0 );
+    return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
 
 //----------------------------------------------------------------------------
