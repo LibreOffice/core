@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:11:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:30:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,24 +220,24 @@ namespace sdr
             }
         }
 
-        void DefaultProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void DefaultProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
         {
         }
 
-        sal_Bool DefaultProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) const
+        sal_Bool DefaultProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             return sal_True;
         }
 
-        void DefaultProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+        void DefaultProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
         }
 
-        void DefaultProperties::PostItemChange(const sal_uInt16 nWhich)
+        void DefaultProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
         {
         }
 
-        void DefaultProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
         {
             // no StyleSheet in DefaultProperties
         }
