@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:35:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
-#pragma hdrstop
-
 #define _SVX_HLNKITEM_CXX
 
 #ifndef _SVX_SVXIDS_HRC
@@ -67,7 +65,7 @@ TYPEINIT1_AUTOFACTORY(SvxHyperlinkItem, SfxPoolItem);
 
 #define HYPERLINKFF_MARKER  0x599401FE
 
-SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
+SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     // store 'simple' data
     // UNICODE: rStrm << sName;
@@ -150,7 +148,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) co
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 nItemVersion ) const
+SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     SvxHyperlinkItem* pNew = new SvxHyperlinkItem( Which() );
     sal_uInt32 nType;
@@ -249,10 +247,10 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 nWhich, String& rName, String& rURL,
+SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& rURL,
                                     String& rTarget, String& rIntName, SvxLinkInsertMode eTyp,
                                     sal_uInt16 nEvents, SvxMacroTableDtor *pMacroTbl ):
-    SfxPoolItem (nWhich),
+    SfxPoolItem (_nWhich),
     sName       (rName),
     sURL        (rURL),
     sTarget     (rTarget),
@@ -371,7 +369,7 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 
 BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -399,7 +397,7 @@ BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberI
 
 BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     ::rtl::OUString aStr;
     sal_Int32 nVal;
