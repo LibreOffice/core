@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:16:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,7 +614,7 @@ static void SAL_CALL defenv_harden(
 }
 
 //------------------------------------------------------------------------------
-static void SAL_CALL defenv_dispose( uno_Environment * pEnv )
+static void SAL_CALL defenv_dispose( uno_Environment * )
 {
 }
 }
@@ -770,14 +770,16 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
             {
                 buf.appendAscii(
                     RTL_CONSTASCII_STRINGPARAM("; proxy free=0x") );
-                buf.append( (sal_Int64)rIEntry.fpFreeProxy, 16 );
+                buf.append(
+                    reinterpret_cast< sal_IntPtr >(rIEntry.fpFreeProxy), 16 );
             }
             else
             {
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("; original") );
             }
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("; ptr=0x") );
-            buf.append( (sal_Int64) rIEntry.pInterface, 16 );
+            buf.append(
+                reinterpret_cast< sal_IntPtr >(rIEntry.pInterface), 16 );
 
             if (pOEntry->find( rIEntry.pInterface, nPos + 1 ) < 0)
             {
@@ -951,7 +953,8 @@ inline void EnvironmentsData::getEnvironment(
         *ppEnv = 0;
     }
 
-    OUString aKey( OUString::valueOf( (sal_Int64)pContext ) );
+    OUString aKey(
+        OUString::valueOf( reinterpret_cast< sal_IntPtr >(pContext) ) );
     aKey += rEnvTypeName;
 
     // try to find registered mapping
@@ -970,7 +973,8 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     OSL_ENSURE( ppEnv, "### null ptr!" );
     uno_Environment * pEnv =  *ppEnv;
 
-    OUString aKey( OUString::valueOf( (sal_Int64)pEnv->pContext ) );
+    OUString aKey(
+        OUString::valueOf( reinterpret_cast< sal_IntPtr >(pEnv->pContext) ) );
     aKey += pEnv->pTypeName;
 
     // try to find registered environment
@@ -1088,7 +1092,7 @@ static uno_Environment * initDefaultEnvironment(
             OUString aSymbolName(
                 RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT) );
             uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)
-                ::osl_getSymbol( hMod, aSymbolName.pData );
+                ::osl_getFunctionSymbol( hMod, aSymbolName.pData );
             if (fpInit)
             {
                 pEnv = reinterpret_cast< uno_Environment * >(
@@ -1135,7 +1139,8 @@ void SAL_CALL uno_getEnvironment(
     rData.getEnvironment( ppEnv, rEnvTypeName, pContext );
     if (! *ppEnv)
     {
-        if (*ppEnv = initDefaultEnvironment( rEnvTypeName, pContext ))
+        *ppEnv = initDefaultEnvironment( rEnvTypeName, pContext );
+        if (*ppEnv)
         {
             // register new environment:
             rData.registerEnvironment( ppEnv );
