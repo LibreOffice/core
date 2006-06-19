@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkfilt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:34:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ void TextFilter::Execute()
 
 void TextFilter::Filter()
 {
-    char c;
+    int c;
     while ( (c = fgetc( pIn )) != EOF )
         fputc( c, pOut );
 }
@@ -106,7 +106,7 @@ MkLine::MkLine()
     pPrivateTnrLst = NULL;
 }
 
-DECLARE_LIST( ByteStringList, MkLine * );
+DECLARE_LIST( ByteStringList, MkLine * )
 
 class MkFilter : public TextFilter
 {
@@ -139,7 +139,6 @@ void MkFilter::Filter()
 {
     char aLineBuf[LINE_LEN];
     int nState = 0;
-    BOOL bNew = TRUE;
 
     while(( fgets(aLineBuf, LINE_LEN, pIn)) != NULL )
     {
@@ -215,7 +214,7 @@ void MkFilter::Filter()
                 {
                     MkLine *pMkLine = pLine->pPrivateTnrLst->GetObject(i);
                     ByteString aLine = pMkLine->aLine;
-                    if ( pMkLine->bOut );
+                    if ( pMkLine->bOut )
                     {
                         while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 );
                         fputs( aLine.GetBuffer(), pOut );
@@ -233,7 +232,7 @@ void MkFilter::Filter()
     fprintf( stderr, "\n" );
 }
 
-int main( int argc, char **argv )
+int main()
 {
     int nRet = 0;
 
