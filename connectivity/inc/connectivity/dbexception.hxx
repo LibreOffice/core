@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 14:59:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,23 +123,16 @@ protected:
 
 class SQLExceptionIteratorHelper
 {
-public:
-    // specifying the type of the elements to include
-    enum NODES_INCLUDED { NI_EXCEPTIONS, NI_WARNINGS, NI_CONTEXTINFOS };
-        // as ContextInfos are derived from Warnings and Warnings from Exceptions this is sufficient ...
-
 protected:
     const ::com::sun::star::sdbc::SQLException* m_pCurrent;
     SQLExceptionInfo::TYPE          m_eCurrentType;
 
-    NODES_INCLUDED                  m_eMask;
-
 public:
-    SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
-    SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
-    SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
+    SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart);
+    SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart);
+    SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart);
         // same note as above for the SQLExceptionInfo ctors
-    SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
+    SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart);
 
     sal_Bool                                    hasMoreElements() const { return (m_pCurrent != NULL); }
     const ::com::sun::star::sdbc::SQLException* next();
