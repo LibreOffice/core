@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:29:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 // includes *******************************************************************
-
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
@@ -165,14 +163,14 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
 
 SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW );
 
-SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParent ,
+SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParentWnd ,
                                                 USHORT nId ,
                                                 SfxBindings* pBind ,
                                                 SfxChildWinInfo* pInfo )
-                    : SfxChildWindow( pParent , nId )
+                    : SfxChildWindow( pParentWnd, nId )
                     , pBindings( pBind )
 {
-    pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParent );
+    pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParentWnd );
     SetWantsFocus( FALSE );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ( ( SfxFloatingWindow* ) pWindow )->Initialize( pInfo );
@@ -202,12 +200,12 @@ sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
 }
 
 SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
-    SfxBindings* pBindings ,
+    SfxBindings* pBind ,
     SfxChildWindow* pChildWin ,
     Window* pParent )
-    : SfxFloatingWindow( pBindings ,
-                         pChildWin ,
-                         pParent ,
+    : SfxFloatingWindow( pBind,
+                         pChildWin,
+                         pParent,
                          SfxResId( SID_RECORDING_FLOATWINDOW ) )
     , pWrapper( pChildWin )
     , aTbx( this, SfxResId(SID_RECORDING_FLOATWINDOW) )
@@ -218,9 +216,9 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     aTbx.SetItemText( SID_STOP_RECORDING, GetLabelFromCommandURL( aCommandStr, xFrame ));
 
     // Determine size of toolbar
-    Size aSize = aTbx.CalcWindowSizePixel();
-    aTbx.SetPosSizePixel( Point(), aSize );
-    SetOutputSizePixel( aSize );
+    Size aTbxSize = aTbx.CalcWindowSizePixel();
+    aTbx.SetPosSizePixel( Point(), aTbxSize );
+    SetOutputSizePixel( aTbxSize );
 
     // create a generic toolbox controller for our internal toolbox
     svt::GenericToolboxController* pController = new svt::GenericToolboxController(
@@ -289,6 +287,7 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
 
 IMPL_LINK( SfxRecordingFloat_Impl, Select, ToolBox*, pToolBar )
 {
+    (void)pToolBar;
     sal_Int16   nKeyModifier( (sal_Int16)aTbx.GetModifier() );
     if ( xStopRecTbxCtrl.is() )
         xStopRecTbxCtrl->execute( nKeyModifier );
