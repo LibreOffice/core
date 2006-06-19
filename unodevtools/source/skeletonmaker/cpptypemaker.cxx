@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpptypemaker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:18:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,12 @@ void printType(std::ostream & o,
         case codemaker::UnoType::SORT_DOUBLE:
             o << "0";
             return;
+        case codemaker::UnoType::SORT_VOID:
+        case codemaker::UnoType::SORT_STRING:
+        case codemaker::UnoType::SORT_TYPE:
+        case codemaker::UnoType::SORT_ANY:
+        case codemaker::UnoType::SORT_COMPLEX:
+            break;
         }
     }
 
@@ -101,7 +107,7 @@ void printType(std::ostream & o,
               "::com::sun::star::uno::Reference< ");
     }
 
-    o << scopedCppName(manager, codemaker::cpp::translateUnoToCppType(
+    o << scopedCppName(codemaker::cpp::translateUnoToCppType(
                            sort, typeClass, name, false),
                        false, options.shortnames && referenceType > 0);
 
@@ -389,17 +395,17 @@ void printMethods(std::ostream & o,
         if ( type.equals("com/sun/star/beans/XPropertySet")) {
             generated.add(type);
             generateXPropertySetBodies(
-                o, classname, scopedCppName(manager, propertyhelper, false, true));
+                o, classname, scopedCppName(propertyhelper, false, true));
             return;
         } else if ( type.equals("com/sun/star/beans/XFastPropertySet")) {
             generated.add(type);
             generateXFastPropertySetBodies(
-                o, classname, scopedCppName(manager, propertyhelper, false, true));
+                o, classname, scopedCppName(propertyhelper, false, true));
             return;
         } else if ( type.equals("com/sun/star/beans/XPropertyAccess")) {
             generated.add(type);
             generateXPropertyAccessBodies(
-                o, classname, scopedCppName(manager, propertyhelper, false, true));
+                o, classname, scopedCppName(propertyhelper, false, true));
             return;
         }
     }
