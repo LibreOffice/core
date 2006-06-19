@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrdtrans.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:03:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-
+/*
 #include "wrdtrans.hxx"
 
 
@@ -46,8 +46,9 @@
 #include "wtratree.hxx"
 
 #include <tools/string.hxx>
-
+*/
 //**************   Declaration WordTrans_ErrorList   ******************//
+/*
 typedef NAMESPACE_STD(vector)<ByteString> Stl_ByteStringList;
 
 class WordTrans_ErrorList
@@ -71,11 +72,11 @@ class WordTrans_ErrorList
     Stl_ByteStringList      aErrors;
 };
 
-
+*/
 
 //**************   Implementation WordTransformer     ******************//
 
-
+/*
 WordTransformer::WordTransformer()
     :   dpTransformer(0),
         dpErrors(new WordTrans_ErrorList)
@@ -191,9 +192,9 @@ WordTransformer::CreateError()
             dpErrors->AddError(OTHER_ERROR,"Error: Unknown error.");
     }
 }
-
+*/
 //**************   Implementation WordTrans_ErrorList   ******************//
-
+/*
 void
 WordTrans_ErrorList::AddError( WordTransformer::E_Error i_eType,
                                const char *             i_sErrorDescription )
@@ -246,4 +247,4 @@ WordTrans_ErrorList::GetError( USHORT       i_nNr,
         return WordTransformer::OK;
     }
 }
-
+*/
