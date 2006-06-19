@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:52:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
         // An welcher Position finde ich den Wert?
         sal_Int32 nPos = -1;
         const ::rtl::OUString* pTArray = _rList.getConstArray();
-        for (sal_uInt32 i = 0; i < nLength; ++i, ++pTArray)
+        for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
             if( pTArray->equals(_rValue) )
             {
@@ -83,7 +83,7 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
         //////////////////////////////////////////////////////////////////////
         // Wie oft kommt der Wert vor?
         const ::rtl::OUString* pTArray = _rList.getConstArray();
-        for (sal_uInt32 i = 0; i < nLength; ++i, ++pTArray)
+        for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
             if( pTArray->equals(_rValue) )
             {
