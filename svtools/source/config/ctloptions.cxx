@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:54:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
         Commit();
 }
 // -----------------------------------------------------------------------------
-void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& aPropertyNames )
+void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& )
 {
     Load();
     Broadcast(SfxSimpleHint(SFX_HINT_CTL_SETTINGS_CHANGED));
@@ -519,7 +519,7 @@ sal_Bool SvtCTLOptions::IsReadOnly(EOption eOption) const
 /* -----------------30.04.2003 10:40-----------------
 
  --------------------------------------------------*/
-void SvtCTLOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvtCTLOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
     Broadcast( rHint );
