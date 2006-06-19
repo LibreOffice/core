@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:50:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,6 @@ using namespace ::com::sun::star::util;
     ,m_pbSearchAgain            (this, ResId(PB_SEARCH))            \
     ,m_pbClose                  (this, ResId(1))                    \
     ,m_pbHelp                   (this, ResId(1))                    \
-    ,m_pConfig( NULL )                                              \
     ,m_pPreSearchFocus( NULL )
 
 //------------------------------------------------------------------------
@@ -165,6 +164,8 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const Reference< XResultSet >& x
     const UniString& sInitialText, const Reference< XNumberFormatsSupplier >& xFormatSupplier, FMSEARCH_MODE eMode)
     :ModalDialog(pParent, SVX_RES(RID_SVXDLG_SEARCHFORM))
     ,INIT_MEMBERS()
+    ,m_pConfig( NULL )
+
 {
     // hier muss ich die ListBox fuer die Kontextauswahl entfernen :
     sal_Int32 nUpper = m_lbForm.GetPosPixel().Y();
@@ -236,6 +237,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     :ModalDialog(pParent, SVX_RES(RID_SVXDLG_SEARCHFORM))
     ,INIT_MEMBERS()
     ,m_lnkContextSupplier(lnkContextSupplier)
+    ,m_pConfig( NULL )
 {
     DBG_ASSERT(m_lnkContextSupplier.IsSet(), "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
 
@@ -300,7 +302,11 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
 }
 
 //------------------------------------------------------------------------
-void FmSearchDialog::implMoveControls(Control** _ppControls, sal_Int32 _nControls, sal_Int32 _nUp, Control* _pToResize)
+void FmSearchDialog::implMoveControls(
+            Control** _ppControls,
+            sal_Int32 _nControls,
+            sal_Int32 _nUp,
+            Control* /*_pToResize*/)
 {
     for (sal_Int32 i=0; i<_nControls; ++i)
     {
@@ -432,7 +438,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, OnClickedSearchAgain, Button*, pButton)
+IMPL_LINK(FmSearchDialog, OnClickedSearchAgain, Button*, EMPTYARG)
 {
     if (m_pbClose.IsEnabled())
     {   // der Button hat die Funktion 'Suchen'
@@ -527,7 +533,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, OnSearchTextModified, ComboBox*, pEdit)
+IMPL_LINK(FmSearchDialog, OnSearchTextModified, ComboBox*, EMPTYARG)
 {
     if ((m_cmbSearchText.GetText().Len() != 0) || !m_rbSearchForText.IsChecked())
         m_pbSearchAgain.Enable();
@@ -555,7 +561,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
     m_pSearchEngine->RebuildUsedFields(m_rbAllFields.IsChecked() ? -1 : (sal_Int16)m_lbField.GetSelectEntryPos());
         // ruft auch m_pSearchEngine->InvalidatePreviousLoc auf
 
-    sal_Int16 nCurrentContext = m_lbForm.GetSelectEntryPos();
+    sal_Int32 nCurrentContext = m_lbForm.GetSelectEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
         m_arrContextFields[nCurrentContext] = UniString(m_lbField.GetSelectEntry());
     return 0;
@@ -584,7 +590,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     {
         // die beiden jeweils anderen Boxes disablen oder enablen
         CheckBox* pBoxes[] = { &m_cbWildCard, &m_cbRegular, &m_cbApprox };
-        for (int i=0; i<sizeof(pBoxes)/sizeof(CheckBox*); ++i)
+        for (sal_uInt32 i=0; i<sizeof(pBoxes)/sizeof(CheckBox*); ++i)
             if (pBoxes[i] != pBox)
                 if (bChecked)
                     pBoxes[i]->Disable();
@@ -806,13 +812,13 @@ void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
         &m_pbSearchAgain, &m_pbClose };
 
     if (!bEnable)
-        for (sal_Int16 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
+        for (sal_uInt32 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
         {
             pAffectedControls[i]->SetUpdateMode(bEnable);
             pAffectedControls[i]->EnablePaint(bEnable);
         }
     else
-        for (sal_Int16 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
+        for (sal_uInt32 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
         {
             pAffectedControls[i]->EnablePaint(bEnable);
             pAffectedControls[i]->SetUpdateMode(bEnable);
@@ -851,7 +857,7 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, AsyncGrabFocus, void*, EMPTYTAG)
+IMPL_LINK(FmSearchDialog, AsyncGrabFocus, void*, EMPTYARG)
 {
     m_cmbSearchText.GrabFocus();
     return 0;
