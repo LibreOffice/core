@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:09:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,20 +117,17 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_True),
-        // use all chapters by default
-        nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->
-                                                                  getCount()),
-        bUseOutline(sal_True),
-        bUseMarks(sal_True),
-        sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks)),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level)),
-       sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline)),
-        sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromLevelParagraphStyles)),
-        bUseParagraphStyles(sal_False)
+    Reference<XPropertySet> & rPropSet)
+:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_True)
+,   sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks))
+,   sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level))
+,   sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
+,   sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLevelParagraphStyles))
+    // use all chapters by default
+,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
+,   bUseOutline(sal_True)
+,   bUseMarks(sal_True)
+,   bUseParagraphStyles(sal_False)
 {
 }
 
