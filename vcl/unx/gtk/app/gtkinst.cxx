@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 13:32:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:44:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ extern "C"
         rtl::OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM( "gdk_threads_set_lock_functions") );
 
         GdkLockFn gdk_threads_set_lock_functions =
-                (GdkLockFn) osl_getSymbol( pModule, aSymbolName.pData );
+                (GdkLockFn) osl_getFunctionSymbol( pModule, aSymbolName.pData );
         if ( !gdk_threads_set_lock_functions )
         {
 #if OSL_DEBUG_LEVEL > 1
@@ -199,7 +199,7 @@ SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
     return new GtkSalFrame( pParent, nStyle );
 }
 
-SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG nStyle )
+SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG )
 {
     SalFrame* pFrame = new GtkSalFrame( pParentData );
 
