@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:26:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ sal_Int16 GetPropertyAttribs( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );
-    return pImplPropertyInfo ? pImplPropertyInfo->nAttribs : NULL;
+    return pImplPropertyInfo ? pImplPropertyInfo->nAttribs : 0;
 }
 
 sal_Bool DoesDependOnOthers( sal_uInt16 nPropertyId )
