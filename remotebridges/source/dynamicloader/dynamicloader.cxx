@@ -345,10 +345,10 @@ namespace dynamic_loader {
         return bSuccess;
     }
 
-    Reference<XInterface> SAL_CALL DynamicLoader::activate(const OUString & rImplName,
-                                                           const OUString & loaderUrl,
+    Reference<XInterface> SAL_CALL DynamicLoader::activate(const OUString &,
+                                                           const OUString &,
                                                            const OUString & locationUrl,
-                                                           const Reference<XRegistryKey> & xKey)
+                                                           const Reference<XRegistryKey> &)
         throw(CannotActivateFactoryException, RuntimeException)
     {
         OSL_TRACE("DynamicLoader::activate");
@@ -377,11 +377,11 @@ namespace dynamic_loader {
 
 
 extern "C" {
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv) {
+    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment **)   {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo(XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
+    sal_Bool SAL_CALL component_writeInfo(XMultiServiceFactory *, XRegistryKey * pRegistryKey) {
         sal_Bool bRes = sal_False;
 
         if (pRegistryKey) {
@@ -409,7 +409,7 @@ extern "C" {
         return bRes;
     }
 
-    void * SAL_CALL component_getFactory(const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
+    void * SAL_CALL component_getFactory(const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, XRegistryKey *) {
         void * pRet = 0;
 
         if (pServiceManager && OUString::createFromAscii(pImplName).equals(::dynamic_loader::DynamicLoader::implname)) {
