@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:11:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include <sbx.hxx>
 #endif
 #include "sbcomp.hxx"
-#pragma hdrstop
 
 struct SbiParseStack {              // "Stack" fuer Statement-Blocks
     SbiParseStack* pNext;           // Chain
@@ -119,7 +118,7 @@ static SbiStatement StmntTable [] = {
 { WITH,     &SbiParser::With,       N, Y, }, // WITH
 { WRITE,    &SbiParser::Write,      N, Y, }, // WRITE
 
-{ NIL }
+{ NIL, NULL, N, N }
 };
 
 
@@ -132,8 +131,8 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
         : SbiTokenizer( pm->GetSource32(), pb ),
           aGblStrings( this ),
           aLclStrings( this ),
-          aPublics( aGblStrings, SbPUBLIC ),
           aGlobals( aGblStrings, SbGLOBAL ),
+          aPublics( aGblStrings, SbPUBLIC ),
           aRtlSyms( aGblStrings, SbRTL ),
           aGen( *pm, this, 1024 )
 {
@@ -175,9 +174,9 @@ SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
     {
         if( pVar->IsA( TYPE(SbxMethod) ) )
         {
-            SbiProcDef* pProc = aRtlSyms.AddProc( rSym );
-            pProc->SetType( pVar->GetType() );
-            pDef = pProc;
+            SbiProcDef* pProc_ = aRtlSyms.AddProc( rSym );
+            pProc_->SetType( pVar->GetType() );
+            pDef = pProc_;
         }
         else
         {
@@ -783,8 +782,6 @@ void SbiParser::AddConstants( void )
     addStringConst( aPublics, "vbLf", "\x0A" );
 #if defined(UNX)
     addStringConst( aPublics, "vbNewLine", "\x0A" );
-#elif defined(MAC)
-    addStringConst( aPublics, "vbNewLine", "\x0D" );
 #else
     addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
 #endif
