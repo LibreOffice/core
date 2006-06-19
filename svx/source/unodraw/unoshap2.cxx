@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:30:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #define _SVX_USE_UNOGLOBALS_
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
 #endif
@@ -103,9 +106,9 @@
 #include "svdview.hxx"
 #endif
 
+using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::vos;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -131,34 +134,20 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 
 SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw() :
     SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_GROUP) ),
-    pPage( pDrawPage )
+    mxPage( pDrawPage )
 {
-    if( pPage )
-        pPage->acquire();
 }
 
 //----------------------------------------------------------------------
 SvxShapeGroup::~SvxShapeGroup() throw()
 {
-    if( pPage )
-        pPage->release();
 }
 
 //----------------------------------------------------------------------
 void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 {
-    if( pPage )
-    {
-        pPage->release();
-        pPage = NULL;
-    }
-
     SvxShape::Create( pNewObj, pNewPage );
-
-    pPage = pNewPage;
-    if( pPage )
-        pPage->acquire();
-
+    mxPage = pNewPage;
 }
 
 //----------------------------------------------------------------------
@@ -168,8 +157,7 @@ uno::Any SAL_CALL SvxShapeGroup::queryInterface( const uno::Type & rType )
     return SvxShape::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
 
@@ -178,7 +166,7 @@ uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
     else QUERYINT( container::XIndexAccess );
     else QUERYINT( container::XElementAccess );
     else
-        SvxShape::queryAggregation( rType, aAny );
+        return SvxShape::queryAggregation( rType );
 
     return aAny;
 }
@@ -271,19 +259,18 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
     OGuard aGuard( Application::GetSolarMutex() );
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
-    SdrObject* pObject = mpObj.get();
 
-    if( pObject != NULL && pPage != NULL && pShape != NULL )
+    if( mpObj.is()&& mxPage.is() && pShape )
     {
         SdrObject* pSdrShape = pShape->GetSdrObject();
         if( pSdrShape == NULL )
-            pSdrShape = pPage->_CreateSdrObject( xShape );
+            pSdrShape = mxPage->_CreateSdrObject( xShape );
 
         if( pSdrShape->IsInserted() )
             pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
-        pObject->GetSubList()->InsertObject( pSdrShape );
-        pSdrShape->SetModel(pObject->GetModel());
+        mpObj->GetSubList()->InsertObject( pSdrShape );
+        pSdrShape->SetModel(mpObj->GetModel());
 
         // #85922# It makes no sense to set the layer asked
         // from the group object since these is an iteration
@@ -297,10 +284,10 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
         // inserting the new shape into the group.  There a new wrapper
         // would be created when this connection would not already exist.
         if(pShape)
-            pShape->Create( pSdrShape, pPage );
+            pShape->Create( pSdrShape, mxPage.get() );
 
-        if( pModel )
-            pModel->SetChanged();
+        if( mpModel )
+            mpModel->SetChanged();
     }
     else
     {
@@ -316,12 +303,11 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 
     SdrObject* pSdrShape = NULL;
     SvxShape* pShape = SvxShape::getImplementation( xShape );
-    SdrObject* pObject = mpObj.get();
 
     if( pShape )
         pSdrShape = pShape->GetSdrObject();
 
-    if(pObject == NULL || pSdrShape == NULL || pSdrShape->GetObjList()->GetOwnerObj() != pObject )
+    if( !mpObj.is() || pSdrShape == NULL || pSdrShape->GetObjList()->GetOwnerObj() != mpObj.get() )
         throw uno::RuntimeException();
 
     SdrObjList& rList = *pSdrShape->GetObjList();
@@ -358,8 +344,8 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
         DBG_ASSERT( 0, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
     }
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 // XIndexAccess
@@ -371,9 +357,8 @@ sal_Int32 SAL_CALL SvxShapeGroup::getCount() throw( uno::RuntimeException )
 
     sal_Int32 nRetval = 0;
 
-    SdrObject* pObject = mpObj.get();
-    if(pObject && pObject->GetSubList())
-        nRetval = pObject->GetSubList()->GetObjCount();
+    if(mpObj.is() && mpObj->GetSubList())
+        nRetval = mpObj->GetSubList()->GetObjCount();
     else
         throw uno::RuntimeException();
 
@@ -385,24 +370,20 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if( pObject == NULL || pObject->GetSubList() == NULL )
+    if( !mpObj.is() || mpObj->GetSubList() == NULL )
         throw uno::RuntimeException();
 
-
-    if( pObject->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
+    if( mpObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
         throw lang::IndexOutOfBoundsException();
 
-    SdrObject* pDestObj = pObject->GetSubList()->GetObj( Index );
+    SdrObject* pDestObj = mpObj->GetSubList()->GetObj( Index );
 
     if(pDestObj == NULL)
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= xShape;
-    return aAny;
+    return uno::makeAny( xShape );
 }
 
 // ::com::sun::star::container::XElementAccess
@@ -417,9 +398,8 @@ uno::Type SAL_CALL SvxShapeGroup::getElementType() throw( uno::RuntimeException 
 sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    return pObject && pObject->GetSubList() && (pObject->GetSubList()->GetObjCount() > 0);
+    return mpObj.is() && mpObj->GetSubList() && (mpObj->GetSubList()->GetObjCount() > 0);
 }
 
 //----------------------------------------------------------------------
@@ -533,66 +513,60 @@ void SAL_CALL SvxShapeConnector::setSize( const awt::Size& rSize )
 
 // XConnectorShape
 
-void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType nPos ) throw( uno::RuntimeException )
+void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType ) throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
     SvxShape* pShape = SvxShape::getImplementation( xRef );
-    SdrObject* pObject = mpObj.get();
 
     if( pShape )
-        pObject->ConnectToNode( sal_True, pShape->GetSdrObject() );
+        mpObj->ConnectToNode( sal_True, pShape->mpObj.get() );
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType nPos )
+void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType  )
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
     SvxShape* pShape = SvxShape::getImplementation( xRef );
-    SdrObject* pObject = mpObj.get();
 
-    if( pObject && pShape )
-        pObject->ConnectToNode( sal_False, pShape->GetSdrObject() );
+    if( mpObj.is() && pShape )
+        mpObj->ConnectToNode( sal_False, pShape->mpObj.get() );
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing::XConnectableShape >& xShape )
+void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing::XConnectableShape >&  )
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrObject* pObject = mpObj.get();
+    if(mpObj.is())
+        mpObj->DisconnectFromNode( sal_True );
 
-    if(pObject)
-        pObject->DisconnectFromNode( sal_True );
-
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::XConnectableShape >& xShape )
+void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::XConnectableShape >& )
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrObject* pObject = mpObj.get();
+    if(mpObj.is())
+        mpObj->DisconnectFromNode( sal_False );
 
-    if(pObject)
-        pObject->DisconnectFromNode( sal_False );
-
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
@@ -626,8 +600,7 @@ uno::Any SAL_CALL SvxShapeControl::queryInterface( const uno::Type & rType )
     return SvxShapeText::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
 
@@ -712,7 +685,7 @@ Reference< awt::XControlModel > SAL_CALL SvxShapeControl::getControl()
 
     Reference< awt::XControlModel > xModel;
 
-    SdrUnoObj* pUnoObj = PTR_CAST(SdrUnoObj, mpObj.get());
+    SdrUnoObj* pUnoObj = dynamic_cast< SdrUnoObj * >(mpObj.get());
     if( pUnoObj )
         xModel = pUnoObj->GetUnoControlModel();
 
@@ -725,12 +698,12 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrUnoObj* pUnoObj = PTR_CAST(SdrUnoObj, mpObj.get());
+    SdrUnoObj* pUnoObj = dynamic_cast< SdrUnoObj * >(mpObj.get());
     if( pUnoObj )
         pUnoObj->SetUnoControlModel( xControl );
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 // XServiceInfo
@@ -1108,8 +1081,8 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() th
 //----------------------------------------------------------------------
 SvxShapePolyPolygon::SvxShapePolyPolygon( SdrObject* pObj , drawing::PolygonKind eNew )
  throw( com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
-: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGON) ),
-    ePolygonKind( eNew )
+: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGON) )
+, mePolygonKind( eNew )
 {
 }
 
@@ -1120,9 +1093,6 @@ SvxShapePolyPolygon::~SvxShapePolyPolygon() throw()
 
 void SAL_CALL ImplSvxPolyPolygonToPointSequenceSequence( const drawing::PointSequenceSequence* pOuterSequence, XPolyPolygon& rNewPolyPolygon ) throw()
 {
-    // Koordinaten in das PolyPolygon packen
-    sal_Int32 nOuterSequenceCount = pOuterSequence->getLength();
-
     // Zeiger auf innere sequences holen
     const drawing::PointSequence* pInnerSequence = pOuterSequence->getConstArray();
     const drawing::PointSequence* pInnerSeqEnd   = pInnerSequence + pOuterSequence->getLength();
@@ -1176,17 +1146,16 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
             throw lang::IllegalArgumentException();
 
-        SdrObject* pObject = mpObj.get();
-        if( pObject )
+        if( mpObj.is() )
         {
             XPolyPolygon aNewPolyPolygon;
             Matrix3D aMatrix3D;
 
-            pObject->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            mpObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
 
             ImplSvxPolyPolygonToPointSequenceSequence( (drawing::PointSequenceSequence*)aValue.getValue(), aNewPolyPolygon );
 
-            pObject->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            mpObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
         }
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
@@ -1225,8 +1194,8 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         SvxShape::setPropertyValue(aPropertyName, aValue);
     }
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 void SAL_CALL SvxPointSequenceSequenceToXPolyPolygon( const XPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
@@ -1280,15 +1249,14 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
         // PolyPolygon in eine struct PolyPolygon packen
         XPolyPolygon aPolyPoly;
         Matrix3D aMatrix3D;
-        SdrObject* pObject = mpObj.get();
-        if( pObject )
-            pObject->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
+        if( mpObj.is() )
+            mpObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
 
         drawing::PointSequenceSequence aRetval( aPolyPoly.Count() );
 
         SvxPointSequenceSequenceToXPolyPolygon( aPolyPoly, aRetval );
 
-        return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
+        return uno::Any( aRetval );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
     {
@@ -1313,12 +1281,11 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
                 *pSequence++ = awt::Point( rPoly[(USHORT)b].X(), rPoly[(USHORT)b].Y() );
         }
 
-        return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequence*)0) );
+        return uno::Any( aRetval );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
     {
-        drawing::PolygonKind ePT = GetPolygonKind();
-        return Any( &ePT, ::getCppuType((const drawing::PolygonKind*)0) );
+        return Any( GetPolygonKind() );
     }
     else
     {
@@ -1329,7 +1296,7 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
 //----------------------------------------------------------------------
 drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const throw()
 {
-    return ePolygonKind;
+    return mePolygonKind;
 }
 
 //----------------------------------------------------------------------
@@ -1337,9 +1304,8 @@ void SvxShapePolyPolygon::SetPolygon(const XPolyPolygon& rNew) throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrObject* pObject = mpObj.get();
-    if(pObject)
-        ((SdrPathObj*)pObject)->SetPathPoly(rNew);
+    if(mpObj.is())
+        ((SdrPathObj*)mpObj.get())->SetPathPoly(rNew);
 }
 
 //----------------------------------------------------------------------
@@ -1347,10 +1313,15 @@ const XPolyPolygon& SvxShapePolyPolygon::GetPolygon() const throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrObject* pObject = mpObj.get();
-    if(pObject)
-        return ((SdrPathObj*)pObject)->GetPathPoly();
-    return aEmptyPoly;
+    if(mpObj.is())
+    {
+        return ((SdrPathObj*)mpObj.get())->GetPathPoly();
+    }
+    else
+    {
+        static const XPolyPolygon aEmptyPoly;
+        return aEmptyPoly;
+    }
 }
 
 // ::com::sun::star::lang::XServiceInfo
@@ -1371,8 +1342,8 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames
 #endif
 //----------------------------------------------------------------------
 SvxShapePolyPolygonBezier::SvxShapePolyPolygonBezier( SdrObject* pObj , drawing::PolygonKind eNew ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGONBEZIER) ),
-    ePolygonKind( eNew )
+:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGONBEZIER) )
+,   mePolygonKind( eNew )
 {
 }
 
@@ -1514,15 +1485,14 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
         if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
             throw IllegalArgumentException();
 
-        SdrObject* pObject = mpObj.get();
-        if( pObject )
+        if( mpObj.is() )
         {
             Matrix3D aMatrix3D;
             XPolyPolygon aNewPolyPolygon;
 
-            pObject->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            mpObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
             SvxConvertPolyPolygonBezierToXPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
-            pObject->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            mpObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
         }
     }
     else
@@ -1530,8 +1500,8 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
         SvxShape::setPropertyValue(aPropertyName, aValue);
     }
 
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 void SvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
@@ -1573,7 +1543,6 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    uno::Any aAny;
 
     if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
     {
@@ -1582,40 +1551,37 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
         drawing::PolyPolygonBezierCoords aRetval;
         SvxPolyPolygonToPolyPolygonBezierCoords(rPolyPoly, aRetval );
 
-        aAny <<= aRetval;
+        return uno::Any( aRetval );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
     {
-        SdrObject* pObject = mpObj.get();
-        if( pObject )
-        {
-            // PolyPolygon in eine struct PolyPolygon packen
-            XPolyPolygon aPolyPoly;
-            Matrix3D aMatrix3D;
-            pObject->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
+        if( !mpObj.is() )
+            throw lang::DisposedException();
 
-            drawing::PolyPolygonBezierCoords aRetval;
-            SvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
+        // PolyPolygon in eine struct PolyPolygon packen
+        XPolyPolygon aPolyPoly;
+        Matrix3D aMatrix3D;
+        mpObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
 
-            aAny <<= aRetval;
-        }
+        drawing::PolyPolygonBezierCoords aRetval;
+        SvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
+
+        return uno::Any( aRetval );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
     {
-        aAny <<= (drawing::PolygonKind)GetPolygonKind();
+        return uno::Any( mePolygonKind );
     }
     else
     {
         return SvxShape::getPropertyValue(aPropertyName);
     }
-
-    return aAny;
 }
 
 //----------------------------------------------------------------------
 drawing::PolygonKind SvxShapePolyPolygonBezier::GetPolygonKind() const throw()
 {
-    return ePolygonKind;
+    return mePolygonKind;
 }
 
 //----------------------------------------------------------------------
@@ -1623,9 +1589,8 @@ void SvxShapePolyPolygonBezier::SetPolygon(const XPolyPolygon& rNew) throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrObject* pObject = mpObj.get();
-    if(pObject)
-        ((SdrPathObj*)pObject)->SetPathPoly(rNew);
+    if(mpObj.is())
+        ((SdrPathObj*)mpObj.get())->SetPathPoly(rNew);
 }
 
 //----------------------------------------------------------------------
@@ -1633,10 +1598,15 @@ const XPolyPolygon& SvxShapePolyPolygonBezier::GetPolygon() const throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrObject* pObject = mpObj.get();
-    if(pObject)
-        return ((SdrPathObj*)pObject)->GetPathPoly();
-    return aEmptyPoly;
+    if(mpObj.is())
+    {
+        return ((SdrPathObj*)mpObj.get())->GetPathPoly();
+    }
+    else
+    {
+        static const XPolyPolygon aEmptyPoly;
+        return aEmptyPoly;
+    }
 }
 
 
@@ -1689,13 +1659,12 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
     {
         if( aValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
         {
-            uno::Sequence<sal_Int8>* pSeq = (uno::Sequence<sal_Int8>*)aValue.getValue();
+            uno::Sequence<sal_Int8>* pSeq( (uno::Sequence<sal_Int8>*)aValue.getValue() );
             SvMemoryStream  aMemStm;
             Graphic         aGraphic;
 
@@ -1703,7 +1672,7 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
 
             if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
             {
-                ((SdrGrafObj*)pObject)->SetGraphic(aGraphic);
+                ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
             }
         }
         else if( aValue.getValueType() == INTERFACE_TYPE( awt::XBitmap))
@@ -1714,11 +1683,11 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             {
                 // Bitmap einsetzen
                 Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
-                ((SdrGrafObj*)pObject)->SetGraphic(aGraphic);
+                ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
             }
         }
     }
-    else if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)))
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)))
     {
         OUString aURL;
         if(!(aValue >>= aURL))
@@ -1735,10 +1704,10 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             // #101808# since loading a graphic can cause a reschedule of the office
             //          it is possible that our shape is removed while where in this
             //          method.
-            if( pObject )
+            if( mpObj.is() )
             {
-                ((SdrGrafObj*)pObject)->ReleaseGraphicLink();
-                ((SdrGrafObj*)pObject)->SetGraphicObject( aGrafObj );
+                ((SdrGrafObj*)mpObj.get())->ReleaseGraphicLink();
+                ((SdrGrafObj*)mpObj.get())->SetGraphicObject( aGrafObj );
             }
         }
         else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
@@ -1774,15 +1743,15 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             // #101808# since loading a graphic can cause a reschedule of the office
             //          it is possible that our shape is removed while where in this
             //          method.
-            if( pObject )
-                ((SdrGrafObj*)pObject)->SetGraphicLink( aURL, aFilterName );
+            if( mpObj.is() )
+                ((SdrGrafObj*)mpObj.get())->SetGraphicLink( aURL, aFilterName );
         }
         else
         {
         }
 
     }
-    else if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)))
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)))
     {
         OUString aStreamURL;
 
@@ -1795,24 +1764,24 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             aStreamURL = OUString();
         }
 
-        ((SdrGrafObj*)pObject)->SetGrafStreamURL( aStreamURL );
-        ((SdrGrafObj*)pObject)->ForceSwapOut();
+        ((SdrGrafObj*)mpObj.get())->SetGrafStreamURL( aStreamURL );
+        ((SdrGrafObj*)mpObj.get())->ForceSwapOut();
     }
-    else if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)))
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)))
     {
         Reference< graphic::XGraphic > xGraphic;
 
         if( !( aValue >>= xGraphic ) )
             throw lang::IllegalArgumentException();
 
-        static_cast< SdrGrafObj*>( pObject)->SetGraphic( xGraphic );
+        static_cast< SdrGrafObj*>( mpObj.get() )->SetGraphic( xGraphic );
     }
     else
     {
         SvxShape::setPropertyValue(aPropertyName, aValue);
     }
-    if( pModel )
-        pModel->SetChanged();
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
@@ -1820,17 +1789,16 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
+    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
     {
-        const Graphic& rGraphic = ((SdrGrafObj*)pObject)->GetGraphic();
+        const Graphic& rGraphic = ((SdrGrafObj*)mpObj.get())->GetGraphic();
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
         {
             // Objekt in eine Bitmap packen
-            Reference< ::com::sun::star::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(((SdrGrafObj*)pObject)->GetGraphic().GetBitmapEx()) );
-            return uno::Any( &xBitmap, ::getCppuType((const Reference<awt::XBitmap>*)0) );
+            Reference< ::com::sun::star::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(((SdrGrafObj*)mpObj.get())->GetGraphic().GetBitmapEx()) );
+            return uno::Any( xBitmap );
         }
         else
         {
@@ -1838,39 +1806,37 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
 
             ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
             uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
-            return uno::Any( &aSeq, ::getCppuType(( uno::Sequence< sal_Int8 >*)0) );
+            return uno::Any( aSeq );
         }
     }
-    else if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)) )
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)) )
     {
-        uno::Any aAny;
-        if( ((SdrGrafObj*)pObject)->IsLinkedGraphic() )
+        if( ((SdrGrafObj*)mpObj.get())->IsLinkedGraphic() )
         {
-            aAny <<= OUString( ((SdrGrafObj*)pObject)->GetFileName() );
+            return uno::Any( OUString( ((SdrGrafObj*)mpObj.get())->GetFileName() ) );
         }
         else
         {
-            const GraphicObject& rGrafObj = ((SdrGrafObj*)pObject)->GetGraphicObject();
+            const GraphicObject& rGrafObj = ((SdrGrafObj*)mpObj.get())->GetGraphicObject();
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
             aURL += OUString::createFromAscii( rGrafObj.GetUniqueID().GetBuffer() );
-            aAny <<= aURL;
+            return uno::Any( aURL );
         }
-        return aAny;
     }
-    else if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)) )
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)) )
     {
-        const OUString  aStreamURL( ( (SdrGrafObj*) pObject )->GetGrafStreamURL() );
-        uno::Any        aAny;
+        const OUString  aStreamURL( ( (SdrGrafObj*) mpObj.get() )->GetGrafStreamURL() );
+        uno::Any aAny;
 
         if( aStreamURL.getLength() )
             aAny <<= aStreamURL;
 
         return aAny;
     }
-    else if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)) )
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)) )
     {
-        Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( pObject )->GetGraphic().GetXGraphic() );
-        return uno::Any( &xGraphic, ::getCppuType((const Reference<graphic::XGraphic>*)0) );
+        Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
+        return uno::Any( xGraphic );
     }
     else
     {
@@ -2004,22 +1970,21 @@ OUString SAL_CALL SvxCustomShape::getShapeType()
 awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
-    if ( pModel && pObject )
+    if ( mpModel && mpObj.is() )
     {
         SdrAShapeObjGeoData aCustomShapeGeoData;
-        ((SdrObjCustomShape*)pObject)->SaveGeoData( aCustomShapeGeoData );
+        ((SdrObjCustomShape*)mpObj.get())->SaveGeoData( aCustomShapeGeoData );
 
         sal_Bool bMirroredX = sal_False;
         sal_Bool bMirroredY = sal_False;
 
-        if ( pObject )
+        if ( mpObj.is() )
         {
-            bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
-            bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
+            bMirroredX = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredX() );
+            bMirroredY = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredY() );
         }
         // get aRect, this is the unrotated snaprect
-        Rectangle aRect(((SdrObjCustomShape*)pObject)->GetLogicRect());
+        Rectangle aRect(((SdrObjCustomShape*)mpObj.get())->GetLogicRect());
         Rectangle aRectangle( aRect );
 
         if ( bMirroredX || bMirroredY )
@@ -2073,8 +2038,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
         }
         Point aPt( aRectangle.TopLeft() );
 
-        if( pModel->IsWriter() )
-            aPt -= pObject->GetAnchorPos();
+        if( mpModel->IsWriter() )
+            aPt -= mpObj->GetAnchorPos();
 
         ForceMetricTo100th_mm(aPt);
         return ::com::sun::star::awt::Point( aPt.X(), aPt.Y() );
@@ -2117,50 +2082,48 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
-
-    sal_Bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
+    sal_Bool bCustomShapeGeometry = mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
 
     sal_Bool bMirroredX = sal_False;
     sal_Bool bMirroredY = sal_False;
 
     if ( bCustomShapeGeometry )
     {
-        bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
-        bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
+        bMirroredX = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredX() );
+        bMirroredY = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredY() );
     }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
 
     if ( bCustomShapeGeometry )
     {
-        Rectangle aRect( pObject->GetSnapRect() );
+        Rectangle aRect( mpObj.get()->GetSnapRect() );
 
         // #i38892#
-        const SdrGluePointList* pList = pObject->GetGluePointList();
+        const SdrGluePointList* pList = mpObj.get()->GetGluePointList();
         SdrGluePointList* pListCopy = (pList && pList->GetCount()) ? new SdrGluePointList(*pList) : 0L;
         bool bGluePointListChanged(false);
 
-        if ( ((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX )
+        if ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredX() != bMirroredX )
         {
             Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
             Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            ((SdrObjCustomShape*)pObject)->NbcMirror( aTop, aBottom );
+            ((SdrObjCustomShape*)mpObj.get())->NbcMirror( aTop, aBottom );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
+            ((SdrObjCustomShape*)mpObj.get())->SetMirroredX( bMirroredX ? sal_False : sal_True );
 
             // #i38892#
             bGluePointListChanged = true;
         }
-        if ( ((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY )
+        if ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredY() != bMirroredY )
         {
             Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
             Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            ((SdrObjCustomShape*)pObject)->NbcMirror( aLeft, aRight );
+            ((SdrObjCustomShape*)mpObj.get())->NbcMirror( aLeft, aRight );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
+            ((SdrObjCustomShape*)mpObj.get())->SetMirroredY( bMirroredY ? sal_False : sal_True );
 
             // #i38892#
             bGluePointListChanged = true;
@@ -2171,7 +2134,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
         {
             if(bGluePointListChanged)
             {
-                SdrGluePointList* pNewList = pObject->GetGluePointList();
+                SdrGluePointList* pNewList = const_cast< SdrGluePointList* >( mpObj->GetGluePointList() );
 
                 if(pNewList)
                 {
@@ -2188,17 +2151,12 @@ uno::Any SAL_CALL SvxCustomShape::getPropertyValue( const OUString& aPropertyNam
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    if( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RotateAngle" ) ) )
+    if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RotateAngle" ) ) )
     {
-        double fAngle = ((SdrObjCustomShape*)pObject)->GetObjectRotation();
+        double fAngle = ((SdrObjCustomShape*)mpObj.get())->GetObjectRotation();
         fAngle *= 100;
-        sal_Int32 nAngle = (sal_Int32)fAngle;
-
-        Any aAny;
-        aAny <<= nAngle;
-        return aAny;
+        return Any( (sal_Int32)fAngle );
     }
     else
     {
