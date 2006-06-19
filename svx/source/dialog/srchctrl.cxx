@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:03:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#pragma hdrstop
 
 #include "svxids.hrc"
 
@@ -57,11 +56,11 @@
 
 SvxSearchController::SvxSearchController
 (
-    USHORT nId,
+    USHORT _nId,
     SfxBindings& rBind,
     SvxSearchDialog& rDlg
 ) :
-    SfxControllerItem( nId, rBind ),
+    SfxControllerItem( _nId, rBind ),
 
     rSrchDlg( rDlg )
 {
