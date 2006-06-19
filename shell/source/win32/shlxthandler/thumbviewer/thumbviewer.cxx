@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thumbviewer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:05:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,13 @@
 #include <utility>
 #include <stdlib.h>
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <shellapi.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <memory>
 
 extern HINSTANCE g_hModule;
@@ -227,7 +233,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Read(void *pv, ULONG cb, ULONG *pcb
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *)
 {
     size_t size = ref_zip_buffer_.size();
     size_t p = 0;
@@ -247,7 +253,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD 
    HRESULT hr = STG_E_INVALIDFUNCTION;
 
    p += dlibMove.LowPart;
-   if ((p >= 0) && (p < size))
+   if (p < size)
    {
         pos_ = p;
         hr = S_OK;
@@ -282,28 +288,28 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Stat(STATSTG *pstatstg, DWORD grfSt
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Write(void const *pv, ULONG cb, ULONG *pcbWritten)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Write(void const *, ULONG, ULONG *)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::SetSize(ULARGE_INTEGER libNewSize)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::SetSize(ULARGE_INTEGER)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::CopyTo(IStream *, ULARGE_INTEGER, ULARGE_INTEGER *, ULARGE_INTEGER *)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Commit(DWORD grfCommitFlags)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Commit(DWORD)
 { return E_NOTIMPL; }
 
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Revert(void)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
 { return E_NOTIMPL; }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **ppstm)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **)
 {  return E_NOTIMPL; }
 
 
