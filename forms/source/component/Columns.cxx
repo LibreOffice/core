@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 11:58:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _FRM_IDS_HXX_
 #include "ids.hxx"
 #endif
+#include "findpos.hxx"
 
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -92,10 +93,6 @@
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
 #endif
-
-namespace internal {
-sal_Int32 findPos(const ::rtl::OUString& aStr, const StringSequence& rList);
-}
 
 //.........................................................................
 namespace frm
@@ -149,8 +146,10 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
     else
     {
         sal_Int32 nPrefixPos = aModelName.indexOf(aModelPrefix);
-        sal_Int32 nCampatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
-        DBG_ASSERT( (nPrefixPos != -1) ||   (nCampatiblePrefixPos != -1),
+#ifdef DBG_UTIL
+        sal_Int32 nCompatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
+#endif
+        DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1),
                 "::getColumnTypeByModelName() : wrong servivce !");
 
         ::rtl::OUString aColumnType = (nPrefixPos != -1)
@@ -158,7 +157,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
         const StringSequence& rColumnTypes = getColumnTypes();
-        nTypeId = ::internal::findPos(aColumnType, rColumnTypes);
+        nTypeId = ::detail::findPos(aColumnType, rColumnTypes);
     }
     return nTypeId;
 }
@@ -251,9 +250,9 @@ DBG_NAME(OGridColumn);
 OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName)
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
-    ,m_aModelName(_sModelName)
     ,m_aHidden( makeAny( sal_False ) )
     ,m_xORB( _rxFactory )
+    ,m_aModelName(_sModelName)
 {
     DBG_CTOR(OGridColumn,NULL);
 
@@ -287,10 +286,10 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
 }
 
 //------------------------------------------------------------------------------
-OGridColumn::OGridColumn( const OGridColumn* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
+OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
-    ,m_xORB( _rxFactory )
+    ,m_xORB( _pOriginal->m_xORB )
 {
     DBG_CTOR(OGridColumn,NULL);
 
@@ -606,7 +605,7 @@ Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeExce
 //------------------------------------------------------------------------------
 OGridColumn* OGridColumn::createCloneColumn() const
 {
-    return new OGridColumn( this, m_xORB );
+    return new OGridColumn( this );
 }
 
 //XPersistObject
@@ -677,7 +676,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
     }
 
     // 2. Lesen des Versionsnummer
-    sal_uInt16 nVersion = _rxInStream->readShort();
+    sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
     sal_uInt16 nAnyMask = _rxInStream->readShort();
 
     if (nAnyMask & WIDTH)
