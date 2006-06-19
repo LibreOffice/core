@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_class.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:35:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,7 +412,7 @@ PageMaker_Class::Setup_MemberSegment_Out( E_MemberProtection i_eMpr )
 void
 PageMaker_Class::Create_NaviSubRow( E_MemberProtection i_eMpr )
 {
-    int nIndexAdd = cl_MAX * i_eMpr;
+    int nIndexAdd = int(cl_MAX) * int(i_eMpr);
 
     bool bEmpty = true;
     for (int e = 0; e < cl_MAX; e++)
