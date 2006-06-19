@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:37:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         void ViewStrategy::checkInstance(Tree const& _aTreeForThis) const
         {
+            { (void)_aTreeForThis; }
             OSL_ENSURE( getViewBehavior(_aTreeForThis).get() == this,
                         "Tree operation dispatched to wrong strategy instance");
         }
@@ -283,24 +284,28 @@ namespace configmgr
 
         std::auto_ptr<SubtreeChange> ViewStrategy::doPreCommitChanges(Tree const& _aTree, configuration::ElementList& )
         {
+            { (void)_aTree; }
             OSL_ENSURE(!hasChanges(getRootNode(_aTree)),"Unexpected changes in View");
             return std::auto_ptr<SubtreeChange>();
         }
 
         void ViewStrategy::doFinishCommit(Tree const& _aTree, SubtreeChange& )
         {
+            { (void)_aTree; }
             OSL_ENSURE(!hasChanges(getRootNode(_aTree)),"Unexpected changes in View");
             OSL_ENSURE(false,"ERROR: Cannot finish commit for unexpected changes");
         }
 
         void ViewStrategy::doRevertCommit(Tree const& _aTree, SubtreeChange& )
         {
+            { (void)_aTree; }
             OSL_ENSURE(!hasChanges(getRootNode(_aTree)),"Unexpected changes in View");
             OSL_ENSURE(false,"ERROR: Cannot revert commit for unexpected changes");
         }
 
         void ViewStrategy::doFailedCommit(Tree const& _aTree, SubtreeChange& )
         {
+            { (void)_aTree; }
             OSL_ENSURE(!hasChanges(getRootNode(_aTree)),"Unexpected changes in View");
             OSL_ENSURE(false,"ERROR: Cannot recover commit for unexpected changes");
         }
@@ -387,8 +392,6 @@ namespace configmgr
                     pChangeImpl = new ValueReplaceImpl( _rExternalChange.getNewValue(), _rExternalChange.getOldValue() );
                     break;
 
-                    break;
-
                 case ValueChange::setToDefault:
                     pChangeImpl = new ValueResetImpl( _rExternalChange.getNewValue(), _rExternalChange.getOldValue() );
                     break;
@@ -469,6 +472,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         void ViewStrategy::doCollectChanges(Node const& _aNode, NodeChanges& ) const
         {
+            { (void)_aNode; }
             // no-op: there are no changes to collect
             OSL_ENSURE(!hasChanges(_aNode),"Unexpected changes in View");
         }
@@ -527,6 +531,9 @@ namespace configmgr
             GroupMemberVisitor& m_rVisitor;
 
             GroupMemberVisitor::Result m_aResult;
+
+            protected:
+                using NodeVisitor::handle;
         };
 
         bool GroupMemberDispatch::test_value(data::NodeAccessRef const& _aNode) const
@@ -546,7 +553,8 @@ namespace configmgr
         }
 
         GroupMemberDispatch::Result GroupMemberDispatch::handle(data::NodeAccessRef const& _aNonValue)
-        {
+            {
+                { (void)_aNonValue; }
             OSL_ENSURE( !test_value(_aNonValue), "ERROR: Group MemberDispatch:Found a ValueMember for a subtree child.");
 
             return CONTINUE;
