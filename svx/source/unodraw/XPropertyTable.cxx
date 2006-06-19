@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:01:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,9 @@ using namespace ::vos;
 class SvxUnoXPropertyTable : public WeakImplHelper2< XNameContainer, XServiceInfo >
 {
 private:
-    sal_Int16 mnWhich;
-    XPropertyList*  mpList;
     XPropertyTable* mpTable;
+    XPropertyList*  mpList;
+    sal_Int16 mnWhich;
 
     long getCount() const { return mpList ? mpList->Count() : (mpTable?mpTable->Count():0); }
     XPropertyEntry* get( long index ) const;
