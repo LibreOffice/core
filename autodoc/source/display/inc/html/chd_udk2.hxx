@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chd_udk2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:54:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ class CppHtmlDisplay_Udk2 : public autodoc::HtmlDisplay_UdkStd
                                                 i_rNsp );
     bool                CheckFilters(
                             const ary::CodeEntity &
-                                                i_rCe ) const
+                                                ) const
                                                 { // KORR_FUTURE Check, if project is included, and maybe other filters.
                                                   return true; }
     const ary::cpp::DisplayGate &
