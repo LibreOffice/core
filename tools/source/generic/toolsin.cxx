@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolsin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:12:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,8 @@
 #include <toolsin.hxx>
 #endif
 
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
+#if defined WNT
 #include <dll.hxx>
-#endif
-#ifdef MAC
-void ImpDeInitMemMgr();
 #endif
 
 void ImplDeleteCharTabData();
@@ -102,13 +99,7 @@ void GlobalDeInitTools()
 {
     DBG_GLOBALDEBUGEND();
 
-#if defined( WIN ) || defined( WNT )
+#if defined WNT
     ImpDeInitWinTools();
-#endif
-#ifdef OS2
-    ImpDeInitOS2Tools();
-#endif
-#ifdef MAC
-    ImpDeInitMemMgr();
 #endif
 }
