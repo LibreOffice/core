@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:20:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,3 +105,4 @@
 #define ROW_1_2                 (ROW_1+12)
 #define ROW_1_3                 (ROW_1_1+HEIGHT_IMG_HELP+2)
 #define ROW_1_4                 (ROW_1_3+8)
+
