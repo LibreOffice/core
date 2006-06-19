@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itga.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:01:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,7 @@ BOOL TGAReader::ImplReadBody()
     }
     else
     {
-        for ( USHORT nYCount = 0; nYCount < mpFileHeader->nImageHeight; nYCount++, nY += nYAdd )
+        for ( nYCount = 0; nYCount < mpFileHeader->nImageHeight; nYCount++, nY += nYAdd )
         {
             nX = nXStart;
             nXCount = 0;
@@ -681,7 +681,7 @@ BOOL TGAReader::ImplReadPalette()
         }
         mpColorMap = new UINT32[ nColors ];     // we will always index dwords
         if ( mpColorMap == FALSE )
-            return FALSE;                       // out of memory %&!$&/!"§$
+            return FALSE;                       // out of memory %&!$&/!"ï¿½$
 
         switch( mpFileHeader->nColorMapEntrySize )
         {
