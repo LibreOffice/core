@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFontStylesContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:33:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,12 +265,12 @@ XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         rtl_TextEncoding eDfltEnc ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    eDfltEncoding( eDfltEnc ),
     pFamilyNameHdl( new XMLFontFamilyNamePropHdl ),
     pFamilyHdl( new XMLFontFamilyPropHdl ),
     pPitchHdl( new XMLFontPitchPropHdl ),
     pEncHdl( new XMLFontEncodingPropHdl ),
-    pFontStyleAttrTokenMap( new SvXMLTokenMap(aFontStyleAttrTokenMap) )
+    pFontStyleAttrTokenMap( new SvXMLTokenMap(aFontStyleAttrTokenMap) ),
+    eDfltEncoding( eDfltEnc )
 {
 }
 
