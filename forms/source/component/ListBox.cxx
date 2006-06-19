@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:24:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,79 +145,6 @@ namespace frm
     using namespace ::dbtools;
 
     //==================================================================
-    //= ChangeListeners
-    //==================================================================
-    typedef EventListeners<   XChangeListener
-                          >   ChangeListeners_Base;
-    class ChangeListeners : public ChangeListeners_Base
-    {
-    public:
-        inline ChangeListeners( ::cppu::OWeakObject& _rInstigator, ::osl::Mutex& _rMutex )
-            :ChangeListeners_Base( _rInstigator, _rMutex )
-        {
-        }
-
-    protected:
-        virtual bool    implNotify(
-                            const Reference< XChangeListener >& _rxListener,
-                            const EventObject& _rEvent
-                        )   SAL_THROW( ( Exception ) );
-    };
-
-    //------------------------------------------------------------------
-    bool ChangeListeners::implNotify( const Reference< XChangeListener >& _rxListener, const EventObject& _rEvent )   SAL_THROW( ( Exception ) )
-    {
-        _rxListener->changed( _rEvent );
-        return true;
-    }
-
-    //==================================================================
-    //= ItemListeners
-    //==================================================================
-    typedef ::comphelper::OListenerContainerBase<   XItemListener
-                                                ,   ItemEvent
-                                                >   ItemListeners_Base;
-    class ItemListeners : public ItemListeners_Base
-    {
-    protected:
-        ::cppu::OWeakObject& m_rInstigator;
-
-    public:
-        inline ItemListeners( ::cppu::OWeakObject& _rInstigator, ::osl::Mutex& _rMutex )
-            :ItemListeners_Base( _rMutex )
-            ,m_rInstigator( _rInstigator )
-        {
-        }
-
-    public:
-        inline void itemStateChanged( const ItemEvent& _rEvent )
-        {
-            ItemListeners_Base::notify( _rEvent );
-        }
-
-        inline void disposing()
-        {
-            EventObject aEvent( m_rInstigator );
-            ItemListeners_Base::disposing( aEvent );
-        }
-
-    protected:
-        virtual bool    implNotify(
-                            const Reference< XItemListener >& _rxListener,
-                            const ItemEvent& _rEvent
-                        )   SAL_THROW( ( Exception ) );
-    };
-
-    //------------------------------------------------------------------
-    bool ItemListeners::implNotify( const Reference< XItemListener >& _rxListener, const ItemEvent& _rEvent )   SAL_THROW( ( Exception ) )
-    {
-        ItemEvent aEvent( _rEvent );
-        aEvent.Source = m_rInstigator;
-        _rxListener->itemStateChanged( aEvent );
-        return true;
-    }
-
-    //==================================================================
     //= ItemEvent
     //==================================================================
     typedef ::comphelper::EventHolder< ItemEvent >    ItemEventDescription;
@@ -251,9 +178,9 @@ namespace frm
         ,OEntryListHelper( m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aRefreshListeners(m_aMutex)
+        ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
         ,m_eTransferSelectionAs( tsEntry )
-        ,m_nNULLPos(-1)
     {
         DBG_CTOR(OListBoxModel,NULL);
 
@@ -269,9 +196,9 @@ namespace frm
         ,OEntryListHelper( *_pOriginal, m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aRefreshListeners( m_aMutex )
+        ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
         ,m_eTransferSelectionAs( tsEntry )
-        ,m_nNULLPos(-1)
     {
         DBG_CTOR(OListBoxModel,NULL);
         m_eListSourceType = _pOriginal->m_eListSourceType;
@@ -908,9 +835,9 @@ namespace frm
             disposeComponent(xListCursor);
             return;
         }
-        catch(Exception& eUnknown)
+        catch(const Exception& eUnknown)
         {
-            eUnknown;
+            (void)eUnknown;
             disposeComponent(xListCursor);
             return;
         }
@@ -935,7 +862,7 @@ namespace frm
                 {
                     // Feld der 1. Column des ResultSets holen
                     Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
-                    DBG_ASSERT(xSupplyCols.is(), "OListBoxModel::loadData : cursor supports the row set service but is no column supplier ??!");
+                    DBG_ASSERT(xSupplyCols.is(), "OListBoxModel::loadData : cursor supports the row set service but is no column supplier?!");
                     Reference<XIndexAccess> xColumns;
                     if (xSupplyCols.is())
                     {
@@ -1007,9 +934,9 @@ namespace frm
                     //  dann wird die Position fuer einen Leereintrag gemerkt
 
                     ::rtl::OUString aStr;
-                    sal_Int16 i = 0;
+                    sal_Int16 entryPos = 0;
                     // per definitionem the list cursor is positioned _before_ the first row at the moment
-                    while (xListCursor->next() && (i++<SHRT_MAX)) // max anzahl eintraege
+                    while (xListCursor->next() && (entryPos++<SHRT_MAX)) // SHRT_MAX is the maximum number of entries
                     {
                         aStr = DBTypeConversion::getValue(xDataField,
                             xFormatter,
@@ -1045,6 +972,9 @@ namespace frm
                     }
                 }
                 break;
+                default:
+                    OSL_ENSURE( false, "OListBoxModel::loadData: unreachable!" );
+                    break;
             }
         }
         catch(SQLException& eSQL)
@@ -1053,9 +983,9 @@ namespace frm
             disposeComponent(xListCursor);
             return;
         }
-        catch(Exception& eUnknown)
+        catch( const Exception& eUnknown )
         {
-            eUnknown;
+            (void)eUnknown;
             disposeComponent(xListCursor);
             return;
         }
@@ -1105,7 +1035,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void OListBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
+    void OListBoxModel::onConnectedDbColumn( const Reference< XInterface >& /*_rxForm*/ )
     {
         // list boxes which are bound to a db column don't have multi selection
         // - this would be unable to reflect in the db column
@@ -1190,7 +1120,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool OListBoxModel::commitControlValueToDbColumn( bool _bPostReset )
+    sal_Bool OListBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         // current selektion list
         Any aCurrentValue;
@@ -1585,8 +1515,8 @@ namespace frm
     //------------------------------------------------------------------------------
     OListBoxControl::OListBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
         :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
-        ,m_pChangeListeners( new ChangeListeners( *this, m_aMutex ) )
-        ,m_pItemListeners( new ItemListeners( *this, m_aMutex ) )
+        ,m_aChangeListeners( m_aMutex )
+        ,m_aItemListeners( m_aMutex )
         ,m_pItemBroadcaster( NULL )
     {
         DBG_CTOR(OListBoxControl,NULL);
@@ -1640,10 +1570,10 @@ namespace frm
 
     // XFocusListener
     //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxControl::focusGained(const FocusEvent& _rEvent) throw(RuntimeException)
+    void SAL_CALL OListBoxControl::focusGained(const FocusEvent& /*_rEvent*/) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if ( !m_pChangeListeners->empty() ) // only if there are listeners
+        if ( m_aChangeListeners.getLength() ) // only if there are listeners
         {
             Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
             if (xSet.is())
@@ -1655,7 +1585,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxControl::focusLost(const FocusEvent& _rEvent) throw(RuntimeException)
+    void SAL_CALL OListBoxControl::focusLost(const FocusEvent& /*_rEvent*/) throw(RuntimeException)
     {
         m_aCurrentSelection.clear();
     }
@@ -1667,7 +1597,7 @@ namespace frm
         // forward this to our listeners
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if ( !m_pItemListeners->empty() )
+            if ( m_aItemListeners.getLength() )
             {
                 if ( !m_pItemBroadcaster.is() )
                 {
@@ -1690,7 +1620,7 @@ namespace frm
         }
         else
         {
-            if ( !m_pChangeListeners->empty() && m_aCurrentSelection.hasValue() )
+            if ( m_aChangeListeners.getLength() && m_aCurrentSelection.hasValue() )
             {
                 Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
                 if (xSet.is())
@@ -1736,13 +1666,13 @@ namespace frm
     //------------------------------------------------------------------------------
     void SAL_CALL OListBoxControl::addChangeListener(const Reference<XChangeListener>& _rxListener) throw(RuntimeException)
     {
-        m_pChangeListeners->addListener( _rxListener );
+        m_aChangeListeners.addInterface( _rxListener );
     }
 
     //------------------------------------------------------------------------------
     void SAL_CALL OListBoxControl::removeChangeListener(const Reference<XChangeListener>& _rxListener) throw(RuntimeException)
     {
-        m_pChangeListeners->removeListener( _rxListener );
+        m_aChangeListeners.removeInterface( _rxListener );
     }
 
     // OComponentHelper
@@ -1752,8 +1682,9 @@ namespace frm
         if (m_aChangeTimer.IsActive())
             m_aChangeTimer.Stop();
 
-        m_pChangeListeners->disposing();
-        m_pItemListeners->disposing();
+        EventObject aEvent( *this );
+        m_aChangeListeners.disposeAndClear( aEvent );
+        m_aItemListeners.disposeAndClear( aEvent );
 
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -1777,25 +1708,26 @@ namespace frm
                 return;
         }
         const ItemEventDescription& rItemEvent = static_cast< const ItemEventDescription& >( _rEvent );
-        m_pItemListeners->itemStateChanged( rItemEvent.getEventObject() );
+        m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, rItemEvent.getEventObject() );
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(OListBoxControl, OnTimeout, void*, EMPTYTAG)
+    IMPL_LINK(OListBoxControl, OnTimeout, void*, /*EMPTYTAG*/)
     {
-        return m_pChangeListeners->notify();
+        m_aChangeListeners.notifyEach( &XChangeListener::changed, EventObject( *this ) );
+        return 0L;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OListBoxControl::addItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
     {
-        m_pItemListeners->addListener( l );
+        m_aItemListeners.addInterface( l );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OListBoxControl::removeItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
     {
-        m_pItemListeners->removeListener( l );
+        m_aItemListeners.removeInterface( l );
     }
 
     //--------------------------------------------------------------------
