@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxchar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:46:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,20 +58,11 @@ start:
         case SbxCHAR:
             nRes = p->nChar; break;
         case SbxBYTE:
-            if( p->nByte > (USHORT) SbxMAXCHAR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXCHAR;
-            }
-            else
-                nRes = (xub_Unicode) p->nByte;
+            nRes = (xub_Unicode) p->nByte;
             break;
         case SbxINTEGER:
         case SbxBOOL:
-            if( p->nInteger > SbxMAXCHAR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXCHAR;
-            }
-            else if( p->nInteger < SbxMINCHAR )
+            if( p->nInteger < SbxMINCHAR )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINCHAR;
             }
@@ -80,12 +71,7 @@ start:
             break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > (USHORT) SbxMAXCHAR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXCHAR;
-            }
-            else
-                nRes = (xub_Unicode) p->nUShort;
+            nRes = (xub_Unicode) p->nUShort;
             break;
         case SbxLONG:
             if( p->nLong > SbxMAXCHAR )
@@ -312,28 +298,16 @@ start:
         case SbxBYREF | SbxCHAR:
             *p->pChar = n; break;
         case SbxBYREF | SbxBYTE:
-            if( n < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
-            }
             *p->pByte = (BYTE) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            if( n < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
-            }
             *p->pUShort = (UINT16) n; break;
         case SbxBYREF | SbxLONG:
             *p->pLong = (INT32) n; break;
         case SbxBYREF | SbxULONG:
-            if( n < 0 )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
-            }
             *p->pULong = (UINT32) n; break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = (float) n; break;
