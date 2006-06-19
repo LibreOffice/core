@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packethandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:28:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
     comm_BOOL bForceMultiChannelThisPacket = FALSE;
     if ( pReceiver )
     {
-        comm_UINT32 nBytes;
+        comm_UINT32 nBytes = 0;
         nReceiveProtocol = CM_PROTOCOL_OLDSTYLE;
         nReceiveHeaderType = CH_NoHeader;
 
@@ -118,7 +118,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
             comm_ULONG nHeaderReadSoFar = 0;
 
             // Prüfbyte für Längenangabe
-            unsigned char nLenCheck;
+            unsigned char nLenCheck = 0;
             READ_SOCKET_LEN( &nLenCheck, 1, nReadSoFar );
             // Stimmt das Prüfbyte?
             bWasError |= nLenCheck != CalcCheckByte( nBytes );
