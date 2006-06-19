@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_xkb.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:41:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@ private:
     sal_Bool            mbUseExtension;
     sal_uInt32          mnDefaultGroup;
     sal_uInt32          mnGroup;
-    sal_uInt32          mnEventBase;
-    sal_uInt32          mnErrorBase;
+    int                 mnEventBase;
+    int                 mnErrorBase;
     Display*            mpDisplay;
 
 public:
@@ -75,7 +75,7 @@ public:
                                                 sal_uInt32 nShiftState ) const ;
     inline sal_uInt32   GetGroup() const ;          // the current keyboard group
     inline sal_uInt32   GetDefaultGroup() const ;   // base group, usually group 1
-    inline sal_uInt32   GetEventBase() const ;
+    inline int          GetEventBase() const ;
 
 protected:
 
@@ -118,7 +118,7 @@ SalI18N_KeyboardExtension::GetDefaultGroup() const
     return mnDefaultGroup;
 }
 
-inline sal_uInt32
+inline int
 SalI18N_KeyboardExtension::GetEventBase() const
 {
     return mnEventBase;
