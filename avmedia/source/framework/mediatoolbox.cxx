@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediatoolbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:39:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ MediaToolBoxControl::~MediaToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void MediaToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void MediaToolBoxControl::StateChanged( USHORT /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     MediaToolBoxControl_Impl* pCtrl = static_cast< MediaToolBoxControl_Impl* >( GetToolBox().GetItemWindow( GetId() ) );
