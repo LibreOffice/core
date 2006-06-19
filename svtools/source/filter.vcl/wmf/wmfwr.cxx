@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:03:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,6 +507,12 @@ void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo&
         break;
         case LINE_NONE :
             nStyle = W_PS_NULL;
+        break;
+        case LINE_SOLID :
+            nStyle = W_PS_SOLID;
+        break;
+        default:
+            OSL_ASSERT( "unknown linestyle" );
         break;
     }
     *pWMF << nStyle;
@@ -1686,7 +1692,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
 // ------------------------------------------------------------------------
 
-void WMFWriter::WriteHeader( const GDIMetaFile & rMTF, BOOL bPlaceable )
+void WMFWriter::WriteHeader( const GDIMetaFile &, BOOL bPlaceable )
 {
     if( bPlaceable )
     {
