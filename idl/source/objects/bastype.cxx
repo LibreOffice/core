@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:49:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include <globals.hxx>
 #include <hash.hxx>
 #include <database.hxx>
-#pragma hdrstop
 
 /************************************************************************/
 ByteString MakeDefineName( const ByteString & rName )
@@ -293,9 +292,9 @@ SvStream& operator << (SvStream & rStm, const SvVersion & r )
         // Format 4 Bit fuer Major, dann 4 Bit fuer Minor.
         // 0.0 wird nicht komprimiert
 
-        BYTE n = r.GetMajorVersion() << 4;
+        int n = r.GetMajorVersion() << 4;
         n |= r.GetMinorVersion();
-        rStm << n;
+        rStm << (BYTE)n;
     }
     else
     {
