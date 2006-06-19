@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:18:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ namespace sfx2
         sal_Bool                    mbSelectionEnabled      : 1;
 
     private:
-        void                    addFilters( sal_uInt32 nFlags,
+        void                    addFilters( sal_Int64 nFlags,
                                             const String& rFactory,
                                             SfxFilterFlags nMust,
                                             SfxFilterFlags nDont );
@@ -200,7 +200,7 @@ namespace sfx2
                                 FileDialogHelper_Impl(
                                     FileDialogHelper* _pAntiImpl,
                                     const short nDialogType,
-                                    sal_uInt32 nFlags,
+                                    sal_Int64 nFlags,
                                     Window* _pPreferredParentWindow = NULL
                                 );
         virtual                 ~FileDialogHelper_Impl();
