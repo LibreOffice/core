@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:33:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -87,13 +86,13 @@ SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView ) :
         SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_MEASURE )
 {
-    SvxMeasurePage* pPage = new SvxMeasurePage( this, rInAttrs );
+    SvxMeasurePage* _pPage = new SvxMeasurePage( this, rInAttrs );
 
-    pPage->SetView( pSdrView );
-    pPage->Construct();
+    _pPage->SetView( pSdrView );
+    _pPage->Construct();
 
-    SetTabPage( pPage );
-    SetText( pPage->GetText() );
+    SetTabPage( _pPage );
+    SetText( _pPage->GetText() );
 }
 
 /*************************************************************************
@@ -116,9 +115,6 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
                 SvxTabPage      ( pWindow, ResId( RID_SVXPAGE_MEASURE, DIALOG_MGR() ),
                                   rInAttrs ),
 
-        rOutAttrs               ( rInAttrs ),
-        aAttrSet                ( *rInAttrs.GetPool() ),
-
         aFlLine                 ( this, ResId( FL_LINE ) ),
         aFtLineDist             ( this, ResId( FT_LINE_DIST ) ),
         aMtrFldLineDist         ( this, ResId( MTR_LINE_DIST ) ),
@@ -133,18 +129,22 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
         aTsbBelowRefEdge        ( this, ResId( TSB_BELOW_REF_EDGE ) ),
         aFtDecimalPlaces        ( this, ResId( FT_DECIMALPLACES ) ),
         aMtrFldDecimalPlaces    ( this, ResId( MTR_FLD_DECIMALPLACES ) ),
-        aTsbParallel            ( this, ResId( TSB_PARALLEL ) ),
-        aTsbShowUnit            ( this, ResId( TSB_SHOW_UNIT ) ),
-        aLbUnit                 ( this, ResId( LB_UNIT ) ),
 
         aFlLabel                ( this, ResId( FL_LABEL ) ),
-        aFlVert                 ( this, ResId( FL_VERT ) ),
-        aCtlPosition            ( this, ResId( CTL_POSITION ),
-                                        RP_RM, 200, 100, CS_LINE ),
+        aFtPosition             ( this, ResId( FT_POSITION ) ),
+        aCtlPosition            ( this, ResId( CTL_POSITION ) ),
         aTsbAutoPosV            ( this, ResId( TSB_AUTOPOSV ) ),
         aTsbAutoPosH            ( this, ResId( TSB_AUTOPOSH ) ),
-        aFtPosition             ( this, ResId( FT_POSITION ) ),
+        aTsbShowUnit            ( this, ResId( TSB_SHOW_UNIT ) ),
+        aLbUnit                 ( this, ResId( LB_UNIT ) ),
+        aTsbParallel            ( this, ResId( TSB_PARALLEL ) ),
         aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs ),
+
+        aFlVert                 ( this, ResId( FL_VERT ) ),
+        rOutAttrs               ( rInAttrs ),
+        aAttrSet                ( *rInAttrs.GetPool() ),
+        pView( 0 ),
+
         bPositionModified       ( FALSE )
 {
     FillUnitLB();
@@ -401,6 +401,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
                     case SDRMEASURE_TEXTHAUTO:          eRP = RP_MM; break;
                     }
                     break;
+                 default: ;//prevent warning
                 }
 
                 CTL_STATE nState = 0;
@@ -519,8 +520,8 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             USHORT nFieldUnit = (USHORT)(long)aLbUnit.GetEntryData( nPos );
-            FieldUnit eUnit = (FieldUnit) nFieldUnit;
-            rAttrs.Put( SdrMeasureUnitItem( eUnit ) );
+            FieldUnit _eUnit = (FieldUnit) nFieldUnit;
+            rAttrs.Put( SdrMeasureUnitItem( _eUnit ) );
             bModified = TRUE;
         }
     }
@@ -642,7 +643,7 @@ USHORT* SvxMeasurePage::GetRanges()
 |*
 \************************************************************************/
 
-void SvxMeasurePage::PointChanged( Window* pWindow, RECT_POINT eRP )
+void SvxMeasurePage::PointChanged( Window* pWindow, RECT_POINT /*eRP*/ )
 {
     ChangeAttrHdl_Impl( pWindow );
 }
@@ -673,6 +674,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
             case RP_RB:
                 aCtlPosition.SetActualRP( RP_MB );
             break;
+            default: ;//prevent warning
         }
     }
     if( aTsbAutoPosV.GetState() == STATE_CHECK )
@@ -693,6 +695,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
             case RP_RB:
                 aCtlPosition.SetActualRP( RP_RM );
             break;
+            default: ;//prevent warning
         }
     }
     ChangeAttrHdl_Impl( p );
@@ -772,8 +775,8 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             USHORT nFieldUnit = (USHORT)(long)aLbUnit.GetEntryData( nPos );
-            FieldUnit eUnit = (FieldUnit) nFieldUnit;
-            aAttrSet.Put( SdrMeasureUnitItem( eUnit ) );
+            FieldUnit _eUnit = (FieldUnit) nFieldUnit;
+            aAttrSet.Put( SdrMeasureUnitItem( _eUnit ) );
         }
     }
 
