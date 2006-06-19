@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktopterminationobserver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:47:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ namespace utl
         }
 
         //--------------------------------------------------------------------
-        void SAL_CALL OObserverImpl::queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException)
+        void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
         {
             Listeners aToNotify;
             {
@@ -163,7 +163,7 @@ namespace utl
         }
 
         //--------------------------------------------------------------------
-        void SAL_CALL OObserverImpl::notifyTermination( const EventObject& Event ) throw (RuntimeException)
+        void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
         {
             // get the listeners
             Listeners aToNotify;
@@ -191,7 +191,7 @@ namespace utl
         }
 
         //--------------------------------------------------------------------
-        void SAL_CALL OObserverImpl::disposing( const EventObject& Event ) throw (RuntimeException)
+        void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException)
         {
 #if OSL_DEBUG_LEVEL > 0
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
