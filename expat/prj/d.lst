@@ -6,4 +6,6 @@ mkdir: %_DEST%\inc%_EXT%\external\expat
 ..\%__SRC%\lib\libexpat_xmltok.a %_DEST%\lib%_EXT%\libexpat_xmltok.a
 ..\%__SRC%\lib\libexpat_xmlparse.a %_DEST%\lib%_EXT%\libexpat_xmlparse.a
 ..\%__SRC%\lib\libascii_expat_xmlparse.a %_DEST%\lib%_EXT%\libascii_expat_xmlparse.a
+..\%__SRC%\misc\_ooo_st_expat_xmltok.pdb %_DEST%\lib%_EXT%\_ooo_st_expat_xmltok.pdb
+..\%__SRC%\misc\_ooo_st_expat_xmlparse.pdb %_DEST%\lib%_EXT%\_ooo_st_expat_xmlparse.pdb
 
