@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:49:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef _SVX_FMGRIDCL_HXX
 #include "fmgridcl.hxx"
@@ -518,7 +517,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
+IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     ::rtl::OUString             sCommand, sFieldName,sURL;
     sal_Int32                   nCommandType = CommandType::COMMAND;
@@ -1179,11 +1178,11 @@ FmGridControl::FmGridControl(
                 FmXGridPeer* _pPeer,
                 WinBits nBits)
         :DbGridControl(_rxFactory, pParent, nBits)
-        ,m_bInColumnMove(sal_False)
-        ,m_nMarkedColumnId(BROWSER_INVALIDID)
         ,m_pPeer(_pPeer)
-        ,m_bSelecting(sal_False)
         ,m_nCurrentSelectedColumn(-1)
+        ,m_nMarkedColumnId(BROWSER_INVALIDID)
+        ,m_bSelecting(sal_False)
+        ,m_bInColumnMove(sal_False)
 {
     EnableInteractiveRowHeight( );
 }
@@ -1193,16 +1192,16 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
 {
     if ( COMMAND_CONTEXTMENU == _rEvt.GetCommand() )
     {
-        FmGridHeader* pHeader = static_cast< FmGridHeader* >( GetHeaderBar() );
-        if ( pHeader && !_rEvt.IsMouseEvent() )
+        FmGridHeader* pMyHeader = static_cast< FmGridHeader* >( GetHeaderBar() );
+        if ( pMyHeader && !_rEvt.IsMouseEvent() )
         {   // context menu requested by keyboard
             if  ( 1 == GetSelectColumnCount() || IsDesignMode() )
             {
                 sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
                 ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
-                Point aRelativePos( pHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
-                pHeader->triggerColumnContextMenu( aRelativePos, FmGridHeader::AccessControl() );
+                Point aRelativePos( pMyHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
+                pMyHeader->triggerColumnContextMenu( aRelativePos, FmGridHeader::AccessControl() );
 
                 // handled
                 return;
@@ -1554,7 +1553,7 @@ void FmGridControl::DeleteSelectedRows()
 
 // XCurrentRecordListener
 //------------------------------------------------------------------------------
-void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& rEvent)
+void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEvent*/)
 {
     TRACE_RANGE("FmGridControl::positioned");
     // position on the data source (force it to be done in the main thread)
@@ -1578,7 +1577,7 @@ sal_Bool FmGridControl::commit()
 }
 
 //------------------------------------------------------------------------------
-void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& rEvent)
+void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent*/)
 {
     const DbGridRowRef& xRow = GetCurrentRow();
     if (!xRow.Is())
@@ -1615,7 +1614,8 @@ void FmGridControl::restored(const ::com::sun::star::lang::EventObject& rEvent)
 //------------------------------------------------------------------------------
 BrowserHeader* FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 {
-    return new FmGridHeader(this);
+    DBG_ASSERT( pParent == this, "FmGridControl::imp_CreateHeaderBar: parent?" );
+    return new FmGridHeader( pParent );
 }
 
 //------------------------------------------------------------------------------
@@ -1783,9 +1783,6 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
         Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
 
-        Reference< XPropertySetInfo > xPropsInfo = xCol->getPropertySetInfo();
-        sal_Bool bHas = xPropsInfo->hasPropertyByName(FM_PROP_LABEL);
-
         aName  = (const sal_Unicode*)::comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL));
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
@@ -1928,7 +1925,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
         m_nMarkedColumnId = (sal_uInt16)-1;
 }
 // -----------------------------------------------------------------------------
-sal_Bool FmGridControl::isColumnSelected(sal_uInt16 nId,DbGridColumn* _pColumn)
+sal_Bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColumn)
 {
     OSL_ENSURE(_pColumn,"Column can not be null!");
     sal_Bool bSelected = sal_False;
@@ -2090,7 +2087,7 @@ namespace
     }
 }
 // Object data and state ------------------------------------------------------
-::rtl::OUString FmGridControl::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+::rtl::OUString FmGridControl::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
     ::rtl::OUString sRetText;
     switch( _eObjType )
@@ -2109,13 +2106,13 @@ namespace
                                                 FM_PROP_LABEL);
             break;
         default:
-            sRetText = DbGridControl::GetAccessibleName(_eObjType,_nPosition);
+            sRetText = DbGridControl::GetAccessibleObjectName(_eObjType,_nPosition);
     }
     return sRetText;
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString FmGridControl::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+::rtl::OUString FmGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
     ::rtl::OUString sRetText;
     switch( _eObjType )
@@ -2134,7 +2131,7 @@ namespace
                                                 FM_PROP_HELPTEXT);
             break;
         default:
-            sRetText = DbGridControl::GetAccessibleDescription(_eObjType,_nPosition);
+            sRetText = DbGridControl::GetAccessibleObjectDescription(_eObjType,_nPosition);
     }
     return sRetText;
 }
