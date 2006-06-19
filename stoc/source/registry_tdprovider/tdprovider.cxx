@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:08:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,18 +410,18 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
                 if (nIndex > 0)
                 {
                     // open module
-                    com::sun::star::uno::Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey.copy( 0, nIndex ) ) );
-                    if (xKey.is())
+                    com::sun::star::uno::Reference< XRegistryKey > xKey2( xBaseKey->openKey( aKey.copy( 0, nIndex ) ) );
+                    if (xKey2.is())
                     {
                         // closes key in it's dtor (which is
                         // called even in case of exceptions).
-                        RegistryKeyCloser aCloser( xKey );
+                        RegistryKeyCloser aCloser( xKey2 );
 
-                        if ( xKey->isValid() )
+                        if ( xKey2->isValid() )
                         {
-                            if (xKey->getValueType() == RegistryValueType_BINARY)
+                            if (xKey2->getValueType() == RegistryValueType_BINARY)
                             {
-                                Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
+                                Sequence< sal_Int8 > aBytes( xKey2->getBinaryValue() );
                                 typereg::Reader aReader(
                                     aBytes.getConstArray(), aBytes.getLength(),
                                     false, TYPEREG_VERSION_1);
@@ -679,7 +679,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
