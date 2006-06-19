@@ -4,9 +4,9 @@
  *
  *  $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:04:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,23 @@
  *
  ************************************************************************/
 
-#if HAVE_CONFIG_H
-#include <config.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
 #endif
 
-#include <windows.h>
-
 #include "jawt.h"
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include "jawt_md.h"
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #if defined assert
 #undef assert
@@ -72,6 +81,8 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
 JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
+    (void) env; // unused
+    (void) obj_this; // unused
     return (SYSTEM_WIN32);
 }
 

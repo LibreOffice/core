@@ -4,9 +4,9 @@
  *
  *  $RCSfile: com_sun_star_comp_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:04:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,23 @@
  *
  ************************************************************************/
 
-#if HAVE_CONFIG_H
-#include <config.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
 #endif
 
-#include <windows.h>
-
 #include "jawt.h"
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include "jawt_md.h"
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
@@ -82,6 +91,8 @@ static void ThrowException(JNIEnv * env, char const * type, char const * msg) {
 JNIEXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
+    (void) env; // unused
+    (void) obj_this; // unused
     return (SYSTEM_WIN32);
 }
 
@@ -192,8 +203,15 @@ static LRESULT APIENTRY OpenOfficeWndProc(
         }
     }
 
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4152) /* function/data pointer conversion: */
+#endif
     return CallWindowProc(GetProp(hWnd, OLD_PROC_KEY),
                           hWnd, uMsg, wParam, lParam);
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 }
 
 
