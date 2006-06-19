@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:10:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ private:
 // the extern interface
 //---------------------------------------
 Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
-    const Reference< XMultiServiceFactory  >  & rSMgr ) throw(Exception)
+    const Reference< XMultiServiceFactory  >  & ) throw(Exception)
 {
     SaxExpatParser *p = new SaxExpatParser;
 
@@ -307,6 +307,73 @@ public:
     void parse();
 };
 
+extern "C"
+{
+    static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
+    {
+        SaxExpatParser_Impl::callbackStartElement(userData,name,atts);
+    }
+    static void call_callbackEndElement(void *userData, const XML_Char *name)
+    {
+        SaxExpatParser_Impl::callbackEndElement(userData,name);
+    }
+    static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
+    {
+        SaxExpatParser_Impl::callbackCharacters(userData,s,nLen);
+    }
+    static void call_callbackProcessingInstruction(void *userData,const XML_Char *sTarget,const XML_Char *sData )
+    {
+        SaxExpatParser_Impl::callbackProcessingInstruction(userData,sTarget,sData );
+    }
+    static void call_callbackUnparsedEntityDecl(void *userData ,
+                                                  const XML_Char *entityName,
+                                                const XML_Char *base,
+                                                const XML_Char *systemId,
+                                                const XML_Char *publicId,
+                                                const XML_Char *notationName)
+    {
+        SaxExpatParser_Impl::callbackUnparsedEntityDecl(userData,entityName,base,systemId,publicId,notationName);
+    }
+    static void call_callbackNotationDecl(void *userData,
+                                          const XML_Char *notationName,
+                                          const XML_Char *base,
+                                          const XML_Char *systemId,
+                                          const XML_Char *publicId)
+    {
+        SaxExpatParser_Impl::callbackNotationDecl(userData,notationName,base,systemId,publicId);
+    }
+    static int call_callbackExternalEntityRef(XML_Parser parser,
+                                              const XML_Char *openEntityNames,
+                                              const XML_Char *base,
+                                              const XML_Char *systemId,
+                                              const XML_Char *publicId)
+    {
+        return SaxExpatParser_Impl::callbackExternalEntityRef(parser,openEntityNames,base,systemId,publicId);
+    }
+    static int call_callbackUnknownEncoding(void *encodingHandlerData,
+                                              const XML_Char *name,
+                                            XML_Encoding *info)
+    {
+        return SaxExpatParser_Impl::callbackUnknownEncoding(encodingHandlerData,name,info);
+    }
+    static void call_callbackDefault( void *userData,  const XML_Char *s,  int len)
+    {
+        SaxExpatParser_Impl::callbackDefault(userData,s,len);
+    }
+    static void call_callbackStartCDATA( void *userData )
+    {
+        SaxExpatParser_Impl::callbackStartCDATA(userData);
+    }
+    static void call_callbackEndCDATA( void *userData )
+    {
+        SaxExpatParser_Impl::callbackEndCDATA(userData);
+    }
+    static void call_callbackComment( void *userData , const XML_Char *s )
+    {
+        SaxExpatParser_Impl::callbackComment(userData,s);
+    }
+}
+
 
 //---------------------------------------------
 // LocatorImpl
@@ -409,27 +476,27 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     // set all necessary C-Callbacks
     XML_SetUserData( entity.pParser , m_pImpl );
     XML_SetElementHandler(  entity.pParser ,
-                            SaxExpatParser_Impl::callbackStartElement ,
-                            SaxExpatParser_Impl::callbackEndElement );
-    XML_SetCharacterDataHandler( entity.pParser , SaxExpatParser_Impl::callbackCharacters );
+                            call_callbackStartElement ,
+                            call_callbackEndElement );
+    XML_SetCharacterDataHandler( entity.pParser , call_callbackCharacters );
     XML_SetProcessingInstructionHandler(entity.pParser ,
-                                        SaxExpatParser_Impl::callbackProcessingInstruction );
+                                        call_callbackProcessingInstruction );
     XML_SetUnparsedEntityDeclHandler(   entity.pParser,
-                                        SaxExpatParser_Impl::callbackUnparsedEntityDecl );
-    XML_SetNotationDeclHandler( entity.pParser, SaxExpatParser_Impl::callbackNotationDecl );
+                                        call_callbackUnparsedEntityDecl );
+    XML_SetNotationDeclHandler( entity.pParser, call_callbackNotationDecl );
     XML_SetExternalEntityRefHandler(    entity.pParser,
-                                        SaxExpatParser_Impl::callbackExternalEntityRef);
-    XML_SetUnknownEncodingHandler( entity.pParser,  SaxExpatParser_Impl::callbackUnknownEncoding ,0);
+                                        call_callbackExternalEntityRef);
+    XML_SetUnknownEncodingHandler( entity.pParser,  call_callbackUnknownEncoding ,0);
 
     if( m_pImpl->rExtendedDocumentHandler.is() ) {
 
         // These handlers just delegate calls to the ExtendedHandler. If no extended handler is
         // given, these callbacks can be ignored
-        XML_SetDefaultHandlerExpand( entity.pParser, SaxExpatParser_Impl::callbackDefault );
-        XML_SetCommentHandler( entity.pParser, SaxExpatParser_Impl::callbackComment );
+        XML_SetDefaultHandlerExpand( entity.pParser, call_callbackDefault );
+        XML_SetCommentHandler( entity.pParser, call_callbackComment );
         XML_SetCdataSectionHandler(     entity.pParser ,
-                                        SaxExpatParser_Impl::callbackStartCDATA ,
-                                         SaxExpatParser_Impl::callbackEndCDATA );
+                                        call_callbackStartCDATA ,
+                                         call_callbackEndCDATA );
     }
 
 
@@ -650,11 +717,17 @@ void SaxExpatParser_Impl::parse( )
         nRead = getEntity().converter.readAndConvert( seqOut , nBufSize );
 
         if( ! nRead ) {
-            XML_Parse( getEntity().pParser , ( const char * ) seqOut.getArray() , 0 , 1 );
+            XML_Parse( getEntity().pParser ,
+                                   ( const char * ) seqOut.getArray() ,
+                                   0 ,
+                                   1 );
             break;
         }
 
-        sal_Bool bContinue = XML_Parse( getEntity().pParser ,(const char *) seqOut.getArray(),nRead,0);
+        sal_Bool bContinue = ( XML_Parse( getEntity().pParser ,
+                                                (const char *) seqOut.getArray(),
+                                                nRead,
+                                                0 ) != 0 );
 
         if( ! bContinue || this->bExceptionWasThrown ) {
 
@@ -670,7 +743,7 @@ void SaxExpatParser_Impl::parse( )
                 rDocumentLocator->getPublicId(),
                 rDocumentLocator->getSystemId(),
                 rDocumentLocator->getLineNumber(),
-                            rDocumentLocator->getColumnNumber()
+                rDocumentLocator->getColumnNumber()
                 );
 
             if( rErrorHandler.is() ) {
@@ -751,19 +824,20 @@ void SaxExpatParser_Impl::callbackProcessingInstruction(    void *pvThis,
 {
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
     if( pImpl->rDocumentHandler.is() ) {
-        CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS( pImpl ,
-                rDocumentHandler->processingInstruction( XML_CHAR_TO_OUSTRING( sTarget ),
-                                                                XML_CHAR_TO_OUSTRING( sData ) ) );
+        CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
+                    pImpl ,
+                    rDocumentHandler->processingInstruction( XML_CHAR_TO_OUSTRING( sTarget ),
+                    XML_CHAR_TO_OUSTRING( sData ) ) );
     }
 }
 
 
 void SaxExpatParser_Impl::callbackUnparsedEntityDecl(void *pvThis ,
-                                                  const XML_Char *entityName,
-                                                  const XML_Char *base,
-                                                  const XML_Char *systemId,
-                                                  const XML_Char *publicId,
-                                                  const XML_Char *notationName)
+                                                     const XML_Char *entityName,
+                                                     const XML_Char * /*base*/,
+                                                     const XML_Char *systemId,
+                                                     const XML_Char *publicId,
+                                                     const XML_Char *notationName)
 {
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
     if( pImpl->rDTDHandler.is() ) {
@@ -779,7 +853,7 @@ void SaxExpatParser_Impl::callbackUnparsedEntityDecl(void *pvThis ,
 
 void SaxExpatParser_Impl::callbackNotationDecl( void *pvThis,
                                                 const XML_Char *notationName,
-                                                const XML_Char *base,
+                                                const XML_Char * /*base*/,
                                                 const XML_Char *systemId,
                                                 const XML_Char *publicId)
 {
@@ -797,7 +871,7 @@ void SaxExpatParser_Impl::callbackNotationDecl( void *pvThis,
 
 int SaxExpatParser_Impl::callbackExternalEntityRef( XML_Parser parser,
                                                     const XML_Char *context,
-                                                    const XML_Char *base,
+                                                    const XML_Char * /*base*/,
                                                     const XML_Char *systemId,
                                                     const XML_Char *publicId)
 {
@@ -868,9 +942,9 @@ int SaxExpatParser_Impl::callbackExternalEntityRef( XML_Parser parser,
     return bOK;
 }
 
-int SaxExpatParser_Impl::callbackUnknownEncoding(void *encodingHandlerData,
-                                              const XML_Char *name,
-                                              XML_Encoding *info)
+int SaxExpatParser_Impl::callbackUnknownEncoding(void * /*encodingHandlerData*/,
+                                                 const XML_Char * /*name*/,
+                                                 XML_Encoding * /*info*/)
 {
     return 0;
 }
@@ -945,14 +1019,14 @@ extern "C"
 {
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -982,7 +1056,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
 
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
