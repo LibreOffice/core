@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:41:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
     @param aEvent
                 describe the source of this event and MUST be our save broadcaster!
  */
-void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& aEvent )
+void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& )
     throw(css::uno::RuntimeException)
 {
     /* SAFE { */
