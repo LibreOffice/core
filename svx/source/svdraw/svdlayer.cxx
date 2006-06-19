@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:30:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,7 +547,7 @@ USHORT SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
     return USHORT(nRet);
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL bInherited) const
+const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInherited*/) const
 {
     UINT16 i(0);
     const SdrLayer* pLay = NULL;
