@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:19:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,6 @@ protected :
     void                    ShowPageImpl ( IconChoicePageData* pData );
     void                    HidePageImpl ( IconChoicePageData* pData );
 
-    virtual void            PageCreated( USHORT nId, IconChoicePage &rPage );
     virtual SfxItemSet*     CreateInputItemSet( USHORT nId );
     inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
     inline IconChoicePage*  GetTabPage( USHORT nPageId )
