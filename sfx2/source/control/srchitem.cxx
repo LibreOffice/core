@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:41:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ SvxSearchItem::~SvxSearchItem()
 }
 
 // -----------------------------------------------------------------------
-SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *pPool) const
+SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 {
     return new SvxSearchItem(*this);
 }
@@ -282,10 +282,10 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 
 SfxItemPresentation SvxSearchItem::GetPresentation
 (
-    SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    XubString&          rText,
+    SfxItemPresentation ,
+    SfxMapUnit          ,
+    SfxMapUnit          ,
+    XubString&          ,
     const IntlWrapper *
 )   const
 {
@@ -356,7 +356,7 @@ void SvxSearchItem::SetToDescriptor( ::com::sun::star::uno::Reference< ::com::su
 }
 
 
-void SvxSearchItem::Notify( const Sequence< OUString > &rPropertyNames )
+void SvxSearchItem::Notify( const Sequence< OUString > & )
 {
     // applies transliteration changes in the configuration database
     // to the current SvxSearchItem
@@ -440,7 +440,6 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
 
 sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -500,7 +499,6 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 
 sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_False;
     sal_Int32 nInt;
