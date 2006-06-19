@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testregistrytdprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:30:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ template< typename T > void assertEqual(T const & value, T const & argument) {
 
 }
 
-sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
+sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     throw (css::uno::RuntimeException)
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
