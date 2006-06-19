@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_dsapi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:53:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ Context_Docu::Context_Docu( Token_Receiver & o_rReceiver )
 
 void
 Context_Docu::SetParentContext( TkpContext & io_rParentContext,
-                                const char * i_sMultiLineEndToken )
+                                const char * )
 {
     pFollowUpContext = pParentContext = &io_rParentContext;
     pCx_CheckStar->Set_End_FolloUpContext(io_rParentContext);
@@ -197,7 +197,7 @@ Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
     {
         case nF_fin_Error:
             throw X_AutodocParser(X_AutodocParser::x_InvalidChar);
-            break;
+            // no break because of throw
         case nF_fin_Ignore:
             pNewToken = 0;
             io_rText.CutToken();
