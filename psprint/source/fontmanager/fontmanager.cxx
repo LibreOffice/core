@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 09:49:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,21 +413,21 @@ PrintFontManager::BuiltinFont::~BuiltinFont()
 
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::Type1FontFile::queryMetricPage( int nPage, MultiAtomProvider* pProvider )
+bool PrintFontManager::Type1FontFile::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
 {
     return readAfmMetrics( PrintFontManager::get().getAfmFile( this ), pProvider, false, false );
 }
 
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::BuiltinFont::queryMetricPage( int nPage, MultiAtomProvider* pProvider )
+bool PrintFontManager::BuiltinFont::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
 {
     return readAfmMetrics( PrintFontManager::get().getAfmFile( this ), pProvider, false, false );
 }
 
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomProvider* pProvider )
+bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomProvider* /*pProvider*/ )
 {
     bool bSuccess = false;
 
@@ -781,7 +781,9 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         m_eItalic = italic::Upright;
 
     // weight
-    m_eWeight = parseWeight( ByteString( pInfo->gfi->weight ).ToLowerAscii() );
+    ByteString aLowerWeight( pInfo->gfi->weight );
+    aLowerWeight.ToLowerAscii();
+    m_eWeight = parseWeight( aLowerWeight );
 
     // pitch
     m_ePitch = pInfo->gfi->isFixedPitch ? pitch::Fixed : pitch::Variable;
@@ -876,13 +878,13 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         bool bYFound = false;
         bool bQFound = false;
         CharMetricInfo* pChar = pInfo->cmi;
-        for( int i = 0; i < pInfo->numOfChars && ! (bYFound && bQFound); i++ )
+        for( int j = 0; j < pInfo->numOfChars && ! (bYFound && bQFound); j++ )
         {
-            if( pChar[i].name )
+            if( pChar[j].name )
             {
-                if( pChar[i].name[0] == 'Y' && pChar[i].name[1] == 0 )
+                if( pChar[j].name[0] == 'Y' && pChar[j].name[1] == 0 )
                     bYFound = true;
-                else if( pChar[i].name[0] == 'Q' && pChar[i].name[1] == 0 )
+                else if( pChar[j].name[0] == 'Q' && pChar[j].name[1] == 0 )
                     bQFound = true;
             }
         }
@@ -1221,7 +1223,7 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate 
 
 // -------------------------------------------------------------------------
 
-int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum )
+int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int /*nFaceNum*/ )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
@@ -1233,7 +1235,7 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum
     if( !nFontId )
     {
         ::std::list< PrintFont* > aNewFonts;
-        if( analyzeFontFile( nDirID, aName, false, ::std::list<OString>(), aNewFonts ) )
+        if( analyzeFontFile( nDirID, aName, ::std::list<OString>(), aNewFonts ) )
         {
             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin();
                  it != aNewFonts.end(); ++it )
@@ -1249,7 +1251,7 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum
 
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bool bReadFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
+bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
 {
     rNewFonts.clear();
 
@@ -2331,14 +2333,14 @@ void PrintFontManager::initialize( void* pInitDisplay )
                         // fill in font attributes from XLFD rather
                         // than reading every file
                         ::std::list< PrintFont* > aNewFonts;
-                        if( analyzeFontFile( nDirID, aFileName, aXLFDs.size() ? false : true, aXLFDs, aNewFonts ) )
+                        if( analyzeFontFile( nDirID, aFileName, aXLFDs, aNewFonts ) )
                         {
-                            for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
+                            for( ::std::list< PrintFont* >::iterator font_it = aNewFonts.begin(); font_it != aNewFonts.end(); ++font_it )
                             {
                                 fontID aFont = m_nNextFontID++;
-                                m_aFonts[ aFont ] = *it;
+                                m_aFonts[ aFont ] = *font_it;
                                 m_aFontFileToFontID[ aFileName ].insert( aFont );
-                                m_pFontCache->updateFontCacheEntry( *it, false );
+                                m_pFontCache->updateFontCacheEntry( *font_it, false );
                                 nDirFonts++;
 #if OSL_DEBUG_LEVEL > 2
                                 fprintf( stderr, "adding font %d: \"%s\" from %s\n", aFont,
@@ -2425,7 +2427,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                     {
                         ::std::list< PrintFont* > aNewFonts;
 
-                        analyzeFontFile( nDirID, aFileName, true, aEmptyFontsDir, aNewFonts );
+                        analyzeFontFile( nDirID, aFileName, aEmptyFontsDir, aNewFonts );
                         for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
                         {
                             if( findFontBuiltinID( (*it)->m_nPSName ) == 0 )
@@ -3238,11 +3240,11 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                 OUString aFromPath, aToPath;
                 if( bLinkOnly )
                 {
-                    ByteString aFromPath( String(aFromAfm.PathToFileName()),
+                    ByteString aLinkFromPath( String(aFromAfm.PathToFileName()),
                         aEncoding );
-                    ByteString aToPath( String(aToAfm.PathToFileName()),
+                    ByteString aLinkToPath( String(aToAfm.PathToFileName()),
                         aEncoding );
-                    nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
+                    nError = (FileBase::RC)symlink( aLinkFromPath.GetBuffer(), aLinkToPath.GetBuffer() );
                 }
                 else
                     nError = File::copy( aFromAfm.GetMainURL(INetURLObject::DECODE_TO_IURI), aToAfm.GetMainURL(INetURLObject::DECODE_TO_IURI) );
@@ -3276,7 +3278,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
 
             ::std::list< PrintFont* > aNewFonts;
             ::std::list< PrintFont* >::iterator it;
-            if( analyzeFontFile( nDirID, OUStringToOString( aTo.GetName(), aEncoding ), true, ::std::list<OString>(), aNewFonts ) )
+            if( analyzeFontFile( nDirID, OUStringToOString( aTo.GetName(), aEncoding ), ::std::list<OString>(), aNewFonts ) )
             {
                 // remove all fonts for the same file
                 // discarding their font ids
@@ -3361,7 +3363,7 @@ bool PrintFontManager::checkImportPossible() const
 
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::checkChangeFontPropertiesPossible( fontID nFontID ) const
+bool PrintFontManager::checkChangeFontPropertiesPossible( fontID /*nFontID*/ ) const
 {
     // since font properties are changed in the font cache file only nowadays
     // they can always be changed
@@ -3404,7 +3406,7 @@ getImportableFontProperties(
         aDir = rFile.copy( 0, nIndex );
     int nDirID = getDirectoryAtom( aDir, true );
     ::std::list< PrintFont* > aFonts;
-    bool bRet = analyzeFontFile( nDirID, aFile, true, ::std::list<OString>(), aFonts );
+    bool bRet = analyzeFontFile( nDirID, aFile, ::std::list<OString>(), aFonts );
     while( aFonts.begin() != aFonts.end() )
     {
         PrintFont* pFont = aFonts.front();
