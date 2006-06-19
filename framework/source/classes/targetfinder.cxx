@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:15:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,8 +153,8 @@ TargetInfo::TargetInfo( const css::uno::Reference< css::frame::XFrame >& xFrame 
     eFrameType = getFrameType( xFrame );
     switch( eFrameType )
     {
-        //case E_DESKTOP    :   // Nothing to do .. because: Desktop has no parent, no name ... Use default values!
-                                // But - values for children info is set later ...
+        case E_DESKTOP      :   break; // Nothing to do .. because: Desktop has no parent, no name ... Use default values!
+                                       // But - values for children info is set later ...
         case E_TASK         :   {
                                     css::uno::Reference< css::frame::XFrame > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
                                     bParentExist = xParent.is();
@@ -172,6 +172,8 @@ TargetInfo::TargetInfo( const css::uno::Reference< css::frame::XFrame >& xFrame 
                                     sFrameName = xFrame->getName();
                                 }
                                 break;
+        case E_UNKNOWNFRAME :   break;
+        default             :   break;
     }
 
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier  ( xFrame, css::uno::UNO_QUERY );
@@ -251,12 +253,12 @@ EFrameType TargetInfo::getFrameType( const css::uno::Reference< css::frame::XFra
 
     @onerror    We return false.
 *//*-*************************************************************************************************************/
-sal_Bool TargetInfo::impl_getCreateFlag( sal_Int32 nSearchFlags )
+sal_Bool TargetInfo::impl_getCreateFlag( sal_Int32 aSearchFlags )
 {
     bCreationAllowed = sal_False;
-    if( nSearchFlags != css::frame::FrameSearchFlag::CREATE )
+    if( aSearchFlags != css::frame::FrameSearchFlag::CREATE )
     {
-        bCreationAllowed = (( nSearchFlags & css::frame::FrameSearchFlag::CREATE ) == css::frame::FrameSearchFlag::CREATE );
+        bCreationAllowed = (( aSearchFlags & css::frame::FrameSearchFlag::CREATE ) == css::frame::FrameSearchFlag::CREATE );
     }
     return bCreationAllowed;
 }
@@ -301,6 +303,7 @@ ETargetClass TargetFinder::classifyFindFrame( TargetInfo& aInfo )
                                 break;
         case E_FRAME        :   eResult = impl_classifyForFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sParentName, aInfo.sTargetName, aInfo.nSearchFlags );
                                 break;
+        default             :   break;
     }
 
     // It doesnt matter if CREATE flag is set or not ...
@@ -347,6 +350,7 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
                                         eResult = E_FORWARD_UP;
                                     }
                                     break;
+            default             :   break;
         }
     }
     else
@@ -361,6 +365,7 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
                                         eResult = E_FORWARD_UP;
                                     }
                                     break;
+            default             :   break;
         }
     }
     //*************************************************************************************************************
@@ -384,6 +389,7 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
                                         eResult = E_FORWARD_UP;
                                     }
                                     break;
+            default             :   break;
         }
     }
     else
@@ -399,6 +405,7 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
                                         eResult = E_FORWARD_UP;
                                     }
                                     break;
+            default             :   break;
         }
     }
     //*************************************************************************************************************
@@ -430,6 +437,7 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
                                     break;
             case E_FRAME        :   eResult = impl_classifyForFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sParentName, aInfo.sTargetName, aInfo.nSearchFlags );
                                     break;
+            default             :   break;
         }
     }
 
@@ -541,6 +549,7 @@ ETargetClass TargetFinder::impl_classifyForDesktop_findFrame(       sal_Bool    
                 {
                     case E_DEEP_DOWN    :   eResult = E_FLAT_DOWN;
                                             break;
+                              default           :     break;
                 }
             }
         }
@@ -659,10 +668,11 @@ ETargetClass TargetFinder::impl_classifyForTask_findFrame(        sal_Bool      
         {
             switch( eResult )
             {
-                case E_UNKNOWN      :   eResult = E_DEEP_DOWN;
-                                        break;
-                case E_FORWARD_UP   :   eResult = E_DEEP_BOTH;
-                                        break;
+                case E_UNKNOWN    : eResult = E_DEEP_DOWN;
+                                            break;
+                case E_FORWARD_UP   : eResult = E_DEEP_BOTH;
+                                            break;
+                        default:            break;
             }
         }
 
@@ -678,9 +688,10 @@ ETargetClass TargetFinder::impl_classifyForTask_findFrame(        sal_Bool      
             switch( eResult )
             {
                 case E_DEEP_DOWN    :   eResult = E_FLAT_DOWN;
-                                        break;
+                                break;
                 case E_DEEP_BOTH    :   eResult = E_FLAT_BOTH;
-                                        break;
+                                break;
+                        default:                break;
             }
         }
     }
@@ -832,10 +843,11 @@ ETargetClass TargetFinder::impl_classifyForFrame_findFrame(         sal_Bool    
         {
             switch( eResult )
             {
-                case E_UNKNOWN      :   eResult = E_DEEP_DOWN;
-                                           break;
+                case E_UNKNOWN    : eResult = E_DEEP_DOWN;
+                                                break;
                 case E_FORWARD_UP   :   eResult = E_DEEP_BOTH;
-                                         break;
+                                                break;
+                        default           :     break;
             }
         }
 
@@ -852,9 +864,10 @@ ETargetClass TargetFinder::impl_classifyForFrame_findFrame(         sal_Bool    
             switch( eResult )
             {
                 case E_DEEP_DOWN    :   eResult = E_FLAT_DOWN;
-                                        break;
+                                break;
                 case E_DEEP_BOTH    :   eResult = E_FLAT_BOTH;
-                                        break;
+                                                break;
+                        default           :     break;
             }
         }
     }
@@ -892,7 +905,7 @@ ETargetClass TargetFinder::impl_classifyForFrame_findFrame(         sal_Bool    
 
 //*****************************************************************************************************************
 sal_Bool TargetInfo::implcp_ctor( const ::rtl::OUString& sTarget    ,
-                                        sal_Int32        nFlags     ,
+                                        sal_Int32        /*nFlags*/ ,
                                         EFrameType       eType      ,
                                         sal_Bool         bChildrens ,
                                         sal_Bool         bParent    ,
@@ -920,7 +933,7 @@ sal_Bool TargetInfo::implcp_ctor( const ::rtl::OUString& sTarget    ,
 //            - there exist no test for flags!
 sal_Bool TargetInfo::implcp_ctor( const css::uno::Reference< css::frame::XFrame >& xFrame  ,
                                   const ::rtl::OUString&                           sTarget ,
-                                        sal_Int32                                  nFlags  )
+                                        sal_Int32                                /*nFlags*/  )
 {
     return(
             ( &xFrame     == NULL      )    ||
