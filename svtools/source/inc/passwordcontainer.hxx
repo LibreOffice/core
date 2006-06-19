@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:34:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,13 +297,12 @@ public:
 
 class RW_SvMemoryStream : public SvMemoryStream {
 public:
-    RW_SvMemoryStream( void* pBuf, ULONG nSize, StreamMode eMode ):
-            SvMemoryStream( pBuf, nSize, eMode){}
+    RW_SvMemoryStream( void* Buf, ULONG Size, StreamMode eMode ):
+            SvMemoryStream( Buf, Size, eMode){}
 
-    RW_SvMemoryStream( ULONG nInitSize=512, ULONG nResize=64 ):
-            SvMemoryStream( nInitSize, nResize ){}
+    RW_SvMemoryStream( ULONG InitSize=512, ULONG Resize=64 ):
+            SvMemoryStream( InitSize, Resize ){}
 
-    const void*     GetData() { Flush(); return pBuf; }
     ULONG getActualSize(){ return nEndOfData; }
 };
 
