@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlnkitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:53:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:38:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,8 @@ class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxHyperlinkItem( USHORT nWhich = SID_HYPERLINK_GETLINK ):
-                SfxPoolItem(nWhich), pMacroTable(NULL)  { eType = HLINK_DEFAULT; nMacroEvents=0; };
+    SvxHyperlinkItem( USHORT _nWhich = SID_HYPERLINK_GETLINK ):
+                SfxPoolItem(_nWhich), pMacroTable(NULL) { eType = HLINK_DEFAULT; nMacroEvents=0; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
     SvxHyperlinkItem( USHORT nWhich, String& rName, String& rURL,
                                     String& rTarget, String& rIntName,
