@@ -16,14 +16,14 @@ namespace unographic {
 // - *_createInstance -
 // --------------------
 
-static uno::Reference< uno::XInterface > SAL_CALL GraphicProvider_createInstance( const uno::Reference< lang::XMultiServiceFactory >& rxManager)
+static uno::Reference< uno::XInterface > SAL_CALL GraphicProvider_createInstance( const uno::Reference< lang::XMultiServiceFactory >& )
 {
     return SAL_STATIC_CAST( ::cppu::OWeakObject*, new GraphicProvider );
 }
 
 // -----------------------------------------------------------------------------
 
-static uno::Reference< uno::XInterface > SAL_CALL GraphicRendererVCL_createInstance( const uno::Reference< lang::XMultiServiceFactory >& rxManager)
+static uno::Reference< uno::XInterface > SAL_CALL GraphicRendererVCL_createInstance( const uno::Reference< lang::XMultiServiceFactory >&)
 {
     return SAL_STATIC_CAST( ::cppu::OWeakObject*, new GraphicRendererVCL );
 }
@@ -32,7 +32,7 @@ static uno::Reference< uno::XInterface > SAL_CALL GraphicRendererVCL_createInsta
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
+extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -41,7 +41,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char*
 // - component_writeInfo -
 // -----------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     sal_Bool bRet = sal_False;
 
@@ -90,7 +90,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
