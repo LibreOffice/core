@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:50:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct Rectangle;
     struct Size;
     class XFocusListener;
-} } } };
+} } } }
 
 class Rectangle;
 class GraphCtrl;
@@ -194,8 +194,13 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::lang::Locale SAL_CALL getLocale (void) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
-    virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
+//  virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
+//  virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
+
+    //=====  XComponent  ========================================================
+
+    using ::cppu::WeakAggComponentImplHelperBase::addEventListener;
+    using ::cppu::WeakAggComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleEventBroadcaster  =====================================
 
