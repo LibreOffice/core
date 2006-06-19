@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targetpropertiescreator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 08:51:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ namespace animcore
 
     // --------------------------------------------------------------------
 
-    TargetPropertiesCreator::TargetPropertiesCreator( const uno::Reference< uno::XComponentContext >& rxContext ) :
+    TargetPropertiesCreator::TargetPropertiesCreator( const uno::Reference< uno::XComponentContext >&  ) :
         TargetPropertiesCreator_Base( m_aMutex )
     {
     }
@@ -551,4 +551,4 @@ namespace animcore
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
     }
 
-}; // namespace animcore
+} // namespace animcore
