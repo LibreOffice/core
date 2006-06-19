@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multiplexer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:16:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:08:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,16 @@ OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper(   const   Referenc
 {
 }
 
-OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance )
-    : m_aListenerHolder ( m_aMutex  )
+OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& /*aCopyInstance*/ )
+    : XFocusListener()
+    , XWindowListener()
+    , XKeyListener()
+    , XMouseListener()
+    , XMouseMotionListener()
+    , XPaintListener()
+    , XTopWindowListener()
+    , OWeakObject()
+    , m_aListenerHolder ( m_aMutex  )
 {
 }
 
@@ -283,7 +291,7 @@ void OMRCListenerMultiplexerHelper::unadvise(   const   Type&                   
 //  XEventListener
 //____________________________________________________________________________________________________________
 
-void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& aSource ) throw( RuntimeException )
+void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
     // peer is disposed, clear the reference
