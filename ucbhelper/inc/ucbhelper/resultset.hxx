@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:30:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -431,10 +431,10 @@ public:
       * This method should be called by the data supplier for the result set
       * to indicate that there were new data obtained from the data source.
       *
-      * @param nOld is the old count of rows.
-      * @param nnew is the new count of rows.
+      * @param nOld is the old count of rows; must be non-negative.
+      * @param nnew is the new count of rows; must be non-negative.
       */
-    void rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew );
+    void rowCountChanged( sal_Int32 nOld, sal_Int32 nNew );
 
     /**
       * This method should be called by the data supplier for the result set
@@ -492,40 +492,40 @@ public:
      * specified index.
      *
      * @param nIndex is the zero-based index within the logical data array
-     *               of the supplier.
+     *               of the supplier; must be non-negative.
      * @return the content's identifier string.
      */
-    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex ) = 0;
+    virtual rtl::OUString queryContentIdentifierString( sal_Int32 nIndex ) = 0;
 
     /**
      * This method returns the identifier of the content at the specified index.
      *
      * @param nIndex is the zero-based index within the logical data array
-     *               of the supplier.
+     *               of the supplier; must be non-negative.
      * @return the content's identifier.
      */
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >
-    queryContentIdentifier( sal_uInt32 nIndex ) = 0;
+    queryContentIdentifier( sal_Int32 nIndex ) = 0;
 
     /**
      * This method returns the the content at the specified index.
      *
      * @param nIndex is the zero-based index within the logical data array
-     *               of the supplier.
+     *               of the supplier; must be non-negative.
      * @return the content.
      */
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-    queryContent( sal_uInt32 nIndex ) = 0;
+    queryContent( sal_Int32 nIndex ) = 0;
 
     /**
      * This method returns whether there is a content at the specified index.
      *
      * @param nIndex is the zero-based index within the logical data array
-     *               of the supplier.
+     *               of the supplier; must be non-negative.
      * @return true, if there is a content at the given index.
      */
-    virtual sal_Bool getResult( sal_uInt32 nIndex ) = 0;
+    virtual sal_Bool getResult( sal_Int32 nIndex ) = 0;
 
     /**
      * This method returns the total count of objects in the logical data array
@@ -534,9 +534,9 @@ public:
      * to determine the count. Therefor the ResultSet implementation calls
      * it very seldom.
      *
-     * @return the total count of objects.
+     * @return the total count of objects; will always be non-negative.
      */
-    virtual sal_uInt32 totalCount() = 0;
+    virtual sal_Int32 totalCount() = 0;
 
     /**
      * This method returns the count of objects obtained so far. There is no
@@ -546,9 +546,10 @@ public:
      * The implementation should call m_pResultSet->rowCountChanged(...)
      * everytime it has inserted a new entry in its logical result array.
      *
-     * @return the count of objects obtained so far.
+     * @return the count of objects obtained so far; will always be
+     * non-negative.
      */
-    virtual sal_uInt32 currentCount() = 0;
+    virtual sal_Int32 currentCount() = 0;
 
     /**
      * This method returns whether the value returned by currentCount() is
@@ -573,7 +574,7 @@ public:
      * @return the object for accessing the property values.
      */
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
-    queryPropertyValues( sal_uInt32 nIndex  ) = 0;
+    queryPropertyValues( sal_Int32 nIndex  ) = 0;
 
     /**
      * This method is called to instruct the supplier to release the (possibly
@@ -582,7 +583,7 @@ public:
      * @param nIndex is the zero-based index within the logical data array
      *               of the supplier.
      */
-    virtual void releasePropertyValues( sal_uInt32 nIndex ) = 0;
+    virtual void releasePropertyValues( sal_Int32 nIndex ) = 0;
 
     /**
      * This method will be called by the resultset implementation in order
