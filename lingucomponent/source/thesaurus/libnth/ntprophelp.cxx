@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ntprophelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,10 @@ PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet,
         const char *pPropNames[], USHORT nPropCount ) :
-    xMyEvtObj           (rxSource),
-    xPropSet            (rxPropSet),
     aPropNames          (nPropCount),
-    aLngSvcEvtListeners (GetLinguMutex())
+    xMyEvtObj           (rxSource),
+    aLngSvcEvtListeners (GetLinguMutex()),
+    xPropSet            (rxPropSet)
 {
     OUString *pName = aPropNames.getArray();
     for (INT32 i = 0;  i < nPropCount;  ++i)
@@ -86,7 +86,7 @@ PropertyChgHelper::PropertyChgHelper(
 }
 
 
-PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
+/*PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
     aLngSvcEvtListeners (GetLinguMutex())
 {
     xPropSet    = rHelper.xPropSet;
@@ -94,7 +94,7 @@ PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
     AddAsPropListener();
 
     xMyEvtObj   = rHelper.xMyEvtObj;
-}
+} */
 
 
 PropertyChgHelper::~PropertyChgHelper()
