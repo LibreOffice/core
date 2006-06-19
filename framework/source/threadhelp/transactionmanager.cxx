@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transactionmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:49:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,21 @@ TransactionManager::TransactionManager()
     m_aBarrier.open();
 }
 
+/*-************************************************************************************************************//**
+    @short      standard dtor
+    @descr      -
+
+    @seealso    -
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*************************************************************************************************************/
+TransactionManager::~TransactionManager()
+{
+}
+
 /*-****************************************************************************************************//**
     @interface  ITransactionManager
     @short      set new working mode
@@ -177,7 +192,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
                                     // Make member access threadsafe!
                                     ResetableGuard aGuard( m_aMutex );
 
-                                    // Check working mode again .. because anoz´ther instance could be faster.
+                                    // Check working mode again .. because anozï¿½ther instance could be faster.
                                     // (It's possible to set this guard at first of this method too!)
                                     if( m_aTransactionManager.getWorkingMode() == E_INIT )
                                     {
@@ -393,7 +408,12 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
                                             LOG_ERROR( "TransactionManager...", "Owner instance already closed. Call was rejected!" )
                                             throw css::lang::DisposedException( DECLARE_ASCII("TransactionManager...\nOwner instance already closed. Call was rejected!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
+            case E_NOREASON         :   {
+                                            // Help programmer to find out
+                                            LOG_ERROR( "TransactionManager...", "Impossible case E_NOREASON!" )
+                                        }
                                         break;
+            default:                    break; // nothing to do
         }
     }
 }
