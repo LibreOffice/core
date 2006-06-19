@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,6 @@
 #else
 class SfxObjectShell;
 #endif
-
-#pragma hdrstop
 
 #ifndef _FM_FMMODEL_HXX
 #include "fmmodel.hxx"
@@ -91,9 +89,8 @@ struct FmFormModelImplData
 \************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
             :SdrModel(pPool, pPers, LOADREFCOUNTS)
-            ,pObjShell(0)
-//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
+            ,m_pObjShell(0)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
@@ -111,9 +108,8 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
 \************************************************************************/
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
             :SdrModel(rPath, pPool, pPers)
-            ,pObjShell(0)
-//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
+            ,m_pObjShell(0)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
@@ -133,9 +129,10 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
                          FASTBOOL bUseExtColorTable
                          )
             :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
-            ,pObjShell(0)
-//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
+            ,m_pObjShell(0)
+            ,m_bOpenInDesignMode(sal_False)
+            ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
@@ -152,8 +149,8 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          FASTBOOL bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
-            ,pObjShell(0)
-//BFS01         ,bStreamingOldVersion(sal_False)
+            ,m_pImpl( NULL )
+            ,m_pObjShell(0)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
@@ -172,7 +169,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 FmFormModel::~FmFormModel()
 {
 #ifndef SVX_LIGHT
-    if (pObjShell && m_pImpl->pUndoEnv->IsListening(*pObjShell))
+    if (m_pObjShell && m_pImpl->pUndoEnv->IsListening(*m_pObjShell))
         SetObjectShell(NULL);
 
     ClearUndoBuffer();
@@ -187,39 +184,6 @@ FmFormModel::~FmFormModel()
 
 /*************************************************************************
 |*
-|* Copy-Ctor
-|*
-\************************************************************************/
-
-FmFormModel::FmFormModel(const FmFormModel&)
-{
-    DBG_ERROR("FmFormModel: CopyCtor not implemented");
-}
-
-/*************************************************************************
-|*
-|* Operator=
-|*
-\************************************************************************/
-void FmFormModel::operator=(const FmFormModel&)
-{
-    DBG_ERROR("FmFormModel: operator= not implemented");
-}
-
-/*************************************************************************
-|*
-|* Operator==
-|*
-\************************************************************************/
-FASTBOOL FmFormModel::operator==(const FmFormModel&) const
-{
-    DBG_ERROR("FmFormModel: operator== not implemented");
-    return sal_False;
-}
-
-
-/*************************************************************************
-|*
 |* Erzeugt eine neue Seite
 |*
 \************************************************************************/
@@ -230,73 +194,6 @@ SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
 
 /*************************************************************************
 |*
-|* WriteData
-|*
-\************************************************************************/
-
-//BFS01void FmFormModel::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01
-//BFS01 if( rOut.GetVersion() < SOFFICE_FILEFORMAT_50 )
-//BFS01     ((FmFormModel*)this)->bStreamingOldVersion = sal_True;
-//BFS01
-//BFS01 SdrModel::WriteData( rOut );
-//BFS01
-//BFS01 //////////////////////////////////////////////////////////////////////
-//BFS01 // Speichern der Option OpenInDesignMode
-//BFS01 if (!bStreamingOldVersion)
-//BFS01 {
-//BFS01     SdrDownCompat aModelFormatCompat(rOut,STREAM_WRITE);
-//BFS01
-//BFS01     sal_uInt8 nTemp = m_bOpenInDesignMode;
-//BFS01     rOut << nTemp;
-//BFS01
-//BFS01     nTemp = m_bAutoControlFocus;
-//BFS01     rOut << nTemp;
-//BFS01 }
-//BFS01
-//BFS01 ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
-//BFS01
-//BFS01#endif
-//BFS01}
-
-
-/*************************************************************************
-|*
-|* ReadData
-|*
-\************************************************************************/
-//BFS01void FmFormModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if( rIn.GetVersion() < SOFFICE_FILEFORMAT_50 )
-//BFS01     ((FmFormModel*)this)->bStreamingOldVersion = sal_True;
-//BFS01
-//BFS01 SdrModel::ReadData( rHead, rIn );
-//BFS01
-//BFS01 //////////////////////////////////////////////////////////////////////
-//BFS01 // Lesen der Option OpenInDesignMode
-//BFS01 if (!bStreamingOldVersion)
-//BFS01 {
-//BFS01     SdrDownCompat aCompat(rIn,STREAM_READ);
-//BFS01     sal_uInt8 nTemp = 0;
-//BFS01     rIn >> nTemp;
-//BFS01
-//BFS01     implSetOpenInDesignMode( nTemp ? sal_True : sal_False, sal_True );
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft())
-//BFS01     {   // it is a version which already wrote the AutoControlFocus flag
-//BFS01         rIn >> nTemp;
-//BFS01         m_bAutoControlFocus = nTemp ? sal_True : sal_False;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
-//BFS01}
-
-
-/*************************************************************************
-|*
 |* InsertPage
 |*
 \************************************************************************/
@@ -304,8 +201,8 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
 #ifndef SVX_LIGHT
     // hack solange Methode intern
-    if (pObjShell && !m_pImpl->pUndoEnv->IsListening( *pObjShell ))
-        SetObjectShell(pObjShell);
+    if (m_pObjShell && !m_pImpl->pUndoEnv->IsListening( *m_pObjShell ))
+        SetObjectShell(m_pObjShell);
 #endif
 
     SdrModel::InsertPage( pPage, nPos );
@@ -360,8 +257,8 @@ void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
 #ifndef SVX_LIGHT
     // hack solange Methode intern
-    if (pObjShell && !m_pImpl->pUndoEnv->IsListening( *pObjShell ))
-        SetObjectShell(pObjShell);
+    if (m_pObjShell && !m_pImpl->pUndoEnv->IsListening( *m_pObjShell ))
+        SetObjectShell(m_pObjShell);
 #endif
 
     SdrModel::InsertMasterPage(pPage, nPos);
@@ -401,8 +298,8 @@ void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _
     {
         m_bOpenInDesignMode = _bOpenDesignMode;
 
-        if ( pObjShell )
-            pObjShell->SetModified( sal_True );
+        if ( m_pObjShell )
+            m_pObjShell->SetModified( sal_True );
     }
     // no matter if we really did it or not - from now on, it does not count as defaulted anymore
     m_pImpl->bOpenInDesignIsDefaulted = sal_False;
@@ -431,7 +328,7 @@ void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
     if( _bAutoControlFocus != m_bAutoControlFocus )
     {
         m_bAutoControlFocus = _bAutoControlFocus;
-        pObjShell->SetModified( sal_True );
+        m_pObjShell->SetModified( sal_True );
     }
 #endif
 }
@@ -440,25 +337,25 @@ void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
 void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 {
 #ifndef SVX_LIGHT
-    if (pShell == pObjShell)
+    if (pShell == m_pObjShell)
         return;
 
-    if (pObjShell)
+    if (m_pObjShell)
     {
         m_pImpl->pUndoEnv->EndListening( *this );
-        m_pImpl->pUndoEnv->EndListening( *pObjShell );
+        m_pImpl->pUndoEnv->EndListening( *m_pObjShell );
     }
 
-    pObjShell = pShell;
+    m_pObjShell = pShell;
 
-    if (pObjShell)
+    if (m_pObjShell)
     {
-        m_pImpl->pUndoEnv->SetReadOnly( pObjShell->IsReadOnly() || pObjShell->IsReadOnlyUI(), FmXUndoEnvironment::Accessor() );
+        m_pImpl->pUndoEnv->SetReadOnly( m_pObjShell->IsReadOnly() || m_pObjShell->IsReadOnlyUI(), FmXUndoEnvironment::Accessor() );
 
         if (!m_pImpl->pUndoEnv->IsReadOnly())
              m_pImpl->pUndoEnv->StartListening(*this);
 
-        m_pImpl->pUndoEnv->StartListening( *pObjShell );
+        m_pImpl->pUndoEnv->StartListening( *m_pObjShell );
     }
 #endif
 }
