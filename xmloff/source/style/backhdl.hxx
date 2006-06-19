@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backhdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:36:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:30:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ public:
     virtual ~XMLBackGraphicPositionPropHdl();
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
+    using XMLPropertyHandler::importXML;
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter );
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 
