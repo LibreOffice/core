@@ -109,8 +109,8 @@ class DispatchRecorder
         ~DispatchRecorder();
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XDispatchRecorder
