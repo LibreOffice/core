@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:58:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ public:
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XHyphenatedWord;
-}}}};
+}}}}
 
 
 struct SvxAlternativeSpelling
