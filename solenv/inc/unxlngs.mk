@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:33:15 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:15:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,7 @@ ARCH_FLAGS*=
 #name of C Compiler
 #CC*=gcc
 
-CFLAGS+=-Wreturn-type -fmessage-length=0 -c $(INCLUDE)
-.IF "$(PRODUCT)"!=""
-CFLAGS+=-Wuninitialized
-.ENDIF
+CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
@@ -91,7 +88,6 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 PICSWITCH:=-fPIC
 
@@ -122,10 +118,16 @@ CFLAGSOPT=   							# no optimizing for non products
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
-# Enable all warnings
-CFLAGSWALL=-Wall
-# Set default warn level
-CFLAGSDFLTWARN=
+
+CFLAGSWARNCC=-Wreturn-type 
+.IF "$(PRODUCT)"!=""
+CFLAGWARNCC+=-Wuninitialized # not supported without optimization
+.ENDIF
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
