@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:33:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
-
-static sal_uInt32 nFieldFormat = 0;
-static sal_uInt32 nControlFormat = 0;
 
 //........................................................................
 namespace svxform
@@ -151,7 +148,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor )
+    sal_Bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
     {
         return sal_False;   // do not have any formats by default
     }
