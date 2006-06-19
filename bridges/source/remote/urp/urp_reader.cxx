@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:48:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,8 @@ namespace bridges_urp
      *
      ***/
     void SAL_CALL urp_releaseRemoteCallback (
-        remote_Interface *pRemoteI,rtl_uString *pOid,
-        typelib_TypeDescriptionReference *pTypeRef,
-        uno_Environment *pEnvRemote )
+        remote_Interface *, rtl_uString *pOid,
+        typelib_TypeDescriptionReference *pTypeRef, uno_Environment *pEnvRemote )
     {
         remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
         urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
