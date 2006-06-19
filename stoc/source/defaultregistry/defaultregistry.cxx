@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:54:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,8 +366,6 @@ sal_Bool SAL_CALL NestedKeyImpl::isReadOnly(  )
            return m_localKey->isReadOnly();
     else
         throw InvalidRegistryException();
-
-    return sal_False;
 }
 
 //*************************************************************************
@@ -434,8 +432,6 @@ sal_Int32 SAL_CALL NestedKeyImpl::getLongValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return 0;
 }
 
 //*************************************************************************
@@ -479,8 +475,6 @@ Sequence< sal_Int32 > SAL_CALL NestedKeyImpl::getLongListValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return Sequence<sal_Int32>();
 }
 
 //*************************************************************************
@@ -524,8 +518,6 @@ OUString SAL_CALL NestedKeyImpl::getAsciiValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return OUString();
 }
 
 //*************************************************************************
@@ -569,8 +561,6 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getAsciiListValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return Sequence<OUString>();
 }
 
 //*************************************************************************
@@ -614,8 +604,6 @@ OUString SAL_CALL NestedKeyImpl::getStringValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return OUString();
 }
 
 //*************************************************************************
@@ -659,8 +647,6 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getStringListValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return Sequence<OUString>();
 }
 
 //*************************************************************************
@@ -704,8 +690,6 @@ Sequence< sal_Int8 > SAL_CALL NestedKeyImpl::getBinaryValue(  )
     {
         throw InvalidRegistryException();
     }
-
-    return Sequence<sal_Int8>();
 }
 
 //*************************************************************************
@@ -1322,7 +1306,7 @@ OUString SAL_CALL NestedRegistryImpl::getURL() throw(RuntimeException)
 }
 
 //*************************************************************************
-void SAL_CALL NestedRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate )
+void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
@@ -1437,7 +1421,7 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
 }
 
 //*************************************************************************
-Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XComponentContext>& xCtx )
+Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XComponentContext>& )
     throw(Exception)
 {
     Reference<XInterface>   xRet;
@@ -1475,7 +1459,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
