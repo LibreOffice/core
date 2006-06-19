@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:56:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,40 +170,41 @@ struct SfxGroupInfo_Impl
 };
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
-SV_DECL_PTRARR_DEL(SfxGroupInfoArr_Impl, SfxGroupInfoPtr, 5, 5);
+SV_DECL_PTRARR_DEL(SfxGroupInfoArr_Impl, SfxGroupInfoPtr, 5, 5)
 
 class SfxConfigFunctionListBox_Impl : public SvTreeListBox
 {
-friend class SfxConfigGroupListBox_Impl;
-    Timer                           aTimer;
-    SvLBoxEntry*                    pCurEntry;
-    SfxGroupInfoArr_Impl            aArr;
-    SfxStylesInfo_Impl*             pStylesInfo;
+    friend class SfxConfigGroupListBox_Impl;
+    Timer                aTimer;
+    SvLBoxEntry*         pCurEntry;
+    SfxGroupInfoArr_Impl aArr;
+    SfxStylesInfo_Impl*  pStylesInfo;
 
-    DECL_LINK(                      TimerHdl, Timer* );
-    virtual void                    MouseMove( const MouseEvent& rMEvt );
+    DECL_LINK( TimerHdl, Timer* );
+    virtual void  MouseMove( const MouseEvent& rMEvt );
 
 public:
-                                    SfxConfigFunctionListBox_Impl( Window*, const ResId& );
-                                    ~SfxConfigFunctionListBox_Impl();
-    void                            ClearAll();
-    SvLBoxEntry*                    GetEntry_Impl( USHORT nId );
-    SvLBoxEntry*                    GetEntry_Impl( const String& );
-    USHORT                          GetId( SvLBoxEntry *pEntry );
-    String                          GetHelpText( SvLBoxEntry *pEntry );
-    USHORT                          GetCurId()
-                                    { return GetId( FirstSelected() ); }
-    String                          GetCurCommand();
-    String                          GetCurLabel();
-    SfxMacroInfo*                   GetMacroInfo();
-    void                            FunctionSelected();
-    void                            SetStylesInfo(SfxStylesInfo_Impl* pStyles);
+                  SfxConfigFunctionListBox_Impl( Window*, const ResId& );
+                  ~SfxConfigFunctionListBox_Impl();
+
+    void          ClearAll();
+    SvLBoxEntry*  GetEntry_Impl( USHORT nId );
+    SvLBoxEntry*  GetEntry_Impl( const String& );
+    USHORT        GetId( SvLBoxEntry *pEntry );
+    using Window::GetHelpText;
+    String        GetHelpText( SvLBoxEntry *pEntry );
+    USHORT        GetCurId() { return GetId( FirstSelected() ); }
+    String        GetCurCommand();
+    String        GetCurLabel();
+    SfxMacroInfo* GetMacroInfo();
+    void          FunctionSelected();
+    void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
 class SfxSlotPool;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
-    SfxSlotPool* pSlotPool;
+    SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;
@@ -242,32 +243,32 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
 
     ::rtl::OUString MapCommand2UIName(const ::rtl::OUString& sCommand);
 
-    SfxStylesInfo_Impl*             pStylesInfo;
+    SfxStylesInfo_Impl* pStylesInfo;
 
 protected:
-    virtual void                    RequestingChilds( SvLBoxEntry *pEntry);
-#if SUPD>=527
-    virtual BOOL                    Expand( SvLBoxEntry* pParent );
-#endif
+    virtual void        RequestingChilds( SvLBoxEntry *pEntry);
+    using SvListView::Expand;
+    virtual BOOL        Expand( SvLBoxEntry* pParent );
 
 public:
-                                    SfxConfigGroupListBox_Impl ( Window* pParent,
-                                        const ResId&, ULONG nConfigMode = 0 );
-                                    ~SfxConfigGroupListBox_Impl();
-    void                            ClearAll();
+    SfxConfigGroupListBox_Impl ( Window* pParent,
+                                 const ResId&,
+                                 ULONG nConfigMode = 0 );
+    ~SfxConfigGroupListBox_Impl();
+    void                ClearAll();
 
-    void                            Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
-                                         const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
-                                         const ::rtl::OUString&                                        sModuleLongName);
-    void                            SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
-                                    { pFunctionListBox = pBox; }
-    void                            Open( SvLBoxEntry*, BOOL );
-    void                            GroupSelected();
-    void                            SelectMacro( const SfxMacroInfoItem* );
-    void                            SelectMacro( const String&, const String& );
-    String                          GetGroup();
-    void                            SetScriptType( const String& rScriptType );
-    void                            SetStylesInfo(SfxStylesInfo_Impl* pStyles);
+    void                Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
+                             const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
+                             const ::rtl::OUString&                                        sModuleLongName);
+    void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
+                        { pFunctionListBox = pBox; }
+    void                Open( SvLBoxEntry*, BOOL );
+    void                GroupSelected();
+    void                SelectMacro( const SfxMacroInfoItem* );
+    void                SelectMacro( const String&, const String& );
+    String              GetGroup();
+    void                SetScriptType( const String& rScriptType );
+    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 /*
 class SfxMenuConfigEntry
@@ -470,11 +471,11 @@ struct TAccInfo
                  const KeyCode&  aKey    )
             : m_nKeyPos        (nKeyPos  )
             , m_nListPos       (nListPos )
+            , m_bIsConfigurable(sal_True )
             , m_sCommand       (         )
             , m_aKey           (aKey     )
             // its important to set TRUE as default -
             // because only fix entries will be disabled later ...
-            , m_bIsConfigurable(sal_True )
         {}
 
         sal_Bool isConfigured() const
