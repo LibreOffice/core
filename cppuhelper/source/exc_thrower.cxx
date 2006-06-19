@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exc_thrower.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:50:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ Any SAL_CALL getCaughtException()
     }
 
     Any ret;
-    uno_any_destruct( &ret, cpp_release );
+    uno_any_destruct( &ret, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     uno_type_any_constructAndConvert(
         &ret, exc->pData, exc->pType, uno2cpp.get() );
     uno_any_destruct( exc, 0 );
