@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:47:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5593,6 +5593,7 @@ const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
             case mso_sptTextPlainText :
             case mso_sptTextBox :
                 nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
+            default: break;
         }
     }
     return nGluePointType;
