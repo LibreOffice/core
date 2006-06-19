@@ -4,9 +4,9 @@
  *
  *  $RCSfile: protocolhandlercache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:07:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ namespace framework{
 /**
     Programmer can register his own services to handle different protocols.
     Don't forget: It doesn't mean "handling of documents" ... these services could handle protocols ...
-    e.g. "mailto:*", "file://*", ".java:*
+    e.g. "mailto:", "file://", ".java:"
     This struct holds the information about one such registered protocol handler.
     A list of handler objects is defined as ProtocolHandlerHash. see below
 */
