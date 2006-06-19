@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:07:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,14 +213,14 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet,
-    sal_Bool bLevelFormats) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rIndexPropertySet(rPropSet),
-        bChapterIndex(sal_False),
-        bRelativeTabs(sal_True),
-        bUseLevelFormats(bLevelFormats),
-       sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter)),
-      sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsRelativeTabstops))
+    sal_Bool bLevelFormats)
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter))
+,   sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsRelativeTabstops))
+,   bUseLevelFormats(bLevelFormats)
+,   bChapterIndex(sal_False)
+,   bRelativeTabs(sal_True)
+,   rIndexPropertySet(rPropSet)
 {
 }
 
