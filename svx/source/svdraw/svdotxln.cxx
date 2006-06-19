@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:36:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,8 +126,8 @@ void ImpSdrObjTextLink::Closed()
 }
 
 
-void ImpSdrObjTextLink::DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
+                                const ::com::sun::star::uno::Any & /*rValue */)
 {
     FASTBOOL bForceReload=FALSE;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
@@ -288,7 +288,7 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
     return bRet;
 }
 
-FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet)
+FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
     BOOL            bRet = FALSE;
