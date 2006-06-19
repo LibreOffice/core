@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdviter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:42:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                 // Objekt gewuenscht? Na dann erstmal sehen, ob
                 // das Obj in dieser PageView auch sichtbar ist.
                 SetOfByte aObjLay;
-                pObject->GetLayer(aObjLay);
+                pObject->GetLayerSet(aObjLay);
                 aObjLay&=pPV->GetVisibleLayers();
                 return !aObjLay.IsEmpty();
             } else {
@@ -124,7 +124,7 @@ FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                             // Objekt gewuenscht? Na dann erstmal sehen, ob
                             // das Obj in dieser PageView auch sichtbar ist.
                             SetOfByte aObjLay;
-                            pObject->GetLayer(aObjLay);
+                            pObject->GetLayerSet(aObjLay);
                             aObjLay &= pPV->GetVisibleLayers();
                             aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
 
@@ -183,7 +183,7 @@ SdrView* SdrViewIter::ImpFindView()
 
 SdrPageView* SdrViewIter::ImpFindPageView()
 {
-    SdrView* pRet=NULL;
+    //SdrView* pRet=NULL;
     if (pModel!=NULL) {
         while (pAktView!=NULL) {
             USHORT nPvAnz=pAktView->GetPageViewCount();
