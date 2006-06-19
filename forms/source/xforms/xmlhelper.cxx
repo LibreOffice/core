@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:22:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ inline sal_uInt8 lcl_getCharClass( sal_Unicode c )
 }
 
 bool isValidQName( const OUString& sName,
-                   const Reference<XNameContainer>& xNamespaces )
+                   const Reference<XNameContainer>& /*xNamespaces*/ )
 {
     sal_Int32 nLength = sName.getLength();
     const sal_Unicode* pName = sName.getStr();
@@ -125,7 +125,7 @@ bool isValidQName( const OUString& sName,
 }
 
 bool isValidPrefixName( const OUString& sName,
-                        const Reference<XNameContainer>& xNamespaces )
+                        const Reference<XNameContainer>& /*xNamespaces*/ )
 {
     sal_Int32 nLength = sName.getLength();
     const sal_Unicode* pName = sName.getStr();
