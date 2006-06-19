@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localelayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:49:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 LocaleLayer::LocaleLayer( const uno::Sequence<backend::PropertyInfo>& aPropInfoList,
     const rtl::OUString& aTimestamp,
     const uno::Reference<uno::XComponentContext>& xContext)
-  : m_aPropInfoList(aPropInfoList), m_aTimestamp(aTimestamp)
+  : m_aTimestamp(aTimestamp), m_aPropInfoList(aPropInfoList)
 {
     //Create instance of LayerContentDescriber Service
     rtl::OUString const k_sLayerDescriberService(RTL_CONSTASCII_USTRINGPARAM(
