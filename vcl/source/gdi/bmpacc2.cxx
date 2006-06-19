@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:54:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,14 @@
 // - BitmapAccess -
 // ----------------
 
-IMPL_FORMAT_GETPIXEL( _1BIT_MSB_PAL )
+IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_MSB_PAL )
 {
     return( pScanline[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 );
 }
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _1BIT_MSB_PAL )
+IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_MSB_PAL )
 {
     BYTE& rByte = pScanline[ nX >> 3 ];
 
@@ -61,14 +61,14 @@ IMPL_FORMAT_SETPIXEL( _1BIT_MSB_PAL )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _1BIT_LSB_PAL )
+IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_LSB_PAL )
 {
     return( pScanline[ nX >> 3 ] & ( 1 << ( nX & 7 ) ) ? 1 : 0 );
 }
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _1BIT_LSB_PAL )
+IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_LSB_PAL )
 {
     BYTE& rByte = pScanline[ nX >> 3 ];
 
@@ -78,14 +78,14 @@ IMPL_FORMAT_SETPIXEL( _1BIT_LSB_PAL )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _4BIT_MSN_PAL )
+IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
     return( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f );
 }
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _4BIT_MSN_PAL )
+IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 
@@ -95,14 +95,14 @@ IMPL_FORMAT_SETPIXEL( _4BIT_MSN_PAL )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _4BIT_LSN_PAL )
+IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
     return( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 4 : 0 ) ) & 0x0f );
 }
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _4BIT_LSN_PAL )
+IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 
@@ -112,14 +112,14 @@ IMPL_FORMAT_SETPIXEL( _4BIT_LSN_PAL )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _8BIT_PAL )
+IMPL_FORMAT_GETPIXEL_NOMASK( _8BIT_PAL )
 {
     return pScanline[ nX ];
 }
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _8BIT_PAL )
+IMPL_FORMAT_SETPIXEL_NOMASK( _8BIT_PAL )
 {
     pScanline[ nX ] = rBitmapColor.GetIndex();
 }
@@ -174,7 +174,7 @@ IMPL_FORMAT_SETPIXEL( _16BIT_TC_LSB_MASK )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _24BIT_TC_BGR )
+IMPL_FORMAT_GETPIXEL_NOMASK( _24BIT_TC_BGR )
 {
     BitmapColor aBitmapColor;
 
@@ -187,7 +187,7 @@ IMPL_FORMAT_GETPIXEL( _24BIT_TC_BGR )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _24BIT_TC_BGR )
+IMPL_FORMAT_SETPIXEL_NOMASK( _24BIT_TC_BGR )
 {
     *( pScanline = pScanline + nX * 3 )++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
@@ -196,7 +196,7 @@ IMPL_FORMAT_SETPIXEL( _24BIT_TC_BGR )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _24BIT_TC_RGB )
+IMPL_FORMAT_GETPIXEL_NOMASK( _24BIT_TC_RGB )
 {
     BitmapColor aBitmapColor;
 
@@ -209,7 +209,7 @@ IMPL_FORMAT_GETPIXEL( _24BIT_TC_RGB )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _24BIT_TC_RGB )
+IMPL_FORMAT_SETPIXEL_NOMASK( _24BIT_TC_RGB )
 {
     *( pScanline = pScanline + nX * 3 )++ = rBitmapColor.GetRed();
     *pScanline++ = rBitmapColor.GetGreen();
@@ -234,7 +234,7 @@ IMPL_FORMAT_SETPIXEL( _24BIT_TC_MASK )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _32BIT_TC_ABGR )
+IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_ABGR )
 {
     BitmapColor aBitmapColor;
 
@@ -247,7 +247,7 @@ IMPL_FORMAT_GETPIXEL( _32BIT_TC_ABGR )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _32BIT_TC_ABGR )
+IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_ABGR )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = 0;
     *pScanline++ = rBitmapColor.GetBlue();
@@ -257,7 +257,7 @@ IMPL_FORMAT_SETPIXEL( _32BIT_TC_ABGR )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _32BIT_TC_ARGB )
+IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_ARGB )
 {
     BitmapColor aBitmapColor;
 
@@ -270,7 +270,7 @@ IMPL_FORMAT_GETPIXEL( _32BIT_TC_ARGB )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _32BIT_TC_ARGB )
+IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_ARGB )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = 0;
     *pScanline++ = rBitmapColor.GetRed();
@@ -280,7 +280,7 @@ IMPL_FORMAT_SETPIXEL( _32BIT_TC_ARGB )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _32BIT_TC_BGRA )
+IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_BGRA )
 {
     BitmapColor aBitmapColor;
 
@@ -293,7 +293,7 @@ IMPL_FORMAT_GETPIXEL( _32BIT_TC_BGRA )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _32BIT_TC_BGRA )
+IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_BGRA )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
@@ -303,7 +303,7 @@ IMPL_FORMAT_SETPIXEL( _32BIT_TC_BGRA )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _32BIT_TC_RGBA )
+IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_RGBA )
 {
     BitmapColor aBitmapColor;
 
@@ -316,7 +316,7 @@ IMPL_FORMAT_GETPIXEL( _32BIT_TC_RGBA )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _32BIT_TC_RGBA )
+IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_RGBA )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = rBitmapColor.GetRed();
     *pScanline++ = rBitmapColor.GetGreen();
