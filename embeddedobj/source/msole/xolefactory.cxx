@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolefactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 09:52:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,8 +272,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             const ::rtl::OUString& aClassName,
             const uno::Reference< embed::XStorage >& xStorage,
             const ::rtl::OUString& sEntName,
-            sal_Int32 nEntryConnectionMode,
-            const uno::Sequence< beans::PropertyValue >& lArguments,
+            sal_Int32 /*nEntryConnectionMode*/,
+            const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
             const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
