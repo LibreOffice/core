@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngmisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:26:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ BOOL RemoveControlChars( OUString &rTxt )
 // non breaking field character
 #define CH_TXTATR_INWORD    ((sal_Char) 0x02)
 
-BOOL ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar )
+BOOL ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
 {
     // the resulting string looks like this:
     // 1. non breaking field characters get removed
