@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:33:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:34:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,10 @@ namespace
 
         typedef std::vector<Element> Collection;
         Collection collection;
-    private:
+       protected:
+           using NodeVisitor::handle;
+
+       private:
         Result handle(TreeAccessor const& _aElement);
 
         Result handle(NodeAccessRef const& _aNonValue);
@@ -218,6 +221,7 @@ namespace
     //-------------------------------------------------------------------------
     CollectElementTrees::Result CollectElementTrees::handle(NodeAccessRef const& _aNonValue)
     {
+            { (void)_aNonValue; }
         OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValue),"Unexpected: Value-node dispatched to wrong handler");
         if (m_aTemplate.is())
         {
@@ -504,6 +508,7 @@ SetElementChangeImpl* SetNodeImpl::doAdjustToAddedElement(data::Accessor const& 
 
 SetElementChangeImpl* SetNodeImpl::implAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, Element const & aNewElement, bool _bReplacing)
 {
+    { (void)_bReplacing; }
     OSL_ENSURE( validatedName(aNewElement) == aName, "Unexpected Name on new element" );
 
     if (hasStoredElement(aName))
@@ -524,7 +529,7 @@ SetElementChangeImpl* SetNodeImpl::implAdjustToAddedElement(data::Accessor const
 }
 //-------------------------------------------------------------------------
 
-SetElementChangeImpl* SetNodeImpl::doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& aRemoveNodeChange)
+SetElementChangeImpl* SetNodeImpl::doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& /*aRemoveNodeChange*/)
 {
     return implAdjustToRemovedElement(_aAccessor,aName);
 }
@@ -966,6 +971,8 @@ namespace
             translate(m_rDefaultTree);
             visitElements(_aActualTree);
         }
+    protected:
+        using NodeVisitor::handle;
 
     private:
         void translate(ISubtree& _rDefaultTree);
