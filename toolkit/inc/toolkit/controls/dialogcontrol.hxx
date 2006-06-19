@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:48:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,7 @@ public:
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
     // XEventListener
+    using cppu::OPropertySetHelper::disposing;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& evt ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
