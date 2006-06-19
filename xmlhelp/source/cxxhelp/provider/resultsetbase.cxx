@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:20:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,8 @@ ResultSetBase::next(
            uno::RuntimeException )
 {
     sal_Bool test;
-    if( ++m_nRow < m_aItems.size() )
+    m_nRow++;
+    if( sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
         test = true;
     else
         test = false;
@@ -217,7 +218,7 @@ ResultSetBase::isAfterLast(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    return m_nRow >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
+    return sal::static_int_cast<sal_uInt32>( m_nRow ) >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
 }
 
 
@@ -237,7 +238,7 @@ ResultSetBase::isLast(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    if( m_nRow ==  m_aItems.size() - 1 )
+    if( sal::static_int_cast<sal_uInt32>( m_nRow ) ==  m_aItems.size() - 1 )
         return true;
     else
         return false;
@@ -293,7 +294,7 @@ ResultSetBase::getRow(
            uno::RuntimeException)
 {
     // Test, whether behind last row
-    if( -1 == m_nRow || m_nRow >= m_aItems.size() )
+    if( -1 == m_nRow || sal::static_int_cast<sal_uInt32>( m_nRow ) >= m_aItems.size() )
         return 0;
     else
         return m_nRow+1;
@@ -313,7 +314,7 @@ sal_Bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
             m_nRow = -1;
     }
 
-    return 0<= m_nRow && m_nRow < m_aItems.size();
+    return 0<= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size();
 }
 
 
@@ -332,10 +333,10 @@ ResultSetBase::relative(
         while( row-- )
             next();
     else if( row < 0 )
-        while( row++ && m_nRow > - 1 )
+        while( row++ && m_nRow > -1 )
             previous();
 
-    return 0 <= m_nRow && m_nRow < m_aItems.size();
+    return 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size();
 }
 
 
@@ -346,11 +347,11 @@ ResultSetBase::previous(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    if( m_nRow > m_aItems.size() )
+    if( sal::static_int_cast<sal_uInt32>( m_nRow ) > m_aItems.size() )
         m_nRow = m_aItems.size();  // Correct Handling of afterLast
     if( 0 <= m_nRow ) -- m_nRow;
 
-    return 0 <= m_nRow && m_nRow < m_aItems.size();
+    return 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size();
 }
 
 
@@ -418,7 +419,7 @@ ResultSetBase::queryContentIdentifierString(
     void )
     throw( uno::RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
         return m_aPath[m_nRow];
     else
         return rtl::OUString();
@@ -430,7 +431,7 @@ ResultSetBase::queryContentIdentifier(
     void )
     throw( uno::RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
     {
         rtl::OUString url = queryContentIdentifierString();
         if( ! m_aIdents[m_nRow].is() && url.getLength() )
@@ -447,7 +448,7 @@ ResultSetBase::queryContent(
     void )
     throw( uno::RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
         return m_xProvider->queryContent( queryContentIdentifier() );
     else
         return uno::Reference< XContent >();
@@ -549,6 +550,8 @@ void SAL_CALL ResultSetBase::setPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
+    (void)aValue;
+
     if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) ||
         aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
         return;
@@ -641,6 +644,8 @@ void SAL_CALL ResultSetBase::addVetoableChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
+    (void)PropertyName;
+    (void)aListener;
 }
 
 
@@ -651,6 +656,8 @@ void SAL_CALL ResultSetBase::removeVetoableChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
+    (void)PropertyName;
+    (void)aListener;
 }
 
 
