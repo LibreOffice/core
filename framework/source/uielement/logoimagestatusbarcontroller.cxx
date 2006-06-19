@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logoimagestatusbarcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:54:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,28 +139,28 @@ throw ( RuntimeException )
 }
 
 // XStatusListener
-void SAL_CALL LogoImageStatusbarController::statusChanged( const FeatureStateEvent& Event )
+void SAL_CALL LogoImageStatusbarController::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )
 {
 }
 
 // XStatusbarController
 ::sal_Bool SAL_CALL LogoImageStatusbarController::mouseButtonDown(
-    const awt::MouseEvent& aMouseEvent )
+    const awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL LogoImageStatusbarController::mouseMove(
-    const awt::MouseEvent& aMouseEvent )
+    const awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL LogoImageStatusbarController::mouseButtonUp(
-    const awt::MouseEvent& aMouseEvent )
+    const awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
@@ -179,8 +179,8 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL LogoImageStatusbarController::paint(
     const ::com::sun::star::uno::Reference< awt::XGraphics >& xGraphics,
     const awt::Rectangle& rOutputRectangle,
-    ::sal_Int32 nItemId,
-    ::sal_Int32 nStyle )
+    ::sal_Int32 /*nItemId*/,
+    ::sal_Int32 /*nStyle*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
