@@ -4,9 +4,9 @@
  *
  *  $RCSfile: all_tags.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:08:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:54:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@ StdTag::StdTag( E_AtTagId i_eId )
 }
 
 bool
-StdTag::Add_SpecialMeaningToken( const char *       i_sText,
-                                 intt               i_nNr )
+StdTag::Add_SpecialMeaningToken( const char *   ,
+                                 intt           )
 {
     // Does nothing
 
@@ -263,7 +263,7 @@ KeywordTag::KeywordTag()
 
 bool
 KeywordTag::Add_SpecialMeaningToken( const char *       i_sText,
-                                     intt               i_nNr )
+                                     intt               )
 {
     sKeys.push_back(i_sText);
     return true;
@@ -365,7 +365,7 @@ SeeTag::SeeTag()
 
 bool
 SeeTag::Add_SpecialMeaningToken( const char *       i_sText,
-                                 intt               i_nNr )
+                                 intt               )
 {
     static QualifiedName aNull_;
     sReferences.push_back(aNull_);
