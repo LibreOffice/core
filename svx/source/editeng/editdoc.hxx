@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:47:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,7 +517,7 @@ public:
     USHORT          GetLen() const                  { return nEnd - nStart; }
 
     USHORT          GetStartPosX() const            { return nStartPosX; }
-    void            SetStartPosX( USHORT nStart )   { nStartPosX = nStart; }
+    void            SetStartPosX( USHORT start )    { nStartPosX = start; }
 
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
