@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:01:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ ElementInfo ElementParser::parseElementInfo(OUString const& _sTag, SaxAttributeL
 
 ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxAttributeList const& _xAttribs) const
 {
+    { (void)_xAttribs; }
     OSL_PRECOND( _xAttribs.is(), "ERROR: NULL Attribute list");
 
   // todo: make this use a table, if necessary
@@ -491,7 +492,7 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
     }
     else
     {
-        OUString sPrefix = matchNsPrefix(sTypeName,NS_PREFIX_OOR) ? NS_PREFIX_OOR : NS_PREFIX_XS;
+        OUString sPrefix = matchNsPrefix(sTypeName,NS_PREFIX_OOR) ? OUString( NS_PREFIX_OOR ) : OUString( NS_PREFIX_XS );
 
         OUString sBasicName = stripTypeName( mLogger, sTypeName, sPrefix );
 
