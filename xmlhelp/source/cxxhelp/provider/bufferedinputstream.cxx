@@ -182,7 +182,7 @@ void SAL_CALL BufferedInputStream::seek( sal_Int64 location )
     if( 0 <= location && location < m_nBufferSize )
     {
         osl::MutexGuard aGuard( m_aMutex );
-        m_nBufferLocation = location;
+        m_nBufferLocation = sal::static_int_cast<sal_Int32>( location );
     }
     else
         throw IllegalArgumentException();
