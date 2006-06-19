@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IndexedPropertyValuesContainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:44:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ rtl::OUString SAL_CALL IndexedPropertyValuesContainer_getImplementationName() th
 }
 
 uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new IndexedPropertyValuesContainer();
 }
