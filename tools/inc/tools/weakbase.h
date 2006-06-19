@@ -50,7 +50,7 @@ struct WeakConnection
     sal_Int32   mnRefCount;
     reference_type* mpReference;
 
-    WeakConnection( reference_type* pReference ) : mpReference( pReference ), mnRefCount( 0 ) {};
+    WeakConnection( reference_type* pReference ) : mnRefCount( 0 ), mpReference( pReference ) {};
     void acquire() { mnRefCount++; }
     void release() { mnRefCount--; if( mnRefCount == 0 ) delete this; }
 };
