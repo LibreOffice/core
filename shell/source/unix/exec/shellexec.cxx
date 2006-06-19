@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:53:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 //
 //-------------------------------------------------
 
-void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
+void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 /*nFlags*/ )
     throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
     OStringBuffer aBuffer, aLaunchBuffer;
