@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_punct.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:52:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:08:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ Tok_EOL::Text() const
 }
 
 void
-Tok_EOF::Trigger( TokenInterpreter &    io_rInterpreter ) const
+Tok_EOF::Trigger( TokenInterpreter & ) const
 {
     csv_assert(false);
 //  io_rInterpreter.Process_EOF();
