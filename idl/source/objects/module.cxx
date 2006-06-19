@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:50:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #include <tools/fsys.hxx>
 #endif
 #include <tools/debug.hxx>
-
-#pragma hdrstop
-
 
 /****************** SvMetaModule ******************************************/
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
@@ -608,7 +605,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         rOutStm << "SvIDL interface documentation" << endl << endl;
         rOutStm << "<MODULE>" << endl << GetName().GetBuffer() << endl;
-        WriteDescription( rBase, rOutStm );
+        WriteDescription( rOutStm );
         rOutStm << "</MODULE>" << endl << endl;
 
         rOutStm << "<CLASSES>" << endl;
@@ -658,6 +655,9 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
     }
     break;
+
+    default:
+        break;
     }
 }
 
