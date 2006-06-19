@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:41:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,8 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
-#endif
 #include <svtools/transfer.hxx>
 #include "runtime.hxx"
-#pragma hdrstop
 #include "stdobj1.hxx"
 
 #define ATTR_IMP_TYPE           1
@@ -182,16 +178,16 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         }
 
         SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar   = pVar->GetParameters();
+        SbxArray*    pPar_  = pVar->GetParameters();
         USHORT       nWhich = (USHORT)pVar->GetUserData();
         BOOL         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
         {
-            case ATTR_IMP_TYPE:     PropType( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_WIDTH:    PropWidth( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_HEIGHT:   PropHeight( pVar, pPar, bWrite ); return;
+            case ATTR_IMP_TYPE:     PropType( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_WIDTH:    PropWidth( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_HEIGHT:   PropHeight( pVar, pPar_, bWrite ); return;
         }
 
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
@@ -304,19 +300,19 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         }
 
         SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar   = pVar->GetParameters();
+        SbxArray*    pPar_  = pVar->GetParameters();
         USHORT       nWhich = (USHORT)pVar->GetUserData();
         BOOL         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
         {
-            case ATTR_IMP_BOLD:         PropBold( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_ITALIC:       PropItalic( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_SIZE:         PropSize( pVar, pPar, bWrite ); return;
-            case ATTR_IMP_NAME:         PropName( pVar, pPar, bWrite ); return;
+            case ATTR_IMP_BOLD:         PropBold( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_ITALIC:       PropItalic( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_SIZE:         PropSize( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_NAME:         PropName( pVar, pPar_, bWrite ); return;
         }
 
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
@@ -362,9 +358,9 @@ sal_Bool TransferableHelperImpl::GetData( const ::com::sun::star::datatransfer::
 }
 */
 
-void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar, BOOL )
+void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, BOOL )
 {
-    if( pPar && (pPar->Count() > 1) )
+    if( pPar_ && (pPar_->Count() > 1) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
@@ -373,15 +369,17 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar, BOOL )
     //Clipboard::Clear();
 }
 
-void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
-    if( !pPar || (pPar->Count() != 2) )
+    (void)pVar;
+
+    if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    USHORT nFormat = pPar->Get(1)->GetInteger();
+    USHORT nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -404,15 +402,15 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
     */
 }
 
-void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
-    if( !pPar || (pPar->Count() != 2) )
+    if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    USHORT nFormat = pPar->Get(1)->GetInteger();
+    USHORT nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -423,9 +421,9 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar, BOOL )
     //pVar->PutBool( Clipboard::HasFormat( nFormat ) );
 }
 
-void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
-    if( pPar && (pPar->Count() > 1) )
+    if( pPar_ && (pPar_->Count() > 1) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
@@ -435,15 +433,17 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
     //pVar->PutString( Clipboard::PasteString() );
 }
 
-void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
-    if( !pPar || (pPar->Count() != 3) )
+    (void)pVar;
+
+    if( !pPar_ || (pPar_->Count() != 3) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    USHORT nFormat = pPar->Get(2)->GetInteger();
+    USHORT nFormat = pPar_->Get(2)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -453,13 +453,13 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
     /*
     if( nFormat == FORMAT_STRING )
     {
-        Clipboard::CopyString( pPar->Get(1)->GetString() );
+        Clipboard::CopyString( pPar_->Get(1)->GetString() );
     }
     else
     if( (nFormat == FORMAT_BITMAP) ||
         (nFormat == FORMAT_GDIMETAFILE) )
     {
-        SbxObject* pObj = (SbxObject*)pPar->Get(1)->GetObject();
+        SbxObject* pObj = (SbxObject*)pPar_->Get(1)->GetObject();
 
         if( pObj && pObj->IsA( TYPE( SbStdPicture ) ) )
             ((SbStdPicture*)(SbxObject*)pObj)->GetGraphic().Copy();
@@ -467,15 +467,17 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
     */
 }
 
-void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
-    if( !pPar || (pPar->Count() != 2) )
+    (void)pVar;
+
+    if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    // Clipboard::CopyString( pPar->Get(1)->GetString() );
+    // Clipboard::CopyString( pPar_->Get(1)->GetString() );
 }
 
 
@@ -537,19 +539,19 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         }
 
         SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar   = pVar->GetParameters();
+        SbxArray*    pPar_  = pVar->GetParameters();
         USHORT       nWhich = (USHORT)pVar->GetUserData();
         BOOL         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Methods
         switch( nWhich )
         {
-            case METH_CLEAR:            MethClear( pVar, pPar, bWrite ); return;
-            case METH_GETDATA:          MethGetData( pVar, pPar, bWrite ); return;
-            case METH_GETFORMAT:        MethGetFormat( pVar, pPar, bWrite ); return;
-            case METH_GETTEXT:          MethGetText( pVar, pPar, bWrite ); return;
-            case METH_SETDATA:          MethSetData( pVar, pPar, bWrite ); return;
-            case METH_SETTEXT:          MethSetText( pVar, pPar, bWrite ); return;
+            case METH_CLEAR:            MethClear( pVar, pPar_, bWrite ); return;
+            case METH_GETDATA:          MethGetData( pVar, pPar_, bWrite ); return;
+            case METH_GETFORMAT:        MethGetFormat( pVar, pPar_, bWrite ); return;
+            case METH_GETTEXT:          MethGetText( pVar, pPar_, bWrite ); return;
+            case METH_SETDATA:          MethSetData( pVar, pPar_, bWrite ); return;
+            case METH_SETTEXT:          MethSetText( pVar, pPar_, bWrite ); return;
         }
 
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
