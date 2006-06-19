@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:54:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #ifndef _SV_IMPANMVW_HXX
 #include <impanmvw.hxx>
 #endif
-DBG_NAME( Animation );
+DBG_NAME( Animation )
 
 // -----------
 // - Defines -
@@ -471,7 +471,7 @@ void Animation::ImplRestartTimer( ULONG nTimeout )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, pTimer )
+IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
 {
     const ULONG nAnimCount = maList.Count();
 
@@ -768,7 +768,7 @@ BOOL Animation::Mirror( ULONG nMirrorFlags )
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
+BOOL Animation::Dither( ULONG nDitherFlags )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
@@ -779,9 +779,9 @@ BOOL Animation::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
         bRet = TRUE;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
-            bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.Dither( nDitherFlags, pDitherPal );
+            bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.Dither( nDitherFlags );
 
-        maBitmapEx.Dither( nDitherFlags, pDitherPal );
+        maBitmapEx.Dither( nDitherFlags );
     }
     else
         bRet = FALSE;
