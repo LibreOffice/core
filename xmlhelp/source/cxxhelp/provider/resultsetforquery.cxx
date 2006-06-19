@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:21:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                                       URLParameter& aURLParameter,
                                       Databases* pDatabases )
     : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
-      m_aURLParameter( aURLParameter ),
-      m_pDatabases( pDatabases )
+      m_pDatabases( pDatabases ),
+      m_aURLParameter( aURLParameter )
 {
     Reference< XTransliteration > xTrans(
         xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.Transliteration" ) ),
@@ -208,7 +208,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     aCommand.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
     aCommand.Argument <<= m_sProperty;
 
-    for( m_nRow = 0; m_nRow < m_aPath.size(); ++m_nRow )
+    for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )
     {
         m_aPath[m_nRow] =
             m_aPath[m_nRow]                                          +
@@ -225,5 +225,5 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 ;
         }
     }
-    m_nRow = -1;
+    m_nRow = 0xffffffff;
 }
