@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:40:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@ struct SaveStruct
     sal_Bool            bFillStyleSelected;
 };
 
-DECLARE_STACK( SaveStack, SaveStruct* );
+DECLARE_STACK( SaveStack, SaveStruct* )
 
 // -----------------------------------------------------------------------------
 
@@ -542,7 +542,8 @@ struct GDIObj
                 break;
 
                 default:
-                    delete pStyle;
+                    DBG_ERROR( "unsupported style deleted" );
+                    break;
             }
             pStyle = NULL;
         }
