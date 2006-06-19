@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commands.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:57:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 #include <vos/process.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -63,10 +63,10 @@ namespace framework{
                     We need it e.g. to detect running mode of it - plugin, headless ...
 *//*-*************************************************************************************************************/
 
-#define COMMAND_PLUGIN                      DECLARE_ASCII("-plugin"     )   /// office is plugged into a browser
-#define COMMAND_HEADLESS                    DECLARE_ASCII("-headless"   )   /// office runs in headless mode for scripting
-#define COMMAND_INVISIBLE                   DECLARE_ASCII("-invisible"  )   /// office runs in invisible mode which supress splash screen and first empry document
-#define COMMAND_SERVER                      DECLARE_ASCII("-server"     )   /// office runs as server
+#define COMMAND_PLUGIN    DECLARE_ASCII("-plugin"     ) /// office is plugged into a browser
+#define COMMAND_HEADLESS  DECLARE_ASCII("-headless"   ) /// office runs in headless mode for scripting
+#define COMMAND_INVISIBLE DECLARE_ASCII("-invisible"  ) /// office runs in invisible mode which supress splash screen and first empry document
+#define COMMAND_SERVER    DECLARE_ASCII("-server"     ) /// office runs as server
 
 /*-************************************************************************************************************//**
     @short          This method parse command line of office and search for any argument.
