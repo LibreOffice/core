@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:32:38 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:14:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
-CFLAGS+=-Wreturn-type -fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
@@ -94,7 +94,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
@@ -120,7 +119,6 @@ CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
-CFLAGSOPT+=-Wuninitialized				# not supported without optimization
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
@@ -128,10 +126,48 @@ CFLAGSOPT=   							# no optimizing for non products
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
-# Enable all warnings
-CFLAGSWALL=-Wall
-# Set default warn level
-CFLAGSDFLTWARN=
+
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
+    -Wno-non-virtual-dtor
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-Werror
+
+# Once all modules on this platform compile without warnings, set
+# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
+# settings.mk):
+MODULES_WITH_WARNINGS := \
+    b_server \
+    basctl \
+    binfilter \
+    chart2 \
+    cppcanvas \
+    desktop \
+    devtools \
+    dxcanvas \
+    extensions \
+    filter \
+    finalize \
+    glcanvas \
+    instset_native \
+    instsetoo_native \
+    lingu \
+    postprocess \
+    r_tools \
+    sc \
+    sch \
+    sd \
+    slideshow \
+    smoketest_native \
+    smoketestoo_native \
+    starmath \
+    svx \
+    sw \
+    top \
+    writerperfect \
+    xmlsecurity
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
