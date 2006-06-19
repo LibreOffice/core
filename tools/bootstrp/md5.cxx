@@ -4,9 +4,9 @@
  *
  *  $RCSfile: md5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:30:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include "md5.hxx"
 
+#include <cstddef>
 #include <stdio.h>
 
 #include <string.hxx>
@@ -74,7 +75,7 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
 
             rtl_digest_destroyMD5( digest );
 
-            for ( int i = 0; i < sizeof(checksum); i++ )
+            for ( std::size_t i = 0; i < sizeof(checksum); i++ )
             {
                 if ( checksum[i] < 16 )
                     aChecksum.Append( "0" );
