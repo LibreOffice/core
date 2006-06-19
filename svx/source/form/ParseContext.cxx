@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParseContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ OSystemParseContext::~OSystemParseContext()
         case ERROR_INVALID_REAL_COMPARE:    aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID); break;
         case ERROR_INVALID_TABLE:           aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE); break;
         case ERROR_INVALID_COLUMN:          aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
+        case ERROR_INVALID_TABLE_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_TABLE_EXISTS); break;
+        case ERROR_NONE: break;
     }
     return aMsg;
 }
@@ -121,6 +123,9 @@ OSystemParseContext::~OSystemParseContext()
         case KEY_MAX:       aKeyword = m_aSQLInternationals.GetToken(11); break;
         case KEY_MIN:       aKeyword = m_aSQLInternationals.GetToken(12); break;
         case KEY_SUM:       aKeyword = m_aSQLInternationals.GetToken(13); break;
+        case KEY_NONE:
+            DBG_ERROR( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
+            break;
     }
     return aKeyword;
 }
