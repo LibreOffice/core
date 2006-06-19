@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:34:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:59:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
@@ -201,9 +200,9 @@ DBG_NAME(FmXUndoEnvironment);
 //------------------------------------------------------------------------------
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel(_rModel)
+                   ,m_pPropertySetCache(NULL)
                    ,m_Locks( 0 )
                    ,bReadOnly(sal_False)
-                   ,m_pPropertySetCache(NULL)
 {
     DBG_CTOR(FmXUndoEnvironment,NULL);
 }
@@ -291,7 +290,7 @@ void FmXUndoEnvironment::ModeChanged()
 }
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(SdrHint))
     {
@@ -309,6 +308,8 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 Removed( pSdrObj );
             }
             break;
+            default:
+                break;
         }
     }
     else if (rHint.ISA(SfxSimpleHint))
@@ -350,11 +351,8 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
     else if (pObj->IsGroupObject())
     {
         SdrObjListIter aIter(*pObj->GetSubList());
-        while (aIter.IsMore())
-        {
-            SdrObject* pObj = aIter.Next();
-            Inserted(pObj);
-        }
+        while ( aIter.IsMore() )
+            Inserted( aIter.Next() );
     }
 }
 
@@ -422,11 +420,8 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
     else if (pObj->IsGroupObject())
     {
         SdrObjListIter aIter(*pObj->GetSubList());
-        while (aIter.IsMore())
-        {
-            SdrObject* pObj = aIter.Next();
-            Removed(pObj);
-        }
+        while ( aIter.IsMore() )
+            Removed( aIter.Next() );
     }
 }
 
@@ -720,7 +715,7 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) thro
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::modified( const EventObject& aEvent ) throw (RuntimeException)
+void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
 {
     implSetModified();
 }
@@ -950,7 +945,7 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
 
     // Objectshells are not thread safe, so guard the destruction
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::vos::OGuard aSolarGuarsReset( Application::GetSolarMutex() );
         xObjSh = NULL;
     }
 }
@@ -971,10 +966,10 @@ Any SAL_CALL FmXUndoEnvironment::approveFiring(const ScriptEvent& evt) throw(::c
 //------------------------------------------------------------------------------
 FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyChangeEvent& evt)
                      :SdrUndoAction(rNewMod)
+                     ,xObj(evt.Source, UNO_QUERY)
                      ,aPropertyName(evt.PropertyName)
                      ,aNewValue(evt.NewValue)
                      ,aOldValue(evt.OldValue)
-                     ,xObj(evt.Source, UNO_QUERY)
 {
     if (rNewMod.GetObjectShell())
         rNewMod.GetObjectShell()->SetModified(sal_True);
@@ -1035,15 +1030,15 @@ String FmUndoPropertyAction::GetComment() const
 
 DBG_NAME(FmUndoContainerAction);
 //------------------------------------------------------------------------------
-FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
+FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                                              Action _eAction,
                                              const Reference< XIndexContainer > & xCont,
                                              const Reference< XInterface > & xElem,
                                              sal_Int32 nIdx)
-                      :SdrUndoAction(rMod)
-                      ,m_eAction( _eAction )
+                      :SdrUndoAction( _rMod )
                       ,m_xContainer( xCont )
                       ,m_nIndex( nIdx )
+                      ,m_eAction( _eAction )
 {
     OSL_ENSURE( nIdx >= 0, "FmUndoContainerAction::FmUndoContainerAction: invalid index!" );
         // some old code suggested this could be a valid argument. However, this code was
@@ -1054,9 +1049,8 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
     {
         // normalize
         m_xElement = m_xElement.query( xElem );
-        switch ( m_eAction )
+        if ( m_eAction == Removed )
         {
-        case Removed:
             if (m_nIndex >= 0)
             {
                 Reference< XEventAttacherManager >  xManager( xCont, UNO_QUERY );
@@ -1068,7 +1062,6 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
 
             // we now own the element
             m_xOwnElement = m_xElement;
-            break;
         }
     }
 }
