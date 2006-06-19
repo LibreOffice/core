@@ -4,9 +4,9 @@
  *
  *  $RCSfile: is_type.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:51:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@ Type_Storage::EraseAll()
 }
 
 void
-Type_Storage::Save( PersistenceAdmin & io_rSaver ) const
+Type_Storage::Save( PersistenceAdmin & ) const
 {
     // KORR_FUTURE
 }
 
 void
-Type_Storage::Load( PersistenceAdmin & io_rLoader )
+Type_Storage::Load( PersistenceAdmin & )
 {
     // KORR_FUTURE
 }
