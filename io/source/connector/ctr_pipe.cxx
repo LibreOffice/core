@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctr_pipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:29:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,17 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector {
 
-    PipeConnection::PipeConnection( const OUString &s, const OUString & sConnectionDescription ) :
+    PipeConnection::PipeConnection( const OUString & sConnectionDescription ) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
         m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
-        m_sDescription += OUString::valueOf( (sal_Int64) &m_pipe , 10 );
+        m_sDescription += OUString::valueOf(
+            sal::static_int_cast< sal_Int64 >(
+                reinterpret_cast< sal_IntPtr >(&m_pipe)),
+            10 );
     }
 
     PipeConnection::~PipeConnection()
