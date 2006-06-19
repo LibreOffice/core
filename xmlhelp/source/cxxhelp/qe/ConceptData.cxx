@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConceptData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:22:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,13 @@ ConceptData::ConceptData( sal_Int32 id,
                           ContextTables* contextTables )
     : queryNo_( sal_uInt8( queryNo & 0xF ) ),
       nColumns_( sal_uInt8( nColumns & 0xF ) ),
+      role_( sal_uInt8( role & 0xF ) ),
       concept_( id ),
       proximity_( nColumns * ProxPerTerm ),
-      role_( sal_uInt8( role & 0xF ) ),
       penalty_( score ),
+      m_nRefcount( 0 ),
       ctx_( contextTables ),
-      next_( 0 ),
-      m_nRefcount( 0 )
+      next_( 0 )
 {
 }
 
