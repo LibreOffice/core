@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:23:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,8 +302,6 @@ public:
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
                          const Rectangle& rOldBoundRect);
 
-    virtual void RequestBasic();
-
     void            SetLayoutName(String aName);
     virtual String  GetLayoutName() const       { return aLayoutName; }
 
@@ -320,7 +318,7 @@ public:
                          BOOL bScaleAllObj);
 
     const String&   GetName();
-    String          GetRealName() const { return aPageName; };
+    String          GetRealName() const { return FmFormPage::GetName(); };
 
     void    SetPresentationLayout(const String& rLayoutName,
                                   BOOL bReplaceStyleSheets = TRUE,
