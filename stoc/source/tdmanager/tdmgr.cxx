@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:21:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1031,7 +1031,11 @@ Reference< XTypeDescription > ManagerImpl::getInstantiatedStruct(
     // args.size() cannot exceed SAL_MAX_INT32, as each argument consumes at
     // least one position within an rtl::OUString (which is no longer than
     // SAL_MAX_INT32):
-    if (!good || args.size() != structType->getTypeParameters().getLength()) {
+    if (!good
+        || (args.size()
+            != sal::static_int_cast< sal_uInt32 >(
+                structType->getTypeParameters().getLength())))
+    {
         throw NoSuchElementException(name, static_cast< OWeakObject * >(this));
     }
     return new InstantiatedStruct(structType, args);
@@ -1058,8 +1062,8 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
         }
         else if (rName[rName.getLength()-1] == ']') // test for array
         {
-            sal_Int32 nIndex = 0, nTokens = 0;
-            do { rName.getToken( 0, '[', nIndex ); nTokens++; } while( nIndex != -1 );
+            sal_Int32 nIndex2 = 0, nTokens = 0;
+            do { rName.getToken( 0, '[', nIndex2 ); nTokens++; } while( nIndex2 != -1 );
             sal_Int32 nDims = nTokens - 1;
             sal_Int32 dimOffset = rName.indexOf('[');
             Reference< XTypeDescription > xElemType(
@@ -1157,11 +1161,13 @@ static Reference< XInterface > SAL_CALL ManagerImpl_create(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::Exception) )
 {
-    sal_Int32 nCacheSize;
-    if (!xContext.is() || !(xContext->getValueByName( OUString(
-        RTL_CONSTASCII_USTRINGPARAM("/implementations/" IMPLNAME "/CacheSize") ) ) >>= nCacheSize))
-    {
-        nCacheSize = CACHE_SIZE;
+    sal_Int32 nCacheSize = CACHE_SIZE;
+    if (xContext.is()) {
+        xContext->getValueByName(
+            OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/implementations/" IMPLNAME "/CacheSize"))) >>=
+            nCacheSize;
     }
 
     return Reference< XInterface >( *new ManagerImpl( xContext, nCacheSize ) );
@@ -1194,7 +1200,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
