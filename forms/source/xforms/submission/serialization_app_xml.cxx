@@ -4,9 +4,9 @@
  *
  *  $RCSfile: serialization_app_xml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:24:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
     CSS::uno::Reference< CSS::lang::XUnoTunnel > aTunnel(aNode, CSS::uno::UNO_QUERY);
     if (aTunnel.is())
     {
-        xmlNodePtr aNodePtr = (xmlNodePtr)aTunnel->getSomething(CSS::uno::Sequence< sal_Int8 >());
+        xmlNodePtr aNodePtr = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(CSS::uno::Sequence< sal_Int8 >()) );
         xmlDocPtr aDocPtr = xmlNewDoc((xmlChar*)"1.0");
         xmlNodePtr aDocNodePtr = xmlDocCopyNode(aNodePtr, aDocPtr, 1);
         if (aDocNodePtr != NULL) {
