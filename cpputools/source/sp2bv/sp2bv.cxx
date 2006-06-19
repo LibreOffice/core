@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sp2bv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:39:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 using namespace rtl;
 
-static sal_Bool hasOption(char* szOption, int argc, char** argv);
+static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 
 
 #define HELP_TEXT    \
@@ -107,7 +107,6 @@ int main(int argc, char **argv)
         case '}':
         case '\\': fprintf(stderr, "sp2vb: file URL contains invalid characters!\n");
             return -1;
-            break;
         default:
             rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, pCur, 1);
         }
@@ -130,7 +129,7 @@ int main(int argc, char **argv)
 
 
 
-static sal_Bool hasOption(char* szOption, int argc, char** argv)
+static sal_Bool hasOption(char const * szOption, int argc, char** argv)
 {
     sal_Bool retVal= sal_False;
     for(sal_Int16 i= 1; i < argc; i++)
