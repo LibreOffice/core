@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventattacher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:58:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,8 @@ Reference< XInterface > createAllListenerAdapter
 InvocationToAllListenerMapper::InvocationToAllListenerMapper
     ( const Reference< XIdlClass >& ListenerType, const Reference< XAllListener >& AllListener, const Any& Helper )
         : m_xAllListener( AllListener )
-        , m_Helper( Helper )
         , m_xListenerType( ListenerType )
+        , m_Helper( Helper )
 {
 }
 
@@ -175,7 +175,7 @@ Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getInt
 
 //*************************************************************************
 Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
-    Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
+    Sequence< sal_Int16 >& , Sequence< Any >& )
         throw( IllegalArgumentException, CannotConvertException,
         InvocationTargetException, RuntimeException )
 {
@@ -225,14 +225,14 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 }
 
 //*************************************************************************
-void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& PropertyName, const Any& Value)
+void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& , const Any& )
     throw( UnknownPropertyException, CannotConvertException,
            InvocationTargetException, RuntimeException )
 {
 }
 
 //*************************************************************************
-Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& PropertyName)
+Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& )
     throw( UnknownPropertyException, RuntimeException )
 {
     return Any();
@@ -554,6 +554,7 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
             case TypeClass_LONG:            rRet <<= sal_Int32( 0 );    break;
             case TypeClass_UNSIGNED_SHORT:  rRet <<= sal_uInt16( 0 );   break;
             case TypeClass_UNSIGNED_LONG:   rRet <<= sal_uInt32( 0 );   break;
+                     default:
             break;
         }
     }
@@ -600,7 +601,7 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
 }
 
 //*************************************************************************
-void FilterAllListenerImpl::disposing(const EventObject& Source)
+void FilterAllListenerImpl::disposing(const EventObject& )
     throw( RuntimeException )
 {
     // TODO: ???
@@ -882,13 +883,13 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * , void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -916,7 +917,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
 
