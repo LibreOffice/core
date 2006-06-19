@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,8 @@ using namespace ::com::sun::star::util;
 
 //====================================================================
 
-DBG_NAME(SfxStateCache);
-DBG_NAME(SfxStateCacheSetState);
+DBG_NAME(SfxStateCache)
+DBG_NAME(SfxStateCacheSetState)
 
 SFX_IMPL_XINTERFACE_2( BindDispatch_Impl, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 SFX_IMPL_XTYPEPROVIDER_2( BindDispatch_Impl, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
@@ -107,7 +107,7 @@ BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::
     aStatus.IsEnabled = sal_True;
 }
 
-void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException )
 {
     if ( xDisp.is() )
     {
@@ -231,8 +231,8 @@ void BindDispatch_Impl::Dispatch( sal_Bool bForceSynchron )
 SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     pDispatch( 0 ),
     nId(nFuncId),
-    pController(0),
     pInternalController(0),
+    pController(0),
     pLastItem( 0 ),
     eLastState( 0 ),
     bItemVisible( sal_True )
@@ -330,7 +330,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 if ( xTunnel.is() )
                 {
                     sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                    pDisp = (SfxOfficeDispatch*)(nImplementation);
+                    pDisp = reinterpret_cast< SfxOfficeDispatch* >(sal::static_int_cast< sal_IntPtr >( nImplementation ));
                 }
 
                 if ( pDisp )
@@ -459,6 +459,7 @@ void SfxStateCache::SetState_Impl
     BOOL bMaybeDirty
 )
 {
+    (void)bMaybeDirty; //unused
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
