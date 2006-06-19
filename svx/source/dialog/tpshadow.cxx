@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:19:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,27 +94,25 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
     SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlXRectPreview ),
-    aXFillAttr          ( pXPool ),
-    rXFSet              ( aXFillAttr.GetItemSet() ),
-
     aFlProp             ( this, ResId( FL_PROP ) ),
+    aTsbShowShadow      ( this, ResId( TSB_SHOW_SHADOW ) ),
     aFtPosition         ( this, ResId( FT_POSITION ) ),
-    aCtlPosition        ( this, ResId( CTL_POSITION ),
-                                    RP_RM, 200, 80, CS_SHADOW ),
+    aCtlPosition        ( this, ResId( CTL_POSITION ) ),
     aFtDistance         ( this, ResId( FT_DISTANCE ) ),
     aMtrDistance        ( this, ResId( MTR_FLD_DISTANCE ) ),
     aFtShadowColor      ( this, ResId( FT_SHADOW_COLOR ) ),
     aLbShadowColor      ( this, ResId( LB_SHADOW_COLOR ) ),
     aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
     aMtrTransparent      ( this, ResId( MTR_SHADOW_TRANSPARENT ) ),
-    aTsbShowShadow      ( this, ResId( TSB_SHOW_SHADOW ) ),
     aCtlXRectPreview    ( this, ResId( CTL_COLOR_PREVIEW ), &XOut,
                                     (XOutdevItemPool*) rInAttrs.GetPool() ),
     rOutAttrs           ( rInAttrs ),
-    bDisable            ( FALSE )
-
+    pColorTab( NULL ),
+    bDisable            ( FALSE ),
+    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    XOut                ( &aCtlXRectPreview ),
+    aXFillAttr          ( pXPool ),
+    rXFSet              ( aXFillAttr.GetItemSet() )
 {
     FreeResource();
 
@@ -130,6 +128,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
+        default: ;//prevent warning
     }
     SetFieldUnit( aMtrDistance, eFUnit );
 
@@ -185,6 +184,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
                 }
             }
             break;
+            case XFILL_NONE : break;
         }
     }
     else
@@ -206,7 +206,6 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aMtrTransparent.SetModifyHdl( aLink );
     aMtrDistance.SetModifyHdl( aLink );
 
-    pColorTab = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -273,10 +272,10 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxShadowTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
 
     return( LEAVE_PAGE );
 }
@@ -319,6 +318,7 @@ BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             case RP_LB: nX = -nXY; nY = nXY; break;
             case RP_MB: nY = nXY;            break;
             case RP_RB: nX = nY = nXY;       break;
+            case RP_MM: break;
         }
 
         // Wenn die Werte des Schattenabstanden==SFX_ITEM_DONTCARE und der angezeigte
@@ -467,7 +467,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // SchattenFarbe:
         if( rAttrs.GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
         {
-            aLbShadowColor.SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs.Get( SDRATTR_SHADOWCOLOR ) ).GetValue() );
+            aLbShadowColor.SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs.Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
         }
         else
             aLbShadowColor.SetNoSelection();
@@ -577,6 +577,7 @@ IMPL_LINK( SvxShadowTabPage, ModifyShadowHdl_Impl, void *, EMPTYARG )
         case RP_LB: nX = -nXY; nY = nXY; break;
         case RP_MB: nY = nXY;            break;
         case RP_RB: nX = nY = nXY;       break;
+        case RP_MM: break;
     }
     aCtlXRectPreview.SetShadowPos( Point( nX, nY ) );
 
