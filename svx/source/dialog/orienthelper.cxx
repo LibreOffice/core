@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orienthelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:49:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@ void OrientationHelper_Impl::AddDependentWindow( Window& rWindow, TriState eDisa
 
 void OrientationHelper_Impl::EnableDependentWindows()
 {
-    TriState eStacked = mrCbStacked.GetState();
     for( WindowVec::iterator aIt = maWinVec.begin(), aEnd = maWinVec.end(); aIt != aEnd; ++aIt )
         EnableWindow( *aIt->first, aIt->second );
 }
@@ -112,6 +111,7 @@ void OrientationHelper_Impl::EnableWindow( Window& rWindow, TriState eDisableIfS
         case STATE_CHECK:   bDisableOnStacked = (mrCbStacked.GetState() != STATE_NOCHECK);  break;
         // STATE_NOCHECK: Disable window, if stacked text is turned off or "don't know".
         case STATE_NOCHECK: bDisableOnStacked = (mrCbStacked.GetState() != STATE_CHECK);    break;
+        default: ;//prevent warning
     }
     rWindow.Enable( bEnabled && !bDisableOnStacked );
 }
