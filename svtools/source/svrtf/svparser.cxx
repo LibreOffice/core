@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:50:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -522,7 +522,7 @@ SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
 }
 
 // wird fuer jedes Token gerufen, das in CallParser erkannt wird
-void SvParser::NextToken( int nToken )
+void SvParser::NextToken( int )
 {
 }
 
@@ -574,7 +574,7 @@ void SvParser::RestoreState()
     }
 }
 
-void SvParser::Continue( int nToken )
+void SvParser::Continue( int )
 {
 }
 
