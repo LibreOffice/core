@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedtransfer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,10 +198,10 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.maTypeName = aFlavor.HumanPresentableName;
 
     //TODO/LATER: the object does *not* know its aspect! Per default we assume CONTENT
-    rDesc.mnViewAspect = embed::Aspects::MSOLE_CONTENT;
+    rDesc.mnViewAspect = sal::static_int_cast<sal_uInt16>(embed::Aspects::MSOLE_CONTENT);
 
     //TODO/LATER: status needs to become sal_Int64
-    rDesc.mnOle2Misc = xObj->getStatus( rDesc.mnViewAspect );
+    rDesc.mnOle2Misc = sal::static_int_cast<sal_Int32>(xObj->getStatus( rDesc.mnViewAspect ));
 
     awt::Size aSz;
     try
