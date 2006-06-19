@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:03:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
-
 #include <stdio.h>
 #include <ctype.h>
 #include <float.h>
@@ -545,8 +542,8 @@ SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
         :
         rScan(rSc),
         eLnge(eLge),
-        bStarFlag( FALSE ),
-        nNewStandardDefined(0)
+        nNewStandardDefined(0),
+        bStarFlag( FALSE )
 {
 }
 
@@ -635,8 +632,8 @@ SvNumberformat::SvNumberformat(String& rString,
                                BOOL bStan)
         :
         rScan(*pSc),
-        bStarFlag( FALSE ),
-        nNewStandardDefined(0)
+        nNewStandardDefined(0),
+        bStarFlag( FALSE )
 {
     // If the group (AKA thousand) separator is a Non-Breaking Space (French)
     // replace all occurences by a simple space.
@@ -1168,7 +1165,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                                  xub_StrLen& nPos,
                                  String& sSymbol)
 {
-    short eType = BRACKET_SYMBOLTYPE_FORMAT;
+    short eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
     sal_Unicode cLetter = ' ';                               // Zwischenergebnis
     xub_StrLen nLen = rString.Len();
@@ -1192,12 +1189,12 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 {
                     eState = SsGetString;
                     nPos--;
-                    eType = BRACKET_SYMBOLTYPE_FORMAT;
+                    eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                 }
                 else if (cToken == ']')
                 {
                     eState = SsStop;
-                    eType = BRACKET_SYMBOLTYPE_ERROR;
+                    eSymbolType = BRACKET_SYMBOLTYPE_ERROR;
                 }
                 else if (cToken == ' ')             // Skip Blanks
                 {
@@ -1209,7 +1206,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 {
                     sSymbol += cToken;
                     eState = SsGetString;
-                    eType = BRACKET_SYMBOLTYPE_FORMAT;
+                    eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                 }
             }
             break;
@@ -1227,9 +1224,9 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         eState = SsGetCon;
                         switch (cToken)
                         {
-                            case '<': eType = NUMBERFORMAT_OP_LT; break;
-                            case '>': eType = NUMBERFORMAT_OP_GT; break;
-                            case '=': eType = NUMBERFORMAT_OP_EQ; break;
+                            case '<': eSymbolType = NUMBERFORMAT_OP_LT; break;
+                            case '>': eSymbolType = NUMBERFORMAT_OP_GT; break;
+                            case '=': eSymbolType = NUMBERFORMAT_OP_EQ; break;
                             default: break;
                         }
                     }
@@ -1246,12 +1243,12 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         if ( rString.GetChar(nPos) == '-' )
                         {   // [$-xxx] locale
                             sSymbol.EraseAllChars('[');
-                            eType = BRACKET_SYMBOLTYPE_LOCALE;
+                            eSymbolType = BRACKET_SYMBOLTYPE_LOCALE;
                             eState = SsGetPrefix;
                         }
                         else
                         {   // currency as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                            eType = BRACKET_SYMBOLTYPE_FORMAT;
+                            eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                             eState = SsGetString;
                         }
                         sSymbol += cToken;
@@ -1259,7 +1256,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     break;
                     case '~' :
                     {   // calendarID as of SV_NUMBERFORMATTER_VERSION_CALENDAR
-                        eType = BRACKET_SYMBOLTYPE_FORMAT;
+                        eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                         sSymbol += cToken;
                         eState = SsGetString;
                     }
@@ -1279,7 +1276,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol += rString.Copy( --nPos, aNatNum.Len()+1 );
                             nPos += aNatNum.Len()+1;
                             //! SymbolType is negative
-                            eType = (short) (BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
+                            eSymbolType = (short) (BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
                             eState = SsGetPrefix;
                         }
                         else if ( aUpperDBNum == aDBNum && '1' <= cDBNum && cDBNum <= '9' )
@@ -1288,7 +1285,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol += rString.Copy( --nPos, aDBNum.Len()+1 );
                             nPos += aDBNum.Len()+1;
                             //! SymbolType is negative
-                            eType = BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1');
+                            eSymbolType = BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1');
                             eState = SsGetPrefix;
                         }
                         else if (cUpper == pKeywords[NF_KEY_H].GetChar(0)   ||  // H
@@ -1303,7 +1300,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         {
                             sSymbol.EraseAllChars('[');
                             sSymbol += cToken;
-                            eType = BRACKET_SYMBOLTYPE_COLOR;
+                            eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
                             eState = SsGetPrefix;
                         }
                     }
@@ -1325,7 +1322,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 {
                     sSymbol += cToken;
                     eState = SsGetString;
-                    eType = BRACKET_SYMBOLTYPE_FORMAT;
+                    eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                 }
                 else
                 {
@@ -1350,7 +1347,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     {
                         sSymbol.EraseAllChars('[');
                         sSymbol += cToken;
-                        eType = BRACKET_SYMBOLTYPE_COLOR;
+                        eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
                         eState = SsGetPrefix;
                     }
                 }
@@ -1363,7 +1360,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     case '<':
                     {
                         eState = SsStop;
-                        eType = BRACKET_SYMBOLTYPE_ERROR;
+                        eSymbolType = BRACKET_SYMBOLTYPE_ERROR;
                     }
                     break;
                     case '>':
@@ -1373,12 +1370,12 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol += cToken;
                             cLetter = ' ';
                             eState = SsStop;
-                            eType = NUMBERFORMAT_OP_NE;
+                            eSymbolType = NUMBERFORMAT_OP_NE;
                         }
                         else
                         {
                             eState = SsStop;
-                            eType = BRACKET_SYMBOLTYPE_ERROR;
+                            eSymbolType = BRACKET_SYMBOLTYPE_ERROR;
                         }
                     }
                     break;
@@ -1388,18 +1385,18 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         {
                             sSymbol += cToken;
                             cLetter = ' ';
-                            eType = NUMBERFORMAT_OP_LE;
+                            eSymbolType = NUMBERFORMAT_OP_LE;
                         }
                         else if (cLetter == '>')
                         {
                             sSymbol += cToken;
                             cLetter = ' ';
-                            eType = NUMBERFORMAT_OP_GE;
+                            eSymbolType = NUMBERFORMAT_OP_GE;
                         }
                         else
                         {
                             eState = SsStop;
-                            eType = BRACKET_SYMBOLTYPE_ERROR;
+                            eSymbolType = BRACKET_SYMBOLTYPE_ERROR;
                         }
                     }
                     break;
@@ -1432,7 +1429,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
         }                                   // of switch
     }                                       // of while
 
-    return eType;
+    return eSymbolType;
 }
 
 NfHackConversion SvNumberformat::Load( SvStream& rStream,
@@ -2680,7 +2677,6 @@ BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
         {
             case NF_SYMBOLTYPE_CALENDAR :
                 return FALSE;
-            break;
             case NF_KEY_EC :
             case NF_KEY_EEC :
             case NF_KEY_R :
@@ -2688,7 +2684,6 @@ BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
             case NF_KEY_AAA :
             case NF_KEY_AAAA :
                 return TRUE;
-            break;
         }
     }
     return FALSE;
@@ -3919,14 +3914,12 @@ DateFormat SvNumberformat::GetDateOrder() const
                 case NF_KEY_D :
                 case NF_KEY_DD :
                     return DMY;
-                break;
                 case NF_KEY_M :
                 case NF_KEY_MM :
                 case NF_KEY_MMM :
                 case NF_KEY_MMMM :
                 case NF_KEY_MMMMM :
                     return MDY;
-                break;
                 case NF_KEY_YY :
                 case NF_KEY_YYYY :
                 case NF_KEY_EC :
@@ -3934,7 +3927,6 @@ DateFormat SvNumberformat::GetDateOrder() const
                 case NF_KEY_R :
                 case NF_KEY_RR :
                     return YMD;
-                break;
             }
         }
     }
@@ -4031,6 +4023,9 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
             case NUMBERFORMAT_OP_GE :
                 rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
             break;
+            default:
+                OSL_ASSERT( "unsupported number format" );
+                break;
         }
         rStr += String( ::rtl::math::doubleToUString( fLimit,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
@@ -4041,7 +4036,7 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
 
 
 String SvNumberformat::GetMappedFormatstring(
-        const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLoc,
+        const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLocWrp,
         BOOL bDontQuote ) const
 {
     String aStr;
@@ -4093,11 +4088,11 @@ String SvNumberformat::GetMappedFormatstring(
             {
                 case 0 :
                     lcl_SvNumberformat_AddLimitStringImpl( aPrefix, eOp1,
-                        fLimit1, rLoc.getNumDecimalSep() );
+                        fLimit1, rLocWrp.getNumDecimalSep() );
                 break;
                 case 1 :
                     lcl_SvNumberformat_AddLimitStringImpl( aPrefix, eOp2,
-                        fLimit2, rLoc.getNumDecimalSep() );
+                        fLimit2, rLocWrp.getNumDecimalSep() );
                 break;
             }
         }
@@ -4150,26 +4145,26 @@ String SvNumberformat::GetMappedFormatstring(
                 {
                     aStr += rKeywords[pType[j]];
                     if( NF_KEY_NNNN == pType[j] )
-                        aStr += rLoc.getLongDateDayOfWeekSep();
+                        aStr += rLocWrp.getLongDateDayOfWeekSep();
                 }
                 else
                 {
                     switch ( pType[j] )
                     {
                         case NF_SYMBOLTYPE_DECSEP :
-                            aStr += rLoc.getNumDecimalSep();
+                            aStr += rLocWrp.getNumDecimalSep();
                         break;
                         case NF_SYMBOLTYPE_THSEP :
-                            aStr += rLoc.getNumThousandSep();
+                            aStr += rLocWrp.getNumThousandSep();
                         break;
                         case NF_SYMBOLTYPE_DATESEP :
-                            aStr += rLoc.getDateSep();
+                            aStr += rLocWrp.getDateSep();
                         break;
                         case NF_SYMBOLTYPE_TIMESEP :
-                            aStr += rLoc.getTimeSep();
+                            aStr += rLocWrp.getTimeSep();
                         break;
                         case NF_SYMBOLTYPE_TIME100SECSEP :
-                            aStr += rLoc.getTime100SecSep();
+                            aStr += rLocWrp.getTime100SecSep();
                         break;
                         case NF_SYMBOLTYPE_STRING :
                             if( bDontQuote )
