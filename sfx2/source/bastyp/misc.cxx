@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:57:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:14:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,54 +63,18 @@ String SearchAndReplace( const String &rSource,
 
 //--------------------------------------------------------------------
 
-String SfxStringEncode( const String &rSource, const char *pKey  )
+String SfxStringEncode( const String &rSource, const char *  )
 {
     String aRet;
     String aCoded(rSource);
-/*ASMUSS
-    // codieren
-    USHORT nCode = 0;
-    for ( USHORT n1 = 0; n1 < aCoded.Len(); ++n1 )
-    {
-        aCoded[n1] ^= pKey[nCode];
-        if ( !pKey[++nCode] )
-            nCode = 0;
-    }
-
-    // als reine Buchstabenfolge darstellen
-    for ( USHORT n2 = 0; n2 < aCoded.Len(); ++n2 )
-    {
-        aRet += (char) ( 'a' + ((aCoded[n2] & 0xF0) >> 4) );
-        aRet += (char) ( 'a' +  (aCoded[n2] & 0xF) );
-    }
-*/
     return aRet;
 }
 
 //--------------------------------------------------------------------
 
-String SfxStringDecode( const String &rSource, const char *pKey  )
+String SfxStringDecode( const String &, const char *  )
 {
-    // Output-Buffer aufbereiten
-    String aRet;/*ASMUSS
-    aRet.AllocStrBuf( rSource.Len() / 2 );
-
-    // Buchstabenfolge in normale Zeichen wandeln
-    USHORT nTo = 0;
-    for ( USHORT n1 = 0; n1 < rSource.Len(); n1 += 2)
-        aRet[nTo++] = (unsigned char)
-                        ( ( ( rSource[n1] - 'a' ) << 4 ) +
-                          ( ( rSource[ USHORT(n1+1) ] - 'a' ) ) );
-
-    // decodieren
-    USHORT nCode = 0;
-    for ( USHORT n2 = 0; n2 < aRet.Len(); ++n2 )
-    {
-        aRet[n2] ^= pKey[nCode];
-        if ( !pKey[++nCode] )
-            nCode = 0;
-    }
-*/
+    String aRet;
     return aRet;
 }
 
