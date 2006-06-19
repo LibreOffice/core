@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:19:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
     ULONG nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
-    XMLFamilyData_Impl aTmp( nFamily );
-    if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
+    XMLFamilyData_Impl aTemporary( nFamily );
+    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
     {
         pFamily = maFamilyList.GetObject( nPos );
     }
@@ -276,10 +276,10 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    ULONG nPos;
-    XMLFamilyData_Impl aTmp( nFamily );
+    sal_uInt32 nPos;
+    XMLFamilyData_Impl aTemporary( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
-    if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
+    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
     {
         pFamily = maFamilyList.GetObject( nPos );
     }
@@ -337,9 +337,9 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
            sal_Int32 nFamily,
-        const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
+        const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &,
+        const SvXMLUnitConverter&,
+        const SvXMLNamespaceMap&,
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     sal_uInt32 nCount = 0;
@@ -385,7 +385,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             {
                 const SvXMLAutoStylePoolPropertiesP_Impl *pProperties =
                     pParent->GetPropertiesList().GetObject( j );
-                sal_uInt32 nPos = pProperties->GetPos();
+                nPos = pProperties->GetPos();
                 DBG_ASSERT( nPos < nCount,
                         "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
                 if( nPos < nCount )
