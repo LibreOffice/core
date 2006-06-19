@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:09:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:03:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 
 // ------------------------------------------------------------------------
 
-SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormat )
+SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const String& )
 {
     if( FileExists( rURL ) )
         Init( rGraphic, rURL );
@@ -407,7 +407,7 @@ SgaObjectAnim::SgaObjectAnim()
 
 SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
                               const INetURLObject& rURL,
-                              const String& rFormatName )
+                              const String& )
 {
     aURL = rURL;
     bIsValid = CreateThumb( rGraphic );
