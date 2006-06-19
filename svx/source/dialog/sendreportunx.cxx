@@ -93,7 +93,7 @@ static string get_profile_string( const char *pFileName, const char *pSectionNam
                     string  keyname = line.substr( 0, iEqualSign );
                     keyname = trim_string( keyname );
 
-                    string  value = line.substr( iEqualSign + 1, -1 );
+                    string  value = line.substr( iEqualSign + 1, string::npos );
                     value = trim_string( value );
 
                     if (
@@ -123,7 +123,7 @@ static bool get_profile_bool( const char *pFileName, const char *pSectionName, c
     return false;
 }
 
-static String get_profile_String( const char *pFileName, const char *pSectionName, const char *pKeyName, const char *pDefault = NULL )
+static String get_profile_String( const char *pFileName, const char *pSectionName, const char *pKeyName, const char * = NULL )
 {
     string  str = get_profile_string( pFileName, pSectionName, pKeyName );
     String  result( str.c_str(), RTL_TEXTENCODING_UTF8 );
