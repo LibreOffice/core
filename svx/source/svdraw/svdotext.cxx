@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:35:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,11 +169,12 @@ sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
 
 TYPEINIT1(SdrTextObj,SdrAttrObj);
 
-SdrTextObj::SdrTextObj():
-    eTextKind(OBJ_TEXT),
+SdrTextObj::SdrTextObj()
+:   SdrAttrObj(),
     pOutlinerParaObject(NULL),
     pEdtOutl(NULL),
-    pFormTextBoundRect(NULL)
+    pFormTextBoundRect(NULL),
+    eTextKind(OBJ_TEXT)
 {
     bTextSizeDirty=FALSE;
     bPortionInfoChecked=FALSE;
@@ -199,9 +200,9 @@ SdrTextObj::SdrTextObj():
     mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
-SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
+SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
+:   SdrAttrObj(),
     aRect(rNewRect),
-    eTextKind(OBJ_TEXT),
     pOutlinerParaObject(NULL),
     pEdtOutl(NULL),
     pFormTextBoundRect(NULL)
@@ -231,11 +232,12 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
     mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
-    eTextKind(eNewTextKind),
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
+:   SdrAttrObj(),
     pOutlinerParaObject(NULL),
     pEdtOutl(NULL),
-    pFormTextBoundRect(NULL)
+    pFormTextBoundRect(NULL),
+    eTextKind(eNewTextKind)
 {
     bTextSizeDirty=FALSE;
     bTextFrame=TRUE;
@@ -261,12 +263,13 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
     mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
+:   SdrAttrObj(),
     aRect(rNewRect),
-    eTextKind(eNewTextKind),
     pOutlinerParaObject(NULL),
     pEdtOutl(NULL),
-    pFormTextBoundRect(NULL)
+    pFormTextBoundRect(NULL),
+    eTextKind(eNewTextKind)
 {
     bTextSizeDirty=FALSE;
     bTextFrame=TRUE;
@@ -293,12 +296,13 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
     mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat):
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat)
+:   SdrAttrObj(),
     aRect(rNewRect),
-    eTextKind(eNewTextKind),
     pOutlinerParaObject(NULL),
     pEdtOutl(NULL),
-    pFormTextBoundRect(NULL)
+    pFormTextBoundRect(NULL),
+    eTextKind(eNewTextKind)
 {
     bTextSizeDirty=FALSE;
     bTextFrame=TRUE;
@@ -373,12 +377,12 @@ void SdrTextObj::NbcSetText(const XubString& rStr)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
-    OutputDevice* pRef1=rOutliner.GetRefDevice();
+    //OutputDevice* pRef1=rOutliner.GetRefDevice();
     rOutliner.SetUpdateMode(TRUE);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
     OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
     Size aSiz(rOutliner.CalcTextSize());
-    OutputDevice* pRef2=rOutliner.GetRefDevice();
+    //OutputDevice* pRef2=rOutliner.GetRefDevice();
     rOutliner.Clear();
     NbcSetOutlinerParaObject(pNewText);
     aTextSize=aSiz;
@@ -1493,14 +1497,14 @@ sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 // Geht z.Zt. nur wenn das Obj schon wenigstens einmal gepaintet wurde
 // Denn dann ist der MtfAnimator initiallisiert
-void SdrTextObj::StartTextAnimation(OutputDevice* pOutDev, const Point& rOffset, long nExtraData)
+void SdrTextObj::StartTextAnimation(OutputDevice* /*pOutDev*/, const Point& /*rOffset*/, long /*nExtraData*/)
 {
     // #111096#
     // use new text animation
     SetTextAnimationAllowed(sal_True);
 }
 
-void SdrTextObj::StopTextAnimation(OutputDevice* pOutDev, long nExtraData)
+void SdrTextObj::StopTextAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
 {
     // #111096#
     // use new text animation
@@ -1574,7 +1578,7 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     SdrFitToSizeType eFit=GetFitToSize();
     FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
     Rectangle aR(aRect);
-    Rectangle aAnchor(aR);
+    Rectangle aAnchor2(aR);
     Rectangle aTextRect(aR);
     SdrOutliner* pOutliner = NULL;
     pOutliner = &pModel->GetHitTestOutliner();
@@ -1585,10 +1589,10 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     }
     else
     {
-        TakeTextRect( *pOutliner, aTextRect, FALSE, &aAnchor, FALSE ); // EditText nicht mehr ignorieren! TRUE); // EditText ignorieren!
+        TakeTextRect( *pOutliner, aTextRect, FALSE, &aAnchor2, FALSE ); // EditText nicht mehr ignorieren! TRUE); // EditText ignorieren!
 
         if (bFitToSize)
-            aR=aAnchor;
+            aR=aAnchor2;
         else
             aR=aTextRect;
     }
@@ -1634,8 +1638,8 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
             // Zunaechst meine Dok-Koordinaten in EE-Dok-Koordinaten umwandeln.
             Point aPt(rPnt); aPt-=aR.TopLeft();
             if (bFitToSize) { // #38214#: FitToSize berueksichtigen
-                Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
-                Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
+                Fraction aX(aTextRect.GetWidth()-1,aAnchor2.GetWidth()-1);
+                Fraction aY(aTextRect.GetHeight()-1,aAnchor2.GetHeight()-1);
                 ResizePoint(aPt,Point(),aX,aY);
             }
             if (aGeo.nDrehWink!=0) RotatePoint(aPt,Point(),-aGeo.nSin,aGeo.nCos); // -sin fuer Unrotate
@@ -1769,7 +1773,7 @@ void SdrTextObj::operator=(const SdrObject& rObj)
     }
 }
 
-void SdrTextObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+void SdrTextObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
 {
     Polygon aPol(aRect);
     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
@@ -1789,13 +1793,13 @@ void SdrTextObj::TakeContour(XPolyPolygon& rPoly) const
         // in every case
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
 
-        Rectangle aAnchor;
+        Rectangle aAnchor2;
         Rectangle aR;
-        TakeTextRect(rOutliner,aR,FALSE,&aAnchor);
+        TakeTextRect(rOutliner,aR,FALSE,&aAnchor2);
         rOutliner.Clear();
         SdrFitToSizeType eFit=GetFitToSize();
         FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-        if (bFitToSize) aR=aAnchor;
+        if (bFitToSize) aR=aAnchor2;
         Polygon aPol(aR);
         if (aGeo.nDrehWink!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
         rPoly.Insert(XPolygon(aPol));
@@ -2266,8 +2270,8 @@ void SdrTextObj::ForceOutlinerParaObject()
             pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
 
             pOutliner->SetStyleSheet( 0, GetStyleSheet());
-            OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
-            SetOutlinerParaObject( pOutlinerParaObject );
+            OutlinerParaObject* pOutlinerParaObject2 = pOutliner->CreateParaObject();
+            SetOutlinerParaObject( pOutlinerParaObject2 );
 
             delete pOutliner;
         }
@@ -2360,7 +2364,7 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
+BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
     double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
@@ -2424,7 +2428,7 @@ BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) c
 // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
     Vector2D aScale, aTranslate;
