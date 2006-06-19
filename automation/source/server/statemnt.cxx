@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:45:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,8 +526,8 @@ StatementSlot::StatementSlot( SCmdStream *pCmdIn )
 
 // Constructor for UnoSlot
 StatementSlot::StatementSlot()
-: pItemArr(NULL)
-, nAnzahl( 0 )
+: nAnzahl( 0 )
+, pItemArr(NULL)
 , nFunctionId( 0 )
 {}
 
@@ -1023,8 +1023,9 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                             if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
                                 pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), FALSE );
-                            for( int i = 0 ; i < pItemWin->GetChildCount(); i++ )
-                                WriteControlData( pItemWin->GetChild(i), nConf, FALSE );
+                            USHORT ii;
+                            for( ii = 0 ; ii < pItemWin->GetChildCount(); ii++ )
+                                WriteControlData( pItemWin->GetChild(ii), nConf, FALSE );
                         }
                         else
                         {
@@ -1253,11 +1254,6 @@ class DisplayHidWin : public ToolBox
     BOOL bConfigChanged;
     void EnableButtons( ULONG nConf );
 
-    // aborting by pressing shist twice
-    BOOL bOldShift;
-    Time aLatest;
-    USHORT nShiftCount;
-
     ULONG nEventHookID;
     static long stub_VCLEventHookProc( NotifyEvent& rEvt, void* pData )
     {
@@ -1269,6 +1265,11 @@ class DisplayHidWin : public ToolBox
 
     SysWinContainer *pContainer;
 
+    // aborting by pressing shist twice
+    BOOL bOldShift;
+    Time aLatest;
+    USHORT nShiftCount;
+
 public:
     DisplayHidWin();
     ~DisplayHidWin();
@@ -1279,9 +1280,9 @@ public:
     virtual void    SetText( const XubString& rStr );
 
     void SetDisplayText( const String &aNewText ){ pEdit->SetText(aNewText); }
-    const String GetDisplayText(){ return pEdit->GetText(); }
-    const BOOL IsDisplayTextModified(){ return pEdit->IsModified(); }
-    const void ClearDisplayTextModified(){ pEdit->ClearModifyFlag(); }
+    String GetDisplayText() const { return pEdit->GetText(); }
+    BOOL IsDisplayTextModified() const { return pEdit->IsModified(); }
+    void ClearDisplayTextModified() const { pEdit->ClearModifyFlag(); }
 
     void SetConfig( ULONG nConf );
     ULONG GetConfig();
@@ -1652,9 +1653,6 @@ private:
 
     Timer InplaceTimer;
 
-    BOOL bAvailable;
-    BOOL bNext;
-
 //  virtual void MouseButtonUp( const MouseEvent& rMEvt );
 //  virtual void MouseMove( const MouseEvent& rMEvt );
 
@@ -1672,6 +1670,9 @@ private:
     Window *Act;
     Window *pTranslateWin;
     BOOL bSelecting;
+
+    BOOL bAvailable;
+    BOOL bNext;
 
     BOOL TestChangedDataSaved();
 
@@ -1715,10 +1716,10 @@ TranslateWin::TranslateWin()
 , PushButtonTT_PB_RESTORE( this, TTProperties::GetSvtResId( TT_PB_RESTORE ) )
 , Old( NULL )
 , Act( NULL )
+, pTranslateWin( NULL )
 , bSelecting( FALSE )
 , bAvailable( FALSE )
 , bNext( FALSE )
-, pTranslateWin( NULL )
 {
     FreeResource();
     PushButtonTT_PB_NEXT.SetClickHdl( LINK( this, TranslateWin, DoNext ) );
@@ -1821,6 +1822,7 @@ IMPL_LINK( TranslateWin, DoRestore, PushButton*, EMPTYARG )
 
 IMPL_LINK( TranslateWin, TranslationChanged, Edit*, pEdit )
 {
+    (void) pEdit; /* avoid warning about unused parameter */
     PushButtonTT_PB_RESTORE.Enable();
     InplaceTimer.Start();
     return 0;
@@ -2283,7 +2285,7 @@ Window* StatementCommand::GetNextRecoverWin()
     // über die TopLevelWindows der App iterieren
     Window* pBase = Application::GetFirstTopLevelWindow();
     Window *pControl = NULL;
-    Window* pFirstDocFrame = NULL;
+    Window* pMyFirstDocFrame = NULL;
     while ( pBase )
     {
         // zuerst weitere Fenster auf dem Fenster suchen und schliessen
@@ -2308,16 +2310,16 @@ Window* StatementCommand::GetNextRecoverWin()
             if ( pBase->IsVisible() && !IsFirstDocFrame( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
                 return pBase;
 
-            if ( !pFirstDocFrame && IsFirstDocFrame( pBase ) )
-                pFirstDocFrame = pBase;
+            if ( !pMyFirstDocFrame && IsFirstDocFrame( pBase ) )
+                pMyFirstDocFrame = pBase;
         }
 
         pBase = Application::GetNextTopLevelWindow( pBase );
     }
 #ifdef RESET_APPLICATION_TO_BACKING_WINDOW
     // close the FirstDocFrame last, It will not be closed, but the Document inside will be closed.
-    if ( IsDocWin( pFirstDocFrame ) )
-        return pFirstDocFrame;
+    if ( IsDocWin( pMyFirstDocFrame ) )
+        return pMyFirstDocFrame;
 #endif // def RESET_APPLICATION_TO_BACKING_WINDOW
 
     return NULL;
@@ -3393,6 +3395,7 @@ BOOL StatementCommand::Execute()
 
 #if OSL_DEBUG_LEVEL > 1
                     USHORT nEntries = Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count();
+                    (void) nEntries; /* avoid warning about unused parameter */
 #endif
                     // The Count is only larger than 2 is the path is a directory which is not empty
                     // the Count of 2 results from the "." and ".." directory
@@ -3577,7 +3580,7 @@ BOOL StatementCommand::UnpackStorage( SotStorageRef xStorage, DirEntry &aBaseDir
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlType )
+StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
 : StatementList()
 , nNr1( 0 )
 , nNr2( 0 )
@@ -3590,13 +3593,13 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlType )
 , bBool2(FALSE)
 {
     QueStatement( NULL );
-    if ( nControlType == SIControl )
+    if ( nControlIdType == SIControl )
     {
         comm_ULONG nId;
         pCmdIn->Read( nId );
         aUId = SmartId( nId );
     }
-    else if ( nControlType == SIStringControl )
+    else if ( nControlIdType == SIStringControl )
     {
         String aId;
         pCmdIn->Read( aId );
@@ -3673,10 +3676,10 @@ BOOL IsDialog(Window *pWin)
 
 
             return TRUE;
-            break;
+//          break;
         default:
             return FALSE;
-            break;
+//          break;
     }
 }
 
@@ -4575,7 +4578,6 @@ BOOL StatementControl::Execute()
 
     if ( pControl && pControl->GetType() == WINDOW_TOOLBOX )
     {
-        ToolBox *pTB = ((ToolBox*)pControl);
         if ( !aUId.Matches( pControl->GetSmartUniqueOrHelpId() ) )
         {   // Also wenn wir irgendwas auf einer Toolbox gefunden haben
             switch ( nMethodId )
@@ -4627,7 +4629,7 @@ BOOL StatementControl::Execute()
             Advance();
             delete this;
             return TRUE;
-            break;
+//          break;
     }
 
 
@@ -5312,7 +5314,7 @@ BOOL StatementControl::Execute()
                                         Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                         if ( aRect.IsEmpty() )
                                         {
-                                            Rectangle aRect = pTB->GetMenubuttonRect();
+                                            aRect = pTB->GetMenubuttonRect();
                                             MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonDown( pTB, aMEvnt );
 
@@ -5325,7 +5327,7 @@ BOOL StatementControl::Execute()
                                         }
                                         else
                                         {
-                                            Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
+                                            aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                             MouseEvent aMEvnt;
                                             aMEvnt = MouseEvent(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonDown( pTB, aMEvnt );
@@ -5356,13 +5358,13 @@ BOOL StatementControl::Execute()
 
                                         if ( pWin && pWin->GetType() == WINDOW_FLOATINGWINDOW )
                                         {
-                                            MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
+                                            aMEvnt = MouseEvent(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonUp( pTB, aMEvnt );
                                             ((FloatingWindow*)pWin)->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
                                         }
                                         else
                                         {
-                                            MouseEvent aMEvnt(Point(1,-10), 1, MOUSE_SIMPLECLICK,MOUSE_LEFT);
+                                            aMEvnt = MouseEvent(Point(1,-10), 1, MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonUp( pTB, aMEvnt );
                                             ReportError( aUId, GEN_RES_STR1( S_TEAROFF_FAILED, MethodString( nMethodId ) ) );
                                         }
@@ -5469,7 +5471,7 @@ BOOL StatementControl::Execute()
     SvLBoxEntry *pThisEntry = ((SvTreeListBox*)pControl)->First(); \
     { \
         int niTemp = Anzahl; \
-        while ( Anzahl-- ) \
+        while ( niTemp-- ) \
         { \
             pThisEntry = ((SvTreeListBox*)pControl)->Next( pThisEntry ); \
         } \
@@ -5745,10 +5747,7 @@ SvLBoxString* pItem = NULL;\
                                                 CellControllerRef aControler;
                                                 aControler = ((EditBrowseBox*)pControl)->Controller();
                                                 if ( aControler.Is() )
-                                                {
-                                                    Window& aWin = aControler->GetWindow();
                                                     pRet->GenReturn ( RET_Value, aUId, aControler->GetWindow().GetText() );
-                                                }
                                                 else
                                                     ReportError( aUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "BrowseBox" ) );
                                             }
@@ -5793,7 +5792,7 @@ SvLBoxString* pItem = NULL;\
                                                 bBool1 = TRUE;
                                             if( nParams & PARAM_STR_1 )
                                             {
-            /*                                  ListBox *pLB = ((ListBox*)pControl);
+            / *                                 ListBox *pLB = ((ListBox*)pControl);
                                                 if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
                                                     ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
                                                 else
@@ -6134,7 +6133,7 @@ SvLBoxString* pItem = NULL;\
                         case M_Size:
                         case M_Move:
                             goto FloatWin;
-                            break;
+//                          break;
                         case M_IsMax :
                             pRet->GenReturn ( RET_Value, aUId, ((WorkWindow*)pControl)->IsMaximized() );
                             break;
