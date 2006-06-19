@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLParser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:57:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ class SAXParser : public cppu::WeakImplHelper2< XErrorHandler, XDocumentHandler 
     Reference < XParser > xParser;
 
     // XErrorHandler
-    void AddToList( sal_Char* cuType, const ::com::sun::star::uno::Any& aSAXParseException );
+    void AddToList( const sal_Char* cuType, const ::com::sun::star::uno::Any& aSAXParseException );
     String aErrors;
 
     NodeRef xTreeRoot;
@@ -317,7 +317,7 @@ BOOL SAXParser::Parse( ParseAction aAct )
 
 
 // Helper Methods XErrorHandler
-void SAXParser::AddToList( sal_Char* cuType, const ::com::sun::star::uno::Any& aSAXParseException )
+void SAXParser::AddToList( const sal_Char* cuType, const ::com::sun::star::uno::Any& aSAXParseException )
 {
     SAXParseException aException;
     aSAXParseException >>= aException;
@@ -372,6 +372,7 @@ void SAXParser::startElement( const ::rtl::OUString& aName, const ::com::sun::st
 
 void SAXParser::endElement( const ::rtl::OUString& aName ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) aName; /* avoid warning about unused parameter */
     xCurrentNode = xCurrentNode->GetParent();
 }
 
@@ -395,14 +396,18 @@ void SAXParser::characters( const ::rtl::OUString& aChars ) throw (::com::sun::s
 
 void SAXParser::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) aWhitespaces; /* avoid warning about unused parameter */
 }
 
 void SAXParser::processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) aTarget; /* avoid warning about unused parameter */
+    (void) aData; /* avoid warning about unused parameter */
 }
 
 void SAXParser::setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) xLocator; /* avoid warning about unused parameter */
 #if OSL_DEBUG_LEVEL > 1
     ::rtl::OUString aTester;
     aTester = xLocator->getPublicId();
