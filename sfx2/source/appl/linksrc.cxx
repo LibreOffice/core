@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linksrc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:42:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/svarray.hxx>
-#pragma hdrstop
 
 
 using namespace ::com::sun::star::uno;
