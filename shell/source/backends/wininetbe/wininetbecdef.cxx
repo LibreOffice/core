@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wininetbecdef.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:50:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:17:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,14 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 //------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char **aEnvTypeName, uno_Environment **aEnvironment) {
+    const sal_Char **aEnvTypeName, uno_Environment ** /*aEnvironment*/) {
 
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *pServiceManager, void *pRegistryKey) {
+extern "C" sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void *pRegistryKey) {
 
     using namespace ::com::sun::star::registry;
     if (pRegistryKey)

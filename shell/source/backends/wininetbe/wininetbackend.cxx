@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wininetbackend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:49:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ WinInetBackend* WinInetBackend::createInstance(
 // ---------------------------------------------------------------------------------------
 
 uno::Reference<backend::XLayer> SAL_CALL WinInetBackend::getLayer(
-        const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
+        const rtl::OUString& aComponent, const rtl::OUString& /*aTimestamp*/)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
 
@@ -99,7 +99,7 @@ uno::Reference<backend::XLayer> SAL_CALL WinInetBackend::getLayer(
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-WinInetBackend::getUpdatableLayer(const rtl::OUString& aComponent)
+WinInetBackend::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
     throw (backend::BackendAccessException,lang::NoSupportException,
            lang::IllegalArgumentException)
 {
