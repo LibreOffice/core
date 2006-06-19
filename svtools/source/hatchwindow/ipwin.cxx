@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:05:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:09:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 *************************************************************************/
 SvResizeHelper::SvResizeHelper()
     : aBorder( 5, 5 )
-    , bResizeable( TRUE )
     , nGrab( -1 )
+    , bResizeable( TRUE )
 {
 }
 
@@ -478,8 +478,8 @@ SvResizeWindow::SvResizeWindow
     VCLXHatchWindow* pWrapper
 )
     : Window( pParent, WB_CLIPCHILDREN )
-    , m_pWrapper( pWrapper )
     , m_nMoveGrab( -1 )
+    , m_pWrapper( pWrapper )
 {
     OSL_ENSURE( pParent != NULL && pWrapper != NULL, "Wrong initialization of hatch window!\n" );
     SetBackground();
