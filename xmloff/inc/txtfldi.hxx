@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:09:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,8 +745,6 @@ protected:
 class XMLRevisionDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
     const ::rtl::OUString sPropertyRevision;
-    sal_Int16 nRevision;
-    sal_Bool bRevisionOK;
 
 public:
 
