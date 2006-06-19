@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagesdocumenthandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,6 +331,9 @@ throw(  SAXException, RuntimeException )
                                 m_pImages->aHighContrastMaskURL = xAttribs->getValueByIndex( n );
                             }
                             break;
+
+                                          default:
+                                              break;
                         }
                     }
                 } // for
@@ -388,6 +391,9 @@ throw(  SAXException, RuntimeException )
                                 pItem->nIndex       = xAttribs->getValueByIndex( n ).toInt32();
                             }
                             break;
+
+                                          default:
+                                              break;
                         }
                     }
                 }
@@ -500,6 +506,9 @@ throw(  SAXException, RuntimeException )
                                 pItem->aURL         = xAttribs->getValueByIndex( n );
                             }
                             break;
+
+                                          default:
+                                              break;
                         }
                     }
                 }
@@ -536,6 +545,9 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages->Insert( pItem, m_pExternalImages->Count() );
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
@@ -592,22 +604,25 @@ throw(  SAXException, RuntimeException )
                 m_bExternalImageStartFound = sal_False;
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
 
-void SAL_CALL OReadImagesDocumentHandler::characters(const OUString& aChars)
+void SAL_CALL OReadImagesDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const OUString& aWhitespaces)
+void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::processingInstruction(
-    const OUString& aTarget, const OUString& aData )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
