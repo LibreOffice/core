@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_policy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:09:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,8 +440,9 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
 PolicyReader::~PolicyReader()
     SAL_THROW( () )
 {
-    oslFileError rc = ::osl_closeFile( m_file );
-    OSL_ASSERT( osl_File_E_None == rc );
+    if ( ::osl_closeFile( m_file ) != osl_File_E_None ) {
+        OSL_ASSERT( false );
+    }
 }
 
 static OUString s_grant = OUSTR("grant");
