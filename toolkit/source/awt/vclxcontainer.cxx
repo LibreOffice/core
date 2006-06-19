@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:12:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,9 +220,9 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
                 Window* pBehindLast = pWin->GetWindow( WINDOW_NEXT );
                 if ( pBehindLast )
                 {
-                    WinBits nStyle = pBehindLast->GetStyle();
-                    nStyle |= WB_GROUP;
-                    pBehindLast->SetStyle( nStyle );
+                    WinBits nLastStyle = pBehindLast->GetStyle();
+                    nLastStyle |= WB_GROUP;
+                    pBehindLast->SetStyle( nLastStyle );
                 }
             }
 
