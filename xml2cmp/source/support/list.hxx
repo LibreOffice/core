@@ -4,9 +4,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:57:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,8 @@ class List
                             unsigned            pos,
                             const XX &          elem );
     void                push_back(
-                            const XX &          elem)
-                                                { insert(size(),elem); }
+                            const XX &          elem_)
+                                                { insert(size(),elem_); }
 
     virtual void        remove(
                             unsigned            pos );
@@ -141,7 +141,7 @@ List<XX>::List()
 
 template <class XX>
 void
-List<XX>::insert(unsigned pos, const XX & elem)
+List<XX>::insert(unsigned pos, const XX & elem_)
 {
     if ( pos > len )
       return;
@@ -151,7 +151,7 @@ List<XX>::insert(unsigned pos, const XX & elem)
     {
         inhalt[p] = inhalt[p-1];
     }
-    inhalt[pos] = elem;
+    inhalt[pos] = elem_;
     len++;
 }
 
@@ -231,14 +231,14 @@ DynamicList<XY>::~DynamicList()
 
 template <class XY>
 void
-DynamicList<XY>::insert(unsigned pos, XY * const & elem)
+DynamicList<XY>::insert(unsigned pos, XY * const & elem_)
 {
     if ( pos > this->len )
       return;
 
     checkSize(this->len+2);
     memmove(this->inhalt[pos+1], this->inhalt[pos], (this->len-pos) * sizeof(XY*) );
-    this->inhalt[pos] = elem;
+    this->inhalt[pos] = elem_;
     this->len++;
 }
 
