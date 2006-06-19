@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkpchars.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:13:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,18 +164,18 @@ CharacterSource::MoveOn_OverStack()
 }
 
 CharacterSource::
-S_SourceState::S_SourceState( DYN char *    dpSource,
-                              intt          nSourceSize,
-                              intt          nCurPos,
-                              intt          nLastCut,
-                              intt          nLastTokenStart,
-                              char          cCharAtLastCut )
-    :   dpSource(dpSource),
-        nSourceSize(nSourceSize),
-        nCurPos(nCurPos),
-        nLastCut(nLastCut),
-        nLastTokenStart(nLastTokenStart),
-        cCharAtLastCut(cCharAtLastCut)
+S_SourceState::S_SourceState( DYN char *    dpSource_,
+                              intt          nSourceSize_,
+                              intt          nCurPos_,
+                              intt          nLastCut_,
+                              intt          nLastTokenStart_,
+                              char          cCharAtLastCut_ )
+    :   dpSource(dpSource_),
+        nSourceSize(nSourceSize_),
+        nCurPos(nCurPos_),
+        nLastCut(nLastCut_),
+        nLastTokenStart(nLastTokenStart_),
+        cCharAtLastCut(cCharAtLastCut_)
 {
 }
 
