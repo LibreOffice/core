@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dundo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ TYPEINIT1(E3dRotateUndoAction, E3dUndoAction);
 
                         E3dRotateUndoAction
 
-************************************************************************\
+************************************************************************/
 
 /************************************************************************\
 |*
@@ -137,11 +137,11 @@ E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
     const SfxItemSet& rOldSet,
     BOOL bUseSubObj)
 :   SdrUndoAction( rModel ),
-    pView        ( p3dView ),
     pObject      ( pInObject ),
+    pView        ( p3dView ),
+    bUseSubObjects(bUseSubObj),
     aNewSet      ( rNewSet ),
-    aOldSet      ( rOldSet ),
-    bUseSubObjects(bUseSubObj)
+    aOldSet      ( rOldSet )
 {
 }
 
@@ -197,7 +197,7 @@ void E3dAttributesUndoAction::Redo()
 |* Mehrfaches Undo nicht moeglich
 |*
 \************************************************************************/
-BOOL E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& rView) const
+BOOL E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
     return FALSE;
 }
