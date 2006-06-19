@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 09:57:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,8 +303,8 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------
@@ -386,7 +386,7 @@ class Frame :   // interfaces
         //  Attention: windowResized() and windowShown() are implement only! All other are empty!
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL windowResized                      (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowMoved                        (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowMoved                        (   const   css::awt::WindowEvent&                                              /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowShown                        (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowHidden                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
 
@@ -395,7 +395,7 @@ class Frame :   // interfaces
         //  Attention: focusLost() not implemented yet!
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL focusGained                        (   const   css::awt::FocusEvent&                                               aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL focusLost                          (   const   css::awt::FocusEvent&                                               aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL focusLost                          (   const   css::awt::FocusEvent&                                               /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
 
         //---------------------------------------------------------------------------------------------------------
         //  XTopWindowListener
@@ -403,11 +403,11 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL windowActivated                    (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowDeactivated                  (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowOpened                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowOpened                       (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowClosing                      (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowClosed                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
-        virtual void                                                SAL_CALL windowMinimized                    (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
-        virtual void                                                SAL_CALL windowNormalized                   (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowClosed                       (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowMinimized                    (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowNormalized                   (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
 
         //---------------------------------------------------------------------------------------------------------
         //  XEventListener
