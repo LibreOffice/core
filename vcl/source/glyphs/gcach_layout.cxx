@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:07:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,16 +167,28 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
 #ifdef ENABLE_ICU_LAYOUT
 
 #define bool_t signed char
+
+// disable warnings in icu layout headers
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
+
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
 #include <layout/LEScripts.h>
+
+// enable warnings again
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
+
 #include <unicode/uscript.h>
 #include <unicode/ubidi.h>
 
 using namespace U_ICU_NAMESPACE;
 
-static const int ICU_DELETED_GLYPH = 0xFFFF;
-static const int ICU_MARKED_GLYPH = 0xFFFE;
+static const LEGlyphID ICU_DELETED_GLYPH = 0xFFFF;
+static const LEGlyphID ICU_MARKED_GLYPH = 0xFFFE;
 
 // -----------------------------------------------------------------------
 
@@ -198,6 +210,7 @@ public:
     virtual float           getScaleFactorX() const;
     virtual float           getScaleFactorY() const;
 
+    using LEFontInstance::mapCharToGlyph;
     virtual LEGlyphID       mapCharToGlyph( LEUnicode32 ch ) const;
 
     virtual le_int32        getAscent() const;
@@ -325,8 +338,13 @@ void IcuFontFromServerFont::getGlyphAdvance( LEGlyphID nGlyphIndex,
 
 // -----------------------------------------------------------------------
 
-le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID glyph,
-    le_int32 pointNumber, LEPoint& point ) const
+le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID,
+    le_int32
+#if OSL_DEBUG_LEVEL > 1
+pointNumber
+#endif
+    ,
+    LEPoint& ) const
 {
     //TODO: replace dummy implementation
 #if OSL_DEBUG_LEVEL > 1
@@ -461,7 +479,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         int nLastCharPos = -1;
         for( int i = 0; i < nRawRunGlyphCount; ++i, ++pPos )
         {
-            int nGlyphIndex = pIcuGlyphs[i];
+            LEGlyphID nGlyphIndex = pIcuGlyphs[i];
             if( (nGlyphIndex == ICU_MARKED_GLYPH)
             ||  (nGlyphIndex == ICU_DELETED_GLYPH) )
                 continue;  // ignore these glyphs
