@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_func2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:48:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ PE_Function::PE_Function( const RParent &       i_rCurInterface )
 }
 
 PE_Function::PE_Function( const RParent &     i_rCurService,
-                          E_Constructor       i_eCtorMarker )
+                          E_Constructor        )
     :   eState(expect_name),
         sData_Name(),
         nData_ReturnType(0),
@@ -278,13 +278,17 @@ PE_Function::Process_BuiltInType( const TokBuiltInType & i_rToken )
                    GoIntoParameterVariable();
                 break;
         case expect_parameter_separator:
-        {
-                csv_assert(i_rToken.Id() == TokBuiltInType::bty_ellipse);
-
-                pCurFunction->Set_Ellipse();
-                   SetResult(done,stay);
-                // eState stays the same, because we wait for the closing ")" now.
-        }       break;
+                if (i_rToken.Id() != TokBuiltInType::bty_ellipse)
+                {
+                    OnDefault();
+                }
+                else
+                {
+                    pCurFunction->Set_Ellipse();
+                       SetResult(done,stay);
+                    // eState stays the same, because we wait for the closing ")" now.
+                }
+                break;
         case expect_exception:
                 GoIntoException();
                 break;
