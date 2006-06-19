@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,40 +258,42 @@ throw(  SAXException, RuntimeException )
                     aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'toolbar:toolbar' cannot be embeded into 'toolbar:toolbar'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
-                else
-                {
-                    // Check if we have a UI name set in our XML file
-                    OUString aUIName;
-                    for ( int n = 0; n < xAttribs->getLength(); n++ )
-                    {
+                        else
+                        {
+                            // Check if we have a UI name set in our XML file
+                            OUString aUIName;
+                            for ( int n = 0; n < xAttribs->getLength(); n++ )
+                      {
                         pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
                         if ( pToolBoxEntry != m_aToolBoxMap.end() )
                         {
-                            switch ( pToolBoxEntry->second )
-                            {
-                                case TB_ATTRIBUTE_UINAME:
+                                    switch ( pToolBoxEntry->second )
+                                    {
+                                        case TB_ATTRIBUTE_UINAME:
                                     aUIName = xAttribs->getValueByIndex( n );
-                                break;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                    if ( aUIName.getLength() > 0 )
-                    {
-                        // Try to set UI name as a container property
-                        Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
-                        if ( xPropSet.is() )
-                        {
-                            try
+                            if ( aUIName.getLength() > 0 )
                             {
-                                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" )), makeAny( aUIName ) );
-                            }
-                            catch ( UnknownPropertyException& )
-                            {
+                                // Try to set UI name as a container property
+                                Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
+                                if ( xPropSet.is() )
+                                {
+                                    try
+                                    {
+                                        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" )), makeAny( aUIName ) );
+                                    }
+                                    catch ( UnknownPropertyException& )
+                                    {
+                                    }
+                                }
                             }
                         }
-                    }
-                }
 
                 m_bToolBarStartFound = sal_True;
             }
@@ -320,7 +322,6 @@ throw(  SAXException, RuntimeException )
                 sal_Bool bAttributeURL  = sal_False;
 
                 m_bToolBarItemStartFound = sal_True;
-                sal_Int16       nItemType( ::com::sun::star::ui::ItemType::DEFAULT );
                 OUString        aLabel;
                 OUString        aCommandURL;
                 OUString        aHelpURL;
@@ -424,6 +425,9 @@ throw(  SAXException, RuntimeException )
                                 while ( nIndex >= 0 );
                             }
                             break;
+
+                                          default:
+                                              break;
                         }
                     }
                 } // for
@@ -531,6 +535,9 @@ throw(  SAXException, RuntimeException )
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
@@ -609,22 +616,25 @@ throw(  SAXException, RuntimeException )
                 m_bToolBarSeparatorStartFound = sal_False;
             }
             break;
+
+                  default:
+                      break;
         }
     }
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::characters(const OUString& aChars)
+void SAL_CALL OReadToolBoxDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadToolBoxDocumentHandler::ignorableWhitespace(const OUString& aWhitespaces)
+void SAL_CALL OReadToolBoxDocumentHandler::ignorableWhitespace(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::processingInstruction(
-    const OUString& aTarget, const OUString& aData )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
@@ -662,8 +672,8 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     const Reference< XIndexAccess >& rItemAccess,
     Reference< XDocumentHandler >& rWriteDocumentHandler ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    m_rItemAccess( rItemAccess ),
-    m_xWriteDocumentHandler( rWriteDocumentHandler )
+    m_xWriteDocumentHandler( rWriteDocumentHandler ),
+    m_rItemAccess( rItemAccess )
 {
     m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
     m_aAttributeType    = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
