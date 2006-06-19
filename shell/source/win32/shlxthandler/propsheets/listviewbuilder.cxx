@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listviewbuilder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:03:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,13 @@
 #include "internal/config.hxx"
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <commctrl.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <commctrl.h>
 #include <tchar.h>
 
