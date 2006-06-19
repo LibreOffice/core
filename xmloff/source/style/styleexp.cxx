@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:48:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,9 @@ XMLStyleExport::XMLStyleExport(
         SvXMLAutoStylePoolP *pAutoStyleP ) :
     rExport( rExp ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
+    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
     sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
-    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sPoolStyleName( rPoolStyleName ),
     pAutoStylePool( pAutoStyleP  )
 {
@@ -140,11 +140,11 @@ XMLStyleExport::~XMLStyleExport()
 {
 }
 
-void XMLStyleExport::exportStyleAttributes( const Reference< XStyle >& rStyle )
+void XMLStyleExport::exportStyleAttributes( const Reference< XStyle >& )
 {
 }
 
-void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
+void XMLStyleExport::exportStyleContent( const Reference< XStyle >& )
 {
 }
 
