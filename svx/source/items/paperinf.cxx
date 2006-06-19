@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:08:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,7 @@ Paper SvxPaperInfo::GetSvPaper( const Size &rSize, MapUnit eUnit,
         case SVX_PAPER_LETTER:  eRet = PAPER_LETTER;                    break;
         case SVX_PAPER_LEGAL:   eRet = PAPER_LEGAL;                     break;
         case SVX_PAPER_TABLOID: eRet = PAPER_TABLOID;                   break;
+        default: ;//prevent warning
     }
 
     return eRet;
