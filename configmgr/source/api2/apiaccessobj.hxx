@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:05:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:14:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,16 +69,16 @@ namespace configmgr
             ApiTreeImpl&    m_rTree;
             NodeRef         m_aNode;
         public:
-            OInnerElement(UnoInterface* pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode);
-            ~OInnerElement();
+            inline OInnerElement(UnoInterface*  pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode);
+            inline ~OInnerElement();
 
-            virtual NodeRef             doGetNode() const;
-            virtual ApiTreeImpl&        getApiTree() const;
+            virtual inline NodeRef          doGetNode() const;
+            virtual inline ApiTreeImpl&     getApiTree() const;
 
-            virtual UnoInterface*       doGetUnoInstance() const;
-            virtual ServiceInfo const*  doGetServiceInfo() const;
+            virtual inline UnoInterface*        doGetUnoInstance() const;
+            virtual inline ServiceInfo const*   doGetServiceInfo() const;
 
-            static ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceInfo const* getStaticServiceInfo();
         };
     //-------------------------------------------------------------------------
 
@@ -106,13 +106,13 @@ namespace configmgr
             : m_aTree(pUnoThis, rProvider,aTree,pParentTree)
             {}
 
-            virtual NodeRef             doGetNode() const;
-            virtual ApiTreeImpl&        getApiTree() const;
+            virtual inline NodeRef          doGetNode() const;
+            virtual inline ApiTreeImpl&     getApiTree() const;
 
-            virtual UnoInterface*       doGetUnoInstance() const;
-            virtual ServiceInfo const*  doGetServiceInfo() const;
+            virtual inline UnoInterface*        doGetUnoInstance() const;
+            virtual inline ServiceInfo const*   doGetServiceInfo() const;
 
-            static ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceInfo const* getStaticServiceInfo();
         };
 
     // Set Elements
@@ -138,14 +138,14 @@ namespace configmgr
                 : m_aRootTree(pUnoThis, rProvider,aTree, _xOptions)
             {}
 
-            virtual NodeRef             doGetNode() const;
-            virtual ApiTreeImpl&        getApiTree() const;
-            virtual ApiRootTreeImpl&    getRootTree();
+            virtual inline NodeRef          doGetNode() const;
+            virtual inline ApiTreeImpl&     getApiTree() const;
+            virtual inline ApiRootTreeImpl& getRootTree();
 
-            virtual UnoInterface*       doGetUnoInstance() const;
-            virtual ServiceInfo const*  doGetServiceInfo() const;
+            virtual inline UnoInterface*        doGetUnoInstance() const;
+            virtual inline ServiceInfo const*   doGetServiceInfo() const;
 
-            static ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceInfo const* getStaticServiceInfo();
         };
     //-------------------------------------------------------------------------
 
@@ -160,14 +160,14 @@ namespace configmgr
             : m_aRootTree(pUnoThis, rProvider,aTree,_xOptions)
             {}
 
-            virtual NodeRef             doGetNode() const;
-            virtual ApiTreeImpl&        getApiTree() const;
-            virtual ApiRootTreeImpl&    getRootTree();
+            virtual inline NodeRef          doGetNode() const;
+            virtual inline ApiTreeImpl&     getApiTree() const;
+            virtual inline ApiRootTreeImpl& getRootTree();
 
-            virtual UnoInterface*       doGetUnoInstance() const;
-            virtual ServiceInfo const*  doGetServiceInfo() const;
+            virtual inline UnoInterface*        doGetUnoInstance() const;
+            virtual inline ServiceInfo const*   doGetServiceInfo() const;
 
-            static ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceInfo const* getStaticServiceInfo();
         };
 
     // Root Elements
