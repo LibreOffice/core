@@ -36,7 +36,6 @@ hedabu: ..\inc\xmlexp.hxx %_DEST%\inc%_EXT%\xmloff\xmlexp.hxx
 hedabu: ..\inc\xmlreg.hxx %_DEST%\inc%_EXT%\xmloff\xmlreg.hxx
 hedabu: ..\inc\xmlnumi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumi.hxx
 hedabu: ..\inc\xmlnume.hxx %_DEST%\inc%_EXT%\xmloff\xmlnume.hxx
-hedabu: ..\inc\xmltabi.hxx %_DEST%\inc%_EXT%\xmloff\xmltabi.hxx
 hedabu: ..\inc\xmltabe.hxx %_DEST%\inc%_EXT%\xmloff\xmltabe.hxx
 hedabu: ..\inc\maptype.hxx %_DEST%\inc%_EXT%\xmloff\maptype.hxx
 hedabu: ..\inc\uniref.hxx %_DEST%\inc%_EXT%\xmloff\uniref.hxx
@@ -59,11 +58,7 @@ hedabu: ..\inc\prhdlfac.hxx %_DEST%\inc%_EXT%\xmloff\prhdlfac.hxx
 hedabu: ..\inc\EnumPropertyHdl.hxx %_DEST%\inc%_EXT%\xmloff\EnumPropertyHdl.hxx
 hedabu: ..\inc\NamedBoolPropertyHdl.hxx %_DEST%\inc%_EXT%\xmloff\NamedBoolPropertyHdl.hxx
 hedabu: ..\inc\numehelp.hxx %_DEST%\inc%_EXT%\xmloff\numehelp.hxx
-hedabu: ..\inc\sdxmlimp.hxx %_DEST%\inc%_EXT%\xmloff\sdxmlimp.hxx
-hedabu: ..\inc\sdxmlexp.hxx %_DEST%\inc%_EXT%\xmloff\sdxmlexp.hxx
 hedabu: ..\inc\XMLTextListAutoStylePool.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextListAutoStylePool.hxx
-hedabu: ..\inc\SchXMLExport.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLExport.hxx
-hedabu: ..\inc\SchXMLImport.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLImport.hxx
 hedabu: ..\inc\SchXMLTableAddresses.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLTableAddresses.hxx
 hedabu: ..\inc\shapeexport.hxx %_DEST%\inc%_EXT%\xmloff\shapeexport.hxx
 hedabu: ..\inc\shapeimport.hxx %_DEST%\inc%_EXT%\xmloff\shapeimport.hxx
@@ -99,7 +94,6 @@ hedabu: ..\inc\DocumentSettingsContext.hxx %_DEST%\inc%_EXT%\xmloff\DocumentSett
 hedabu: ..\inc\XMLGraphicsDefaultStyle.hxx %_DEST%\inc%_EXT%\xmloff\XMLGraphicsDefaultStyle.hxx
 hedabu: ..\inc\XMLEmbeddedObjectExportFilter.hxx %_DEST%\inc%_EXT%\xmloff\XMLEmbeddedObjectExportFilter.hxx
 hedabu: ..\inc\XMLFilterServiceNames.h %_DEST%\inc%_EXT%\xmloff\XMLFilterServiceNames.h
-hedabu: ..\inc\XMLBase64Export.hxx %_DEST%\inc%_EXT%\xmloff\XMLBase64Export.hxx
 hedabu: ..\inc\XMLBase64ImportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLBase64ImportContext.hxx
 hedabu: ..\inc\xmltoken.hxx %_DEST%\inc%_EXT%\xmloff\xmltoken.hxx
 hedabu: ..\inc\XMLEventExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLEventExport.hxx
