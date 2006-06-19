@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:25:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    switch( xMapper->getPropertySetMapper()
+    switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TABSTOP:
@@ -113,7 +113,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
     case CTF_DROPCAPFORMAT:
         {
             DBG_ASSERT( rProp.mnIndex >= 2 &&
-                        CTF_DROPCAPWHOLEWORD  == xMapper->getPropertySetMapper()
+                        CTF_DROPCAPWHOLEWORD  == mxMapper->getPropertySetMapper()
                             ->GetEntryContextId( rProp.mnIndex-2 ),
                         "invalid property map!");
             XMLTextDropCapImportContext *pDCContext =
@@ -130,9 +130,9 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
     case CTF_BACKGROUND_URL:
     {
         DBG_ASSERT( rProp.mnIndex >= 2 &&
-                    CTF_BACKGROUND_POS  == xMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_POS  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
-                    CTF_BACKGROUND_FILTER  == xMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_FILTER  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
 
@@ -141,7 +141,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
         sal_Int32 nTranspIndex = -1;
         if( (rProp.mnIndex >= 3) &&
             ( CTF_BACKGROUND_TRANSPARENCY ==
-              xMapper->getPropertySetMapper()->GetEntryContextId(
+              mxMapper->getPropertySetMapper()->GetEntryContextId(
                   rProp.mnIndex-3 ) ) )
             nTranspIndex = rProp.mnIndex-3;
 
@@ -160,7 +160,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
     case CTF_SECTION_ENDNOTE_END:
         pContext = new XMLSectionFootnoteConfigImport(
             GetImport(), nPrefix, rLocalName, rProperties,
-            xMapper->getPropertySetMapper());
+            mxMapper->getPropertySetMapper());
         break;
 #endif // #ifndef SVX_LIGHT
     }
