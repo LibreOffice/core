@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propstate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:37:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:44:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ namespace comphelper
                                                     ,public ::com::sun::star::beans::XPropertyState
     {
     public:
-        OPropertyStateHelper(::cppu::OBroadcastHelper& rBHelper):OPropertySetHelper(rBHelper) { }
+        OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp):OPropertySetHelper(rBHlp) { }
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException);
 
@@ -103,6 +103,8 @@ namespace comphelper
         virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
     protected:
+        virtual ~OPropertyStateHelper();
+
         void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
 
     protected:
@@ -122,8 +124,8 @@ namespace comphelper
         virtual ~OStatefulPropertySet();
 
     protected:
-        DECLARE_XINTERFACE();
-        DECLARE_XTYPEPROVIDER();
+        DECLARE_XINTERFACE()
+        DECLARE_XTYPEPROVIDER()
     };
 
 //.........................................................................
