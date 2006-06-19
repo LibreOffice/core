@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:31:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.9 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.10 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -221,27 +221,27 @@ OStorePageObject::~OStorePageObject (void)
 /*
  * swap.
  */
-void OStorePageObject::swap (const D& rDescr)
+void OStorePageObject::swap (const D&)
 {
 #ifdef OSL_BIGENDIAN
-    m_rPage.swap (rDescr);
+    m_rPage.swap ();
 #endif /* OSL_BIGENDIAN */
 }
 
 /*
  * guard.
  */
-void OStorePageObject::guard (const D& rDescr)
+void OStorePageObject::guard (const D&)
 {
-    m_rPage.guard (rDescr);
+    m_rPage.guard ();
 }
 
 /*
  * verify.
  */
-storeError OStorePageObject::verify (const D& rDescr)
+storeError OStorePageObject::verify (const D&)
 {
-    return m_rPage.verify (rDescr);
+    return m_rPage.verify ();
 }
 
 /*========================================================================
@@ -1219,7 +1219,12 @@ storeError OStorePageBIOS::getPageSize (sal_uInt16 &rnPageSize)
  * Low Level: Precond: initialized, exclusive access.
  */
 storeError OStorePageBIOS::acquireLock (
-    sal_uInt32 nAddr, sal_uInt32 nSize)
+    sal_uInt32 nAddr,
+    sal_uInt32
+#ifdef STORE_FEATURE_LOCKING
+        nSize
+#endif /* STORE_FEATURE_LOCKING */
+)
 {
     // Check precond.
     if (!m_xLockBytes.is())
@@ -1245,7 +1250,12 @@ storeError OStorePageBIOS::acquireLock (
  * Low Level: Precond: initialized, exclusive access.
  */
 storeError OStorePageBIOS::releaseLock (
-    sal_uInt32 nAddr, sal_uInt32 nSize)
+    sal_uInt32 nAddr,
+    sal_uInt32
+#ifdef STORE_FEATURE_LOCKING
+        nSize
+#endif /* STORE_FEATURE_LOCKING */
+)
 {
     // Check precond.
     if (!m_xLockBytes.is())
@@ -1400,8 +1410,7 @@ storeError OStorePageBIOS::acquirePage (
  * releasePage.
  * Precond: initialized.
  */
-storeError OStorePageBIOS::releasePage (
-    const OStorePageDescriptor& rDescr, storeAccessMode eMode)
+storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);
@@ -1971,7 +1980,7 @@ storeError OStorePageBIOS::peek (OStorePageData &rData)
     }
 
     // Verify PageHead.
-    eErrCode = rData.verify (aDescr);
+    eErrCode = rData.verify ();
     if (eErrCode != store_E_None)
     {
         // Restore PageDescriptor.
@@ -1981,7 +1990,7 @@ storeError OStorePageBIOS::peek (OStorePageData &rData)
 
 #ifdef OSL_BIGENDIAN
     // Swap to internal representation.
-    rData.swap (aDescr);
+    rData.swap ();
 #endif /* OSL_BIGENDIAN */
 
     // Verify PageDescriptor.
@@ -2003,18 +2012,18 @@ storeError OStorePageBIOS::poke (OStorePageData &rData)
 
 #ifdef OSL_BIGENDIAN
     // Swap to external representation.
-    rData.swap (aDescr);
+    rData.swap ();
 #endif /* OSL_BIGENDIAN */
 
     // Guard PageHead.
-    rData.guard (aDescr);
+    rData.guard ();
 
     // Write PageHead.
     storeError eErrCode = write (aDescr.m_nAddr, &rData, rData.size());
 
 #ifdef OSL_BIGENDIAN
     // Swap back to internal representation.
-    rData.swap (aDescr);
+    rData.swap ();
 #endif /* OSL_BIGENDIAN */
 
     // Done.
