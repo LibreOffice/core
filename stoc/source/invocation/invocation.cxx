@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:56:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,8 +297,8 @@ Invocation_Impl::Invocation_Impl
     const Reference<XIntrospection> & rI,
     const Reference<XIdlReflection> & rCR
 )
-    : xIntrospection( rI )
-    , xTypeConverter( rTC )
+    : xTypeConverter( rTC )
+    , xIntrospection( rI )
     , xCoreReflection( rCR )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
@@ -682,7 +682,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         // ParameterInfos
         Sequence<ParamInfo> aFParams        = xMethod->getParameterInfos();
         const ParamInfo* pFParams           = aFParams.getConstArray();
-        sal_uInt32 nFParamsLen              = aFParams.getLength();
+        sal_Int32 nFParamsLen               = aFParams.getLength();
         if (nFParamsLen != InParams.getLength())
         {
             throw IllegalArgumentException(
@@ -702,7 +702,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         sal_Int16* pOutIndizes              = OutIndizes.getArray();
         sal_uInt32 nOutIndex                = 0;
 
-        sal_uInt32 nPos;
+        sal_Int32 nPos;
 
         try
         {
@@ -788,7 +788,7 @@ struct MemberItem
 
 // qsort compare function for MemberItem
 //int __cdecl compare(const void *elem1, const void *elem2 )
-int SAL_CALL compare(const void *elem1, const void *elem2 )
+extern "C" int SAL_CALL compare(const void *elem1, const void *elem2 )
 {
     MemberItem* pItem1 = *(MemberItem**)elem1;
     MemberItem* pItem2 = *(MemberItem**)elem2;
@@ -1169,8 +1169,8 @@ private:
 };
 
 InvocationService::InvocationService( const Reference<XComponentContext> & xCtx )
-    : mxSMgr( xCtx->getServiceManager() )
-    , mxCtx( xCtx )
+    : mxCtx( xCtx )
+    , mxSMgr( xCtx->getServiceManager() )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xTypeConverter = Reference<XTypeConverter>(
@@ -1284,7 +1284,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
