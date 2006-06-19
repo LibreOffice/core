@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:39:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,7 @@ public:
 
     virtual ~XMLTypedPropertiesOOoTContext_Impl();
 
+    using XMLPersAttrListTContext::AddAttribute;
     void AddAttribute( const ::rtl::OUString &sName ,
                        const ::rtl::OUString &sValue );
     void AddAttribute( sal_uInt16 nPrefix, XMLTokenEnum eToken,
@@ -258,7 +259,7 @@ void XMLTypedPropertiesOOoTContext_Impl::AddAttribute(
 }
 
 void XMLTypedPropertiesOOoTContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+        const Reference< XAttributeList >& )
 {
     // empty, ignore even the attribute list
 }
@@ -650,6 +651,9 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     eToken = XML_WAVE;
                     bDouble = sal_True;
                     break;
+                default:
+                    OSL_ENSURE( false, "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
+                    break;
                 }
                 pContext->AddAttribute(
                         GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -696,6 +700,8 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 case XML_uX:
                     eToken = XML_SOLID;
                     c = 'X';
+                    break;
+                default:
                     break;
                 }
                 pContext->AddAttribute(
@@ -1065,7 +1071,7 @@ void XMLPropertiesOOoTContext_Impl::EndElement()
         Export();
 }
 
-void XMLPropertiesOOoTContext_Impl::Characters( const OUString& rChars )
+void XMLPropertiesOOoTContext_Impl::Characters( const OUString& )
 {
     // ignore them
 }
@@ -1330,7 +1336,7 @@ void XMLStyleOOoTContext::EndElement()
         GetTransformer().GetDocHandler()->endElement( GetExportQName() );
 }
 
-void XMLStyleOOoTContext::Characters( const OUString& rChars )
+void XMLStyleOOoTContext::Characters( const OUString& )
 {
     // element content only:
 }
