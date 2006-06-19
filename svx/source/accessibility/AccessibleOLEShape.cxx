@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:16:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
 
 
 
-sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 nIndex)
+sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException();
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 nIndex)
 
 
 
-::rtl::OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 nIndex)
+::rtl::OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException)
 {
@@ -97,7 +97,7 @@ sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 nIndex)
 
 
 
-Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 nIndex)
+Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException)
 {
