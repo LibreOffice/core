@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sstring.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:33:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #  define _TOOLS_STRINGLIST
 #endif
 
-#include "sstring.hxx"
+#include "bootstrp/sstring.hxx"
 
 SByteStringList::SByteStringList()
 {
@@ -66,15 +66,14 @@ ULONG SByteStringList::IsString( ByteString* pStr )
         else
             return NOT_THERE;
     }
-    return nRet;
 }
 
 ULONG SByteStringList::GetPrevString( ByteString* pStr )
 {
     ULONG nRet = 0;
     BOOL bFound = FALSE;
-    ULONG nCount = Count();
-    ULONG nUpper = nCount;
+    ULONG nCountMember = Count();
+    ULONG nUpper = nCountMember;
     ULONG nLower = 0;
     ULONG nCurrent = nUpper / 2;
     ULONG nRem = 0;
@@ -85,7 +84,7 @@ ULONG SByteStringList::GetPrevString( ByteString* pStr )
         if ( (nCurrent == nLower) || (nCurrent == nUpper) )
             return nLower;
         pString = GetObject( nCurrent );
-        ULONG nResult =  pStr->CompareTo( *pString );
+        StringCompare nResult =  pStr->CompareTo( *pString );
         if ( nResult == COMPARE_LESS )
         {
             nUpper = nCurrent;
@@ -195,15 +194,14 @@ ULONG SUniStringList::IsString( UniString* pStr )
         else
             return NOT_THERE;
     }
-    return nRet;
 }
 
 ULONG SUniStringList::GetPrevString( UniString* pStr )
 {
     ULONG nRet = 0;
     BOOL bFound = FALSE;
-    ULONG nCount = Count();
-    ULONG nUpper = nCount;
+    ULONG nCountMember = Count();
+    ULONG nUpper = nCountMember;
     ULONG nLower = 0;
     ULONG nCurrent = nUpper / 2;
     ULONG nRem = 0;
@@ -214,7 +212,7 @@ ULONG SUniStringList::GetPrevString( UniString* pStr )
         if ( (nCurrent == nLower) || (nCurrent == nUpper) )
             return nLower;
         pString = GetObject( nCurrent );
-        ULONG nResult =  pStr->CompareTo( *pString );
+        StringCompare nResult =  pStr->CompareTo( *pString );
         if ( nResult == COMPARE_LESS )
         {
             nUpper = nCurrent;
