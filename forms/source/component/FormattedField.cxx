@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:23:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,15 +298,14 @@ OFormattedControl::OFormattedControl(const Reference<XMultiServiceFactory>& _rxF
     DBG_CTOR(OFormattedControl,NULL);
 
     increment(m_refCount);
-    {   // als FocusListener anmelden
+    {
         Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
         {
             xComp->addKeyListener(this);
         }
     }
-    // Refcount wieder bei 1 fuer den Listener
-    sal_Int32 n = decrement(m_refCount);
+    decrement(m_refCount);
 }
 
 //------------------------------------------------------------------------------
@@ -385,12 +384,12 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
 }
 
 //------------------------------------------------------------------------------
-void OFormattedControl::keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OFormattedControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OFormattedControl, OnKeyPressed, void*, EMPTYARG)
+IMPL_LINK(OFormattedControl, OnKeyPressed, void*, /*EMPTYARG*/)
 {
     m_nKeyEvent = 0;
 
@@ -838,7 +837,6 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                     {
                         Locale aApplicationLocale = Application::GetSettings().GetUILocale();
 
-                        sal_Int32 nNewKey = 0;
                         if (m_bOriginalNumeric)
                             aFmtKey <<= (sal_Int32)xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale);
                         else
@@ -925,12 +923,10 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
     sal_Bool bVoidKey = sal_True;
     if (m_xAggregateSet.is())
     {
-                Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
-                if (aSupplier.getValueType().getTypeClass() != TypeClass_VOID)
+        Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
+        if (aSupplier.getValueType().getTypeClass() != TypeClass_VOID)
         {
-            DBG_ASSERT(isAReference(aSupplier, static_cast<XNumberFormatsSupplier*>(NULL)),
-                "OFormattedModel::write : invalid formats supplier !");
-                        xSupplier = *(Reference<XNumberFormatsSupplier> *)aSupplier.getValue();
+            OSL_VERIFY( aSupplier >>= xSupplier );
         }
 
         aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
@@ -1062,9 +1058,10 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                 OStreamSection aDownCompat(xIn);
 
                 sal_Int16 nSubVersion = _rxInStream->readShort();
+                (void)nSubVersion;
 
                 // version 0 and higher : the "effective value" property
-                                Any aEffectiveValue;
+                Any aEffectiveValue;
                 {
                     OStreamSection aDownCompat2(xIn);
                     switch (_rxInStream->readShort())
@@ -1124,24 +1121,7 @@ sal_Int16 OFormattedModel::getPersistenceFlags() const
 }
 
 //------------------------------------------------------------------------------
-namespace
-{
-    static void lcl_replaceAscii( ::rtl::OUString& _rText, const sal_Char* _pAscii, const ::rtl::OUString& _rReplace )
-    {
-        ::rtl::OUString sFind = ::rtl::OUString::createFromAscii( _pAscii );
-        sal_Int32 nPos = _rText.indexOf( sFind );
-        if ( 0 <= nPos )
-        {
-            ::rtl::OUString sNew = _rText.copy( 0, nPos );
-            sNew += _rReplace;
-            sNew += _rText.copy( nPos + sFind.getLength() );
-            _rText = sNew;
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OFormattedModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
