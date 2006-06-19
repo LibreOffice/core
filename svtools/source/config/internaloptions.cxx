@@ -4,9 +4,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:28:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames )
+        virtual void Notify( const Sequence< OUString >& )
         {
             DBG_ASSERT( sal_False, "SvtInternalOptions::Notify()\nNot used yet ... but called!?\n" );
         }
@@ -435,10 +435,10 @@ void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTemp
     Commit();
 }
 
+#if 0
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-/*
 void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
                                                 const   OUString&   sFilter     ,
                                                 const   OUString&   sTempName   )
@@ -470,7 +470,8 @@ sal_Bool SvtInternalOptions_Impl::IsRecoveryListEmpty() const
 {
     return ( m_aRecoveryList.empty() );
 }
-*/
+#endif
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -534,7 +535,7 @@ SvtInternalOptions::SvtInternalOptions()
     // ... and initialize ouer data container only if it not already!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInternalOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtInternalOptions_Impl::ctor()");
         m_pDataContainer = new SvtInternalOptions_Impl();
 
         ItemHolder1::holdConfigItem(E_INTERNALOPTIONS);
@@ -623,47 +624,6 @@ void SvtInternalOptions::SetCurrentTempURL( const OUString& aNewCurrentTempURL )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetCurrentTempURL( aNewCurrentTempURL );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions::PushRecoveryItem(  const   OUString&   sURL        ,
-                                            const   OUString&   sFilter     ,
-                                            const   OUString&   sTempName   )
-{
-    OSL_ENSURE(sal_False, "(deprecated) Who calls it?");
-    /*
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->PushRecoveryItem( sURL, sFilter, sTempName );
-    */
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions::PopRecoveryItem(   OUString&   sURL        ,
-                                            OUString&   sFilter     ,
-                                            OUString&   sTempName   )
-{
-    OSL_ENSURE(sal_False, "(deprecated) Who calls it?");
-    /*
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->PopRecoveryItem( sURL, sFilter, sTempName );
-    */
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions::IsRecoveryListEmpty() const
-{
-    OSL_ENSURE(sal_False, "(deprecated) Who calls it?");
-    return sal_True;
-    /*
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRecoveryListEmpty();
-    */
 }
 
 //*****************************************************************************************************************
