@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:52:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,12 +205,14 @@ void SdrPathObj::ImpForceKind()
             case OBJ_FREELINE: eKind=OBJ_PLIN; break;
             case OBJ_PATHFILL: eKind=OBJ_POLY; break;
             case OBJ_FREEFILL: eKind=OBJ_POLY; break;
+            default: break;
         }
     } else {
         switch (eKind) {
             case OBJ_LINE: eKind=OBJ_PATHLINE; break;
             case OBJ_PLIN: eKind=OBJ_PATHLINE; break;
             case OBJ_POLY: eKind=OBJ_PATHFILL; break;
+            default: break;
         }
     }
 
@@ -259,6 +261,7 @@ void SdrPathObj::ImpSetClosed(FASTBOOL bClose)
             case OBJ_PATHLINE: eKind=OBJ_PATHFILL; break;
             case OBJ_FREELINE: eKind=OBJ_FREEFILL; break;
             case OBJ_SPLNLINE: eKind=OBJ_SPLNFILL; break;
+            default: break;
         }
         // Nun das Poly noch schliessen
         USHORT nPolyAnz=aPathPolygon.Count();
@@ -279,6 +282,7 @@ void SdrPathObj::ImpSetClosed(FASTBOOL bClose)
             case OBJ_PATHFILL: eKind=OBJ_PATHLINE; break;
             case OBJ_FREEFILL: eKind=OBJ_FREELINE; break;
             case OBJ_SPLNFILL: eKind=OBJ_SPLNLINE; break;
+            default: break;
         }
         bClosedObj=FALSE;
     }
@@ -540,6 +544,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
             case OBJ_PATHFILL: rName=ImpGetResStr(STR_ObjNameSingulPATHFILL); break;
             case OBJ_FREEFILL: rName=ImpGetResStr(STR_ObjNameSingulFREEFILL); break;
             case OBJ_SPLNFILL: rName=ImpGetResStr(STR_ObjNameSingulPERSPLN); break;
+            default: break;
         }
     }
 
@@ -565,10 +570,11 @@ void SdrPathObj::TakeObjNamePlural(XubString& rName) const
         case OBJ_PATHFILL: rName=ImpGetResStr(STR_ObjNamePluralPATHFILL); break;
         case OBJ_FREEFILL: rName=ImpGetResStr(STR_ObjNamePluralFREEFILL); break;
         case OBJ_SPLNFILL: rName=ImpGetResStr(STR_ObjNamePluralPERSPLN); break;
+        default: break;
     }
 }
 
-void SdrPathObj::TakeXorPoly(XPolyPolygon& rXPolyPoly, FASTBOOL bDetail) const
+void SdrPathObj::TakeXorPoly(XPolyPolygon& rXPolyPoly, FASTBOOL /*bDetail*/) const
 {
     rXPolyPoly=aPathPolygon;
 }
@@ -620,7 +626,7 @@ SdrHdl* SdrPathObj::GetHdl(USHORT nHdlNum) const
 
 void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    USHORT nCnt=GetHdlCount();
+    //USHORT nCnt=GetHdlCount();
     USHORT nPolyCnt=aPathPolygon.Count();
     FASTBOOL bClosed=IsClosed();
     USHORT nIdx=0;
@@ -725,9 +731,8 @@ inline USHORT GetNextPnt(USHORT nPnt, USHORT nPntMax, FASTBOOL bClosed)
     return nPnt;
 }
 
-class ImpSdrPathDragData
+struct ImpSdrPathDragData : public SdrDragStatUserData
 {
-public:
     XPolygon                    aXP;            // Ausschnitt aud dem Originalpolygon
     FASTBOOL                    bValid;         // FALSE = zu wenig Punkte
     FASTBOOL                    bClosed;        // geschlossenes Objekt?
@@ -858,9 +863,8 @@ void ImpSdrPathDragData::ResetPoly(const SdrPathObj& rPO)
     aXP[4]=rXP[nNextNextPnt0];  aXP.SetFlags(4,rXP.GetFlags(nNextNextPnt0));
 }
 
-class ImpPathCreateUser
+struct ImpPathCreateUser : public SdrDragStatUserData
 {
-public:
     Point                   aBezControl0;
     Point                   aBezStart;
     Point                   aBezCtrl1;
@@ -900,7 +904,7 @@ public:
     XPolygon GetFormPoly() const;
     FASTBOOL CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, FASTBOOL bMouseDown, SdrView* pView);
     XPolygon GetBezierPoly() const;
-    FASTBOOL CalcCurve(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView) { return FALSE; }
+    FASTBOOL CalcCurve(const Point& /*rP1*/, const Point& /*rP2*/, const Point& /*rDir*/, SdrView* /*pView*/) { return FALSE; }
     XPolygon GetCurvePoly() const { return XPolygon(); }
     FASTBOOL CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     XPolygon GetCirclePoly() const;
@@ -921,7 +925,7 @@ XPolygon ImpPathCreateUser::GetFormPoly() const
     return XPolygon();
 }
 
-FASTBOOL ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, FASTBOOL bMouseDown, SdrView* pView)
+FASTBOOL ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, FASTBOOL bMouseDown, SdrView* /*pView*/)
 {
     FASTBOOL bRet=TRUE;
     aBezStart=rP1;
@@ -1248,7 +1252,7 @@ FASTBOOL SdrPathObj::MovDrag(SdrDragStat& rDrag) const
         USHORT   nPrevPrevPnt  =pID->nPrevPrevPnt  ; // Index des vorvorherigen Punkts
         USHORT   nNextNextPnt  =pID->nNextNextPnt  ; // Index des uebernaechsten Punkts
         FASTBOOL bControl      =pID->bControl      ; // Punkt ist ein Kontrollpunkt
-        FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
+        //FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
         FASTBOOL bIsNextControl=pID->bIsNextControl; // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
         FASTBOOL bPrevIsControl=pID->bPrevIsControl; // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
         FASTBOOL bNextIsControl=pID->bNextIsControl; // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
@@ -1458,9 +1462,9 @@ FASTBOOL SdrPathObj::EndDrag(SdrDragStat& rDrag)
         // Winkel anpassen fuer Text an einfacher Linie
         SetRectsDirty();
         if (bLineGlueMirror) { // #40549#
-            XPolygon& rXP=aPathPolygon[0];
-            Point aLinePt1_(rXP[0]);
-            Point aLinePt2_(rXP[1]);
+            XPolygon& rXP2=aPathPolygon[0];
+            Point aLinePt1_(rXP2[0]);
+            Point aLinePt2_(rXP2[1]);
             FASTBOOL bXMirr=(aLinePt1_.X()>aLinePt2_.X())!=(aLinePt1.X()>aLinePt2.X());
             FASTBOOL bYMirr=(aLinePt1_.Y()>aLinePt2_.Y())!=(aLinePt1.Y()>aLinePt2.Y());
             if (bXMirr || bYMirr) {
@@ -1583,11 +1587,11 @@ XubString SdrPathObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
                 {
                     UINT16 nPntMax(nPntAnz - 1);
                     Point aPt1,aPt2;
-                    BOOL bClose(IsClosed());
+                    BOOL bClose2(IsClosed());
                     BOOL bPt1(nPntNum > 0);
                     BOOL bPt2(nPntNum < nPntMax);
 
-                    if(bClose && nPntAnz > 2)
+                    if(bClose2 && nPntAnz > 2)
                     {
                         bPt1 = TRUE;
                         bPt2 = TRUE;
@@ -1750,7 +1754,7 @@ void SdrPathObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) cons
         USHORT   nPrevPrevPnt  =pID->nPrevPrevPnt  ; // Index des vorvorherigen Punkts
         USHORT   nNextNextPnt  =pID->nNextNextPnt  ; // Index des uebernaechsten Punkts
         FASTBOOL bControl      =pID->bControl      ; // Punkt ist ein Kontrollpunkt
-        FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
+        //FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
         FASTBOOL bIsNextControl=pID->bIsNextControl; // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
         FASTBOOL bPrevIsControl=pID->bPrevIsControl; // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
         FASTBOOL bNextIsControl=pID->bNextIsControl; // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
@@ -1878,6 +1882,7 @@ FASTBOOL SdrPathObj::MovCreate(SdrDragStat& rStat)
                     pU->nBezierStartPoint=rXPoly.GetPointCount();
                     if (pU->nBezierStartPoint>0) pU->nBezierStartPoint--;
                 } break;
+                default: break;
             } // switch
         }
     }
@@ -2134,11 +2139,11 @@ FASTBOOL SdrPathObj::BckCreate(SdrDragStat& rStat)
             aPathPolygon.Remove(aPathPolygon.Count()-1);
         }
         if (aPathPolygon.Count()>0) {
-            XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
-            USHORT nActPoint=rXPoly.GetPointCount();
-            if (nActPoint>0) {
-                nActPoint--;
-                rXPoly[nActPoint]=rStat.Now();
+            XPolygon& rXPoly2=aPathPolygon[aPathPolygon.Count()-1];
+            USHORT nActPoint2=rXPoly2.GetPointCount();
+            if (nActPoint2>0) {
+                nActPoint2--;
+                rXPoly2[nActPoint2]=rStat.Now();
             }
         }
     }
@@ -2202,6 +2207,7 @@ Pointer SdrPathObj::GetCreatePointer() const
         case OBJ_SPLNFILL: return Pointer(POINTER_DRAW_FREEHAND);
         case OBJ_PATHPOLY: return Pointer(POINTER_DRAW_POLYGON);
         case OBJ_PATHPLIN: return Pointer(POINTER_DRAW_POLYGON);
+        default: break;
     } // switch
     return Pointer(POINTER_CROSS);
 }
@@ -2399,7 +2405,7 @@ USHORT SdrPathObj::NbcInsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL bHi
         USHORT          nPolyCnt = aPathPolygon.Count();
         USHORT          nPoly;
         USHORT          nPnt;
-        USHORT          nPntMax;
+        USHORT          nPntMax(0);
         FASTBOOL        bAppend = FALSE;
         FASTBOOL        bTestEnd = FALSE;
 
@@ -2630,11 +2636,11 @@ FASTBOOL SdrPathObj::NbcDelPoint(USHORT nHdlNum)
             }
             if (nDelAnz!=0) rXPoly.Remove(nDelOfs,nDelAnz);
             if (bClosed) { // letzten Punkt auf den Ersten setzen
-                USHORT nPntMax=rXPoly.GetPointCount();
-                if (nPntMax>0) {
-                    nPntMax--;
-                    rXPoly[nPntMax]=rXPoly[0];
-                    rXPoly.SetFlags(nPntMax,rXPoly.GetFlags(0));
+                USHORT nPntMax2=rXPoly.GetPointCount();
+                if (nPntMax2>0) {
+                    nPntMax2--;
+                    rXPoly[nPntMax2]=rXPoly[0];
+                    rXPoly.SetFlags(nPntMax2,rXPoly.GetFlags(0));
                 }
             }
         }
