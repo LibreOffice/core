@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:12:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:05:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -620,8 +620,9 @@ public:
     virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    // The same as the interface method, but only uique names
-    Sequence< OUString > getAvailableServiceNames( HashSet_OWString & aNameSet );
+    // The same as the getAvailableServiceNames, but only uique names
+    Sequence< OUString > getUniqueAvailableServiceNames(
+        HashSet_OWString & aNameSet );
 
     // XElementAccess
     virtual Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
@@ -1099,6 +1100,8 @@ void OServiceManager::disposing()
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "### RuntimeException occured upon disposing factory: %s", str.getStr() );
+#else
+            (void) exc; // unused
 #endif
         }
     }
@@ -1196,8 +1199,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
 }
 
 void OServiceManager::addPropertyChangeListener(
-    const OUString& PropertyName,
-    const Reference<XPropertyChangeListener >& aListener)
+    const OUString&, const Reference<XPropertyChangeListener >&)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
@@ -1205,8 +1207,7 @@ void OServiceManager::addPropertyChangeListener(
 }
 
 void OServiceManager::removePropertyChangeListener(
-    const OUString& PropertyName,
-    const Reference<XPropertyChangeListener >& aListener)
+    const OUString&, const Reference<XPropertyChangeListener >&)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
@@ -1214,8 +1215,7 @@ void OServiceManager::removePropertyChangeListener(
 }
 
 void OServiceManager::addVetoableChangeListener(
-    const OUString& PropertyName,
-    const Reference<XVetoableChangeListener >& aListener)
+    const OUString&, const Reference<XVetoableChangeListener >&)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
@@ -1223,8 +1223,7 @@ void OServiceManager::addVetoableChangeListener(
 }
 
 void OServiceManager::removeVetoableChangeListener(
-    const OUString& PropertyName,
-    const Reference<XVetoableChangeListener >& aListener)
+    const OUString&, const Reference<XVetoableChangeListener >&)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
@@ -1242,7 +1241,8 @@ Reference<XEventListener > OServiceManager::getFactoryListener()
 }
 
 // XMultiServiceFactory, XContentEnumeration
-Sequence< OUString > OServiceManager::getAvailableServiceNames( HashSet_OWString & aNameSet )
+Sequence< OUString > OServiceManager::getUniqueAvailableServiceNames(
+    HashSet_OWString & aNameSet )
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
@@ -1305,14 +1305,14 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                 }
                 else
                 {
-                    Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
-                    if (xFac.is())
+                    Reference< XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
+                    if (xFac2.is())
                     {
 #if OSL_DEBUG_LEVEL > 1
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
                         OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
-                        return xFac->createInstance();
+                        return xFac2->createInstance();
                     }
                 }
             }
@@ -1322,6 +1322,8 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+#else
+            (void) exc; // unused
 #endif
         }
     }
@@ -1367,14 +1369,14 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                 }
                 else
                 {
-                    Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
-                    if (xFac.is())
+                    Reference< XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
+                    if (xFac2.is())
                     {
 #if OSL_DEBUG_LEVEL > 1
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
                         OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
-                        return xFac->createInstanceWithArguments( rArguments );
+                        return xFac2->createInstanceWithArguments( rArguments );
                     }
                 }
             }
@@ -1384,6 +1386,8 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+#else
+            (void) exc; // unused
 #endif
         }
     }
@@ -1398,7 +1402,7 @@ Sequence< OUString > OServiceManager::getAvailableServiceNames()
     check_undisposed();
     // all names
     HashSet_OWString aNameSet;
-    return getAvailableServiceNames( aNameSet );
+    return getUniqueAvailableServiceNames( aNameSet );
 }
 
 // XMultibleServiceFactory
@@ -1459,7 +1463,7 @@ Sequence< OUString > OServiceManager::getSupportedServiceNames()
 
 
 Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
-    const OUString& aServiceName, Reference< XComponentContext > const & xContext )
+    const OUString& aServiceName, Reference< XComponentContext > const & )
 {
     Sequence< Reference< XInterface > > ret;
 
@@ -1897,7 +1901,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
             return x;
     }
 
-    return Reference<XSingleServiceFactory >();
+    return Reference<XInterface >();
 }
 
 /**
@@ -1957,7 +1961,7 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
     // all names from the registry
     fillAllNamesFromRegistry( aNameSet );
 
-    return OServiceManager::getAvailableServiceNames( aNameSet );
+    return OServiceManager::getUniqueAvailableServiceNames( aNameSet );
 }
 
 // XServiceInfo
@@ -2138,7 +2142,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
