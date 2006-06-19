@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -155,11 +153,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnAssign          ( this, SVX_RES( BTN_ASSIGN ) ),
 
         // Geometrie
-        aFtHorizontal       ( this, SVX_RES( FT_HORIZONTAL ) ),
-        aNumHorizontal      ( this, SVX_RES( NUM_HORIZONTAL ) ),
-        aFtVertical         ( this, SVX_RES( FT_VERTICAL ) ),
-        aNumVertical        ( this, SVX_RES( NUM_VERTICAL ) ),
-        aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
         aFtPercentDiagonal  ( this, SVX_RES( FT_PERCENT_DIAGONAL ) ),
         aMtrPercentDiagonal ( this, SVX_RES( MTR_PERCENT_DIAGONAL ) ),
         aFtBackscale        ( this, SVX_RES( FT_BACKSCALE ) ),
@@ -170,11 +163,17 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aMtrDepth           ( this, SVX_RES( MTR_DEPTH ) ),
         aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
 
+        aFtHorizontal       ( this, SVX_RES( FT_HORIZONTAL ) ),
+        aNumHorizontal      ( this, SVX_RES( NUM_HORIZONTAL ) ),
+        aFtVertical         ( this, SVX_RES( FT_VERTICAL ) ),
+        aNumVertical        ( this, SVX_RES( NUM_VERTICAL ) ),
+        aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
+
         aBtnNormalsObj      ( this, SVX_RES( BTN_NORMALS_OBJ ) ),
         aBtnNormalsFlat     ( this, SVX_RES( BTN_NORMALS_FLAT ) ),
         aBtnNormalsSphere   ( this, SVX_RES( BTN_NORMALS_SPHERE ) ),
-        aBtnTwoSidedLighting( this, SVX_RES( BTN_TWO_SIDED_LIGHTING ) ),
         aBtnNormalsInvert   ( this, SVX_RES( BTN_NORMALS_INVERT ) ),
+        aBtnTwoSidedLighting( this, SVX_RES( BTN_TWO_SIDED_LIGHTING ) ),
         aFLNormals         ( this, SVX_RES( FL_NORMALS ) ),
 
         aBtnDoubleSided     ( this, SVX_RES( BTN_DOUBLE_SIDED ) ),
@@ -231,13 +230,13 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnTexModulate     ( this, SVX_RES( BTN_TEX_MODULATE ) ),
         aBtnTexBlend        ( this, SVX_RES( BTN_TEX_BLEND ) ),
         aFtTexProjectionX   ( this, SVX_RES( FT_TEX_PROJECTION_X ) ),
+        aBtnTexObjectX      ( this, SVX_RES( BTN_TEX_OBJECT_X ) ),
         aBtnTexParallelX    ( this, SVX_RES( BTN_TEX_PARALLEL_X ) ),
         aBtnTexCircleX      ( this, SVX_RES( BTN_TEX_CIRCLE_X ) ),
-        aBtnTexObjectX      ( this, SVX_RES( BTN_TEX_OBJECT_X ) ),
         aFtTexProjectionY   ( this, SVX_RES( FT_TEX_PROJECTION_Y ) ),
+        aBtnTexObjectY      ( this, SVX_RES( BTN_TEX_OBJECT_Y ) ),
         aBtnTexParallelY    ( this, SVX_RES( BTN_TEX_PARALLEL_Y ) ),
         aBtnTexCircleY      ( this, SVX_RES( BTN_TEX_CIRCLE_Y ) ),
-        aBtnTexObjectY      ( this, SVX_RES( BTN_TEX_OBJECT_Y ) ),
         aFtTexFilter        ( this, SVX_RES( FT_TEX_FILTER ) ),
         aBtnTexFilter       ( this, SVX_RES( BTN_TEX_FILTER ) ),
         aFLTexture         ( this, SVX_RES( FL_TEXTURE ) ),
@@ -260,16 +259,16 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aFLMaterial        ( this, SVX_RES( FL_MATERIAL ) ),
 
         // Unterer Bereich
-        aBtnPerspective     ( this, SVX_RES( BTN_PERSPECTIVE ) ),
         aBtnConvertTo3D     ( this, SVX_RES( BTN_CHANGE_TO_3D ) ),
         aBtnLatheObject     ( this, SVX_RES( BTN_LATHE_OBJ ) ),
+        aBtnPerspective     ( this, SVX_RES( BTN_PERSPECTIVE ) ),
         aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
         aCtlLightPreview    ( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
 
+        pLightGroup         ( NULL ),
         aImgLightOn         ( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
         aImgLightOff        ( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
 
-        pLightGroup         ( NULL ),
         bUpdate             ( FALSE ),
         eViewType           ( VIEWTYPE_GEO ),
 
@@ -281,6 +280,9 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         pMatFavSetList      ( NULL ),
 
         pBindings           ( pInBindings ),
+        pControllerItem(0L),
+        pConvertTo3DItem(0L),
+        pConvertTo3DLatheItem(0L),
 //      pPool               ( NULL ),
         mpImpl              ( new Svx3DWinImpl() ),
         mpRemember2DAttributes(NULL),
@@ -586,7 +588,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
     // construct field values
     const SfxPoolItem* pItem;
-    BOOL bUpdate = FALSE;
+    //BOOL bUpdate = FALSE;
 
     // evtl. PoolUnit ermitteln
     if( !mpImpl->pPool )
@@ -603,7 +605,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( SFX_ITEM_SET == eState )
     {
         UINT32 nState = ( ( const SfxUInt32Item* )pItem )->GetValue();
-        BOOL bLathe   = (BOOL) ( nState & 1 );
+        //BOOL bLathe   = (BOOL) ( nState & 1 );
         BOOL bExtrude = (BOOL) ( nState & 2 );
         BOOL bSphere  = (BOOL) ( nState & 4 );
         BOOL bCube    = (BOOL) ( nState & 8 );
@@ -1709,7 +1711,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLCOLOR);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const XFillColorItem&)rAttrs.Get(XATTR_FILLCOLOR)).GetValue();
+        aColor = ((const XFillColorItem&)rAttrs.Get(XATTR_FILLCOLOR)).GetColorValue();
         aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialDiffuse );
         ColorLB* pLb = &aLbMatColor;
         if( aColor != pLb->GetSelectEntryColor() )
@@ -2026,8 +2028,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Neigung (Schatten)
     if( !aMtrSlant.IsEmptyFieldValue() )
     {
-        UINT16 nValue = (UINT16) aMtrSlant.GetValue();
-        rAttrs.Put(Svx3DShadowSlantItem(nValue));
+        UINT16 nValue2 = (UINT16) aMtrSlant.GetValue();
+        rAttrs.Put(Svx3DShadowSlantItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_SHADOW_SLANT);
@@ -2035,8 +2037,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Distanz
     if( !aMtrDistance.IsEmptyFieldValue() )
     {
-        UINT32 nValue = GetCoreValue( aMtrDistance, ePoolUnit );
-        rAttrs.Put(Svx3DDistanceItem(nValue));
+        UINT32 nValue2 = GetCoreValue( aMtrDistance, ePoolUnit );
+        rAttrs.Put(Svx3DDistanceItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_DISTANCE);
@@ -2044,8 +2046,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Brennweite
     if( !aMtrFocalLength.IsEmptyFieldValue() )
     {
-        UINT32 nValue = GetCoreValue( aMtrFocalLength, ePoolUnit );
-        rAttrs.Put(Svx3DFocalLengthItem(nValue));
+        UINT32 nValue2 = GetCoreValue( aMtrFocalLength, ePoolUnit );
+        rAttrs.Put(Svx3DFocalLengthItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
@@ -2365,8 +2367,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Glanzpunkt Intensitaet
     if( !aMtrMatSpecularIntensity.IsEmptyFieldValue() )
     {
-        UINT16 nValue = (UINT16) aMtrMatSpecularIntensity.GetValue();
-        rAttrs.Put(Svx3DMaterialSpecularIntensityItem(nValue));
+        UINT16 nValue2 = (UINT16) aMtrMatSpecularIntensity.GetValue();
+        rAttrs.Put(Svx3DMaterialSpecularIntensityItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);
@@ -2941,7 +2943,7 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
         pLb = &aLbMatColor;
     else if( pBtn == &aBtnEmissionColor )
         pLb = &aLbMatEmission;
-    else if( pBtn == &aBtnSpecularColor )
+    else // if( pBtn == &aBtnSpecularColor )
         pLb = &aLbMatSpecular;
 
     Color aColor = pLb->GetSelectEntryColor();
@@ -3050,8 +3052,8 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
         // Beleuchtung
         else if( p == &aLbAmbientlight )
         {
-            Color aColor = aLbAmbientlight.GetSelectEntryColor();
-            pLightGroup->SetGlobalAmbientLight( aColor );
+            Color aColor2 = aLbAmbientlight.GetSelectEntryColor();
+            pLightGroup->SetGlobalAmbientLight( aColor2 );
 
             aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
             //aCtlPreview.SetLightGroup( pLightGroup );
@@ -3066,12 +3068,12 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
                  p == &aLbLight7 ||
                  p == &aLbLight8 )
         {
-            Color aColor = ( (ColorLB*)p )->GetSelectEntryColor();
+            Color aColor2 = ( (ColorLB*)p )->GetSelectEntryColor();
             USHORT nLightSource = GetLightSource();
 
             *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
 
-            pLightGroup->SetIntensity( aColor,
+            pLightGroup->SetIntensity( aColor2,
                             Base3DMaterialDiffuse,
                             (Base3DLightNumber) nLightSource );
 
@@ -3155,7 +3157,7 @@ IMPL_LINK( Svx3DWin, ClickLightHdl, PushButton*, pBtn )
 
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, p )
+IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, EMPTYARG )
 {
     //USHORT nItemId = aCtlFavorites.GetSelectItemId();
 
@@ -3170,7 +3172,7 @@ IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, p )
+IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
 {
     *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
     //aCtlPreview.SetLightGroup( pLightGroup );
@@ -3181,7 +3183,7 @@ IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, p )
+IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, EMPTYARG )
 {
     Base3DLightNumber eLight = aCtlLightPreview.GetPreviewControl().GetSelectedLight();
 
@@ -3197,6 +3199,7 @@ IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, p )
         case 5: pBtn = &aBtnLight6; break;
         case 6: pBtn = &aBtnLight7; break;
         case 7: pBtn = &aBtnLight8; break;
+        default: break;
     }
 
     if( pBtn )
@@ -3442,13 +3445,13 @@ ColorLB* Svx3DWin::GetLbByButton( const PushButton* pBtn )
 |* Ableitung vom SfxChildWindow als "Behaelter" fuer Effekte
 |*
 \************************************************************************/
-__EXPORT Svx3DChildWindow::Svx3DChildWindow( Window* pParent,
+__EXPORT Svx3DChildWindow::Svx3DChildWindow( Window* _pParent,
                                                          USHORT nId,
                                                          SfxBindings* pBindings,
                                                          SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
+    SfxChildWindow( _pParent, nId )
 {
-    Svx3DWin* pWin = new Svx3DWin( pBindings, this, pParent );
+    Svx3DWin* pWin = new Svx3DWin( pBindings, this, _pParent );
     pWindow = pWin;
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
@@ -3461,17 +3464,17 @@ __EXPORT Svx3DChildWindow::Svx3DChildWindow( Window* pParent,
 |* ControllerItem fuer 3DStatus
 |*
 \************************************************************************/
-Svx3DCtrlItem::Svx3DCtrlItem( USHORT nId,
+Svx3DCtrlItem::Svx3DCtrlItem( USHORT _nId,
                                 Svx3DWin* pWin,
-                                SfxBindings* pBindings) :
-    SfxControllerItem( nId, *pBindings ),
+                                SfxBindings* _pBindings) :
+    SfxControllerItem( _nId, *_pBindings ),
     p3DWin( pWin )
 {
 }
 
 // -----------------------------------------------------------------------
-void __EXPORT Svx3DCtrlItem::StateChanged( USHORT nSId,
-                        SfxItemState eState, const SfxPoolItem* pItem )
+void __EXPORT Svx3DCtrlItem::StateChanged( USHORT /*nSId*/,
+                        SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/ )
 {
     /*
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_3D_STATE )
@@ -3490,13 +3493,13 @@ void __EXPORT Svx3DCtrlItem::StateChanged( USHORT nSId,
 |*
 \************************************************************************/
 
-SvxConvertTo3DItem::SvxConvertTo3DItem(UINT16 nId, SfxBindings* pBindings)
-:   SfxControllerItem(nId, *pBindings),
+SvxConvertTo3DItem::SvxConvertTo3DItem(UINT16 _nId, SfxBindings* _pBindings)
+:   SfxControllerItem(_nId, *_pBindings),
     bState(FALSE)
 {
 }
 
-void SvxConvertTo3DItem::StateChanged(UINT16 nId, SfxItemState eState, const SfxPoolItem* pState)
+void SvxConvertTo3DItem::StateChanged(UINT16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/)
 {
     BOOL bNewState = (eState != SFX_ITEM_DISABLED);
     if(bNewState != bState)
