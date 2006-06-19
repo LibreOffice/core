@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:38:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,11 @@
 static bool bFirstAssert = true;
 #endif
 
+#if OSL_DEBUG_LEVEL > 1
 inline void SMprintf( const char* pFormat, ... )
+#else
+inline void SMprintf( const char*, ... )
+#endif
 {
 #if OSL_DEBUG_LEVEL > 1
     FILE* fp = fopen( "/tmp/sessionlog.txt", bFirstAssert ? "w" : "a" );
@@ -216,22 +220,22 @@ static void BuildSmPropertyList()
         nSmProps = 4;
         pSmProps = new SmProp[ nSmProps ];
 
-        pSmProps[ 0 ].name      = SmCloneCommand;
-        pSmProps[ 0 ].type      = SmLISTofARRAY8;
+        pSmProps[ 0 ].name      = const_cast<char*>(SmCloneCommand);
+        pSmProps[ 0 ].type      = const_cast<char*>(SmLISTofARRAY8);
         pSmProps[ 0 ].num_vals  = 1;
         pSmProps[ 0 ].vals      = new SmPropValue;
         pSmProps[ 0 ].vals->length  = aExec.Len()+1;
         pSmProps[ 0 ].vals->value   = strdup( aExec.GetBuffer() );
 
-        pSmProps[ 1 ].name      = SmProgram;
-        pSmProps[ 1 ].type      = SmARRAY8;
+        pSmProps[ 1 ].name      = const_cast<char*>(SmProgram);
+        pSmProps[ 1 ].type      = const_cast<char*>(SmARRAY8);
         pSmProps[ 1 ].num_vals  = 1;
         pSmProps[ 1 ].vals      = new SmPropValue;
         pSmProps[ 1 ].vals->length  = aExec.Len()+1;
         pSmProps[ 1 ].vals->value   = strdup( aExec.GetBuffer() );
 
-        pSmProps[ 2 ].name      = SmRestartCommand;
-        pSmProps[ 2 ].type      = SmLISTofARRAY8;
+        pSmProps[ 2 ].name      = const_cast<char*>(SmRestartCommand);
+        pSmProps[ 2 ].type      = const_cast<char*>(SmLISTofARRAY8);
         pSmProps[ 2 ].num_vals  = 2;
         pSmProps[ 2 ].vals      = new SmPropValue[2];
         pSmProps[ 2 ].vals[0].length    = aExec.Len()+1;
@@ -251,8 +255,8 @@ static void BuildSmPropertyList()
             osl_freeSecurityHandle( aSec );
         }
 
-        pSmProps[ 3 ].name      = SmUserID;
-        pSmProps[ 3 ].type      = SmARRAY8;
+        pSmProps[ 3 ].name      = const_cast<char*>(SmUserID);
+        pSmProps[ 3 ].type      = const_cast<char*>(SmARRAY8);
         pSmProps[ 3 ].num_vals  = 1;
         pSmProps[ 3 ].vals      = new SmPropValue;
         pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
@@ -269,7 +273,7 @@ bool SessionManagerClient::checkDocumentsSaved()
     return bDocSaveDone;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
+IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, EMPTYARG )
 {
     SMprintf( "posting save documents event shutdown = %s\n", (pThis!=0) ? "true" : "false" );
     if( pOneInstance )
@@ -283,7 +287,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
     return 0;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, pDummy )
+IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, InteractionHdl, void*, EMPTYARG )
 {
     SMprintf( "interaction link\n" );
     if( pOneInstance )
@@ -295,7 +299,7 @@ IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, pDummy )
     return 0;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void*, pDummy )
+IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownCancelHdl, void*, EMPTYARG )
 {
     SMprintf( "shutdown cancel\n" );
     if( pOneInstance )
@@ -308,12 +312,12 @@ IMPL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void*, pDummy )
 }
 
 void SessionManagerClient::SaveYourselfProc(
-    SmcConn connection,
-    SmPointer client_data,
+    SmcConn,
+    SmPointer,
     int save_type,
     Bool shutdown,
     int interact_style,
-    Bool fast
+    Bool
     )
 {
     SMprintf( "Session: save yourself, save_type = %s, shutdown = %s, interact_style = %s, fast = %s\n",
@@ -345,7 +349,7 @@ void SessionManagerClient::SaveYourselfProc(
 #endif
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
+IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
 {
     const std::list< SalFrame* >& rFrames = GetSalData()->GetDisplay()->getFrames();
     SMprintf( rFrames.begin() != rFrames.end() ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
@@ -356,7 +360,7 @@ IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
 
 void SessionManagerClient::DieProc(
     SmcConn connection,
-    SmPointer client_data
+    SmPointer
     )
 {
     SMprintf( "Session: die\n" );
@@ -368,8 +372,8 @@ void SessionManagerClient::DieProc(
 }
 
 void SessionManagerClient::SaveCompleteProc(
-    SmcConn connection,
-    SmPointer client_data
+    SmcConn,
+    SmPointer
     )
 {
     SMprintf( "Session: save complete\n" );
@@ -377,7 +381,7 @@ void SessionManagerClient::SaveCompleteProc(
 
 void SessionManagerClient::ShutdownCanceledProc(
     SmcConn connection,
-    SmPointer client_data )
+    SmPointer )
 {
     SMprintf( "Session: shutdown canceled\n" );
     if( connection == aSmcConnection )
@@ -386,7 +390,7 @@ void SessionManagerClient::ShutdownCanceledProc(
 
 void SessionManagerClient::InteractProc(
                                         SmcConn connection,
-                                        SmPointer client_data )
+                                        SmPointer )
 {
     SMprintf( "Session: interaction request completed\n" );
     if( connection == aSmcConnection )
@@ -606,7 +610,7 @@ void ICEConnectionObserver::wakeup()
     write( nWakeupFiles[1], &cChar, 1 );
 }
 
-void ICEConnectionWorker( void* pData )
+void ICEConnectionWorker( void* )
 {
 #ifdef USE_SM_EXTENSION
     while( osl_scheduleThread(ICEConnectionObserver::ICEThread) && ICEConnectionObserver::nConnections )
@@ -658,9 +662,9 @@ void ICEConnectionWorker( void* pData )
 
 void ICEConnectionObserver::ICEWatchProc(
     IceConn connection,
-    IcePointer client_data,
+    IcePointer,
     Bool opening,
-    IcePointer* watch_data
+    IcePointer*
     )
 {
     // note: this is a callback function for ICE
