@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:58:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ public:
     virtual ~WinSalOpenGL();
 
     virtual bool        IsValid();
-    virtual void*       GetOGLFnc( const char * );
+    virtual oglFunction GetOGLFnc( const char * );
     virtual void        OGLEntry( SalGraphics* pGraphics );
     virtual void        OGLExit( SalGraphics* pGraphics );
     virtual void        StartScene( SalGraphics* pGraphics );
