@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,14 +151,12 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     nAuxiliaryColor = rSource.nAuxiliaryColor;
 
     DeleteTable( aHatchTable );
-    void*   pSource = rSource.aHatchTable.First();
+    HatchEntry* pSource = (HatchEntry*)rSource.aHatchTable.First();
     while ( pSource )
     {
         sal_uInt32  nKey = rSource.aHatchTable.GetKey( pSource );
-        void* pDest = new sal_Int8[ sizeof( HatchEntry ) ];
-        memcpy( pDest, pSource, sizeof( HatchEntry ) );
-        aHatchTable.Insert( nKey, pDest );
-        pSource = rSource.aHatchTable.Next();
+        aHatchTable.Insert( nKey, new HatchEntry( *pSource ) );
+        pSource = (HatchEntry*)rSource.aHatchTable.Next();
     }
     bSegmentCount = rSource.bSegmentCount;
     return (*this);
@@ -324,11 +322,11 @@ void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, l
 
 void CGMElements::DeleteTable( Table& rTable )
 {
-    void*   pPtr = rTable.First();
+    HatchEntry* pPtr = (HatchEntry*)rTable.First();
     while ( pPtr )
     {
         delete pPtr;
-        pPtr = rTable.Next();
+        pPtr = (HatchEntry*)rTable.Next();
     }
     rTable.Clear();
 }
