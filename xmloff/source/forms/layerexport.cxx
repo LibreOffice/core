@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:12:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,10 @@ namespace xmloff
         m_rContext.GetEventExport().AddTranslationTable(g_pFormsEventTranslation);
 
         clear();
+    }
+
+    OFormLayerXMLExport_Impl::~OFormLayerXMLExport_Impl()
+    {
     }
 
     //---------------------------------------------------------------------
@@ -683,7 +687,7 @@ namespace xmloff
                         ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
                         for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
                         {
-                            sal_Int32 nDummy = 0;
+                            (void)aHaveALook;
                         }
 #endif
 
@@ -704,7 +708,7 @@ namespace xmloff
         }
         catch( const Exception& e )
         {
-            e;  // make compiler happy
+            (void)e;    // make compiler happy
             OSL_ENSURE( sal_False, "OFormLayerXMLExport_Impl::collectGridAutoStyles: error examining the grid colums!" );
         }
     }
