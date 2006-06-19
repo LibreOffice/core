@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_xkb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:56:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,11 @@
 #include "i18n_xkb.hxx"
 #endif
 
-SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display *pDisplay )
+SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display*
+#if __XKeyboardExtension__
+pDisplay
+#endif
+)
     : mbUseExtension( (sal_Bool)__XKeyboardExtension__ ),
       mnDefaultGroup( 0 )
 {
@@ -112,7 +116,11 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display *pDisplay )
 }
 
 void
-SalI18N_KeyboardExtension::Dispatch( XEvent *pEvent )
+SalI18N_KeyboardExtension::Dispatch( XEvent*
+#if __XKeyboardExtension__
+pEvent
+#endif
+)
 {
     #if __XKeyboardExtension__
 
@@ -143,10 +151,15 @@ SalI18N_KeyboardExtension::Dispatch( XEvent *pEvent )
     #endif // __XKeyboardExtension__
 }
 
+#if __XKeyboardExtension__
 sal_uInt32
 SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32 nKeyCode,
                                                  sal_uInt32 nShiftState,
                                                    sal_uInt32 nGroup ) const
+#else
+sal_uInt32
+SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32,sal_uInt32,sal_uInt32 ) const
+#endif
 {
     #if __XKeyboardExtension__
 
