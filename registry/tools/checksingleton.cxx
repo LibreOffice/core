@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:18:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,11 +92,22 @@ OUString convertToFileUrl(const OString& fileName)
     if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return uUrlFileName;
@@ -175,7 +186,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     }
 
     char    *s=NULL;
-    for (i; i < ac; i++)
+    for (; i < ac; i++)
     {
         if (av[i][0] == '-')
         {
@@ -291,9 +302,9 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     bRet = initOptions(rargc, rargv, bCmdFile);
 
-                    for (long i=0; i < rargc; i++)
+                    for (long j=0; j < rargc; j++)
                     {
-                        free(rargv[i]);
+                        free(rargv[j]);
                     }
                 }
             } else
@@ -368,10 +379,10 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
             } else
             {
                 bRet = sal_True;
-                OUString value = reader.getSuperTypeName();
+                OUString value2 = reader.getSuperTypeName();
 
                 if ( entryKey.setValue(tmpName, RG_VALUETYPE_UNICODE,
-                                       (RegValue)value.getStr(), sizeof(sal_Unicode)* (value.getLength()+1)) )
+                                       (RegValue)value2.getStr(), sizeof(sal_Unicode)* (value2.getLength()+1)) )
                 {
                     fprintf(stderr, "%s: could not create data entry for singleton \"%s\"\n",
                             options.getProgramName().getStr(), U2S( singletonName ));
@@ -380,7 +391,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
                 if ( options.forceOutput() )
                 {
                     fprintf(stderr, "%s: create SINGLETON entry for \"%s\" -> \"%s\"\n",
-                            options.getProgramName().getStr(), U2S( singletonName ), U2S(value));
+                            options.getProgramName().getStr(), U2S( singletonName ), U2S(value2));
                 }
             }
         }
@@ -408,8 +419,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
-
-void _cdecl main( int argc, char * argv[] )
+int _cdecl main( int argc, char * argv[] )
 #endif
 {
     if ( !options.initOptions(argc, argv) )
@@ -502,8 +512,6 @@ void _cdecl main( int argc, char * argv[] )
                 options.getProgramName().getStr(), options.getTypeReg().getStr());
         exit(11);
     }
-
-    exit(0);
 }
 
 
