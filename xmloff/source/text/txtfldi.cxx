@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:29:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@
 #endif
 
 #ifndef _RTL_USTRING
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -422,13 +422,11 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const sal_Char* pService,
     sal_uInt16 nPrefix, const OUString& rElementName)
-    : SvXMLImportContext( rImport, nPrefix, rElementName ),
-      sContentBuffer(),
-      rTextImportHelper(rHlp),
-      bValid(sal_False),
-      sIsFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
-      sServicePrefix(RTL_CONSTASCII_USTRINGPARAM(
-          sAPI_textfield_prefix))
+:   SvXMLImportContext( rImport, nPrefix, rElementName )
+,   sIsFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed))
+,   rTextImportHelper(rHlp)
+,   sServicePrefix(RTL_CONSTASCII_USTRINGPARAM(sAPI_textfield_prefix))
+,   bValid(sal_False)
 {
     DBG_ASSERT(NULL != pService, "Need service name!");
     sServiceName = OUString::createFromAscii(pService);
@@ -497,14 +495,14 @@ void XMLTextFieldImportContext::EndElement()
     rTextImportHelper.InsertString(GetContent());
 }
 
-void XMLTextFieldImportContext::Characters(const OUString& sContent)
+void XMLTextFieldImportContext::Characters(const OUString& rContent)
 {
-    sContentBuffer.append(sContent);
+    sContentBuffer.append(rContent);
 }
 
 sal_Bool XMLTextFieldImportContext::CreateField(
     Reference<XPropertySet> & xField,
-    const OUString& sServiceName)
+    const OUString& rServiceName)
 {
     // instantiate new XTextField:
     // ask import for model, model is factory, ask factory to create service
@@ -512,7 +510,7 @@ sal_Bool XMLTextFieldImportContext::CreateField(
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
     if( xFactory.is() )
     {
-        Reference<XInterface> xIfc = xFactory->createInstance(sServiceName);
+        Reference<XInterface> xIfc = xFactory->createInstance(rServiceName);
         if( xIfc.is() )
         {
             Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
@@ -847,15 +845,13 @@ TYPEINIT1( XMLSenderFieldImportContext, XMLTextFieldImportContext);
 XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName,
-    sal_uInt16 nToken) :
-    XMLTextFieldImportContext(rImport, rHlp, sAPI_extended_user,
-                              nPrfx, sLocalName),
-    bFixed(sal_True),
-    nElementToken(nToken),
-    sEmpty(),
-    sPropertyFieldSubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_user_data_type)),
-    sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
-    sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
+    sal_uInt16 nToken)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_extended_user,nPrfx, sLocalName)
+,   sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed))
+,   sPropertyFieldSubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_user_data_type))
+,   sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
+,   bFixed(sal_True)
+,   nElementToken(nToken)
 {
 }
 
@@ -976,13 +972,13 @@ TYPEINIT1( XMLAuthorFieldImportContext, XMLSenderFieldImportContext);
 XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName,
-    sal_uInt16 nToken) :
-        XMLSenderFieldImportContext(rImport, rHlp, nPrfx, sLocalName, nToken),
-        bAuthorFullName(sal_True),
-        sPropertyAuthorFullName(RTL_CONSTASCII_USTRINGPARAM(sAPI_full_name)),
-        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
-        sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
-        sServiceAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author))
+    sal_uInt16 nToken)
+:   XMLSenderFieldImportContext(rImport, rHlp, nPrfx, sLocalName, nToken)
+,   bAuthorFullName(sal_True)
+,   sServiceAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author))
+,   sPropertyAuthorFullName(RTL_CONSTASCII_USTRINGPARAM(sAPI_full_name))
+,   sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed))
+,   sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
 {
     // overwrite service name from XMLSenderFieldImportContext
     SetServiceName(sServiceAuthor);
@@ -1043,16 +1039,13 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aSelectPageAttrMap[] =
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
-    const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_page_number,
-                                  nPrfx, sLocalName),
-        sString(),
-        sStringOK(sal_False),
-        eSelectPage(PageNumberType_CURRENT),
-        sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type)),
-        sPropertyUserText(RTL_CONSTASCII_USTRINGPARAM(sAPI_user_text)),
-        sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_numbering_type))
+    const OUString& sLocalName)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_page_number, nPrfx, sLocalName)
+,   sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
+,   sPropertyUserText(RTL_CONSTASCII_USTRINGPARAM(sAPI_user_text))
+,   sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM(sAPI_numbering_type))
+,   eSelectPage(PageNumberType_CURRENT)
+,   sStringOK(sal_False)
 {
     bValid = sal_True;
 }
@@ -1105,18 +1098,15 @@ TYPEINIT1( XMLPageNumberImportContext, XMLTextFieldImportContext );
 
 XMLPageNumberImportContext::XMLPageNumberImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
-    const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_page_number,
-                                  nPrfx, sLocalName),
-        sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type)),
-        sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_numbering_type)),
-        sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM(sAPI_offset)),
-        sNumberFormat(),
-        sNumberSync(GetXMLToken(XML_FALSE)),
-        nPageAdjust(0),
-        eSelectPage(PageNumberType_CURRENT),
-        sNumberFormatOK(sal_False)
+    const OUString& sLocalName)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_page_number, nPrfx, sLocalName)
+,   sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
+,   sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM(sAPI_numbering_type))
+,   sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM(sAPI_offset))
+,   sNumberSync(GetXMLToken(XML_FALSE))
+,   nPageAdjust(0)
+,   eSelectPage(PageNumberType_CURRENT)
+,   sNumberFormatOK(sal_False)
 {
     bValid = sal_True;
 }
@@ -1219,14 +1209,11 @@ TYPEINIT1( XMLPlaceholderFieldImportContext, XMLTextFieldImportContext);
 
 XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx, const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_jump_edit,
-                                  nPrfx, sLocalName),
-        sPropertyPlaceholderType(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_place_holder_type)),
-        sPropertyPlaceholder(RTL_CONSTASCII_USTRINGPARAM(sAPI_place_holder)),
-        sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
-        sDescription()
+    sal_uInt16 nPrfx, const OUString& sLocalName)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_jump_edit,nPrfx, sLocalName)
+,   sPropertyPlaceholderType(RTL_CONSTASCII_USTRINGPARAM(sAPI_place_holder_type))
+,   sPropertyPlaceholder(RTL_CONSTASCII_USTRINGPARAM(sAPI_place_holder))
+,   sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint))
 {
 }
 
@@ -1280,19 +1267,19 @@ void XMLPlaceholderFieldImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyHint, aAny);
 
     // remove <...> around content (if present)
-    OUString sContent = GetContent();
+    OUString aContent = GetContent();
     sal_Int32 nStart = 0;
-    sal_Int32 nLength = sContent.getLength();
-    if ((nLength > 0) && (sContent.getStr()[0] == '<'))
+    sal_Int32 nLength = aContent.getLength();
+    if ((nLength > 0) && (aContent.getStr()[0] == '<'))
     {
         --nLength;
         ++nStart;
     }
-    if ((nLength > 0) && (sContent.getStr()[sContent.getLength()-1] == '>'))
+    if ((nLength > 0) && (aContent.getStr()[aContent.getLength()-1] == '>'))
     {
         --nLength;
     }
-    aAny <<= sContent.copy(nStart, nLength);
+    aAny <<= aContent.copy(nStart, nLength);
     xPropertySet->setPropertyValue(sPropertyPlaceholder, aAny);
 
     aAny <<= nPlaceholderType;
@@ -1308,26 +1295,23 @@ TYPEINIT1( XMLTimeFieldImportContext, XMLTextFieldImportContext);
 
 XMLTimeFieldImportContext::XMLTimeFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx, const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_date_time,
-                                  nPrfx, sLocalName),
-        fTimeValue(0.0),
-        nAdjust(0),
-        bTimeOK(sal_False),
-        bFixed(sal_False),
-        nFormatKey(0),
-        bFormatOK(sal_False),
-        bIsDate(sal_False),
-        bIsDefaultLanguage( sal_True ),
-        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
-        sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
-        sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_date_time_value)),
-        sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_date_time)),
-        sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM(sAPI_adjust)),
-        sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date)),
-        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
+    sal_uInt16 nPrfx, const OUString& sLocalName)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_date_time, nPrfx, sLocalName)
+,   sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format))
+,   sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed))
+,   sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM(sAPI_date_time_value))
+,   sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM(sAPI_date_time))
+,   sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM(sAPI_adjust))
+,   sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date))
+,   sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
+,   fTimeValue(0.0)
+,   nAdjust(0)
+,   nFormatKey(0)
+,   bTimeOK(sal_False)
+,   bFormatOK(sal_False)
+,   bFixed(sal_False)
+,   bIsDate(sal_False)
+,   bIsDefaultLanguage( sal_True )
 {
     bValid = sal_True;  // always valid!
 }
@@ -1526,29 +1510,22 @@ TYPEINIT1( XMLDatabaseFieldImportContext, XMLTextFieldImportContext );
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
-    const OUString& sLocalName, bool bUseDisply) :
-        XMLTextFieldImportContext(rImport, rHlp, pServiceName,
-                                  nPrfx, sLocalName),
-        sPropertyDataBaseName(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_name)),
-        sPropertyDataBaseURL(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_u_r_l)),
-        sPropertyTableName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_table_name)),
-        sPropertyDataCommandType(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_command_type)),
-        sPropertyIsVisible(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
-        sDatabaseName(),
-        sTableName(),
-        nCommandType( sdb::CommandType::TABLE ),
-        bDatabaseOK(sal_False),
-        bDatabaseNameOK(sal_False),
-        bDatabaseURLOK(sal_False),
-        bCommandTypeOK(sal_False),
-        bTableOK(sal_False),
-        bUseDisplay( bUseDisply ),
-        bDisplay( sal_True ),
-        bDisplayOK( false )
+    const OUString& sLocalName, bool bUseDisply)
+:   XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, sLocalName)
+,   sPropertyDataBaseName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_name))
+,   sPropertyDataBaseURL(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_u_r_l))
+,   sPropertyTableName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_table_name))
+,   sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_command_type))
+,   sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible))
+,   nCommandType( sdb::CommandType::TABLE )
+,   bCommandTypeOK(sal_False)
+,   bDisplay( sal_True )
+,   bDisplayOK( false )
+,   bUseDisplay( bUseDisply )
+,   bDatabaseOK(sal_False)
+,   bDatabaseNameOK(sal_False)
+,   bDatabaseURLOK(sal_False)
+,   bTableOK(sal_False)
 {
 }
 
@@ -1599,13 +1576,11 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
 }
 
 SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
-
-    if( ( nPrefix == XML_NAMESPACE_FORM ) &&
+    if( ( p_nPrefix == XML_NAMESPACE_FORM ) &&
         IsXMLToken( rLocalName, XML_CONNECTION_RESOURCE ) )
     {
         // process attribute list directly
@@ -1629,7 +1604,7 @@ SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
         ProcessAttribute( XML_TOKEN_INVALID, OUString() );
     }
 
-    return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+    return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
                                                   xAttrList);
 }
 
@@ -1715,13 +1690,11 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
 
 XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx, const OUString& sLocalName) :
-        XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database_next,
-                                      nPrfx, sLocalName, false),
-        sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
-        sTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_true)),
-        sCondition(),
-        bConditionOK(sal_False)
+    sal_uInt16 nPrfx, const OUString& sLocalName)
+: XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database_next, nPrfx, sLocalName, false)
+,   sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition))
+,   sTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_true))
+,   bConditionOK(sal_False)
 {
 }
 
@@ -1899,17 +1872,15 @@ TYPEINIT1( XMLSimpleDocInfoImportContext, XMLTextFieldImportContext );
 XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName, sal_uInt16 nToken,
-    sal_Bool bContent, sal_Bool bAuthor) :
-        XMLTextFieldImportContext(rImport, rHlp, MapTokenToServiceName(nToken),
-                                  nPrfx, sLocalName),
-        bFixed(sal_False),
-        bHasAuthor(bAuthor),
-        bHasContent(bContent),
-        sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
-        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
-        sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author)),
-        sPropertyCurrentPresentation(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
+    sal_Bool bContent, sal_Bool bAuthor)
+:   XMLTextFieldImportContext(rImport, rHlp, MapTokenToServiceName(nToken),nPrfx, sLocalName)
+,   sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed))
+,   sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
+,   sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author))
+,   sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
+,   bFixed(sal_False)
+,   bHasAuthor(bAuthor)
+,   bHasContent(bContent)
 {
     bValid = sal_True;
 }
@@ -2102,15 +2073,14 @@ TYPEINIT1( XMLDateTimeDocInfoImportContext, XMLSimpleDocInfoImportContext );
 
 XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
-    const OUString& sLocalName, sal_uInt16 nToken) :
-        XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx, sLocalName,
-                                      nToken, sal_False, sal_False),
-        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
-        sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date)),
-        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language)),
-        nFormat(0),
-        bFormatOK(sal_False),
-        bIsDefaultLanguage(sal_True)
+    const OUString& sLocalName, sal_uInt16 nToken)
+:   XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx, sLocalName,nToken, sal_False, sal_False)
+,   sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format))
+,   sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date))
+,   sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
+,   nFormat(0)
+,   bFormatOK(sal_False)
+,   bIsDefaultLanguage(sal_True)
 {
     // we allow processing of EDIT_DURATION here, because import of actual
     // is not supported anyway. If it was, we'd need an extra import class
@@ -2337,9 +2307,6 @@ XMLConditionalTextImportContext::XMLConditionalTextImportContext(
         sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_false_content)),
         sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_condition_true)),
         sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
-        sCondition(),
-        sTrueContent(),
-        sFalseContent(),
         bConditionOK(sal_False),
         bTrueOK(sal_False),
         bFalseOK(sal_False),
@@ -2426,8 +2393,6 @@ XMLHiddenTextImportContext::XMLHiddenTextImportContext(
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
         sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_hidden)),
-        sCondition(),
-        sString(),
         bConditionOK(sal_False),
         bStringOK(sal_False),
         bIsHidden(sal_False)
@@ -2954,8 +2919,6 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
         sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
         sPropertyMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
         sPropertyScriptURL(RTL_CONSTASCII_USTRINGPARAM("ScriptURL")),
-        sMacro(),
-        sDescription(),
         bDescriptionOK(sal_False)
 {
 }
@@ -3027,7 +2990,6 @@ void XMLMacroFieldImportContext::PrepareField(
         Sequence<PropertyValue> aValues;
         pEvents->GetEventSequence( sOnClick, aValues );
 
-        const PropertyValue* pValues = aValues.getConstArray();
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
@@ -3095,22 +3057,17 @@ TYPEINIT1( XMLReferenceFieldImportContext, XMLTextFieldImportContext );
 
 XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    sal_uInt16 nToken, sal_uInt16 nPrfx, const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_get_reference,
-                                  nPrfx, sLocalName),
-        nType(ReferenceFieldPart::PAGE_DESC),
-        sName(),
-        bNameOK(sal_False),
-        bTypeOK(sal_False),
-        bSeqNumberOK(sal_False),
-        nElementToken(nToken),
-        sPropertyReferenceFieldPart(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_reference_field_part)),
-        sPropertyReferenceFieldSource(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_reference_field_source)),
-        sPropertySourceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_source_name)),
-        sPropertyCurrentPresentation(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
+    sal_uInt16 nToken, sal_uInt16 nPrfx, const OUString& sLocalName)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_get_reference, nPrfx, sLocalName)
+,   sPropertyReferenceFieldPart(RTL_CONSTASCII_USTRINGPARAM(sAPI_reference_field_part))
+,   sPropertyReferenceFieldSource(RTL_CONSTASCII_USTRINGPARAM(sAPI_reference_field_source))
+,   sPropertySourceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_source_name))
+,   sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
+,   nElementToken(nToken)
+,   nType(ReferenceFieldPart::PAGE_DESC)
+,   bNameOK(sal_False)
+,   bTypeOK(sal_False)
+,   bSeqNumberOK(sal_False)
 {
 }
 
@@ -3289,15 +3246,14 @@ TYPEINIT1( XMLDdeFieldDeclImportContext, SvXMLImportContext );
 
 XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& sLocalName, const SvXMLTokenMap& rMap) :
-        SvXMLImportContext(rImport, nPrfx, sLocalName),
-        rTokenMap(rMap),
-        sPropertyName(RTL_CONSTASCII_USTRINGPARAM(sAPI_name)),
-        sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_type)),
-        sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_file)),
-        sPropertyDDECommandElement(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_element)),
-        sPropertyIsAutomaticUpdate(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_is_automatic_update))
+    const OUString& sLocalName, const SvXMLTokenMap& rMap)
+:   SvXMLImportContext(rImport, nPrfx, sLocalName)
+,   sPropertyIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_automatic_update))
+,   sPropertyName(RTL_CONSTASCII_USTRINGPARAM(sAPI_name))
+,   sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_type))
+,   sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_file))
+,   sPropertyDDECommandElement(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_element))
+,   rTokenMap(rMap)
 {
     DBG_ASSERT(XML_NAMESPACE_TEXT == nPrfx, "wrong prefix");
     DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
@@ -3499,7 +3455,7 @@ void XMLDdeFieldImportContext::EndElement()
 }
 
 void XMLDdeFieldImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropertySet)
+    const Reference<XPropertySet> &)
 {
     // empty, since not needed.
 }
@@ -3523,14 +3479,14 @@ XMLSheetNameImportContext::XMLSheetNameImportContext(
 }
 
 void XMLSheetNameImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    sal_uInt16,
+    const ::rtl::OUString& )
 {
     // no attributes -> nothing to be done
 }
 
 void XMLSheetNameImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropertySet)
+    const Reference<XPropertySet> &)
 {
     // no attributes -> nothing to be done
 }
@@ -3691,8 +3647,8 @@ void XMLBibliographyFieldImportContext::StartElement(
 }
 
 void XMLBibliographyFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
-    const OUString& sAttrValue )
+    sal_uInt16,
+    const OUString& )
 {
     // attributes are handled in StartElement
     DBG_ERROR("This should not have happened.");
@@ -3719,7 +3675,7 @@ void XMLBibliographyFieldImportContext::PrepareField(
 const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     OUString sName)
 {
-    sal_Char* pName = NULL;
+    const sal_Char* pName = NULL;
 
     if (IsXMLToken(sName, XML_IDENTIFIER))
     {
@@ -3878,8 +3834,8 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
 }
 
 void XMLAnnotationImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
-    const OUString& sAttrValue )
+    sal_uInt16,
+    const OUString& )
 {
     // ignore
 }
@@ -3887,7 +3843,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
 SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
     USHORT nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList >& xAttrList )
+    const Reference<XAttributeList >& )
 {
     SvXMLImportContext *pContext = 0;
     if( XML_NAMESPACE_DC == nPrefix )
@@ -3945,15 +3901,14 @@ XMLScriptImportContext::XMLScriptImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx,
-    const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_script,
-                                  nPrfx, sLocalName),
-        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
-        sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM(sAPI_script_type)),
-        sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_url_content)),
-        bContentOK(sal_False),
-        bUrlContent(sal_False),
-        bScriptTypeOK(sal_False)
+    const OUString& sLocalName)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_script, nPrfx, sLocalName)
+,   sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM(sAPI_script_type))
+,   sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_url_content))
+,   sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
+,   bContentOK(sal_False)
+,   bScriptTypeOK(sal_False)
+,   bUrlContent(sal_False)
 {
 }
 
@@ -4187,13 +4142,12 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
 }
 
 /// process attribute values
-void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16 nAttrToken, const ::rtl::OUString& sAttrValue )
+void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16, const ::rtl::OUString& )
 {
 }
 
 /// prepare XTextField for insertion into document
-void XMLHeaderFieldImportContext::PrepareField(
-        const Reference<XPropertySet> & xPropertySet)
+void XMLHeaderFieldImportContext::PrepareField(const Reference<XPropertySet> &)
 {
 }
 
@@ -4212,13 +4166,12 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
 }
 
 /// process attribute values
-void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16 nAttrToken, const ::rtl::OUString& sAttrValue )
+void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16, const ::rtl::OUString& )
 {
 }
 
 /// prepare XTextField for insertion into document
-void XMLFooterFieldImportContext::PrepareField(
-        const Reference<XPropertySet> & xPropertySet)
+void XMLFooterFieldImportContext::PrepareField(const Reference<XPropertySet> &)
 {
 }
 
@@ -4238,14 +4191,14 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
 }
 
 /// process attribute values
-void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue )
+void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16,
+                                   const ::rtl::OUString& )
 {
 }
 
 /// prepare XTextField for insertion into document
 void XMLDateTimeFieldImportContext::PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet)
+        ::com::sun::star::beans::XPropertySet> &)
 {
 }
