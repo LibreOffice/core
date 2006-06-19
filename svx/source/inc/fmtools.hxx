@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:21:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >&    getColumnsSupplier() const  { return m_xColumnsSupplier; }
 
     // das normale queryInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
+    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
     { return m_xMoveOperations->queryInterface(type); }
 
     // ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>
@@ -327,7 +327,7 @@ public:
     { return m_xBookmarkOperations->getBookmark(); }
     sal_Bool moveToBookmark(const ::com::sun::star::uno::Any& bookmark) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
     sal_Bool moveRelativeToBookmark(const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->moveRelativeToBookmark(bookmark, rows); }
-    sal_Int32 compareBookmarks(const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->compareBookmarks(first, second); }
+    sal_Int32 compareBookmarks(const ::com::sun::star::uno::Any& lhs, const ::com::sun::star::uno::Any& rhs) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->compareBookmarks(lhs, rhs); }
     sal_Int32 hasOrderedBookmarks(void) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->hasOrderedBookmarks(); }
     sal_Int32 hashBookmark(const ::com::sun::star::uno::Any& bookmark) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
 
@@ -382,7 +382,7 @@ class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< ::com::sun::star::l
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
-    sal_Int16               m_nId;
+    sal_Int16           m_nId;
 
     virtual ~FmXDisposeMultiplexer();
 public:
