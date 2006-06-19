@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:11:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,13 +296,13 @@ void WeakComponentImplHelperBase::dispose()
             }
             catch (...)
             {
-                MutexGuard aGuard( rBHelper.rMutex );
+                MutexGuard aGuard2( rBHelper.rMutex );
                 // bDisposed and bInDispose must be set in this order:
                 rBHelper.bDisposed = sal_True;
                 rBHelper.bInDispose = sal_False;
                 throw;
             }
-            MutexGuard aGuard( rBHelper.rMutex );
+            MutexGuard aGuard2( rBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
@@ -430,13 +430,13 @@ void WeakAggComponentImplHelperBase::dispose()
             }
             catch (...)
             {
-                MutexGuard aGuard( rBHelper.rMutex );
+                MutexGuard aGuard2( rBHelper.rMutex );
                 // bDisposed and bInDispose must be set in this order:
                 rBHelper.bDisposed = sal_True;
                 rBHelper.bInDispose = sal_False;
                 throw;
             }
-            MutexGuard aGuard( rBHelper.rMutex );
+            MutexGuard aGuard2( rBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
