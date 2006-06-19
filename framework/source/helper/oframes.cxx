@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:24:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,6 +337,11 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
 
+      sal_uInt32 nCount = m_pFrameContainer->getCount();
+      if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
+          throw IndexOutOfBoundsException( OUString::createFromAscii( "OFrames::getByIndex - Index out of bounds" ),
+                                           (OWeakObject *)this );
+
     // Set default return value.
     Any aReturnValue;
 
@@ -347,7 +352,6 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
     {
         // Get element form container.
         // (If index not valid, FrameContainer return NULL!)
-        if (m_pFrameContainer->getCount()>nIndex)
             aReturnValue <<= (*m_pFrameContainer)[nIndex];
     }
 
