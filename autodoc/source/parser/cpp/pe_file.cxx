@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_file.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:25:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ PE_File::Handle_ChildFailure()
 ary::cpp::RwGate &
 PE_File::AryGate() const
 {
-     return const_cast< PE_File& >(*this).Env().AryGate();
+     return const_cast< PE_File& >(*this).access_Env().AryGate();
 }
 
 void
@@ -214,7 +214,7 @@ PE_File::SpReturn_VarFunc()
 {
      if (bWithinSingleExternC)
     {
-        Env().CloseBlock();
+        access_Env().CloseBlock();
          bWithinSingleExternC = false;
     }
 }
@@ -222,104 +222,104 @@ PE_File::SpReturn_VarFunc()
 void
 PE_File::SpReturn_Template()
 {
-    Env().OpenTemplate( pSpuTemplate->Child().Result_Parameters() );
+    access_Env().OpenTemplate( pSpuTemplate->Child().Result_Parameters() );
 }
 
 void
-PE_File::On_std_namespace(const char * i_sText)
+PE_File::On_std_namespace(const char * )
 {
     pSpuNamespace->Push(done);
 }
 
 void
-PE_File::On_std_ClassKey(const char * i_sText)
+PE_File::On_std_ClassKey(const char * )
 {
     pSpuVarFunc->Push(not_done);        // This is correct,
                                         //   classes are parsed via PE_Type.
 }
 
 void
-PE_File::On_std_typedef(const char * i_sText)
+PE_File::On_std_typedef(const char * )
 {
     pSpuTypedef->Push(not_done);
 }
 
 void
-PE_File::On_std_enum(const char * i_sText)
+PE_File::On_std_enum(const char * )
 {
     pSpuVarFunc->Push(not_done);        // This is correct,
                                         //   enums are parsed via PE_Type.
 }
 
 void
-PE_File::On_std_VarFunc(const char * i_sText)
+PE_File::On_std_VarFunc(const char * )
 {
     pSpuVarFunc->Push(not_done);
 }
 
 void
-PE_File::On_std_template(const char * i_sText)
+PE_File::On_std_template(const char * )
 {
     pSpuTemplate->Push(done);
 }
 
 void
-PE_File::On_std_extern(const char * i_sText)
+PE_File::On_std_extern(const char * )
 {
     SetTokenResult(done, stay);
     pStati->SetCur(in_extern);
 }
 
 void
-PE_File::On_std_using(const char * i_sText)
+PE_File::On_std_using(const char * )
 {
     pSpuUsing->Push(done);
 }
 
 void
-PE_File::On_std_SwBracketRight(const char * i_sText)
+PE_File::On_std_SwBracketRight(const char * )
 {
     SetTokenResult(done,stay);
-    Env().CloseBlock();
+    access_Env().CloseBlock();
 }
 
 void
-PE_File::On_std_DefineName(const char * i_sText)
+PE_File::On_std_DefineName(const char * )
 {
     pSpuDefs->Push(not_done);
 }
 
 void
-PE_File::On_std_MacroName(const char * i_sText)
+PE_File::On_std_MacroName(const char * )
 {
     pSpuDefs->Push(not_done);
 }
 
 void
-PE_File::On_in_extern_Constant(const char * i_sText)
+PE_File::On_in_extern_Constant(const char * )
 {
     SetTokenResult(done,stay);
     pStati->SetCur(in_externC);
 
-    Env().OpenExternC();
+    access_Env().OpenExternC();
 }
 
 void
-PE_File::On_in_extern_Ignore(const char * i_sText)
+PE_File::On_in_extern_Ignore(const char * )
 {
     SetTokenResult(not_done, stay);
     pStati->SetCur(std);
 }
 
 void
-PE_File::On_in_externC_SwBracket_Left(const char * i_sText)
+PE_File::On_in_externC_SwBracket_Left(const char * )
 {
     SetTokenResult(done, stay);
     pStati->SetCur(std);
 }
 
 void
-PE_File::On_in_externC_NoBlock(const char * i_sText)
+PE_File::On_in_externC_NoBlock(const char * )
 {
     SetTokenResult(not_done, stay);
     pStati->SetCur(std);
@@ -329,5 +329,3 @@ PE_File::On_in_externC_NoBlock(const char * i_sText)
 
 
 }   // namespace cpp
-
-
