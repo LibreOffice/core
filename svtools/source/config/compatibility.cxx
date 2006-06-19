@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compatibility.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:47:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -457,7 +455,7 @@ SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames )
+void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     DBG_ASSERT( sal_False, "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
