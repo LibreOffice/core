@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:40:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,8 @@
 #include <vcl/cvtgrf.hxx>
 #endif
 
+using ::rtl::OUString;
 using namespace ::vos;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -146,16 +146,14 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
         maMapModeSrc            ( MAP_100TH_MM ),
         // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
         maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) ),
-        mbStatus                ( FALSE ),
-//      mXModel                 ( rXModel ),
 //      mXStatusIndicator       ( rXStatInd ),
-        mbStatusIndicator       ( FALSE ),
+        mpPicStrm               ( NULL ),
+        mpHostAppData           ( NULL ),
         mnPagesWritten          ( 0 ),
-//      mnTxId                  ( 0x7a2f64 ),
         mnShapeMasterTitle      ( 0 ),
         mnShapeMasterBody       ( 0 ),
-        mpPicStrm               ( NULL ),
-        mpHostAppData           ( NULL )
+        mbStatusIndicator       ( FALSE ),
+        mbStatus                ( FALSE )
 {
 }
 
@@ -240,17 +238,8 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 //Map from twips to export units, generally twips as well, only excel and word
 //export is happening here, so native units are export units, leave as
 //placeholder if required in future
-void ImplEESdrWriter::MapRect(ImplEESdrObject& rObj)
+void ImplEESdrWriter::MapRect(ImplEESdrObject& /* rObj */ )
 {
-#if 0
-    Rectangle aNewRect=rObj.GetRect();
-    MapMode aOrig = maMapModeSrc;
-    maMapModeSrc = MapMode( MAP_INCH, Point(),
-        Fraction(1,EES_MAP_FRACTION), Fraction(1,EES_MAP_FRACTION));
-    rObj.SetRect( ImplMapPoint(aNewRect.TopLeft()),
-        ImplMapSize(aNewRect.GetSize()) );
-    maMapModeSrc = aOrig;
-#endif
 }
 
 UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
@@ -592,7 +581,6 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            const Rectangle& rRect = rObj.GetRect();
             UINT32 nFlags = 0xa00;          // Flags: Connector | HasSpt
             if( aNewRect.Height < 0 )
                 nFlags |= 0x80;             // Flags: VertMirror
@@ -966,7 +954,7 @@ BOOL ImplEESdrWriter::ImplInitPageValues()
 
 void ImplEESdrWriter::ImplWritePage(
             EscherSolverContainer& rSolverContainer,
-            ImplEESdrPageType ePageType, BOOL bBackGround )
+            ImplEESdrPageType ePageType, BOOL /* bBackGround */ )
 {
     ImplInitPageValues();
 
@@ -1123,14 +1111,14 @@ void EscherEx::EndSdrObjectPage()
 
 // -------------------------------------------------------------------
 
-EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& rShape )
+EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */ )
 {
     return NULL;
 }
 
 // -------------------------------------------------------------------
 
-void EscherEx::EndShape( UINT16 nShapeType, UINT32 nShapeID )
+void EscherEx::EndShape( UINT16 /* nShapeType */, UINT32 /* nShapeID */ )
 {
 }
 
@@ -1150,7 +1138,7 @@ UINT32 EscherEx::QueryTextID( const Reference< XShape >&, UINT32 )
 
 // -------------------------------------------------------------------
 // add an dummy rectangle shape into the escher stream
-UINT32 EscherEx::AddDummyShape( const SdrObject& rObj )
+UINT32 EscherEx::AddDummyShape( const SdrObject& /* rObj */ )
 {
     OpenContainer( ESCHER_SpContainer );
     UINT32 nShapeID = GetShapeID();
@@ -1181,9 +1169,13 @@ const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 // -------------------------------------------------------------------
 
 ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
-                                    const SdrObject& rObj )
-    : mbValid( FALSE ), mbPresObj( FALSE ), mbEmptyPresObj( FALSE ),
-    mnShapeId( 0 ), mnAngle( 0 ), mnTextSize( 0 )
+                                    const SdrObject& rObj ) :
+    mnShapeId( 0 ),
+    mnTextSize( 0 ),
+    mnAngle( 0 ),
+    mbValid( FALSE ),
+    mbPresObj( FALSE ),
+    mbEmptyPresObj( FALSE )
 {
     SdrPage* pPage = rObj.GetPage();
     DBG_ASSERT( pPage, "ImplEESdrObject::ImplEESdrObject: no SdrPage" );
@@ -1201,10 +1193,14 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
 }
 
 ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
-                                    const Reference< XShape >& rShape )
-    : mbValid( FALSE ), mbPresObj( FALSE ), mbEmptyPresObj( FALSE ),
-    mnShapeId( 0 ), mnAngle( 0 ), mXShape( rShape ),
-    mnTextSize( 0 )
+                                    const Reference< XShape >& rShape ) :
+    mXShape( rShape ),
+    mnShapeId( 0 ),
+    mnTextSize( 0 ),
+    mnAngle( 0 ),
+    mbValid( FALSE ),
+    mbPresObj( FALSE ),
+    mbEmptyPresObj( FALSE )
 {
     Init( rEx );
 }
