@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:48:24 $
+#   last change: $Author: hr $ $Date: 2006-06-19 19:18:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ SLOFILES=	$(SLO)$/button.obj		\
             $(SLO)$/tabctrl.obj
 
 EXCEPTIONSFILES=					\
+            $(SLO)$/ctrl.obj		\
             $(SLO)$/edit.obj		\
             $(SLO)$/field2.obj		\
             $(SLO)$/ilstbox.obj		\
