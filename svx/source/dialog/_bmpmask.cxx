@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:31:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,6 @@
 #ifndef _SV_COLRDLG_HXX
 #include <svtools/colrdlg.hxx>
 #endif
-
-#pragma hdrstop
 
 #define BMPMASK_PRIVATE
 
@@ -388,9 +386,9 @@ void ColorWindow::Paint( const Rectangle &Rect )
 
 //-------------------------------------------------------------------------
 
-SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( USHORT nId, SvxBmpMask& rMask,
+SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( USHORT nId_, SvxBmpMask& rMask,
                                             SfxBindings& rBindings ) :
-            SfxControllerItem   ( nId, rBindings ),
+            SfxControllerItem   ( nId_, rBindings ),
             rBmpMask            ( rMask)
 {
 }
@@ -412,12 +410,12 @@ void SvxBmpMaskSelectItem::StateChanged( USHORT nSID, SfxItemState eState,
 
 //-------------------------------------------------------------------------
 
-SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent, USHORT nId,
+SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, USHORT nId,
                                               SfxBindings* pBindings,
                                               SfxChildWinInfo* pInfo ) :
-        SfxChildWindow( pParent, nId )
+        SfxChildWindow( pParent_, nId )
 {
-    pWindow = new SvxBmpMask( pBindings, this, pParent,
+    pWindow = new SvxBmpMask( pBindings, this, pParent_,
                               BMP_RESID( RID_SVXDLG_BMPMASK ) );
     SvxBmpMask* pDlg = (SvxBmpMask*) pWindow;
 
