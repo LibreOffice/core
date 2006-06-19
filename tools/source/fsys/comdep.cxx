@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comdep.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:12:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,6 @@
  *
  ************************************************************************/
 
-#ifdef MAC
-#define private public
-#define protected public
-#endif
-
 #include "comdep.hxx"
 
 #ifndef _DEBUG_HXX
@@ -50,41 +45,10 @@
 #include <fsys.hxx>
 #endif
 
-DBG_NAMEEX( DirEntry );
+DBG_NAMEEX( DirEntry )
 
-//--------------------------------------------------------------------
-
-#if defined( DOS ) || defined( WIN )
-
-#ifdef MSC
-#include "dosmsc.cxx"
-#endif
-
-#if defined( BLC ) || defined( TCPP )
-#include "dosblc.cxx"
-#endif
-
-#ifdef ZTC
-#include "dosztc.cxx"
-#endif
-
-#else
-
-#if defined( WNT ) && !defined( WTC )
+#if defined UNX
+#include "unx.cxx"
+#elif defined WNT
 #include "wntmsc.cxx"
 #endif
-
-#ifdef UNX
-#include "unx.cxx"
-#endif
-
-#ifdef PM2
-#include "os2.cxx"
-#endif
-
-#ifdef MAC
-#include "mac.cxx"
-#endif
-
-#endif
-
