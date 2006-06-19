@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:29:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,10 @@ inline static sal_Int64 coerceToInt64( const Any & rVal )
         return *(sal_uInt64 *)rVal.getValue();
     case TypeClass_ENUM:
         return *(int *)rVal.getValue();
+    default:
+        OSL_ASSERT(false);
+        return 0;
     }
-    OSL_ENSURE( sal_False, "### cannot read union discriminant: no ordinal type!" );
-    return 0; // dummy
 }
 //==================================================================================================
 inline static typelib_TypeDescription * createCTD(
@@ -649,6 +650,8 @@ static typelib_TypeDescription * createCTD(
         case TypeClass_INTERFACE_ATTRIBUTE:
             pRet = createCTD( Reference< XInterfaceAttributeTypeDescription >::query( xType ) );
             break;
+        default:
+            break;
         }
     }
 
@@ -686,6 +689,7 @@ static void SAL_CALL typelib_callback(
             }
             catch (container::NoSuchElementException & exc)
             {
+                (void) exc; // avoid warning about unused variable
                 OSL_ENSURE(
                     0, OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -694,6 +698,7 @@ static void SAL_CALL typelib_callback(
             }
             catch (Exception & exc)
             {
+                (void) exc; // avoid warning about unused variable
                 OSL_ENSURE(
                     0, OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -724,7 +729,9 @@ public:
 void EventListenerImpl::disposing( lang::EventObject const & rEvt )
     throw (RuntimeException)
 {
-    OSL_ASSERT( rEvt.Source == m_xTDMgr );
+    if (rEvt.Source != m_xTDMgr) {
+        OSL_ASSERT(false);
+    }
     // deregister of c typelib callback
     ::typelib_typedescription_revokeCallback( m_xTDMgr.get(), typelib_callback );
 }
