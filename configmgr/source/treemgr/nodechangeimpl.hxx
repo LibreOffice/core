@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:30:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,7 @@ namespace configmgr
             UnoAny getNewValue() const { return m_aNewValue; }
 
         protected:
+                     using NodeChangeImpl::setTarget;
         // override information items
             /// the path from base to 'affected' node - here is the name of the changing node
             virtual RelativePath doGetChangingNodePath(ChangeCount _ix) const;
