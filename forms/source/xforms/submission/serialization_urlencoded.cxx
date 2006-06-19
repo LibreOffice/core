@@ -4,9 +4,9 @@
  *
  *  $RCSfile: serialization_urlencoded.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:25:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,15 +86,14 @@ sal_Bool CSerializationURLEncoded::is_unreserved(sal_Char c)
         case '(':
         case ')':
             return sal_True;
-            break;
     }
     return sal_False;
 }
 void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStringBuffer& aBuffer)
 {
     OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
-    const sal_Char *pString = utf8String.getStr();
-    sal_Char tmpChar[3];
+    const sal_uInt8 *pString = reinterpret_cast< const sal_uInt8 * >( utf8String.getStr() );
+    sal_Char tmpChar[4]; tmpChar[3] = 0;
 
     while( *pString != 0)
     {
