@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:15:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ void VCLXWindow::SetSystemParent_Impl( sal_Int64 nHandle )
 #elif defined( OS2 )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( UNX )
-    aSysParentData.aWindow = nHandle;
+    aSysParentData.aWindow = (long)nHandle;
 #endif
 #endif
 
