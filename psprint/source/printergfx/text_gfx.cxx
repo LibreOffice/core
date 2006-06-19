@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text_gfx.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 12:55:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,14 +741,14 @@ const ::std::list< KernPair >& PrinterGfx::getKernPairs( bool bVertical ) const
  */
 
 sal_Bool
-PrinterGfx::GetGlyphBoundRect (sal_Unicode c, Rectangle& rOutRect)
+PrinterGfx::GetGlyphBoundRect (sal_Unicode /*c*/, Rectangle& /*rOutRect*/)
 {
     return 0;
 }
 
 sal_uInt32
-PrinterGfx::GetGlyphOutline (sal_Unicode c,
-                             sal_uInt16 **ppPolySizes, Point **ppPoints, sal_uInt8 **ppFlags)
+PrinterGfx::GetGlyphOutline (sal_Unicode /*c*/,
+                             sal_uInt16 **/*ppPolySizes*/, Point **/*ppPoints*/, sal_uInt8 **/*ppFlags*/)
 {
     return 0;
 }
