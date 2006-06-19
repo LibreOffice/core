@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:19:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,8 +131,8 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
                     SEQUENCE < PROPERTYVALUE > aProperties;
                     if ( aValue >>= aProperties )
                     {
-                        long nCount = aProperties.getLength();
-                        for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+                        long nPropCount = aProperties.getLength();
+                        for ( long nIndex = 0; nIndex < nPropCount; nIndex++ )
                         {
                             if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
                             {
@@ -174,8 +174,6 @@ ANY SAL_CALL SfxEvents_Impl::getByName( const OUSTRING& aName )
     }
 
     throw NOSUCHELEMENTEXCEPTION();
-
-    return ANY();
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -352,7 +350,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 //--------------------------------------------------------------------------------------------------------
 // --- ::lang::XEventListener ---
 //--------------------------------------------------------------------------------------------------------
-void SAL_CALL SfxEvents_Impl::disposing( const EVENTOBJECT& Source ) throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxEvents_Impl::disposing( const EVENTOBJECT& /*Source*/ ) throw( RUNTIMEEXCEPTION )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -646,7 +644,7 @@ SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
 }
 
 //-----------------------------------------------------------------------------
-void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& aBC, const SfxHint& aHint )
+void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& /*aBC*/, const SfxHint& aHint )
 {
     SfxEventHint* pNamedHint = PTR_CAST(SfxEventHint, &aHint);
     if (!pNamedHint)
