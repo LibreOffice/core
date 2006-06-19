@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:07:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,10 +202,10 @@ bool ImplImageTree::implInit()
         }
         aZipFileName += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
 
-        uno::Any                aAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "UserConfig" ) ) );
+        uno::Any                aUserAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "UserConfig" ) ) );
         INetURLObject           aZipURL;
 
-        if( ( aAny >>= aRet ) && aRet.getLength() )
+        if( ( aUserAny >>= aRet ) && aRet.getLength() )
         {
             aZipURL = INetURLObject( aRet );
             aZipURL.Append( aZipFileName );
@@ -448,7 +448,7 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName,
                     // check all locale variants, starting with the most detailed one
                     if( aSubDir[nSubDirs].getLength() )
                     {
-                        const sal_uInt32 nPos = rName.lastIndexOf( '/' );
+                        const sal_Int32 nPos = rName.lastIndexOf( '/' );
 
                         if( -1 != nPos )
                         {
