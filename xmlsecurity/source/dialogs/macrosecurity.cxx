@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:57:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,7 +391,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     maTrustedAuthors = mpDlg->maSecOptions.GetTrustedAuthors();
     mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS );
     maTrustCertROFI.Show( mbAuthorsReadonly );
-    mbAuthorsReadonly ? maTrustCertLB.Disable() : maTrustCertLB.Enable();
+    mbAuthorsReadonly ? maTrustCertLB.DisableTable() : maTrustCertLB.EnableTable();
 //  unused button
 //    maAddCertPB.Enable( !mbAuthorsReadonly );
 
