@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:36:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:33:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
-// include ---------------------------------------------------------------
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
