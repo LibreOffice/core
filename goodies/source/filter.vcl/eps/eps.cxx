@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:18:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ private:
     inline void         ImplExecMode( ULONG nMode );
 
                         // writes char[] + LF to stream
-    inline void         ImplWriteLine( char[], ULONG nMode = PS_RET );
+    inline void         ImplWriteLine( const char*, ULONG nMode = PS_RET );
 
                         // writes ( nNumb / 10^nCount ) in ASCII format to stream
     void                ImplWriteF( sal_Int32 nNumb, ULONG nCount = 3, ULONG nMode = PS_SPACE );
@@ -231,7 +231,7 @@ private:
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
     void                ImplWriteString( const ByteString&, VirtualDevice& rVDev, const INT32* pDXArry = NULL, BOOL bStretch = FALSE );
-    void                ImplDefineFont( char*, char* );
+    void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw( ULONG nMode = PS_RET );
     void                ImplPathDraw();
@@ -867,12 +867,12 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_HATCH_ACTION :
             {
-                VirtualDevice   aVDev;
+                VirtualDevice   l_aVDev;
                 GDIMetaFile     aTmpMtf;
 
-                aVDev.SetMapMode( rVDev.GetMapMode() );
-                aVDev.AddHatchActions( ( (const MetaHatchAction*)pMA)->GetPolyPolygon(),
-                                       ( (const MetaHatchAction*)pMA )->GetHatch(), aTmpMtf );
+                l_aVDev.SetMapMode( rVDev.GetMapMode() );
+                l_aVDev.AddHatchActions( ( (const MetaHatchAction*)pMA)->GetPolyPolygon(),
+                                         ( (const MetaHatchAction*)pMA )->GetHatch(), aTmpMtf );
                 ImplWriteActions( aTmpMtf, rVDev );
             }
             break;
@@ -1233,28 +1233,28 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                             PolyPolygon aStartArrow;
                             PolyPolygon aEndArrow;
-                            double fTransparency( aStroke.getTransparency() );
+//                          double fTransparency( aStroke.getTransparency() );
                             double fStrokeWidth( aStroke.getStrokeWidth() );
                             SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
-                            SvtGraphicStroke::DashArray aDashArray;
+                            SvtGraphicStroke::DashArray l_aDashArray;
 
                             aStroke.getStartArrow( aStartArrow );
                             aStroke.getEndArrow( aEndArrow );
-                            aStroke.getDashArray( aDashArray );
+                            aStroke.getDashArray( l_aDashArray );
 
                             bSkipSequence = sal_True;
-                            if ( aDashArray.size() > 11 )   // ps dasharray limit is 11
+                            if ( l_aDashArray.size() > 11 ) // ps dasharray limit is 11
                                 bSkipSequence = sal_False;
                             if ( aStartArrow.Count() || aEndArrow.Count() )
                                 bSkipSequence = sal_False;
                             if ( (sal_uInt32)eJT > 2 )
                                 bSkipSequence = sal_False;
-                            if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) )
+                            if ( l_aDashArray.size() && ( fStrokeWidth != 0.0 ) )
                                 bSkipSequence = sal_False;
                             if ( bSkipSequence )
                             {
                                 ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
-                                                    aStroke.getCapType(), eJT, aDashArray );
+                                                    aStroke.getCapType(), eJT, l_aDashArray );
                                 ImplPolyLine( aPath );
                             }
                         }
@@ -1352,6 +1352,9 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                                 case SvtGraphicFill::fillGradient :
                                     aFill.getPath( aFillPath );
+                                break;
+
+                                case SvtGraphicFill::fillHatch :
                                 break;
                             }
                             if ( aFillPath.Count() )
@@ -1532,10 +1535,10 @@ void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
 
 void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
-    VirtualDevice   aVDev;
+    VirtualDevice   l_aVDev;
     GDIMetaFile     aTmpMtf;
-    aVDev.SetMapMode( rVDev.GetMapMode() );
-    aVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
+    l_aVDev.SetMapMode( rVDev.GetMapMode() );
+    l_aVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
     ImplWriteActions( aTmpMtf, rVDev );
 }
 
@@ -2008,8 +2011,8 @@ void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution,
     MapMode     aMapModeInch( MAP_INCH, aEmptyPoint, aFract, aFract );
     Size        aSizePixel = OutputDevice::LogicToLogic( rSize, rVirDev.GetMapMode(), aMapModeInch );
 
-    Color aTextColor( COL_BLACK );
-    rVirDev.SetTextColor( aTextColor );
+    Color l_aTextColor( COL_BLACK );
+    rVirDev.SetTextColor( l_aTextColor );
     rVirDev.SetTextAlign( ALIGN_TOP );
     const Size aOutSize( rVirDev.PixelToLogic( aSizePixel, rVirDev.GetMapMode() ) );
     rVirDev.SetOutputSize( aOutSize );
@@ -2145,7 +2148,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplDefineFont( char* pOriginalName, char* pItalic )
+void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 {
     *mpPS << (BYTE)'/';             //convert the font pOriginalName using ISOLatin1Encoding
     *mpPS << pOriginalName;
@@ -2277,10 +2280,10 @@ double PSWriter::ImplGetScaling( const MapMode& rMapMode )
             nMul = 2540;
             break;
         case MAP_TWIP :
-            nMul = 1,76388889;
+            nMul = 1.76388889;
             break;
         case MAP_POINT :
-            nMul = 35,27777778;
+            nMul = 35.27777778;
             break;
         default:
             nMul = 1.0;
@@ -2328,7 +2331,7 @@ inline void PSWriter::ImplExecMode( ULONG nMode )
 
 //---------------------------------------------------------------------------------
 
-inline void PSWriter::ImplWriteLine( char pString[], ULONG nMode )
+inline void PSWriter::ImplWriteLine( const char* pString, ULONG nMode )
 {
     ULONG i = 0;
     while ( pString[ i ] )
@@ -2388,11 +2391,11 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
 
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
-    SvtGraphicStroke::DashArray aDashArray;
+    SvtGraphicStroke::DashArray l_aDashArray;
     if ( rLineInfo.GetStyle() == LINE_DASH )
-        aDashArray.push_back( 2 );
+        l_aDashArray.push_back( 2 );
     double fLWidth = ( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5;
-    ImplWriteLineInfo( fLWidth, 10.0, SvtGraphicStroke::capButt, SvtGraphicStroke::joinMiter, aDashArray );
+    ImplWriteLineInfo( fLWidth, 10.0, SvtGraphicStroke::capButt, SvtGraphicStroke::joinMiter, l_aDashArray );
 }
 
 //---------------------------------------------------------------------------------
@@ -2411,7 +2414,7 @@ void PSWriter::ImplWriteLong( sal_Int32 nNumber, ULONG nMode )
 
 void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
 {
-    sal_Int32 n, nLen;
+    sal_Int32 nLength;
 
     sal_Int32   nPTemp = (sal_Int32)fNumber;
     sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
@@ -2420,9 +2423,9 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
         *mpPS << (sal_Char)'-';
 
     ByteString aNumber1( ByteString::CreateFromInt32( nPTemp ) );
-    nLen = aNumber1.Len();
-    mnCursorPos += nLen;
-    for ( n = 0; n < nLen; n++ )
+    nLength = aNumber1.Len();
+    mnCursorPos += nLength;
+    for ( sal_Int32 n = 0; n < nLength; n++ )
         *mpPS << aNumber1.GetChar( (sal_uInt16)n );
 
     int zCount = 0;
