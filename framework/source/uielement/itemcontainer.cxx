@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:54:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,9 +187,8 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
 sal_Int64 ItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
-    {
-        return (sal_Int64)this;
-    }
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
+
     return 0;
 }
 
@@ -212,7 +211,8 @@ const Sequence< sal_Int8 >& ItemContainer::GetUnoTunnelId() throw()
 ItemContainer* ItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
-    return xUT.is() ? (ItemContainer*)xUT->getSomething( ItemContainer::GetUnoTunnelId() ) : NULL;
+    return xUT.is() ? reinterpret_cast< ItemContainer* >(sal::static_int_cast< sal_IntPtr >(
+                          xUT->getSomething( ItemContainer::GetUnoTunnelId() ))) : NULL;
 }
 
 // XElementAccess
