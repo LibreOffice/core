@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:43:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
-
-#pragma hdrstop
 
 #include "xoutx.hxx"
 
@@ -74,10 +72,10 @@
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                             const SfxItemSet& rInAttrs ) :
                             Control ( pParent, rResId ),
+                            rAttrs  ( rInAttrs ),
                             pEdgeObj( NULL ),
                             pObjList( NULL ),
-                            pView   ( NULL ),
-                            rAttrs  ( rInAttrs )
+                            pView   ( NULL )
 {
     pExtOutDev = new XOutputDevice( this );
 
@@ -268,7 +266,7 @@ void SvxXConnectionPreview::Construct()
 |*
 *************************************************************************/
 
-void SvxXConnectionPreview::Paint( const Rectangle& rRect )
+void SvxXConnectionPreview::Paint( const Rectangle& )
 {
     SdrPaintInfoRec aInfoRec;
 
