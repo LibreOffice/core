@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:57:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,6 +305,8 @@ static VarNameAttribute aVarNameAttribute[] =
     { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
 };
 
+#if 0
+// currently unused
 static Sequence< OUString > GetPathPropertyNames()
 {
     const int nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
@@ -315,6 +317,7 @@ static Sequence< OUString > GetPathPropertyNames()
 
     return aNames;
 }
+#endif
 
 // class SvtPathOptions_Impl ---------------------------------------------
 
@@ -331,19 +334,17 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
         // Substitution is done by the service itself using the substition service
         Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
         a >>= aPathValue;
-        switch ( ePath )
+        if( ePath == SvtPathOptions::PATH_ADDIN     ||
+            ePath == SvtPathOptions::PATH_FILTER    ||
+            ePath == SvtPathOptions::PATH_HELP      ||
+            ePath == SvtPathOptions::PATH_MODULE    ||
+            ePath == SvtPathOptions::PATH_PLUGIN    ||
+            ePath == SvtPathOptions::PATH_STORAGE
+          )
         {
-            case SvtPathOptions::PATH_ADDIN:
-            case SvtPathOptions::PATH_FILTER:
-            case SvtPathOptions::PATH_HELP:
-            case SvtPathOptions::PATH_MODULE:
-            case SvtPathOptions::PATH_PLUGIN:
-            case SvtPathOptions::PATH_STORAGE:
-            {
-                // These office paths have to be converted to system pathes
-                utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
-                aPathValue = aResult;
-            }
+            // These office paths have to be converted to system pathes
+            utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
+            aPathValue = aResult;
         }
 
         m_aPathArray[ ePath ] = aPathValue;
@@ -359,7 +360,6 @@ BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
     BOOL bReadonly = FALSE;
     if ( ePath <= SvtPathOptions::PATH_UICONFIG )
     {
-        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
         Reference<XPropertySet> xPrSet(m_xPathSettings, UNO_QUERY);
         if(xPrSet.is())
         {
@@ -1036,10 +1036,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
                 case PATH_USERDICTIONARY:/*-Wall???*/           break;
                 case PATH_USERCONFIG:/*-Wall???*/           break;
+                case PATH_COUNT: /*-Wall???*/ break;
             }
 
-            sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
-            for ( i = 0; i < nCount; ++i )
+            sal_uInt16 j, nIdx = 0, nTokenCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
+            for ( j = 0; j < nTokenCount; ++j )
             {
                 BOOL bIsURL = TRUE;
                 String aPathToken = aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx );
@@ -1121,8 +1122,8 @@ class PathService : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XCo
 
 // class PathService -----------------------------------------------------
 
-void SAL_CALL PathService::addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL PathService::removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL PathService::addPropertyChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& ) throw(::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL PathService::removePropertyChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& ) throw(::com::sun::star::uno::RuntimeException) {}
 void SAL_CALL PathService::flush(  ) throw(::com::sun::star::uno::RuntimeException) {}
 
 ::rtl::OUString SAL_CALL PathService::substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException)
