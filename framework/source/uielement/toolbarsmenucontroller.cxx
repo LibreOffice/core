@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:20:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,11 +222,11 @@ DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
 ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     PopupMenuControllerBase( xServiceManager ),
+    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" )),
+    m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" )),
     m_bModuleIdentified( sal_False ),
     m_bResetActive( sal_False ),
-    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() ),
-    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" )),
-    m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
+    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() )
 {
 }
 
@@ -613,7 +613,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 }
 
 // XEventListener
-void SAL_CALL ToolbarsMenuController::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -678,16 +678,13 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 }
 
 // XMenuListener
-void SAL_CALL ToolbarsMenuController::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ToolbarsMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
 void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
-    static const char UNO_CMD[] = ".uno:";
-
     Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
     Reference< XMultiServiceFactory >   xServiceManager;
     Reference< XURLTransformer >        xURLTransformer;
     Reference< XFrame >                 xFrame;
@@ -695,7 +692,6 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
 
     ResetableGuard aLock( m_aLock );
     xPopupMenu             = m_xPopupMenu;
-    xDispatch              = m_xDispatch;
     xServiceManager        = m_xServiceManager;
     xURLTransformer        = m_xURLTransformer;
     xFrame                 = m_xFrame;
@@ -707,148 +703,138 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
         if ( pPopupMenu )
         {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs( 1 );
+            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
+            rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
+            if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0 )
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-
-                rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
-                sal_Bool      bContextSensitive( sal_False );
-
-                // Retrieve context senstive state from user value of menu item
-                bContextSensitive = ( pVCLPopupMenu->GetUserValue( rEvent.MenuId ) == 1 );
-
-                if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0 )
+                // Command to restore the visibility of all context sensitive toolbars
+                Reference< XNameReplace > xNameReplace( xPersistentWindowState, UNO_QUERY );
+                if ( xPersistentWindowState.is() && xNameReplace.is() )
                 {
-                    // Command to restore the visibility of all context sensitive toolbars
-                    Reference< XNameReplace > xNameReplace( xPersistentWindowState, UNO_QUERY );
-                    if ( xPersistentWindowState.is() && xNameReplace.is() )
+                    try
                     {
-                        try
+                        Sequence< rtl::OUString > aElementNames = xPersistentWindowState->getElementNames();
+                        sal_Int32 nCount = aElementNames.getLength();
+                        bool      bRefreshToolbars( false );
+
+                        for ( sal_Int32 i = 0; i < nCount; i++ )
                         {
-                            Sequence< rtl::OUString > aElementNames = xPersistentWindowState->getElementNames();
-                            sal_Int32 nCount = aElementNames.getLength();
-                            bool      bRefreshToolbars( false );
-
-                            for ( sal_Int32 i = 0; i < nCount; i++ )
+                            try
                             {
-                                try
+                                rtl::OUString aElementName = aElementNames[i];
+                                Sequence< PropertyValue > aWindowState;
+
+                                Any a( xPersistentWindowState->getByName( aElementName ));
+
+                                if ( a >>= aWindowState )
                                 {
-                                    rtl::OUString aElementName = aElementNames[i];
-                                    Sequence< PropertyValue > aWindowState;
-
-                                    Any a( xPersistentWindowState->getByName( aElementName ));
-
-                                    if ( a >>= aWindowState )
+                                    sal_Bool  bVisible( sal_False );
+                                    sal_Bool  bContextSensitive( sal_False );
+                                    sal_Int32 nVisibleIndex( -1 );
+                                    for ( sal_Int32 j = 0; j < aWindowState.getLength(); j++ )
                                     {
-                                        sal_Bool  bVisible( sal_False );
-                                        sal_Bool  bContextSensitive( sal_False );
-                                        sal_Int32 nVisibleIndex( -1 );
-                                        for ( sal_Int32 j = 0; j < aWindowState.getLength(); j++ )
+                                        if ( aWindowState[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_VISIBLE ))
                                         {
-                                            if ( aWindowState[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_VISIBLE ))
-                                            {
-                                                aWindowState[j].Value >>= bVisible;
-                                                nVisibleIndex = j;
-                                            }
-                                            else if ( aWindowState[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
-                                                aWindowState[j].Value >>= bContextSensitive;
+                                            aWindowState[j].Value >>= bVisible;
+                                            nVisibleIndex = j;
                                         }
+                                        else if ( aWindowState[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
+                                            aWindowState[j].Value >>= bContextSensitive;
+                                    }
 
-                                        if ( !bVisible && bContextSensitive && nVisibleIndex >= 0 )
-                                        {
-                                            // Default is: Every context sensitive toolbar is visible
-                                            aWindowState[nVisibleIndex].Value = makeAny( sal_True );
-                                            xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
-                                            bRefreshToolbars = true;
-                                        }
+                                    if ( !bVisible && bContextSensitive && nVisibleIndex >= 0 )
+                                    {
+                                        // Default is: Every context sensitive toolbar is visible
+                                        aWindowState[nVisibleIndex].Value = makeAny( sal_True );
+                                        xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
+                                        bRefreshToolbars = true;
                                     }
                                 }
-                                catch ( NoSuchElementException& )
-                                {
-                                }
                             }
-
-                            if ( bRefreshToolbars )
+                            catch ( NoSuchElementException& )
                             {
-                                Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( xFrame ));
-                                if ( xLayoutManager.is() )
+                            }
+                        }
+
+                        if ( bRefreshToolbars )
+                        {
+                            Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( xFrame ));
+                            if ( xLayoutManager.is() )
+                            {
+                                Reference< XPropertySet > xPropSet( xLayoutManager, UNO_QUERY );
+                                if ( xPropSet.is() )
                                 {
-                                    Reference< XPropertySet > xPropSet( xLayoutManager, UNO_QUERY );
-                                    if ( xPropSet.is() )
+                                    try
                                     {
-                                        try
-                                        {
-                                            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RefreshContextToolbarVisibility" )), makeAny( sal_True ));
-                                        }
-                                        catch ( RuntimeException& )
-                                        {
-                                        }
-                                        catch ( Exception& )
-                                        {
-                                        }
+                                        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RefreshContextToolbarVisibility" )), makeAny( sal_True ));
+                                    }
+                                    catch ( RuntimeException& )
+                                    {
+                                    }
+                                    catch ( Exception& )
+                                    {
                                     }
                                 }
-                                RefreshToolbars( xFrame );
                             }
-                        }
-                        catch ( RuntimeException& )
-                        {
-                            throw;
-                        }
-                        catch ( Exception& )
-                        {
+                            RefreshToolbars( xFrame );
                         }
                     }
-                }
-                else if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ))) < 0 )
-                {
-                    URL                     aTargetURL;
-                    Sequence<PropertyValue> aArgs;
-
-                    aTargetURL.Complete = aCmd;
-                    xURLTransformer->parseStrict( aTargetURL );
-                    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-                    if ( xDispatchProvider.is() )
+                    catch ( RuntimeException& )
                     {
-                        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
-                                                                aTargetURL, ::rtl::OUString(), 0 );
-
-                        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-                        pExecuteInfo->xDispatch     = xDispatch;
-                        pExecuteInfo->aTargetURL    = aTargetURL;
-                        pExecuteInfo->aArgs         = aArgs;
-                        Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                        throw;
+                    }
+                    catch ( Exception& )
+                    {
                     }
                 }
-                else
-                {
-                    Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( xFrame ));
-                    if ( xLayoutManager.is() )
-                    {
-                        // Extract toolbar name from the combined uno-command.
-                        sal_Int32 nIndex = aCmd.indexOf( '=' );
-                        if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
-                        {
-                            rtl::OUStringBuffer aBuf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_PRIVATE_TB_RESOURCE )));
-                            aBuf.append( aCmd.copy( nIndex+1 ));
+            }
+            else if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ))) < 0 )
+            {
+                URL                     aTargetURL;
+                Sequence<PropertyValue> aArgs;
 
-                            sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
-                            rtl::OUString aToolBarResName( aBuf.makeStringAndClear() );
-                            if ( bShow )
-                            {
-                                xLayoutManager->createElement( aToolBarResName );
-                                xLayoutManager->showElement( aToolBarResName );
-                            }
-                            else
-                            {
-                                // closing means:
-                                // hide and destroy element
-                                xLayoutManager->hideElement( aToolBarResName );
-                                xLayoutManager->destroyElement( aToolBarResName );
-                            }
+                aTargetURL.Complete = aCmd;
+                xURLTransformer->parseStrict( aTargetURL );
+                Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+                if ( xDispatchProvider.is() )
+                {
+                    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                            aTargetURL, ::rtl::OUString(), 0 );
+
+                    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+                    pExecuteInfo->xDispatch     = xDispatch;
+                    pExecuteInfo->aTargetURL    = aTargetURL;
+                    pExecuteInfo->aArgs         = aArgs;
+                    Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                }
+            }
+            else
+            {
+                Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( xFrame ));
+                if ( xLayoutManager.is() )
+                {
+                    // Extract toolbar name from the combined uno-command.
+                    sal_Int32 nIndex = aCmd.indexOf( '=' );
+                    if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
+                    {
+                        rtl::OUStringBuffer aBuf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_PRIVATE_TB_RESOURCE )));
+                        aBuf.append( aCmd.copy( nIndex+1 ));
+
+                        sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
+                        rtl::OUString aToolBarResName( aBuf.makeStringAndClear() );
+                        if ( bShow )
+                        {
+                            xLayoutManager->createElement( aToolBarResName );
+                            xLayoutManager->showElement( aToolBarResName );
+                        }
+                        else
+                        {
+                            // closing means:
+                            // hide and destroy element
+                            xLayoutManager->hideElement( aToolBarResName );
+                            xLayoutManager->destroyElement( aToolBarResName );
                         }
                     }
                 }
@@ -857,7 +843,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
     }
 }
 
-void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     std::vector< rtl::OUString >   aCmdVector;
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -896,7 +882,7 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& rEven
     }
 }
 
-void SAL_CALL ToolbarsMenuController::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ToolbarsMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -943,7 +929,6 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
             m_bInitialized = sal_True;
@@ -995,7 +980,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
     }
 }
 
-IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     try
     {
