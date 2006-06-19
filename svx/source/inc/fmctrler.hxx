@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:15:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,7 @@ class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
     friend class FmXPageViewWinRec;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>              m_xAggregate;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>            m_xTabController, m_xNavigationController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>            m_xTabController;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>                  m_xActiveControl, m_xCurrentControl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>        m_xModelAsIndex;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xModelAsManager;
@@ -354,7 +354,6 @@ class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
     ::rtl::OUString             m_aMode;
 
     sal_uInt32                  m_nLoadEvent;
-    sal_uInt32                  m_nUpdateDispatcherEvent;
     sal_uInt32                  m_nToggleEvent;
 
     sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)
@@ -406,6 +405,7 @@ public:
 // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+    static FmXFormController* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
 // XDispatch
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& _rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) throw (::com::sun::star::uno::RuntimeException);
@@ -433,6 +433,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException );
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    using OPropertySetHelper::getFastPropertyValue;
 
 // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(void) throw( ::com::sun::star::uno::RuntimeException );
