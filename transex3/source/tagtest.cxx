@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-15 19:17:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,14 @@
 
 
 TokenInfo::TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &rErrorList )
-: nId( pnId )
-, nPos(nP)
-, aTokenString( paStr )
+: bClosed(FALSE)
+, bCloseTag(FALSE)
 , bIsBroken(FALSE)
 , bHasBeenFixed(FALSE)
 , bDone(FALSE)
-, bClosed(FALSE)
-, bCloseTag(FALSE)
+, aTokenString( paStr )
+, nId( pnId )
+, nPos(nP)
 {
     if ( nId == TAG_COMMONSTART || nId == TAG_COMMONEND )
         SplitTag( rErrorList );
@@ -595,13 +595,13 @@ BOOL ParserMessageList::HasErrors()
 
 struct Tag
 {
-    String GetName() { return String::CreateFromAscii( pName ); };
-    char* pName;
+    String GetName() const { return String::CreateFromAscii( pName ); };
+    const char* pName;
     TokenId nTag;
 };
 
 
-static Tag aKnownTags[] =
+static const Tag aKnownTags[] =
 {
 /*  commenting oldstyle tags
 //  { "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
@@ -712,20 +712,20 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
         {
             // check for paired \" \"
             bool bEven = true;
-            USHORT nPos = 0;
+            USHORT nQuotePos = 0;
             USHORT nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"" );
             USHORT nQuotedBackPos = aLastToken.SearchAscii( "\\\\" );    // this is only to kick out quoted backslashes
             while ( nQuotedQuotesPos != STRING_NOTFOUND )
             {
                 if ( nQuotedBackPos <= nQuotedQuotesPos )
-                    nPos = nQuotedBackPos+2;
+                    nQuotePos = nQuotedBackPos+2;
                 else
                 {
-                    nPos = nQuotedQuotesPos+2;
+                    nQuotePos = nQuotedQuotesPos+2;
                     bEven = !bEven;
                 }
-                nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"", nPos );
-                nQuotedBackPos = aLastToken.SearchAscii( "\\\\", nPos );    // this is only to kick out quoted backslashes
+                nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"", nQuotePos );
+                nQuotedBackPos = aLastToken.SearchAscii( "\\\\", nQuotePos );    // this is only to kick out quoted backslashes
             }
             if ( !bEven )
             {
@@ -1358,7 +1358,7 @@ BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rExpec
 
     if ( aExpectedToken.nId == TAG_COMMONEND )
     {
-        aExpectedToken.aTokenString = String::CreateFromAscii( "Close tag for " ).Append(aExpectedToken.aTokenString);
+        aExpectedToken.aTokenString.Insert( String::CreateFromAscii( "Close tag for " ), 0 );
     }
 
     ByteString sTmp( "Expected Symbol" );
@@ -1405,12 +1405,12 @@ ParserMessage::ParserMessage( USHORT PnErrorNr, ByteString PaErrorText, const To
     nTagLength = aLexem.Len();
 }
 
-ParserError::ParserError( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
-: ParserMessage( nErrorNr, aErrorText, rTag )
+ParserError::ParserError( USHORT ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
+: ParserMessage( ErrorNr, ErrorText, rTag )
 {}
 
-ParserWarning::ParserWarning( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
-: ParserMessage( nErrorNr, aErrorText, rTag )
+ParserWarning::ParserWarning( USHORT ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
+: ParserMessage( ErrorNr, ErrorText, rTag )
 {}
 
 BOOL LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )
