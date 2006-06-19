@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:21:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,8 @@ namespace stoc_connector
     };
 
     OConnector::OConnector(const Reference< XComponentContext > &xCtx)
-        : _xCtx( xCtx )
-        , _xSMgr( xCtx->getServiceManager() )
+        : _xSMgr( xCtx->getServiceManager() )
+        , _xCtx( xCtx )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     }
@@ -115,7 +115,7 @@ namespace stoc_connector
                     aDesc.getParameter(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name"))));
 
-                PipeConnection *pConn = new PipeConnection( aName, sConnectionDescription );
+                PipeConnection *pConn = new PipeConnection( sConnectionDescription );
 
                 if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
                 {
@@ -152,9 +152,7 @@ namespace stoc_connector
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "tcpnodelay"))).toInt32() != 0;
 
-                SocketConnection *pConn = new SocketConnection( aHost,
-                                                                nPort,
-                                                                sConnectionDescription);
+                SocketConnection *pConn = new SocketConnection( sConnectionDescription);
 
                 SocketAddr AddrTarget( aHost.pData, nPort );
                 if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
@@ -280,7 +278,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
