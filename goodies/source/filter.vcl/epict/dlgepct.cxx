@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepct.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:39:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 
 DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPCT, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
@@ -64,8 +65,7 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE ) ),
-                pMgr                ( rPara.pResMgr ),
-                rFltCallPara        ( rPara )
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
