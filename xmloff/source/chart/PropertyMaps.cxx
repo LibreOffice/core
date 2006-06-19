@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:18:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,9 +489,9 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 // ----------------------------------------
 
 XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
-                                                            const SvXMLImport& rImport ) :
-        SvXMLImportPropertyMapper( rMapper, const_cast< SvXMLImport & >( rImport )),
-        mrImport( const_cast< SvXMLImport & > ( rImport ))
+                                                            const SvXMLImport& _rImport ) :
+        SvXMLImportPropertyMapper( rMapper, const_cast< SvXMLImport & >( _rImport )),
+        mrImport( const_cast< SvXMLImport & > ( _rImport ))
 {
     // chain shape mapper for drawing properties
 
@@ -683,6 +683,6 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
-void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& /*rProperties*/, sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
 }
