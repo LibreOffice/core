@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:27:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:59:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,7 @@ namespace frm
 
             // create the peer
             Reference< XControlModel > xModel( getModel() );
-            ORichTextPeer* pPeer = ORichTextPeer::Create( m_xORB, xModel, pParentWin, getWinBits( xModel ) );
+            ORichTextPeer* pPeer = ORichTextPeer::Create( xModel, pParentWin, getWinBits( xModel ) );
             DBG_ASSERT( pPeer, "ORichTextControl::createPeer: invalid peer returned!" );
             if ( pPeer )
             {
@@ -374,8 +374,7 @@ namespace frm
     //==================================================================
     DBG_NAME( ORichTextPeer )
     //------------------------------------------------------------------
-    ORichTextPeer* ORichTextPeer::Create( const Reference< XMultiServiceFactory >& _rxORB,
-        const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
+    ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -386,7 +385,7 @@ namespace frm
             return NULL;
 
         // the peer itself
-        ORichTextPeer* pPeer = new ORichTextPeer( _rxORB );
+        ORichTextPeer* pPeer = new ORichTextPeer;
         pPeer->acquire();   // by definition, the returned object is aquired once
 
         // the VCL control for the peer
@@ -400,7 +399,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ORichTextPeer::ORichTextPeer( const Reference< XMultiServiceFactory >& _rxORB )
+    ORichTextPeer::ORichTextPeer()
     {
         DBG_CTOR( ORichTextPeer, NULL );
     }
@@ -709,7 +708,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException)
     {
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
@@ -761,7 +760,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void ORichTextPeer::onSelectionChanged( const ESelection& _rSelection )
+    void ORichTextPeer::onSelectionChanged( const ESelection& /*_rSelection*/ )
     {
         AttributeDispatchers::iterator aDispatcherPos = m_aDispatchers.find( SID_COPY );
         if ( aDispatcherPos != m_aDispatchers.end() )
