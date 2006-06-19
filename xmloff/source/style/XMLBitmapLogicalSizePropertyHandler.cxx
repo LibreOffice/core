@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBitmapLogicalSizePropertyHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:31:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,16 +68,16 @@ XMLBitmapLogicalSizePropertyHandler::~XMLBitmapLogicalSizePropertyHandler()
 sal_Bool XMLBitmapLogicalSizePropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     rValue = ::cppu::bool2any( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 );
     return sal_True;
 }
 
 sal_Bool XMLBitmapLogicalSizePropertyHandler::exportXML(
-    OUString& rStrExpValue,
-    const Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    OUString&,
+    const Any&,
+    const SvXMLUnitConverter& ) const
 {
     return sal_False;
 }
