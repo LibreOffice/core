@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:16:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,6 @@ provoking error here, because PP ignores #error
 #endif
 
 #ifdef CPPU_ENV
-/* test: whether given CPPU_ENV matches expected one */
-#if (CPPU_ENV != TMP_CPPU_ENV)
-#error "CPPU_ENV: unexpected env!"
-provoking error here, because PP ignores #error
-#endif
 
 #define CPPU_STRINGIFY_EX( x ) #x
 #define CPPU_STRINGIFY( x ) CPPU_STRINGIFY_EX( x )
@@ -97,8 +92,10 @@ provoking error here, because PP ignores #error
 #define CPPU_CURRENT_LANGUAGE_BINDING_NAME CPPU_STRINGIFY( CPPU_ENV )
 
 #else
+
 #error "No supported C++ compiler environment."
 provoking error here, because PP ignores #error
+
 #endif /* CPPU_ENV */
 
 #undef TMP_CPPU_ENV
