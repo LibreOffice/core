@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplpitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:34:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,15 +59,11 @@ SfxTemplateItem::SfxTemplateItem() :
 
 SfxTemplateItem::SfxTemplateItem
 (
-    USHORT nWhich,          // Slot-ID
-    const String& rStyle,   // Name des aktuellen Styles
-    USHORT nValue           // Flags f"ur das Filtern bei automatischer Anzeige
-) :
-
-    SfxFlagItem( nWhich, nValue ),
-
+    USHORT nWhichId,      // Slot-ID
+    const String& rStyle, // Name des aktuellen Styles
+    USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
-
 {
 }
 
@@ -100,7 +96,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -112,7 +108,7 @@ sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemb
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
