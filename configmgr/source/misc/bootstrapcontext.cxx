@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrapcontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:08:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:26:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,18 +200,7 @@ uno::Reference< lang::XMultiComponentFactory > SAL_CALL
 }
 // ---------------------------------------------------------------------------
 
-uno::Any SAL_CALL
-    ComponentContext::getValueByName( const OUString& aName )
-        throw (uno::RuntimeException)
-{
-    uno::Any aResult;
 
-    bool bFound =
-        lookupInContext  ( aResult, aName ) ||
-        lookupInBootstrap( aResult, aName );
-
-    return aResult;
-}
 // ---------------------------------------------------------------------------
 
 sal_Bool ComponentContext::isPassthrough(Context const & _xContext)
@@ -461,7 +450,7 @@ bool UnoContextTunnel::tunnelFailure(uno::Any const & aException, bool bRaise)
 }
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
-void DisposingForwarder::disposing( lang::EventObject const & rSource )
+void DisposingForwarder::disposing( lang::EventObject const & /*rSource*/ )
 throw (uno::RuntimeException)
 {
     m_xTarget->dispose();
