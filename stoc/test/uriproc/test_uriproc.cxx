@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_uriproc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:36:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -755,13 +755,13 @@ void Test::testVndSunStarScript() {
         Parameter parameters[parameterCount];
     };
     Data data[] = {
-        { "vnd.sun.star.script:", 0 },
-        { "vnd.sun.star.script:/", 0 },
-        { "vnd.sun.star.script:/abc/def?ghi=jkl&mno=pqr", 0 },
-        { "vnd.sun.star.script:abc%3fdef/ghi", "abc?def/ghi" },
-        { "vnd.sun.star.script:name?a", 0 },
+        { "vnd.sun.star.script:", 0, {} },
+        { "vnd.sun.star.script:/", 0, {} },
+        { "vnd.sun.star.script:/abc/def?ghi=jkl&mno=pqr", 0, {} },
+        { "vnd.sun.star.script:abc%3fdef/ghi", "abc?def/ghi", {} },
+        { "vnd.sun.star.script:name?a", 0, {} },
         { "vnd.sun.star.script:name?a=", "name", { { "a", "" }, { "A", 0 } } },
-        { "vnd.sun.star.script:name?a=&", 0 },
+        { "vnd.sun.star.script:name?a=&", 0, {} },
         { "vnd.sun.star.script:name?key1=&%26=%3D&key1=hello", "name",
           { { "key1", "" }, { "key2", 0 }, { "&", "=" } } } };
     for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
