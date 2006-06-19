@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:23:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:18:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,13 +170,13 @@ namespace basprov
             // get output parameters
             if ( xSbxParams.Is() )
             {
-                SbxInfo* pInfo = m_xMethod->GetInfo();
-                if ( pInfo )
+                SbxInfo* pInfo_ = m_xMethod->GetInfo();
+                if ( pInfo_ )
                 {
                     OutParamMap aOutParamMap;
                     for ( USHORT n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
                     {
-                        const SbxParamInfo* pParamInfo = pInfo->GetParam( n );
+                        const SbxParamInfo* pParamInfo = pInfo_->GetParam( n );
                         if ( pParamInfo && ( pParamInfo->eType & SbxBYREF ) != 0 )
                         {
                             SbxVariable* pVar = xSbxParams->Get( n );
