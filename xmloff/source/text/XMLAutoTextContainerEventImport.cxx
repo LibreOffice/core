@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLAutoTextContainerEventImport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:56:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
     USHORT nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & )
 {
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken( rLocalName, XML_EVENT_LISTENERS)   )
