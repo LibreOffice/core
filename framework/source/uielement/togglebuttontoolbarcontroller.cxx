@@ -4,9 +4,9 @@
  *
  *  $RCSfile: togglebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:19:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,9 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                     sal_Int32 nPos( -1 );
 
                     rControlCommand.Arguments[i].Value >>= nPos;
-                    if ( nPos >= 0 && nPos < m_aDropdownMenuList.size() )
+                    if ( nPos >= 0 &&
+                         ( sal::static_int_cast< sal_uInt32 >(nPos)
+                           < m_aDropdownMenuList.size() ) )
                     {
                         m_aCurrentSelection = m_aDropdownMenuList[nPos];
                         m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
