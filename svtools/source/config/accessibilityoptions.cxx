@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:46:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,6 @@ void SvtAccessibilityOptions_Impl::Commit()
 {
     ClearModified();
     Sequence< OUString > aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence< Any > aValues( aNames.getLength() );
     Any* pValues = aValues.getArray();
     sal_Bool bTemp=false;
@@ -313,7 +312,7 @@ void SvtAccessibilityOptions_Impl::Commit()
 
 // -----------------------------------------------------------------------
 
-void SvtAccessibilityOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void SvtAccessibilityOptions_Impl::Notify( const Sequence<rtl::OUString>& )
 {
     Load();
 }
@@ -367,7 +366,7 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
 
 // -----------------------------------------------------------------------
 
-void SvtAccessibilityOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     Broadcast( rHint );
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
@@ -442,19 +441,6 @@ sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 }
 
 // -----------------------------------------------------------------------
-
-void SvtAccessibilityOptions::SetIsForDrawings(sal_Bool bSet)
-{
-#if SUPD>644
-    DBG_ERROR( "SvtAccessibilityOptions::SetIsForDrawings: is obsolete!" );
-#endif // SUPD>644
-}
-void SvtAccessibilityOptions::SetIsForBorders(sal_Bool bSet)
-{
-#if SUPD>644
-    DBG_ERROR( "SvtAccessibilityOptions::SetIsForBorders: is obsolete!" );
-#endif // SUPD>644
-}
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
 {
     sm_pSingleImplConfig->SetAutoDetectSystemHC(bSet);
