@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptingContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:31:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 #include <osl/mutex.hxx>
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>
