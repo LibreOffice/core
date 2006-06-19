@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:57:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ using namespace ::com::sun::star::uno;
 
 //=========================================================================
 
-DBG_NAME(SfxVirtualMenu);
+DBG_NAME(SfxVirtualMenu)
 
 //=========================================================================
 
@@ -127,7 +127,7 @@ public:
     void                Update();
 };
 
-void SfxMenuImageControl_Impl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SfxMenuImageControl_Impl::StateChanged( USHORT /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )
 {
     const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
     if ( pItem )
@@ -146,16 +146,16 @@ void SfxMenuImageControl_Impl::Update()
     Menu* pSVMenu = pMenu->GetSVMenu();
     for (USHORT nPos = 0; nPos<pSVMenu->GetItemCount(); nPos++)
     {
-        USHORT nId = pSVMenu->GetItemId( nPos );
-        const SfxSlot* pSlot = pPool->GetSlot( nId );
+        USHORT nslotId = pSVMenu->GetItemId( nPos );
+        const SfxSlot* pSlot = pPool->GetSlot( nslotId );
         if ( pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ) )
         {
-            pSVMenu->SetItemImageMirrorMode( nId, FALSE );
-            pSVMenu->SetItemImageAngle( nId, lRotation );
+            pSVMenu->SetItemImageMirrorMode( nslotId, FALSE );
+            pSVMenu->SetItemImageAngle( nslotId, lRotation );
         }
 
         if ( pSlot && pSlot->IsMode( SFX_SLOT_IMAGEREFLECTION ) )
-            pSVMenu->SetItemImageMirrorMode( nId, bIsMirrored );
+            pSVMenu->SetItemImageMirrorMode( nslotId, bIsMirrored );
     }
 }
 
@@ -225,9 +225,9 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
                 SfxVirtualMenu* pOwnParent, Menu& rMenu, BOOL bWithHelp,
                 SfxBindings &rBindings, BOOL bOLEServer, BOOL bRes, BOOL bIsAddonMenu ):
     pItems(0),
+       pImageControl(0),
     pBindings(&rBindings),
     pResMgr(0),
-    pImageControl(0),
     pAutoDeactivate(0),
     nLocks(0),
     bHelpInitialized( bWithHelp ),
@@ -261,9 +261,9 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
 SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
                     SfxBindings &rBindings, BOOL bOLEServer, BOOL bRes, BOOL bIsAddonMenu ):
     pItems(0),
+       pImageControl(0),
     pBindings(&rBindings),
     pResMgr(0),
-    pImageControl(0),
     pAutoDeactivate(0),
     nLocks(0),
     bHelpInitialized( bWithHelp ),
@@ -420,8 +420,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
     SFX_APP();
     const int bOleServer = FALSE;
     const int bMac = FALSE;
-    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
     SvtMenuOptions aOptions;
     aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
@@ -435,72 +433,72 @@ void SfxVirtualMenu::CreateFromSVMenu()
     USHORT nSVPos = 0;
     for ( USHORT nPos=0; nPos<nCount; ++nPos, ++nSVPos )
     {
-        USHORT nId = pSVMenu->GetItemId(nSVPos);
-        PopupMenu* pPopup = pSVMenu->GetPopupMenu(nId);
-        if( pPopup && nId >= SID_OBJECTMENU0 && nId <= SID_OBJECTMENU_LAST )
+        USHORT nSlotId = pSVMenu->GetItemId(nSVPos);
+        PopupMenu* pPopup = pSVMenu->GetPopupMenu(nSlotId);
+        if( pPopup && nSlotId >= SID_OBJECTMENU0 && nSlotId <= SID_OBJECTMENU_LAST )
         {
             // artefact in XML menuconfig: every entry in root menu must have a popup!
-            pSVMenu->SetPopupMenu( nId, NULL );
+            pSVMenu->SetPopupMenu( nSlotId, NULL );
             DELETEZ( pPopup );
         }
 
         if ( pPopup )
         {
             SfxMenuControl *pMnuCtrl =
-                SfxMenuControl::CreateControl(nId, *pPopup, *pBindings);
+                SfxMenuControl::CreateControl(nSlotId, *pPopup, *pBindings);
 
             if ( pMnuCtrl )
             {
                 // Das Popup war offensichtlich kein "echtes"; solche werden
                 // niemals aus der Resource geladen und m"ussen daher explizit
                 // gel"oscht werden
-                if ( pSVMenu->GetPopupMenu( nId ) == pPopup )
-                    pSVMenu->SetPopupMenu( nId, NULL );
+                if ( pSVMenu->GetPopupMenu( nSlotId ) == pPopup )
+                    pSVMenu->SetPopupMenu( nSlotId, NULL );
                 delete pPopup;
                 pPopup = 0;
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                 rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
-                (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId),
-                                    pSVMenu->GetHelpText(nId), *pBindings);
-                pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId),
-                                pSVMenu->GetHelpText(nId), *pBindings);
+                (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId),
+                                    pSVMenu->GetHelpText(nSlotId), *pBindings);
+                pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId),
+                                pSVMenu->GetHelpText(nSlotId), *pBindings);
 
                 if (  aOptions.IsMenuIconsEnabled() )
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
                     Image aImage = GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast );
-                    pSVMenu->SetItemImage( nId, aImage );
+                    pSVMenu->SetItemImage( nSlotId, aImage );
                 }
             }
             else
             {
 /*
-                if ( nId >= SID_SFX_START && !SfxMenuManager::IsPopupFunction(nId) )
+                if ( nSlotId >= SID_SFX_START && !SfxMenuManager::IsPopupFunction(nSlotId) )
                 {
                     // Echte Popups sollen keine SlotIds haben; leider sind
                     // da noch Altlasten mit herumzuschleppen ...
-                    String aTitle = pSVMenu->GetItemText( nId );
-                    pSVMenu->SetPopupMenu( nId, NULL );
-                    USHORT nPos = pSVMenu->GetItemPos( nId );
+                    String aTitle = pSVMenu->GetItemText( nSlotId );
+                    pSVMenu->SetPopupMenu( nSlotId, NULL );
+                    USHORT nPos = pSVMenu->GetItemPos( nSlotId );
                     pSVMenu->RemoveItem( nPos );
-                    nId = 1;
-                    while ( pSVMenu->GetItemPos(nId) != MENU_ITEM_NOTFOUND )
-                        nId++;
-                    pSVMenu->InsertItem( nId, aTitle, 0, nPos );
-                    pSVMenu->SetPopupMenu( nId, pPopup );
+                    nSlotId = 1;
+                    while ( pSVMenu->GetItemPos(nSlotId) != MENU_ITEM_NOTFOUND )
+                        nSlotId++;
+                    pSVMenu->InsertItem( nSlotId, aTitle, 0, nPos );
+                    pSVMenu->SetPopupMenu( nSlotId, pPopup );
                 }
 */
-                pSVMenu->SetHelpId( nId, 0L );
+                pSVMenu->SetHelpId( nSlotId, 0L );
                 pMnuCtrl = pItems+nPos;
 
                 // normalerweise jetzt erst im Activate-Handler
                 if ( bOLE )
                 {
-                    pMnuCtrl->Bind( this, nId,
-                        *new SfxVirtualMenu(nId, this, *pPopup, bHelpInitialized, *pBindings, bOLE, bResCtor),
-                        pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId),
+                    pMnuCtrl->Bind( this, nSlotId,
+                        *new SfxVirtualMenu(nSlotId, this, *pPopup, bHelpInitialized, *pBindings, bOLE, bResCtor),
+                        pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId),
                         *pBindings );
                 }
             }
@@ -515,64 +513,63 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 case MENUITEM_STRINGIMAGE:
                 {
                     SfxMenuControl *pMnuCtrl=0;
-                    String aCmd( pSVMenu->GetItemCommand( nId ) );
+                    String aCmd( pSVMenu->GetItemCommand( nSlotId ) );
                     if ( aCmd.CompareToAscii("slot:", 5) == 0 )
                     {
                         SfxMacroConfig* pCfg = SFX_APP()->GetMacroConfig();
-                        if ( pCfg->IsMacroSlot( nId ) )
+                        if ( pCfg->IsMacroSlot( nSlotId ) )
                         {
-                            if ( pCfg->GetMacroInfo( nId ) )
+                            if ( pCfg->GetMacroInfo( nSlotId ) )
                             {
-                                pCfg->RegisterSlotId( nId );
-                                pSVMenu->SetItemCommand( nId, String() );
+                                pCfg->RegisterSlotId( nSlotId );
+                                pSVMenu->SetItemCommand( nSlotId, String() );
                                 aCmd.Erase();
                             }
                             else
                             {
-                                pSVMenu->SetItemCommand( nId, String::CreateFromAscii("macro:///macro.not.founc") );
+                                pSVMenu->SetItemCommand( nSlotId, String::CreateFromAscii("macro:///macro.not.founc") );
                             }
                         }
                     }
 
-                    if ( aCmd.Len() && (( nId < SID_SFX_START ) || ( nId > SHRT_MAX )) )
+                    if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
-                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId, *pSVMenu, *pBindings, this );
+                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, *pBindings, this );
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
                         }
                     }
 
                     if ( !pMnuCtrl )
                     {
                         // try to create control via Id
-                        pMnuCtrl = SfxMenuControl::CreateControl(nId, *pSVMenu, *pBindings);
+                        pMnuCtrl = SfxMenuControl::CreateControl(nSlotId, *pSVMenu, *pBindings);
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
                         }
                         else
                             // take default control
                             pMnuCtrl = (pItems+nPos);
 
-                        pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
+                        pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
                     }
 
                     if ( aOptions.IsMenuIconsEnabled() )
                     {
                         Image aImage;
-                        if ( bIsAddonPopupMenu || framework::AddonMenuManager::IsAddonMenuId( nId ))
+                        if ( bIsAddonPopupMenu || framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
                         {
-                            rtl::OUString aCmd( pSVMenu->GetItemCommand( nId ) );
                             rtl::OUString aImageId;
 
                             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                                (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nId );
+                                (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
 
                             if ( pMenuAttributes )
                                 aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -582,15 +579,15 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         else
                         {
                             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                            aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+                            aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
                             aImage = GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast );
                         }
 
                         if ( !!aImage )
-                            pSVMenu->SetItemImage( nId, aImage );
+                            pSVMenu->SetItemImage( nSlotId, aImage );
                     }
 
-                    if ( !IsItemHidden_Impl(nId, bOleServer, bMac) )
+                    if ( !IsItemHidden_Impl(nSlotId, bOleServer, bMac) )
                         ++nVisibleItems;
                     else
                         pSVMenu->RemoveItem( nSVPos-- );
@@ -625,7 +622,7 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
     if ( pMenu == pSVMenu )
     {
         // AutoDeactivate ist jetzt nicht mehr n"otig
-        //USHORT nId = pMenu->GetCurItemId();
+        //USHORT nSlotId = pMenu->GetCurItemId();
         if ( pAutoDeactivate )
             pAutoDeactivate->Stop();
     }
@@ -633,48 +630,47 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
     return TRUE;
 }
 
-IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
+IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
 {
     SvtMenuOptions aOptions;
-    USHORT nCount = pSVMenu->GetItemCount();
+    USHORT nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
     BOOL bIcons = aOptions.IsMenuIconsEnabled();
     BOOL bIsHiContrastMode = IsHiContrastMode();
     Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
 
     if ( !bIsAddonPopupMenu )
     {
-        for ( USHORT nSVPos=0; nSVPos<nCount; ++nSVPos )
+        for ( USHORT nSVPos=0; nSVPos<nItemCount; ++nSVPos )
         {
-            USHORT          nId   = pSVMenu->GetItemId( nSVPos );
-            MenuItemType    nType = pSVMenu->GetItemType( nSVPos );
+            USHORT          nSlotId = pSVMenu->GetItemId( nSVPos );
+            MenuItemType    nType   = pSVMenu->GetItemType( nSVPos );
             if ( nType == MENUITEM_STRING && bIcons )
             {
-                if ( framework::AddonMenuManager::IsAddonMenuId( nId ))
+                if ( framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
                 {
                     // Special code for Add-On menu items. They can appear inside the help menu.
-                    rtl::OUString aCmd( pSVMenu->GetItemCommand( nId ) );
+                    rtl::OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
                     rtl::OUString aImageId;
 
                     ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                        (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nId );
+                        (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
 
                     if ( pMenuAttributes )
                         aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                    pSVMenu->SetItemImage( nId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
+                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
                 }
                 else
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
-                    pSVMenu->SetItemImage( nId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
+                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
                 }
             }
             else if( nType == MENUITEM_STRINGIMAGE && !bIcons )
             {
-                pSVMenu->SetItemImage( nId, Image() );
+                pSVMenu->SetItemImage( nSlotId, Image() );
             }
         }
     }
@@ -712,35 +708,34 @@ void SfxVirtualMenu::UpdateImages()
     if ( bIcons )
     {
         BOOL            bIsHiContrastMode   = IsHiContrastMode();
-        USHORT          nCount              = pSVMenu->GetItemCount();
+        USHORT          nItemCount          = pSVMenu->GetItemCount();
         SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
-        SfxModule*      pModule             = pViewFrame->GetObjectShell()->GetModule();
         Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
 
-        for ( USHORT nSVPos=0; nSVPos < nCount; ++nSVPos )
+        for ( USHORT nSVPos=0; nSVPos < nItemCount; ++nSVPos )
         {
-            USHORT nId = pSVMenu->GetItemId( nSVPos );
+            USHORT nSlotId = pSVMenu->GetItemId( nSVPos );
             if ( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE )
             {
-                if ( framework::AddonMenuManager::IsAddonMenuId( nId ))
+                if ( framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
                 {
                     // Special code for Add-On menu items. They can appear inside the help menu.
-                    rtl::OUString aCmd( pSVMenu->GetItemCommand( nId ) );
+                    rtl::OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
                     rtl::OUString aImageId;
 
                     ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                        (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nId );
+                        (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
 
                     if ( pMenuAttributes )
                         aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                    pSVMenu->SetItemImage( nId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
+                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
                 }
                 else
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
-                    pSVMenu->SetItemImage( nId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
+                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
                 }
             }
         }
@@ -764,27 +759,24 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     if ( bIcons )
     {
         BOOL            bIsHiContrastMode   = IsHiContrastMode();
-        USHORT          nCount              = pMenu->GetItemCount();
-        SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
-        SfxModule*      pModule             = pViewFrame->GetObjectShell()->GetModule();
+        USHORT          nItemCount          = pMenu->GetItemCount();
         Reference<com::sun::star::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
 
-        for ( USHORT nPos=0; nPos < nCount; ++nPos )
+        for ( USHORT nPos=0; nPos < nItemCount; ++nPos )
         {
-            USHORT nId = pMenu->GetItemId( nPos );
-            PopupMenu* pPopup = pMenu->GetPopupMenu( nId );
+            USHORT nSlotId = pMenu->GetItemId( nPos );
+            PopupMenu* pPopup = pMenu->GetPopupMenu( nSlotId );
             if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
             {
-                sal_Bool      bImageSet = sal_False;
                 rtl::OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+                    (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nSlotId );
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                pMenu->SetItemImage( nId, RetrieveAddOnImage( aXFrame, aImageId, pMenu->GetItemCommand( nId ), FALSE, bIsHiContrastMode ));
+                pMenu->SetItemImage( nSlotId, RetrieveAddOnImage( aXFrame, aImageId, pMenu->GetItemCommand( nSlotId ), FALSE, bIsHiContrastMode ));
             }
 
             if ( pPopup )
@@ -803,13 +795,13 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
     if ( !pMenu )
         return;
 
-    USHORT  nCount = pMenu->GetItemCount();
-    for ( USHORT nPos=0; nPos < nCount; ++nPos )
+    USHORT nItemCount = pMenu->GetItemCount();
+    for ( USHORT nPos=0; nPos < nItemCount; ++nPos )
     {
-        USHORT nId = pMenu->GetItemId( nPos );
-        PopupMenu* pPopup = pMenu->GetPopupMenu( nId );
+        USHORT nSlotId = pMenu->GetItemId( nPos );
+        PopupMenu* pPopup = pMenu->GetPopupMenu( nSlotId );
         if ( pMenu->GetItemType( nPos ) == MENUITEM_STRINGIMAGE )
-            pMenu->SetItemImage( nId, Image() );
+            pMenu->SetItemImage( nSlotId, Image() );
         if ( pPopup )
             RemoveMenuImages( pPopup );
     }
@@ -822,7 +814,6 @@ FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
     // Selber suchen, da SV mit 'USHORT nSID = pSVMenu->GetCurItemId();' immer
     // 0 liefert. Das ist so, weil die Event-Weiterleitung lt. TH nichts mit
     // CurItem des Parent-Menus zu tun hat.
-    BOOL bIsMenuBar = pSVMenu->IsMenuBar();
     sal_uInt32 nAddonsPopupPrefixLen = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 
     for ( USHORT nPos = 0; nPos < nCount; ++nPos )
@@ -839,7 +830,7 @@ FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
             // Nur ein gebundener Menu-Controller hat schon seine Id!
             if ( !rCtrl.GetId() )
             {
-                BOOL bIsAddonPopupMenu = FALSE;
+                bIsAddonPopupMenu = FALSE;
                 DBG_ASSERT( !pSubMenu, "Popup schon vorhanden!");
 
                 // Check if the popup is an Add-On popup menu
@@ -853,7 +844,7 @@ FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 
                 // VirtualMenu f"ur Sub-Menu erzeugen
                 BOOL bRes = bResCtor;
-                SfxVirtualMenu *pSubMenu = new SfxVirtualMenu( nSID, this,
+                pSubMenu = new SfxVirtualMenu( nSID, this,
                         *pMenu, FALSE, *pBindings, bOLE, bRes, bIsAddonPopupMenu );
 
                 DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
@@ -897,8 +888,8 @@ void SfxVirtualMenu::BindControllers()
     for ( nPos=0; nPos<rCtrlArr.Count(); nPos++ )
     {
         SfxMenuControl* pCtrl = rCtrlArr[nPos];
-        USHORT nId = pCtrl->GetId();
-        if ( !pSVMenu->GetItemCommand(nId).Len() )
+        USHORT nSlotId = pCtrl->GetId();
+        if ( !pSVMenu->GetItemCommand(nSlotId).Len() )
             pCtrl->ReBind();
     }
 
@@ -952,19 +943,18 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     // Create menu item at the end of the tools popup menu for the addons popup menu
     if ( pAddonMenu && pAddonMenu->GetItemCount() > 0 )
     {
-        USHORT nCount = pMenu->GetItemCount();
+        USHORT nItemCount = pMenu->GetItemCount();
         String aAddonsTitle( SfxResId( STR_MENU_ADDONS ));
-        if ( nCount > 0 && pMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
+        if ( nItemCount > 0 && pMenu->GetItemType( nItemCount-1 ) != MENUITEM_SEPARATOR )
             pMenu->InsertSeparator();
         pMenu->InsertItem( SID_ADDONS, aAddonsTitle );
         pMenu->SetPopupMenu( SID_ADDONS, pAddonMenu );
 
         if ( SvtMenuOptions().IsMenuIconsEnabled() )
         {
-            SfxModule* pModule = pBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetModule();
-            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-            aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));
-            pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+               rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+               aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));
+         pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
         }
     }
     else
@@ -1027,8 +1017,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
                 Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
                 Reference< XIndexAccess > xList ( xTasksSupplier->getFrames(), UNO_QUERY );
-                sal_Int32 nCount = xList->getCount();
-                for( sal_Int32 i=0; i<nCount; ++i )
+                sal_Int32 nFrameCount = xList->getCount();
+                for( sal_Int32 i=0; i<nFrameCount; ++i )
                 {
                     Reference< XFrame > xFrame;
                     Any aVal = xList->getByIndex(i);
@@ -1091,9 +1081,9 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         pBindings->GetDispatcher_Impl()->Flush();
         for ( USHORT nPos = 0; nPos < nCount; ++nPos )
         {
-            USHORT nId = (pItems+nPos)->GetId();
-            if ( nId && nId > END_ITEMID_WINDOWLIST )
-                pBindings->Update(nId);
+            USHORT nSlotId = (pItems+nPos)->GetId();
+            if ( nSlotId && nSlotId > END_ITEMID_WINDOWLIST )
+                pBindings->Update(nSlotId);
         }
 
         pBindings->Update( SID_IMAGE_ORIENTATION );
@@ -1134,8 +1124,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 #endif
         return bRet;
     }
-
-    return FALSE; // dead code for WTC
 }
 
 //--------------------------------------------------------------------
@@ -1163,16 +1151,16 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
 
 IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 {
-    USHORT nId = (USHORT) pMenu->GetCurItemId();
-    DBG_OUTF( ("SfxVirtualMenu %lx selected %u from %lx", this, nId, pMenu) );
+    USHORT nSlotId = (USHORT) pMenu->GetCurItemId();
+    DBG_OUTF( ("SfxVirtualMenu %lx selected %u from %lx", this, nSlotId, pMenu) );
 /*
-    if ( pSVMenu->GetItemCommand( nId ).Len() )
+    if ( pSVMenu->GetItemCommand( nSlotId ).Len() )
     {
         SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
         for ( USHORT nPos=0; nPos<rCtrlArr.Count(); nPos++ )
         {
             SfxMenuControl* pCtrl = rCtrlArr[nPos];
-            if ( pCtrl->GetId() == nId )
+            if ( pCtrl->GetId() == nSlotId )
             {
                 SfxUnoMenuControl *pUnoCtrl = (SfxUnoMenuControl*) pCtrl;
                 pUnoCtrl->Select();
@@ -1181,23 +1169,21 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
         }
     }
 */
-    if ( nId >= START_ITEMID_WINDOWLIST && nId <= END_ITEMID_WINDOWLIST )
+    if ( nSlotId >= START_ITEMID_WINDOWLIST && nSlotId <= END_ITEMID_WINDOWLIST )
     {
         // window list menu item selected
         Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                         DEFINE_CONST_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
-        USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
-
         if ( xDesktop.is() )
         {
             USHORT nTaskId = START_ITEMID_WINDOWLIST;
             Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
-            sal_Int32 nCount = xList->getCount();
-            for ( sal_Int32 i=0; i<nCount; ++i )
+            sal_Int32 nFrameCount = xList->getCount();
+            for ( sal_Int32 i=0; i<nFrameCount; ++i )
             {
                 Any aItem = xList->getByIndex(i);
                 Reference< XFrame > xFrame;
-                if (( aItem >>= xFrame ) && xFrame.is() && nTaskId == nId )
+                if (( aItem >>= xFrame ) && xFrame.is() && nTaskId == nSlotId )
                 {
                     Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                     pWin->GrabFocus();
@@ -1211,16 +1197,16 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 
         return TRUE;
     }
-    else if ( nId >= START_ITEMID_PICKLIST && nId <= END_ITEMID_PICKLIST )
+    else if ( nSlotId >= START_ITEMID_PICKLIST && nSlotId <= END_ITEMID_PICKLIST )
     {
-        SfxPickList::Get()->ExecuteMenuEntry( nId );
+        SfxPickList::Get()->ExecuteMenuEntry( nSlotId );
         return sal_True;
     }
 
-    if ( pMenu->GetItemCommand( nId ).Len() )
-        pBindings->ExecuteCommand_Impl( pMenu->GetItemCommand( nId ) );
+    if ( pMenu->GetItemCommand( nSlotId ).Len() )
+        pBindings->ExecuteCommand_Impl( pMenu->GetItemCommand( nSlotId ) );
     else
-        pBindings->Execute( nId );
+        pBindings->Execute( nSlotId );
 
     return TRUE;
 }
@@ -1256,12 +1242,12 @@ USHORT SfxVirtualMenu::GetItemPos( USHORT nItemId ) const
 
 // returns the popup-menu assigned to the item or 0 if none
 
-SfxVirtualMenu* SfxVirtualMenu::GetPopupMenu( USHORT nId ) const
+SfxVirtualMenu* SfxVirtualMenu::GetPopupMenu( USHORT nItemId ) const
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
-    USHORT nPos = GetItemPos(nId);
+    USHORT nPos = GetItemPos(nItemId);
     if ( nPos != MENU_ITEM_NOTFOUND )
         return (pItems+nPos)->GetPopupMenu();
     return 0;
@@ -1270,12 +1256,12 @@ SfxVirtualMenu* SfxVirtualMenu::GetPopupMenu( USHORT nId ) const
 
 // returns the text of the item as currently shown in the menu
 
-String SfxVirtualMenu::GetItemText( USHORT nId ) const
+String SfxVirtualMenu::GetItemText( USHORT nSlotId ) const
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
-    USHORT nPos = GetItemPos(nId);
+    USHORT nPos = GetItemPos(nSlotId);
     if ( nPos != MENU_ITEM_NOTFOUND )
         return (pItems+nPos)->GetTitle();
     return String();
@@ -1284,12 +1270,12 @@ String SfxVirtualMenu::GetItemText( USHORT nId ) const
 
 // returns the text of the item as currently shown in the menu
 
-String SfxVirtualMenu::GetItemHelpText( USHORT nId ) const
+String SfxVirtualMenu::GetItemHelpText( USHORT nSlotId ) const
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
-    USHORT nPos = GetItemPos(nId);
+    USHORT nPos = GetItemPos(nSlotId);
     if ( nPos != MENU_ITEM_NOTFOUND )
         return (pItems+nPos)->GetHelpText();
     return String();
@@ -1370,18 +1356,18 @@ void SfxVirtualMenu::SetItemText( USHORT nItemId, const String& rText )
 
 //
 
-void SfxVirtualMenu::SetPopupMenu( USHORT nId, PopupMenu *pMenu )
+void SfxVirtualMenu::SetPopupMenu( USHORT nItemId, PopupMenu *pMenu )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
-    if (pSVMenu->GetItemPos( nId ) != MENU_ITEM_NOTFOUND )
-        GetSVMenu()->SetPopupMenu( nId, pMenu );
+    if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
+        GetSVMenu()->SetPopupMenu( nItemId, pMenu );
     for ( USHORT n = 0; n < nCount; ++n )
     {
         SfxVirtualMenu *pSubMenu = (pItems+n)->GetPopupMenu();
         if ( pSubMenu )
-            pSubMenu->SetPopupMenu( nId, pMenu );
+            pSubMenu->SetPopupMenu( nItemId, pMenu );
     }
 }
 
@@ -1389,7 +1375,7 @@ void SfxVirtualMenu::SetPopupMenu( USHORT nId, PopupMenu *pMenu )
 
 // Erzwingt die Initialisierung, die sonst nur im Activate kommt
 
-void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL bOLE )
+void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL /*bOLE*/ )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
@@ -1417,15 +1403,14 @@ void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL bOLE )
 
 void SfxVirtualMenu::InitializeHelp()
 {
-    SfxSlotPool &rSlotPool = SFX_SLOTPOOL();
     for ( USHORT nPos = 0; nPos<pSVMenu->GetItemCount(); ++nPos )
     {
-        USHORT nId = pSVMenu->GetItemId(nPos);
+        USHORT nSlotId = pSVMenu->GetItemId(nPos);
         // TODO/CLEANUP: this code does nothing!
 //        if ( !bHelpInitialized )
 //            pSVMenu->SetHelpText( nId, rSlotPool.GetSlotHelpText_Impl( nId ) );
         SfxMenuControl &rCtrl = pItems[nPos];
-        if ( nId && !rCtrl.GetId() )
+        if ( nSlotId && !rCtrl.GetId() )
         {
             InitPopup( nPos, TRUE );
         }
