@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:59:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,15 @@ class CommunicationLink;
 class EditWindow;
 #endif
 
-void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString );
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+    void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString );
+#ifdef __cplusplus
+}
+#endif
+
 
 #define IsVisible IsReallyVisible
 #define GET_REAL_PARENT() GetWindow( WINDOW_REALPARENT )
@@ -127,16 +135,16 @@ typedef USHORT SearchFlags;
 
 class Search
 {
-    SearchFlags nSearchFlags;
+    SearchFlags nmSearchFlags;
 public:
-    Search( SearchFlags nPSearchFlags = 0): nSearchFlags(nPSearchFlags) {}
+    Search( SearchFlags nSearchFlags = 0): nmSearchFlags(nSearchFlags) {}
     virtual ~Search() {}
 
     virtual BOOL IsWinOK( Window *pWin ) = 0;
-    SearchFlags GetSearchFlags() { return nSearchFlags; }
-    void AddSearchFlags( SearchFlags aNewFlags ) { nSearchFlags |= aNewFlags; }
-    void RemoveSearchFlags( SearchFlags aRemoveFlags ) { nSearchFlags &= ( ~aRemoveFlags ); }
-    BOOL HasSearchFlag( SearchFlags aQueryFlag ) { return (nSearchFlags & aQueryFlag) == aQueryFlag; }
+    SearchFlags GetSearchFlags() { return nmSearchFlags; }
+    void AddSearchFlags( SearchFlags aNewFlags ) { nmSearchFlags |= aNewFlags; }
+    void RemoveSearchFlags( SearchFlags aRemoveFlags ) { nmSearchFlags &= ( ~aRemoveFlags ); }
+    BOOL HasSearchFlag( SearchFlags aQueryFlag ) { return (nmSearchFlags & aQueryFlag) == aQueryFlag; }
 };
 
 BOOL IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
@@ -263,7 +271,7 @@ protected:
 
     Window* SearchTree( SmartId aUId, BOOL bSearchButtonOnToolbox = FALSE );
     Window* GetActive( WindowType nRT, BOOL MaybeBase = TRUE );
-    Window* GetFocus( WindowType nRT ,BOOL ParentWasRT = FALSE, BOOL MaybeBase = TRUE );
+    Window* GetFocus( WindowType nRT, BOOL MaybeBase = TRUE );
     Window* GetAnyActive( BOOL MaybeBase = TRUE );
     ScrollBar* GetScrollBar( Window *pBase, USHORT nDirection, BOOL MaybeBase = TRUE );
     Window* GetPopupFloatingWin( BOOL MaybeBase = TRUE );
