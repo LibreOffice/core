@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:48:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,10 +125,6 @@
 
 #ifndef _E3D_CUBE3D_HXX
 #include "cube3d.hxx"
-#endif
-
-#ifndef _E3D_POLYOB3D_HXX
-#include "polyob3d.hxx"
 #endif
 
 #ifndef _E3D_DLIGHT3D_HXX
@@ -883,7 +879,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
 
             // Fuellfarbe muss auf Linienfarbe, da das Objekt vorher
             // nur eine Linie war
-            Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetValue();
+            Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
             aSet.Put(XFillColorItem(String(), aColorLine));
         }
 
@@ -1192,7 +1188,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
         E3dDepthLayer* pBaseLayer = NULL;
         E3dDepthLayer* pLayer = NULL;
         INT32 nNumLayers = 0;
-        SfxItemPool& rPool = pMod->GetItemPool();
+        //SfxItemPool& rPool = pMod->GetItemPool();
 
         while(aIter.IsMore())
         {
@@ -1205,7 +1201,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
 
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
                 XFillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
-                Color aLocalColor = ((const XFillColorItem&)(rLocalSet.Get(XATTR_FILLCOLOR))).GetValue();
+                Color aLocalColor = ((const XFillColorItem&)(rLocalSet.Get(XATTR_FILLCOLOR))).GetColorValue();
 
                 // ExtrudeObj einordnen
                 if(pLayer)
@@ -1232,7 +1228,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                             {
                                 if(eLocalFillStyle == XFILL_SOLID)
                                 {
-                                    Color aCompareColor = ((const XFillColorItem&)(rCompareSet.Get(XATTR_FILLCOLOR))).GetValue();
+                                    Color aCompareColor = ((const XFillColorItem&)(rCompareSet.Get(XATTR_FILLCOLOR))).GetColorValue();
 
                                     if(aCompareColor == aLocalColor)
                                     {
@@ -1402,6 +1398,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                                 eConstraint = E3DDRAG_CONSTR_Z;
                             }
                             break;
+                            default: break;
                         }
 
                         // die nicht erlaubten Rotationen ausmaskieren
@@ -1909,13 +1906,13 @@ BOOL LineCutting (Point aP1,
     long nS4 = Point2Line (aP4, aP1, aP2);
 
     // die werte koennen reichlich gross werden, also geht eine multiplikation daneben
-    BOOL bCut (((nS1 < 0) && (nS2 > 0) || (nS1 > 0) && (nS2 < 0)) &&
-              ((nS3 < 0) && (nS4 > 0) || (nS3 > 0) && (nS4 < 0)));
+    //BOOL bCut (((nS1 < 0) && (nS2 > 0) || (nS1 > 0) && (nS2 < 0)) &&
+    //          ((nS3 < 0) && (nS4 > 0) || (nS3 > 0) && (nS4 < 0)));
 
-    if (bCut)
-    {
-        BOOL bStop = bCut;
-    }
+    //if (bCut)
+    //{
+    //    BOOL bStop = bCut;
+    //}
 
     return ((nS1 < 0) && (nS2 > 0) || (nS1 > 0) && (nS2 < 0)) &&
            ((nS3 < 0) && (nS4 > 0) || (nS3 > 0) && (nS4 < 0));
