@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:23:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include <cstddef>
 #include <limits>
 
 #include "rtl/tencinfo.h"
@@ -210,7 +211,7 @@ namespace unnamed_tools_inetmime {
 void appendISO88591(UniString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
 {
-    sal_Size nLength = pEnd - pBegin;
+    xub_StrLen nLength = static_cast< xub_StrLen >(pEnd - pBegin);
     sal_Unicode * pBuffer = new sal_Unicode[nLength];
     for (sal_Unicode * p = pBuffer; pBegin != pEnd;)
         *p++ = sal_uChar(*pBegin++);
@@ -352,7 +353,7 @@ bool parseParameters(ParameterList const & rInput,
                     bBadEncoding = true;
                     break;
                 }
-                aValue += UniString(pUnicode, nSize);
+                aValue += UniString(pUnicode, static_cast< xub_StrLen >(nSize));
                 delete[] pUnicode;
                 pNext = pNext->m_pNext;
             }
@@ -974,12 +975,12 @@ const sal_Char * INetMIME::scanQuotedBlock(const sal_Char * pBegin,
     DBG_ASSERT(pBegin && pBegin <= pEnd,
                "INetMIME::scanQuotedBlock(): Bad sequence");
 
-    if (pBegin != pEnd && *pBegin == nOpening)
+    if (pBegin != pEnd && static_cast< unsigned char >(*pBegin) == nOpening)
     {
         ++rLength;
         ++pBegin;
         while (pBegin != pEnd)
-            if (*pBegin == nClosing)
+            if (static_cast< unsigned char >(*pBegin) == nClosing)
             {
                 ++rLength;
                 return ++pBegin;
@@ -1131,7 +1132,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        ByteString aAttribute(pAttributeBegin, p - pAttributeBegin);
+        ByteString aAttribute(
+            pAttributeBegin, static_cast< xub_StrLen >(p - pAttributeBegin));
         if (bDowncaseAttribute)
             aAttribute.ToLowerAscii();
 
@@ -1181,7 +1183,9 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aCharset = ByteString(pCharsetBegin, p - pCharsetBegin);
+                    aCharset = ByteString(
+                        pCharsetBegin,
+                        static_cast< xub_StrLen >(p - pCharsetBegin));
                     if (bDowncaseCharset)
                         aCharset.ToLowerAscii();
                 }
@@ -1213,8 +1217,9 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aLanguage = ByteString(pLanguageBegin,
-                                           p - pLanguageBegin);
+                    aLanguage = ByteString(
+                        pLanguageBegin,
+                        static_cast< xub_StrLen >(p - pLanguageBegin));
                     if (bDowncaseLanguage)
                         aLanguage.ToLowerAscii();
                 }
@@ -1297,7 +1302,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
             if (p == pTokenBegin)
                 break;
             if (pParameters)
-                aValue = ByteString(pTokenBegin, p - pTokenBegin);
+                aValue = ByteString(
+                    pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin));
         }
 
         *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
@@ -1333,9 +1339,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        ByteString aAttribute = ByteString(pAttributeBegin,
-                                           p - pAttributeBegin,
-                                           RTL_TEXTENCODING_ASCII_US);
+        ByteString aAttribute = ByteString(
+            pAttributeBegin, static_cast< xub_StrLen >(p - pAttributeBegin),
+            RTL_TEXTENCODING_ASCII_US);
         if (bDowncaseAttribute)
             aAttribute.ToLowerAscii();
 
@@ -1385,8 +1391,10 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aCharset = ByteString(pCharsetBegin, p - pCharsetBegin,
-                                          RTL_TEXTENCODING_ASCII_US);
+                    aCharset = ByteString(
+                        pCharsetBegin,
+                        static_cast< xub_StrLen >(p - pCharsetBegin),
+                        RTL_TEXTENCODING_ASCII_US);
                     if (bDowncaseCharset)
                         aCharset.ToLowerAscii();
                 }
@@ -1418,8 +1426,10 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aLanguage = ByteString(pLanguageBegin, p - pLanguageBegin,
-                                           RTL_TEXTENCODING_ASCII_US);
+                    aLanguage = ByteString(
+                        pLanguageBegin,
+                        static_cast< xub_StrLen >(p - pLanguageBegin),
+                        RTL_TEXTENCODING_ASCII_US);
                     if (bDowncaseLanguage)
                         aLanguage.ToLowerAscii();
                 }
@@ -1512,8 +1522,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
             if (p == pTokenBegin)
                 break;
             if (pParameters)
-                aValue = ByteString(pTokenBegin, p - pTokenBegin,
-                                    RTL_TEXTENCODING_UTF8);
+                aValue = ByteString(
+                    pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin),
+                    RTL_TEXTENCODING_UTF8);
         }
 
         *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
@@ -1906,6 +1917,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
         // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-R.TXT>
         // version 1.0 of 18 August 1999
 
+#if defined WNT
     static const sal_uInt32 aWindows1252Ranges[]
         = { 0, 0x7F, 0xA0, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
             0x17D, 0x17E, 0x192, 0x192, 0x2C6, 0x2C6, 0x2DC, 0x2DC,
@@ -1914,6 +1926,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x2122, 0x2122, sal_uInt32(-1) };
         // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/
         // CP1252.TXT> version 2.01 of 04/15/98
+#endif // WNT
 
     INetMIMECharsetList_Impl * pList = new INetMIMECharsetList_Impl;
     switch (eEncoding)
@@ -2231,7 +2244,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 {
     writeHeaderFieldBody(rSink, eType,
                          UniString(rBody, RTL_TEXTENCODING_UTF8),
-                         ePreferredEncoding);
+                         ePreferredEncoding, bInitialSpace);
 }
 
 //============================================================================
@@ -2537,6 +2550,10 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 entity_determined:
                                     break;
                                 }
+
+                                case HEADER_FIELD_TEXT:
+                                    OSL_ASSERT(false);
+                                    break;
                             }
 
                             // In a 'non-phrase', a non-US-ASCII character
@@ -2973,48 +2990,49 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
                                  rtl_TextEncoding eEncoding,
                                  sal_uInt32 & rCharacter)
 {
-    if (rBegin == pEnd || *rBegin < 0x80 || *rBegin >= 0xFE)
+    if (rBegin == pEnd || static_cast< unsigned char >(*rBegin) < 0x80
+        || static_cast< unsigned char >(*rBegin) >= 0xFE)
         return false;
 
     int nCount;
     sal_uInt32 nMin;
     sal_uInt32 nUCS4;
     const sal_Char * p = rBegin;
-    if (*p < 0xE0)
+    if (static_cast< unsigned char >(*p) < 0xE0)
     {
         nCount = 1;
         nMin = 0x80;
-        nUCS4 = *p & 0x1F;
+        nUCS4 = static_cast< unsigned char >(*p) & 0x1F;
     }
-    else if (*p < 0xF0)
+    else if (static_cast< unsigned char >(*p) < 0xF0)
     {
         nCount = 2;
         nMin = 0x800;
-        nUCS4 = *p & 0xF;
+        nUCS4 = static_cast< unsigned char >(*p) & 0xF;
     }
-    else if (*p < 0xF8)
+    else if (static_cast< unsigned char >(*p) < 0xF8)
     {
         nCount = 3;
         nMin = 0x10000;
-        nUCS4 = *p & 7;
+        nUCS4 = static_cast< unsigned char >(*p) & 7;
     }
-    else if (*p < 0xFC)
+    else if (static_cast< unsigned char >(*p) < 0xFC)
     {
         nCount = 4;
         nMin = 0x200000;
-        nUCS4 = *p & 3;
+        nUCS4 = static_cast< unsigned char >(*p) & 3;
     }
     else
     {
         nCount = 5;
         nMin = 0x4000000;
-        nUCS4 = *p & 1;
+        nUCS4 = static_cast< unsigned char >(*p) & 1;
     }
     ++p;
 
     for (; nCount-- > 0; ++p)
-        if ((*p & 0xC0) == 0x80)
-            nUCS4 = nUCS4 << 6 | *p & 0x3F;
+        if ((static_cast< unsigned char >(*p) & 0xC0) == 0x80)
+            nUCS4 = nUCS4 << 6 | static_cast< unsigned char >(*p) & 0x3F;
         else
             return false;
 
@@ -3279,13 +3297,11 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                         bDone = true;
                                         break;
                                     }
-                                    sText
-                                        += rBody.
-                                               Copy(
-                                                   pEncodedTextCopyBegin
-                                                       - pBegin,
-                                                   q - 1
-                                                     - pEncodedTextCopyBegin);
+                                    sText += rBody.Copy(
+                                        static_cast< xub_StrLen >(
+                                            pEncodedTextCopyBegin - pBegin),
+                                        static_cast< xub_StrLen >(
+                                            q - 1 - pEncodedTextCopyBegin));
                                     sText += sal_Char(nDigit1 << 4 | nDigit2);
                                     q += 2;
                                     pEncodedTextCopyBegin = q;
@@ -3294,26 +3310,22 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
                                 case '?':
                                     if (q - pEncodedTextBegin > 1)
-                                        sText
-                                            += rBody.
-                                                   Copy(
-                                                       pEncodedTextCopyBegin
-                                                           - pBegin,
-                                                       q - 1
-                                                     - pEncodedTextCopyBegin);
+                                        sText += rBody.Copy(
+                                            static_cast< xub_StrLen >(
+                                                pEncodedTextCopyBegin - pBegin),
+                                            static_cast< xub_StrLen >(
+                                                q - 1 - pEncodedTextCopyBegin));
                                     else
                                         bEncodedWord = false;
                                     bDone = true;
                                     break;
 
                                 case '_':
-                                    sText
-                                        += rBody.
-                                               Copy(
-                                                   pEncodedTextCopyBegin
-                                                       - pBegin,
-                                                   q - 1
-                                                     - pEncodedTextCopyBegin);
+                                    sText += rBody.Copy(
+                                        static_cast< xub_StrLen >(
+                                            pEncodedTextCopyBegin - pBegin),
+                                        static_cast< xub_StrLen >(
+                                            q - 1 - pEncodedTextCopyBegin));
                                     sText += ' ';
                                     pEncodedTextCopyBegin = q;
                                     break;
@@ -3348,8 +3360,8 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 //                      break;
 //              }
 
-            sal_Unicode * pUnicodeBuffer;
-            sal_Size nUnicodeSize;
+            sal_Unicode * pUnicodeBuffer = 0;
+            sal_Size nUnicodeSize = 0;
             if (bEncodedWord)
             {
                 pUnicodeBuffer
@@ -3364,10 +3376,14 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             {
                 appendISO88591(sDecoded, pCopyBegin, pWSPBegin);
                 if (eType == HEADER_FIELD_TEXT)
-                    sDecoded.Append(pUnicodeBuffer, nUnicodeSize);
+                    sDecoded.Append(
+                        pUnicodeBuffer,
+                        static_cast< xub_StrLen >(nUnicodeSize));
                 else if (nCommentLevel == 0)
                 {
-                    sEncodedText.Append(pUnicodeBuffer, nUnicodeSize);
+                    sEncodedText.Append(
+                        pUnicodeBuffer,
+                        static_cast< xub_StrLen >(nUnicodeSize));
                     if (!bQuotedEncodedText)
                     {
                         const sal_Unicode * pTextPtr = pUnicodeBuffer;
@@ -3484,9 +3500,8 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                 {
                     appendISO88591(sDecoded, pCopyBegin, p - 1);
                     sal_Unicode aUTF16Buf[2];
-                    xub_StrLen nUTF16Len = putUTF32Character(aUTF16Buf,
-                                                             nCharacter)
-                                               - aUTF16Buf;
+                    xub_StrLen nUTF16Len = static_cast< xub_StrLen >(
+                        putUTF32Character(aUTF16Buf, nCharacter) - aUTF16Buf);
                     sDecoded.Append(aUTF16Buf, nUTF16Len);
                     p = pUTF8End;
                     pCopyBegin = p;
@@ -3587,7 +3602,7 @@ void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
     m_bOverflow = m_bOverflow
                   || pEnd - pBegin > STRING_MAXLEN - m_aBuffer.Len();
     if (!m_bOverflow)
-        m_aBuffer.Append(pBegin, pEnd - pBegin);
+        m_aBuffer.Append(pBegin, static_cast< xub_StrLen >(pEnd - pBegin));
 }
 
 //============================================================================
@@ -3649,7 +3664,7 @@ void INetMIMEUnicodeOutputSink::writeSequence(const sal_Unicode * pBegin,
     m_bOverflow = m_bOverflow
                   || pEnd - pBegin > STRING_MAXLEN - m_aBuffer.Len();
     if (!m_bOverflow)
-        m_aBuffer.Append(pBegin, pEnd - pBegin);
+        m_aBuffer.Append(pBegin, static_cast< xub_StrLen >(pEnd - pBegin));
 }
 
 //============================================================================
@@ -3874,9 +3889,15 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                             > m_rSink.getLineLengthLimit())
                         m_eCoding = CODING_ENCODED;
                 }
-                else if (m_pBufferEnd - m_pBuffer
-                             > m_rSink.getLineLengthLimit() - 1)
-                    m_eCoding = CODING_ENCODED;
+                else
+                {
+                    OSL_ASSERT(m_pBufferEnd >= m_pBuffer);
+                    if (static_cast< std::size_t >(m_pBufferEnd - m_pBuffer)
+                        > m_rSink.getLineLengthLimit() - 1)
+                    {
+                        m_eCoding = CODING_ENCODED;
+                    }
+                }
                 break;
 
             case CODING_QUOTED:
@@ -3893,6 +3914,9 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 else if ((m_pBufferEnd - m_pBuffer) + m_nQuotedEscaped
                              > m_rSink.getLineLengthLimit() - 3)
                     m_eCoding = CODING_ENCODED;
+                break;
+
+            default:
                 break;
         }
 
@@ -3912,6 +3936,9 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 
                     case CODING_ENCODED:
                         m_rSink << "?=";
+                        break;
+
+                    default:
                         break;
                 }
                 for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
@@ -3955,6 +3982,9 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 
                     case CODING_ENCODED:
                         m_rSink << "?=";
+                        break;
+
+                    default:
                         break;
                 }
                 for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
@@ -4227,6 +4257,10 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 m_ePrevMIMEEncoding = eMIMEEncoding;
                 break;
             }
+
+            default:
+                OSL_ASSERT(false);
+                break;
         }
     }
 
@@ -4328,6 +4362,9 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
 
             case STATE_SECOND_EQUALS:
                 m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_BAD:
                 break;
         }
 
