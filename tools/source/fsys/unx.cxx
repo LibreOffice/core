@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:36:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,6 @@ DECLARE_LIST( FileStatList, FileStat* )
 #define MOUNTPOINT   mnt_dir
 #define MOUNTFS      mnt_type
 #endif
-
-static BOOL   bLastCaseSensitive    = FALSE;
 
 struct mymnttab
 {
@@ -389,7 +387,7 @@ DirEntry DirEntry::GetDevice() const
 |*
 *************************************************************************/
 
-BOOL DirEntry::SetCWD( BOOL bSloppy )
+BOOL DirEntry::SetCWD( BOOL bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -500,7 +498,7 @@ FileStat::FileStat( const void *, const void * ):
 |*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
-BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bAccessRemovableDevice )
+BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
 {
 
     nSize = 0;
@@ -612,7 +610,7 @@ const char *TempDirImpl( char *pBuf )
 |*
 *************************************************************************/
 
-FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
+FSysPathStyle DirEntry::GetPathStyle( const String & )
 {
     return FSYS_STYLE_UNX;
 }
@@ -660,15 +658,14 @@ void FileStat::SetDateTime( const String& rFileName,
 
 //=========================================================================
 
-ErrCode FileStat::QueryDiskSpace( const String &rPath,
-                                  BigInt &rFreeBytes, BigInt &rTotalBytes )
+ErrCode FileStat::QueryDiskSpace( const String &, BigInt &, BigInt & )
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
 
 //=========================================================================
 
-void FSysEnableSysErrorBox( BOOL bEnable )
+void FSysEnableSysErrorBox( BOOL )
 {
 }
 
