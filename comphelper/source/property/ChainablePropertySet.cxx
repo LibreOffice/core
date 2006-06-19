@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChainablePropertySet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:55:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:50:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::auto_ptr< vos::OGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new vos::OGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -110,7 +110,7 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::auto_ptr< vos::OGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new vos::OGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -125,25 +125,25 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     return aAny;
 }
 
-void SAL_CALL ChainablePropertySet::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void SAL_CALL ChainablePropertySet::addPropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+void SAL_CALL ChainablePropertySet::removePropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL ChainablePropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
@@ -156,7 +156,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::auto_ptr< vos::OGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new vos::OGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -190,7 +190,7 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::auto_ptr< vos::OGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new vos::OGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -218,19 +218,19 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
     return aValues;
 }
 
-void SAL_CALL ChainablePropertySet::addPropertiesChangeListener( const Sequence< ::rtl::OUString >& aPropertyNames, const Reference< XPropertiesChangeListener >& xListener )
+void SAL_CALL ChainablePropertySet::addPropertiesChangeListener( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& xListener )
+void SAL_CALL ChainablePropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >& aPropertyNames, const Reference< XPropertiesChangeListener >& xListener )
+void SAL_CALL ChainablePropertySet::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
@@ -305,7 +305,7 @@ void ChainablePropertySet::_preGetPropertyState ()
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
-void ChainablePropertySet::_getPropertyState( const comphelper::PropertyInfo& rInfo, PropertyState& rStates )
+void ChainablePropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
     throw(UnknownPropertyException )
 {
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
@@ -317,13 +317,13 @@ void ChainablePropertySet::_postGetPropertyState ()
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
-void ChainablePropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& rInfo )
+void ChainablePropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException )
 {
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
-Any ChainablePropertySet::_getPropertyDefault( const comphelper::PropertyInfo& rInfo )
+Any ChainablePropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
