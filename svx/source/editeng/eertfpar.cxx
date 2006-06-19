@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:36:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 #include <eeng_pch.hxx>
-
-#pragma hdrstop
 
 #include <eertfpar.hxx>
 #include <impedit.hxx>
