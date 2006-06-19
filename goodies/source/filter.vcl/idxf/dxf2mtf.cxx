@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ PenStyle DXF2GDIMetaFile::GetEntityPStyle(const DXFBasicEntity & rE)
 }
 
 
-BOOL DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, ULONG nWidth)
+BOOL DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, ULONG /*nWidth*/)
 {
     long nColor;
     Color aColor;
@@ -171,7 +171,7 @@ BOOL DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 }
 
 
-BOOL DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, USHORT nHeight, double fWidthScale)
+BOOL DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, USHORT nHeight, double /*fWidthScale*/)
 {
     long nColor;
     Color aColor;
@@ -549,12 +549,12 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
     if ( rE.nBoundaryPathCount )
     {
         SetAreaAttribute( rE );
-        sal_Int32 i = 0;
+        sal_Int32 j = 0;
         PolyPolygon aPolyPoly;
-        for ( i = 0; i < rE.nBoundaryPathCount; i++ )
+        for ( j = 0; j < rE.nBoundaryPathCount; j++ )
         {
             DXFPointArray aPtAry;
-            const DXFBoundaryPathData& rPathData = rE.pBoundaryPathData[ i ];
+            const DXFBoundaryPathData& rPathData = rE.pBoundaryPathData[ j ];
             if ( rPathData.bIsPolyLine )
             {
                 sal_Int32 i;
@@ -633,8 +633,8 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
             if ( nSize )
             {
                 Polygon aPoly( nSize );
-                for ( i = 0; i < nSize; i++ )
-                    aPoly[ (sal_uInt16)i ] = aPtAry[ i ];
+                for ( j = 0; j < nSize; j++ )
+                    aPoly[ (sal_uInt16)j ] = aPtAry[ j ];
                 aPolyPoly.Insert( aPoly, POLYPOLY_APPEND );
             }
         }
