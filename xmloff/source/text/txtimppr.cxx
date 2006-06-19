@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:30:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,9 +164,9 @@ sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
 
 XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper,
-            SvXMLImport& rImport,
+            SvXMLImport& rImp,
             XMLFontStylesContext *pFontDecls ) :
-    SvXMLImportPropertyMapper( rMapper, rImport ),
+    SvXMLImportPropertyMapper( rMapper, rImp ),
     nSizeTypeIndex( -2 ),
     nWidthTypeIndex( -2 ),
     xFontDecls( pFontDecls )
@@ -289,7 +289,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
 void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
-            sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+            sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
     sal_Bool bHasAnyHeight = sal_False;
     sal_Bool bHasAnyMinHeight = sal_False;
@@ -689,14 +689,14 @@ void XMLTextImportPropertyMapper::finished(
         {
             const_cast < XMLTextImportPropertyMapper * > ( this )
                 ->nSizeTypeIndex  = -1;
-            sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
-            for( sal_Int32 i=0; i < nCount; i++ )
+            sal_Int32 nPropCount = getPropertySetMapper()->GetEntryCount();
+            for( sal_Int32 j=0; j < nPropCount; j++ )
             {
                 if( CTF_SIZETYPE == getPropertySetMapper()
-                        ->GetEntryContextId( i ) )
+                        ->GetEntryContextId( j ) )
                 {
                     const_cast < XMLTextImportPropertyMapper * > ( this )
-                        ->nSizeTypeIndex = i;
+                        ->nSizeTypeIndex = j;
                     break;
                 }
             }
@@ -718,13 +718,13 @@ void XMLTextImportPropertyMapper::finished(
             const_cast < XMLTextImportPropertyMapper * > ( this )
                 ->nWidthTypeIndex  = -1;
             sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
-            for( sal_Int32 i=0; i < nCount; i++ )
+            for( sal_Int32 j=0; j < nCount; j++ )
             {
                 if( CTF_FRAMEWIDTH_TYPE  == getPropertySetMapper()
-                        ->GetEntryContextId( i ) )
+                        ->GetEntryContextId( j ) )
                 {
                     const_cast < XMLTextImportPropertyMapper * > ( this )
-                        ->nWidthTypeIndex = i;
+                        ->nWidthTypeIndex = j;
                     break;
                 }
             }
