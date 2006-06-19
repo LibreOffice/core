@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:16:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:26:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,9 +834,9 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
                 for( std::list< OUString >::const_iterator file_it = it->second.m_aAlternateFiles.begin();
                      file_it != it->second.m_aAlternateFiles.end() && bSuccess; ++file_it )
                 {
-                    Config aConfig( *file_it );
-                    aConfig.DeleteGroup( it->second.m_aGroup );
-                    aConfig.Flush();
+                    Config aAltConfig( *file_it );
+                    aAltConfig.DeleteGroup( it->second.m_aGroup );
+                    aAltConfig.Flush();
                 }
             }
         }
@@ -1016,7 +1016,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername )
     return popen (aShellCommand.getStr(), "w");
 }
 
-int PrinterInfoManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
+int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/ )
 {
     return (0 == pclose( pFile ));
 }
