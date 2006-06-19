@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:34:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,6 +344,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FmFocusListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
     {
+        (void)Source;
         DBG_ASSERT( Source.Source == m_xWindow, "FmFocusListenerAdapter::disposing: where did this come from?" );
         m_xWindow.clear();
     }
@@ -436,19 +437,19 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         // not interested in
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         // not interested in
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         // not interested in
     }
@@ -456,6 +457,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FmMouseListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
     {
+        (void)Source;
         DBG_ASSERT( Source.Source == m_xWindow, "FmMouseListenerAdapter::disposing: where did this come from?" );
         m_xWindow.clear();
     }
@@ -642,11 +644,11 @@ namespace svx
 
     //------------------------------------------------------------------------
     FmTextControlShell::FmTextControlShell( SfxViewFrame* _pFrame )
-        :m_pViewFrame( _pFrame )
-        ,m_rBindings( _pFrame->GetBindings() )
-        ,m_bActiveControl( false )
+        :m_bActiveControl( false )
         ,m_bActiveControlIsReadOnly( true )
         ,m_bActiveControlIsRichText( false )
+        ,m_pViewFrame( _pFrame )
+        ,m_rBindings( _pFrame->GetBindings() )
         ,m_bNeedClipboardInvalidation( true )
     {
         m_aClipboardInvalidation.SetTimeoutHdl( LINK( this, FmTextControlShell, OnInvalidateClipboard ) );
@@ -660,7 +662,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( FmTextControlShell, OnInvalidateClipboard, void*, _pNotInterestedIn )
+    IMPL_LINK( FmTextControlShell, OnInvalidateClipboard, void*, /*_pNotInterestedIn*/ )
     {
         if ( m_bNeedClipboardInvalidation )
         {
@@ -840,7 +842,6 @@ namespace svx
                         sError += "\n  WhichID: "; sError += ::rtl::OString::valueOf( (sal_Int32)nWhich );
                         sError += "\n  UNO name: ";
 
-                        const SfxSlot* pSlot = NULL;
                         ::rtl::OUString sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotForItemSet );
                         if ( sUnoSlotName.getLength() )
                             sError += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -1139,7 +1140,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------------
-    void FmTextControlShell::designModeChanged( bool _bNewDesignMode )
+    void FmTextControlShell::designModeChanged( bool /*_bNewDesignMode*/ )
     {
         m_rBindings.Invalidate( pTextControlSlots );
     }
@@ -1180,6 +1181,7 @@ namespace svx
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
         DBG_TRACE( sTrace );
 #endif
+        (void)_rxController;
 
         if ( IsActiveControl() )
             controlDeactivated();
@@ -1442,7 +1444,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------------
-    void FmTextControlShell::contextMenuRequested( const awt::MouseEvent& _rEvent )
+    void FmTextControlShell::contextMenuRequested( const awt::MouseEvent& /*_rEvent*/ )
     {
         m_rBindings.GetDispatcher()->ExecutePopup( SVX_RES( RID_FM_TEXTATTRIBUTE_MENU ) );
     }
