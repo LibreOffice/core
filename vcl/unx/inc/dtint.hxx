@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-03 13:09:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ struct XEvent;
 
 class DtIntegrator;
 
-DECLARE_LIST( DtIntegratorList, DtIntegrator* );
+DECLARE_LIST( DtIntegratorList, DtIntegrator* )
 
 enum DtType {
     DtGeneric,
