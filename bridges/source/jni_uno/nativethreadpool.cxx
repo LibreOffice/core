@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nativethreadpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:38:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ static void SAL_CALL executeRequest(void * data) {
         env->CallObjectMethod(job->job, job->pool->execute);
         env->DeleteGlobalRef(job->job);
         delete job;
-    } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException & e) {
+    } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
         //TODO: DeleteGlobalRef(job->job)
         delete job;
     }
