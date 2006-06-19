@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:08:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,14 @@
 // ToDo:
 //  - Read->RefreshBuffer->Auf Aenderungen von nBufActualLen reagieren
 
+#include <cstddef>
+
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>  // isspace
 #include <stdlib.h> // strtol, _crotl
+
+#include "boost/static_assert.hpp"
 
 /*
 #if defined( DBG_UTIL ) && (OSL_DEBUG_LEVEL > 1)
@@ -60,7 +64,6 @@ c >>= 4;                    \
 c |= nSwapTmp;
 #endif
 
-#include <new.hxx>
 #include <debug.hxx>
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <stream.hxx>
@@ -69,7 +72,7 @@ c |= nSwapTmp;
 
 // -----------------------------------------------------------------------
 
-DBG_NAME( Stream );
+DBG_NAME( Stream )
 
 // -----------------------------------------------------------------------
 
@@ -115,30 +118,7 @@ inline static void SwapDouble( double& r )
           c[1] = SWAPLONG(c[1]);
         }
     }
-
-#elif MAC
-
-inline static void SwapFloat( float& r )
-    {
-        *((sal_uInt32*)(void*)&r) = SWAPLONG( *((sal_uInt32*)(void*)&r) );
-    }
-
-inline static void SwapDouble( double& r )
-    {
-#ifdef DBG_UTIL
-        if( sizeof(double) != 8 )
-          DBG_ASSERT( FALSE, "Can only swap 8-Byte-doubles\n" );
 #endif
-
-      sal_uInt32* c = (sal_uInt32*)(void*)&r;
-      sal_uInt32  nHelp;
-      // zwei 32-Bit-Werte in situ vertauschen
-      // und die beiden 32-Bit-Werte selbst in situ drehen
-      nHelp = SWAPLONG(c[0]);
-      c[0]  = SWAPLONG(c[1]);
-      c[1] = nHelp;
-    }
-#endif // #ifdef UNX / elif MAC
 
 //SDO
 
@@ -147,7 +127,7 @@ inline static void SwapDouble( double& r )
 int tmp = eIOMode; \
 if( (tmp == STREAM_IO_READ) && sizeof(datatype)<=nBufFree) \
 {\
-    for (int i = 0; i < sizeof(datatype); i++)\
+    for (std::size_t i = 0; i < sizeof(datatype); i++)\
         ((char *)&value)[i] = pBufPos[i];\
     nBufActualPos += sizeof(datatype);\
     pBufPos += sizeof(datatype);\
@@ -162,7 +142,7 @@ else\
 int tmp = eIOMode; \
 if( (tmp==STREAM_IO_WRITE) && sizeof(datatype) <= nBufFree)\
 {\
-    for (int i = 0; i < sizeof(datatype); i++)\
+    for (std::size_t i = 0; i < sizeof(datatype); i++)\
         pBufPos[i] = ((char *)&value)[i];\
     nBufFree -= sizeof(datatype);\
     nBufActualPos += sizeof(datatype);\
@@ -446,9 +426,7 @@ void SvStream::ImpInit()
 //  eTargetCharSet      = osl_getThreadTextEncoding();
     nCryptMask          = 0;
     bIsEof              = FALSE;
-#if defined( MAC )
-    eLineDelimiter      = LINEEND_CR;   // MAC-Format
-#elif defined( UNX )
+#if defined UNX
     eLineDelimiter      = LINEEND_LF;   // UNIX-Format
 #else
     eLineDelimiter      = LINEEND_CRLF; // DOS-Format
@@ -499,8 +477,12 @@ SvStream::SvStream( SvLockBytes* pLockBytesP )
     ImpInit();
     xLockBytes = pLockBytesP;
     const SvStream* pStrm;
-    if( pLockBytesP && (pStrm = pLockBytesP->GetStream() ) )
-        SetError( pStrm->GetErrorCode() );
+    if( pLockBytesP ) {
+        pStrm = pLockBytesP->GetStream();
+        if( pStrm ) {
+            SetError( pStrm->GetErrorCode() );
+        }
+    }
     SetBufferSize( 256 );
 }
 
@@ -890,7 +872,7 @@ sal_Bool SvStream::ReadCString( ByteString& rStr )
                     &&  ( 0 == *pPtr )                  //    AND found a string terminator
                     );
 
-        rStr.Append( buf, pPtr - buf );
+        rStr.Append( buf, ::sal::static_int_cast< xub_StrLen >( pPtr - buf ) );
     }
 
     nFilePos += rStr.Len();
@@ -1082,7 +1064,7 @@ sal_Bool SvStream::StartReadingUnicodeText()
             SetEndianSwap( !bSwap );
         break;
         default:
-            SeekRel( -((sal_Size)sizeof(nFlag)) );      // no BOM, pure data
+            SeekRel( -((sal_sSize)sizeof(nFlag)) );      // no BOM, pure data
     }
     return nError == SVSTREAM_OK;
 }
@@ -1286,7 +1268,7 @@ SvStream& SvStream::operator>>( float& r )
 {
     // Read( (char*)&r, sizeof(float) );
     READNUMBER_WITHOUT_SWAP(float,r)
-#if defined( UNX ) || defined ( MAC )
+#if defined UNX
     if( bSwap )
       SwapFloat(r);
 #endif
@@ -1297,7 +1279,7 @@ SvStream& SvStream::operator>>( double& r )
 {
     // Read( (char*)&r, sizeof(double) );
     READNUMBER_WITHOUT_SWAP(double,r)
-#if defined( UNX ) || defined ( MAC )
+#if defined UNX
     if( bSwap )
       SwapDouble(r);
 #endif
@@ -1446,7 +1428,7 @@ SvStream& SvStream::operator<< ( float v )
 SvStream& SvStream::operator<< ( const double& r )
 {
 //    Write( (char*)&r, sizeof( double ) );
-#if defined( UNX ) || defined ( MAC )
+#if defined UNX
     if( bSwap )
     {
       double nHelp = r;
@@ -1498,7 +1480,13 @@ SvStream& SvStream::ReadByteString( UniString& rStr, rtl_TextEncoding eSrcCharSe
         operator>> (nLen);
         if (nLen)
         {
-            sal_Unicode *pStr = rStr.AllocBuffer(nLen);
+            if (nLen > STRING_MAXLEN) {
+                SetError(SVSTREAM_GENERALERROR);
+                return *this;
+            }
+            sal_Unicode *pStr = rStr.AllocBuffer(
+                static_cast< xub_StrLen >(nLen));
+            BOOST_STATIC_ASSERT(STRING_MAXLEN <= SAL_MAX_SIZE / 2);
             Read( pStr, nLen << 1 );
 
             if (bSwap)
@@ -1608,9 +1596,9 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
         {
             // Ja!
             memcpy(pData, pBufPos, (size_t) nCount);
-            nBufActualPos += (sal_uInt16)nCount;
+            nBufActualPos = nBufActualPos + (sal_uInt16)nCount;
             pBufPos += nCount;
-            nBufFree -= (sal_uInt16)nCount;
+            nBufFree = nBufFree - (sal_uInt16)nCount;
         }
         else
         {
@@ -1711,7 +1699,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
     if( nCount <= (sal_Size)(nBufSize - nBufActualPos) )
     {
         memcpy( pBufPos, pData, (size_t)nCount );
-        nBufActualPos += (sal_uInt16)nCount;
+        nBufActualPos = nBufActualPos + (sal_uInt16)nCount;
         // wurde der Puffer erweitert ?
         if( nBufActualPos > nBufActualLen )
             nBufActualLen = nBufActualPos;
@@ -2367,13 +2355,13 @@ sal_Bool SvStream::SetStreamSize( sal_Size nSize )
 
 //============================================================================
 
-void SvStream::AddMark( sal_Size nPos )
+void SvStream::AddMark( sal_Size )
 {
 }
 
 //============================================================================
 
-void SvStream::RemoveMark( sal_Size nPos )
+void SvStream::RemoveMark( sal_Size )
 {
 }
 
@@ -2433,18 +2421,18 @@ SvStream& endlub( SvStream& rStrm )
 |*
 *************************************************************************/
 
-SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size nBufSize,
+SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
                                 StreamMode eMode )
 {
     if( eMode & STREAM_WRITE )
         bIsWritable = TRUE;
     else
         bIsWritable = FALSE;
-    nEndOfData  = nBufSize;
+    nEndOfData  = bufSize;
     bOwnsData   = FALSE;
     pBuf        = (BYTE *) pBuffer;
     nResize     = 0L;
-    nSize       = nBufSize;
+    nSize       = bufSize;
     nPos        = 0L;
     SetBufferSize( 0 );
 }
@@ -2728,7 +2716,7 @@ void SvMemoryStream::ResetError()
 
 sal_Bool SvMemoryStream::AllocateMemory( sal_Size nNewSize )
 {
-    pBuf = (BYTE*)SvMemAlloc( nNewSize, MEM_NOCALLNEWHDL );
+    pBuf = new BYTE[nNewSize];
     return( pBuf != 0 );
 }
 
@@ -2751,7 +2739,7 @@ sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
 
     if( nNewSize )
     {
-        BYTE* pNewBuf   = (BYTE *) SvMemAlloc( nNewSize,MEM_NOCALLNEWHDL );
+        BYTE* pNewBuf   = new BYTE[nNewSize];
 
         if( pNewBuf )
         {
@@ -2790,7 +2778,7 @@ sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
 
 void SvMemoryStream::FreeMemory()
 {
-    SvMemFree( pBuf );
+    delete[] pBuf;
 }
 
 /*************************************************************************
@@ -2839,315 +2827,8 @@ void SvMemoryStream::SetSize( sal_Size nNewSize )
     ReAllocateMemory( nDiff );
 }
 
-// *********************************************************************
-// Mac implementierung (mit Handles) in StrmMac.cxx
-// *********************************************************************
-
-#ifndef MAC
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SvSharedMemoryStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-SvSharedMemoryStream::SvSharedMemoryStream( void* pBuffer,sal_Size nBufSize,
-                                            StreamMode eMode ) :
-                SvMemoryStream( (char*)pBuffer, nBufSize, eMode )
-{
-    aHandle = 0;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SvSharedMemoryStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-SvSharedMemoryStream::SvSharedMemoryStream( sal_Size nInitSize,
-                                            sal_Size nResizeOffset) :
-                SvMemoryStream( (void*)NULL )
-{
-    if( !nInitSize )
-        nInitSize = 1024;
-
-    aHandle     = 0;
-    bIsWritable = TRUE;
-    bOwnsData   = TRUE;
-    nEndOfData  = 0L;
-    nResize     = nResizeOffset;
-    nPos        = 0;
-    pBuf        = 0;
-
-    if( nResize != 0 && nResize < 16 )
-        nResize = 16;
-
-    if( nInitSize && !AllocateMemory( nInitSize ) )
-    {
-        SetError( SVSTREAM_OUTOFMEMORY );
-        nSize = 0;
-    }
-    else
-        nSize = nInitSize;
-
-    SetBufferSize( 64 );
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::~SvSharedMemoryStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-SvSharedMemoryStream::~SvSharedMemoryStream()
-{
-    if( bOwnsData )
-    {
-        FreeMemory();
-        pBuf = 0; // damit der Dtor von SvMemoryStream nicht mehr zuschlaegt
-    }
-    else
-        Flush();
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::GetData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
-*************************************************************************/
-
-const void* SvSharedMemoryStream::GetData()
-{
-    Flush();
-    return pBuf;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::operator const char*()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
-*************************************************************************/
-
-SvSharedMemoryStream::operator const void*()
-{
-    Flush();
-    return pBuf;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::IsA()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-sal_uInt16 SvSharedMemoryStream::IsA() const
-{
-    return (sal_uInt16)ID_SHAREDMEMORYSTREAM;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SwitchBuffer()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    KH 16.06.95
-|*    Letzte Aenderung  KH 16.06.95
-|*
-*************************************************************************/
-
-void* SvSharedMemoryStream::SwitchBuffer( sal_Size nInitSize, sal_Size nResize )
-{
-    return (void*)SvMemoryStream::SwitchBuffer(nInitSize, nResize);
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SetBuffer()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    KH 16.06.95
-|*    Letzte Aenderung  KH 16.06.95
-|*
-*************************************************************************/
-
-void* SvSharedMemoryStream::SetBuffer( void* pBuf, sal_Size nSize, sal_Bool bOwnsData,
-                                       sal_Size nEof)
-{
-    return (void*)SvMemoryStream::SetBuffer((char*)pBuf,nSize,bOwnsData,nEof);
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::GetData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    KH 19.06.95
-|*    Letzte Aenderung  KH 19.06.95
-|*
-*************************************************************************/
-
-sal_Size SvSharedMemoryStream::GetData( void* pData, sal_Size nCount )
-{
-    return SvMemoryStream::GetData(pData, nCount);
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::PutData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    KH 19.06.95
-|*    Letzte Aenderung  KH 19.06.95
-|*
-*************************************************************************/
-
-sal_Size SvSharedMemoryStream::PutData( const void* pData, sal_Size nCount )
-{
-    return SvMemoryStream::PutData(pData, nCount);
-}
-
-
-//
-// Speicherverwaltung (Alloc, Free, Realloc, SetHandle)
-// Standardimplementation DOS & UNIX
-//
-
-#if defined(DOS) || defined(UNX)
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SetHandle()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 05.10.95
-|*    Letzte Aenderung  OV 05.10.95
-|*
-*************************************************************************/
-
-void* SvSharedMemoryStream::SetHandle( void* aHandle, sal_Size nSize,
-    sal_Bool bOwnsData, sal_Size nEOF)
-{
-    DBG_ERROR("SvSharedMemoryStream::SetHandle not implemented");
-    return 0;
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::AllocateMemory()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-sal_Bool SvSharedMemoryStream::AllocateMemory( sal_Size nNewSize )
-{
-    pBuf = new BYTE[ nNewSize ];
-    return( pBuf != 0 );
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::ReAllocateMemory()   (Bozo-Algorithmus)
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-sal_Bool SvSharedMemoryStream::ReAllocateMemory( long nDiff )
-{
-    sal_Bool bRetVal    = FALSE;
-    sal_Size nNewSize  = nSize + nDiff;
-    if( nNewSize )
-    {
-        BYTE* pNewBuf   = new BYTE[ nNewSize ];
-        if( pNewBuf )
-        {
-            bRetVal = TRUE; // Success!
-            if( nNewSize < nSize )      // Verkleinern ?
-            {
-                memcpy( pNewBuf, pBuf, (size_t)nNewSize );
-                if( nPos > nNewSize )
-                    nPos = 0L;
-                if( nEndOfData >= nNewSize )
-                    nEndOfData = nNewSize-1L;
-            }
-            else
-                memcpy( pNewBuf, pBuf, (size_t)nSize );
-
-            FreeMemory();
-
-            pBuf  = pNewBuf;
-            nSize = nNewSize;
-        }
-    }
-    else
-    {
-        FreeMemory();
-        bRetVal = TRUE;
-        pBuf = 0;
-        nSize = 0;
-        nPos = 0;
-        nEndOfData = 0;
-    }
-    return bRetVal;
-}
-
-void SvSharedMemoryStream::FreeMemory()
-{
-    delete[] pBuf;
-}
-
-
-#endif
-
-#endif
-
 TYPEINIT0 ( SvDataCopyStream )
 
-// --------------------
-
-// Diese Methoden muessen fuer die Win16-Version implementiert werden,
-// da sonst der Compiler Aerger macht. (?)
-/*
-TypeId SvDataCopyStream::Type() const
-{
-    return 0;
-}
-
-sal_Bool SvDataCopyStream::IsA(TypeId aId) const
-{
-    return FALSE;
-}
-*/
-
-void SvDataCopyStream::Assign( const SvDataCopyStream& rHack)
+void SvDataCopyStream::Assign( const SvDataCopyStream& )
 {
 }
