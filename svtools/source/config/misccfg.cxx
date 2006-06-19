@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misccfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:51:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,12 +65,12 @@ using namespace com::sun::star::uno;
  --------------------------------------------------------------------*/
 SfxMiscCfg::SfxMiscCfg() :
     ConfigItem(C2U("Office.Common") ),
-    nYear2000( SvNumberFormatter::GetYear2000Default() ),
-    bNotFound (FALSE),
     bPaperSize(FALSE),
-    bPaperOrientation (FALSE)
+    bPaperOrientation (FALSE),
+    bNotFound (FALSE),
+    nYear2000( SvNumberFormatter::GetYear2000Default() )
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SfxMiscCfg::SfxMiscCfg()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SfxMiscCfg::SfxMiscCfg()");
 
     Load();
 }
@@ -174,7 +174,7 @@ void SfxMiscCfg::Load()
 /* -----------------------------02.03.01 15:31--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
 {
     Load();
 }
@@ -184,7 +184,6 @@ void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPr
 void SfxMiscCfg::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
-    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
