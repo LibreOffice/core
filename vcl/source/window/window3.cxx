@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:39:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ BOOL Window::HitTestNativeControl( ControlType nType,
 
 // -----------------------------------------------------------------------
 
-void Window::ImplMoveControlValue( ControlType nType, ControlPart nPart, const ImplControlValue& aValue, const Point& rDelta ) const
+void Window::ImplMoveControlValue( ControlType nType, const ImplControlValue& aValue, const Point& rDelta ) const
 {
     if( aValue.getOptionalVal() )
     {
@@ -201,7 +201,7 @@ BOOL Window::DrawNativeControl( ControlType nType,
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
 
     // do so for ImplControlValue members, also
-    ImplMoveControlValue( nType, nPart, aValue, aWinOffs );
+    ImplMoveControlValue( nType, aValue, aWinOffs );
 
     Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
@@ -211,7 +211,7 @@ BOOL Window::DrawNativeControl( ControlType nType,
     BOOL bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, aValue, *ImplGetWinData()->mpSalControlHandle, aCaption, this );
 
     // transform back ImplControlValue members
-    ImplMoveControlValue( nType, nPart, aValue, Point()-aWinOffs );
+    ImplMoveControlValue( nType, aValue, Point()-aWinOffs );
 
     return bRet;
 }
@@ -252,12 +252,12 @@ BOOL Window::DrawNativeControlText(ControlType nType,
     aWinOffs = OutputToScreenPixel( aWinOffs );
     Region screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
-    ImplMoveControlValue( nType, nPart, aValue, aWinOffs );
+    ImplMoveControlValue( nType, aValue, aWinOffs );
 
     BOOL bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, aValue, *ImplGetWinData()->mpSalControlHandle, aCaption, this );
 
     // transform back ImplControlValue members
-    ImplMoveControlValue( nType, nPart, aValue, Point()-aWinOffs );
+    ImplMoveControlValue( nType, aValue, Point()-aWinOffs );
 
     return bRet;
 }
@@ -289,7 +289,7 @@ BOOL Window::GetNativeControlRegion(  ControlType nType,
     aWinOffs = OutputToScreenPixel( aWinOffs );
     Region screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
-    ImplMoveControlValue( nType, nPart, aValue, aWinOffs );
+    ImplMoveControlValue( nType, aValue, aWinOffs );
 
     BOOL bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, aValue,
                                 *ImplGetWinData()->mpSalControlHandle, aCaption, rNativeBoundingRegion,
@@ -301,7 +301,7 @@ BOOL Window::GetNativeControlRegion(  ControlType nType,
         rNativeContentRegion.Move( -aWinOffs.X(), -aWinOffs.Y() );
     }
     // transform back ImplControlValue members
-    ImplMoveControlValue( nType, nPart, aValue, Point()-aWinOffs );
+    ImplMoveControlValue( nType, aValue, Point()-aWinOffs );
 
     return bRet;
 }
