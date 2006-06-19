@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:43:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,6 +288,22 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::
         actionPerformed_Impl( sal_False, e );
     }
 }
+
+//------------------------------------------------------------------------------
+void SAL_CALL OImageButtonControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OImageButtonControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
+{
+}
+
 
 //.........................................................................
 }   // namespace frm
