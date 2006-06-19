@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bundles.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:48:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,9 +122,9 @@ FontEntry::~FontEntry()
 // ---------------------------------------------------------------
 
 CGMFList::CGMFList() :
-    nFontsAvailable     ( 0 ),
     nFontNameCount      ( 0 ),
-    nCharSetCount       ( 0 )
+    nCharSetCount       ( 0 ),
+    nFontsAvailable     ( 0 )
 {
     aFontEntryList.Clear();
 }
