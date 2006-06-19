@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagesconfiguration.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:05:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptor
 
 struct ImageListItemDescriptor
 {
-    ImageListItemDescriptor() : pImageItemList( 0 )
-                                , nMaskMode( ImageMaskMode_Color ) {}
+    ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color )
+                                , pImageItemList( 0 ) {}
     ~ImageListItemDescriptor() { delete pImageItemList; }
 
     String                      aURL;                   // an URL to a bitmap with several images inside
