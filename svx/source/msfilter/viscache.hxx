@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:48:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,16 @@ class Impl_OlePres
 
     UINT32  nAdvFlags;
     INT32   nJobLen;
-    void *  pJob;
+    BYTE*   pJob;
     Size    aSize;      // Groesse in 100TH_MM
 public:
                     Impl_OlePres( ULONG nF )
                         : nFormat( nF )
-                        , nAdvFlags( 0x2 ) // in Dokument gefunden
-                        , nJobLen( 0 )
-                        , pJob( NULL )
                         , pBmp( NULL )
                         , pMtf( NULL )
+                        , nAdvFlags( 0x2 )  // in Dokument gefunden
+                        , nJobLen( 0 )
+                        , pJob( NULL )
                     {}
                     ~Impl_OlePres()
                     {
