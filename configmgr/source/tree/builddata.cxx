@@ -4,9 +4,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:15:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,10 @@ namespace configmgr
 
         Result  linkTree(TreeAddress const & _aFragment);
         Result  linkSet(SetNodeAccess const & _aSet);
+
+    protected:
+        using NodeVisitor::handle;
+
     private:
         Result  handle(TreeAccessor const & _aElement);
         Result  handle(SetNodeAccess const & _aSet);
@@ -286,6 +290,10 @@ namespace configmgr
         {}
 
         TreeAddress buildTree(TreeAccessor const & _aSourceTree);
+
+    protected:
+        using NodeVisitor::handle;
+
     private:
         class ElementListBuilder;
 
@@ -307,6 +315,9 @@ namespace configmgr
         {}
 
         List buildElementList(SetNodeAccess const & _aSet);
+    protected:
+        using NodeVisitor::handle;
+
     private:
         Result handle(TreeAccessor const & _aSourceTree);
     };
@@ -334,6 +345,9 @@ namespace configmgr
 
         static node::Attributes convertAttributes(NodeAccessRef const& _aNode)
         { return _aNode.getAttributes(); }
+    protected:
+        using NodeVisitor::handle;
+
     private:
         std::auto_ptr<ISubtree>     convertNode(GroupNodeAccess const& _aGroupNode) const;
         std::auto_ptr<ISubtree>     convertNode(SetNodeAccess const& _aSetNode) const;
@@ -358,6 +372,9 @@ namespace configmgr
 
         void addElements(SetNodeAccess const & _aSet)       { this->visitElements(_aSet); }
         void addChildren(GroupNodeAccess const & _aGroup)   { this->visitChildren(_aGroup); }
+    protected:
+        using NodeVisitor::handle;
+
     private:
         Result handle(TreeAccessor const & _aElement);
         Result handle(NodeAccessRef const & _aMember);
@@ -563,6 +580,7 @@ NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::handle(SetNodeAccess const & 
 
 inline void TreeNodeBuilder::checkOffset(Offset _pos)
 {
+    { (void)_pos; }
     OSL_ENSURE(_pos < m_nodes.size(), "TreeNodeBuilder: Node access past end.");
 }
 //-----------------------------------------------------------------------------
@@ -682,8 +700,8 @@ void TreeNodeBuilder::endGroup( Offset _nPos )
 
     GroupNode & rGroup = nodeAt(_nPos).group;
 
-    rGroup.numDescendants = m_nodes.size() - _nPos - 1;
-    m_parent -= rGroup.info.parent;
+    rGroup.numDescendants = Offset( m_nodes.size() - static_cast< ::std::size_t >(_nPos) - 1 );
+    m_parent = m_parent - rGroup.info.parent;
 }
 //-----------------------------------------------------------------------------
 
@@ -704,7 +722,7 @@ void TreeNodeBuilder::addValue( Name _aName, Flags::Field _aFlags,
 {
     OSL_PRECOND(_aValueType == (_aValueType & Type::mask_valuetype), "TreeNodeBuilder: invalid value type");
 
-    addNode(_aName,_aFlags,Type::nodetype_value | _aValueType);
+    addNode(_aName,_aFlags,AnyData::TypeCode(Type::nodetype_value | _aValueType));
 
     lastNode().value.value          = _aUserValue;
     lastNode().value.defaultValue   = _aDefaultValue;
@@ -738,7 +756,7 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(ValueNodeAccess const & _aNod
     sharable::Name aNodeName = allocName( allocator(), aSrc.info.getName(_aNode.accessor()));
     Flags::Field aFlags = aSrc.info.flags;
 
-    AnyData::TypeCode aType = aSrc.info.type & Type::mask_valuetype;
+    AnyData::TypeCode aType = AnyData::TypeCode( aSrc.info.type & Type::mask_valuetype );
 
     AnyData aNewValue, aNewDefault;
     if (aFlags & Flags::valueAvailable)
@@ -1155,17 +1173,17 @@ NodeVisitor::Result ConvertingSubnodeBuilder::handle(NodeAccessRef const & _aMem
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void DataTreeDefaultMerger::mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode)
+void DataTreeDefaultMerger::mergeDefaults(TreeAddress /*_aBaseAddress*/, INode const& /*_aDefaultNode*/)
 {
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeDefaultMerger::handle(ISubtree const & _aNode)
+void DataTreeDefaultMerger::handle(ISubtree const & /*_aNode*/)
 {
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeDefaultMerger::handle(OValueNode const & _aNode)
+void DataTreeDefaultMerger::handle(OValueNode const & /*_aNode*/)
 {
 }
 //-----------------------------------------------------------------------------
@@ -1257,7 +1275,7 @@ void DataTreeCleanup::destroyData(sharable::GroupNode * _pNode)
 
 void DataTreeCleanup::destroyData(sharable::ValueNode * _pNode)
 {
-    AnyData::TypeCode aValueType = _pNode->info.type & Type::mask_valuetype;
+    AnyData::TypeCode aValueType = AnyData::TypeCode( _pNode->info.type & Type::mask_valuetype );
     Flags::Field aFlags          = _pNode->info.flags;
 
     destroyData(&_pNode->info);
