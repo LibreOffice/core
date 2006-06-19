@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:24:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,8 +173,8 @@ namespace configmgr
         ISubtree(ISubtree const& other)
         :INode(other)
         ,m_nLevel(other.m_nLevel)
-        ,m_sId() // do not copy ID while cloning !
         ,m_nDefaultLevels(other.m_nDefaultLevels)
+        ,m_sId() // do not copy ID while cloning !
         ,m_sTemplateName(other.m_sTemplateName)
         ,m_sTemplateModule(other.m_sTemplateModule)
         {}
