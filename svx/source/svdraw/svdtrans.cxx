@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:41:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 {
     Fraction xFact(rxFact);
     Fraction yFact(ryFact);
-    long nHgt=rRect.Bottom()-rRect.Top();
+    //long nHgt=rRect.Bottom()-rRect.Top();
 
     {
         if (xFact.GetDenominator()==0) {
@@ -175,7 +175,7 @@ void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MirrorRect(Rectangle& rRect, const Point& rRef1, const Point& rRef2, FASTBOOL bNoJustify)
+void MirrorRect(Rectangle& rRect, const Point& /*rRef1*/, const Point& /*rRef2*/, FASTBOOL bNoJustify)
 {
     // !!! fehlende Implementation !!!
     if (!bNoJustify) rRect.Justify();
@@ -407,19 +407,19 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
                           const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert,
                           const Rectangle rRefRect)
 {
-    FASTBOOL bC1=pC1!=NULL;
-    FASTBOOL bC2=pC2!=NULL;
-    long x0=rPnt.X();
+    //FASTBOOL bC1=pC1!=NULL;
+    //FASTBOOL bC2=pC2!=NULL;
+    //long x0=rPnt.X();
     long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
     if (bVert) {
     } else {
-        long nBase=rCenter.Y()-rRad.Y();
+        //long nBase=rCenter.Y()-rRad.Y();
         long nTop=rRefRect.Top();
         long nBtm=rRefRect.Bottom();
         long nHgt=nBtm-nTop;
         long dy=rPnt.Y()-y0;
-        FASTBOOL bOben=rRad.Y()<0;
+        //FASTBOOL bOben=rRad.Y()<0;
         double a=((double)(y0-nTop))/nHgt;
         a*=dy;
         rPnt.Y()=y0+Round(a);
@@ -779,6 +779,7 @@ FrPair GetInchOrMM(MapUnit eU)
             aP=aVD.PixelToLogic(aP);
             return FrPair(3200,aP.X(),3200,aP.Y());
         }
+        default: break;
     }
     return Fraction(1,1);
 }
@@ -797,6 +798,7 @@ FrPair GetInchOrMM(FieldUnit eU)
         case FUNIT_PICA       : return FrPair(   6,1);
         case FUNIT_FOOT       : return FrPair(   1,12);
         case FUNIT_MILE       : return FrPair(   1,63360);
+        default: break;
     }
     return Fraction(1,1);
 }
@@ -886,6 +888,7 @@ void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, FASTB
         case MAP_SYSFONT    : break;
         case MAP_APPFONT    : break;
         case MAP_RELATIVE   : break;
+        default: break;
     } // switch
     rnKomma=nKomma;
     rbMetr=bMetr;
@@ -981,7 +984,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
 
     ForceUndirty();
 
-    xub_StrLen nK(nKomma_);
+    sal_Int16 nK(nKomma_);
     XubString aStr;
 
     if(bNeg)
@@ -1007,7 +1010,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
     if(nK > 0 && aStr.Len() <= nK )
     {
         // Komma erforderlich
-        xub_StrLen nAnz(nK - aStr.Len());
+        sal_Int16 nAnz(nK - aStr.Len());
 
         if(nAnz >= 0 && rLoc.isNumLeadingZero())
             nAnz++;
@@ -1169,6 +1172,7 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
             rStr += sal_Unicode('%');
             break;
         }
+        default: break;
     }
 }
 
