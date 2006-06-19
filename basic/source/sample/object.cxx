@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:44:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-#pragma hdrstop
 #include "object.hxx"
 #include "collelem.hxx"
 // Makro MEMBER()
@@ -110,21 +109,21 @@ SampleObject::Methods SampleObject::aMethods[] = {
 // Eine Sample-Methode (der Returnwert ist SbxNULL)
 { "Display",    SbxEMPTY,       1 | _FUNCTION, MEMBER(SampleObject::Display) },
     // Ein Named Parameter
-    { "message",SbxSTRING },
+    { "message",SbxSTRING, 0,NULL },
 // Eine Sample-Funktion
 { "Square",     SbxDOUBLE,      1 | _FUNCTION, MEMBER(SampleObject::Square)  },
     // Ein Named Parameter
-    { "value",  SbxDOUBLE },
+    { "value",  SbxDOUBLE, 0,NULL },
 //  Basic-Callback
 { "Event",      SbxEMPTY,       1 | _FUNCTION, MEMBER(SampleObject::Event)   },
     // Ein Named Parameter
-    { "event",  SbxSTRING },
+    { "event",  SbxSTRING, 0,NULL },
 //  Element erzeugen
 { "Create",     SbxEMPTY,       1 | _FUNCTION, MEMBER(SampleObject::Create)  },
     // Ein Named Parameter
-    { "name",  SbxSTRING },
+    { "name",  SbxSTRING, 0,NULL },
 
-{ NULL,     SbxNULL,            -1 }};  // Tabellenende
+{ NULL,     SbxNULL,            -1, NULL }};  // Tabellenende
 
 SampleObject::SampleObject( const String& rClass ) : SbxObject( rClass )
 {
@@ -163,13 +162,13 @@ SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
             // Args-Felder isolieren:
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
-            String aName = String::CreateFromAscii( p->pName );
+            String aName_ = String::CreateFromAscii( p->pName );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
                 eCT = SbxCLASS_PROPERTY;
             else if( nType & _METHOD )
                 eCT = SbxCLASS_METHOD;
-            pRes = Make( aName, eCT, p->eType );
+            pRes = Make( aName_, eCT, p->eType );
             // Wir setzen den Array-Index + 1, da ja noch andere
             // Standard-Properties existieren, die auch aktiviert
             // werden muessen.
@@ -189,7 +188,7 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
-        SbxArray* pPar = pVar->GetParameters();
+        SbxArray* pPar_ = pVar->GetParameters();
         USHORT nIndex = (USHORT) pVar->GetUserData();
         // kein Index: weiterreichen!
         if( nIndex )
@@ -207,13 +206,13 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                     // Parameter-Test fuer Methoden:
                     USHORT nPar = aMethods[ --nIndex ].nArgs & 0x00FF;
                     // Element 0 ist der Returnwert
-                    if( ( !pPar && nPar )
-                     || ( pPar->Count() != nPar+1 ) )
+                    if( ( !pPar_ && nPar )
+                     || ( pPar_->Count() != nPar+1 ) )
                         SetError( SbxERR_WRONG_ARGS );
                     // Alles klar, man kann den Call ausfuehren
                     else
                     {
-                        (this->*(aMethods[ nIndex ].pFunc))( pVar, pPar, bWrite );
+                        (this->*(aMethods[ nIndex ].pFunc))( pVar, pPar_, bWrite );
                     }
                 }
             }
@@ -228,19 +227,19 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
 {
     Methods* p = &aMethods[ nIdx ];
     // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pInfo = new SbxInfo( Hilfedateiname, p->nHelpId );
-    SbxInfo* pInfo = new SbxInfo;
+    // SbxInfo* pInfo_ = new SbxInfo( Hilfedateiname, p->nHelpId );
+    SbxInfo* pInfo_ = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )
     {
         p++;
-        String aName = String::CreateFromAscii( p->pName );
-        USHORT nFlags = ( p->nArgs >> 8 ) & 0x03;
+        String aName_ = String::CreateFromAscii( p->pName );
+        USHORT nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
-            nFlags |= SBX_OPTIONAL;
-        pInfo->AddParam( aName, p->eType, nFlags );
+            nFlags_ |= SBX_OPTIONAL;
+        pInfo_->AddParam( aName_, p->eType, nFlags_ );
     }
-    return pInfo;
+    return pInfo_;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -251,33 +250,33 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
 
 // Die Methoden:
 
-void SampleObject::Display( SbxVariable*, SbxArray* pPar, BOOL )
+void SampleObject::Display( SbxVariable*, SbxArray* pPar_, BOOL )
 {
     // GetString() loest u.U. auch einen Error aus!
-    String s( pPar->Get( 1 )->GetString() );
+    String s( pPar_->Get( 1 )->GetString() );
     if( !IsError() )
         InfoBox( NULL, s ).Execute();
 }
 
-void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
-    double n = pPar->Get( 1 )->GetDouble();
+    double n = pPar_->Get( 1 )->GetDouble();
     pVar->PutDouble( n * n );
 }
 
 // Callback nach BASIC:
 
-void SampleObject::Event( SbxVariable*, SbxArray* pPar, BOOL )
+void SampleObject::Event( SbxVariable*, SbxArray* pPar_, BOOL )
 {
-    Call( pPar->Get( 1 )->GetString(), NULL );
+    Call( pPar_->Get( 1 )->GetString(), NULL );
 }
 
 // Neues Element anlegen
 
-void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar, BOOL )
+void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     pVar->PutObject(
-        MakeObject( pPar->Get( 1 )->GetString(), String( RTL_CONSTASCII_USTRINGPARAM("SampleElement") ) ) );
+        MakeObject( pPar_->Get( 1 )->GetString(), String( RTL_CONSTASCII_USTRINGPARAM("SampleElement") ) ) );
 }
 
 // Die Factory legt unsere beiden Objekte an.
