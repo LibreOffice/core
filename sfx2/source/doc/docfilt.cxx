@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:41:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:26:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#pragma hdrstop
-
+#include "docfac.hxx"
 #include "docfilt.hxx"
 #include "fltfnc.hxx"
 #include "sfxuno.hxx"
@@ -66,7 +65,7 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxFilter);
+DBG_NAME(SfxFilter)
 
 SfxFilter::SfxFilter(  const String &rName,
                        const String &rWildCard,
@@ -77,15 +76,15 @@ SfxFilter::SfxFilter(  const String &rName,
                        const String &rMimeType,
                        const String &rUsrDat,
                        const String &rServiceName ):
-    lFormat(lFmt),
-    nFormatType(nType),
     aWildCard(rWildCard, ';'),
+    lFormat(lFmt),
     aTypeName(rTypNm),
-    nDocIcon(nIcon),
     aUserData(rUsrDat),
+    nFormatType(nType),
+    nDocIcon(nIcon),
+    aServiceName( rServiceName ),
     aMimeType( rMimeType ),
-    aFilterName( rName ),
-    aServiceName( rServiceName )
+    aFilterName( rName )
 {
     String aExts = GetWildcard()();
     String aShort, aLong;
