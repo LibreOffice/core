@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:44:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,39 +101,43 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(OImageControlModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// OComponentHelper
+    // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// OPropertyChangeListener
+    // OPropertyChangeListener
     virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
+    // Reference< XPropertySet>
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// ::com::sun::star::io::XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::form::XImageProducerSupplier
+    // XImageProducerSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer> SAL_CALL getImageProducer() throw ( ::com::sun::star::uno::RuntimeException);
 
-// XImageProducer
+    // XImageProducer
     virtual void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
 
-// ::comphelper::OAggregationArrayUsageHelper
+    // ::comphelper::OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+    // prevent method hiding
+    using OBoundControlModel::disposing;
+    using OBoundControlModel::getFastPropertyValue;
 
 protected:
     // OBoundControlModel overridables
@@ -233,12 +237,15 @@ public:
 
     // XMouseListener
     virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
-    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
-    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
+    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
 
     // XControl
     virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& _rxModel ) throw (::com::sun::star::uno::RuntimeException);
+
+    // prevent method hiding
+    using OBoundControl::disposing;
 
 private:
     void    implClearGraphics( sal_Bool _bForce );
