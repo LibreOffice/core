@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:41:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1172,15 +1172,15 @@ class KDESalGraphics : public X11SalGraphics
     virtual BOOL drawNativeControl( ControlType nType, ControlPart nPart,
                                     const Region& rControlRegion, ControlState nState,
                                     const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                    OUString aCaption );
+                                    const OUString& aCaption );
     virtual BOOL drawNativeControlText( ControlType nType, ControlPart nPart,
                                         const Region& rControlRegion, ControlState nState,
                                         const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                        OUString aCaption );
+                                        const OUString& aCaption );
     virtual BOOL getNativeControlRegion( ControlType nType, ControlPart nPart,
                                          const Region& rControlRegion, ControlState nState,
                                          const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                         OUString aCaption,
+                                         const OUString& aCaption,
                                          Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 };
 
@@ -1231,7 +1231,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 */
 BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Region& rControlRegion, const Point& rPos,
-                                           SalControlHandle& rControlHandle, BOOL& rIsInside )
+                                           SalControlHandle&, BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
@@ -1337,8 +1337,8 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 */
 BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
                                         const Region& rControlRegion, ControlState nState,
-                                        const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                        OUString aCaption )
+                                        const ImplControlValue& aValue, SalControlHandle&,
+                                        const OUString& )
 {
     BOOL bReturn = FALSE;
 
@@ -1473,10 +1473,10 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     @param aCaption
     A caption or title string (like button text etc.)
 */
-BOOL KDESalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart,
-                                            const Region& rControlRegion, ControlState nState,
-                                            const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                            OUString aCaption )
+BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
+                                            const Region&, ControlState,
+                                            const ImplControlValue&, SalControlHandle&,
+                                            const OUString& )
 {
     return FALSE;
 }
@@ -1503,8 +1503,8 @@ BOOL KDESalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart
 */
 BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
                                              const Region& rControlRegion, ControlState nState,
-                                             const ImplControlValue& aValue, SalControlHandle& rControlHandle,
-                                             OUString aCaption,
+                                             const ImplControlValue&, SalControlHandle&,
+                                             const OUString&,
                                              Region &rNativeBoundingRegion, Region &rNativeContentRegion )
 {
     BOOL bReturn = FALSE;
@@ -1964,7 +1964,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.buttonText() );
 
         // Font
-        Font aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
+        aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
         aStyleSettings.SetMenuFont( aFont );
     }
 
@@ -1972,7 +1972,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     KToolBar *pToolBar = qMainWindow.toolBar();
     if ( pToolBar )
     {
-        Font aFont = toFont( pToolBar->font(), rSettings.GetUILocale() );
+        aFont = toFont( pToolBar->font(), rSettings.GetUILocale() );
         aStyleSettings.SetToolFont( aFont );
     }
 
