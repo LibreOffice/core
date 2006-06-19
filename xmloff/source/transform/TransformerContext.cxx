@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransformerContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:58:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ XMLTransformerContext::~XMLTransformerContext()
 XMLTransformerContext *XMLTransformerContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,
                                             const OUString& rQName,
-                                            const Reference< XAttributeList >& xAttrList )
+                                            const Reference< XAttributeList >& )
 {
     return m_rTransformer.CreateContext( nPrefix, rLocalName, rQName );
 }
