@@ -4,9 +4,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:48:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ Player::~Player()
 
 // ------------------------------------------------------------------------------
 
-bool Player::create( const ::rtl::OUString& rURL )
+bool Player::create( const ::rtl::OUString& /* rURL */ )
 {
     bool bRet = false;
 
@@ -100,7 +100,7 @@ double SAL_CALL Player::getDuration(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setMediaTime( double fTime )
+void SAL_CALL Player::setMediaTime( double /* fTime */ )
     throw (uno::RuntimeException)
 {
 }
@@ -117,7 +117,7 @@ double SAL_CALL Player::getMediaTime(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setStopTime( double fTime )
+void SAL_CALL Player::setStopTime( double /* fTime */ )
     throw (uno::RuntimeException)
 {
 }
@@ -134,7 +134,7 @@ double SAL_CALL Player::getStopTime(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setRate( double fRate )
+void SAL_CALL Player::setRate( double /* fRate */ )
     throw (uno::RuntimeException)
 {
 }
@@ -151,7 +151,7 @@ double SAL_CALL Player::getRate(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
+void SAL_CALL Player::setPlaybackLoop( sal_Bool /* bSet */ )
     throw (uno::RuntimeException)
 {
 }
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setMute( sal_Bool bSet )
+void SAL_CALL Player::setMute( sal_Bool /* bSet */ )
     throw (uno::RuntimeException)
 {
 }
@@ -185,7 +185,7 @@ sal_Bool SAL_CALL Player::isMute(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
+void SAL_CALL Player::setVolumeDB( sal_Int16 /* nVolumeDB */ )
     throw (uno::RuntimeException)
 {
 }

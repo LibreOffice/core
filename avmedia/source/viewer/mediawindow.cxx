@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:43:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,57 +103,57 @@ bool MediaWindow::isValid() const
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::MouseMove( const MouseEvent& rMEvt )
+void MediaWindow::MouseMove( const MouseEvent& /* rMEvt */ )
 {
 }
 
 // ---------------------------------------------------------------------
 
-void MediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void MediaWindow::MouseButtonDown( const MouseEvent& /* rMEvt */ )
 {
 }
 
 // ---------------------------------------------------------------------
 
-void MediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void MediaWindow::MouseButtonUp( const MouseEvent& /* rMEvt */ )
 {
 }
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::KeyInput( const KeyEvent& rKEvt )
+void MediaWindow::KeyInput( const KeyEvent& /* rKEvt */ )
 {
 }
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::KeyUp( const KeyEvent& rKEvt )
+void MediaWindow::KeyUp( const KeyEvent& /* rKEvt */ )
 {
 }
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::Command( const CommandEvent& rCEvt )
+void MediaWindow::Command( const CommandEvent& /* rCEvt */ )
 {
 }
 
 // -------------------------------------------------------------------------
 
-sal_Int8 MediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 MediaWindow::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return 0;
 }
 
 // -------------------------------------------------------------------------
 
-sal_Int8 MediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 MediaWindow::ExecuteDrop( const ExecuteDropEvent& /* rEvt */ )
 {
     return 0;
 }
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void MediaWindow::StartDrag( sal_Int8 /* nAction */, const Point& /* rPosPixel */ )
 {
 }
 
@@ -389,7 +389,8 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                         "Vivo Video", "viv",
                                         "WAVE Audio", "wav" };
 
-    for( int i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
+    unsigned int i;
+    for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
                                         ::rtl::OUString::createFromAscii( pFilters[ i ] ),
@@ -399,7 +400,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
 // -------------------------------------------------------------------------
 
-bool MediaWindow::executeMediaURLDialog( Window* pParent, ::rtl::OUString& rURL, bool bInsertDialog )
+bool MediaWindow::executeMediaURLDialog( Window* /* pParent */, ::rtl::OUString& rURL, bool bInsertDialog )
 {
     ::sfx2::FileDialogHelper        aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
     static const ::rtl::OUString    aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
@@ -411,7 +412,8 @@ bool MediaWindow::executeMediaURLDialog( Window* pParent, ::rtl::OUString& rURL,
 
     getMediaFilters( aFilters );
 
-    for( int i = 0; i < aFilters.size(); ++i )
+    unsigned int i;
+    for( i = 0; i < aFilters.size(); ++i )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -425,7 +427,7 @@ bool MediaWindow::executeMediaURLDialog( Window* pParent, ::rtl::OUString& rURL,
     // add filter for all media types
     aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
-    for( int i = 0; i < aFilters.size(); ++i )
+    for( i = 0; i < aFilters.size(); ++i )
     {
         ::rtl::OUString aTypes;
 
@@ -515,7 +517,8 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
 
             getMediaFilters( aFilters );
 
-            for( int i = 0; ( i < aFilters.size() ) && !bRet; ++i )
+            unsigned int i;
+            for( i = 0; ( i < aFilters.size() ) && !bRet; ++i )
             {
                 for( sal_Int32 nIndex = 0; nIndex >= 0 && !bRet; )
                 {
