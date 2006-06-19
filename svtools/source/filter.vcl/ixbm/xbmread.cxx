@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xbmread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:42:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 // - XBMReader -
 // -------------
 
-XBMReader::XBMReader( SvStream& rStm, void* pCallData ) :
+XBMReader::XBMReader( SvStream& rStm, void* ) :
             rIStm           ( rStm ),
             pAcc1           ( NULL ),
             nLastPos        ( rStm.Tell() ),
