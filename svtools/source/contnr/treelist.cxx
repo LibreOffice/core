@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:07:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1849,7 +1849,7 @@ void SvListView::ModelHasEntryInvalidated( SvListEntry*)
     DBG_CHKTHIS(SvListView,0);
 }
 
-void SvListView::ActionMoving( SvListEntry* pEntry,SvListEntry* pTargetPrnt,ULONG nChildPos)
+void SvListView::ActionMoving( SvListEntry* pEntry,SvListEntry*,ULONG)
 {
     DBG_CHKTHIS(SvListView,0);
     SvListEntry* pParent = pEntry->pParent;
@@ -1879,7 +1879,10 @@ void SvListView::ActionInserted( SvListEntry* pEntry )
     DBG_ASSERT(pEntry,"Insert:No Entry")
     SvViewData* pData = CreateViewData( pEntry );
     InitViewData( pData, pEntry );
-    BOOL bSuccess = aDataTable.Insert( (ULONG)pEntry, pData );
+    #ifdef DBG_UTIL
+    BOOL bSuccess =
+    #endif
+        aDataTable.Insert( (ULONG)pEntry, pData );
     DBG_ASSERT(bSuccess,"Entry already in View")
     if ( nVisibleCount && pModel->IsEntryVisible( this, pEntry ))
     {
