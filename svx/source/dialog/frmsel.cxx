@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:08:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ using ::com::sun::star::accessibility::XAccessible;
 
 FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex )
 {
-    DBG_ASSERT( nIndex < FRAMEBORDERTYPE_COUNT,
+    DBG_ASSERT( nIndex < (size_t)FRAMEBORDERTYPE_COUNT,
         "svx::GetFrameBorderTypeFromIndex - invalid index" );
     return static_cast< FrameBorderType >( nIndex + 1 );
 }
@@ -118,6 +118,7 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
         case FRAMEBORDER_VER:       return FRAMESEL_INNER_VER;
         case FRAMEBORDER_TLBR:      return FRAMESEL_DIAG_TLBR;
         case FRAMEBORDER_BLTR:      return FRAMESEL_DIAG_BLTR;
+        case FRAMEBORDER_NONE : break;
     }
     return FRAMESEL_NONE;
 }
@@ -577,6 +578,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
         case FRAMEBORDER_HOR:       nLinePos = mnLine2; break;
         case FRAMEBORDER_RIGHT:
         case FRAMEBORDER_BOTTOM:    nLinePos = mnLine3; break;
+        default: ; //prevent warning
     }
     nLinePos -= mnArrowSize / 2;
 
@@ -608,6 +610,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
             aPos1 = Point( nTLPos, nBRPos ); nImgId1 = 7;
             aPos2 = Point( nBRPos, nTLPos ); nImgId2 = 8;
         break;
+        default: ; //prevent warning
     }
 
     // Arrow or marker? Do not draw arrows into disabled control.
@@ -831,12 +834,12 @@ bool FrameSelector::SupportsDontCareState() const
     return (mxImpl->mnFlags & FRAMESEL_DONTCARE) != 0;
 }
 
-FrameBorderState FrameSelector::GetBorderState( FrameBorderType eBorder ) const
+FrameBorderState FrameSelector::GetFrameBorderState( FrameBorderType eBorder ) const
 {
     return mxImpl->GetBorder( eBorder ).GetState();
 }
 
-const SvxBorderLine* FrameSelector::GetBorderStyle( FrameBorderType eBorder ) const
+const SvxBorderLine* FrameSelector::GetFrameBorderStyle( FrameBorderType eBorder ) const
 {
     const SvxBorderLine& rStyle = mxImpl->GetBorder( eBorder ).GetCoreStyle();
     // rest of the world uses null pointer for invisible frame border
