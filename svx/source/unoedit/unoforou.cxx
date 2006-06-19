@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:11:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
-#endif
 
 #include <algorithm>
 
@@ -443,7 +440,7 @@ USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rOutliner.GetLineLen(nPara, nLine);
 }
 
-sal_Bool SvxOutlinerForwarder::QuickFormatDoc( BOOL bFull )
+sal_Bool SvxOutlinerForwarder::QuickFormatDoc( BOOL )
 {
     rOutliner.QuickFormatDoc();
 
@@ -503,7 +500,7 @@ sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
     if(bOutlinerText)
         ++nNewDepth;
 
-    if(nNewDepth >= 0 && nNewDepth <= 9)
+    if( nNewDepth <= 9 )
     {
         Paragraph* pPara = rOutliner.GetParagraph( nPara );
         if( pPara )
