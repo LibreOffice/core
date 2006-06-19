@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:34:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 return JFW_E_NO_PLUGIN;
             }
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getSymbol(
+                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getAllJavaInfos")));
 
             OSL_ASSERT(getAllJavaFunc);
@@ -145,8 +145,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             if (plerr != JFW_PLUGIN_E_NONE)
                 return JFW_E_ERROR;
 
-            for (int i = 0; i < cInfos; i++)
-                vecInfo.push_back(jfw::CJavaInfo::createWrapper(arInfos[i]));
+            for (int j = 0; j < cInfos; j++)
+                vecInfo.push_back(jfw::CJavaInfo::createWrapper(arInfos[j]));
 
             rtl_freeMemory(arInfos);
 
@@ -154,7 +154,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             // of the paths added by jfw_setJRELocations or jfw_addJRELocation
             //get the function from the plugin
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
 
             OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
@@ -368,7 +368,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
             RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_startJavaVirtualMachine"));
         jfw_plugin_startJavaVirtualMachine_ptr pFunc =
             (jfw_plugin_startJavaVirtualMachine_ptr)
-            osl_getSymbol(modulePlugin, sFunctionName.pData);
+            osl_getFunctionSymbol(modulePlugin, sFunctionName.pData);
         if (pFunc == NULL)
             return JFW_E_ERROR;
 
@@ -472,7 +472,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         osl::MutexGuard guard(jfw::getFwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        sal_Int64 nFeatureFlags = 0L;
+        sal_uInt64 nFeatureFlags = 0;
         jfw::CJavaInfo aCurrentInfo;
 //Determine if accessibility support is needed
         bool bSupportAccessibility = jfw::isAccessibilitySupportDesired();
@@ -505,7 +505,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 return JFW_E_NO_PLUGIN;
 
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getSymbol(
+                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getAllJavaInfos")));
 
             OSL_ASSERT(getAllJavaFunc);
@@ -537,27 +537,27 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             bool bInfoFound = false;
             for (int ii = 0; ii < cInfos; ii++)
             {
-                JavaInfo* pInfo = arInfos[ii];
+                JavaInfo* pJInfo = arInfos[ii];
 
                 //We remember the very first installation in aCurrentInfo
                 if (aCurrentInfo.getLocation().getLength() == 0)
-                        aCurrentInfo = pInfo;
+                        aCurrentInfo = pJInfo;
                 // compare features
                 // If the user does not require any features (nFeatureFlags = 0)
                 // then the first installation is used
-                if ((pInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
+                if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
                 {
                     //the just found Java implements all required features
                     //currently there is only accessibility!!!
-                    aCurrentInfo = pInfo;
+                    aCurrentInfo = pJInfo;
                     bInfoFound = true;
                     break;
                 }
             }
             //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
             //its contents
-            for (int i = 0; i < cInfos; i++)
-                jfw_freeJavaInfo(arInfos[i]);
+            for (int j = 0; j < cInfos; j++)
+                jfw_freeJavaInfo(arInfos[j]);
             rtl_freeMemory(arInfos);
 
             if (bInfoFound == true)
@@ -588,7 +588,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 // of the paths added by jfw_setJRELocations or jfw_addJRELocation
                 //get the function from the plugin
                 jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                    (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                    (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
 
                 OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
@@ -596,11 +596,11 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                     return JFW_E_ERROR;
 
                 typedef std::vector<rtl::OString>::const_iterator citLoc;
-                for (citLoc i = vecJRELocations.begin();
-                    i != vecJRELocations.end(); i++)
+                for (citLoc it = vecJRELocations.begin();
+                    it != vecJRELocations.end(); it++)
                 {
                     rtl::OUString sLocation =
-                        rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
+                        rtl::OStringToOUString(*it, RTL_TEXTENCODING_UTF8);
                     jfw::CJavaInfo aInfo;
                     javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
                         sLocation.pData,
@@ -814,7 +814,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             }
 
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
 
             OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
