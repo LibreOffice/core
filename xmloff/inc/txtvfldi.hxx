@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:10:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,8 @@ public:
         sal_Bool bStyle,                        /// process data style (P.F.)
         sal_Bool bValue,                        /// process value (Prep.Field)
         sal_Bool bFormula);                     /// process formula (Prep.F.)
+
+    virtual ~XMLValueImportHelper();
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
