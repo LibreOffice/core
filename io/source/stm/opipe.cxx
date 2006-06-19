@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opipe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
+#include <limits>
 #include <string.h>
 
 using namespace ::rtl;
@@ -62,8 +63,6 @@ using namespace ::com::sun::star::lang;
 // Implementation and service names
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"
 #define SERVICE_NAME "com.sun.star.io.Pipe"
-#define MAX_BUFFER_SIZE     0x80000000
-
 
 namespace io_stm{
 
@@ -206,9 +205,6 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
         // wait for new data outside guarded section!
         osl_waitCondition( m_conditionBytesAvail , 0 );
     }
-
-    // this point is never reached
-    return 0;
 }
 
 
@@ -243,9 +239,6 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
 
         osl_waitCondition( m_conditionBytesAvail , 0 );
     }
-
-    // this point is never reached
-    return 0;
 }
 
 
@@ -262,7 +255,9 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
             *this );
     }
 
-    if( nBytesToSkip + m_nBytesToSkip > MAX_BUFFER_SIZE || 0 > nBytesToSkip + m_nBytesToSkip )
+    if( nBytesToSkip < 0
+        || (nBytesToSkip
+            > std::numeric_limits< sal_Int32 >::max() - m_nBytesToSkip) )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::skipBytes BufferSizeExceededException" )),
@@ -478,7 +473,7 @@ Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(  )
 
 
 Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
-    const Reference < XComponentContext > & rCtx ) throw(Exception)
+    const Reference < XComponentContext > & ) throw(Exception)
 {
     OPipeImpl *p = new OPipeImpl;
 
