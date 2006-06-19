@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:33:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifndef _VOS_MODULE_HXX_
-#include <vos/module.hxx>
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
 #endif
 #include "solar.hrc"
 #include "fltcall.hxx"
@@ -153,7 +153,7 @@ void SAL_CALL SvFilterOptionsDialog::release() throw()
 }
 
 // XInitialization
-void SAL_CALL SvFilterOptionsDialog::initialize( const uno::Sequence< uno::Any > & aArguments )
+void SAL_CALL SvFilterOptionsDialog::initialize( const uno::Sequence< uno::Any > & )
     throw ( uno::Exception, uno::RuntimeException )
 {
 }
@@ -225,15 +225,15 @@ sal_Int16 SvFilterOptionsDialog::execute()
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
-    String aFilterName( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+    String aFilterNameStr( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
     String aInternalFilterName;
-    sal_Int32 i, nCount = aMediaDescriptor.getLength();
-    for ( i = 0; i < nCount; i++ )
+    sal_Int32 j, nCount = aMediaDescriptor.getLength();
+    for ( j = 0; j < nCount; j++ )
     {
-        if ( aMediaDescriptor[ i ].Name.equals( aFilterName ) )
+        if ( aMediaDescriptor[ j ].Name.equals( aFilterNameStr ) )
         {
             OUString aStr;
-            aMediaDescriptor[ i ].Value >>= aStr;
+            aMediaDescriptor[ j ].Value >>= aStr;
             aInternalFilterName = aStr;
             aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "draw_" ) ), String(), 0 );
             aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "impress_" ) ), String(), 0 );
@@ -314,8 +314,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
                     aSystemPath += OUString( aFilterName );
 
-                    ::vos::OModule aLibrary( aSystemPath );
-                    PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) );
+                    osl::Module aLibrary( aSystemPath );
+                    PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) );
                     // Dialog in DLL ausfuehren
                     if( pFunc )
                     {
