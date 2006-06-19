@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MergeElemTContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:47:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,10 @@ XMLParagraphTransformerContext::~XMLParagraphTransformerContext()
 }
 
 XMLTransformerContext *XMLParagraphTransformerContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        sal_uInt16 /*nPrefix*/,
+        const OUString& /*rLocalName*/,
         const OUString& rQName,
-        const Reference< XAttributeList >& xAttrList )
+        const Reference< XAttributeList >& )
 {
     XMLTransformerContext *pContext = 0;
 
