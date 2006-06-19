@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:21:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,6 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         case XML_NAMESPACE_NONE:
             // ...if there isn't one, return the local name
             return rLocalName;
-        break;
         case XML_NAMESPACE_XMLNS:
         {
             // ...if it's in the xmlns namespace, make the prefix
@@ -238,7 +237,6 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             sQName.append ( rLocalName );
             return sQName.makeStringAndClear();;
         }
-        break;
         default:
         {
             QNameCache::const_iterator aQCacheIter;
@@ -295,14 +293,14 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
 {
     sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
 
-    NameSpaceHash::const_iterator aIter;
+    NameSpaceHash::const_iterator it;
     if (bCache)
-        aIter = aNameCache.find ( rAttrName );
+        it = aNameCache.find ( rAttrName );
     else
-        aIter = aNameCache.end();
-    if ( aIter != aNameCache.end() )
+        it = aNameCache.end();
+    if ( it != aNameCache.end() )
     {
-        const NameSpaceEntry &rEntry = (*aIter).second.getBody();
+        const NameSpaceEntry &rEntry = (*it).second.getBody();
         if ( pPrefix )
             *pPrefix = rEntry.sPrefix;
         if ( pLocalName )
@@ -396,7 +394,7 @@ sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
     return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
 }
 
-sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
+sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix,
                                     const OUString& rName, sal_uInt16 nKey )
 {
     sal_Bool bRet = sal_False;
@@ -454,7 +452,7 @@ sal_uInt16 SvXMLNamespaceMap::GetIndexByPrefix( const OUString& rPrefix ) const
 sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName(
                             const OUString& rAttrName,
                             OUString *pLocalName,
-                            sal_uInt16 nIdxGuess) const
+                            sal_uInt16 /*nIdxGuess*/) const
 {
     return _GetKeyByAttrName( rAttrName, 0, pLocalName, 0 );
 }
@@ -463,7 +461,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
                                             OUString *pNamespace,
-                                            USHORT nIdxGuess ) const
+                                            USHORT /*nIdxGuess*/ ) const
 {
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
 }
