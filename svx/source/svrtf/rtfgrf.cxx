@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:43:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#pragma hdrstop
 
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
