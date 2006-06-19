@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventOOoTContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:09:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,8 +100,11 @@ void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit 
 
         XMLTransformerOOoEventMap_Impl::value_type aVal( aKey, aData );
 
-        bool bInserted = insert( aVal ).second;
-        OSL_ENSURE( bInserted, "duplicate OOo event name extry" );
+        if( !insert( aVal ).second )
+        {
+            OSL_ENSURE( false, "duplicate OOo event name extry" );
+        }
+
         ++pInit;
     }
 }
