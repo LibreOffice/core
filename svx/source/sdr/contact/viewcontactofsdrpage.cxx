@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:29:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ namespace sdr
 
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
-        sal_Bool ViewContactOfSdrPage::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfSdrPage::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // #116481# Test page painting. Suppress output when control layer is painting.
             if(rDisplayInfo.GetControlLayerPainting())
@@ -121,7 +121,7 @@ namespace sdr
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
         // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfSdrPage::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContactOfSdrPage::PaintObject(DisplayInfo& /*rDisplayInfo*/, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // #115593#
             // set paint flags and rectangle
@@ -224,7 +224,7 @@ namespace sdr
         }
 
         // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // test for page painting
             if(!rDisplayInfo.GetMasterPagePainting()
