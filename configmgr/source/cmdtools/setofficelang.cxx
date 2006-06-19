@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setofficelang.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:37:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,11 +329,14 @@ static uno::Reference< uno::XInterface > createView(uno::Reference< lang::XMulti
     return xView;
 }
 // --------------------------------------------------------------------------
+//#if OSL_DEBUG_LEVEL > 0
+#if 0 // currently not used in debug builds!
 static uno::Reference< container::XHierarchicalNameAccess > createInfoView(uno::Reference< lang::XMultiServiceFactory > const & xProvider, OUString const & aNodepath)
 {
     uno::Reference< container::XHierarchicalNameAccess > xView( createView(xProvider,aNodepath, false), uno::UNO_QUERY_THROW );
     return xView;
 }
+#endif
 // --------------------------------------------------------------------------
 static uno::Reference< util::XChangesBatch > createUpdateView(uno::Reference< lang::XMultiServiceFactory > const & xProvider, OUString const & aNodepath)
 {
