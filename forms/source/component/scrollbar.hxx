@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrollbar.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,10 @@ namespace frm
         DECLARE_DEFAULT_LEAF_XTOR( OScrollBarModel );
 
         // XServiceInfo
-        DECLARE_SERVICE_REGISTRATION( OScrollBarModel );
+        DECLARE_SERVICE_REGISTRATION( OScrollBarModel )
 
         // XPersistObject
-        DECLARE_XPERSISTOBJECT();
+        DECLARE_XPERSISTOBJECT()
 
         // XCloneable
         DECLARE_XCLONEABLE();
@@ -104,6 +104,10 @@ namespace frm
 
         // XCoponent and related helpers
         virtual void SAL_CALL disposing();
+
+        // prevent method hiding
+        using OBoundControlModel::disposing;
+        using OBoundControlModel::getFastPropertyValue;
 
         IMPLEMENT_INFO_SERVICE()
     };
