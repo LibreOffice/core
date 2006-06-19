@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:24:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,6 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
     awt::Size aChartSize;
     // this flag is necessarry for pie charts in the core
@@ -564,8 +563,6 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    uno::Any aTrueBool;
-                    aTrueBool <<= (sal_Bool)(sal_True);
                     xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasMainTitle" ), aTrueBool );
 
                     SCH_BUILDCHART( xDoc );
@@ -780,7 +777,6 @@ uno::Sequence< sal_Int32 > SchXMLChartContext::GetNumberSequenceFromString( cons
     ::std::vector< sal_Int32 > aVec;
     sal_Int32 nLastPos = 0;
     sal_Int32 nPos = 0;
-    const sal_Int32 nSize = rStr.getLength();
     while( nPos != -1 )
     {
         nPos = rStr.indexOf( aSpace, nLastPos );
@@ -831,7 +827,6 @@ SchXMLTitleContext::~SchXMLTitleContext()
 void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
 
     if( mxTitleShape.is())
         mrPosition = mxTitleShape->getPosition();
@@ -884,7 +879,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
     USHORT nPrefix,
     const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -942,7 +937,6 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
 
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetLegendAttrTokenMap();
 
     awt::Point aPosition;
