@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:13:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -623,7 +623,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttribs)
+        const Reference< sax::XAttributeList >&)
     {
         SvXMLImportContext* pContext = NULL;
         if ( 0 == _rLocalName.compareToAscii( "form" ) )
