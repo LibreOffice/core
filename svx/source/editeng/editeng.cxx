@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:48:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:39:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 #include <eeng_pch.hxx>
 
 // #define _SOLAR__PRIVATE 1
-#pragma hdrstop
-
 #define USE_SVXFONT
 
 #define _SVSTDARR_USHORTS
@@ -963,7 +961,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
                     if ( aCurSel.HasRange() ) {
-                        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetSelection());
+                        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetPrimarySelection());
                         pEditView->pImpEditView->CutCopy( aSelection, FALSE );
                     }
 
@@ -2388,7 +2386,7 @@ BOOL EditEngine::IsVerboseTextComments() const
 // =====================================================================
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
-void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT nTextStart, USHORT nTextLen, const sal_Int32*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex, BYTE nRightToLeft )
+void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT, const sal_Int32*, const SvxFont&, sal_uInt16, sal_uInt16, BYTE )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
@@ -2507,23 +2505,23 @@ XubString __EXPORT EditEngine::GetUndoComment( sal_uInt16 nId ) const
     return aComment;
 }
 
-Rectangle EditEngine::GetBulletArea( sal_uInt16 nPara )
+Rectangle EditEngine::GetBulletArea( sal_uInt16 )
 {
     return Rectangle( Point(), Point() );
 }
 
-XubString __EXPORT EditEngine::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16, sal_uInt16, Color*&, Color*& )
+XubString __EXPORT EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return ' ';
 }
 
-void __EXPORT EditEngine::FieldClicked( const SvxFieldItem& rField, sal_uInt16, sal_uInt16 )
+void __EXPORT EditEngine::FieldClicked( const SvxFieldItem&, sal_uInt16, sal_uInt16 )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::FieldSelected( const SvxFieldItem& rField, sal_uInt16, sal_uInt16 )
+void __EXPORT EditEngine::FieldSelected( const SvxFieldItem&, sal_uInt16, sal_uInt16 )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
