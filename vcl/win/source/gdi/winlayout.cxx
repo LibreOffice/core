@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:22:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,8 +359,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
         mpGlyphOrigAdvs = new int[ mnGlyphCount ];
 
-    DWORD nGcpOption = 0;
 #ifndef GCP_KERN_HACK
+    DWORD nGcpOption = 0;
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
@@ -510,16 +510,16 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     // scale layout metrics if needed
     if( mfFontScale != 1.0 )
     {
-        mnWidth   *= mfFontScale;
-        mnBaseAdv *= mfFontScale;
+        mnWidth   = (long)((double)mnWidth*mfFontScale);
+        mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
         for( i = 0; i < mnCharCount; ++i )
-            mpCharWidths[ i ] *= mfFontScale;
+            mpCharWidths[ i ] = (int)((double)mpCharWidths[i]*mfFontScale);
         if( mpGlyphAdvances != mpCharWidths )
             for( i = 0; i < mnGlyphCount; ++i )
-                mpGlyphAdvances[ i ] *= mfFontScale;
+                mpGlyphAdvances[ i ] = (int)((double)mpGlyphAdvances[i]*mfFontScale);
         if( mpGlyphOrigAdvs && (mpGlyphOrigAdvs != mpGlyphAdvances) )
             for( i = 0; i < mnGlyphCount; ++i )
-                mpGlyphOrigAdvs[ i ] *= mfFontScale;
+                mpGlyphOrigAdvs[ i ] = (int)((double)mpGlyphOrigAdvs[i]*mfFontScale);
     }
 
     return true;
@@ -623,7 +623,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         {
             // #108267#,#109387# break up string into smaller chunks
             // the output positions will be updated by windows (SetTextAlign)
-            long i,n;
+            unsigned int i,n;
             POINT oldPos;
             UINT oldTa = ::GetTextAlign( aHDC );
             ::SetTextAlign( aHDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP );
@@ -652,7 +652,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         {
             // workaround for problem in #106259#
             long nXPos = mnBaseAdv;
-            for( int i = 0; i < limitedGlyphCount; ++i )
+            for( unsigned int i = 0; i < limitedGlyphCount; ++i )
             {
                 ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), 0, NULL,
                     mpOutGlyphs+i, 1, NULL );
@@ -910,7 +910,7 @@ void SimpleWinLayout::DropGlyph( int nStart )
 
 // -----------------------------------------------------------------------
 
-void SimpleWinLayout::Simplify( bool bIsBase )
+void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
 {
     // return early if no glyph has been dropped
     int i = mnGlyphCount;
@@ -1387,14 +1387,15 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
          || (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos) )
         {
             for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
-                mpLogClusters[ i ] = -1;
+                mpLogClusters[ i ] = sal::static_int_cast<WORD>(~0U);
             continue;
         }
 
         // override bidi analysis if requested
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
         {
-            rVisualItem.mpScriptItem->a.fRTL                 = aScriptState.uBidiLevel;
+            // FIXME: is this intended ?
+            rVisualItem.mpScriptItem->a.fRTL                 = (aScriptState.uBidiLevel & 1);
             rVisualItem.mpScriptItem->a.s.uBidiLevel         = aScriptState.uBidiLevel;
             rVisualItem.mpScriptItem->a.s.fOverrideDirection = aScriptState.fOverrideDirection;
         }
@@ -1597,17 +1598,17 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // scale layout metrics if needed
     if( mfFontScale != 1.0 )
     {
-        mnBaseAdv *= mfFontScale;
+        mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
         for( i = 0; i < mnGlyphCount; ++i )
         {
-            mpGlyphAdvances[i]   *= mfFontScale;
-            mpGlyphOffsets[i].du *= mfFontScale;
-            mpGlyphOffsets[i].dv *= mfFontScale;
+            mpGlyphAdvances[i]   = (int)((double)mpGlyphAdvances[i]*mfFontScale);
+            mpGlyphOffsets[i].du = (LONG)((double)mpGlyphOffsets[i].du*mfFontScale);
+            mpGlyphOffsets[i].dv = (LONG)((double)mpGlyphOffsets[i].dv*mfFontScale);
             // mpJustifications are still NULL
         }
 
         for( i = mnSubStringMin; i < nSubStringEnd; ++i )
-            mpCharWidths[i] *= mfFontScale;
+            mpCharWidths[i] = (int)((double)mpCharWidths[i]*mfFontScale);
     }
 
     return true;
@@ -1837,7 +1838,7 @@ void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
         return;
 
     VisualItem* pVI = mpVisualItems;
-    int nMinGlyphPos, nEndGlyphPos;
+    int nMinGlyphPos = 0, nEndGlyphPos;
     if( nStart == 0 )               // nStart==0 for first visible glyph
     {
         for( int i = mnItemCount; --i >= 0; ++pVI )
@@ -1852,8 +1853,14 @@ void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
         for( int i = mnItemCount; --i >= 0; ++pVI )
             if( (nStart >= pVI->mnMinGlyphPos) && (nStart < pVI->mnEndGlyphPos) )
                 break;
-        bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
+        #if OSL_DEBUG_LEVEL > 0
+        bool bRC =
+        #endif
+        GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
         DBG_ASSERT( bRC, "USPLayout::MoveG GISR() returned false" );
+        #if OSL_DEBUG_LEVEL > 0
+        (void)bRC;
+        #endif
     }
 
     long nDelta = nNewXPos - pVI->mnXOffset;
@@ -1894,7 +1901,7 @@ void UniscribeLayout::DropGlyph( int nStart )
 
 // -----------------------------------------------------------------------
 
-void UniscribeLayout::Simplify( bool bIsBase )
+void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 {
     static const WCHAR cDroppedGlyph = DROPPED_OUTGLYPH;
     int i;
@@ -1975,7 +1982,7 @@ void UniscribeLayout::Simplify( bool bIsBase )
                 mpJustifications[ j ] = mpJustifications[ i ];
             int k = mpGlyphs2Chars[ i ];
             mpGlyphs2Chars[ j ]   = k;
-            mpLogClusters[ k ]    = j++;
+            mpLogClusters[ k ]    = sal::static_int_cast<WORD>(j++);
         }
 
         rVI.mnEndGlyphPos = j;
@@ -2024,7 +2031,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
         Point aPos = GetDrawPosition( aRelPos );
         SCRIPT_CACHE& rScriptCache = GetScriptCache();
-        HRESULT nRC = (*pScriptTextOut)( mhDC, &rScriptCache,
+        (*pScriptTextOut)( mhDC, &rScriptCache,
             aPos.X(), aPos.Y(), 0, NULL,
             &rVisualItem.mpScriptItem->a, NULL, 0,
             mpOutGlyphs + nMinGlyphPos,
