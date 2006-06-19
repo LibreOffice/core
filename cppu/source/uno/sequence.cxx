@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:54:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ namespace cppu
 static inline uno_Sequence * reallocSeq(
     uno_Sequence * pReallocate, sal_Size nElementSize, sal_Int32 nElements )
 {
-    OSL_ASSERT( nElementSize >= 0 && nElements >= 0 );
+    OSL_ASSERT( nElements >= 0 );
     uno_Sequence * pNew = 0;
     sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
     if (nSize > 0)
