@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:43:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #include <svtools/pver.hxx>
 #endif
 #include <svtools/saveopt.hxx>
-#pragma hdrstop
 
 #define _SVX_OPTGENRL_CXX
 
@@ -119,8 +118,8 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     aCompanyEdit    ( this, ResId( ED_COMPANY ) ),
     aNameLbl        ( this, ResId( FT_NAME ) ),
     aNameLblRuss    ( this, ResId( FT_NAME_RUSS ) ),
-    aFatherName     ( this, ResId( ED_FATHERNAME ) ),
     aFirstName      ( this, ResId( ED_FIRSTNAME ) ),
+    aFatherName     ( this, ResId( ED_FATHERNAME ) ),
     aName           ( this, ResId( ED_NAME ) ),
     aShortName      ( this, ResId( ED_SHORTNAME ) ),
     aStreetLbl      ( this, ResId( FT_STREET ) ),
@@ -216,7 +215,7 @@ SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 //------------------------------------------------------------------------
 
-BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
     // Eingaben trimmen (f"uhrende und nachfolgende Leerzeichen entfernen)
     aCompanyEdit.SetText( TRIM(aCompanyEdit.GetText()) );
@@ -237,8 +236,7 @@ BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& rCoreSet )
     aFaxEdit.SetText( TRIM(aFaxEdit.GetText()) );
     aEmailEdit.SetText( TRIM(aEmailEdit.GetText()) );
 
-    BOOL bModified = FALSE, bChgAddr = FALSE;
-    const SfxItemSet& rOldSet = GetItemSet();
+    BOOL bModified = FALSE;
     bModified |= GetAddress_Impl();
     SvtSaveOptions aSaveOpt;
     if ( aUseDataCB.IsChecked() != aSaveOpt.IsUseUserData() )
@@ -526,10 +524,10 @@ void SvxGeneralTabPage::SetAddress_Impl()
 
 // -----------------------------------------------------------------------
 
-int SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxGeneralTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
