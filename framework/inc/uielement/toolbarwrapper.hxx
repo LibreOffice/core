@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarwrapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:48:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
         virtual void SAL_CALL functionExecute( const ::rtl::OUString& aUIElementName, const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
+        using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
