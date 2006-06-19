@@ -4,9 +4,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:31:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,7 @@ LongCurrencyFormatter::LongCurrencyFormatter()
 
 // -----------------------------------------------------------------------
 
-void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
+void LongCurrencyFormatter::ImplLoadRes( const ResId& )
 {
     ImpInit();
 
@@ -760,6 +760,7 @@ LongCurrencyBox::LongCurrencyBox( Window* pParent, const ResId& rResId ) :
     SetField( this );
     WinBits nStyle = ImplInitRes( rResId ) ;
     ComboBox::ImplLoadRes( rResId );
+    ImplInit( pParent, nStyle );
     LongCurrencyFormatter::ImplLoadRes( rResId );
     Reformat();
 
