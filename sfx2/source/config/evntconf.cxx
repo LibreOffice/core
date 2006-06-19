@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:26:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ public:
 // class SfxMacroQueryDlg_Impl -------------------------------------------
 
 SfxMacroQueryDlg_Impl::SfxMacroQueryDlg_Impl( const String& rMacName, BOOL bDefault ) :
-    QueryBox( NULL, SfxResId( DLG_MACROQUERY ) )
+    QueryBox( NULL, SfxResId( QUERYBOX_MACROQUERY ) )
 {
     SetButtonText( GetButtonId(0), String( SfxResId(BTN_OK) ) );
     SetButtonText( GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
@@ -177,7 +177,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-void SfxAsyncEvent_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxAsyncEvent_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
     if( pHint && pHint->GetId() == SFX_HINT_DYING && pTimer->IsActive() )
@@ -210,14 +210,14 @@ SfxAsyncEvent_Impl::~SfxAsyncEvent_Impl()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK(SfxAsyncEvent_Impl, TimerHdl, Timer*, pTimer)
+IMPL_LINK(SfxAsyncEvent_Impl, TimerHdl, Timer*, pAsyncTimer)
 {
-    pTimer->Stop();
+    pAsyncTimer->Stop();
     ScriptType eSType = pMacro->GetScriptType();
     BOOL bIsBasic = ( eSType == STARBASIC );
     if ( bIsBasic && StarBASIC::IsRunning() )
         // Neues eventgebundenes Macro erst ausf"uhren, wenn gerade kein anderes Macro mehr l"auft
-        pTimer->Start();
+        pAsyncTimer->Start();
     else
     {
         SFX_APP()->GetMacroConfig()->ExecuteMacro( pSh, pMacro, aArgs );
@@ -243,7 +243,7 @@ struct EventNames_Impl
                 , maUIName( rUIName ) {}
 };
 
-DECLARE_LIST( SfxEventList_Impl, EventNames_Impl* );
+DECLARE_LIST( SfxEventList_Impl, EventNames_Impl* )
 
 SfxEventList_Impl   *gp_Id_SortList = NULL;
 SfxEventList_Impl   *gp_Name_SortList = NULL;
