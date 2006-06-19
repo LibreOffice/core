@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ownview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:09:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:31:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ DummyHandler_Impl::~DummyHandler_Impl()
 }
 
 //--------------------------------------------------------
-void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& xRequest )
+void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
         throw( uno::RuntimeException )
 {
     return;
@@ -350,12 +350,12 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
         // read the complete size of the Object Package
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return sal_False;
-
+/*
         sal_uInt32 nLength = (sal_uInt8)aReadSeq[0]
                             + (sal_uInt8)aReadSeq[1] * 0x100
                             + (sal_uInt8)aReadSeq[2] * 0x10000
                             + (sal_uInt8)aReadSeq[3] * 0x1000000;
-
+*/
         // read the first header ( have no idea what does this header mean )
         if ( xInStream->readBytes( aReadSeq, 2 ) != 2 || aReadSeq[0] != 2 || aReadSeq[1] != 0 )
             return sal_False;
@@ -682,7 +682,7 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
 }
 
 //--------------------------------------------------------
-void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership )
+void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject&, sal_Bool )
         throw ( util::CloseVetoException,
                 uno::RuntimeException )
 {
