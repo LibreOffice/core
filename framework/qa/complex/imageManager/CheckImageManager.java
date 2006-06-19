@@ -14,12 +14,12 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.ui.XImageManager;
+import com.sun.star.ui.XImageManager;
 import complexlib.ComplexTestCase;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
-import drafts.com.sun.star.ui.XUIConfiguration;
-import drafts.com.sun.star.ui.XUIConfigurationManager;
-import drafts.com.sun.star.ui.XUIConfigurationPersistence;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XUIConfiguration;
+import com.sun.star.ui.XUIConfigurationManager;
+import com.sun.star.ui.XUIConfigurationPersistence;
 import java.io.PrintWriter;
 import share.LogWriter;
 
@@ -43,7 +43,7 @@ public class CheckImageManager extends ComplexTestCase {
         XUIConfigurationManager xManager = null;
         try {
             Object o = (XInterface)xMSF.createInstance(
-                    "drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+                    "com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             XModuleUIConfigurationManagerSupplier xMUICMS =
                     (XModuleUIConfigurationManagerSupplier)UnoRuntime.queryInterface(
                     XModuleUIConfigurationManagerSupplier.class, o);
@@ -146,15 +146,15 @@ public class CheckImageManager extends ComplexTestCase {
             triggered = true;
         }
 
-        public void elementInserted(drafts.com.sun.star.ui.ConfigurationEvent configurationEvent) {
+        public void elementInserted(com.sun.star.ui.ConfigurationEvent configurationEvent) {
             triggered = true;
         }
 
-        public void elementRemoved(drafts.com.sun.star.ui.ConfigurationEvent configurationEvent) {
+        public void elementRemoved(com.sun.star.ui.ConfigurationEvent configurationEvent) {
             triggered = true;
         }
 
-        public void elementReplaced(drafts.com.sun.star.ui.ConfigurationEvent configurationEvent) {
+        public void elementReplaced(com.sun.star.ui.ConfigurationEvent configurationEvent) {
             triggered = true;
         }
 
