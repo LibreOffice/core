@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:39:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,11 +120,21 @@ static OUString convertToFileUrl(const OUString& fileName)
     if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None) {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(fileName, uUrlFileName) == FileBase::E_None );
+        if (FileBase::getFileURLFromSystemPath(fileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return uUrlFileName;
@@ -593,7 +603,7 @@ struct ODisposingListener : public WeakImplHelper1< XEventListener >
     static void waitFor( const Reference< XComponent > & xComp );
 };
 //__________________________________________________________________________________________________
-void ODisposingListener::disposing( const EventObject & rEvt )
+void ODisposingListener::disposing( const EventObject & )
     throw (RuntimeException)
 {
     cDisposed.set();
@@ -619,7 +629,7 @@ void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
 
 using namespace unoexe;
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
 {
     if (argc <= 1)
     {
@@ -740,7 +750,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         sal_Int32 nOffset = nPos;
         for ( ; nPos < nCount; ++nPos )
         {
-            OSL_VERIFY( rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData ) == osl_Process_E_None );
+            if (rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData )
+                != osl_Process_E_None)
+            {
+                OSL_ASSERT(false);
+            }
         }
 
         if (aReadOnlyRegistries.size() > 0 ||
@@ -813,11 +827,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
             // init params
             Sequence< Any > aInitParams( aParams.getLength() );
-            const OUString * pParams = aParams.getConstArray();
+            const OUString * p = aParams.getConstArray();
             Any * pInitParams = aInitParams.getArray();
-            for ( sal_Int32 nPos = aParams.getLength(); nPos--; )
+            for ( sal_Int32 i = aParams.getLength(); i--; )
             {
-                pInitParams[nPos] = makeAny( pParams[nPos] );
+                pInitParams[i] = makeAny( p[i] );
             }
 
             // instance provider
