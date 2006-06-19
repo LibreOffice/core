@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swafopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _SV_KEYCODES_HXX //autogen
 #include <vcl/keycodes.hxx>
