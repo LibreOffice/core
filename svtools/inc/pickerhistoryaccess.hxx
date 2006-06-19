@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pickerhistoryaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:04:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef INCLUDED_SVLDLLAPI_H
 #include "svtools/svldllapi.h"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENX_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 //.........................................................................
