@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:06:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ struct ImplTabBarItem
                     }
 };
 
-DECLARE_LIST( ImplTabBarList, ImplTabBarItem* );
+DECLARE_LIST( ImplTabBarList, ImplTabBarItem* )
 
 // =======================================================================
 
@@ -341,7 +341,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TabBarEdit, ImplEndTimerHdl, void*, pCancel )
+IMPL_LINK( TabBarEdit, ImplEndTimerHdl, void*, EMPTYARG )
 {
     if ( HasFocus() )
         return 0;
@@ -447,12 +447,12 @@ void TabBar::ImplInitSettings( BOOL bFont, BOOL bBackground )
 
     if ( bFont )
     {
-        Font aFont;
-        aFont = rStyleSettings.GetToolFont();
+        Font aToolFont;
+        aToolFont = rStyleSettings.GetToolFont();
         if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        aFont.SetWeight( WEIGHT_BOLD );
-        SetZoomedPointFont( aFont );
+            aToolFont.Merge( GetControlFont() );
+        aToolFont.SetWeight( WEIGHT_BOLD );
+        SetZoomedPointFont( aToolFont );
 
         // Font in der groesse Anpassen, wenn Fenster zu klein?
         while ( GetTextHeight() > (GetOutputSizePixel().Height()-1) )
@@ -1417,7 +1417,7 @@ void TabBar::ImplSelect()
 {
     Select();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, (void*) mnCurPageId );
+    CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 }
 
 // -----------------------------------------------------------------------
@@ -1447,7 +1447,7 @@ void TabBar::ImplActivatePage()
 {
     ActivatePage();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, (void*) mnCurPageId );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 }
 
 // -----------------------------------------------------------------------
@@ -1463,7 +1463,7 @@ long TabBar::ImplDeactivatePage()
 {
     long nRet = DeactivatePage();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEDEACTIVATED, (void*) mnCurPageId );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEDEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 
     return nRet;
 }
@@ -1535,7 +1535,7 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, (void*) nPageId );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
 }
 
 // -----------------------------------------------------------------------
@@ -1562,7 +1562,7 @@ void TabBar::RemovePage( USHORT nPageId )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) nPageId );
+        CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
     }
 }
 
@@ -1639,7 +1639,7 @@ void TabBar::EnablePage( USHORT nPageId, BOOL bEnable )
             if ( IsReallyVisible() && IsUpdateMode() )
                 Invalidate( pItem->maRect );
 
-            CallEventListeners( bEnable ? VCLEVENT_TABBAR_PAGEENABLED : VCLEVENT_TABBAR_PAGEDISABLED, (void*) nPageId );
+            CallEventListeners( bEnable ? VCLEVENT_TABBAR_PAGEENABLED : VCLEVENT_TABBAR_PAGEDISABLED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
         }
     }
 }
@@ -2245,7 +2245,7 @@ void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_TABBAR_PAGETEXTCHANGED, (void*) nPageId );
+        CallEventListeners( VCLEVENT_TABBAR_PAGETEXTCHANGED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
     }
 }
 
