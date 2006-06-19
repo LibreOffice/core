@@ -4,9 +4,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:25:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,11 @@ class DT_MLTag : public DT_Dsapi
 class DT_MupType : public DT_MLTag
 {
   public:
-                        DT_MupType(             /// Constructor for End-Tag
-                            bool                i_bEnd )    /// Must be there, but is not evaluated.
+    explicit            DT_MupType(             /// Constructor for End-Tag
+                            bool                )   /// Must be there, but is not evaluated.
                                                 :   bIsBegin(false) {}
                         DT_MupType(             /// Constructor for Begin-Tag
-                            const udmstri &     i_sScope )
+                            const String &      i_sScope )
                                                 :   sScope(i_sScope), bIsBegin(true) {}
     virtual void        DisplayAt(
                             DocumentationDisplay &
@@ -123,11 +123,11 @@ class DT_MupType : public DT_MLTag
 class DT_MupMember : public DT_MLTag
 {
   public:
-                        DT_MupMember(           /// Constructor for End-Tag
-                            bool                i_bEnd )    /// Must be there, but is not evaluated.
+    explicit            DT_MupMember(           /// Constructor for End-Tag
+                            bool                )   /// Must be there, but is not evaluated.
                                                 :   bIsBegin(false) {}
                         DT_MupMember(           /// Constructor for Begin-Tag
-                            const udmstri &     i_sScope )
+                            const String &      i_sScope )
                                                 :   sScope(i_sScope), bIsBegin(true) {}
     virtual void        DisplayAt(
                             DocumentationDisplay &
