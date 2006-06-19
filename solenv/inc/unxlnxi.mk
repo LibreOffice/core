@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 10:51:55 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:16:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ CFLAGS=-c -I. -I/usr/solar/inc/pthread_provenzano -I$(INC) -I$(INCLOCAL) -I$(INC
 .ENDIF
 CFLAGSCC=-pipe -fguiding-decls $(ARCH_FLAGS)
 CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
 #STDOBJVCL=$(L)$/salmain.o
 CFLAGSOBJGUIST=
@@ -80,6 +79,13 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-O2
 CFLAGSNOOPT=-O2
 CFLAGSOUTOBJ=-o
+
+CFLAGSWARNCC=
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 STATIC		= -Bstatic
 DYNAMIC		= -Bdynamic
