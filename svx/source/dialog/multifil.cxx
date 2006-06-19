@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multifil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:34:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@
 #endif
 
 #include <tools/urlobj.hxx>
-#pragma hdrstop
 
 #include "multipat.hxx"
 #include "multifil.hxx"
