@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProviderCache.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <hash_map>
 #include <osl/mutex.hxx>
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
