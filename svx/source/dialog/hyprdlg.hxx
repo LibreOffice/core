@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:18:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,6 @@ private:
     String              sSearchTitle;
     PopupMenu           aLinkPopup;
     PopupMenu           *pTargetMenu;
-    Timer               aTimer;
     BOOL                bNoDoc;
     BOOL                bSend;
     BOOL                bHasOldName;
@@ -138,10 +137,8 @@ private:
     // Drag&Drop
     BOOL         GetDragData(USHORT nItem, ULONG nDDFormatId, String& rBuffer);
 
-    DECL_LINK(TimeHdl, Timer *);
     DECL_LINK(TBClickHdl, ToolBox *);
     DECL_LINK(TBSelectHdl, ToolBox *);
-    DECL_LINK(TBDeactivateHdl, ToolBox *);
     DECL_LINK(DropdownClick, ToolBox * );
     DECL_LINK(LinkPopupSelectHdl, Menu *);
     DECL_LINK(SearchPopupSelectHdl, Menu *);
