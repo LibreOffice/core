@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:40:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,8 @@ AccessibleStateSetHelper::AccessibleStateSetHelper ( const sal_Int64 _nInitialSt
 }
 
 AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelper& rHelper)
-    : mpHelperImpl(NULL)
+    : cppu::WeakImplHelper1<XAccessibleStateSet>()
+    , mpHelperImpl(NULL)
 {
     if (rHelper.mpHelperImpl)
         mpHelperImpl = new AccessibleStateSetHelperImpl(*rHelper.mpHelperImpl);
@@ -347,7 +348,6 @@ uno::Sequence<sal_Int8> SAL_CALL
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
-        ::vos::OGuard aGuard (maMutex);
         aId.realloc (16);
         rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
     }
