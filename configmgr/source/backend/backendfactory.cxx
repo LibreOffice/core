@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:23:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ uno::Reference<uno::XInterface> SAL_CALL instantiateDefaultBackend( CreationCont
 
     try
     {
-        return createUnoBackend(xContext);
+        return uno::Reference< uno::XInterface >( createUnoBackend(xContext), uno::UNO_QUERY );
     }
     TUNNEL_ALL_EXCEPTIONS()
 
