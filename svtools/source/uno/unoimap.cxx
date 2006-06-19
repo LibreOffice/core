@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:35:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
                 { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     SEQTYPE(::getCppuType((const PointSequence*)0)),    0, 0 },
-                {0,0,0,0,0}
+                {0,0,0,0,0,0}
             };
 
             return new PropertySetInfo( aPolygonObj_Impl );
@@ -220,7 +220,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
                 { MAP_LEN( "IsActive" ),        HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
                 { MAP_LEN( "Center" ),      HANDLE_CENTER,      &::getCppuType((const awt::Point*)0),   0, 0 },
                 { MAP_LEN( "Radius" ),      HANDLE_RADIUS,      &::getCppuType((const sal_Int32*)0),    0, 0 },
-                {0,0,0,0,0}
+                {0,0,0,0,0,0}
             };
 
             return new PropertySetInfo( aCircleObj_Impl );
@@ -236,7 +236,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0), 0, 0 },
                 { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),            0, 0 },
                 { MAP_LEN( "Boundary" ),    HANDLE_BOUNDARY,    &::getCppuType((const awt::Rectangle*)0),   0, 0 },
-                {0,0,0,0,0}
+                {0,0,0,0,0,0}
             };
 
             return new PropertySetInfo( aRectangleObj_Impl );
@@ -620,7 +620,7 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
 
-SvUnoImageMap::SvUnoImageMap( const SvEventDescription* pSupportedMacroItems )
+SvUnoImageMap::SvUnoImageMap( const SvEventDescription* )
 {
 }
 
