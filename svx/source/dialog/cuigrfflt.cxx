@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigrfflt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:51:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,10 +385,10 @@ void GraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic )
 
 GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic ) :
     ModalDialog     ( pParent, rResId ),
+    maModifyHdl     ( LINK( this, GraphicFilterDialog, ImplModifyHdl ) ),
     mfScaleX        ( 0.0 ),
     mfScaleY        ( 0.0 ),
     maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
-    maModifyHdl     ( LINK( this, GraphicFilterDialog, ImplModifyHdl ) ),
     maPreview       ( this, SVX_RES( CTL_PREVIEW ) ),
     maFlParameter   ( this, SVX_RES( FL_PARAMETER ) ),
     maBtnOK         ( this, SVX_RES( BTN_OK ) ),
@@ -441,7 +441,7 @@ GraphicFilterDialog::~GraphicFilterDialog()
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer*, pTimer )
+IMPL_LINK( GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer*, EMPTYARG )
 {
     maTimer.Stop();
     maPreview.SetGraphic( GetFilteredGraphic( maGraphic, mfScaleX, mfScaleY ) );
@@ -451,7 +451,7 @@ IMPL_LINK( GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer*, pTimer )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GraphicFilterDialog, ImplModifyHdl, void*, p )
+IMPL_LINK( GraphicFilterDialog, ImplModifyHdl, void*, EMPTYARG )
 {
     if( maGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -566,7 +566,7 @@ GraphicFilterSolarize::~GraphicFilterSolarize()
 // -----------------------------------------------------------------------------
 
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
-                                                   double fScaleX, double fScaleY )
+                                                   double /*fScaleX*/, double /*fScaleY*/ )
 {
     Graphic         aRet;
     BmpFilterParam  aParam( GetGreyThreshold() );
@@ -626,7 +626,7 @@ GraphicFilterSepia::~GraphicFilterSepia()
 // -----------------------------------------------------------------------------
 
 Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
-                                                double fScaleX, double fScaleY )
+                                                double /*fScaleX*/, double /*fScaleY*/ )
 {
     Graphic         aRet;
     BmpFilterParam  aParam( GetSepiaPercent() );
@@ -677,7 +677,7 @@ GraphicFilterPoster::~GraphicFilterPoster()
 // -----------------------------------------------------------------------------
 
 Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
-                                                 double fScaleX, double fScaleY )
+                                                 double /*fScaleX*/, double /*fScaleY*/ )
 {
     Graphic         aRet;
     const USHORT    nPosterCount = GetPosterColorCount();
@@ -737,7 +737,7 @@ GraphicFilterEmboss::~GraphicFilterEmboss()
 // -----------------------------------------------------------------------------
 
 Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
-                                                 double fScaleX, double fScaleY )
+                                                 double /*fScaleX*/, double /*fScaleY*/ )
 {
     Graphic aRet;
     USHORT  nAzim, nElev;
