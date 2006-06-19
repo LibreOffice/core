@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EffectMigration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:45:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,13 @@
 #endif
 
 using namespace ::vos;
-using namespace ::rtl;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::drawing::XShape;
-
+using ::rtl::OUString;
 
 struct deprecated_FadeEffect_conversion_table_entry
 {
