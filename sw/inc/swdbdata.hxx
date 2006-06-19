@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdbdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:12:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef _SWDBDATA_HXX
 #define _SWDBDATA_HXX
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 // contains the description of a data source
