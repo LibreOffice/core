@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:14:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-void SfxEventAsyncer_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
     if( pHint && pHint->GetId() == SFX_HINT_DYING && pTimer->IsActive() )
@@ -209,10 +209,11 @@ SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
+IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 {
+    (void)pAsyncTimer; // unused variable
     SfxObjectShellRef xRef( aHint.GetObjShell() );
-    pTimer->Stop();
+    pAsyncTimer->Stop();
 #ifdef DBG_UTIL
     ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( aHint.GetEventId() );
     ByteString aTmp( "SfxEvent: ");
@@ -648,13 +649,13 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         BOOL bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
         aMiscOptions.SetSymbolsSize( bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL );
-        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-        while ( pViewFrame )
+        SfxViewFrame* pCurrViewFrame = SfxViewFrame::GetFirst();
+        while ( pCurrViewFrame )
         {
             // update all "final" dispatchers
-            if ( !pViewFrame->GetActiveChildFrame_Impl() )
-                pViewFrame->GetDispatcher()->Update_Impl(sal_True);
-            pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
+            if ( !pCurrViewFrame->GetActiveChildFrame_Impl() )
+                pCurrViewFrame->GetDispatcher()->Update_Impl(sal_True);
+            pCurrViewFrame = SfxViewFrame::GetNext(*pCurrViewFrame);
         }
     }
 
@@ -844,9 +845,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                   pSh;
                   ++nIdx, pSh = pDispat->GetShell(nIdx) )
             {
-                SfxUndoManager *pUndoMgr = pSh->GetUndoManager();
-                if ( pUndoMgr )
-                    pUndoMgr->SetMaxUndoActionCount( nUndoCount );
+                SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
+                if ( pShUndoMgr )
+                    pShUndoMgr->SetMaxUndoActionCount( nUndoCount );
             }
         }
     }
@@ -1206,5 +1207,3 @@ SfxMiscCfg* SfxApplication::GetMiscConfig()
 
     return pAppData_Impl->pMiscConfig;
 }
-
-
