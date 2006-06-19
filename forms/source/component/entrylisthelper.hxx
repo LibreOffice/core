@@ -4,9 +4,9 @@
  *
  *  $RCSfile: entrylisthelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,9 @@ namespace frm
         */
         void        disposing( );
 
+        // prevent method hiding
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) = 0;
+
         /** helper for implementing convertFastPropertyValue( StringItemList )
 
             <p>The signature of this method and the return type have the same semantics
@@ -148,6 +151,7 @@ namespace frm
         virtual void SAL_CALL entryRangeInserted( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL entryRangeRemoved( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL allEntriesChanged( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+
     private:
         /** disconnects from the active external list source, if present
             @see connectExternalListSource
