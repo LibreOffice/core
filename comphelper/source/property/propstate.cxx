@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propstate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:59:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,8 @@ namespace comphelper
         return aTypes;
     }
 
+    OPropertyStateHelper::~OPropertyStateHelper() {}
+
     //---------------------------------------------------------------------
     void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  ::com::sun::star::uno::Any& aNewValue, const  ::com::sun::star::uno::Any& aOldValue)
     {
@@ -163,7 +165,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle(sal_Int32 nHandle)
+    ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle(sal_Int32)
     {
         return  ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     }
@@ -175,7 +177,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    ::com::sun::star::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+    ::com::sun::star::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 ) const
     {
         return  ::com::sun::star::uno::Any();
     }
