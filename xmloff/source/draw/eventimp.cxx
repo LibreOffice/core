@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:44:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,7 +322,6 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                     const rtl::OUString &rTmp =
                         rImp.GetAbsoluteReference(sValue);
                     INetURLObject::translateToInternal( rTmp, msBookmark,
-                        INetURLObject::WAS_ENCODED,
                         INetURLObject::DECODE_UNAMBIGUOUS,
                         RTL_TEXTENCODING_UTF8 );
                 }
@@ -396,6 +395,8 @@ void SdXMLEventContext::EndElement()
 
         case ClickAction_VANISH:
             nPropertyCount += 4;
+            break;
+        default:
             break;
         }
 
@@ -538,6 +539,11 @@ void SdXMLEventContext::EndElement()
                 pProperties->Value <<= mnVerb;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 break;
+            case ClickAction_MACRO:
+                DBG_ERROR("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
+                break;
+            default:
+                break;
             }
         }
 
@@ -553,7 +559,7 @@ void SdXMLEventContext::EndElement()
 TYPEINIT1( SdXMLEventsContext, SvXMLImportContext );
 
 SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape)
+        const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
 : SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
 {
 }
