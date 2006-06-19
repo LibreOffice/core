@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmservs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:55:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
@@ -129,8 +127,8 @@ namespace svxform
         xSet->insert(::com::sun::star::uno::makeAny(xSingleFactory));
 
 
-    DECL_SERVICE( FmXGridControl );
-    DECL_SERVICE( FmXFormController );
+    DECL_SERVICE( FmXGridControl )
+    DECL_SERVICE( FmXFormController )
 
 
 // ------------------------------------------------------------------------
