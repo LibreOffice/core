@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SD_SDFILTER_HXX
 
 #include <tools/gen.hxx>
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
