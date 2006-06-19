@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:09:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,10 +712,10 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                 keyit = m_aKeys.find( aKey );
                 if( keyit != m_aKeys.end() )
                 {
-                    PPDKey* pKey = keyit->second;
-                    const PPDValue* pValue = pKey->getValue( aOption );
+                    pKey = keyit->second;
+                    const PPDValue* pDefValue = pKey->getValue( aOption );
                     if( pKey->m_pDefaultValue == NULL )
-                        pKey->m_pDefaultValue = pValue;
+                        pKey->m_pDefaultValue = pDefValue;
                 }
                 else
                 {
@@ -724,8 +724,8 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                     // (example: DefaultResolution)
                     // so invent that key here and have a default value
                     pKey = new PPDKey( aKey );
-                    PPDValue* pValue = pKey->insertValue( aOption );
-                    pValue->m_eType = eInvocation; // or what ?
+                    PPDValue* pNewValue = pKey->insertValue( aOption );
+                    pNewValue->m_eType = eInvocation; // or what ?
                     insertKey( aKey, pKey );
                 }
             }
