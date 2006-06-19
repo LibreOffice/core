@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextListBlockContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:22:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,15 +87,15 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rTxtImp,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    rTxtImport( rTxtImp ),
-    xParentListBlock( rTxtImp.GetListBlock() ),
-    nLevel( 0 ),
-    nLevels( 0 ),
-    bRestartNumbering( sal_True ),
-    bSetDefaults( sal_False ),
-    sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+:   SvXMLImportContext( rImport, nPrfx, rLName )
+,   rTxtImport( rTxtImp )
+,   sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
+,   xParentListBlock( rTxtImp.GetListBlock() )
+,   nLevel( 0 )
+,   nLevels( 0 )
+,   bRestartNumbering( sal_True )
+,   bSetDefaults( sal_False )
 {
     // Inherit style name from parent list, as well as the flags whether
     // numbering must be restarted and formats have to be created.
