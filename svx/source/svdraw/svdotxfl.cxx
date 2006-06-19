@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxfl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:36:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@ void SdrRegisterFieldClasses()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
-FASTBOOL SdrTextObj::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
-    FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, XubString& rRet) const
+FASTBOOL SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, USHORT /*nPara*/, USHORT /*nPos*/,
+    FASTBOOL /*bEdit*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, XubString& /*rRet*/) const
 {
     return FALSE;
 }
