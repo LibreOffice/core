@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:33:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,19 +207,19 @@ TransferableHelper::TerminateListener::~TerminateListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::TerminateListener::disposing( const EventObject& Source ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::TerminateListener::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException )
+void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const EventObject& ) throw( TerminationVetoException, RuntimeException )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& aEvent ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& ) throw( RuntimeException )
 {
     mrParent.ImplFlush();
 }
@@ -416,7 +416,7 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& ) throw( RuntimeException )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -446,7 +446,7 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >& 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::disposing( const EventObject& rSource ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::disposing( const EventObject& ) throw( RuntimeException )
 {
 }
 
@@ -468,25 +468,25 @@ void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::dragEnter( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::dragEnter( const DragSourceDragEvent& ) throw( RuntimeException )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::dragExit( const DragSourceEvent& rDSE ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::dragExit( const DragSourceEvent& ) throw( RuntimeException )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::dragOver( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::dragOver( const DragSourceDragEvent& ) throw( RuntimeException )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
+void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& ) throw( RuntimeException )
 {
 }
 
@@ -499,7 +499,7 @@ sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >&
     if( ( rId.getLength() == 16 ) &&
         ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
     {
-        nRet = (sal_Int64) this;
+        nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     else
         nRet = 0;
@@ -641,7 +641,7 @@ void TransferableHelper::ClearFormats()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& rFlavor )
+sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
 {
     maAny = rAny;
     return( maAny.hasValue() );
@@ -673,7 +673,7 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetBitmap( const Bitmap& rBitmap, const DataFlavor& rFlavor )
+sal_Bool TransferableHelper::SetBitmap( const Bitmap& rBitmap, const DataFlavor& )
 {
     if( !rBitmap.IsEmpty() )
     {
@@ -688,7 +688,7 @@ sal_Bool TransferableHelper::SetBitmap( const Bitmap& rBitmap, const DataFlavor&
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& rFlavor )
+sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& )
 {
     if( rMtf.GetActionCount() )
     {
@@ -703,7 +703,7 @@ sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const Data
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& rFlavor )
+sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& )
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
@@ -720,7 +720,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
 
@@ -734,7 +734,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
 // -----------------------------------------------------------------------------
 
 sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
-                                                              const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                                              const ::com::sun::star::datatransfer::DataFlavor& )
 {
     SvMemoryStream aMemStm( 1024, 1024 );
 
@@ -850,7 +850,7 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 // -----------------------------------------------------------------------------
 
 sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
-                                          const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                          const ::com::sun::star::datatransfer::DataFlavor& )
 {
     SvMemoryStream aMemStm( 4096, 4096 );
 
@@ -896,7 +896,7 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
 // -----------------------------------------------------------------------------
 
 sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf,
-                                           const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                           const ::com::sun::star::datatransfer::DataFlavor& )
 {
     maAny <<= rIf;
     return( maAny.hasValue() );
@@ -904,7 +904,7 @@ sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Referenc
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
+sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
     DBG_ERROR( "TransferableHelper::WriteObject( ... ) not implemented" );
     return sal_False;
@@ -912,7 +912,7 @@ sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef& rxOStm, void* pUs
 
 // -----------------------------------------------------------------------------
 
-void TransferableHelper::DragFinished( sal_Int8 nDropAction )
+void TransferableHelper::DragFinished( sal_Int8 )
 {
 }
 
@@ -970,7 +970,7 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
     Reference< XClipboard > xSelection;
 
     if( pWindow )
-        xSelection = pWindow->GetSelection();
+        xSelection = pWindow->GetPrimarySelection();
 
     if( xSelection.is() && !mxTerminateListener.is() )
     {
@@ -1044,7 +1044,7 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 void TransferableHelper::ClearSelection( Window *pWindow )
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
-    Reference< XClipboard > xSelection( pWindow->GetSelection() );
+    Reference< XClipboard > xSelection( pWindow->GetPrimarySelection() );
 
     if( xSelection.is() )
         xSelection->setContents( NULL, NULL );
@@ -1140,7 +1140,7 @@ void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::C
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& ) throw (RuntimeException)
 {
     // clipboard is being disposed. Hmm. Okay, become disfunctional myself.
     dispose();
@@ -1951,7 +1951,7 @@ sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
 // -----------------------------------------------------------------------------
 
 sal_Bool TransferableDataHelper::GetFileList(
-            const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
+            const ::com::sun::star::datatransfer::DataFlavor&,
             FileList& rFileList )
 {
     SotStorageStreamRef xStm;
@@ -2138,11 +2138,11 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWin
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
-    Reference< XClipboard > xSelection( pWindow->GetSelection() );
+    Reference< XClipboard > xSelection;
        TransferableDataHelper   aRet;
 
     if( pWindow )
-        xSelection = pWindow->GetSelection();
+        xSelection = pWindow->GetPrimarySelection();
 
     if( xSelection.is() )
        {
@@ -2171,7 +2171,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWin
 // -----------------------------------------------------------------------------
 sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
                                           const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
-                                          sal_Bool bCompareParameters )
+                                          sal_Bool )
 {
     Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
     Reference< XMimeContentTypeFactory >    xMimeFact;
