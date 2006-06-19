@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:05:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rProp
     This check is for items that store either metric values if theire positiv
     or percentage if theire negativ.
 */
-sal_Bool SvxUnoCheckForConversion( const SfxItemSet& rSet, sal_Int32 nWID, const uno::Any& rVal )
+sal_Bool SvxUnoCheckForConversion( const SfxItemSet&, sal_Int32 nWID, const uno::Any& rVal )
 {
     sal_Bool bConvert = sal_True; // the default is that all metric items must be converted
 
@@ -389,7 +389,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
     const SfxPoolItem* pItem = 0;
     SfxItemPool* pPool = rSet.GetPool();
 
-    SfxItemState eState = rSet.GetItemState( pMap->nWID, pMap->nWID != SDRATTR_XMLATTRIBUTES, &pItem );
+    rSet.GetItemState( pMap->nWID, pMap->nWID != SDRATTR_XMLATTRIBUTES, &pItem );
 
     if( NULL == pItem && pPool )
     {
