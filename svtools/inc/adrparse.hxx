@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adrparse.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:06:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ struct SvAddressEntry_Impl
 };
 
 //============================================================================
-DECLARE_LIST(SvAddressList_Impl, SvAddressEntry_Impl *);
+DECLARE_LIST(SvAddressList_Impl, SvAddressEntry_Impl *)
 
 //============================================================================
 class SVL_DLLPUBLIC SvAddressParser
