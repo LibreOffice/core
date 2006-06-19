@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:10:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ namespace sdr
             return *(new AttributeProperties(*this, rObj));
         }
 
-        void AttributeProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void AttributeProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
         {
             // own modifications
             SdrObject& rObj = GetSdrObject();
@@ -608,7 +608,7 @@ namespace sdr
             }
         }
 
-        void AttributeProperties::ForceStyleToHardAttributes(sal_Bool bPseudoSheetsOnly)
+        void AttributeProperties::ForceStyleToHardAttributes(sal_Bool /*bPseudoSheetsOnly*/)
         {
             if(GetStyleSheet() && HAS_BASE(SfxStyleSheet, mpStyleSheet))
             {
@@ -676,7 +676,7 @@ namespace sdr
             if(pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet())
             {
                 SdrObject& rObj = GetSdrObject();
-                SdrPage* pPage = rObj.GetPage();
+                //SdrPage* pPage = rObj.GetPage();
 
                 switch(pStyleHint->GetHint())
                 {
