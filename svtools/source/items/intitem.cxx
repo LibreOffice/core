@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:58:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ DBG_NAME(SfxInt16Item);
 TYPEINIT1_AUTOFACTORY(SfxInt16Item, SfxPoolItem);
 
 //============================================================================
-SfxInt16Item::SfxInt16Item(USHORT nWhich, SvStream & rStream):
-    SfxPoolItem(nWhich)
+SfxInt16Item::SfxInt16Item(USHORT which, SvStream & rStream):
+    SfxPoolItem(which)
 {
     DBG_CTOR(SfxInt16Item, 0);
     short nTheValue = 0;
@@ -127,8 +127,7 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal,
-                              BYTE nMemberId) const
+BOOL SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
@@ -137,8 +136,7 @@ BOOL SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal,
 
 //============================================================================
 // virtual
-BOOL SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId)
+BOOL SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
 {
     sal_Int16 nValue;
     if (rVal >>= nValue)
@@ -235,15 +233,15 @@ DBG_NAME(SfxMetricItem);
 TYPEINIT1_AUTOFACTORY(SfxMetricItem, SfxInt32Item);
 
 //============================================================================
-SfxMetricItem::SfxMetricItem(USHORT nWhich, UINT32 nValue):
-    SfxInt32Item(nWhich, nValue)
+SfxMetricItem::SfxMetricItem(USHORT which, UINT32 nValue):
+    SfxInt32Item(which, nValue)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }
 
 //============================================================================
-SfxMetricItem::SfxMetricItem(USHORT nWhich, SvStream & rStream):
-    SfxInt32Item(nWhich, rStream)
+SfxMetricItem::SfxMetricItem(USHORT which, SvStream & rStream):
+    SfxInt32Item(which, rStream)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }

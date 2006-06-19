@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imageitm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:58:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,16 @@ struct SfxImageItem_Impl
 
 //---------------------------------------------------------
 
-SfxImageItem::SfxImageItem( USHORT nWhich, UINT16 nImage )
-    : SfxInt16Item( nWhich, nImage )
+SfxImageItem::SfxImageItem( USHORT which, UINT16 nImage )
+    : SfxInt16Item( which, nImage )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
     pImp->bMirrored = FALSE;
 }
 
-SfxImageItem::SfxImageItem( USHORT nWhich, const String& rURL )
-    : SfxInt16Item( nWhich, 0 )
+SfxImageItem::SfxImageItem( USHORT which, const String& rURL )
+    : SfxInt16Item( which, 0 )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
@@ -83,7 +83,7 @@ SfxImageItem::~SfxImageItem()
 
 //---------------------------------------------------------
 
-SfxPoolItem* SfxImageItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
 {
     return new SfxImageItem( *this );
 }
@@ -95,7 +95,7 @@ int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
     return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
 }
 
-BOOL SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
     aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
@@ -107,7 +107,7 @@ BOOL SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) 
     return TRUE;
 }
 
-BOOL SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
