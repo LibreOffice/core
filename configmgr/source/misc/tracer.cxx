@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:13:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:28:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,11 @@ namespace configmgr
 namespace configmgr
 {
 
+extern "C"
+{
+    static void call_freeThreadData(void*);
+}
+
 struct OTracerSetup
 {
     enum {
@@ -90,7 +95,7 @@ struct OTracerSetup
         ,m_pOutputMedium(NULL)
         ,m_bInitialized(sal_False)
     {
-        m_nThreadKey = ::osl_createThreadKey(&freeThreadData);
+        m_nThreadKey = ::osl_createThreadKey(call_freeThreadData);
     }
     ~OTracerSetup()
     {
@@ -119,7 +124,7 @@ struct OTracerSetup
     };
 
     ThreadData& ensureThreadData();
-    static void SAL_CALL freeThreadData(void*p);
+    static void freeThreadData(void*p);
 };
 
 //==========================================================================
@@ -197,6 +202,11 @@ OTracerSetup::ThreadData& OTracerSetup::ensureThreadData()
     }
 
     return *pRet;
+}
+
+static void call_freeThreadData( void* p )
+{
+    OTracerSetup::freeThreadData( p );
 }
 
 //--------------------------------------------------------------------------
