@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxalign.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:52:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _AEITEM_HXX
 #include <svtools/aeitem.hxx>
 #endif
-#pragma hdrstop
 
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
