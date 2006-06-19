@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testtdmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:33:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:07:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
                                    "com.sun.star.registry.SimpleRegistry") ),
                 m_context ), css::uno::UNO_QUERY_THROW );
         xReg->open( url, true /* read-only */, false /* ! create */ );
-        css::uno::Any arg( makeAny(xReg) );
+        css::uno::Any arg( css::uno::makeAny(xReg) );
         css::uno::Reference<css::container::XHierarchicalNameAccess> xTDprov(
             m_context->getServiceManager()->
             createInstanceWithArgumentsAndContext(
@@ -175,7 +175,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
                 css::uno::Sequence<css::uno::Any>( &arg, 1 ), m_context ),
             css::uno::UNO_QUERY_THROW );
         try {
-            xSet->insert( makeAny(xTDprov) );
+            xSet->insert( css::uno::makeAny(xTDprov) );
             if (! supposedToBeCompatible)
                 std::cerr << "current rdb file: " <<
                     rtl::OUStringToOString(
