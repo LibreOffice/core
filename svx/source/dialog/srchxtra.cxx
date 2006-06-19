@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:04:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,11 +176,11 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHATTR )  ),
 
+    aAttrFL ( this, ResId( FL_ATTR ) ),
+    aAttrLB ( this, ResId( LB_ATTR ) ),
     aOKBtn  ( this, ResId( BTN_ATTR_OK ) ),
     aEscBtn ( this, ResId( BTN_ATTR_CANCEL ) ),
     aHelpBtn( this, ResId( BTN_ATTR_HELP ) ),
-    aAttrLB ( this, ResId( LB_ATTR ) ),
-    aAttrFL ( this, ResId( FL_ATTR ) ),
 
     rList( rLst )
 
@@ -303,14 +303,14 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 ) :
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
 
+    aFixedLine  ( this, ResId( FL_SIMILARITY ) ),
     aOtherTxt   ( this, ResId( FT_OTHER ) ),
     aOtherFld   ( this, ResId( NF_OTHER ) ),
-    aShorterTxt ( this, ResId( FT_SHORTER ) ),
-    aShorterFld ( this, ResId( NF_SHORTER ) ),
     aLongerTxt  ( this, ResId( FT_LONGER ) ),
     aLongerFld  ( this, ResId( NF_LONGER ) ),
+    aShorterTxt ( this, ResId( FT_SHORTER ) ),
+    aShorterFld ( this, ResId( NF_SHORTER ) ),
     aRelaxBox   ( this, ResId( CB_RELAX ) ),
-    aFixedLine  ( this, ResId( FL_SIMILARITY ) ),
 
     aOKBtn      ( this, ResId( BTN_ATTR_OK ) ),
     aEscBtn     ( this, ResId( BTN_ATTR_CANCEL ) ),
