@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorconfigurationreader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:02:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,22 +269,22 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const ::rtl::OUString& 
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::characters(const ::rtl::OUString& sChars)
+void SAL_CALL AcceleratorConfigurationReader::characters(const ::rtl::OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const ::rtl::OUString& sWhitespaces)
+void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const ::rtl::OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const ::rtl::OUString& sTarget,
-                                                                    const ::rtl::OUString& sData  )
+void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const ::rtl::OUString& /*sTarget*/,
+                                                                    const ::rtl::OUString& /*sData*/  )
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
