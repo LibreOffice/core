@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_cpp_bridgetest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:48:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,6 @@ public __gc class BridgeTest : public WeakBase, public XMain
 
         //arrays have same rank and size and element type.
         int len  = ar1->Length;
-        Type* elemType = t1->GetElementType();
         bool ret = true;
         for (int i = 0; i < len; i++)
         {
@@ -284,8 +283,8 @@ static bool testAny(Type* typ, Object*  value, XBridgeTest* xLBT )
         any = Any(typ, value);
 
     Any any2 = xLBT->transportAny(any);
-    bool ret;
-    if( ! (ret= compareData(__box(any), __box(any2))))
+    bool ret = compareData(__box(any), __box(any2));
+    if (!ret)
     {
         Console::WriteLine("any is different after roundtrip: in {0}, out {1}\n",
                           any.Type->FullName, any2.Type->FullName);
@@ -363,7 +362,7 @@ static bool performQueryForUnknownType(XBridgeTest* xLBT)
     // test queryInterface for an unknown type
     try
     {
-        foo::MyInterface* a = __try_cast<foo::MyInterface*>(xLBT);
+        __try_cast<foo::MyInterface*>(xLBT);
     }
     catch( System::InvalidCastException*)
     {
@@ -643,7 +642,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
     bRet = check( compareData(seqFloatRet, arFloat), "sequence test") && bRet;
     Double seqDoubleRet[] = xBT2->setSequenceDouble(arDouble);
     bRet = check( compareData(seqDoubleRet, arDouble), "sequence test") && bRet;
-    TestEnum seqEnumRet[] = xBT2->setSequenceEnum(arEnum);
+    xBT2->setSequenceEnum(arEnum);
     //comparing seqEnumRet with arEnum will fail since they are of different
     //types because of workaround. arEnum is Int32[].
     Console::WriteLine(new String("cli_cpp_bridgetest: Test omitted because "
@@ -663,21 +662,21 @@ static bool performSequenceTest(XBridgeTest* xBT)
     bRet = check( compareData(seqStructRet, arStruct), "sequence test") && bRet;
     }
     {
-    Boolean arBoolTemp[] = static_cast<Boolean[]>( arBool->Clone());
-    Char arCharTemp[] = static_cast<Char[]>(arChar->Clone());
-    Byte arByteTemp[] = static_cast<Byte[]>(arByte->Clone());
-    Int16 arShortTemp[] = static_cast<Int16[]>(arShort->Clone());
-    UInt16 arUShortTemp[] = static_cast<UInt16[]>(arUShort->Clone());
-    Int32 arLongTemp[] = static_cast<Int32[]>(arLong->Clone());
-    UInt32 arULongTemp[] = static_cast<UInt32[]>(arULong->Clone());
-    Int64 arHyperTemp[] = static_cast<Int64[]>(arHyper->Clone());
-    UInt64 arUHyperTemp[] = static_cast<UInt64[]>(arUHyper->Clone());
-    Single arFloatTemp[] = static_cast<Single[]>(arFloat->Clone());
-    Double arDoubleTemp[] = static_cast<Double[]>(arDouble->Clone());
-    TestEnum arEnumTemp[] = static_cast<TestEnum[]>(arEnum->Clone());
-    String* arStringTemp[] = static_cast<String*[]>(arString->Clone());
-    Object* arObjectTemp = static_cast<Object*[]>(arObject->Clone());
-    Any arAnyTemp[] = static_cast<Any[]>(arAny->Clone());
+//     Boolean arBoolTemp[] = static_cast<Boolean[]>( arBool->Clone());
+//     Char arCharTemp[] = static_cast<Char[]>(arChar->Clone());
+//     Byte arByteTemp[] = static_cast<Byte[]>(arByte->Clone());
+//     Int16 arShortTemp[] = static_cast<Int16[]>(arShort->Clone());
+//     UInt16 arUShortTemp[] = static_cast<UInt16[]>(arUShort->Clone());
+//     Int32 arLongTemp[] = static_cast<Int32[]>(arLong->Clone());
+//     UInt32 arULongTemp[] = static_cast<UInt32[]>(arULong->Clone());
+//     Int64 arHyperTemp[] = static_cast<Int64[]>(arHyper->Clone());
+//     UInt64 arUHyperTemp[] = static_cast<UInt64[]>(arUHyper->Clone());
+//     Single arFloatTemp[] = static_cast<Single[]>(arFloat->Clone());
+//     Double arDoubleTemp[] = static_cast<Double[]>(arDouble->Clone());
+//     TestEnum arEnumTemp[] = static_cast<TestEnum[]>(arEnum->Clone());
+//     String* arStringTemp[] = static_cast<String*[]>(arString->Clone());
+//     Object* arObjectTemp = static_cast<Object*[]>(arObject->Clone());
+//     Any arAnyTemp[] = static_cast<Any[]>(arAny->Clone());
 //     // make sure this are has the same contents as arLong3[0]
 //     int[][] arLong2Temp = new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} };
 //     // make sure this are has the same contents as arLong3
@@ -792,7 +791,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
     Double seqDoubleRet[] = xBT2->setSequenceDouble(_arDouble);
     bRet = check( compareData(seqDoubleRet, _arDouble), "sequence test") && bRet;
     TestEnum _arEnum[] = new TestEnum[0];
-    TestEnum seqEnumRet[] = xBT2->setSequenceEnum(_arEnum);
+    xBT2->setSequenceEnum(_arEnum);
 //  compiler bug: _arEnum has type System.Enum and not TestEnum
 //    bRet = check( compareData(seqEnumRet, _arEnum), "sequence test") && bRet;
     UInt16 _arUShort[] = new UInt16[0];
@@ -823,7 +822,6 @@ static bool testObjectMethodsImplemention(XBridgeTest* xLBT)
 {
     bool ret = false;
     Object* obj = new Object();
-    Object* xInt = static_cast<Object*> (xLBT);
     XBridgeTestBase* xBase = dynamic_cast<XBridgeTestBase*>(xLBT);
     if (xBase == 0)
         return false;
@@ -872,8 +870,6 @@ static bool raiseException(XBridgeTest* xLBT )
         {
             try
             {
-                TestDataElements* aRet = new TestDataElements();
-                TestDataElements* aRet2 = new TestDataElements();
                 xLBT->raiseException(
                     5, Constants::STRING_TEST_CONSTANT, xLBT->Interface );
             }
