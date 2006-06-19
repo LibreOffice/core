@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:31:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,16 +120,13 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 
 ::com::sun::star::uno::Any SAL_CALL SvxOle2Shape::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Any aAny;
-    SvxShape::queryAggregation( rType, aAny );
-    return aAny;
+    return SvxShape::queryAggregation( rType );
 }
 
 //XPropertySet
 void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, const Any& aValue )    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
     if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CLSID" ) ) )
     {
@@ -137,7 +134,7 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         if( aValue >>= aCLSID )
         {
             // init a ole object with a global name
-            if( pObject )
+            if( mpObj.is() )
             {
                 SvGlobalName aClassName;
                 if( aClassName.MakeId( aCLSID ) )
@@ -155,7 +152,7 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         OUString aURL;
         if( aValue >>= aURL )
         {
-            SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObject );
+            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle )
             {
                 GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
@@ -172,7 +169,7 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
 
         if( aValue >>= aPersistName )
         {
-            SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObject );
+            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
 
             if( pOle )
                 pOle->SetPersistName( aPersistName );
@@ -187,7 +184,7 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         OUString aLinkURL;
         if ( aValue >>= aLinkURL )
         {
-            if( pObject )
+            if( mpObj.is() )
                 createLink( aLinkURL );
 
             return;
@@ -202,12 +199,11 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
 Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
     if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ThumbnailGraphicURL" ) ) )
     {
         OUString    aURL;
-        SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObject );
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
 
         if( pOle )
         {
@@ -215,7 +211,7 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
 
             // if there isn't already a preview graphic set, check if we need to generate
             // one if model says so
-            if( pGraphic == NULL && !pOle->IsEmptyPresObj() && pModel->IsSaveOLEPreview() )
+            if( pGraphic == NULL && !pOle->IsEmptyPresObj() && mpModel->IsSaveOLEPreview() )
                 pGraphic = pOle->GetGraphic();
 
             if( pGraphic )
@@ -230,15 +226,15 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
     else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_OLE2_PERSISTNAME ) ) )
     {
         OUString    aPersistName;
-        SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObject );
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
 
         if( pOle )
         {
             aPersistName = pOle->GetPersistName();
             if( aPersistName.getLength() )
             {
-                SfxObjectShell *pPersist = pObject->GetModel()->GetPersist();
-                if( (NULL == pPersist) || !pPersist->GetEmbeddedObjectContainer().HasEmbeddedObject( static_cast< SdrOle2Obj* >( pObject )->GetPersistName() ) )
+                SfxObjectShell *pPersist = mpObj->GetModel()->GetPersist();
+                if( (NULL == pPersist) || !pPersist->GetEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
                     aPersistName = OUString();
             }
         }
@@ -248,7 +244,7 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
     else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkURL" ) ) )
     {
         OUString    aLinkURL;
-        SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObject );
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
 
         if( pOle )
         {
@@ -266,16 +262,14 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
 
 sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 {
-    sal_Bool            bOk = sal_False;
-
     DBG_TESTSOLARMUTEX();
-    SdrObject* pObject = mpObj.get();
 
-    if ( !static_cast< SdrOle2Obj* >( pObject )->IsEmpty() )
+    SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+    if ( !pOle2Obj && !pOle2Obj->IsEmpty() )
         return sal_False;
 
     // create storage and inplace object
-    SfxObjectShell*     pPersist = pModel->GetPersist();
+    SfxObjectShell*     pPersist = mpModel->GetPersist();
     ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
     Any                 aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
@@ -283,37 +277,36 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         aPersistName = aTmpStr;
 
     //TODO/LATER: how to cope with creation failure?!
-    uno::Reference < embed::XEmbeddedObject > xObj =
-            pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
+    uno::Reference < embed::XEmbeddedObject > xObj( pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName ) );
     if( xObj.is() )
     {
         aAny <<= ( aTmpStr = aPersistName );
         setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
 
         // the object is inserted during setting of PersistName property usually
-        if ( static_cast< SdrOle2Obj* >( pObject )->IsEmpty() )
-            static_cast< SdrOle2Obj* >( pObject )->SetObjRef( xObj );
+        if( pOle2Obj->IsEmpty() )
+            pOle2Obj->SetObjRef( xObj );
 
-        Rectangle aRect = static_cast< SdrOle2Obj* >( pObject )->GetLogicRect();
+        Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
             // default size
             try
             {
-                awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObject )->GetAspect() );
+                awt::Size aSz = xObj->getVisualAreaSize( pOle2Obj->GetAspect() );
                 aRect.SetSize( Size( aSz.Width, aSz.Height ) );
             }
             catch( embed::NoVisualAreaSizeException& )
             {}
-            static_cast< SdrOle2Obj* >( pObject )->SetLogicRect( aRect );
+            pOle2Obj->SetLogicRect( aRect );
         }
         else
         {
             awt::Size aSz;
-            Size aSize = static_cast< SdrOle2Obj* >( pObject )->GetLogicRect().GetSize();
+            Size aSize = pOle2Obj->GetLogicRect().GetSize();
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize(  static_cast< SdrOle2Obj* >( pObject )->GetAspect(), aSz );
+            xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
         }
     }
 
@@ -322,17 +315,15 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 
 sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
 {
-    sal_Bool bResult = sal_False;
-
     DBG_TESTSOLARMUTEX();
-    SdrObject* pObject = mpObj.get();
 
-    if ( !static_cast< SdrOle2Obj* >( pObject )->IsEmpty() )
+    SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+    if ( !pOle2Obj || !pOle2Obj->IsEmpty() )
         return sal_False;
 
     ::rtl::OUString aPersistName;
 
-    SfxObjectShell* pPersist = pModel->GetPersist();
+    SfxObjectShell* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
     aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
@@ -358,29 +349,29 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
         setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
-        if ( static_cast< SdrOle2Obj* >( pObject )->IsEmpty() )
-            static_cast< SdrOle2Obj* >( pObject )->SetObjRef( xObj );
+        if ( pOle2Obj->IsEmpty() )
+            pOle2Obj->SetObjRef( xObj );
 
-        Rectangle aRect = static_cast< SdrOle2Obj* >( pObject )->GetLogicRect();
+        Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
             // default size
             try
             {
-                awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObject )->GetAspect() );
+                awt::Size aSz = xObj->getVisualAreaSize( pOle2Obj->GetAspect() );
                 aRect.SetSize( Size( aSz.Width, aSz.Height ) );
             }
             catch( embed::NoVisualAreaSizeException& )
             {}
-            static_cast< SdrOle2Obj* >( pObject )->SetLogicRect( aRect );
+            pOle2Obj->SetLogicRect( aRect );
         }
         else
         {
             awt::Size aSz;
-            Size aSize = static_cast< SdrOle2Obj* >( pObject )->GetLogicRect().GetSize();
+            Size aSize = pOle2Obj->GetLogicRect().GetSize();
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize(  static_cast< SdrOle2Obj* >( pObject )->GetAspect(), aSz );
+            xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
         }
     }
 
@@ -411,20 +402,19 @@ void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw (
 void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, const Any& aValue )  throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
     sal_Bool bOwn = sal_False;
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
         if( pMap->nWID >= OWN_ATTR_APPLET_DOCBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
-            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObject)->GetObjRef() ) )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)mpObj.get())->GetObjRef() ) )
                 return;
 
-            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObject)->GetObjRef()->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return;
 
@@ -449,15 +439,15 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
     if( !bOwn )
         SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
 
-    if( pModel )
+    if( mpModel )
     {
-        SfxObjectShell* pPersist = pModel->GetPersist();
+        SfxObjectShell* pPersist = mpModel->GetPersist();
         if( pPersist && !pPersist->IsEnableSetModified() )
         {
-            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObject );
+            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle && !pOle->IsEmpty() )
             {
-                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
+                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)mpObj.get())->GetObjRef(), uno::UNO_QUERY );
                 if( xMod.is() )
                     // TODO/MBA: what's this?!
                     xMod->setModified( sal_False );
@@ -469,18 +459,17 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
 Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
         if( pMap->nWID >= OWN_ATTR_APPLET_DOCBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
-            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObject)->GetObjRef() ) )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)mpObj.get())->GetObjRef() ) )
                 return uno::Any();
 
-            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObject)->GetObjRef()->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return uno::Any();
 
@@ -527,20 +516,19 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
     sal_Bool bOwn = sal_False;
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
-            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObject)->GetObjRef() ) )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)mpObj.get())->GetObjRef() ) )
                 return;
 
-            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObject)->GetObjRef()->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return;
 
@@ -562,15 +550,15 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
     if( !bOwn )
         SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
 
-    if( pModel )
+    if( mpModel )
     {
-        SfxObjectShell* pPersist = pModel->GetPersist();
+        SfxObjectShell* pPersist = mpModel->GetPersist();
         if( pPersist && !pPersist->IsEnableSetModified() )
         {
-            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObject );
+            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle && !pOle->IsEmpty() )
             {
-                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
+                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)mpObj.get())->GetObjRef(), uno::UNO_QUERY );
                 if( xMod.is() )
                     // TODO/MBA: what's this?!
                     xMod->setModified( sal_False );
@@ -582,18 +570,17 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
 Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
-            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObject)->GetObjRef() ) )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)mpObj.get())->GetObjRef() ) )
                 return uno::Any();
 
-            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObject)->GetObjRef()->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return uno::Any();
 
@@ -638,21 +625,20 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
     sal_Bool bOwn = sal_False;
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
 
     Any aAny;
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
-            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObject)->GetObjRef() ) )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)mpObj.get())->GetObjRef() ) )
                 return;
 
-            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObject)->GetObjRef()->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return;
 
@@ -678,15 +664,15 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
     if( !bOwn )
         SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
 
-    if( pModel )
+    if( mpModel )
     {
-        SfxObjectShell* pPersist = pModel->GetPersist();
+        SfxObjectShell* pPersist = mpModel->GetPersist();
         if( pPersist && !pPersist->IsEnableSetModified() )
         {
-            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObject );
+            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle && !pOle->IsEmpty() )
             {
-                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
+                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)mpObj.get())->GetObjRef(), uno::UNO_QUERY );
                 if( xMod.is() )
                     // TODO/MBA: what's this?!
                     xMod->setModified( sal_False );
@@ -698,19 +684,18 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
 Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
 
     Any aAny;
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
-            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObject)->GetObjRef() ) )
+            if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)mpObj.get())->GetObjRef() ) )
                 return uno::Any();
 
-            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)pObject)->GetObjRef()->getComponent(), uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xSet( ((SdrOle2Obj*)mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if ( !xSet.is() )
                 return uno::Any();
 
@@ -755,13 +740,12 @@ void SAL_CALL SvxMediaShape::setPropertyValue( const OUString& rPropertyName, co
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     OGuard                      aGuard( Application::GetSolarMutex() );
-    const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMapEntry( rPropertyName );
+    const SfxItemPropertyMap*   pMap = maPropSet.getPropertyMapEntry( rPropertyName );
     bool                        bOwn = false;
-    SdrObject*                  pObject = mpObj.get();
 
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
-        SdrMediaObj* pMedia = PTR_CAST( SdrMediaObj, pObject );
+        SdrMediaObj* pMedia = dynamic_cast< SdrMediaObj* >( mpObj.get() );
 
         if( pMedia && ( pMap->nWID >= OWN_ATTR_MEDIA_URL ) && ( pMap->nWID <= OWN_ATTR_MEDIA_ZOOM ) )
         {
@@ -833,12 +817,11 @@ Any SAL_CALL SvxMediaShape::getPropertyValue( const OUString& rPropertyName )
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OGuard                      aGuard( Application::GetSolarMutex() );
-    const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMapEntry( rPropertyName );
-    SdrObject*                  pObject = mpObj.get();
+    const SfxItemPropertyMap*   pMap = maPropSet.getPropertyMapEntry( rPropertyName );
 
-    if( pMap && pObject && pModel )
+    if( pMap && mpObj.is() && mpModel )
     {
-        SdrMediaObj* pMedia = PTR_CAST( SdrMediaObj, pObject );
+        SdrMediaObj* pMedia = dynamic_cast< SdrMediaObj* >( mpObj.get() );
 
         if( pMedia && ( pMap->nWID >= OWN_ATTR_MEDIA_URL ) && ( pMap->nWID <= OWN_ATTR_MEDIA_ZOOM ) )
         {
