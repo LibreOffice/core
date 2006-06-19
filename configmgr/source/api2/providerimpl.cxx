@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:19:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,7 @@ namespace configmgr
         catch (uno::Exception& e)
         {
             // could not read profile
+                   (void)e;
             CFG_TRACE_ERROR_NI("Provider bootstrapping: Caught an exception trying to get 'Setup' data: %s", OUSTRING2ASCII(e.Message));
         }
 
@@ -381,6 +382,7 @@ namespace configmgr
         }
         catch (uno::Exception& e)
         {
+            (void)e;
             CFG_TRACE_ERROR("Disposing the TreeManager or closing the session caused an exception: %s", OUSTRING2ASCII(e.Message));
             clearTreeManager();
         }
@@ -754,7 +756,6 @@ namespace configmgr
 
                 return false;
             }
-            break;
 
         case ARG_NOCACHE_OBSOLETE:
             {
@@ -846,7 +847,7 @@ namespace configmgr
     bool extractLegacyArguments(    const uno::Sequence<uno::Any>& _rArgs,
                                     OUString&   /* [out] */ _rNodeAccessor,
                                     sal_Int32&  /* [out] */ _nLevels )
-        CFG_NOTHROW()
+    CFG_THROW1 (lang::IllegalArgumentException)
     {
         OSL_ASSERT( _rArgs.getLength() != 0 );
 
