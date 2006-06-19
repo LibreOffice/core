@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querystatus.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:06:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,9 @@ SFX_IMPL_XTYPEPROVIDER_2( SfxQueryStatus_Impl, ::com::sun::star::frame::XStatusL
 
 SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand ) :
     cppu::OWeakObject(),
+    m_bQueryInProgress( sal_False ),
     m_eState( SFX_ITEM_DISABLED ),
     m_pItem( 0 ),
-    m_bQueryInProgress( sal_False ),
     m_nSlotID( nSlotId )
 {
     m_aCommand.Complete = rCommand;
@@ -134,7 +134,7 @@ SfxQueryStatus_Impl::~SfxQueryStatus_Impl()
 {
 }
 
-void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& Source )
+void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& )
 throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
