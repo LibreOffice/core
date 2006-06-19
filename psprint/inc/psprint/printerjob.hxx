@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ public:
 
     sal_Bool        AbortJob ();
 
-    sal_Bool        StartPage (const JobData& rJobSetup, sal_Bool bNewJobData);
+    sal_Bool        StartPage (const JobData& rJobSetup);
     sal_Bool        EndPage ();
 
     sal_uInt32      GetErrorCode ();
