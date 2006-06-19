@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:55:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
 { \
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
     { \
-        return (sal_Int64)this; \
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
     } \
     return 0; \
 } \
@@ -65,7 +65,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() t
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \
-    return xUT.is() ? (ClassName*)xUT->getSomething( ClassName::GetUnoTunnelId() ) : NULL; \
+    return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
 }
 
 #define IMPL_XUNOTUNNEL2( ClassName, BaseClass ) \
@@ -73,7 +73,7 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
 { \
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
     { \
-        return (sal_Int64)this; \
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
     } \
     return BaseClass::getSomething( rIdentifier ); \
 } \
@@ -95,7 +95,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() t
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \
-    return xUT.is() ? (ClassName*)xUT->getSomething( ClassName::GetUnoTunnelId() ) : NULL; \
+    return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
 }
 
 // -------------------------------------------------------------------------------------
@@ -198,9 +198,9 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
 #endif
 
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ClassName, InterfaceName, MethodName, EventType ) \
-void ClassName::MethodName( const EventType& e ) throw(::com::sun::star::uno::RuntimeException) \
+void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::RuntimeException) \
 { \
-    EventType aMulti( e ); \
+    EventType aMulti( evt ); \
     aMulti.Source = &GetContext(); \
     ::cppu::OInterfaceIteratorHelper aIt( *this ); \
     while( aIt.hasMoreElements() ) \
