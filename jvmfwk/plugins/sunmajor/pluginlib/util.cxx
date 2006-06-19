@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,15 @@
 #include <utility>
 #include <algorithm>
 #include <map>
-#ifdef WNT
+
+#if defined WNT
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #endif
 
 #include "sunjre.hxx"
@@ -126,7 +133,7 @@ namespace
     rtl::OUString getLibraryLocation()
     {
         rtl::OUString libraryFileUrl;
-        OSL_VERIFY(osl::Module::getUrlFromAddress((void *) getLibraryLocation, libraryFileUrl));
+        OSL_VERIFY(osl::Module::getUrlFromAddress((void *)(sal_IntPtr)getLibraryLocation, libraryFileUrl));
         return getDirFromFile(libraryFileUrl);
     }
 
@@ -189,8 +196,10 @@ inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
 {
     if (m_rHandle != 0)
     {
-        oslFileError eError = osl_closeFile(m_rHandle);
-        OSL_ENSURE(eError == osl_File_E_None, "unexpected situation");
+        if (osl_closeFile(m_rHandle) != osl_File_E_None)
+        {
+            OSL_ENSURE(false, "unexpected situation");
+        }
     }
 }
 
@@ -297,8 +306,8 @@ public:
     OString getData();
 };
 
-AsynchReader::AsynchReader(oslFileHandle & rHandle): m_aGuard(rHandle), m_bError(false),
-                                                     m_nDataSize(0), m_bDone(false)
+AsynchReader::AsynchReader(oslFileHandle & rHandle):
+    m_nDataSize(0), m_bError(false), m_bDone(false), m_aGuard(rHandle)
 {
 }
 
@@ -362,7 +371,7 @@ bool getJavaProps(const OUString & exePath,
     //a different directory. The JREProperties.class is expected to reside
     //next to the plugin.
     rtl::OUString sThisLib;
-    if (osl_getModuleURLFromAddress((void *) & getJavaProps,
+    if (osl_getModuleURLFromAddress((void *) (sal_IntPtr)& getJavaProps,
                                     & sThisLib.pData) == sal_False)
         return false;
     sThisLib = getDirFromFile(sThisLib);
@@ -446,9 +455,9 @@ bool getJavaProps(const OUString & exePath,
         sal_Int32 index = sLine.indexOf('=', 0);
         OSL_ASSERT(index != -1);
         OUString sKey = sLine.copy(0, index);
-        OUString sValue = sLine.copy(index + 1);
+        OUString sVal = sLine.copy(index + 1);
 
-        props.push_back(std::make_pair(sKey, sValue));
+        props.push_back(std::make_pair(sKey, sVal));
     }
 
     if (rs != FileHandleReader::RESULT_ERROR && props.size()>0)
@@ -517,7 +526,7 @@ void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfo
 }
 
 
-bool getJavaInfoFromRegistry(const bool bSdk, const wchar_t* szRegKey,
+bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                              vector<OUString>& vecJavaHome)
 {
     HKEY    hRoot;
@@ -592,12 +601,12 @@ bool getJavaInfoFromRegistry(const bool bSdk, const wchar_t* szRegKey,
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome)
 {
-    return getJavaInfoFromRegistry(true, HKEY_SUN_SDK, vecHome);
+    return getJavaInfoFromRegistry(HKEY_SUN_SDK, vecHome);
 }
 
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome)
 {
-    return getJavaInfoFromRegistry(false, HKEY_SUN_JRE, vecJavaHome);
+    return getJavaInfoFromRegistry(HKEY_SUN_JRE, vecJavaHome);
 }
 
 #endif // WNT
@@ -897,10 +906,6 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         {
             //if the path is a link, then resolve it
             //check if the executable exists at all
-            bool bExe = false;
-            bool bError = false;
-
-
 
             //path can be only "file:///". Then do not append a '/'
             //sizeof counts the terminating 0
@@ -1237,7 +1242,8 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                                 //remove trailing '/'
                                 sal_Int32 islash = usDir3.lastIndexOf('/');
                                 if (islash == usDir3.getLength() - 1
-                                    && islash > sizeof("file:///") - 2)
+                                    && (islash
+                                        > RTL_CONSTASCII_LENGTH("file://")))
                                     usDir3 = usDir3.copy(0, islash);
                                 getJREInfoByPath(usDir3,vecInfos);
                             }
