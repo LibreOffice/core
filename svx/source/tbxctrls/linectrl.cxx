@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:48:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,12 +493,12 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
     }
     else if( nId % 2 ) // LinienAnfang
     {
-        XLineEndEntry* pEntry = pLineEndList->Get( ( nId - 1 ) / 2 - 1 );
+        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
         pLineStartItem  = new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
     else // LinienEnde
     {
-        XLineEndEntry* pEntry = pLineEndList->Get( nId / 2 - 2 );
+        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
         pLineEndItem    = new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
 
@@ -552,7 +552,7 @@ void SvxLineEndWindow::FillValueSet()
         // Temporaer wird ein Eintrag hinzugefuegt, um die UI-Bitmap zu erhalten
         XPolygon aNothing( 0 );
         pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
-        pEntry = pLineEndList->Get( nCount );
+        pEntry = pLineEndList->GetLineEnd( nCount );
         pBmp = pLineEndList->GetBitmap( nCount );
         DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
 
@@ -570,7 +570,7 @@ void SvxLineEndWindow::FillValueSet()
 
         for( long i = 0; i < nCount; i++ )
         {
-            pEntry = pLineEndList->Get( i );
+            pEntry = pLineEndList->GetLineEnd( i );
             DBG_ASSERT( pEntry, "Konnte auf LineEndEntry nicht zugreifen" );
             pBmp = pLineEndList->GetBitmap( i );
             DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
