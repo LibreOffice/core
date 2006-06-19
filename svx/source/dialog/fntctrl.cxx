@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:05:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@
 #define _SVSTDARR_XUB_STRLEN
 #include <svtools/svstdarr.hxx>
 #endif
-
-#pragma hdrstop
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
@@ -174,7 +172,8 @@ class FontPrevWin_Impl
 public:
     inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( FALSE ),
-        cStartBracket( 0 ), cEndBracket( 0 ), pColor( NULL ), pBackColor( 0 ), nFontWidthScale( 100 ),
+        pColor( NULL ), pBackColor( 0 ),
+        cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
         bTwoLines( FALSE )
         {
@@ -287,7 +286,7 @@ void FontPrevWin_Impl::_CheckScript()
  * The member nAscent is calculated to the maximal ascent of all used fonts.
  * --------------------------------------------------*/
 
-Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* pPrinter,
+Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter,
     SvxFont &rFont )
 {
     USHORT nScript;
@@ -315,7 +314,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* pPrinter,
     do
     {
         SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : ((nScript==ScriptType::COMPLEX) ? aCTLFont : rFont);
-        ULONG nWidth = rFnt.GetTxtSize( pPrinter, aText, nStart, nEnd-nStart ).
+        ULONG nWidth = rFnt.GetTxtSize( _pPrinter, aText, nStart, nEnd-nStart ).
                        Width();
         aTextWidth[ nIdx++ ] = nWidth;
         nTxtWidth += nWidth;
@@ -365,10 +364,10 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* pPrinter,
  * given rFont.
  * --------------------------------------------------*/
 
-void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* pPrinter,
+void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     Point &rPt, SvxFont &rFont )
 {
-    Font aOldFont = pPrinter->GetFont();
+    Font aOldFont = _pPrinter->GetFont();
     USHORT nScript;
     USHORT nIdx = 0;
     xub_StrLen nStart = 0;
@@ -387,9 +386,9 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* pPrinter,
     do
     {
         SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : ((nScript==ScriptType::COMPLEX) ? aCTLFont : rFont);
-        pPrinter->SetFont( rFnt );
+        _pPrinter->SetFont( rFnt );
 
-        rFnt.DrawPrev( pWin, pPrinter, rPt, aText, nStart, nEnd - nStart );
+        rFnt.DrawPrev( pWin, _pPrinter, rPt, aText, nStart, nEnd - nStart );
 
         rPt.X() += aTextWidth[ nIdx++ ];
         if( nEnd < aText.Len() && nIdx < nCnt )
@@ -402,7 +401,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* pPrinter,
             break;
     }
     while( TRUE );
-    pPrinter->SetFont( aOldFont );
+    _pPrinter->SetFont( aOldFont );
 }
 
 // -----------------------------------------------------------------------
@@ -607,7 +606,7 @@ void SvxFontPrevWindow::UseResourceText( BOOL bUse )
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::Paint( const Rectangle& rRect )
+void SvxFontPrevWindow::Paint( const Rectangle& )
 {
     Printer* pPrinter = pImpl->pPrinter;
     SvxFont& rFont = pImpl->aFont;
@@ -714,9 +713,9 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         nResultWidth += nEndBracketWidth;
         nResultWidth += nTextWidth;
 
-        long nX = (aLogSize.Width() - nResultWidth) / 2;
-        DrawLine( Point( 0,  nY ), Point( nX, nY ) );
-        DrawLine( Point( nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
+        long _nX = (aLogSize.Width() - nResultWidth) / 2;
+        DrawLine( Point( 0,  nY ), Point( _nX, nY ) );
+        DrawLine( Point( _nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
 
         long nSmallAscent = pImpl->nAscent;
         long nOffset = (nStdAscent - nSmallAscent ) / 2;
@@ -724,19 +723,19 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         if(pImpl->cStartBracket)
         {
             String sBracket(pImpl->cStartBracket);
-            rFont.DrawPrev( this, pPrinter, Point( nX, nY - nOffset - 4), sBracket );
-            nX += nStartBracketWidth;
+            rFont.DrawPrev( this, pPrinter, Point( _nX, nY - nOffset - 4), sBracket );
+            _nX += nStartBracketWidth;
         }
 
-        Point aTmpPoint1( nX, nY - nSmallAscent - 2 );
-        Point aTmpPoint2( nX, nY );
+        Point aTmpPoint1( _nX, nY - nSmallAscent - 2 );
+        Point aTmpPoint2( _nX, nY );
         pImpl->DrawPrev( this, pPrinter, aTmpPoint1, aSmallFont );
         pImpl->DrawPrev( this, pPrinter, aTmpPoint2, aSmallFont );
 
-        nX += nTextWidth;
+        _nX += nTextWidth;
         if(pImpl->cEndBracket)
         {
-            Point aTmpPoint( nX + 1, nY - nOffset - 4);
+            Point aTmpPoint( _nX + 1, nY - nOffset - 4);
             String sBracket(pImpl->cEndBracket);
             rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
         }
