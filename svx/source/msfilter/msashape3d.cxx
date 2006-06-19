@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:45:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,10 +121,10 @@ SvxMSDffCustomShape3D::Transformation2D::Transformation2D( const DffPropSet& rPr
     {
         fZScreen = 0.0;
         fViewPointOriginX = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginX, 32768 )) * rSnapRect.GetWidth()) / 65536.0;
-        fViewPointOriginY = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginY,-32768 )) * rSnapRect.GetHeight()) / 65536.0;
+        fViewPointOriginY = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginY, (sal_uInt32)-32768 )) * rSnapRect.GetHeight()) / 65536.0;
         fViewPoint.X() = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 )) / 360;   // 360 emu = 0,01 mm
-        fViewPoint.Y() = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DYViewpoint,-1250000 )) / 360;
-        fViewPoint.W() = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DZViewpoint,-9000000 )) / 360;
+        fViewPoint.Y() = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DYViewpoint, (sal_uInt32)-1250000 )) / 360;
+        fViewPoint.W() = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DZViewpoint, (sal_uInt32)-9000000 )) / 360;
     }
 }
 
@@ -275,7 +275,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
                 if ( bFillBmpTile )
                 {
                     const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
-                    const XOBitmap& rXOBmp = rBmpItm.GetValue();
+                    const XOBitmap& rXOBmp = rBmpItm.GetBitmapValue();
                     aFillBmp = rXOBmp.GetBitmap();
                     Size aLogicalSize = aFillBmp.GetPrefSize();
                     if ( aFillBmp.GetPrefMapMode() == MAP_PIXEL )
@@ -294,7 +294,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
                     if ( rSnapRect != aBoundRect )
                     {
                         const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
-                        const XOBitmap& rXOBmp = rBmpItm.GetValue();
+                        const XOBitmap& rXOBmp = rBmpItm.GetBitmapValue();
                         aFillBmp = rXOBmp.GetBitmap();
                         Size aBmpSize( aFillBmp.GetSizePixel() );
                         double fXScale = (double)aBoundRect.GetWidth() / (double)rSnapRect.GetWidth();
@@ -329,7 +329,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
             else if ( eFillStyle == XFILL_NONE )
             {
                 XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
-                p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetValue() ) );
+                p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetColorValue() ) );
                 p3DObj->SetMergedItem( Svx3DDoubleSidedItem( sal_True ) );
                 p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                 p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
@@ -358,7 +358,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
         // InitScene replacement
         double fW = rVolume.GetWidth();
         double fH = rVolume.GetHeight();
-        double fCamZ = rVolume.MaxVec().Z() + ( ( fW + fH ) / 2.0 );
+//      double fCamZ = rVolume.MaxVec().Z() + ( ( fW + fH ) / 2.0 );
 
         rCamera.SetAutoAdjustProjection( FALSE );
         rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
@@ -373,7 +373,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
         pScene->SetRectsDirty();
 
         double fViewPointOriginX = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginX, 32768 )) * rSnapRect.GetWidth()) / 65536.0;
-        double fViewPointOriginY = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginY,-32768 )) * rSnapRect.GetHeight()) / 65536.0;
+        double fViewPointOriginY = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginY, (sal_uInt32)-32768 )) * rSnapRect.GetHeight()) / 65536.0;
 
         Matrix4D aNewTransform( pScene->GetTransform() );
         Point aCenter( rSnapRect.Center() );
@@ -412,15 +412,15 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
         {
             aNewTransform.Translate( -fViewPointOriginX, fViewPointOriginY, 0 );
             // now set correct camera position
-            double fViewPointOriginX = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginX, 32768 )) * rSnapRect.GetWidth()) / 65536.0;
-            double fViewPointOriginY = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginY,-32768 )) * rSnapRect.GetHeight()) / 65536.0;
+//          double fViewPointOriginX = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginX, 32768 )) * rSnapRect.GetWidth()) / 65536.0;
+//          double fViewPointOriginY = ((double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DOriginY, (sal_uInt32)-32768 )) * rSnapRect.GetHeight()) / 65536.0;
             double fViewPointX = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 )) / 360;
-            double fViewPointY = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DYViewpoint,-1250000 )) / 360;
-            double fViewPointZ = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DZViewpoint,-9000000 )) / 360;
+            double fViewPointY = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DYViewpoint,(sal_uInt32)-1250000 )) / 360;
+            double fViewPointZ = (double)((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DZViewpoint,(sal_uInt32)-9000000 )) / 360;
 
-            Vector3D aLookAt( fViewPointX, -fViewPointY, 0 );
+            Vector3D aLkAt( fViewPointX, -fViewPointY, 0 );
             Vector3D aNewCamPos( fViewPointX, -fViewPointY, -fViewPointZ );
-            rCamera.SetPosAndLookAt( aNewCamPos, aLookAt );
+            rCamera.SetPosAndLookAt( aNewCamPos, aLkAt );
             pScene->SetCamera( rCamera );
         }
         pScene->NbcSetTransform( aNewTransform );
@@ -437,16 +437,16 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
         if ( !nLightZ )
             nLightZ = 1;
         double fLightIntensity = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DKeyIntensity, 43712 )) / 65536.0;
-        sal_Bool bLightHarsh = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 2 ) != 0;
+//      sal_Bool bLightHarsh = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 2 ) != 0;
 
-        sal_Int32 nLight2X = ((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DFillX, -50000 )) / 360;
+        sal_Int32 nLight2X = ((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DFillX, (sal_uInt32)-50000 )) / 360;
         sal_Int32 nLight2Y = - ((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DFillY, 0 )) / 360;
         sal_Int32 nLight2Z = - ((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DFillZ, 10000 )) / 360;
         if ( !nLight2Z )
             nLight2Z = -1;
         double fLight2Intensity = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DFillIntensity, 43712 )) / 65536.0;
-        sal_Bool bLight2Harsh = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 1 ) != 0;
-        sal_Bool bLightFace = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 1 ) != 0;
+//      sal_Bool bLight2Harsh = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 1 ) != 0;
+//      sal_Bool bLightFace = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 1 ) != 0;
 
         sal_uInt16 nAmbientColor = (sal_uInt16)( fAmbientIntensity * 255.0 );
         if ( nAmbientColor > 255 )
@@ -481,8 +481,8 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
         }
 
         double fSpecular = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 )) / 65536.0;
-        double fDiffuse = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 )) / 65536.0;
-        double fShininess = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DShininess, 0 )) / 65536.0;
+//      double fDiffuse = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 )) / 65536.0;
+//      double fShininess = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DShininess, 0 )) / 65536.0;
 
         sal_uInt16 nItensity = 25;
         Color aSpecularCol( COL_BLACK );
