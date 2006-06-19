@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:11:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ namespace sdr
 
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
-        sal_Bool ViewContact::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContact::ShouldPaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // default implementation always paints the object
             return sal_True;
@@ -258,7 +258,7 @@ namespace sdr
         // When ShouldPaintDrawHierarchy() returns sal_True, the DrawHierarchy of the object is painted.
         // Else, the flags and rectangles of the VOCs of the sub-hierarchy are set to the values of the
         // object's VOC.
-        sal_Bool ViewContact::ShouldPaintDrawHierarchy(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContact::ShouldPaintDrawHierarchy(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // default is to draw the DRawHierarchy
             return sal_True;
@@ -266,26 +266,26 @@ namespace sdr
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
         // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContact::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        sal_Bool ViewContact::PaintObject(DisplayInfo& /*rDisplayInfo*/, Rectangle& /*rPaintRectangle*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Default implementation has nothing to paint and has to return sal_False
             return sal_False;
         }
 
         // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewContact::PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        void ViewContact::PrePaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Default implementation has nothing to paint
         }
 
-        void ViewContact::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        void ViewContact::PostPaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Default implementation has nothing to paint
         }
 
         // Paint this objects GluePoints. This is after PaitObject() was called.
         // This is temporarily as long as GluePoints are no handles yet.
-        void ViewContact::PaintGluePoints(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        void ViewContact::PaintGluePoints(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
         {
             // Default implementation has nothing to paint
         }
@@ -299,7 +299,7 @@ namespace sdr
             return 0L;
         }
 
-        ViewContact& ViewContact::GetViewContact(sal_uInt32 nIndex) const
+        ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
         {
             // call would be an error
             DBG_ERROR("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
