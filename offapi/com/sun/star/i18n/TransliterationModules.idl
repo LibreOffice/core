@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransliterationModules.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:53:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ published enum TransliterationModules
     /// Transliterate an ascii number string to formal Korean Hanja upper case number string in spellout format
     NumToTextFormalUpper_ko        = 13,
     NON_IGNORE_MASK                = 0x000000ff,
-    IGNORE_MASK                    = 0xffffff00,
+    IGNORE_MASK                    = -0x100,
     /// Ignore case when comparing strings by transliteration service
     IGNORE_CASE                    = 0x00000100,
     /// Ignore Hiragana and Katakana when comparing strings by transliteration service
