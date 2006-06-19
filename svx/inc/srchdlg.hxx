@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:55:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ struct SearchAttrItem
 
 // class SearchAttrItemList ----------------------------------------------
 
-SV_DECL_VARARR_VISIBILITY(SrchAttrItemList, SearchAttrItem, 8, 8, SVX_DLLPUBLIC);
+SV_DECL_VARARR_VISIBILITY(SrchAttrItemList, SearchAttrItem, 8, 8, SVX_DLLPUBLIC)
 
 class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
 {
