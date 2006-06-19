@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 09:01:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,15 +73,6 @@ class BaseReference
 {
 protected:
     /** the interface pointer
-
-        <p>To work around ambiguities in the case of multiple-inheritance
-        interface types (which inherit <code>XInterface</code> more than once),
-        dervied <code>Reference</code> instances use
-        <code>reinterpret_cast</code> to switch <code>_pInterface</code> from a
-        pointer to <code>XInterface</code> to a pointer to a derived interface
-        type, and vice versa.  <em>In principle, this is not guaranteed to
-        work.</em>  In practice, it seems to work on all supported
-        platforms.</p>
     */
     XInterface * _pInterface;
 
@@ -209,6 +200,36 @@ class Reference : public BaseReference
         SAL_THROW( (RuntimeException) );
 #endif
 
+    /** Cast from an "interface pointer" (e.g., BaseReference::_pInterface) to a
+        pointer to this interface_type.
+
+        To work around ambiguities in the case of multiple-inheritance interface
+        types (which inherit XInterface more than once), use reinterpret_cast
+        (resp. a sequence of two static_casts, to avoid warnings about
+        reinterpret_cast used between related classes) to switch from a pointer
+        to XInterface to a pointer to this derived interface_type.  In
+        principle, this is not guaranteed to work.  In practice, it seems to
+        work on all supported platforms.
+    */
+    static inline interface_type * castFromXInterface(XInterface * p) {
+        return static_cast< interface_type * >(static_cast< void * >(p));
+    }
+
+    /** Cast from a pointer to this interface_type to an "interface pointer"
+        (e.g., BaseReference::_pInterface).
+
+        To work around ambiguities in the case of multiple-inheritance interface
+        types (which inherit XInterface more than once), use reinterpret_cast
+        (resp. a sequence of two static_casts, to avoid warnings about
+        reinterpret_cast used between related classes) to switch from a pointer
+        to this derived interface_type to a pointer to XInterface.  In
+        principle, this is not guaranteed to work.  In practice, it seems to
+        work on all supported platforms.
+    */
+    static inline XInterface * castToXInterface(interface_type * p) {
+        return static_cast< XInterface * >(static_cast< void * >(p));
+    }
+
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
@@ -315,14 +336,14 @@ public:
         @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL operator -> () const SAL_THROW( () )
-        { return reinterpret_cast< interface_type * >( _pInterface ); }
+        { return castFromXInterface(_pInterface); }
 
     /** Gets interface pointer. This call does not acquire the interface.
 
         @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL get() const SAL_THROW( () )
-        { return reinterpret_cast< interface_type * >( _pInterface ); }
+        { return castFromXInterface(_pInterface); }
 
     /** Clears reference, i.e. releases interface. Reference is null after clear() call.
     */
