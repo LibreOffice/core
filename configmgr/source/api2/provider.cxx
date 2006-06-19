@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:19:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void SAL_CALL OProvider::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+       void SAL_CALL OProvider::disposing(com::sun::star::lang::EventObject const& /*rEvt*/) throw()
     {
         releaseContext();
         this->dispose();
