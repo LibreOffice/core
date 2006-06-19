@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwpeq.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:40:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ using namespace std;
 
 #include "mzstring.h"
 #include "hwpeq.h"
-
+#include <sal/types.h>
 //#define TEST
 //#define DEBUG
 
@@ -78,7 +78,7 @@ using namespace std;
 enum { SCRIPT_NONE, SCRIPT_SUB, SCRIPT_SUP, SCRIPT_ALL};
 
 static int  eq_word(MzString& outs, istream *strm, int script = SCRIPT_NONE);
-static bool eq_sentence(MzString& outs, istream *strm, char *end = 0);
+static bool eq_sentence(MzString& outs, istream *strm, const char *end = 0);
 
 struct hwpeq {
   const char    *key;       // hwp math keyword
@@ -449,7 +449,7 @@ static char *make_keyword( char *keyword, const char *token)
     ptr = keyword;
     while( *ptr ) {
       if( isupper(*ptr) )
-    *ptr = tolower(*ptr);
+    *ptr = sal::static_int_cast<char>(tolower(*ptr));
       ptr++;
     }
   }
@@ -516,7 +516,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       token << (char) ch;
       ch = strm->get();
     } while( ch != EOF && (ch & 0x80 || isalpha(ch)) ) ;
-    strm->putback(ch);
+    strm->putback(sal::static_int_cast<char>(ch));
     /*  sub, sub, over, atop 특수 처리
         그 이유는 next_state()에 영향을 미치기 때문이다.
      */
@@ -537,12 +537,12 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   else if( IS_BINARY(ch) ) {
     do token << (char) ch;
     while( IS_BINARY(ch = strm->get()) );
-    strm->putback(ch);
+    strm->putback(sal::static_int_cast<char>(ch));
   }
   else if( isdigit(ch) ) {
     do token << (char) ch;
     while( isdigit(ch = strm->get()) );
-    strm->putback(ch);
+    strm->putback(sal::static_int_cast<char>(ch));
   }
   else
     token << (char) ch;
@@ -563,7 +563,7 @@ static int read_white_space(MzString& outs, istream *strm)
   else {
     while( IS_WS(ch = strm->get()) )
       outs << (char )ch;
-    strm->putback(ch);
+    strm->putback(sal::static_int_cast<char>(ch));
     result = ch;
   }
   return result;
@@ -626,7 +626,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
       else
     script_status = SCRIPT_NONE;
 
-      if( (eq = lookup_eqn(keyword)) ) {
+      if( 0 != (eq = lookup_eqn(keyword)) ) {
     nargs = eq->nargs;
     while( nargs-- ) {
       ch = read_white_space(state, strm);
@@ -658,7 +658,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
   return result;
 }
 
-static bool eq_sentence(MzString& outs, istream *strm, char *end)
+static bool eq_sentence(MzString& outs, istream *strm, const char *end)
 {
   MzString  state;
   MzString  white, token;
@@ -694,7 +694,7 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
   int       ch, result;
   hwpeq     *eq = 0;
 
-  while( (result = next_token(white, token, strm)) ) {
+  while( 0 != (result = next_token(white, token, strm)) ) {
     if( sentinel && (result == 1) && strchr(sentinel, token[0]) )
       break;
     make_keyword(key, token);
@@ -706,7 +706,7 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
     strcpy(key + 1, eq->key);
       }
       if( (eq->flag & EQ_CASE) && isupper(token[0]) )
-    key[1] = toupper(key[1]);
+    key[1] = sal::static_int_cast<char>(toupper(key[1]));
       token = key;
     }
 
