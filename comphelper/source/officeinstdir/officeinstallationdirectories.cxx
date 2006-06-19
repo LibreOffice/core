@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeinstallationdirectories.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:54:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
         }
         else
         {
-            sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pUserDir );
+            nIndex = aCanonicalURL.indexOf( *m_pUserDir );
             if ( nIndex  != -1 )
             {
                 return rtl::OUString(
@@ -268,7 +268,7 @@ OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
         }
         else
         {
-            sal_Int32 nIndex = URL.indexOf( m_aUserDirMacro );
+            nIndex = URL.indexOf( m_aUserDirMacro );
             if ( nIndex != -1 )
             {
                 // late init m_pOfficeDir and m_pUserDir
