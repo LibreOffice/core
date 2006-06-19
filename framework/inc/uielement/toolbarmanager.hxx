@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-10 10:26:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         virtual ~ToolBarManager();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         ToolBox* GetToolBar() const;
 
