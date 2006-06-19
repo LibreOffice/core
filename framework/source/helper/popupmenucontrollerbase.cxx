@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:26:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,8 +126,8 @@ DEFINE_XTYPEPROVIDER_7                  (   PopupMenuControllerBase             
 
 PopupMenuControllerBase::PopupMenuControllerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( xServiceManager ),
-    m_bInitialized( sal_False )
+    m_bInitialized( sal_False ),
+    m_xServiceManager( xServiceManager )
 {
 }
 
@@ -153,13 +153,13 @@ void PopupMenuControllerBase::resetPopupMenu( com::sun::star::uno::Reference< co
 }
 
 // XStatusListener
-void SAL_CALL PopupMenuControllerBase::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
+void SAL_CALL PopupMenuControllerBase::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
     // must be implemented by sub class
 }
 
 // XEventListener
-void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
     m_xFrame.clear();
@@ -168,7 +168,7 @@ void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& Source ) th
 }
 
 // XMenuListener
-void SAL_CALL PopupMenuControllerBase::highlight( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -207,11 +207,11 @@ void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent
     }
 }
 
-void SAL_CALL PopupMenuControllerBase::activate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
-void SAL_CALL PopupMenuControllerBase::deactivate( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -273,7 +273,6 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
 
         if ( xFrame.is() && aCommandURL.getLength() )
         {
-            ResetableGuard aLock( m_aLock );
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
         }
