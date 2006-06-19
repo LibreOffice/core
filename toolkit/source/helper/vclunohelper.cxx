@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:24:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,6 @@
 #ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #endif
-
-#pragma hdrstop
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -494,6 +492,7 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
             return ::com::sun::star::embed::EmbedMapUnits::TWIP;
         case MAP_PIXEL:
             return ::com::sun::star::embed::EmbedMapUnits::PIXEL;
+        default: ; // avoid compiler warning
     }
 
     OSL_ENSURE( sal_False, "Unexpected VCL map mode is provided!\n" );
