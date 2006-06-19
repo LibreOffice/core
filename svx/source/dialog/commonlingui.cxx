@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:42:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SvxClickInfoCtr::SvxClickInfoCtr( Window* pParent, const ResId& rResId ) :
 }
 
 //-----------------------------------------------------------------------------
-void SvxClickInfoCtr::MouseButtonDown( const MouseEvent& rMEvt )
+void SvxClickInfoCtr::MouseButtonDown( const MouseEvent& )
 {
     aActivateLink.Call(this);
 }
@@ -108,15 +108,15 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     ,aNewWord       ( this, ResId( FT_NEWWORD ) )
     ,aNewWordED     ( this, ResId( ED_NEWWORD ) )
     ,aSuggestionFT  ( this, ResId( FT_SUGGESTION ) )
-    ,aAuditBox      ( this, ResId( GB_AUDIT ) )
     ,aIgnoreBtn     ( this, ResId( BTN_IGNORE ) )
     ,aIgnoreAllBtn  ( this, ResId( BTN_IGNOREALL ) )
     ,aChangeBtn     ( this, ResId( BTN_CHANGE ) )
     ,aChangeAllBtn  ( this, ResId( BTN_CHANGEALL ) )
     ,aOptionsBtn    ( this, ResId( BTN_OPTIONS ) )
     ,aStatusText    ( this, ResId( FT_STATUS ) )
-    ,aCancelBtn     ( this, ResId( BTN_SPL_CANCEL ) )
     ,aHelpBtn       ( this, ResId( BTN_SPL_HELP ) )
+    ,aCancelBtn     ( this, ResId( BTN_SPL_CANCEL ) )
+    ,aAuditBox      ( this, ResId( GB_AUDIT ) )
 {
     FreeResource();
 
@@ -267,7 +267,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         {
             this, &aAuditBox, &aStatusText
         };
-        for ( sal_Int32 i = 0; i < sizeof( pResize ) / sizeof( pResize[0] ); ++i )
+        for ( sal_uInt32 i = 0; i < sizeof( pResize ) / sizeof( pResize[0] ); ++i )
         {
             aSize = pResize[i]->GetSizePixel( );
             pResize[i]->SetSizePixel( Size( aSize.Width() + _nX, aSize.Height() + _nY ) );
@@ -280,7 +280,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         {
             &aStatusText, &aHelpBtn, &aCancelBtn
         };
-        for ( sal_Int32 i = 0; i < sizeof( pMoveDown ) / sizeof( pMoveDown[0] ); ++i )
+        for ( sal_uInt32 i = 0; i < sizeof( pMoveDown ) / sizeof( pMoveDown[0] ); ++i )
         {
             aPos = pMoveDown[i]->GetPosPixel();
             aPos.Y() += _nY;
@@ -294,7 +294,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         {
             &aIgnoreBtn, &aIgnoreAllBtn, &aChangeBtn, &aChangeAllBtn, &aOptionsBtn, &aHelpBtn, &aCancelBtn
         };
-        for ( sal_Int32 i = 0; i < sizeof( pMoveRight ) / sizeof( pMoveRight[0] ); ++i )
+        for ( sal_uInt32 i = 0; i < sizeof( pMoveRight ) / sizeof( pMoveRight[0] ); ++i )
         {
             aPos = pMoveRight[i]->GetPosPixel();
             aPos.X() += _nX;
