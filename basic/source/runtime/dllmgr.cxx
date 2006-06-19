@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:09:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,6 @@
  ************************************************************************/
 
 #include <stdlib.h>
-#ifdef OS2
-#define INCL_DOSMODULEMGR
-#include <tools/svpm.h>
-#endif
 
 #if defined( WIN ) || defined( WNT )
 #ifndef _SVWIN_H
@@ -66,10 +62,6 @@ typedef FARPROC SbiDllProc;
 #elif defined(WNT)
 typedef HMODULE SbiDllHandle;
 typedef int(*SbiDllProc)();
-#elif defined(OS2)
-typedef HMODULE SbiDllHandle;
-typedef PFN SbiDllProc;
-
 #else
 typedef void* SbiDllHandle;
 typedef void* SbiDllProc;
@@ -82,15 +74,11 @@ typedef void* SbiDllProc;
 #ifndef WINAPI
 #ifdef WNT
 #define WINAPI __far __pascal
-#else
-#if defined(ICC) && defined(OS2)
-#define WINAPI _System
-#endif
 #endif
 #endif
 
 extern "C" {
-#if defined(INTEL) && (defined(WIN) || defined(WNT) || defined(OS2))
+#if defined(INTEL) && (defined(WIN) || defined(WNT))
 
 extern INT16 WINAPI CallINT( SbiDllProc, char *stack, short nstack);
 extern INT32 WINAPI CallLNG( SbiDllProc, char *stack, short nstack);
@@ -291,16 +279,20 @@ SbError SbiDllMgr::Call( const char* pProcName, const char* pDllName,
 
 void SbiDllMgr::CheckDllName( ByteString& rDllName )
 {
-#if defined(WIN) || defined(WNT) // || defined(OS2)
+#if defined(WIN) || defined(WNT)
     if( rDllName.Search('.') == STRING_NOTFOUND )
         rDllName += ".DLL";
+#else
+    (void)rDllName;
 #endif
 }
 
 
 SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
 {
-#if defined(MAC) || defined(UNX)
+    (void)rDllName;
+
+#if defined(UNX)
     SbiDllHandle hLib=0;
 #else
     SbiDllHandle hLib;
@@ -321,10 +313,6 @@ SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
         hLib = 0;
     }
 
-#elif defined(OS2)
-    char cErr[ 100 ];
-    if( DosLoadModule( (PSZ) cErr, 100, (const char*)rDllName, &hLib ) )
-        hLib = 0;
 #endif
     return hLib;
 }
@@ -334,9 +322,8 @@ void SbiDllMgr::FreeDllHandle( SbiDllHandle hLib )
 #if defined(WIN) || defined(WNT)
     if( hLib )
         FreeLibrary ((HINSTANCE) hLib);
-#elif defined(OS2)
-    if( hLib )
-        DosFreeModule( (HMODULE) hLib );
+#else
+    (void)hLib;
 #endif
 }
 
@@ -380,26 +367,8 @@ SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName
             pProc = (SbiDllProc)GetProcAddress( hLib, buf2 );
     }
 
-#elif defined(OS2)
-    PSZ pp;
-    APIRET rc;
-    // 1. Ordinal oder mit Parametern:
-    rc = DosQueryProcAddr( hLib, nOrd, pp = (char*)rProcName.GetStr(), &pProc );
-    // 2. nur der Name:
-    if( rc )
-        rc = DosQueryProcAddr( hLib, 0, pp = (PSZ)buf1, &pProc );
-    // 3. der Name mit Underline vorweg:
-    if( rc )
-        rc = DosQueryProcAddr( hLib, 0, pp = (PSZ)buf2, &pProc );
-    if( rc )
-        pProc = NULL;
-    else
-    {
-        // 16-bit oder 32-bit?
-        ULONG nInfo = 0;
-        if( DosQueryProcType( hLib, nOrd, pp, &nInfo ) )
-            nInfo = 0;;
-    }
+#else
+    (void)hLib;
 #endif
     return pProc;
 }
@@ -531,6 +500,10 @@ SbError SbiDllMgr::CallProc( SbiDllProc pProc, SbxArray* pArgs,
 SbError SbiDllMgr::CallProcC( SbiDllProc pProc, SbxArray* pArgs,
     SbxVariable& rResult )
 {
+    (void)pProc;
+    (void)pArgs;
+    (void)rResult;
+
     DBG_ERROR("C calling convention not supported");
     return (USHORT)SbERR_BAD_ARGUMENT;
 }
