@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:38:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:20:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,6 @@
 #ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
-
-#pragma hdrstop
-
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
