@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:49:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,17 +102,10 @@ void Slider::ImplInit( Window* pParent, WinBits nStyle )
     mbCalcSize          = TRUE;
     mbFullDrag          = TRUE;
 
-    ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
 
     ImplInitSettings();
     SetSizePixel( CalcWindowSizePixel() );
-}
-
-// -----------------------------------------------------------------------
-
-void Slider::ImplInitStyle( WinBits nStyle )
-{
 }
 
 // -----------------------------------------------------------------------
@@ -564,6 +557,8 @@ long Slider::ImplDoAction( BOOL bCallEndSlide )
         case SCROLL_SET:
             nDelta = ImplSlide( ImplCalcThumbPos( GetPointerPosPixel().X() ), bCallEndSlide );
             break;
+        default:
+            break;
     }
 
     return nDelta;
@@ -610,6 +605,8 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
             }
             else
                 mnStateFlags &= ~SLIDER_STATE_CHANNEL2_DOWN;
+            break;
+        default:
             break;
     }
 
@@ -727,7 +724,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 
 // -----------------------------------------------------------------------
 
-void Slider::MouseButtonUp( const MouseEvent& rMEvt )
+void Slider::MouseButtonUp( const MouseEvent& )
 {
     if( SCROLL_SET == meScrollType )
     {
@@ -879,7 +876,7 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-void Slider::Paint( const Rectangle& rRect )
+void Slider::Paint( const Rectangle& )
 {
     ImplDraw( SLIDER_DRAW_ALL );
 }
@@ -930,7 +927,6 @@ void Slider::StateChanged( StateChangedType nType )
     }
     else if ( nType == STATE_CHANGE_STYLE )
     {
-        ImplInitStyle( GetStyle() );
         if ( IsReallyVisible() && IsUpdateMode() )
         {
             if ( (GetPrevStyle() & SLIDER_VIEW_STYLE) !=
