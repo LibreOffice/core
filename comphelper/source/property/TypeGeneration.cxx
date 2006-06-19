@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:32:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,8 @@ using namespace ::comphelper;
 
 namespace comphelper
 {
-    void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType )
+    void GenerateCppuType (
+        CppuTypes eType, const com::sun::star::uno::Type*& pType )
     {
         switch( eType )
         {
