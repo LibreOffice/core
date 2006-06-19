@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:11:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 
 // =======================================================================
 
-DBG_NAME( Font );
+DBG_NAME( Font )
 
 // -----------------------------------------------------------------------
 
@@ -812,7 +812,7 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     rOStm << rImpl_Font.maSize;
 
-    rOStm << (UINT16) GetStoreCharSet( rImpl_Font.meCharSet, rOStm.GetVersion() );
+    rOStm << (UINT16) GetStoreCharSet( rImpl_Font.meCharSet );
     rOStm << (UINT16) rImpl_Font.meFamily;
     rOStm << (UINT16) rImpl_Font.mePitch;
     rOStm << (UINT16) rImpl_Font.meWeight;
