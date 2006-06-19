@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:48:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:03:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,12 +50,14 @@
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
-
-#pragma hdrstop
-
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 // INCLUDE -------------------------------------------------------------------
 
-
+#ifndef _UNO_LINGU_HXX
+#include <unolingu.hxx>
+#endif
 #include <dialmgr.hxx>
 #include "ctredlin.hrc"
 #include "ctredlin.hxx"
@@ -645,8 +647,8 @@ SvxTPView::SvxTPView( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_VIEW_PAGE)),
     aViewData   ( this, ResId( DG_VIEW) ),
     PbAccept    ( this, ResId(PB_ACCEPT  ) ),
-    PbAcceptAll ( this, ResId(PB_ACCEPTALL  ) ),
     PbReject    ( this, ResId(PB_REJECT  ) ),
+    PbAcceptAll ( this, ResId(PB_ACCEPTALL  ) ),
     PbRejectAll ( this, ResId(PB_REJECTALL  ) ),
     PbUndo      ( this, ResId(PB_UNDO  ) ),
     aTitle1     ( ResId( STR_TITLE1 ) ),        // lokale Resource
@@ -671,7 +673,6 @@ SvxTPView::SvxTPView( Window * pParent)
     PbRejectAll.SetClickHdl(aLink);
     PbUndo.SetClickHdl(aLink);
 
-    long nSize=(aViewData.GetOutputSizePixel().Width())/5;
     nDistance=PbAccept.GetSizePixel().Height()+2*MIN_DISTANCE;
     aViewData.SetTabs(nStaticTabs);
 }
@@ -827,6 +828,7 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 
 SvxTPFilter::SvxTPFilter( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_FILTER_PAGE)),
+    pRedlinTable(NULL),
     aCbDate     ( this, ResId( CB_DATE ) ),
     aLbDate     ( this, ResId( LB_DATE ) ),
     aDfDate     ( this, ResId( DF_DATE ) ),
@@ -844,10 +846,9 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     aLbAction   ( this, ResId( LB_ACTION ) ),
     aCbComment  ( this, ResId( CB_COMMENT) ),
     aEdComment  ( this, ResId( ED_COMMENT) ),
-    aStrMyName  (       ResId( STR_FILTER) ),
     aActionStr  (       ResId( STR_ACTION) ),
-    bModified   (FALSE),
-    pRedlinTable(NULL)
+    aStrMyName  (       ResId( STR_FILTER) ),
+    bModified   (FALSE)
 {
     Image aImgTimeHC( ResId( IMG_TIME_H ) );
     FreeResource();
