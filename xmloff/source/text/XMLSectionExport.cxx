@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:37:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,70 +181,68 @@ using ::com::sun::star::uno::XInterface;
 
 XMLSectionExport::XMLSectionExport(
     SvXMLExport& rExp,
-    XMLTextParagraphExport& rParaExp) :
-        rExport(rExp),
-        rParaExport(rParaExp),
-        sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
-        sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter")),
-        sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM("CreateFromLabels")),
-        sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")),
-        sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline")),
-        sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
-        sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
-        sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
-        sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink")),
-        sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM("IsCaseSensitive")),
-        sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
-        sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible")),
-        sLabelCategory(RTL_CONSTASCII_USTRINGPARAM("LabelCategory")),
-        sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM("LabelDisplayType")),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
-        sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat")),
-        sLevelParagraphStyles(
-            RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles")),
-        sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion")),
-        sMainEntryCharacterStyleName(
-            RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName")),
-        sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading")),
-        sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
-        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
-        sName(RTL_CONSTASCII_USTRINGPARAM("Name")),
-        sUseAlphabeticalSeparators(
-            RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators")),
-        sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM("UseCombinedEntries")),
-        sUseDash(RTL_CONSTASCII_USTRINGPARAM("UseDash")),
-        sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM("UseKeyAsEntry")),
-        sUsePP(RTL_CONSTASCII_USTRINGPARAM("UsePP")),
-        sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM("UseUpperCase")),
-        sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromOtherEmbeddedObjects")),
-        sCreateFromStarCalc(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarCalc")),
-        sCreateFromStarChart(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarChart")),
-        sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarDraw")),
-        sCreateFromStarImage(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarImage")),
-        sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarMath")),
-        sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromEmbeddedObjects")),
-        sCreateFromGraphicObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromGraphicObjects")),
-        sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM("CreateFromTables")),
-        sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames")),
-        sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource")),
-        sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated")),
-        sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
-        sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops")),
-        sCreateFromLevelParagraphStyles(
-            RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles")),
-        sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
-        sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection")),
-        sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection")),
-        sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
-        sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
-        sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey")),
-        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm")),
-        sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale")),
-        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
-        sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible")),
-        sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")),
-        sEmpty(),
-        bHeadingDummiesExported( sal_False )
+    XMLTextParagraphExport& rParaExp)
+:   sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition"))
+,   sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter"))
+,   sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromEmbeddedObjects"))
+,   sCreateFromGraphicObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromGraphicObjects"))
+,   sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM("CreateFromLabels"))
+,   sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks"))
+,   sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromOtherEmbeddedObjects"))
+,   sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline"))
+,   sCreateFromStarCalc(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarCalc"))
+,   sCreateFromStarChart(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarChart"))
+,   sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarDraw"))
+,   sCreateFromStarImage(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarImage"))
+,   sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarMath"))
+,   sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM("CreateFromTables"))
+,   sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames"))
+,   sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement"))
+,   sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile"))
+,   sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType"))
+,   sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink"))
+,   sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM("IsCaseSensitive"))
+,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
+,   sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible"))
+,   sLabelCategory(RTL_CONSTASCII_USTRINGPARAM("LabelCategory"))
+,   sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM("LabelDisplayType"))
+,   sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
+,   sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat"))
+,   sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles"))
+,   sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion"))
+,   sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName"))
+,   sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading"))
+,   sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel"))
+,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
+,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
+,   sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators"))
+,   sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM("UseCombinedEntries"))
+,   sUseDash(RTL_CONSTASCII_USTRINGPARAM("UseDash"))
+,   sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM("UseKeyAsEntry"))
+,   sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource"))
+,   sUsePP(RTL_CONSTASCII_USTRINGPARAM("UsePP"))
+,   sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM("UseUpperCase"))
+,   sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
+,   sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate"))
+,   sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops"))
+,   sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles"))
+,   sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex"))
+,   sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection"))
+,   sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection"))
+
+,   sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection"))
+,   sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection"))
+,   sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey"))
+,   sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm"))
+,   sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"))
+,   sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
+
+,   sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible"))
+,   sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"))
+
+,   rExport(rExp)
+,   rParaExport(rParaExp)
+,   bHeadingDummiesExported( sal_False )
 {
 }
 
@@ -1009,8 +1007,12 @@ void XMLSectionExport::ExportBaseIndexSource(
 
 
 void XMLSectionExport::ExportBaseIndexBody(
-    SectionTypeEnum eType,
-    const Reference<XPropertySet> & rSection)
+    SectionTypeEnum
+    #ifdef DBG_UTIL
+    eType
+    #endif
+    ,
+    const Reference<XPropertySet> &)
 {
     // type not used; checked anyway.
     DBG_ASSERT(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
@@ -1729,9 +1731,9 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                 Sequence<PropertyValue> & rKey = aKeys[nKeys];
 
                 sal_Int32 nKeyCount = rKey.getLength();
-                for(sal_Int32 nKey = 0; nKey < nKeyCount; nKey++)
+                for(sal_Int32 nPropertyKey = 0; nPropertyKey < nKeyCount; nPropertyKey++)
                 {
-                    PropertyValue& rValue = rKey[nKey];
+                    PropertyValue& rValue = rKey[nPropertyKey];
 
                     if (rValue.Name.equalsAsciiL(sAPI_SortKey,
                                                  sizeof(sAPI_SortKey)-1))
