@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crenum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:53:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,13 +165,13 @@ FieldAccessMode IdlEnumFieldImpl::getAccessMode()
     return FieldAccessMode_READONLY;
 }
 //__________________________________________________________________________________________________
-Any IdlEnumFieldImpl::get( const Any & rObj )
+Any IdlEnumFieldImpl::get( const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     return Any( &_nValue, getTypeDescr() );
 }
 //__________________________________________________________________________________________________
-void IdlEnumFieldImpl::set( const Any & rObj, const Any & rValue )
+void IdlEnumFieldImpl::set( const Any &, const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     throw IllegalAccessException(
@@ -179,7 +179,7 @@ void IdlEnumFieldImpl::set( const Any & rObj, const Any & rValue )
         (XWeak *)(OWeakObject *)this );
 }
 //__________________________________________________________________________________________________
-void IdlEnumFieldImpl::set( Any & rObj, const Any & rValue )
+void IdlEnumFieldImpl::set( Any &, const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     throw IllegalAccessException(

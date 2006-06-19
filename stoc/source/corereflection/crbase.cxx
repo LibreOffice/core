@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:52:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ void IdlClassImpl::createObject( Any & rObj )
     throw(::com::sun::star::uno::RuntimeException)
 {
     rObj.clear();
-    uno_any_destruct( &rObj, cpp_release );
+    uno_any_destruct( &rObj, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     uno_any_construct( &rObj, 0, getTypeDescr(), 0 );
 }
 
@@ -178,7 +178,7 @@ Sequence< Reference< XIdlClass > > IdlClassImpl::getClasses()
     return Sequence< Reference< XIdlClass > >();
 }
 //__________________________________________________________________________________________________
-Reference< XIdlClass > IdlClassImpl::getClass( const OUString & rName )
+Reference< XIdlClass > IdlClassImpl::getClass( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE( sal_False, "### unexpected use!" );
@@ -200,7 +200,7 @@ Sequence< Reference< XIdlClass > > IdlClassImpl::getSuperclasses() throw(::com::
 }
 // structs
 //__________________________________________________________________________________________________
-Reference< XIdlField > IdlClassImpl::getField( const OUString & rName )
+Reference< XIdlField > IdlClassImpl::getField( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Reference< XIdlField >();
@@ -219,7 +219,7 @@ Uik IdlClassImpl::getUik()
     return Uik();
 }
 //__________________________________________________________________________________________________
-Reference< XIdlMethod > IdlClassImpl::getMethod( const OUString & rName )
+Reference< XIdlMethod > IdlClassImpl::getMethod( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return Reference< XIdlMethod >();
