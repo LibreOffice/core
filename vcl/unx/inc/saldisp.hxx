@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:35:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
 extern "C" {
     struct SnDisplay;
     struct SnLauncheeContext;
-};
+}
 
 class VCL_DLLPUBLIC SalDisplay
 {
@@ -404,7 +404,6 @@ public:
     void            PrintEvent( const ByteString &rComment,
                                 XEvent       *pEvent ) const;
 
-    void            AddFontPath( const ByteString &rPath ) const;
     XlfdStorage*    GetXlfdList();
     ExtendedFontStruct*
     GetFont( const ExtendedXlfd *pFont,
@@ -514,7 +513,7 @@ public:
     virtual ~SalX11Display();
 
     virtual long        Dispatch( XEvent *pEvent );
-    virtual void        Yield( BOOL bWait );
+    virtual void        Yield();
 
     BOOL     IsEvent();
 };
