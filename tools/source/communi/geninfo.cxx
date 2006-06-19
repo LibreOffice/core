@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geninfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:09:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@ GenericInformation::GenericInformation( const ByteString &rKey,
 /*****************************************************************************/
                 : ByteString( rKey ),
                 sValue( rValue ),
-                pParent( pParentList ),
-                pInfoList( pSubInfos )
+                pInfoList( pSubInfos ),
+                pParent( pParentList )
 {
     // if a ParentList exists, insert this object into it
     if ( pParent )
@@ -64,8 +64,8 @@ GenericInformation::GenericInformation( const GenericInformation& rInf,
 /*****************************************************************************/
                 : ByteString( rInf ),
                 sValue( rInf.sValue ),
-                pParent(NULL),
-                pInfoList( 0L )
+                pInfoList( 0L ),
+                pParent(NULL)
 {
     if(bCopySubs && rInf.pInfoList)
         pInfoList = new GenericInformationList(*rInf.pInfoList, this);
@@ -150,6 +150,7 @@ GenericInformationList::GenericInformationList( GenericInformation *pParent )
 GenericInformationList::GenericInformationList(const GenericInformationList& rList,
                             GenericInformation *pParent)
 /*****************************************************************************/
+    : GenericInformationList_Impl()
 {
     USHORT i;
     GenericInformation* pTemp,*pWork;
@@ -170,7 +171,7 @@ GenericInformationList::~GenericInformationList()
 /*****************************************************************************/
 {
     // delete all Informations stored in this List
-    // ### GH: Hier werden dann wohl etwa die Hälfte der Einträge gelöscht
+    // ### GH: Hier werden dann wohl etwa die Hï¿½lfte der Eintrï¿½ge gelï¿½scht
 /*  for ( ULONG i = 0; i < Count(); i++ ) {
         GetObject( i )->ListDeleted();
         delete GetObject( i );
@@ -252,7 +253,6 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
       if ( !pReturnInfo ) { // wenn kein Return, dann muss man es anlegen
         if ( !bCreatePath ) // wenn aber kein Create, dann nicht anlegen
           return NULL;
-        USHORT nTmp = 0;
         pReturnInfo = new GenericInformation( sKey, "", this, NULL);
         pReturnInfo->SetSubList( new GenericInformationList( pReturnInfo ));
       }
@@ -291,7 +291,7 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
         }
     }
 
-// ### GH: dieser Block schein überflüssig zu sein
+// ### GH: dieser Block schein ï¿½berflï¿½ssig zu sein
     if ( Count() == 1 ) {
         ByteString sCandidate( *GetObject( 0 ));
         if ( sCandidate.ToUpperAscii() == sKey ) {
@@ -309,7 +309,7 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
             return 1;
         }
     }
-// ### GH: /ENDE/ dieser Block schein überflüssig zu sein
+// ### GH: /ENDE/ dieser Block schein ï¿½berflï¿½ssig zu sein
 
     ULONG nActPos = nStart + (( nEnd - nStart ) / 2 );
     ByteString sCandidate = ByteString( *GetObject( nActPos ));
@@ -383,49 +383,6 @@ BOOL GenericInformationList::InsertInfo( const ByteString &rPathKey, const ByteS
   }
   return FALSE;
 }
-
-/*****************************************************************************
-BOOL GenericInformationList::InsertInfo( const String &rPathKey,
-                     const String &rValue,
-                     BOOL bNewPath = FALSE)
-/*****************************************************************************
-{
-  GenericInformation *pInfo;
-
-  if ( !pPathKey || '\0'==pPathKey[0] )
-    return FALSE;
-
-  char *pNextItem = strchr( pPathKey, '/' );
-  if ( !pNextItem ) { // kein Token mehr gefunden
-    /* aus dem PathKey kann nun eine GenericInformation gebildet
-     * und eingefuegt werden *
-    pInfo = GetInfo( pPathKey, FALSE );
-    // Object besteht nicht und soll auch nicht nachgebildet werden
-    if ( !pInfo && !bNewPath )
-      return FALSE;
-    // erzeuge neue GI und stopfe sie in die Liste. Fertig !
-    pInfo = new GenericInformation( String( pPathKey ), String( pValue ), 0, 0 );
-    return InsertInfo( pInfo, TRUE );
-  }
-  else { // noch nicht fertig, muss noch tiefer in den Baum gehen
-    // SuchString anfertigen
-    String sSearch ( pPathKey );
-    sSearch.Erase ( USHORT(pNextItem - pPathKey));
-    // suchen..
-    pInfo = GetInfo( sSearch, FALSE );
-    if ( !pInfo && ! bNewPath)  // subinfo nicht vorhanden und
-      return FALSE;             // ich darf keinen neuen Pfad anlegen
-
-    if ( !pInfo )
-      // neue Subinfo machen und einfuegen
-      pInfo = new GenericInformation ( sSearch , "", this, 0 );
-
-    pNextItem++;
-    return pInfo->InsertSubInfo( pNextItem, pValue, bNewPath );
-    }
-  }
-}
-*/
 
 /*****************************************************************************/
 void GenericInformationList::RemoveInfo( GenericInformation *pInfo,
