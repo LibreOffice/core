@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:27:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 #ifdef OSL_LITENDIAN
             nMask = SWAPLONG( nMask );
 #endif
-            for( long i = 0; i < nHeight; i++, pLast4Bytes += nScanSize )
+            for( sal_uInt32 i = 0; i < nHeight; i++, pLast4Bytes += nScanSize )
                 ( *(long*) pLast4Bytes ) &= nMask;
         }
     }
