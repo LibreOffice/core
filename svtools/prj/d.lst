@@ -196,7 +196,6 @@ hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
 hedabu: ..\inc\imaprect.hxx %_DEST%\inc%_EXT%\svtools\imaprect.hxx
 hedabu: ..\inc\imapcirc.hxx %_DEST%\inc%_EXT%\svtools\imapcirc.hxx
 hedabu: ..\inc\imappoly.hxx %_DEST%\inc%_EXT%\svtools\imappoly.hxx
-hedabu: ..\inc\svtuiks.hxx %_DEST%\inc%_EXT%\svtools\svtuiks.hxx
 
 hedabu: ..\inc\parhtml.hxx %_DEST%\inc%_EXT%\svtools\parhtml.hxx
 hedabu: ..\inc\htmltokn.h %_DEST%\inc%_EXT%\svtools\htmltokn.h
@@ -213,10 +212,8 @@ hedabu: ..\source\svxml\xmlattr.hxx %_DEST%\inc%_EXT%\svtools\xmlattr.hxx
 hedabu: ..\source\svxml\domdoc.hxx %_DEST%\inc%_EXT%\svtools\domdoc.hxx
 
 hedabu: ..\inc\ctypeitm.hxx %_DEST%\inc%_EXT%\svtools\ctypeitm.hxx
-hedabu: ..\inc\groupset.hxx %_DEST%\inc%_EXT%\svtools\groupset.hxx
 
 hedabu: ..\inc\fmtfield.hxx %_DEST%\inc%_EXT%\svtools\fmtfield.hxx
-hedabu: ..\inc\svtoxstr.hxx %_DEST%\inc%_EXT%\svtools\svtoxstr.hxx
 hedabu: ..\inc\strmadpt.hxx %_DEST%\inc%_EXT%\svtools\strmadpt.hxx
 hedabu: ..\inc\instrm.hxx %_DEST%\inc%_EXT%\svtools\instrm.hxx
 hedabu: ..\inc\outstrm.hxx %_DEST%\inc%_EXT%\svtools\outstrm.hxx
@@ -331,7 +328,6 @@ hedabu: ..\inc\AccessibleBrowseBoxTableBase.hxx %_DEST%\inc%_EXT%\svtools\Access
 hedabu: ..\inc\AccessibleBrowseBoxTable.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTable.hxx
 hedabu: ..\inc\AccessibleBrowseBoxHeaderBar.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderBar.hxx
 hedabu: ..\inc\AccessibleBrowseBoxHeaderCell.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderCell.hxx
-hedabu: ..\inc\AccessibleBrowseBoxTableCell.hxx %_DEST%\inc%_EXT%\svtools\accessiblebrowseboxcell.hxx
 
 hedabu: ..\inc\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
 hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
@@ -352,6 +348,7 @@ hedabu: ..\inc\QueryFolderName.hxx %_DEST%\inc%_EXT%\svtools\QueryFolderName.hxx
 hedabu: ..\inc\DocumentInfoPreview.hxx %_DEST%\inc%_EXT%\svtools\DocumentInfoPreview.hxx
 hedabu: ..\inc\javacontext.hxx %_DEST%\inc%_EXT%\svtools\javacontext.hxx
 hedabu: ..\inc\javainteractionhandler.hxx %_DEST%\inc%_EXT%\svtools\javainteractionhandler.hxx
+hedabu: ..\inc\options.hxx %_DEST%\inc%_EXT%\svtools\options.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
