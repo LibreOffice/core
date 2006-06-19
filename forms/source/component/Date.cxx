@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:22:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
