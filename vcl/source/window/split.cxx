@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:33:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ namespace
 
 // =======================================================================
 
-void Splitter::ImplInitData()
+void Splitter::ImplInitSplitterData()
 {
     ImplGetWindowImpl()->mbSplitter        = TRUE;
     mpRefWin          = NULL;
@@ -181,7 +181,7 @@ void Splitter::ImplDrawSplitter()
 Splitter::Splitter( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SPLITTER )
 {
-    ImplInitData();
+    ImplInitSplitterData();
     ImplInit( pParent, nStyle );
 }
 
@@ -190,7 +190,7 @@ Splitter::Splitter( Window* pParent, WinBits nStyle ) :
 Splitter::Splitter( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_SPLITTER )
 {
-    ImplInitData();
+    ImplInitSplitterData();
     rResId.SetRT( RSC_SPLITTER );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
