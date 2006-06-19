@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vafu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:30:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,10 +344,10 @@ PE_VarFunc::SpReturn_Variable()
 
     if ( NOT bExtern )
     {
-        VarFlags aFlags( UINT16(0)
-                         | ( bStatic AND Env().Context().CurClass() == 0 ? VarFlags::f_static_local : 0 )
+        VarFlags aFlags( UINT16(
+                           ( bStatic AND Env().Context().CurClass() == 0 ? VarFlags::f_static_local : 0 )
                          | ( bStatic AND Env().Context().CurClass() != 0 ? VarFlags::f_static_member : 0 )
-                         | ( bMutable  ? VarFlags::f_mutable : 0 )
+                         | ( bMutable  ? VarFlags::f_mutable : 0 ) )
                        );
 
 //      ary::S_InitData aData( 0, Env().CurCeSpace().Id(), i_sName, 0 );
@@ -396,32 +396,32 @@ PE_VarFunc::SpReturn_Ignore()
 }
 
 void
-PE_VarFunc::On_start_Identifier(const char * i_sText)
+PE_VarFunc::On_start_Identifier(const char *)
 {
     pSpuType->Push(not_done);
 }
 
 void
-PE_VarFunc::On_start_operator(const char * i_sText)
+PE_VarFunc::On_start_operator(const char *)
 {
     pSpuFunctionCastOperator->Push(done);
 }
 
 void
-PE_VarFunc::On_start_TypeKey(const char * i_sText)
+PE_VarFunc::On_start_TypeKey(const char *)
 {
     pSpuType->Push(not_done);
 }
 
 void
-PE_VarFunc::On_start_virtual(const char * i_sText)
+PE_VarFunc::On_start_virtual(const char *)
 {
     SetTokenResult(done, stay);
     bVirtual = true;
 }
 
 void
-PE_VarFunc::On_start_Tilde(const char * i_sText)
+PE_VarFunc::On_start_Tilde(const char *)
 {
     SetTokenResult(done, stay);
     pStati->SetCur(expectName);
@@ -430,47 +430,47 @@ PE_VarFunc::On_start_Tilde(const char * i_sText)
 }
 
 void
-PE_VarFunc::On_start_const(const char * i_sText)
+PE_VarFunc::On_start_const(const char *)
 {
     pSpuType->Push(not_done);
 }
 
 void
-PE_VarFunc::On_start_volatile(const char * i_sText)
+PE_VarFunc::On_start_volatile(const char *)
 {
     pSpuType->Push(not_done);
 }
 
 void
-PE_VarFunc::On_start_extern(const char * i_sText)
+PE_VarFunc::On_start_extern(const char *)
 {
     SetTokenResult(done, stay);
     bExtern = true;
 }
 
 void
-PE_VarFunc::On_start_static(const char * i_sText)
+PE_VarFunc::On_start_static(const char *)
 {
     SetTokenResult(done, stay);
     bStatic = true;
 }
 
 void
-PE_VarFunc::On_start_mutable(const char * i_sText)
+PE_VarFunc::On_start_mutable(const char *)
 {
     SetTokenResult(done, stay);
     bMutable = true;
 }
 
 void
-PE_VarFunc::On_start_register(const char * i_sText)
+PE_VarFunc::On_start_register(const char *)
 {
     SetTokenResult(done, stay);
     bRegister = true;
 }
 
 void
-PE_VarFunc::On_start_inline(const char * i_sText)
+PE_VarFunc::On_start_inline(const char *)
 {
        SetTokenResult(done, stay);
 
@@ -478,32 +478,32 @@ PE_VarFunc::On_start_inline(const char * i_sText)
 }
 
 void
-PE_VarFunc::On_start_explicit(const char * i_sText)
+PE_VarFunc::On_start_explicit(const char *)
 {
     SetTokenResult(done, stay);
     bExplicit = true;
 }
 
 void
-PE_VarFunc::On_start_Bracket_Right(const char * i_sText)
+PE_VarFunc::On_start_Bracket_Right(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_VarFunc::On_start_typename(const char * i_sText)
+PE_VarFunc::On_start_typename(const char *)
 {
     pSpuType->Push(not_done);
 }
 
 void
-PE_VarFunc::On_expectCtor_Bracket_Left(const char * i_sText)
+PE_VarFunc::On_expectCtor_Bracket_Left(const char *)
 {
     pSpuFunctionCtor->Push(not_done);
 }
 
 void
-PE_VarFunc::On_afterClassDecl_Semicolon(const char * i_sText)
+PE_VarFunc::On_afterClassDecl_Semicolon(const char *)
 {
     SetTokenResult(done, pop_success);
 }
@@ -517,13 +517,13 @@ PE_VarFunc::On_expectName_Identifier(const char * i_sText)
 }
 
 void
-PE_VarFunc::On_expectName_operator(const char * i_sText)
+PE_VarFunc::On_expectName_operator(const char *)
 {
     pSpuFunctionNormalOperator->Push(done);
 }
 
 void
-PE_VarFunc::On_expectName_Bracket_Left(const char * i_sText)
+PE_VarFunc::On_expectName_Bracket_Left(const char *)
 {
     // Function pointer declaration
     pSpuIgnore->Push(not_done);
@@ -532,13 +532,13 @@ PE_VarFunc::On_expectName_Bracket_Left(const char * i_sText)
 
 
 void
-PE_VarFunc::On_afterName_ArrayBracket_Left(const char * i_sText)
+PE_VarFunc::On_afterName_ArrayBracket_Left(const char *)
 {
     pSpuVariable->Push(not_done);
 }
 
 void
-PE_VarFunc::On_afterName_Bracket_Left(const char * i_sText)
+PE_VarFunc::On_afterName_Bracket_Left(const char *)
 {
     if ( NOT bInDestructor)
         pSpuFunctionStd->Push(not_done);
@@ -547,7 +547,7 @@ PE_VarFunc::On_afterName_Bracket_Left(const char * i_sText)
 }
 
 void
-PE_VarFunc::On_afterName_DoubleColon(const char * i_sText)
+PE_VarFunc::On_afterName_DoubleColon(const char *)
 {
     pSpuIgnore->Push(done);   // This seems to be only an implementation.
 
@@ -557,13 +557,13 @@ PE_VarFunc::On_afterName_DoubleColon(const char * i_sText)
 }
 
 void
-PE_VarFunc::On_afterName_Semicolon(const char * i_sText)
+PE_VarFunc::On_afterName_Semicolon(const char *)
 {
     pSpuVariable->Push(not_done);
 }
 
 void
-PE_VarFunc::On_afterName_Comma(const char * i_sText)
+PE_VarFunc::On_afterName_Comma(const char *)
 {
     pSpuVariable->Push(not_done);
 }
@@ -637,15 +637,15 @@ PE_VarFunc::CreateFunctionFlags()
 {
     typedef ary::cpp::FunctionFlags  FuncFlags;
 
-    return FuncFlags(     UINT16(0)
-                          | ( bStatic AND Env().Context().CurClass() == 0 ? FuncFlags::f_static_local : 0 )
+    return FuncFlags(     UINT16(
+                            ( bStatic AND Env().Context().CurClass() == 0 ? FuncFlags::f_static_local : 0 )
                           | ( bStatic AND Env().Context().CurClass() != 0 ? FuncFlags::f_static_member : 0 )
                           | ( bExtern ? FuncFlags::f_extern : 0 )
                           | ( Env().IsExternC() ? FuncFlags::f_externC : 0 )
                           | ( bMutable  ? FuncFlags::f_mutable : 0 )
                           | ( bInline  ? FuncFlags::f_inline : 0 )
                           | ( bRegister  ? FuncFlags::f_register : 0 )
-                          | ( bExplicit  ? FuncFlags::f_explicit : 0 )
+                          | ( bExplicit  ? FuncFlags::f_explicit : 0 ) )
                         );
 
 }
