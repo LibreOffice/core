@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sourceviewconfig.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:54:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
-
 #ifndef _SVTOOLS_SOURCEVIEWCONFIG_HXX
 #include <sourceviewconfig.hxx>
 #endif
@@ -185,7 +182,7 @@ void SourceViewConfig_Impl::Load()
 /*-- 28.08.2002 16:38:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SourceViewConfig_Impl::Notify( const Sequence< OUString >& aPropertyNames )
+void SourceViewConfig_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
 }
@@ -196,7 +193,6 @@ void SourceViewConfig_Impl::Commit()
 {
     ClearModified();
     Sequence< OUString > aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence< Any > aValues( aNames.getLength() );
     Any* pValues = aValues.getArray();
     for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
@@ -294,7 +290,7 @@ void SourceViewConfig::SetShowProportionalFontsOnly(sal_Bool bSet)
 /* -----------------------------30.08.2002 10:40------------------------------
 
  ---------------------------------------------------------------------------*/
-void SourceViewConfig::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SourceViewConfig::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     Broadcast( rHint );
 }
