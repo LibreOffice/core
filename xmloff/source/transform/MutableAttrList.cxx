@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MutableAttrList.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:48:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,12 @@ XMLMutableAttributeList* XMLMutableAttributeList::getImplementation(
 {
     Reference< XUnoTunnel > xUT( xInt, UNO_QUERY );
     if( xUT.is() )
-        return (XMLMutableAttributeList*)xUT->getSomething(
-                                XMLMutableAttributeList::getUnoTunnelId() );
+    {
+        return
+            reinterpret_cast<XMLMutableAttributeList*>(
+                sal::static_int_cast<sal_IntPtr>(
+                    xUT->getSomething( XMLMutableAttributeList::getUnoTunnelId())));
+    }
     else
         return NULL;
 }
@@ -125,7 +129,7 @@ sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
         0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                 rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0;
 }
