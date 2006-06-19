@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_metho.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:01:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,17 +41,20 @@
 
 
 
-char C_sFileHeader1[] = "/* ";
-char C_sFileHeader2[] = " */\r\n/* Implementation of component_getDescriptionFunc() */\r\n\r\n"
+const char C_sFileHeader1[]
+                      = "/* ";
+const char C_sFileHeader2[]
+                      = " */\r\n/* Implementation of component_getDescriptionFunc() */\r\n\r\n"
                         "#include <sal/types.h>\r\n\r\n";
-char C_sFuncBegin[]   = "#ifdef __cplusplus\r\n"
+const char C_sFuncBegin[]
+                      = "#ifdef __cplusplus\r\n"
                         "extern \"C\" {\r\n"
                         "#endif\r\n\r\n"
                         "const sal_Char * SAL_CALL\r\ncomponent_getDescriptionFunc()\r\n"
                         "{\r\n"
                         "    return (const sal_Char*) \r\n"
                         "    \"";
-char C_sFuncEnd[]    =  "\";\r\n"
+const char C_sFuncEnd[]    =  "\";\r\n"
                         "}\r\n\r\n"
                         "#ifdef __cplusplus\r\n"
                         "} /* end of extern \"C\" */\r\n"
@@ -64,7 +67,7 @@ Create_AccessMethod( const char *           i_pOutputFileName,
 {
     const char * pText = i_sText;
     const char * pTrans = 0;
-    char   sDescrLineChange[] = "\"\r\n    \"";
+    const char   sDescrLineChange[] = "\"\r\n    \"";
     int    sDescrLen = strlen(sDescrLineChange);
 
     std::ofstream aFile(i_pOutputFileName, std::ios::out
