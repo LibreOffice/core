@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:08:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,6 @@
  *
  ************************************************************************/
 
-#ifndef _NEW_HXX
-#include <tools/new.hxx>
-#endif
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
@@ -1063,6 +1060,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
     ULONG   nMaxPos;
     ULONG   nPos;
     sal_uInt32 nFirstIfd, nDataLen;
+
     bStatus = TRUE;
 
     pCallback    = pcallback;
@@ -1213,8 +1211,8 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
                     nStripsPerPlane = ( nImageLength - 1 ) / nRowsPerStrip + 1;
                     nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
 
-                    for ( ULONG i = 0; i < 4; i++ )
-                        pMap[ i ] = new BYTE[ nBytesPerRow ];
+                    for ( ULONG j = 0; j < 4; j++ )
+                        pMap[ j ] = new BYTE[ nBytesPerRow ];
 
                     if ( ReadMap( 10, 60 ) )
                     {
