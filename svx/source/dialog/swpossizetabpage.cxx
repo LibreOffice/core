@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:09:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,7 +560,9 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
   -----------------------------------------------------------------------*/
 SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SfxTabPage( pParent, ResId( RID_SVXPAGE_SWPOSSIZE, DIALOG_MGR() ), rInAttrs ),
+#ifdef WNT
 #pragma warning (disable : 4355)
+#endif
     m_aSizeFL(    this, ResId( FL_SIZE   ) ),
     m_aWidthFT(   this, ResId( FT_WIDTH  ) ),
     m_aWidthMF(   this, ResId( MF_WIDTH  ) ),
@@ -575,8 +577,6 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rIn
     m_aToCharRB(  this, ResId( RB_TOCHAR ) ),
     m_aAsCharRB(  this, ResId( RB_ASCHAR ) ),
     m_aToFrameRB( this, ResId( RB_TOFRAME) ),
-
-    m_aExampleWN( this,   ResId( WN_EXAMPLE ) ),
 
     m_aProtectionFL(  this, ResId( FL_PROTECTION  ) ),
     m_aPositionCB(    this, ResId( CB_POSITION    ) ),
@@ -600,23 +600,26 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rIn
     m_aVertToLB(      this, ResId( LB_VERTTO      ) ),
 
     m_aFollowCB(      this, ResId( CB_FOLLOW      ) ),
+    m_aExampleWN( this,   ResId( WN_EXAMPLE ) ),
+#ifdef WNT
 #pragma warning (default : 4355)
+#endif
+    m_pVMap( 0 ),
+    m_pHMap( 0 ),
+    m_pSdrView( 0 ),
     m_nOldH(HoriOrientation::CENTER),
     m_nOldHRel(RelOrientation::FRAME),
     m_nOldV(VertOrientation::TOP),
     m_nOldVRel(RelOrientation::PRINT_AREA),
-    m_pSdrView( 0 ),
-    m_pVMap( 0 ),
-    m_pHMap( 0 ),
     m_fWidthHeightRatio(1.0),
     m_nHtmlMode(0),
+    m_bHtmlMode(false),
     m_bAtHoriPosModified(false),
     m_bAtVertPosModified(false),
     m_bIsVerticalFrame(false),
-    m_bIsInRightToLeft(false),
     m_bPositioningDisabled(false),
     m_bIsMultiSelection(false),
-    m_bHtmlMode(false)
+    m_bIsInRightToLeft(false)
 {
     FreeResource();
     FieldUnit eDlgUnit = GetModuleFieldUnit( &rInAttrs );
@@ -735,9 +738,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
         bModified |= TRUE;
     }
 
-    BOOL bRet = FALSE;
     const SfxItemSet& rOldSet = GetItemSet();
-    const SfxPoolItem* pOldItem = 0;
 
     if(!m_bPositioningDisabled)
     {
@@ -1036,19 +1037,13 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
         RangeModifyHdl(&m_aWidthMF);  // initially set maximum values
     }
 }
-/*-- 03.03.2004 12:21:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SvxSwPosSizeTabPage::ActivatePage( const SfxItemSet& rSet )
-{
-}
 /*-- 03.03.2004 12:21:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-int  SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* pSet )
+int  SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
 /*-- 04.03.2004 09:14:41---------------------------------------------------
@@ -1108,7 +1103,7 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
 /*-- 05.03.2004 10:43:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, pEdit )
+IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
 {
     if(m_bPositioningDisabled)
         return 0;
@@ -1194,7 +1189,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, pEdit )
 /*-- 05.03.2004 11:12:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, pButton )
+IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
 {
     m_aHoriMirrorCB.Enable(!m_aAsCharRB.IsChecked() && !m_bIsMultiSelection);
 
@@ -1217,7 +1212,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, pButton )
 /*-- 05.03.2004 14:20:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SvxSwPosSizeTabPage, MirrorHdl, CheckBox *, pBtn )
+IMPL_LINK( SvxSwPosSizeTabPage, MirrorHdl, CheckBox *, EMPTYARG )
 {
     short nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
@@ -1295,8 +1290,6 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     FixedText *pRelFT = bHori ? &m_aHoriToFT : &m_aVertToFT;
     FrmMap *pMap = bHori ? m_pHMap : m_pVMap;
 
-    USHORT nLBSelPos = pLB->GetSelectEntryPos();
-    //BOOL bEnable = nLBSelPos == pLB->GetEntryCount()-1 && !bFormat;
 
     USHORT nMapPos = GetMapPos(pMap, *pLB);
     USHORT nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
@@ -1429,7 +1422,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, ProtectHdl, TriStateBox *, EMPTYARG)
 /*-- 05.03.2004 14:20:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-short SvxSwPosSizeTabPage::GetRelation(FrmMap *pMap, ListBox &rRelationLB)
+short SvxSwPosSizeTabPage::GetRelation(FrmMap */*pMap*/, ListBox &rRelationLB)
 {
     short nRel = 0;
     USHORT nPos = rRelationLB.GetSelectEntryPos();
@@ -1445,7 +1438,7 @@ short SvxSwPosSizeTabPage::GetRelation(FrmMap *pMap, ListBox &rRelationLB)
 /*-- 05.03.2004 14:20:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB)
+short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &/*rAlignLB*/, ListBox &rRelationLB)
 {
     short nAlign = 0;
 
@@ -1720,11 +1713,11 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
             USHORT nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
-            for (USHORT nMapPos = 0; nMapPos < nMapCount; nMapPos++)
+            for (USHORT _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
             {
-                if (pMap[nMapPos].eStrId == eStrId)
+                if (pMap[_nMapPos].eStrId == eStrId)
                 {
-                    nLBRelations = pMap[nMapPos].nLBRelations;
+                    nLBRelations = pMap[_nMapPos].nLBRelations;
                     for (USHORT nRelPos = 0; nRelPos < nRelCount; nRelPos++)
                     {
                         if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
@@ -1735,7 +1728,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
                             String sEntry = m_aFramePosString.GetString(sStrId1);
                             USHORT nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
-                            if (pMap[nMapPos].nAlign == nAlign)
+                            if (pMap[_nMapPos].nAlign == nAlign)
                                 sSelEntry = sEntry;
                             break;
                         }
