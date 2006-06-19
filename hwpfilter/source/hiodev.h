@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hiodev.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:36:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
  * hwpio.h
  * (C) 1999 Mizi Research, All rights are reserved
  *
- * $Id: hiodev.h,v 1.3 2005-09-07 16:36:44 rt Exp $
+ * $Id: hiodev.h,v 1.4 2006-06-20 00:54:06 hr Exp $
  */
 
 #ifndef _HIODEV_H_
@@ -119,14 +119,17 @@ class HStreamIODev : public HIODev
 /**
  * Read one byte from stream
  */
+        using HIODev::read1b;
         virtual int read1b();
 /**
  * Read 2 bytes from stream
  */
+        using HIODev::read2b;
         virtual int read2b();
 /**
  * Read 4 bytes from stream
  */
+        using HIODev::read4b;
         virtual long read4b();
 /**
  * Read some bytes from stream to given pointer as amount of size
@@ -162,8 +165,11 @@ class HMemIODev : public HIODev
         virtual int  state() const;
 /* gzip routine wrapper */
         virtual bool setCompressed( bool );
+        using HIODev::read1b;
         virtual int read1b();
+        using HIODev::read2b;
         virtual int read2b();
+        using HIODev::read4b;
         virtual long read4b();
         virtual int readBlock( void *ptr, int size );
         virtual int skipBlock( int size );
