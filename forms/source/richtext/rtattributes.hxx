@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtattributes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:11:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:02:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,22 +102,22 @@ namespace frm
     //====================================================================
     //................................................................
     inline AttributeState::AttributeState( )
-        :eSimpleState( eIndetermined )
-        ,pItemHandle( NULL )
+        :pItemHandle( NULL )
+        ,eSimpleState( eIndetermined )
     {
     }
 
     //................................................................
     inline AttributeState::AttributeState( AttributeCheckState _eCheckState )
-        :eSimpleState( _eCheckState )
-        ,pItemHandle( NULL )
+        :pItemHandle( NULL )
+        ,eSimpleState( _eCheckState )
     {
     }
 
     //................................................................
     inline AttributeState::AttributeState( const AttributeState& _rSource )
-        :eSimpleState( eIndetermined )
-        ,pItemHandle( NULL )
+        :pItemHandle( NULL )
+        ,eSimpleState( eIndetermined )
     {
         operator=( _rSource );
     }
