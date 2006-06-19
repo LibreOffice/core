@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oslfile2streamwrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:00:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
 #include <comphelper/oslfile2streamwrap.hxx>
 #endif
+
+#include <algorithm>
 
 namespace comphelper
 {
@@ -78,14 +80,14 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 
 
     sal_uInt64 nRead = 0;
     FileBase::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
-    if (eError != osl_File_E_None)
+    if (eError != FileBase::E_None)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     // Wenn gelesene Zeichen < MaxLength, staruno::Sequence anpassen
     if (nRead < (sal_uInt32)nBytesToRead)
-        aData.realloc( nRead );
+        aData.realloc( sal::static_int_cast< sal_Int32 >(nRead) );
 
-    return nRead;
+    return sal::static_int_cast< sal_Int32 >(nRead);
 }
 
 //------------------------------------------------------------------------------
@@ -120,14 +122,14 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
     FileBase::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
-    if (eError != osl_File_E_None)
+    if (eError != FileBase::E_None)
     {
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
     }
 
 #ifdef DBG_UTIL
     m_pFile->getPos(nCurrentPos);
-    volatile int dummy = 0;                      // to take a look at last changes ;-)
+//  volatile int dummy = 0;                      // to take a look at last changes ;-)
 #endif
 }
 
@@ -140,24 +142,25 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
 
     sal_uInt64 nPos;
     FileBase::RC eError = m_pFile->getPos(nPos);
-    if (eError != osl_File_E_None)
+    if (eError != FileBase::E_None)
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nDummy = 0;
     eError = m_pFile->setPos(Pos_End, nDummy);
-    if (eError != osl_File_E_None)
+    if (eError != FileBase::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nAvailable;
     eError = m_pFile->getPos(nAvailable);
-    if (eError != osl_File_E_None)
+    if (eError != FileBase::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
     eError = m_pFile->setPos(Pos_Absolut, nPos);
-    if (eError != osl_File_E_None)
+    if (eError != FileBase::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
-    return nAvailable;
+    return sal::static_int_cast< sal_Int32 >(
+        std::max(nAvailable, sal::static_int_cast< sal_uInt64 >(SAL_MAX_INT32)));
 }
 
 //------------------------------------------------------------------------------
@@ -180,7 +183,8 @@ void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_In
 {
     sal_uInt64 nWritten;
     FileBase::RC eError = rFile.write(aData.getConstArray(),aData.getLength(), nWritten);
-    if (eError != osl_File_E_None || nWritten != aData.getLength())
+    if (eError != FileBase::E_None
+        || nWritten != sal::static_int_cast< sal_uInt32 >(aData.getLength()))
     {
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
     }
