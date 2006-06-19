@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:21:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,8 +308,8 @@ class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider  
         virtual ~SubstitutePathVariables();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XStringSubstitution
@@ -357,12 +357,12 @@ class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider  
         const rtl::OUString             m_aVarStart;
         const rtl::OUString             m_aVarEnd;
 
-        VarNameToIndexMap               m_aPreDefVarMap;            // Mapping from pre-def variable names to enum for array access
+        VarNameToIndexMap                     m_aPreDefVarMap;                // Mapping from pre-def variable names to enum for array access
         SubstituteVariables             m_aSubstVarMap;             // Active rule set map indexed by variable name!
-        PredefinedPathVariables         m_aPreDefVars;              // All predefined variables
-        SubstitutePathVariables_Impl    m_aImpl;                    // Implementation class that access the configuration
-        ReSubstFixedVarOrderVector      m_aReSubstFixedVarOrder;    // To speed up resubstitution fixed variables (order for lookup)
-        ReSubstUserVarOrderVector       m_aReSubstUserVarOrder;     // To speed up resubstitution user variables
+        PredefinedPathVariables               m_aPreDefVars;                // All predefined variables
+        SubstitutePathVariables_Impl                m_aImpl;                    // Implementation class that access the configuration
+        ReSubstFixedVarOrderVector            m_aReSubstFixedVarOrder;        // To speed up resubstitution fixed variables (order for lookup)
+        ReSubstUserVarOrderVector             m_aReSubstUserVarOrder;             // To speed up resubstitution user variables
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         WorkPathHelper_Impl             m_aWorkPathHelper;          // Helper class to get a substitution for $(workdirurl)
 };
