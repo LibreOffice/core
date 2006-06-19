@@ -4,9 +4,9 @@
  *
  *  $RCSfile: luxenum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:09:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ class Enum // : public Template_Base
 //                      Sequence_();
     bool                CheckIntt(
                             intt                i_nNumber )
-                                                { return Values_().find(nValue) != Values_().end(); }
+                                                { return Values_().find(i_nNumber) != Values_().end(); }
 
     // DATA
     intt                nValue;
