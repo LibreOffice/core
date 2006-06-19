@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:23:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,11 +158,11 @@
 #ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
 #endif
-#ifndef _FRM_IDS_HXX_
-#include "ids.hxx"
-#endif
 #ifndef FORMS_COMPONENT_CLONEABLE_HXX
 #include "cloneable.hxx"
+#endif
+#ifndef _FRM_IDS_HXX_
+#include "ids.hxx"
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
@@ -175,8 +175,6 @@
 namespace frm
 {
 //.........................................................................
-
-    class OFormComponentListeners;
 
     // default tab index for components
     const sal_Int16 FRM_DEFAULT_TABINDEX = 0;
@@ -492,6 +490,7 @@ public:
                 throw (::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                 throw (::com::sun::star::uno::Exception);
+    using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // ::com::sun::star::beans::XPropertyState
     virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
@@ -610,10 +609,9 @@ private:
     ::rtl::OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
 
-    cppu::OInterfaceContainerHelper     m_aUpdateListeners;
-    cppu::OInterfaceContainerHelper     m_aResetListeners;
-    ::std::auto_ptr< OFormComponentListeners >
-                                        m_pFormComponentListeners;
+    ::cppu::OInterfaceContainerHelper   m_aUpdateListeners;
+    ::cppu::OInterfaceContainerHelper   m_aResetListeners;
+    ::cppu::OInterfaceContainerHelper   m_aFormComponentListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                                         m_xExternalBinding;
@@ -954,40 +952,42 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
-// OComponentHelper
+    // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// XReset
+    // XReset
     virtual void SAL_CALL reset(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 
-// XServiceInfo
+    // XServiceInfo
     virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// XServiceInfo - static version
+    // XServiceInfo - static version
     static  StringSequence SAL_CALL getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
-// XChild
+    // XChild
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-// XPersistObject
+    // XPersistObject
     virtual void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// XBoundComponent
+    // XBoundComponent
     virtual sal_Bool SAL_CALL commit() throw(::com::sun::star::uno::RuntimeException);
-// XUpdateBroadcaster (base of XBoundComponent)
+
+    // XUpdateBroadcaster (base of XBoundComponent)
     virtual void SAL_CALL addUpdateListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeUpdateListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 
-// XPropertySet
+    // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
                 throw (::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                 throw (::com::sun::star::uno::Exception);
+    using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // ::com::sun::star::beans::XPropertyState
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
