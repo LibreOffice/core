@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:50:51 $
+#   last change: $Author: hr $ $Date: 2006-06-19 23:54:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,31 +127,6 @@ OBJFILES=	\
             $(OBJ)$/testcomp.obj  \
             $(OBJ)$/testsameprocess.obj 
 
-
-# APP1TARGET=	testmarshal
-# APP1OBJS=	$(OBJ)$/testmarshal.obj \
-# 		$(SLO)$/urp_marshal.obj\
-# 		$(SLO)$/urp_unmarshal.obj \
-# 		$(SLO)$/urp_bridgeimpl.obj \
-# 		$(SLB)$/bridges_remote_static.lib
-        
-# # 		$(SLO)$/marshal.obj\
-# # 		$(SLO)$/unmarshal.obj\
-
-# .IF "$(OS)" == "LINUX"
-# APP1STDLIBS+= -lstdc++
-# .ENDIF
-
-#APP1LIBS+=	\
-#			$(SLB)$/bridges_marshal.lib
-# APP1STDLIBS+=	\
-# 			$(UNOLIB) \
-# 			$(CPPULIB)	\
-# 			$(CPPUHELPERLIB)	\
-# 			$(SALLIB)	\
-# 			$(LIBCIMT)
-
-# APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
 APP2TARGET=	testserver
 APP2OBJS=	$(OBJ)$/testserver.obj \
