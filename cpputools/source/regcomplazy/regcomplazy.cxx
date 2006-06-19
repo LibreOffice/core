@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcomplazy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:37:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,7 @@ static void print_options() SAL_THROW( () )
 }
 
 static bool checkImplValue(RegistryValueList<sal_Char*>* pValueList, OString sImplName) {
-    int i = 0;
-    for (i=0; i < pValueList->getLength(); i++) {
+    for (sal_uInt32 i=0; i < pValueList->getLength(); i++) {
         if (sImplName.equals(pValueList->getElement(i)))
             return true;
     }
@@ -142,7 +141,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     OString sDescr = sBuffer.makeStringAndClear();
     sal_Int32 nTokenIndex = 0;
-    sal_Int32 nIndex = 0;
 
     CDescrVector vDescr;
     CompDescriptor descr;
@@ -154,16 +152,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (sTmp.pData->buffer[sTmp.getLength()-1] == '\x0D')
             sToken = sTmp.copy(0, sTmp.getLength()-1);
 
-        if (nIndex = sToken.indexOf("[Data]") >= 0) {
+        if (sToken.indexOf("[Data]") >= 0) {
             do {
-                OString sTmp = sDescr.getToken(0, '\x0A', nTokenIndex);
-                OString sToken(sTmp);
-                if (sTmp.pData->buffer[sTmp.getLength()-1] == '\x0D')
-                    sToken = sTmp.copy(0, sTmp.getLength()-1);
+                OString sTmp2 = sDescr.getToken(0, '\x0A', nTokenIndex);
+                OString sToken2(sTmp2);
+                if (sTmp2.pData->buffer[sTmp2.getLength()-1] == '\x0D')
+                    sToken2 = sTmp2.copy(0, sTmp2.getLength()-1);
 
-                if ((sToken.getLength() > 0) && (sToken.pData->buffer[0] != '[')) {
-                    OString dataKey(sToken.copy(0, sToken.indexOf('=')));
-                    OString sValues(sToken.copy(sToken.indexOf('=')+1));
+                if ((sToken2.getLength() > 0) && (sToken2.pData->buffer[0] != '[')) {
+                    OString dataKey(sToken2.copy(0, sToken2.indexOf('=')));
+                    OString sValues(sToken2.copy(sToken2.indexOf('=')+1));
                     sal_Int32 nVIndex = 0;
                     OSVector vValues;
                     do {
@@ -175,7 +173,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     break;
             } while (nTokenIndex >= 0 );
         }
-        if ( nIndex = sToken.indexOf("[ComponentDescriptor]") >= 0) {
+        if ( sToken.indexOf("[ComponentDescriptor]") >= 0) {
             if (bFirst)
                 bFirst = false;
             else
@@ -183,16 +181,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
             descr = CompDescriptor();
         }
-        else if ( nIndex = sToken.indexOf("ImplementationName=") >= 0) {
+        else if ( sToken.indexOf("ImplementationName=") >= 0) {
             descr.sImplementationName = sToken.copy(19);
         }
-        else if ( nIndex = sToken.indexOf("ComponentName=") >= 0) {
+        else if ( sToken.indexOf("ComponentName=") >= 0) {
             descr.sComponentName = sToken.copy(14);
         }
-        else if ( nIndex = sToken.indexOf("LoaderName=") >= 0) {
+        else if ( sToken.indexOf("LoaderName=") >= 0) {
             descr.sLoaderName = sToken.copy(11);
         }
-        else if ( (nIndex = sToken.indexOf("[SupportedServices]") < 0) &&
+        else if ( (sToken.indexOf("[SupportedServices]") < 0) &&
                   (sToken.getLength() > 0) &&
                   (sToken.pData->buffer[0] != '[') ) {
             descr.vSupportedServices.push_back(sToken);
@@ -316,15 +314,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     continue;
                 }
 
-                sal_Int32 nServices = valueList.getLength()+1;
+                sal_uInt32 nServices = valueList.getLength()+1;
                 sal_Char** pImplList = (sal_Char**)rtl_allocateZeroMemory(
                     nServices * sizeof(sal_Char*));
                 pImplList[0] = (sal_Char*)rtl_allocateZeroMemory(
                     sImplName.getLength()+1 * sizeof(sal_Char));
                 rtl_copyMemory(pImplList[0], (sal_Char*)sImplName.getStr(),
                                sImplName.getLength()+1);
-                int i = 0;
-                for (i=0; i < valueList.getLength(); i++) {
+                for (sal_uInt32 i=0; i < valueList.getLength(); i++) {
                     pImplList[i+1]=valueList.getElement(i);
                 }
                 key.setStringListValue(OUString(), pImplList, nServices);
