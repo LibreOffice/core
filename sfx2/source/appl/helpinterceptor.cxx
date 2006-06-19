@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 13:31:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,9 +266,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 // XDispatch
 
 void SAL_CALL HelpInterceptor_Impl::dispatch(
-
-    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( RuntimeException )
-
+    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException )
 {
     sal_Bool bBack = ( String( DEFINE_CONST_UNICODE(".uno:Backward") ) == String( aURL.Complete ) );
     if ( bBack || String( DEFINE_CONST_UNICODE(".uno:Forward") ) == String( aURL.Complete ) )
@@ -307,9 +305,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
 // -----------------------------------------------------------------------
 
 void SAL_CALL HelpInterceptor_Impl::addStatusListener(
-
-    const Reference< XStatusListener >& xControl, const URL& aURL ) throw( RuntimeException )
-
+    const Reference< XStatusListener >& xControl, const URL& ) throw( RuntimeException )
 {
     DBG_ASSERT( !m_xListener.is(), "listener already exists" );
     m_xListener = xControl;
@@ -318,9 +314,7 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener(
 // -----------------------------------------------------------------------
 
 void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
-
-    const Reference< XStatusListener >& xControl, const URL& aURL ) throw( RuntimeException )
-
+    const Reference< XStatusListener >&, const URL&) throw( RuntimeException )
 {
     m_xListener = 0;
 }
@@ -347,7 +341,7 @@ void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::F
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& obj )
+void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& )
 
     throw( ::com::sun::star::uno::RuntimeException )
 
@@ -359,9 +353,9 @@ void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventO
 
   -----------------------------------------------------------------------*/
 HelpStatusListener_Impl::HelpStatusListener_Impl(
-        Reference < XDispatch > xDispatch, URL& rURL)
+        Reference < XDispatch > aDispatch, URL& rURL)
 {
-    xDispatch->addStatusListener(this, rURL);
+    aDispatch->addStatusListener(this, rURL);
 }
 /*-- 05.09.2002 12:17:59---------------------------------------------------
 
@@ -382,7 +376,7 @@ void HelpStatusListener_Impl::statusChanged(
 /*-- 05.09.2002 12:18:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void HelpStatusListener_Impl::disposing( const EventObject& obj ) throw( RuntimeException )
+void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
 {
     xDispatch->removeStatusListener(this, com::sun::star::util::URL());
     xDispatch = 0;
