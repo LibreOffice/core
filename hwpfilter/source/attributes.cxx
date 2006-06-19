@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:28:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@
 struct TagAttribute
 {
     TagAttribute(){}
-    TagAttribute( const OUString &sName, const OUString &sType , const OUString &sValue )
+    TagAttribute( const OUString &rName, const OUString &rType , const OUString &rValue )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        sName     = rName;
+        sType     = rType;
+        sValue    = rValue;
     }
 
     OUString sName;
@@ -71,11 +71,12 @@ struct AttributeListImpl_impl
 
 sal_Int16 SAL_CALL AttributeListImpl::getLength(void) throw (RuntimeException)
 {
-    return m_pImpl->vecAttribute.size();
+    return (sal_Int16)m_pImpl->vecAttribute.size();
 }
 
 
-AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
+AttributeListImpl::AttributeListImpl( const AttributeListImpl &r ) :
+cppu::WeakImplHelper1<com::sun::star::xml::sax::XAttributeList>( r )
 {
     m_pImpl = new AttributeListImpl_impl;
     *m_pImpl = *(r.m_pImpl);
@@ -84,7 +85,8 @@ AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
 
 OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() )
+    sal_uInt32 i2 = sal::static_int_cast<sal_Int16>(i);
+    if( i >= 0 &&  i2 < m_pImpl->vecAttribute.size() )
     {
         return m_pImpl->vecAttribute[i].sName;
     }
@@ -94,7 +96,8 @@ OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 
 OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() )
+    sal_uInt32 i2 = sal::static_int_cast<sal_Int16>(i);
+    if( i >= 0 &&  i2 < m_pImpl->vecAttribute.size() )
     {
         return m_pImpl->vecAttribute[i].sType;
     }
@@ -104,7 +107,8 @@ OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 
 OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() )
+    sal_uInt32 i2 = sal::static_int_cast<sal_Int16>(i);
+    if( i >= 0 &&  i2 < m_pImpl->vecAttribute.size() )
     {
         return m_pImpl->vecAttribute[i].sValue;
     }
