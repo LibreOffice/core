@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:07:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,10 +414,10 @@ InterfaceTypeDescriptionImpl::InterfaceTypeDescriptionImpl(
     const Sequence< OUString > & rOptionalBaseTypes,
     const Sequence< sal_Int8 > & rBytes, bool published )
     : _xTDMgr( xTDMgr )
+    , _aBytes( rBytes )
     , _aName( rName )
     , _aBaseTypes( rBaseTypes )
     , _aOptionalBaseTypes( rOptionalBaseTypes )
-    , _aBytes( rBytes )
     , _membersInit( false )
     , _published( published )
 {
@@ -506,6 +506,10 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
                         setter.reset(
                             new stoc::registry_tdprovider::FunctionDescription(
                                 _xTDMgr, _aBytes, j));
+                        break;
+
+                    default:
+                        OSL_ASSERT(false);
                         break;
                     }
                 }
