@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pestate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:51:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ namespace uidl
 {
 
 void
-ParseEnvState::Process_Identifier( const TokIdentifier & i_rToken )
+ParseEnvState::Process_Identifier( const TokIdentifier & )
 {
     Process_Default();
 }
@@ -63,37 +63,37 @@ ParseEnvState::Process_NameSeparator()
 }
 
 void
-ParseEnvState::Process_Punctuation( const TokPunctuation & i_rToken )
+ParseEnvState::Process_Punctuation( const TokPunctuation & )
 {
     Process_Default();
 }
 
 void
-ParseEnvState::Process_BuiltInType( const TokBuiltInType & i_rToken )
+ParseEnvState::Process_BuiltInType( const TokBuiltInType & )
 {
     Process_Default();
 }
 
 void
-ParseEnvState::Process_TypeModifier( const TokTypeModifier & i_rToken )
+ParseEnvState::Process_TypeModifier( const TokTypeModifier & )
 {
     Process_Default();
 }
 
 void
-ParseEnvState::Process_MetaType( const TokMetaType &    i_rToken )
+ParseEnvState::Process_MetaType( const TokMetaType &    )
 {
     Process_Default();
 }
 
 void
-ParseEnvState::Process_Stereotype( const TokStereotype & i_rToken )
+ParseEnvState::Process_Stereotype( const TokStereotype & )
 {
     Process_Default();
 }
 
 void
-ParseEnvState::Process_ParameterHandling( const TokParameterHandling & i_rToken )
+ParseEnvState::Process_ParameterHandling( const TokParameterHandling & )
 {
     Process_Default();
 }
@@ -117,7 +117,7 @@ ParseEnvState::Process_Observes()
 }
 
 void
-ParseEnvState::Process_Assignment( const TokAssignment & i_rToken )
+ParseEnvState::Process_Assignment( const TokAssignment & )
 {
     Process_Default();
 }
