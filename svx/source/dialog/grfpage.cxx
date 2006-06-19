@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:10:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:11:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,17 +104,9 @@ inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent,  SVX_RES( RID_SVXPAGE_GRFCROP ), rSet ),
-    aSizeFL(        this, ResId( FL_SIZE    )),
-    aWidthFT(       this, ResId( FT_WIDTH   )),
-    aWidthMF(       this, ResId( MF_WIDTH   )),
-    aHeightFT(      this, ResId( FT_HEIGHT  )),
-    aHeightMF(      this, ResId( MF_HEIGHT  )),
-    aZoomFL(        this, ResId( FL_ZOOM    )),
-    aWidthZoomFT(   this, ResId( FT_WIDTHZOOM )),
-    aWidthZoomMF(   this, ResId( MF_WIDTHZOOM )),
-    aHeightZoomFT(  this, ResId( FT_HEIGHTZOOM)),
-    aHeightZoomMF(  this, ResId( MF_HEIGHTZOOM)),
     aCropFL(        this, ResId( FL_CROP    )),
+    aZoomConstRB(   this, ResId( RB_ZOOMCONST)),
+    aSizeConstRB(   this, ResId( RB_SIZECONST)),
     aLeftFT(        this, ResId( FT_LEFT    )),
     aLeftMF(        this, ResId( MF_LEFT    )),
     aRightFT(       this, ResId( FT_RIGHT   )),
@@ -123,11 +115,19 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     aTopMF(         this, ResId( MF_TOP     )),
     aBottomFT(      this, ResId( FT_BOTTOM  )),
     aBottomMF(      this, ResId( MF_BOTTOM  )),
-    aSizeConstRB(   this, ResId( RB_SIZECONST)),
-    aZoomConstRB(   this, ResId( RB_ZOOMCONST)),
-    aExampleWN(     this, ResId( WN_BSP     )),
+    aZoomFL(        this, ResId( FL_ZOOM    )),
+    aWidthZoomFT(   this, ResId( FT_WIDTHZOOM )),
+    aWidthZoomMF(   this, ResId( MF_WIDTHZOOM )),
+    aHeightZoomFT(  this, ResId( FT_HEIGHTZOOM)),
+    aHeightZoomMF(  this, ResId( MF_HEIGHTZOOM)),
+    aSizeFL(        this, ResId( FL_SIZE    )),
+    aWidthFT(       this, ResId( FT_WIDTH   )),
+    aWidthMF(       this, ResId( MF_WIDTH   )),
+    aHeightFT(      this, ResId( FT_HEIGHT  )),
+    aHeightMF(      this, ResId( MF_HEIGHT  )),
     aOrigSizeFT(    this, ResId(FT_ORIG_SIZE)),
     aOrigSizePB(    this, ResId( PB_ORGSIZE )),
+    aExampleWN(     this, ResId( WN_BSP     )),
     pLastCropField(0),
     bInitialized(FALSE),
     bSetOrigSize(FALSE)
@@ -370,8 +370,6 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
-                                                    SID_ATTR_GRAF_CROP ) ) );
 
     bSetOrigSize = FALSE;
 
@@ -441,10 +439,10 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-int SvxGrfCropPage::DeactivatePage(SfxItemSet *pSet)
+int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return TRUE;
 }
 
@@ -821,16 +819,15 @@ Size SvxGrfCropPage::GetGrfOrigSize( const Graphic& rGrf ) const
 SvxGrfCropPage::SvxCropExample::SvxCropExample( Window* pPar,
                                                 const ResId& rResId )
     : Window( pPar, rResId ),
-    aTopLeft(0,0), aBottomRight(0,0),
     aFrameSize( OutputDevice::LogicToLogic(
                             Size( CM_1_TO_TWIP / 2, CM_1_TO_TWIP / 2 ),
-                            MapMode( MAP_TWIP ), GetMapMode() ))
-
+                            MapMode( MAP_TWIP ), GetMapMode() )),
+    aTopLeft(0,0), aBottomRight(0,0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& rRect )
+void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& )
 {
     Size aWinSize( PixelToLogic(GetOutputSizePixel() ));
     SetLineColor();
