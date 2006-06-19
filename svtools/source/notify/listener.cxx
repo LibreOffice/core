@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:30:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,11 @@ BOOL SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
 
 // base implementation of notification handler
 
-void SvtListener::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
+void SvtListener::Notify( SvtBroadcaster&
+#ifdef DBG_UTIL
+rBC
+#endif
+, const SfxHint& )
 {
     DBG_ASSERT( IsListening( rBC ),
                 "notification from unregistered broadcaster" );
