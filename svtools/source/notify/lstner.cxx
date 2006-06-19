@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:32:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@
 #include "hint.hxx"
 #include "brdcst.hxx"
 
-SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0, 2 );
+SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0, 2 )
 
 #define _SFX_LSTNER_CXX
 #include "lstner.hxx"
 
 //====================================================================
-DBG_NAME(SfxListener);
+DBG_NAME(SfxListener)
 TYPEINIT0(SfxListener);
 
 //====================================================================
@@ -184,11 +184,18 @@ BOOL SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 
 // base implementation of notification handler
 
+#ifdef DBG_UTIL
 void SfxListener::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                              const SfxHint& rHint, const TypeId& rHintType )
+                              const SfxHint&, const TypeId& rHintType )
+#else
+void SfxListener::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
+                              const SfxHint&, const TypeId& )
+#endif
 {
+    #ifdef DBG_UTIL
     const SfxBroadcaster *pBC = &rBC;
     DBG_ASSERT( USHRT_MAX != aBCs.GetPos(pBC),
                 "notification from unregistered broadcaster" );
+    #endif
 }
 
