@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 08:31:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:55:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,7 +349,7 @@ Reference< XHyphenatedWord > SAL_CALL
 Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                const ::com::sun::star::lang::Locale& aLocale,
                sal_Int16 nMaxLeading,
-               const ::com::sun::star::beans::PropertyValues& aProperties )
+               const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
                throw (com::sun::star::uno::RuntimeException,
                com::sun::star::lang::IllegalArgumentException)
 {
@@ -499,7 +499,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                     }
                     hit = hit && (hyphens[i]&1) && ((i + leftrep - pos[i]) < Leading);
                     hit = hit && ((i + leftrep - pos[i]) >= (minLead-1) );
-                    hit = hit && ((wordlen - i - 1 + strlen(rep[i]) - leftrep - 1) >= minTrail);
+                    hit = hit && ((wordlen - i - 1 + sal::static_int_cast< sal_sSize >(strlen(rep[i])) - leftrep - 1) >= minTrail);
                 }
             if (hit) {
             nHyphenationPos = i;
@@ -575,10 +575,10 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
 
 
 Reference < XHyphenatedWord > SAL_CALL
-    Hyphenator::queryAlternativeSpelling( const ::rtl::OUString& aWord,
-                  const ::com::sun::star::lang::Locale& aLocale,
-                  sal_Int16 nIndex,
-                  const ::com::sun::star::beans::PropertyValues& aProperties )
+    Hyphenator::queryAlternativeSpelling( const ::rtl::OUString& /*aWord*/,
+                  const ::com::sun::star::lang::Locale& /*aLocale*/,
+                  sal_Int16 /*nIndex*/,
+                  const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::uno::RuntimeException)
 {
@@ -591,7 +591,7 @@ Reference < XHyphenatedWord > SAL_CALL
 Reference< XPossibleHyphens > SAL_CALL
     Hyphenator::createPossibleHyphens( const ::rtl::OUString& aWord,
                    const ::com::sun::star::lang::Locale& aLocale,
-                   const ::com::sun::star::beans::PropertyValues& aProperties )
+                   const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::uno::RuntimeException)
 
@@ -599,7 +599,7 @@ Reference< XPossibleHyphens > SAL_CALL
 
   SvtPathOptions aPathOpt;
 
-  int nHyphenationPos = -1;
+//  int nHyphenationPos = -1;
   int wordlen;
   char *hyphens;
   char *lcword;
@@ -798,7 +798,7 @@ OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC
 
 
 Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
-            const Reference< XMultiServiceFactory > & rSMgr )
+            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
 
@@ -841,7 +841,7 @@ sal_Bool SAL_CALL
 
 
 OUString SAL_CALL
-    Hyphenator::getServiceDisplayName( const Locale& rLocale )
+    Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
