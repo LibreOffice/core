@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxprinter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:45:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ protected:
 
 public:
     VCLXPrinterPropertySet( const String& rPrinterName );
-    ~VCLXPrinterPropertySet();
+    virtual ~VCLXPrinterPropertySet();
 
     Printer*                    GetPrinter() const { return mpPrinter; }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  GetDevice();
@@ -123,6 +123,7 @@ public:
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException);
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
+    using cppu::OPropertySetHelper::getFastPropertyValue;
     void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 
     // ::com::sun::star::awt::XPrinterPropertySet
