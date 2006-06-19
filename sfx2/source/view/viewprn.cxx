@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:10:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,11 +185,10 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
 
 //-------------------------------------------------------------------------
 
-BOOL UseStandardPrinter_Impl( Window *pParent, SfxPrinter *pDocPrinter )
+BOOL UseStandardPrinter_Impl( Window* /*pParent*/, SfxPrinter* pDocPrinter )
 {
     // Optionen abfragen, ob gewarnt werden soll (Doc uebersteuert App)
     BOOL bWarn = FALSE;
-    SfxApplication *pSfxApp = SFX_APP();
     const SfxItemSet *pDocOptions = &pDocPrinter->GetOptions();
     if ( pDocOptions )
     {
@@ -853,7 +852,7 @@ void SfxViewShell::LockPrinter( BOOL bLock)
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::Print( SfxProgress &rProgress, PrintDialog *pDlg )
+USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, PrintDialog *pDlg )
 {
     SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
     SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_PRINTDOC, pObjShell));
@@ -863,14 +862,14 @@ USHORT SfxViewShell::Print( SfxProgress &rProgress, PrintDialog *pDlg )
 
 //--------------------------------------------------------------------
 
-SfxPrinter* SfxViewShell::GetPrinter( BOOL bCreate )
+SfxPrinter* SfxViewShell::GetPrinter( BOOL /*bCreate*/ )
 {
     return 0;
 }
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags )
+USHORT SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, USHORT /*nDiffFlags*/ )
 {
     return 0;
 }
@@ -879,8 +878,8 @@ USHORT SfxViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags )
 
 SfxTabPage* SfxViewShell::CreatePrintOptionsPage
 (
-    Window*             pParent,
-    const SfxItemSet&   rOptions
+    Window*             /*pParent*/,
+    const SfxItemSet&   /*rOptions*/
 )
 
 /*  [Beschreibung]
