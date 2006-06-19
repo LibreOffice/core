@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:48:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@
 #include <tools/bigint.hxx>
 #endif
 
-#pragma hdrstop
-
 /****************** SvToken **********************************************/
 /*************************************************************************
 |*
@@ -85,6 +83,7 @@ ByteString SvToken::GetTokenAsString() const
             aStr = "RTTIBASE";//(ULONG)pComplexObj;
             break;
         case SVTOKEN_EOF:
+        case SVTOKEN_HASHID:
             break;
     }
 
@@ -134,6 +133,8 @@ ByteString SvToken::Print() const
             break;
         case SVTOKEN_EOF:
             aStr += "end of file";
+            break;
+        case SVTOKEN_HASHID:
             break;
     }
     aStr += GetTokenAsString();
@@ -227,9 +228,9 @@ void SvTokenStream::InitCtor()
 |*    Beschreibung
 *************************************************************************/
 SvTokenStream::SvTokenStream( const String & rFileName )
-    : aFileName( rFileName )
-    , pInStream( new SvFileStream( rFileName, STREAM_STD_READ | STREAM_NOCREATE ) )
+    : pInStream( new SvFileStream( rFileName, STREAM_STD_READ | STREAM_NOCREATE ) )
     , rInStream( *pInStream )
+    , aFileName( rFileName )
     , aTokList( 0x8000, 0x8000 )
 {
     InitCtor();
@@ -241,9 +242,9 @@ SvTokenStream::SvTokenStream( const String & rFileName )
 |*    Beschreibung
 *************************************************************************/
 SvTokenStream::SvTokenStream( SvStream & rStream, const String & rFileName )
-    : aFileName( rFileName )
-    , pInStream( NULL )
+    : pInStream( NULL )
     , rInStream( rStream )
+    , aFileName( rFileName )
     , aTokList( 0x8000, 0x8000 )
 {
     InitCtor();
@@ -356,30 +357,6 @@ BOOL SvTokenStream::Skip( char cStart, char cEnd, UINT32 * pBegin )
         // siehe aerger rsc, }; ausgemerzt
         pTok = GetToken_Next();
     return nContextCount == 0;
-}
-
-/*************************************************************************
-|*    SvTokenStream::Replace()
-|*
-|*    Beschreibung
-|*    Invariante        Range immer gueltig
-*************************************************************************/
-void SvTokenStream::Replace( const Range & rRange, SvToken * pNewTok )
-{
-    // Robuster SeekCursor
-    ULONG nSeekPos = aTokList.GetCurPos();
-    if( nSeekPos >= (ULONG)rRange.Min() )
-        if( nSeekPos <= (ULONG)rRange.Max() )
-            nSeekPos = rRange.Min();
-        else
-            nSeekPos -= rRange.Len();
-
-    long nLen = rRange.Len();
-    aTokList.Seek( (ULONG)rRange.Min() );
-    while( nLen-- )
-        delete aTokList.Remove();
-
-    Seek( nSeekPos );
 }
 
 /*************************************************************************
