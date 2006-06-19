@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 13:31:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:16:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,13 +118,13 @@
 namespace css = ::com::sun::star;
 
 //==================================================================
-DBG_NAME(SfxDispatcherFlush);
-DBG_NAME(SfxDispatcherFillState);
+DBG_NAME(SfxDispatcherFlush)
+DBG_NAME(SfxDispatcherFillState)
 
 //==================================================================
 typedef SfxRequest* SfxRequestPtr;
 SV_IMPL_PTRARR( SfxItemPtrArray, SfxPoolItemPtr );
-SV_DECL_PTRARR_DEL( SfxRequestPtrArray, SfxRequestPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( SfxRequestPtrArray, SfxRequestPtr, 4, 4 )
 SV_IMPL_PTRARR( SfxRequestPtrArray, SfxRequestPtr );
 
 DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
@@ -134,8 +134,8 @@ struct SfxToDo_Impl
 {
     SfxShell*           pCluster;
     sal_Bool                bPush;
-    sal_Bool                bDelete;
-    sal_Bool                bUntil;
+    sal_Bool            bDelete;
+    sal_Bool            bUntil;
 
     SfxToDo_Impl()
         : pCluster(0)
@@ -217,7 +217,7 @@ struct SfxDispatcher_Impl
 #define SFX_FLUSH_TIMEOUT    50
 
 //====================================================================
-sal_Bool SfxDispatcher::IsLocked( sal_uInt16 nSID ) const
+sal_Bool SfxDispatcher::IsLocked( sal_uInt16 ) const
 
 /*  [Beschreibung]
 
@@ -645,6 +645,7 @@ IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 */
 
 {
+    (void)pvoid; // unused
     DBG_MEMTEST();
 
     Flush();
@@ -849,7 +850,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI )
         return;
 
     for ( int i = int(pImp->aStack.Count()) - 1; i >= 0; --i )
-        pImp->aStack.Top( (sal_uInt16) i )->DoActivate(pImp->pFrame, bMDI);
+        pImp->aStack.Top( (sal_uInt16) i )->DoActivate_Impl(pImp->pFrame, bMDI);
 
     if ( pImp->aToDoStack.Count() )
     {
@@ -927,7 +928,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI )
         return;
 
     for ( sal_uInt16 i = 0; i < pImp->aStack.Count(); ++i )
-        pImp->aStack.Top(i)->DoDeactivate(pImp->pFrame, bMDI);
+        pImp->aStack.Top(i)->DoDeactivate_Impl(pImp->pFrame, bMDI);
 
     Flush();
 }
@@ -1251,14 +1252,14 @@ int SfxExecuteItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 //--------------------------------------------------------------------
-SfxPoolItem* SfxExecuteItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SfxExecuteItem::Clone( SfxItemPool* ) const
 {
     return new SfxExecuteItem( *this );
 }
 
 //--------------------------------------------------------------------
 SfxExecuteItem::SfxExecuteItem( const SfxExecuteItem& rArg )
-    : SfxPoolItem( rArg ), nModifier( 0 )
+    : SfxItemPtrArray(), SfxPoolItem( rArg ), nModifier( 0 )
 {
     eCall = rArg.eCall;
     nSlot = rArg.nSlot;
@@ -1269,9 +1270,9 @@ SfxExecuteItem::SfxExecuteItem( const SfxExecuteItem& rArg )
 
 //--------------------------------------------------------------------
 SfxExecuteItem::SfxExecuteItem(
-    sal_uInt16 nWhich, sal_uInt16 nSlotP, SfxCallMode eModeP,
+    sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP,
     const SfxPoolItem*  pArg1, ... ) :
-    SfxPoolItem( nWhich ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
+    SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
 {
     va_list pVarArgs;
     va_start( pVarArgs, pArg1 );
@@ -1283,8 +1284,8 @@ SfxExecuteItem::SfxExecuteItem(
 
 //--------------------------------------------------------------------
 SfxExecuteItem::SfxExecuteItem(
-    sal_uInt16 nWhich, sal_uInt16 nSlotP, SfxCallMode eModeP )
-    : SfxPoolItem( nWhich ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
+    sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP )
+    : SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
 {
 }
 
@@ -1952,13 +1953,13 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
 
     if ( pTaskWin && ( bIsMDIApp || bIsIPOwner ) )
     {
-        SfxDispatcher *pActDispat = pTaskWin->GetBindings().GetDispatcher_Impl();
-        SfxDispatcher *pDispat = this;
-        while ( pActDispat && !bIsTaskActive )
+        SfxDispatcher *pActDispatcher = pTaskWin->GetBindings().GetDispatcher_Impl();
+        SfxDispatcher *pDispatcher = this;
+        while ( pActDispatcher && !bIsTaskActive )
         {
-            if ( pDispat == pActDispat )
+            if ( pDispatcher == pActDispatcher )
                 bIsTaskActive = sal_True;
-            pActDispat = pActDispat->pImp->pParent;
+            pActDispatcher = pActDispatcher->pImp->pParent;
         }
 
         if ( bIsTaskActive && nStatBarId && pImp->pFrame )
@@ -2084,11 +2085,11 @@ void SfxDispatcher::FlushImpl()
         if ( aToDo.bPush )
         {
             if ( pImp->bActive )
-                aToDo.pCluster->DoActivate(pImp->pFrame, sal_True);
+                aToDo.pCluster->DoActivate_Impl(pImp->pFrame, sal_True);
         }
         else
             if ( pImp->bActive )
-                aToDo.pCluster->DoDeactivate(pImp->pFrame, sal_True);
+                aToDo.pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
     }
     for ( nToDo = aToDoCopy.Count()-1; nToDo >= 0; --nToDo )
     {
@@ -2600,7 +2601,6 @@ sal_Bool SfxDispatcher::_FillState
     DBG_PROFSTART(SfxDispatcherFillState);
 
     const SfxSlot *pSlot = rSvr.GetSlot();
-    SfxApplication *pSfxApp = SFX_APP();
     if ( pSlot && IsLocked( pSlot->GetSlotId() ) )
     {
         pImp->bInvalidateOnUnlock = sal_True;
@@ -2719,7 +2719,7 @@ const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
 //----------------------------------------------------------------------
 void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId,
                                   Window *pWin, const Point *pPos,
-                                  const SfxPoolItem *pArg1, ... )
+                                  const SfxPoolItem *, ... )
 {
     ExecutePopup( nConfigId, pWin, pPos );
 }
@@ -3003,7 +3003,7 @@ void SfxDispatcher::InsertShell_Impl( SfxShell& rShell, sal_uInt16 nPos )
     // Der cast geht, weil SfxShellStack_Impl keine eigenen member hat
     ((StackAccess_Impl*) (&pImp->aStack))->Insert( nPos, &rShell );
     rShell.SetDisableFlags( pImp->nDisableFlags );
-    rShell.DoActivate(pImp->pFrame, sal_True);
+    rShell.DoActivate_Impl(pImp->pFrame, sal_True);
 
     if ( !SFX_APP()->IsDowning() )
     {
@@ -3027,7 +3027,7 @@ void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
         {
             rStack.Remove( n );
             rShell.SetDisableFlags( 0 );
-            rShell.DoDeactivate(pImp->pFrame, sal_True);
+            rShell.DoDeactivate_Impl(pImp->pFrame, sal_True);
             break;
         }
     }
