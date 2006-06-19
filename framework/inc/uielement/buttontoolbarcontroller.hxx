@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttontoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:16:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
 {
     public:
         ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
-                                 const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                  ToolBar*             pToolBar,
-                                 USHORT               nID,
                                  const rtl::OUString& aCommand );
         virtual ~ButtonToolbarController();
 
