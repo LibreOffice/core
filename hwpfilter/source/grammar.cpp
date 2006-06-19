@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grammar.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 13:28:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,13 @@
     by GNU Bison version 1.28  */
 
 #define YYBISON 1  /* Identify Bison output.  */
+
+#ifndef YYDEBUG
+#define YYDEBUG 0
+#endif
+#ifndef YYMAXDEPTH
+#define YYMAXDEPTH 0
+#endif
 
 #define ACCENT  257
 #define SMALL_GREEK 258
@@ -79,7 +86,7 @@
 LinkedList<Node> nodelist;
 
 Node *mainParse(const char *_code);
-void yyerror(char *);
+void yyerror(const char *);
 int yylex();
 void initFlex( const char *s );
 void viewResult(Node *res);
@@ -560,8 +567,10 @@ int yydebug;            /*  nonzero means print parse trace */
    definitions require.  With GCC, __builtin_memcpy takes an arg
    of type size_t, but it can handle unsigned int.  */
 
+#if defined __GNUC__
 #if __GNUC__ > 1        /* GNU C and GNU C++ define this.  */
 #define __yy_memcpy(TO,FROM,COUNT)  __builtin_memcpy(TO,FROM,COUNT)
+#endif
 #else               /* not GNU C or C++ */
 #ifndef __cplusplus
 
@@ -669,6 +678,7 @@ yyparse(YYPARSE_PARAM_ARG)
 #endif
 
   YYSTYPE yyval;        /*  the variable used to return     */
+  yyval.dval = 0;
                 /*  semantic values from the action */
                 /*  routines                */
 
@@ -700,7 +710,7 @@ yyparse(YYPARSE_PARAM_ARG)
    have just been pushed. so pushing a state here evens the stacks.  */
 yynewstate:
 
-  *++yyssp = yystate;
+  *++yyssp = sal::static_int_cast<short>(yystate);
 
   if (yyssp >= yyss + yystacksize - 1)
     {
@@ -1013,11 +1023,11 @@ case 21:
     break;}
 case 22:
 #line 87 "grammar.y"
-{ yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '{'); debug("EQLeft \n"); nodelist.insert(yyval.ptr); ;
+{   yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '{'); debug("EQLeft \n"); nodelist.insert(yyval.ptr); ;
     break;}
 case 23:
 #line 88 "grammar.y"
-{ yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '<'); debug("EQLeft \n"); nodelist.insert(yyval.ptr); ;
+{   yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '<'); debug("EQLeft \n"); nodelist.insert(yyval.ptr); ;
     break;}
 case 24:
 #line 89 "grammar.y"
@@ -1451,7 +1461,7 @@ Node *mainParse(const char *_code)
         return 0L;
 }
 
-void yyerror(char *err)
+void yyerror(const char * /*err*/)
 {
 //  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
@@ -1465,7 +1475,7 @@ void yyerror(char *err)
 }
 
 #ifndef PARSE_DEBUG
-int debug(const char */*format*/, ...)
+int debug(const char * /*format*/, ...)
 {
     return 0;
 }
