@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:54:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,10 +108,10 @@ XMLMetaTransformerContext::~XMLMetaTransformerContext()
 }
 
 XMLTransformerContext *XMLMetaTransformerContext::CreateChildContext(
-            sal_uInt16 nPrefix,
+            sal_uInt16 /*nPrefix*/,
             const OUString& rLocalName,
             const OUString& rQName,
-            const Reference< XAttributeList >& rAttrList )
+            const Reference< XAttributeList >& )
 {
     XMLPersTextContentTContext *pContext =
         new XMLPersTextContentTContext( GetTransformer(), rQName );
@@ -163,7 +163,7 @@ void XMLMetaTransformerContext::EndElement()
     GetTransformer().GetDocHandler()->endElement( GetQName() );
 }
 
-void XMLMetaTransformerContext::Characters( const OUString& rChars )
+void XMLMetaTransformerContext::Characters( const OUString& )
 {
     // ignore them
 }
