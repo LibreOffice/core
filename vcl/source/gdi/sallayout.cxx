@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:18:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,15 @@
 #endif
 
 #include <limits.h>
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 // =======================================================================
 
@@ -101,10 +108,11 @@ int GetVerticalFlags( sal_Unicode nChar )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode GetVerticalChar( sal_Unicode nChar )
+sal_Unicode GetVerticalChar( sal_Unicode )
 {
     return 0; // #i14788# input method is responsible vertical char changes
 
+#if 0
     int nVert = 0;
     switch( nChar )
     {
@@ -144,6 +152,7 @@ sal_Unicode GetVerticalChar( sal_Unicode nChar )
     }
 
     return nVert;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -282,15 +291,19 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
         case LANGUAGE_HINDI:
             nOffset = 0x0966 - '0';  // devanagari
             break;
+        #if 0
         // TODO case:
             nOffset = 0x1369 - '0';  // ethiopic
             break;
+        #endif
         case LANGUAGE_GUJARATI:
             nOffset = 0x0AE6 - '0';  // gujarati
             break;
+        #if 0
         // TODO case:
             nOffset = 0x0A66 - '0';  // gurmukhi
             break;
+        #endif
         case LANGUAGE_KANNADA:
             nOffset = 0x0CE6 - '0';  // kannada
             break;
@@ -306,9 +319,11 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
         case LANGUAGE_MONGOLIAN:
             nOffset = 0x1810 - '0';   // mongolian
             break;
+        #if 0
         // TODO case:
             nOffset = 0x1040 - '0';   // myanmar
             break;
+        #endif
         case LANGUAGE_ORIYA:
             nOffset = 0x0B66 - '0';   // oriya
             break;
@@ -337,7 +352,7 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
 #endif
     }
 
-    nChar += nOffset;
+    nChar = sal::static_int_cast<sal_Unicode>(nChar + nOffset);
     return nChar;
 }
 
@@ -509,11 +524,11 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 
 // =======================================================================
 
-ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
+ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLen,
     int nMinCharPos, int nEndCharPos, int nFlags )
 :
     mnFlags( nFlags ),
-    mnLength( nLength ),
+    mnLength( nLen ),
     mnMinCharPos( nMinCharPos ),
     mnEndCharPos( nEndCharPos ),
     mpStr( pStr ),
