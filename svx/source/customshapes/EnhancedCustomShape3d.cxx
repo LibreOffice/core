@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-10 16:20:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,10 +263,10 @@ drawing::Direction3D GetDirection3D( SdrCustomShapeGeometryItem& rItem, const rt
     return aRetValue;
 }
 
-EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double *pM ) :
-    aCenter( pCustomShape->GetSnapRect().Center() ),
-    pMap( pM ),
-    eProjectionMode( drawing::ProjectionMode_PARALLEL )
+EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& /*rBoundRect*/, const double *pM )
+:   aCenter( pCustomShape->GetSnapRect().Center() )
+,   eProjectionMode( drawing::ProjectionMode_PARALLEL )
+,   pMap( pM )
 {
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const rtl::OUString sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
@@ -529,7 +529,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     if ( bFillBmpTile )
                     {
                         const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
-                        const XOBitmap& rXOBmp = rBmpItm.GetValue();
+                        const XOBitmap& rXOBmp = rBmpItm.GetBitmapValue();
                         aFillBmp = rXOBmp.GetBitmap();
                         Size aLogicalSize = aFillBmp.GetPrefSize();
                         if ( aFillBmp.GetPrefMapMode() == MAP_PIXEL )
@@ -547,7 +547,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         if ( aSnapRect != aBoundRect )
                         {
                             const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
-                            const XOBitmap& rXOBmp = rBmpItm.GetValue();
+                            const XOBitmap& rXOBmp = rBmpItm.GetBitmapValue();
                             aFillBmp = rXOBmp.GetBitmap();
                             Size aBmpSize( aFillBmp.GetSizePixel() );
                             double fXScale = (double)aBoundRect.GetWidth() / (double)aSnapRect.GetWidth();
@@ -567,7 +567,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aSet );
                     if ( bUseExtrusionColor )
-                        p3DObj->SetMergedItem( XFillColorItem( String(), ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetValue() ) );
+                        p3DObj->SetMergedItem( XFillColorItem( String(), ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetColorValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
@@ -584,7 +584,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 else if ( eFillStyle == XFILL_NONE )
                 {
                     XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
-                    p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetValue() ) );
+                    p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetColorValue() ) );
                     p3DObj->SetMergedItem( Svx3DDoubleSidedItem( sal_True ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
@@ -655,9 +655,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                             fInvTanBeta * sin(fAlpha));
                     }
                 }
-                Vector3D aLookAt( 0, 0, 0 );
-                Vector3D aNewCamPos( 0, 0, 25000 );
-                rCamera.SetPosAndLookAt( aNewCamPos, aLookAt );
+                Vector3D _aLookAt( 0, 0, 0 );
+                Vector3D _aNewCamPos( 0, 0, 25000 );
+                rCamera.SetPosAndLookAt( _aNewCamPos, _aLookAt );
                 pScene->SetCamera( rCamera );
             }
             else
@@ -670,9 +670,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 double fViewPointX = aViewPoint.PositionX;
                 double fViewPointY = aViewPoint.PositionY;
                 double fViewPointZ = aViewPoint.PositionZ;
-                Vector3D aLookAt( fViewPointX, -fViewPointY, 0 );
+                Vector3D _aLookAt( fViewPointX, -fViewPointY, 0 );
                 Vector3D aNewCamPos( fViewPointX, -fViewPointY, fViewPointZ );
-                rCamera.SetPosAndLookAt( aNewCamPos, aLookAt );
+                rCamera.SetPosAndLookAt( aNewCamPos, _aLookAt );
                 pScene->SetCamera( rCamera );
             }
             pScene->NbcSetTransform( aNewTransform );
@@ -696,7 +696,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             double fLightIntensity = GetDouble( rGeometryItem, sFirstLightLevel, 43712.0 / 655.36, NULL ) / 100.0;
 
             const rtl::OUString sFirstLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightHarsh" ) );
-            sal_Bool bFirstLightHarsh = GetBool( rGeometryItem, sFirstLightHarsh, sal_False );
+            /* sal_Bool bFirstLightHarsh = */ GetBool( rGeometryItem, sFirstLightHarsh, sal_False );
 
             const rtl::OUString sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
             drawing::Direction3D aSecondLightDirectionDefault( -50000, 0, 10000 );
@@ -709,8 +709,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             const rtl::OUString sSecondLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightHarsh" ) );
             const rtl::OUString sLightFace( RTL_CONSTASCII_USTRINGPARAM ( "LightFace" ) );
-            sal_Bool bLight2Harsh = GetBool( rGeometryItem, sSecondLightHarsh, sal_False );
-            sal_Bool bLightFace = GetBool( rGeometryItem, sLightFace, sal_False );
+            /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, sSecondLightHarsh, sal_False );
+            /* sal_Bool bLightFace = */ GetBool( rGeometryItem, sLightFace, sal_False );
 
             sal_uInt16 nAmbientColor = (sal_uInt16)( fAmbientIntensity * 255.0 );
             if ( nAmbientColor > 255 )
@@ -746,8 +746,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             const rtl::OUString sShininess( RTL_CONSTASCII_USTRINGPARAM ( "Shininess" ) );
             const rtl::OUString sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
             double fSpecular = GetDouble( rGeometryItem, sSpecularity, 0, NULL ) / 100;
-            double fDiffuse = GetDouble( rGeometryItem, sDiffusion, 0, NULL ) / 100;
-            double fShininess = GetDouble( rGeometryItem, sShininess, 0, NULL ) / 100;
+            /* double fDiffuse = */ GetDouble( rGeometryItem, sDiffusion, 0, NULL ) / 100;
+            /* double fShininess = */ GetDouble( rGeometryItem, sShininess, 0, NULL ) / 100;
             sal_Bool bMetal = GetBool( rGeometryItem, sMetal, sal_False );
 
             Color aSpecularCol( 225,225,225 );
