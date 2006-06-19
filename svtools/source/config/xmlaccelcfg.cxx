@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlaccelcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:49:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,11 +95,11 @@ private:
 struct TagAttribute
 {
     TagAttribute(){}
-    TagAttribute( const OUString &sName, const OUString &sType , const OUString &sValue )
+    TagAttribute( const OUString &aName, const OUString &aType , const OUString &aValue )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        sName   = aName;
+        sType   = aType;
+        sValue  = aValue;
     }
 
     OUString sName;
@@ -125,7 +125,8 @@ sal_Int16 SAL_CALL AttributeListImpl::getLength(void) throw (RuntimeException)
 }
 
 
-AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
+AttributeListImpl::AttributeListImpl( const AttributeListImpl &r ) :
+    cppu::WeakImplHelper1<com::sun::star::xml::sax::XAttributeList>(r)
 {
     m_pImpl = new AttributeListImpl_impl;
     *m_pImpl = *(r.m_pImpl);
@@ -133,7 +134,7 @@ AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
 
 OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( i < sal::static_int_cast<sal_Int16>(m_pImpl->vecAttribute.size()) ) {
         return m_pImpl->vecAttribute[i].sName;
     }
     return OUString();
@@ -142,7 +143,7 @@ OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 
 OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( i < sal::static_int_cast<sal_Int16>(m_pImpl->vecAttribute.size()) ) {
         return m_pImpl->vecAttribute[i].sType;
     }
     return OUString();
@@ -150,7 +151,7 @@ OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 
 OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( i < sal::static_int_cast<sal_Int16>(m_pImpl->vecAttribute.size()) ) {
         return m_pImpl->vecAttribute[i].sValue;
     }
     return OUString();
@@ -222,13 +223,13 @@ Any SAL_CALL OReadAccelatorDocumentHandler::queryInterface( const Type & rType )
 }
 
 void SAL_CALL OReadAccelatorDocumentHandler::ignorableWhitespace(
-    const OUString& aWhitespaces )
+    const OUString& )
 throw( SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadAccelatorDocumentHandler::processingInstruction(
-    const OUString& aTarget, const OUString& aData )
+    const OUString&, const OUString& )
 throw( SAXException, RuntimeException )
 {
 }
@@ -270,12 +271,12 @@ void SAL_CALL OReadAccelatorDocumentHandler::endDocument(void)
 
 
 void SAL_CALL OReadAccelatorDocumentHandler::startElement(
-    const OUString& aName, const Reference< XAttributeList > &xAttrList )
+    const OUString& aElementName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     m_nElementDepth++;
 
-    if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORLIST )))
+    if ( aElementName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORLIST )))
     {
         // acceleratorlist
         if ( m_bAcceleratorMode )
@@ -287,7 +288,7 @@ throw( SAXException, RuntimeException )
         else
             m_bAcceleratorMode = sal_True;
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORITEM )))
+    else if ( aElementName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORITEM )))
     {
         // accelerator item
         if ( !m_bAcceleratorMode )
@@ -329,7 +330,7 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadAccelatorDocumentHandler::characters(const rtl::OUString& aChars)
+void SAL_CALL OReadAccelatorDocumentHandler::characters(const rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
