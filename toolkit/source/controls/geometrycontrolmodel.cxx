@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:17:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,9 +115,9 @@
         ,m_nPosY(0)
         ,m_nWidth(0)
         ,m_nHeight(0)
-        ,m_bCloneable(sal_False)
         ,m_nTabIndex(-1)
         ,m_nStep(0)
+        ,m_bCloneable(sal_False)
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
@@ -147,9 +147,9 @@
         ,m_nPosY(0)
         ,m_nWidth(0)
         ,m_nHeight(0)
-        ,m_bCloneable(_rxAggregateInstance.is())
         ,m_nTabIndex(-1)
         ,m_nStep(0)
+        ,m_bCloneable(_rxAggregateInstance.is())
     {
         increment(m_refCount);
         {
