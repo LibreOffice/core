@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:01:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@ struct PredicateReturn
     BOOL    bRet;
 };
 
+extern "C" {
 Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 {
     PredicateReturn *pPre = (PredicateReturn *)pData;
@@ -217,8 +218,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 
     return False;
 }
-
-
+}
 
 bool X11SalInstance::AnyInput(USHORT nType)
 {
