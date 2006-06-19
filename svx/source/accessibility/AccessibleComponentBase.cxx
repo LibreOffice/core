@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:12:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
 
 uno::Reference<XAccessible > SAL_CALL
     AccessibleComponentBase::getAccessibleAtPoint (
-        const awt::Point& aPoint)
+        const awt::Point& /*aPoint*/)
     throw (uno::RuntimeException)
 {
     return uno::Reference<XAccessible>();
@@ -150,7 +150,7 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
 
 void SAL_CALL AccessibleComponentBase::addFocusListener (
     const ::com::sun::star::uno::Reference<
-    ::com::sun::star::awt::XFocusListener >& xListener)
+    ::com::sun::star::awt::XFocusListener >& /*xListener*/)
     throw (::com::sun::star::uno::RuntimeException)
 {
     // Ignored
@@ -160,7 +160,7 @@ void SAL_CALL AccessibleComponentBase::addFocusListener (
 
 
 void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::star::uno::Reference<
-    ::com::sun::star::awt::XFocusListener >& xListener )
+    ::com::sun::star::awt::XFocusListener >& /*xListener*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     // Ignored
