@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobexecutor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:23:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,8 @@ class JobExecutor : public  css::lang::XTypeProvider
     public:
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // task.XJobExecutor
