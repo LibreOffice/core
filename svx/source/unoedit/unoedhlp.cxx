@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:10:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
