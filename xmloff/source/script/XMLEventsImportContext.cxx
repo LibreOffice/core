@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEventsImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:19:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ XMLEventsImportContext::~XMLEventsImportContext()
 
 
 void XMLEventsImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+    const Reference<XAttributeList> &)
 {
     // nothing to be done
 }
@@ -140,7 +140,7 @@ void XMLEventsImportContext::EndElement()
 }
 
 SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
@@ -177,7 +177,7 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
 
     // b) delegate to factory
     return GetImport().GetEventImport().CreateContext(
-        GetImport(), nPrefix, rLocalName, xAttrList,
+        GetImport(), p_nPrefix, rLocalName, xAttrList,
         this, sEventName, sLanguage);
 }
 
