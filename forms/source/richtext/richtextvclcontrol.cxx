@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:09:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,6 @@ namespace frm
     void RichTextControl::executeAttribute( AttributeId _nAttributeId, const SfxPoolItem* _pArgument )
     {
         SfxItemSet aToApplyAttributes( getView().GetEmptyItemSet() );
-        SfxItemPool& rPool = *getView().GetAttribs().GetPool();
-
         if ( !m_pImpl->executeAttribute( getView().GetAttribs(), aToApplyAttributes, _nAttributeId, _pArgument, m_pImpl->getSelectedScriptType() ) )
         {
             OSL_ENSURE( sal_False, "RichTextControl::executeAttribute: cannot handle the given attribute!" );

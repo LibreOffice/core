@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtattributehandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:10:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    AttributeCheckState AttributeHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
+    AttributeCheckState AttributeHandler::implGetCheckState( const SfxPoolItem& /*_rItem*/ ) const
     {
         OSL_ENSURE( sal_False, "AttributeHandler::implGetCheckState: not to be called!" );
         return eIndetermined;
@@ -282,9 +282,10 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void ParaAlignmentHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void ParaAlignmentHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "ParaAlignmentHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
+        (void)_pAdditionalArg;
         _rNewAttribs.Put( SvxAdjustItem( m_eAdjust, getWhich() ) );
     }
 
@@ -316,9 +317,10 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void LineSpacingHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void LineSpacingHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "LineSpacingHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
+        (void)_pAdditionalArg;
 
         SvxLineSpacingItem aLineSpacing( m_nLineSpace, getWhich() );
         aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
@@ -357,10 +359,11 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "EscapementHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
             // well, in theory we could allow an SvxEscapementItem here, but this is not needed
+        (void)_pAdditionalArg;
 
         bool bIsChecked = getCheckState( _rCurrentAttribs ) == eChecked;
         _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SVX_ESCAPEMENT_OFF : m_eEscapement, getWhich() ) );
@@ -392,7 +395,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SlotHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void SlotHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
     {
         if ( _pAdditionalArg )
         {
@@ -451,7 +454,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void FontSizeHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void FontSizeHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
     {
         const SvxFontHeightItem* pFontHeightItem = PTR_CAST( SvxFontHeightItem, _pAdditionalArg );
         OSL_ENSURE( pFontHeightItem, "FontSizeHandler::executeAttribute: need a FontHeightItem!" );
@@ -459,7 +462,7 @@ namespace frm
         if ( pFontHeightItem )
         {
             // corect measurement units
-            SfxMapUnit eItemMapUnit = pFontHeightItem->GetPropUnit();
+            SfxMapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
             ULONG nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
             {
@@ -513,7 +516,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void ParagraphDirectionHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void ParagraphDirectionHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* /*_pAdditionalArg*/, ScriptType /*_nForScriptType*/ ) const
     {
         _rNewAttribs.Put( SvxFrameDirectionItem( m_eParagraphDirection, getWhich() ) );
 
@@ -548,7 +551,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void BooleanHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const
+    void BooleanHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( _pAdditionalArg && _pAdditionalArg->ISA( SfxBoolItem ), "BooleanHandler::executeAttribute: invalid argument!" );
         if ( _pAdditionalArg )
