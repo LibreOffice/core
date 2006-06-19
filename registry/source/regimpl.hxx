@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:16:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,7 @@ public:
 
     RegError getResolvedKeyName(RegKeyHandle hKey,
                                  const OUString& keyName,
-                                 OUString& resolvedName,
-                                 sal_Bool firstLinkOnly=sal_False);
+                                 OUString& resolvedName);
 
     friend class ORegKey;
 protected:
@@ -187,17 +186,12 @@ protected:
                                  sal_Bool bReport=sal_False);
 
     RegError    checkBlop(OStoreStream& rValue,
-                          ORegKey* pTargetKey,
                           const OUString& sTargetPath,
-                          const OUString& valueName,
                           sal_uInt32 srcValueSize,
                           sal_uInt8* pSrcBuffer,
                           sal_Bool bReport=sal_False);
 
     RegError    mergeModuleValue(OStoreStream& rTargetValue,
-                                 ORegKey* pTargetKey,
-                                 const OUString& sTargetPath,
-                                 const OUString& valueName,
                                  RegistryTypeReader& reader,
                                  RegistryTypeReader& reader2);
 
@@ -220,7 +214,7 @@ protected:
                                    const OUString& keyName,
                                    RegKeyHandle* phOpenKey);
 
-    OUString resolveLinks(ORegKey* pKey, const OUString& path, sal_Bool firstLinkOnly=sal_False);
+    OUString resolveLinks(ORegKey* pKey, const OUString& path);
     ORegKey* resolveLink(ORegKey* pKey, OUString& resolvedPath, const OUString& name);
 
     sal_Bool insertRecursionLink(ORegKey* pLink);
