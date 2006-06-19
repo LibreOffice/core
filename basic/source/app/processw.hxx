@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:19:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 
 class ProcessWrapper : public SbxObject
 {
+using SbxVariable::GetInfo;
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
     // werden koennen.
