@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recently_used_file_handler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:56:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,13 +162,13 @@ namespace /* private */ {
                 timestamp_ = t;
         }
 
-        void set_is_private(const string_t& character)
+        void set_is_private(const string_t& /*character*/)
         { is_private_ = true; }
 
         void set_groups(const string_t& character)
         { groups_.push_back(character); }
 
-        void set_nothing(const string_t& character)
+        void set_nothing(const string_t& /*character*/)
         {}
 
         bool has_groups() const
@@ -204,7 +204,7 @@ namespace /* private */ {
                 string_container_t::const_iterator iter = groups_.begin();
                 string_container_t::const_iterator iter_end = groups_.end();
 
-                for (/**/; iter != iter_end; ++iter)
+                for ( ; iter != iter_end; ++iter)
                     write_xml_tag(TAG_GROUP, (*iter), file);
 
                 write_xml_end_tag(TAG_GROUPS, file);
@@ -276,15 +276,15 @@ namespace /* private */ {
         }
 
         virtual void start_element(
-            const string_t& raw_name,
+            const string_t& /*raw_name*/,
             const string_t& local_name,
-            const xml_tag_attribute_container_t& attributes)
+            const xml_tag_attribute_container_t& /*attributes*/)
         {
             if ((local_name == TAG_RECENT_ITEM) && (NULL == item_))
                 item_ = new recently_used_item;
         }
 
-        virtual void end_element(const string_t& raw_name, const string_t& local_name)
+        virtual void end_element(const string_t& /*raw_name*/, const string_t& local_name)
         {
             if (named_command_map_.find(local_name) != named_command_map_.end())
                 (item_->*named_command_map_[local_name])(current_element_);
@@ -311,14 +311,14 @@ namespace /* private */ {
         virtual void start_document() {}
         virtual void end_document()   {}
 
-        virtual void ignore_whitespace(const string_t& whitespaces)
+        virtual void ignore_whitespace(const string_t& /*whitespaces*/)
         {}
 
         virtual void processing_instruction(
-            const string_t& target, const string_t& data)
+            const string_t& /*target*/, const string_t& /*data*/)
         {}
 
-        virtual void comment(const string_t& comment)
+        virtual void comment(const string_t& /*comment*/)
         {}
     private:
         recently_used_item* item_;
