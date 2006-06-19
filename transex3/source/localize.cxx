@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:31:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include "tools/errcode.hxx"
 #include "tools/fsys.hxx"
 
-// #define EHAM02_TEST
 
 //
 // SourceTreeLocalizer
@@ -147,7 +146,9 @@ public:
     SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool bLocal , bool bQuiet2_in );
     ~SourceTreeLocalizer();
 
-    ByteString getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand , ByteString rParameter );
+    ByteString getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand
+            //, ByteString rParameter
+            );
 
     void SetLanguageRestriction( const ByteString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
@@ -162,12 +163,12 @@ public:
 
 /*****************************************************************************/
 SourceTreeLocalizer::SourceTreeLocalizer(
-    const ByteString &rRoot, const ByteString &rVersion, bool bLocal , bool bQuiet2_in )
+    const ByteString &rRoot, const ByteString &rVersion, bool Local , bool bQuiet2_in )
 /*****************************************************************************/
-                : SourceTreeIterator( rRoot, rVersion , bLocal ),
+                : SourceTreeIterator( rRoot, rVersion , Local ),
                 nMode( LOCALIZE_NONE ),
-                bQuiet2( bQuiet2_in ),
-                nFileCnt( 0 )
+                nFileCnt( 0 ),
+                bQuiet2( bQuiet2_in )
 {
 }
 
@@ -296,7 +297,8 @@ void SourceTreeLocalizer::WorkOnFile(
             sCommand += sTempFile;
             if ( sLanguageRestriction.Len()) {
                 sCommand += " -l ";
-                sCommand += getSourceLanguages( sLanguageRestriction , sCommand , rParameter );
+//              sCommand += getSourceLanguages( sLanguageRestriction , sCommand , rParameter );
+                sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
                 //sCommand += sLanguageRestriction;
             }
             if ( rIso.Equals("iso") && sIsoCode99.Len()) {
@@ -317,21 +319,6 @@ void SourceTreeLocalizer::WorkOnFile(
             while ( aSDFIn.IsOpen() && !aSDFIn.IsEof()) {
                 aSDFIn.ReadLine( sLine );
                 if ( sLine.Len()) {
-
-#ifdef EHAM02_TEST
-                    if ( sLine.GetToken( 9, '\t' ) == "99" ) {
-                        ByteString sTmp;
-                        for ( USHORT i = 0; i < sLine.GetTokenCount( '\t' ); i++ ) {
-                            if ( i == 10 )
-                                sTmp += "X_";
-                            sTmp += sLine.GetToken( i, '\t' );
-                            sTmp += "\t";
-                        }
-                        sTmp.EraseTrailingChars( '\t' );
-                        sLine = sTmp;
-                    }
-#endif
-
                     aSDF.WriteLine( sLine );
                 }
             }
@@ -344,16 +331,17 @@ void SourceTreeLocalizer::WorkOnFile(
         aOldCWD.SetCWD();
 }
 
-ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand , ByteString sParameter )
+ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestriction_inout , ByteString sCommand //, ByteString sParameter
+        )
 {
     // Source languages in helpcontent2 and macromigration en-US only!
     if( sCommand.Search("helpex") != STRING_NOTFOUND ) {
-        sLanguageRestriction.Assign( ByteString("en-US") );
+        sLanguageRestriction_inout.Assign( ByteString("en-US") );
     }
     else if( sCommand.Search("xmlex") != STRING_NOTFOUND ){
-        sLanguageRestriction.Assign( ByteString("en-US") );
+        sLanguageRestriction_inout.Assign( ByteString("en-US") );
     }
-    return sLanguageRestriction;
+    return sLanguageRestriction_inout;
 }
 
 /*****************************************************************************/
@@ -554,7 +542,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
             Dir myDir( aEntry.GetPath(), theDir);
             DirEntry current;
             BOOL found=FALSE;
-            for(int x=0; x < myDir.Count() && !found;){
+            for( USHORT x=0; x < myDir.Count() && !found;){
                 current=myDir[x++];
                 StringCompare result=current.GetName().CompareIgnoreCaseToAscii( aEntry.GetName() );
                 if( result==COMPARE_EQUAL ){
@@ -680,11 +668,11 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
     sOutputFileName.SearchAndReplaceAll( sInpath , sBlank );
 
     String sDel = DirEntry::GetAccessDelimiter();
-
+    ByteString sBDel( sDel.GetBuffer() , sDel.Len() , RTL_TEXTENCODING_UTF8 );
     if( bLocal ){
-        int nPos = sOutputFileName.SearchBackward( sDel.GetChar(0) );
-        if( nPos >= 0 )
-            sOutputFileName = sOutputFileName.Copy( nPos+1 , sOutputFileName.Len()-nPos-1 );
+        xub_StrLen nPos = sOutputFileName.SearchBackward( sBDel.GetChar(0) );
+        //if( nPos >= 0 )
+        sOutputFileName = sOutputFileName.Copy( nPos+1 , sOutputFileName.Len()-nPos-1 );
     }
     ByteStringBoolHashMap aFileHM;
     // Read all possible files
@@ -726,7 +714,7 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
         // Test
 
         if( bLocal ){
-            int nPos = sFile.SearchBackward( '\\' );
+            USHORT nPos = sFile.SearchBackward( '\\' );
             ByteString sTmp = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
             //printf("'%s'='%s'\n",sTmp.GetBuffer(), sOutputFileName.GetBuffer());
             if( sTmp.CompareTo(sOutputFileName) == COMPARE_EQUAL ){
@@ -755,7 +743,7 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
         DirEntry aSourceFile( sOutputFileName.GetBuffer() );
         FSysError aErr = aSourceFile.CopyTo( DirEntry ( sOutputFile.GetBuffer() ) , FSYS_ACTION_COPYFILE );
         if( aErr != FSYS_ERR_OK ){
-            printf("ERROR: Can't copy file '%s' to '%s' %d\n",sOutputFileName.GetBuffer(),sOutputFile.GetBuffer(),aErr);
+            printf("ERROR: Can't copy file '%s' to '%s' %d\n",sOutputFileName.GetBuffer(),sOutputFile.GetBuffer(),sal::static_int_cast<int>(aErr));
         }
     }
     return bReturn;
@@ -922,8 +910,6 @@ int Error()
 BOOL CheckLanguages( ByteString &rLanguages )
 /*****************************************************************************/
 {
-    BOOL bReturn = TRUE;
-
     ByteString sTmp( rLanguages );
     /* Using gcc-2.95.3 and STLport-4.5 .Equals() must
      * be used.. using == causes a compile error */
@@ -983,36 +969,39 @@ int _cdecl main( int argc, char *argv[] )
     ByteString sOutput;
 
     for( int i = 1; i < argc; i++ ) {
-        if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-E" )) {
+        ByteString sSwitch( argv[ i ] );
+        sSwitch.ToUpperAscii();
+
+        if ( sSwitch.Equals( "-E" )) {
             nState = STATE_EXPORT;
             if ( bMerge )
                 return Error();
             bExport = TRUE;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-M" )) {
+        else if ( sSwitch.Equals( "-M" )) {
             nState = STATE_MERGE;
             if ( bExport )
                 return Error();
             bMerge = TRUE;
         }
-        else if( ByteString( argv[ i ]).ToUpperAscii().Equals( "-Q" )) {
+        else if( sSwitch.Equals( "-Q" )) {
             bQuiet = true;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-I" ) )
+        else if ( sSwitch.Equals( "-I" ) )
             nState = STATE_ISOCODE;
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-L" ) )
+        else if ( sSwitch.Equals( "-L" ) )
             nState = STATE_LANGUAGES;
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-F" ) )
+        else if ( sSwitch.Equals( "-F" ) )
             nState = STATE_FILENAME;
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-QQ" ))
+        else if ( sSwitch.Equals( "-QQ" ))
             bQuiet2 = true;
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-O" ) )
+        else if ( sSwitch.Equals( "-O" ) )
             nState = STATE_OUTPUT;
         else {
             switch ( nState ) {
                 case STATE_NONE:
                     return Error();
-                break;
+                //break;
                 case STATE_ISOCODE:
                     if ( sIsoCode.Len())
                         return Error();
@@ -1040,7 +1029,7 @@ int _cdecl main( int argc, char *argv[] )
 
                 default:
                     return Error();
-                break;
+                //break;
             }
         }
     }
@@ -1110,7 +1099,7 @@ int _cdecl main( int argc, char *argv[] )
     aIter.SetLanguageRestriction( sLanguages );
      aIter.SetIsoCode99( sIsoCode );
     if ( bExport ){
-        if( bQuiet2 ){ printf("");fflush( stdout );}
+        if( bQuiet2 ){ /*printf("");*/fflush( stdout );}
         aIter.Extract( sFileName );
         if( bQuiet2 ){ printf("\n    %d files found!\n",aIter.GetFileCnt());}
     }
