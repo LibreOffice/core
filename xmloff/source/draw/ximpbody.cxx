@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:56:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
-
 #ifndef _XIMPBODY_HXX
 #include "ximpbody.hxx"
 #endif
@@ -181,14 +178,14 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
     GetImport().GetShapeImport()->startPage( rShapes );
 
-    uno::Reference< drawing::XDrawPage > xDrawPage(rShapes, uno::UNO_QUERY);
+    uno::Reference< drawing::XDrawPage > xShapeDrawPage(rShapes, uno::UNO_QUERY);
 
     // set PageName?
     if(maName.getLength())
     {
-        if(xDrawPage.is())
+        if(xShapeDrawPage.is())
         {
-            uno::Reference < container::XNamed > xNamed(xDrawPage, uno::UNO_QUERY);
+            uno::Reference < container::XNamed > xNamed(xShapeDrawPage, uno::UNO_QUERY);
             if(xNamed.is())
                 xNamed->setName(maName);
         }
@@ -242,7 +239,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
     if( maHREF.getLength() )
     {
-        uno::Reference< beans::XPropertySet > xProps( xDrawPage, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProps( xShapeDrawPage, uno::UNO_QUERY );
         if( xProps.is() )
         {
             sal_Int32 nIndex = maHREF.lastIndexOf( (sal_Unicode)'#' );
