@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbasici.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:21:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ XMLBasicImportContext::~XMLBasicImportContext()
 
 SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
     USHORT nPrefix, const ::rtl::OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList >& rxAttrList )
+    const Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -172,7 +172,7 @@ XMLBasicImportChildContext::~XMLBasicImportChildContext()
 
 SvXMLImportContext* XMLBasicImportChildContext::CreateChildContext(
     USHORT nPrefix, const ::rtl::OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList >& xAttrList )
+    const Reference< xml::sax::XAttributeList >& )
 {
     return new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName, m_xHandler );
 }
