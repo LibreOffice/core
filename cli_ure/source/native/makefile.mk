@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:06:16 $
+#   last change: $Author: hr $ $Date: 2006-06-20 00:57:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,9 @@ UNOTYPES = \
     com.sun.star.registry.XRegistryKey \
     com.sun.star.registry.XSimpleRegistry
 
-CFLAGS += -clr -AI $(OUT)$/bin
+# When compiling for CLR, disable "warning C4339: use of undefined type detected
+# in CLR meta-data - use of this type may lead to a runtime exception":
+CFLAGS += -clr -AI $(OUT)$/bin -wd4339
 #see  Microsoft Knowledge Base Article - 814472 
 LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
 
