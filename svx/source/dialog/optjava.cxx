@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:56:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,7 @@ IMPL_LINK( SvxJavaOptionsPage, EnableHdl_Impl, CheckBox *, EMPTYARG )
     m_aParameterBtn.Enable( bEnable );
     m_aClassPathBtn.Enable( bEnable );
 
-    bEnable ? m_aJavaList.Enable() : m_aJavaList.Disable();
+    bEnable ? m_aJavaList.EnableTable() : m_aJavaList.DisableTable();
 
     return 0;
 }
@@ -317,7 +317,7 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, pList )
+IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, EMPTYARG )
 {
     // set installation directory info
     SvLBoxEntry* pEntry = m_aJavaList.FirstSelected();
@@ -642,7 +642,7 @@ SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttr
 
 // -----------------------------------------------------------------------
 
-BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
     BOOL bModified = FALSE;
     javaFrameworkError eErr = JFW_E_NONE;
@@ -731,7 +731,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 
 // -----------------------------------------------------------------------
 
-void SvxJavaOptionsPage::Reset( const SfxItemSet& rSet )
+void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 {
     ClearJavaInfo();
     ClearJavaList();
@@ -1008,13 +1008,13 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
     {
         String sFolderURL( xFolderPicker->getDirectory() );
         INetURLObject aURL( sFolderURL );
-        String sFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        String _sFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
-            m_aPathList.InsertEntry( sFolder, SvFileInformationManager::GetImage( aURL ) );
+            m_aPathList.InsertEntry( _sFolder, SvFileInformationManager::GetImage( aURL ) );
         else
         {
             String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg.SearchAndReplaceAscii( "%1", sFolder );
+            sMsg.SearchAndReplaceAscii( "%1", _sFolder );
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }
     }
