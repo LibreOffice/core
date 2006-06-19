@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:49:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -123,10 +121,10 @@ SearchDefaultConfigItem_Impl::~SearchDefaultConfigItem_Impl()
 |*
 \************************************************************************/
 
-SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
+SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
 
-    SfxControllerItem   ( SID_HYPERLINK_SETLINK, *pBindings ),
     ToolBox             ( pParent, ResId( RID_SVXDLG_HYPERLINK, DIALOG_MGR() ) ),
+    SfxControllerItem   ( SID_HYPERLINK_SETLINK, *_pBindings ),
 
     aForwarder          ( SID_HYPERLINK_GETLINK, *this ),
     aHyperlinkDlgForward( SID_HYPERLINK_DIALOG , *this),
@@ -141,8 +139,9 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
     aLinkPopup          ( ResId( RID_SVXMN_HYPERLINK, DIALOG_MGR() ) ),
     pTargetMenu         ( NULL ),
 
-    bHasOldName         ( FALSE ),
     bNoDoc              ( TRUE ),
+    bSend               ( FALSE ),
+    bHasOldName         ( FALSE ),
     bHtmlMode           ( FALSE )
 
 {
@@ -192,12 +191,8 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
     aUrlCB.SetRatio((nUrlWidth * 100L) / nSum);
     aNameCB.SetRatio((nNameWidth * 100L) / nSum);
 
-    aTimer.SetTimeout( 250 );
-    aTimer.SetTimeoutHdl( LINK( this, SvxHyperlinkDlg, TimeHdl ) );
-
     SetClickHdl( LINK( this, SvxHyperlinkDlg, TBClickHdl ) );
     SetSelectHdl( LINK( this, SvxHyperlinkDlg, TBSelectHdl ) );
-    SetDeactivateHdl( LINK( this, SvxHyperlinkDlg, TBDeactivateHdl ) );
     SetDropdownClickHdl( LINK( this, SvxHyperlinkDlg, DropdownClick ) );
 
     SetItemBits( BTN_TARGET, GetItemBits( BTN_TARGET ) | TIB_DROPDOWNONLY );
@@ -548,24 +543,6 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
             }
         }
     }
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-IMPL_LINK( SvxHyperlinkDlg, TBDeactivateHdl, ToolBox *, pBox )
-{
-    return TRUE;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-IMPL_LINK( SvxHyperlinkDlg, TimeHdl, Timer *, pTimer )
-{
-    return TRUE;
 }
 
 /*--------------------------------------------------------------------
@@ -1024,13 +1001,13 @@ SFX_IMPL_CHILDWINDOW(SvxHyperlinkDlgWrapper, SID_HYPERLINK_INSERT)
     Beschreibung: Wrapper fuer Hyperlinkleiste
  --------------------------------------------------------------------*/
 
-SvxHyperlinkDlgWrapper::SvxHyperlinkDlgWrapper( Window* pParent, USHORT nId,
-                                                SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+SvxHyperlinkDlgWrapper::SvxHyperlinkDlgWrapper( Window* _pParent, USHORT nId,
+                                                SfxBindings* _pBindings, SfxChildWinInfo* /*pInfo*/ ) :
 
-    SfxChildWindow( pParent, nId )
+    SfxChildWindow( _pParent, nId )
 
 {
-    pWindow = new SvxHyperlinkDlg( pBindings, pParent );
+    pWindow = new SvxHyperlinkDlg( _pBindings, _pParent );
     eChildAlignment = SFX_ALIGN_TOP;
 }
 
