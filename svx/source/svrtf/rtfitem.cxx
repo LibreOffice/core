@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:37:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#pragma hdrstop
 
 #define ITEMID_FONTLIST     0
 #define ITEMID_FONT         0
