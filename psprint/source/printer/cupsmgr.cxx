@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 12:02:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ class CUPSWrapper
     const char*     (*m_pcupsUser)();
     void            (*m_pcupsSetUser)(const char*);
 
-    void* loadSymbol( const char* );
+    oslGenericFunction loadSymbol( const char* );
 public:
     CUPSWrapper();
     ~CUPSWrapper();
@@ -146,10 +146,10 @@ using namespace rtl;
  *  CUPSWrapper class
  */
 
-void* CUPSWrapper::loadSymbol( const char* pSymbol )
+oslGenericFunction CUPSWrapper::loadSymbol( const char* pSymbol )
 {
     OUString aSym( OUString::createFromAscii( pSymbol ) );
-    void* pSym = osl_getSymbol( m_pLib, aSym.pData );
+    oslGenericFunction pSym = osl_getFunctionSymbol( m_pLib, aSym.pData );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s %s\n", pSymbol, pSym ? "found" : "not found" );
 #endif
@@ -382,6 +382,14 @@ CUPSManager* CUPSManager::tryLoadCUPS()
     return pManager;
 }
 
+extern "C"
+{
+static void run_dest_thread_stub( void* pThis )
+{
+    CUPSManager::runDestThread( pThis );
+}
+}
+
 CUPSManager::CUPSManager( CUPSWrapper* pWrapper ) :
         PrinterInfoManager( CUPS ),
         m_pCUPSWrapper( pWrapper ),
@@ -389,7 +397,7 @@ CUPSManager::CUPSManager( CUPSWrapper* pWrapper ) :
         m_pDests( NULL ),
         m_bNewDests( false )
 {
-    m_aDestThread = osl_createThread( runDestThread, this );
+    m_aDestThread = osl_createThread( run_dest_thread_stub, this );
 }
 
 CUPSManager::~CUPSManager()
@@ -980,7 +988,7 @@ bool CUPSManager::addOrRemovePossible() const
 
 #include <rtsname.hxx>
 
-const char* CUPSManager::authenticateUser( const char* pIn )
+const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
 {
     const char* pRet = NULL;
 
@@ -991,7 +999,7 @@ const char* CUPSManager::authenticateUser( const char* pIn )
     {
         OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_authenticateQuery" ) );
         bool (*getpw)( const OString& rServer, OString& rUser, OString& rPw) =
-            (bool(*)(const OString&,OString&,OString&))osl_getSymbol( pLib, aSym.pData );
+            (bool(*)(const OString&,OString&,OString&))osl_getFunctionSymbol( pLib, aSym.pData );
         if( getpw )
         {
             osl::MutexGuard aGuard( m_aCUPSMutex );
