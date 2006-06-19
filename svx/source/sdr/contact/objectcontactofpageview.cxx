@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:10:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ namespace sdr
 
         // Update Draw Hierarchy data. Take care of everything that is inside
         // of rDisplayInfo.GetRedrawArea(), that is the necessary part.
-        void ObjectContactOfPageView::EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo)
+        void ObjectContactOfPageView::EnsureValidDrawHierarchy(DisplayInfo& /*rDisplayInfo*/)
         {
             // get StartNode
             SdrPage* pStartPage = GetSdrPage();
@@ -362,7 +362,7 @@ namespace sdr
         // Process the whole displaying
         void ObjectContactOfPageView::ProcessDisplay(DisplayInfo& rDisplayInfo)
         {
-            SdrPage* pStartPage = GetSdrPage();
+            const SdrPage* pStartPage = GetSdrPage();
 
             if(IsDrawHierarchyValid()
                 && pStartPage
@@ -371,7 +371,7 @@ namespace sdr
                 && maDrawHierarchy.Count())
             {
                 // #i28641# test if ControlLayer is to be painted
-                SdrPage* pStartPage = GetSdrPage();
+                //SdrPage* pStartPage = GetSdrPage();
                 const SdrModel& rModel = *(pStartPage->GetModel());
                 const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
                 const sal_uInt32 nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
@@ -504,7 +504,7 @@ namespace sdr
                 pOut->Pop();
                 pOut->EnableMapMode(bWasEnabled);
             }
-#endif DBG_UTIL
+#endif // DBG_UTIL
         }
 
         // Decide if to PreRender
