@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:09:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ class SfxOfficeDispatch;
 class SfxBaseController;
 
 typedef SfxShell* SfxShellPtr_Impl;
-SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 );
+SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 )
 
 // struct SfxViewShell_Impl ----------------------------------------------
 
