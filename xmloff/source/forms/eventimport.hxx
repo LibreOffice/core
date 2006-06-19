@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:07:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@ namespace xmloff
         void setEvents(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxContainer
             );
+
+        virtual ~ODefaultEventAttacherManager();
     };
 
 //.........................................................................
@@ -110,6 +112,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2.34.1  2005/11/03 17:46:59  cl
+ *  warning free code changes for unxlngi6
+ *
+ *  Revision 1.2  2005/09/09 14:07:41  rt
+ *  INTEGRATION: CWS ooo19126 (1.1.646); FILE MERGED
+ *  2005/09/05 14:38:57 rt 1.1.646.1: #i54170# Change license header: remove SISSL
+ *
  *  Revision 1.1.646.1  2005/09/05 14:38:57  rt
  *  #i54170# Change license header: remove SISSL
  *
