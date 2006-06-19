@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remote_types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:44:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ inline sal_Bool SAL_CALL remote_relatesToInterface( typelib_TypeDescription * pT
     switch (pTypeDescr->eTypeClass)
     {
     case typelib_TypeClass_SEQUENCE:
-    {
         switch (((typelib_IndirectTypeDescription *)pTypeDescr)->pType->eTypeClass)
         {
         case typelib_TypeClass_INTERFACE:
@@ -73,23 +72,20 @@ inline sal_Bool SAL_CALL remote_relatesToInterface( typelib_TypeDescription * pT
         case typelib_TypeClass_SEQUENCE:
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
-        {
             return remote_relatesToInterface2( pTypeDescr );
+        default:
+            return sal_False;
         }
-        }
-        return sal_False;
-    }
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
-    {
         return remote_relatesToInterface2( pTypeDescr );
-    }
     case typelib_TypeClass_UNION: // might relate to interface
     case typelib_TypeClass_ANY: // might relate to interface
     case typelib_TypeClass_INTERFACE:
         return sal_True;
+    default:
+        return sal_False;
     }
-    return sal_False;
 }
 
 /** Determines whether given type is a cpp simple type, e.g. int, enum.<br>
