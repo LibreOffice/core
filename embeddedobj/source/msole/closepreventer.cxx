@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closepreventer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:41:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:30:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,20 +35,20 @@
 
 #include "closepreventer.hxx"
 
-void SAL_CALL OClosePreventer::queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership )
+void SAL_CALL OClosePreventer::queryClosing( const ::com::sun::star::lang::EventObject&, sal_Bool  )
         throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException)
 {
     throw ::com::sun::star::util::CloseVetoException();
 }
 
-void SAL_CALL OClosePreventer::notifyClosing( const com::sun::star::lang::EventObject& Source )
+void SAL_CALL OClosePreventer::notifyClosing( const com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::RuntimeException)
 {
     // just a disaster
     OSL_ENSURE( sal_False, "The object can not be prevented from closing!\n" );
 }
 
-void SAL_CALL OClosePreventer::disposing( const com::sun::star::lang::EventObject& Source )
+void SAL_CALL OClosePreventer::disposing( const com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::RuntimeException)
 {
     // just a disaster
