@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:18:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_TPLNEDEF_CXX
 
@@ -104,39 +103,38 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_LINE_DEF ), rInAttrs ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
-    aXLineAttr          ( pXPool ),
-    rXLSet              ( aXLineAttr.GetItemSet() ),
-
-    aXLStyle            ( XLINE_DASH ),
-    aXWidth             ( XOUT_WIDTH ),
-    aXColor             ( String(), COL_BLACK ),
-    aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
-
+    aFlDefinition   ( this, ResId( FL_DEFINITION ) ),
+    aFTLinestyle    ( this, ResId( FT_LINESTYLE ) ),
+    aLbLineStyles   ( this, ResId( LB_LINESTYLES ) ),
     aFtType         ( this, ResId( FT_TYPE ) ),
     aLbType1        ( this, ResId( LB_TYPE_1 ) ),
     aLbType2        ( this, ResId( LB_TYPE_2 ) ),
     aFtNumber       ( this, ResId( FT_NUMBER ) ),
     aNumFldNumber1  ( this, ResId( NUM_FLD_1 ) ),
     aNumFldNumber2  ( this, ResId( NUM_FLD_2 ) ),
-    aFtDistance     ( this, ResId( FT_DISTANCE ) ),
-    aMtrDistance    ( this, ResId( MTR_FLD_DISTANCE ) ),
     aFtLength       ( this, ResId( FT_LENGTH ) ),
     aMtrLength1     ( this, ResId( MTR_FLD_LENGTH_1 ) ),
     aMtrLength2     ( this, ResId( MTR_FLD_LENGTH_2 ) ),
+    aFtDistance     ( this, ResId( FT_DISTANCE ) ),
+    aMtrDistance    ( this, ResId( MTR_FLD_DISTANCE ) ),
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aFlDefinition   ( this, ResId( FL_DEFINITION ) ),
-    aLbLineStyles   ( this, ResId( LB_LINESTYLES ) ),
-    aFTLinestyle    ( this, ResId( FT_LINESTYLE ) ),
     aBtnAdd         ( this, ResId( BTN_ADD ) ),
     aBtnModify      ( this, ResId( BTN_MODIFY ) ),
     aBtnDelete      ( this, ResId( BTN_DELETE ) ),
-    aCtlPreview     ( this, ResId( CTL_PREVIEW ), &XOut ),
     aBtnLoad        ( this, ResId( BTN_LOAD ) ),
     aBtnSave        ( this, ResId( BTN_SAVE ) ),
-    rOutAttrs       ( rInAttrs )
+    aCtlPreview     ( this, ResId( CTL_PREVIEW ), &XOut ),
 
+    rOutAttrs       ( rInAttrs ),
+
+    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    XOut                ( &aCtlPreview ),
+    aXLStyle            ( XLINE_DASH ),
+    aXWidth             ( XOUT_WIDTH ),
+    aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
+    aXColor             ( String(), COL_BLACK ),
+    aXLineAttr          ( pXPool ),
+    rXLSet              ( aXLineAttr.GetItemSet() )
 {
     aBtnLoad.SetModeImage( Image( ResId( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
     aBtnSave.SetModeImage( Image( ResId( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
@@ -155,6 +153,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
+        default: ; //prevent warning
     }
     SetFieldUnit( aMtrDistance, eFUnit );
     SetFieldUnit( aMtrLength1, eFUnit );
@@ -216,14 +215,14 @@ void SvxLineDefTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-void SvxLineDefTabPage::ActivatePage( const SfxItemSet& rSet )
+void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 {
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
         // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
         if( pDashList )
         {
-            if( *pPageType == 1 && *pPosDashLb >= 0 &&
+            if( *pPageType == 1 &&
                 *pPosDashLb != LISTBOX_ENTRY_NOTFOUND )
             {
                 aLbLineStyles.SelectEntryPos( *pPosDashLb );
@@ -257,12 +256,12 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxLineDefTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     CheckChanges_Impl();
 
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
 
     return( LEAVE_PAGE );
 }
@@ -373,7 +372,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
             case XLINE_DASH:
             {
                 const XLineDashItem& rDashItem = ( const XLineDashItem& ) rAttrs.Get( XATTR_LINEDASH );
-                aDash = rDashItem.GetValue();
+                aDash = rDashItem.GetDashValue();
 
                 aLbLineStyles.SetNoSelection();
                 aLbLineStyles.SelectEntry( rDashItem.GetName() );
@@ -420,7 +419,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
         {
         }
         else
-            aDash = pDashList->Get( nTmp )->GetDash();
+            aDash = pDashList->GetDash( nTmp )->GetDash();
 
         FillDialog_Impl();
 
@@ -620,7 +619,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = TRUE;
 
         for ( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pDashList->Get( i )->GetName() )
+            if ( aName == pDashList->GetDash( i )->GetName() )
                 bDifferent = FALSE;
     }
 
@@ -638,7 +637,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         for( long i = 0; i < nCount && bDifferent; i++ )
         {
-            if( aName == pDashList->Get( i )->GetName() )
+            if( aName == pDashList->GetDash( i )->GetName() )
                 bDifferent = FALSE;
         }
 
@@ -649,9 +648,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
             pEntry = new XDashEntry( aDash, aName );
 
-            long nCount = pDashList->Count();
-            pDashList->Insert( pEntry, nCount );
-            Bitmap* pBitmap = pDashList->GetBitmap( nCount );
+            long nDashCount = pDashList->Count();
+            pDashList->Insert( pEntry, nDashCount );
+            Bitmap* pBitmap = pDashList->GetBitmap( nDashCount );
             aLbLineStyles.Append( pEntry, pBitmap );
 
             aLbLineStyles.SelectEntryPos( aLbLineStyles.GetEntryCount() - 1 );
@@ -700,7 +699,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         ResMgr* pMgr = DIALOG_MGR();
         String aNewName( ResId( RID_SVXSTR_LINESTYLE, pMgr ) );
         String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, pMgr ) );
-        String aName( pDashList->Get( nPos )->GetName() );
+        String aName( pDashList->GetDash( nPos )->GetName() );
         String aOldName = aName;
 
         //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
@@ -720,7 +719,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pDashList->Get( i )->GetName() &&
+                if( aName == pDashList->GetDash( i )->GetName() &&
                     aName != aOldName )
                     bDifferent = FALSE;
             }
@@ -804,7 +803,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, p )
+IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     ResMgr* pMgr = DIALOG_MGR();
     USHORT nReturn = RET_YES;
@@ -901,7 +900,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, p )
+IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sod" ) );
