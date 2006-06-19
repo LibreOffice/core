@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:35:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,15 +218,13 @@ sal_uInt16 SvXMLAttrContainerData::GetAttrCount() const
 
 const ::rtl::OUString& SvXMLAttrContainerData::GetAttrLName(sal_uInt16 i) const
 {
-    OSL_ENSURE( i >= 0 && i < pLNames->Count(),
-                "SvXMLAttrContainerData::GetLName: illegal index" );
+    OSL_ENSURE( i < pLNames->Count(), "SvXMLAttrContainerData::GetLName: illegal index" );
     return *(*pLNames)[i];
 }
 
 const ::rtl::OUString& SvXMLAttrContainerData::GetAttrValue(sal_uInt16 i) const
 {
-    OSL_ENSURE( i >= 0 && i < pValues->Count(),
-                "SvXMLAttrContainerData::GetValue: illegal index" );
+    OSL_ENSURE( i < pValues->Count(), "SvXMLAttrContainerData::GetValue: illegal index" );
     return *(*pValues)[i];
 }
 
