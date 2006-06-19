@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:39:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,8 @@ namespace comphelper
 
     public:
         OModule();
+
+        virtual ~OModule();
 
         /** register a component implementing a service with the given data.
             @param _rImplementationName
