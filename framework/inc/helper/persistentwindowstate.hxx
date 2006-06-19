@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistentwindowstate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:18:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,8 @@ class PersistentWindowState :   // interfaces
 
         //____________________________
         // XInterface, XTypeProvider
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         //____________________________
         // XInitialization
