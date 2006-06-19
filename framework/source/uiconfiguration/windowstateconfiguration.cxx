@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:23:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,8 +205,8 @@ class ConfigurationAccess_WindowState : // interfaces
         virtual                   ~ConfigurationAccess_WindowState();
 
         //  XInterface, XTypeProvider
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -269,13 +269,13 @@ class ConfigurationAccess_WindowState : // interfaces
         // provided to outside code!
         struct WindowStateInfo
         {
-            WindowStateInfo() : nMask( 0 ),
+            WindowStateInfo() : aDockingArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ),
+                                aDockPos( 0, 0 ),
                                 aPos( 0, 0 ),
                                 aSize( 0, 0 ),
                                 nInternalState( 0 ),
                                 nStyle( 0 ),
-                                aDockPos( 0, 0 ),
-                                aDockingArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ) {}
+                                nMask( 0 ) {}
 
             sal_Bool                                bLocked : 1,
                                                     bDocked : 1,
@@ -346,10 +346,10 @@ DEFINE_XTYPEPROVIDER_7  (   ConfigurationAccess_WindowState         ,
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const rtl::OUString& aModuleName, const Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
+    m_aConfigWindowAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
     m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
-    m_bModified( sal_False ),
-    m_aConfigWindowAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS ))
+    m_bModified( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
@@ -625,17 +625,17 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
     // do nothing - next time someone wants to retrieve this node we will find it in the configuration
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
     //
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
     //
 }
@@ -914,7 +914,6 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
     sal_Int32                 nMask( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     sal_Int32                 i( 0 );
-    sal_Int32                 nIndex( 0 );
     Sequence< PropertyValue > aPropSeq;
     WindowStateInfo           aWindowStateInfo;
 
@@ -1087,8 +1086,6 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
 
 Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const rtl::OUString& rResourceURL )
 {
-    Any a;
-
     if ( !m_bConfigAccessInitialized )
     {
         impl_initializeConfigAccess();
@@ -1114,7 +1111,7 @@ Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const r
     {
     }
 
-    return a;
+    return Any();
 }
 
 void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateInfo& rWinStateInfo, const Sequence< PropertyValue >& rSeq )
@@ -1122,7 +1119,6 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
     sal_Int32 nCompareCount( m_aPropArray.size() );
     sal_Int32 nCount( rSeq.getLength() );
     sal_Int32 i( 0 );
-    sal_Int32 nIndex( 0 );
 
     for ( i = 0; i < nCount; i++ )
     {
