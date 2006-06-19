@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngp.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 10:50:16 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:15:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ CC*=gcc
 CFLAGS=-nostdinc -c $(INCLUDE) 
 CFLAGSCC= -pipe $(ARCH_FLAGS)
 CFLAGSCXX= -pipe -fguiding-decls -fno-rtti -fno-exceptions $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 # Exceptions increase the size of shared libraries by 50% !!
 .IF "$(PRJNAME)"=="usr" || "$(PRJNAME)"=="uno" || "$(PRJNAME)"=="starone" || "$(PRJNAME)"=="schedule" || "$(PRJNAME)"=="one" || "$(SET_EXEPTIONS)"!=""
@@ -82,6 +81,13 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-O2
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
+
+CFLAGSWARNCC=
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 STATIC		= -Bstatic
 DYNAMIC		= -Bdynamic
