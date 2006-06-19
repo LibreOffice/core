@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ static void ImplMouseAutoPos( Dialog* pDialog )
 
 // =======================================================================
 
-void Dialog::ImplInitData()
+void Dialog::ImplInitDialogData()
 {
     mpWindowImpl->mbDialog            = TRUE;
 
@@ -430,7 +430,7 @@ void Dialog::ImplCenterDialog()
 Dialog::Dialog( WindowType nType ) :
     SystemWindow( nType )
 {
-    ImplInitData();
+    ImplInitDialogData();
 }
 
 // -----------------------------------------------------------------------
@@ -438,7 +438,7 @@ Dialog::Dialog( WindowType nType ) :
 Dialog::Dialog( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_DIALOG )
 {
-    ImplInitData();
+    ImplInitDialogData();
     ImplInit( pParent, nStyle );
 }
 
@@ -447,7 +447,7 @@ Dialog::Dialog( Window* pParent, WinBits nStyle ) :
 Dialog::Dialog( Window* pParent, const ResId& rResId ) :
     SystemWindow( WINDOW_DIALOG )
 {
-    ImplInitData();
+    ImplInitDialogData();
     rResId.SetRT( RSC_DIALOG );
     ImplInit( pParent, ImplInitRes( rResId ) );
     ImplLoadRes( rResId );
@@ -565,7 +565,6 @@ BOOL Dialog::Close()
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
         BOOL bRet = TRUE;
-        ImplDelData aDelData;
         ImplAddDel( &aDelData );
         PushButton* pButton = ImplGetCancelButton( this );
         if ( pButton )
@@ -908,7 +907,7 @@ void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 }
 
 
-void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
