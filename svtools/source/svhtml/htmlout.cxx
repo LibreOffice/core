@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:51:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,12 +700,12 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 else
                     rStream << sHTML_O_nohref;
 
-                const String& rName = pObj->GetName();
-                if( rName.Len() )
+                const String& rObjName = pObj->GetName();
+                if( rObjName.Len() )
                 {
                     ((sOut = ' ') += sHTML_O_name) += "=\"";
                     rStream << sOut.GetBuffer();
-                    Out_String( rStream, rName, eDestEnc, pNonConvertableChars ) << '\"';
+                    Out_String( rStream, rObjName, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
                 const String& rTarget = pObj->GetTarget();
