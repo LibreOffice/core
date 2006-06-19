@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:00:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,10 +166,10 @@ BOOL BmpSum::GetCommandOptions( const ::std::vector< String >& rArgs, const Stri
 
 // -----------------------------------------------------------------------
 
-void BmpSum::Message( const String& rText, BYTE cExitCode )
+void BmpSum::Message( const String& rText, BYTE nExitCode )
 {
-    if( EXIT_NOERROR != cExitCode )
-        SetExitCode( cExitCode );
+    if( EXIT_NOERROR != nExitCode )
+        SetExitCode( nExitCode );
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
@@ -370,7 +370,6 @@ void BmpSum::ProcessFileList( const String& rInFileList,
         while( aIter != aFileNameSet.end() )
         {
             ByteString      aStr( *aIter++ );
-            Bitmap          aBmp;
             SvFileStream    aBmpStm( String( aStr.GetBuffer(), RTL_TEXTENCODING_ASCII_US ), STREAM_READ );
             sal_uInt64      nCRC = 0;
 
