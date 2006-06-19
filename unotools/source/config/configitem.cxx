@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:36:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,9 +157,10 @@ struct ConfigItem_Impl
     ConfigItem_Impl() :
         pManager(0),
         nMode(0),
-        nInValueChange(0),
         bIsModified(sal_False),
-        bEnableInternalNotification(sal_False){}
+        bEnableInternalNotification(sal_False),
+        nInValueChange(0)
+    {}
 };
 }
 /* -----------------------------04.12.00 10:25--------------------------------
@@ -187,19 +188,19 @@ namespace
     template <class TYP>
     class AutoDeleter // : Noncopyable
     {
-        TYP* pItem;
+        TYP* m_pItem;
     public:
         AutoDeleter(TYP * pItem)
-        : pItem(pItem)
+        : m_pItem(pItem)
         {
         }
 
         ~AutoDeleter()
         {
-            delete pItem;
+            delete m_pItem;
         }
 
-        void keep() { pItem = 0; }
+        void keep() { m_pItem = 0; }
     };
 }
 /* -----------------------------29.08.00 16:34--------------------------------
@@ -242,8 +243,6 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
 
     const OUString* pCheckPropertyNames = aPropertyNames.getConstArray();
 
-    const sal_Int32 nBaseTreeLen = ConfigManager::GetConfigBaseURL().getLength() +
-        pParent->GetSubTreeName().getLength() + 1;
     sal_Int32 nNotify = 0;
     for(int i = 0; i < aChangedNames.getLength(); i++)
     {
@@ -261,16 +260,16 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
-void ConfigChangeListener_Impl::disposing( const EventObject& rSource ) throw(RuntimeException)
+void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) throw(RuntimeException)
 {
-    pParent->RemoveListener();
+    pParent->RemoveChangesListener();
 }
 /* -----------------------------29.08.00 12:50--------------------------------
 
  ---------------------------------------------------------------------------*/
 ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
-    pImpl(new ConfigItem_Impl),
-    sSubTree(rSubTree)
+    sSubTree(rSubTree),
+    pImpl(new ConfigItem_Impl)
 {
     AutoDeleter<ConfigItem_Impl> aNewImpl(pImpl);
 
@@ -289,8 +288,8 @@ ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
 
  ---------------------------------------------------------------------------*/
 ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree) :
-    pImpl(new ConfigItem_Impl),
-    sSubTree(rSubTree)
+    sSubTree(rSubTree),
+    pImpl(new ConfigItem_Impl)
 {
     pImpl->pManager = &rManager;
     pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE; // does not allow exceptions
@@ -310,7 +309,7 @@ ConfigItem::~ConfigItem()
 {
     if(pImpl->pManager)
     {
-        RemoveListener();
+        RemoveChangesListener();
         pImpl->pManager->RemoveConfigItem(*this);
     }
     delete pImpl;
@@ -337,7 +336,7 @@ void    ConfigItem::ReleaseConfigMgr()
         }
         CATCH_INFO("Exception from commitChanges(): ")
     }
-    RemoveListener();
+    RemoveChangesListener();
     OSL_ENSURE(pImpl->pManager, "ConfigManager already released");
     pImpl->pManager = 0;
 }
@@ -352,7 +351,7 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames)
+void ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /*rPropertyNames*/)
 {
     OSL_ENSURE(sal_False, "Base class called");
 }
@@ -771,7 +770,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 void ConfigItem::DisableNotification()
 {
     OSL_ENSURE( xChangeLstnr.is(), "ConfigItem::DisableNotification: notifications not enabled currently!" );
-    RemoveListener();
+    RemoveChangesListener();
 }
 /* -----------------------------29.08.00 16:19--------------------------------
 
@@ -806,7 +805,7 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
 /* -----------------------------29.08.00 16:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-void ConfigItem::RemoveListener()
+void ConfigItem::RemoveChangesListener()
 {
     Reference<XChangesNotifier> xChgNot(m_xHierarchyAccess, UNO_QUERY);
     if(xChgNot.is() && xChangeLstnr.is())
