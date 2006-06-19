@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:02:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::UpdatefollowingHyperLabels( ItemIndex _Index, sal_Int16 _n_add )
+    void ORoadmap::UpdatefollowingHyperLabels( ItemIndex _Index, sal_Int16 )
     {
         if ( _Index < ( m_pImpl->getItemCount() ) )
         {
@@ -727,14 +727,14 @@ namespace svt
     }
 
 
-    ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, const ResId& _rId)
+    ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, const ResId& )
     {
         mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_WORDBREAK);
         mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
     }
 
 
-    ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, WinBits _nWinStyle)
+    ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, WinBits )
     {
         mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_WORDBREAK);
         mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
