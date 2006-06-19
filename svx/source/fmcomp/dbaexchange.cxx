@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:58:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,6 @@ namespace svx
             return;
         }
 
-        sal_Bool bIsStatement = CommandType::COMMAND == nObjectType;
         String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
 
         // check if the SQL-statement is modified
@@ -639,14 +638,10 @@ namespace svx
 
         const Any* pSelRows = _rSelRows.getConstArray();
         const Any* pSelRowsEnd = pSelRows + _rSelRows.getLength();
-        for (pSelRows; pSelRows<pSelRowsEnd; ++pSelRows)
+        for ( ; pSelRows < pSelRowsEnd; ++pSelRows )
         {
-            sal_Int32 nSelectedRow;
-#if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
-#endif
-            *pSelRows >>= nSelectedRow;
-            OSL_ENSURE( bSuccess, "ODataAccessObjectTransferable::addCompatibleSelectionDescription: invalid row number!" );
+            sal_Int32 nSelectedRow( 0 );
+            OSL_VERIFY( *pSelRows >>= nSelectedRow );
 
             m_sCompatibleObjectDescription += ::rtl::OUString::valueOf((sal_Int32)nSelectedRow);
             m_sCompatibleObjectDescription += sSeparator;
@@ -679,7 +674,6 @@ namespace svx
         // extract the single values from the sequence
 
         ::rtl::OUString sObjectName;
-        sal_Bool bEscapeProcessing = sal_True;
         ::rtl::OUString sDatasourceName = _rDatasource;
         sObjectName = _rCommand;
 
