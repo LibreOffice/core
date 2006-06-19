@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:06:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,6 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
             sal_Char   pConversionBuffer[ 32 ];
             sal_uInt32 nConversionInfo;
             sal_Size   nConvertedChars;
-            sal_uInt32 nCodePoint;
             sal_Size   nSize;
 
             nSize = rtl_convertUnicodeToText( aConverter, aContext,
