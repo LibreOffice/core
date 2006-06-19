@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:04:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,7 +689,7 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 }
 
 //----------------------------------------------
-sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 nAspect )
+sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
