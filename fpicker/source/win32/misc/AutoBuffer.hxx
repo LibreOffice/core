@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AutoBuffer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:51:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 //-------------------------------------------------------------
