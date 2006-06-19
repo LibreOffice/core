@@ -4,9 +4,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:22:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,16 +133,16 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                             SymbolType eType  )
 {
     // Groessen vorberechnen
-    long    n       = Min( rRect.GetWidth(), rRect.GetHeight() );
-    long    nSize   = n;
+    long    nMin    = Min( rRect.GetWidth(), rRect.GetHeight() );
+    long    nSize   = nMin;
 
-    if ( n & 0x01 )
-        n--;
+    if ( nMin & 0x01 )
+        nMin--;
     Point   aCenter = rRect.Center();
     long    nCenterX = aCenter.X();
     long    nCenterY = aCenter.Y();
-    long    n2 = n / 2;
-    long    n4 = n / 4;
+    long    n2 = nMin / 2;
+    long    n4 = nMin / 4;
     long    nLeft;
     long    nTop;
     long    nRight;
@@ -154,7 +154,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
     {
         case SYMBOL_ARROW_UP:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
             {
                 n2--;
                 n4--;
@@ -179,7 +179,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 
         case SYMBOL_ARROW_DOWN:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
             {
                 n2--;
                 n4--;
@@ -204,7 +204,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 
         case SYMBOL_ARROW_LEFT:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
             {
                 n2--;
                 n4--;
@@ -229,7 +229,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 
         case SYMBOL_ARROW_RIGHT:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
             {
                 n2--;
                 n4--;
@@ -255,7 +255,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 
         case SYMBOL_SPIN_UP:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
                 n2--;
             nTop = nCenterY-n4;
             nBottom = nTop+n2;
@@ -275,7 +275,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 
         case SYMBOL_SPIN_DOWN:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
                 n2--;
             nTop = nCenterY-n4;
             nBottom = nTop+n2;
@@ -298,7 +298,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         case SYMBOL_PREV:
         case SYMBOL_REVERSEPLAY:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
                 n2--;
             nLeft = nCenterX-n4;
             if ( eType == SYMBOL_FIRST )
@@ -328,7 +328,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         case SYMBOL_NEXT:
         case SYMBOL_PLAY:
             {
-            if ( !(n & 0x01) )
+            if ( !(nMin & 0x01) )
                 n2--;
             nLeft = nCenterX-n4;
             if ( eType == SYMBOL_LAST )
@@ -362,8 +362,8 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                 // our arrows as we want to use one pixel for the spearhead! Otherwise
                 // it will be clipped!
                 nCenterX++;
-                n2 = ( n-1 ) / 2;
-                n4 = ( n-1 ) / 4;
+                n2 = ( nMin-1 ) / 2;
+                n4 = ( nMin-1 ) / 4;
             }
 
             nTop = nCenterY-n2;
@@ -487,15 +487,15 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         case SYMBOL_CLOSE:
             {
             Size aRectSize( 2, 1 );
-            if ( n < 8 )
+            if ( nMin < 8 )
                 aRectSize.Width() = 1;
-            else if ( n > 20 )
-                aRectSize.Width() = n/10;
+            else if ( nMin > 20 )
+                aRectSize.Width() = nMin/10;
             nLeft   = nCenterX-n2+1;
             nTop    = nCenterY-n2+1;
-            nBottom = nCenterY-n2+n-aRectSize.Width()+1;
+            nBottom = nCenterY-n2+nMin-aRectSize.Width()+1;
             i = 0;
-            while ( i < n-aRectSize.Width()+1 )
+            while ( i < nMin-aRectSize.Width()+1 )
             {
                 pDev->DrawRect( Rectangle( Point( nLeft+i, nTop+i ), aRectSize ) );
                 pDev->DrawRect( Rectangle( Point( nLeft+i, nBottom-i ), aRectSize ) );
@@ -644,7 +644,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             break;
         case SYMBOL_HIDE:
             {
-            long nExtra = n / 8;
+            long nExtra = nMin / 8;
             Rectangle aRect( nCenterX-n2+nExtra, nCenterY+n2-1,
                              nCenterX+n2-nExtra, nCenterY+n2 );
             pDev->DrawRect( aRect );
@@ -858,7 +858,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                            const StyleSettings& rStyleSettings, USHORT nStyle )
 {
     // mask menu style
-    BOOL bMenuStyle = nStyle & FRAME_DRAW_MENU;
+    BOOL bMenuStyle = (nStyle & FRAME_DRAW_MENU) ? TRUE : FALSE;
     nStyle &= ~FRAME_DRAW_MENU;
 
     Window *pWin = NULL;
