@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:33:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,11 @@ const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW( () )
     return *s_pStaticOidPart;
 }
 
-void SAL_CALL computeObjectIdentifier(
+}
+
+extern "C" {
+
+static void SAL_CALL computeObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
     SAL_THROW( () )
 {
@@ -149,27 +153,23 @@ void SAL_CALL computeObjectIdentifier(
     }
 }
 
-void SAL_CALL acquireInterface( uno_ExtEnvironment *, void * pCppI )
+static void SAL_CALL acquireInterface( uno_ExtEnvironment *, void * pCppI )
     SAL_THROW( () )
 {
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
 
-void SAL_CALL releaseInterface( uno_ExtEnvironment *, void * pCppI )
+static void SAL_CALL releaseInterface( uno_ExtEnvironment *, void * pCppI )
     SAL_THROW( () )
 {
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
 
-void SAL_CALL environmentDisposing( uno_Environment * ) SAL_THROW( () )
+static void SAL_CALL environmentDisposing( uno_Environment * ) SAL_THROW( () )
 {
     bridges::cpp_uno::shared::g_moduleCount.modCnt.release(
         &bridges::cpp_uno::shared::g_moduleCount.modCnt );
 }
-
-}
-
-extern "C" {
 
 sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
     return bridges::cpp_uno::shared::g_moduleCount.canUnload(
@@ -213,7 +213,7 @@ void SAL_CALL uno_ext_getMapping(
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
                 pFrom->pExtEnv, pTo->pExtEnv, sal_True );
             ::uno_registerMapping(
-                &pMapping, bridges::cpp_uno::shared::Bridge::freeMapping,
+                &pMapping, bridges::cpp_uno::shared::freeMapping,
                 (uno_Environment *)pFrom->pExtEnv,
                 (uno_Environment *)pTo->pExtEnv, 0 );
         }
@@ -227,7 +227,7 @@ void SAL_CALL uno_ext_getMapping(
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
                 pTo->pExtEnv, pFrom->pExtEnv, sal_False );
             ::uno_registerMapping(
-                &pMapping, bridges::cpp_uno::shared::Bridge::freeMapping,
+                &pMapping, bridges::cpp_uno::shared::freeMapping,
                 (uno_Environment *)pFrom->pExtEnv,
                 (uno_Environment *)pTo->pExtEnv, 0 );
         }
