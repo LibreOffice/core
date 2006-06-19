@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:14:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,6 @@ class BaseControl   : public UNO3_XSERVICEINFO
                     , public IMPL_MutexContainer
                     , public UNO3_OCOMPONENTHELPER
 {
-
 //____________________________________________________________________________________________________________
 //  public methods
 //____________________________________________________________________________________________________________
@@ -1235,6 +1234,7 @@ public:
 //____________________________________________________________________________________________________________
 
 protected:
+    using OComponentHelper::disposing;
 
     /**_______________________________________________________________________________________________________
         @short      -
