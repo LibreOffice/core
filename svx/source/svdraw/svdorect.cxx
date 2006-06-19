@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:35:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,7 +568,7 @@ void SdrRectObj::operator=(const SdrObject& rObj)
     SdrTextObj::operator=(rObj);
 }
 
-void SdrRectObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+void SdrRectObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
 {
     rPoly=XPolyPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
 }
@@ -742,7 +742,7 @@ void SdrRectObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) cons
 {
     rXPP.Clear();
     FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    FASTBOOL bRectSiz=!bRad;
+    //FASTBOOL bRectSiz=!bRad;
     if (bRad) {
         Point aPt(rDrag.GetNow());
         if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
