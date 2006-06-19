@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolling.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:40:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,8 +253,8 @@ namespace svx
     //--------------------------------------------------------------------
     ControllerFeatures::ControllerFeatures( const Reference< XMultiServiceFactory >& _rxORB, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_xORB( _rxORB )
-        ,m_pImpl( NULL )
         ,m_pInvalidationCallback( _pInvalidationCallback )
+        ,m_pImpl( NULL )
     {
     }
 
@@ -262,8 +262,8 @@ namespace svx
     ControllerFeatures::ControllerFeatures( const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_xORB( _rxORB )
-        ,m_pImpl( NULL )
         ,m_pInvalidationCallback( _pInvalidationCallback )
+        ,m_pImpl( NULL )
     {
         assign( _rxController );
     }
@@ -272,8 +272,8 @@ namespace svx
     ControllerFeatures::ControllerFeatures( const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XForm >& _rxForm, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_xORB( _rxORB )
-        ,m_pImpl( NULL )
         ,m_pInvalidationCallback( _pInvalidationCallback )
+        ,m_pImpl( NULL )
     {
         assign( _rxForm );
     }
@@ -367,7 +367,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL FormControllerHelper::cursorMoved(const EventObject& event) throw( RuntimeException )
+    void SAL_CALL FormControllerHelper::cursorMoved(const EventObject& /*event*/) throw( RuntimeException )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         OSL_ENSURE( m_xCursor.is(), "FormControllerHelper::cursorMoved: already disposed!" );
@@ -377,19 +377,19 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FormControllerHelper::rowChanged( const EventObject& event ) throw (RuntimeException)
+    void SAL_CALL FormControllerHelper::rowChanged( const EventObject& /*event*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FormControllerHelper::rowSetChanged( const EventObject& event ) throw (RuntimeException)
+    void SAL_CALL FormControllerHelper::rowSetChanged( const EventObject& /*event*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FormControllerHelper::modified( const EventObject& _rSource ) throw( RuntimeException )
+    void SAL_CALL FormControllerHelper::modified( const EventObject& /*_rSource*/ ) throw( RuntimeException )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -451,7 +451,7 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FormControllerHelper::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL FormControllerHelper::disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
     {
         // not interested in
     }
@@ -780,8 +780,6 @@ namespace svx
                 {
                     OSL_ENSURE( sal_False, "FormControllerHelper::executeAutoFilter: could not reset the parser's order!" );
                 }
-
-                sal_Bool bParserSuccess = sal_True;
 
                 param_appendOrderByColumn aParam;
                 aParam.xField = xBoundField;
