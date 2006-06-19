@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionSourceImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:18:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ void XMLSectionSourceImportContext::EndElement()
 SvXMLImportContext* XMLSectionSourceImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & )
 {
     // ignore -> default context
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
