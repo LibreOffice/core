@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiconfigelementwrapperbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:27:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,13 +144,14 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
     ,   ::cppu::OWeakObject         (                                                   )
-    ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
     ,   m_nType                     ( nType                                             )
-    ,   m_bInitialized              ( sal_False                                         )
     ,   m_bPersistent               ( sal_True                                          )
+    ,   m_bInitialized              ( sal_False                                         )
     ,   m_bConfigListener           ( sal_False                                         )
     ,   m_bConfigListening          ( sal_False                                         )
     ,   m_bDisposed                 ( sal_False                                         )
+    ,   m_bNoClose                  ( sal_False                                         )
+    ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
 {
 }
 
@@ -177,7 +178,7 @@ void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun:
 }
 
 // XEventListener
-void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& aEvent )
+void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& )
 throw( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -223,17 +224,17 @@ void SAL_CALL UIConfigElementWrapperBase::update() throw (::com::sun::star::uno:
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     // can be implemented by derived class
 }
