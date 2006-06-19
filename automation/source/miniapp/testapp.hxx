@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:21:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ public:
     void FileExit();
     void FileOpen();
     void TestGross();
-    void Tree(GHEditWindow *aEditWin, Window *pBase, int Indent);
+    void Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent);
     void WinTree();
     void SysDlg();
     DECL_LINK(MenuSelectHdl,MenuBar*);
@@ -105,9 +105,12 @@ class MyDispatcher
 
 public:
     MyDispatcher(MainWindow  *MainWin) : pMainWin(MainWin) {};
-    ~MyDispatcher() {};
+    virtual ~MyDispatcher() {};
     virtual USHORT ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs = 0, USHORT nMode = 0);
-    virtual void SetExecuteMode( USHORT nMode ) {}; // Ist hier sowieso egal
+    virtual void SetExecuteMode( USHORT nMode )
+    {
+        (void) nMode; /* avoid warning about unused parameter */
+    };  // Ist hier sowieso egal
 };
 
 class MyApp : public Application
