@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:13:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <unotools/processfactory.hxx>
-#include <rtl/ustring>
+#include "rtl/ustring.hxx"
 
 #include <rtl/process.h>
 
@@ -331,8 +331,8 @@ void JRE_PropertyChanged( JNIEnv * env, const SvCommandList & rCmdList )
     jmethodID mCtor = env->GetMethodID( pClass, "<init>", "()V" );
     jobject pProps = env->NewObject( pClass, mCtor, NULL );
 
-    char * pSignature = "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;";
-    char * pMethodName = "put";
+    const char * pSignature = "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;";
+    const char * pMethodName = "put";
     jmethodID mPut = env->GetMethodID( pClass, pMethodName, pSignature );
     env->DeleteLocalRef( pClass );
 
