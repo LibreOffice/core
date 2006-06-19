@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:29:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,22 +146,23 @@ private:
         // used by locked columns
 public:
     DbGridColumn(sal_uInt16 _nId, DbGridControl& rParent)
-        :m_nId(_nId)
+        :m_pCell(NULL)
         ,m_rParent(rParent)
-        ,m_nFieldType(0)
+        ,m_nLastVisibleWidth(-1)
         ,m_nFormatKey(0)
-        ,m_pCell(NULL)
-        ,m_bNumeric(sal_False)
-        ,m_bDateTime(sal_False)
-        ,m_nAlign(::com::sun::star::awt::TextAlign::LEFT)
+        ,m_nFieldType(0)
+        ,m_nTypeId(0)
+        ,m_nId(_nId)
         ,m_nFieldPos(-1)
+        ,m_nAlign(::com::sun::star::awt::TextAlign::LEFT)
         ,m_bReadOnly(sal_False)
         ,m_bAutoValue(sal_False)
         ,m_bInSave(sal_False)
+        ,m_bNumeric(sal_False)
+        ,m_bObject(sal_False)
         ,m_bHidden(sal_False)
-        ,m_nLastVisibleWidth(-1)
-        ,m_nTypeId(0)
         ,m_bLocked(sal_False)
+        ,m_bDateTime(sal_False)
     {
     }
 
@@ -323,15 +324,15 @@ public:
     sal_Bool Commit();
 
     // Formatting the field data to output text
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) { return XubString(); }
+    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) = 0;
 
     virtual void Update(){}
     // Refresh the control by the field data
-    virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) {}
+    virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) = 0;
 
     // Painten eines Zellinhalts im vorgegeben Rechteck
-    virtual void Paint( OutputDevice& rDev, const Rectangle& rRect, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-            void Paint( OutputDevice& _rDev, const Rectangle& _rRect );
+    virtual void PaintFieldToCell( OutputDevice& rDev, const Rectangle& rRect, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
+    virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect );
 
     void  ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground);
 
@@ -432,7 +433,7 @@ public:
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual void Paint( OutputDevice& _rDev, const Rectangle& _rRect,
+    virtual void PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter );
 
@@ -476,12 +477,14 @@ class DbCheckBox : public DbCellControl
 public:
     TYPEINFO();
     DbCheckBox(DbGridColumn& _rColumn);
+
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual void Paint(OutputDevice& rDev, const Rectangle& rRect,
+    virtual void PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
+    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
 
 protected:
     // DbCellControl
@@ -711,8 +714,10 @@ public:
 
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual void Paint(OutputDevice& rDev, const Rectangle& rRect);
+    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
     virtual void Update();
+    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
     const XubString& GetText() const {return m_aText;}
     void SetText(const XubString& rText);
@@ -768,15 +773,15 @@ public:
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener)throw(::com::sun::star::uno::RuntimeException)        { OComponentHelper::removeEventListener(aListener);}
 
 // ::com::sun::star::awt::XControl
-    virtual void SAL_CALL setContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Context) throw(::com::sun::star::uno::RuntimeException){}
+    virtual void SAL_CALL setContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*Context*/) throw(::com::sun::star::uno::RuntimeException){}
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL getContext() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException){}
+    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& /*Toolkit*/, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& /*Parent*/) throw(::com::sun::star::uno::RuntimeException){}
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException) {return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > ();}
-    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
+    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& /*Model*/) throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException) {return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > ();}
-    virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException) {}
+    virtual void SAL_CALL setDesignMode(sal_Bool /*bOn*/) throw (::com::sun::star::uno::RuntimeException) {}
     virtual sal_Bool SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
     virtual sal_Bool SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
 
@@ -800,7 +805,7 @@ public:
     TYPEINFO();
     FmXDataCell(DbGridColumn* pColumn, DbCellControl* pControl):FmXGridCell(pColumn, pControl){}
 
-    virtual void Paint(OutputDevice& rDev,
+    virtual void PaintFieldToCell(OutputDevice& rDev,
                const Rectangle& rRect,
                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& xField,
                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -820,11 +825,11 @@ protected:
     /** determines whether the text of this cell can be painted directly, without
         using the painter control
 
-        If this is <TRUE/>, the <member>Paint</member> method will simply use the text as returned
-        by <member>GetText</member>, and draw it onto the device passed to <member>Paint</member>,
+        If this is <TRUE/>, the <member>PaintCell</member> method will simply use the text as returned
+        by <member>GetText</member>, and draw it onto the device passed to <member>PaintFieldToCell</member>,
         while respecting the current alignment settings.
 
-        If this is <FALSE/>, the <member>Paint</member> request will be forwarded to the painter
+        If this is <FALSE/>, the <member>PaintFieldToCell</member> request will be forwarded to the painter
         control (<member>m_pPainter</member>). This is more expensive, but the only option
         if your painting involves more that a simple DrawText.
 
@@ -840,7 +845,7 @@ public:
     {
     }
 
-    virtual void Paint(OutputDevice& rDev,
+    virtual void PaintFieldToCell(OutputDevice& rDev,
                const Rectangle& rRect,
                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& xField,
                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -998,7 +1003,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxObject);
 
 //  painting the filter text
-    void Paint(OutputDevice& rDev, const Rectangle& rRect);
+    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
     void Update(){m_pCellControl->Update();}
 
 // OComponentHelper
