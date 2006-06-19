@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:53:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ void KDEData::Init()
  **********************************************************************/
 
 extern "C" {
-    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
+    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
     {
         rtl::OString aVersion( qVersion() );
 #if OSL_DEBUG_LEVEL > 1
