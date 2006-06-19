@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NamedBoolPropertyHdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:25:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -70,7 +70,7 @@ XMLNamedBoolPropertyHdl::~XMLNamedBoolPropertyHdl()
     // Nothing to do
 }
 
-sal_Bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( rStrImpValue == maTrueStr )
     {
@@ -87,7 +87,7 @@ sal_Bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& 
     return sal_False;
 }
 
-sal_Bool XMLNamedBoolPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLNamedBoolPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( ::cppu::any2bool( rValue ) )
     {
