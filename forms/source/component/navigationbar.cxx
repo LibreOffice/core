@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigationbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ namespace frm
         // open a section for compatibility - if we later on write additional members,
         // then older versions can skip them
         Reference< XDataOutputStream > xDataOut( _rxOutStream, UNO_QUERY );
-        OStreamSection aEnsureCompat( xDataOut );
+        OStreamSection aEnsureBlockCompat( xDataOut );
 
         // base class
         OControlModel::write( _rxOutStream );
@@ -310,7 +310,7 @@ namespace frm
     void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream ) throw ( IOException, RuntimeException )
     {
         Reference< XDataInputStream > xDataIn( _rxInStream, UNO_QUERY );
-        OStreamSection aEnsureCompat( xDataIn );
+        OStreamSection aEnsureBlockCompat( xDataIn );
 
         // base class
         OControlModel::read( _rxInStream );
