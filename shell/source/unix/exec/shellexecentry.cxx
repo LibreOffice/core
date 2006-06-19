@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexecentry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ extern "C"
 //----------------------------------------------------------------------
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -101,7 +101,7 @@ void SAL_CALL component_getImplementationEnvironment(
 // component_writeInfo
 //-----------------------------------------------------------------------
 
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
 // component_getFactory
 //----------------------------------------------------------------------
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
+void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* /*pSrvManager*/, uno_Interface* /*pRegistryKey*/ )
 {
     Reference< XSingleComponentFactory > xFactory;
 
