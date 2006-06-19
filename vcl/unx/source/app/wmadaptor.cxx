@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:04:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1789,7 +1789,7 @@ bool NetWMAdaptor::supportsICCCMPos() const
 /*
  *  WMAdaptor::enableAlwaysOnTop
  */
-void WMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
+void WMAdaptor::enableAlwaysOnTop( X11SalFrame*, bool /*bEnable*/ ) const
 {
 }
 
@@ -1898,7 +1898,7 @@ void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferen
 /*
  *  WMAdaptor::handlePropertyNotify
  */
-int WMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const
+int WMAdaptor::handlePropertyNotify( X11SalFrame*, XPropertyEvent* ) const
 {
     return 0;
 }
@@ -2040,7 +2040,7 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
 /*
  * WMAdaptor::shade
  */
-void WMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
+void WMAdaptor::shade( X11SalFrame*, bool /*bToShaded*/ ) const
 {
 }
 
@@ -2309,7 +2309,7 @@ void WMAdaptor::switchToWorkArea( int nWorkArea ) const
 /*
  * WMAdaptor::frameIsMapping
  */
-void WMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
+void WMAdaptor::frameIsMapping( X11SalFrame* ) const
 {
 }
 
