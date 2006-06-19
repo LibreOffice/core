@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:49:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,6 @@ void SvtHelpOptions_Impl::implLoadURLCounters()
 void SvtHelpOptions_Impl::Commit()
 {
     Sequence< OUString > aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence< Any > aValues( aNames.getLength() );
     Any* pValues = aValues.getArray();
     for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
@@ -578,7 +577,7 @@ SvtHelpOptions::SvtHelpOptions()
     ++nRefCount;
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtHelpOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtHelpOptions_Impl::ctor()");
         pOptions = new SvtHelpOptions_Impl;
 
         ItemHolder2::holdConfigItem(E_HELPOPTIONS);
@@ -761,11 +760,11 @@ IdList* SvtHelpOptions::GetPIStarterList()
     return pImp->GetPIStarterList();
 }
 
-void SvtHelpOptions::AddToPIStarterList( sal_Int32 nId )
+void SvtHelpOptions::AddToPIStarterList( sal_Int32 )
 {
 }
 
-void SvtHelpOptions::RemoveFromPIStarterList( sal_Int32 nId )
+void SvtHelpOptions::RemoveFromPIStarterList( sal_Int32 )
 {
 }
 
