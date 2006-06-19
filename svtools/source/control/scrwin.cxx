@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ void __EXPORT ScrollableWindow::StartScroll()
 
 //-------------------------------------------------------------------
 
-void __EXPORT ScrollableWindow::EndScroll( long nDeltaX, long nDeltaY )
+void __EXPORT ScrollableWindow::EndScroll( long, long )
 {
 }
 
@@ -481,7 +481,7 @@ void ScrollableWindow::SetLineSize( ULONG nHorz, ULONG nVert )
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY )
+void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, USHORT )
 {
     if ( !bScrolling )
         StartScroll();
