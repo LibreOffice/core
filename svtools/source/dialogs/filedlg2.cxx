@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:12:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 
-DECLARE_LIST( UniStringList, UniString* );
+DECLARE_LIST( UniStringList, UniString* )
 
 #define STD_BTN_WIDTH   80
 #define STD_BTN_HEIGHT  26
@@ -142,7 +142,7 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
     return ListBox::PreNotify ( rNEvt );
 }
 
-ImpPathDialog::ImpPathDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE nType, BOOL bCreateDir )
+ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreateDir )
 {
     pSvPathDialog = pDlg;
     nDirCount = 0;
@@ -193,7 +193,6 @@ void ImpPathDialog::InitControls()
     Size aEDSiz = pDlg->LogicToPixel( Size( 142, 12 ), MAP_APPFONT );
     Point aPnt( a6Siz.Width(), a6Siz.Height() );
     long nLbH1 = pDlg->LogicToPixel( Size( 0, 93 ), MAP_APPFONT ).Height();
-    long nLbH2 = pDlg->LogicToPixel( Size( 0, 60 ), MAP_APPFONT ).Height();
     long nH = 0;
     UniString aEmptyStr;
 
@@ -205,6 +204,7 @@ void ImpPathDialog::InitControls()
 
     aPnt.Y() += aEDSiz.Height() + a3Siz.Height();
 #ifndef UNX
+    long nLbH2 = pDlg->LogicToPixel( Size( 0, 60 ), MAP_APPFONT ).Height();
     INITCONTROL( pDirList, KbdListBox, WB_AUTOHSCROLL | WB_BORDER,
         aPnt, Size( aEDSiz.Width(), nLbH1 ), aEmptyStr, HID_FILEDLG_DIRS );
     aPnt.Y() += nLbH1 + a6Siz.Height();
@@ -450,7 +450,7 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
     return 0;
 }
 
-void ImpPathDialog::UpdateEntries( const BOOL dummy_bWithDirs )
+void ImpPathDialog::UpdateEntries( const BOOL )
 {
     UniString aTabString;
     DirEntry aTmpPath;
@@ -723,7 +723,7 @@ UniString ImpPathDialog::GetPath() const
 
 
 ImpFileDialog::ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE nType ) :
-  ImpPathDialog( pDlg, nWinBits, nType, FALSE )
+  ImpPathDialog( pDlg, nType, FALSE )
 {
     bOpen = (nWinBits & WB_SAVEAS) == 0;
 
@@ -1351,7 +1351,7 @@ UniString ImpFileDialog::ExtendFileName( DirEntry aEntry ) const
         }
         else
         {
-            // kein Filter gefunden (merkwÆrdig) -> Default-Extension anhaengen
+            // kein Filter gefunden (merkwï¿½rdig) -> Default-Extension anhaengen
             aPostfix = GetFileDialog()->GetDefaultExt();
         }
 
@@ -1377,7 +1377,7 @@ void ImpSvFileDlg::CreateDialog( PathDialog* pSvDlg, WinBits nStyle, RESOURCE_TY
 {
     delete pDlg;
     if ( nType == WINDOW_PATHDIALOG )
-        pDlg = new ImpPathDialog( pSvDlg, nStyle, nType, bCreate );
+        pDlg = new ImpPathDialog( pSvDlg, nType, bCreate );
     else
         pDlg = new ImpFileDialog( pSvDlg, nStyle, nType );
 }
