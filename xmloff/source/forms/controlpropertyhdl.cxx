@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:04:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlBorderStyleHandler::pickOne( const Color& _rColor, sal_Int16 _nStyle, Any& _rValue ) const
+    void OControlBorderStyleHandler::pickOne( const Color&, sal_Int16 _nStyle, Any& _rValue ) const
     {
         _rValue <<= _nStyle;
     }
@@ -359,7 +359,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlBorderColorHandler::pickOne( const Color& _rColor, sal_Int16 _nStyle, Any& _rValue ) const
+    void OControlBorderColorHandler::pickOne( const Color& _rColor, sal_Int16 /*_nStyle*/, Any& _rValue ) const
     {
         _rValue <<= (sal_Int32)_rColor.GetColor();
     }
@@ -442,6 +442,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12.34.1  2005/11/16 22:47:08  pl
+ *  #i55991# removed warnings
+ *
+ *  Revision 1.12  2005/09/09 14:04:23  rt
+ *  INTEGRATION: CWS ooo19126 (1.11.302); FILE MERGED
+ *  2005/09/05 14:38:54 rt 1.11.302.1: #i54170# Change license header: remove SISSL
+ *
  *  Revision 1.11.302.1  2005/09/05 14:38:54  rt
  *  #i54170# Change license header: remove SISSL
  *
