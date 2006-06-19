@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dependy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:52:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ DependencyFinder::FindNeededServices( StringVector &        o_rLibraries,
     aResult_Libraries.erase( aResult_Libraries.begin(), aResult_Libraries.end() );
     aResult_Services.erase( aResult_Services.begin(), aResult_Services.end() );
 
-    const ServiceInfo & rSInfo = (*itService).second->FirstImplementation();
+//  const ServiceInfo & rSInfo = (*itService).second->FirstImplementation();
     Add2Result( *(*itService).second );
 
     for ( std::set< Simstr >::const_iterator il = aResult_Libraries.begin();
