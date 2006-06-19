@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:51:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,6 @@
 #include <slot.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#pragma hdrstop
-
 
 /****************** SvMetaSlot *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaSlot, SvMetaAttribute );
@@ -797,7 +795,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aSet || aGet || aPseudoSlots )
     {
         WriteTab( rOutStm, nTab );
-        char * p = "";
+        char const * p = "";
         if( aPseudoSlots )
         {
             aPseudoSlots.WriteSvIdl( SvHash_PseudoSlots(), rOutStm );
@@ -935,7 +933,6 @@ BOOL SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         SvMetaType * pType = GetType();
         if( pType->GetType() == TYPE_METHOD )
             pType = pType->GetReturnType();
-        SvMetaType * pBaseType = pType->GetBaseType();
         if( !pType->IsItem() )
         {
             rBase.SetError( "this attribute is not a slot", rInStm.GetToken() );
@@ -990,11 +987,11 @@ BOOL SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     {
         bOk = SvMetaAttribute::ReadSvIdl( rBase, rInStm );
 
-        SvMetaAttribute *pAttr = rBase.SearchKnownAttr( GetSlotId() );
-        if( pAttr )
+        SvMetaAttribute *pAttr2 = rBase.SearchKnownAttr( GetSlotId() );
+        if( pAttr2 )
         {
             // F"ur Testzwecke: Referenz bei kompletter Definition
-            SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr );
+            SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr2 );
             if( pKnownSlot )
             {
                 SetRef( pKnownSlot );
@@ -1012,7 +1009,7 @@ BOOL SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             else
             {
                 ByteString aStr( "attribute " );
-                aStr += pAttr->GetName();
+                aStr += pAttr2->GetName();
                 aStr += " is method or variable but not a slot";
                 rBase.SetError( aStr, rInStm.GetToken() );
                 rBase.WriteError( rInStm );
@@ -1090,7 +1087,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         nPos = rList.GetObject(0)->xSlot->GetSlotId().GetValue() >= nId ? 0 : 1;
     else
     {
-        USHORT nMid, nLow = 0;
+        USHORT nMid = 0, nLow = 0;
         USHORT nHigh = nListCount - 1;
         BOOL bFound = FALSE;
         while ( !bFound && nLow <= nHigh )
@@ -1144,13 +1141,12 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         for( ULONG n = 0; n < pEnum->Count(); n++ )
         {
             // Die SlotId erzeugen
-            SvMetaEnumValue *pEnumValue = pEnum->GetObject(n);
-            ByteString aValName = pEnumValue->GetName();
+            SvMetaEnumValue *enumValue = pEnum->GetObject(n);
+            ByteString aValName = enumValue->GetName();
             ByteString aSId( GetSlotId() );
             if( GetPseudoPrefix().Len() )
                 aSId = GetPseudoPrefix();
             aSId += '_';
-            USHORT nLen = pEnum->GetPrefix().Len();
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
             xEnumSlot = NULL;
@@ -1181,7 +1177,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 
             // Die Slaves sind kein Master !
             xEnumSlot->aPseudoSlots = FALSE;
-            xEnumSlot->SetEnumValue(pEnumValue);
+            xEnumSlot->SetEnumValue(enumValue);
 
             if ( !pFirstEnumSlot || xEnumSlot->GetSlotId().GetValue() < pFirstEnumSlot->GetSlotId().GetValue() )
                 pFirstEnumSlot = xEnumSlot;
@@ -1297,7 +1293,6 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 
 void SvMetaSlot::WriteSlot( const ByteString & rShellName, USHORT nCount,
                             const ByteString & rSlotId,
-                            const ByteString & rValueName,
                             SvSlotElementList& rSlotList,
                             const ByteString & rPrefix,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
@@ -1612,7 +1607,7 @@ USHORT SvMetaSlot::WriteSlotMap( const ByteString & rShellName, USHORT nCount,
                                 SvStream & rOutStm )
 {
     // SlotId, wenn nicht angegeben, aus Namen generieren
-    ByteString aSlotId = GetSlotId();
+    ByteString slotId = GetSlotId();
 
     USHORT nSCount = 0;
     if( IsMethod() )
@@ -1627,30 +1622,7 @@ USHORT SvMetaSlot::WriteSlotMap( const ByteString & rShellName, USHORT nCount,
         nSCount = (USHORT)pType->GetAttrCount();
     }
 
-    WriteSlot( rShellName, nCount, aSlotId, ByteString(),
-                rSlotList, rPrefix, rBase, rOutStm );
-/*
-    SvMetaTypeEnum * pEnum = NULL;
-    SvMetaType * pBType = GetType()->GetBaseType();
-    pEnum = PTR_CAST( SvMetaTypeEnum, pBType );
-    if( aPseudoSlots && pEnum )
-    {
-        rBase.nMasterPos = rBase.nSlotPos-1;
-        rBase.nEnumPos = rBase.nMasterPos + pEnum->Count() + 1;
-
-        for( ULONG n = 0; n < pEnum->Count(); n++ )
-        {
-            ByteString aValName = pEnum->GetObject( n )->GetName();
-            ByteString aSId( aSlotId );
-            if( GetPseudoPrefix().Len() )
-                aSId = GetPseudoPrefix();
-            aSId += '_';
-            USHORT nLen = pEnum->GetPrefix().Len();
-            aSId += aValName.Copy( pEnum->GetPrefix().Len() );
-            WriteSlot( rShellName, nCount + nSCount, aSId, aValName, rSlotList, rBase, rOutStm );
-        }
-    }
-*/
+    WriteSlot( rShellName, nCount, slotId, rSlotList, rPrefix, rBase, rOutStm );
     return nSCount;
 }
 
@@ -1697,21 +1669,20 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
             if( GetPseudoPrefix().Len() )
                 aSId = GetPseudoPrefix();
             aSId += '_';
-            USHORT nLen = pEnum->GetPrefix().Len();
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
-            ULONG nSId;
+            ULONG nSId2;
             BOOL bIdOk = FALSE;
-            if( rBase.FindId( aSId, &nSId ) )
+            if( rBase.FindId( aSId, &nSId2 ) )
             {
-                aSId = ByteString::CreateFromInt32( nSId );
+                aSId = ByteString::CreateFromInt32( nSId2 );
                 bIdOk = TRUE;
             }
 
             // wenn Id nicht gefunden, immer schreiben
-            if( !bIdOk || !pTable->IsKeyValid( nSId ) )
+            if( !bIdOk || !pTable->IsKeyValid( nSId2 ) )
             {
-                pTable->Insert( nSId, this );
+                pTable->Insert( nSId2, this );
                 rOutStm << "SfxSlotInfo " << aSId.GetBuffer()
                         << endl << '{' << endl;
 
@@ -1750,24 +1721,23 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             if( GetPseudoPrefix().Len() )
                 aSId = GetPseudoPrefix();
             aSId += '_';
-            USHORT nLen = pEnum->GetPrefix().Len();
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
-            ULONG nSId;
+            ULONG nSId2;
             BOOL bIdOk = FALSE;
-            if( rBase.FindId( aSId, &nSId ) )
+            if( rBase.FindId( aSId, &nSId2 ) )
             {
-                aSId = ByteString::CreateFromInt32( nSId );
+                aSId = ByteString::CreateFromInt32( nSId2 );
                 bIdOk = TRUE;
             }
 
             // wenn Id nicht gefunden, immer schreiben
-            if( !bIdOk || !pTable->IsKeyValid( nSId ) )
+            if( !bIdOk || !pTable->IsKeyValid( nSId2 ) )
             {
-                pTable->Insert( nSId, this );
+                pTable->Insert( nSId2, this );
 
                 rOutStm << "#define " << aSId.GetBuffer() << '\t'
-                        << ByteString::CreateFromInt32( nSId ).GetBuffer() << endl;
+                        << ByteString::CreateFromInt32( nSId2 ).GetBuffer() << endl;
             }
         }
     }
@@ -1928,7 +1898,6 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 {
     rStrm << "PROJECT,";
     rStrm << GetSlotId().GetBuffer() << ',';
-    USHORT nId = (USHORT) GetSlotId().GetValue();
     rStrm << ByteString::CreateFromInt32( GetSlotId().GetValue() ).GetBuffer() << ',';
 
     if ( GetPseudoPrefix().Len() )
