@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testtoolloader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:39:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,9 +132,10 @@ void InitTestToolLib()
         aTestToolModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
         if ( aTestToolModule )
         {
-            void* pInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
+            oslGenericFunction pInitFunc = osl_getFunctionSymbol(
+                aTestToolModule, aFuncName.pData );
             if ( pInitFunc )
-                (*(pfunc_CreateRemoteControl)pInitFunc)();
+                (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
             else
             {
                    DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
@@ -157,9 +158,10 @@ void DeInitTestToolLib()
     {
         OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
 
-        void* pDeInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
+        oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
+            aTestToolModule, aFuncName.pData );
         if ( pDeInitFunc )
-            (*(pfunc_DestroyRemoteControl)pDeInitFunc)();
+            (reinterpret_cast< pfunc_DestroyRemoteControl >(pDeInitFunc))();
 
         osl_unloadModule( aTestToolModule );
     }
