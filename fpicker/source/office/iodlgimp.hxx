@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlgimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:10:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ public:
 // SvtFileDialogFilterList_Impl
 //*****************************************************************************
 
-SV_DECL_PTRARR_DEL( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl*, 3, 3 );
+SV_DECL_PTRARR_DEL( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl*, 3, 3 )
 
 //*****************************************************************************
 // SvtFileDlgMode
@@ -140,8 +140,7 @@ private:
     PopupMenu*          m_pMenu;
 
 protected:
-//    inline  const SvtFileDialog*  GetParent() const { return _pParent; }
-    inline        SvtFileDialog*  GetParent()       { return m_pParent; }
+    inline        SvtFileDialog*  GetDialogParent()       { return m_pParent; }
 
 protected:
             void    OpenURL( const String& rURL );
