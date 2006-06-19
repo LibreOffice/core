@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 10:08:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:14:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
+#ifndef _SV_TIMER_HXX
+#include <timer.hxx>
+#endif
 
 #include <unohelp.hxx>
 
@@ -206,7 +209,7 @@ class Reflection;
 
 extern "C" {
     typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
-};
+}
 
 // =======================================================================
 
@@ -295,7 +298,7 @@ Application::~Application()
 
 // -----------------------------------------------------------------------
 
-void Application::InitAppRes( const ResId& rResId )
+void Application::InitAppRes( const ResId& )
 {
 }
 
@@ -520,7 +523,7 @@ void Application::Reschedule()
     // Restliche Timer abarbeitet
     if ( !pSVData->mbNoCallTimer )
         while ( pSVData->mbNotAllTimerCalled )
-            ImplTimerCallbackProc();
+            Timer::ImplTimerCallbackProc();
 
     pSVData->maAppData.mnDispatchLevel++;
     pSVData->mpDefInst->Yield( FALSE );
@@ -536,7 +539,7 @@ void Application::Yield()
     // Restliche Timer abarbeitet
     if ( !pSVData->mbNoCallTimer )
         while ( pSVData->mbNotAllTimerCalled )
-            ImplTimerCallbackProc();
+            Timer::ImplTimerCallbackProc();
 
     // Wenn Application schon beendet wurde, warten wir nicht mehr auf
     // Messages, sondern verarbeiten nur noch welche, wenn noch welche
@@ -548,7 +551,7 @@ void Application::Yield()
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOINSTANCE( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
 {
     ImplGetSVData()->maAppData.mbAppQuit = TRUE;
     return 0;
@@ -689,8 +692,8 @@ BOOL Application::IsUserActive( USHORT nTest )
 
 // -----------------------------------------------------------------------
 
-void Application::SystemSettingsChanging( AllSettings& rSettings,
-                                          Window* pFrame )
+void Application::SystemSettingsChanging( AllSettings& /*rSettings*/,
+                                          Window* /*pFrame*/ )
 {
 }
 
@@ -1009,7 +1012,7 @@ ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMous
 
 // -----------------------------------------------------------------------------
 
-IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
+IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 {
     const ::vos::OGuard aGuard( GetSolarMutex() );
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
@@ -1497,7 +1500,7 @@ Window* Application::GetDefDialogParent()
             }
         }
         // last active application frame
-        if( pWin = pSVData->maWinData.mpActiveApplicationFrame )
+        if( NULL != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
         {
             return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
@@ -1616,7 +1619,7 @@ UnoWrapperBase* Application::GetUnoWrapper( BOOL bCreateIfNotExist )
         if ( hTkLib )
         {
             ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateUnoWrapper" ) );
-            FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)osl_getSymbol( hTkLib, aFunctionName.pData );
+            FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)osl_getFunctionSymbol( hTkLib, aFunctionName.pData );
             if ( fnCreateWrapper )
             {
                 pSVData->mpUnoWrapper = fnCreateWrapper();
@@ -1894,7 +1897,10 @@ BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
     BOOL bRet = true;
 
 // Disable Java bridge on UNIX
-#ifndef UNX
+#if defined UNX
+    (void) bShowCancel; // unsued
+    (void) rCancelled; // unused
+#else
     bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
 
     if( !bRet && bShowCancel && !rCancelled )
@@ -1935,6 +1941,6 @@ void Application::SetPropertyHandler( PropertyHandler* p )
 
 
 
-void Application::AppEvent( const ApplicationEvent& rAppEvent )
+void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }
