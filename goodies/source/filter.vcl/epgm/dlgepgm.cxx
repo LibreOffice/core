@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepgm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:37:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,14 @@
 
 DlgExportEPGM::DlgExportEPGM( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPGM, rPara.pResMgr ) ),
+                rFltCallPara        ( rPara ),
                 aGrpFormat          ( this, ResId( GRP_FORMAT ) ),
                 aRBRaw              ( this, ResId( RB_RAW ) ),
                 aRBASCII            ( this, ResId( RB_ASCII ) ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pMgr                ( rPara.pResMgr ),
-                rFltCallPara        ( rPara )
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
