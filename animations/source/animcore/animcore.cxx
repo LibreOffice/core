@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animcore.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:46:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,8 @@ Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NUL
 Sequence< sal_Int8 >* AnimationNode::mpId[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
-:   mnNodeType( nNodeType ),
+:   maChangeListener(maMutex),
+    mnNodeType( nNodeType ),
     mnFill( AnimationFill::DEFAULT ),
     mnFillDefault( AnimationFill::INHERIT ),
     mnRestart( AnimationRestart:: DEFAULT ),
@@ -489,6 +490,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mfAcceleration( 0.0 ),
     mfDecelerate( 0.0 ),
     mbAutoReverse( sal_False ),
+    mpParent(0),
     mnValueType( 0 ),
     mnSubItem( 0 ),
     mnCalcMode( (nNodeType == AnimationNodeType::ANIMATEMOTION) ? AnimationCalcMode::PACED : AnimationCalcMode::LINEAR),
@@ -504,14 +506,14 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mfVolume(1.0),
     mnCommand(0),
     mnIterateType( ::com::sun::star::presentation::ShapeAnimationSubType::AS_WHOLE ),
-    mfIterateInterval(0.0),
-    maChangeListener(maMutex),
-    mpParent(0)
+    mfIterateInterval(0.0)
 {
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
-:   mnNodeType( rNode.mnNodeType ),
+:   AnimationNodeBase(),
+    maChangeListener(maMutex),
+    mnNodeType( rNode.mnNodeType ),
 
     // attributes for the XAnimationNode interface implementation
     maBegin( rNode.maBegin ),
@@ -528,6 +530,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     mfDecelerate( rNode.mfDecelerate ),
     mbAutoReverse( rNode.mbAutoReverse ),
     maUserData( rNode.maUserData ),
+    mpParent(0),
 
     // attributes for XAnimate
     maTarget( rNode.maTarget ),
@@ -571,9 +574,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
 
     // XIterateContainer
     mnIterateType( rNode.mnIterateType ),
-    mfIterateInterval( rNode.mfIterateInterval ),
-    maChangeListener(maMutex),
-    mpParent(0)
+    mfIterateInterval( rNode.mfIterateInterval )
 {
 }
 
@@ -584,7 +585,7 @@ AnimationNode::~AnimationNode()
 // --------------------------------------------------------------------
 
 #define IMPL_NODE_FACTORY(N,IN,SN)\
-Reference< XInterface > SAL_CALL createInstance_##N( const Reference< XComponentContext > & rSMgr ) throw (Exception)\
+Reference< XInterface > SAL_CALL createInstance_##N( const Reference< XComponentContext > &  ) throw (Exception)\
 {\
     return Reference < XInterface > ( SAL_STATIC_CAST( ::cppu::OWeakObject * , new AnimationNode( N ) ) );\
 }\
@@ -1226,7 +1227,7 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent ) 
         mpParent = 0;
         Reference< XUnoTunnel > xTunnel( mxParent, UNO_QUERY );
         if( xTunnel.is() )
-            mpParent = ( AnimationNode* )xTunnel->getSomething( getUnoTunnelId() );
+            mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() )));
 
         fireChangeListener();
     }
@@ -2087,7 +2088,8 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
 {
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
+
     }
     else
     {
@@ -2139,4 +2141,4 @@ void AnimationNode::fireChangeListener()
 
 // --------------------------------------------------------------------
 
-}; // namespace animcore
+} // namespace animcore
