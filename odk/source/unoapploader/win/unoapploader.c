@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoapploader.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:20:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <process.h>
-#include <Windows.h>
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 char* getPath();
 char* getPathFromWindowsRegistry();
@@ -81,6 +88,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     STARTUPINFO startup_info;
     PROCESS_INFORMATION process_info;
     BOOL bCreate;
+
+    (void) hInstance; /* unused */
+    (void) hPrevInstance; /* unused */
+    (void) nCmdShow; /* unused */
 
     /* get the path of the UNO installation */
     path = getPath();
@@ -229,7 +240,7 @@ char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
     data = (char*) malloc( size );
 
     /* read the default value */
-    if ( RegQueryValueEx( hkey, NULL, NULL, &type, data, &size ) != ERROR_SUCCESS )
+    if ( RegQueryValueEx( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
     {
         RegCloseKey( hkey );
         return NULL;
