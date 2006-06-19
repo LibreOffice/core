@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:55:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,8 +604,14 @@ String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 
 String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
 {
-    Text [ de ] = "Das angegebene Kriterium kann nicht mit diesem Feld verglichen werden!!";
+    Text [ de ] = "Das angegebene Kriterium kann nicht mit diesem Feld verglichen werden";
     Text [ en-US ] = "The entered criterion cannot be compared with this field.";
+};
+
+String RID_STR_SVT_SQL_TABLE_EXISTS
+{
+    Text [ de ] = "Eine Tabelle mit dem angegebenen Namen existiert bereits.";
+    Text [ en-US ] = "A table with the given name already exists.";
 };
 
 String RID_STR_DATANAVIGATOR
