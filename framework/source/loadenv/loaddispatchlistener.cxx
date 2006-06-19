@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loaddispatchlistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:37:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void SAL_CALL LoadDispatchListener::dispatchFinished(const css::frame::DispatchR
 }
 
 //-----------------------------------------------
-void SAL_CALL LoadDispatchListener::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL LoadDispatchListener::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
@@ -137,7 +137,7 @@ void LoadDispatchListener::setURL(const ::rtl::OUString & sURL)
 }
 
 //-----------------------------------------------
-sal_Bool LoadDispatchListener::wait(sal_Int32 nWait_ms)
+sal_Bool LoadDispatchListener::wait(sal_Int32 /*nWait_ms*/)
 {
     // Wait till an event occures
     m_aUserWait.wait(0);
