@@ -22,6 +22,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#if defined __GNUC__
+#pragma GCC system_header
+#elif defined __SINPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+
 /* external functions (C++ code, declared as extren "C" */
 extern WorkOnTokenSet( int, char* );
 extern Argument( char * );
