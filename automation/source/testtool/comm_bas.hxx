@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comm_bas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:30:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ private:
     };
     static Methods aManagerMethods[];   // Methodentabelle
     static Methods aLinkMethods[];      // Methodentabelle
-    Methods *pMethods;  // Aktuelle Methodentabelle
+    Methods *m_pMethods;    // Aktuelle Methodentabelle
 
     // Methoden
     //      Manager
@@ -90,22 +90,20 @@ private:
     void LGetString( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
     // Interne Member und Methoden
-    CommunicationManagerClientViaSocket *pManager;
-    CommunicationLink *pLink;
-    BOOL bIsManager;    // Ist es kein Manager, so ist es ein Link
+    CommunicationManagerClientViaSocket *m_pManager;
+    CommunicationLink *m_pLink;
+    BOOL m_bIsManager;  // Ist es kein Manager, so ist es ein Link
 
     // Kram für Manager
     DECL_LINK( Open, CommunicationLink* );
     DECL_LINK( Close, CommunicationLink* );
     DECL_LINK( Data, CommunicationLink* );
     void Events( String aType, CommunicationLink* pLink );
-    BOOL bCatchOpen;
-    CommunicationLink *pNewLink;
-    String aEventHandlerName;
+    BOOL m_bCatchOpen;
+    CommunicationLink *m_pNewLink;
+    String m_aEventHandlerName;
 
-    // Kram für Link
-
-
+    using SbxVariable::GetInfo;
     // Infoblock auffuellen
     SbxInfo* GetInfo( short nIdx );
 
@@ -119,7 +117,7 @@ public:
     // Suchen eines Elements
     virtual SbxVariable* Find( const String&, SbxClassType );
 
-    CommunicationLink* GetCommunicationLink() { return pLink; }
+    CommunicationLink* GetCommunicationLink() { return m_pLink; }
 };
 
 
