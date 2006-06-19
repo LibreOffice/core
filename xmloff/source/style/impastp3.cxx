@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:43:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,11 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
     for( i = 0; i < nCount; i++ )
     {
         SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList.GetObject( i );
-        if( nProperties > pIS->GetProperties().size() )
+        if( nProperties > (sal_Int32)pIS->GetProperties().size() )
         {
             continue;
         }
-        else if( nProperties < pIS->GetProperties().size() )
+        else if( nProperties < (sal_Int32)pIS->GetProperties().size() )
         {
             break;
         }
