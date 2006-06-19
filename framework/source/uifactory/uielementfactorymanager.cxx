@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uielementfactorymanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:01:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:44:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,8 +143,8 @@ class ConfigurationAccess_UIElementFactoryManager : // interfaces
                                                     public  ::cppu::OWeakObject
 {
     public:
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
                       ConfigurationAccess_UIElementFactoryManager( Reference< XMultiServiceFactory >& rServiceManager );
         virtual       ~ConfigurationAccess_UIElementFactoryManager();
@@ -208,11 +208,11 @@ DEFINE_XTYPEPROVIDER_3  (   ConfigurationAccess_UIElementFactoryManager ,
 
 ConfigurationAccess_UIElementFactoryManager::ConfigurationAccess_UIElementFactoryManager( Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( rServiceManager ),
     m_aPropType( RTL_CONSTASCII_USTRINGPARAM( "Type" )),
     m_aPropName( RTL_CONSTASCII_USTRINGPARAM( "Name" )),
     m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
     m_aPropFactory( RTL_CONSTASCII_USTRINGPARAM( "FactoryImplementation" )),
+    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False )
 {
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(
@@ -419,7 +419,7 @@ void SAL_CALL ConfigurationAccess_UIElementFactoryManager::elementReplaced( cons
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UIElementFactoryManager::disposing( const EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UIElementFactoryManager::disposing( const EventObject& ) throw(RuntimeException)
 {
     // SAFE
     // remove our reference to the config access
@@ -544,8 +544,8 @@ DEFINE_INIT_SERVICE                     (   UIElementFactoryManager, {} )
 
 UIElementFactoryManager::UIElementFactoryManager( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( xServiceManager ),
-    m_bConfigRead( sal_False )
+    m_bConfigRead( sal_False ),
+    m_xServiceManager( xServiceManager )
 {
     m_pConfigAccess = new ConfigurationAccess_UIElementFactoryManager( m_xServiceManager );
     m_pConfigAccess->acquire();
