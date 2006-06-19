@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:04:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,7 @@ protected:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
             throw (uno::Exception);
 
+    using apihelper::PropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const;
 
 };
@@ -212,6 +213,7 @@ public :
     ~SimpleLocalFileLayer() ;
 
     // XLayer
+    using BasicLocalFileLayer::readData;
     virtual void SAL_CALL readData(
             const uno::Reference<backend::XLayerHandler>& xHandler)
         throw (backend::MalformedDataException, lang::NullPointerException,
@@ -259,6 +261,7 @@ public :
     ~FlatLocalFileLayer(void) ;
 
     // XLayer
+    using BasicLocalFileLayer::readData;
     virtual void SAL_CALL readData(
             const uno::Reference<backend::XLayerHandler>& xHandler)
         throw (backend::MalformedDataException, lang::NullPointerException,
@@ -374,6 +377,7 @@ public :
     /** Destructor */
     ~CompositeLocalFileLayer(void) ;
     // XLayer
+    using BasicCompositeLocalFileLayer::readData;
     virtual void SAL_CALL readData(
             const uno::Reference<backend::XLayerHandler>& xHandler)
         throw (backend::MalformedDataException, lang::NullPointerException,
@@ -384,6 +388,7 @@ public :
         throw (lang::WrappedTargetException, uno::RuntimeException)
     { return BasicCompositeLocalFileLayer::listSubLayerIds() ; }
 
+    using BasicCompositeLocalFileLayer::readSubLayerData;
     virtual void SAL_CALL readSubLayerData(
             const uno::Reference<backend::XLayerHandler>& xHandler,
             const rtl::OUString& aSubLayerId)
@@ -393,7 +398,7 @@ public :
 
 private :
     // not implemented: warn of attempts to use this here
-    void getFileUrl();
+    void getFileUrl() const;
 } ;
 /**
   Implementation of the XUpdatableLayer and XCompositeLayer
@@ -434,6 +439,7 @@ public :
     /** Destructor */
     ~FullCompositeLocalFileLayer(void) ;
     // XLayer
+    using BasicCompositeLocalFileLayer::readData;
     virtual void SAL_CALL readData(
             const uno::Reference<backend::XLayerHandler>& xHandler)
         throw (backend::MalformedDataException, lang::NullPointerException,
@@ -450,6 +456,7 @@ public :
         throw (lang::WrappedTargetException, uno::RuntimeException)
     { return BasicCompositeLocalFileLayer::listSubLayerIds() ; }
 
+    using BasicCompositeLocalFileLayer::readSubLayerData;
     virtual void SAL_CALL readSubLayerData(
             const uno::Reference<backend::XLayerHandler>& xHandler,
             const rtl::OUString& aSubLayerId)
