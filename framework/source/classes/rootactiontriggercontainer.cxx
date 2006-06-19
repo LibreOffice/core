@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootactiontriggercontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:14:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const Reference< XMultiServiceFactory >& rServiceManager ) :
     PropertySetContainer( rServiceManager )
-    ,   m_pMenu( pMenu )
     ,   m_bContainerCreated( sal_False )
     ,   m_bContainerChanged( sal_False )
     ,   m_bInContainerCreation( sal_False )
+    ,   m_pMenu( pMenu )
 {
 }
 
@@ -152,7 +152,7 @@ throw ( Exception,  RuntimeException )
         throw com::sun::star::uno::RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown service specifier!" )), (OWeakObject *)this );
 }
 
-Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& Arguments )
+Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 throw ( Exception, RuntimeException )
 {
     return createInstance( ServiceSpecifier );
@@ -297,7 +297,7 @@ throw ( RuntimeException )
 sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw ( RuntimeException )
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
     else
         return 0;
 }
