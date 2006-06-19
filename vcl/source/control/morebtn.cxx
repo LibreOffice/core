@@ -4,9 +4,9 @@
  *
  *  $RCSfile: morebtn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:48:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 
 // =======================================================================
 
-DECLARE_LIST( ImplMoreWindowList, Window* );
+DECLARE_LIST( ImplMoreWindowList, Window* )
 
 struct ImplMoreButtonData
 {
