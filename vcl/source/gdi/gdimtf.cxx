@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:54:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,18 +309,18 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
 
 BOOL GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 {
-    const ULONG nCount = Count();
+    const ULONG nObjCount = Count();
     BOOL        bRet = FALSE;
 
     if( this == &rMtf )
         bRet = TRUE;
-    else if( rMtf.GetActionCount() == nCount &&
+    else if( rMtf.GetActionCount() == nObjCount &&
              rMtf.GetPrefSize() == aPrefSize &&
              rMtf.GetPrefMapMode() == aPrefMapMode )
     {
         bRet = TRUE;
 
-        for( ULONG n = 0UL; n < nCount; n++ )
+        for( ULONG n = 0UL; n < nObjCount; n++ )
         {
             if( GetObject( n ) != rMtf.GetObject( n ) )
             {
@@ -337,18 +337,18 @@ BOOL GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 
 sal_Bool GDIMetaFile::IsEqual( const GDIMetaFile& rMtf ) const
 {
-    const ULONG nCount = Count();
+    const ULONG nObjCount = Count();
     BOOL        bRet = FALSE;
 
     if( this == &rMtf )
         bRet = TRUE;
-    else if( rMtf.GetActionCount() == nCount &&
+    else if( rMtf.GetActionCount() == nObjCount &&
              rMtf.GetPrefSize() == aPrefSize &&
              rMtf.GetPrefMapMode() == aPrefMapMode )
     {
         bRet = TRUE;
 
-        for( ULONG n = 0UL; n < nCount; n++ )
+        for( ULONG n = 0UL; n < nObjCount; n++ )
         {
             if(!((MetaAction*)GetObject( n ))->IsEqual(*((MetaAction*)rMtf.GetObject( n ))))
             {
@@ -439,10 +439,10 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, ULONG nPos )
     if ( !bRecord && !rMtf.bRecord )
     {
         MetaAction* pAction = GetCurAction();
-        const ULONG nCount = Count();
+        const ULONG nObjCount = Count();
 
-        if( nPos > nCount )
-            nPos = nCount;
+        if( nPos > nObjCount )
+            nPos = nObjCount;
 
         for( ULONG nCurPos = GetCurPos(); nCurPos < nPos; nCurPos++ )
         {
@@ -464,11 +464,11 @@ void GDIMetaFile::Play( OutputDevice* pOut, ULONG nPos )
     if( !bRecord )
     {
         MetaAction* pAction = GetCurAction();
-        const ULONG nCount = Count();
+        const ULONG nObjCount = Count();
         ULONG       i  = 0, nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
 
-        if( nPos > nCount )
-            nPos = nCount;
+        if( nPos > nObjCount )
+            nPos = nObjCount;
 
         // #i23407# Set backwards-compatible text language and layout mode
         // This is necessary, since old metafiles don't even know of these
@@ -988,9 +988,9 @@ void GDIMetaFile::Rotate( long nAngle10 )
 
         for( MetaAction* pAction = (MetaAction*) First(); pAction; pAction = (MetaAction*) Next() )
         {
-            const USHORT nType = pAction->GetType();
+            const USHORT nActionType = pAction->GetType();
 
-            switch( nType )
+            switch( nActionType )
             {
                 case( META_PIXEL_ACTION ):
                 {
@@ -1196,8 +1196,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 // #105055# Handle gradientex comment block correctly
                 case( META_COMMENT_ACTION ):
                 {
-                    MetaCommentAction* pAct = (MetaCommentAction*) pAction;
-                    if( pAct->GetComment().Equals( "XGRAD_SEQ_BEGIN" ) )
+                    MetaCommentAction* pCommentAct = (MetaCommentAction*) pAction;
+                    if( pCommentAct->GetComment().Equals( "XGRAD_SEQ_BEGIN" ) )
                     {
                         int nBeginComments( 1 );
                         pAction = (MetaAction*) Next();
@@ -1359,9 +1359,9 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     aMtf.AddAction( pAction );
 
                     // update rotation point and offset, if necessary
-                    if( ( META_MAPMODE_ACTION == nType ) ||
-                        ( META_PUSH_ACTION == nType ) ||
-                        ( META_POP_ACTION == nType ) )
+                    if( ( META_MAPMODE_ACTION == nActionType ) ||
+                        ( META_PUSH_ACTION == nActionType ) ||
+                        ( META_POP_ACTION == nActionType ) )
                     {
                         aRotAnchor = aMapVDev.LogicToLogic( aOrigin, aPrefMapMode, aMapVDev.GetMapMode() );
                         aRotOffset = aMapVDev.LogicToLogic( aOffset, aPrefMapMode, aMapVDev.GetMapMode() );
@@ -1428,7 +1428,7 @@ BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBm
 
 // ------------------------------------------------------------------------
 
-Color GDIMetaFile::ImplColMonoFnc( const Color& rColor, const void* pColParam )
+Color GDIMetaFile::ImplColMonoFnc( const Color&, const void* pColParam )
 {
     return( ( (const ImplColMonoParam*) pColParam )->aColor );
 }
@@ -1919,7 +1919,7 @@ ULONG GDIMetaFile::GetChecksum() const
     SVBT32              aBT32;
     ULONG               nCrc = 0;
 
-    for( ULONG i = 0, nCount = GetActionCount(); i < nCount; i++ )
+    for( ULONG i = 0, nObjCount = GetActionCount(); i < nObjCount; i++ )
     {
         MetaAction* pAction = GetAction( i );
 
@@ -2187,7 +2187,7 @@ ULONG GDIMetaFile::GetSizeBytes() const
 {
     ULONG nSizeBytes = 0;
 
-    for( ULONG i = 0, nCount = GetActionCount(); i < nCount; ++i )
+    for( ULONG i = 0, nObjCount = GetActionCount(); i < nObjCount; ++i )
     {
         MetaAction* pAction = GetAction( i );
 
@@ -2215,7 +2215,7 @@ ULONG GDIMetaFile::GetSizeBytes() const
             {
                 const PolyPolygon& rPolyPoly = ( (MetaPolyPolygonAction*) pAction )->GetPolyPolygon();
 
-                for( ULONG n = 0; n < rPolyPoly.Count(); ++n )
+                for( USHORT n = 0; n < rPolyPoly.Count(); ++n )
                     nSizeBytes += ( rPolyPoly[ n ].GetSize() * sizeof( Point ) );
             }
             break;
@@ -2389,7 +2389,10 @@ BOOL GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
     // determine size that has the same aspect ratio as image size and
     // fits into the rectangle determined by nMaximumExtent
     if ( aSizePix.Width() && aSizePix.Height()
-      && ( aSizePix.Width() > nMaximumExtent || aSizePix.Height() > nMaximumExtent ) )
+      && ( sal::static_int_cast< unsigned long >(aSizePix.Width()) >
+               nMaximumExtent ||
+           sal::static_int_cast< unsigned long >(aSizePix.Height()) >
+               nMaximumExtent ) )
     {
         const Size  aOldSizePix( aSizePix );
         double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();
