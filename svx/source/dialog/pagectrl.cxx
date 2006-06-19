@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:50:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:25:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
-
-#pragma hdrstop
 
 #define ITEMID_BOX          0
 #define ITEMID_FRAMEDIR     0
@@ -132,7 +130,7 @@ SvxPageWindow::~SvxPageWindow()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SvxPageWindow::Paint( const Rectangle& rRect )
+void __EXPORT SvxPageWindow::Paint( const Rectangle& )
 {
     Fraction aXScale( aWinSize.Width(), std::max( (long) (aSize.Width() * 2 + aSize.Width() / 8), 1L ) );
     Fraction aYScale( aWinSize.Height(), std::max( aSize.Height(), 1L ) );
@@ -198,8 +196,8 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
     {
         SetLineColor( Color(COL_TRANSPARENT) );
         SetFillColor( rDlgColor );
-        Size aWinSize(GetOutputSize());
-        DrawRect( Rectangle( Point(0,0), aWinSize ) );
+        Size _aWinSize(GetOutputSize());
+        DrawRect( Rectangle( Point(0,0), _aWinSize ) );
     }
     SetLineColor( rFieldTextColor );
     // Schatten
@@ -351,14 +349,14 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
 
         long nW = aRect.GetWidth(), nH = aRect.GetHeight();
         long nTW = CELL_WIDTH * 3, nTH = CELL_HEIGHT * 3;
-        long nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
-        long nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
-        Rectangle aCellRect( Point( nLeft, nTop ), Size( CELL_WIDTH, CELL_HEIGHT ) );
+        long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
+        long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
+        Rectangle aCellRect( Point( _nLeft, _nTop ), Size( CELL_WIDTH, CELL_HEIGHT ) );
 
         for ( USHORT i = 0; i < 3; ++i )
         {
-            aCellRect.Left() = nLeft;
-            aCellRect.Right() = nLeft + CELL_WIDTH;
+            aCellRect.Left() = _nLeft;
+            aCellRect.Right() = _nLeft + CELL_WIDTH;
             if ( i > 0 )
                 aCellRect.Move( 0, CELL_HEIGHT );
 
