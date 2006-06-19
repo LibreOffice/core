@@ -4,9 +4,9 @@
  *
  *  $RCSfile: com_sun_star_lib_connections_pipe_PipeConnection.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:08:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-#if HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "osl/security.h"
 #include <osl/pipe.h>
 
@@ -48,11 +44,10 @@
 static void ThrowException(JNIEnv * env, char const * type, char const * msg) {
     jclass c;
     (*env)->ExceptionClear(env);
-    c = (*env)->FindClass(env, "java/lang/RuntimeException");
+    c = (*env)->FindClass(env, type);
     if (c == NULL) {
         (*env)->ExceptionClear(env);
-        (*env)->FatalError(
-            env, "JNI FindClass(\"java/lang/RuntimeException\") failed");
+        (*env)->FatalError(env, "JNI FindClass failed");
     }
     if ((*env)->ThrowNew(env, c, msg) != 0) {
         (*env)->ExceptionClear(env);
@@ -73,28 +68,25 @@ static oslPipe getPipe(JNIEnv * env, jobject obj_this)
 {
     jclass      tclass;
     jfieldID    fid;
-    while (1)
+    tclass  = (*env)->GetObjectClass(env, obj_this);
+    if (tclass == NULL)
     {
-        tclass  = (*env)->GetObjectClass(env, obj_this);
-        if (tclass == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find class");
-            break;
-        }
-
-        fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
-        if (fid == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find field");
-            break;
-        }
-        return ((oslPipe)((*env)->GetLongField(env, obj_this, fid)));
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find class");
+        return NULL;
     }
-    return NULL;
+
+    fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
+    if (fid == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find field");
+        return NULL;
+    }
+    return (oslPipe) SAL_INT_CAST(
+        sal_IntPtr, (*env)->GetLongField(env, obj_this, fid));
 }
 
 /*****************************************************************************/
@@ -134,99 +126,99 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_cre
     oslSecurity     psec    = osl_getCurrentSecurity();
     oslPipe         npipe   = NULL;
     rtl_uString *   pname   = NULL;
-    while (1)
+    if ((*env)->MonitorEnter(env, obj_this) != 0)
     {
-        if ((*env)->MonitorEnter(env, obj_this) != 0)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot synchronize on the object");
-            break;
-        }
-        state   = INMONITOR;
-
-        /* check connection state */
-        npipe   = getPipe(env, obj_this);
-        if ((*env)->ExceptionOccurred(env) != NULL)
-            break;
-        if (npipe != NULL)
-        {
-            ThrowException(env,
-                           "com/sun/star/io/IOException",
-                           "native pipe is already connected");
-            break;
-        }
-
-        /* save the pipe name */
-        tclass  = (*env)->GetObjectClass(env, obj_this);
-        if (tclass == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find class");
-            break;
-        }
-
-        fid     = (*env)->GetFieldID(env, tclass,
-            "_aDescription", "Ljava/lang/String;");
-        if (fid == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find field");
-            break;
-        }
-
-        (*env)->SetObjectField(env, obj_this, fid, (jobject)name);
-
-        /* convert pipe name to rtl_uString */
-        pname   = jstring2ustring(env, name);
-        if (pname == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot convert name");
-            break;
-        }
-        state   = GOTNAME;
-
-        /* try to connect */
-        npipe   = osl_createPipe(pname, osl_Pipe_OPEN, psec);
-        if (npipe == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "cannot create native pipe");
-            break;
-        }
-        state   = CREATED;
-
-        /* save the pipe */
-        tclass  = (*env)->GetObjectClass(env, obj_this);
-        if (tclass == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find class");
-            break;
-        }
-
-        fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
-        if (fid == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find field");
-            break;
-        }
-        (*env)->SetLongField(env, obj_this, fid, (jlong)npipe);
-
-        /* done */
-        rtl_uString_release(pname);
-        (*env)->MonitorExit(env, obj_this);
-        osl_freeSecurityHandle(psec);
-        return;
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot synchronize on the object");
+        goto error;
     }
+    state   = INMONITOR;
+
+    /* check connection state */
+    npipe   = getPipe(env, obj_this);
+    if ((*env)->ExceptionOccurred(env) != NULL)
+        goto error;
+    if (npipe != NULL)
+    {
+        ThrowException(env,
+                       "com/sun/star/io/IOException",
+                       "native pipe is already connected");
+        goto error;
+    }
+
+    /* save the pipe name */
+    tclass  = (*env)->GetObjectClass(env, obj_this);
+    if (tclass == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find class");
+        goto error;
+    }
+
+    fid     = (*env)->GetFieldID(env, tclass,
+                                 "_aDescription", "Ljava/lang/String;");
+    if (fid == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find field");
+        goto error;
+    }
+
+    (*env)->SetObjectField(env, obj_this, fid, (jobject)name);
+
+    /* convert pipe name to rtl_uString */
+    pname   = jstring2ustring(env, name);
+    if (pname == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot convert name");
+        goto error;
+    }
+    state   = GOTNAME;
+
+    /* try to connect */
+    npipe   = osl_createPipe(pname, osl_Pipe_OPEN, psec);
+    if (npipe == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "cannot create native pipe");
+        goto error;
+    }
+    state   = CREATED;
+
+    /* save the pipe */
+    tclass  = (*env)->GetObjectClass(env, obj_this);
+    if (tclass == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find class");
+        goto error;
+    }
+
+    fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
+    if (fid == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find field");
+        goto error;
+    }
+    (*env)->SetLongField(
+        env, obj_this, fid, SAL_INT_CAST(jlong, (sal_IntPtr) npipe));
+
+    /* done */
+    rtl_uString_release(pname);
+    (*env)->MonitorExit(env, obj_this);
+    osl_freeSecurityHandle(psec);
+    return;
+
+ error:
     switch (state)
     {
         case CREATED:
@@ -263,58 +255,57 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_clo
     jclass      tclass;     /* this class */
     jfieldID    fid;        /* a field identifier */
 
-    while (1)
+    if ((*env)->MonitorEnter(env, obj_this) != 0)
     {
-        if ((*env)->MonitorEnter(env, obj_this) != 0)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot synchronize on the object");
-            break;
-        }
-        state   = INMONITOR;
-
-        /* check connection state */
-        npipe   = getPipe(env, obj_this);
-        if ((*env)->ExceptionOccurred(env) != NULL)
-            break;
-        if (npipe == NULL)
-        {
-            ThrowException(env,
-                           "com/sun/star/io/IOException",
-                           "native pipe is not connected");
-            break;
-        }
-
-        /* remove the reference to the pipe */
-        tclass  = (*env)->GetObjectClass(env, obj_this);
-        if (tclass == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find class");
-            break;
-        }
-
-        fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
-        if (fid == NULL)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot find field");
-            break;
-        }
-
-        (*env)->SetLongField(env, obj_this, fid, (jlong)0);
-
-        /* release the pipe */
-        osl_closePipe(npipe);
-        osl_releasePipe(npipe);
-
-        /* done */
-        (*env)->MonitorExit(env, obj_this);
-        return;
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot synchronize on the object");
+        goto error;
     }
+    state   = INMONITOR;
+
+    /* check connection state */
+    npipe   = getPipe(env, obj_this);
+    if ((*env)->ExceptionOccurred(env) != NULL)
+        goto error;
+    if (npipe == NULL)
+    {
+        ThrowException(env,
+                       "com/sun/star/io/IOException",
+                       "native pipe is not connected");
+        goto error;
+    }
+
+    /* remove the reference to the pipe */
+    tclass  = (*env)->GetObjectClass(env, obj_this);
+    if (tclass == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find class");
+        goto error;
+    }
+
+    fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
+    if (fid == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot find field");
+        goto error;
+    }
+
+    (*env)->SetLongField(env, obj_this, fid, (jlong)0);
+
+    /* release the pipe */
+    osl_closePipe(npipe);
+    osl_releasePipe(npipe);
+
+    /* done */
+    (*env)->MonitorExit(env, obj_this);
+    return;
+
+ error:
     switch (state)
     {
         case INMONITOR:
@@ -348,87 +339,86 @@ JNIEXPORT jint JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_rea
     jbyteArray  bytes;          /* java read buffer */
     jint        nread;          /* number of bytes has been read */
 
-    while (1)
+    /* enter monitor */
+    if ((*env)->MonitorEnter(env, obj_this) != 0)
     {
-        /* enter monitor */
-        if ((*env)->MonitorEnter(env, obj_this) != 0)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot synchronize on the object");
-            break;
-        }
-        state = INMONITOR;
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot synchronize on the object");
+        goto error;
+    }
+    state = INMONITOR;
 
-        /* check connection state */
-        npipe   = getPipe(env, obj_this);
-        if ((*env)->ExceptionOccurred(env) != NULL)
-            break;
-        if (npipe == NULL)
-        {
-            ThrowException(env,
-                           "com/sun/star/io/IOException",
-                           "native pipe is not connected");
-            break;
-        }
+    /* check connection state */
+    npipe   = getPipe(env, obj_this);
+    if ((*env)->ExceptionOccurred(env) != NULL)
+        goto error;
+    if (npipe == NULL)
+    {
+        ThrowException(env,
+                       "com/sun/star/io/IOException",
+                       "native pipe is not connected");
+        goto error;
+    }
 
-        /* aquire pipe */
-        osl_acquirePipe( npipe );
-        state = AQUIRED;
+    /* aquire pipe */
+    osl_acquirePipe( npipe );
+    state = AQUIRED;
 
-        /* allocate a buffer */
-        if ((nbuff = malloc(len)) == NULL)
+    /* allocate a buffer */
+    if ((nbuff = malloc(len)) == NULL)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe out of memory");
+        goto error;
+    }
+
+    state = GOTBUFFER;
+
+    /* exit monitor */
+    (*env)->MonitorExit(env, obj_this);
+
+    /* reading */
+    nread = osl_readPipe(npipe, nbuff, len);
+
+    /* enter monitor again */
+    if ((*env)->MonitorEnter(env, obj_this) != 0)
+    {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot synchronize on the object");
+        goto error;
+    }
+
+    /* copy buffer */
+    if (nread >= 0)
+    {
+        bytes   = (*env)->NewByteArray(env, len);
+        if (bytes == NULL)
         {
             ThrowException(env,
                            "java/lang/RuntimeException",
                            "native pipe out of memory");
-            break;
+            goto error;
         }
 
-        state = GOTBUFFER;
-
-        /* exit monitor */
-        (*env)->MonitorExit(env, obj_this);
-
-        /* reading */
-        nread = osl_readPipe(npipe, nbuff, len);
-
-        /* enter monitor again */
-        if ((*env)->MonitorEnter(env, obj_this) != 0)
-        {
-            ThrowException(env,
-                           "java/lang/RuntimeException",
-                           "native pipe cannot synchronize on the object");
-            break;
-        }
-
-        /* copy buffer */
-        if (nread >= 0)
-        {
-            bytes   = (*env)->NewByteArray(env, len);
-            if (bytes == NULL)
-            {
-                ThrowException(env,
-                               "java/lang/RuntimeException",
-                               "native pipe out of memory");
-                break;
-            }
-
-            /* save the data */
-            (*env)->SetByteArrayRegion(env, bytes, 0, len, nbuff);
-            (*env)->SetObjectArrayElement(env, buffer, 0, bytes);
-            (*env)->DeleteLocalRef(env, bytes);
-        }
-
-        /* done */
-        free(nbuff);
-        if ( state >= AQUIRED )
-            osl_releasePipe( npipe );
-
-        /* exit monitor */
-        (*env)->MonitorExit(env, obj_this);
-        return nread;
+        /* save the data */
+        (*env)->SetByteArrayRegion(env, bytes, 0, len, nbuff);
+        (*env)->SetObjectArrayElement(env, buffer, 0, bytes);
+        (*env)->DeleteLocalRef(env, bytes);
     }
+
+    /* done */
+    free(nbuff);
+    if ( state >= AQUIRED )
+        osl_releasePipe( npipe );
+
+    /* exit monitor */
+    (*env)->MonitorExit(env, obj_this);
+    return nread;
+
+ error:
     switch (state)
     {
         case GOTBUFFER:
@@ -463,65 +453,64 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_wri
     jsize   nwrite;         /* number of bytes to write */
     jbyte * nbuff = NULL;   /* native buffer */
 
-    while (1)
+    if ((*env)->MonitorEnter(env, obj_this) != 0)
     {
+        ThrowException(env,
+                       "java/lang/RuntimeException",
+                       "native pipe cannot synchronize on the object");
+        goto error;
+    }
+    state   = INMONITOR;
+
+    /* check connection state */
+    npipe   = getPipe(env, obj_this);
+    if ((*env)->ExceptionOccurred(env) != NULL)
+        goto error;
+    if (npipe == NULL)
+    {
+        ThrowException(env,
+                       "com/sun/star/io/IOException",
+                       "native pipe is not connected");
+        goto error;
+    }
+
+    nwrite  = (*env)->GetArrayLength(env, buffer);
+    if (nwrite > 0)
+    {
+        nbuff   = (*env)->GetByteArrayElements(env, buffer, NULL);
+        if (nbuff == NULL)
+        {
+            ThrowException(env,
+                           "java/lang/RuntimeException",
+                           "native pipe out of memory");
+            goto error;
+        }
+        state   = GOTBUFFER;
+
+        (*env)->MonitorExit(env, obj_this);
+        /* writing */
+        count   = osl_writePipe(npipe, nbuff, nwrite);
         if ((*env)->MonitorEnter(env, obj_this) != 0)
         {
             ThrowException(env,
                            "java/lang/RuntimeException",
                            "native pipe cannot synchronize on the object");
-            break;
+            goto error;
         }
-        state   = INMONITOR;
-
-        /* check connection state */
-        npipe   = getPipe(env, obj_this);
-        if ((*env)->ExceptionOccurred(env) != NULL)
-            break;
-        if (npipe == NULL)
+        if (count != nwrite)
         {
             ThrowException(env,
                            "com/sun/star/io/IOException",
-                           "native pipe is not connected");
-            break;
+                           "native pipe is failed to write");
+            goto error;
         }
-
-        nwrite  = (*env)->GetArrayLength(env, buffer);
-        if (nwrite > 0)
-        {
-            nbuff   = (*env)->GetByteArrayElements(env, buffer, NULL);
-            if (nbuff == NULL)
-            {
-                ThrowException(env,
-                               "java/lang/RuntimeException",
-                               "native pipe out of memory");
-                break;
-            }
-            state   = GOTBUFFER;
-
-            (*env)->MonitorExit(env, obj_this);
-            /* writing */
-            count   = osl_writePipe(npipe, nbuff, nwrite);
-            if ((*env)->MonitorEnter(env, obj_this) != 0)
-            {
-                ThrowException(env,
-                               "java/lang/RuntimeException",
-                               "native pipe cannot synchronize on the object");
-                break;
-            }
-            if (count != nwrite)
-            {
-                ThrowException(env,
-                               "com/sun/star/io/IOException",
-                               "native pipe is failed to write");
-                break;
-            }
-        }
-        /* done */
-        (*env)->ReleaseByteArrayElements(env, buffer, nbuff, JNI_ABORT);
-        (*env)->MonitorExit(env, obj_this);
-        return;
     }
+    /* done */
+    (*env)->ReleaseByteArrayElements(env, buffer, nbuff, JNI_ABORT);
+    (*env)->MonitorExit(env, obj_this);
+    return;
+
+ error:
     switch (state)
     {
         case GOTBUFFER:
@@ -544,5 +533,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_wri
 JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_flushJNI
   (JNIEnv * env, jobject obj_this)
 {
+    (void) env; /* not used */
+    (void) obj_this; /* not used */
     return;
 }
