@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:07:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#pragma hdrstop
 
 #include "svxbox.hxx"
 
@@ -56,18 +55,18 @@ SV_IMPL_PTRARR(SvxEntryLst, SvxBoxEntry*)
  --------------------------------------------------------------------*/
 
 SvxBoxEntry::SvxBoxEntry() :
+    nId(LISTBOX_ENTRY_NOTFOUND),
     bModified(FALSE),
-    bNew(FALSE),
-    nId(LISTBOX_ENTRY_NOTFOUND)
+    bNew(FALSE)
 {
 }
 
 
 SvxBoxEntry::SvxBoxEntry(const String& aNam, USHORT nIdx) :
-    bModified(FALSE),
-    bNew(FALSE),
     aName(aNam),
-    nId(nIdx)
+    nId(nIdx),
+    bModified(FALSE),
+    bNew(FALSE)
 {
 }
 
@@ -75,8 +74,8 @@ SvxBoxEntry::SvxBoxEntry(const String& aNam, USHORT nIdx) :
 SvxBoxEntry::SvxBoxEntry(const SvxBoxEntry& rOld) :
     aName(rOld.aName),
     nId(rOld.nId),
-    bNew(rOld.bNew),
-    bModified(rOld.bModified)
+    bModified(rOld.bModified),
+    bNew(rOld.bNew)
 {
 }
 
@@ -206,7 +205,7 @@ USHORT SvxListBox::GetEntryPos(const SvxBoxEntry& rEntry) const
      Beschreibung: Rund um die Entries
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxListBox::GetEntry(USHORT nPos) const
+const SvxBoxEntry& SvxListBox::GetSvxBoxEntry(USHORT nPos) const
 {
     if(nPos < aEntryLst.Count())
         return *aEntryLst[nPos];
@@ -218,7 +217,7 @@ const SvxBoxEntry& SvxListBox::GetEntry(USHORT nPos) const
      Beschreibung: aktullen Eintrag zurueckgeben
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxListBox::GetSelectEntry(USHORT nSelId) const
+const SvxBoxEntry& SvxListBox::GetSelectSvxBoxEntry(USHORT nSelId) const
 {
     String aName(ListBox::GetSelectEntry(nSelId));
 
