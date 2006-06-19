@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:23:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ XLineEndEntry* XLineEndTable::Remove(long nIndex)
 
 /************************************************************************/
 
-XLineEndEntry* XLineEndTable::Get(long nIndex) const
+XLineEndEntry* XLineEndTable::GetLineEnd(long nIndex) const
 {
     return (XLineEndEntry*) XPropertyTable::Get(nIndex, 0);
 }
@@ -191,7 +191,7 @@ BOOL XLineEndTable::Create()
 
 /************************************************************************/
 
-Bitmap* XLineEndTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XLineEndTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -365,7 +365,7 @@ XLineEndEntry* XLineEndList::Remove(long nIndex)
 
 /************************************************************************/
 
-XLineEndEntry* XLineEndList::Get(long nIndex) const
+XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 {
     return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
 }
@@ -571,8 +571,8 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
     pXOut->DrawRect( Rectangle( aZero, aVDSize ) );
 
     pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-    pXLSet->GetItemSet().Put( XLineStartItem( String(), Get( nIndex )->GetLineEnd() ) );
-    pXLSet->GetItemSet().Put( XLineEndItem( String(), Get( nIndex )->GetLineEnd() ) );
+    pXLSet->GetItemSet().Put( XLineStartItem( String(), GetLineEnd( nIndex )->GetLineEnd() ) );
+    pXLSet->GetItemSet().Put( XLineEndItem( String(), GetLineEnd( nIndex )->GetLineEnd() ) );
 
 //-/    pXOut->SetLineAttr( *pXLSet );
     pXOut->SetLineAttr( pXLSet->GetItemSet() );
