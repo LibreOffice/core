@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_tpltp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,14 +142,15 @@ PE_TemplateTop::On_expect_name_Identifier( const char * i_sText)
     SetTokenResult(done, stay);
     pStati->SetCur(expect_separator);
 
+    StreamLock sl(50);
     if ( NOT bCurIsConstant )
     {
-        udmstri sText( StreamLock(50)() << "typename " << i_sText << c_str );
+        String sText( sl() << "typename " << i_sText << c_str );
         aResult_Parameters.push_back(sText);
     }
     else //
     {
-        udmstri sText( StreamLock(50)() << "constant " << i_sText << c_str );
+        String sText( sl() << "constant " << i_sText << c_str );
         aResult_Parameters.push_back(sText);
         bCurIsConstant = false;
     }  // endif
@@ -170,9 +171,3 @@ PE_TemplateTop::On_expect_separator_Greater( const char *)
 
 
 }   // namespace cpp
-
-
-
-
-
-
