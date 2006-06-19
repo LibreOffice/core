@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:29:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,11 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
                         aEnv.getToken( 0, ';', nIndex ),
                         RTL_TEXTENCODING_ASCII_US ) );
                     OUString aFileUrl;
-                    OSL_VERIFY(
-                        osl_File_E_None ==
-                        FileBase::getFileURLFromSystemPath(aStr, aFileUrl) );
+                    if (FileBase::getFileURLFromSystemPath(aStr, aFileUrl)
+                        != FileBase::E_None)
+                    {
+                        OSL_ASSERT(false);
+                    }
                     s_v.push_back( aFileUrl );
                 } while( nIndex != -1 );
 #if OSL_DEBUG_LEVEL > 1
@@ -224,11 +226,11 @@ static OUString makeComponentPath(
     // No system path allowed here !
     {
         OUString aComp;
-        OSL_ASSERT( osl_File_E_None ==
+        OSL_ASSERT( FileBase::E_None ==
                     FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
         OSL_ASSERT(
             ! rPath.getLength() ||
-            osl_File_E_None ==
+            FileBase::E_None ==
               FileBase::getSystemPathFromFileURL( rPath, aComp ) );
     }
 #endif
@@ -301,9 +303,9 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString aExcMsg;
     Reference< XInterface > xRet;
 
-    void * pSym;
+    oslGenericFunction pSym;
     OUString aGetEnvName = OUSTR(COMPONENT_GETENV);
-    pSym = osl_getSymbol( lib, aGetEnvName.pData );
+    pSym = osl_getFunctionSymbol( lib, aGetEnvName.pData );
     if (pSym != 0)
     {
         uno_Environment * pCurrentEnv = 0;
@@ -338,7 +340,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         }
 
         OUString aGetFactoryName = OUSTR(COMPONENT_GETFACTORY);
-        pSym = osl_getSymbol( lib, aGetFactoryName.pData );
+        pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
         if (pSym != 0)
         {
             OString aImplName(
@@ -437,7 +439,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     else
     {
         OUString aGetFactoryName = OUSTR(CREATE_COMPONENT_FACTORY_FUNCTION);
-        pSym = ::osl_getSymbol( lib, aGetFactoryName.pData );
+        pSym = ::osl_getFunctionSymbol( lib, aGetFactoryName.pData );
         if (pSym != 0)
         {
             OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
@@ -537,9 +539,9 @@ void SAL_CALL writeSharedLibComponentInfo(
 
     sal_Bool bRet = sal_False;
 
-    void * pSym;
+    oslGenericFunction pSym;
     OUString aGetEnvName = OUSTR(COMPONENT_GETENV);
-    pSym = osl_getSymbol( lib, aGetEnvName.pData );
+    pSym = osl_getFunctionSymbol( lib, aGetEnvName.pData );
     if (pSym != 0)
     {
         uno_Environment * pCurrentEnv = 0;
@@ -574,7 +576,7 @@ void SAL_CALL writeSharedLibComponentInfo(
         }
 
         OUString aWriteInfoName = OUSTR(COMPONENT_WRITEINFO);
-        pSym = osl_getSymbol( lib, aWriteInfoName.pData );
+        pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
         if (pSym != 0)
         {
             if (bNeedsMapping)
@@ -664,7 +666,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     else
     {
         OUString aWriteInfoName = OUSTR(WRITE_COMPONENT_INFO_FUNCTION);
-        pSym = osl_getSymbol( lib, aWriteInfoName.pData );
+        pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
         if (pSym != 0)
         {
             OUString aCppEnvTypeName =
