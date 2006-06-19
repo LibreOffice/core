@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobexecutor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:43:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent
     }
 }
 
-void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
 {
     // I'm not interested on changed items :-)
 }
