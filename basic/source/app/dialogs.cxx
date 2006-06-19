@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:11:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,10 +223,10 @@ void ConfEdit::Click()
 
 
 OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
-: ModelessDialog( pParent, aResId )
+: TabDialog( pParent, aResId )
 , aTabCtrl( this, ResId( RES_TC_OPTIONS ) )
-, aOK( this, ResId( RID_OK ) )
-, aCancel( this, ResId( RID_CANCEL ) )
+, aOK( this )
+, aCancel( this )
 , aConfig( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
 {
     aConfig.EnablePersistence( FALSE );
@@ -236,6 +236,9 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
     ActivatePageHdl( &aTabCtrl );
 
     aOK.SetClickHdl( LINK( this, OptionsDialog, OKClick ) );
+
+    aOK.Show();
+    aCancel.Show();
 }
 
 OptionsDialog::~OptionsDialog()
@@ -246,7 +249,7 @@ OptionsDialog::~OptionsDialog()
 
 BOOL OptionsDialog::Close()
 {
-    if ( ModelessDialog::Close() )
+    if ( TabDialog::Close() )
     {
         delete this;
         return TRUE;
@@ -290,6 +293,7 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 {
+    (void) pButton; /* avoid warning about unused parameter */
     aConfig.EnablePersistence();
     GenericOptions *pGeneric;
     pGeneric = (GenericOptions*)aTabCtrl.GetTabPage( RID_TP_GEN );
@@ -438,6 +442,7 @@ IMPL_LINK( ProfileOptions, NewProfile, Button*, EMPTYARG )
 
 IMPL_LINK( ProfileOptions, CheckButtonsHdl, ComboBox*, pCB )
 {
+    (void) pCB; /* avoid warning about unused parameter */
     CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
     return 0;
 }
@@ -725,6 +730,7 @@ IMPL_LINK( GenericOptions, MoveButtons, AutoTimer*, aTimer )
     aPos = aPbDelValue.GetPosPixel();
     aPos.Y() += nStep;
     aPbDelValue.SetPosPixel( aPos );
+    return 0;
 }
 
 String GenericOptions::ReadKey( const ByteString &aGroup, const ByteString &aKey )
@@ -852,6 +858,7 @@ IMPL_LINK( GenericOptions, CheckButtonsHdl, ComboBox*, pCB )
 
 void GenericOptions::Save( Config &aConfig )
 {
+    (void) aConfig; /* avoid warning about unused parameter */
     DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" )
 
     // eventuelle Änderungen Speichern
@@ -1210,7 +1217,7 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 break;
 //              case SbxCURRENCY:
 //              case SbxDATE:
-                break;
+//              break;
             case SbxINTEGER:
                 aNumericFieldRID_NF_NEW_INTEGER.Show();
                 aNumericFieldRID_NF_NEW_INTEGER.SetText( pVar->GetString() );
@@ -1225,7 +1232,7 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
 //              case SbxOBJECT:     // kann nicht editiert werden
-                break;
+//              break;
             case SbxSINGLE:
             case SbxDOUBLE:
             case SbxSTRING:
@@ -1234,6 +1241,8 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aEditRID_ED_NEW_STRING.Show();
                 aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
                 break;
+            default:    // don't know how to edit
+                ;
         }
     }
 
@@ -1244,6 +1253,7 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
 
 IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 {
+    (void) pButton; /* avoid warning about unused parameter */
     BOOL bWasError = SbxBase::IsError();    // Da eventuell ein Fehler geschmissen wird.
 
 
@@ -1295,10 +1305,10 @@ SvNumberformat::
             break;
 //      case SbxCURRENCY:
 //          pVar->PutCurrency( aContent );
-            break;
+//          break;
 //      case SbxDATE:
 //          pVar->PutDate( aContent );
-            break;
+//          break;
         case SbxINTEGER:
             pVar->PutInteger( (INT16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
@@ -1316,6 +1326,8 @@ SvNumberformat::
         case SbxEMPTY:
             bError = !pVar->PutStringExt( aContent );
             break;
+        default:    // don't know how to edit
+            ;
     }
 
 
