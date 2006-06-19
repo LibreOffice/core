@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anydata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:38:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ TypeCode getTypeCode(uno::Type const & _aType)
             if (aElementTC & Type::flag_sequence) // no sequence of sequence
                 return Type::value_invalid;
 
-            return aElementTC | Type::flag_sequence;
+            return TypeCode( aElementTC | Type::flag_sequence );
         }
     default:
         return Type::value_invalid;
@@ -189,7 +189,7 @@ uno::Type getUnoType( TypeCode _aType)
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        return getUnoSequenceType(_aType & Type::mask_basetype);
+        return getUnoSequenceType( TypeCode(_aType & Type::mask_basetype));
 
     else
         return getUnoSimpleType(_aType);
@@ -369,7 +369,7 @@ AnyData allocData(memory::Allocator const& _anAllocator, TypeCode _aType, uno::A
     OSL_ENSURE( _aType == getTypeCode(_aAny.getValueType()), "Type code does not match value" );
 
     if (_aType & Type::flag_sequence)
-        return allocSequenceData(_anAllocator,_aType & Type::mask_basetype,_aAny);
+        return allocSequenceData(_anAllocator,TypeCode( _aType & Type::mask_basetype),_aAny);
 
     else
         return allocSimpleData(_anAllocator,_aType,_aAny);
@@ -429,7 +429,7 @@ void    freeData(memory::Allocator const& _anAllocator, TypeCode _aType, AnyData
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        freeSequence(_anAllocator,_aType & Type::mask_basetype,_aData.sequenceValue);
+        freeSequence(_anAllocator,TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
 
     else
         freeSimpleData(_anAllocator,_aType,_aData);
@@ -493,12 +493,10 @@ uno::Any readData(memory::Accessor const& _anAccessor, TypeCode _aType, AnyData 
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        return readAnySequence(_anAccessor,_aType & Type::mask_basetype,_aData.sequenceValue);
+        return readAnySequence(_anAccessor,TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
 
     else
         return readSimpleData(_anAccessor,_aType,_aData);
-
-    return uno::Any();
 }
 
 //-----------------------------------------------------------------------------
