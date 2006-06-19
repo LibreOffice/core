@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:55:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ struct SfxPoolVersion_Impl
 };
 
 SV_DECL_PTRARR( SfxPoolItemArrayBase_Impl, SfxPoolItem*, 0, 5 )
-SV_DECL_PTRARR_DEL( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl*, 0, 2 );
+SV_DECL_PTRARR_DEL( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl*, 0, 2 )
 
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
