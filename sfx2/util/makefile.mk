@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-02 17:10:40 $
+#   last change: $Author: hr $ $Date: 2006-06-19 22:40:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ SHL1DEPN+= \
 
 SHL1LIBS=   $(LIB1TARGET)
 
-SHL1OBJS=   $(SLO)$/sfxdll.obj
+#SHL1OBJS=   $(SLO)$/sfxdll.obj
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
