@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:23:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #ifndef _SV_MSGBOX_HXX //autogen wg. RET_OK, RET_CANCEL
 #include <vcl/msgbox.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_ZOOM_CXX
 
@@ -232,17 +231,17 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_ZOOM ) ),
 
+    aZoomFl         ( this, ResId( FL_ZOOM ) ),
+    aWholePageBtn   ( this, ResId( BTN_WHOLE_PAGE ) ),
+    aPageWidthBtn   ( this, ResId( BTN_PAGE_WIDTH ) ),
+    aOptimalBtn     ( this, ResId( BTN_OPTIMAL ) ),
     a200Btn         ( this, ResId( BTN_200 ) ),
     a150Btn         ( this, ResId( BTN_150 ) ),
     a100Btn         ( this, ResId( BTN_100 ) ),
     a75Btn          ( this, ResId( BTN_75 ) ),
     a50Btn          ( this, ResId( BTN_50 ) ),
-    aOptimalBtn     ( this, ResId( BTN_OPTIMAL ) ),
-    aPageWidthBtn   ( this, ResId( BTN_PAGE_WIDTH ) ),
-    aWholePageBtn   ( this, ResId( BTN_WHOLE_PAGE ) ),
     aUserBtn        ( this, ResId( BTN_USER ) ),
     aUserEdit       ( this, ResId( ED_USER ) ),
-    aZoomFl         ( this, ResId( FL_ZOOM ) ),
     aOKBtn          ( this, ResId( BTN_ZOOM_OK ) ),
     aCancelBtn      ( this, ResId( BTN_ZOOM_CANCEL ) ),
     aHelpBtn        ( this, ResId( BTN_ZOOM_HELP ) ),
@@ -296,7 +295,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     if ( rItem.ISA(SvxZoomItem) )
     {
         const SvxZoomItem& rZoomItem = (const SvxZoomItem&)rItem;
-        USHORT nValue = rZoomItem.GetValue();
+        USHORT nZoom = rZoomItem.GetValue();
         SvxZoomType eType = rZoomItem.GetType();
         USHORT nValSet = rZoomItem.GetValueSet();
         USHORT nBtnId = 0;
@@ -313,6 +312,8 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
                 nBtnId = ZOOMBTN_WHOLEPAGE;
                 break;
             case SVX_ZOOM_PERCENT:
+                break;
+            case SVX_ZOOM_PAGEWIDTH_NOBORDER:
                 break;
         }
 
@@ -333,12 +334,12 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
             aPageWidthBtn.Disable();
         if ( !(SVX_ZOOM_ENABLE_WHOLEPAGE & nValSet) )
             aWholePageBtn.Disable();
-        SetFactor( nValue, nBtnId );
+        SetFactor( nZoom, nBtnId );
     }
     else
     {
-        USHORT nValue = ( (const SfxUInt16Item&)rItem ).GetValue();
-        SetFactor( nValue );
+        USHORT nZoom = ( (const SfxUInt16Item&)rItem ).GetValue();
+        SetFactor( nZoom );
     }
 
     FreeResource();
@@ -364,7 +365,6 @@ USHORT* SvxZoomDialog::GetRanges()
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
     bModified |= TRUE;
-    USHORT nFactor = GetFactor();
 
     if ( pBtn == &aUserBtn )
     {
