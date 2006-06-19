@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:27:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,15 +112,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-DBG_NAME(SfxBindingsMsgPos);
-DBG_NAME(SfxBindingsUpdateServers);
-DBG_NAME(SfxBindingsCreateSet);
-DBG_NAME(SfxBindingsUpdateCtrl1);
-DBG_NAME(SfxBindingsUpdateCtrl2);
-DBG_NAME(SfxBindingsNextJob_Impl0);
-DBG_NAME(SfxBindingsNextJob_Impl);
-DBG_NAME(SfxBindingsUpdate_Impl);
-DBG_NAME(SfxBindingsInvalidateAll);
+DBG_NAME(SfxBindingsMsgPos)
+DBG_NAME(SfxBindingsUpdateServers)
+DBG_NAME(SfxBindingsCreateSet)
+DBG_NAME(SfxBindingsUpdateCtrl1)
+DBG_NAME(SfxBindingsUpdateCtrl2)
+DBG_NAME(SfxBindingsNextJob_Impl0)
+DBG_NAME(SfxBindingsNextJob_Impl)
+DBG_NAME(SfxBindingsUpdate_Impl)
+DBG_NAME(SfxBindingsInvalidateAll)
 
 //====================================================================
 
@@ -137,7 +137,7 @@ typedef std::hash_map< USHORT, bool > InvalidateSlotMap;
 
 //====================================================================
 
-DECL_PTRARRAY(SfxStateCacheArr_Impl, SfxStateCache*, 32, 16);
+DECL_PTRARRAY(SfxStateCacheArr_Impl, SfxStateCache*, 32, 16)
 
 //====================================================================
 
@@ -163,12 +163,10 @@ public:
 
 IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
 {
+    (void)pTimer; // unused
     aTimer.Stop();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
-    //::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
-    //aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
-    //aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:user") );
     xDisp->dispatch( aCommand, aSeq );
 
     delete this;
@@ -267,7 +265,7 @@ struct SfxFoundCache_Impl
 
 //--------------------------------------------------------------------------
 
-SV_DECL_PTRARR_SORT_DEL(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*, 16, 16 );
+SV_DECL_PTRARR_SORT_DEL(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*, 16, 16 )
 SV_IMPL_OP_PTRARR_SORT(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*);
 
 //==========================================================================
@@ -423,8 +421,8 @@ void SfxBindings::DeleteControllers_Impl()
 
     if( pImp->pUnoCtrlArr )
     {
-        sal_uInt16 nCount = pImp->pUnoCtrlArr->Count();
-        for ( sal_uInt16 n=nCount; n>0; n-- )
+        sal_uInt16 nCtrlCount = pImp->pUnoCtrlArr->Count();
+        for ( sal_uInt16 n=nCtrlCount; n>0; n-- )
         {
             SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];
             pCtrl->ReleaseBindings();
@@ -554,9 +552,10 @@ void SfxBindings::Update_Impl
     {
         // Wenn pCache == NULL und kein SlotServer ( z.B. weil Dispatcher gelockt! ),
         // darf nat"urlich kein Update versucht werden
-        SfxFoundCache_Impl aFound( pCache->GetId(), 0,
-                                   pRealSlot, pCache );
-        UpdateControllers_Impl( 0, &aFound, 0, SFX_ITEM_DISABLED);
+        SfxFoundCache_Impl aFoundCache(
+                            pCache->GetId(), 0,
+                            pRealSlot, pCache );
+        UpdateControllers_Impl( 0, &aFoundCache, 0, SFX_ITEM_DISABLED);
     }
 
     DBG_PROFSTOP(SfxBindingsUpdate_Impl);
@@ -1246,8 +1245,8 @@ void SfxBindings::Invalidate
 
 void SfxBindings::Invalidate
 (
-    sal_uInt16  nId,                // zu invalidierende Slot-Id
-    sal_Bool    bWithMsg            // SlotServer neu holen ?
+    sal_uInt16,             // zu invalidierende Slot-Id
+    sal_Bool                // SlotServer neu holen ?
 )
 
 /*  [Beschreibung]
@@ -1269,29 +1268,6 @@ void SfxBindings::Invalidate
 
 {
     DBG_ERROR( "Methode veraltet!" );
-/*
-    DBG_MEMTEST();
-    DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
-    DBG_ASSERT( sal_False, "alte Methode aus Kompatibilitaetsgruenden gerettet (MH)");
-
-    if ( pImp->pSubBindings )
-        pImp->pSubBindings->Invalidate( nId, bWithMsg );
-
-    if ( !pDispatcher || pImp->bAllDirty || SFX_APP()->IsDowning() )
-        return;
-
-    SfxStateCache* pCache = GetStateCache(nId);
-    if ( pCache )
-    {
-        pCache->Invalidate(bWithMsg);
-        pImp->nMsgPos = Min(GetSlotPos(nId), pImp->nMsgPos);
-        if ( !nRegLevel )
-        {
-            pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
-            pImp->aTimer.Start();
-        }
-    }
-*/
 }
 
 //--------------------------------------------------------------------
@@ -1941,11 +1917,11 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
         if ( bInsert && bSameMethod )
         {
-            const SfxFoundCache_Impl *pFound = new SfxFoundCache_Impl(
+            const SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
                 pSibling->GetSlotId(), pSibling->GetWhich(rPool),
                 pSibling, pSiblingCache );
 
-            rFound.Insert( pFound );
+            rFound.Insert( pFoundCache );
         }
 
         pSibling = pSibling->GetNextSlot();
@@ -2111,7 +2087,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     try
     {
 #endif
-    const long MAX_INPUT_DELAY = 200;
+    const unsigned MAX_INPUT_DELAY = 200;
 
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -2247,7 +2223,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxBindings::EnterRegistrations(char *pFile, int nLine)
+sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 
 /*  [Beschreibung]
 
@@ -2278,6 +2254,8 @@ sal_uInt16 SfxBindings::EnterRegistrations(char *pFile, int nLine)
 */
 
 {
+    (void)pFile;
+    (void)nLine;
     DBG_MEMTEST();
 #ifdef DBG_UTIL
     ByteString aMsg;
@@ -2331,7 +2309,7 @@ sal_uInt16 SfxBindings::EnterRegistrations(char *pFile, int nLine)
 }
 //--------------------------------------------------------------------
 
-void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine )
+void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int nLine )
 
 /*  [Beschreibung]
 
@@ -2363,6 +2341,9 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine 
 */
 
 {
+    (void)nLevel; // unused variable
+    (void)pFile;
+    (void)nLine;
     DBG_MEMTEST();
     DBG_ASSERT( nRegLevel, "Leave without Enter" );
     DBG_ASSERT( nLevel == USHRT_MAX || nLevel == nRegLevel, "wrong Leave" );
@@ -2641,7 +2622,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = (SfxOfficeDispatch*)(nImplementation);
+                pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
             }
 
             if ( !pDisp )
