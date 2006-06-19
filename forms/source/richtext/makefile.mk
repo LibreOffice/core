@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:05:44 $
+#   last change: $Author: hr $ $Date: 2006-06-19 12:59:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,14 @@ EXCEPTIONSFILES=\
             $(SLO)$/clipboarddispatcher.obj \
             $(SLO)$/attributedispatcher.obj \
             $(SLO)$/parametrizedattributedispatcher.obj \
-            $(SLO)$/specialdispatchers.obj
+            $(SLO)$/specialdispatchers.obj \
+            $(SLO)$/richtextengine.obj \
+            $(SLO)$/richtextimplcontrol.obj
 
 SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/richtextvclcontrol.obj \
-            $(SLO)$/richtextengine.obj \
             $(SLO)$/richtextviewport.obj \
             $(SLO)$/rtattributehandler.obj \
-            $(SLO)$/richtextimplcontrol.obj \
 
 # --- Targets ----------------------------------
 
