@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:58:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include"xmlnmspe.hxx"
@@ -114,7 +112,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
     // create new group shape and add it to rShapes, use it
     // as base for the new group import
