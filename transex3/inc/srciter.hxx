@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:56:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@ protected:
     bool bLocal;
 
 public:
-    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal = false);
-    ~SourceTreeIterator();
+    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in = false);
+    virtual ~SourceTreeIterator();
 
     BOOL StartExecute();
     void EndExecute();
