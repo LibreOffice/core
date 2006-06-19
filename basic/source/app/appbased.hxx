@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbased.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:10:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:33:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@ class BasicFrame;
 class BreakpointWindow;
 
 class AppBasEd : public AppEdit  {  // Editor-Window:
+using DockingWindow::Notify;
+
     SbModuleRef pMod;               // compiliertes Modul
     BOOL bCompiled;                 // TRUE, wenn compiliert
 protected:
