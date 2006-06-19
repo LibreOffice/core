@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:45:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#pragma hdrstop
-
-
 #define LOCALEDATA_LIBRARYNAME "i18npool"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NumberFormatMapper"
 
@@ -80,6 +77,7 @@ NumberFormatCodeWrapper::NumberFormatCodeWrapper(
         }
         catch ( Exception& e )
         {
+            (void)e;
             DBG_ERRORFILE( "NumberFormatCodeWrapper ctor: Exception caught!" );
         }
     }
@@ -99,6 +97,7 @@ NumberFormatCodeWrapper::NumberFormatCodeWrapper(
         }
         catch ( Exception& e )
         {
+            (void)e;
             DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
         }
     }
@@ -127,6 +126,7 @@ NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage
     }
     catch ( Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "getDefault: Exception caught!" );
     }
     return ::com::sun::star::i18n::NumberFormatCode();
@@ -143,6 +143,7 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
     }
     catch ( Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "getFormatCode: Exception caught!" );
     }
     return ::com::sun::star::i18n::NumberFormatCode();
@@ -159,6 +160,7 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
     }
     catch ( Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "getAllFormatCode: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
@@ -175,6 +177,7 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
     }
     catch ( Exception& e )
     {
+        (void)e;
         DBG_ERRORFILE( "getAllFormatCodes: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
