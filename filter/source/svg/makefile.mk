@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:54:37 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:11:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=svgfilter
+PRJNAME=filter
 TARGET=svgfilter
 
 ENABLE_EXCEPTIONS=TRUE
