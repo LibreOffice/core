@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formula.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:31:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,11 +685,11 @@ int Formula::parse()
          // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
           eq2latex(a,eq);
 
-          int idx=a.find(0xff);
+          int idx=a.find(sal::static_int_cast<char>(0xff));
           while(idx){
                 //printf("idx = [%d]\n",idx);
                 a.replace(idx,0x20);
-                if((idx = a.find(0xff,idx+1)) < 0)
+                if((idx = a.find(sal::static_int_cast<char>(0xff),idx+1)) < 0)
                      break;
           }
 
