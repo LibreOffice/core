@@ -4,9 +4,9 @@
  *
  *  $RCSfile: subtree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:19:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ namespace configmgr
         virtual std::auto_ptr<INode> clone() const;
 
 // double dispatch support
-        virtual void dispatch(NodeAction& anAction) const { }
-        virtual void dispatch(NodeModification& anAction) { }
+            virtual void dispatch(NodeAction& /*anAction*/) const { }
+            virtual void dispatch(NodeModification& /*anAction*/) { }
     };
 
 // -----------------------------------------------------------------------------
