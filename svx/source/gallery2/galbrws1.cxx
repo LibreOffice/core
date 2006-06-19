@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:57:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,17 +413,17 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
                 if( aData.aEditedTitle.Len() && aName != aData.aEditedTitle )
                 {
                     const String    aOldName( aName );
-                    String          aName( aData.aEditedTitle );
+                    String          aTitle( aData.aEditedTitle );
                     USHORT          nCount = 0;
 
-                    while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
+                    while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
                     {
-                        aName = aData.aEditedTitle;
-                        aName += ' ';
-                        aName += String::CreateFromInt32( nCount );
+                        aTitle = aData.aEditedTitle;
+                        aTitle += ' ';
+                        aTitle += String::CreateFromInt32( nCount );
                     }
 
-                    mpGallery->RenameTheme( aOldName, aName );
+                    mpGallery->RenameTheme( aOldName, aTitle );
                 }
             }
 
@@ -453,7 +453,7 @@ void GalleryBrowser1::GetFocus()
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser1::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
 
@@ -586,7 +586,7 @@ BOOL GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
+IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, EMPTYARG )
 {
     ::std::vector< USHORT > aExecVector( ImplGetExecuteVector() );
 
@@ -624,7 +624,7 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, p )
+IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, EMPTYARG )
 {
     ( (GalleryBrowser*) GetParent() )->ThemeSelectionHasChanged();
     return 0L;
@@ -632,7 +632,7 @@ IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, p )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, p )
+IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, EMPTYARG )
 {
     String  aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
     String  aName( aNewTheme );
@@ -658,22 +658,21 @@ IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, p )
 
         if( RET_OK == aThemeProps->Execute() ) //CHINA001 if( RET_OK == aThemeProps.Execute() )
         {
-            String aName( pTheme->GetName() );
+            String aOldName( pTheme->GetName() );
 
-            if( aData.aEditedTitle.Len() && ( aName != aData.aEditedTitle ) )
+            if( aData.aEditedTitle.Len() && ( aOldName != aData.aEditedTitle ) )
             {
-                const String    aOldName( aName );
-                String          aName( aData.aEditedTitle );
-                USHORT          nCount = 0;
+                String          aNewName( aData.aEditedTitle );
+                USHORT          nCount2 = 0;
 
-                while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
+                while( mpGallery->HasTheme( aNewName ) && ( nCount2++ < 16000 ) )
                 {
-                    aName = aData.aEditedTitle;
-                    aName += ' ';
-                    aName += String::CreateFromInt32( nCount );
+                    aNewName = aData.aEditedTitle;
+                    aNewName += ' ';
+                    aNewName += String::CreateFromInt32( nCount2 );
                 }
 
-                mpGallery->RenameTheme( aOldName, aName );
+                mpGallery->RenameTheme( aOldName, aNewName );
             }
 
             mpThemes->SelectEntry( pTheme->GetName() );
