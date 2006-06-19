@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:59:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
-#pragma hdrstop
 
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
@@ -184,7 +183,7 @@ void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
 #*
 #************************************************************************/
 
-void SvxNumberPreviewImpl::Paint( const Rectangle& rRect )
+void SvxNumberPreviewImpl::Paint( const Rectangle& )
 {
     Font    aDrawFont   = GetFont();
     Size    aSzWnd      = GetOutputSizePixel();
@@ -276,35 +275,38 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
 
     :   SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUMBERFORMAT ), rCoreAttrs ),
 
-        aWndPreview     ( this, ResId( WND_NUMBER_PREVIEW ) ),
         aFtCategory     ( this, ResId( FT_CATEGORY ) ),
         aLbCategory     ( this, ResId( LB_CATEGORY ) ),
         aFtFormat       ( this, ResId( FT_FORMAT ) ),
         aLbCurrency     ( this, ResId( LB_CURRENCY) ),
         aLbFormat       ( this, ResId( LB_FORMAT ) ),
-        aFtEdFormat     ( this, ResId( FT_EDFORMAT ) ),
-        aEdFormat       ( this, ResId( ED_FORMAT ) ),
-        aEdComment      ( this, ResId( ED_COMMENT ) ),
-        aIbAdd          ( this, ResId( IB_ADD       ) ),
-        aIbRemove       ( this, ResId( IB_REMOVE    ) ),
-        aIbInfo         ( this, ResId( IB_INFO      ) ),
-        aBtnNegRed      ( this, ResId( BTN_NEGRED ) ),
-        aBtnThousand    ( this, ResId( BTN_THOUSAND ) ),
-        aFtLeadZeroes   ( this, ResId( FT_LEADZEROES ) ),
-        aFtDecimals     ( this, ResId( FT_DECIMALS ) ),
-        aEdLeadZeroes   ( this, ResId( ED_LEADZEROES ) ),
-        aEdDecimals     ( this, ResId( ED_DECIMALS ) ),
         aFtLanguage     ( this, ResId( FT_LANGUAGE ) ),
         aLbLanguage     ( this, ResId( LB_LANGUAGE ), FALSE ),
         aCbSourceFormat ( this, ResId( CB_SOURCEFORMAT ) ),
+        aFtDecimals     ( this, ResId( FT_DECIMALS ) ),
+        aEdDecimals     ( this, ResId( ED_DECIMALS ) ),
+        aFtLeadZeroes   ( this, ResId( FT_LEADZEROES ) ),
+        aEdLeadZeroes   ( this, ResId( ED_LEADZEROES ) ),
+        aBtnNegRed      ( this, ResId( BTN_NEGRED ) ),
+        aBtnThousand    ( this, ResId( BTN_THOUSAND ) ),
         aFlOptions      ( this, ResId( FL_OPTIONS ) ),
+
+        aFtEdFormat     ( this, ResId( FT_EDFORMAT ) ),
+        aEdFormat       ( this, ResId( ED_FORMAT ) ),
+        aIbAdd          ( this, ResId( IB_ADD       ) ),
+        aIbInfo         ( this, ResId( IB_INFO      ) ),
+        aIbRemove       ( this, ResId( IB_REMOVE    ) ),
         aFtComment      ( this, ResId( FT_COMMENT ) ),
+        aEdComment      ( this, ResId( ED_COMMENT ) ),
+
+        aWndPreview     ( this, ResId( WND_NUMBER_PREVIEW ) ),
+        pNumItem        ( NULL ),
+        pNumFmtShell    ( NULL ),
+        nInitFormat     ( ULONG_MAX ),
+
         aStrEurope      ( ResId( STR_EUROPE) ),
         sAutomaticEntry ( ResId( STR_AUTO_ENTRY)),
 //      aIconList       ( ResId( IL_ICON ) ),   -> done Init_Impl
-        nInitFormat     ( ULONG_MAX ),
-        pNumItem        ( NULL ),
-        pNumFmtShell    ( NULL ),
         pLastActivWindow( NULL )
 {
     Init_Impl();
@@ -635,7 +637,6 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     aLbCurrency.SelectEntryPos((USHORT)pNumFmtShell->GetCurrencySymbol());
 
     nFixedCategory=nCatLbSelPos;
-    String sFixedCategory=aLbCategory.GetEntry(nFixedCategory);
     if(bOneAreaFlag)
     {
         String sFixedCategory=aLbCategory.GetEntry(nFixedCategory);
@@ -898,15 +899,15 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         // --------------------------------------------
         if ( aCbSourceFormat.IsEnabled() )
         {
-            USHORT nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
-            SfxItemState eItemState = rMyItemSet.GetItemState( nWhich, FALSE );
+            USHORT _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
+            SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, FALSE );
             const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                         GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
             BOOL bOld = (pBoolItem ? pBoolItem->GetValue() : FALSE);
-            rCoreAttrs.Put( SfxBoolItem( nWhich, aCbSourceFormat.IsChecked() ) );
+            rCoreAttrs.Put( SfxBoolItem( _nWhich, aCbSourceFormat.IsChecked() ) );
             if ( !bDataChanged )
                 bDataChanged = (bOld != aCbSourceFormat.IsChecked() ||
-                    eItemState != SFX_ITEM_SET);
+                    _eItemState != SFX_ITEM_SET);
         }
 
         // FillItemSet is only called on OK, here we can notify the
@@ -922,22 +923,22 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 }
 
 
-int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-/*  if ( (ULONG_MAX != nInitFormat) && pSet )
+/*  if ( (ULONG_MAX != nInitFormat) && _pSet )
     {
         const ULONG  nCurKey    = pNumFmtShell->GetCurNumFmtKey();
         const USHORT nWhich     = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
         SfxItemState eItemState = GetItemSet().GetItemState( nWhich, FALSE );
 
         if ( (nInitFormat == nCurKey) && (SFX_ITEM_DEFAULT == eItemState) )
-            pSet->ClearItem( nWhich );
+            _pSet->ClearItem( nWhich );
         else
-            pSet->Put( SfxUInt32Item( nWhich, nCurKey ) );
+            _pSet->Put( SfxUInt32Item( nWhich, nCurKey ) );
     }
  */
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
@@ -955,8 +956,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
     String      aTmpString;
     String      aTmpCatString;
     Font        aFont=aLbCategory.GetFont();
-    double      nVal=0;
-    BOOL        bFLAG=FALSE;
     USHORT      i = 0;
     short       nTmpCatPos;
     short       aPrivCat;
@@ -976,8 +975,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
     {
         nTmpCatPos=aLbCategory.GetSelectEntryPos();
     }
-
-    USHORT nSelPos=LISTBOX_ENTRY_NOTFOUND;
 
     switch (nTmpCatPos)
     {
@@ -1761,7 +1758,7 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
     return 0;
 }
 
-IMPL_LINK( SvxNumberFormatTabPage, TimeHdl_Impl, Timer*, pT)
+IMPL_LINK( SvxNumberFormatTabPage, TimeHdl_Impl, Timer*, EMPTYARG)
 {
     pLastActivWindow=NULL;
     return 0;
