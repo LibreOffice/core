@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagesconfiguration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:52:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_CLASSES_IMAGESCONFIGURATION_HXX_
-#define __FRAMEWORK_CLASSES_IMAGESCONFIGURATION_HXX_
+#ifndef __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
+#define __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
@@ -93,15 +93,16 @@ SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptor
 
 struct ImageListItemDescriptor
 {
-    ImageListItemDescriptor() : pImageItemList( 0 )
-                                , nMaskMode( ImageMaskMode_Color ) {}
+    ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ),
+                                pImageItemList( 0 ) {}
+
     ~ImageListItemDescriptor() { delete pImageItemList; }
 
-    String                      aURL;                   // an URL to a bitmap with several images inside
-    Color                       aMaskColor;             // a color used as transparent
-    String                      aMaskURL;               // an URL to an optional bitmap used as a mask
-    ImageMaskMode               nMaskMode;              // an enum to describe the current mask mode
-    ImageItemListDescriptor*    pImageItemList;         // an array of ImageItemDescriptors that describes every image
+    String                      aURL;               // an URL to a bitmap with several images inside
+    Color                       aMaskColor;         // a color used as transparent
+    String                      aMaskURL;           // an URL to an optional bitmap used as a mask
+    ImageMaskMode                     nMaskMode;            // an enum to describe the current mask mode
+    ImageItemListDescriptor*              pImageItemList;       // an array of ImageItemDescriptors that describes every image
     String                      aHighContrastURL;       // an URL to an optional high contrast bitmap with serveral images inside
     String                      aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
 };
@@ -112,10 +113,10 @@ SV_DECL_PTRARR_DEL( ImageListDescriptor, ImageListItemDescriptorPtr, 10, 2)
 struct ImageListsDescriptor
 {
     ImageListsDescriptor() : pImageList( 0 ),
-                             pExternalImageList( 0 ) {}
+                     pExternalImageList( 0 ) {}
     ~ImageListsDescriptor() { delete pImageList; delete pExternalImageList; }
 
-    ImageListDescriptor*                pImageList;
+    ImageListDescriptor*            pImageList;
     ExternalImageItemListDescriptor*    pExternalImageList;
 };
 
