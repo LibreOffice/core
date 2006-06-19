@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UriReferenceFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:16:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,11 +140,11 @@ sal_Int32 parseScheme(rtl::OUString const & uriReference) {
 class UriReference: public cppu::WeakImplHelper1< css::uri::XUriReference > {
 public:
     UriReference(
-        rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
+        rtl::OUString const & scheme, bool bIsHierarchical, bool bHasAuthority,
         rtl::OUString const & authority, rtl::OUString const & path,
-        bool hasQuery, rtl::OUString const & query):
+        bool bHasQuery, rtl::OUString const & query):
         m_base(
-            scheme, isHierarchical, hasAuthority, authority, path, hasQuery,
+            scheme, bIsHierarchical, bHasAuthority, authority, path, bHasQuery,
             query)
     {}
 
@@ -547,6 +547,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                         break;
 
                     case css::uri::RelativeUriExcessParentSegments_REMOVE:
+                        break;
+
+                    default:
+                        OSL_ASSERT(false);
                         break;
                     }
                 }
