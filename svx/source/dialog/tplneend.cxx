@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:18:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_TPLNEEND_CXX
 
@@ -101,29 +100,30 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_LINEEND_DEF ), rInAttrs ),
 
+    aFlTip              ( this, ResId( FL_TIP ) ),
+    aFTTitle            ( this, ResId( FT_TITLE ) ),
+    aEdtName            ( this, ResId( EDT_NAME ) ),
+    aFTLineEndStyle     ( this, ResId( FT_LINE_END_STYLE ) ),
+    aLbLineEnds         ( this, ResId( LB_LINEENDS ) ),
+    aBtnAdd             ( this, ResId( BTN_ADD ) ),
+    aBtnModify          ( this, ResId( BTN_MODIFY ) ),
+    aBtnDelete          ( this, ResId( BTN_DELETE ) ),
+    aBtnLoad            ( this, ResId( BTN_LOAD ) ),
+    aBtnSave            ( this, ResId( BTN_SAVE ) ),
+    aFiTip              ( this, ResId( FI_TIP ) ),
+    aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
+
+    rOutAttrs           ( rInAttrs ),
+    pPolyObj( NULL ),
+
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     XOut                ( &aCtlPreview ),
-    aXLineAttr          ( pXPool ),
-    rXLSet              ( aXLineAttr.GetItemSet() ),
-
     aXLStyle            ( XLINE_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
     aXColor             ( String(), COL_BLACK ),
-
-    aFiTip              ( this, ResId( FI_TIP ) ),
-    aFlTip              ( this, ResId( FL_TIP ) ),
-    aEdtName            ( this, ResId( EDT_NAME ) ),
-    aLbLineEnds         ( this, ResId( LB_LINEENDS ) ),
-    aFTLineEndStyle     ( this, ResId( FT_LINE_END_STYLE ) ),
-    aFTTitle            ( this, ResId( FT_TITLE ) ),
-    aBtnModify          ( this, ResId( BTN_MODIFY ) ),
-    aBtnAdd             ( this, ResId( BTN_ADD ) ),
-    aBtnDelete          ( this, ResId( BTN_DELETE ) ),
-    aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aBtnLoad            ( this, ResId( BTN_LOAD ) ),
-    aBtnSave            ( this, ResId( BTN_SAVE ) ),
-    rOutAttrs           ( rInAttrs )
-
+    aXLineAttr          ( pXPool ),
+    rXLSet              ( aXLineAttr.GetItemSet() ),
+    pLineEndList( NULL )
 {
     aBtnLoad.SetModeImage( Image( ResId( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
     aBtnSave.SetModeImage( Image( ResId( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
@@ -157,8 +157,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aLbLineEnds.SetSelectHdl(
         LINK( this, SvxLineEndDefTabPage, SelectLineEndHdl_Impl ) );
 
-    pLineEndList = NULL;
-    pPolyObj     = NULL;
 }
 
 //------------------------------------------------------------------------
@@ -197,15 +195,14 @@ void SvxLineEndDefTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
+void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 {
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
         // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
         if( pLineEndList )
         {
-            if( *pPosLineEndLb >= 0 &&
-                *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
+            if( *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
             {
                 aLbLineEnds.SelectEntryPos( *pPosLineEndLb );
                 SelectLineEndHdl_Impl( this );
@@ -236,12 +233,12 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     CheckChanges_Impl();
 
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
 
     return( LEAVE_PAGE );
 }
@@ -274,7 +271,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( *pDlgType == 0 ) // Linien-Dialog
     {
@@ -283,10 +280,10 @@ BOOL SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             CheckChanges_Impl();
 
             long nPos = aLbLineEnds.GetSelectEntryPos();
-            XLineEndEntry* pEntry = pLineEndList->Get( nPos );
+            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
-            rOutAttrs.Put( XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
-            rOutAttrs.Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
+            rSet.Put( XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
+            rSet.Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
         }
     }
     return( TRUE );
@@ -294,7 +291,7 @@ BOOL SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndDefTabPage::Reset( const SfxItemSet& rOutAttrs )
+void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
 {
     aLbLineEnds.SelectEntryPos( 0 );
 
@@ -303,7 +300,7 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& rOutAttrs )
     {
         int nPos = aLbLineEnds.GetSelectEntryPos();
 
-        XLineEndEntry* pEntry = pLineEndList->Get( nPos );
+        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
         aEdtName.SetText( aLbLineEnds.GetSelectEntry() );
 
@@ -335,9 +332,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& rOutAttrs )
 // -----------------------------------------------------------------------
 
 SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+                const SfxItemSet& rSet )
 {
-    return( new SvxLineEndDefTabPage( pWindow, rOutAttrs ) );
+    return( new SvxLineEndDefTabPage( pWindow, rSet ) );
 }
 
 //------------------------------------------------------------------------
@@ -348,7 +345,7 @@ IMPL_LINK( SvxLineEndDefTabPage, SelectLineEndHdl_Impl, void *, EMPTYARG )
     {
         int nPos = aLbLineEnds.GetSelectEntryPos();
 
-        XLineEndEntry* pEntry = pLineEndList->Get( nPos );
+        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
         aEdtName.SetText( aLbLineEnds.GetSelectEntry() );
 
@@ -392,7 +389,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
         // Pruefen, ob Name schon vorhanden ist
         for ( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pLineEndList->Get( i )->GetName() )
+            if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
                 bDifferent = FALSE;
 
         // Wenn ja, wird wiederholt ein neuer Name angefordert
@@ -417,7 +414,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
-                    if( aName == pLineEndList->Get( i )->GetName() )
+                    if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                         bDifferent = FALSE;
                 }
 
@@ -432,7 +429,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn nicht vorhanden, wird Eintrag aufgenommen
         if( bDifferent )
         {
-            XLineEndEntry* pEntry = pLineEndList->Get( nPos );
+            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
             pEntry->SetName( aName );
             aEdtName.SetText( aName );
@@ -457,7 +454,6 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     {
         const SdrObject* pNewObj;
         SdrObject* pConvPolyObj = NULL;
-        UINT16 nId = pPolyObj->GetObjIdentifier();
 
         if( pPolyObj->ISA( SdrPathObj ) )
         {
@@ -511,7 +507,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             bDifferent = TRUE;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
-                if ( aName == pLineEndList->Get( i )->GetName() )
+                if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = FALSE;
         }
 
@@ -529,7 +525,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pLineEndList->Get( i )->GetName() )
+                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = FALSE;
             }
 
@@ -538,9 +534,9 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 bLoop = FALSE;
                 pEntry = new XLineEndEntry( aXPoly, aName );
 
-                long nCount = pLineEndList->Count();
-                pLineEndList->Insert( pEntry, nCount );
-                Bitmap* pBitmap = pLineEndList->GetBitmap( nCount );
+                long nLineEndCount = pLineEndList->Count();
+                pLineEndList->Insert( pEntry, nLineEndCount );
+                Bitmap* pBitmap = pLineEndList->GetBitmap( nLineEndCount );
 
                 // Zur ListBox hinzufuegen
                 aLbLineEnds.Append( pEntry, pBitmap );
