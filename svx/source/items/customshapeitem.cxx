@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:33:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
     aPropSeq = rVal;
 
     // hashing property values
-    beans::PropertyValue* pPropValues = aPropSeq.getArray();
-    const rtl::OUString* pPtr = NULL;
+//  beans::PropertyValue* pPropValues = aPropSeq.getArray();
+//  const rtl::OUString* pPtr = NULL;
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
         beans::PropertyValue& rPropVal = aPropSeq[ i ];
@@ -235,9 +235,9 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rPropN
                     sal_Int32 i;
                     for ( i = 0; i < rSecSequence.getLength(); i++ )
                     {
-                        PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rPropName, rSecSequence[ i ].Name ) ) );
-                        if ( aHashIter != aPropPairHashMap.end() )
-                            aPropPairHashMap.erase( aHashIter );        // removing property from pair hashmap
+                        PropertyPairHashMap::iterator _aHashIter( aPropPairHashMap.find( PropertyPair( rPropName, rSecSequence[ i ].Name ) ) );
+                        if ( _aHashIter != aPropPairHashMap.end() )
+                            aPropPairHashMap.erase( _aHashIter );       // removing property from pair hashmap
                     }
                 }
             }
@@ -292,7 +292,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rSeque
 SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
 {
 }
-SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion ):
+SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& /*rIn*/, sal_uInt16 nVersion ):
     SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {
     if ( nVersion )
@@ -309,8 +309,8 @@ int __EXPORT SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) c
 }
 
 SfxItemPresentation __EXPORT SdrCustomShapeGeometryItem::GetPresentation(
-    SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
-    SfxMapUnit ePresentationMetric, XubString &rText, const IntlWrapper *) const
+    SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
+    SfxMapUnit /*ePresentationMetric*/, XubString &rText, const IntlWrapper *) const
 {
     rText += sal_Unicode( ' ' );
     if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
@@ -337,7 +337,7 @@ SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool */*pPool*/ ) const
 {
     SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( GetGeometry() );
 //  SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( *this );
@@ -359,16 +359,16 @@ int __EXPORT SdrCustomShapeGeometryItem::IsPoolable() const
     return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
 }
 #endif
-sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
+sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
 {
     return 1;
 }
-sal_Bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
     return sal_True;
 }
-sal_Bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )
         return sal_False;
