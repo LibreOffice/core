@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:49:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,11 +186,6 @@ DEFINE_XTYPEPROVIDER_6                  (   ImageManager                        
                                             ::com::sun::star::ui::XUIConfigurationPersistence
                                         )
 
-static OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
-{
-    return OUString();
-}
-
 static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, sal_Int16 nImageType )
 {
     static Size   aNormSize( IMAGE_SIZE_NORMAL, IMAGE_SIZE_NORMAL );
@@ -233,20 +228,6 @@ static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
     if ( nImageType & ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST )
         nIndex += 2;
     return nIndex;
-}
-
-static sal_Int16 implts_convertIndexToImageType( sal_Int16 nIndex )
-{
-    sal_Int16 nImageType = ::com::sun::star::ui::ImageType::SIZE_DEFAULT;
-    switch ( nImageType )
-    {
-        case 0: break;
-        case 1: nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE; break;
-        case 2: nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST; break;
-        case 3: nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                              ::com::sun::star::ui::ImageType::SIZE_LARGE; break;
-    }
-    return nImageType;
 }
 
 ImageList* ImageManager::implts_getUserImageList( ImageType nImageType )
@@ -309,9 +290,9 @@ sal_Bool ImageManager::implts_loadUserImages(
             uno::Reference< XInputStream > xInputStream = xStream->getInputStream();
 
             ImageListsDescriptor aUserImageListInfo;
-            sal_Bool bResult = ImagesConfiguration::LoadImages( m_xServiceManager,
-                                                                xInputStream,
-                                                                aUserImageListInfo );
+            ImagesConfiguration::LoadImages( m_xServiceManager,
+                                             xInputStream,
+                                             aUserImageListInfo );
             if (( aUserImageListInfo.pImageList != 0 ) &&
                 ( aUserImageListInfo.pImageList->Count() > 0 ))
             {
@@ -473,17 +454,18 @@ sal_Bool ImageManager::implts_storeUserImages(
 
 ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , m_bReadOnly( true )
-    , m_bModified( false )
-    , m_xUserImageStorage( 0 )
     , m_xUserConfigStorage( 0 )
+    , m_xUserImageStorage( 0 )
+    , m_xUserBitmapsStorage( 0 )
+    , m_bReadOnly( true )
+    , m_bInitialized( false )
+    , m_bModified( false )
     , m_bConfigRead( false )
     , m_bDisposed( false )
-    , m_bInitialized( false )
-    , m_xServiceManager( xServiceManager )
     , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
     , m_aResourceString( RTL_CONSTASCII_USTRINGPARAM( ModuleImageList ))
+    , m_xServiceManager( xServiceManager )
+    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
     {
@@ -964,7 +946,7 @@ throw ( ::com::sun::star::uno::Exception,
 {
     ResetableGuard aGuard( m_aLock );
 
-    uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject* >( this ));
+    uno::Reference< uno::XInterface > xRefThis( static_cast< OWeakObject* >( this ));
 
     if ( m_bDisposed )
         throw DisposedException();
