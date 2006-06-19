@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelinkarray.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:07:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1141,17 +1141,17 @@ void Array::DrawRange( OutputDevice& rDev,
                 Rectangle aRect( GetCellRect( nCol, nRow ) );
                 if( (aRect.GetWidth() > 1) && (aRect.GetHeight() > 1) )
                 {
-                    size_t nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
-                    size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
-                    size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
-                    size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
+                    size_t _nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
+                    size_t _nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
+                    size_t _nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
+                    size_t _nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
 
                     DrawDiagFrameBorders( rDev, aRect,
-                        GetCellStyleTLBR( nFirstCol, nFirstRow, true ), GetCellStyleBLTR( nFirstCol, nFirstRow, true ),
-                        GetCellStyleLeft( nFirstCol, nFirstRow ), GetCellStyleTop( nFirstCol, nFirstRow ),
-                        GetCellStyleRight( nLastCol, nLastRow ), GetCellStyleBottom( nLastCol, nLastRow ),
-                        GetCellStyleLeft( nFirstCol, nLastRow ), GetCellStyleBottom( nFirstCol, nLastRow ),
-                        GetCellStyleRight( nLastCol, nFirstRow ), GetCellStyleTop( nLastCol, nFirstRow ),
+                        GetCellStyleTLBR( _nFirstCol, _nFirstRow, true ), GetCellStyleBLTR( _nFirstCol, _nFirstRow, true ),
+                        GetCellStyleLeft( _nFirstCol, _nFirstRow ), GetCellStyleTop( _nFirstCol, _nFirstRow ),
+                        GetCellStyleRight( _nLastCol, _nLastRow ), GetCellStyleBottom( _nLastCol, _nLastRow ),
+                        GetCellStyleLeft( _nFirstCol, _nLastRow ), GetCellStyleBottom( _nFirstCol, _nLastRow ),
+                        GetCellStyleRight( _nLastCol, _nFirstRow ), GetCellStyleTop( _nLastCol, _nFirstRow ),
                         pForceColor, mxImpl->mbDiagDblClip );
                 }
             }
