@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:42:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,7 @@ namespace accessibility
     uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
+        (void)i;
 
         throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No childs available")),
                                               uno::Reference< uno::XInterface >
@@ -326,7 +327,7 @@ namespace accessibility
         return aRect.IsInside( aPoint );
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
@@ -542,8 +543,6 @@ namespace accessibility
     void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
-
-        SvxEditSource* pOldEditSource = mpEditSource;
 
         mpEditSource = pEditSource;
 
