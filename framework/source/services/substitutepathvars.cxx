@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:21:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,16 +326,16 @@ EnvironmentType SubstitutePathVariables_Impl::GetEnvTypeFromString( const rtl::O
 
 SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyLink ) :
     utl::ConfigItem( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Substitution" ))),
-    m_aListenerNotify( aNotifyLink ),
-    m_aSharePointsNodeName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SharePoints" ))),
-    m_aDirPropertyName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Directory" ))),
-    m_aEnvPropertyName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Environment" ))),
-    m_aLevelSep( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ))),
     m_bYPDomainRetrieved( sal_False ),
     m_bDNSDomainRetrieved( sal_False ),
     m_bNTDomainRetrieved( sal_False ),
     m_bHostRetrieved( sal_False ),
-    m_bOSRetrieved( sal_False )
+    m_bOSRetrieved( sal_False ),
+    m_aListenerNotify( aNotifyLink ),
+    m_aSharePointsNodeName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SharePoints" ))),
+    m_aDirPropertyName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Directory" ))),
+    m_aEnvPropertyName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Environment" ))),
+    m_aLevelSep( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" )))
 {
     // Enable notification mechanism
     // We need it to get information about changes outside these class on our configuration branch
@@ -385,7 +385,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
     }
 }
 
-void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames )
+void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& /*aPropertyNames*/ )
 {
     // NOT implemented yet!
 }
@@ -501,8 +501,8 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
                         aHostStr = aHostStr.toAsciiLowerCase();
 
                         // Pattern match if domain environment match
-                        WildCard aPattern(aHostStr);
-                        sal_Bool bMatch = aPattern.Matches(aHost);
+                                    WildCard aPattern(aHostStr);
+                                    sal_Bool bMatch = aPattern.Matches(aHost);
                         if ( bMatch )
                         {
                             aActiveRule         = aRule;
@@ -530,8 +530,8 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
                             aDomain = GetNTDomainName();
 
                         // Pattern match if domain environment match
-                        WildCard aPattern(aDomainStr);
-                        sal_Bool bMatch = aPattern.Matches(aDomain);
+                                    WildCard aPattern(aDomainStr);
+                                    sal_Bool bMatch = aPattern.Matches(aDomain);
                         if ( bMatch )
                         {
                             aActiveRule         = aRule;
@@ -561,6 +561,12 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
                         }
                     }
                     break;
+
+                              case ET_UNKNOWN: // nothing to do
+                                  break;
+
+                              default:
+                                  break;
                 }
             }
         }
@@ -676,9 +682,9 @@ DEFINE_INIT_SERVICE                     (   SubstitutePathVariables, {} )
 
 SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_aVarStart( SIGN_STARTVARIABLE ),
     m_aVarEnd( SIGN_ENDVARIABLE ),
+    m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_xServiceManager( xServiceManager )
 {
     int i;
@@ -762,7 +768,7 @@ throw ( NoSuchElementException, RuntimeException )
 //_________________________________________________________________________________________________________________
 //
 
-IMPL_LINK( SubstitutePathVariables, implts_ConfigurationNotify, SubstitutePathNotify*, pSubstVarNotify )
+IMPL_LINK( SubstitutePathVariables, implts_ConfigurationNotify, SubstitutePathNotify*, EMPTYARG )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
@@ -882,11 +888,11 @@ throw ( NoSuchElementException, RuntimeException )
 
             // Path variables are not case sensitive!
             aSubVarString = aSubString.toAsciiLowerCase();
-            VarNameToIndexMap::const_iterator pIter = m_aPreDefVarMap.find( aSubVarString );
-            if ( pIter != m_aPreDefVarMap.end() )
+            VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( aSubVarString );
+            if ( pNTOIIter != m_aPreDefVarMap.end() )
             {
                 // Fixed/Predefined variable found
-                PreDefVariable nIndex = (PreDefVariable)pIter->second;
+                PreDefVariable nIndex = (PreDefVariable)pNTOIIter->second;
 
                 // Determine variable value and length from array/table
                 if ( nIndex == PREDEFVAR_WORK && !bWorkRetrieved )
@@ -1059,7 +1065,6 @@ throw ( RuntimeException )
     // Due to a recursive definition this code must exchange variables with variables!
     sal_Bool        bResubstitutionCompleted    = sal_False;
     sal_Bool        bVariableFound              = sal_False;
-    sal_Int32       nURLLen                     = aURL.getLength();
 
     // Get transient predefined path variable $(work) value before starting resubstitution
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_WORK ] = GetWorkVariableValue();
@@ -1150,12 +1155,12 @@ throw ( NoSuchElementException, RuntimeException )
         aVariable = aStrBuffer.makeStringAndClear();
     }
 
-    VarNameToIndexMap::const_iterator pIter = m_aPreDefVarMap.find( ( nPos == -1 ) ? aVariable : rVariable );
+    VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( ( nPos == -1 ) ? aVariable : rVariable );
 
     // Fixed/Predefined variable
-    if ( pIter != m_aPreDefVarMap.end() )
+    if ( pNTOIIter != m_aPreDefVarMap.end() )
     {
-        PreDefVariable nIndex = (PreDefVariable)pIter->second;
+        PreDefVariable nIndex = (PreDefVariable)pNTOIIter->second;
         return m_aPreDefVars.m_FixedVar[(sal_Int32)nIndex];
     }
     else
@@ -1185,15 +1190,10 @@ throw ( NoSuchElementException, RuntimeException )
         rtl::OUString aExceptionText( RTL_CONSTASCII_USTRINGPARAM( "Unknown variable!" ));
         throw NoSuchElementException( aExceptionText, (cppu::OWeakObject *)this );
     }
-
-    // SAFE-IMPOSSIBLE CASE!
-    return rtl::OUString();
 }
 
 void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
 {
-    utl::ConfigManager* pCfgMgr = utl::ConfigManager::GetConfigManager();
-
     Any aAny;
     ::rtl::OUString aOfficePath;
     ::rtl::OUString aUserPath;
