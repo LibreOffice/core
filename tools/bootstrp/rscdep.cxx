@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:32:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "prj.hxx"
+#include "bootstrp/prj.hxx"
 
 #include <string.hxx>
 #include <list.hxx>
@@ -75,7 +75,7 @@ void RscHrcDep::Execute()
 //static String aDelim;
 
 /* poor man's getopt() */
-int     simple_getopt(int argc, char *argv[], const char *optstring);
+int     simple_getopt(char *argv[], const char *optstring);
 #ifdef WNT
 static char *optarg = NULL;
 static int  optind = 1;
@@ -91,7 +91,6 @@ _cdecl
 main( int argc, char **argv )
 {
     int c;
-    int digit_optind = 0;
     char aBuf[255];
     char pOutputFileName[255];
     char pSrsFileName[255];
@@ -117,7 +116,6 @@ main( int argc, char **argv )
         {
             strcpy(pSrsFileName, &aBuf[4]);
             String aName( pSrsFileName, gsl_getSystemTextEncoding());
-            USHORT nPos = 0;
             DirEntry aDest( aName );
             aSrsBaseName = aDest.GetBase();
             //break;
@@ -150,7 +148,6 @@ main( int argc, char **argv )
                 {
                     strcpy(pSrsFileName, &aBuf2[3]);
                     String aName( pSrsFileName, gsl_getSystemTextEncoding());
-                    USHORT nPos = 0;
                     DirEntry aDest( aName );
                     aSrsBaseName = aDest.GetBase();
                     //break;
@@ -178,8 +175,7 @@ main( int argc, char **argv )
 
     while( 1 )
     {
-        int this_option_optind = optind ? optind : 1;
-        c = simple_getopt( argc, argv,
+        c = simple_getopt( argv,
         "_abcdefghi:jklmnopqrstuvwxyzABCDEFGHI:JKLMNOPQRSTUVWXYZ1234567890/-+=.\\()\"");
         if ( c == -1 )
             break;
@@ -303,7 +299,7 @@ main( int argc, char **argv )
  * it's too sad that getopt() is not available everywhere
  * note: this is not a full POSIX conforming getopt()
  */
-int simple_getopt(int argc, char *argv[], const char *optstring)
+int simple_getopt(char *argv[], const char *optstring)
 {
     char *arg = argv[optind];
 
