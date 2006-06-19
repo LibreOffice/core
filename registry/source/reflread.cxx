@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,6 @@
 #include <cstddef>
 
 using namespace salhelper;
-
-static CPInfoTag aTag;
 
 static sal_Char NULL_STRING[1] = { 0 };
 static sal_Unicode NULL_WSTRING[1] = { 0 };
@@ -156,8 +154,8 @@ public:
 };
 
 BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer)
-    : m_isCopied(copyBuffer)
-    , m_bufferLen(len)
+    : m_bufferLen(len)
+    , m_isCopied(copyBuffer)
 {
     if (m_isCopied)
     {
@@ -201,9 +199,9 @@ public:
 };
 
 StringCache::StringCache(sal_uInt16 size)
-    : m_numOfStrings(size)
+    : m_stringTable(NULL)
+    , m_numOfStrings(size)
     , m_stringsCopied(0)
-    , m_stringTable(NULL)
 {
     m_stringTable = new sal_Unicode*[m_numOfStrings];
 
@@ -500,7 +498,7 @@ float ConstantPool::readFloatConstant(sal_uInt16 index)
     {
         float   v;
         sal_uInt32  b;
-    } x;
+    } x = { 0.0f };
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -527,7 +525,7 @@ double ConstantPool::readDoubleConstant(sal_uInt16 index)
             sal_uInt32  b1;
             sal_uInt32  b2;
         } b;
-    } x;
+    } x = { 0.0 };
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -608,7 +606,7 @@ public:
 
     sal_uInt16      m_numOfEntries;
     sal_uInt16      m_numOfFieldEntries;
-    sal_uInt8       m_FIELD_ENTRY_SIZE;
+    sal_uInt16      m_FIELD_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
     FieldList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
@@ -777,7 +775,7 @@ public:
 
     sal_uInt16      m_numOfEntries;
     sal_uInt16      m_numOfReferenceEntries;
-    sal_uInt8       m_REFERENCE_ENTRY_SIZE;
+    sal_uInt16      m_REFERENCE_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
     ReferenceList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
@@ -870,7 +868,7 @@ public:
     sal_uInt16      m_numOfEntries;
     sal_uInt16      m_numOfMethodEntries;
     sal_uInt16      m_numOfParamEntries;
-    sal_uInt8       m_PARAM_ENTRY_SIZE;
+    sal_uInt16      m_PARAM_ENTRY_SIZE;
     sal_uInt32*     m_pIndex;
     ConstantPool*   m_pCP;
 
@@ -1173,6 +1171,8 @@ typereg_Version TypeRegistryEntry::getVersion() const {
 
 **************************************************************************/
 
+extern "C" {
+
 sal_Bool typereg_reader_create(
     void const * buffer, sal_uInt32 length, sal_Bool copy,
     typereg_Version maxVersion, void ** result)
@@ -1287,6 +1287,7 @@ void typereg_reader_getTypeName(void * hEntry, rtl_uString** pTypeName)
         pTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
+
 
 static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString** pSuperTypeName)
 {
@@ -1737,7 +1738,7 @@ void typereg_reader_getSuperTypeName(
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-extern "C" RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
+RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
 {
     static RegistryTypeReader_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)
@@ -1783,4 +1784,6 @@ extern "C" RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(v
     {
         return (&aApi);
     }
+}
+
 }
