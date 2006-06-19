@@ -4,9 +4,9 @@
  *
  *  $RCSfile: g2g.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:54:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ private:
 public:
 
                     G2GApp();
-                    ~G2GApp();
+    virtual        ~G2GApp();
 
     int             Start( const ::std::vector< String >& rArgs );
 };
@@ -123,10 +123,10 @@ BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
 // -----------------------------------------------------------------------
 
-void G2GApp::Message( const String& rText, BYTE cExitCode )
+void G2GApp::Message( const String& rText, BYTE nExitCode )
 {
-    if( EXIT_NOERROR != cExitCode )
-        SetExitCode( cExitCode );
+    if( EXIT_NOERROR != nExitCode )
+        SetExitCode( nExitCode );
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
