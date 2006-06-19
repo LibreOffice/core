@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:11:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ namespace bridges_remote {
     public:
         // performance optimization. In some cases, it is not necessary to acquire the
         // environment.
-        RemoteThreadCounter( uno_Environment *pEnvRemote, RemoteThreadCounter_HoldEnvWeak value )
+        RemoteThreadCounter( uno_Environment *pEnvRemote, RemoteThreadCounter_HoldEnvWeak )
             : m_bReleaseEnvironment( sal_False )
             , m_pEnvRemote( pEnvRemote )
         {
