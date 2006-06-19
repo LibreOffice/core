@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeHandle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:27:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 // -----------------------------------------------------------------------------
 
 EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
-    mxCustomShape ( xCustomShape ),
-    mnIndex     ( nIndex )
+    mnIndex     ( nIndex ),
+    mxCustomShape ( xCustomShape )
 {
 }
 
@@ -99,7 +99,7 @@ void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const com::sun::
 }
 
 // XInitialization
-void SAL_CALL EnhancedCustomShapeHandle::initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
+void SAL_CALL EnhancedCustomShapeHandle::initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& /* aArguments */ )
     throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException )
 {
 }
