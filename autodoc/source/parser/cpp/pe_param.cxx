@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_param.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:04:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,19 +193,19 @@ PE_Parameter::SpReturn_Variable()
 }
 
 void
-PE_Parameter::On_start_Type(const char * i_sText)
+PE_Parameter::On_start_Type(const char *)
 {
     pSpuType->Push(not_done);
 }
 
 void
-PE_Parameter::On_start_Bracket_Right(const char * i_sText)
+PE_Parameter::On_start_Bracket_Right(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Parameter::On_start_Ellipse(const char * i_sText)
+PE_Parameter::On_start_Ellipse(const char *)
 {
     SetTokenResult(done, pop_success);
 
@@ -246,37 +246,37 @@ PE_Parameter::On_expectName_Assign(const char * i_sText)
 }
 
 void
-PE_Parameter::On_afterName_ArrayBracket_Left(const char * i_sText)
+PE_Parameter::On_afterName_ArrayBracket_Left(const char *)
 {
     pSpuVariable->Push(not_done);
 }
 
 void
-PE_Parameter::On_afterName_Bracket_Right(const char * i_sText)
+PE_Parameter::On_afterName_Bracket_Right(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Parameter::On_afterName_Comma(const char * i_sText)
+PE_Parameter::On_afterName_Comma(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Parameter::On_afterName_Assign(const char * i_sText)
+PE_Parameter::On_afterName_Assign(const char *)
 {
     pSpuVariable->Push(not_done);
 }
 
 void
-PE_Parameter::On_finished_Bracket_Right(const char * i_sText)
+PE_Parameter::On_finished_Bracket_Right(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
 
 void
-PE_Parameter::On_finished_Comma(const char * i_sText)
+PE_Parameter::On_finished_Comma(const char *)
 {
     SetTokenResult(not_done, pop_success);
 }
