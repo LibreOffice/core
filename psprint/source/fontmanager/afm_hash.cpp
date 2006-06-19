@@ -112,7 +112,7 @@ AfmKeywordHash::in_word_set (register const char *str, register unsigned int len
     };
   static const struct hash_entry wordlist[] =
     {
-      {""},
+      {"",NOPE},
 #line 6 "afm_keyword_list"
       {"C",CODE},
 #line 7 "afm_keyword_list"
@@ -223,7 +223,7 @@ AfmKeywordHash::in_word_set (register const char *str, register unsigned int len
       {"Ascent",ASCENT},
 #line 3 "afm_keyword_list"
       {"Ascender",ASCENDER},
-      {""},
+      {"",NOPE},
 #line 34 "afm_keyword_list"
       {"L",LIGATURE}
     };
