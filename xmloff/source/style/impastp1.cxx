@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:42:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,9 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
         const UniReference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
         sal_Bool bAsFam )
-    : mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ), maStrPrefix( rStrPrefix ),
-      mnCount( 0 ), mnName( 0 ), bAsFamily( bAsFam ),
-      pCache( 0 )
+    : pCache( 0 ), mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
+      mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
+
 {
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl( 5, 5 );
