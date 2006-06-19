@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:22:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,15 +143,15 @@ EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
     return xRet;
 }
 
-void SAL_CALL EmbedEventListener_Impl::changingState( const lang::EventObject& aEvent,
-                                                    ::sal_Int32 nOldState,
-                                                    ::sal_Int32 nNewState )
+void SAL_CALL EmbedEventListener_Impl::changingState( const lang::EventObject&,
+                                                    ::sal_Int32,
+                                                    ::sal_Int32 )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aEvent,
+void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
                                                     ::sal_Int32 nOldState,
                                                     ::sal_Int32 nNewState )
     throw ( uno::RuntimeException )
@@ -182,7 +182,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aE
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException)
+void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pObject )
@@ -220,7 +220,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership )
+void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, ::sal_Bool )
         throw ( util::CloseVetoException, uno::RuntimeException)
 {
     // An embedded object can be shared between several objects (f.e. for undo purposes)
@@ -792,4 +792,4 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
     if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
 }
 
-};
+}
