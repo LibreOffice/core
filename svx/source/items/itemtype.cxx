@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemtype.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:36:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:12:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#pragma hdrstop
 
 #include "svxids.hrc"
 
@@ -90,6 +89,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
                 case SFX_MAPUNIT_100TH_MM:  nRet *= 1000; break;
                 case SFX_MAPUNIT_10TH_MM:   nRet *= 100; break;
                 case SFX_MAPUNIT_MM:        nRet *= 10; break;
+                default: ;//prevent warning
             }
             break;
         }
@@ -107,6 +107,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
                 case SFX_MAPUNIT_1000TH_INCH:   nRet *= 1000; break;
                 case SFX_MAPUNIT_100TH_INCH:    nRet *= 100; break;
                 case SFX_MAPUNIT_10TH_INCH:     nRet *= 10; break;
+                default: ;//prevent warning
             }
             break;
         }
