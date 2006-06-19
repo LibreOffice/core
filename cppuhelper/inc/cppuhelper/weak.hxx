@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weak.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:22:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,15 +129,17 @@ public:
 
         @param rObj dummy param
     */
-    inline OWeakObject( const OWeakObject & rObj ) SAL_THROW( () )
-        : m_refCount( 0 )
+    inline OWeakObject( const OWeakObject & ) SAL_THROW( () )
+        : com::sun::star::uno::XWeak()
+        , m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
     /** Dummy assignment operator. Does not affect reference count.
 
         @return this OWeakObject
     */
-    inline OWeakObject & SAL_CALL operator = ( const OWeakObject & rObj) SAL_THROW( () )
+    inline OWeakObject & SAL_CALL operator = ( const OWeakObject &)
+        SAL_THROW( () )
         { return *this; }
 
     /** Basic queryInterface() implementation supporting ::com::sun::star::uno::XWeak and
