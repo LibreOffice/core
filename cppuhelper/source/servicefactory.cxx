@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:28:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,11 +102,11 @@ static Reference< XInterface > SAL_CALL createInstance(
     }
     else
     {
-        Reference< lang::XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
-        if (xFac.is())
+        Reference< lang::XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
+        if (xFac2.is())
         {
             OSL_ENSURE( !xContext.is(), "### ignoring context!" );
-            return xFac->createInstance();
+            return xFac2->createInstance();
         }
     }
     throw RuntimeException(
@@ -137,6 +137,8 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+#else
+        (void) exc; // avoid warning about unused variable
 #endif
     }
 
@@ -166,6 +168,8 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+#else
+        (void) exc; // avoid warning about unused variable
 #endif
     }
 
@@ -217,13 +221,18 @@ static void add_access_control_entries(
         {
             // no file url
             OUString baseDir;
-            oslProcessError prc = ::osl_getProcessWorkingDir(
-                &baseDir.pData );
-            OSL_ASSERT( osl_Process_E_None == prc );
+            if ( ::osl_getProcessWorkingDir( &baseDir.pData )
+                 != osl_Process_E_None )
+            {
+                OSL_ASSERT( false );
+            }
             OUString fileURL;
-            oslFileError frc = ::osl_getAbsoluteFileURL(
-                baseDir.pData, ac_policy.pData, &fileURL.pData );
-            OSL_ASSERT( osl_File_E_None == frc );
+            if ( ::osl_getAbsoluteFileURL(
+                     baseDir.pData, ac_policy.pData, &fileURL.pData )
+                 != osl_File_E_None )
+            {
+                OSL_ASSERT( false );
+            }
             ac_policy = fileURL;
         }
 
@@ -413,19 +422,18 @@ Reference< XComponentContext > bootstrapInitialContext(
                     keys.getConstArray();
                 for ( sal_Int32 nPos = keys.getLength(); nPos--; )
                 {
+                    Reference< registry::XRegistryKey > const & xKey2 =
+                        pKeys[ nPos ];
                     try
                     {
-                        Reference< registry::XRegistryKey > const & xKey =
-                            pKeys[ nPos ];
-
                         OUStringBuffer buf( 32 );
                         buf.appendAscii(
                             RTL_CONSTASCII_STRINGPARAM("/singletons/") );
                         buf.append(
-                            xKey->getKeyName().copy(
+                            xKey2->getKeyName().copy(
                                 sizeof("/SINGLETONS") /* -\0 +'/' */ ) );
                         entry.name = buf.makeStringAndClear();
-                        entry.value <<= xKey->getStringValue();
+                        entry.value <<= xKey2->getStringValue();
                         context_values.push_back( entry );
                     }
                     catch (Exception & rExc)
@@ -433,7 +441,7 @@ Reference< XComponentContext > bootstrapInitialContext(
 #if OSL_DEBUG_LEVEL > 0
                         OString aStr(
                             OUStringToOString(
-                                xKey->getKeyName().copy( 11 ),
+                                xKey2->getKeyName().copy( 11 ),
                                 RTL_TEXTENCODING_ASCII_US ) );
                         OString aStr2(
                             OUStringToOString(
@@ -443,6 +451,8 @@ Reference< XComponentContext > bootstrapInitialContext(
                             "### failed reading singleton [%s]"
                             " service name from registry: %s\n",
                             aStr.getStr(), aStr2.getStr() );
+#else
+                        (void) rExc; // avoid warning about unused variable
 #endif
                     }
                 }
