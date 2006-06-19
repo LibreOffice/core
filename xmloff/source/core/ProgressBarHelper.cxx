@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:32:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "filt_pch.hxx"
 #endif
 
-#pragma hdrstop
+
 
 
 //___________________________________________________________________
@@ -61,16 +61,16 @@ const float fProgressStep = 0.5;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
                                     const sal_Bool bTempStrict)
-    : fOldPercent(0.0),
-    nRange(nDefaultProgressBarRange),
-    xStatusIndicator(xTempStatusIndicator),
-    nReference(100),
-    nValue(0),
+: xStatusIndicator(xTempStatusIndicator)
+, nRange(nDefaultProgressBarRange)
+, nReference(100)
+, nValue(0)
+, fOldPercent(0.0)
+, bStrict(bTempStrict)
+, bRepeat(sal_True)
 #ifndef PRODUCT
-    bFailure(sal_False),
+, bFailure(sal_False)
 #endif
-    bStrict(bTempStrict),
-    bRepeat(sal_True)
 {
 }
 
@@ -86,7 +86,7 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
         {
             double fPercent(nNewReference / nReference);
             double fValue(nValue * fPercent);
-            nValue = sal_Int32(nValue);
+            nValue = sal_Int32(fValue);
             nReference = nNewReference;
         }
         else
