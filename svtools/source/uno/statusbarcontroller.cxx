@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:55:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,22 +94,22 @@ StatusbarController::StatusbarController(
     const OUString& aCommandURL,
     unsigned short nID ) :
     OWeakObject()
-    ,   m_aListenerContainer( m_aMutex )
-    ,   m_xServiceManager( rServiceManager )
-    ,   m_xFrame( xFrame )
-    ,   m_aCommandURL( aCommandURL )
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_nID( nID )
+    ,   m_xFrame( xFrame )
+    ,   m_xServiceManager( rServiceManager )
+    ,   m_aCommandURL( aCommandURL )
+    ,   m_aListenerContainer( m_aMutex )
 {
 }
 
 StatusbarController::StatusbarController() :
     OWeakObject()
-    ,   m_aListenerContainer( m_aMutex )
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_nID( 0 )
+    ,   m_aListenerContainer( m_aMutex )
 {
 }
 
@@ -203,7 +203,6 @@ throw ( Exception, RuntimeException )
     const rtl::OUString aIdentifier( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
 
     bool bInitialized( true );
-    bool bBindListener( false );
 
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
@@ -367,40 +366,40 @@ throw ( RuntimeException )
 
 // XStatusbarController
 ::sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL StatusbarController::mouseMove(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 void SAL_CALL StatusbarController::command(
-    const ::com::sun::star::awt::Point& aPos,
-    ::sal_Int32 nCommand,
-    ::sal_Bool bMouseEvent,
-    const ::com::sun::star::uno::Any& aData )
+    const ::com::sun::star::awt::Point&,
+    ::sal_Int32,
+    ::sal_Bool,
+    const ::com::sun::star::uno::Any& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
 void SAL_CALL StatusbarController::paint(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-    const ::com::sun::star::awt::Rectangle& rOutputRectangle,
-    ::sal_Int32 nItemId,
-    ::sal_Int32 nStyle )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&,
+    const ::com::sun::star::awt::Rectangle&,
+    ::sal_Int32,
+    ::sal_Int32 )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -455,11 +454,11 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
-                if ( pIter != m_aListenerMap.end() )
+                URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
+                if ( aIter != m_aListenerMap.end() )
                 {
-                    Reference< XDispatch > xOldDispatch( pIter->second );
-                    pIter->second = xDispatch;
+                    Reference< XDispatch > xOldDispatch( aIter->second );
+                    aIter->second = xDispatch;
 
                     try
                     {
