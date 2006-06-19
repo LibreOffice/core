@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sessionlistener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:50:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ class SessionListener :   // interfaces
         //---------------------------------------
         // XInterface, XTypeProvider, XServiceInfo
 
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         #ifdef ENABLE_AUTODOC_FIX
