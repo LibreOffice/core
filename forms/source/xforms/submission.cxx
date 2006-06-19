@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:38:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -610,13 +610,13 @@ void SAL_CALL Submission::submit( ) throw ( VetoException, WrappedTargetExceptio
     submitWithInteraction( NULL );
 }
 
-void SAL_CALL Submission::addSubmissionVetoListener( const Reference< XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
+void SAL_CALL Submission::addSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ ) throw (NoSupportException, RuntimeException)
 {
     // TODO
     throw NoSupportException();
 }
 
-void SAL_CALL Submission::removeSubmissionVetoListener( const Reference< XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException)
+void SAL_CALL Submission::removeSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ ) throw (NoSupportException, RuntimeException)
 {
     // TODO
     throw NoSupportException();
