@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:33:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ using namespace ::com::sun::star;
 
 // =======================================================================
 
-static sal_Char* pDbgHelpText[] =
+static const sal_Char* pDbgHelpText[] =
 {
 "Object Test\n",
 "------------------------------------------\n",
@@ -1363,7 +1363,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
     {
         DbgInfoDialog aInfoDialog( this, TRUE );
         XubString aHelpText;
-        sal_Char** pHelpStrs = pDbgHelpText;
+        const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
         {
             aHelpText.AppendAscii( *pHelpStrs );
@@ -1408,12 +1408,12 @@ void DbgInfoDialog::SetInfoText( const XubString& rStr )
     maListBox.Clear();
     XubString aStr = rStr;
     aStr.ConvertLineEnd( LINEEND_LF );
-    USHORT nIndex = 0;
+    USHORT nStrIndex = 0;
     USHORT nFoundIndex;
     do
     {
-        nFoundIndex = aStr.Search( _LF, nIndex );
-        XubString aTextParagraph = aStr.Copy( nIndex, nFoundIndex-nIndex );
+        nFoundIndex = aStr.Search( _LF, nStrIndex );
+        XubString aTextParagraph = aStr.Copy( nStrIndex, nFoundIndex-nStrIndex );
         if ( mbHelpText )
         {
             long    nMaxWidth = maListBox.GetOutputSizePixel().Width()-30;
@@ -1445,7 +1445,7 @@ void DbgInfoDialog::SetInfoText( const XubString& rStr )
             }
         }
         maListBox.InsertEntry( aTextParagraph );
-        nIndex = nFoundIndex+1;
+        nStrIndex = nFoundIndex+1;
     }
     while ( nFoundIndex != STRING_NOTFOUND );
     maListBox.SetUpdateMode( TRUE );
@@ -1511,7 +1511,7 @@ void DbgDialogTest( Window* pWindow )
         {
             XubString       aText = pChild->GetText();
             XubString       aErrorText = aText;
-            USHORT          nAccelPos;
+            USHORT          nAccelPos = STRING_NOTFOUND;
             xub_Unicode     cAccel = 0;
             if ( aErrorText.Len() > 128 )
             {
@@ -1977,13 +1977,12 @@ void DbgPrintShell( const char* pLine )
         OutputDebugString( aDbgOutBuf );
         return;
     }
+
+    DbgPrintWindow( pLine );
 #endif
 #ifdef UNX
     fprintf( stderr, "%s\n", pLine );
-    return;
 #endif
-
-    DbgPrintWindow( pLine );
 }
 
 // =======================================================================
