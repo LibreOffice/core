@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:35:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,6 +246,7 @@ class SalGtkFilePicker :
         // XEventListener
         //------------------------------------------------
 
+        using cppu::WeakComponentImplHelperBase::disposing;
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);
 
@@ -336,7 +337,14 @@ class SalGtkFilePicker :
 
         ::rtl::OUString m_aCurrentFilter;
 
-          GtkWidget  *getWidget( sal_Int16 nControlId, GType *pType = NULL);
+        bool bVersionWidthUnset;
+        sal_Bool mbPreviewState;
+        gulong mHID_Preview;
+        GtkWidget* m_pPreview;
+        sal_Int32 m_PreviewImageWidth;
+        sal_Int32 m_PreviewImageHeight;
+
+        GtkWidget  *getWidget( sal_Int16 nControlId, GType *pType = NULL);
 
         void SetCurFilter( const OUString& rFilter );
         void SetFilters();
@@ -348,14 +356,6 @@ class SalGtkFilePicker :
                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
         void updateCurrentFilterFromName(const gchar* filtername);
         void unselect_type();
-
-        bool bVersionWidthUnset;
-        sal_Bool mbPreviewState;
-        gulong mHID_Preview;
-        GtkWidget* m_pPreview;
-        sal_Int32 m_PreviewImageWidth;
-        sal_Int32 m_PreviewImageHeight;
-
         void InitialMapping();
 
         void HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction,
