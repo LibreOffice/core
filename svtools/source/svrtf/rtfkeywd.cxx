@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:36:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1174,7 +1174,7 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 };
 
 
-
+extern "C" {
 static int
 #if defined( WNT )
  __cdecl
@@ -1205,6 +1205,8 @@ _Optlink
     }
 
     return nRet;
+}
+
 }
 
 int GetRTFToken( const String& rSearch )
