@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:18:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,26 +240,28 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     // Zuerst ChildWindow im SDT suchen; "Uberlagerungen m"ussen mit einem
     // ChildWindowContext realisiert werden
     SfxApplication *pApp = SFX_APP();
-    SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-    for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
     {
-        pFact = rFactories[nFactory];
-        if ( pFact->nId == nId )
+        SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
         {
-            SfxChildWinInfo& rFactInfo = pFact->aInfo;
-            if ( rInfo.bVisible )
+            pFact = rFactories[nFactory];
+            if ( pFact->nId == nId )
             {
-                if ( pBindings )
-                    pBindings->ENTERREGISTRATIONS();
-                SfxChildWinInfo aInfo = rFactInfo;
-                Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
-                pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
-                Application::SetSystemWindowMode( nOldMode );
-                if ( pBindings )
-                    pBindings->LEAVEREGISTRATIONS();
-            }
+                SfxChildWinInfo& rFactInfo = pFact->aInfo;
+                if ( rInfo.bVisible )
+                {
+                    if ( pBindings )
+                        pBindings->ENTERREGISTRATIONS();
+                    SfxChildWinInfo aInfo = rFactInfo;
+                    Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
+                    pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
+                    Application::SetSystemWindowMode( nOldMode );
+                    if ( pBindings )
+                        pBindings->LEAVEREGISTRATIONS();
+                }
 
-            break;
+                break;
+            }
         }
     }
 
@@ -624,7 +626,7 @@ SfxChildAlignment SfxChildWindowContext::GetAlignment() const
         return SFX_ALIGN_NOALIGNMENT;
 }
 
-void SfxChildWindowContext::Resizing( Size& rSize )
+void SfxChildWindowContext::Resizing( Size& )
 {
 }
 
@@ -722,16 +724,16 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
         // Dockt nicht in einem Splitwindow
         return sal_True;
     aStr.Erase(0, nPos+1);
-    Point aPos;
-    Size aSize;
-    if ( GetPosSizeFromString( aStr, aPos, aSize ) )
+    Point aChildPos;
+    Size aChildSize;
+    if ( GetPosSizeFromString( aStr, aChildPos, aChildSize ) )
     {
         if ( pSize )
-            *pSize = aSize;
+            *pSize = aChildSize;
         if ( pLine )
-            *pLine = (sal_uInt16) aPos.X();
+            *pLine = (sal_uInt16) aChildPos.X();
         if ( pPos )
-            *pPos = (sal_uInt16) aPos.Y();
+            *pPos = (sal_uInt16) aChildPos.Y();
         return sal_True;
     }
     return sal_False;
