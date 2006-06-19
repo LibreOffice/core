@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfentrd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:54:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,15 +582,15 @@ sal_Bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
 }
 
 DXFBoundaryPathData::DXFBoundaryPathData() :
-    bIsPolyLine( sal_True ),
-    nPointIndex( 0 ),
     nFlags( 0 ),
     nHasBulgeFlag( 0 ),
     nIsClosedFlag( 0 ),
     nPointCount( 0 ),
-    nEdgeCount( 0 ),
     fBulge( 0.0 ),
     nSourceBoundaryObjects( 0 ),
+    nEdgeCount( 0 ),
+    bIsPolyLine( sal_True ),
+    nPointIndex( 0 ),
     pP( NULL )
 {
 }
@@ -670,11 +670,10 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
 DXFHatchEntity::DXFHatchEntity() :
     DXFBasicEntity( DXF_HATCH ),
     bIsInBoundaryPathContext( sal_False ),
-    pBoundaryPathData( NULL ),
     nCurrentBoundaryPathIndex( -1 ),
-    nBoundaryPathCount( 0 ),
     nFlags( 0 ),
     nAssociativityFlag( 0 ),
+    nBoundaryPathCount( 0 ),
     nHatchStyle( 0 ),
     nHatchPatternType( 0 ),
     fHatchPatternAngle( 0.0 ),
@@ -682,7 +681,8 @@ DXFHatchEntity::DXFHatchEntity() :
     nHatchDoubleFlag( 0 ),
     nHatchPatternDefinitionLines( 0 ),
     fPixelSize( 1.0 ),
-    nNumberOfSeedPoints( 0 )
+    nNumberOfSeedPoints( 0 ),
+    pBoundaryPathData( NULL )
 {
 }
 
