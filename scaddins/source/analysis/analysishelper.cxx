@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:28:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 }
 
 
-sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear, sal_Bool bLeapYear )
+sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16, sal_Bool bLeapYear )
 {
 
     if( nMonth != 2 )
@@ -568,7 +568,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 }
 
 
-void AddDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY, sal_Int32 nDD, sal_Int32 nDM, sal_Int32 nDY )
+void AddDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY, sal_Int32 /*nDD*/, sal_Int32 nDM, sal_Int32 /*nDY*/ )
 {
     sal_Int32   nD = rD;
     sal_Int32   nM = rM;
@@ -1206,6 +1206,8 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 else
                     eS = S_End;
                 break;
+            case S_End:     // to avoid compiler warning
+                break;      // loop exits anyway
         }
 
         p++;
@@ -1287,7 +1289,6 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
                 case 0:
                 case 1:
                     return ::rtl::math::round( fCost * 0.5, 0 );
-                    break;
                 default:
                     return 0.0;
             }
@@ -1372,9 +1373,9 @@ double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 }
 
 
-double GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
-    sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
-    sal_Int32 nBase ) THROWDEF_RTE_IAE
+double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /*nMat*/, sal_Int32 /*nIssue*/,
+    sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fYield*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
+    sal_Int32 /*nBase*/ ) THROWDEF_RTE_IAE
 {
     THROW_RTE;  // #87380#
 /*
@@ -1520,9 +1521,9 @@ double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
 }
 
 
-double GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
-    sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq,
-    sal_Int32 nBase ) THROWDEF_RTE_IAE
+double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /*nMat*/, sal_Int32 /*nIssue*/,
+    sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fPrice*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
+    sal_Int32 /*nBase*/ ) THROWDEF_RTE_IAE
 {
     THROW_RTE;  // #87380#
 /*
@@ -1902,7 +1903,7 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
 //  ResStringArray      aDefFuncNameArray( AnalysisResId( nCompID, rResMgr ) );
     const ResStringArray&   rArr = aArrLoader.GetStringArray();
 
-    sal_uInt16              nCount = rArr.Count();
+    sal_uInt16              nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
     sal_uInt16              n;
 
     for( n = 0 ; n < nCount ; n++ )
@@ -2256,7 +2257,7 @@ void ScaDoubleList::Append(
 
 
 
-sal_Bool ScaDoubleList::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+sal_Bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     return sal_True;
 }
@@ -2595,13 +2596,13 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) 
 
 void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
 {
-    sal_Int32       nE = aMultPars.getLength();
+    sal_Int32       nEle = aMultPars.getLength();
     sal_Bool        bEmpty0 = eAH == AH_EmpyAs0;
     sal_Bool        bErrOnEmpty = eAH == AH_EmptyAsErr;
 
-    for( sal_Int32 n = 0 ; n < nE ; n++ )
+    for( sal_Int32 i = 0 ; i < nEle ; i++ )
     {
-        const ANY&  r = aMultPars[ n ];
+        const ANY&  r = aMultPars[ i ];
         switch( r.getValueTypeClass() )
         {
             case uno::TypeClass_VOID:       break;
@@ -2647,6 +2648,10 @@ ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e ) : 
 {
     fConst = fC;
     eClass = e;
+}
+
+ConvertData::~ConvertData()
+{
 }
 
 
@@ -2712,7 +2717,7 @@ double ConvertData::Convert(
     if( Class() != r.Class() )
         THROW_IAE;
 
-    nLevFrom -= nLevTo;                         // effectiv level
+    nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );    // effective level
 
     f *= r.fConst / fConst;
 
@@ -2736,6 +2741,9 @@ double ConvertData::ConvertFromBase( double f, sal_Int16 n ) const
 
 
 
+ConvertDataLinear::~ConvertDataLinear()
+{
+}
 
 double ConvertDataLinear::Convert(
     double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const THROWDEF_RTE_IAE
