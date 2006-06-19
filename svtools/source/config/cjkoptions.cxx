@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:54:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,8 +167,6 @@ SvtCJKOptions_Impl::~SvtCJKOptions_Impl()
  ---------------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
 {
-    sal_Bool bModified = sal_False;
-
     if (
         !bROCJKFont          &&
         !bROVerticalText     &&
@@ -262,7 +260,7 @@ void SvtCJKOptions_Impl::Load()
 /*-- 10.04.01 12:41:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
+void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
 }
