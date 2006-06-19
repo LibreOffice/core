@@ -4,9 +4,9 @@
  *
  *  $RCSfile: database.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:59:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 #include <tools/debug.hxx>
 #include <database.hxx>
 #include <globals.hxx>
-#pragma hdrstop
-
 
 /****************** SvIdlDataBase ****************************************/
 /*************************************************************************
@@ -66,11 +64,11 @@ void PrimeNumber(){
 */
 
 SvIdlDataBase::SvIdlDataBase()
-    : bIsModified( FALSE )
-    , bExport( FALSE )
+    : bExport( FALSE )
+    , nUniqueId( 0 )
+    , bIsModified( FALSE )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
-    , nUniqueId( 0 )
 {
     //PrimeNumber();
 }
@@ -723,9 +721,9 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
             ULONG n;
             if( FindId( pTok->GetString(), &n ) )
             {
-                for( ULONG n = 0; n < aAttrList.Count(); n++ )
+                for( ULONG i = 0; i < aAttrList.Count(); i++ )
                 {
-                    SvMetaAttribute * pAttr = aAttrList.GetObject( n );
+                    SvMetaAttribute * pAttr = aAttrList.GetObject( i );
                     if( pAttr->GetSlotId() == pTok->GetString() )
                         return pAttr;
                 }
@@ -749,9 +747,9 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
     ULONG n;
     if( FindId( rId, &n ) )
     {
-        for( ULONG n = 0; n < aAttrList.Count(); n++ )
+        for( ULONG i = 0; i < aAttrList.Count(); i++ )
         {
-            SvMetaAttribute * pAttr = aAttrList.GetObject( n );
+            SvMetaAttribute * pAttr = aAttrList.GetObject( i );
             if( pAttr->GetSlotId() == rId )
                 return pAttr;
         }
@@ -1134,33 +1132,8 @@ BOOL SvIdlWorkingBase::WriteCSource( SvStream & rOutStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvIdlWorkingBase::WriteSfxItem( SvStream & rOutStm )
+BOOL SvIdlWorkingBase::WriteSfxItem( SvStream & )
 {
-/*
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-        {
-            const SvMetaItemMemberList & rItemList = pModule->GetItemList();
-            for( ULONG i = 0; i < rItemList.Count(); i++ )
-            {
-                SvMetaItem * pItem = rItemList.GetObject( i );
-                if( HAS_BASE( SvMetaItem, pItem ) )
-                {
-                    // Header
-                    ((SvMetaItem*)pItem)->WriteSfxItem( *this, rOutStm, TRUE );
-                    // Source
-                    ((SvMetaItem*)pItem)->WriteSfxItem( *this, rOutStm, FALSE );
-                }
-            }
-        }
-    }
-    return TRUE;
-*/
     return FALSE;
 }
 
