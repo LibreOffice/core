@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:41:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-#pragma hdrstop
-
 #include "sfx.hrc"
 #include "docfilt.hxx"
 #include "docfac.hxx"
@@ -73,13 +71,13 @@ namespace css = ::com::sun::star;
 
 //========================================================================
 
-DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 );
+DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 )
 
 //========================================================================
 
-DBG_NAME(SfxObjectFactory);
+DBG_NAME(SfxObjectFactory)
 
-static SfxObjectFactoryArr_Impl* pObjFac = 0;
+//static SfxObjectFactoryArr_Impl* pObjFac = 0;
 
 //========================================================================
 
@@ -107,7 +105,7 @@ struct SfxObjectFactory_Impl
 
 //========================================================================
 
-SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool bForceLoad ) const
+SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool /*bForceLoad*/ ) const
 {
     return pImpl->pFilterContainer;
 }
@@ -119,10 +117,9 @@ SfxObjectFactory::SfxObjectFactory
     const SvGlobalName&     rName,
     SfxObjectShellFlags     nFlagsP,
     const char*             pName
-)
-    : nFlags( nFlagsP ),
-    pShortName( pName ),
-    pImpl( new SfxObjectFactory_Impl )
+) :    pShortName( pName ),
+       pImpl( new SfxObjectFactory_Impl ),
+       nFlags( nFlagsP )
 {
     DBG_CTOR(SfxObjectFactory, 0);
     pImpl->pFilterContainer = new SfxFilterContainer( String::CreateFromAscii( pName ) );
