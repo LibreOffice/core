@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:00:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,6 +469,7 @@ PropertyReset::PropertyReset(NodeUpdate * _pParent, OUString const & _aName)
 
 void PropertyReset::writeToLayer(backenduno::XLayerHandler * _pLayer)
 {
+    (void) _pLayer; // avoid warning about unused parameter
     OSL_ASSERT(_pLayer);
     // skip - nothing to write
 }
