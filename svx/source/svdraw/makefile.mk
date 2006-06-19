@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 00:22:58 $
+#   last change: $Author: hr $ $Date: 2006-06-19 16:33:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,12 @@ EXCEPTIONSFILES= \
          $(SLO)$/svdouno.obj         \
          $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdpagv.obj		 \
+         $(SLO)$/svdcrtv.obj         \
+         $(SLO)$/svdedtv1.obj        \
+         $(SLO)$/svdobj.obj          \
+         $(SLO)$/svdoimp.obj         \
+         $(SLO)$/svdpage.obj         \
+         $(SLO)$/svdxcgv.obj		 \
          $(SLO)$/svdoashp.obj
          
 
