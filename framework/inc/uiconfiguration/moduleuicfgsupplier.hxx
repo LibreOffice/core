@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:40:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,8 @@ namespace framework
     {
         public:
             //  XInterface, XTypeProvider, XServiceInfo
-            DECLARE_XINTERFACE
-            DECLARE_XTYPEPROVIDER
+            FWK_DECLARE_XINTERFACE
+            FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
             ModuleUIConfigurationManagerSupplier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
