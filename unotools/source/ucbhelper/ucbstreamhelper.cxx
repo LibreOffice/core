@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:24:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace utl
 
 static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode,
         Reference < XInteractionHandler > xInteractionHandler,
-        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron, sal_Bool bEnsureFileExists )
+        UcbLockBytesHandler* pHandler, sal_Bool /*bForceSynchron*/, sal_Bool bEnsureFileExists )
 {
     SvStream* pStream = NULL;
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
@@ -79,7 +79,7 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
         UcbLockBytesRef xLockBytes;
         if ( eOpenMode & STREAM_WRITE )
         {
-            sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC );
+            sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC ) != 0;
             if ( bTruncate )
             {
                 try
@@ -198,7 +198,7 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream )
     }
 
     return pStream;
-};
+}
 
 SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream )
 {
@@ -217,7 +217,7 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream )
         return CreateStream( xStream->getInputStream() );
 
     return pStream;
-};
+}
 
 SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, sal_Bool bCloseStream )
 {
@@ -258,4 +258,4 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream, sal_Bool
     return pStream;
 };
 
-};
+}
