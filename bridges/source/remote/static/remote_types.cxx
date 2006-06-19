@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remote_types.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:43:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@ sal_Bool SAL_CALL remote_relatesToInterface2( typelib_TypeDescription * pTypeDes
             TYPELIB_DANGER_RELEASE( pTD );
             return bRel;
         }
-
+        default:
+            break;
         }
     }
     case typelib_TypeClass_STRUCT:
@@ -81,7 +82,10 @@ sal_Bool SAL_CALL remote_relatesToInterface2( typelib_TypeDescription * pTypeDes
                 TYPELIB_DANGER_RELEASE( pTD );
                 if (bRel)
                     return sal_True;
+                break;
             }
+            default:
+                break;
             }
         }
         if (pComp->pBaseTypeDescription)
