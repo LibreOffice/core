@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ca_type.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:34:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,10 @@ BuiltInType::inq_IsConst() const
 }
 
 void
-BuiltInType::inq_Get_Text( StreamStr &          o_rPreName,
+BuiltInType::inq_Get_Text( StreamStr &          ,
                            StreamStr &          o_rName,
-                           StreamStr &          o_rPostName,
-                           const DisplayGate &  i_rGate ) const
+                           StreamStr &          ,
+                           const DisplayGate &  ) const
 {
     switch (eSpecialisation)
     {
@@ -113,10 +113,10 @@ NullType::inq_IsConst() const
 }
 
 void
-NullType::inq_Get_Text( StreamStr &          o_rPreName,
-                        StreamStr &          o_rName,
-                        StreamStr &          o_rPostName,
-                        const DisplayGate &  i_rGate ) const
+NullType::inq_Get_Text( StreamStr &          ,
+                        StreamStr &          ,
+                        StreamStr &          ,
+                        const DisplayGate &  ) const
 {
 }
 
