@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:00:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,41 +83,43 @@ BOOL ParseCommandLine( int argc, char* argv[])
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
-        if ( ByteString( argv[ i ]).ToUpperAscii() == "-I" ) {
+        ByteString sSwitch( argv[ i ] );
+        sSwitch.ToUpperAscii();
+        if ( sSwitch == "-I" ) {
             nState = STATE_INPUT; // next tokens specifies source files
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii()  == "-O" ) {
+        else if ( sSwitch  == "-O" ) {
             nState = STATE_OUTPUT; // next token specifies the dest file
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-P" ) {
+        else if ( sSwitch == "-P" ) {
             nState = STATE_PRJ; // next token specifies the cur. project
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-R" ) {
+        else if ( sSwitch == "-R" ) {
             nState = STATE_ROOT; // next token specifies path to project root
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-QQ" ) {
+        else if ( sSwitch == "-QQ" ) {
             bQuiet = true;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-M" ) {
+        else if ( sSwitch == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
+        else if ( sSwitch == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
+        else if ( sSwitch == "-UTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = TRUE;
         }
-/*      else if ( ByteString( argv[ i ]).ToUpperAscii() == "-NOUTF8" ) {
+/*      else if ( sSwitch == "-NOUTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = FALSE;
-        }
-/*      else if ( ByteString( argv[ i ]).ToUpperAscii() == "-ULF" ) {
+        }*/
+/*      else if ( sSwitch == "-ULF" ) {
             nState = STATE_ULF;
             bULF = TRUE;
         }*/
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" ) {
+        else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
         }
         else {
@@ -125,7 +127,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 case STATE_NON: {
                     return FALSE;   // no valid command line
                 }
-                break;
+                //break;
                 case STATE_INPUT: {
                     sInputFile = argv[ i ];
                     bInput = TRUE; // source file found
