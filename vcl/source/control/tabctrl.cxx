@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:50:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,12 @@ struct ImplTabItem
     BOOL                mbFullVisible;
 };
 
-DECLARE_LIST( ImplTabItemList, ImplTabItem* );
+DECLARE_LIST( ImplTabItemList, ImplTabItem* )
 
 // -----------------------------------------------------------------------
 
+#if 0
+// not used
 #define TABCOLORCOUNT   10
 
 static ColorData aImplTabColorAry[TABCOLORCOUNT] =
@@ -118,6 +120,7 @@ static ColorData aImplTabColorAry[TABCOLORCOUNT] =
     RGB_COLORDATA( 248, 180, 168 ),
     RGB_COLORDATA( 248, 216, 168 )
 };
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -444,7 +447,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth ) const
 
 // -----------------------------------------------------------------------
 
-Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
+Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight )
 {
     Size aWinSize = Control::GetOutputSizePixel();
     if ( nWidth == -1 )
@@ -458,7 +461,7 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
                           Size( nWidth-TAB_OFFSET*2, nHeight-TAB_OFFSET*2 ) );
     }
 
-    if ( nPos == TAB_PAGERECT )
+    if ( nItemPos == TAB_PAGERECT )
     {
         USHORT nLastPos;
         if ( mnCurPageId )
@@ -618,7 +621,7 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
         ImplPosScrollBtns();
     }
 
-    return mpItemList->GetObject( nPos )->maRect;
+    return mpItemList->GetObject( nItemPos )->maRect;
 }
 
 // -----------------------------------------------------------------------
@@ -759,7 +762,7 @@ void TabControl::ImplActivateTabPage( BOOL bNext )
 
 // -----------------------------------------------------------------------
 
-void TabControl::ImplSetFirstPagePos( USHORT nPagePos )
+void TabControl::ImplSetFirstPagePos( USHORT )
 {
     return; // was only required for single line
 }
@@ -884,7 +887,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
             nState |= CTRL_STATE_ROLLOVER;
             ImplTabItem* pI;
             int idx=0;
-            while( (pI = mpItemList->GetObject(idx++)) )
+            while( (pI = mpItemList->GetObject(idx++)) != NULL )
                 if( (pI != pItem) && (pI->maRect.IsInside( GetPointerPosPixel() ) ) )
                 {
                     nState &= ~CTRL_STATE_ROLLOVER; // avoid multiple highlighted tabs
@@ -982,7 +985,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TabControl, ImplScrollBtnHdl, PushButton*, pBtn )
+IMPL_LINK( TabControl, ImplScrollBtnHdl, PushButton*, EMPTYARG )
 {
     ImplSetScrollBtnsState();
     return 0;
@@ -1033,7 +1036,6 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
 
     // find current item
-    ImplTabItem* pPrevCurItem = NULL;
     ImplTabItem* pCurItem = NULL;
     ImplTabItem* pItem = mpItemList->First();
     pItem = mpItemList->First();
@@ -1462,7 +1464,7 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -1590,7 +1592,7 @@ void TabControl::InsertPage( const ResId& rResId, USHORT nPos )
 
     // ID
     if ( nObjMask & RSC_TABCONTROLITEM_ID )
-        nItemId = ReadLongRes();
+        nItemId = sal::static_int_cast<USHORT>(ReadLongRes());
 
     // Text
     XubString aTmpStr;
@@ -1602,7 +1604,7 @@ void TabControl::InsertPage( const ResId& rResId, USHORT nPos )
     if ( nObjMask & RSC_TABCONTROLITEM_PAGERESID )
     {
         ImplTabItem* pItem = mpItemList->GetObject( GetPagePos( nItemId ) );
-        pItem->mnTabPageResId = ReadLongRes();
+        pItem->mnTabPageResId = sal::static_int_cast<USHORT>(ReadLongRes());
     }
 }
 
@@ -1794,7 +1796,7 @@ USHORT TabControl::GetCurPageId() const
 
 // -----------------------------------------------------------------------
 
-void TabControl::SetFirstPageId( USHORT nPageId )
+void TabControl::SetFirstPageId( USHORT )
 {
     return; // was only required for single line
 }
@@ -2031,7 +2033,7 @@ Rectangle TabControl::GetTabPageBounds( USHORT nPage ) const
         std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPage );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
-            if( it->second >= 0 && it->second < mpTabCtrlData->maTabRectangles.size() )
+            if( it->second >= 0 && it->second < static_cast<int>(mpTabCtrlData->maTabRectangles.size()) )
             {
                 aRet = mpTabCtrlData->maTabRectangles[ it->second ];
                 aRet.Union( const_cast<TabControl*>(this)->ImplGetTabRect( TAB_PAGERECT ) );
