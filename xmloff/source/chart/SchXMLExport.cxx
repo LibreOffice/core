@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 11:40:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,8 +300,6 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
 {
     uno::Reference< chart::XDiagram > xDiagram = rChartDoc->getDiagram();
 
-    // determine if data is in rows
-    sal_Bool bSwitchData = sal_False;
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
     rtl::OUString sChartType ( xDiagram->getDiagramType());
     if( xDiaProp.is())
@@ -666,6 +664,10 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                     case chart::ChartLegendPosition_BOTTOM:
                         msString = GetXMLToken(XML_BOTTOM);
                         break;
+                    case chart::ChartLegendPosition_NONE:
+                    case chart::ChartLegendPosition_MAKE_FIXED_SIZE:
+                        // nothing
+                        break;
                 }
 
                 // export anchor position
@@ -940,7 +942,6 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     // variables for autostyles
     uno::Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
-    sal_Int32 nStyleFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
     rtl::OUString aASName;
     sal_Bool bHasTwoYAxes = sal_False;
     sal_Bool bIs3DChart = sal_False;
@@ -1088,7 +1089,6 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     msStringBuffer.setLength( 0 );
     SvXMLElementExport* pSeries = NULL;
     rtl::OUString aSeriesASName;
-    sal_Bool bWrite = sal_False;
     sal_Int32 nAttachedAxis;
 
 
@@ -1825,7 +1825,6 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
     sal_Int32 nNumberFormat;
     uno::Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
-    sal_Int32 nStyleFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
     rtl::OUString aASName;
 
     // get some properties from document first
