@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:15:13 $
+#   last change: $Author: hr $ $Date: 2006-06-19 19:33:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..$/..
 PRJNAME=vcl
 TARGET=glyphs
 
+ENABLE_EXCEPTIONS=true
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
