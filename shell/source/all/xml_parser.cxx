@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml_parser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:42:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:14:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,14 +113,17 @@ xml_parser::~xml_parser()
    different events */
 
 //###################################################
-extern "C" void xml_parser::xml_start_element_handler(
-    void* UserData, const XML_Char* name, const XML_Char** atts)
+extern "C"
+{
+
+static void xml_start_element_handler(void* UserData, const XML_Char* name, const XML_Char** atts)
 {
     assert(UserData != NULL);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
 
-    if (pImpl->document_handler_)
+    i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
+    if (pDocHdl)
     {
         xml_tag_attribute_container_t attributes;
 
@@ -132,47 +135,50 @@ extern "C" void xml_parser::xml_start_element_handler(
             i += 2; // skip to next pair
         }
 
-        pImpl->document_handler_->start_element(
+        pDocHdl->start_element(
             name, get_local_name(name), attributes);
     }
 }
 
 //###################################################
-extern "C" void xml_parser::xml_end_element_handler(
-    void* UserData, const XML_Char* name)
+static void xml_end_element_handler(void* UserData, const XML_Char* name)
 {
     assert(UserData);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
-    if (pImpl->document_handler_)
-        pImpl->document_handler_->end_element(name, get_local_name(name));
+    i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
+    if (pDocHdl)
+        pDocHdl->end_element(name, get_local_name(name));
 }
 
 //###################################################
-extern "C" void xml_parser::xml_character_data_handler(
-    void* UserData, const XML_Char* s, int len)
+static void xml_character_data_handler(void* UserData, const XML_Char* s, int len)
 {
     assert(UserData);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
-    if (pImpl->document_handler_)
+    i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
+    if (pDocHdl)
     {
         if (has_only_whitespaces(s,len))
-            pImpl->document_handler_->ignore_whitespace(string_t(s, len));
+            pDocHdl->ignore_whitespace(string_t(s, len));
         else
-            pImpl->document_handler_->characters(string_t(s, len));
+            pDocHdl->characters(string_t(s, len));
     }
 }
 
 //###################################################
-extern "C" void xml_parser::xml_comment_handler(void* UserData, const XML_Char* Data)
+static void xml_comment_handler(void* UserData, const XML_Char* Data)
 {
     assert(UserData);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
-    if (pImpl->document_handler_)
-        pImpl->document_handler_->comment(Data);
+    i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
+    if (pDocHdl)
+        pDocHdl->comment(Data);
 }
+
+} // extern "C"
 
 //###################################################
 void xml_parser::init()
