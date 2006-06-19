@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addxmltostorageoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:46:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ SvtAddXMLToStorageOptions::SvtAddXMLToStorageOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( !m_pDataContainer )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtAddXMLToStorageOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtAddXMLToStorageOptions_Impl::ctor()");
         m_pDataContainer = new SvtAddXMLToStorageOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_ADDXMLTOSTORAGEOPTIONS);
