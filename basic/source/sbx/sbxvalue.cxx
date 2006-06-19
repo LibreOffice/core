@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvalue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:56:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ SbxUINT64 &SbxUINT64::operator /= ( const SbxUINT64 &r )
 // Das Default-Handling setzt nur den Fehlercode.
 
 #ifndef WNT
-#if defined ( UNX ) || defined ( OS2 ) && (defined ( BLC ) || defined ( WTC ))
+#if defined ( UNX )
 int matherr( struct exception* p )
 #else
 int matherr( struct _exception* p )
@@ -221,7 +221,7 @@ int matherr( struct _exception* p )
 {
     switch( p->type )
     {
-#if defined ( UNX ) || defined ( OS2 )
+#if defined ( UNX )
         case OVERFLOW: SbxBase::SetError( SbxERR_OVERFLOW ); break;
 #else
         case _OVERFLOW: SbxBase::SetError( SbxERR_OVERFLOW ); break;
@@ -289,7 +289,8 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
     aData.eType = SbxDataType( n );
 }
 
-SbxValue::SbxValue( const SbxValue& r ) : SbxBase( r )
+SbxValue::SbxValue( const SbxValue& r )
+    : SvRefBase( r ), SbxBase( r )
 {
     if( !r.CanRead() )
     {
@@ -316,6 +317,7 @@ SbxValue::SbxValue( const SbxValue& r ) : SbxBase( r )
                 if( aData.pDecimal )
                     aData.pDecimal->addRef();
                 break;
+            default: break;
         }
     }
 }
@@ -601,10 +603,10 @@ BOOL SbxValue::Get( SbxValues& rRes ) const
 
 BOOL SbxValue::GetNoBroadcast( SbxValues& rRes )
 {
-    USHORT nFlags = GetFlags();
+    USHORT nFlags_ = GetFlags();
     SetFlag( SBX_NO_BROADCAST );
     BOOL bRes = Get( rRes );
-    SetFlags( nFlags );
+    SetFlags( nFlags_ );
     return bRes;
 }
 
@@ -817,7 +819,7 @@ BOOL SbxValue::PutStringExt( const XubString& r )
 
     // #34939: Bei Strings. die eine Zahl enthalten und wenn this einen
     // Num-Typ hat, Fixed-Flag setzen, damit der Typ nicht veraendert wird
-    USHORT nFlags = GetFlags();
+    USHORT nFlags_ = GetFlags();
     if( ( eTargetType >= SbxINTEGER && eTargetType <= SbxCURRENCY ) ||
         ( eTargetType >= SbxCHAR && eTargetType <= SbxUINT ) ||
         eTargetType == SbxBOOL )
@@ -836,7 +838,7 @@ BOOL SbxValue::PutStringExt( const XubString& r )
     if( !bRet )
         ResetError();
 
-    SetFlags( nFlags );
+    SetFlags( nFlags_ );
     return bRet;
 }
 
@@ -981,9 +983,9 @@ BOOL SbxValue::ImpIsNumeric( BOOL bOnlyIntntl ) const
         {
             XubString s( *aData.pString );
             double n;
-            SbxDataType t;
+            SbxDataType t2;
             USHORT nLen = 0;
-            if( ImpScan( s, n, t, &nLen, /*bAllowIntntl*/FALSE, bOnlyIntntl ) == SbxERR_OK )
+            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/FALSE, bOnlyIntntl ) == SbxERR_OK )
                 return BOOL( nLen == s.Len() );
         }
         return FALSE;
@@ -1054,6 +1056,7 @@ BOOL SbxValue::SetType( SbxDataType t )
                             aData.pObj->ReleaseRef();
                     }
                     break;
+                default: break;
             }
             // Das klappt immer, da auch die Float-Repraesentationen 0 sind.
             memset( &aData, 0, sizeof( SbxValues ) );
@@ -1259,6 +1262,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                         else
                             aL.nLong = ~aL.nLong;
                         break;
+                    default: break;
                 }
             }
         }
