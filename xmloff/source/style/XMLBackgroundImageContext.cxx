@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:36:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,8 @@ void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
                         ? GraphicLocation_MIDDLE_BOTTOM
                         : GraphicLocation_RIGHT_BOTTOM);
         break;
+    default:
+        break;
     }
 }
 
@@ -195,6 +197,8 @@ void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
                 : (GraphicLocation_MIDDLE_MIDDLE==eVert
                         ? GraphicLocation_RIGHT_MIDDLE
                         : GraphicLocation_RIGHT_BOTTOM);
+        break;
+    default:
         break;
     }
 }
