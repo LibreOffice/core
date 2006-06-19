@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:06:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,6 +397,7 @@ private:
     Link            maAllowRenamingHdl;
     Link            maEndRenamingHdl;
 
+    using Window::ImplInit;
     SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void            ImplInitSettings( BOOL bFont, BOOL bBackground );
     SVT_DLLPRIVATE void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
