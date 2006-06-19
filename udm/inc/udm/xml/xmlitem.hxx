@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:33:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,6 @@ class EmptyElement : public Element
 
     // Local
     virtual AttrList &  inq_RefAttrs() = 0;
-    const AttrList &    inq_RefAttrs() const;
 };
 
 class PureElement : public Element
@@ -183,7 +182,6 @@ class PureElement : public Element
     // Local
     virtual Dyn< Item > &
                         inq_RefContent() = 0;
-    const Dyn< Item > & inq_RefContent() const;
 };
 
 class SglTag : public Element
@@ -273,7 +271,7 @@ class APureElement : public PureElement
     virtual Dyn< Item > &
                         inq_RefContent();
     // DATA
-    ::csv::String         sTagName;
+    ::csv::String       sTagName;
     Dyn< Item >         pContent;
 };
 
@@ -390,18 +388,8 @@ inline Item *
 Element::SetContent( DYN Item * let_dpItem )
     { do_SetContent(let_dpItem); return let_dpItem; }
 
-inline const AttrList &
-EmptyElement::inq_RefAttrs() const
-    { return const_cast< EmptyElement* >(this)->inq_RefAttrs(); }
-
-inline const Dyn< Item > &
-PureElement::inq_RefContent() const
-    { return const_cast< PureElement* >(this)->inq_RefContent(); }
 
 }   // namespace xml
 }   // namespace csi
 
-
 #endif
-
-
