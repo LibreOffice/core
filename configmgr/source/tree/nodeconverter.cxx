@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeconverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:18:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:29:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ void ONodeConverter::handle(AddNode& aAddNode)
 }
 
 //--------------------------------------------------------------------------
-void ONodeConverter::handle(RemoveNode& aRemoveNode)
+void ONodeConverter::handle(RemoveNode& /*aRemoveNode*/)
 {
     m_pNode.reset();
 }
@@ -206,6 +206,7 @@ void OCreateSubtreeAction::handle(SubtreeChange& _rChange)
 //--------------------------------------------------------------------------
 void OCreateSubtreeAction::handle(RemoveNode& _rChange)
 {
+    { (void)_rChange; }
     // we have nothing to do
     OSL_ENSURE(!m_rTree.getChild(_rChange.getNodeName()), "Removed node found in tree being built");
 }
