@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:19:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ SlideShowViewPaintListeners::SlideShowViewPaintListeners( ::osl::Mutex& rMutex )
 {
 }
 
-bool SlideShowViewPaintListeners::implNotify( const Reference< awt::XPaintListener >& rListener,
+bool SlideShowViewPaintListeners::implTypedNotify( const Reference< awt::XPaintListener >& rListener,
                                               const awt::PaintEvent&                  rEvent ) throw( uno::Exception )
 {
     rListener->windowPaint( rEvent );
@@ -160,7 +160,7 @@ SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex )
 {
 }
 
-bool SlideShowViewMouseListeners::implNotify( const Reference< awt::XMouseListener >&   rListener,
+bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseListener >&  rListener,
                                               const WrappedMouseEvent&                  rEvent ) throw( uno::Exception )
 {
     switch( rEvent.meType )
@@ -194,7 +194,7 @@ SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mut
 {
 }
 
-bool SlideShowViewMouseMotionListeners::implNotify( const Reference< awt::XMouseMotionListener >&   rListener,
+bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::XMouseMotionListener >&  rListener,
                                                     const WrappedMouseMotionEvent&                  rEvent ) throw( uno::Exception )
 {
     switch( rEvent.meType )
@@ -423,7 +423,7 @@ void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListe
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( mpPaintListeners.get() )
-        mpPaintListeners->addListener( xListener );
+        mpPaintListeners->addTypedListener( xListener );
 }
 
 void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintListener >& xListener ) throw (RuntimeException)
@@ -431,7 +431,7 @@ void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintLi
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( mpPaintListeners.get() )
-        mpPaintListeners->removeListener( xListener );
+        mpPaintListeners->removeTypedListener( xListener );
 }
 
 void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListener >& xListener ) throw (RuntimeException)
@@ -439,7 +439,7 @@ void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListe
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( mpMouseListeners.get() )
-        mpMouseListeners->addListener( xListener );
+        mpMouseListeners->addTypedListener( xListener );
 }
 
 void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseListener >& xListener ) throw (RuntimeException)
@@ -447,7 +447,7 @@ void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseLi
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( mpMouseListeners.get() )
-        mpMouseListeners->removeListener( xListener );
+        mpMouseListeners->removeTypedListener( xListener );
 }
 
 void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener ) throw (RuntimeException)
@@ -463,7 +463,7 @@ void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMous
     }
 
     if( mpMouseMotionListeners.get() )
-        mpMouseMotionListeners->addListener( xListener );
+        mpMouseMotionListeners->addTypedListener( xListener );
 }
 
 void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener ) throw (RuntimeException)
@@ -471,7 +471,7 @@ void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XM
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( mpMouseMotionListeners.get() )
-        mpMouseMotionListeners->removeListener( xListener );
+        mpMouseMotionListeners->removeTypedListener( xListener );
 
     // TODO(P1): Might be nice to deregister for mouse motion
     // events, when the last listener is gone.
