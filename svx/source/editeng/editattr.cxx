@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 #include <eeng_pch.hxx>
-
-#pragma hdrstop
 
 #include <svxfont.hxx>
 #include <flditem.hxx>
