@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,12 +223,12 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     return true;
 }
 
-char const* const* VendorBase::getRuntimePaths(int* size)
+char const* const* VendorBase::getRuntimePaths(int* /*size*/)
 {
     return NULL;
 }
 
-char const* const* VendorBase::getLibraryPaths(int* size)
+char const* const* VendorBase::getLibraryPaths(int* /*size*/)
 {
     return NULL;
 }
@@ -268,7 +268,7 @@ bool VendorBase::needsRestart() const
     return false;
 }
 
-int VendorBase::compareVersions(const rtl::OUString& sSecond) const
+int VendorBase::compareVersions(const rtl::OUString& /*sSecond*/) const
 {
     OSL_ENSURE(0, "[Java framework] VendorBase::compareVersions must be "
                "overridden in derived class.");
