@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:11:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,18 +33,10 @@
  *
  ************************************************************************/
 
-#if defined( OS2 )
-#include <svpm.h>
-#elif defined( WNT )
+#if defined WNT
+#pragma warning (push,1)
 #include <svwin.h>
-#elif defined( WIN ) || defined( DOS )
-#include <dos.h>
-#elif defined( MAC )
-#include "mac_start.h"
-#ifndef __OSUTILS__
-#include "OSUtils.h"
-#endif
-#include "mac_end.h"
+#pragma warning (pop)
 #else
 #include <time.h>
 #endif
@@ -149,15 +141,7 @@ static void DaysToDate( long nDays,
 
 Date::Date()
 {
-#if defined( OS2 )
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Datum zusammenbauen
-    nDate = ((ULONG)aDateTime.day) +
-            (((ULONG)aDateTime.month)*100) +
-            (((ULONG)aDateTime.year)*10000);
-#elif defined( WNT )
+#if defined WNT
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
@@ -165,28 +149,6 @@ Date::Date()
     nDate = ((ULONG)aDateTime.wDay) +
             (((ULONG)aDateTime.wMonth)*100) +
             (((ULONG)aDateTime.wYear)*10000);
-#elif ( defined( WIN ) || defined( DOS )) && !defined( BLC )
-    _dosdate_t aDate;
-    _dos_getdate( &aDate );
-
-    // Datum zusammenbauen
-    nDate = ((ULONG)aDate.day) +
-            (((ULONG)aDate.month)*100) +
-            (((ULONG)aDate.year)*10000);
-#elif ( defined( WIN ) || defined( DOS )) && defined( BLC )
-    dosdate_t aDate;
-    _dos_getdate( &aDate );
-
-    // Datum zusammenbauen
-    nDate = ((ULONG)aDate.day) +
-            (((ULONG)aDate.month)*100) +
-            (((ULONG)aDate.year)*10000);
-#elif defined( MAC )
-    DateTimeRec dt;
-    ::GetTime(&dt);
-    nDate = ((ULONG)dt.day) +
-            (((ULONG)dt.month)*100) +
-            (((ULONG)dt.year )*10000);
 #else
     time_t     nTmpTime;
     struct tm aTime;
@@ -249,7 +211,7 @@ USHORT Date::GetDayOfYear() const
 {
     USHORT nDay = GetDay();
     for( USHORT i = 1; i < GetMonth(); i++ )
-         nDay += ::DaysInMonth( i, GetYear() );
+         nDay = nDay + ::DaysInMonth( i, GetYear() );   // += yields a warning on MSVC, so don't use it
     return nDay;
 }
 
