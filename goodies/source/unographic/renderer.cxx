@@ -4,9 +4,9 @@
  *
  *  $RCSfile: renderer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
         { MAP_CHAR_LEN( "DestinationRect" ), UNOGRAPHIC_DESTINATIONRECT, &::getCppuType( (const awt::Rectangle*)(0)), 0, 0 },
         { MAP_CHAR_LEN( "RenderData" ), UNOGRAPHIC_RENDERDATA,  &::getCppuType( (const uno::Any*)(0)), 0, 0 },
 
-        { 0,0,0,0,0}
+        { 0,0,0,0,0,0 }
     };
 
     pRet->acquire();
