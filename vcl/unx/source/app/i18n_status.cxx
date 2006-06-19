@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:20:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ StatusWindow::StatusWindow( WinBits nWinBits ) :
 
 StatusWindow::~StatusWindow() {}
 
-void StatusWindow::setPosition( SalFrame* pFrame )
+void StatusWindow::setPosition( SalFrame* )
 {
 }
 
@@ -200,7 +200,7 @@ bool XIMStatusWindow::checkLastParent() const
     return false;
 }
 
-void XIMStatusWindow::DataChanged( const DataChangedEvent& rEvt )
+void XIMStatusWindow::DataChanged( const DataChangedEvent& )
 {
     m_aStatusText.SetSettings( GetSettings() );
     layout();
@@ -274,7 +274,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
     }
 }
 
-IMPL_LINK( XIMStatusWindow, DelayedShowHdl, void*, pDummy )
+IMPL_LINK( XIMStatusWindow, DelayedShowHdl, void*, EMPTYARG )
 {
     m_nDelayedEvent = 0;
     const SystemEnvData* pData = GetSystemData();
@@ -408,7 +408,7 @@ void IIIMPStatusWindow::layout()
         Invalidate();
 }
 
-void IIIMPStatusWindow::DataChanged( const DataChangedEvent& rEvt )
+void IIIMPStatusWindow::DataChanged( const DataChangedEvent& )
 {
     m_aStatusBtn.SetSettings( GetSettings() );
     layout();
@@ -495,10 +495,9 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
     if( pBtn == & m_aStatusBtn )
     {
         const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
-        int nIndex = m_aStatusBtn.GetCurItemId()-1;
+        unsigned int nIndex = m_aStatusBtn.GetCurItemId()-1;
         if( nIndex < rChoices.size() )
         {
-            bool bDummy; // should always be false in this case
             XSetICValues( static_cast<X11SalFrame*>(I18NStatus::get().getParent())->getInputContext()->GetContext(),
                           XNUnicodeCharacterSubset,
                           rChoices[nIndex].pData,
