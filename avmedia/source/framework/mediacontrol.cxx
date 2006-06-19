@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediacontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:17:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
     maImageList( AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
     maItem( 0, AVMEDIA_SETMASK_ALL ),
-    maTimeSlider( this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET ),
     maPlayToolBox( this, WB_3DLOOK ),
+    maTimeSlider( this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET ),
     maMuteToolBox( this, WB_3DLOOK ),
     maVolumeSlider( this, WB_HORZ | WB_DRAG | WB_SLIDERSET ),
     maZoomToolBox( this, WB_3DLOOK ),
@@ -315,7 +315,7 @@ void MediaControl::update()
 
 // ------------------------------------------------------------------------------
 
-void MediaControl::execute( const MediaItem& rItem )
+void MediaControl::execute( const MediaItem& )
 {
 }
 
@@ -510,7 +510,7 @@ IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
 
 // ------------------------------------------------------------------------------
 
-IMPL_LINK( MediaControl, implVolumeEndHdl, Slider*, p )
+IMPL_LINK( MediaControl, implVolumeEndHdl, Slider*, EMPTYARG )
 {
     return 0;
 }
@@ -632,7 +632,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
 
 // ------------------------------------------------------------------------------
 
-IMPL_LINK( MediaControl, implTimeoutHdl, Timer*, p )
+IMPL_LINK( MediaControl, implTimeoutHdl, Timer*, EMPTYARG )
 {
     update();
     maTimer.Start();
