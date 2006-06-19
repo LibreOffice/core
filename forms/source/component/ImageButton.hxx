@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageButton.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:44:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ protected:
 public:
     OImageButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(OImageButtonControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
@@ -105,15 +105,18 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XEventListener
+    // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException)
         { OControl::disposing(_rSource); }
 
-// ::com::sun::star::awt::XMouseListener
+    // XMouseListener
     virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
-    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
-    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
+    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+
+    // prevent method hiding
+    using OClickableImageBaseControl::disposing;
 };
 
 //.........................................................................
