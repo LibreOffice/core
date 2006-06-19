@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bessel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:20:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,8 +291,8 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException 
 {
     switch( nOrder )
     {
-        case 0:     return Besselk0( fNum );        break;
-        case 1:     return Besselk1( fNum );        break;
+        case 0:     return Besselk0( fNum );
+        case 1:     return Besselk1( fNum );
         default:
         {
             double      fBkp;
@@ -397,8 +397,8 @@ double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException 
 {
     switch( nOrder )
     {
-        case 0:     return Bessely0( fNum );        break;
-        case 1:     return Bessely1( fNum );        break;
+        case 0:     return Bessely0( fNum );
+        case 1:     return Bessely1( fNum );
         default:
         {
             double      fByp;
