@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:50:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef _SVX_FMCTRLER_HXX
 #include <fmctrler.hxx>
@@ -276,9 +275,9 @@ FmXPageViewWinRec::FmXPageViewWinRec(const Reference< XMultiServiceFactory >&   
     //const SdrPageViewWinRec* pWinRec,
     const SdrPageViewWindow& rWindow,
     FmXFormView* _pViewImpl)
-:   m_pViewImpl(_pViewImpl)
+    :m_xORB( _xORB )
+    ,m_pViewImpl( _pViewImpl )
     ,m_pWindow( (Window*)(&rWindow.GetOutputDevice()) )
-    ,m_xORB(_xORB)
 {
     DBG_CTOR(FmXPageViewWinRec,NULL);
 
@@ -536,14 +535,14 @@ Reference< XControlContainer >  FmXPageViewWinRec::getControlContainer() const
 //------------------------------------------------------------------------
 FmXFormView::FmXFormView(const Reference< XMultiServiceFactory >&   _xORB,
             FmFormView* _pView)
-    :m_pView(_pView)
-    ,m_xORB( _xORB )
+    :m_xORB( _xORB )
+    ,m_pMarkedGrid(NULL)
+    ,m_pView(_pView)
     ,m_nActivationEvent(0)
     ,m_nErrorMessageEvent( 0 )
     ,m_nAutoFocusEvent( 0 )
     ,m_pWatchStoredList( NULL )
     ,m_bFirstActivation( sal_True )
-    ,m_pMarkedGrid(NULL)
 {
 }
 
@@ -637,7 +636,7 @@ void SAL_CALL FmXFormView::elementReplaced(const ContainerEvent& evt) throw( Run
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
+void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& /*evt*/) throw( RuntimeException )
 {
 }
 
@@ -729,7 +728,7 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, EMPTYTAG)
+IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, /*EMPTYTAG*/)
 {
     m_nErrorMessageEvent = 0;
     displayException( m_aAsyncError );
@@ -744,7 +743,7 @@ void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
+IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 {
     m_nActivationEvent = 0;
 
@@ -832,18 +831,6 @@ void FmXFormView::Deactivate(BOOL bDeactivateController)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::AttachControl( const Reference< XControl > & rControl, sal_Bool bDetach )
-{
-    /* wird im fmctrler gemacht */
-}
-
-//------------------------------------------------------------------------------
-void FmXFormView::AttachControls( const Reference< XControlContainer > & rCtrlContainer,
-                                  sal_Bool bDetach )
-{
-}
-
-//------------------------------------------------------------------------------
 FmFormShell* FmXFormView::GetFormShell() const
 {
     return m_pView ? m_pView->GetFormShell() : NULL;
@@ -897,7 +884,7 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
         }
         catch( const Exception& e )
         {
-            e;  // make compiler happy
+            (void)e;    // make compiler happy
         }
 
         if ( !xReturn.is() && _rControls.getLength() )
@@ -908,7 +895,7 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
+IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 {
     m_nAutoFocusEvent = 0;
 
@@ -1715,7 +1702,6 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
     // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
     ::Size aTextSize(_pOutDev->GetTextWidth(sFieldName + _rFieldPostfix), _pOutDev->GetTextHeight());
 
-    SdrModel* pModel    = m_pView->GetModel();
     MapMode   eTargetMode(_pOutDev->GetMapMode()),
               eSourceMode(MAP_100TH_MM);
 
@@ -1855,7 +1841,7 @@ FmXFormView::ObjectRemoveListener::ObjectRemoveListener( FmXFormView* pParent )
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if (rHint.ISA(SdrHint) && (((SdrHint&)rHint).GetKind() == HINT_OBJREMOVED))
         m_pParent->ObjectRemovedInAliveMode(((SdrHint&)rHint).GetObject());
@@ -2054,7 +2040,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL FmXFormView::focusGained( const FocusEvent& e ) throw (RuntimeException)
+void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (RuntimeException)
 {
     if ( m_xWindow.is() && m_pView )
     {
@@ -2063,7 +2049,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& e ) throw (RuntimeExce
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL FmXFormView::focusLost( const FocusEvent& e ) throw (RuntimeException)
+void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeException)
 {
     // when switch the focus outside the office the mark didn't change
     // so we can not remove us as focus listener
