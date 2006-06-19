@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impframe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:03:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 #ifndef _SFXCANCEL_HXX //autogen
 #include <svtools/cancel.hxx>
 #endif
-
-#pragma hdrstop
 
 #include "frame.hxx"
 #include "viewfrm.hxx"                  // SvBorder
@@ -78,57 +76,56 @@ class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase, public Sfx
 {
 friend class SfxFrame;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                     xFrame;
-    String                  aFrameIdName;
-    sal_uInt32              nType;
-    sal_uInt32              nHistoryPos;
-    SfxViewFrame*           pCurrentViewFrame;
-    SfxObjectShell*         pCurrentObjectShell;
-    SfxFrameDescriptor*     pDescr;
-    sal_uInt16              nFrameId;
-    sal_uInt16              nLocks;
-    sal_Bool                bCloseOnUnlock : 1;
-    sal_Bool                bClosing : 1;
-    sal_Bool                bPrepClosing : 1;
-    sal_Bool                bInCancelTransfers : 1;
-    sal_Bool                bOwnsBindings : 1;
-    sal_Bool                bReleasingComponent : 1;
-    sal_Bool                bFocusLocked : 1;
-    sal_Bool                bInPlace : 1;
-    SfxCancelManager*       pCancelMgr;
-    SfxCancellable*         pLoadCancellable;
-    SfxFrame*               pFrame;
-    const SfxItemSet*       pSet;
-    SfxWorkWindow*          pWorkWin;
-    SvBorder                aBorder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
+    String                    aFrameIdName;
+    sal_uInt32                nType;
+    sal_uInt32                nHistoryPos;
+    SfxViewFrame*             pCurrentViewFrame;
+    SfxObjectShell*           pCurrentObjectShell;
+    SfxFrameDescriptor*       pDescr;
+    sal_uInt16                nFrameId;
+    sal_uInt16                nLocks;
+    sal_Bool                  bCloseOnUnlock : 1;
+    sal_Bool                  bClosing : 1;
+    sal_Bool                  bPrepClosing : 1;
+    sal_Bool                  bInCancelTransfers : 1;
+    sal_Bool                  bOwnsBindings : 1;
+    sal_Bool                  bReleasingComponent : 1;
+    sal_Bool                  bFocusLocked : 1;
+    sal_Bool                  bInPlace : 1;
+    SfxCancelManager*         pCancelMgr;
+    SfxCancellable*           pLoadCancellable;
+    SfxFrame*                 pFrame;
+    const SfxItemSet*         pSet;
+    SfxWorkWindow*            pWorkWin;
+    SvBorder                  aBorder;
 
-                            SfxFrame_Impl( SfxFrame* pAntiImplP ) :
-                                SvCompatWeakBase( pAntiImplP ),
-                                pFrame( pAntiImplP ),
-                                bClosing(sal_False),
-                                bPrepClosing(sal_False),
-                                nType( 0L ),
-                                nHistoryPos( 0 ),
-                                nFrameId( 0 ),
-                                pCurrentObjectShell( NULL ),
-                                pCurrentViewFrame( NULL ),
-                                bInCancelTransfers( sal_False ),
-                                bCloseOnUnlock( sal_False ),
-                                bOwnsBindings( sal_False ),
-                                bReleasingComponent( sal_False ),
-                                bFocusLocked( sal_False ),
-                                bInPlace( sal_False ),
-                                nLocks( 0 ),
-                                pDescr( NULL ),
-                                pCancelMgr( 0 ),
-                                pLoadCancellable( 0 ),
-                                pSet( 0 ),
-                                pWorkWin( 0 )
-                            {}
+    SfxFrame_Impl( SfxFrame* pAntiImplP ) :
+                              SvCompatWeakBase( pAntiImplP ),
+                              nType( 0L ),
+                              nHistoryPos( 0 ),
+                              pCurrentViewFrame( NULL ),
+                              pCurrentObjectShell( NULL ),
+                              pDescr( NULL ),
+                              nFrameId( 0 ),
+                              nLocks( 0 ),
+                              bCloseOnUnlock( sal_False ),
+                              bClosing(sal_False),
+                              bPrepClosing(sal_False),
+                              bInCancelTransfers( sal_False ),
+                              bOwnsBindings( sal_False ),
+                              bReleasingComponent( sal_False ),
+                              bFocusLocked( sal_False ),
+                              bInPlace( sal_False ),
+                              pCancelMgr( 0 ),
+                              pLoadCancellable( 0 ),
+                              pFrame( pAntiImplP ),
+                              pSet( 0 ),
+                              pWorkWin( 0 )
+                              {}
 
-                            ~SfxFrame_Impl() { delete pCancelMgr;
-                                               delete pLoadCancellable; }
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual ~SfxFrame_Impl() { delete pCancelMgr; delete pLoadCancellable; }
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 #endif
