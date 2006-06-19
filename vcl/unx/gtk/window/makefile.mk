@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:38:24 $
+#   last change: $Author: hr $ $Date: 2006-06-19 19:45:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ PKGCONFIG_MODULES=gtk+-2.0
 SLOFILES=\
             $(SLO)$/gtkframe.obj				\
             $(SLO)$/gtkobject.obj
+EXCEPTIONSFILES=$(SLO)$/gtkframe.obj
 .ELSE # "$(ENABLE_GTK)" != ""
 
 dummy:
