@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itempool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:05:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,37 +751,37 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
         *ppItemArr = new SfxPoolItemArray_Impl;
 
     SfxPoolItem **ppFree = 0;
-    SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
+    SfxPoolItem** ppHtArray = (SfxPoolItem**)(*ppItemArr)->GetData();
     if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
     {
         // wenn es ueberhaupt gepoolt ist, koennte es schon drin sein
         if ( IsPooledItem(&rItem) )
         {
             // 1. Schleife: teste ob der Pointer vorhanden ist.
-            for( USHORT n = (*ppItemArr)->Count(); n; ++ppHtArr, --n )
-                if( &rItem == (*ppHtArr) )
+            for( USHORT n = (*ppItemArr)->Count(); n; ++ppHtArray, --n )
+                if( &rItem == (*ppHtArray) )
                 {
-                    AddRef( **ppHtArr );
-                    return **ppHtArr;
+                    AddRef( **ppHtArray );
+                    return **ppHtArray;
                 }
         }
 
         // 2. Schleife: dann muessen eben die Attribute verglichen werden
         USHORT n;
-        for ( n = (*ppItemArr)->Count(), ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-              n; ++ppHtArr, --n )
+        for ( n = (*ppItemArr)->Count(), ppHtArray = (SfxPoolItem**)(*ppItemArr)->GetData();
+              n; ++ppHtArray, --n )
         {
-            if ( *ppHtArr )
+            if ( *ppHtArray )
             {
-                if( **ppHtArr == rItem )
+                if( **ppHtArray == rItem )
                 {
-                    AddRef( **ppHtArr );
-                    return **ppHtArr;
+                    AddRef( **ppHtArray );
+                    return **ppHtArray;
                 }
             }
             else
                 if ( !ppFree )
-                    ppFree = ppHtArr;
+                    ppFree = ppHtArray;
         }
     }
     else
