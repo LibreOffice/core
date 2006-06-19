@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjsearch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:46:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,6 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 
-#pragma hdrstop
-
 #ifndef _SVX_DIALOGS_HRC
 #include <dialogs.hrc>
 #endif
@@ -86,10 +84,10 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet&
     aMatchSesheZeje             ( this, ResId( CB_MATCH_SESHE_ZEJE ) ),
     aMatchIaiya                 ( this, ResId( CB_MATCH_IAIYA ) ),
     aMatchKiku                  ( this, ResId( CB_MATCH_KIKU ) ),
+    aMatchProlongedSoundMark    ( this, ResId( CB_MATCH_PROLONGED_SOUNDMARK ) ),
     aIgnore                     ( this, ResId( FL_IGNORE ) ),
     aIgnorePunctuation          ( this, ResId( CB_IGNORE_PUNCTUATION ) ),
     aIgnoreWhitespace           ( this, ResId( CB_IGNORE_WHITESPACES ) ),
-    aMatchProlongedSoundMark    ( this, ResId( CB_MATCH_PROLONGED_SOUNDMARK ) ),
     aIgnoreMiddleDot            ( this, ResId( CB_IGNORE_MIDDLE_DOT ) )
 {
     FreeResource();
@@ -201,7 +199,7 @@ INT32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
 }
 
 
-void SvxJSearchOptionsPage::Reset( const SfxItemSet& rSet )
+void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
 {
     SvtSearchOptions aOpt;
 
@@ -252,7 +250,7 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet& rSet )
 }
 
 
-BOOL SvxJSearchOptionsPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 {
     BOOL bModified = FALSE;
 
