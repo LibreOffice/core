@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap_gfx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:45:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
 /* XXX does not work XXX */
 void
 PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
-                        const PrinterBmp& rBitmap, const PrinterBmp& rTransBitmap)
+                        const PrinterBmp& /*rBitmap*/, const PrinterBmp& /*rTransBitmap*/)
 {
     double fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
     double fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
@@ -495,7 +495,7 @@ PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
 /* XXX does not work XXX */
 void
 PrinterGfx::DrawMask   (const Rectangle& rDest, const Rectangle& rSrc,
-                        const PrinterBmp &rBitmap, PrinterColor& rMaskColor)
+                        const PrinterBmp &/*rBitmap*/, PrinterColor& /*rMaskColor*/)
 {
     double fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
     double fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
