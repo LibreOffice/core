@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:29:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:58:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,8 +277,8 @@ class Desktop   :   // interfaces
         virtual ~Desktop(                                                                        );
 
         //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //  XDesktop
@@ -339,6 +339,7 @@ class Desktop   :   // interfaces
         virtual void                                                                SAL_CALL removeFrameActionListener  ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) throw( css::uno::RuntimeException          );
 
         //   XComponent
+        using cppu::OPropertySetHelper::disposing;
         virtual void                                                                SAL_CALL dispose                    (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL removeEventListener        ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
@@ -364,6 +365,7 @@ class Desktop   :   // interfaces
                                                                                                                const css::uno::Any&  aValue          ) throw( css::lang::IllegalArgumentException );
         virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast(       sal_Int32       nHandle         ,
                                                                                                                const css::uno::Any&  aValue          ) throw( css::uno::Exception                 );
+        using cppu::OPropertySetHelper::getFastPropertyValue;
         virtual void                                                SAL_CALL getFastPropertyValue            (       css::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       );
