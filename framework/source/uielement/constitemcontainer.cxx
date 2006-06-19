@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constitemcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:52:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,10 +87,12 @@ namespace framework
 /**
  * The class which implements the PropertySetInfo interface.
  */
-
+extern "C"
+{
 static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 ) SAL_THROW( () )
 {
    return ((OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
+}
 }
 
 class OPropertySetHelperInfo_Impl
@@ -315,7 +317,7 @@ sal_Int64 ConstItemContainer::getSomething( const ::com::sun::star::uno::Sequenc
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ConstItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
     {
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
     }
     return 0;
 }
@@ -339,7 +341,8 @@ const Sequence< sal_Int8 >& ConstItemContainer::GetUnoTunnelId() throw()
 ConstItemContainer* ConstItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
-    return xUT.is() ? (ConstItemContainer*)xUT->getSomething( ConstItemContainer::GetUnoTunnelId() ) : NULL;
+    return xUT.is() ? reinterpret_cast< ConstItemContainer* >(sal::static_int_cast< sal_IntPtr >(
+                          xUT->getSomething( ConstItemContainer::GetUnoTunnelId() ))) : NULL;
 }
 
 // XElementAccess
@@ -391,7 +394,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return (*pInfo);
 }
 
-void SAL_CALL ConstItemContainer::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void SAL_CALL ConstItemContainer::setPropertyValue( const OUString&, const Any& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
 }
@@ -405,31 +408,31 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
     throw UnknownPropertyException();
 }
 
-void SAL_CALL ConstItemContainer::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+void SAL_CALL ConstItemContainer::addPropertyChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ConstItemContainer::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
-{
-    // Only read-only properties - do nothing
-}
-
-void SAL_CALL ConstItemContainer::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ConstItemContainer::removePropertyChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     // Only read-only properties - do nothing
 }
 
-void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ConstItemContainer::addVetoableChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    // Only read-only properties - do nothing
+}
+
+void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     // Only read-only properties - do nothing
 }
 
 // XFastPropertySet
-void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue )
+void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const ::com::sun::star::uno::Any& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
 }
