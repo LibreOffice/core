@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:28:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ private:
 
     void                ImplCreateImageList();
     void                ImplSetRegion( const Bitmap& rRegionBmp );
+    using Window::ImplGetMousePointer;
     PointerStyle        ImplGetMousePointer( long nDistX, long nDistY );
     void                ImplDrawWheel();
     void                ImplRecalcScrollValues();
