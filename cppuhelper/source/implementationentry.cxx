@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implementationentry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:27:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::registry;
 namespace cppu {
 
 sal_Bool component_writeInfoHelper(
-    void *pServiceManager, void *pRegistryKey , const struct ImplementationEntry entries[] )
+    void *, void *pRegistryKey , const struct ImplementationEntry entries[] )
 {
     sal_Bool bRet = sal_False;
     try
@@ -72,9 +72,8 @@ sal_Bool component_writeInfoHelper(
             bRet = sal_True;
         }
     }
-    catch ( InvalidRegistryException &e )
+    catch ( InvalidRegistryException & )
     {
-        e;
         OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
     }
     return bRet;
@@ -82,9 +81,7 @@ sal_Bool component_writeInfoHelper(
 
 
 void * component_getFactoryHelper(
-    const sal_Char * pImplName,
-    void * pServiceManager,
-    void * pRegistryKey,
+    const sal_Char * pImplName, void *, void *,
     const struct ImplementationEntry entries[] )
 {
 
