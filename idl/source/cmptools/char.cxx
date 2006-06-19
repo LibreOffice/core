@@ -4,9 +4,9 @@
  *
  *  $RCSfile: char.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:48:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #endif
 
 #include <char.hxx>
-#pragma hdrstop
 
 /****************** D A T E N ********************************************/
 static unsigned char EqualTab[ 256 ] = {
@@ -94,7 +93,7 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
         pCharTable = new Table();
 
     BYTE * pSet;
-    pSet = (BYTE *)pCharTable->Get( (ULONG)nSource << 16 + (ULONG)nDest );
+    pSet = (BYTE *)pCharTable->Get( ((ULONG)nSource << 16) + (ULONG)nDest );
 
     if( !pSet )
     {
@@ -106,7 +105,7 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
             if( c )
                 pSet[ i ] = (BYTE)c;
         }
-        pCharTable->Insert( (ULONG)nSource << 16 + (ULONG)nDest, pSet );
+        pCharTable->Insert( ((ULONG)nSource << 16) + (ULONG)nDest, pSet );
     }
 
     return (char *)pSet;
