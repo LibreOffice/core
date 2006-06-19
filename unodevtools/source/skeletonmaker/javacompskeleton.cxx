@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:18:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,13 @@ namespace skeletonmaker { namespace java {
 
 void generatePackage(std::ostream & o, const OString & implname)
 {
-    short count=0;
     sal_Int32 index = implname.lastIndexOf('.');
     if (index != -1)
         o << "package " << implname.copy(0, index) << ";\n\n";
 }
 
 void generateImports(std::ostream & o,
-         const std::hash_set< OString, OStringHash >& interfaces,
+         const std::hash_set< OString, OStringHash >& /*interfaces*/,
          const OString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
@@ -270,7 +269,7 @@ bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute)
 }
 
 void registerProperties(std::ostream& o,
-                        TypeManager const & manager,
+                        TypeManager const & /*manager*/,
                         const AttributeInfo& properties,
                         const OString& indentation)
 {
@@ -734,7 +733,7 @@ void generateClassDefinition(std::ostream& o,
 void generateSkeleton(ProgramOptions const & options,
                       TypeManager const & manager,
                       std::vector< OString > const & types,
-                      OString const & delegate)
+                      OString const & /*delegate*/)
 {
     std::hash_set< OString, OStringHash > interfaces;
     std::hash_set< OString, OStringHash > services;
