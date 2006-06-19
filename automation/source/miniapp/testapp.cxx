@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testapp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:21:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,7 @@ void MainWindow::FileOpen()
 
     if (Dlg.Execute() == RET_OK)
     {
-
-        EditFileWindow * aEditWin = new EditFileWindow(this,Dlg.GetPath());
-
+        new EditFileWindow(this,Dlg.GetPath());
     }
 }
 
@@ -137,7 +135,7 @@ void MainWindow::FileExit()
 }
 
 
-void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, int Indent)
+void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent)
 {
     String sIndent,aText;
     sIndent.Expand(5*Indent);
@@ -148,7 +146,7 @@ void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, int Indent)
     aEditWin->AddText(String(sIndent).AppendAscii("Text: ").Append(aText).AppendAscii("\n"));
     aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String::CreateFromInt64(pBase->GetHelpId())).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
 
-    int i;
+    USHORT i;
     for (i = 0 ; i < pBase->GetChildCount() ; i++)
     {
         Tree(aEditWin,pBase->GetChild(i),Indent+1);
@@ -265,6 +263,8 @@ void MyApp::Property( ApplicationProperty& rProp )
 
 USHORT MyDispatcher::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT nMode)
 {
+    (void) ppArgs; /* avoid warning about unused parameter */
+    (void) nMode; /* avoid warning about unused parameter */
 
     switch (nSID)
     {
