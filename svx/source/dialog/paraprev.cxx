@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:52:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // include ---------------------------------------------------------------
 
-#pragma hdrstop
-
 #include "paraprev.hxx"
 
 // STATIC DATA -----------------------------------------------------------
@@ -49,15 +47,13 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
 
     Window( pParent, rId ),
 
-    nFirstLineOfst  ( 0 ),
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
+    nFirstLineOfst  ( 0 ),
     nUpper          ( 0 ),
     nLower          ( 0 ),
     eAdjust         ( SVX_ADJUST_LEFT ),
-#if  SUPD>352
     eLastLine       ( SVX_ADJUST_LEFT ),
-#endif
     eLine           ( SVX_PREV_LINESPACE_1 ),
     nLineVal        ( 0 )
 
@@ -78,7 +74,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
 
 // -----------------------------------------------------------------------
 
-void SvxParaPrevWindow::Paint( const Rectangle& rRect )
+void SvxParaPrevWindow::Paint( const Rectangle& )
 {
     DrawParagraph( TRUE );
 }
@@ -177,6 +173,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
                 case SVX_ADJUST_CENTER:
                     aPnt.X() += ( aSiz.Width() - nLW ) / 2;
                     break;
+                default: ; //prevent warning
             }
             if( SVX_ADJUST_BLOCK == eAdjust )
             {
@@ -195,6 +192,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
                         case SVX_ADJUST_BLOCK:
                             nLW = aSiz.Width();
                             break;
+                        default: ; //prevent warning
                     }
                 }
                 else
