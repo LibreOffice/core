@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 08:31:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:57:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
     std::vector<dictentry*> postupthes;
         SvtPathOptions aPathOpt;
         int numusr;          // number of user dictionary entries
-        int numshr;          // number of shared dictionary entries
+        int numshr = 0;          // number of shared dictionary entries
 
     if (!numthes) {
 
@@ -470,7 +470,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
 
 
 Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
-            const Reference< XMultiServiceFactory > & rSMgr )
+            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
     Reference< XInterface > xService = (cppu::OWeakObject*) new Thesaurus;
@@ -479,7 +479,7 @@ Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
 
 
 OUString SAL_CALL
-    Thesaurus::getServiceDisplayName( const Locale& rLocale )
+    Thesaurus::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
