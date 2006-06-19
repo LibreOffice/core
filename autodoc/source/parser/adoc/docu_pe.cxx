@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,74 +84,74 @@ Adoc_PE::Hdl_at_std( const Tok_at_std & i_rTok )
 }
 
 void
-Adoc_PE::Hdl_at_base( const Tok_at_base & i_rTok )
+Adoc_PE::Hdl_at_base( const Tok_at_base & )
 {
     InstallAtTag(
         CurDocu().CheckIn_BaseTag() );
 }
 
 void
-Adoc_PE::Hdl_at_exception( const Tok_at_exception & i_rTok )
+Adoc_PE::Hdl_at_exception( const Tok_at_exception & )
 {
     InstallAtTag(
         CurDocu().CheckIn_ExceptionTag() );
 }
 
 void
-Adoc_PE::Hdl_at_impl( const Tok_at_impl & i_rTok )
+Adoc_PE::Hdl_at_impl( const Tok_at_impl & )
 {
     InstallAtTag(
         CurDocu().Create_ImplementsTag() );
 }
 
 void
-Adoc_PE::Hdl_at_key( const Tok_at_key & i_rTok )
+Adoc_PE::Hdl_at_key( const Tok_at_key & )
 {
     InstallAtTag(
         CurDocu().Create_KeywordTag() );
 }
 
 void
-Adoc_PE::Hdl_at_param( const Tok_at_param & i_rTok )
+Adoc_PE::Hdl_at_param( const Tok_at_param & )
 {
     InstallAtTag(
         CurDocu().CheckIn_ParameterTag() );
 }
 
 void
-Adoc_PE::Hdl_at_see( const Tok_at_see & i_rTok )
+Adoc_PE::Hdl_at_see( const Tok_at_see & )
 {
     InstallAtTag(
         CurDocu().CheckIn_SeeTag() );
 }
 
 void
-Adoc_PE::Hdl_at_template( const Tok_at_template & i_rTok )
+Adoc_PE::Hdl_at_template( const Tok_at_template & )
 {
     InstallAtTag(
         CurDocu().CheckIn_TemplateTag() );
 }
 
 void
-Adoc_PE::Hdl_at_interface( const Tok_at_interface & i_rTok )
+Adoc_PE::Hdl_at_interface( const Tok_at_interface & )
 {
     CurDocu().Set_Interface();
 }
 
 void
-Adoc_PE::Hdl_at_internal( const Tok_at_internal & i_rTok )
+Adoc_PE::Hdl_at_internal( const Tok_at_internal & )
 {
     CurDocu().Set_Internal();
 }
 
 void
-Adoc_PE::Hdl_at_obsolete( const Tok_at_obsolete & i_rTok )
+Adoc_PE::Hdl_at_obsolete( const Tok_at_obsolete & )
 {
     CurDocu().Set_Obsolete();
 }
 
 void
-Adoc_PE::Hdl_at_module( const Tok_at_module & i_rTok )
+Adoc_PE::Hdl_at_module( const Tok_at_module & )
 {
     // KORR_FUTURE
 
@@ -160,7 +160,7 @@ Adoc_PE::Hdl_at_module( const Tok_at_module & i_rTok )
 }
 
 void
-Adoc_PE::Hdl_at_file( const Tok_at_file & i_rTok )
+Adoc_PE::Hdl_at_file( const Tok_at_file & )
 {
     // KORR_FUTURE
 
@@ -169,7 +169,7 @@ Adoc_PE::Hdl_at_file( const Tok_at_file & i_rTok )
 }
 
 void
-Adoc_PE::Hdl_at_gloss( const Tok_at_gloss & i_rTok )
+Adoc_PE::Hdl_at_gloss( const Tok_at_gloss & )
 {
     // KORR_FUTURE
 
@@ -177,27 +177,27 @@ Adoc_PE::Hdl_at_gloss( const Tok_at_gloss & i_rTok )
 }
 
 void
-Adoc_PE::Hdl_at_global( const Tok_at_global & i_rTok )
+Adoc_PE::Hdl_at_global( const Tok_at_global & )
 {
     // KORR_FUTURE
 //  Create_GlobalTextComponent();
 }
 
 void
-Adoc_PE::Hdl_at_include( const Tok_at_include & i_rTok )
+Adoc_PE::Hdl_at_include( const Tok_at_include & )
 {
     // KORR_FUTURE
 }
 
 void
-Adoc_PE::Hdl_at_label( const Tok_at_label & i_rTok )
+Adoc_PE::Hdl_at_label( const Tok_at_label & )
 {
     InstallAtTag(
         CurDocu().Create_LabelTag() );
 }
 
 void
-Adoc_PE::Hdl_at_since( const Tok_at_since & i_rTok )
+Adoc_PE::Hdl_at_since( const Tok_at_since & )
 {
     InstallAtTag(
         CurDocu().Create_SinceTag() );
@@ -325,7 +325,7 @@ Adoc_PE::Hdl_Eol( const Tok_Eol & )
 }
 
 void
-Adoc_PE::Hdl_EoDocu( const Tok_EoDocu & i_rTok )
+Adoc_PE::Hdl_EoDocu( const Tok_EoDocu & )
 {
     bIsComplete = true;
 }
