@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 16:43:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ namespace configmgr
         if (bValue)
         {
             uno_Any aTmpAny;
-            uno_type_any_construct(&aTmpAny, _pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire);
+            uno_type_any_construct(&aTmpAny, _pUnoAny->pData, _pUnoAny->pType, reinterpret_cast< uno_AcquireFunc >( uno::cpp_acquire ));
 
             bool bData = impl_Any_storesData(&aTmpAny);
 
@@ -230,7 +230,7 @@ namespace configmgr
             void * pFromData = impl_getData(_pAnyPairDataFrom, bOldIsData);
 
             uno_Any aTmpAny;
-            uno_type_any_construct(&aTmpAny, pFromData, _pAnyPairDescFrom->pType, uno::cpp_acquire);
+            uno_type_any_construct(&aTmpAny, pFromData, _pAnyPairDescFrom->pType, reinterpret_cast< uno_AcquireFunc >( uno::cpp_acquire ));
 
             bool bNewIsData = impl_Any_storesData(&aTmpAny);
             OSL_ENSURE(bOldIsData == bNewIsData, "INFO [safe to ignore]: Copy of uno_Any changes directness !?");
@@ -276,7 +276,7 @@ namespace configmgr
             }
 
             typelib_typedescriptionreference_acquire( aTmpAny.pType );
-            uno_any_destruct(&aTmpAny, uno::cpp_release );
+            uno_any_destruct(&aTmpAny, reinterpret_cast< uno_ReleaseFunc >( uno::cpp_release ));
 
             impl_setDataPointer(_pAnyPairData, NULL);
             OSL_DEBUG_ONLY(impl_setDataPointer(_pAnyPairData, reinterpret_cast<void*>(0xDeadBeef)));
@@ -349,7 +349,11 @@ namespace configmgr
 
             typelib_typedescriptionreference_acquire(aTmpAny.pType);
 
-            uno_type_any_assign(&aTmpAny, _pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire, uno::cpp_release );
+            uno_type_any_assign(&aTmpAny,
+                                _pUnoAny->pData,
+                                _pUnoAny->pType,
+                                reinterpret_cast< uno_AcquireFunc >( uno::cpp_acquire ),
+                                reinterpret_cast< uno_AcquireFunc >( uno::cpp_release ));
 
             cfgmgr_SelectorType nNewState = anypair_any_set_Data(_pAnyPairData,_nSelect,&aTmpAny);
             impl_state_setState(&_pAnyPairDesc->nState, nNewState, _nSelect);
