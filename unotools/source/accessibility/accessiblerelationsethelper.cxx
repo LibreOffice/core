@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:40:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,8 @@ AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
 }
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper)
-    : mpHelperImpl(NULL)
+    : cppu::WeakImplHelper1<XAccessibleRelationSet>()
+    , mpHelperImpl(NULL)
 {
     if (rHelper.mpHelperImpl)
         mpHelperImpl = new AccessibleRelationSetHelperImpl(*rHelper.mpHelperImpl);
@@ -282,7 +283,6 @@ uno::Sequence<sal_Int8> SAL_CALL
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
-        ::vos::OGuard aGuard (maMutex);
         aId.realloc (16);
         rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
     }
