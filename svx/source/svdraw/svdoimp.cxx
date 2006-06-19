@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:33:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:42:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(
     mbForceNoArrowsRight(false),
     mbForceHair(_bForceHair)
 {
-    maStartPolygon = (((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue()).getB2DPolygon();
+    maStartPolygon = (((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue()).getB2DPolygon();
 
     if(maStartPolygon.count())
     {
@@ -334,7 +334,7 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(
         }
     }
 
-    maEndPolygon = (((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue()).getB2DPolygon();
+    maEndPolygon = (((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue()).getB2DPolygon();
 
     if(maEndPolygon.count())
     {
@@ -366,7 +366,7 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(
     mfDegreeStepWidth = 10.0;
     meLineJoint = ((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue();
 
-    XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetValue();
+    XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetDashValue();
 
     // fill local dash info
     mfFullDashDotLen = ImpCreateDotDashArray(maDotDashArray, aDash, GetDisplayLineWidth());
@@ -466,7 +466,7 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
             }
             else
             {
-                ::basegfx::tools::B2DLineJoin aB2DLineJoin;
+                ::basegfx::tools::B2DLineJoin aB2DLineJoin(::basegfx::tools::B2DLINEJOIN_NONE);
 
                 switch(mrLineAttr.GetLineJoint())
                 {
