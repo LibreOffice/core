@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,6 @@ void XOBitmap::Bitmap2Array()
 void XOBitmap::Array2Bitmap()
 {
     VirtualDevice   aVD;
-    BOOL            bPixelColor = FALSE;
     USHORT          nLines = 8; // von Type abhaengig
 
     if( !pPixelArray )
@@ -555,7 +554,7 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, USHORT nVer ) :
 
 //*************************************************************************
 
-XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool, const XOBitmap& rTheBitmap )
+XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/, const XOBitmap& rTheBitmap )
 :   NameOrIndex( XATTR_FILLBITMAP, -1 ),
     aXOBitmap( rTheBitmap )
 {
@@ -563,7 +562,7 @@ XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool, const XOBitmap& rTheBitmap
 
 //*************************************************************************
 
-XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool )
+XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/)
 : NameOrIndex(XATTR_FILLBITMAP, -1 )
 {
 }
@@ -578,7 +577,7 @@ XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool )
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillBitmapItem(*this);
 }
@@ -675,12 +674,12 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 |*
 *************************************************************************/
 
-const XOBitmap& XFillBitmapItem::GetValue(const XBitmapTable* pTable) const
+const XOBitmap& XFillBitmapItem::GetBitmapValue(const XBitmapTable* pTable) const // GetValue -> GetBitmapValue
 {
     if (!IsIndex())
         return aXOBitmap;
     else
-        return pTable->Get(GetIndex())->GetXBitmap();
+        return pTable->GetBitmap(GetIndex())->GetXBitmap();
 }
 
 
@@ -694,7 +693,7 @@ const XOBitmap& XFillBitmapItem::GetValue(const XBitmapTable* pTable) const
 |*
 *************************************************************************/
 
-USHORT XFillBitmapItem::GetVersion( USHORT nFileFormatVersion ) const
+USHORT XFillBitmapItem::GetVersion( USHORT /*nFileFormatVersion*/) const
 {
     // 2. Version
     return( 1 );
@@ -705,8 +704,8 @@ USHORT XFillBitmapItem::GetVersion( USHORT nFileFormatVersion ) const
 SfxItemPresentation XFillBitmapItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&           rText, const IntlWrapper *
 )   const
 {
@@ -719,15 +718,16 @@ SfxItemPresentation XFillBitmapItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText += GetName();
             return ePres;
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
 }
 
 //------------------------------------------------------------------------
 
 sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     // needed for MID_NAME
@@ -750,14 +750,14 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
     if( nMemberId == MID_GRAFURL ||
         nMemberId == 0 )
     {
-        XOBitmap aLocalXOBitmap( GetValue() );
+        XOBitmap aLocalXOBitmap( GetBitmapValue() );
         aURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
         aURL += ::rtl::OUString::createFromAscii( aLocalXOBitmap.GetGraphicObject().GetUniqueID().GetBuffer() );
     }
     if( nMemberId == MID_BITMAP ||
         nMemberId == 0  )
     {
-        XOBitmap aLocalXOBitmap( GetValue() );
+        XOBitmap aLocalXOBitmap( GetBitmapValue() );
         Bitmap aBmp( aLocalXOBitmap.GetBitmap() );
         BitmapEx aBmpEx( aBmp );
 
@@ -793,7 +793,7 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
 
 sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     ::rtl::OUString aName;
@@ -836,7 +836,7 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     {
         GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
         XOBitmap aBMP( aGrafObj );
-        SetValue( aBMP );
+        SetBitmapValue( aBMP );
     }
     if( bSetBitmap )
     {
@@ -862,8 +862,8 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
 
 BOOL XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return ((XFillBitmapItem*)p1)->GetValue().GetGraphicObject().GetUniqueID() ==
-           ((XFillBitmapItem*)p2)->GetValue().GetGraphicObject().GetUniqueID();
+    return ((XFillBitmapItem*)p1)->GetBitmapValue().GetGraphicObject().GetUniqueID() ==
+           ((XFillBitmapItem*)p2)->GetBitmapValue().GetGraphicObject().GetUniqueID();
 }
 
 XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
