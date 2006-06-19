@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchrecordersupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:38:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,8 +125,8 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         //  init member
-        , m_xFactory         ( xFactory                      )
         , m_xDispatchRecorder( NULL                          )
+        , m_xFactory         ( xFactory                      )
 {
 }
 
