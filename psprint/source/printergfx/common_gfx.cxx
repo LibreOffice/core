@@ -4,9 +4,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:45:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,11 @@ using namespace psp ;
 static const sal_Int32 nMaxTextColumn = 80;
 
 GraphicsStatus::GraphicsStatus() :
+        mbArtItalic( false ),
+        mbArtBold( false ),
         mnTextHeight( 0 ),
         mnTextWidth( 0 ),
-        mfLineWidth( -1 ),
-        mbArtItalic( false ),
-        mbArtBold( false )
+        mfLineWidth( -1 )
 {
 }
 
