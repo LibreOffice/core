@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltrcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:48:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,6 @@ void    SvtAppFilterOptions_Impl::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
 
-    const Type& rType = ::getBooleanCppuType();
     if(pValues[0].hasValue())
         bLoadVBA = *(sal_Bool*)pValues[0].getValue();
     if(pValues[1].hasValue())
@@ -228,7 +227,7 @@ SvtFilterOptions::SvtFilterOptions() :
     ConfigItem( C2U("Office.Common/Filter/Microsoft") ),
     pImp(new SvtFilterOptions_Impl)
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtFilterOptions::SvtFilterOptions()");
+    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtFilterOptions::SvtFilterOptions()");
     EnableNotification(GetPropertyNames());
     Load();
 }
@@ -285,7 +284,7 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
 /*-- 22.01.01 08:53:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SvtFilterOptions::Notify( const Sequence<OUString>& aPropertyNames)
+void SvtFilterOptions::Notify( const Sequence<OUString>& )
 {
     Load();
 }
@@ -295,7 +294,6 @@ void SvtFilterOptions::Notify( const Sequence<OUString>& aPropertyNames)
 void SvtFilterOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
-    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
