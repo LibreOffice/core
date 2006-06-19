@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:50:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,23 +74,12 @@
 #include <i18npool/lang.h>
 #endif
 
-#ifdef OS2
-#define INCL_WINWINDOWMGR
-#define INCL_DOS
-#endif
-
 #if defined (WNT)
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
 #endif
 #endif
-#if defined (OS2)
-#ifndef _SVPM_H
-#include <tools/svpm.h>
-#endif
-#endif
 
-#pragma hdrstop
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
 #ifdef _OLD_FILE_IMPL
@@ -147,7 +136,7 @@ using namespace com::sun::star::io;
 #include <stdlib.h>
 #include <ctype.h>
 
-#if defined (WIN) || defined (WNT) || defined (OS2)
+#if defined (WIN) || defined (WNT)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
 #endif
 
@@ -164,26 +153,6 @@ using namespace com::sun::star::io;
 #ifdef WNT
 #include <io.h>
 #endif
-
-#ifdef MAC
-#include <mac_start.h>
-
-#ifndef __FILES__
-  #include <Files.h>
-#endif
-
-#ifndef __ERRORS__
-  #include <Errors.h>
-#endif
-
-#include <MAC_TOOLS.hxx>
-#include <mac_end.h>
-#endif
-
-#if defined (OS2) && defined (__BORLANDC__)
-#pragma option -w-par
-#endif
-
 
 static void FilterWhiteSpace( String& rStr )
 {
@@ -250,12 +219,14 @@ String getFullPath( const String& aRelPath )
 // Sets (virtual) current path for UCB file access
 void implChDir( const String& aDir )
 {
+    (void)aDir;
     // TODO
 }
 
 // Sets (virtual) current drive for UCB file access
 void implChDrive( const String& aDrive )
 {
+    (void)aDrive;
     // TODO
 }
 
@@ -293,6 +264,8 @@ static Reference< XSimpleFileAccess3 > getFileAccess( void )
 
 RTLFUNC(CreateObject)
 {
+    (void)bWrite;
+
     String aClass( rPar.Get( 1 )->GetString() );
     SbxObjectRef p = SbxBase::CreateObject( aClass );
     if( !p )
@@ -309,6 +282,8 @@ RTLFUNC(CreateObject)
 
 RTLFUNC(Error)
 {
+    (void)bWrite;
+
     if( !pBasic )
         StarBASIC::Error( SbERR_INTERNAL_ERROR );
     else
@@ -317,7 +292,7 @@ RTLFUNC(Error)
         SbError nErr = 0L;
         if( rPar.Count() == 1 )
         {
-            nErr = StarBASIC::GetErr();
+            nErr = StarBASIC::GetErrBasic();
             aErrorMsg = StarBASIC::GetErrorMsg();
         }
         else
@@ -337,6 +312,9 @@ RTLFUNC(Error)
 
 RTLFUNC(Sin)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -350,6 +328,9 @@ RTLFUNC(Sin)
 
 RTLFUNC(Cos)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -363,6 +344,9 @@ RTLFUNC(Cos)
 
 RTLFUNC(Atn)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -376,6 +360,9 @@ RTLFUNC(Atn)
 
 RTLFUNC(Abs)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -388,6 +375,9 @@ RTLFUNC(Abs)
 
 RTLFUNC(Asc)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -409,6 +399,9 @@ RTLFUNC(Asc)
 
 RTLFUNC(Chr)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -428,13 +421,16 @@ RTLFUNC(Chr)
 
 RTLFUNC(CurDir)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // #57064 Obwohl diese Funktion nicht mit DirEntry arbeitet, ist sie von
     // der Anpassung an virtuelle URLs nich betroffen, da bei Nutzung der
     // DirEntry-Funktionalitaet keine Moeglichkeit besteht, das aktuelle so
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
 //  rPar.Get(0)->PutEmpty();
-#if defined (WIN) || defined (WNT) || (defined (OS2) && !defined( WTC ))
+#if defined (WIN) || defined (WNT)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
     {
@@ -468,64 +464,12 @@ RTLFUNC(CurDir)
     delete [] pBuffer;
     _chdrive(old);
 #else
-#ifdef OS2
-    if( !nCurDir )
-        nCurDir = _getdrive();
-#endif
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else
         StarBASIC::Error( SbERR_NO_DEVICE );
     delete [] pBuffer;
 #endif
-
-#elif defined MAC
-
-    Str255              aBuffer;
-    FSSpec              aFileSpec;      // Pseudofile
-    String              aPar1;
-    OSErr               nErr;
-
-    // Erstmal aktuelle Pfad bestimmen
-    nErr = FSMakeFSSpec(0,0,"\p:X",&aFileSpec);
-
-    PathNameFromDirID( aFileSpec.parID,aFileSpec.vRefNum, (char*) aBuffer);
-    String aPath((char*) &aBuffer[1],aBuffer[0]);
-
-    if ( rPar.Count() == 2 )
-    {
-        aPar1 = rPar.Get(1)->GetString();
-
-        // Wen kein ':' drin ist dann haengen wir (netterweise) einen an
-        if (aPar1.Search(':') == STRING_NOTFOUND)
-            aPar1 += ':';
-        USHORT nFirstColon = aPar1.Search(':');
-        if (!aPar1.Len() ||
-            nFirstColon != (aPar1.Len() - 1))
-            // Kein ':' am Ende oder mehr als ein ':' oder leerer String
-        {
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
-            return;
-        }
-        // Is Param1 eventuelle das Volume des aktuellen Pfades ?
-        USHORT nMatchPoint = aPath.Match(aPar1);
-        if (nMatchPoint != (nFirstColon + 1))
-        {
-            String aPseudoFile(aPar1);
-            aPseudoFile += 'X'; // Pseudodatei
-
-            nErr = FSMakeFSSpec(0,0,aPseudoFile.GetPascalStr(),&aFileSpec);
-
-            if(nErr == nsvErr)
-            {
-                StarBASIC::Error( SbERR_NO_DEVICE );
-                return;
-            }
-            aPath = aPar1;
-        }
-    }
-
-    rPar.Get(0)->PutString(aPath);
 
 #elif defined( UNX )
 
@@ -560,6 +504,9 @@ RTLFUNC(CurDir)
 
 RTLFUNC(ChDir) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
@@ -587,6 +534,9 @@ RTLFUNC(ChDir) // JSM
 
 RTLFUNC(ChDrive) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
@@ -595,7 +545,7 @@ RTLFUNC(ChDrive) // JSM
 #ifndef UNX
         String aPar1 = rPar.Get(1)->GetString();
 
-#if defined (WIN) || defined (WNT) || (defined (OS2) && !defined (WTC))
+#if defined (WIN) || defined (WNT)
         if (aPar1.Len() > 0)
         {
             int nCurDrive = (int)aPar1.GetBuffer()[0]; ;
@@ -609,23 +559,6 @@ RTLFUNC(ChDrive) // JSM
             if (_chdrive(nCurDrive))
                 StarBASIC::Error( SbERR_NO_DEVICE );
         }
-#elif defined MAC
-        // Wen kein ':' drin ist dann haengen wir (netterweise) einen an
-        if (aPar1.Search(':') == STRING_NOTFOUND)
-            aPar1 += ':';
-        if (!aPar1.Len() ||
-            aPar1.Search(':') != (aPar1.Len() - 1))
-            // Kein ':' am Ende oder mehr als ein ':' oder leerer String
-        {
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
-            return;
-        }
-
-        DirEntry aDrive(aPar1);
-        if (aDrive.SetCWD())
-            return;
-        else
-            StarBASIC::Error( SbERR_NO_DEVICE );
 #endif
 
 #endif
@@ -670,6 +603,9 @@ void implStepRenameOSL( const String& aSource, const String& aDest )
 
 RTLFUNC(FileCopy) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 3)
     {
@@ -718,6 +654,9 @@ RTLFUNC(FileCopy) // JSM
 
 RTLFUNC(Kill) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
@@ -756,6 +695,9 @@ RTLFUNC(Kill) // JSM
 
 RTLFUNC(MkDir) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
@@ -824,20 +766,20 @@ void implRemoveDirRecursive( const String& aDirPath )
 
     for( ;; )
     {
-        DirectoryItem aItem;
-        nRet = aDir.getNextItem( aItem );
+        DirectoryItem aItem2;
+        nRet = aDir.getNextItem( aItem2 );
         if( nRet != FileBase::E_None )
             break;
 
         // Handle flags
-        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
-        nRet = aItem.getFileStatus( aFileStatus );
-        OUString aPath = aFileStatus.getFileURL();
+        FileStatus aFileStatus2( FileStatusMask_Type | FileStatusMask_FileURL );
+        nRet = aItem2.getFileStatus( aFileStatus2 );
+        OUString aPath = aFileStatus2.getFileURL();
 
         // Directory?
-        FileStatus::Type aType = aFileStatus.getFileType();
-        sal_Bool bFolder = isFolder( aType );
-        if( bFolder )
+        FileStatus::Type aType2 = aFileStatus2.getFileType();
+        sal_Bool bFolder2 = isFolder( aType2 );
+        if( bFolder2 )
         {
             implRemoveDirRecursive( aPath );
         }
@@ -855,6 +797,9 @@ void implRemoveDirRecursive( const String& aDirPath )
 
 RTLFUNC(RmDir) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
@@ -910,14 +855,19 @@ RTLFUNC(RmDir) // JSM
 
 RTLFUNC(SendKeys) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
 }
 
 RTLFUNC(Exp)
 {
-    ULONG nArgCount = rPar.Count();
-    if ( rPar.Count() < 2 )
+    (void)pBasic;
+    (void)bWrite;
+
+    if( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
@@ -930,6 +880,9 @@ RTLFUNC(Exp)
 
 RTLFUNC(FileLen)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -974,6 +927,9 @@ RTLFUNC(FileLen)
 
 RTLFUNC(Hex)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -992,6 +948,9 @@ RTLFUNC(Hex)
 
 RTLFUNC(InStr)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     ULONG nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1059,6 +1018,9 @@ RTLFUNC(InStr)
 
 RTLFUNC(InStrRev)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     ULONG nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1135,6 +1097,9 @@ RTLFUNC(InStrRev)
 
 RTLFUNC(Int)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1154,6 +1119,9 @@ RTLFUNC(Int)
 
 RTLFUNC(Fix)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1171,6 +1139,9 @@ RTLFUNC(Fix)
 
 RTLFUNC(LCase)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1184,7 +1155,9 @@ RTLFUNC(LCase)
 
 RTLFUNC(Left)
 {
-    ULONG nArgCount = rPar.Count();
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 3 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1207,6 +1180,9 @@ RTLFUNC(Left)
 
 RTLFUNC(Log)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1225,6 +1201,9 @@ RTLFUNC(Log)
 
 RTLFUNC(LTrim)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1240,6 +1219,9 @@ RTLFUNC(LTrim)
 
 RTLFUNC(Mid)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     ULONG nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1325,6 +1307,9 @@ RTLFUNC(Mid)
 
 RTLFUNC(Oct)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1341,7 +1326,9 @@ RTLFUNC(Oct)
 
 RTLFUNC(Right)
 {
-    ULONG nArgCount = rPar.Count();
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 3 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1368,11 +1355,17 @@ RTLFUNC(Right)
 
 RTLFUNC(RTL)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get( 0 )->PutObject( pBasic->getRTL() );
 }
 
 RTLFUNC(RTrim)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1385,7 +1378,9 @@ RTLFUNC(RTrim)
 
 RTLFUNC(Sgn)
 {
-    ULONG nArgCount = rPar.Count();
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1402,6 +1397,9 @@ RTLFUNC(Sgn)
 
 RTLFUNC(Space)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1414,6 +1412,9 @@ RTLFUNC(Space)
 
 RTLFUNC(Spc)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1426,6 +1427,9 @@ RTLFUNC(Spc)
 
 RTLFUNC(Sqr)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1440,6 +1444,9 @@ RTLFUNC(Sqr)
 
 RTLFUNC(Str)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1485,6 +1492,9 @@ RTLFUNC(Str)
 
 RTLFUNC(StrComp)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1530,6 +1540,9 @@ RTLFUNC(StrComp)
 
 RTLFUNC(String)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1554,6 +1567,9 @@ RTLFUNC(String)
 
 RTLFUNC(Tan)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1565,6 +1581,9 @@ RTLFUNC(Tan)
 
 RTLFUNC(UCase)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1579,11 +1598,14 @@ RTLFUNC(UCase)
 
 RTLFUNC(Val)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        double nResult;
+        double nResult = 0.0;
         char* pEndPtr;
 
         String aStr( rPar.Get(1)->GetString() );
@@ -1681,12 +1703,15 @@ BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
 // Function to convert date to ISO 8601 date format
 RTLFUNC(CDateToIso)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() == 2 )
     {
         double aDate = rPar.Get(1)->GetDate();
 
         char Buffer[9];
-        snprintf( Buffer, sizeof( Buffer ), "%04ld%02ld%02ld",
+        snprintf( Buffer, sizeof( Buffer ), "%04d%02d%02d",
             implGetDateYear( aDate ),
             implGetDateMonth( aDate ),
             implGetDateDay( aDate ) );
@@ -1700,6 +1725,9 @@ RTLFUNC(CDateToIso)
 // Function to convert date from ISO 8601 date format
 RTLFUNC(CDateFromIso)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() == 2 )
     {
         String aStr = rPar.Get(1)->GetString();
@@ -1721,6 +1749,9 @@ RTLFUNC(CDateFromIso)
 
 RTLFUNC(DateSerial)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 4 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1737,6 +1768,9 @@ RTLFUNC(DateSerial)
 
 RTLFUNC(TimeSerial)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 4 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1765,6 +1799,9 @@ RTLFUNC(TimeSerial)
 
 RTLFUNC(DateValue)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1808,6 +1845,9 @@ RTLFUNC(DateValue)
 
 RTLFUNC(TimeValue)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1845,6 +1885,9 @@ RTLFUNC(TimeValue)
 
 RTLFUNC(Day)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1859,6 +1902,9 @@ RTLFUNC(Day)
 
 RTLFUNC(Year)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1881,6 +1927,9 @@ INT16 implGetHour( double dDate )
 
 RTLFUNC(Hour)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1905,6 +1954,9 @@ INT16 implGetMinute( double dDate )
 
 RTLFUNC(Minute)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1917,6 +1969,9 @@ RTLFUNC(Minute)
 
 RTLFUNC(Month)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1944,6 +1999,9 @@ INT16 implGetSecond( double dDate )
 
 RTLFUNC(Second)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1958,6 +2016,9 @@ RTLFUNC(Second)
 
 RTLFUNC(Now)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     Date aDate;
     Time aTime;
     double aSerial = (double)GetDayDiff( aDate );
@@ -1974,6 +2035,8 @@ RTLFUNC(Now)
 
 RTLFUNC(Time)
 {
+    (void)pBasic;
+
     if ( !bWrite )
     {
         Time aTime;
@@ -2027,6 +2090,9 @@ RTLFUNC(Time)
 
 RTLFUNC(Timer)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     Time aTime;
     long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
@@ -2038,6 +2104,9 @@ RTLFUNC(Timer)
 
 RTLFUNC(Date)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( !bWrite )
     {
         Date aToday;
@@ -2080,6 +2149,9 @@ RTLFUNC(Date)
 
 RTLFUNC(IsArray)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2088,6 +2160,9 @@ RTLFUNC(IsArray)
 
 RTLFUNC(IsObject)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2114,6 +2189,9 @@ RTLFUNC(IsObject)
 
 RTLFUNC(IsDate)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2149,6 +2227,9 @@ RTLFUNC(IsDate)
 
 RTLFUNC(IsEmpty)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2157,6 +2238,9 @@ RTLFUNC(IsEmpty)
 
 RTLFUNC(IsError)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2165,6 +2249,9 @@ RTLFUNC(IsError)
 
 RTLFUNC(IsNull)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2185,6 +2272,9 @@ RTLFUNC(IsNull)
 
 RTLFUNC(IsNumeric)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2195,6 +2285,9 @@ RTLFUNC(IsNumeric)
 
 RTLFUNC(IsMissing)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2225,10 +2318,10 @@ String getDirectoryPath( String aPathStr )
             }
             else if( aType == FileStatus::Link )
             {
-                FileStatus aFileStatus( FileStatusMask_LinkTargetURL );
-                nRet = aItem.getFileStatus( aFileStatus );
+                FileStatus aFileStatus2( FileStatusMask_LinkTargetURL );
+                nRet = aItem.getFileStatus( aFileStatus2 );
                 if( nRet == FileBase::E_None )
-                    aRetStr = getDirectoryPath( aFileStatus.getLinkTargetURL() );
+                    aRetStr = getDirectoryPath( aFileStatus2.getLinkTargetURL() );
             }
         }
     }
@@ -2341,6 +2434,9 @@ bool isRootDir( String aDirURLStr )
 
 RTLFUNC(Dir)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     String aPath;
 
     USHORT nParCount = rPar.Count();
@@ -2685,6 +2781,9 @@ RTLFUNC(Dir)
 
 RTLFUNC(GetAttr)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() == 2 )
     {
         INT16 nFlags = 0;
@@ -2748,14 +2847,6 @@ RTLFUNC(GetAttr)
             }
             else
                 StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #elif defined( OS2 )
-            FILESTATUS3 aFileStatus;
-            APIRET rc = DosQueryPathInfo(aByteStrFullPath.GetBuffer(),1,
-                                         &aFileStatus,sizeof(FILESTATUS3));
-            if (!rc)
-                nFlags = (INT16) aFileStatus.attrFile;
-            else
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
     #else
             bUseFileStat = TRUE;
     #endif
@@ -2796,6 +2887,9 @@ RTLFUNC(GetAttr)
 
 RTLFUNC(FileDateTime)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -2836,7 +2930,7 @@ RTLFUNC(FileDateTime)
             nRet = aItem.getFileStatus( aFileStatus );
             TimeValue aTimeVal = aFileStatus.getModifyTime();
             oslDateTime aDT;
-            sal_Bool bRet = osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
+            osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
 
             aTime = Time( aDT.Hours, aDT.Minutes, aDT.Seconds, 10000000*aDT.NanoSeconds );
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
@@ -2880,6 +2974,9 @@ RTLFUNC(FileDateTime)
 
 RTLFUNC(EOF)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // AB 08/16/2000: No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -2912,6 +3009,9 @@ RTLFUNC(EOF)
 
 RTLFUNC(FileAttr)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // AB 08/16/2000: No changes for UCB
 
     // #57064 Obwohl diese Funktion nicht mit DirEntry arbeitet, ist sie von
@@ -2942,6 +3042,9 @@ RTLFUNC(FileAttr)
 }
 RTLFUNC(Loc)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // AB 08/16/2000: No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -2977,6 +3080,9 @@ RTLFUNC(Loc)
 
 RTLFUNC(Lof)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // AB 08/16/2000: No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3001,6 +3107,9 @@ RTLFUNC(Lof)
 
 RTLFUNC(Seek)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // AB 08/16/2000: No changes for UCB
     int nArgs = (int)rPar.Count();
     if ( nArgs < 2 || nArgs > 3 )
@@ -3046,6 +3155,9 @@ RTLFUNC(Seek)
 
 RTLFUNC(Format)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     USHORT nArgCount = (USHORT)rPar.Count();
     if ( nArgCount < 2 || nArgCount > 3 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3065,6 +3177,9 @@ RTLFUNC(Format)
 
 RTLFUNC(Randomize)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() > 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     INT16 nSeed;
@@ -3077,6 +3192,9 @@ RTLFUNC(Randomize)
 
 RTLFUNC(Rnd)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() > 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3103,6 +3221,9 @@ RTLFUNC(Rnd)
 
 RTLFUNC(Shell)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No shell command for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3271,6 +3392,9 @@ RTLFUNC(Shell)
 
 RTLFUNC(VarType)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3335,6 +3459,9 @@ String getBasicTypeName( SbxDataType eType )
 
 RTLFUNC(TypeName)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3350,6 +3477,9 @@ RTLFUNC(TypeName)
 
 RTLFUNC(Len)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3361,6 +3491,9 @@ RTLFUNC(Len)
 
 RTLFUNC(DDEInitiate)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No DDE for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3388,6 +3521,9 @@ RTLFUNC(DDEInitiate)
 
 RTLFUNC(DDETerminate)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No DDE for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3411,6 +3547,9 @@ RTLFUNC(DDETerminate)
 
 RTLFUNC(DDETerminateAll)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No DDE for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3435,6 +3574,9 @@ RTLFUNC(DDETerminateAll)
 
 RTLFUNC(DDERequest)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No DDE for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3461,6 +3603,9 @@ RTLFUNC(DDERequest)
 
 RTLFUNC(DDEExecute)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No DDE for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3485,6 +3630,9 @@ RTLFUNC(DDEExecute)
 
 RTLFUNC(DDEPoke)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     // No DDE for "virtual" portal users
     if( needSecurityRestrictions() )
     {
@@ -3511,6 +3659,9 @@ RTLFUNC(DDEPoke)
 
 RTLFUNC(FreeFile)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 1 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3533,6 +3684,9 @@ RTLFUNC(FreeFile)
 
 RTLFUNC(LBound)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     USHORT nParCount = rPar.Count();
     if ( nParCount != 3 && nParCount != 2 )
     {
@@ -3556,6 +3710,9 @@ RTLFUNC(LBound)
 
 RTLFUNC(UBound)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     USHORT nParCount = rPar.Count();
     if ( nParCount != 3 && nParCount != 2 )
     {
@@ -3580,6 +3737,9 @@ RTLFUNC(UBound)
 
 RTLFUNC(RGB)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 4 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3606,6 +3766,9 @@ RTLFUNC(RGB)
 
 RTLFUNC(QBColor)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     static const INT32 pRGB[] =
     {
         0x000000,
@@ -3645,6 +3808,10 @@ RTLFUNC(QBColor)
 
 RTLFUNC(StrConv)
 {
+    (void)pBasic;
+    (void)bWrite;
+    (void)rPar;
+
     DBG_ASSERT(0,"StrConv:Not implemented");
 //  if ( rPar.Count() != 3 )
 //  {
@@ -3655,6 +3822,9 @@ RTLFUNC(StrConv)
 
 RTLFUNC(Beep)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() != 1 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3665,6 +3835,9 @@ RTLFUNC(Beep)
 
 RTLFUNC(Load)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3684,6 +3857,9 @@ RTLFUNC(Load)
 
 RTLFUNC(Unload)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if( rPar.Count() != 2 )
     {
@@ -3704,6 +3880,9 @@ RTLFUNC(Unload)
 
 RTLFUNC(LoadPicture)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3727,6 +3906,9 @@ RTLFUNC(LoadPicture)
 
 RTLFUNC(SavePicture)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if( rPar.Count() != 3 )
     {
@@ -3748,10 +3930,16 @@ RTLFUNC(SavePicture)
 
 RTLFUNC(AboutStarBasic)
 {
+    (void)pBasic;
+    (void)bWrite;
+    (void)rPar;
 }
 
 RTLFUNC(MsgBox)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     static const WinBits nStyleMap[] =
     {
         WB_OK,              // MB_OK
@@ -3858,6 +4046,9 @@ RTLFUNC(MsgBox)
 
 RTLFUNC(SetAttr) // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+
     rPar.Get(0)->PutEmpty();
     if ( rPar.Count() == 3 )
     {
@@ -3905,28 +4096,8 @@ RTLFUNC(SetAttr) // JSM
             if (!SetFileAttributes (aByteFile.GetBuffer(),(DWORD)nFlags))
                 StarBASIC::Error(SbERR_FILE_NOT_FOUND);
     #endif
-    #ifdef OS2
-            FILESTATUS3 aFileStatus;
-            APIRET rc = DosQueryPathInfo(aByteFile.GetBuffer(),1,
-                                         &aFileStatus,sizeof(FILESTATUS3));
-            if (!rc)
-            {
-                if (aFileStatus.attrFile != nFlags)
-                {
-                    aFileStatus.attrFile = nFlags;
-                    rc = DosSetPathInfo(aFile.GetStr(),1,
-                                        &aFileStatus,sizeof(FILESTATUS3),0);
-                    if (rc)
-                        StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-                }
-            }
-            else
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #endif
 #else
-            sal_Bool bReadOnly = (nFlags & 0x0001) != 0; // ATTR_READONLY
-            sal_uInt64 nAttrs = bReadOnly ? Attribute_ReadOnly : 0;
-            String aPath = getFullPathUNC( rPar.Get(1)->GetString() );
+            // Not implemented
 #endif
         }
     }
@@ -3936,6 +4107,10 @@ RTLFUNC(SetAttr) // JSM
 
 RTLFUNC(Reset)  // JSM
 {
+    (void)pBasic;
+    (void)bWrite;
+    (void)rPar;
+
     SbiIoSystem* pIO = pINST->GetIoSystem();
     if (pIO)
         pIO->CloseAll();
@@ -3943,6 +4118,9 @@ RTLFUNC(Reset)  // JSM
 
 RTLFUNC(DumpAllObjects)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     USHORT nArgCount = (USHORT)rPar.Count();
     if( nArgCount < 2 || nArgCount > 3 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3965,6 +4143,9 @@ RTLFUNC(DumpAllObjects)
 
 RTLFUNC(FileExists)
 {
+    (void)pBasic;
+    (void)bWrite;
+
     if ( rPar.Count() == 2 )
     {
         String aStr = rPar.Get(1)->GetString();
