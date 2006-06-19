@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuiimapwnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:52:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
@@ -115,8 +114,6 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
     ModalDialog         ( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) ),
 
     aFlURL              ( this, ResId( FL_URL ) ),
-    aBtnOk              ( this, ResId( BTN_OK ) ),
-    aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
     aFtURL1             ( this, ResId( FT_URL1 ) ),
     aEdtURL             ( this, ResId( EDT_URL ) ),
     aFtURLDescription   ( this, ResId( FT_URLDESCRIPTION ) ),
@@ -124,7 +121,9 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
     aFtTarget           ( this, ResId( FT_TARGET ) ),
     aCbbTargets         ( this, ResId( CBB_TARGETS ) ),
     aFtName             ( this, ResId( FT_NAME ) ),
-    aEdtName            ( this, ResId( EDT_NAME ) )
+    aEdtName            ( this, ResId( EDT_NAME ) ),
+    aBtnOk              ( this, ResId( BTN_OK ) ),
+    aBtnCancel          ( this, ResId( BTN_CANCEL1 ) )
 
 {
     FreeResource();
