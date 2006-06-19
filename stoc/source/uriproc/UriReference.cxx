@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UriReference.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:16:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,23 +46,23 @@ namespace css = com::sun::star;
 using stoc::uriproc::UriReference;
 
 UriReference::UriReference(
-    rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
+    rtl::OUString const & scheme, bool bIsHierarchical, bool bHasAuthority,
     rtl::OUString const & authority, rtl::OUString const & path,
-    bool hasQuery, rtl::OUString const & query):
+    bool bHasQuery, rtl::OUString const & query):
     m_scheme(scheme),
     m_authority(authority),
     m_path(path),
     m_query(query),
-    m_isHierarchical(isHierarchical),
-    m_hasAuthority(hasAuthority),
-    m_hasQuery(hasQuery),
+    m_isHierarchical(bIsHierarchical),
+    m_hasAuthority(bHasAuthority),
+    m_hasQuery(bHasQuery),
     m_hasFragment(false)
 {
-    OSL_ASSERT(scheme.getLength() != 0 || isHierarchical);
-    OSL_ASSERT(!hasAuthority || isHierarchical);
-    OSL_ASSERT(authority.getLength() == 0 || hasAuthority);
-    OSL_ASSERT(!hasQuery || isHierarchical);
-    OSL_ASSERT(query.getLength() == 0 || hasQuery);
+    OSL_ASSERT(scheme.getLength() != 0 || bIsHierarchical);
+    OSL_ASSERT(!bHasAuthority || bIsHierarchical);
+    OSL_ASSERT(authority.getLength() == 0 || bHasAuthority);
+    OSL_ASSERT(!bHasQuery || bIsHierarchical);
+    OSL_ASSERT(query.getLength() == 0 || bHasQuery);
 }
 
 UriReference::~UriReference() {}
