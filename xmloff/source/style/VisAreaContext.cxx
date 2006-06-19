@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VisAreaContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:30:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "filt_pch.hxx"
 #endif
 
-#pragma hdrstop
+
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -146,7 +146,7 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
 SvXMLImportContext *XMLVisAreaContext::CreateChildContext( USHORT nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                          ::com::sun::star::xml::sax::XAttributeList>& )
 {
     // here is no context
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
