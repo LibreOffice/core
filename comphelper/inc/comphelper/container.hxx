@@ -4,9 +4,9 @@
  *
  *  $RCSfile: container.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:29:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #define _COMPHELPER_CONTAINER_HXX_
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
 #endif
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
@@ -80,17 +82,19 @@ protected:
 public:
     IndexAccessIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint);
 
+    virtual ~IndexAccessIterator();
+
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    Next();
 
     virtual void Invalidate() { m_xCurrentObject = NULL; }
 
 protected:
-    virtual sal_Bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rElement) { return sal_True; }
+    virtual sal_Bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*rElement*/) { return sal_True; }
         // damit kann man bestimmte Elemente ausschliessen, die werden dann einfach
         // uebergangen
         // wenn hier sal_True zurueckkommt, wird dieses Element von Next zurueckgeliefert, man kann sich hier also auch
         // gleich ein paar zusaetzliche Angaben zu dem Element holen (deswegen ist die Methode auch nicht const)
-    virtual sal_Bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xContainer) const { return sal_True; }
+    virtual sal_Bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*xContainer*/) const { return sal_True; }
 };
 
 //.........................................................................
