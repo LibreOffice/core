@@ -4,9 +4,9 @@
  *
  *  $RCSfile: replace.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:34:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 /****************************************************************************/
-#if defined( UNX ) || defined( MAC )
+#if defined UNX
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
