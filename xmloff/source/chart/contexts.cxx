@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:30:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ SchXMLBodyContext_Impl::~SchXMLBodyContext_Impl()
 SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & )
 {
     return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
                                   rLocalName );
