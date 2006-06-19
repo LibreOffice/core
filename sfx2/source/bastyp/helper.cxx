@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:54:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ using namespace rtl;
 using namespace comphelper;
 using namespace osl;
 
-DECLARE_LIST( StringList_Impl, OUString* );
+DECLARE_LIST( StringList_Impl, OUString* )
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
@@ -337,7 +337,6 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
                     xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
                 if ( xDynamicResultSet.is() )
                 {
-                    sal_Int16 nCaps = xDynamicResultSet->getCapabilities();
                     xResultSet = xDynamicResultSet->getStaticResultSet();
                 }
             }
@@ -399,7 +398,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
 
 // -----------------------------------------------------------------------
 
-Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String& rFolder, sal_Bool bFolder )
+Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String& rFolder, sal_Bool bIsFolder )
 {
     StringList_Impl* pProperties = NULL;
     INetURLObject aFolderObj( rFolder );
@@ -423,10 +422,10 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
         try
         {
             Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-            ResultSetInclude eInclude = bFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
+            ResultSetInclude eInclude = bIsFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
-            Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
+            Reference < com::sun::star::ucb::XAnyCompareFactory > xCmpFactory;
             Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
             Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
                 xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
@@ -440,10 +439,9 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 
             Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
             xDynamicResultSet =
-                xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
+                xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCmpFactory );
             if ( xDynamicResultSet.is() )
             {
-                sal_Int16 nCaps = xDynamicResultSet->getCapabilities();
                 xResultSet = xDynamicResultSet->getStaticResultSet();
             }
 
@@ -577,7 +575,6 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
                 {
                     String aTitle( xRow->getString(1) );
                     String aType( xRow->getString(2) );
-                    sal_Bool bFolder = xRow->getBoolean(3);
                     String aRow = aTitle;
                     aRow += '\t';
                     aRow += aType;
