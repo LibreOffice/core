@@ -4,9 +4,9 @@
  *
  *  $RCSfile: is_ce.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:50:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@ Ce_Storage::EraseAll()
 }
 
 void
-Ce_Storage::Save( PersistenceAdmin &  io_rSaver ) const
+Ce_Storage::Save( PersistenceAdmin &  ) const
 {
     // KORR_FUTURE
 }
 
 void
-Ce_Storage::Load( PersistenceAdmin & io_rLoader )
+Ce_Storage::Load( PersistenceAdmin & )
 {
     // KORR_FUTURE
 }
