@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:40:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,10 +283,10 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     sModify         (ResId(STR_MODIFY)),
     sNew            (aNewReplacePB.GetText()),
     aDecoView       ( this),
-    bFirstSelect    (sal_True),
-    bDoNothing      (sal_False),
     xSpell          ( xSpl ),
-    nOld            ( NOACTDICT )
+    nOld            ( NOACTDICT ),
+    bFirstSelect    (sal_True),
+    bDoNothing      (sal_False)
 
 {
     if (SvxGetDictionaryList().is())
@@ -581,7 +581,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
             aStr += '\t';
             aStr += String(pEntry[i]->getReplacementText());
         }
-        aWordsLB.InsertEntry(aStr, nPos == USHRT_MAX ?  LIST_APPEND : nPos);
+        aWordsLB.InsertEntry(aStr, 0, sal_False, nPos == USHRT_MAX ?  LIST_APPEND : nPos);
     }
 
     if (aWordsLB.GetEntryCount())
@@ -639,7 +639,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
     }
     if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
     {
-        SvLBoxEntry* pEntry = aWordsLB.FirstSelected();
+        SvLBoxEntry* _pEntry = aWordsLB.FirstSelected();
         XubString aNewWord(aWordED.GetText());
         String sEntry(aNewWord);
         XubString aReplaceStr(aReplaceED.GetText());
@@ -661,8 +661,8 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                 if(bIsNegEntry)
                     aRplcText = aReplaceStr;
 
-                if (pEntry) // entry selected in aWordsLB ie action = modify entry
-                    xDic->remove( aWordsLB.GetEntryText( pEntry, 0 ) );
+                if (_pEntry) // entry selected in aWordsLB ie action = modify entry
+                    xDic->remove( aWordsLB.GetEntryText( _pEntry, 0 ) );
                 // if remove has failed the following add should fail too
                 // and thus a warning message should be triggered...
 
@@ -680,7 +680,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             // insert new entry in list-box etc...
 
             aWordsLB.SetUpdateMode(sal_False);
-            sal_uInt16 nPos = USHRT_MAX;
+            sal_uInt16 _nPos = USHRT_MAX;
 
             if(aReplaceFT.IsVisible())
             {
@@ -689,16 +689,16 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             }
 
             SvLBoxEntry* pNewEntry = NULL;
-            if(pEntry) // entry selected in aWordsLB ie action = modify entry
+            if(_pEntry) // entry selected in aWordsLB ie action = modify entry
             {
-                aWordsLB.SetEntryText( sEntry, pEntry );
-                pNewEntry = pEntry;
+                aWordsLB.SetEntryText( sEntry, _pEntry );
+                pNewEntry = _pEntry;
             }
             else
             {
-                nPos = GetLBInsertPos( aNewWord );
-                SvLBoxEntry* pInsEntry = aWordsLB.InsertEntry(sEntry,
-                            nPos == USHRT_MAX ? LIST_APPEND : (sal_uInt32)nPos);
+                _nPos = GetLBInsertPos( aNewWord );
+                SvLBoxEntry* pInsEntry = aWordsLB.InsertEntry(sEntry, 0, sal_False,
+                            _nPos == USHRT_MAX ? LIST_APPEND : (sal_uInt32)_nPos);
                 pNewEntry = pInsEntry;
             }
 
