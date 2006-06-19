@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:14:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,9 @@ sal_Char __READONLY_DATA sTelnetScheme[] = INET_TELNET_SCHEME;
 
 SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
                                                  const SfxItemSet& rItemSet)
-:   maGrpLinkTyp            ( this, ResId (GRP_LINKTYPE) ),
+:   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
+                              rItemSet ) ,
+    maGrpLinkTyp           ( this, ResId (GRP_LINKTYPE) ),
     maRbtLinktypInternet    ( this, ResId (RB_LINKTYP_INTERNET) ),
     maRbtLinktypFTP         ( this, ResId (RB_LINKTYP_FTP) ),
     maRbtLinktypTelnet      ( this, ResId (RB_LINKTYP_TELNET) ),
@@ -81,10 +83,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous           ( this, ResId (CBX_ANONYMOUS) ),
     maBtBrowse              ( this, ResId (BTN_BROWSE) ),
     maBtTarget              ( this, ResId (BTN_TARGET) ),
-    SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
-                              rItemSet ) ,
-    mbMarkWndOpen           ( FALSE ),
-    maStrStdDocURL          ()
+    mbMarkWndOpen           ( FALSE )
 {
     // Set HC bitmaps and display display of bitmap names.
     maBtBrowse.SetModeImage( Image( ResId( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
@@ -543,7 +542,7 @@ void SvxHyperlinkInternetTp::SetMarkStr ( String& aStrMark )
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::SetOnlineMode( BOOL bEnable )
+void SvxHyperlinkInternetTp::SetOnlineMode( BOOL /*bEnable*/ )
 {
     // State of target-button in subject to the current url-string
     // ( Can't display any targets in an document, if there is no
