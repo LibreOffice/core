@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:18:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@
 #include <queue>
 #include <set>
 
-SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
+SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16)
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
@@ -237,9 +237,9 @@ struct SAL_DLLPRIVATE FmLoadAction
     sal_uInt32  nEventId;
     sal_uInt16  nFlags;
 
-    FmLoadAction( ) : pPage( NULL ), nFlags( 0 ), nEventId( 0 ) { }
+    FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
     FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, sal_uInt32 _nEventId )
-        :pPage( _pPage ), nFlags( _nFlags ), nEventId( _nEventId )
+        :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
     }
 };
@@ -303,7 +303,8 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     CursorActions   m_aCursorActions;
         // all actions on async cursors
 
-    SvBools     m_aControlLocks;
+    ::std::vector< sal_Bool >
+                    m_aControlLocks;
         // while doing a async cursor action we have to lock all controls of the active controller.
         // m_aControlLocks remembers the previous lock states to be restored afterwards.
     ::osl::Mutex    m_aAsyncSafety;
@@ -364,7 +365,7 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     mutable ::svxform::DocumentType
                     m_eDocumentType;        /// the type of document we're living in
     sal_Int16       m_nLockSlotInvalidation;
-    sal_Bool        m_bHadPropBrw:1;
+    sal_Bool        m_bHadPropertyBrowserInDesignMode : 1;
 
     sal_Bool        m_bTrackProperties  : 1;
         // soll ich (bzw. der Owner diese Impl-Klasse) mich um die Aktualisierung des ::com::sun::star::beans::Property-Browsers kuemmern ?
@@ -467,8 +468,6 @@ protected:
     void startListening();
     void stopListening();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> GetBoundField(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>  GetControlFromModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel);
         // liefert das Control, welches das angegebene Model hat
     void CollectFormContexts(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xStartingPoint, const UniString& strCurrentLevelPrefix, UniString& strNames);
@@ -533,7 +532,7 @@ public:
 
     void DetermineSelection(const SdrMarkList& rMarkList);
     void SetSelection(const SdrMarkList& rMarkList);
-    void SetSelectionDelayed(FmFormView* pView);
+    void SetSelectionDelayed();
 
     void SetDesignMode(sal_Bool bDesign);
 
@@ -781,7 +780,7 @@ public:
     ::com::sun::star::sdbc::SQLException        GetRunException()                   { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_aRunException; }
 
     /// the excution (within the method "run") was canceled ?
-    sal_Bool                WasCanceled(sal_Bool bEnable)           { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bCanceled; }
+    sal_Bool                WasCanceled()                       { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bCanceled; }
 
     /// the handler will be called synchronously (the parameter is a pointer to the thread)
     void                SetTerminationHdl(const Link& aTermHdl) { ::osl::MutexGuard aGuard(m_aAccessSafety); m_aTerminationHandler = aTermHdl; }
