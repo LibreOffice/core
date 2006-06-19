@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:01:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,8 +148,8 @@ BOOL ImplImageRefData::IsEqual( const ImplImageRefData& rData )
 // -----------------
 
 ImplImageData::ImplImageData( const BitmapEx& rBmpEx ) :
-    maBmpEx( rBmpEx ),
-    mpImageBitmap( NULL )
+    mpImageBitmap( NULL ),
+    maBmpEx( rBmpEx )
 {
 }
 
@@ -264,7 +264,7 @@ void ImplImageBmp::Expand( USHORT nGrowSize )
 {
     const ULONG     nDX = nGrowSize * maSize.Width();
     const USHORT    nOldSize = mnSize;
-    BYTE*           pNewAry = new BYTE[ mnSize += nGrowSize ];
+    BYTE*           pNewAry = new BYTE[ mnSize = sal::static_int_cast<USHORT>(mnSize+nGrowSize) ];
 
     maBmpEx.Expand( nDX, 0UL );
 
@@ -566,7 +566,11 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ImplUpdateDisplayBmp( OutputDevice* pOutDev )
+void ImplImageBmp::ImplUpdateDisplayBmp( OutputDevice*
+#if defined WIN || defined WNT
+pOutDev
+#endif
+)
 {
     if( !mpDisplayBmp && !maBmpEx.IsEmpty() )
     {
