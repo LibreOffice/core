@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,8 +134,8 @@ _FileListEntry::_FileListEntry( const String& rFileName,
     pCollator   ( pColl ),
     bFile       ( FALSE ),
     bOwner      ( FALSE ),
-    bOwnFormat  ( TRUE ),
-    bNoName     ( TRUE )
+    bNoName     ( TRUE ),
+    bOwnFormat  ( TRUE )
 {
     if ( pTitle )
         aBaseName = *pTitle;
@@ -671,10 +671,12 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
             nIdx = 0;
         else nIdx++;
 
-        SvLBoxEntry *pEntry = pCaller->InsertEntry( rName,
-                                                    pCaller->GetOpenedBmp(1),
-                                                    pCaller->GetClosedBmp(1),
-                                                    pParent, TRUE, nIdx);
+        pCaller->InsertEntry( rName,
+                              pCaller->GetOpenedBmp(1),
+                              pCaller->GetClosedBmp(1),
+                              pParent,
+                              TRUE,
+                              nIdx);
         pCaller->Update();
         // pCaller->EditEntry( pEntry );
         pCaller->Expand( pParent );
