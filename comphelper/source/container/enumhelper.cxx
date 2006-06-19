@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enumhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:45:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:46:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,8 @@ void OEnumerationByName::impl_stopDisposeListening()
 //==================================================================
 //------------------------------------------------------------------------------
 OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess)
-    :m_xAccess(_rxAccess)
-    ,m_nPos(0)
+    :m_nPos(0)
+    ,m_xAccess(_rxAccess)
     ,m_bListening(sal_False)
 {
     impl_startDisposeListening();
