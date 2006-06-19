@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:57:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
 
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
+#endif
+
 namespace connectivity
 {
     namespace parse
@@ -46,7 +50,7 @@ namespace connectivity
         class OParseColumn;
 
         typedef sdbcx::OColumn OParseColumn_BASE;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
 
         class OParseColumn :    public OParseColumn_BASE,
                                 public OParseColumn_PROP
@@ -57,7 +61,7 @@ namespace connectivity
             sal_Bool        m_bDbasePrecisionChanged;
             sal_Bool        m_bAggregateFunction;
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
             virtual ~OParseColumn();
@@ -86,12 +90,14 @@ namespace connectivity
             ::rtl::OUString getTableName() const { return  m_aTableName; }
             sal_Bool        getFunction() const { return  m_bFunction; }
             sal_Bool        getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
+        private:
+            using OParseColumn_BASE::createArrayHelper;
         };
 
         class OOrderColumn;
 
         typedef sdbcx::OColumn OOrderColumn_BASE;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
 
         class OOrderColumn :    public OOrderColumn_BASE,
                                 public OOrderColumn_PROP
@@ -99,7 +105,7 @@ namespace connectivity
             sal_Bool        m_bAscending;
             sal_Bool        m_bOrder;
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
             virtual ~OOrderColumn();
@@ -120,6 +126,8 @@ namespace connectivity
             virtual void construct();
 
             virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        private:
+            using OOrderColumn_BASE::createArrayHelper;
         };
     }
 }
