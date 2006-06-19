@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:15:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,6 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-
-#pragma hdrstop
 
 #include "dialogs.hrc"
 
@@ -492,6 +490,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
             //case STATE_CHECK: eFTS = SDRTEXTFIT_RESIZEATTR; break;
             case STATE_CHECK: eFTS = SDRTEXTFIT_PROPORTIONAL; break;
+            default: ; //prevent warning
         }
         rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
@@ -602,6 +601,7 @@ void SvxTextAttrPage::Construct()
                     bWordWrapTextEnabled = TRUE;
                 }
                 break;
+                default: ;//prevent warning
             }
         }
     }
@@ -644,7 +644,7 @@ USHORT* SvxTextAttrPage::GetRanges()
 
 /** Check whether we have to uncheck the "Full width" check box.
 */
-void SvxTextAttrPage::PointChanged( Window* pWindow, RECT_POINT eRP )
+void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
 {
     if (aTsbFullWidth.GetState() == STATE_CHECK)
     {
@@ -660,6 +660,8 @@ void SvxTextAttrPage::PointChanged( Window* pWindow, RECT_POINT eRP )
                 case RP_RM:
                 case RP_RB:
                     aTsbFullWidth.SetState( STATE_NOCHECK );
+                break;
+                default: ;//prevent warning
             }
         else
             switch (eRP)
@@ -671,6 +673,8 @@ void SvxTextAttrPage::PointChanged( Window* pWindow, RECT_POINT eRP )
                 case RP_MB:
                 case RP_RB:
                     aTsbFullWidth.SetState( STATE_NOCHECK );
+                break;
+                default: ;//prevent warning
             }
     }
 }
@@ -708,6 +712,7 @@ IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
                 case RP_RB:
                     aCtlPosition.SetActualRP( RP_MB );
                     break;
+                default: ;//prevent warning
             }
         }
         else
@@ -728,7 +733,8 @@ IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
                 case RP_RT:
                 case RP_RB:
                     aCtlPosition.SetActualRP( RP_RM );
-                    break;
+                break;
+                default: ;//prevent warning
             }
         }
     }
@@ -741,7 +747,7 @@ IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
+IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, EMPTYARG )
 {
     BOOL bAutoGrowWidth  = aTsbAutoGrowWidth.GetState() == STATE_CHECK;
     BOOL bAutoGrowHeight = aTsbAutoGrowHeight.GetState() == STATE_CHECK;
