@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opageenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ OuputPage_Environment::MoveDir_Down2( const ary::cpp::Class & i_rClass )
 }
 
 void
-OuputPage_Environment::MoveDir_2Project( const ary::cpp::ProjectGroup & i_rProject )
+OuputPage_Environment::MoveDir_2Project( const ary::cpp::ProjectGroup & )
 {
     // KORR_FUTURE
 }
@@ -501,13 +501,13 @@ OuputPage_Environment::SetFile_CurProject()
 }
 
 void
-OuputPage_Environment::SetFile_File( const ary::cpp::FileGroup & i_rFile )
+OuputPage_Environment::SetFile_File( const ary::cpp::FileGroup & )
 {
     // KORR_FUTURE
 }
 
 void
-OuputPage_Environment::SetFile_Defs( const ary::cpp::FileGroup & i_rFile )
+OuputPage_Environment::SetFile_Defs( const ary::cpp::FileGroup & )
 {
     // KORR_FUTURE
 }
