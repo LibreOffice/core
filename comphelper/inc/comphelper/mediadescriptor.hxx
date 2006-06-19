@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:54:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,6 @@
 
 //_______________________________________________
 // includes
-
-#ifndef __COM_SUN_STAR_IO_XINPUTSTREAM_HPP__
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
@@ -206,7 +202,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
          */
-        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithPostData(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xPostData)
+        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithPostData()
             throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
