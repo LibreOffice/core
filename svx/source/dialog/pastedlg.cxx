@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pastedlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:53:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@ void SvPasteObjectDialog::SelectObject()
 
 IMPL_LINK( SvPasteObjectDialog, SelectHdl, ListBox *, pListBox )
 {
+    (void)pListBox;
+
     if ( !aOKButton1.IsEnabled() )
         aOKButton1.Enable();
     return 0;
@@ -106,6 +108,8 @@ IMPL_LINK( SvPasteObjectDialog, SelectHdl, ListBox *, pListBox )
 
 IMPL_LINK_INLINE_START( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 {
+    (void)pListBox;
+
     EndDialog( RET_OK );
     return 0;
 }
