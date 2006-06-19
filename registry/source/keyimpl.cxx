@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keyimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:14:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 //*********************************************************************
 //  ORegKey()
 //
-ORegKey::ORegKey(const OUString& keyName, const OStoreDirectory& rStoreDir, ORegistry* pReg)
+ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
     : m_refCount(1)
     , m_name(keyName)
     , m_bDeleted(sal_False)
@@ -69,7 +69,7 @@ ORegKey::ORegKey(const OUString& keyName, const OStoreDirectory& rStoreDir, OReg
 //  ORegKey()
 //
 ORegKey::ORegKey(const OUString& keyName, const OUString& linkName,
-                 const OStoreDirectory& rStoreDir, ORegistry* pReg)
+                 ORegistry* pReg)
     : m_refCount(1)
     , m_name(keyName)
     , m_bDeleted(sal_False)
@@ -133,14 +133,15 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
 {
     ORegKey*        pKey;
     OUString        sFullKeyName, sSubKeyName;
-    RegKeyHandle    hSKey, hSubKey;
+    RegKeyHandle    hSKey = 0, hSubKey;
     RegError        _ret = REG_NO_ERROR;
     sal_uInt32      nSubKeys;
     ORegKey*        *subKeys;
 
     if ( keyName.getLength() )
     {
-        if ((_ret = openKey(keyName, &hSKey)))
+        _ret = openKey(keyName, &hSKey);
+        if (_ret)
         {
             *phOpenSubKeys = NULL;
             *pnSubKeys = 0;
@@ -173,7 +174,8 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
                 sFullKeyName += m_pRegistry->ROOT;
             sFullKeyName += sSubKeyName;
 
-            if (_ret = pKey->openKey(sSubKeyName, &hSubKey))
+            _ret = pKey->openKey(sSubKeyName, &hSubKey);
+            if (_ret)
             {
                 *phOpenSubKeys = NULL;
                 *pnSubKeys = 0;
@@ -213,7 +215,8 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 
     if (keyName.getLength())
     {
-        if (_ret = openKey(keyName, (RegKeyHandle*)&pKey, RESOLVE_PART))
+        _ret = openKey(keyName, (RegKeyHandle*)&pKey, RESOLVE_PART);
+        if (_ret)
         {
             *pSubKeyNames = NULL;
             *pnSubKeys = 0;
@@ -418,6 +421,9 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
             break;
         case RG_VALUETYPE_BINARY:
             rtl_copyMemory(pBuffer+VALUE_HEADEROFFSET, value, size);
+            break;
+        default:
+            OSL_ASSERT(false);
             break;
     }
 
@@ -1047,7 +1053,9 @@ RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
 
     if ( name.getLength() )
     {
-        if ((_ret = ((ORegKey*)this)->openKey(name, (RegKeyHandle*)&pKey, RESOLVE_PART)))
+        _ret = ((ORegKey*)this)->openKey(
+            name, (RegKeyHandle*)&pKey, RESOLVE_PART);
+        if (_ret)
             return _ret;
 
         if (pKey->isLink())
@@ -1082,7 +1090,8 @@ RegError ORegKey::createLink(const OUString& linkName, const OUString& linkTarge
 
     if (m_pRegistry->openKey(this, linkName, (RegKeyHandle*)&pKey, RESOLVE_PART))
     {
-        if (_ret = m_pRegistry->createKey(this, linkName, (RegKeyHandle*)&pKey))
+        _ret = m_pRegistry->createKey(this, linkName, (RegKeyHandle*)&pKey);
+        if (_ret)
             return _ret;
     } else
     {
@@ -1124,7 +1133,9 @@ RegError ORegKey::getLinkTarget(const OUString& linkName, OUString& linkTarget) 
 
     if ( linkName.getLength() )
     {
-        if (_ret = ((ORegKey*)this)->openKey(linkName, (RegKeyHandle*)&pKey, RESOLVE_PART))
+        _ret = ((ORegKey*)this)->openKey(
+            linkName, (RegKeyHandle*)&pKey, RESOLVE_PART);
+        if (_ret)
             return REG_INVALID_LINK;
 
         _ret = pKey->getLinkTarget(OUString(), linkTarget);
@@ -1142,10 +1153,10 @@ RegError ORegKey::getLinkTarget(const OUString& linkName, OUString& linkTarget) 
 }
 
 RegError ORegKey::getResolvedKeyName(const OUString& keyName,
-                                     OUString& resolvedName,
-                                     sal_Bool firstLinkOnly)
+                                     OUString& resolvedName)
 {
-    return m_pRegistry->getResolvedKeyName((ORegKey*)this, keyName, resolvedName, firstLinkOnly);
+    return
+        m_pRegistry->getResolvedKeyName((ORegKey*)this, keyName, resolvedName);
 }
 
 //*********************************************************************
