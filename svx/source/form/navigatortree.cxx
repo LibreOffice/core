@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:34:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,22 +240,25 @@ namespace svxform
                            Window* pParent )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL ) // #100258# OJ WB_HSCROLL added
         ,m_aControlExchange(this)
-        ,nEditEvent(0)
+        ,m_xORB(_xORB)
+        ,m_pNavModel( NULL )
+        ,m_pRootEntry(NULL)
         ,m_pEditEntry(NULL)
-        ,m_nSelectLock(0)
+        ,nEditEvent(0)
+        ,m_sdiState(SDI_DIRTY)
         ,m_aTimerTriggered(-1,-1)
-        ,m_bRootSelected(sal_False)
+        ,m_aDropActionType( DA_SCROLLUP )
+        ,m_nSelectLock(0)
         ,m_nFormsSelected(0)
         ,m_nControlsSelected(0)
         ,m_nHiddenControls(0)
-        ,m_bPrevSelectionMixed(sal_False)
-        ,m_bInitialUpdate(sal_True)
-        ,m_bMarkingObjects(sal_False)
-        ,m_sdiState(SDI_DIRTY)
+        ,m_aTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
         ,m_bDragDataDirty(sal_False)
+        ,m_bPrevSelectionMixed(sal_False)
+        ,m_bMarkingObjects(sal_False)
+        ,m_bRootSelected(sal_False)
+        ,m_bInitialUpdate(sal_True)
         ,m_bKeyboardCut( sal_False )
-        ,m_pRootEntry(NULL)
-        ,m_xORB(_xORB)
     {
         SetHelpId( HID_FORM_NAVIGATOR );
 
@@ -311,7 +314,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTree::Update( FmFormShell* pFormShell )
+    void NavigatorTree::UpdateContent( FmFormShell* pFormShell )
     {
         if (m_bInitialUpdate)
         {
@@ -331,7 +334,7 @@ namespace svxform
 
             m_bDragDataDirty = sal_True;    // sicherheitshalber, auch wenn ich gar nicht dragge
         }
-        GetNavModel()->Update( pFormShell );
+        GetNavModel()->UpdateContent( pFormShell );
 
         // wenn es eine Form gibt, die Root expandieren
         if (m_pRootEntry && !IsExpanded(m_pRootEntry))
@@ -417,7 +420,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    void NavigatorTree::StartDrag( sal_Int8 nAction, const ::Point& rPosPixel )
+    void NavigatorTree::StartDrag( sal_Int8 /*nAction*/, const ::Point& /*rPosPixel*/ )
     {
         EndSelection();
 
@@ -460,7 +463,7 @@ namespace svxform
                     SvLBoxEntry* pCurrent = GetCurEntry();
                     if (!pCurrent)
                         break;
-                    ptWhere = GetEntryPos(pCurrent);
+                    ptWhere = GetEntryPosition(pCurrent);
                 }
 
                 // meine Selektionsdaten auf den aktuellen Stand
@@ -537,10 +540,11 @@ namespace svxform
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
                     {
                         aContextMenu.SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
+#if OSL_DEBUG_LEVEL > 0
                         FmControlData* pCurrent = (FmControlData*)(m_arrCurrentSelection[0]->GetUserData());
-
                         OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
                             "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
+#endif
 
                         pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection( *aContextMenu.GetPopupMenu( SID_FM_CHANGECONTROLTYPE ) );
                     }
@@ -691,7 +695,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTree::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if( rHint.ISA(FmNavRemovedHint) )
         {
@@ -951,7 +955,7 @@ namespace svxform
         DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implAcceptDataTransfer: keine Eintraege !");
 
         sal_Bool bDropTargetIsComponent = IsFormComponentEntry( _pTargetEntry );
-        SvLBoxEntry* pDropTargetParent = GetParent( _pTargetEntry );
+        //SvLBoxEntry* pDropTargetParent = GetParent( _pTargetEntry );
 
         // conditions to disallow the drop
         // 0) the root entry is part of the list (can't DnD the root!)
@@ -1092,9 +1096,9 @@ namespace svxform
             return DND_ACTION_NONE;
 
         // format checks
+#ifdef DBG_UTIL
         sal_Bool bHasHiddenControlsFormat = OControlExchange::hasHiddenControlModelsFormat( rDataFlavors );
         sal_Bool bForeignCollection = _rData.getFormsRoot().get() != GetNavModel()->GetFormPage()->GetForms().get();
-#ifdef DBG_UTIL
         DBG_ASSERT(!bForeignCollection || bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: invalid format (AcceptDrop shouldn't have let this pass) !");
         DBG_ASSERT(bForeignCollection || !m_bDragDataDirty, "NavigatorTree::implExecuteDataTransfer: invalid state (shell changed since last exchange resync) !");
             // das sollte in AcceptDrop erledigt worden sein : dort wird in _rData die Liste der Controls aufgebaut und m_bDragDataDirty
@@ -1450,6 +1454,9 @@ namespace svxform
             case KEYFUNC_COPY:
                 doCopy();
                 break;
+
+            default:
+                break;
         }
 
         SvTreeListBox::KeyInput(rKEvt);
@@ -1644,7 +1651,9 @@ namespace svxform
         if (--m_aTimerCounter > 0)
             return 0L;
 
-        if (m_aDropActionType == DA_EXPANDNODE)
+        switch ( m_aDropActionType )
+        {
+        case DA_EXPANDNODE:
         {
             SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
             if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
@@ -1655,29 +1664,26 @@ namespace svxform
 
             // nach dem Expand habe ich im Gegensatz zum Scrollen natuerlich nix mehr zu tun
             m_aDropActionTimer.Stop();
-        } else
-        {
-            switch (m_aDropActionType)
-            {
-                case DA_SCROLLUP :
-                {
-                    ScrollOutputArea(1);
-                    break;
-                }
+        }
+        break;
 
-                case DA_SCROLLDOWN :
-                    ScrollOutputArea(-1);
-                    break;
-            }
-
+        case DA_SCROLLUP :
+            ScrollOutputArea( 1 );
             m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+            break;
+
+        case DA_SCROLLDOWN :
+            ScrollOutputArea( -1 );
+            m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+            break;
+
         }
 
         return 0L;
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, pThis)
+    IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
     {
         m_sdiState = SDI_DIRTY;
 
@@ -1739,8 +1745,6 @@ namespace svxform
             return;
 
         CollectSelectionData(SDI_ALL);
-        DBG_ASSERT( (m_nFormsSelected >= 0) && (m_nControlsSelected >= 0) && (m_nHiddenControls >= 0),
-            "NavigatorTree::ShowSelectionProperties : selection counter(s) invalid !");
         DBG_ASSERT( m_nFormsSelected + m_nControlsSelected + (m_bRootSelected ? 1 : 0) == m_arrCurrentSelection.Count(),
             "NavigatorTree::ShowSelectionProperties : selection meta data invalid !");
 
@@ -1818,11 +1822,11 @@ namespace svxform
     {
         // die Root darf ich natuerlich nicht mitloeschen
         sal_Bool bRootSelected = IsSelected(m_pRootEntry);
-        int nSelectionCount = GetSelectionCount();
-        if (bRootSelected && (nSelectionCount > 1))     // die Root plus andere Elemente ?
+        ULONG nSelectedEntries = GetSelectionCount();
+        if (bRootSelected && (nSelectedEntries > 1))     // die Root plus andere Elemente ?
             Select(m_pRootEntry, sal_False);                // ja -> die Root raus
 
-        if ((nSelectionCount == 0) || bRootSelected)    // immer noch die Root ?
+        if ((nSelectedEntries == 0) || bRootSelected)    // immer noch die Root ?
             return;                                     // -> sie ist das einzige selektierte -> raus
 
         DBG_ASSERT(!m_bPrevSelectionMixed, "NavigatorTree::DeleteSelection() : loeschen nicht erlaubt wenn Markierung und Selektion nciht konsistent");
