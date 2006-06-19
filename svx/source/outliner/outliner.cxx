@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:51:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 #include <outl_pch.hxx>
-
-#pragma hdrstop
 
 #include <math.h>
 
