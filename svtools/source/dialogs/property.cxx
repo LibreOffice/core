@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:18:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ void SvXPropertyEdit::ClearList()
 {
     return;
 }
-void SvXPropertyEdit::InsertEntry( const String& rString,USHORT nPos)
+void SvXPropertyEdit::InsertEntry( const String&,USHORT )
 {
     return;
 }
@@ -171,21 +171,21 @@ void* SvXPropertyEdit::GetMyData()
 }
 
 
-IMPL_LINK( SvXPropertyEdit, ModifiedHdl, Edit*, pEd )
+IMPL_LINK( SvXPropertyEdit, ModifiedHdl, Edit*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->Modified(this);
     return 0;
 }
 
-IMPL_LINK( SvXPropertyEdit, GetFocusHdl, Edit*, pEd )
+IMPL_LINK( SvXPropertyEdit, GetFocusHdl, Edit*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->GetFocus(this);
     return 0;
 }
 
-IMPL_LINK( SvXPropertyEdit, LoseFocusHdl, Edit*, pEd )
+IMPL_LINK( SvXPropertyEdit, LoseFocusHdl, Edit*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->LoseFocus(this);
@@ -299,21 +299,21 @@ void* SvXPropertyListBox::GetMyData()
     return pData;
 }
 
-IMPL_LINK( SvXPropertyListBox, ModifiedHdl, ListBox*, pLB )
+IMPL_LINK( SvXPropertyListBox, ModifiedHdl, ListBox*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->Modified(this);
     return 0;
 }
 
-IMPL_LINK( SvXPropertyListBox, GetFocusHdl, ListBox*, pLB )
+IMPL_LINK( SvXPropertyListBox, GetFocusHdl, ListBox*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->GetFocus(this);
     return 0;
 }
 
-IMPL_LINK( SvXPropertyListBox, LoseFocusHdl, ListBox*, pLB )
+IMPL_LINK( SvXPropertyListBox, LoseFocusHdl, ListBox*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->LoseFocus(this);
@@ -428,21 +428,21 @@ void* SvXPropertyComboBox::GetMyData()
     return pData;
 }
 
-IMPL_LINK( SvXPropertyComboBox, ModifiedHdl, ComboBox*, pCB )
+IMPL_LINK( SvXPropertyComboBox, ModifiedHdl, ComboBox*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->Modified(this);
     return 0;
 }
 
-IMPL_LINK( SvXPropertyComboBox, GetFocusHdl, ComboBox*, pCB )
+IMPL_LINK( SvXPropertyComboBox, GetFocusHdl, ComboBox*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->GetFocus(this);
     return 0;
 }
 
-IMPL_LINK( SvXPropertyComboBox, LoseFocusHdl, ComboBox*, pCB )
+IMPL_LINK( SvXPropertyComboBox, LoseFocusHdl, ComboBox*, EMPTYARG )
 {
     if(pListener!=NULL)
         pListener->LoseFocus(this);
@@ -616,7 +616,7 @@ void SvPropertyLine::Locked(BOOL nFlag)
         pSvXPropertyControl->SetLocked(nFlag);
 }
 
-BOOL SvPropertyLine::IsLocked()
+BOOL SvPropertyLine::IsLineLocked()
 {
     return bIsLocked;
 }
@@ -637,6 +637,10 @@ void SvPropertyLine::SetClickHdl(const Link& rLink)
 SvXPropEvListener::SvXPropEvListener()
 {
     pTheActiveControl=NULL;
+}
+
+SvXPropEvListener::~SvXPropEvListener()
+{
 }
 
 void SvXPropEvListener::Modified (SvXPropertyControl *pSvXPCtr)
@@ -1031,12 +1035,12 @@ USHORT SvListBoxForProperties::GetFirstVisibleEntry()
 {
     return 0;
 }
-void SvListBoxForProperties::SetFirstVisibleEntry(USHORT nPos)
+void SvListBoxForProperties::SetFirstVisibleEntry(USHORT)
 {
     return;
 }
 
-void SvListBoxForProperties::SetSelectedEntry(USHORT nPos)
+void SvListBoxForProperties::SetSelectedEntry(USHORT)
 {
     return;
 }
@@ -1341,6 +1345,9 @@ void SvPropertyBox::ClearTable()
     pPage->GetTheListBox()->Clear();
 }
 
+SvBasicPropertyDataControl::~SvBasicPropertyDataControl()
+{
+}
 
 void SvBasicPropertyDataControl::Modified(const String& aName,
                                 const String& aVal,void* pData)
@@ -1379,7 +1386,7 @@ void SvBasicPropertyDataControl::Select(        const String& aName,
     aSelectLink.Call(this);
 }
 
-void SvBasicPropertyDataControl::LinkClicked(const String& aName, void* pData)
+void SvBasicPropertyDataControl::LinkClicked(const String&, void*)
 {
 }
 
