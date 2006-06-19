@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:07:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,7 +634,7 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
-                                           sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                           sal_uInt32, const ::com::sun::star::datatransfer::DataFlavor& )
 {
     sal_Bool bRet = sal_False;
 
