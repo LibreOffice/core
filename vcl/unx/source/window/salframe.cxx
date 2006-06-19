@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:04:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -849,7 +849,7 @@ void X11SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalFrame::Enable( BOOL bEnable )
+void X11SalFrame::Enable( BOOL /*bEnable*/ )
 {
     // NYI: enable/disable frame
 }
@@ -2142,11 +2142,11 @@ X11SalFrame::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent
     aEvent.xclient.data.l[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
 #else
     aEvent.xclient.data.l[0] = (sal_uInt32)((long)pExtTextEvent);
-    aEvent.xclient.data.l[1] = NULL;
+    aEvent.xclient.data.l[1] = 0;
 #endif
     aEvent.xclient.data.l[2] = (sal_uInt32)nExtTextEventType;
-    aEvent.xclient.data.l[3] = NULL;
-    aEvent.xclient.data.l[4] = NULL;
+    aEvent.xclient.data.l[3] = 0;
+    aEvent.xclient.data.l[4] = 0;
 
     XPutBackEvent( GetXDisplay(), &aEvent );
 }
@@ -2583,7 +2583,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                     && aChild // pointer may not be in any child
                     )
                 {
-                    const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
                     for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
                     {
                         const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
@@ -2595,8 +2594,8 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                         {
                             // #i63638# check that pointer is inside window, not
                             // only inside stacking window
-                            if( root_x >= pFrame->maGeometry.nX && root_x < pFrame->maGeometry.nX+pFrame->maGeometry.nWidth &&
-                                root_y >= pFrame->maGeometry.nY && root_y < pFrame->maGeometry.nX+pFrame->maGeometry.nHeight )
+                            if( root_x >= pFrame->maGeometry.nX && root_x < sal::static_int_cast< int >(pFrame->maGeometry.nX+pFrame->maGeometry.nWidth) &&
+                                root_y >= pFrame->maGeometry.nY && root_y < sal::static_int_cast< int >(pFrame->maGeometry.nX+pFrame->maGeometry.nHeight) )
                             {
                                 bClosePopups = false;
                             }
@@ -3263,7 +3262,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     return 1;
 }
 
-IMPL_LINK( X11SalFrame, HandleAlwaysOnTopRaise, void*, pDummy )
+IMPL_LINK( X11SalFrame, HandleAlwaysOnTopRaise, void*, EMPTYARG )
 {
     if( bMapped_ )
         ToTop( 0 );
@@ -3448,7 +3447,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-long X11SalFrame::HandleColormapEvent( XColormapEvent *pEvent )
+long X11SalFrame::HandleColormapEvent( XColormapEvent* )
 {
     return 0;
 }
@@ -3603,7 +3602,15 @@ void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Bool X11SalFrame::checkKeyReleaseForRepeat( Display* pDisplay, XEvent* pCheck, XPointer pX11SalFrame )
+extern "C"
+{
+Bool call_checkKeyReleaseForRepeat( Display* pDisplay, XEvent* pCheck, XPointer pX11SalFrame )
+{
+    return X11SalFrame::checkKeyReleaseForRepeat( pDisplay, pCheck, pX11SalFrame );
+}
+}
+
+Bool X11SalFrame::checkKeyReleaseForRepeat( Display*, XEvent* pCheck, XPointer pX11SalFrame )
 {
     X11SalFrame* pThis = (X11SalFrame*)pX11SalFrame;
     return
@@ -3641,7 +3648,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 {
                     nReleaseTime_ = pEvent->xkey.time;
                     XEvent aEvent;
-                    if( XCheckIfEvent( pEvent->xkey.display, &aEvent, checkKeyReleaseForRepeat, (XPointer)this ) )
+                    if( XCheckIfEvent( pEvent->xkey.display, &aEvent, call_checkKeyReleaseForRepeat, (XPointer)this ) )
                         XPutBackEvent( pEvent->xkey.display, &aEvent );
                     else
                         nRet        = HandleKeyEvent( &pEvent->xkey );
