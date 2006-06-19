@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:20:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,8 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
                                         convertMeasure( nVal, rValue ) )
                 aColumn.RightMargin = nVal;
             break;
+        default:
+            break;
         }
     }
 }
@@ -304,22 +306,22 @@ XMLTextColumnsContext::XMLTextColumnsContext(
                                 const Reference< xml::sax::XAttributeList >&
                                     xAttrList,
                                 const XMLPropertyState& rProp,
-                                 ::std::vector< XMLPropertyState > &rProps ) :
-    XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
-    pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) ),
-    pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) ),
-      pColumns( 0 ),
-    pColumnSep( 0 ),
-    nCount( 0 ),
-    bAutomatic( sal_False ),
-    nAutomaticDistance( 0 ),
-    sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn")),
-    sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth")),
-    sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor")),
-    sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight")),
-    sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment")),
-    sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic")),
-    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
+                                 ::std::vector< XMLPropertyState > &rProps )
+:   XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
+,   sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn"))
+,   sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth"))
+,   sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor"))
+,   sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight"))
+,   sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
+,   sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic"))
+,   sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
+,   pColumns( 0 )
+,   pColumnSep( 0 )
+,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
+,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
+,   nCount( 0 )
+,   bAutomatic( sal_False )
+,   nAutomaticDistance( 0 )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int32 nVal;
@@ -352,12 +354,12 @@ XMLTextColumnsContext::~XMLTextColumnsContext()
 {
     if( pColumns )
     {
-        sal_uInt16 nCount = pColumns->Count();
-        while( nCount )
+        sal_uInt16 nColCount = pColumns->Count();
+        while( nColCount )
         {
-            nCount--;
-            XMLTextColumnContext_Impl *pColumn = (*pColumns)[nCount];
-            pColumns->Remove( nCount, 1 );
+            nColCount--;
+            XMLTextColumnContext_Impl *pColumn = (*pColumns)[nColCount];
+            pColumns->Remove( nColCount, 1 );
             pColumn->ReleaseRef();
         }
     }
