@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:03:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,8 +266,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
                                                   xAttrList);
 }
 
-void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
-    sal_Bool bOverwrite)
+void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
 {
     // (code almost the same as export...)
 
@@ -281,8 +280,8 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
         Sequence<rtl::OUString> aServices = xFactory->getAvailableServiceNames();
         sal_Bool bFound(sal_False);
         sal_Int32 i(0);
-        sal_Int32 nCount(aServices.getLength());
-        while (i < nCount && !bFound)
+        sal_Int32 nServiceCount(aServices.getLength());
+        while (i < nServiceCount && !bFound)
         {
             if (aServices[i].equals(sFieldMaster_Bibliography))
             // here we should use a methode which compares in reverse order if available
@@ -327,7 +326,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
 
                 sal_Int32 nCount = aSortKeys.size();
                 Sequence<Sequence<PropertyValue> > aKeysSeq(nCount);
-                for(sal_Int32 i = 0; i < nCount; i++)
+                for(i = 0; i < nCount; i++)
                 {
                     aKeysSeq[i] = aSortKeys[i];
                 }
