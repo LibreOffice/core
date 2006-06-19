@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:36:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-#pragma hdrstop
 
 #define _SVX_TPLINE_CXX
 
@@ -175,28 +174,18 @@ SvxLineTabPage::SvxLineTabPage
     const SfxItemSet& rInAttrs
 ) :
     SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_LINE ), rInAttrs ),
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
-    aXLineAttr          ( pXPool ),
-    rXLSet              ( aXLineAttr.GetItemSet() ),
-
-    aXLStyle            ( XLINE_DASH ),
-    aXWidth             ( 1 ),
-    aXColor             ( String(), COL_LIGHTRED ),
-    aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
-
-    aFtColor            ( this, ResId( FT_COLOR ) ),
-    aLbColor            ( this, ResId( LB_COLOR ) ),
     aFtLineStyle        ( this, ResId( FT_LINE_STYLE ) ),
     aLbLineStyle        ( this, ResId( LB_LINE_STYLE ) ),
+    aFtColor            ( this, ResId( FT_COLOR ) ),
+    aLbColor            ( this, ResId( LB_COLOR ) ),
     aFtLineWidth        ( this, ResId( FT_LINE_WIDTH ) ),
     aMtrLineWidth       ( this, ResId( MTR_FLD_LINE_WIDTH ) ),
     aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
     aMtrTransparent     ( this, ResId( MTR_LINE_TRANSPARENT ) ),
     aFlLine             ( this, ResId( FL_LINE ) ),
     aFtLineEndsStyle    ( this, ResId( FT_LINE_ENDS_STYLE ) ),
-    aFtLineEndsWidth    ( this, ResId( FT_LINE_ENDS_WIDTH ) ),
     aLbStartStyle       ( this, ResId( LB_START_STYLE ) ),
+    aFtLineEndsWidth    ( this, ResId( FT_LINE_ENDS_WIDTH ) ),
     aMtrStartWidth      ( this, ResId( MTR_FLD_START_WIDTH ) ),
     aTsbCenterStart     ( this, ResId( TSB_CENTER_START ) ),
     aLbEndStyle         ( this, ResId( LB_END_STYLE ) ),
@@ -212,27 +201,36 @@ SvxLineTabPage::SvxLineTabPage
     maFTEdgeStyle       ( this, ResId( FT_EDGE_STYLE ) ),
     maLBEdgeStyle       ( this, ResId( LB_EDGE_STYLE ) ),
 
-    //#58425# Symbole auf einer Linie (z.B. StarChart) ->
+    pSymbolList(NULL),
+    bNewSize(FALSE),
+    nNumMenuGalleryItems(0),
+    nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
+    pSymbolAttr(NULL),
+    //#58425# Symbole auf einer Linie (z.B. StarChart)
+    aFlSymbol           ( this, ResId(FL_SYMBOL_FORMAT)),
+    aSymbolMB           ( this, ResId(MB_SYMBOL_BITMAP)),
     aSymbolWidthFT      ( this, ResId(FT_SYMBOL_WIDTH)),
     aSymbolWidthMF      ( this, ResId(MF_SYMBOL_WIDTH)),
     aSymbolHeightFT     ( this, ResId(FT_SYMBOL_HEIGHT)),
     aSymbolHeightMF     ( this, ResId(MF_SYMBOL_HEIGHT)),
-    aFlSymbol           ( this, ResId(FL_SYMBOL_FORMAT)),
     aSymbolRatioCB      ( this, ResId(CB_SYMBOL_RATIO)),
-    aSymbolMB           ( this, ResId(MB_SYMBOL_BITMAP)),
-    nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
+
     bLastWidthModified(FALSE),
     aSymbolLastSize(Size(0,0)),
     bSymbols(FALSE),
-    pSymbolList(NULL),
-    nNumMenuGalleryItems(0),
-    pSymbolAttr(NULL),
-    bNewSize(FALSE),
-    //#58425# Symbole auf einer Linie (z.B. StarChart) <-
 
-    nPageType           ( 0 ),//CHINA001 pPageType          ( NULL ),
-    rOutAttrs           ( rInAttrs )
+    rOutAttrs           ( rInAttrs ),
+    bObjSelected( sal_False ),
 
+    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    XOut                ( &aCtlPreview ),
+    aXLStyle            ( XLINE_DASH ),
+    aXWidth             ( 1 ),
+    aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
+    aXColor             ( String(), COL_LIGHTRED ),
+    aXLineAttr          ( pXPool ),
+    rXLSet              ( aXLineAttr.GetItemSet() ),
+    nPageType           ( 0 )//CHINA001 pPageType           ( NULL ),
 {
     FreeResource();
 
@@ -259,6 +257,7 @@ SvxLineTabPage::SvxLineTabPage
             aMtrStartWidth.SetSpinSize( 2 );
             aMtrEndWidth.SetSpinSize( 2 );
             break;
+            default: ;//prevent warning
     }
     SetFieldUnit( aMtrLineWidth, eFUnit );
     SetFieldUnit( aMtrStartWidth, eFUnit );
@@ -549,7 +548,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int SvxLineTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( nDlgType == 0 ) // Linien-Dialog//CHINA001 if( *pDlgType == 0 ) // Linien-Dialog
     {
@@ -561,8 +560,8 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* pSet )
         *pPosLineEndLb = nPos;
     }
 
-    if( pSet )
-        FillItemSet( *pSet );
+    if( _pSet )
+        FillItemSet( *_pSet );
 
     return( LEAVE_PAGE );
 }
@@ -597,7 +596,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( pDashList->Count() > (long) ( nPos - 2 ) )
                 {
                     XLineDashItem aDashItem( aLbLineStyle.GetSelectEntry(),
-                                        pDashList->Get( nPos - 2 )->GetDash() );
+                                        pDashList->GetDash( nPos - 2 )->GetDash() );
                     pOld = GetOldItem( rAttrs, XATTR_LINEDASH );
                     if ( !pOld || !( *(const XLineDashItem*)pOld == aDashItem ) )
                     {
@@ -675,7 +674,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 pItem = new XLineStartItem();
             else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
                 pItem = new XLineStartItem( aLbStartStyle.GetSelectEntry(),
-                            pLineEndList->Get( nPos - 1 )->GetLineEnd() );
+                            pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
             pOld = GetOldItem( rAttrs, XATTR_LINESTART );
             if( pItem &&
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
@@ -695,7 +694,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 pItem = new XLineEndItem();
             else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
                 pItem = new XLineEndItem( aLbEndStyle.GetSelectEntry(),
-                            pLineEndList->Get( nPos - 1 )->GetLineEnd() );
+                            pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
             pOld = GetOldItem( rAttrs, XATTR_LINEEND );
             if( pItem &&
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
@@ -873,7 +872,7 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             rXLSet.Put( XLineDashItem( aLbLineStyle.GetSelectEntry(),
-                            pDashList->Get( nPos - 2 )->GetDash() ) );
+                            pDashList->GetDash( nPos - 2 )->GetDash() ) );
         }
     }
 
@@ -884,7 +883,7 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
             rXLSet.Put( XLineStartItem() );
         else
             rXLSet.Put( XLineStartItem( aLbStartStyle.GetSelectEntry(),
-                        pLineEndList->Get( nPos - 1 )->GetLineEnd() ) );
+                        pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
     nPos = aLbEndStyle.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -893,7 +892,7 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
             rXLSet.Put( XLineEndItem() );
         else
             rXLSet.Put( XLineEndItem( aLbEndStyle.GetSelectEntry(),
-                        pLineEndList->Get( nPos - 1 )->GetLineEnd() ) );
+                        pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
     // #116827#
@@ -1165,7 +1164,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 
     if ( rAttrs.GetItemState( XATTR_LINECOLOR ) != SFX_ITEM_DONTCARE )
     {
-        Color aCol = ( ( const XLineColorItem& ) rAttrs.Get( XATTR_LINECOLOR ) ).GetValue();
+        Color aCol = ( ( const XLineColorItem& ) rAttrs.Get( XATTR_LINECOLOR ) ).GetColorValue();
         aLbColor.SelectEntry( aCol );
         if( aLbColor.GetSelectEntryCount() == 0 )
         {
@@ -1184,11 +1183,11 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         // #86265# select entry using list and polygon, not string
         sal_Bool bSelected(FALSE);
-        const XPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetValue();
+        const XPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetLineStartValue();
 
         for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = pLineEndList->Get(a);
+            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
             const XPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
@@ -1217,11 +1216,11 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         // #86265# select entry using list and polygon, not string
         sal_Bool bSelected(FALSE);
-        const XPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetValue();
+        const XPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetLineEndValue();
 
         for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = pLineEndList->Get(a);
+            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
             const XPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
@@ -1353,6 +1352,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             case XLINEJOINT_NONE : maLBEdgeStyle.SelectEntryPos(1); break;
             case XLINEJOINT_MITER : maLBEdgeStyle.SelectEntryPos(2); break;
             case XLINEJOINT_BEVEL : maLBEdgeStyle.SelectEntryPos(3); break;
+            case XLINEJOINT_MIDDLE : break;
         }
     }
     else
@@ -1483,7 +1483,7 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 //------------------------------------------------------------------------
 // #116827#
 
-IMPL_LINK( SvxLineTabPage, ChangeEdgeStyleHdl_Impl, void *, p )
+IMPL_LINK( SvxLineTabPage, ChangeEdgeStyleHdl_Impl, void *, EMPTYARG )
 {
     ChangePreviewHdl_Impl( this );
 
@@ -1606,7 +1606,7 @@ IMPL_LINK( SvxLineTabPage, ChangeTransparentHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-void SvxLineTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
+void SvxLineTabPage::PointChanged( Window*, RECT_POINT eRcPt )
 {
     eRP = eRcPt;
 }
@@ -1701,7 +1701,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
-        SfxObjectShell *pDocSh = SfxObjectShell::Current();
         SdrObject *pObj=NULL;
         long i=0;
         while(pObj=pSymbolList->GetObj(i))
