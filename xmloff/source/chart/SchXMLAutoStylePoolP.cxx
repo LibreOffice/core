@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:23:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
 
     if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
     {
-        ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
-        for( iter; (iter != rProperties.end()); iter++ )
+        for( ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
+             (iter != rProperties.end()); iter++ )
         {
             if( iter->mnIndex == -1 )
                 continue;
