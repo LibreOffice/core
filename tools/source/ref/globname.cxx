@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globname.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:31:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 
 #include <stream.hxx>
 #include <globname.hxx>
-
-#pragma hdrstop
 
 /************** class ImpSvGlobalName ************************************/
 ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
@@ -255,7 +253,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     nSec = nSec * 16 + (*pStr - '0');
                 else
-                    nSec = nSec * 16 + (toupper( *pStr ) - 'A' + 10 );
+                    nSec = nSec * 16 + (UINT16)(toupper( *pStr ) - 'A' + 10 );
             else
                 return FALSE;
             pStr++;
@@ -269,7 +267,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     nThird = nThird * 16 + (*pStr - '0');
                 else
-                    nThird = nThird * 16 + (toupper( *pStr ) - 'A' + 10 );
+                    nThird = nThird * 16 + (UINT16)(toupper( *pStr ) - 'A' + 10 );
             else
                 return FALSE;
             pStr++;
@@ -284,7 +282,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
                 else
-                    szRemain[i/2] = szRemain[i/2] * 16 + (toupper( *pStr ) - 'A' + 10 );
+                    szRemain[i/2] = szRemain[i/2] * 16 + (BYTE)(toupper( *pStr ) - 'A' + 10 );
             else
                 return FALSE;
             pStr++;
@@ -444,6 +442,7 @@ SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aS
 {
     // create SvGlobalName from a platform independent representation
     GUID aResult;
+    memset( &aResult, 0, sizeof( aResult ) );
     if ( aSeq.getLength() == 16 )
     {
         aResult.Data1 = ( ( ( ( ( ( sal_uInt8 )aSeq[0] << 8 ) + ( sal_uInt8 )aSeq[1] ) << 8 ) + ( sal_uInt8 )aSeq[2] ) << 8 ) + ( sal_uInt8 )aSeq[3];
