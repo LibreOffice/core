@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgeimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:23:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,8 +270,7 @@ namespace remotebridges_factory {
         m->release();
     }
 
-    void OBridge::thisDisposing( remote_DisposingListener * p,
-                                     rtl_uString *pString )
+    void OBridge::thisDisposing( remote_DisposingListener * p, rtl_uString * )
     {
         OBridge *m  = (OBridge * ) p;
         m->dispose();
