@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:11:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ void SfxAlienWarningDialog::InitSize()
         &m_aYesBtn, &m_aNoBtn, &m_aMoreInfoBtn, &m_aOptionLine, &m_aWarningOffBox
     };
     Window** pCurrent = pWins;
-    for ( sal_Int32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+    for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
     {
         Point aNewPos = (*pCurrent)->GetPosPixel();
         aNewPos.Y() -= nDelta;
