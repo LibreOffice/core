@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:17:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef INCLUDED_STL_VECTOR
 #include <vector>
 #define INCLUDED_STL_VECTOR
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
 #endif
 #ifndef _XMLSEARCH_DB_BTREEDICT_HXX_
 #include <db/BtreeDict.hxx>
@@ -387,9 +384,9 @@ void BlockProcessorImpl::process( Block* block ) const
 
 
 BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor ) throw( IOException )
-    : blocksL_( 0 ),
-      blocks_( 0 ),
-      blockManager_( new DBEnvImpl( indexAccessor ) )   // may throw IOExcption
+    : blockManager_( new DBEnvImpl( indexAccessor ) ),   // may throw IOExcption
+      blocksL_( 0 ),
+      blocks_( 0 )
 {
 
     RandomAccessStream* SCHEMA = indexAccessor.getStream( rtl::OUString::createFromAscii( "SCHEMA" ),
@@ -642,6 +639,7 @@ void DBEnvImpl::read( sal_Int32 blNum,xmlsearch::db::Block*& block ) const
 
 void DBEnvImpl::write( sal_Int32 blNum,xmlsearch::db::Block* block )
 {
+    (void)blNum;
     if( ! block )
         return;
 }
