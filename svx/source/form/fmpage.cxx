@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:54:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
@@ -135,33 +133,33 @@ TYPEINIT1(FmFormPage, SdrPage);
 //------------------------------------------------------------------
 FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMasterPage)
            :SdrPage(rModel, bMasterPage)
-           ,pBasic(_pBasic)
 #ifndef SVX_LIGHT
-           ,pImpl(new FmFormPageImpl(this))
+           ,m_pImpl(new FmFormPageImpl(this))
 #else
-           ,pImpl(NULL)
+           ,m_pImpl(NULL)
 #endif
+           ,m_pBasic(_pBasic)
 {
 }
 
 //------------------------------------------------------------------
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
-           ,pBasic(0)
 #ifndef SVX_LIGHT
-           ,pImpl(new FmFormPageImpl(this, *rPage.GetImpl()))
+           ,m_pImpl(new FmFormPageImpl(this, *rPage.GetImpl()))
 #else
-           ,pImpl(NULL)
+           ,m_pImpl(NULL)
 #endif
+           ,m_pBasic(0)
 {
-    aPageName = rPage.aPageName;
+    m_sPageName = rPage.m_sPageName;
 }
 
 //------------------------------------------------------------------
 FmFormPage::~FmFormPage()
 {
 #ifndef SVX_LIGHT
-    delete pImpl;
+    delete m_pImpl;
 #endif
 }
 
@@ -179,15 +177,15 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 
 
     /* #35055# */
-    if ( ( pOldModel != pNewModel ) && pImpl )
+    if ( ( pOldModel != pNewModel ) && m_pImpl )
     {
         try
         {
-            if ( pImpl->m_xForms.is() )
+            if ( m_pImpl->m_xForms.is() )
             {
                 // we want to keep the current collection, just reset the model
                 // with which it's associated.
-                Reference< XChild > xAsChild( pImpl->m_xForms, UNO_QUERY );
+                Reference< XChild > xAsChild( m_pImpl->m_xForms, UNO_QUERY );
                 if ( xAsChild.is() )
                 {
                     FmFormModel* pDrawModel = (FmFormModel*) GetModel();
@@ -199,7 +197,7 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
         }
         catch( ::com::sun::star::uno::Exception ex )
         {
-            OSL_ENSURE( sal_False, "UNO Exception caught resetting model for pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+            OSL_ENSURE( sal_False, "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
         }
     }
 }
@@ -230,29 +228,11 @@ void FmFormPage::InsertObject(SdrObject* pObj, sal_uInt32 nPos,
 #endif
 }
 
-#ifndef SVX_LIGHT
-//------------------------------------------------------------------
-void FmFormPage::InsertFormObjectEnsureEnv(const SdrObject* _pSourceObject, SdrObject* _pClone, sal_Bool _bTryPreserveName, sal_uInt32 _nPos,
-    const SdrInsertReason* _pReason)
-{
-    DBG_ERROR("FmFormPage::InsertFormObjectEnsureEnv : obsolete method used (maybe I should write a changes mail ?) !");
-    InsertObject(_pClone, _nPos, _pReason);
-    return;
-}
-
-//------------------------------------------------------------------
-sal_Bool FmFormPage::EnsureFormObjectEnv(const SdrObject* _pObj)
-{
-    DBG_ERROR("FmFormPage::EnsureFormObjectEnv : obsolete method used (maybe I should write a changes mail ?) !");
-    return sal_False;
-}
-#endif
-
 //------------------------------------------------------------------
 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
 #ifndef SVX_LIGHT
-    return pImpl->getForms( _bForceCreate );
+    return m_pImpl->getForms( _bForceCreate );
 #else
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  aRef;
     return aRef;
@@ -356,35 +336,4 @@ SdrObject* FmFormPage::ReplaceObject(SdrObject* pNewObj, sal_uInt32 nObjNum)
 {
     return SdrPage::ReplaceObject(pNewObj, nObjNum);
 }
-
-
-//------------------------------------------------------------------
-void FmFormPage::SetBasic( StarBASIC* pBas )
-{
-}
-
-void FmFormPage::RequestBasic()
-{
-}
-
-XubString FmFormPage::GetLinkData( const XubString& rLinkName )
-{
-    return XubString();
-}
-
-void FmFormPage::SetLinkData( const XubString& rLinkName, const XubString& rLinkData )
-{
-}
-
-void FmFormPage::UpdateLinkData( const XubString& rLinkName, const XubString& rLinkData )
-{
-}
-
-SfxJSArray* FmFormPage::GetFormsArray() const
-{
-    return 0;
-}
-
-
-
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
 
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
@@ -322,16 +321,12 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 //------------------------------------------------------------------
 sal_uInt32 FmFormObj::GetObjInventor()   const
 {
-//BFS01 if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
-//BFS01     return SdrInventor;
     return FmFormInventor;
 }
 
 //------------------------------------------------------------------
 sal_uInt16 FmFormObj::GetObjIdentifier() const
 {
-//BFS01 if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
-//BFS01     return OBJ_RECT;
     return OBJ_FM_CONTROL;
 }
 
@@ -379,56 +374,10 @@ SdrObject* FmFormObj::Clone() const
 }
 
 //------------------------------------------------------------------
-// #116235#
-//SdrObject* FmFormObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
-//{
-//  SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
-//  if (!pReturn)
-//      return pReturn;
-//
-//  FmFormObj* pCloneAsFormObj = PTR_CAST(FmFormObj, pReturn);
-//  if (!pCloneAsFormObj)
-//      return pReturn;
-//
-//  FmFormPage* pClonesPage = PTR_CAST(FmFormPage, pReturn->GetPage());
-//  if (!pClonesPage || !pClonesPage->GetForms().is())
-//      return pReturn;
-//
-//  // build an form environment equivalent to my own withín the destination page
-//  Reference< XChild >  xMeAsChild(GetUnoControlModel(), UNO_QUERY);
-//  if (!xMeAsChild.is())
-//      return pReturn;
-//
-//  try
-//  {
-//      Reference< XInterface >  xMyParent = xMeAsChild->getParent();
-//      Reference< XInterface >  xClonesParent = ensureModelEnv(xMyParent, Reference< XIndexContainer > (pClonesPage->GetForms(), ::com::sun::star::uno::UNO_QUERY));
-//      Reference< XIndexContainer >  xNewParentContainer(xClonesParent, UNO_QUERY);
-//      Reference< XFormComponent >  xCloneAsFormComponent(PTR_CAST(FmFormObj, pReturn)->GetUnoControlModel(), UNO_QUERY);
-//      if (xNewParentContainer.is() && xCloneAsFormComponent.is())
-//      {
-//          sal_Int32 nPos = xNewParentContainer->getCount();
-//          xNewParentContainer->insertByIndex(nPos, makeAny(xCloneAsFormComponent));
-//          // transfer the events, too
-//          Reference< XEventAttacherManager >  xEventManager(xNewParentContainer, UNO_QUERY);
-//          if (xEventManager.is())
-//              xEventManager->registerScriptEvents(nPos, pCloneAsFormObj->GetEvents());
-//      }
-//  }
-//  catch(...)
-//  {
-//      DBG_ERROR("FmFormObj::Clone : error while placing the model within it's new env");
-//  }
-//
-//
-//  return pReturn;
-//}
-
-//------------------------------------------------------------------
 void FmFormObj::ReformatText()
 {
-    const FmFormModel* pModel = PTR_CAST( FmFormModel, GetModel() );
-    OutputDevice* pCurrentRefDevice = pModel ? pModel->GetRefDevice() : NULL;
+    const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
+    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
 
     if ( m_pLastKnownRefDevice != pCurrentRefDevice )
     {
@@ -485,27 +434,6 @@ void FmFormObj::operator= (const SdrObject& rObj)
             aEvts = pFormObj->aEvts;
     }
 }
-
-//------------------------------------------------------------------
-//BFS01void FmFormObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 FmFormModel* pModel = (FmFormModel*)GetModel();
-//BFS01 if( pModel && pModel->IsStreamingOldVersion() )
-//BFS01 {
-//BFS01     SdrLayerID nOld = GetLayer();
-//BFS01     ((FmFormObj*)this)->NbcSetLayer( pModel->GetControlExportLayerId( *this ) );
-//BFS01     SdrUnoObj::WriteData( rOut );
-//BFS01     ((FmFormObj*)this)->NbcSetLayer( nOld );
-//BFS01     return;
-//BFS01 }
-//BFS01 SdrUnoObj::WriteData(rOut);
-//BFS01}
-
-//------------------------------------------------------------------
-//BFS01void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 SdrUnoObj::ReadData(rHead,rIn);
-//BFS01}
 
 //------------------------------------------------------------------
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
@@ -681,7 +609,7 @@ FASTBOOL FmFormObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FmFormObj, OnCreate, void*, EMPTYTAG)
+IMPL_LINK(FmFormObj, OnCreate, void*, /*EMPTYTAG*/)
 {
     m_nControlCreationEvent = 0;
     if ( m_pControlCreationView )
