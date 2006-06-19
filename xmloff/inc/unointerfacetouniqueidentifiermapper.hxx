@@ -53,6 +53,6 @@ private:
     sal_Int32 mnNextId;
 };
 
-};
+}
 
 #endif
