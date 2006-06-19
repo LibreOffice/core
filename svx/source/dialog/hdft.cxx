@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:12:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #endif
 #include <vcl/msgbox.hxx>
 #include <vcl/graph.hxx>
-#pragma hdrstop
 
 #include "dialogs.hrc"
 #include "hdft.hrc"
@@ -172,23 +171,23 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     SfxTabPage( pParent, ResId( nResId, DIALOG_MGR() ), rAttr ),
 
     aTurnOnBox      ( this, ResId( CB_TURNON ) ),
+    aCntSharedBox   ( this, ResId( CB_SHARED ) ),
+    aLMLbl          ( this, ResId( FT_LMARGIN ) ),
+    aLMEdit         ( this, ResId( ED_LMARGIN ) ),
+    aRMLbl          ( this, ResId( FT_RMARGIN ) ),
+    aRMEdit         ( this, ResId( ED_RMARGIN ) ),
     aDistFT         ( this, ResId( FT_DIST ) ),
     aDistEdit       ( this, ResId( ED_DIST ) ),
     aDynSpacingCB   ( this, ResId( CB_DYNSPACING ) ),
     aHeightFT       ( this, ResId( FT_HEIGHT ) ),
     aHeightEdit     ( this, ResId( ED_HEIGHT ) ),
     aHeightDynBtn   ( this, ResId( CB_HEIGHT_DYN ) ),
-    aLMLbl          ( this, ResId( FT_LMARGIN ) ),
-    aLMEdit         ( this, ResId( ED_LMARGIN ) ),
-    aRMLbl          ( this, ResId( FT_RMARGIN ) ),
-    aRMEdit         ( this, ResId( ED_RMARGIN ) ),
-    aCntSharedBox   ( this, ResId( CB_SHARED ) ),
     aFrm            ( this, ResId( FL_FRAME ) ),
     aBspWin         ( this, ResId( WN_BSP ) ),
     aBackgroundBtn  ( this, ResId( BTN_EXTRAS ) ),
 
-    pBBSet                      ( NULL ),
     nId                         ( nSetId ),
+    pBBSet                      ( NULL ),
     bDisableQueryBox            ( FALSE ),
     bEnableBackgroundSelector   ( TRUE )
 
@@ -230,22 +229,6 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
     const USHORT        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
     const USHORT        nWBoxInfo   = GetWhich( SID_ATTR_BORDER_INNER );
     const USHORT        nWShadow    = GetWhich( SID_ATTR_BORDER_SHADOW );
-#ifdef SINIX
-    USHORT      aWhichTab[23];
-    aWhichTab[0]    =   aWhichTab[1]    = nWSize;
-    aWhichTab[2]    =   aWhichTab[3]    = nWLRSpace;
-    aWhichTab[4]    =   aWhichTab[5]    = nWULSpace;
-    aWhichTab[6]    =   aWhichTab[7]    = nWOn;
-    aWhichTab[8]    =   aWhichTab[9]    = nWDynamic;
-    aWhichTab[10]   =   aWhichTab[11]   = nWShared;
-    aWhichTab[12]   =   aWhichTab[13]   = nWBrush;
-    aWhichTab[14]   =   aWhichTab[15]   = nWBoxInfo;
-    aWhichTab[16]   =   aWhichTab[17]   = nWBox;
-    aWhichTab[18]   =   aWhichTab[19]   = nWShadow;
-    aWhichTab[20]   =   aWhichTab[21]  = nWDynSpacing;
-    aWhichTab[22] = 0;
-
-#else
     const USHORT        aWhichTab[] = { nWSize,     nWSize,
                                         nWLRSpace,  nWLRSpace,
                                         nWULSpace,  nWULSpace,
@@ -258,7 +241,6 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
                                         nWShadow,   nWShadow,
                                         nWDynSpacing, nWDynSpacing,
                                         0 };
-#endif
     const SfxItemSet&   rOldSet     = GetItemSet();
     SfxItemPool*        pPool       = rOldSet.GetPool();
     DBG_ASSERT( pPool, "no pool :-(" );
@@ -309,22 +291,22 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
         aSet.Put( *pBBSet );
     else
     {
-        const SfxItemSet* pSet;
+        const SfxItemSet* _pSet;
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
              GetItemSet().GetItemState( GetWhich( nId ), FALSE, &pItem ) )
         {
-            pSet = &( (SvxSetItem*)pItem )->GetItemSet();
+            _pSet = &( (SvxSetItem*)pItem )->GetItemSet();
 
-            if ( pSet->GetItemState( nWBrush ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxBrushItem&)pSet->Get( nWBrush ) );
-            if ( pSet->GetItemState( nWBoxInfo ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxBoxInfoItem&)pSet->Get( nWBoxInfo ) );
-            if ( pSet->GetItemState( nWBox ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxBoxItem&)pSet->Get( nWBox ) );
-            if ( pSet->GetItemState( nWShadow ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxShadowItem&)pSet->Get( nWShadow ) );
+            if ( _pSet->GetItemState( nWBrush ) == SFX_ITEM_SET )
+                aSet.Put( (const SvxBrushItem&)_pSet->Get( nWBrush ) );
+            if ( _pSet->GetItemState( nWBoxInfo ) == SFX_ITEM_SET )
+                aSet.Put( (const SvxBoxInfoItem&)_pSet->Get( nWBoxInfo ) );
+            if ( _pSet->GetItemState( nWBox ) == SFX_ITEM_SET )
+                aSet.Put( (const SvxBoxItem&)_pSet->Get( nWBox ) );
+            if ( _pSet->GetItemState( nWShadow ) == SFX_ITEM_SET )
+                aSet.Put( (const SvxShadowItem&)_pSet->Get( nWShadow ) );
         }
     }
 
@@ -826,8 +808,6 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
         if ( rHeaderOn.GetValue() )
         {
-            const SfxBoolItem& rDynamic = (const SfxBoolItem&)
-                rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) );
             const SvxSizeItem& rSize = (const SvxSizeItem&)
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
             const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)
@@ -865,8 +845,6 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
         if ( rFooterOn.GetValue() )
         {
-            const SfxBoolItem& rDynamic = (const SfxBoolItem&)
-                rFooterSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) );
             const SvxSizeItem& rSize = (const SvxSizeItem&)
                 rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
             const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)
@@ -916,10 +894,10 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-int SvxHFPage::DeactivatePage( SfxItemSet* pSet )
+int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
 
