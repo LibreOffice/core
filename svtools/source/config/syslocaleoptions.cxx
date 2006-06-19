@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:57:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,9 +186,9 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
     , m_nBlockedHint( 0 )
     , m_nBroadcastBlocked( 0 )
+    , m_bDecimalSeparator( sal_True )
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROCurrency(CFG_READONLY_DEFAULT)
-    , m_bDecimalSeparator( sal_True )
     , m_bRODecimalSeparator(sal_False)
 
 {
@@ -476,7 +476,7 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
     MutexGuard aGuard( GetMutex() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSysLocaleOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtSysLocaleOptions_Impl::ctor()");
         pOptions = new SvtSysLocaleOptions_Impl;
 
         ItemHolder2::holdConfigItem(E_SYSLOCALEOPTIONS);
