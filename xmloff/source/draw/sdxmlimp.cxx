@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:50:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,8 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
 #ifndef _XMLOFF_XMLMETAI_HXX
 #include "xmlscripti.hxx"
-#endif
-
-#ifndef _SDXMLIMP_HXX
-#include "sdxmlimp.hxx"
 #endif
 
 #ifndef _SDXMLIMP_IMPL_HXX
@@ -249,7 +243,7 @@ public:
 
 SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
-                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
+                const uno::Reference< xml::sax::XAttributeList > & ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
@@ -259,7 +253,7 @@ SdXMLBodyContext_Impl::~SdXMLBodyContext_Impl()
 }
 
 SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
+        sal_uInt16 /*nPrefix*/,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -294,7 +288,7 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
     SdXMLImport& rImport,
     USHORT nPrfx,
     const OUString& rLName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+    const uno::Reference<xml::sax::XAttributeList>&)
 :   SvXMLImportContext(rImport, nPrfx, rLName)
 {
 }
@@ -445,8 +439,8 @@ SdXMLImport::SdXMLImport(
     mnStyleFamilyMask(0),
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
-    mbLoadDoc(sal_True),
     mbIsDraw(bIsDraw),
+    mbLoadDoc(sal_True),
     mbPreview(sal_False),
     msPageLayouts( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ),
     msPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) )
@@ -697,7 +691,7 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+    const uno::Reference<xml::sax::XAttributeList>&)
 {
     SvXMLImportContext* pContext = 0L;
 
@@ -723,7 +717,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLImport::CreateBodyContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+    const uno::Reference<xml::sax::XAttributeList>&)
 {
     SvXMLImportContext *pContext = 0;
     pContext = new SdXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName);
@@ -761,7 +755,7 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+    const uno::Reference<xml::sax::XAttributeList>&)
 {
     if(mpMasterStylesContext)
         return mpMasterStylesContext;
@@ -777,7 +771,7 @@ SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLoca
 // import pool defaults. Parameter contains pool defaults read
 // from input data. These data needs to be set at the model.
 //
-void SdXMLImport::ImportPoolDefaults(const XMLPropStyleContext* pPool)
+void SdXMLImport::ImportPoolDefaults(const XMLPropStyleContext*)
 {
 }
 
