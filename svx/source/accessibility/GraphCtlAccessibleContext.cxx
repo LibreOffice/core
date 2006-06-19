@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:44:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,11 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpControl( &rRepr ),
-    mbDisposed( sal_False ),
-    mnClientId( 0 ),
     mpModel (NULL),
     mpPage (NULL),
-    mpView (NULL)
+    mpView (NULL),
+    mnClientId( 0 ),
+    mbDisposed( sal_False )
 {
     if (mpControl != NULL)
     {
@@ -958,7 +958,7 @@ Sequence< sal_Int8 > SvxGraphCtrlAccessibleContext::getUniqueId( void )
 
 //-----------------------------------------------------------------------------
 
-void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
@@ -989,6 +989,8 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& rBC, const SfxHint& 
                 break;
             case HINT_MODELCLEARED:
                 dispose();
+                break;
+            default:
                 break;
         }
     }
