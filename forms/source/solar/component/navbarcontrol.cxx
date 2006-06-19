@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navbarcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
+    void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 

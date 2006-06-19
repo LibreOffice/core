@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binding.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:13:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,8 +141,8 @@ Binding::Binding() :
     mxModel(),
     msBindingID(),
     maBindingExpression(),
-    mxNamespaces( new NameContainer<OUString>() ),
     maReadonly(),
+    mxNamespaces( new NameContainer<OUString>() ),
     mbInCalculate( false ),
     mnDeferModifyNotifications( 0 ),
     mbValueModified( false ),
@@ -1218,7 +1218,7 @@ sal_Bool Binding::isValid( const Any_t& )
 }
 
 rtl::OUString Binding::explainInvalid(
-    const Any_t& Value )
+    const Any_t& /*Value*/ )
     throw( RuntimeException )
 {
     // first, check for model
