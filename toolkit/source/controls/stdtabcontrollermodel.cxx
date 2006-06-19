@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtabcontrollermodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:18:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::S
         UnoControlModelEntry* pEntry = maControls.GetObject( n );
         if ( pEntry->bGroup )
         {
-            if ( nG == nGroup )
+            if ( nG == (sal_uInt32)nGroup )
             {
                 sal_uInt32 nCount = ImplGetControlCount( *pEntry->pGroup );
                 aSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >( nCount );
@@ -397,8 +397,6 @@ void StdTabControllerModel::write( const ::com::sun::star::uno::Reference< ::com
 void StdTabControllerModel::read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    short nVersion = InStream->readShort();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aSeq = ImplReadControls( InStream );
     setControlModels( aSeq );
