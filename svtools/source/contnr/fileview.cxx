@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:37:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ using ::rtl::OUString;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-DECLARE_LIST( StringList_Impl, OUString* );
+DECLARE_LIST( StringList_Impl, OUString* )
 
 #define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
@@ -302,7 +302,7 @@ private:
 
 protected:
     virtual BOOL            DoubleClickHdl();
-    virtual ::rtl::OUString GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
+    virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
 
 public:
     ViewTabListBox_Impl( Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
@@ -393,6 +393,7 @@ public:
     const HashedEntry*      Find( const OUString& rNameToSearchFor );
     const HashedEntry*      Find( const HashedEntry& rToSearchFor );
                                 // not const, because First()/Next() is used
+    using List::Insert;
     const HashedEntry&      Insert( HashedEntry* pInsertOrDelete );
                                 // don't care about pInsertOrDelete after this any more and handle it as invalid!
                                 // returns the Entry, which is effectively inserted
@@ -515,7 +516,9 @@ public:
                                             // rBaseURL: path to folder for which the translation of the entries
                                             //  should be done
 
+    using List::operator==;
     inline sal_Bool operator    ==( const HashedEntry& rRef ) const;
+    using List::operator!=;
     inline sal_Bool operator    !=( const HashedEntry& rRef ) const;
 
     const OUString*         Translate( const OUString& rName ) const;
@@ -604,7 +607,7 @@ private:
 public:
                             NameTranslator_Impl( void );
                             NameTranslator_Impl( const INetURLObject& rActualFolder );
-                            ~NameTranslator_Impl();
+                            virtual ~NameTranslator_Impl();
 
      // IContentTitleTranslation
     virtual sal_Bool        GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
@@ -662,7 +665,7 @@ public:
                             SvtFileView_Impl( SvtFileView* pAntiImpl,
                                               sal_Int16 nFlags,
                                               sal_Bool bOnlyFolder );
-                           ~SvtFileView_Impl();
+    virtual                ~SvtFileView_Impl();
 
     void                    Clear();
 
@@ -868,7 +871,7 @@ ViewTabListBox_Impl::~ViewTabListBox_Impl()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer*, pTimer )
+IMPL_LINK( ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer*, EMPTYARG )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1124,9 +1127,9 @@ BOOL ViewTabListBox_Impl::DoubleClickHdl()
         // 07.12.2001 - 95727 - fs@openoffice.org
 }
 
-::rtl::OUString ViewTabListBox_Impl::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+::rtl::OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
-    ::rtl::OUString sRet = SvHeaderTabListBox::GetAccessibleDescription( _eType, _nPos );
+    ::rtl::OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
     if ( ::svt::BBTYPE_TABLECELL == _eType )
     {
         sal_Int32 nRow = _nPos / GetColumnCount();
@@ -1287,7 +1290,7 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
         if ( bDoInsert )
         {
             // insert entry and set user data
-            SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( aNewRow, aImage, aImage );
+            SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( aNewRow, aImage, aImage, NULL );
             SvtContentEntry* pUserData = new SvtContentEntry( aURL, bIsFolder );
             pEntry->SetUserData( pUserData );
         }
@@ -1702,8 +1705,6 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
     HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
     DBG_ASSERT( pBar, "invalid headerbar" );
 
-    USHORT nTokenCount = rCfgStr.GetTokenCount();
-
     USHORT nIdx = 0;
     mpImp->mnSortColumn = (USHORT)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
     BOOL bUp = (BOOL)(USHORT)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
@@ -1822,19 +1823,19 @@ const String* NameTranslator_Impl::GetTransTableFileName() const
 SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, sal_Int16 nFlags, sal_Bool bOnlyFolder )
 
     :mpAntiImpl                 ( pAntiImpl )
+    ,m_eAsyncActionResult       ( ::svt::ERROR )
+    ,m_bRunningAsyncAction      ( false )
+    ,m_bAsyncActionCancelled    ( false )
+    ,mpNameTrans                ( NULL )
+    ,mpUrlFilter                ( NULL )
     ,mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( sal_True )
     ,mbOnlyFolder               ( bOnlyFolder )
     ,mbReplaceNames             ( sal_False )
-    ,aIntlWrapper               ( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() )
-    ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
-    ,mpNameTrans                ( NULL )
     ,mnSuspendSelectCallback    ( 0 )
     ,mbIsFirstResort            ( sal_True )
-    ,mpUrlFilter                ( NULL )
-    ,m_bRunningAsyncAction      ( false )
-    ,m_bAsyncActionCancelled    ( false )
-    ,m_eAsyncActionResult       ( ::svt::ERROR )
+    ,aIntlWrapper               ( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() )
+    ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
 
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
@@ -1973,6 +1974,9 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const FolderDescriptor& 
 
     case ::svt::ERROR:
         return eFailure;
+
+    case ::svt::RUNNING:
+        return eStillRunning;
     }
 
     DBG_ERRORFILE( "SvtFileView_Impl::GetFolderContent_Impl: unreachable!" );
@@ -2166,7 +2170,7 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
 }
 
 //-----------------------------------------------------------------------
-void SvtFileView_Impl::onTimeout( CallbackTimer* _pInstigator )
+void SvtFileView_Impl::onTimeout( CallbackTimer* )
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard( maMutex );
@@ -2203,7 +2207,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
 
     m_aAsyncActionFinished.set();
 
-    if ( eSuccess == _eResult )
+    if ( svt::SUCCESS == _eResult )
         implEnumerationSuccess();
 
     if ( m_aCurrentAsyncActionHandler.IsSet() )
