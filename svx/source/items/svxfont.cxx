@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:25:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:15:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
 #ifndef _COM_SUN_STAR_I18N_KCHARACTERTYPE_HPP_
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #endif
-#pragma hdrstop
 
 #define ITEMID_ESCAPEMENT   0
 
@@ -231,9 +230,9 @@ protected:
     const xub_StrLen nLen;
 
 public:
-    SvxDoCapitals( OutputDevice *pOut, const XubString &rTxt,
-                   const xub_StrLen nIdx, const xub_StrLen nLen )
-        : pOut(pOut), rTxt(rTxt), nIdx(nIdx), nLen(nLen)
+    SvxDoCapitals( OutputDevice *_pOut, const XubString &_rTxt,
+                   const xub_StrLen _nIdx, const xub_StrLen _nLen )
+        : pOut(_pOut), rTxt(_rTxt), nIdx(_nIdx), nLen(_nLen)
         { }
 
     virtual void DoSpace( const BOOL bDraw );
@@ -248,12 +247,12 @@ public:
     inline const xub_StrLen GetLen() const { return nLen; }
 };
 
-void SvxDoCapitals::DoSpace( const BOOL bDraw ) { }
+void SvxDoCapitals::DoSpace( const BOOL /*bDraw*/ ) { }
 
 void SvxDoCapitals::SetSpace() { }
 
-void SvxDoCapitals::Do( const XubString &rTxt, const xub_StrLen nIdx,
-    const xub_StrLen nLen, const BOOL bUpper ) { }
+void SvxDoCapitals::Do( const XubString &/*_rTxt*/, const xub_StrLen /*_nIdx*/,
+    const xub_StrLen /*_nLen*/, const BOOL /*bUpper*/ ) { }
 
 /*************************************************************************
  *                  SvxFont::DoOnCapitals() const
@@ -263,7 +262,6 @@ void SvxDoCapitals::Do( const XubString &rTxt, const xub_StrLen nIdx,
 
 void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 {
-    OutputDevice *pOut = rDo.GetOut();
     const XubString &rTxt = rDo.GetTxt();
     const xub_StrLen nIdx = rDo.GetIdx();
     const xub_StrLen nLen = STRING_LEN == nPartLen ? rDo.GetLen() : nPartLen;
@@ -441,8 +439,8 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
             // If strings differ work preparing the necessary snippet to address that
             // potential difference
             const XubString aSnippet(rTxt, nIdx, nLen);
-            XubString aNewText = CalcCaseMap(aSnippet);
-            nWidth = pOut->GetTextWidth( aNewText, 0, aNewText.Len() );
+            XubString _aNewText = CalcCaseMap(aSnippet);
+            nWidth = pOut->GetTextWidth( _aNewText, 0, _aNewText.Len() );
         }
         else
         {
@@ -661,9 +659,9 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
                 // If strings differ work preparing the necessary snippet to address that
                 // potential difference
                 const XubString aSnippet(rTxt, nIdx, nTmp);
-                XubString aNewText = CalcCaseMap(aSnippet);
+                XubString _aNewText = CalcCaseMap(aSnippet);
 
-                pOut->DrawStretchText( aPos, aSize.Width(), aNewText, 0, aNewText.Len() );
+                pOut->DrawStretchText( aPos, aSize.Width(), _aNewText, 0, _aNewText.Len() );
             }
             else
             {
@@ -708,12 +706,12 @@ protected:
     Size        aTxtSize;
     short       nKern;
 public:
-      SvxDoGetCapitalSize( SvxFont *pFnt, const OutputDevice *pOut,
-                           const XubString &rTxt, const xub_StrLen nIdx,
-                           const xub_StrLen nLen, const short nKrn )
-            : SvxDoCapitals( (OutputDevice*)pOut, rTxt, nIdx, nLen ),
-              pFont( pFnt ),
-              nKern( nKrn )
+      SvxDoGetCapitalSize( SvxFont *_pFnt, const OutputDevice *_pOut,
+                           const XubString &_rTxt, const xub_StrLen _nIdx,
+                           const xub_StrLen _nLen, const short _nKrn )
+            : SvxDoCapitals( (OutputDevice*)_pOut, _rTxt, _nIdx, _nLen ),
+              pFont( _pFnt ),
+              nKern( _nKrn )
             { }
 
     virtual void Do( const XubString &rTxt, const xub_StrLen nIdx,
@@ -722,8 +720,8 @@ public:
     inline const Size &GetSize() const { return aTxtSize; };
 };
 
-void SvxDoGetCapitalSize::Do( const XubString &rTxt, const xub_StrLen nIdx,
-                              const xub_StrLen nLen, const BOOL bUpper )
+void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
+                              const xub_StrLen _nLen, const BOOL bUpper )
 {
     Size aPartSize;
     if ( !bUpper )
@@ -731,7 +729,7 @@ void SvxDoGetCapitalSize::Do( const XubString &rTxt, const xub_StrLen nIdx,
         BYTE nProp = pFont->GetPropr();
         pFont->SetProprRel( KAPITAELCHENPROP );
         pFont->SetPhysFont( pOut );
-        aPartSize.setWidth( pOut->GetTextWidth( rTxt, nIdx, nLen ) );
+        aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
         aPartSize.setHeight( pOut->GetTextHeight() );
         aTxtSize.Height() = aPartSize.Height();
         pFont->SetPropr( nProp );
@@ -739,11 +737,11 @@ void SvxDoGetCapitalSize::Do( const XubString &rTxt, const xub_StrLen nIdx,
     }
     else
     {
-        aPartSize.setWidth( pOut->GetTextWidth( rTxt, nIdx, nLen ) );
+        aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
         aPartSize.setHeight( pOut->GetTextHeight() );
     }
     aTxtSize.Width() += aPartSize.Width();
-    aTxtSize.Width() += ( nLen * long( nKern ) );
+    aTxtSize.Width() += ( _nLen * long( nKern ) );
 }
 
 /*************************************************************************
@@ -781,10 +779,10 @@ protected:
     Point aSpacePos;
     short nKern;
 public:
-    SvxDoDrawCapital( SvxFont *pFnt, OutputDevice *pOut, const XubString &rTxt,
-                      const xub_StrLen nIdx, const xub_StrLen nLen,
+    SvxDoDrawCapital( SvxFont *pFnt, OutputDevice *_pOut, const XubString &_rTxt,
+                      const xub_StrLen _nIdx, const xub_StrLen _nLen,
                       const Point &rPos, const short nKrn )
-        : SvxDoCapitals( pOut, rTxt, nIdx, nLen ),
+        : SvxDoCapitals( _pOut, _rTxt, _nIdx, _nLen ),
           pFont( pFnt ),
           aPos( rPos ),
           aSpacePos( rPos ),
@@ -823,8 +821,8 @@ void SvxDoDrawCapital::SetSpace()
         aSpacePos.X() = aPos.X();
 }
 
-void SvxDoDrawCapital::Do( const XubString &rTxt, const xub_StrLen nIdx,
-                           const xub_StrLen nLen, const BOOL bUpper)
+void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
+                           const xub_StrLen _nLen, const BOOL bUpper)
 {
     BYTE nProp;
     Size aPartSize;
@@ -841,15 +839,15 @@ void SvxDoDrawCapital::Do( const XubString &rTxt, const xub_StrLen nIdx,
     }
     pFont->SetPhysFont( pOut );
 
-    aPartSize.setWidth( pOut->GetTextWidth( rTxt, nIdx, nLen ) );
+    aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
     aPartSize.setHeight( pOut->GetTextHeight() );
     long nWidth = aPartSize.Width();
     if ( nKern )
     {
         aPos.X() += (nKern/2);
-        if ( nLen ) nWidth += (nLen*long(nKern));
+        if ( _nLen ) nWidth += (_nLen*long(nKern));
     }
-    pOut->DrawStretchText(aPos,nWidth-nKern,rTxt,nIdx,nLen);
+    pOut->DrawStretchText(aPos,nWidth-nKern,_rTxt,_nIdx,_nLen);
 
     // Font restaurieren
     pFont->SetUnderline( eUnder );
