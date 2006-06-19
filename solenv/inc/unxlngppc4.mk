@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:33:02 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:15:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -fsigned-char -pipe -frtti $(ARCH_FLAGS)
-CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
@@ -116,11 +115,12 @@ CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 
-# Enable all warnings
-CFLAGSWALL=-Wall
-
-# Set default warn level
-CFLAGSDFLTWARN=
+CFLAGSWARNCC=
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
+CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWERRCC=-Werror
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
