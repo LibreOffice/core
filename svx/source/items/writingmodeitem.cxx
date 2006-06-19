@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writingmodeitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:41:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@ using namespace ::com::sun::star::text;
 
 TYPEINIT1_AUTOFACTORY(SvxWritingModeItem, SfxUInt16Item);
 
-SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, USHORT nWhich )
-    : SfxUInt16Item( nWhich, (sal_uInt16)eValue )
+SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, USHORT _nWhich )
+    : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
 {
 }
 
@@ -76,24 +76,28 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
     return new SvxWritingModeItem( *this );
 }
 
-SfxPoolItem* SvxWritingModeItem::Create( SvStream & rStrm, USHORT nVer ) const
+SfxPoolItem* SvxWritingModeItem::Create( SvStream & , USHORT  ) const
 {
     DBG_ERROR("SvxWritingModeItem should not be streamed!");
     return NULL;
 }
 
-SvStream& SvxWritingModeItem::Store( SvStream & rStrm, USHORT nIVer ) const
+SvStream& SvxWritingModeItem::Store( SvStream & rStrm, USHORT  ) const
 {
     DBG_ERROR("SvxWritingModeItem should not be streamed!");
     return rStrm;
 }
 
-USHORT SvxWritingModeItem::GetVersion( USHORT nFVer ) const
+USHORT SvxWritingModeItem::GetVersion( USHORT /*nFVer*/ ) const
 {
     return USHRT_MAX;
 }
 
-SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String &rText, const IntlWrapper *  ) const
+SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePres,
+        SfxMapUnit /*eCoreMetric*/,
+        SfxMapUnit /*ePresMetric*/,
+        String &rText,
+        const IntlWrapper *  ) const
 {
     SfxItemPresentation eRet = ePres;
     switch( ePres )
