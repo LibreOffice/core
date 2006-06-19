@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:15:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,14 +165,18 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyImport::Characters(const ::rtl::OUString& _rChars)
+    void OPropertyImport::Characters(const ::rtl::OUString&
+    #if OSL_DEBUG_LEVEL > 0
+    _rChars
+    #endif
+    )
     {
         // ignore them (should be whitespaces only)
         OSL_ENSURE(0 == _rChars.trim().getLength(), "OPropertyImport::Characters: non-whitespace characters!");
     }
 
     //---------------------------------------------------------------------
-    void OPropertyImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    void OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
         if (pProperty)
@@ -388,7 +392,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList)
+        const Reference< sax::XAttributeList >&)
     {
         if( token::IsXMLToken( _rLocalName, token::XML_PROPERTY ) )
         {
@@ -439,7 +443,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            const Reference< sax::XAttributeList >& _rxAttrList)
+            const Reference< sax::XAttributeList >&)
     {
         OSL_ENSURE(sal_False,
                 ::rtl::OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"")
