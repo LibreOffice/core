@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:38:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _UNOTOOLS_TEXTSEARCH_HXX
 #define _UNOTOOLS_TEXTSEARCH_HXX
 
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
+#endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -154,7 +157,7 @@ class UNOTOOLS_DLLPUBLIC TextSearch
 public:
     // rText ist der zusuchende String
     // this first two CTORs are deprecated!
-    TextSearch( const SearchParam & rPara, ULONG nLanguage );
+    TextSearch( const SearchParam & rPara, LanguageType nLanguage );
     TextSearch( const SearchParam & rPara, const CharClass& rCClass );
 
     TextSearch( const ::com::sun::star::util::SearchOptions& rPara );
