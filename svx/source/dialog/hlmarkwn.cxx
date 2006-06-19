@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:50:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,6 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
     const ULONG nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
 
-    BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
     Color aMaskColor( COL_LIGHTMAGENTA );
     const OUString aProp_LinkDisplayName( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) );
     const OUString aProp_LinkTarget( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.LinkTarget" ) );
@@ -431,9 +430,8 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 try
                 {
                     // get bitmap for the tree-entry
-                    uno::Any aAny( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ) );
-                    uno::Reference< awt::XBitmap > aXBitmap;
-                    if( aAny >>= aXBitmap )
+                    uno::Reference< awt::XBitmap > aXBitmap( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ), uno::UNO_QUERY );
+                    if( aXBitmap.is() )
                     {
                         Image aBmp( VCLUnoHelper::GetBitmap( aXBitmap ).GetBitmap(), aMaskColor );
                         // insert Displayname into treelist with bitmaps
