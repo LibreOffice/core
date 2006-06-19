@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:53:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,23 +272,23 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
 
         sal_Bool                                                                                       m_bDisposed : 1,
-                                                                                                       m_bInitialized : 1,
-                                                                                                       m_bDeleteMenu : 1,
-                                                                                                       m_bDeleteChildren : 1,
-                                                                                                       m_bActive : 1,
-                                                                                                       m_bIsBookmarkMenu : 1,
-                                                                                                       m_bWasHiContrast : 1,
-                                                                                                       m_bShowMenuImages : 1;
+                                                                                     m_bInitialized : 1,
+                                                                                     m_bDeleteMenu : 1,
+                                                                                     m_bDeleteChildren : 1,
+                                                                                     m_bActive : 1,
+                                                                                     m_bIsBookmarkMenu : 1,
+                                                                                     m_bWasHiContrast : 1,
+                                                                                     m_bShowMenuImages : 1;
         sal_Bool                                                                                       m_bModuleIdentified : 1,
                                                                                                        m_bRetrieveImages : 1,
                                                                                                        m_bAcceleratorCfg : 1;
-        ::rtl::OUString                                                                                m_aMenuItemCommand;
+        ::rtl::OUString                                                                      m_aMenuItemCommand;
         ::rtl::OUString                                                                                m_aModuleIdentifier;
-        Menu*                                                                                          m_pVCLMenu;
+        Menu*                                                                          m_pVCLMenu;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                            m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                   m_xUICommandLabels;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >         m_xPopupMenuControllerRegistration;
-        ::std::vector< MenuItemHandler* >                                                              m_aMenuItemHandlerVector;
+        ::std::vector< MenuItemHandler* >                                                                m_aMenuItemHandlerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                     m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                        m_xDocImageManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                        m_xModuleImageManager;
