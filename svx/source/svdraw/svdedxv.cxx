@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:49:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:36:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,8 @@ SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrObjEditView::SdrObjEditView(SdrModel* pModel1, XOutputDevice* pXOut):
-    SdrGlueEditView(pModel1,pXOut)
+SdrObjEditView::SdrObjEditView(SdrModel* pModel1, XOutputDevice* _pXOut):
+    SdrGlueEditView(pModel1,_pXOut)
 {
     ImpClearVars();
 }
@@ -230,7 +230,7 @@ void SdrObjEditView::ModelHasChanged()
             BOOL bAnchorChg=FALSE;
             BOOL bColorChg=FALSE;
             BOOL bContourFrame=pTextObj->IsContourTextFrame();
-            EVAnchorMode eNewAnchor;
+            EVAnchorMode eNewAnchor(ANCHOR_VCENTER_HCENTER);
             Rectangle aOldArea(aMinTextEditArea);
             aOldArea.Union(aTextEditArea);
             Color aNewColor;
@@ -355,7 +355,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     const SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextObjTmp);
     BOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
     BOOL bFitToSize=(pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING) !=0;
-    BOOL bContourFrame=pText!=NULL && pText->IsContourTextFrame();
+    //BOOL bContourFrame=pText!=NULL && pText->IsContourTextFrame();
     Window* pWin=rOutlView.GetWindow();
     Rectangle aBlankRect(rOutlView.GetOutputArea());
     aBlankRect.Union(aMinTextEditArea);
@@ -456,7 +456,7 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
     return aBackground;
 }
 
-OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL bNoPaint, OutlinerView* pGivenView) const
+OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL /*bNoPaint*/, OutlinerView* pGivenView) const
 {
     // Hintergrund
     Color aBackground(ImpGetTextEditBackgroundColor());
@@ -693,14 +693,14 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
 
             // check if this view is already inserted
-            ULONG i,nCount = pTextEditOutliner->GetViewCount();
-            for( i = 0; i < nCount; i++ )
+            ULONG i2,nCount = pTextEditOutliner->GetViewCount();
+            for( i2 = 0; i2 < nCount; i2++ )
             {
-                if( pTextEditOutliner->GetView(i) == pTextEditOutlinerView )
+                if( pTextEditOutliner->GetView(i2) == pTextEditOutlinerView )
                     break;
             }
 
-            if( i == nCount )
+            if( i2 == nCount )
                 pTextEditOutliner->InsertView(pTextEditOutlinerView,0);
 
             aHdl.SetMoveOutside(FALSE);
@@ -709,11 +709,11 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
 
             // alle Wins als OutlinerView beim Outliner anmelden
             if (!bOnlyOneView) {
-                for (i=0; i<nWinAnz; i++) {
-                    OutputDevice* pOut=GetWin((USHORT)i);
+                for (i2=0; i2<nWinAnz; i2++) {
+                    OutputDevice* pOut=GetWin((USHORT)i2);
                     if (pOut!=pWin && pOut->GetOutDevType()==OUTDEV_WINDOW) {
                         OutlinerView* pOutlView=ImpMakeOutlinerView((Window*)pOut,!bEmpty,NULL);
-                        pTextEditOutliner->InsertView(pOutlView,i);
+                        pTextEditOutliner->InsertView(pOutlView,i2);
                     }
                 }
             }
@@ -1417,7 +1417,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     BOOL bAllTextSelected=ImpIsTextEditAllSelected();
     SfxItemSet* pModifiedSet=NULL;
     const SfxItemSet* pSet=&rSet;
-    const SvxAdjustItem* pParaJust=NULL;
+    //const SvxAdjustItem* pParaJust=NULL;
 
     if (!bTextEdit)
     {
@@ -1528,17 +1528,17 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     return bRet;
 }
 
-SfxStyleSheet* SdrObjEditView::GetStyleSheet(BOOL& rOk) const
+SfxStyleSheet* SdrObjEditView::GetStyleSheet() const // SfxStyleSheet* SdrObjEditView::GetStyleSheet(BOOL& rOk) const
 {
     if ( pTextEditOutlinerView )
     {
-        rOk=TRUE;
+        // rOk=TRUE;
         SfxStyleSheet* pSheet = pTextEditOutlinerView->GetStyleSheet();
         return pSheet;
     }
     else
     {
-        return SdrGlueEditView::GetStyleSheet(rOk);
+        return SdrGlueEditView::GetStyleSheet(); // SdrGlueEditView::GetStyleSheet(rOk);
     }
 }
 
