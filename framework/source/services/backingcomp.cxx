@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // create a listener for automatic updates of the window background color
     // It hold itself alive and listen for window disposing() so it can die automaticly
     // if we release our component window.
-    ColorListener* pColorListener = new ColorListener(m_xWindow);
+    new ColorListener(m_xWindow);
 
     // sett he right title at the title bar of the parent window
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
@@ -668,7 +668,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     return  <FALSE/> everytime.
  */
 
-sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& xModel )
+sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
     throw (css::uno::RuntimeException)
 {
     return sal_False;
@@ -711,7 +711,7 @@ css::uno::Any SAL_CALL BackingComp::getViewData()
                 not used.
  */
 
-void SAL_CALL BackingComp::restoreViewData( /*IN*/ const css::uno::Any& aData )
+void SAL_CALL BackingComp::restoreViewData( /*IN*/ const css::uno::Any& )
     throw (css::uno::RuntimeException)
 {
 }
@@ -750,7 +750,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     @return TRUE if the request could be finished successfully; FALSE otherwise.
  */
 
-sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool bSuspend )
+sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     throw (css::uno::RuntimeException)
 {
     /* FIXME ... implemented by using default :-( */
@@ -875,7 +875,7 @@ void SAL_CALL BackingComp::dispose()
                 We must inform it about this unsupported feature.
  */
 
-void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& xListener )
+void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
     throw(css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
@@ -893,7 +893,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
                 not used.
  */
 
-void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& xListener )
+void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
     throw(css::uno::RuntimeException)
 {
 }
@@ -1000,7 +1000,7 @@ void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent& aEvent )
 /**
  */
 
-void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& aEvent )
+void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
     throw(css::uno::RuntimeException)
 {
     /* Attention
