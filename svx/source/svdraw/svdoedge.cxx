@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:32:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,8 +297,8 @@ TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
 SdrEdgeObj::SdrEdgeObj()
 :   SdrTextObj(),
-    bEdgeTrackDirty(sal_False),
     nNotifyingCount(0),
+    bEdgeTrackDirty(sal_False),
     // #109007# Default is to allow default connects
     mbSuppressDefaultConnect(sal_False),
     // #110649#
@@ -888,7 +888,7 @@ USHORT SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     }
 }
 
-FASTBOOL SdrEdgeObj::ImpStripPolyPoints(XPolygon& rXP) const
+FASTBOOL SdrEdgeObj::ImpStripPolyPoints(XPolygon& /*rXP*/) const
 {
     // fehlende Implementation !!!
     return FALSE;
@@ -902,8 +902,8 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     FASTBOOL bObn=nEscAngle==9000;
     FASTBOOL bLks=nEscAngle==18000;
     FASTBOOL bUnt=nEscAngle==27000;
-    FASTBOOL bHor=bLks || bRts;
-    FASTBOOL bVer=bObn || bUnt;
+    //FASTBOOL bHor=bLks || bRts;
+    //FASTBOOL bVer=bObn || bUnt;
 
     Point aP1(rStPt); // erstmal den Pflichtabstand
     if (bLks) aP1.X()=rRect.Left();
@@ -1146,8 +1146,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 nQ+=Abs(aXP[3].X()-aXP[2].X())+Abs(aXP[3].Y()-aXP[2].Y());
             *pnQuality=nQ;
         }
-        USHORT n1=1;
-        USHORT n2=1;
+        //USHORT n1=1;
+        //USHORT n2=1;
         if (bInfo) {
             pInfo->nObj1Lines=2;
             pInfo->nObj2Lines=2;
@@ -1203,7 +1203,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         long nXMax=Max(aBewareRect1.Right(),aBewareRect2.Right());
         long nYMin=Min(aBewareRect1.Top(),aBewareRect2.Top());
         long nYMax=Max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
-        FASTBOOL bBoundOverlap=aBoundRect1.Right()>aBoundRect2.Left() && aBoundRect1.Left()<aBoundRect2.Right() &&
+        //FASTBOOL bBoundOverlap=aBoundRect1.Right()>aBoundRect2.Left() && aBoundRect1.Left()<aBoundRect2.Right() &&
                                aBoundRect1.Bottom()>aBoundRect2.Top() && aBoundRect1.Top()<aBoundRect2.Bottom();
         FASTBOOL bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
                                 aBewareRect1.Bottom()>aBewareRect2.Top() && aBewareRect1.Top()<aBewareRect2.Bottom();
@@ -1563,11 +1563,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         FASTBOOL bOverflow=FALSE;
         Point aPt0(aXP1[0]);
         for (USHORT nPntNum=1; nPntNum<nPntAnz; nPntNum++) {
-            Point aPt1(aXP1[nPntNum]);
-            nQual+=Abs(aPt1.X()-aPt0.X())+Abs(aPt1.Y()-aPt0.Y());
+            Point aPt1b(aXP1[nPntNum]);
+            nQual+=Abs(aPt1b.X()-aPt0.X())+Abs(aPt1b.Y()-aPt0.Y());
             if (nQual<nQual0) bOverflow=TRUE;
             nQual0=nQual;
-            aPt0=aPt1;
+            aPt0=aPt1b;
         }
 
         USHORT nTmp=nPntAnz;
@@ -1609,11 +1609,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         aBewareRect2=rBewareRect2;
 
         for (USHORT i=0; i<nPntAnz; i++) {
-            Point aPt1(aXP1[i]);
-            FASTBOOL b1=aPt1.X()>aBewareRect1.Left() && aPt1.X()<aBewareRect1.Right() &&
-                        aPt1.Y()>aBewareRect1.Top() && aPt1.Y()<aBewareRect1.Bottom();
-            FASTBOOL b2=aPt1.X()>aBewareRect2.Left() && aPt1.X()<aBewareRect2.Right() &&
-                        aPt1.Y()>aBewareRect2.Top() && aPt1.Y()<aBewareRect2.Bottom();
+            Point aPt1b(aXP1[i]);
+            FASTBOOL b1=aPt1b.X()>aBewareRect1.Left() && aPt1b.X()<aBewareRect1.Right() &&
+                        aPt1b.Y()>aBewareRect1.Top() && aPt1b.Y()<aBewareRect1.Bottom();
+            FASTBOOL b2=aPt1b.X()>aBewareRect2.Left() && aPt1b.X()<aBewareRect2.Right() &&
+                        aPt1b.Y()>aBewareRect2.Top() && aPt1b.Y()<aBewareRect2.Bottom();
             USHORT nInt0=nIntersections;
             if (i==0 || i==nPntAnz-1) {
                 if (b1 && b2) nIntersections++;
@@ -1623,23 +1623,23 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             }
             // und nun noch auf Ueberschneidungen checken
             if (i>0 && nInt0==nIntersections) {
-                if (aPt0.Y()==aPt1.Y()) { // Horizontale Linie
+                if (aPt0.Y()==aPt1b.Y()) { // Horizontale Linie
                     if (aPt0.Y()>aBewareRect1.Top() && aPt0.Y()<aBewareRect1.Bottom() &&
-                        ((aPt0.X()<=aBewareRect1.Left() && aPt1.X()>=aBewareRect1.Right()) ||
-                         (aPt1.X()<=aBewareRect1.Left() && aPt0.X()>=aBewareRect1.Right()))) nIntersections++;
+                        ((aPt0.X()<=aBewareRect1.Left() && aPt1b.X()>=aBewareRect1.Right()) ||
+                         (aPt1b.X()<=aBewareRect1.Left() && aPt0.X()>=aBewareRect1.Right()))) nIntersections++;
                     if (aPt0.Y()>aBewareRect2.Top() && aPt0.Y()<aBewareRect2.Bottom() &&
-                        ((aPt0.X()<=aBewareRect2.Left() && aPt1.X()>=aBewareRect2.Right()) ||
-                         (aPt1.X()<=aBewareRect2.Left() && aPt0.X()>=aBewareRect2.Right()))) nIntersections++;
+                        ((aPt0.X()<=aBewareRect2.Left() && aPt1b.X()>=aBewareRect2.Right()) ||
+                         (aPt1b.X()<=aBewareRect2.Left() && aPt0.X()>=aBewareRect2.Right()))) nIntersections++;
                 } else { // Vertikale Linie
                     if (aPt0.X()>aBewareRect1.Left() && aPt0.X()<aBewareRect1.Right() &&
-                        ((aPt0.Y()<=aBewareRect1.Top() && aPt1.Y()>=aBewareRect1.Bottom()) ||
-                         (aPt1.Y()<=aBewareRect1.Top() && aPt0.Y()>=aBewareRect1.Bottom()))) nIntersections++;
+                        ((aPt0.Y()<=aBewareRect1.Top() && aPt1b.Y()>=aBewareRect1.Bottom()) ||
+                         (aPt1b.Y()<=aBewareRect1.Top() && aPt0.Y()>=aBewareRect1.Bottom()))) nIntersections++;
                     if (aPt0.X()>aBewareRect2.Left() && aPt0.X()<aBewareRect2.Right() &&
-                        ((aPt0.Y()<=aBewareRect2.Top() && aPt1.Y()>=aBewareRect2.Bottom()) ||
-                         (aPt1.Y()<=aBewareRect2.Top() && aPt0.Y()>=aBewareRect2.Bottom()))) nIntersections++;
+                        ((aPt0.Y()<=aBewareRect2.Top() && aPt1b.Y()>=aBewareRect2.Bottom()) ||
+                         (aPt1b.Y()<=aBewareRect2.Top() && aPt0.Y()>=aBewareRect2.Bottom()))) nIntersections++;
                 }
             }
-            aPt0=aPt1;
+            aPt0=aPt1b;
         }
         if (nPntAnz<=1) nIntersections++;
         nQual0=nQual;
@@ -1739,27 +1739,27 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 // Vor und hinter dem Mittelpunkt jeweils
                 // noch einen Kontrollpunkt einfuegen
                 Point aCenter(aXP1[2]);
-                long dx1=aCenter.X()-aXP1[1].X();
-                long dy1=aCenter.Y()-aXP1[1].Y();
-                long dx2=aCenter.X()-aXP1[3].X();
-                long dy2=aCenter.Y()-aXP1[3].Y();
+                long dx1b=aCenter.X()-aXP1[1].X();
+                long dy1b=aCenter.Y()-aXP1[1].Y();
+                long dx2b=aCenter.X()-aXP1[3].X();
+                long dy2b=aCenter.Y()-aXP1[3].Y();
                 aXP1.Insert(2,aCenter,XPOLY_CONTROL);
                 aXP1.SetFlags(3,XPOLY_SYMMTR);
                 aXP1.Insert(4,aCenter,XPOLY_CONTROL);
-                aXP1[2].X()-=dx1/2;
-                aXP1[2].Y()-=dy1/2;
-                aXP1[3].X()-=(dx1+dx2)/4;
-                aXP1[3].Y()-=(dy1+dy2)/4;
-                aXP1[4].X()-=dx2/2;
-                aXP1[4].Y()-=dy2/2;
+                aXP1[2].X()-=dx1b/2;
+                aXP1[2].Y()-=dy1b/2;
+                aXP1[3].X()-=(dx1b+dx2b)/4;
+                aXP1[3].Y()-=(dy1b+dy2b)/4;
+                aXP1[4].X()-=dx2b/2;
+                aXP1[4].Y()-=dy2b/2;
             }
             if (nPntAnz==6) {
-                Point aPt1(aXP1[2]);
-                Point aPt2(aXP1[3]);
-                aXP1.Insert(2,aPt1,XPOLY_CONTROL);
-                aXP1.Insert(5,aPt2,XPOLY_CONTROL);
-                long dx=aPt1.X()-aPt2.X();
-                long dy=aPt1.Y()-aPt2.Y();
+                Point aPt1b(aXP1[2]);
+                Point aPt2b(aXP1[3]);
+                aXP1.Insert(2,aPt1b,XPOLY_CONTROL);
+                aXP1.Insert(5,aPt2b,XPOLY_CONTROL);
+                long dx=aPt1b.X()-aPt2b.X();
+                long dy=aPt1b.Y()-aPt2b.Y();
                 aXP1[3].X()-=dx/2;
                 aXP1[3].Y()-=dy/2;
                 aXP1.SetFlags(3,XPOLY_SYMMTR);
@@ -1898,7 +1898,7 @@ void SdrEdgeObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralEDGE);
 }
 
-void SdrEdgeObj::TakeXorPoly(XPolyPolygon& rXPolyPoly, FASTBOOL bDetail) const
+void SdrEdgeObj::TakeXorPoly(XPolyPolygon& rXPolyPoly, FASTBOOL /*bDetail*/) const
 {
     if (bEdgeTrackDirty) ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
     rXPolyPoly=XPolyPolygon(*pEdgeTrack);
@@ -2004,9 +2004,8 @@ FASTBOOL SdrEdgeObj::HasSpecialDrag() const
     return TRUE;
 }
 
-class ImpEdgeUser
+struct ImpEdgeUser : public SdrDragStatUserData
 {
-public:
     XPolygon          aXP;
     SdrObjConnection  aCon1;
     SdrObjConnection  aCon2;
@@ -2018,8 +2017,8 @@ FASTBOOL SdrEdgeObj::BegDrag(SdrDragStat& rDragStat) const
 {
     if (rDragStat.GetHdl()==NULL) return FALSE;
     rDragStat.SetEndDragChangesAttributes(TRUE);
-    rDragStat.pUser=new ImpEdgeUser;
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.pUser;
+    rDragStat.SetUser(new ImpEdgeUser);
+    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
     pEdgeUser->aXP=(*pEdgeTrack);
     pEdgeUser->aInfo=aEdgeInfo;
     pEdgeUser->aCon1=aCon1;
@@ -2037,7 +2036,7 @@ FASTBOOL SdrEdgeObj::BegDrag(SdrDragStat& rDragStat) const
 FASTBOOL SdrEdgeObj::MovDrag(SdrDragStat& rDragStat) const
 {
     Point aPt(rDragStat.GetNow());
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.pUser;
+    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
     const SdrHdl* pHdl=rDragStat.GetHdl();
     const ImpEdgeHdl* pEdgeHdl=(ImpEdgeHdl*)pHdl;
     pEdgeUser->aXP=(*pEdgeTrack);
@@ -2072,7 +2071,7 @@ FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     // #110094#-14 SendRepaintBroadcast();
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.pUser;
+    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
     if (rDragStat.GetHdl()->GetPointNum()<2) {
         (*pEdgeTrack)=pEdgeUser->aXP;
         aEdgeInfo=pEdgeUser->aInfo;
@@ -2088,8 +2087,8 @@ FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
         aEdgeInfo=pEdgeUser->aInfo;
     }
     ImpSetEdgeInfoToAttr();
-    delete (ImpEdgeUser*)rDragStat.pUser;
-    rDragStat.pUser=NULL;
+    delete (ImpEdgeUser*)rDragStat.GetUser();
+    rDragStat.SetUser(NULL);
     SetChanged();
     SetRectsDirty();
     BroadcastObjectChange();
@@ -2102,14 +2101,14 @@ FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
 
 void SdrEdgeObj::BrkDrag(SdrDragStat& rDragStat) const
 {
-    delete (ImpEdgeUser*)rDragStat.pUser;
-    rDragStat.pUser=NULL;
+    delete (ImpEdgeUser*)rDragStat.GetUser();
+    rDragStat.SetUser(NULL);
     if (rDragStat.GetView()!=NULL) {
         rDragStat.GetView()->HideConnectMarker();
     }
 }
 
-XubString SdrEdgeObj::GetDragComment(const SdrDragStat& rDragStat, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
+XubString SdrEdgeObj::GetDragComment(const SdrDragStat& /*rDragStat*/, FASTBOOL /*bUndoDragComment*/, FASTBOOL bCreateComment) const
 {
     XubString aStr;
     if (!bCreateComment) ImpTakeDescriptionStr(STR_DragEdgeTail,aStr);
@@ -2118,7 +2117,7 @@ XubString SdrEdgeObj::GetDragComment(const SdrDragStat& rDragStat, FASTBOOL bUnd
 
 void SdrEdgeObj::TakeDragPoly(const SdrDragStat& rDragStat, XPolyPolygon& rXPP) const
 {
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.pUser;
+    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
     rXPP.Clear();
     rXPP.Insert(pEdgeUser->aXP);
 }
@@ -2222,7 +2221,7 @@ void SdrEdgeObj::BrkCreate(SdrDragStat& rDragStat)
     }
 }
 
-void SdrEdgeObj::TakeCreatePoly(const SdrDragStat& rStatDrag, XPolyPolygon& rXPP) const
+void SdrEdgeObj::TakeCreatePoly(const SdrDragStat& /*rStatDrag*/, XPolyPolygon& rXPP) const
 {
     rXPP.Clear();
     rXPP.Insert(*pEdgeTrack);
@@ -2256,7 +2255,7 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
     SdrObjConnection aTestCon;
     SdrObjConnection aBestCon;
     FASTBOOL bTestBoundHit=FALSE;
-    FASTBOOL bBestBoundHit=FALSE;
+    //FASTBOOL bBestBoundHit=FALSE;
 
     while (no>0 && !bFnd) {
         // Problem: Gruppenobjekt mit verschiedenen Layern liefert LayerID 0 !!!!
