@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeblob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:21:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,10 @@ void writeConstantData(typereg::Writer& rWriter, sal_uInt16 fieldIndex,
         constValue.m_type = RT_TYPE_STRING;
         constValue.m_value.aString = ((OUString*)aConstantAny.getValue())->getStr();
     }
-            break;
+    break;
+    default:
+        OSL_ENSURE( 0, "unsupported constant type" );
+        break;
     }
 
     rWriter.setFieldData(fieldIndex, OUString(), OUString(), RT_ACCESS_CONST,
@@ -797,6 +800,9 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         rtl_copyMemory(pBlob, p, *blobsize);
     }
     break;
+    default:
+        OSL_ENSURE( 0, "unsupported type" );
+        break;
     }
 
     return pBlob;
