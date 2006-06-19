@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfreprd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,6 +374,10 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 //???
                 break;
             }
+            case DXF_HATCH :
+                break;
+            case DXF_LWPOLYLINE :
+                break;
         }
         pBE=pBE->pSucc;
     }
