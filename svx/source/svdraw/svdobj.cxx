@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:17:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ SdrObjUserCall::~SdrObjUserCall()
 {
 }
 
-void SdrObjUserCall::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect)
+void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*/, const Rectangle& /*rOldBoundRect*/)
 {
 }
 
@@ -212,16 +212,16 @@ void SdrObjUserCall::Changed(const SdrObject& rObj, SdrUserCallType eType, const
 
 TYPEINIT0(SdrObjUserData);
 
-void SdrObjUserData::operator=(const SdrObjUserData& rData)    // nicht implementiert
+void SdrObjUserData::operator=(const SdrObjUserData& /*rData*/)    // nicht implementiert
 {
 }
 
-sal_Bool SdrObjUserData::operator==(const SdrObjUserData& rData) const // nicht implementiert
+sal_Bool SdrObjUserData::operator==(const SdrObjUserData& /*rData*/) const // nicht implementiert
 {
     return FALSE;
 }
 
-sal_Bool SdrObjUserData::operator!=(const SdrObjUserData& rData) const // nicht implementiert
+sal_Bool SdrObjUserData::operator!=(const SdrObjUserData& /*rData*/) const // nicht implementiert
 {
     return FALSE;
 }
@@ -248,7 +248,7 @@ SdrObjUserData::~SdrObjUserData()
 //BFS01{
 //BFS01}
 
-FASTBOOL SdrObjUserData::HasMacro(const SdrObject* pObj) const
+FASTBOOL SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 {
     return FALSE;
 }
@@ -259,12 +259,12 @@ SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const Sd
     return pObj->CheckHit(rRec.aPos,rRec.nTol,rRec.pVisiLayer);
 }
 
-Pointer SdrObjUserData::GetMacroPointer(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
+Pointer SdrObjUserData::GetMacroPointer(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
 {
     return Pointer(POINTER_REFHAND);
 }
 
-void SdrObjUserData::PaintMacro(XOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
+void SdrObjUserData::PaintMacro(XOutputDevice& rXOut, const Rectangle& /*rDirtyRect*/, const SdrObjMacroHitRec& /*rRec*/, const SdrObject* pObj) const
 {
     if (pObj==NULL) return;
     Color aBlackColor( COL_BLACK );
@@ -282,12 +282,12 @@ void SdrObjUserData::PaintMacro(XOutputDevice& rXOut, const Rectangle& rDirtyRec
     rXOut.SetRasterOp(eRop0);
 }
 
-FASTBOOL SdrObjUserData::DoMacro(const SdrObjMacroHitRec& rRec, SdrObject* pObj)
+FASTBOOL SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pObj*/)
 {
     return FALSE;
 }
 
-XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
+XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
 {
     return String();
 }
@@ -486,17 +486,16 @@ void SdrObject::SetBoundRectDirty()
 DBG_NAME(SdrObject);
 TYPEINIT1(SdrObject,SfxListener);
 
-SdrObject::SdrObject():
+SdrObject::SdrObject()
+:   mpProperties(0L),
+    mpViewContact(0L),
     pObjList(NULL),
     pPage(NULL),
     pModel(NULL),
     pUserCall(NULL),
     pPlusData(NULL),
     nOrdNum(0),
-    nLayerId(0),
-    mpProperties(0L),
-    // #110094#
-    mpViewContact(0L)
+    nLayerId(0)
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =FALSE;
@@ -691,14 +690,14 @@ SdrLayerID SdrObject::GetLayer() const
     return SdrLayerID(nLayerId);
 }
 
-void SdrObject::GetLayer(SetOfByte& rSet) const
+void SdrObject::GetLayerSet(SetOfByte& rSet) const
 {
     rSet.Set((BYTE)nLayerId);
     SdrObjList* pOL=GetSubList();
     if (pOL!=NULL) {
         ULONG nObjAnz=pOL->GetObjCount();
         for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
-            pOL->GetObj(nObjNum)->GetLayer(rSet);
+            pOL->GetObj(nObjNum)->GetLayerSet(rSet);
         }
     }
 }
@@ -986,7 +985,7 @@ void SdrObject::SetChanged()
     }
 }
 
-sal_Bool SdrObject::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrObject::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfoRec*/) const
 {
     Color aRedColor( COL_RED );
     Color aYellowColor( COL_YELLOW );
@@ -1115,7 +1114,7 @@ void SdrObject::ImpDrawShadowLineGeometry(
     sal_Int32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
     sal_Int32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
     const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-    Color aColor(rShadColItem.GetValue());
+    Color aColor(rShadColItem.GetColorValue());
     sal_uInt16 nTrans = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
 
     // draw shadow line geometry
@@ -1125,7 +1124,7 @@ void SdrObject::ImpDrawShadowLineGeometry(
 void SdrObject::ImpDrawColorLineGeometry(
     XOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const
 {
-    Color aColor = ((XLineColorItem&)rSet.Get(XATTR_LINECOLOR)).GetValue();
+    Color aColor = ((XLineColorItem&)rSet.Get(XATTR_LINECOLOR)).GetColorValue();
     sal_uInt16 nTrans = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
 
     // draw the line geometry
@@ -1528,10 +1527,10 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
                             if( aLine.GetLength() > 16000 )
                             {
                                 Point       aPoint;
-                                Rectangle   aOutRect( aPoint, rXOut.GetOutDev()->GetOutputSizePixel() );
+                                Rectangle   aOutRect2( aPoint, rXOut.GetOutDev()->GetOutputSizePixel() );
                                 Line        aIntersection;
 
-                                if( aLine.Intersection( aOutRect, aIntersection ) )
+                                if( aLine.Intersection( aOutRect2, aIntersection ) )
                                 {
                                     rXOut.GetOutDev()->DrawLine( rXOut.GetOutDev()->PixelToLogic( aIntersection.GetStart() ),
                                                                  rXOut.GetOutDev()->PixelToLogic( aIntersection.GetEnd() ) );
@@ -1714,7 +1713,7 @@ XubString SdrObject::GetWinkStr(long nWink, FASTBOOL bNoDegChar) const
     return aStr;
 }
 
-XubString SdrObject::GetMetrStr(long nVal, MapUnit eWantMap, FASTBOOL bNoUnitChars) const
+XubString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, FASTBOOL bNoUnitChars) const
 {
     XubString aStr;
     if (pModel!=NULL) {
@@ -1818,11 +1817,11 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
             case META_POLYGON_ACTION:
             {
-                const Polygon& rPoly = ( (const MetaPolygonAction&) rAct ).GetPolygon();
+                const Polygon& rPoly2 = ( (const MetaPolygonAction&) rAct ).GetPolygon();
 
-                if( rPoly.GetSize() > 2 )
+                if( rPoly2.GetSize() > 2 )
                 {
-                    aXPoly = rPoly;
+                    aXPoly = rPoly2;
                     bXPoly = TRUE;
                 }
             }
@@ -1839,11 +1838,11 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
             case META_POLYLINE_ACTION:
             {
-                const Polygon& rPoly = ( (const MetaPolyLineAction&) rAct ).GetPolygon();
+                const Polygon& rPoly2 = ( (const MetaPolyLineAction&) rAct ).GetPolygon();
 
-                if( rPoly.GetSize() > 1 )
+                if( rPoly2.GetSize() > 1 )
                 {
-                    aXPoly = rPoly;
+                    aXPoly = rPoly2;
                     bXPoly = TRUE;
                 }
             }
@@ -1900,12 +1899,12 @@ SdrHdl* SdrObject::GetHdl(USHORT nHdlNum) const
     return pH;
 }
 
-USHORT SdrObject::GetPlusHdlCount(const SdrHdl& rHdl) const
+USHORT SdrObject::GetPlusHdlCount(const SdrHdl& /*rHdl*/) const
 {
     return 0;
 }
 
-SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const
+SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, USHORT /*nPlNum*/) const
 {
     return NULL;
 }
@@ -1975,15 +1974,15 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         } else { // Scheitelpunkthandles
             if ((bLft || bRgt) && nXDiv!=0) {
-                long nHgt0=aRect.Bottom()-aRect.Top();
-                long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
-                aTmpRect.Top()-=(nNeed-nHgt0)/2;
+                long nHgt0b=aRect.Bottom()-aRect.Top();
+                long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
+                aTmpRect.Top()-=(nNeed-nHgt0b)/2;
                 aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
             }
             if ((bTop || bBtm) && nYDiv!=0) {
-                long nWdt0=aRect.Right()-aRect.Left();
-                long nNeed=long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
-                aTmpRect.Left()-=(nNeed-nWdt0)/2;
+                long nWdt0b=aRect.Right()-aRect.Left();
+                long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
+                aTmpRect.Left()-=(nNeed-nWdt0b)/2;
                 aTmpRect.Right()=aTmpRect.Left()+nNeed;
             }
         }
@@ -2008,7 +2007,7 @@ FASTBOOL SdrObject::BegDrag(SdrDragStat& rDrag) const
     return FALSE;
 }
 
-FASTBOOL SdrObject::MovDrag(SdrDragStat& rDrag) const
+FASTBOOL SdrObject::MovDrag(SdrDragStat& /*rDrag*/) const
 {
     return TRUE;
 }
@@ -2022,11 +2021,11 @@ FASTBOOL SdrObject::EndDrag(SdrDragStat& rDrag)
     return TRUE;
 }
 
-void SdrObject::BrkDrag(SdrDragStat& rDrag) const
+void SdrObject::BrkDrag(SdrDragStat& /*rDrag*/) const
 {
 }
 
-XubString SdrObject::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bDragUndoComment, FASTBOOL bCreateComment) const
+XubString SdrObject::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bDragUndoComment*/, FASTBOOL /*bCreateComment*/) const
 {
     return String();
 }
@@ -2063,11 +2062,11 @@ FASTBOOL SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-void SdrObject::BrkCreate(SdrDragStat& rStat)
+void SdrObject::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-FASTBOOL SdrObject::BckCreate(SdrDragStat& rStat)
+FASTBOOL SdrObject::BckCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }
@@ -2334,7 +2333,7 @@ long SdrObject::GetRotateAngle() const
     return 0;
 }
 
-long SdrObject::GetShearAngle(FASTBOOL bVertical) const
+long SdrObject::GetShearAngle(FASTBOOL /*bVertical*/) const
 {
     return 0;
 }
@@ -2359,7 +2358,7 @@ USHORT SdrObject::GetPointCount() const
     return 0;
 }
 
-const Point& SdrObject::GetPoint(USHORT i) const
+const Point& SdrObject::GetPoint(USHORT /*i*/) const
 {
     return *((Point*)NULL);
 }
@@ -2374,7 +2373,7 @@ void SdrObject::SetPoint(const Point& rPnt, USHORT i)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrObject::NbcSetPoint(const Point& rPnt, USHORT i)
+void SdrObject::NbcSetPoint(const Point& /*rPnt*/, USHORT /*i*/)
 {
 }
 
@@ -2390,7 +2389,7 @@ USHORT SdrObject::InsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL& rInsNe
     return nRet;
 }
 
-USHORT SdrObject::NbcInsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL bHideHim, FASTBOOL& rInsNextAfter)
+USHORT SdrObject::NbcInsPoint(const Point& /*rPos*/, FASTBOOL /*bNewObj*/, FASTBOOL /*bHideHim*/, FASTBOOL& /*rInsNextAfter*/)
 {
     return 0xFFFF;
 }
@@ -2407,7 +2406,7 @@ USHORT SdrObject::InsPoint(USHORT i, const Point& rPos, FASTBOOL bInsAfter, FAST
     return nRet;
 }
 
-USHORT SdrObject::NbcInsPoint(USHORT i, const Point& rPos, FASTBOOL bInsAfter, FASTBOOL bNewObj, FASTBOOL bHideHim)
+USHORT SdrObject::NbcInsPoint(USHORT /*i*/, const Point& /*rPos*/, FASTBOOL /*bInsAfter*/, FASTBOOL /*bNewObj*/, FASTBOOL /*bHideHim*/)
 {
     return 0xFFFF;
 }
@@ -2424,7 +2423,7 @@ FASTBOOL SdrObject::DelPoint(USHORT i)
     return bRet;
 }
 
-FASTBOOL SdrObject::NbcDelPoint(USHORT i)
+FASTBOOL SdrObject::NbcDelPoint(USHORT /*i*/)
 {
     return TRUE;
 }
@@ -2441,7 +2440,7 @@ SdrObject* SdrObject::RipPoint(USHORT i, USHORT& rNewPt0Index)
     return pRet;
 }
 
-SdrObject* SdrObject::NbcRipPoint(USHORT i, USHORT& rNewPt0Index)
+SdrObject* SdrObject::NbcRipPoint(USHORT /*i*/, USHORT& /*rNewPt0Index*/)
 {
     return NULL;
 }
@@ -2472,12 +2471,12 @@ SdrObject* SdrObject::CheckTextEditHit(const Point& rPnt, USHORT nTol, const Set
     return CheckHit(rPnt,nTol,pVisiLayer);
 }
 
-FASTBOOL SdrObject::BegTextEdit(SdrOutliner& rOutl)
+FASTBOOL SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
 {
     return FALSE;
 }
 
-void SdrObject::EndTextEdit(SdrOutliner& rOutl)
+void SdrObject::EndTextEdit(SdrOutliner& /*rOutl*/)
 {
 }
 
@@ -2493,7 +2492,7 @@ void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
     }
 }
 
-void SdrObject::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrObject::NbcSetOutlinerParaObject(OutlinerParaObject* /*pTextObject*/)
 {
 }
 
@@ -3037,11 +3036,11 @@ const SdrGluePointList* SdrObject::GetGluePointList() const
     return NULL;
 }
 
-SdrGluePointList* SdrObject::GetGluePointList()
-{
-    if (pPlusData!=NULL) return pPlusData->pGluePoints;
-    return NULL;
-}
+//SdrGluePointList* SdrObject::GetGluePointList()
+//{
+//  if (pPlusData!=NULL) return pPlusData->pGluePoints;
+//  return NULL;
+//}
 
 SdrGluePointList* SdrObject::ForceGluePointList()
 {
@@ -3113,19 +3112,19 @@ void SdrObject::ToggleEdgeXor(const SdrDragStat& rDrag, XOutputDevice& rXOut, FA
     rXOut.SetRasterOp(eRop0);
 }
 
-void SdrObject::NspToggleEdgeXor(const SdrDragStat& rDrag, XOutputDevice& rXOut, FASTBOOL bTail1, FASTBOOL bTail2, FASTBOOL bDetail) const
+void SdrObject::NspToggleEdgeXor(const SdrDragStat& /*rDrag*/, XOutputDevice& /*rXOut*/, FASTBOOL /*bTail1*/, FASTBOOL /*bTail2*/, FASTBOOL /*bDetail*/) const
 {
 }
 
-void SdrObject::ConnectToNode(FASTBOOL bTail1, SdrObject* pObj)
+void SdrObject::ConnectToNode(FASTBOOL /*bTail1*/, SdrObject* /*pObj*/)
 {
 }
 
-void SdrObject::DisconnectFromNode(FASTBOOL bTail1)
+void SdrObject::DisconnectFromNode(FASTBOOL /*bTail1*/)
 {
 }
 
-SdrObject* SdrObject::GetConnectedNode(FASTBOOL bTail1) const
+SdrObject* SdrObject::GetConnectedNode(FASTBOOL /*bTail1*/) const
 {
     return NULL;
 }
@@ -3186,7 +3185,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                     aLinePolygonPart->SetModel(pRet->GetModel());
 
                     aSet.Put(XLineWidthItem(0L));
-                    Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetValue();
+                    Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
                     UINT16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
                     aSet.Put(XFillColorItem(XubString(), aColorLine));
                     aSet.Put(XFillStyleItem(XFILL_SOLID));
@@ -3307,13 +3306,13 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) 
 {
     if(pRet->ISA(SdrObjGroup))
     {
-        SdrObjList* pObjList = pRet->GetSubList();
+        SdrObjList* pObjList2 = pRet->GetSubList();
         SdrObject* pGroup = new SdrObjGroup;
         pGroup->SetModel(pRet->GetModel());
 
-        for(UINT32 a=0;a<pObjList->GetObjCount();a++)
+        for(UINT32 a=0;a<pObjList2->GetObjCount();a++)
         {
-            SdrObject* pIterObj = pObjList->GetObj(a);
+            SdrObject* pIterObj = pObjList2->GetObj(a);
             pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj, bForceLineDash));
         }
 
@@ -3345,7 +3344,7 @@ SdrObject* SdrObject::ConvertToPolyObj(BOOL bBezier, BOOL bLineToArea) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrObject::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrObject::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
@@ -3706,6 +3705,8 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
                 case SDRUSERCALL_REMOVED:
                     eChildUserType = SDRUSERCALL_CHILD_REMOVED;
                 break;
+
+                default: break;
             }
 
             pGroup->GetUserCall()->Changed( *this, eChildUserType, rBoundRect );
@@ -3729,7 +3730,7 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, S
     }
 }
 
-sal_Bool SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
+sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
 {
     FASTBOOL bRet = FALSE;
 
@@ -3829,7 +3830,7 @@ sal_Bool SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
+BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/) const
 {
     // any kind of SdrObject, just use SnapRect
     Rectangle aRectangle(GetSnapRect());
@@ -3885,7 +3886,7 @@ BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) co
 // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
     Vector2D aScale, aTranslate;
@@ -3966,7 +3967,7 @@ sal_Bool SdrObject::IsInDestruction() const
 //BFS09
 bool SdrObject::ImpAddLineGeomteryForMiteredLines()
 {
-    sal_Int32 nLineWidth(0L);
+    //sal_Int32 nLineWidth(0L);
     bool bRetval(false);
 
     if(XLINE_NONE != ((const XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue())
