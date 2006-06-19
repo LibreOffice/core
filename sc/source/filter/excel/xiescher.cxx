@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:48:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,7 +807,8 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
         case EXC_OBJ_CMO_SCROLLBAR:
         {
             sal_Int32 nApiOrient = mbScrollHor ? AwtScrollOrient::HORIZONTAL : AwtScrollOrient::VERTICAL;
-            sal_Int32 nVisSize = std::min< sal_Int32 >( mnScrollPage, 1 );
+            sal_Int32 nVisSize = std::min< sal_Int32 >(
+                sal::static_int_cast< sal_Int32 >(mnScrollPage), 1 );
 
             // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
             rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
