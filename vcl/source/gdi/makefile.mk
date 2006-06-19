@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 15:11:53 $
+#   last change: $Author: hr $ $Date: 2006-06-19 19:26:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\
             $(SLO)$/bmpfast.obj	\
-            $(SLO)$/color.obj		\
             $(SLO)$/cvtsvm.obj		\
             $(SLO)$/cvtgrf.obj		\
             $(SLO)$/font.obj		\
@@ -120,13 +119,23 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/pngwrite.obj	
 
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
+                    $(SLO)$/outdev3.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
+                    $(SLO)$/print2.obj		\
+                    $(SLO)$/sallayout.obj		\
+                    $(SLO)$/image.obj		\
                     $(SLO)$/impgraph.obj	\
+                    $(SLO)$/metric.obj		\
+                    $(SLO)$/pdfwriter_impl.obj	\
                     $(SLO)$/fontcfg.obj		\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
+                    $(SLO)$/fontcvt.obj		\
+                    $(SLO)$/jobset.obj		\
                     $(SLO)$/impimagetree.obj		\
+                    $(SLO)$/pngread.obj		\
+                    $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj
                     
 
