@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxbyte.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:38:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ start:
         case SbxEMPTY:
             nRes = 0; break;
         case SbxCHAR:
-            if( p->nChar < 0 )
+            if( p->nChar > SbxMAXBYTE )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
@@ -282,10 +282,6 @@ void ImpPutByte( SbxValues* p, BYTE n )
             break;
 
         case SbxCHAR:
-            if( n > SbxMAXCHAR )
-            {
-                SbxBase::SetError( SbxERR_CONVERSION ); n = SbxMAXCHAR;
-            }
             p->nChar = (xub_Unicode) n; break;
 
         case SbxBYREF | SbxSTRING:
@@ -305,10 +301,6 @@ void ImpPutByte( SbxValues* p, BYTE n )
             break;
         }
         case SbxBYREF | SbxCHAR:
-            if( n > SbxMAXCHAR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXCHAR;
-            }
             *p->pChar = (xub_Unicode) n; break;
         case SbxBYREF | SbxBYTE:
             *p->pByte = n; break;
