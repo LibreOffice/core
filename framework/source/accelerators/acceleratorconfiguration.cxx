@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:02:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:11:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,8 @@ DEFINE_XTYPEPROVIDER_6(AcceleratorConfiguration             ,
 AcceleratorConfiguration::AcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
     : ThreadHelpBase  (&Application::GetSolarMutex())
     , m_xSMGR         (xSMGR                        )
-    , m_pWriteCache   (0                            )
     , m_aPresetHandler(xSMGR                        )
+    , m_pWriteCache   (0                            )
 {
 }
 
@@ -436,7 +436,7 @@ void SAL_CALL AcceleratorConfiguration::storeToStorage(const css::uno::Reference
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void SAL_CALL AcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::setStorage()", "TODO implement this HACK .-)")
@@ -451,14 +451,14 @@ void SAL_CALL AcceleratorConfiguration::setStorage(const css::uno::Reference< cs
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener)
+void SAL_CALL AcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener)
+void SAL_CALL AcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
@@ -477,14 +477,14 @@ void SAL_CALL AcceleratorConfiguration::reset()
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener)
+void SAL_CALL AcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::addResetListener()", "TODO implement me")
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener)
+void SAL_CALL AcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::removeResetListener()", "TODO implement me")
@@ -492,7 +492,7 @@ void SAL_CALL AcceleratorConfiguration::removeResetListener(const css::uno::Refe
 
 //-----------------------------------------------
 // IStorageListener
-void AcceleratorConfiguration::changesOccured(const ::rtl::OUString& sPath)
+void AcceleratorConfiguration::changesOccured(const ::rtl::OUString& /*sPath*/)
 {
     reload();
 }
@@ -622,8 +622,6 @@ AcceleratorCache& AcceleratorConfiguration::impl_getCFG(sal_Bool bWriteAccessReq
         return *m_pWriteCache;
     else
         return m_aReadCache;
-
-    aWriteLock.unlock();
     // <- SAFE ----------------------------------
 }
 
