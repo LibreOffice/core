@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparaimphint.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:32:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,16 +90,16 @@ public:
     XMLHint_Impl( sal_uInt8 nTyp,
                   const Reference < XTextRange > & rS,
                   const Reference < XTextRange > & rE ) :
-        nType( nTyp ),
         xStart( rS ),
-        xEnd( rE )
+        xEnd( rE ),
+        nType( nTyp )
     {
     }
 
     XMLHint_Impl( sal_uInt8 nTyp,
                   const Reference < XTextRange > & rS ) :
-        nType( nTyp ),
-        xStart( rS )
+        xStart( rS ),
+        nType( nTyp )
     {
     }
 
