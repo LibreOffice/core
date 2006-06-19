@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flagitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:57:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxFlagItem);
+DBG_NAME(SfxFlagItem)
 
 USHORT nSfxFlagVal[16] =
 {
@@ -89,7 +89,7 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxFlagItem::Store(SvStream &rStream, USHORT nItemVersion) const
+SvStream& SfxFlagItem::Store(SvStream &rStream, USHORT) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rStream << nVal;
@@ -100,9 +100,9 @@ SvStream& SfxFlagItem::Store(SvStream &rStream, USHORT nItemVersion) const
 
 SfxItemPresentation SfxFlagItem::GetPresentation
 (
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
     XubString&              rText,
     const IntlWrapper *
 )   const
@@ -116,7 +116,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-XubString SfxFlagItem::GetFlagText( BYTE nV ) const
+XubString SfxFlagItem::GetFlagText( BYTE ) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_WARNING( "calling GetValueText(USHORT) on SfxFlagItem -- overload!" );
@@ -134,7 +134,7 @@ BYTE SfxFlagItem::GetFlagCount() const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxFlagItem::Create(SvStream &rStream, USHORT nVersion) const
+SfxPoolItem* SfxFlagItem::Create(SvStream &, USHORT) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_WARNING( "calling Create() on SfxFlagItem -- overload!" );
