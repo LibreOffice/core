@@ -4,9 +4,9 @@
  *
  *  $RCSfile: senddoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:07:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,13 @@
 #endif
 
 #define WIN32_LEAN_AND_MEAN
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tchar.h>
 
 #include <iostream>
@@ -147,7 +153,7 @@ void initAttachementList(MapiAttachmentList_t* pMapiAttachmentList)
         MapiFileDesc mfd;
         ZeroMemory(&mfd, sizeof(mfd));
         mfd.lpszPathName = const_cast<char*>(iter->c_str());
-        mfd.nPosition = -1;
+        mfd.nPosition = sal::static_int_cast<ULONG>(-1);
         pMapiAttachmentList->push_back(mfd);
     }
 }
@@ -295,7 +301,11 @@ int main(int argc, char* argv[])
             mapi.MAPILogoff(hSession, 0, 0, 0);
         }
     }
-    catch (const std::runtime_error& ex)
+    catch (const std::runtime_error&
+    #if OSL_DEBUG_LEVEL > 0
+    ex
+    #endif
+    )
     {
         OSL_ENSURE(false, ex.what());
     }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplemapi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:08:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,15 @@
 #define INCLUDED_SIMPLEMAPI_HXX
 
 #define WIN32_LEAN_AND_MEAN
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
 #include <mapi.h>
 #include <mapix.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 class CSimpleMapi
 {
