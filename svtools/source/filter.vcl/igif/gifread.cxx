@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gifread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:41:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 #define _GIFPRIVATE
 
-#include <tools/new.hxx>
 #include "decode.hxx"
 #include "gifread.hxx"
 
@@ -49,7 +48,7 @@
 // - GIFReader -
 // -------------
 
-GIFReader::GIFReader( SvStream& rStm, void* pCallData ) :
+GIFReader::GIFReader( SvStream& rStm, void* ) :
             aGPalette       ( 256 ),
             aLPalette       ( 256 ),
             rIStm           ( rStm ),
@@ -437,7 +436,7 @@ ULONG GIFReader::ReadNextBlock()
                     if( nRead && !bOverreadBlock )
                         FillImages( pTarget, nRead );
 
-                    SvMemFree( pTarget );
+                    rtl_freeMemory( pTarget );
                 }
             }
         }
@@ -720,8 +719,8 @@ BOOL GIFReader::ProcessGIF()
         // naechsten Datenblock lesen
         case( NEXT_BLOCK_READING ):
         {
-            USHORT  nLastImageX = nImageX;
-            USHORT  nLastImageY = nImageY;
+            USHORT  nLastX = nImageX;
+            USHORT  nLastY = nImageY;
             ULONG   nRet = ReadNextBlock();
 
             // Return: 0:Pending / 1:OK; / 2:OK und letzter Block: / 3:EOI / 4:HardAbort
@@ -760,8 +759,8 @@ BOOL GIFReader::ProcessGIF()
             }
             else
             {
-                nImageX = nLastImageX;
-                nImageY = nLastImageY;
+                nImageX = nLastX;
+                nImageY = nLastY;
             }
         }
         break;
