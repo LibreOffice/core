@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:13:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,19 +80,19 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::text::XLineNumberingProperties;
 
 
-XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp) :
-    rExport(rExp),
-    sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
-    sCountEmptyLines(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines")),
-    sCountLinesInFrames(RTL_CONSTASCII_USTRINGPARAM("CountLinesInFrames")),
-    sDistance(RTL_CONSTASCII_USTRINGPARAM("Distance")),
-    sInterval(RTL_CONSTASCII_USTRINGPARAM("Interval")),
-    sSeparatorText(RTL_CONSTASCII_USTRINGPARAM("SeparatorText")),
-    sNumberPosition(RTL_CONSTASCII_USTRINGPARAM("NumberPosition")),
-    sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-    sIsOn(RTL_CONSTASCII_USTRINGPARAM("IsOn")),
-    sRestartAtEachPage(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage")),
-    sSeparatorInterval(RTL_CONSTASCII_USTRINGPARAM("SeparatorInterval"))
+XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp)
+:   sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName"))
+,   sCountEmptyLines(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines"))
+,   sCountLinesInFrames(RTL_CONSTASCII_USTRINGPARAM("CountLinesInFrames"))
+,   sDistance(RTL_CONSTASCII_USTRINGPARAM("Distance"))
+,   sInterval(RTL_CONSTASCII_USTRINGPARAM("Interval"))
+,   sSeparatorText(RTL_CONSTASCII_USTRINGPARAM("SeparatorText"))
+,   sNumberPosition(RTL_CONSTASCII_USTRINGPARAM("NumberPosition"))
+,   sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
+,   sIsOn(RTL_CONSTASCII_USTRINGPARAM("IsOn"))
+,   sRestartAtEachPage(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage"))
+,   sSeparatorInterval(RTL_CONSTASCII_USTRINGPARAM("SeparatorInterval"))
+,   rExport(rExp)
 {
 }
 
@@ -227,7 +227,6 @@ void XMLLineNumberingExport::Export()
                 aAny = xLineNumbering->getPropertyValue(sSeparatorInterval);
                 sal_Int16 nLineDistance;
                 aAny >>= nLineDistance;
-                OUStringBuffer sBuf;
                 SvXMLUnitConverter::convertNumber(sBuf,
                                                   (sal_Int32)nLineDistance);
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
