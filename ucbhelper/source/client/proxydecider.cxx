@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxydecider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 08:47:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:12:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,10 +118,10 @@ class HostnameCache
     typedef std::pair< rtl::OUString, rtl::OUString > HostListEntry;
 
     std::list< HostListEntry >     m_aHostList;
-    sal_Int32                      m_nCapacity;
+    sal_uInt32                     m_nCapacity;
 
 public:
-    explicit HostnameCache( sal_Int32 nCapacity )
+    explicit HostnameCache( sal_uInt32 nCapacity )
         : m_nCapacity( nCapacity ) {}
 
     bool get( const rtl::OUString & rKey, rtl::OUString & rValue ) const
@@ -714,8 +714,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
 
 //=========================================================================
 // virtual
-void SAL_CALL InternetProxyDecider_Impl::disposing(
-                                        const lang::EventObject& Source )
+void SAL_CALL InternetProxyDecider_Impl::disposing(const lang::EventObject&)
     throw( uno::RuntimeException )
 {
     if ( m_xNotifier.is() )
