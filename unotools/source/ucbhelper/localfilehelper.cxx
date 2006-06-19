@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:50:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] == ::rtl::OUString::createFromAscii( "Url" );
+        pProps[0] = ::rtl::OUString::createFromAscii( "Url" );
 
         try
         {
@@ -252,4 +252,4 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
         return Sequence < ::rtl::OUString > ();
 }
 
-};
+}
