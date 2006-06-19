@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 13:00:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,6 @@ bool write_report( const hash_map< string, string >& rSettings )
 {
     FILE    *fp = fopen( tmpnam( g_szReportFile ), "w" );
     const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
-    const char *pszProductName = getenv( "PRODUCTNAME" );
 
     fprintf( fp,
        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -272,7 +271,8 @@ bool write_description( const hash_map< string, string >& rSettings )
     return bSuccess;
 }
 
-
+#if 0
+// unused
 static void printSettings( const hash_map<string,string>& rSettings )
 {
     printf( "Settings:\n" );
@@ -281,8 +281,9 @@ static void printSettings( const hash_map<string,string>& rSettings )
         printf( "%s=\"%s\"\n", it->first.c_str(), it->second.c_str() );
     }
 }
+#endif
 
-bool save_crash_report( const string& rFileName, const hash_map< string, string >& rSettings )
+bool save_crash_report( const string& rFileName, const hash_map< string, string >& /*rSettings*/ )
 {
     bool bSuccess = false;
     FILE    *fpout = fopen( rFileName.c_str(), "w" );
@@ -566,9 +567,6 @@ string crash_get_details( const hash_map< string, string >& rSettings )
 {
     string aRet;
 
-    FILE    *fp;
-    char    buf[1024];
-
     write_description( rSettings );
     write_report( rSettings );
 
@@ -729,7 +727,7 @@ static string get_script_string( const char *pFileName, const char *pKeyName )
                 string  keyname = line.substr( 0, iEqualSign );
                 keyname = trim_string( keyname );
 
-                string  value = line.substr( iEqualSign + 1, -1 );
+                string  value = line.substr( iEqualSign + 1, string::npos );
                 value = trim_string( value );
 
                 if ( value.length() && '\"' == value[0] )
@@ -788,7 +786,7 @@ static string get_profile_string( const char *pFileName, const char *pSectionNam
                     string  keyname = line.substr( 0, iEqualSign );
                     keyname = trim_string( keyname );
 
-                    string  value = line.substr( iEqualSign + 1, -1 );
+                    string  value = line.substr( iEqualSign + 1, string::npos );
                     value = trim_string( value );
 
                     if (
@@ -917,6 +915,8 @@ static bool write_crash_data()
     return success;
 }
 
+#if 0
+// unused
 static bool write_settings( const hash_map< string, string >& rSettings )
 {
     bool success = false;
@@ -940,6 +940,7 @@ static bool write_settings( const hash_map< string, string >& rSettings )
 
     return success;
 }
+#endif
 
 static void read_settings( hash_map< string, string >& rSettings )
 {
@@ -1007,7 +1008,7 @@ static bool setup_version()
             if ( string::npos != iSpace )
             {
                 productname = productkey.substr( 0, iSpace );
-                productversion = productkey.substr( iSpace + 1, -1 );
+                productversion = productkey.substr( iSpace + 1, string::npos );
             }
             else
                 productname = productkey;
@@ -1033,8 +1034,9 @@ static bool setup_version()
     return 0 != g_strReportServer.length();
 }
 
+#if 0
 // Use gconftool-2 to determine if gnome accessiblity is enabled
-
+// unused
 static bool get_accessibility_state()
 {
     bool bAccessible = false;
@@ -1051,6 +1053,7 @@ static bool get_accessibility_state()
 
     return bAccessible;
 }
+#endif
 
 int main( int argc, char** argv )
 {
@@ -1062,7 +1065,7 @@ int main( int argc, char** argv )
 
     if ( setup_version() )
     {
-        long pid = setup_commandline_arguments( argc, argv, &g_signal );
+        /*long pid =*/ setup_commandline_arguments( argc, argv, &g_signal );
 
         if ( g_bLoadReport )
         {
