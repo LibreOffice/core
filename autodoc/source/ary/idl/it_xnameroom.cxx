@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_xnameroom.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ ExplicitNameRoom::~ExplicitNameRoom()
 }
 
 void
-ExplicitNameRoom::do_Visit( Host & //io_rHost
+ExplicitNameRoom::do_Visit( Host &
                                     ) const
 {
     // yet unused.
@@ -81,10 +81,10 @@ ExplicitNameRoom::inq_ClassId() const
 
 void
 ExplicitNameRoom::inq_Get_Text( StringVector &      o_module,
-                                String &            o_name,
-                                Ce_id &             o_nRelatedCe,
-                                int &               o_nSequemceCount,
-                                const Gate &        i_rGate ) const
+                                String &            ,
+                                Ce_id &             ,
+                                int &               ,
+                                const Gate &        ) const
 {
     StringVector::const_iterator it = NameChain_Begin();
     if ( it != NameChain_End()
