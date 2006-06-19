@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stcktree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:12:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ void DbgPrintStackTree( void* pVoid )
 void DbgStartStackTree() {}
 void DbgEndStackTree() {}
 void* DbgGetStackTree( ULONG ) { return NULL; }
-void DbgFreeStackTree( void*, ULONG nAlloc ) {}
+void DbgFreeStackTree( void*, ULONG ) {}
 void DbgPrintStackTree( void* ) {}
 
 #endif
