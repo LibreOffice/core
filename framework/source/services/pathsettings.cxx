@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:45:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,7 +848,6 @@ void SAL_CALL PathSettings::setFastPropertyValue_NoBroadcast(   sal_Int32       
     throw( css::uno::Exception )
 {
     EPropHandle     nID        = (EPropHandle)nHandle;
-    sal_Bool        bReadOnly  = isReadOnly(nID);
     sal_Bool        bMultiPath = isMultiPath(nID);
     ::rtl::OUString sValue     ;
 
