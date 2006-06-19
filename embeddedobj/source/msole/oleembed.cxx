@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:06:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,7 +561,11 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 }
 
 //----------------------------------------------
-sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
+sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
+#if defined WNT
+    nAspect
+#endif
+)
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
