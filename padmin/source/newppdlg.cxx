@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:26:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
     else if( pButton == &m_aSearchBtn )
     {
         String aPath( m_aPathBox.GetText() );
-        if( chooseDirectory( this, aPath ) )
+        if( chooseDirectory( aPath ) )
         {
             m_aPathBox.SetText( aPath );
             Import();
