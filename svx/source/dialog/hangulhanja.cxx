@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:13:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,22 +326,22 @@ namespace svx
         sal_Int32 _nOptions,
         sal_Bool _bIsInteractive,
         HangulHanjaConversion* _pAntiImpl )
-        :m_pUIParent( _pUIParent )
-        ,m_pAntiImpl( _pAntiImpl )
-        ,m_pConversionDialog( NULL )
-        ,m_nCurrentStartIndex( 0 )
-        ,m_nCurrentEndIndex( 0 )
-        ,m_nReplacementBaseIndex( 0 )
-        ,m_nCurrentConversionOption( TextConversionOption::NONE )
-        ,m_nCurrentConversionType( -1 ) // not yet known
-        ,m_bTryBothDirections( sal_True )
-        ,m_xORB( _rxORB )
-        ,m_aSourceLocale( _rSourceLocale )
-        ,m_nSourceLang( SvxLocaleToLanguage( _rSourceLocale ) )
-        ,m_nTargetLang( SvxLocaleToLanguage( _rTargetLocale ) )
-        ,m_nCurrentPortionLang( LANGUAGE_NONE )
-        ,m_pTargetFont( _pTargetFont )
-        ,m_bIsInteractive( _bIsInteractive )
+: m_pConversionDialog( NULL )
+, m_pUIParent( _pUIParent )
+, m_xORB( _rxORB )
+, m_aSourceLocale( _rSourceLocale )
+, m_nSourceLang( SvxLocaleToLanguage( _rSourceLocale ) )
+, m_nTargetLang( SvxLocaleToLanguage( _rTargetLocale ) )
+, m_pTargetFont( _pTargetFont )
+, m_bIsInteractive( _bIsInteractive )
+, m_pAntiImpl( _pAntiImpl )
+, m_nCurrentPortionLang( LANGUAGE_NONE )
+, m_nCurrentStartIndex( 0 )
+, m_nCurrentEndIndex( 0 )
+, m_nReplacementBaseIndex( 0 )
+, m_nCurrentConversionOption( TextConversionOption::NONE )
+, m_nCurrentConversionType( -1 ) // not yet known
+, m_bTryBothDirections( sal_True )
     {
         implReadOptionsFromConfiguration();
 
@@ -525,9 +525,8 @@ namespace svx
                 }
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            e;  // make compiler happy
             DBG_ERROR( "HangulHanjaConversion_Impl::implNextConvertibleUnit: caught an exception!" );
 
             //!!! at least we want to move on in the text in order
@@ -543,7 +542,6 @@ namespace svx
         m_aCurrentSuggestions.realloc( 0 );
 
         // ask the TextConversion service for the next convertible piece of text
-        sal_Int32 nStartLookupAt = _nStartAt;
 
         // get current values from dialog
         if( m_eConvType == HHC::eConvHangulHanja && m_pConversionDialog )
@@ -744,9 +742,8 @@ namespace svx
                     }
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-                e;  // make compiler happy
                 DBG_ERROR( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
             }
         }
@@ -947,7 +944,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnOptionsChanged, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnOptionsChanged, void*, EMPTYARG )
     {
         //options and dictionaries might have been changed
         //-> update our internal settings and the dialog
@@ -957,7 +954,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnIgnore, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnIgnore, void*, EMPTYARG )
     {
         // simply ignore, and proceed
         implProceed( sal_False );
@@ -965,7 +962,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnIgnoreAll, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnIgnoreAll, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnIgnoreAll: no dialog! How this?" );
 
@@ -986,7 +983,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnChange, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnChange, void*, EMPTYARG )
     {
         // change
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
@@ -999,7 +996,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnChangeAll, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnChangeAll, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
         if ( m_pConversionDialog )
@@ -1034,7 +1031,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnConversionTypeChanged, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnConversionTypeChanged, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
         if( m_pConversionDialog )
@@ -1043,7 +1040,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversion_Impl, OnFind, void*, NOTINTERESTEDIN )
+    IMPL_LINK( HangulHanjaConversion_Impl, OnFind, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnFind: where did this come from?" );
         if ( m_pConversionDialog )
@@ -1094,9 +1091,8 @@ namespace svx
                 m_pConversionDialog->SetCurrentString( sNewOriginal, aSuggestions, false );
                 m_pConversionDialog->FocusSuggestion();
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-                e;  // make compiler happy
                 DBG_ERROR( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
             }
         }
@@ -1171,25 +1167,25 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion::HandleNewUnit( const sal_Int32 _nStartIndex, const sal_Int32 _nEndIndex )
+    void HangulHanjaConversion::HandleNewUnit( const sal_Int32, const sal_Int32 )
     {
         // nothing to do, only derived classes need this.
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion::GetNextPortion( OUString& /* [out] */ _rNextPortion, LanguageType& /* [out] */ _rLangOfPortion, sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
+    void HangulHanjaConversion::GetNextPortion( OUString&, LanguageType&, sal_Bool )
     {
         DBG_ERROR( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
     }
 
     //-------------------------------------------------------------------------
     void HangulHanjaConversion::ReplaceUnit(
-            const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
-            const ::rtl::OUString& _rOrigText,
-            const OUString& _rReplaceWith,
-            const ::com::sun::star::uno::Sequence< sal_Int32 > &_rOffsets,
-            ReplacementAction _eAction,
-            LanguageType *pNewUnitLanguage )
+            const sal_Int32, const sal_Int32,
+            const ::rtl::OUString&,
+            const OUString&,
+            const ::com::sun::star::uno::Sequence< sal_Int32 > &,
+            ReplacementAction,
+            LanguageType * )
     {
         DBG_ERROR( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
     }
