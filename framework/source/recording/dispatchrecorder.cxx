@@ -130,7 +130,7 @@ DispatchRecorder::~DispatchRecorder()
 
 //*************************************************************************
 // generate header
-void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException )
+void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& ) throw( css::uno::RuntimeException )
 {
     /* SAFE{ */
     /* } */
