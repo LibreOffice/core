@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:41:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -785,7 +785,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 XFillExchangeData aFillData( XFillAttrSetItem( &pDoc->GetPool() ) );
 
                                 *xStm >> aFillData;
-                                const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetValue() );
+                                const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, TRUE );
                                 nRet = nDropAction;
                             }
