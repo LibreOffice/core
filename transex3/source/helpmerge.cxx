@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 13:26:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,6 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, //int nLangIdx_in ){
     ByteString sCur;
     XMLElement* pTmp     = NULL;
     XMLElement* pTmp2    = NULL;
-
-    XMLUtil& rXMLUtil = XMLUtil::Instance();   // Get Singleton
 
     sCur = sLangIdx_in;
     ByteString sFallback( sCur );
@@ -111,10 +109,10 @@ void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in) {
     fprintf(stdout,"+--------------------------+\n");
 }
 
-HelpParser::HelpParser( const ByteString &rHelpFile, bool bUTF8 , bool bHasInputList  )
+HelpParser::HelpParser( const ByteString &rHelpFile, bool rUTF8 , bool rHasInputList  )
         : sHelpFile( rHelpFile ),
-          bUTF8    ( bUTF8     ),
-          bHasInputList( bHasInputList )
+          bUTF8    ( rUTF8     ),
+          bHasInputList( rHasInputList )
           {};
 
 /*****************************************************************************/
@@ -154,7 +152,7 @@ bool HelpParser::CreateSDF(
     if(file.get() == NULL){
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
         exit(-1);
-        return false;
+        //return false;
     }
     file->Extract();
     if( !file->CheckExportStatus() ){
@@ -188,9 +186,7 @@ bool HelpParser::CreateSDF(
     ByteString sTimeStamp( Export::GetTimeStamp() );
     OUString sOUTimeStamp( sTimeStamp.GetBuffer() , sTimeStamp.Len() , RTL_TEXTENCODING_ASCII_US );
 
-    short nCurLang=0;
     OUStringBuffer sBuffer;
-    XMLUtil& xmlutil=XMLUtil::Instance();
     const OUString sOUPrj( rPrj_in.GetBuffer() , rPrj_in.Len() , RTL_TEXTENCODING_ASCII_US );
     const OUString sOUActFileName(sActFileName.GetBuffer() , sActFileName.Len() , RTL_TEXTENCODING_ASCII_US );
 
@@ -206,7 +202,8 @@ bool HelpParser::CreateSDF(
         posm = aXMLStrHM->find( *pos );
         pElem = posm->second;
         ByteString sCur;
-        for( long int n = 0; n < aLanguages.size(); n++ )
+
+        for( unsigned int n = 0; n < aLanguages.size(); n++ )
         {
             sCur = aLanguages[ n ];
             if(pElem->find( sCur )==pElem->end())
@@ -263,6 +260,7 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
         ByteString& sLanguage , MergeDataFile& aMergeDataFile )
 {
 
+    (void) rSDFFile;
     bool hasNoError = true;
 
     SimpleXMLParser aParser;
@@ -342,6 +340,8 @@ bool HelpParser::Merge(
     const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir )
 {
 
+
+    (void) rSDFFile ;
     bool hasNoError = true;
     SimpleXMLParser aParser;
     String sUsedTempFile;
@@ -372,11 +372,12 @@ bool HelpParser::Merge(
     {
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_UTF8).GetBuffer());
         exit(-1);
-        return false;
+        //return false;
     }
 
+
     ByteString sCur;
-    for( long int n = 0; n < aLanguages.size(); n++ ){
+    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
 
         ByteString sFilepath;
@@ -485,12 +486,8 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
        PFormEntrys   *pEntrys    = NULL;
     XMLData       *data       = NULL;
     XMLParentNode *parent     = NULL;
-    XMLDefault    *xmldefault = NULL;
 
-    short         curLang     = 0;
     String        sNewdata;
-    bool          isFallback  = false;
-    ULONG nPos = 0;
     ByteString sLId;
     ByteString sGId;
 
@@ -546,7 +543,6 @@ void HelpParser::Process( LangHashMap* aLangHM , const ByteString& sCur , ResDat
     short         curLang     = 0;
     String        sNewdata;
     bool          isFallback  = false;
-    ULONG nPos = 0;
     ByteString sLId;
     ByteString sGId;
 
@@ -590,9 +586,8 @@ void HelpParser::Process( LangHashMap* aLangHM , const ByteString& sCur , ResDat
                         if( isFallback )
                         {
                             xmldefault = new XMLDefault( String::CreateFromAscii("\n") , NULL );
-                            int pos = parent->GetPos( pXMLElement->GetId() );
-                            if( pos != -1 )
-                            {
+                            int pos = parent->GetPosition( pXMLElement->GetId() );
+                            if( pos != -1 ){
                                 parent->AddChild(xmldefault , pos+1 );
                                 parent->AddChild(pXMLElement , pos+2 );
                             }
