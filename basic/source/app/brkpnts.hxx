@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkpnts.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:14:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,12 @@ class BreakpointListe;
 struct Breakpoint;
 class ImageList;
 
-DECLARE_LIST( BreakpointList, Breakpoint* );
+DECLARE_LIST( BreakpointList, Breakpoint* )
 
 class BreakpointWindow : public Window, public BreakpointList
 {
+using Window::Scroll;
+
 public:
     BreakpointWindow( Window *pParent );
 //  ~BreakpointWindow();
@@ -67,9 +69,6 @@ public:
 
 protected:
     Breakpoint* FindBreakpoint( ULONG nLine );
-
-private:
-    BreakpointListe *pBreakpoints;
 
 private:
     long            nCurYOffset;
@@ -91,7 +90,8 @@ public:
 
     void            SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
 
-    void            Scroll( long nHorzScroll, long nVertScroll );
+    virtual void        Scroll( long nHorzScroll, long nVertScroll,
+                                USHORT nFlags = 0 );
     long&           GetCurYOffset()         { return nCurYOffset; }
 };
 
