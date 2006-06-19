@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:17:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,7 +669,7 @@ XPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
         long nIndex;
         for( nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            XLineEndEntry* pEntry = pLineEndList->Get(nIndex);
+            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
             if( pEntry->GetName() == aArrowName )
             {
                 xPolygon = pEntry->GetLineEnd();
