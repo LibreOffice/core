@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:48:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ void SdrDragMethod::MovAllPoints()
     }
 }
 
-void SdrDragMethod::MovPoint(Point& rPnt, const Point& rPvOfs)
+void SdrDragMethod::MovPoint(Point& /*rPnt*/, const Point& /*rPvOfs*/)
 {
 }
 
@@ -368,7 +368,7 @@ void SdrDragMovHdl::Mov(const Point& rNoSnapPnt)
     }
 }
 
-FASTBOOL SdrDragMovHdl::End(FASTBOOL bCopy)
+FASTBOOL SdrDragMovHdl::End(FASTBOOL /*bCopy*/)
 {
     switch (GetDragHdl()->GetKind()) {
         case HDL_REF1: Ref1()=DragStat().GetNow(); break;
@@ -377,6 +377,7 @@ FASTBOOL SdrDragMovHdl::End(FASTBOOL bCopy)
             Ref1()+=DragStat().GetNow()-DragStat().GetStart();
             Ref2()+=DragStat().GetNow()-DragStat().GetStart();
         } break;
+        default: break;
     }
     return TRUE;
 }
@@ -483,7 +484,7 @@ void SdrDragObjOwn::Mov(const Point& rNoSnapPnt)
     SdrPageView* pPV=GetDragPV();
     if (pPV!=NULL) {
         if (!DragStat().IsNoSnap()) SnapPos(aPnt);
-        FASTBOOL bOrtho=rView.IsOrtho();
+        //FASTBOOL bOrtho=rView.IsOrtho();
         if (rView.IsOrtho()) {
             if (DragStat().IsOrtho8Possible()) OrthoDistance8(DragStat().GetStart(),aPnt,rView.IsBigOrtho());
             else if (DragStat().IsOrtho4Possible()) OrthoDistance4(DragStat().GetStart(),aPnt,rView.IsBigOrtho());
@@ -505,7 +506,7 @@ void SdrDragObjOwn::Mov(const Point& rNoSnapPnt)
     }
 }
 
-FASTBOOL SdrDragObjOwn::End(FASTBOOL bCopy)
+FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
 {
     Hide();
     SdrUndoAction* pUndo=NULL;
@@ -560,7 +561,7 @@ void SdrDragObjOwn::Brk()
     SdrDragMethod::Brk();
 }
 
-void SdrDragObjOwn::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
+void SdrDragObjOwn::DrawXor(XOutputDevice& rXOut, FASTBOOL /*bFull*/) const
 {
     SdrPageView* pPV=GetDragPV();
     if (pPV!=NULL) {
@@ -639,7 +640,7 @@ void SdrDragMove::MovAllPoints()
     }
 }
 
-void SdrDragMove::MovPoint(Point& rPnt, const Point& rPvOfs)
+void SdrDragMove::MovPoint(Point& rPnt, const Point& /*rPvOfs*/)
 {
     rPnt.X()+=DragStat().GetDX();
     rPnt.Y()+=DragStat().GetDY();
@@ -705,27 +706,27 @@ void SdrDragMove::Mov(const Point& rNoSnapPnt_)
         FASTBOOL bWorkArea=!aLR.IsEmpty();
         FASTBOOL bDragLimit=IsDragLimit();
         if (bDragLimit || bWorkArea) {
-            Rectangle aSR(GetMarkedRect());
+            Rectangle aSR2(GetMarkedRect());
             Point aD(aPt1-DragStat().GetStart());
             if (bDragLimit) {
                 Rectangle aR2(GetDragLimitRect());
                 if (bWorkArea) aLR.Intersection(aR2);
                 else aLR=aR2;
             }
-            if (aSR.Left()>aLR.Left() || aSR.Right()<aLR.Right()) { // ist ueberhaupt Platz zum verschieben?
-                aSR.Move(aD.X(),0);
-                if (aSR.Left()<aLR.Left()) {
-                    aPt1.X()-=aSR.Left()-aLR.Left();
-                } else if (aSR.Right()>aLR.Right()) {
-                    aPt1.X()-=aSR.Right()-aLR.Right();
+            if (aSR2.Left()>aLR.Left() || aSR2.Right()<aLR.Right()) { // ist ueberhaupt Platz zum verschieben?
+                aSR2.Move(aD.X(),0);
+                if (aSR2.Left()<aLR.Left()) {
+                    aPt1.X()-=aSR2.Left()-aLR.Left();
+                } else if (aSR2.Right()>aLR.Right()) {
+                    aPt1.X()-=aSR2.Right()-aLR.Right();
                 }
             } else aPt1.X()=DragStat().GetStart().X(); // kein Platz zum verschieben
-            if (aSR.Top()>aLR.Top() || aSR.Bottom()<aLR.Bottom()) { // ist ueberhaupt Platz zum verschieben?
-                aSR.Move(0,aD.Y());
-                if (aSR.Top()<aLR.Top()) {
-                    aPt1.Y()-=aSR.Top()-aLR.Top();
-                } else if (aSR.Bottom()>aLR.Bottom()) {
-                    aPt1.Y()-=aSR.Bottom()-aLR.Bottom();
+            if (aSR2.Top()>aLR.Top() || aSR2.Bottom()<aLR.Bottom()) { // ist ueberhaupt Platz zum verschieben?
+                aSR2.Move(0,aD.Y());
+                if (aSR2.Top()<aLR.Top()) {
+                    aPt1.Y()-=aSR2.Top()-aLR.Top();
+                } else if (aSR2.Bottom()>aLR.Bottom()) {
+                    aPt1.Y()-=aSR2.Bottom()-aLR.Bottom();
                 }
             } else aPt1.Y()=DragStat().GetStart().Y(); // kein Platz zum verschieben
         }
@@ -739,7 +740,7 @@ void SdrDragMove::Mov(const Point& rNoSnapPnt_)
                 ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
                 if (nPtAnz!=0) {
                     const SdrObject* pObj=pM->GetObj();
-                    const SdrPageView* pPV=pM->GetPageView();
+                    //const SdrPageView* pPV=pM->GetPageView();
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     Rectangle aBound(pObj->GetCurrentBoundRect());
                     for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
@@ -868,6 +869,7 @@ FASTBOOL SdrDragResize::Beg()
         case HDL_LWLFT: eRefHdl=HDL_UPRGT; break;
         case HDL_LOWER: eRefHdl=HDL_UPPER; DragStat().SetHorFixed(TRUE); break;
         case HDL_LWRGT: eRefHdl=HDL_UPLFT; break;
+        default: break;
     }
     if (eRefHdl!=HDL_MOVE) pRefHdl=GetHdlList().GetHdl(eRefHdl);
     if (pRefHdl!=NULL && !rView.IsResizeAtCenter()) {
@@ -1143,6 +1145,7 @@ FASTBOOL SdrDragShear::Beg()
         case HDL_LOWER: eRefHdl=HDL_UPPER; break;
         case HDL_LEFT : eRefHdl=HDL_RIGHT; bVertical=TRUE; break;
         case HDL_RIGHT: eRefHdl=HDL_LEFT ; bVertical=TRUE; break;
+        default: break;
     }
     if (eRefHdl!=HDL_MOVE) pRefHdl=GetHdlList().GetHdl(eRefHdl);
     if (pRefHdl!=NULL) {
@@ -1491,7 +1494,7 @@ void SdrDragGradient::Mov(const Point& rPnt)
     }
 }
 
-FASTBOOL SdrDragGradient::End(FASTBOOL bCopy)
+FASTBOOL SdrDragGradient::End(FASTBOOL /*bCopy*/)
 {
     // here the result is clear, do something with the values
     Ref1() = pIAOHandle->GetPos();
@@ -1730,7 +1733,7 @@ void SdrDragCrook::MovAllPoints()
                             pC2=&aPol[i];
                             i++;
                         }
-                        MovPoint(*pPnt,aPvOfs,pC1,pC2);
+                        MovPointCrook(*pPnt,aPvOfs,pC1,pC2);
                     }
                 }
             }
@@ -1738,10 +1741,10 @@ void SdrDragCrook::MovAllPoints()
     }
 }
 
-void SdrDragCrook::MovPoint(Point& rPnt, const Point& rPvOfs, Point* pC1, Point* pC2)
+void SdrDragCrook::MovPointCrook(Point& rPnt, const Point& rPvOfs, Point* pC1, Point* pC2)
 {
-    FASTBOOL bSlant=eMode==SDRCROOK_SLANT;
-    FASTBOOL bStretch=eMode==SDRCROOK_STRETCH;
+    //FASTBOOL bSlant=eMode==SDRCROOK_SLANT;
+    //FASTBOOL bStretch=eMode==SDRCROOK_STRETCH;
     FASTBOOL bVert=bVertical;
     FASTBOOL bC1=pC1!=NULL;
     FASTBOOL bC2=pC2!=NULL;
@@ -1844,10 +1847,10 @@ void SdrDragCrook::Mov(const Point& rPnt)
                     nPntWink+=nSA/2;
                     nPntWink/=nSA;
                     nPntWink*=nSA;
-                    BigInt a(nNeuRad);
-                    a*=BigInt(nWink);
-                    a/=BigInt(nWink0);
-                    nNeuRad=long(a);
+                    BigInt a2(nNeuRad);
+                    a2*=BigInt(nWink);
+                    a2/=BigInt(nWink0);
+                    nNeuRad=long(a2);
                     if (bVertical) aNeuCenter.X()=aStart.X()+nNeuRad;
                     else aNeuCenter.Y()=aStart.Y()+nNeuRad;
                 }
@@ -1863,10 +1866,10 @@ void SdrDragCrook::Mov(const Point& rPnt)
                     nWink+=nSA/2;
                     nWink/=nSA;
                     nWink*=nSA;
-                    BigInt a(nNeuRad);
-                    a*=BigInt(nWink);
-                    a/=BigInt(nWink0);
-                    nNeuRad=long(a);
+                    BigInt a2(nNeuRad);
+                    a2*=BigInt(nWink);
+                    a2/=BigInt(nWink0);
+                    nNeuRad=long(a2);
                     if (bVertical) aNeuCenter.X()=aStart.X()+nNeuRad;
                     else aNeuCenter.Y()=aStart.Y()+nNeuRad;
                 }
