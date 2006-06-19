@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 09:57:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -666,7 +666,7 @@ void CalcDistances( const Polygon& rPoly, std::vector< double >& rDistances )
     }
 }
 
-void InsertMissingOutlinePoints( const Polygon& rOutlinePoly, const std::vector< double >& rDistances, const Rectangle& rTextAreaBoundRect, Polygon& rPoly )
+void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances, const Rectangle& rTextAreaBoundRect, Polygon& rPoly )
 {
     sal_uInt16 i = 0;
     double fLastDistance;
@@ -861,8 +861,8 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
 //BFS09                             InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, rPoly );
 //BFS09                             InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, rPoly );
 
-                                sal_uInt16 j, nPointCount = aLocalPoly.GetSize();
-                                for ( j = 0; j < nPointCount; j++ )
+                                sal_uInt16 j, _nPointCount = aLocalPoly.GetSize();
+                                for ( j = 0; j < _nPointCount; j++ )
                                 {
                                     Point& rPoint = aLocalPoly[ j ];
                                     rPoint.X() -= nLeft;
