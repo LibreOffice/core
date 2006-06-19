@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:44:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ using namespace ::com::sun::star::script;
 
 //====================================================================
 
-DBG_NAME(SfxObjectShell);
+DBG_NAME(SfxObjectShell)
 
 #define DocumentInfo
 #include "sfxslots.hxx"
@@ -635,7 +635,7 @@ void SfxObjectShell::InitBasicManager_Impl
                                (aus <SvPersist::Load()>) bzw. 0, falls es
                                sich um ein neues Dokument handelt
                                (aus <SvPersist::InitNew()>). */
-    , const String* pName
+    , const String* /*pName*/
 )
 /*  [Beschreibung]
 
@@ -655,7 +655,7 @@ void SfxObjectShell::InitBasicManager_Impl
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicMgr, "Lokaler BasicManager bereits vorhanden");
 
     pImp->bBasicInitialized = TRUE;
-    BasicManager* pBasicManager;
+    BasicManager* pBasicManager( 0 );
     uno::Reference< embed::XStorage > xStorage = xDocStorage;
     if ( xStorage.is() )
     {
@@ -1076,19 +1076,19 @@ SfxObjectShell* SfxObjectShell::CreateObjectByFactoryName( const String& rFact, 
 }
 
 
-SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObjectCreateMode eMode )
+SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObjectCreateMode /*eMode*/ )
 {
     if ( rServiceName.Len() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel > xDoc(
-            ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
+        ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
         if ( xDoc.is() )
         {
             ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xDoc, UNO_QUERY );
             ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
-                return (SfxObjectShell*) (sal_IntPtr) nHandle;
+                return reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
         }
     }
 
@@ -1130,7 +1130,7 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
         ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         sal_Int64 nHandle = xObj->getSomething( aSeq );
         if ( nHandle )
-            return (SfxObjectShell*) (sal_Int32*) nHandle;
+            return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
     }
 
     return NULL;
