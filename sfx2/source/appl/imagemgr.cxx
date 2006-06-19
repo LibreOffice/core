@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:19:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
             sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
             if ( nHandle )
             {
-                SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+                SfxObjectShell* pDoc = reinterpret_cast<SfxObjectShell*>(sal::static_int_cast<sal_IntPtr>( nHandle ));
                 SfxModule* pModule = pDoc->GetFactory().GetModule();
                 pSlot = pModule->GetSlotPool()->GetSlot( nId );
             }
@@ -228,13 +228,6 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
                 xModuleImageManager = Reference< XImageManager >( xUICfgMgr->getImageManager(), UNO_QUERY );
                 m_aModuleIdToImageMgrMap.insert( ModuleIdToImagegMgr::value_type( aModuleId, xModuleImageManager ));
             }
-
-            sal_Int16 nImageType( ::com::sun::star::ui::ImageType::COLOR_NORMAL|
-                                  ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
-            if ( bBig )
-                nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
-            if ( bHiContrast )
-                nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
 
             Sequence< Reference< ::com::sun::star::graphic::XGraphic > > aGraphicSeq;
             Sequence< rtl::OUString > aImageCmdSeq( 1 );
