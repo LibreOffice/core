@@ -4,9 +4,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-08 14:14:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,12 +114,13 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 
     *size = sizeof(ar) / sizeof (char*);
     return ar;
-#endif
+#else
     size = 0;
     return NULL;
+#endif
 }
 
-int OtherInfo::compareVersions(const rtl::OUString& sSecond) const
+int OtherInfo::compareVersions(const rtl::OUString& /*sSecond*/) const
 {
     //Need to provide an own algorithm for comparing version.
     //Because this function returns always 0, which means the version of
