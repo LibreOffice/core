@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpolyimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:51:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #ifndef _XPOLY_HXX
 #include <xpoly.hxx>
 #endif
-
-#pragma hdrstop
-
 
 /*************************************************************************
 |*
@@ -98,7 +95,7 @@ public:
 |*    Letzte Aenderung  Joe 26-09-1995
 |*
 *************************************************************************/
-DECLARE_LIST( XPolygonList, XPolygon* );
+DECLARE_LIST( XPolygonList, XPolygon* )
 
 class ImpXPolyPolygon
 {
