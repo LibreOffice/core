@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:21:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,6 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
-#pragma hdrstop
-
 #include <ucbhelper/content.hxx>
 #include <osl/file.hxx>
 
@@ -103,8 +101,6 @@ GraphicFilter* GetGrfFilter()
 }
 
 // -----------------------------------------------------------------------
-
-#pragma optimize( "", off )
 
 int LoadGraphic( const String &rPath, const String &rFilterName,
                  Graphic& rGraphic, GraphicFilter* pFilter,
@@ -164,6 +160,4 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
         delete pMed;
     return nRes;
 }
-
-#pragma optimize( "", on )
 
