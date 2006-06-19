@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp_pe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:15:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ Cpp_PE::Cpp_PE( EnvData & i_rEnv )
 }
 
 void
-Cpp_PE::StdHandlingOfSyntaxError( const char * i_sText )
+Cpp_PE::StdHandlingOfSyntaxError( const char * )
 {
 //  GlobalHandlingOfSyntaxError(i_sText, Env().CurFileName(), Env().LineCount());
 
