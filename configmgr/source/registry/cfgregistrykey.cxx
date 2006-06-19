@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:14:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:28:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -759,7 +759,7 @@ sal_Bool SAL_CALL OConfigurationRegistryKey::isValid(  ) throw(RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
+RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUString& /*_rKeyName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -1506,28 +1506,28 @@ Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getKeyNames(  ) 
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistryKey::createLink( const ::rtl::OUString& aLinkName, const ::rtl::OUString& aLinkTarget ) throw(InvalidRegistryException, RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistryKey::createLink( const ::rtl::OUString& /*aLinkName*/, const ::rtl::OUString& /*aLinkTarget*/ ) throw(InvalidRegistryException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& rLinkName ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& /*rLinkName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getLinkTarget( const ::rtl::OUString& rLinkName ) throw(InvalidRegistryException, RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getLinkTarget( const ::rtl::OUString& /*rLinkName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getResolvedName( const ::rtl::OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getResolvedName( const ::rtl::OUString& /*aKeyName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
