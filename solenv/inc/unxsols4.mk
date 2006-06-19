@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 16:19:24 $
+#   last change: $Author: hr $ $Date: 2006-06-19 17:17:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,10 +88,56 @@ CFLAGSOPT=-xarch=v8plus -xO3 -xspace -xprefetch=yes
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
 
-# Enable all warnings
-CFLAGSWALL=+w2
-# Set default warn level
-CFLAGSDFLTWARN=
+# Warnings switched off for CXX:
+# - doubunder: we have many identifiers containing double underscores, some of
+#   them in the stable UDK API we cannot change
+# - inllargeuse: "function is too large and will not be expanded inline" is
+#   merely a hint
+# - notemsource: "could not find source for function" appears to be spurious
+# - reftotemp: warns about calling non-const functions on temporary objects,
+#   something legally done by boost::scoped_array<T>::reset, for example
+#   (this_type(p).swap(*this))
+CFLAGSWARNCC=
+CFLAGSWARNCXX=+w2 -erroff=doubunder,inllargeuse,notemsource,reftotemp
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-errwarn=%all
+CFLAGSWERRCXX=-xwe
+
+# Once all modules on this platform compile without warnings, set
+# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
+# settings.mk):
+MODULES_WITH_WARNINGS := \
+    b_server \
+    basctl \
+    binfilter \
+    canvas \
+    chart2 \
+    cppcanvas \
+    desktop \
+    devtools \
+    dxcanvas \
+    extensions \
+    filter \
+    finalize \
+    glcanvas \
+    instset_native \
+    instsetoo_native \
+    lingu \
+    postprocess \
+    r_tools \
+    sc \
+    sch \
+    sd \
+    slideshow \
+    smoketest_native \
+    smoketestoo_native \
+    starmath \
+    svx \
+    sw \
+    top \
+    writerperfect \
+    xmlsecurity
 
 STDOBJVCL=$(L)$/salmain.o
 
