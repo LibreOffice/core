@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binaryreadhandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:26:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,8 +430,7 @@ namespace configmgr
                     case ValueFlags::val_any:
                     {
                         OSL_ENSURE(false,"Node of type Any cannot have value");
-                        throw io::WrongFormatException();
-                        break;
+                                         throw io::WrongFormatException();
                     }
                     case ValueFlags::val_string:
                     {

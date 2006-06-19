@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emptylayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:28:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,21 +130,21 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+        void SAL_CALL RequireEmptyLayer::overrideNode( const OUString& /*aName*/, sal_Int16 /*aAttributes*/, sal_Bool /*bClear*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
+        void SAL_CALL RequireEmptyLayer::addOrReplaceNode( const OUString& /*aName*/, sal_Int16 /*aAttributes*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+        void SAL_CALL RequireEmptyLayer::addOrReplaceNodeFromTemplate( const OUString& /*aName*/, const backenduno::TemplateIdentifier& /*aTemplate*/, sal_Int16 /*aAttributes*/)
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
@@ -158,28 +158,28 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::dropNode( const OUString& aName )
+        void SAL_CALL RequireEmptyLayer::dropNode( const OUString& /*aName*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+        void SAL_CALL RequireEmptyLayer::addProperty( const OUString& /*aName*/, sal_Int16 /*aAttributes*/, const uno::Type& /*aType*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+        void SAL_CALL RequireEmptyLayer::addPropertyWithValue( const OUString& /*aName*/, sal_Int16 /*aAttributes*/, const uno::Any& /*aValue*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+        void SAL_CALL RequireEmptyLayer::overrideProperty( const OUString& /*aName*/, sal_Int16 /*aAttributes*/, const uno::Type& /*aType*/, sal_Bool /*bClear*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
@@ -193,14 +193,14 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::setPropertyValue( const uno::Any& aValue )
+        void SAL_CALL RequireEmptyLayer::setPropertyValue( const uno::Any& /*aValue*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+        void SAL_CALL RequireEmptyLayer::setPropertyValueForLocale( const uno::Any& /*aValue*/, const OUString& /*aLocale*/ )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
