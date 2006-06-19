@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stortree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:33:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX "$Revision: 1.4 $"
+#define _STORE_STORTREE_HXX "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -193,8 +193,8 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     }
     void usageCount (sal_uInt16 nCount)
     {
-        base::m_aDescr.m_nUsed  = base::size() + self::size();
-        base::m_aDescr.m_nUsed += sal_uInt16(nCount * sizeof(T));
+        base::m_aDescr.m_nUsed = base::size() + self::size() +
+            sal_uInt16(nCount * sizeof(T));
     }
 
     /** Construction.
