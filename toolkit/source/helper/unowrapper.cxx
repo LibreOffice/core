@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:27:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:06:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,12 +156,16 @@ TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
     return new UnoWrapper( NULL );
 }
 
-};  // extern "C"
+}   // extern "C"
 
 
 UnoWrapper::UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit )
 {
     mxToolkit = rxToolkit;
+}
+
+UnoWrapper::~UnoWrapper()
+{
 }
 
 void UnoWrapper::Destroy()
