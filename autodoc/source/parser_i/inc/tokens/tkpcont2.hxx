@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkpcont2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:09:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ TkpNullContex2 &    TkpContext_Null2_();
 class StateMachineContext
 {
   public:
+    virtual ~StateMachineContext() {}
+
     /// Is used by StmBoundsStatu2 only.
     virtual void        PerformStatusFunction(
                             uintt               i_nStatusSignal,
