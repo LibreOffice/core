@@ -132,6 +132,7 @@ namespace treeview {
             throw( com::sun::star::uno::RuntimeException )
         {
             // read only
+            (void)aListener;
         }
 
         virtual void SAL_CALL
@@ -140,6 +141,7 @@ namespace treeview {
             throw( com::sun::star::uno::RuntimeException )
         {
             // read only
+            (void)aListener;
         }
 
 
@@ -154,6 +156,7 @@ namespace treeview {
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
             throw( com::sun::star::uno::RuntimeException )
         {
+            (void)xListener;
         }
 
         virtual void SAL_CALL
@@ -161,6 +164,7 @@ namespace treeview {
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
             throw( com::sun::star::uno::RuntimeException )
         {
+            (void)aListener;
         }
 
 
