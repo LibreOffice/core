@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:36:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,8 +175,9 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
             }
             break;
         }
-           break;
-
+        default:
+            DBG_ASSERT( 0, "input unit not handled" );
+            break;
     }
 
 
@@ -186,7 +187,6 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
     {
         // A big int is required for calculation
         BigInt nBigVal( nValue );
-        BigInt nBigFac( nFac );
         nBigVal *= nMul;
         nBigVal /= nDiv;
         nBigVal += 5;
@@ -493,6 +493,9 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                 }
                 break;
             }
+            default:
+                DBG_ERROR("xmloff::SvXMLExportHelper::GetConversionFactor(), illegal eCoreUnit value!");
+                break;
         }
 
         if(eUnit != XML_TOKEN_INVALID)
