@@ -5,6 +5,9 @@
 #ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 
 class CollatorRessourceData;
 
