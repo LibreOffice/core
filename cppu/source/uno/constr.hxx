@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:50:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,9 +136,6 @@ inline void _defaultConstructArray(
             *((sal_Int32 *)pMem + i) = ((typelib_EnumTypeDescription *)pElementType)->nDefaultEnumValue;
         }
         break;
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         for (i=0; i < nTotalElements; i++)
@@ -158,6 +155,9 @@ inline void _defaultConstructArray(
             uno_Sequence** ppElement = (uno_Sequence **)pMem + i;
             *ppElement = createEmptySequence();
         }
+        break;
+    default:
+        OSL_ASSERT(false);
         break;
     }
     TYPELIB_DANGER_RELEASE( pElementType );
@@ -221,9 +221,6 @@ inline void _defaultConstructData(
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
@@ -266,6 +263,9 @@ inline void _defaultConstructData(
         break;
     case typelib_TypeClass_INTERFACE:
         *(void **)pMem = 0; // either cpp or c-uno interface
+        break;
+    default:
+        OSL_ASSERT(false);
         break;
     }
 }
