@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_globalindex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:51:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,8 @@ HF_IdlGlobalIndex::Produce_Page(ary::idl::alphabetical_index::E_Letter i_letter)
 
     HF_TitleTable
         aTitle(CurOut());
-
-    aTitle.Produce_Title( StreamLock(100)()
+    StreamLock sl(100);
+    aTitle.Produce_Title( sl()
                           << "Global Index "
                           << ( i_letter != ary::idl::alphabetical_index::non_alpha
                                 ?   char(int(i_letter)-'a'+'A')
