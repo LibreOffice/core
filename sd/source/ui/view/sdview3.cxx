@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:10:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1290,7 +1290,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             if( eFill == XFILL_SOLID || eFill == XFILL_NONE )
             {
                 const XFillColorItem&   rColItem = (XFillColorItem&) rSet.Get( XATTR_FILLCOLOR );
-                Color                   aColor( rColItem.GetValue() );
+                Color                   aColor( rColItem.GetColorValue() );
                 String                  aName( rColItem.GetName() );
                 SfxItemSet              aSet( pDoc->GetPool() );
                 BOOL                    bClosed = pPickObj->IsClosedObj();
