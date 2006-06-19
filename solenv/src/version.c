@@ -4,9 +4,9 @@
  *
  *  $RCSfile: version.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:03:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,13 +59,13 @@ static const struct VersionInfo g_aVersionInfo =
 };
 
 #ifdef WNT
-__declspec(dllexport) const struct VersionInfo* GetVersionInfo();
+__declspec(dllexport) const struct VersionInfo* GetVersionInfo(void);
 #endif
 
 #ifdef WNT
-__declspec(dllexport) const struct VersionInfo* GetVersionInfo()
+__declspec(dllexport) const struct VersionInfo* GetVersionInfo(void)
 #else
-const struct VersionInfo *GetVersionInfo()
+const struct VersionInfo *GetVersionInfo(void)
 #endif
 {
     return &g_aVersionInfo;
