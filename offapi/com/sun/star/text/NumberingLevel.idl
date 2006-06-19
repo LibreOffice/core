@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingLevel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:17:52 $
+ *  last change: $Author: tl $ $Date: 2006-06-19 10:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,22 +40,30 @@
 #include <com/sun/star/util/Color.idl>
 #endif
 
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XBitmap_idl__
+#include <com/sun/star/awt/XBitmap.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::NumberingLevel
 /** provides access to a numbering level as part of the Numbering Rules.
  */
 published service NumberingLevel
 {
-
-
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::Adjust
     /** adjusts the numbering (HoriOrientation_LEFT/RIGHT/CENTER)
 
         <p>
@@ -65,48 +73,43 @@ published service NumberingLevel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::ParentNumbering
     /** number of upper levels that are included in the current numbering symbol.
      */
     [optional, property] short ParentNumbering;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::Prefix
     /** the prefix of the numbering symbol.
      */
     [property] string Prefix;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::Suffix
     /** the suffix of the numbering symbol.
      */
     [property] string Suffix;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::CharStyleName
     /** Name of the character style that is used for the numbering symbol.
      */
     [optional, property] string CharStyleName;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::BulletId
     /** the ID of the symbol in the given font. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
           @deprecated
      */
     [optional, property] short BulletId;
     //-------------------------------------------------------------------------
+
     /** contains the symbol in the given font. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
      */
     [property] string BulletChar;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::BulletFontName
     /** the name of the font for the symbol. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
      */
@@ -114,9 +117,13 @@ published service NumberingLevel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::GraphicURL
-    /** the URL of the graphic file that is used as the numbering symbol.
+    /** the font used to paint the bullet.
+     */
+    [optional, property] com::sun::star::awt::FontDescriptor BulletFont;
 
+    //-------------------------------------------------------------------------
+
+    /** the URL of the graphic file that is used as the numbering symbol.
 
         <p> This is only valid if the numbering type is
         <const scope="com::sun::star::style">NumberingType::BITMAP</const>.</p>
@@ -125,7 +132,19 @@ published service NumberingLevel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::VertOrient
+    /** the bitmap containing the bullet.
+     */
+    [optional, property] com::sun::star::awt::XBitmap GraphicBitmap;
+
+    //-------------------------------------------------------------------------
+
+    /** size of the graphic that is used as bullet.
+     */
+    [optional, property] com::sun::star::awt::Size    GraphicSize;
+    //-------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+
     /** contains the vertical orientation of a graphic.
 
         <p> It is set using com::sun::star::text::VertOrientation.</p>
@@ -133,9 +152,7 @@ published service NumberingLevel
     [optional, property] short VertOrient;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::StartWith
     /** specifies the start value for the numbering.
-
 
         <p>This property is only valid if the numbering type is not
         <const scope="com::sun::star::style">NumberingType::BITMAP</const> or
@@ -145,14 +162,12 @@ published service NumberingLevel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::LeftMargin
     /** specifies the left margin of the numbering
      */
     [property] long LeftMargin;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::SymbolTextDistance
     /** specifies the distance between the numbering symbol and the text of
         the paragraph.
      */
@@ -160,7 +175,6 @@ published service NumberingLevel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::FirstLineOffset
     /** specifies the offset between the beginning of the first line and
         the beginning of the following lines of the paragraph.
      */
@@ -168,14 +182,12 @@ published service NumberingLevel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::NumberingType
     /** specifies the type of numbering.
      */
     [property] short NumberingType;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingLevel::HeadingStyleName
     /** contains the name of the paragraph style that is interpreted as the
         header of this level. It is only contained in the levels of
         chapter numbering rules.

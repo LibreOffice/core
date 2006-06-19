@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingRules.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:18:11 $
+ *  last change: $Author: tl $ $Date: 2006-06-19 10:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,37 +65,42 @@ published service NumberingRules
      */
         interface com::sun::star::container::XIndexReplace;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::beans::XPropertySet;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingRules::IsAbsoluteMargins
     /** determins if the margins are absolute or relative
         to the preceeding numbering level.
      */
     [optional, property] boolean  IsAbsoluteMargins;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingRules::IsAutomatic
     /** determins if the numbering rules are automatically created
         as opposed to numbering rules that are part of a numbering style.
      */
     [optional, property] boolean IsAutomatic;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingRules::IsContinuousNumbering
     /** determins if the numbering levels are counted coninuously  or if
-        each numbering level is counted separately .
+        each numbering level is counted separately.
      */
     [optional, property] boolean IsContinuousNumbering;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::NumberingRules::Name
     /** contains the name of the numbering rules. It is used to identify a certain
         numbering rules property
      */
     [optional, readonly, property] string Name;
+    //-------------------------------------------------------------------------
 
+    /** This numbering is used in the outline of the document (e.g. headings).
+     */
+    [optional, property] boolean    NumberingIsOutline;
+    //-------------------------------------------------------------------------
+
+    /** the type of numbering (arabic, characters, roman numbers, etc.).
+     */
+    [optional, property] short    NumberingType;
+    //-------------------------------------------------------------------------
 };
 
 //=============================================================================
