@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:51:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 13:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,16 +35,16 @@
 
 // -----------------------------------------------------------------------
 
-static void ImplUpdateStringFromUniString( ByteString* pString,
-                                           const sal_Unicode* pUniStr, sal_Size nUniLen,
-                                           rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
+void ByteString::ImplUpdateStringFromUniString(
+    const sal_Unicode* pUniStr, sal_Size nUniLen,
+    rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
     ByteStringData* pNewStringData = NULL;
     rtl_uString2String( (rtl_String **)(&pNewStringData),
                         pUniStr, nUniLen,
                         eTextEncoding, nCvtFlags );
-    STRING_RELEASE((STRING_TYPE *)pString->mpData);
-    pString->mpData = pNewStringData;
+    STRING_RELEASE((STRING_TYPE *)mpData);
+    mpData = pNewStringData;
 }
 
 // =======================================================================
@@ -74,9 +74,9 @@ ByteString::ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nL
     else
     {
         // Laenge korrigieren, wenn noetig
-        xub_StrLen nMaxLen = rUniStr.mpData->mnLen-nPos;
+        sal_Int32 nMaxLen = rUniStr.mpData->mnLen-nPos;
         if ( nLen > nMaxLen )
-            nLen = nMaxLen;
+            nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
     mpData = NULL;
@@ -358,21 +358,20 @@ void ImplDeleteCharTabData()
 
 // =======================================================================
 
-static void ImplStringConvert( ByteString* pString,
-                               rtl_TextEncoding eSource, rtl_TextEncoding eTarget,
-                               BOOL bReplace )
+void ByteString::ImplStringConvert(
+    rtl_TextEncoding eSource, rtl_TextEncoding eTarget, BOOL bReplace )
 {
     sal_uChar* pConvertTab = ImplGet1ByteConvertTab( eSource, eTarget, bReplace );
     if ( pConvertTab )
     {
-        char* pStr = pString->mpData->maStr;
+        char* pStr = mpData->maStr;
         while ( *pStr )
         {
             sal_uChar c = (sal_uChar)*pStr;
             sal_uChar cConv = pConvertTab[c];
             if ( c != cConv )
             {
-                pStr = ImplCopyStringData( pString, pStr );
+                pStr = ImplCopyStringData( pStr );
                 *pStr = (char)cConv;
             }
 
@@ -387,10 +386,10 @@ static void ImplStringConvert( ByteString* pString,
         sal_Size                    nDestChars;
         sal_Size                    nTempLen;
         sal_Unicode*                pTempBuf;
-        nTempLen = pString->mpData->mnLen;
+        nTempLen = mpData->mnLen;
         pTempBuf = new sal_Unicode[nTempLen];
         nDestChars = rtl_convertTextToUnicode( hSrcConverter, 0,
-                                               pString->mpData->maStr, pString->mpData->mnLen,
+                                               mpData->maStr, mpData->mnLen,
                                                pTempBuf, nTempLen,
                                                RTL_TEXTTOUNICODE_FLAGS_FLUSH |
                                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
@@ -402,7 +401,7 @@ static void ImplStringConvert( ByteString* pString,
         // sowieso keine Ersatzdarstellung moeglich ist. Da sich der String
         // sowieso in der Laenge aendern kann, nehmen wir auch sonst keine
         // Ruecksicht darauf, das die Laenge erhalten bleibt.
-        ImplUpdateStringFromUniString( pString, pTempBuf, nDestChars, eTarget,
+        ImplUpdateStringFromUniString( pTempBuf, nDestChars, eTarget,
                                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
                                        RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
                                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
@@ -440,7 +439,7 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
         return *this;
 
     // Zeichensatz umwandeln
-    ImplStringConvert( this, eSource, eTarget, bReplace );
+    ImplStringConvert( eSource, eTarget, bReplace );
 
     return *this;
 }
