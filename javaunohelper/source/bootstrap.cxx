@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 12:42:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 
 //==================================================================================================
 extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
-    JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs,
+    JNIEnv * jni_env, jclass, jstring juno_rc, jobjectArray jpairs,
     jobject loader )
 {
     try
