@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentreader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:43:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,11 @@ CBaseReader( DocumentName )
         m_DefaultLocale = DocumentLocale;
         Initialize( DOC_CONTENT_NAME );
     }
-    catch(xml_parser_exception& ex)
+    catch(xml_parser_exception&
+    #if OSL_DEBUG_LEVEL > 0
+    ex
+    #endif
+    )
     {
         ENSURE(false, ex.what());
     }
@@ -190,8 +194,8 @@ void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::ws
 
     if ( local_name == CONTENT_STYLE_STYLE )
     {
-        StyleLocalePair_t StyleLocalePair = reinterpret_cast<CAutoStyleTag * >( pTagBuilder)->getStyleLocalePair();
-        if ( ( reinterpret_cast<CAutoStyleTag * >( pTagBuilder)->isFull() ) && ( StyleLocalePair.second != m_DefaultLocale ) )
+        StyleLocalePair_t StyleLocalePair = static_cast<CAutoStyleTag * >( pTagBuilder)->getStyleLocalePair();
+        if ( ( static_cast<CAutoStyleTag * >( pTagBuilder)->isFull() ) && ( StyleLocalePair.second != m_DefaultLocale ) )
                 m_StyleMap.insert( StyleLocalePair );
     }
     if (( local_name == CONTENT_TEXT_A )||( local_name == CONTENT_TEXT_SPAN ) ||

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metainforeader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,11 @@ CBaseReader( DocumentName )
 
         Initialize( META_CONTENT_NAME );
     }
-    catch(xml_parser_exception& ex)
+    catch(xml_parser_exception&
+    #if OSL_DEBUG_LEVEL > 0
+    ex
+    #endif
+    )
     {
         ENSURE(false, ex.what());
     }
