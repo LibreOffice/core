@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:35:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,9 @@ namespace svt
 
         RoadmapWizardImpl()
             :pRoadmap( NULL )
-            ,pFixedLine(NULL)
             ,nActivePath( -1 )
             ,bActivePathIsDefinite( false )
+            ,pFixedLine(NULL)
         {
         }
 
@@ -453,7 +453,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( RoadmapWizard, OnRoadmapItemSelected, void*, _pNotInterestedIn )
+    IMPL_LINK( RoadmapWizard, OnRoadmapItemSelected, void*, EMPTYARG )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
