@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:10:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ namespace configmgr
             // POST: Handle ValueChange
             _rValueChange.setNewValue(m_aValueChange.getNewValue(), m_aValueChange.getMode());
         }
-        virtual void handle(RemoveNode& _rRemoveNode)
+              virtual void handle(RemoveNode& /*_rRemoveNode*/)
         {
             OSL_ENSURE(false, "OMergeValueChange::handle(ValueChange): have a ValueChange for a removed node!");
             // should never happen. How did the user change a value for a node which is obviously flagged as removed?
@@ -402,7 +402,7 @@ namespace configmgr
                     m_eAction = RemoveCompletely;
             }
 
-        virtual void handle(RemoveNode& _rRemoveNode)
+              virtual void handle(RemoveNode& /*_rRemoveNode*/)
             {
                 OSL_ENSURE(false, "OMergeRemoveNode::handle(RemoveNode): should never happen!");
                 // how can a RemoveNode change exist if in the file we're merging it into
