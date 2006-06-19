@@ -10,8 +10,8 @@ using namespace com::sun::star::ucb;
 
 
 XInputStream_impl::XInputStream_impl( const rtl::OUString& aUncPath )
-    : m_aFile( aUncPath ),
-      m_bIsOpen( false )
+    : m_bIsOpen( false ),
+      m_aFile( aUncPath )
 {
     m_bIsOpen = ( osl::FileBase::E_None == m_aFile.open( OpenFlag_Read ) );
 }
@@ -82,7 +82,7 @@ XInputStream_impl::readBytes(
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
     // if any code relies on this, so be conservative---SB):
-    if (nrc != nBytesToRead)
+    if (nrc != sal::static_int_cast<sal_uInt64>( nBytesToRead) )
         aData.realloc(sal_Int32(nrc));
     return ( sal_Int32 ) nrc;
 }
