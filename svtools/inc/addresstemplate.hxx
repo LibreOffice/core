@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:53:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,9 +108,6 @@ namespace svt
         // string to display for "no selection"
         const String    m_sNoFieldSelection;
 
-        AddressBookSourceDialogData*
-                        m_pImpl;
-
         /// the DatabaseContext for selecting data sources
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xDatabaseContext;
@@ -119,6 +116,9 @@ namespace svt
                         m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xCurrentDatasourceTables;
+
+        AddressBookSourceDialogData*
+                        m_pImpl;
 
     public:
         AddressBookSourceDialog( Window* _pParent,
