@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:34:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
             break;
     }
     setReferenceValue( sReferenceValue );
-    setDefaultChecked( nDefaultChecked );
+    setDefaultChecked( static_cast< CheckState >( nDefaultChecked ) );
 
     // Nach dem Lesen die Defaultwerte anzeigen
     if ( getControlSource().getLength() )
@@ -262,13 +262,13 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         aValue <<= (sal_Int16)( bTriState ? STATE_DONTKNOW : getDefaultChecked() );
     }
     else
-        aValue <<= ( bValue ? (sal_Int16)STATE_CHECK : (sal_Int16)STATE_NOCHECK );
+        aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
 
     return aValue;
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool _bPostReset )
+sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     OSL_PRECOND( m_xColumnUpdate.is(), "OCheckBoxModel::commitControlValueToDbColumn: not bound!" );
     if ( m_xColumnUpdate.is() )
