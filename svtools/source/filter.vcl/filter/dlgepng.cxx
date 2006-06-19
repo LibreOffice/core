@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepng.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:35:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#pragma hdrstop
 #include <tools/ref.hxx>
 #include <vcl/msgbox.hxx>
 #include "dlgepng.hxx"
@@ -50,16 +48,16 @@ using namespace ::com::sun::star::uno;
 
 DlgExportEPNG::DlgExportEPNG( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPNG, rPara.pResMgr ) ),
+                FilterConfigItem    ( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PNG" ) ), &rPara.aFilterData ),
+                rFltCallPara        ( rPara ),
+                aGrpCompression     ( this, ResId( GRP_COMPRESSION ) ),
                 aFiCompression      ( this, ResId( FI_COMPRESSION ) ),
                 aNumCompression     ( this, ResId( NUM_COMPRESSION ) ),
                 aCbxInterlaced      ( this, ResId( CBX_INTERLACED ) ),
-                aGrpCompression     ( this, ResId( GRP_COMPRESSION ) ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                FilterConfigItem    ( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PNG" ) ), &rPara.aFilterData ),
-                pMgr                ( rPara.pResMgr ),
-                rFltCallPara        ( rPara )
+                pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
