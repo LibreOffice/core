@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:26:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,11 @@ namespace configmgr
     using configuration::Name;
     using configuration::AbsolutePath;
 // =========================================================================
+//#if OSL_DEBUG_LEVEL > 0
+#if 0 // currently not used in debug build!
 static void test_complete(memory::HeapManager & _rDummy)
 { new TreeManager(NULL,_rDummy); }
+#endif
 // =========================================================================
 
 #define MAKEUSTRING( char_array ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( char_array ) )
@@ -213,6 +216,7 @@ void TreeManager::disposeUser(RequestOptions const& _aUserOptions)
 // -------------------------------------------------------------------------
 void TreeManager::implDisposeOne(CacheRef const & _aDisposedCache, RequestOptions const & _aOptions)
 {
+    (void) _aOptions; // avoid warning about unused parameter
     OSL_ASSERT(_aDisposedCache.is());
     CFG_TRACE_INFO("Now removing TreeInfo (user '%s' with locale '%s') and broadcaster",
                     OUSTRING2ASCII(_aOptions.getEntity()), OUSTRING2ASCII(_aOptions.getLocale()) );
@@ -372,6 +376,7 @@ data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
 // -------------------------------------------------------------------------
 void TreeManager::fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOptions&  ) CFG_NOTHROW()
 {
+    (void) aSubtreePath; // avoid warning about unused parameter
     CFG_TRACE_WARNING("TreeManager: Prefetching not implemented. (Request to prefetch component %s.", OUSTRING2ASCII(aSubtreePath.toString()));
 }
 
@@ -504,7 +509,7 @@ data::TreeAccessor TreeManager::requestTemplate(data::Accessor const& /*_aSource
 }
 
 // -------------------------------------------------------------------------
-void TreeManager::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChangeTree) CFG_UNO_THROW_ALL(  )
+void TreeManager::saveAndNotifyUpdate(data::Accessor const& /*_aChangedDataAccessor*/, TreeChangeList const& aChangeTree) CFG_UNO_THROW_ALL(  )
 {
     {
         CFG_TRACE_INFO("TreeManager: committing an Update to the cache controller");
@@ -659,7 +664,7 @@ void TreeManager::nodeUpdated(TreeChangeList& _rChanges)
 // ICachedDataListener
 // ----------------------------------------------------------------------------
 
-void TreeManager::disposing(backend::ICachedDataProvider & _rProvider)   CFG_NOTHROW()
+void TreeManager::disposing(backend::ICachedDataProvider & /*_rProvider*/)   CFG_NOTHROW()
 {
     CFG_TRACE_INFO("TreeManager: provider is being disposed");
     this->dispose();
