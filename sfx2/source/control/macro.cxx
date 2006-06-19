@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:04:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 
 //====================================================================
 
-SV_DECL_PTRARR_DEL( SfxStatements_Impl, SfxMacroStatement*, 16, 8 );
+SV_DECL_PTRARR_DEL( SfxStatements_Impl, SfxMacroStatement*, 16, 8 )
 SV_IMPL_PTRARR( SfxStatements_Impl, SfxMacroStatement* );
 
 //--------------------------------------------------------------------
@@ -65,9 +65,9 @@ struct SfxMacro_Impl
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const SfxShell& rShell,         // <SfxShell>, die den Request ausf"uhrte
-    const String&   rTarget,        // Name des Zielobjektes vor der Ausf"urhung
-    BOOL            bAbsolute,      // obsolet
+    const SfxShell& /*rShell*/,     // <SfxShell>, die den Request ausf"uhrte
+    const String&   /*rTarget*/,    // Name des Zielobjektes vor der Ausf"urhung
+    BOOL            /*bAbsolute*/,  // obsolet
     const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
     BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
@@ -279,8 +279,8 @@ SfxMacroStatement::SfxMacroStatement
     <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
 */
 
-:   aStatement( rStatement ),
-    nSlotId( 0 ),
+:   nSlotId( 0 ),
+       aStatement( rStatement ),
     bDone( TRUE ),
     pDummy( 0 )
 {
@@ -298,9 +298,9 @@ SfxMacroStatement::SfxMacroStatement
     Copy-Konstruktor der SfxMacroStatement-Klasse.
 */
 
-:   aStatement( rOrig.aStatement ),
-    nSlotId( rOrig.nSlotId ),
-    bDone( rOrig.bDone ),
+:   nSlotId( rOrig.nSlotId ),
+    aStatement( rOrig.aStatement ),
+       bDone( rOrig.bDone ),
     pDummy( 0 )
 {
     aArgs = rOrig.aArgs;
@@ -323,10 +323,10 @@ SfxMacroStatement::~SfxMacroStatement()
 
 void SfxMacroStatement::GenerateNameAndArgs_Impl
 (
-    SfxMacro*       pMacro,         // darin wird aufgezeichnet
+    SfxMacro*       /*pMacro*/,         // darin wird aufgezeichnet
     const SfxSlot&  rSlot,          // der Slot, der das Statement abspielen kann
     BOOL            bRequestDone,   // TRUE=wurde ausgef"uhrt, FALSE=abgebrochen
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& /*rArgs*/
 )
 
 /*  [Beschreibung]
