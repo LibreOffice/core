@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:33:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@
 
 #include "chrtitem.hxx"
 
-#pragma hdrstop
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
 // -----------------------------------------------------------------------
@@ -110,14 +108,14 @@ SvxChartStyleItem::SvxChartStyleItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartStyleItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartStyleItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartStyleItem(rIn, Which());
 }
@@ -143,14 +141,14 @@ SvxChartDataDescrItem::SvxChartDataDescrItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartDataDescrItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartDataDescrItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartDataDescrItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartDataDescrItem(rIn, Which());
 }
@@ -176,14 +174,14 @@ SvxChartLegendPosItem::SvxChartLegendPosItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartLegendPosItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartLegendPosItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartLegendPosItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartLegendPosItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartLegendPosItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartLegendPosItem(rIn, Which());
 }
@@ -209,21 +207,21 @@ SvxChartTextOrderItem::SvxChartTextOrderItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartTextOrderItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartTextOrderItem(rIn, Which());
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // the order of the two enums is not equal, so a mapping is required
     ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
@@ -248,7 +246,7 @@ sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BY
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // the order of the two enums is not equal, so a mapping is required
     ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
@@ -303,14 +301,14 @@ SvxChartTextOrientItem::SvxChartTextOrientItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartTextOrientItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartTextOrientItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartTextOrientItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartTextOrientItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartTextOrientItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartTextOrientItem(rIn, Which());
 }
@@ -354,8 +352,8 @@ XubString SvxDoubleItem::GetValueText() const
 // -----------------------------------------------------------------------
 
 SfxItemPresentation SvxDoubleItem::GetPresentation
-            ( SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
-              SfxMapUnit ePresentationMetric, XubString& rText,
+            ( SfxItemPresentation /*ePresentation*/, SfxMapUnit /*eCoreMetric*/,
+              SfxMapUnit /*ePresentationMetric*/, XubString& rText,
               const IntlWrapper * pIntlWrapper) const
 {
     DBG_ASSERT( pIntlWrapper, "SvxDoubleItem::GetPresentation: no IntlWrapper" );
@@ -378,23 +376,23 @@ int SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* Pool) const
+SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxDoubleItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, USHORT nVersion) const
+SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, USHORT /*nVersion*/) const
 {
-    double fVal;
-    rIn >> fVal;
-    return new SvxDoubleItem(fVal, Which());
+    double _fVal;
+    rIn >> _fVal;
+    return new SvxDoubleItem(_fVal, Which());
 }
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxDoubleItem::Store(SvStream& rOut, USHORT nItemVersion) const
+SvStream& SvxDoubleItem::Store(SvStream& rOut, USHORT /*nItemVersion*/) const
 {
     rOut << fVal;
     return rOut;
@@ -425,14 +423,14 @@ SfxFieldUnit SvxDoubleItem::GetUnit() const
 
 
 // -----------------------------------------------------------------------
-sal_Bool SvxDoubleItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxDoubleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= fVal;
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxDoubleItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxDoubleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     return rVal >>= fVal;
 }
@@ -460,14 +458,14 @@ SvxChartKindErrorItem::SvxChartKindErrorItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartKindErrorItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartKindErrorItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartKindErrorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartKindErrorItem(rIn, Which());
 }
@@ -502,14 +500,14 @@ SvxChartIndicateItem::SvxChartIndicateItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartIndicateItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartIndicateItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartIndicateItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartIndicateItem(rIn, Which());
 }
@@ -544,14 +542,14 @@ SvxChartRegressItem::SvxChartRegressItem(SvStream& rIn, USHORT nId) :
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* pPool) const
+SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartRegressItem(*this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxChartRegressItem::Create(SvStream& rIn, USHORT nVer) const
+SfxPoolItem* SvxChartRegressItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new SvxChartRegressItem(rIn, Which());
 }
