@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:05:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,14 +336,14 @@ namespace xmloff
         :OElementExport(_rContext, _rxControl, _rEvents)
         ,m_sControlId(_rControlId)
         ,m_sReferringControls(_rReferringControls)
+        ,m_nClassId(FormComponentType::CONTROL)
+        ,m_eType( UNKNOWN )
         ,m_nIncludeCommon(0)
         ,m_nIncludeDatabase(0)
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
         ,m_nIncludeBindings(0)
-        ,m_nClassId(FormComponentType::CONTROL)
         ,m_pOuterElement(NULL)
-        ,m_eType( UNKNOWN )
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
@@ -524,7 +524,6 @@ namespace xmloff
             case TEXT_AREA:
             {
                 // if we act as rich text control, we need to export some text:p elements
-                Reference< XText > xControlText( m_xProps, UNO_QUERY );
                 if ( xControlText.is() )
                 {
                     sal_Bool bActingAsRichText = sal_False;
@@ -538,13 +537,16 @@ namespace xmloff
                 }
             }
             break;
+            default:
+                // nothing do to
+                break;
         }
     }
 
     //---------------------------------------------------------------------
     void OControlExport::exportCommonControlAttributes()
     {
-        sal_Int32 i=0;
+        size_t i=0;
 
         // I decided to handle all the properties here with some static arrays describing the property-attribute
         // relations. This leads to somewhat ugly code :), but the only alternative I can think of right now
@@ -2070,7 +2072,7 @@ namespace xmloff
         OElementExport::exportSubTags();
         // loop through all children
         Reference< XIndexAccess > xCollection(m_xProps, UNO_QUERY);
-        OSL_ENSURE(xCollection.is(), "OFormLayerXMLExport::implExportForm: a form which is not an index access? Suspicíous!");
+        OSL_ENSURE(xCollection.is(), "OFormLayerXMLExport::implExportForm: a form which is not an index access? Suspicï¿½ous!");
 
         if (xCollection.is())
             m_rContext.exportCollectionElements(xCollection);
