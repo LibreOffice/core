@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:40:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
                 long nCount = pColorTable->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
-                    XColorEntry* pEntry = pColorTable->Get(n);
+                    XColorEntry* pEntry = pColorTable->GetColor(n);
                     aLbColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
                 aLbColor.SetUpdateMode( TRUE );
