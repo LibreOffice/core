@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stordata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:45:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORDATA_CXX_ "$Revision: 1.3 $"
+#define _STORE_STORDATA_CXX_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -82,7 +82,8 @@ OStoreIndirectionPageData::OStoreIndirectionPageData (sal_uInt16 nPageSize)
 void OStoreIndirectionPageData::initialize (void)
 {
     base::m_aGuard.m_nMagic = STORE_MAGIC_INDIRECTPAGE;
-    base::m_aDescr.m_nUsed += self::size();
+    base::m_aDescr.m_nUsed = sal::static_int_cast< sal_uInt16 >(
+        base::m_aDescr.m_nUsed + self::size());
     self::m_aGuard.m_nMagic = 0;
 
     sal_uInt16 i, n = capacityCount();
@@ -93,7 +94,12 @@ void OStoreIndirectionPageData::initialize (void)
 /*
  * swap.
  */
-void OStoreIndirectionPageData::swap (const D& rDescr)
+void OStoreIndirectionPageData::swap (
+    const D&
+#ifdef OSL_BIGENDIAN
+        rDescr
+#endif /* OSL_BIGENDIAN */
+)
 {
 #ifdef OSL_BIGENDIAN
     m_aGuard.swap();
@@ -112,7 +118,12 @@ void OStoreIndirectionPageData::swap (const D& rDescr)
 /*
  * swap.
  */
-void OStoreIndirectionPageObject::swap (const D& rDescr)
+void OStoreIndirectionPageObject::swap (
+    const D&
+#ifdef OSL_BIGENDIAN
+        rDescr
+#endif /* OSL_BIGENDIAN */
+)
 {
 #ifdef OSL_BIGENDIAN
     base::swap (rDescr);
@@ -870,11 +881,16 @@ void OStoreDirectoryDataBlock::LinkTable::swap (void)
 /*
  * swap.
  */
-void OStoreDirectoryPageObject::swap (const D& rDescr)
+void OStoreDirectoryPageObject::swap (
+    const D&
+#ifdef OSL_BIGENDIAN
+        rDescr
+#endif /* OSL_BIGENDIAN */
+)
 {
 #ifdef OSL_BIGENDIAN
     base::swap (rDescr);
-    m_rPage.swap (rDescr);
+    m_rPage.swap ();
 #endif /* OSL_BIGENDIAN */
 }
 
@@ -884,7 +900,7 @@ void OStoreDirectoryPageObject::swap (const D& rDescr)
 void OStoreDirectoryPageObject::guard (const D& rDescr)
 {
     base::guard (rDescr);
-    m_rPage.guard (rDescr);
+    m_rPage.guard ();
 }
 
 /*
@@ -896,7 +912,7 @@ storeError OStoreDirectoryPageObject::verify (const D& rDescr)
     if (eErrCode != store_E_None)
         return eErrCode;
     else
-        return m_rPage.verify (rDescr);
+        return m_rPage.verify ();
 }
 
 /*
@@ -907,7 +923,7 @@ OStoreDirectoryPageObject::scope (
     sal_uInt32                       nPage,
     page::DataBlock::LinkDescriptor &rDescr) const
 {
-    typedef OStoreIndirectionPageData indirect;
+    typedef OStoreIndirectionPageData indrct;
     sal_uInt32 index0, index1, index2, index3;
 
     // direct.
@@ -927,7 +943,7 @@ OStoreDirectoryPageObject::scope (
     nPage -= nLimit;
 
     // single indirect.
-    sal_uInt32 nCapacity = indirect::capacityCount(m_rPage.m_aDescr);
+    sal_uInt32 nCapacity = indrct::capacityCount(m_rPage.m_aDescr);
     nCount = m_rPage.m_aDataBlock.singleCount();
     nLimit = nCount * nCapacity;
     if (nPage < nLimit)
