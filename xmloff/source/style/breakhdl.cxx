@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:37:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
     }
 
     OUStringBuffer aOut;
-    sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
+    /* sal_Bool bOk = */ rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
     return sal_True;
@@ -195,7 +195,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
     }
 
     OUStringBuffer aOut;
-    sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
+    /* sal_Bool bOk = */ rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
     return sal_True;
