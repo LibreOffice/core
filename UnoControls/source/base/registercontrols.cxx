@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registercontrols.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:16:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:09:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ CREATEINSTANCE  ( StatusIndicator   )
 //______________________________________________________________________________________________________________
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(    const   sal_Char**          ppEnvironmentTypeName   ,
-                                                                            uno_Environment**   ppEnvironment           )
+                                                                            uno_Environment**   /*ppEnvironment*/           )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
@@ -254,7 +254,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(    const   sal_
 //  write component info to registry
 //______________________________________________________________________________________________________________
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager ,
+extern "C" sal_Bool SAL_CALL component_writeInfo(   void*   /*pServiceManager*/ ,
                                                     void*   pRegistryKey    )
 {
     AS_DBG_OUT ( "component_writeInfo():\t[start]\n" )
@@ -303,7 +303,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager ,
 
 extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementationName ,
                                                         void*       pServiceManager     ,
-                                                        void*       pRegistryKey        )
+                                                        void*       /*pRegistryKey*/        )
 {
     AS_DBG_OUT( "component_getFactory():\t[start]\n" )
 
