@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 13:15:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,7 @@ long lclGetBeg( const Style& rBorder )
     {
         case REFMODE_CENTERED:  if( rBorder.Prim() ) nPos = -128 * (rBorder.GetWidth() - 1); break;
         case REFMODE_END:       if( rBorder.Prim() ) nPos = -256 * (rBorder.GetWidth() - 1); break;
+        case REFMODE_BEGIN:     break;
     }
     return nPos;
 }
@@ -314,6 +315,7 @@ long lclGetEnd( const Style& rBorder )
     {
         case REFMODE_CENTERED:  if( rBorder.Prim() ) nPos = 128 * (rBorder.GetWidth() - 1); break;
         case REFMODE_BEGIN:     if( rBorder.Prim() ) nPos = 256 * (rBorder.GetWidth() - 1); break;
+        case REFMODE_END:     break;
     }
     return nPos;
 }
@@ -461,7 +463,7 @@ void lclLinkLeftEnd_Single(
  */
 void lclLinkLeftEnd_Prim(
         LineEndResult& rResult, const Style& rBorder,
-        const DiagStyle& rLFromTR, const Style& rLFromT, const Style& rLFromL, const Style& rLFromB, const DiagStyle& rLFromBR )
+        const DiagStyle& rLFromTR, const Style& rLFromT, const Style& rLFromL, const Style& rLFromB, const DiagStyle& /*rLFromBR*/ )
 {
     // double diagonal frame border coming from top right
     if( rLFromTR.Secn() )
