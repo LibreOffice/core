@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uicategorydescription.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:51:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,8 +157,8 @@ class ConfigurationAccess_UICategory : // interfaces
         virtual                   ~ConfigurationAccess_UICategory();
 
         //  XInterface, XTypeProvider
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -233,12 +233,12 @@ DEFINE_XTYPEPROVIDER_5  (   ConfigurationAccess_UICategory      ,
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( rServiceManager ),
-    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_NAME )),
-    m_bConfigAccessInitialized( sal_False ),
-    m_bCacheFilled( sal_False ),
     m_aConfigCategoryAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
-    m_xGenericUICategories( rGenericUICategories )
+    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_NAME )),
+    m_xGenericUICategories( rGenericUICategories ),
+    m_xServiceManager( rServiceManager ),
+    m_bConfigAccessInitialized( sal_False ),
+    m_bCacheFilled( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigCategoryAccess += aModuleName;
@@ -263,8 +263,6 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const ::rtl::OUString& rId )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    static sal_Int32 nRequests  = 0;
-
     ResetableGuard aLock( m_aLock );
     if ( !m_bConfigAccessInitialized )
     {
@@ -488,15 +486,15 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
 }
 
@@ -558,9 +556,9 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
     m_aModuleToCategoryFileMap.insert( ModuleToCategoryFileMap::value_type(
         rtl::OUString::createFromAscii( GENERIC_MODULE_NAME ), aGenericCategories ));
 
-    CategoryHashMap::iterator pIter = m_aCategoryHashMap.find( aGenericCategories );
-    if ( pIter != m_aCategoryHashMap.end() )
-        pIter->second = m_xGenericCategories;
+    CategoryHashMap::iterator pCatIter = m_aCategoryHashMap.find( aGenericCategories );
+    if ( pCatIter != m_aCategoryHashMap.end() )
+        pCatIter->second = m_xGenericCategories;
 
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
@@ -605,10 +603,10 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 
     ResetableGuard aLock( m_aLock );
 
-    ModuleToCategoryFileMap::const_iterator pIter = m_aModuleToCategoryFileMap.find( aName );
-    if ( pIter != m_aModuleToCategoryFileMap.end() )
+    ModuleToCategoryFileMap::const_iterator pM2CIter = m_aModuleToCategoryFileMap.find( aName );
+    if ( pM2CIter != m_aModuleToCategoryFileMap.end() )
     {
-        OUString aCommandFile( pIter->second );
+        OUString aCommandFile( pM2CIter->second );
         CategoryHashMap::iterator pIter = m_aCategoryHashMap.find( aCommandFile );
         if ( pIter != m_aCategoryHashMap.end() )
         {
