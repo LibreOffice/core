@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontrollerfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 15:13:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:43:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,8 +127,8 @@ class ConfigurationAccess_StatusbarControllerFactory : // interfaces
                                                        public  ::cppu::OWeakObject
 {
     public:
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
 
                       ConfigurationAccess_StatusbarControllerFactory( Reference< XMultiServiceFactory >& rServiceManager );
         virtual       ~ConfigurationAccess_StatusbarControllerFactory();
@@ -201,11 +201,11 @@ DEFINE_XTYPEPROVIDER_3  (   ConfigurationAccess_StatusbarControllerFactory  ,
 
 ConfigurationAccess_StatusbarControllerFactory::ConfigurationAccess_StatusbarControllerFactory( Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( rServiceManager ),
     m_aPropCommand( RTL_CONSTASCII_USTRINGPARAM( "Command" )),
     m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
     m_aPropController( RTL_CONSTASCII_USTRINGPARAM( "Controller" )),
     m_aPropValue( RTL_CONSTASCII_USTRINGPARAM( "Value" )),
+    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False )
 {
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(
@@ -357,7 +357,7 @@ void SAL_CALL ConfigurationAccess_StatusbarControllerFactory::elementReplaced( c
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_StatusbarControllerFactory::disposing( const EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_StatusbarControllerFactory::disposing( const EventObject& ) throw(RuntimeException)
 {
     // SAFE
     // remove our reference to the config access
@@ -487,8 +487,8 @@ DEFINE_INIT_SERVICE                     (   StatusbarControllerFactory, {} )
 
 StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_xServiceManager( xServiceManager ),
-    m_bConfigRead( sal_False )
+    m_bConfigRead( sal_False ),
+    m_xServiceManager( xServiceManager )
 {
     m_pConfigAccess = new ConfigurationAccess_StatusbarControllerFactory( m_xServiceManager );
     m_pConfigAccess->acquire();
@@ -505,7 +505,7 @@ StatusbarControllerFactory::~StatusbarControllerFactory()
 // XMultiComponentFactory
 Reference< XInterface > SAL_CALL StatusbarControllerFactory::createInstanceWithContext(
     const ::rtl::OUString& aServiceSpecifier,
-    const Reference< XComponentContext >& Context )
+    const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
     // SAFE
@@ -528,7 +528,7 @@ throw (Exception, RuntimeException)
 Reference< XInterface > SAL_CALL StatusbarControllerFactory::createInstanceWithArgumentsAndContext(
     const ::rtl::OUString&                  ServiceSpecifier,
     const Sequence< Any >&                  Arguments,
-    const Reference< XComponentContext >&   Context )
+    const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
     const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
