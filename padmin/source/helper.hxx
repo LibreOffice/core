@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:34:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ void FindFiles( const String& rDirectory, ::std::list< String >& rResult, const 
 Config& getPadminRC();
 void freePadminRC();
 
-bool chooseDirectory( Window* pParent, String& rInOutPath );
+bool chooseDirectory( String& rInOutPath );
 
 } // namespace padmin
 
