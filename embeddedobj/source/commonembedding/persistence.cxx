@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:04:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 00:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1710,10 +1710,10 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
         throw uno::RuntimeException(); //TODO
 
     // detect entry existence
-    sal_Bool bElExists = xNameAccess->hasByName( sEntName );
+    /*sal_Bool bElExists =*/ xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = sal_False;
-    sal_Int32 nStorageMode = embed::ElementModes::READWRITE;
+//  sal_Int32 nStorageMode = embed::ElementModes::READWRITE;
 
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );
