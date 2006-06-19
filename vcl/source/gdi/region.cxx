@@ -4,9 +4,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:00:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@ static ImplRegionBase aImplEmptyRegion  = { 0, 0, NULL };
 
 // =======================================================================
 
-DBG_NAME( Region );
-DBG_NAMEEX( Polygon );
-DBG_NAMEEX( PolyPolygon );
+DBG_NAME( Region )
+DBG_NAMEEX( Polygon )
+DBG_NAMEEX( PolyPolygon )
 
 // -----------------------------------------------------------------------
 
@@ -2511,7 +2511,7 @@ Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
     int nPolygonRects = 0, nPolygonPolygons = 0;
     int nPolygons = rPolyPoly.Count();
 
-    for( int i = 0; i < nPolygons; i++ )
+    for( USHORT i = 0; i < nPolygons; i++ )
     {
         const Polygon& rPoly = rPolyPoly[i];
         if( ImplPolygonRectTest( rPoly ) )
@@ -2524,7 +2524,7 @@ Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
 
     Region aResult;
     Rectangle aRect;
-    for( int i = 0; i < nPolygons; i++ )
+    for( USHORT i = 0; i < nPolygons; i++ )
     {
         const Polygon& rPoly = rPolyPoly[i];
         if( ImplPolygonRectTest( rPoly, &aRect ) )
