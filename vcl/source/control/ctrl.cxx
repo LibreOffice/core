@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:45:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ using namespace vcl;
 
 // =======================================================================
 
-void Control::ImplInitData()
+void Control::ImplInitControlData()
 {
     mbHasFocus      = FALSE;
     mpLayoutData    = NULL;
@@ -75,7 +75,7 @@ void Control::ImplInitData()
 Control::Control( WindowType nType ) :
     Window( nType )
 {
-    ImplInitData();
+    ImplInitControlData();
 }
 
 // -----------------------------------------------------------------------
@@ -83,7 +83,7 @@ Control::Control( WindowType nType ) :
 Control::Control( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
 {
-    ImplInitData();
+    ImplInitControlData();
     Window::ImplInit( pParent, nStyle, NULL );
 }
 
@@ -92,7 +92,7 @@ Control::Control( Window* pParent, WinBits nStyle ) :
 Control::Control( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_CONTROL )
 {
-    ImplInitData();
+    ImplInitControlData();
     rResId.SetRT( RSC_CONTROL );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle, NULL );
