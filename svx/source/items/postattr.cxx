@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:39:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 16:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // include ---------------------------------------------------------------
 
-#pragma hdrstop
-
 #define _SVX_POSTATTR_CXX
 #define ITEMID_AUTHOR   0
 #define ITEMID_DATE     0
@@ -53,16 +51,16 @@ TYPEINIT1_AUTOFACTORY(SvxPostItTextItem, SfxStringItem);
 
 // class SvxPostItAuthorItem ---------------------------------------------
 
-SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 nWhich )
+SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 {
-    SetWhich( nWhich );
+    SetWhich( _nWhich );
 }
 
 // -----------------------------------------------------------------------
 
 SvxPostItAuthorItem::SvxPostItAuthorItem( const XubString& rAuthor,
-                                          sal_uInt16 nWhich ) :
-    SfxStringItem( nWhich, rAuthor )
+                                          sal_uInt16 _nWhich ) :
+    SfxStringItem( _nWhich, rAuthor )
 {
 }
 
@@ -71,8 +69,8 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( const XubString& rAuthor,
 SfxItemPresentation SvxPostItAuthorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
 )   const
 {
@@ -88,6 +86,7 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
             rText = SVX_RESSTR(RID_SVXITEMS_AUTHOR_COMPLETE);
             rText += GetValue();
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -101,16 +100,16 @@ SfxPoolItem* __EXPORT SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 
 // class SvxPostItDateItem -----------------------------------------------
 
-SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 nWhich )
+SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
 {
-    SetWhich( nWhich );
+    SetWhich( _nWhich );
 }
 
 // -----------------------------------------------------------------------
 
-SvxPostItDateItem::SvxPostItDateItem( const XubString& rDate, sal_uInt16 nWhich ) :
+SvxPostItDateItem::SvxPostItDateItem( const XubString& rDate, sal_uInt16 _nWhich ) :
 
-    SfxStringItem( nWhich, rDate )
+    SfxStringItem( _nWhich, rDate )
 {
 }
 
@@ -119,8 +118,8 @@ SvxPostItDateItem::SvxPostItDateItem( const XubString& rDate, sal_uInt16 nWhich 
 SfxItemPresentation SvxPostItDateItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
 )   const
 {
@@ -136,6 +135,7 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
             rText = SVX_RESSTR(RID_SVXITEMS_DATE_COMPLETE);
             rText += GetValue();
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -149,16 +149,16 @@ SfxPoolItem* __EXPORT SvxPostItDateItem::Clone( SfxItemPool * ) const
 
 // class SvxPostItTextItem -----------------------------------------------
 
-SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 nWhich )
+SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
 {
-    SetWhich( nWhich );
+    SetWhich( _nWhich );
 }
 
 // -----------------------------------------------------------------------
 
-SvxPostItTextItem::SvxPostItTextItem( const XubString& rText, sal_uInt16 nWhich ) :
+SvxPostItTextItem::SvxPostItTextItem( const XubString& rText, sal_uInt16 _nWhich ) :
 
-    SfxStringItem( nWhich, rText )
+    SfxStringItem( _nWhich, rText )
 {
 }
 
@@ -167,8 +167,8 @@ SvxPostItTextItem::SvxPostItTextItem( const XubString& rText, sal_uInt16 nWhich 
 SfxItemPresentation SvxPostItTextItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
 )   const
 {
@@ -184,6 +184,7 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
             rText = SVX_RESSTR(RID_SVXITEMS_TEXT_COMPLETE);
             rText += GetValue();
             return SFX_ITEM_PRESENTATION_COMPLETE;
+        default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
