@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextOrientationHdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:29:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ XMLTextOrientationHdl::~XMLTextOrientationHdl()
 sal_Bool XMLTextOrientationHdl::importXML(
     const ::rtl::OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     sal_Bool bRetval( sal_False );
 
@@ -72,7 +72,7 @@ sal_Bool XMLTextOrientationHdl::importXML(
 sal_Bool XMLTextOrientationHdl::exportXML(
     ::rtl::OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     sal_Bool bVal;
     sal_Bool bRetval( sal_False );
