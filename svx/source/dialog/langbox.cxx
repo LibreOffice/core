@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:05:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,6 @@
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
-#pragma hdrstop
-
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <scripttypeitem.hxx>
 #endif
@@ -84,7 +82,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
-#define A2OU(x)     OUString::createFromAscii( x )
 
 //========================================================================
 //  misc local helper functions
