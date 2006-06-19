@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtksys.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:36:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
               GTK_BUTTONS_NONE, aMessage.GetBuffer(), NULL );
     gtk_window_set_title( GTK_WINDOW( mainwin ), aTitle.GetBuffer() );
 
-    gint i, nButtons = 0, nResponse;
+    gint nButtons = 0, nResponse;
 
     int nButton = 0;
     for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
