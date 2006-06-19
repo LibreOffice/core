@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:28:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,8 @@ private:
     ScrollBarBox*       mpScrollBox;
 
     Point               maTextWindowOffset;
-    ULONG               mnTextWidth;
+    xub_StrLen          mnTextWidth;
+    mutable Selection   maSelection;
 
 protected:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -142,8 +143,8 @@ public:
     void        SetReadOnly( BOOL bRdOnly );
     BOOL        IsReadOnly() const;
 
-    void        SetMaxTextLen( ULONG nLen );
-    ULONG       GetMaxTextLen() const;
+    void        SetMaxTextLen( xub_StrLen nLen );
+    xub_StrLen  GetMaxTextLen() const;
 
     void        SetInsertMode( BOOL bInsert );
     BOOL        IsInsertMode() const;
@@ -153,7 +154,7 @@ public:
     String      GetSelected( LineEnd aSeparator ) const;
 
     void        SetSelection( const Selection& rSelection );
-    Selection   GetSelection() const;
+    const Selection& GetSelection() const;
 
     void        Cut();
     void        Copy();
@@ -416,12 +417,12 @@ BOOL ImpSvMEdit::IsReadOnly() const
     return mpTextWindow->GetTextView()->IsReadOnly();
 }
 
-void ImpSvMEdit::SetMaxTextLen( ULONG nLen )
+void ImpSvMEdit::SetMaxTextLen( xub_StrLen nLen )
 {
     mpTextWindow->GetTextEngine()->SetMaxTextLen( nLen );
 }
 
-ULONG ImpSvMEdit::GetMaxTextLen() const
+xub_StrLen ImpSvMEdit::GetMaxTextLen() const
 {
     return mpTextWindow->GetTextEngine()->GetMaxTextLen();
 }
@@ -535,7 +536,7 @@ String ImpSvMEdit::GetTextLines( LineEnd aSeparator ) const
     return mpTextWindow->GetTextEngine()->GetTextLines( aSeparator );
 }
 
-void ImpSvMEdit::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
     {
@@ -617,9 +618,9 @@ void ImpSvMEdit::SetSelection( const Selection& rSelection )
     mpTextWindow->GetTextView()->SetSelection( aTextSel );
 }
 
-Selection ImpSvMEdit::GetSelection() const
+const Selection& ImpSvMEdit::GetSelection() const
 {
-    Selection aSel;
+    maSelection = Selection();
     TextSelection aTextSel( mpTextWindow->GetTextView()->GetSelection() );
     aTextSel.Justify();
     // Selektion flachklopfen => jeder Umbruch ein Zeichen...
@@ -629,23 +630,23 @@ Selection ImpSvMEdit::GetSelection() const
     ULONG n;
     for ( n = 0; n < aTextSel.GetStart().GetPara(); n++ )
     {
-        aSel.Min() += pExtTextEngine->GetTextLen( n );
-        aSel.Min()++;
+        maSelection.Min() += pExtTextEngine->GetTextLen( n );
+        maSelection.Min()++;
     }
 
     // Erster Absatz mit Selektion:
-    aSel.Max() = aSel.Min();
-    aSel.Min() += aTextSel.GetStart().GetIndex();
+    maSelection.Max() = maSelection.Min();
+    maSelection.Min() += aTextSel.GetStart().GetIndex();
 
     for ( n = aTextSel.GetStart().GetPara(); n < aTextSel.GetEnd().GetPara(); n++ )
     {
-        aSel.Max() += pExtTextEngine->GetTextLen( n );
-        aSel.Max()++;
+        maSelection.Max() += pExtTextEngine->GetTextLen( n );
+        maSelection.Max()++;
     }
 
-    aSel.Max() += aTextSel.GetEnd().GetIndex();
+    maSelection.Max() += aTextSel.GetEnd().GetIndex();
 
-    return aSel;
+    return maSelection;
 }
 
 Size ImpSvMEdit::CalcMinimumSize() const
@@ -998,7 +999,10 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
 
 MultiLineEdit::~MultiLineEdit()
 {
-    delete pImpSvMEdit;
+    {
+        ::std::auto_ptr< ImpSvMEdit > pDelete( pImpSvMEdit );
+        pImpSvMEdit = NULL;
+    }
     delete pUpdateDataTimer;
 }
 
@@ -1017,7 +1021,7 @@ WinBits MultiLineEdit::ImplInitStyle( WinBits nStyle )
 }
 
 
-void MultiLineEdit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
+void MultiLineEdit::ImplInitSettings( BOOL /*bFont*/, BOOL /*bForeground*/, BOOL bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1124,12 +1128,12 @@ BOOL MultiLineEdit::IsReadOnly() const
     return pImpSvMEdit->IsReadOnly();
 }
 
-void MultiLineEdit::SetMaxTextLen( ULONG nMaxLen )
+void MultiLineEdit::SetMaxTextLen( xub_StrLen nMaxLen )
 {
     pImpSvMEdit->SetMaxTextLen( nMaxLen );
 }
 
-ULONG MultiLineEdit::GetMaxTextLen() const
+xub_StrLen MultiLineEdit::GetMaxTextLen() const
 {
     return pImpSvMEdit->GetMaxTextLen();
 }
@@ -1201,6 +1205,9 @@ void MultiLineEdit::Resize()
 
 void MultiLineEdit::GetFocus()
 {
+    if ( !pImpSvMEdit )  // might be called from within the dtor, when pImpSvMEdit == NULL is a valid state
+        return;
+
     Edit::GetFocus();
     pImpSvMEdit->GetFocus();
 }
@@ -1210,7 +1217,7 @@ void MultiLineEdit::SetSelection( const Selection& rSelection )
     pImpSvMEdit->SetSelection( rSelection );
 }
 
-Selection MultiLineEdit::GetSelection() const
+const Selection& MultiLineEdit::GetSelection() const
 {
     return pImpSvMEdit->GetSelection();
 }
