@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ private:
     ::rtl::OUString     m_sToolboxName;
 
     void                toggleToolbox();
+
+protected:
+    using SfxToolBoxControl::Select;
 
 public:
     SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
