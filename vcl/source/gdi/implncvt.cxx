@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implncvt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:02:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 19:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,13 +108,13 @@ ImplFloatPoint ImplFloatPoint::GetNVec( const ImplFloatPoint& rPoint ) const
 // --------------------
 
 ImplLineConverter::ImplLineConverter( const Polygon& rPolygon, const LineInfo& rLineInfo, const Point* pRefPoint ) :
+    mbRefPoint      ( FALSE ),
     mfWidthHalf     ( rLineInfo.GetWidth() >> 1 ),
     maLineInfo      ( rLineInfo ),
     mpFloat0        ( new ImplFloatPoint[ 6 ] ),
     mpFloat1        ( new ImplFloatPoint[ 6 ] ),
-    mpFloatPoint    ( NULL ),
     mnLines         ( 0 ),
-        mbRefPoint              ( FALSE )
+    mpFloatPoint    ( NULL )
 {
     UINT16  nIndex, nPolySize = rPolygon.GetSize();
     if ( nPolySize )
@@ -385,7 +385,7 @@ const Polygon* ImplLineConverter::ImplGetNext()
                             double fX = 0;
                             double fY;
                             double fBDest = 0;
-                            double fBSource;
+                            double fBSource = 0;
                             aSourcePoint = mpFloat0[ 1 + nFirst ];
 
                             int nValid = 0;
