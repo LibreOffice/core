@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:46:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ namespace awt {
 
 extern "C" {
     typedef Window* (SAL_CALL *FN_SvtCreateWindow)( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits );
-};
+}
 
 
 //  ----------------------------------------------------
