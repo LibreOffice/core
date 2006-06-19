@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:24:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 15:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-#pragma hdrstop
-
 #ifndef _SVX_SWPOSSIZETABPAGE_HXX
 #include <swpossizetabpage.hxx>
 #endif
@@ -192,21 +190,21 @@ void SvxCaptionTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 {
-    SfxItemPool*    pPool = rOutAttrs.GetPool();
+    SfxItemPool*    pPool = _rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
     SfxMapUnit      eUnit;
 
     nCaptionType = aCT_CAPTTYPE.GetSelectItemId()-1;
 
-    rOutAttrs.Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
+    _rOutAttrs.Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
 
     if( aMF_ABSTAND.IsValueModified() )
     {
         eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONGAP ) );
-        rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(aMF_ABSTAND, eUnit ) ) );
+        _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(aMF_ABSTAND, eUnit ) ) );
     }
 
     // Sonderbehandlung!!! XXX
@@ -219,10 +217,10 @@ BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         }
     }
 
-    rOutAttrs.Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
+    _rOutAttrs.Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
 
     bEscRel = aLB_ANSATZ_REL.IsVisible();
-    rOutAttrs.Put( SdrCaptionEscIsRelItem( bEscRel ) );
+    _rOutAttrs.Put( SdrCaptionEscIsRelItem( bEscRel ) );
 
     if( bEscRel )
     {
@@ -234,26 +232,26 @@ BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             case AT_MITTE:  nVal=5000;break;
             case AT_UNTEN:  nVal=10000;break;
         }
-        rOutAttrs.Put( SdrCaptionEscRelItem( nVal ) );
+        _rOutAttrs.Put( SdrCaptionEscRelItem( nVal ) );
     }
     else
     {
         if( aMF_ANSATZ.IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONESCABS ) );
-            rOutAttrs.Put( SdrCaptionEscAbsItem( GetCoreValue(aMF_ANSATZ, eUnit ) ) );
+            _rOutAttrs.Put( SdrCaptionEscAbsItem( GetCoreValue(aMF_ANSATZ, eUnit ) ) );
         }
     }
 
     bFitLineLen = aCB_LAENGE.IsChecked();
-    rOutAttrs.Put( SdrCaptionFitLineLenItem( bFitLineLen ) );
+    _rOutAttrs.Put( SdrCaptionFitLineLenItem( bFitLineLen ) );
 
     if( ! bFitLineLen )
     {
         if( aMF_LAENGE.IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONLINELEN ) );
-            rOutAttrs.Put( SdrCaptionLineLenItem( GetCoreValue(aMF_LAENGE, eUnit ) ) );
+            _rOutAttrs.Put( SdrCaptionLineLenItem( GetCoreValue(aMF_LAENGE, eUnit ) ) );
         }
     }
 
@@ -264,7 +262,7 @@ BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
 // -----------------------------------------------------------------------
 
-void SvxCaptionTabPage::Reset( const SfxItemSet& rOutAttrs )
+void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 {
 
     //------------Metrik einstellen-----------------------------
@@ -278,6 +276,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet& rOutAttrs )
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
+        default: ;//prevent warning
     }
     SetFieldUnit( aMF_ABSTAND, eFUnit );
     SetFieldUnit( aMF_ANSATZ, eFUnit );
@@ -599,8 +598,8 @@ void SvxCaptionTabPage::FillValueSet()
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, USHORT nAnchorTypes)
  :  SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_CAPTION ) ),
-    nAnchorCtrls(nAnchorTypes),
-    pView       ( pSdrView )
+    pView       ( pSdrView ),
+    nAnchorCtrls(nAnchorTypes)
 {
     FreeResource();
 
