@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:50:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 17:05:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
 USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const USHORT nFormat,
-                                  BOOL bIgnoreOptions,
+                                  BOOL /*bIgnoreOptions*/,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
 #ifndef SVX_LIGHT
@@ -658,11 +658,11 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
             const long          nStartX1 = aWorkRect.Left() + 1L;
             const long          nEndX1 = aWorkRect.Right();
             const long          nStartX2 = nEndX1 - 1L;
-            const long          nEndX2 = nStartX1 - 1L;
+//          const long          nEndX2 = nStartX1 - 1L;
             const long          nStartY1 = aWorkRect.Top() + 1L;
             const long          nEndY1 = aWorkRect.Bottom();
             const long          nStartY2 = nEndY1 - 1L;
-            const long          nEndY2 = nStartY1 - 1L;
+//          const long          nEndY2 = nStartY1 - 1L;
             Point*              pPoints1 = NULL;
             Point*              pPoints2 = NULL;
             long                nX, nY;
