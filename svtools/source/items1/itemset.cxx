@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 21:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,11 @@
 // STATIC DATA -----------------------------------------------------------
 
 static const USHORT nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
+#ifdef DBG_UTIL
 static ULONG nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
+#endif
 
-DBG_NAME(SfxItemSet);
+DBG_NAME(SfxItemSet)
 
 //========================================================================
 
@@ -122,8 +124,14 @@ SfxItemSet::SfxItemSet
     SfxItemPool&    rPool,          /* der Pool, in dem die SfxPoolItems,
                                        welche in dieses SfxItemSet gelangen,
                                        aufgenommen werden sollen */
-    BOOL            bTotalRanges    /* komplette Pool-Ranges uebernehmen,
+    BOOL
+#if DBG_UTIL
+#ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
+
+                    bTotalRanges    /* komplette Pool-Ranges uebernehmen,
                                        muss auf TRUE gesetzt werden */
+#endif
+#endif
 )
 /*  [Beschreibung]
 
@@ -544,10 +552,12 @@ SfxItemState SfxItemSet::GetItemState( USHORT nWhich,
 
                     if (ppItem)
                     {
+                        #ifdef DBG_UTIL
                         const SfxPoolItem *pItem = *ppFnd;
                         DBG_ASSERT( !pItem->ISA(SfxSetItem) ||
                                 0 != &((const SfxSetItem*)pItem)->GetItemSet(),
                                 "SetItem without ItemSet" );
+                        #endif
                         *ppItem = *ppFnd;
                     }
                     return SFX_ITEM_SET;
@@ -1012,11 +1022,11 @@ const SfxPoolItem& SfxItemSet::Get( USHORT nWhich, BOOL bSrchInParent) const
                             //!return aDefault;
                             return _pPool->GetDefaultItem( nWhich );
                         }
+#ifdef DBG_UTIL
                         const SfxPoolItem *pItem = *ppFnd;
                         DBG_ASSERT( !pItem->ISA(SfxSetItem) ||
                                 0 != &((const SfxSetItem*)pItem)->GetItemSet(),
                                 "SetItem without ItemSet" );
-#ifdef DBG_UTIL
                         if ( pItem->ISA(SfxVoidItem) || !pItem->Which() )
                             DBG_WARNING( "SFX_WARNING: Getting disabled Item" );
 #endif
@@ -1045,7 +1055,7 @@ const SfxPoolItem& SfxItemSet::Get( USHORT nWhich, BOOL bSrchInParent) const
     // Notification-Callback
 // -----------------------------------------------------------------------
 
-void SfxItemSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
+void SfxItemSet::Changed( const SfxPoolItem&, const SfxPoolItem& )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
 }
@@ -1086,7 +1096,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     BOOL bEqual = TRUE;
     USHORT* pWh1 = _pWhichRanges;
     USHORT* pWh2 = rSet._pWhichRanges;
-    USHORT nSize = 0, nWhich;
+    USHORT nSize = 0;
 
     for( USHORT n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
     {
@@ -1112,7 +1122,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
                 // aus dem Pool loeschen
                 if( !IsInvalidItem( *ppFnd1 ) )
                 {
-                    nWhich = (*ppFnd1)->Which();
+                    USHORT nWhich = (*ppFnd1)->Which();
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = _pParent
@@ -1157,7 +1167,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     BOOL bEqual = TRUE;
     USHORT* pWh1 = _pWhichRanges;
     USHORT* pWh2 = rSet._pWhichRanges;
-    USHORT nSize = 0, nWhich;
+    USHORT nSize = 0;
 
     for( USHORT n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
     {
@@ -1183,7 +1193,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
                 // aus dem Pool loeschen
                 if( !IsInvalidItem( *ppFnd1 ) )
                 {
-                    nWhich = (*ppFnd1)->Which();
+                    USHORT nWhich = (*ppFnd1)->Which();
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = _pParent
