@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef _GALTHEME_HRC_
+#define _GALTHEME_HRC_
 
-#define RID_SVX_GALLERY_START               1000
-#define RID_GALLERYSTR_THEME_START          (RID_SVX_GALLERY_START + 5000)
+#define RID_GALLERYSTR_THEME_START          (6000)
 
 #define RID_GALLERYSTR_THEME_3D             (RID_GALLERYSTR_THEME_START + 1)
 #define RID_GALLERYSTR_THEME_ANIMATIONS                 (RID_GALLERYSTR_THEME_START + 2)
@@ -80,3 +81,5 @@
 
 #define RID_GALLERYSTR_THEME_FIRST          RID_GALLERYSTR_THEME_3D
 #define RID_GALLERYSTR_THEME_LAST           RID_GALLERYSTR_THEME_FONTWORK_VERTICAL
+
+#endif
