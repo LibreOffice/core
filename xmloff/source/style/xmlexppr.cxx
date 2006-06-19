@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 15:53:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,8 +319,8 @@ FilterPropertiesInfos_Impl::~FilterPropertiesInfos_Impl ()
 // ----------------------------------------------------------------------------
 
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
-    aPropInfos(),
     nCount(0),
+    aPropInfos(),
     pApiNames( 0 )
 {
     aLastItr = aPropInfos.begin();
@@ -559,7 +559,6 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 for(sal_uInt32 i = 0; i < nCount; i++ )
                 {
                     // The value is stored in the PropertySet itself, add to list.
-                    sal_Bool bGotValue = sal_False;
                     XMLPropertyState aNewProperty( -1 );
                     aNewProperty.maValue = *pValues;
                     ++pValues;
@@ -633,8 +632,8 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
 SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper ) :
-    maPropMapper( rMapper ),
-    pCache( 0 )
+    pCache( 0 ),
+    maPropMapper( rMapper )
 {
 }
 
@@ -1023,7 +1022,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        sal_uInt16 nFlags,
+        sal_uInt16 /*nFlags*/,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
