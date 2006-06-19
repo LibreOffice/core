@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleimagemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:10:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 11:02:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,8 +203,8 @@ namespace framework
     {
         public:
             //  XInterface, XTypeProvider, XServiceInfo
-            DECLARE_XINTERFACE
-            DECLARE_XTYPEPROVIDER
+            FWK_DECLARE_XINTERFACE
+            FWK_DECLARE_XTYPEPROVIDER
 
             ModuleImageManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
             virtual ~ModuleImageManager();
