@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxmenu.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 09:55:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ class Menu;
 class MenuBar;
 class VclSimpleEvent;
 
-DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* );
+DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* )
 
 //  ----------------------------------------------------
 //  class VCLXMenu
