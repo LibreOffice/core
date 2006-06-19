@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:21:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 14:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::AddUnknown (const OUString& sPropertyName,
+void DescriptionGenerator::AddUnknown (const OUString& /*sPropertyName*/,
     const OUString& sLocalizedName)
 {
     //        uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
@@ -453,6 +453,8 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                     case drawing::FillStyle_BITMAP:
                         sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
                         break;
+                    case drawing::FillStyle_MAKE_FIXED_SIZE:
+                        break;
                 }
             }
             msDescription.append (sFillStyleName);
@@ -487,6 +489,8 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                         STRING,
                         SIP_XA_FILLBITMAP,
                         XATTR_FILLBITMAP);
+                    break;
+                case drawing::FillStyle_MAKE_FIXED_SIZE:
                     break;
             }
         }
