@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:25:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 23:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,11 +468,13 @@ static void cpp_call(
     }
 }
 
+}
 
-//==================================================================================================
-void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
+namespace bridges { namespace cpp_uno { namespace shared {
+
+void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
 #if defined BRIDGES_DEBUG
     OString cstr( OUStringToOString( pMemberDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
@@ -595,4 +597,4 @@ void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
     }
 }
 
-}
+} } }
