@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtualmachine.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:23:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 18:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,9 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     OSL_ENSURE(pAttached != 0, "bad parameter");
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
-    OSL_ENSURE(n == JNI_OK || n == JNI_EDETACHED, "JNI: GetEnv failed");
+    if (n != JNI_OK && n != JNI_EDETACHED) {
+        OSL_ENSURE(false, "JNI: GetEnv failed");
+    }
     if (pEnv == 0)
     {
         if (m_pVm->AttachCurrentThread(reinterpret_cast< void ** >(&pEnv), 0)
@@ -180,7 +182,8 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 void VirtualMachine::detachThread() const
 {
 #ifdef SOLAR_JAVA
-    jint n = m_pVm->DetachCurrentThread();
-    OSL_ENSURE(n == JNI_OK, "JNI: DetachCurrentThread failed");
+    if (m_pVm->DetachCurrentThread() != JNI_OK) {
+        OSL_ENSURE(false, "JNI: DetachCurrentThread failed");
+    }
 #endif
 }
