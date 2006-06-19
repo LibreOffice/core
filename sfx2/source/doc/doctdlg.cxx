@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:42:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 22:27:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ SfxDocumentTemplateDlg::~SfxDocumentTemplateDlg()
 
 IMPL_LINK( SfxDocumentTemplateDlg, EditHdl, Button *, pBut )
 {
-
+    (void)pBut; //unused
     if ( !aRegionLb.GetSelectEntryCount() ||
          !aTemplateLb.GetSelectEntryCount())
         return 0;
@@ -144,6 +144,7 @@ void SfxDocumentTemplateDlg::Init()
 
 IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
 {
+    (void)pButton; //unused
     SfxTemplateOrganizeDlg *pDlg =
         new SfxTemplateOrganizeDlg(this, pTemplates);
     const short nRet = pDlg->Execute();
@@ -168,7 +169,8 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
 
 IMPL_LINK( SfxDocumentTemplateDlg, OkHdl, Control *, pControl )
 {
-        // pruefen, ob eine Vorlage diesen Namens existiert
+    (void)pControl; //unused
+    // pruefen, ob eine Vorlage diesen Namens existiert
     if(LISTBOX_ENTRY_NOTFOUND != aTemplateLb.GetEntryPos(
         GetTemplateName())) {
         QueryBox aQuery(this, SfxResId(MSG_CONFIRM_OVERWRITE_TEMPLATE));
