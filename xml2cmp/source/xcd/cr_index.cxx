@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:01:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 20:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ Simstr sIdlRootPath;
 
 Index::Index( const char *          i_sOutputDirectory,
               const char *          i_sIdlRootPath,
-              const List<Simstr> &  i_rTagList )
+              const List<Simstr> &   )
     :   aService2Module(20),
         aModule2Service(20),
         sOutputDirectory(i_sOutputDirectory),
