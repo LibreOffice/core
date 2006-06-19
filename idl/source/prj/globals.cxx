@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:52:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 10:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 
 #include <globals.hxx>
 #include <database.hxx>
-#pragma hdrstop
 
 /****************** G L O B A L S ****************************************/
 #ifdef DOS
@@ -68,8 +67,8 @@ IdlDll * GetIdlApp()
 
 IdlDll::IdlDll()
     : pHashTable( NULL )
-    , pGlobalNames( NULL )
     , pClassMgr( NULL )
+    , pGlobalNames( NULL )
 
 {
     pClassMgr   = new SvClassManager();
@@ -143,8 +142,8 @@ SvGlobalHashNames::SvGlobalHashNames()
     , MM_AutoUpdate( INS( "AutoUpdate" ) )
     , MM_Synchron( INS( "Synchron" ) )
     , MM_Asynchron( INS( "Asynchron" ) )
-    A_ENTRY(RecordPerItem)
     A_ENTRY(RecordPerSet)
+    A_ENTRY(RecordPerItem)
     A_ENTRY(RecordManual)
     A_ENTRY(NoRecord)
     A_ENTRY(RecordAbsolute)
@@ -176,17 +175,17 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(StateMethod)
     A_ENTRY(GroupId)
     A_ENTRY(HasDialog)
+    A_ENTRY(TypeLibFile)
+    A_ENTRY(Export)
+    A_ENTRY(Automation)
+    A_ENTRY(PseudoPrefix)
+    A_ENTRY(define)
     A_ENTRY(MenuConfig)
     A_ENTRY(ToolBoxConfig)
     A_ENTRY(StatusBarConfig)
     A_ENTRY(AccelConfig)
     A_ENTRY(AllConfig)
     A_ENTRY(FastCall)
-    A_ENTRY(TypeLibFile)
-    A_ENTRY(Export)
-    A_ENTRY(Automation)
-    A_ENTRY(PseudoPrefix)
-    A_ENTRY(define)
     A_ENTRY(SbxObject)
     A_ENTRY(Container)
     A_ENTRY(ImageRotation)
@@ -194,8 +193,8 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(IsCollection)
     A_ENTRY(ReadOnlyDoc)
     A_ENTRY(ConfigName)
-    A_ENTRY(struct)
     A_ENTRY(union)
+    A_ENTRY(struct)
     A_ENTRY(typedef)
     A_ENTRY(Readonly)
     A_ENTRY(SlotType)
