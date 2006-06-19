@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:46:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-19 12:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,16 +69,17 @@ UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
                               ary::n22::Repository &    io_rRepository,
                               TokenProcessing_Result &  o_rResult )
 {
+    pRepository = &io_rRepository;
     aMyNode.EstablishContacts(io_pParentPE, io_rRepository.Gate_Idl(), o_rResult);
 }
 
-void
-UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
-                              ary::idl::Gate &          io_rGate,
-                              TokenProcessing_Result &  o_rResult )
-{
-    aMyNode.EstablishContacts(io_pParentPE, io_rGate, o_rResult);
-}
+//void
+//UnoIDL_PE::EstablishContacts( UnoIDL_PE *             io_pParentPE,
+//                            ary::idl::Gate &          io_rGate,
+//                            TokenProcessing_Result &  o_rResult )
+//{
+//  aMyNode.EstablishContacts(io_pParentPE, io_rGate, o_rResult);
+//}
 
 void
 UnoIDL_PE::Enter( E_EnvStackAction  i_eWayOfEntering )
@@ -96,7 +97,7 @@ UnoIDL_PE::Enter( E_EnvStackAction  i_eWayOfEntering )
                 break;
         case pop_failure:
                 throw X_AutodocParser(X_AutodocParser::x_Any);
-                break;
+                // no break because of throw
         default:
             csv_assert(false);
     }   // end switch
@@ -117,7 +118,7 @@ UnoIDL_PE::Leave( E_EnvStackAction  i_eWayOfLeaving )
                 break;
         case pop_failure:
                 throw X_AutodocParser(X_AutodocParser::x_Any);
-                break;
+                // no break because of throw
         default:
             csv_assert(false);
     }   // end switch
@@ -205,6 +206,13 @@ UnoIDL_PE::ParseInfo() const
     }
 }
 
+UnoIDL_PE::UnoIDL_PE()
+    :   aMyNode(),
+        pDocu(),
+        pRepository(0)
+{
+}
+
+
 }   // namespace uidl
 }   // namespace csi
-
