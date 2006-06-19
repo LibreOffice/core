@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:19:47 $
+#   last change: $Author: hr $ $Date: 2006-06-20 00:21:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..
 
-PRJNAME=AUTOMATION
+PRJNAME=automation
 TARGET=miniapp
 
 # --- Settings ------------------------------------------------------------
