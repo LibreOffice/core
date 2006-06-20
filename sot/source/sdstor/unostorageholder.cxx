@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostorageholder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:44:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,14 +111,14 @@ String UNOStorageHolder::GetStorageName()
     return String();
 }
 
-void SAL_CALL UNOStorageHolder::preCommit( const lang::EventObject& aEvent )
+void SAL_CALL UNOStorageHolder::preCommit( const lang::EventObject& /*aEvent*/ )
         throw ( uno::Exception,
                 uno::RuntimeException )
 {
     // do nothing
 }
 
-void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& aEvent )
+void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
         throw ( uno::RuntimeException )
 {
     ::utl::TempFile aTmpStorFile;
@@ -157,7 +157,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& aEvent )
 
     SvStorageInfoList aSubStorInfoList;
     m_rSotStorage->FillInfoList( &aSubStorInfoList );
-    for ( sal_Int32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+    for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
     {
         m_rSotStorage->Remove( aSubStorInfoList[nInd].GetName() );
         if ( m_rSotStorage->GetError() )
@@ -178,21 +178,21 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& aEvent )
     m_rSotStorage->Commit();
 }
 
-void SAL_CALL UNOStorageHolder::preRevert( const lang::EventObject& aEvent )
+void SAL_CALL UNOStorageHolder::preRevert( const lang::EventObject& /*aEvent*/ )
         throw ( uno::Exception,
                 uno::RuntimeException )
 {
     // do nothing
 }
 
-void SAL_CALL UNOStorageHolder::reverted( const lang::EventObject& aEvent )
+void SAL_CALL UNOStorageHolder::reverted( const lang::EventObject& /*aEvent*/ )
         throw ( uno::RuntimeException )
 {
     // do nothing, since reverting of the duplicate storage just means
     // not to copy changes done for it to the original storage
 }
 
-void SAL_CALL UNOStorageHolder::disposing( const lang::EventObject& Source )
+void SAL_CALL UNOStorageHolder::disposing( const lang::EventObject& /*Source*/ )
         throw ( uno::RuntimeException )
 {
     if ( m_pTempFile )
