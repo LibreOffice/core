@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Throwable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:19:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ namespace connectivity
         java_lang_Throwable( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
         ::rtl::OUString getMessage() const;
         ::rtl::OUString getLocalizedMessage() const;
-        ::rtl::OUString toString() const;
+        virtual ::rtl::OUString toString() const;
     };
 }
 #endif // _CONNECTIVITY_JAVA_LANG_THROWABLE_HXX_
