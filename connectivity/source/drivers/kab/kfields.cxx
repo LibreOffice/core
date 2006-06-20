@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kfields.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:53:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:41:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@ sal_uInt32 findKabField(const ::rtl::OUString& columnName) throw(SQLException)
     ::dbtools::throwGenericSQLException(
         ::rtl::OUString::createFromAscii("Invalid column name: ") + columnName,
         NULL);
+    // Unreachable:
+    OSL_ASSERT(false);
+    return 0;
 }
 // ------------------------------------------------------------------------------
     }

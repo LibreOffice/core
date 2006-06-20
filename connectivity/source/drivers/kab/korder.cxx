@@ -4,9 +4,9 @@
  *
  *  $RCSfile: korder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:53:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,9 @@ KabOrder::~KabOrder()
 }
 // -----------------------------------------------------------------------------
 KabSimpleOrder::KabSimpleOrder(::rtl::OUString &sColumnName, sal_Bool bAscending)
-    : m_nFieldNumber(findKabField(sColumnName)),
-      m_bAscending(bAscending),
-      KabOrder()
+    : KabOrder(),
+      m_nFieldNumber(findKabField(sColumnName)),
+      m_bAscending(bAscending)
 {
 }
 // -----------------------------------------------------------------------------
@@ -67,8 +67,8 @@ sal_Int32 KabSimpleOrder::compare(const ::KABC::Addressee &aAddressee1, const ::
 }
 // -----------------------------------------------------------------------------
 KabComplexOrder::KabComplexOrder()
-    : m_aOrders(),
-      KabOrder()
+    : KabOrder(),
+      m_aOrders()
 {
 }
 // -----------------------------------------------------------------------------
