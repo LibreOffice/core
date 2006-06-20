@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:01:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,9 +163,9 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
+sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException)
 {
-    return (first == second) ? 0 : 2;
+    return (lhs == rhs) ? 0 : 2;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
