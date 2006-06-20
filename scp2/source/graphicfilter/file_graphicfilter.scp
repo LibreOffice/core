@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_graphicfilter.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:04:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ File gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Filters_Xcu
     Name = "/registry/spool/fcfg_drawgraphics_filters.xcu";
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Flash, flash )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Flash, flash )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svg, svgfilter )
 
