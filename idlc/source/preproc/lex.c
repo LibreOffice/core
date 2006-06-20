@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lex.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #define MAXSTATE        32
 #define ACT(tok,act)    ((tok<<7)+act)
 #define QBSBIT          0100
-#define GETACT(st)      (st>>7)&0x1ff
+#define GETACT(st)      ((st>>7)&0x1ff)
 
 /* character classes */
 #define C_WS    1
@@ -93,183 +93,183 @@ struct fsm
 
  /*const*/ struct fsm fsm[] = {
     /* start state */
-    START, {C_XX}, ACT(UNCLASS, S_SELF),
-    START, {' ', '\t', '\v'}, WS1,
-    START, {C_NUM}, NUM1,
-    START, {'.'}, NUM3,
-    START, {C_ALPH}, ID1,
-    START, {'L'}, ST1,
-    START, {'"'}, ST2,
-    START, {'\''}, CC1,
-    START, {'/'}, COM1,
-    START, {EOFC}, S_EOF,
-    START, {'\n'}, S_NL,
-    START, {'-'}, MINUS1,
-    START, {'+'}, PLUS1,
-    START, {'<'}, LT1,
-    START, {'>'}, GT1,
-    START, {'='}, ASG1,
-    START, {'!'}, NOT1,
-    START, {'&'}, AND1,
-    START, {'|'}, OR1,
-    START, {'#'}, SHARP1,
-    START, {'%'}, PCT1,
-    START, {'['}, ACT(SBRA, S_SELF),
-    START, {']'}, ACT(SKET, S_SELF),
-    START, {'('}, ACT(LP, S_SELF),
-    START, {')'}, ACT(RP, S_SELF),
-    START, {'*'}, STAR1,
-    START, {','}, ACT(COMMA, S_SELF),
-    START, {'?'}, ACT(QUEST, S_SELF),
-    START, {':'}, ACT(COLON, S_SELF),
-    START, {';'}, ACT(SEMIC, S_SELF),
-    START, {'{'}, ACT(CBRA, S_SELF),
-    START, {'}'}, ACT(CKET, S_SELF),
-    START, {'~'}, ACT(TILDE, S_SELF),
-    START, {'^'}, CIRC1,
+    { START, {C_XX}, ACT(UNCLASS, S_SELF) },
+    { START, {' ', '\t', '\v'}, WS1 },
+    { START, {C_NUM}, NUM1 },
+    { START, {'.'}, NUM3 },
+    { START, {C_ALPH}, ID1 },
+    { START, {'L'}, ST1 },
+    { START, {'"'}, ST2 },
+    { START, {'\''}, CC1 },
+    { START, {'/'}, COM1 },
+    { START, {EOFC}, S_EOF },
+    { START, {'\n'}, S_NL },
+    { START, {'-'}, MINUS1 },
+    { START, {'+'}, PLUS1 },
+    { START, {'<'}, LT1 },
+    { START, {'>'}, GT1 },
+    { START, {'='}, ASG1 },
+    { START, {'!'}, NOT1 },
+    { START, {'&'}, AND1 },
+    { START, {'|'}, OR1 },
+    { START, {'#'}, SHARP1 },
+    { START, {'%'}, PCT1 },
+    { START, {'['}, ACT(SBRA, S_SELF) },
+    { START, {']'}, ACT(SKET, S_SELF) },
+    { START, {'('}, ACT(LP, S_SELF) },
+    { START, {')'}, ACT(RP, S_SELF) },
+    { START, {'*'}, STAR1 },
+    { START, {','}, ACT(COMMA, S_SELF) },
+    { START, {'?'}, ACT(QUEST, S_SELF) },
+    { START, {':'}, ACT(COLON, S_SELF) },
+    { START, {';'}, ACT(SEMIC, S_SELF) },
+    { START, {'{'}, ACT(CBRA, S_SELF) },
+    { START, {'}'}, ACT(CKET, S_SELF) },
+    { START, {'~'}, ACT(TILDE, S_SELF) },
+    { START, {'^'}, CIRC1 },
 
     /* saw a digit */
-    NUM1, {C_XX}, ACT(NUMBER, S_SELFB),
-    NUM1, {C_NUM, C_ALPH, '.'}, NUM1,
-    NUM1, {'E', 'e'}, NUM2,
-    NUM1, {'_'}, ACT(NUMBER, S_SELFB),
+    { NUM1, {C_XX}, ACT(NUMBER, S_SELFB) },
+    { NUM1, {C_NUM, C_ALPH, '.'}, NUM1 },
+    { NUM1, {'E', 'e'}, NUM2 },
+    { NUM1, {'_'}, ACT(NUMBER, S_SELFB) },
 
     /* saw possible start of exponent, digits-e */
-    NUM2, {C_XX}, ACT(NUMBER, S_SELFB),
-    NUM2, {'+', '-'}, NUM1,
-    NUM2, {C_NUM, C_ALPH}, NUM1,
-    NUM2, {'_'}, ACT(NUMBER, S_SELFB),
+    { NUM2, {C_XX}, ACT(NUMBER, S_SELFB) },
+    { NUM2, {'+', '-'}, NUM1 },
+    { NUM2, {C_NUM, C_ALPH}, NUM1 },
+    { NUM2, {'_'}, ACT(NUMBER, S_SELFB) },
 
     /* saw a '.', which could be a number or an operator */
-    NUM3, {C_XX}, ACT(DOT, S_SELFB),
-    NUM3, {'.'}, DOTS1,
-    NUM3, {C_NUM}, NUM1,
+    { NUM3, {C_XX}, ACT(DOT, S_SELFB) },
+    { NUM3, {'.'}, DOTS1 },
+    { NUM3, {C_NUM}, NUM1 },
 
-    DOTS1, {C_XX}, ACT(UNCLASS, S_SELFB),
-    DOTS1, {C_NUM}, NUM1,
-    DOTS1, {'.'}, ACT(ELLIPS, S_SELF),
+    { DOTS1, {C_XX}, ACT(UNCLASS, S_SELFB) },
+    { DOTS1, {C_NUM}, NUM1 },
+    { DOTS1, {'.'}, ACT(ELLIPS, S_SELF) },
 
     /* saw a letter or _ */
-    ID1, {C_XX}, ACT(NAME, S_NAME),
-    ID1, {C_ALPH, C_NUM}, ID1,
+    { ID1, {C_XX}, ACT(NAME, S_NAME) },
+    { ID1, {C_ALPH, C_NUM}, ID1 },
 
     /* saw L (start of wide string?) */
-    ST1, {C_XX}, ACT(NAME, S_NAME),
-    ST1, {C_ALPH, C_NUM}, ID1,
-    ST1, {'"'}, ST2,
-    ST1, {'\''}, CC1,
+    { ST1, {C_XX}, ACT(NAME, S_NAME) },
+    { ST1, {C_ALPH, C_NUM}, ID1 },
+    { ST1, {'"'}, ST2 },
+    { ST1, {'\''}, CC1 },
 
     /* saw " beginning string */
-    ST2, {C_XX}, ST2,
-    ST2, {'"'}, ACT(STRING, S_SELF),
-    ST2, {'\\'}, ST3,
-    ST2, {'\n'}, S_STNL,
-    ST2, {EOFC}, S_EOFSTR,
+    { ST2, {C_XX}, ST2 },
+    { ST2, {'"'}, ACT(STRING, S_SELF) },
+    { ST2, {'\\'}, ST3 },
+    { ST2, {'\n'}, S_STNL },
+    { ST2, {EOFC}, S_EOFSTR },
 
     /* saw \ in string */
-    ST3, {C_XX}, ST2,
-    ST3, {'\n'}, S_STNL,
-    ST3, {EOFC}, S_EOFSTR,
+    { ST3, {C_XX}, ST2 },
+    { ST3, {'\n'}, S_STNL },
+    { ST3, {EOFC}, S_EOFSTR },
 
     /* saw ' beginning character const */
-    CC1, {C_XX}, CC1,
-    CC1, {'\''}, ACT(CCON, S_SELF),
-    CC1, {'\\'}, CC2,
-    CC1, {'\n'}, S_STNL,
-    CC1, {EOFC}, S_EOFSTR,
+    { CC1, {C_XX}, CC1 },
+    { CC1, {'\''}, ACT(CCON, S_SELF) },
+    { CC1, {'\\'}, CC2 },
+    { CC1, {'\n'}, S_STNL },
+    { CC1, {EOFC}, S_EOFSTR },
 
     /* saw \ in ccon */
-    CC2, {C_XX}, CC1,
-    CC2, {'\n'}, S_STNL,
-    CC2, {EOFC}, S_EOFSTR,
+    { CC2, {C_XX}, CC1 },
+    { CC2, {'\n'}, S_STNL },
+    { CC2, {EOFC}, S_EOFSTR },
 
     /* saw /, perhaps start of comment */
-    COM1, {C_XX}, ACT(SLASH, S_SELFB),
-    COM1, {'='}, ACT(ASSLASH, S_SELF),
-    COM1, {'*'}, COM2,
-    COM1, {'/'}, COM4,
+    { COM1, {C_XX}, ACT(SLASH, S_SELFB) },
+    { COM1, {'='}, ACT(ASSLASH, S_SELF) },
+    { COM1, {'*'}, COM2 },
+    { COM1, {'/'}, COM4 },
 
-    /* saw "/*", start of comment */
-    COM2, {C_XX}, COM2,
-    COM2, {'\n'}, S_COMNL,
-    COM2, {'*'}, COM3,
-    COM2, {EOFC}, S_EOFCOM,
+    /* saw / followed by *, start of comment */
+    { COM2, {C_XX}, COM2 },
+    { COM2, {'\n'}, S_COMNL },
+    { COM2, {'*'}, COM3 },
+    { COM2, {EOFC}, S_EOFCOM },
 
     /* saw the * possibly ending a comment */
-    COM3, {C_XX}, COM2,
-    COM3, {'\n'}, S_COMNL,
-    COM3, {'*'}, COM3,
-    COM3, {'/'}, S_COMMENT,
+    { COM3, {C_XX}, COM2 },
+    { COM3, {'\n'}, S_COMNL },
+    { COM3, {'*'}, COM3 },
+    { COM3, {'/'}, S_COMMENT },
 
     /* // comment */
-    COM4, {C_XX}, COM4,
-    COM4, {'\n'}, S_NL,
-    COM4, {EOFC}, S_EOFCOM,
+    { COM4, {C_XX}, COM4 },
+    { COM4, {'\n'}, S_NL },
+    { COM4, {EOFC}, S_EOFCOM },
 
     /* saw white space, eat it up */
-    WS1, {C_XX}, S_WS,
-    WS1, {'\t', '\v', ' '}, WS1,
+    { WS1, {C_XX}, S_WS },
+    { WS1, {'\t', '\v', ' '}, WS1 },
 
     /* saw -, check --, -=, -> */
-    MINUS1, {C_XX}, ACT(MINUS, S_SELFB),
-    MINUS1, {'-'}, ACT(MMINUS, S_SELF),
-    MINUS1, {'='}, ACT(ASMINUS, S_SELF),
-    MINUS1, {'>'}, ACT(ARROW, S_SELF),
+    { MINUS1, {C_XX}, ACT(MINUS, S_SELFB) },
+    { MINUS1, {'-'}, ACT(MMINUS, S_SELF) },
+    { MINUS1, {'='}, ACT(ASMINUS, S_SELF) },
+    { MINUS1, {'>'}, ACT(ARROW, S_SELF) },
 
     /* saw +, check ++, += */
-    PLUS1, {C_XX}, ACT(PLUS, S_SELFB),
-    PLUS1, {'+'}, ACT(PPLUS, S_SELF),
-    PLUS1, {'='}, ACT(ASPLUS, S_SELF),
+    { PLUS1, {C_XX}, ACT(PLUS, S_SELFB) },
+    { PLUS1, {'+'}, ACT(PPLUS, S_SELF) },
+    { PLUS1, {'='}, ACT(ASPLUS, S_SELF) },
 
     /* saw <, check <<, <<=, <= */
-    LT1, {C_XX}, ACT(LT, S_SELFB),
-    LT1, {'<'}, LT2,
-    LT1, {'='}, ACT(LEQ, S_SELF),
-    LT2, {C_XX}, ACT(LSH, S_SELFB),
-    LT2, {'='}, ACT(ASLSH, S_SELF),
+    { LT1, {C_XX}, ACT(LT, S_SELFB) },
+    { LT1, {'<'}, LT2 },
+    { LT1, {'='}, ACT(LEQ, S_SELF) },
+    { LT2, {C_XX}, ACT(LSH, S_SELFB) },
+    { LT2, {'='}, ACT(ASLSH, S_SELF) },
 
     /* saw >, check >>, >>=, >= */
-    GT1, {C_XX}, ACT(GT, S_SELFB),
-    GT1, {'>'}, GT2,
-    GT1, {'='}, ACT(GEQ, S_SELF),
-    GT2, {C_XX}, ACT(RSH, S_SELFB),
-    GT2, {'='}, ACT(ASRSH, S_SELF),
+    { GT1, {C_XX}, ACT(GT, S_SELFB) },
+    { GT1, {'>'}, GT2 },
+    { GT1, {'='}, ACT(GEQ, S_SELF) },
+    { GT2, {C_XX}, ACT(RSH, S_SELFB) },
+    { GT2, {'='}, ACT(ASRSH, S_SELF) },
 
     /* = */
-    ASG1, {C_XX}, ACT(ASGN, S_SELFB),
-    ASG1, {'='}, ACT(EQ, S_SELF),
+    { ASG1, {C_XX}, ACT(ASGN, S_SELFB) },
+    { ASG1, {'='}, ACT(EQ, S_SELF) },
 
     /* ! */
-    NOT1, {C_XX}, ACT(NOT, S_SELFB),
-    NOT1, {'='}, ACT(NEQ, S_SELF),
+    { NOT1, {C_XX}, ACT(NOT, S_SELFB) },
+    { NOT1, {'='}, ACT(NEQ, S_SELF) },
 
     /* & */
-    AND1, {C_XX}, ACT(AND, S_SELFB),
-    AND1, {'&'}, ACT(LAND, S_SELF),
-    AND1, {'='}, ACT(ASAND, S_SELF),
+    { AND1, {C_XX}, ACT(AND, S_SELFB) },
+    { AND1, {'&'}, ACT(LAND, S_SELF) },
+    { AND1, {'='}, ACT(ASAND, S_SELF) },
 
     /* | */
-    OR1, {C_XX}, ACT(OR, S_SELFB),
-    OR1, {'|'}, ACT(LOR, S_SELF),
-    OR1, {'='}, ACT(ASOR, S_SELF),
+    { OR1, {C_XX}, ACT(OR, S_SELFB) },
+    { OR1, {'|'}, ACT(LOR, S_SELF) },
+    { OR1, {'='}, ACT(ASOR, S_SELF) },
 
     /* # */
-    SHARP1, {C_XX}, ACT(SHARP, S_SELFB),
-    SHARP1, {'#'}, ACT(DSHARP, S_SELF),
+    { SHARP1, {C_XX}, ACT(SHARP, S_SELFB) },
+    { SHARP1, {'#'}, ACT(DSHARP, S_SELF) },
 
     /* % */
-    PCT1, {C_XX}, ACT(PCT, S_SELFB),
-    PCT1, {'='}, ACT(ASPCT, S_SELF),
+    { PCT1, {C_XX}, ACT(PCT, S_SELFB) },
+    { PCT1, {'='}, ACT(ASPCT, S_SELF) },
 
     /* * */
-    STAR1, {C_XX}, ACT(STAR, S_SELFB),
-    STAR1, {'='}, ACT(ASSTAR, S_SELF),
+    { STAR1, {C_XX}, ACT(STAR, S_SELFB) },
+    { STAR1, {'='}, ACT(ASSTAR, S_SELF) },
 
     /* ^ */
-    CIRC1, {C_XX}, ACT(CIRC, S_SELFB),
-    CIRC1, {'='}, ACT(ASCIRC, S_SELF),
+    { CIRC1, {C_XX}, ACT(CIRC, S_SELFB) },
+    { CIRC1, {'='}, ACT(ASCIRC, S_SELF) },
 
-    -1
+    { -1, {'\0'}, S_SELF }
 };
 
 /* first index is char, second is state */
@@ -294,20 +294,20 @@ void
 
                 case C_XX:              /* random characters */
                     for (j = 0; j < 256; j++)
-                        bigfsm[j][fp->state] = nstate;
+                        bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_ALPH:
                     for (j = 0; j <= 256; j++)
-                        if ('a' <= j && j <= 'z' || 'A' <= j && j <= 'Z'
+                        if (('a' <= j && j <= 'z') || ('A' <= j && j <= 'Z')
                             || j == '_')
-                            bigfsm[j][fp->state] = nstate;
+                            bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_NUM:
                     for (j = '0'; j <= '9'; j++)
-                        bigfsm[j][fp->state] = nstate;
+                        bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 default:
-                    bigfsm[fp->ch[i]][fp->state] = nstate;
+                    bigfsm[fp->ch[i]][fp->state] = (short) nstate;
             }
         }
     }
@@ -355,7 +355,6 @@ int
     int runelen;
     Source *s = cursource;
     int nmac = 0;
-    extern char outbuf[];
 
     tp = trp->lp;
     ip = s->inp;
@@ -412,7 +411,7 @@ continue2:
                     ip += runelen;
                     runelen = 1;
                 case S_SELFB:
-                    tp->type = GETACT(state);
+                    tp->type = (unsigned char) GETACT(state);
                     tp->len = ip - tp->t;
                     tp++;
                     goto continue2;
@@ -564,7 +563,7 @@ continue2:
 int
     trigraph(Source * s)
 {
-    int c;
+    uchar c;
 
     while (s->inp + 2 >= s->inl && fillbuf(s) != EOF);
     ;
