@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndexIter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:38:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,21 +181,22 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand));
+                while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand));
                 break;
             case SQLFilterOperator::LESS:
-                while ((pKey = GetNextKey()) && pKey->getValue().isNull());
+                while ( ( ( pKey = GetNextKey() ) != NULL ) && pKey->getValue().isNull());
                 break;
             case SQLFilterOperator::LESS_EQUAL:
-                while (pKey = GetNextKey());
+                while ( ( pKey = GetNextKey() ) != NULL );
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
             case SQLFilterOperator::EQUAL:
                 pKey = GetFirstKey(m_aRoot,*m_pOperand);
                 break;
             case SQLFilterOperator::GREATER:
-                if (!(pKey = GetFirstKey(m_aRoot,*m_pOperand)))
-                    while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand));
+                pKey = GetFirstKey(m_aRoot,*m_pOperand);
+                if ( !pKey )
+                    while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand));
         }
     }
     else
@@ -203,13 +204,13 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand))
+                while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand))
                     ;
                 break;
             case SQLFilterOperator::LESS:
             case SQLFilterOperator::LESS_EQUAL:
             case SQLFilterOperator::EQUAL:
-                if (!(pKey = GetNextKey()) || !m_pOperator->operate(pKey,m_pOperand))
+                if ( ( ( pKey = GetNextKey() ) == NULL )  || !m_pOperator->operate(pKey,m_pOperand))
                 {
                     pKey = NULL;
                     m_aCurLeaf = NULL;
@@ -240,7 +241,7 @@ ULONG OIndexIterator::GetLike(BOOL bFirst)
     }
 
     ONDXKey* pKey;
-    while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand))
+    while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand))
         ;
     return pKey ? pKey->GetRecord() : STRING_NOTFOUND;
 }
@@ -260,7 +261,7 @@ ULONG OIndexIterator::GetNull(BOOL bFirst)
     }
 
     ONDXKey* pKey;
-    if (!(pKey = GetNextKey()) || !pKey->getValue().isNull())
+    if ( ( ( pKey = GetNextKey() ) == NULL ) || !pKey->getValue().isNull())
     {
         pKey = NULL;
         m_aCurLeaf = NULL;
