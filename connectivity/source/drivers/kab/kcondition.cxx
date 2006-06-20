@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kcondition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:53:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@ KabCondition::~KabCondition()
 }
 // -----------------------------------------------------------------------------
 KabConditionConstant::KabConditionConstant(const sal_Bool bValue)
-    : m_bValue(bValue),
-          KabCondition()
+    : KabCondition(),
+      m_bValue(bValue)
 {
 }
 // -----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ sal_Bool KabConditionConstant::isAlwaysFalse() const
     return !m_bValue;
 }
 // -----------------------------------------------------------------------------
-sal_Bool KabConditionConstant::eval(const ::KABC::Addressee &aAddressee) const
+sal_Bool KabConditionConstant::eval(const ::KABC::Addressee &) const
 {
     return m_bValue;
 }
@@ -118,8 +118,8 @@ sal_Bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
 }
 // -----------------------------------------------------------------------------
 KabConditionCompare::KabConditionCompare(const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
-    : m_sMatchString(sMatchString),
-      KabConditionColumn(sColumnName)
+    : KabConditionColumn(sColumnName),
+      m_sMatchString(sMatchString)
 {
 }
 // -----------------------------------------------------------------------------
@@ -173,9 +173,9 @@ sal_Bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
 }
 // -----------------------------------------------------------------------------
 KabConditionBoolean::KabConditionBoolean(KabCondition *pLeft, KabCondition *pRight)
-    : m_pLeft(pLeft),
-          m_pRight(pRight),
-          KabCondition()
+    : KabCondition(),
+      m_pLeft(pLeft),
+      m_pRight(pRight)
 {
 }
 // -----------------------------------------------------------------------------

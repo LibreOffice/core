@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:50:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,12 +92,12 @@ sal_Int32 SAL_CALL KabResultSetMetaData::getColumnCount() throw(SQLException, Ru
     return m_aKabFields.size();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32 column) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
@@ -121,79 +121,79 @@ sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32 column) throw(
     return aName;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getTableName(sal_Int32 column) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL KabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return KabDatabaseMetaData::getAddressBookTableName();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getCatalogName(sal_Int32 column) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL KabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnTypeName(sal_Int32 column) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnLabel(sal_Int32 column) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32 column) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isCurrency(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isAutoIncrement(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isAutoIncrement(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isSigned(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isSigned(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL KabResultSetMetaData::getPrecision(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL KabResultSetMetaData::getPrecision(sal_Int32) throw(SQLException, RuntimeException)
 {
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL KabResultSetMetaData::isNullable(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL KabResultSetMetaData::isNullable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return (sal_Int32) sal_True;
 // KDE address book currently does not use NULL values.
 // But it might do it someday
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isSearchable(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isSearchable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isReadOnly(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isReadOnly(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isDefinitelyWritable(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isDefinitelyWritable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabResultSetMetaData::isWritable(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabResultSetMetaData::isWritable(sal_Int32) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }

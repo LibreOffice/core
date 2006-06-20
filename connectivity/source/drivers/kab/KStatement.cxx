@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:51:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,11 @@ IMPLEMENT_SERVICE_INFO(KabStatement, "com.sun.star.sdbc.drivers.KabStatement", "
 KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
-    rBHelper(KabCommonStatement_BASE::rBHelper),
-    m_pParseTree(NULL),
-    m_aSQLIterator(_pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL),
     m_aParser(_pConnection->getDriver()->getMSFactory()),
-    m_pConnection(_pConnection)
+    m_aSQLIterator(_pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL),
+    m_pParseTree(NULL),
+    m_pConnection(_pConnection),
+    rBHelper(KabCommonStatement_BASE::rBHelper)
 {
     m_pConnection->acquire();
 }
@@ -121,6 +121,9 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
                         // WHERE 0 <> 1
                         // (might not be correct SQL... don't care, handling anyway)
                         return new KabConditionConstant(pLeft->getTokenValue() != pRight->getTokenValue());
+
+                    default:
+                        break;
                 }
             }
             else if (SQL_ISRULE(pLeft, column_ref) && pRight->isToken())
@@ -141,6 +144,9 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
                      case SQL_NODE_NOTEQUAL:
                         // WHERE Name <> 'Jones'
                         return new KabConditionDifferent(sColumnName, sMatchString);
+
+                    default:
+                        break;
                 }
             }
         }
@@ -214,6 +220,9 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
     ::dbtools::throwGenericSQLException(
         ::rtl::OUString::createFromAscii("Syntax error or keyword not recognized."),
         NULL);
+    // Unreachable:
+    OSL_ASSERT(false);
+    return 0;
 }
 // -----------------------------------------------------------------------------
 KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNode) const throw(SQLException)
@@ -261,6 +270,9 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
     ::dbtools::throwGenericSQLException(
         ::rtl::OUString::createFromAscii("Syntax error or keyword not recognized."),
         NULL);
+    // Unreachable:
+    OSL_ASSERT(false);
+    return 0;
 }
 //------------------------------------------------------------------------------
 sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
@@ -433,7 +445,7 @@ Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  ) throw(SQ
     return (Reference< XConnection >) m_pConnection;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -485,10 +497,10 @@ void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeE
 }
 // -------------------------------------------------------------------------
 sal_Bool KabCommonStatement::convertFastPropertyValue(
-        Any & rConvertedValue,
-        Any & rOldValue,
-        sal_Int32 nHandle,
-        const Any& rValue) throw (::com::sun::star::lang::IllegalArgumentException)
+        Any &,
+        Any &,
+        sal_Int32,
+        const Any&) throw (::com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bConverted = sal_False;
     // here we have to try to convert
@@ -496,7 +508,7 @@ OSL_ENSURE(false, "KabCommonStatement::convertFastPropertyValue is not implement
     return bConverted;
 }
 // -------------------------------------------------------------------------
-void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any&) throw (Exception)
 {
     // set the value to whatever is nescessary
     switch (nHandle)
@@ -517,7 +529,7 @@ void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 OSL_ENSURE(false, "KabCommonStatement::setFastPropertyValue_NoBroadcast is not implemented!");
 }
 // -------------------------------------------------------------------------
-void KabCommonStatement::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void KabCommonStatement::getFastPropertyValue(Any&,sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
