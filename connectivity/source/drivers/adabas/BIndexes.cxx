@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:22:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:09:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
         aName       = _rName;
 
 
-    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),
+    Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(Any(),
         m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
 
     sdbcx::ObjectType xRet = NULL;
@@ -142,7 +142,7 @@ void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
@@ -200,7 +200,7 @@ void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     if(!m_pTable->isNew())
     {
@@ -210,7 +210,7 @@ void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         aName   = _sElementName.copy(nLen+1);
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         if (aSchema.getLength())
