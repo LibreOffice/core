@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filrow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:27:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:20:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ XRow_impl::getCharacterStream(
 uno::Any SAL_CALL
 XRow_impl::getObject(
     sal_Int32 columnIndex,
-    const uno::Reference< container::XNameAccess >& typeMap )
+    const uno::Reference< container::XNameAccess >& )
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
