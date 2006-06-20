@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filinsreq.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:25:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,13 +143,13 @@ XInteractionRequestImpl::XInteractionRequestImpl(
     const rtl::OUString& aClashingName,
     const Reference<XInterface>& xOrigin,
     shell *pShell,sal_Int32 CommandId)
-    : m_aSeq( 2 ),
-      p1( new XInteractionSupplyNameImpl ),
+    : p1( new XInteractionSupplyNameImpl ),
       p2( new XInteractionAbortImpl ),
-      m_aClashingName(aClashingName),
-      m_xOrigin(xOrigin),
       m_nErrorCode(0),
-      m_nMinorError(0)
+      m_nMinorError(0),
+      m_aSeq( 2 ),
+      m_aClashingName(aClashingName),
+      m_xOrigin(xOrigin)
 {
     if( pShell )
         pShell->retrieveError(CommandId,m_nErrorCode,m_nMinorError);
