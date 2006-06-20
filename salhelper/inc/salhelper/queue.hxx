@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:59:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ public:
 
     inline ~QueueBase()
     {
-        erase (begin(), end());
+        erase (this->begin(), this->end());
     }
 
     inline void put (const element_type& element)
@@ -96,10 +96,10 @@ public:
         element_type element;
 
         osl::MutexGuard aGuard (m_aMutex);
-        if (!empty())
+        if (!this->empty())
         {
-            element = front();
-            pop_front();
+            element = this->front();
+            this->pop_front();
         }
 
         return (element);
