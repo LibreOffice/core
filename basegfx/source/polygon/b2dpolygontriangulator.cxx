@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontriangulator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:46:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,7 +413,6 @@ namespace basegfx
                 else
                 {
                     // only one entry at start point, delete it
-                    EdgeEntry* pEdge = mpList;
                     mpList = mpList->getNext();
                 }
             }
