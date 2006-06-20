@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:03:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames()
 // ------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL Xdnd_createInstance(
-    const Reference< XMultiServiceFactory > & xMultiServiceFactory)
+    const Reference< XMultiServiceFactory > & )
 {
     return Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
@@ -195,7 +195,7 @@ Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames()
 // ------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
-    const Reference< XMultiServiceFactory > & xMultiServiceFactory)
+    const Reference< XMultiServiceFactory > & )
 {
     return Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
 }
@@ -241,12 +241,12 @@ static const OUString& getXdndDropTargetServiceName()
 extern "C" {
     void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName,
-        uno_Environment** ppEnv )
+        uno_Environment** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pXUnoKey )
+    sal_Bool SAL_CALL component_writeInfo( void*, void* pXUnoKey )
     {
         if( pXUnoKey )
         {
@@ -284,7 +284,7 @@ extern "C" {
     void* SAL_CALL component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
-        void* pXUnoKey
+        void*
         )
     {
         void* pRet = 0;
