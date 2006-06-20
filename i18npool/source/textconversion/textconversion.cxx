@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:48:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,13 +61,13 @@ static void* nullFunc()
     return NULL;
 }
 
-void* SAL_CALL
+oslGenericFunction SAL_CALL
 TextConversion::getFunctionBySymbol(const sal_Char* func)
 {
     if (hModule)
-        return osl_getSymbol(hModule, OUString::createFromAscii(func).pData);
+        return osl_getFunctionSymbol(hModule, OUString::createFromAscii(func).pData);
     else
-        return (void*) nullFunc;
+        return reinterpret_cast< oslGenericFunction >(nullFunc);
 }
 
 OUString SAL_CALL
