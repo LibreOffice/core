@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:09:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,12 +221,9 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
             break;
 
         case XML_TOK_TABLE_FILTER:
-            GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName,sal_True);
-            break;
         case XML_TOK_TABLE_TYPE_FILTER:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName,sal_False);
+            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );
             break;
         case XML_TOK_AUTO_INCREMENT:
         case XML_TOK_DELIMITER:
@@ -236,7 +233,7 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
             break;
         case XML_TOK_DATA_SOURCE_SETTINGS:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSettings( GetOwnImport(), nPrefix, rLocalName,xAttrList,*this );
+            pContext = new OXMLDataSourceSettings( GetOwnImport(), nPrefix, rLocalName, *this );
             break;
     }
 
