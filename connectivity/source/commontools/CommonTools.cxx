@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:14:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,15 +327,20 @@ namespace connectivity
 #include <ctype.h>      //isdigit
 namespace dbtools
 {
-sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials);
+//------------------------------------------------------------------
+sal_Bool isCharOk(sal_Unicode c,const ::rtl::OUString& _rSpecials)
+{
+
+    return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
+          c == '_' || _rSpecials.indexOf(c) != -1);
+}
 
 //------------------------------------------------------------------------------
 sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
     // Ueberpruefung auf korrekte Namensgebung im SQL Sinne
     // Dieses ist wichtig fuer Tabellennamen beispielsweise
-    ::rtl::OString aName(rName,rName.getLength(),RTL_TEXTENCODING_ASCII_US);
-    const char* pStr = aName.getStr();
+    const sal_Unicode* pStr = rName.getStr();
     if (*pStr > 127 || isdigit(*pStr))
         return sal_False;
 
@@ -357,13 +362,6 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
     // 11.04.00 - 74902 - FS
 
     return sal_True;
-}
-//------------------------------------------------------------------
-sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
-{
-
-    return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
-          c == '_' || _rSpecials.indexOf(c) != -1);
 }
 //------------------------------------------------------------------
 // Erzeugt einen neuen Namen falls noetig
