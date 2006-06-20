@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:19:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
+    Reference< XResultSet > xResult = m_pTable->getMetaData()->getColumns(Any(),
                                                             m_pTable->getSchema(),m_pTable->getTableName(),_rName);
 
     sdbcx::ObjectType xRet = NULL;
@@ -150,7 +150,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
     if(descriptor.is() && !m_pTable->isNew())
     {
         ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-        ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         m_pTable->beginTransAction();
@@ -181,13 +181,13 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     OSL_ENSURE(m_pTable,"OColumns::dropByName: Table is null!");
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-        ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
