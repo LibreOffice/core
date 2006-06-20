@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnPeer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:33:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>& _rxFactory)
-: m_pActFieldDescr(NULL)
-, m_xORB(_rxFactory)
+    :m_xORB(_rxFactory)
+    ,m_pActFieldDescr(NULL)
 {
     osl_incrementInterlockedCount( &m_refCount );
     {
