@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:20:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@ class OInputStream : public WeakImplHelper1 < XInputStream >
 {
 public:
     OInputStream( const Sequence< sal_Int8 >&seq ) :
-        m_seq( seq ),
-        nPos( 0 )
+        nPos( 0 ),
+        m_seq( seq )
         {}
 
 public:
@@ -99,7 +99,7 @@ public:
         {
             return readBytes( aData, nMaxBytesToRead );
         }
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    virtual void SAL_CALL skipBytes( sal_Int32 /*nBytesToSkip*/ )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
         {
             // not implemented
@@ -147,10 +147,10 @@ class TestDocumentHandler :
 {
 public:
     TestDocumentHandler(const char* locale, const char* outFile ) :
-      of(outFile, locale), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfCollations(0),
-      nbOfFormatElements(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
-      nbOfTransliterations(0), isStartDayOfWeek(false), foundDefaultName(false),
-      flag(-1), foundVariant(false), openElement(false), rootNode(0)
+      rootNode(0), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfFormatElements(0),
+      nbOfTransliterations(0), nbOfCollations(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
+      flag(-1), of(outFile, locale), isStartDayOfWeek(false), foundDefaultName(false),
+      foundVariant(false), openElement(false)
     {
         strncpy( theLocale, locale, sizeof(theLocale) );
         theLocale[sizeof(theLocale)-1] = 0;
@@ -172,12 +172,12 @@ public: // Error handler
             Reference < XInterface >() ,
             aSAXParseException );
     }
-    virtual void SAL_CALL fatalError(const Any& aSAXParseException) throw (SAXException, RuntimeException)
+    virtual void SAL_CALL fatalError(const Any& /*aSAXParseException*/) throw (SAXException, RuntimeException)
     {
         ++nError;
         printf( "Fatal Error !\n" );
     }
-    virtual void SAL_CALL warning(const Any& aSAXParseException) throw (SAXException, RuntimeException)
+    virtual void SAL_CALL warning(const Any& /*aSAXParseException*/) throw (SAXException, RuntimeException)
     {
         printf( "Warning !\n" );
     }
@@ -238,7 +238,7 @@ public: // ExtendedDocumentHandler
     }
 
 
-    virtual void SAL_CALL endElement(const OUString& aName) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL endElement(const OUString& /*aName*/) throw (SAXException,RuntimeException)
     {
         currentNode . pop();
     }
@@ -254,16 +254,16 @@ public: // ExtendedDocumentHandler
           return;
     }
 
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL ignorableWhitespace(const OUString& /*aWhitespaces*/) throw (SAXException,RuntimeException)
     {
-   }
+    }
 
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL processingInstruction(const OUString& /*aTarget*/, const OUString& /*aData*/) throw (SAXException,RuntimeException)
     {
         // ignored
     }
 
-    virtual void SAL_CALL setDocumentLocator(const Reference< XLocator> & xLocator)
+    virtual void SAL_CALL setDocumentLocator(const Reference< XLocator> & /*xLocator*/)
         throw (SAXException,RuntimeException)
     {
         // ignored
@@ -290,10 +290,10 @@ public: // ExtendedDocumentHandler
     virtual void SAL_CALL endCDATA(void) throw (RuntimeException)
     {
     }
-    virtual void SAL_CALL comment(const OUString& sComment) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL comment(const OUString& /*sComment*/) throw (SAXException,RuntimeException)
     {
     }
-    virtual void SAL_CALL unknown(const OUString& sString) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL unknown(const OUString& /*sString*/) throw (SAXException,RuntimeException)
     {
     }
 
