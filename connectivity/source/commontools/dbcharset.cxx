@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:14:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -97,6 +101,7 @@ namespace dbtools
         sal_Bool bIsMimeEncoding = 0 != ( _rInfo.Flags & RTL_TEXTENCODING_INFO_MIME );
         OSL_ENSURE( !bIsMimeEncoding || rtl_getMimeCharsetFromTextEncoding( _eEncoding ),
                 "OCharsetMap::OCharsetMap: inconsistence in rtl!" );
+        OSL_UNUSED( _eEncoding );
         return bIsMimeEncoding;
     }
 
