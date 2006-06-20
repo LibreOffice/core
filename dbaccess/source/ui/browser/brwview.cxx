@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:19:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,9 @@ UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
                                         IController* _pController,
                                         const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
     :ODataView(pParent,_pController,_rFactory)
-    ,m_pVclControl(NULL)
-    ,m_pSplitter(NULL)
     ,m_pTreeView(NULL)
+    ,m_pSplitter(NULL)
+    ,m_pVclControl(NULL)
     ,m_pStatus(NULL)
 {
     DBG_CTOR(UnoDataBrowserView,NULL);
@@ -188,10 +188,10 @@ UnoDataBrowserView::~UnoDataBrowserView()
     DBG_DTOR(UnoDataBrowserView,NULL);
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, p )
+IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, /*NOINTERESTEDIN*/ )
 {
-    long nTest = m_pSplitter->GetPosPixel().Y();
-    m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), m_pSplitter->GetPosPixel().Y() ) );
+    long nYPos = m_pSplitter->GetPosPixel().Y();
+    m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), nYPos ) );
     Resize();
 
     return 0L;
@@ -360,7 +360,7 @@ void UnoDataBrowserView::GetFocus()
     }
 }
 // -----------------------------------------------------------------------------
-void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
     stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
     m_pVclControl = NULL;
