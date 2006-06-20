@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:06:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -926,12 +926,12 @@ Sequence< ::rtl::OUString > OIndexColumnWrapper::getSupportedServiceNames(  ) th
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OIndexColumnWrapper::getInfoHelper()
 {
-    return *static_cast< OIdPropertyArrayUsageHelper< OIndexColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
+    return *static_cast< OPropertyArrayUsageHelper< OIndexColumnWrapper >* >(this)->getArrayHelper();
 }
 
 // comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OIndexColumnWrapper::createArrayHelper( sal_Int32 nId ) const
+::cppu::IPropertyArrayHelper* OIndexColumnWrapper::createArrayHelper() const
 {
     BEGIN_PROPERTY_HELPER(9)
         DECL_PROP1_BOOL(ISASCENDING,                    READONLY);
@@ -999,12 +999,12 @@ Sequence< ::rtl::OUString > OKeyColumnWrapper::getSupportedServiceNames(  ) thro
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OKeyColumnWrapper::getInfoHelper()
 {
-    return *static_cast< OIdPropertyArrayUsageHelper< OKeyColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
+    return *static_cast< OPropertyArrayUsageHelper< OKeyColumnWrapper >* >(this)->getArrayHelper();
 }
 
 // comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OKeyColumnWrapper::createArrayHelper( sal_Int32 nId ) const
+::cppu::IPropertyArrayHelper* OKeyColumnWrapper::createArrayHelper() const
 {
     BEGIN_PROPERTY_HELPER(9)
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
