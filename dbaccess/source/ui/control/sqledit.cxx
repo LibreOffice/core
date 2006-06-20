@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqledit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:35:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,12 +62,12 @@
 //------------------------------------------------------------------------------
 using namespace dbaui;
 
-DBG_NAME(OSqlEdit);
+DBG_NAME(OSqlEdit)
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     MultiLineEdit( pParent, nWinStyle )
+    ,m_pView(pParent)
     ,m_bAccelAction( sal_False )
     ,m_bStopTimer(sal_False )
-    ,m_pView(pParent)
 {
     DBG_CTOR(OSqlEdit,NULL);
     SetHelpId( HID_CTL_QRYSQLEDIT );
@@ -156,7 +156,7 @@ IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
     return 0L;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OSqlEdit, ModifyHdl, void*, EMPTYTAG)
+IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
 {
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
