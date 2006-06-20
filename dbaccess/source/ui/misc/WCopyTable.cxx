@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:45:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ using namespace ::com::sun::star::sdbcx;
 
 #define MAX_PAGES   4   // max. Pages die angezeigt werden
 
-DBG_NAME(OCopyTableWizard);
+DBG_NAME(OCopyTableWizard)
 namespace
 {
     void clearColumns(ODatabaseExport::TColumns& _rColumns,ODatabaseExport::TColumnVector& _rColumnsVec)
@@ -155,17 +155,18 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_pbPrev( this , ModuleRes(PB_PREV))
     ,m_pbNext( this , ModuleRes(PB_NEXT))
     ,m_pbFinish( this , ModuleRes(PB_OK))
-    ,m_nPageCount(0)
+    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xConnection(_xConnection)
     ,m_xSourceObject(_xSourceObject)
-    ,m_bCreatePrimaryColumn(sal_False)
-    ,m_eCreateStyle(WIZARD_DEF_DATA)
-    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
-    ,m_xFormatter(_xFormatter)
-    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
-    ,m_xFactory(_rM)
     ,m_xSourceConnection(_xSourceConnection)
+    ,m_xFormatter(_xFormatter)
+    ,m_xFactory(_rM)
+    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+    ,m_nPageCount(0)
     ,m_bDeleteSourceColumns(sal_True)
+    ,m_eCreateStyle(WIZARD_DEF_DATA)
+    ,m_ePressed( WIZARD_NONE )
+    ,m_bCreatePrimaryColumn(sal_False)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -204,24 +205,25 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
                                    const Reference< XConnection >& _xConnection,
                                    const Reference< XNumberFormatter >& _xFormatter,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-    : WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
+    :WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
+    ,m_vSourceColumns(_rSourceColumns)
     ,m_pbHelp( this , ModuleRes(PB_HELP))
     ,m_pbCancel( this , ModuleRes(PB_CANCEL))
     ,m_pbPrev( this , ModuleRes(PB_PREV))
     ,m_pbNext( this , ModuleRes(PB_NEXT))
     ,m_pbFinish( this , ModuleRes(PB_OK))
-    ,m_nPageCount(0)
-    ,m_xConnection(_xConnection)
-    ,m_bCreatePrimaryColumn(sal_False)
-    ,m_eCreateStyle(WIZARD_DEF_DATA)
     ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
-    ,m_vSourceColumns(_rSourceColumns)
-    ,m_xFormatter(_xFormatter)
-    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
-    ,m_xFactory(_rM)
-    ,m_sName(_rDefaultName)
+    ,m_xConnection(_xConnection)
     ,m_xSourceConnection(_xConnection) // in this case source connection and dest connection are the same
+    ,m_xFormatter(_xFormatter)
+    ,m_xFactory(_rM)
+    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+    ,m_nPageCount(0)
     ,m_bDeleteSourceColumns(sal_False)
+    ,m_sName(_rDefaultName)
+    ,m_eCreateStyle(WIZARD_DEF_DATA)
+    ,m_ePressed( WIZARD_NONE )
+    ,m_bCreatePrimaryColumn(sal_False)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -381,7 +383,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 }
                 else
                 {
-                    m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND));
+                    m_vColumnPos.push_back( ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
                     m_vColumnTypes.push_back(0);
                 }
             }
@@ -476,8 +478,8 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                                     OCopyTable* pPage = reinterpret_cast<OCopyTable*>(GetPage(0));
                                     m_bCreatePrimaryColumn = sal_True;
                                     m_aKeyName = pPage->GetKeyName();
-                                    sal_Int32 nBreakPos = 0;
-                                    CheckColumns(nBreakPos);
+                                    sal_Int32 nBreakPos2 = 0;
+                                    CheckColumns(nBreakPos2);
                                     break;
                                 }
                                 case RET_CANCEL:
@@ -695,11 +697,11 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
 
                 for(;pKeyBegin != pKeyEnd;++pKeyBegin)
                 {
-                    ODatabaseExport::TColumns::iterator aIter = _rColumns.find(*pKeyBegin);
-                    if ( aIter != _rColumns.end() )
+                    ODatabaseExport::TColumns::iterator keyPos = _rColumns.find(*pKeyBegin);
+                    if ( keyPos != _rColumns.end() )
                     {
-                        aIter->second->SetPrimaryKey(sal_True);
-                        aIter->second->SetIsNullable(ColumnValue::NO_NULLS);
+                        keyPos->second->SetPrimaryKey(sal_True);
+                        keyPos->second->SetIsNullable(ColumnValue::NO_NULLS);
                     }
                 }
             }
@@ -883,10 +885,11 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                 m_xDestObject->setPropertyValue(PROPERTY_TEXTCOLOR,m_xSourceObject->getPropertyValue(PROPERTY_TEXTCOLOR));
             // can not be copied yet, because the filter or and order clause could the old table name
         }
+
+        Reference< XColumnsSupplier > xSuppDestinationColumns( m_xDestObject, UNO_QUERY );
         // now append the columns
         const ODatabaseExport::TColumnVector* pVec = getDestVector();
-        Reference<XColumnsSupplier> xColSup(m_xDestObject,UNO_QUERY);
-        appendColumns(xColSup,pVec);
+        appendColumns( xSuppDestinationColumns, pVec );
         // now append the primary key
         Reference<XKeysSupplier> xKeySup(m_xDestObject,UNO_QUERY);
         appendKey(xKeySup,pVec);
@@ -916,8 +919,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             // insert new table name into table filter
             ::dbaui::appendToFilter(m_xConnection,m_sName,GetFactory(),this);
             // set column mappings
-            Reference<XColumnsSupplier> xColSup(m_xDestObject,UNO_QUERY);
-            Reference<XNameAccess> xNameAccess = xColSup->getColumns();
+            Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
             Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
             const ::rtl::OUString* pBegin = aSeq.getConstArray();
             const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
@@ -955,7 +957,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                             ODatabaseExport::TPositions::iterator aColPos = m_vColumnPos.begin();
                             for(; aColPos != m_vColumnPos.end() && nOldPos;++aColPos,++aFound)
                             {
-                                if(aColPos->second != CONTAINER_ENTRY_NOTFOUND && !*aFound && nOldPos == aColPos->second)
+                                if(aColPos->second != COLUMN_POSITION_NOT_FOUND && !*aFound && nOldPos == aColPos->second)
                                     break;
                             }
                             if(aColPos != m_vColumnPos.end())
