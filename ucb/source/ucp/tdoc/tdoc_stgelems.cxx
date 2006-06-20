@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_stgelems.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:03:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,11 +797,11 @@ Stream::Stream(
             const uno::Reference< io::XStream > & xStreamToWrap )
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),
   m_xWrappedStream( xStreamToWrap ),
-  m_xWrappedComponent( xStreamToWrap, uno::UNO_QUERY ),
-  m_xWrappedTypeProv( xStreamToWrap, uno::UNO_QUERY ),
   m_xWrappedOutputStream( xStreamToWrap->getOutputStream() ), // might be empty
   m_xWrappedTruncate( m_xWrappedOutputStream, uno::UNO_QUERY ), // might be empty
-  m_xWrappedInputStream( xStreamToWrap->getInputStream(), uno::UNO_QUERY )
+  m_xWrappedInputStream( xStreamToWrap->getInputStream(), uno::UNO_QUERY ),
+  m_xWrappedComponent( xStreamToWrap, uno::UNO_QUERY ),
+  m_xWrappedTypeProv( xStreamToWrap, uno::UNO_QUERY )
 {
     OSL_ENSURE( m_xWrappedStream.is(),
                 "OutputStream::OutputStream: No stream to wrap!" );
