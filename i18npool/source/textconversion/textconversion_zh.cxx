@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_zh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:48:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
 }
 
 sal_Bool SAL_CALL
-TextConversion_zh::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
+TextConversion_zh::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
     return sal_False;
