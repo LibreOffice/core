@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:21:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 #include <osl/thread.h>
 
@@ -95,7 +98,7 @@ namespace connectivity
                     }
                     catch(const Exception& e)
                     {
-                        e;
+                        OSL_UNUSED( e );
                         OSL_ENSURE(0,"Could not dispose OutputStream");
                     }
                     m_xOutputStream = NULL;
@@ -301,8 +304,8 @@ namespace connectivity
                             }
                             catch(Exception& )
                             {
-                                ::rtl::OUString sName = removeOldURLPrefix(sOrgName);
-                                pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
+                                ::rtl::OUString sStrippedName = removeOldURLPrefix(sOrgName);
+                                pHelper.reset( new StreamHelper(aStoragePair.first.first->openStreamElement( sStrippedName, _nMode ) ) );
                             }
                             aFind->second.second.insert(TStreamMap::value_type(sName,pHelper));
                         }
