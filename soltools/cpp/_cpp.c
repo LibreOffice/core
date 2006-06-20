@@ -10,14 +10,14 @@ char outbuf[OUTS];
 char *outptr = outbuf;
 Source *cursource;
 int nerrs;
-struct token nltoken = {NL, 0, 0, 1, (uchar *) "\n"};
+struct token nltoken = {NL, 0, 0, 1, (uchar *) "\n", 0};
 char *curtime;
 int incdepth;
 int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.4 $ $Date: 2004-04-21 13:24:16 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.5 $ $Date: 2006-06-20 05:05:46 $";
 
 int
 #ifdef _WIN32
@@ -45,7 +45,6 @@ __cdecl
     flushout();
     fflush(stderr);
     exit(nerrs > 0);
-    return 0;
 }
 
 void
@@ -255,7 +254,8 @@ void
             tp = trp->bp + 2;
     kline:
             if (tp + 1 >= trp->lp || tp->type != NUMBER || tp + 3 < trp->lp
-                || (tp + 3 == trp->lp && ((tp + 1)->type != STRING) || *(tp + 1)->t == 'L'))
+                || (tp + 3 == trp->lp
+                    && ((tp + 1)->type != STRING || *(tp + 1)->t == 'L')))
             {
                 error(ERROR, "Syntax error in #line");
                 return;
