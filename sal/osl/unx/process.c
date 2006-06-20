@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 13:43:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -697,7 +697,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     sal_Char* pszWorkDir=0;
     sal_Char** pArguments=0;
     sal_Char** pEnvironment=0;
-    unsigned int index;
+    unsigned int idx;
 
     char szImagePath[PATH_MAX] = "";
     char szWorkDir[PATH_MAX] = "";
@@ -719,23 +719,23 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     }
 
 
-    for ( index = 0 ; index < nArguments ; ++index )
+    for ( idx = 0 ; idx < nArguments ; ++idx )
     {
         rtl_String* strArg =0;
 
 
         rtl_uString2String( &strArg,
-                            rtl_uString_getStr(ustrArguments[index]),
-                            rtl_uString_getLength(ustrArguments[index]),
+                            rtl_uString_getStr(ustrArguments[idx]),
+                            rtl_uString_getLength(ustrArguments[idx]),
                             osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
-        pArguments[index]=strdup(rtl_string_getStr(strArg));
+        pArguments[idx]=strdup(rtl_string_getStr(strArg));
         rtl_string_release(strArg);
-        pArguments[index+1]=0;
+        pArguments[idx+1]=0;
     }
 
-    for ( index = 0 ; index < nEnvironmentVars ; ++index )
+    for ( idx = 0 ; idx < nEnvironmentVars ; ++idx )
     {
         rtl_String* strEnv=0;
 
@@ -745,14 +745,14 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         }
 
         rtl_uString2String( &strEnv,
-                            rtl_uString_getStr(ustrEnvironment[index]),
-                            rtl_uString_getLength(ustrEnvironment[index]),
+                            rtl_uString_getStr(ustrEnvironment[idx]),
+                            rtl_uString_getLength(ustrEnvironment[idx]),
                             osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
-        pEnvironment[index]=strdup(rtl_string_getStr(strEnv));
+        pEnvironment[idx]=strdup(rtl_string_getStr(strEnv));
         rtl_string_release(strEnv);
-        pEnvironment[index+1]=0;
+        pEnvironment[idx+1]=0;
     }
 
 
@@ -770,11 +770,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ( pArguments != 0 )
     {
-        for ( index = 0 ; index < nArguments ; ++index )
+        for ( idx = 0 ; idx < nArguments ; ++idx )
         {
-            if ( pArguments[index] != 0 )
+            if ( pArguments[idx] != 0 )
             {
-                free(pArguments[index]);
+                free(pArguments[idx]);
             }
         }
         free(pArguments);
@@ -782,11 +782,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ( pEnvironment != 0 )
     {
-        for ( index = 0 ; index < nEnvironmentVars ; ++index )
+        for ( idx = 0 ; idx < nEnvironmentVars ; ++idx )
         {
-            if ( pEnvironment[index] != 0 )
+            if ( pEnvironment[idx] != 0 )
             {
-                free(pEnvironment[index]);
+                free(pEnvironment[idx]);
             }
         }
         free(pEnvironment);
