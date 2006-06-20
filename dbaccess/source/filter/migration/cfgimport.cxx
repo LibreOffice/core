@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:07:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,13 +236,13 @@ void SAL_CALL OCfgImport::initialize( const Sequence< Any >& _aArguments ) throw
         *pIter >>= aValue;
         if ( aValue.Name.equalsAscii("OldConfiguration") && (aValue.Value >>= aOldConfigValues) )
         {
-            const NamedValue* pIter = aOldConfigValues.getConstArray();
-            const NamedValue* pEnd    = pIter + aOldConfigValues.getLength();
-            for(;pIter != pEnd;++pIter)
+            const NamedValue* configValues      = aOldConfigValues.getConstArray();
+            const NamedValue* configValuesEnd   = configValues + aOldConfigValues.getLength();
+            for(;configValues != configValuesEnd;++configValues)
             {
-                if ( pIter->Name.equalsAscii("org.openoffice.Office.DataAccess") )
+                if ( configValues->Name.equalsAscii("org.openoffice.Office.DataAccess") )
                 {
-                    pIter->Value >>= m_xLayer;
+                    configValues->Value >>= m_xLayer;
                     break;
                 }
             }
@@ -497,15 +497,15 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                     {
                         Sequence<PropertyValue> aTypes;
                         xNameAccess->getByName(aTypeName) >>= aTypes;
-                        const PropertyValue* pIter = aTypes.getConstArray();
-                        const PropertyValue* pEnd     = pIter + aTypes.getLength();
-                        for( ; pIter != pEnd && !pIter->Name.equalsAscii( "PreferredFilter" ) ; ++pIter)
+                        const PropertyValue* types      = aTypes.getConstArray();
+                        const PropertyValue* typesEnd   = types + aTypes.getLength();
+                        for( ; types != typesEnd && !types->Name.equalsAscii( "PreferredFilter" ) ; ++types)
                             ;
-                        if ( pIter != pEnd )
+                        if ( types != typesEnd )
                         {
                             sal_Int32 nLen = aMedDescr.getLength();
                             aMedDescr.realloc(nLen+1);
-                            aMedDescr[nLen].Value = pIter->Value;
+                            aMedDescr[nLen].Value = types->Value;
                             aMedDescr[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
                         }
                     }
@@ -523,11 +523,11 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                         if ( (xEvents->getByName(s_sOnNew) >>= aEventDesc ) && aEventDesc.getLength() )
                         {
                             ::rtl::OUString sScript;
-                            const PropertyValue* pIter = aEventDesc.getConstArray();
-                            const PropertyValue* pEnd  = pIter + aEventDesc.getLength();
-                            for( ; pIter != pEnd && !pIter->Name.equalsAscii( "Script" ) ; ++pIter)
+                            const PropertyValue* events = aEventDesc.getConstArray();
+                            const PropertyValue* eventsEnd = events + aEventDesc.getLength();
+                            for( ; events != eventsEnd && !events->Name.equalsAscii( "Script" ) ; ++events)
                                 ;
-                            if ( pIter != pEnd && (pIter->Value >>= sScript) )
+                            if ( events != eventsEnd && (events->Value >>= sScript) )
                                 bReport = sScript.equalsAscii("service:com.sun.star.wizards.report.CallReportWizard?fill");
                         }
                     }
@@ -538,11 +538,11 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                         Reference< XFormsSupplier> xFormsSup(xDrawPageSup.is() ? xDrawPageSup->getDrawPage() : Reference< XDrawPage>(),UNO_QUERY);
                         Reference< XNameContainer> xForms(xFormsSup.is() ? xFormsSup->getForms() : Reference< XNameContainer>(),UNO_QUERY);
                         Sequence< ::rtl::OUString> aSeq = xForms.is() ? xForms->getElementNames() : Sequence< ::rtl::OUString>();
-                        const ::rtl::OUString* pIter = aSeq.getConstArray();
-                        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
-                        for(;pIter != pEnd && !bForm;++pIter)
+                        const ::rtl::OUString* elementNames = aSeq.getConstArray();
+                        const ::rtl::OUString* elementNamesEnd = elementNames + aSeq.getLength();
+                        for(;elementNames != elementNamesEnd && !bForm;++elementNames)
                         {
-                            Reference< XNameContainer> xControls(xForms->getByName(*pIter),UNO_QUERY);
+                            Reference< XNameContainer> xControls(xForms->getByName(*elementNames),UNO_QUERY);
                             Sequence< ::rtl::OUString> aControlSeq = xControls.is() ? xControls->getElementNames() : Sequence< ::rtl::OUString>();
                             const ::rtl::OUString* pControlIter = aControlSeq.getConstArray();
                             const ::rtl::OUString* pControlEnd  = pControlIter + aControlSeq.getLength();
@@ -672,7 +672,7 @@ void OCfgImport::setProperties(sal_Int16 _eType)
     }
 }
 // -----------------------------------------------------------------------------
-Any SAL_CALL OCfgImport::execute( const Sequence< NamedValue >& Arguments ) throw (IllegalArgumentException, Exception, RuntimeException)
+Any SAL_CALL OCfgImport::execute( const Sequence< NamedValue >& /*Arguments*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
     m_xLayer->readData(this);
     return Any();
@@ -696,7 +696,7 @@ void SAL_CALL OCfgImport::endLayer()
 void SAL_CALL OCfgImport::overrideNode(
         const ::rtl::OUString& aName,
         sal_Int16 aAttributes,
-        sal_Bool bClear)
+        sal_Bool /*bClear*/)
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -707,7 +707,7 @@ void SAL_CALL OCfgImport::overrideNode(
 
 void SAL_CALL OCfgImport::addOrReplaceNode(
         const ::rtl::OUString& aName,
-        sal_Int16 aAttributes)
+        sal_Int16 /*aAttributes*/)
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -795,9 +795,9 @@ void SAL_CALL OCfgImport::addOrReplaceNode(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  OCfgImport::addOrReplaceNodeFromTemplate(
-        const ::rtl::OUString& aName,
-        const TemplateIdentifier& aTemplate,
-        sal_Int16 aAttributes )
+        const ::rtl::OUString& /*aName*/,
+        const TemplateIdentifier& /*aTemplate*/,
+        sal_Int16 /*aAttributes*/ )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -836,13 +836,12 @@ void SAL_CALL  OCfgImport::endNode()
                         if ( xDatabaseContext.is() )
                         {
                             sal_Int32 i = 0;
-                            ::rtl::OUString sName;
-                            sName = m_sCurrentDataSourceName;
-                            while ( xDatabaseContext->hasByName(sName) )
+                            ::rtl::OUString sDataSourceName = m_sCurrentDataSourceName;
+                            while ( xDatabaseContext->hasByName( sDataSourceName ) )
                             {
-                                sName = m_sCurrentDataSourceName + ::rtl::OUString::valueOf(++i);
+                                sDataSourceName = m_sCurrentDataSourceName + ::rtl::OUString::valueOf(++i);
                             }
-                            Reference< XNamingService>(xDatabaseContext,UNO_QUERY)->registerObject(sName,m_xCurrentDS);
+                            Reference< XNamingService>(xDatabaseContext,UNO_QUERY)->registerObject(sDataSourceName,m_xCurrentDS);
                         }
                     }
                     ::comphelper::disposeComponent(m_xModel);
@@ -861,10 +860,10 @@ void SAL_CALL  OCfgImport::endNode()
                     setProperties(nElementType);
                     Reference<XTablesSupplier> xSupplier(m_xCurrentDS,UNO_QUERY);
                     Reference<XNameContainer> xTables(xSupplier->getTables(),UNO_QUERY);
-                    ::rtl::OUString sName;
-                    m_xCurrentObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    if ( !xTables->hasByName(sName) )
-                        xTables->insertByName(sName,makeAny(m_xCurrentObject));
+                    ::rtl::OUString sTableName;
+                    m_xCurrentObject->getPropertyValue(PROPERTY_NAME) >>= sTableName;
+                    if ( !xTables->hasByName( sTableName ) )
+                        xTables->insertByName( sTableName, makeAny( m_xCurrentObject ) );
                     m_xCurrentObject = NULL;
                 }
                 break;
@@ -951,7 +950,7 @@ void SAL_CALL  OCfgImport::endNode()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  OCfgImport::dropNode(
-        const ::rtl::OUString& aName )
+        const ::rtl::OUString& /*aName*/ )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -961,9 +960,9 @@ void SAL_CALL  OCfgImport::dropNode(
 
 void SAL_CALL  OCfgImport::overrideProperty(
         const ::rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        const Type& aType,
-        sal_Bool bClear )
+        sal_Int16 /*aAttributes*/,
+        const Type& /*aType*/,
+        sal_Bool /*bClear*/ )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -1202,8 +1201,8 @@ void SAL_CALL  OCfgImport::setPropertyValue(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL OCfgImport::setPropertyValueForLocale(
-        const Any& aValue,
-        const ::rtl::OUString& aLocale )
+        const Any& /*aValue*/,
+        const ::rtl::OUString& /*aLocale*/ )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -1220,9 +1219,9 @@ void SAL_CALL  OCfgImport::endProperty()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  OCfgImport::addProperty(
-        const rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        const Type& aType )
+        const rtl::OUString& /*aName*/,
+        sal_Int16 /*aAttributes*/,
+        const Type& /*aType*/ )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -1231,9 +1230,9 @@ void SAL_CALL  OCfgImport::addProperty(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  OCfgImport::addPropertyWithValue(
-        const rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        const Any& aValue )
+        const rtl::OUString& /*aName*/,
+        sal_Int16 /*aAttributes*/,
+        const Any& /*aValue*/ )
     throw(
         MalformedDataException,
         WrappedTargetException )
