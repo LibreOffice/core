@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:17:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,15 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
+
+#if defined( OSL_DEBUG )
+#if OSL_DEBUG > 0
 #ifndef _IMPL_VALID_CHARACTERS_HXX_
 #include <ImplValidCharacters.hxx>
 #endif
+#endif
+#endif
+
 #ifndef _ZIP_PACKAGE_FOLDER_HXX
 #include <ZipPackageFolder.hxx>
 #endif
@@ -52,6 +58,12 @@
 #endif
 #ifndef _CONTENT_INFO_HXX_
 #include <ContentInfo.hxx>
+#endif
+
+#if defined( OSL_DEBUG_LEVEL )
+#if OSL_DEBUG_LEVEL > 0
+#include <ImplValidCharacters.hxx>
+#endif
 #endif
 
 using namespace rtl;
@@ -63,9 +75,9 @@ using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
-: pParent ( NULL )
-, mbIsFolder ( bNewFolder )
+: mbIsFolder ( bNewFolder )
 , mbAllowRemoveOnInsert( sal_True )
+, pParent ( NULL )
 {
 }
 
@@ -88,8 +100,9 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
         pParent->removeByName ( aEntry.sName );
 
     const sal_Unicode *pChar = aName.getStr();
-    VOS_ENSURE ( Impl_IsValidChar (pChar, static_cast < sal_Int16 > ( aName.getLength() ), sal_False), "Invalid character in new zip package entry name!");
-
+    if(pChar == 0 || pChar != 0) {
+        VOS_ENSURE ( Impl_IsValidChar (pChar, static_cast < sal_Int16 > ( aName.getLength() ), sal_False), "Invalid character in new zip package entry name!");
+    }
     aEntry.sName = aName;
 
     if ( pParent )
@@ -113,7 +126,7 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bIns
 void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewParent )
         throw(NoSupportException, RuntimeException)
 {
-    sal_Int64 nTest;
+    sal_Int64 nTest(0);
     Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
     if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::static_getImplementationId () ) ) == 0 )
         throw NoSupportException();
@@ -133,19 +146,19 @@ Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInf
 {
     return Reference < beans::XPropertySetInfo > ();
 }
-void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
+void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
