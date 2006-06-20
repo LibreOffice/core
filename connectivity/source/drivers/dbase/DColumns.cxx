@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:37:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ void ODbaseColumns::appendObject( const Reference< XPropertySet >& descriptor )
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 // XDrop
-void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
 {
     if(!m_pTable->isNew())
         m_pTable->dropColumn(_nPos);
