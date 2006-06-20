@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:58:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1479,10 +1479,10 @@ namespace basegfx
             {
                 // in both directions full radius, use ellipse
                 const B2DPoint aCenter(rRect.getCenter());
-                const double fRadiusX(rRect.getWidth() / 2.0);
-                const double fRadiusY(rRect.getHeight() / 2.0);
+                const double fRectRadiusX(rRect.getWidth() / 2.0);
+                const double fRectRadiusY(rRect.getHeight() / 2.0);
 
-                return createPolygonFromEllipse( aCenter, fRadiusX, fRadiusY );
+                return createPolygonFromEllipse( aCenter, fRectRadiusX, fRectRadiusY );
             }
             else
             {
@@ -1665,7 +1665,6 @@ namespace basegfx
             OSL_ENSURE(fStart >= 0.0 && fStart <= 1.0, "appendUnitCircleQuadrant: Access out of range (!)");
             OSL_ENSURE(fEnd >= 0.0 && fEnd <= 1.0, "appendUnitCircleQuadrant: Access out of range (!)");
             OSL_ENSURE(fEnd >= fStart, "appendUnitCircleQuadrant: Access out of range (!)");
-            const double fZero(0.0);
             const double fOne(1.0);
             const bool bStartIsZero(fTools::equalZero(fStart));
             const bool bEndIsOne(fTools::equal(fEnd, fOne));
@@ -2631,10 +2630,10 @@ namespace basegfx
             const sal_uInt32 nCount( rPoly.count() );
             const double epsilon = ::std::numeric_limits<double>::epsilon();
 
-            for(unsigned int i=0; i<4; ++i)
+            for(unsigned int j=0; j<4; ++j)
             {
-                const ::basegfx::B2DPoint &p1 = aPoints[i];
-                const ::basegfx::B2DPoint &p2 = aPoints[(i+1)%4];
+                const ::basegfx::B2DPoint &p1 = aPoints[j];
+                const ::basegfx::B2DPoint &p2 = aPoints[(j+1)%4];
                 bool bPointOnBoundary = false;
                 for( sal_uInt32 i=0; i<nCount; ++i )
                 {
