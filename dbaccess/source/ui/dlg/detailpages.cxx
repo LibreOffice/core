@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:13:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:06:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,28 +122,28 @@ DBG_NAME(OCommonBehaviourTabPage)
         :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
         ,m_pOptionsLabel(NULL)
         ,m_pOptions(NULL)
+        ,m_pDataConvertFixedLine(NULL)
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
-        ,m_pIsSQL92Check(NULL)
-        ,m_pAutoFixedLine(NULL)
-        ,m_pAutoIncrementLabel(NULL)
-        ,m_pAutoIncrement(NULL)
-        ,m_pAutoRetrievingEnabled(NULL)
-        ,m_pAutoRetrievingLabel(NULL)
-        ,m_pAutoRetrieving(NULL)
-        ,m_pAppendTableAlias(NULL)
-        ,m_pIgnoreDriverPrivileges(NULL)
         ,m_pDSFixedLine(NULL)
+        ,m_pIsSQL92Check(NULL)
+        ,m_pAppendTableAlias(NULL)
         ,m_pParameterSubstitution(NULL)
+        ,m_pIgnoreDriverPrivileges(NULL)
         ,m_pSuppressVersionColumn(NULL)
         ,m_pEnableOuterJoin(NULL)
         ,m_pCatalog(NULL)
         ,m_pSchema(NULL)
         ,m_pIndexAppendix(NULL)
         ,m_pDosLineEnds(NULL)
-        ,m_pDataConvertFixedLine(NULL)
         ,m_pBooleanComprisonModeLabel(NULL)
         ,m_pBooleanComprisonMode(NULL)
+        ,m_pAutoFixedLine(NULL)
+        ,m_pAutoRetrievingEnabled(NULL)
+        ,m_pAutoIncrementLabel(NULL)
+        ,m_pAutoIncrement(NULL)
+        ,m_pAutoRetrievingLabel(NULL)
+        ,m_pAutoRetrieving(NULL)
         ,m_nControlFlags(nControlFlags)
     {
         DBG_CTOR(OCommonBehaviourTabPage,NULL);
@@ -483,7 +483,6 @@ DBG_NAME(OCommonBehaviourTabPage)
         // collect the items
         SFX_ITEMSET_GET(_rSet, pOptionsItem, SfxStringItem, DSID_ADDITIONALOPTIONS, sal_True);
         SFX_ITEMSET_GET(_rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
         SFX_ITEMSET_GET(_rSet, pSQL92Check, SfxBoolItem, DSID_SQL92CHECK, sal_True);
         SFX_ITEMSET_GET(_rSet, pAppendTableAlias, SfxBoolItem, DSID_APPEND_TABLE_ALIAS, sal_True);
         SFX_ITEMSET_GET(_rSet, pAutoIncrementItem, SfxStringItem, DSID_AUTOINCREMENTVALUE, sal_True);
@@ -570,11 +569,11 @@ DBG_NAME(OCommonBehaviourTabPage)
                 // adjust the list of available character sets according to the data source type
                 adjustCharSets( _rSet, m_aCharsets, m_pCharset );
 
-                OCharsetDisplay::const_iterator aFind = m_aCharsets.find(pCharsetItem->GetValue(), OCharsetDisplay::IANA());
+                OCharsetDisplay::const_iterator aFind = m_aCharsets.findIanaName( pCharsetItem->GetValue() );
                 if (aFind == m_aCharsets.end())
                 {
                     DBG_ERROR("OCommonBehaviourTabPage::implInitControls: unknown charset falling back to system language!");
-                    aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
+                    aFind = m_aCharsets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
                     // fallback: system language
                 }
 
@@ -667,7 +666,7 @@ DBG_NAME(OCommonBehaviourTabPage)
         {
             if (m_pCharset->GetSelectEntryPos() != m_pCharset->GetSavedValue())
             {
-                OCharsetDisplay::const_iterator aFind = m_aCharsets.find(m_pCharset->GetSelectEntry(), OCharsetDisplay::Display());
+                OCharsetDisplay::const_iterator aFind = m_aCharsets.findDisplayName( m_pCharset->GetSelectEntry() );
                 DBG_ASSERT(aFind != m_aCharsets.end(), "OCommonBehaviourTabPage::FillItemSet: could not translate the selected character set!");
                 if (aFind != m_aCharsets.end())
                     _rSet.Put(SfxStringItem(DSID_CHARSET, (*aFind).getIanaName()));
@@ -744,7 +743,6 @@ DBG_NAME(ODbaseDetailsPage)
 
         // get the other relevant items
         SFX_ITEMSET_GET(_rSet, pDeletedItem, SfxBoolItem, DSID_SHOWDELETEDROWS, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAppendAliasItem, SfxBoolItem, DSID_APPEND_TABLE_ALIAS, sal_True);
 
         if ( bValid )
         {
@@ -956,7 +954,7 @@ DBG_NAME(OAdoDetailsPage)
     //========================================================================
     //= OMySQLJDBCDetailsPage
     //========================================================================
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, char* _pDriverName)
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, const char* _pDriverName)
         :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
         ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
@@ -1053,7 +1051,7 @@ DBG_NAME(OAdoDetailsPage)
         }
     }
     // -----------------------------------------------------------------------
-    IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, PushButton*, _pButton)
+    IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
@@ -1114,12 +1112,12 @@ DBG_NAME(OAdoDetailsPage)
         ,m_NF_CACHE_SIZE(       this, ResId( NF_CACHE_SIZE      ) )
         ,m_FT_DATA_INCREMENT(   this, ResId( FT_DATA_INCREMENT  ) )
         ,m_NF_DATA_INCREMENT(   this, ResId( NF_DATA_INCREMENT  ) )
-        ,m_CB_SHUTDB(           this, ResId( CB_SHUTDB          ) )
         ,m_aFL_2(               this, ResId( FL_SEPARATOR2      ) )
         ,m_FT_CTRLUSERNAME(     this, ResId( FT_CTRLUSERNAME    ) )
         ,m_ET_CTRLUSERNAME(     this, ResId( ET_CTRLUSERNAME    ) )
         ,m_FT_CTRLPASSWORD(     this, ResId( FT_CTRLPASSWORD    ) )
         ,m_ET_CTRLPASSWORD(     this, ResId( ET_CTRLPASSWORD    ) )
+        ,m_CB_SHUTDB(           this, ResId( CB_SHUTDB          ) )
         ,m_PB_STAT(             this, ResId( PB_STAT            ) )
     {
         m_aEDHostname.SetModifyHdl(getControlModifiedLink());
@@ -1240,13 +1238,13 @@ DBG_NAME(OAdoDetailsPage)
         return 0;
     }
     //------------------------------------------------------------------------
-    IMPL_LINK( OAdabasDetailsPage, LoseFocusHdl, Edit *, pEdit )
+    IMPL_LINK( OAdabasDetailsPage, LoseFocusHdl, Edit *, /*pEdit*/ )
     {
         m_CB_SHUTDB.Enable(m_ET_CTRLUSERNAME.GetText().Len() && m_ET_CTRLPASSWORD.GetText().Len());
         return 0;
     }
     //------------------------------------------------------------------------
-    IMPL_LINK( OAdabasDetailsPage, PBClickHdl, Button *, pButton )
+    IMPL_LINK( OAdabasDetailsPage, PBClickHdl, Button *, /*pButton*/ )
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         if ( m_pAdminDialog )
@@ -1389,7 +1387,7 @@ DBG_NAME(OTextDetailsPage)
     {
         DBG_CTOR(OTextDetailsPage,NULL);
 
-        m_pTextConnectionHelper = new OTextConnectionHelper(this, PAGE_TEXT);
+        m_pTextConnectionHelper = new OTextConnectionHelper(this);
 //      m_pCharset->SetZOrder(&m_aExtension, WINDOW_ZORDER_BEHIND);
         FreeResource();
     }
@@ -1428,7 +1426,6 @@ DBG_NAME(OTextDetailsPage)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        SFX_ITEMSET_GET(_rSet, pHdrItem, SfxBoolItem, DSID_TEXTFILEHEADER, sal_True);
         m_pTextConnectionHelper->implInitControls(_rSet, _bSaveValue, bValid);
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
