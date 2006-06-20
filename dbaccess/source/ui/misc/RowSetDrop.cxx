@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:22:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@ BOOL ORowSetImportExport::Read()
         return FALSE;
     sal_Int32 nCurrentRow = 0;
     sal_Int32 nRowFilterIndex = 0;
-    sal_Int32 kk=0;
     sal_Bool bContinue = sal_True;
     if(m_aSelection.getLength())
     {
