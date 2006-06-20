@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlist.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:15:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ char wd[128];
     der Verkettung gibt, irgendwann irgendwo wird mal ein nlist->next
     ueberschrieben, was in eineme SIGSEGV resultiert.
     Den GDB mit watchpoint hab ich aber nach 2 Tagen abgebrochen..
-    so loeppt´s jedenfalls erstmal..
+    so loeppt's jedenfalls erstmal..
  */
 #define NLSIZE 15000
 
@@ -63,34 +63,33 @@ struct kwtab
 }   kwtab[] =
 
 {
-    "if", KIF, ISKW,
-    "ifdef", KIFDEF, ISKW,
-    "ifndef", KIFNDEF, ISKW,
-    "elif", KELIF, ISKW,
-    "else", KELSE, ISKW,
-    "endif", KENDIF, ISKW,
-    "include", KINCLUDE, ISKW,
-    "include_next", KINCLUDENEXT, ISKW,
-    "import", KIMPORT, ISKW,
-    "define", KDEFINE, ISKW,
-    "undef", KUNDEF, ISKW,
-    "line", KLINE, ISKW,
-    "error", KERROR, ISKW,
-    "pragma", KPRAGMA, ISKW,
-    "ident", KIDENT, ISKW,
-    "eval", KEVAL, ISKW,
-    "defined", KDEFINED, ISDEFINED + ISUNCHANGE,
-    "machine", KMACHINE, ISDEFINED + ISUNCHANGE,
-    "__LINE__", KLINENO, ISMAC + ISUNCHANGE,
-    "__FILE__", KFILE, ISMAC + ISUNCHANGE,
-    "__DATE__", KDATE, ISMAC + ISUNCHANGE,
-    "__TIME__", KTIME, ISMAC + ISUNCHANGE,
-    "__STDC__", KSTDC, ISUNCHANGE,
-    NULL
+    { "if", KIF, ISKW },
+    { "ifdef", KIFDEF, ISKW },
+    { "ifndef", KIFNDEF, ISKW },
+    { "elif", KELIF, ISKW },
+    { "else", KELSE, ISKW },
+    { "endif", KENDIF, ISKW },
+    { "include", KINCLUDE, ISKW },
+    { "include_next", KINCLUDENEXT, ISKW },
+    { "import", KIMPORT, ISKW },
+    { "define", KDEFINE, ISKW },
+    { "undef", KUNDEF, ISKW },
+    { "line", KLINE, ISKW },
+    { "error", KERROR, ISKW },
+    { "pragma", KPRAGMA, ISKW },
+    { "ident", KIDENT, ISKW },
+    { "eval", KEVAL, ISKW },
+    { "defined", KDEFINED, ISDEFINED + ISUNCHANGE },
+    { "machine", KMACHINE, ISDEFINED + ISUNCHANGE },
+    { "__LINE__", KLINENO, ISMAC + ISUNCHANGE },
+    { "__FILE__", KFILE, ISMAC + ISUNCHANGE },
+    { "__DATE__", KDATE, ISMAC + ISUNCHANGE },
+    { "__TIME__", KTIME, ISMAC + ISUNCHANGE },
+    { "__STDC__", KSTDC, ISUNCHANGE },
+    { NULL, 0, 0 }
 };
 
 unsigned long namebit[077 + 1];
-Nlist *np;
 
 void
     setup_kwtab(void)
@@ -106,8 +105,8 @@ void
         t.t = (uchar *) kp->kw;
         t.len = strlen(kp->kw);
         np = lookup(&t, 1);
-        np->flag = kp->flag;
-        np->val = kp->val;
+        np->flag = (char) kp->flag;
+        np->val = (char) kp->val;
         if (np->val == KDEFINED)
         {
             kwdefined = np;
