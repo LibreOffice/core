@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:10:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,12 +224,12 @@ namespace dbaxml
         /** this method is called for every item that has the
         MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
         virtual void handleSpecialItem(
-                SvXMLAttributeList& rAttrList,
-                const XMLPropertyState& rProperty,
-                const SvXMLUnitConverter& rUnitConverter,
-                const SvXMLNamespaceMap& rNamespaceMap,
-                const ::std::vector< XMLPropertyState > *pProperties = 0,
-                sal_uInt32 nIdx = 0 ) const
+                SvXMLAttributeList& /*rAttrList*/,
+                const XMLPropertyState& /*rProperty*/,
+                const SvXMLUnitConverter& /*rUnitConverter*/,
+                const SvXMLNamespaceMap& /*rNamespaceMap*/,
+                const ::std::vector< XMLPropertyState > */*pProperties*/ = 0,
+                sal_uInt32 /*nIdx*/ = 0 ) const
         {
             // nothing to do here
         }
@@ -325,6 +325,8 @@ void ODBExport::exportDataSource()
                 case TypeClass_LONG:
                     // let the unit converter format is as string
                     sValue = ::rtl::OUString::valueOf(getINT32(pIter->Value));
+                    break;
+                default:
                     break;
             }
 
@@ -785,10 +787,10 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                         if ( aColumnDefault.hasValue() )
                         {
-                            ::rtl::OUStringBuffer sValue,sType;
-                            SvXMLUnitConverter::convertAny(sValue,sType,aColumnDefault);
+                            ::rtl::OUStringBuffer sColumnDefaultString,sType;
+                            SvXMLUnitConverter::convertAny( sColumnDefaultString, sType, aColumnDefault );
                             AddAttribute(XML_NAMESPACE_DB, XML_TYPE_NAME,sType.makeStringAndClear());
-                            AddAttribute(XML_NAMESPACE_DB, XML_DEFAULT_VALUE,sValue.makeStringAndClear());
+                            AddAttribute(XML_NAMESPACE_DB, XML_DEFAULT_VALUE,sColumnDefaultString.makeStringAndClear());
                         }
 
                         if ( pAtt->getLength() )
@@ -891,7 +893,6 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             ::std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
             ::std::vector< XMLPropertyState >::iterator aEnd = aPropStates.end();
             UniReference < XMLPropertySetMapper > pColumnStyle = GetColumnStylesPropertySetMapper();
-            sal_Int32 nCount(0);
             while ( aItr != aEnd )
             {
                 if ( aItr->mnIndex != -1 )
