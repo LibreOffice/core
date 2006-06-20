@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:31:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ class RscTypCont
     Atom                nSysWinId;
 
     void        Init();         // Initialisiert Klassen und Tabelle
-    void        SETCONST( RscConst *, char *, UINT32 );
+    void        SETCONST( RscConst *, const char *, UINT32 );
     void        SETCONST( RscConst *, Atom, UINT32 );
     RscEnum *   InitLangType();
     RscEnum *   InitFieldUnitsType();
