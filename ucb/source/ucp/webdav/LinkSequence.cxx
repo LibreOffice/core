@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LinkSequence.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:25:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,11 +67,11 @@ struct LinkSequenceParseContext
 
 //////////////////////////////////////////////////////////////////////////
 extern "C" int LinkSequence_startelement_callback(
-    void *userdata,
+    void *,
     int parent,
     const char *nspace,
     const char *name,
-    const char **atts )
+    const char ** )
 {
     if ( ( name != 0 ) &&
          ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
@@ -127,8 +127,8 @@ extern "C" int LinkSequence_chardata_callback(
 extern "C" int LinkSequence_endelement_callback(
     void *userdata,
     int state,
-    const char *nspace,
-    const char *name )
+    const char *,
+    const char * )
 {
     LinkSequenceParseContext * pCtx
                     = static_cast< LinkSequenceParseContext * >( userdata );
