@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:38:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include<tools/rtti.hxx>
 #include<exchange.hxx>
 #include<filelist.hxx>
-#pragma hdrstop
 
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -48,7 +47,7 @@
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
 
 // String-Liste zum Speichern der Namen deklarieren
-DECLARE_LIST( FileStringList, String* );
+DECLARE_LIST( FileStringList, String* )
 
 
 /*************************************************************************
@@ -140,7 +139,7 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
  * e.g. DropQueryFile
  */
 
-SvStream& operator<<( SvStream& rOStm, const FileList& rFileList )
+SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
 {
     OSL_ENSURE(false, "Not implemented!");
     return rOStm;
