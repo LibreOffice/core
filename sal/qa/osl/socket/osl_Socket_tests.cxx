@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Socket_tests.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:40:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,79 +66,11 @@ namespace osl_Socket
                 // _osl_getFullQualifiedDomainName( );
                 oslSocketResult aResult;
                 rtl::OUString suHostname = osl::SocketAddr::getLocalHostname(&aResult);
-                volatile int dummy = 0;
                 CPPUNIT_ASSERT_MESSAGE("getLocalHostname failed", aResult == osl_Socket_Ok);
             }
 
-// -----------------------------------------------------------------------------
-
-#if defined UNX
-/*
-        void getHostname_003()
-        {
-            struct hostent *pQualifiedHostByName;
-            struct hostent *pHostByName;
-
-            struct hostent  aHostByName, aQualifiedHostByName;
-            sal_Char        pHostBuffer[ 2000 ];
-            sal_Char          pQualifiedHostBuffer[ 2560 ];
-            int     nErrorNo;
-
-            pHostBuffer[0] = '\0';
-            pQualifiedHostBuffer[0] = '\0';
-
-            gethostbyname_r ("sceri.PRC.Sun.COM", &aQualifiedHostByName, pQualifiedHostBuffer, sizeof(pQualifiedHostBuffer), &pQualifiedHostByName, &nErrorNo);
-            // gethostbyname_r ("grande.germany.Sun.COM", &aQualifiedHostByName, pQualifiedHostBuffer, sizeof(pQualifiedHostBuffer), &pQualifiedHostByName, &nErrorNo);
-            gethostbyname_r ("longshot.PRC.Sun.COM", &aHostByName, pHostBuffer, sizeof(pHostBuffer), &pHostByName, &nErrorNo);
-
-            if ( pQualifiedHostByName )
-                t_print("# getHostname_003: QualifiedHostByName!\n" );
-            if ( pHostByName )
-                t_print("# getHostname_003: HostByName!\n" );
-
-        }
-*/
-        void getHostname_001()
-            {
-                struct hostent *pQualifiedHostByName;
-                struct hostent *pHostByName;
-                struct hostent *pQualifiedHostByName1;
-                struct hostent *pHostByName1;
-
-                struct hostent aHostByName, aQualifiedHostByName, aHostByName1, aQualifiedHostByName1;
-                char pHostBuffer[ 256 ];
-                char pQualifiedHostBuffer[ 256 ];
-                char pHostBuffer1[ 2000 ];
-                char pQualifiedHostBuffer1[ 2000 ];
-                int nErrorNo;
-
-                pHostBuffer[0] = '\0';
-                pQualifiedHostBuffer[0] = '\0';
-                pHostBuffer1[0] = '\0';
-                pQualifiedHostBuffer1[0] = '\0';
-
-                gethostbyname_r ("grande.Germany.Sun.COM", &aQualifiedHostByName, pQualifiedHostBuffer, sizeof(pQualifiedHostBuffer), &pQualifiedHostByName, &nErrorNo);
-                gethostbyname_r ("longshot.PRC.Sun.COM", &aHostByName, pHostBuffer, sizeof(pHostBuffer), &pHostByName, &nErrorNo);
-
-                gethostbyname_r ("grande.Germany.Sun.COM", &aQualifiedHostByName1, pQualifiedHostBuffer1, sizeof(pQualifiedHostBuffer1), &pQualifiedHostByName1, &nErrorNo);
-                gethostbyname_r ("longshot.PRC.Sun.COM", &aHostByName1, pHostBuffer1, sizeof(pHostBuffer1), &pHostByName1, &nErrorNo);
-
-                if ( pQualifiedHostByName )
-                    printf( "# QualifiedHostByName got if size is 256!\n" );
-                if ( pHostByName )
-                    printf( "# HostByName got if size is 256!\n" );
-
-                if ( pQualifiedHostByName1 )
-                    printf( "# QualifiedHostByName got if size is 2000!\n" );
-                if ( pHostByName1 )
-                    printf( "# HostByName got if size is 2000!\n" );
-            }
-
-#endif
         CPPUNIT_TEST_SUITE( tests );
         CPPUNIT_TEST( test_001 );
-        //CPPUNIT_TEST( getHostname_003 );
-        CPPUNIT_TEST( getHostname_001 );
         CPPUNIT_TEST_SUITE_END();
     };
 
