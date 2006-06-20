@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:48:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
+#endif
 
 namespace dbaccess
 {
@@ -97,7 +100,6 @@ namespace dbaccess
     class OContainerMediator;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
     typedef ::connectivity::OTableHelper                            OTable_Base;
-    typedef ::connectivity::sdbcx::OTableDescriptor_BASE OTable_Linux;
 
     class ODBTable  :public ODataSettings_Base
                     ,public ODBTable_PROP
@@ -120,6 +122,7 @@ namespace dbaccess
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         virtual void columnDropped(const ::rtl::OUString& _sName);
+        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
 
         /** creates the column collection for the table
             @param  _rNames
@@ -193,6 +196,10 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
         virtual void refreshColumns();
+
+    private:
+        using OTable_Base::createArrayHelper;
+        using OTable_Base::getFastPropertyValue;
     };
 }
 #endif // _DBA_CORE_TABLE_HXX_

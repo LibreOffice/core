@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:34:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,9 @@ namespace dbaccess
         virtual void SAL_CALL setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException);
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
+
+    protected:
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 
     //************************************************************
@@ -253,7 +256,7 @@ namespace dbaccess
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject() = 0;
         virtual void columnDropped(const ::rtl::OUString& _sName) = 0;
-        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone){}
+        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone) = 0;
     };
 
     //============================================================
@@ -359,6 +362,8 @@ namespace dbaccess
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
 
+    private:
+        using OColumns_BASE::setParent;
     };
 }
 #endif // _DBA_COREAPI_COLUMN_HXX_
