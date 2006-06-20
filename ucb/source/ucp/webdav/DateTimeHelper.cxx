@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DateTimeHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:09:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
             n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lf-%02d:%02d",
                         &year, &month, &day, &hours, &minutes, &seconds,
                         &off_hours, &off_minutes );
-            if ( n = 8 )
+            if ( n == 8 )
             {
                 fix = off_hours * 3600 + off_minutes * 60;
             }
@@ -98,13 +98,13 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
 
     oslDateTime aDateTime;
     aDateTime.NanoSeconds = 0;
-    aDateTime.Seconds     = static_cast< int >( seconds );    // 0-59
-    aDateTime.Minutes     = minutes;    // 0-59
-    aDateTime.Hours       = hours;      // 0-23
-    aDateTime.Day         = day;        // 1-31
+    aDateTime.Seconds     = sal::static_int_cast< sal_uInt16 >(seconds); // 0-59
+    aDateTime.Minutes     = sal::static_int_cast< sal_uInt16 >(minutes); // 0-59
+    aDateTime.Hours       = sal::static_int_cast< sal_uInt16 >(hours); // 0-23
+    aDateTime.Day         = sal::static_int_cast< sal_uInt16 >(day); // 1-31
     aDateTime.DayOfWeek   = 0;          // 0-6, 0 = Sunday
-    aDateTime.Month       = month;      // 1-12
-    aDateTime.Year        = year;
+    aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month); // 1-12
+    aDateTime.Year        = sal::static_int_cast< sal_uInt16 >(year);
 
     TimeValue aTimeValue;
     if ( osl_getTimeValueFromDateTime( &aDateTime, &aTimeValue ) )
@@ -205,7 +205,7 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
         {
             // RFC 1036
             found = sscanf (aDT.getStr(), "%3s, %2d-%3s-%2d %2d:%2d:%2d GMT",
-                            string_day, &day, &string_month, &year, &hours, &minutes, &seconds);
+                            string_day, &day, string_month, &year, &hours, &minutes, &seconds);
         }
         found = (found == 7) ? 1 : 0;
     }
@@ -232,13 +232,18 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
 
             oslDateTime aDateTime;
             aDateTime.NanoSeconds = 0;
-            aDateTime.Seconds     = seconds;    // 0-59
-            aDateTime.Minutes     = minutes;    // 0-59
-            aDateTime.Hours       = hours;      // 0-23
-            aDateTime.Day         = day;        // 1-31
+            aDateTime.Seconds     = sal::static_int_cast< sal_uInt16 >(seconds);
+                // 0-59
+            aDateTime.Minutes     = sal::static_int_cast< sal_uInt16 >(minutes);
+                // 0-59
+            aDateTime.Hours       = sal::static_int_cast< sal_uInt16 >(hours);
+                // 0-23
+            aDateTime.Day         = sal::static_int_cast< sal_uInt16 >(day);
+                // 1-31
             aDateTime.DayOfWeek   = 0; //dayofweek;  // 0-6, 0 = Sunday
-            aDateTime.Month       = month;      // 1-12
-            aDateTime.Year        = year;
+            aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month);
+                // 1-12
+            aDateTime.Year        = sal::static_int_cast< sal_uInt16 >(year);
 
             TimeValue aTimeValue;
             if ( osl_getTimeValueFromDateTime( &aDateTime,
