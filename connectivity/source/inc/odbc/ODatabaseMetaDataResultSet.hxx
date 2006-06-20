@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:35:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,6 @@ namespace connectivity
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
             sal_Bool                                    m_bEOF;                 // after last record
-            sal_Bool                                    m_bLastRecord;
             sal_Bool                                    m_bFreeHandle;
 
             // set the columncount of the driver
@@ -133,10 +132,6 @@ namespace connectivity
             sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
 
             sal_Int32 mapColumn (sal_Int32  column);
 
@@ -168,7 +163,7 @@ namespace connectivity
             ODatabaseMetaDataResultSet(OConnection* _pConnection);
 
 
-            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }
@@ -270,6 +265,9 @@ namespace connectivity
                                                                     const ::rtl::OUString& table,sal_Int32 scope,   sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openIndexInfo( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,
                                                     const ::rtl::OUString& table,sal_Bool unique,sal_Bool approximate )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        protected:
+            using OPropertySetHelper::getFastPropertyValue;
         };
     }
 
