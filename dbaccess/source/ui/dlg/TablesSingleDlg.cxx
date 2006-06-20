@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TablesSingleDlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,13 @@ DBG_NAME(OTableSubscriptionDialog)
 OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XMultiServiceFactory >& _rxORB
-            ,const ::com::sun::star::uno::Any& _aDataSourceName) : SfxSingleTabDialog(pParent,UID_DLG_TABLE_FILTER,_pItems)
-            ,m_pOutSet(_pItems)
-            ,m_bStopExecution(sal_False)
+            ,const ::com::sun::star::uno::Any& _aDataSourceName)
+    :SfxSingleTabDialog(pParent,UID_DLG_TABLE_FILTER,_pItems)
+    ,m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
+    ,m_bStopExecution(sal_False)
+    ,m_pOutSet(_pItems)
 {
     DBG_CTOR(OTableSubscriptionDialog,NULL);
-    m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,pParent,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet = new SfxItemSet( *_pItems );
