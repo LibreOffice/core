@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filcmd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:22:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ namespace fileaccess {
     {
     public:
 
-        XCommandInfo_impl( shell* pMyShell, const rtl::OUString& aUnqPath );
+        XCommandInfo_impl( shell* pMyShell );
 
         virtual ~XCommandInfo_impl();
 
