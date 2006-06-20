@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:29:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,9 +208,9 @@ shell::MyProperty::MyProperty( const sal_Bool&                              __is
                                const com::sun::star::uno::Any&              __Value,
                                const com::sun::star::beans::PropertyState&  __State,
                                const sal_Int16&                             __Attributes )
-    : isNative( __isNative ),
-      PropertyName( __PropertyName ),
+    : PropertyName( __PropertyName ),
       Handle( __Handle ),
+      isNative( __isNative ),
       Typ( __Typ ),
       Value( __Value ),
       State( __State ),
@@ -234,9 +234,8 @@ shell::MyProperty::~MyProperty()
 shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory,
               FileProvider* pProvider )
     : TaskManager(),
-      m_xMultiServiceFactory( xMultiServiceFactory ),
       m_pProvider( pProvider ),
-      m_sCommandInfo( 8 ),
+      m_xMultiServiceFactory( xMultiServiceFactory ),
       Title( rtl::OUString::createFromAscii( "Title" ) ),
       CasePreservingURL(
           rtl::OUString::createFromAscii( "CasePreservingURL" ) ),
@@ -253,7 +252,8 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
       IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
       FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
-      FileContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-file" ) )
+      FileContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-file" ) ),
+      m_sCommandInfo( 8 )
 {
     // Title
     m_aDefaultProperties.insert( MyProperty( true,
@@ -832,12 +832,10 @@ shell::ls( sal_Int32 CommandId,
 // Info for commands
 
 uno::Reference< XCommandInfo > SAL_CALL
-shell::info_c(
-    sal_Int32 CommandId,
-    const rtl::OUString& aUnqPath )
+shell::info_c()
     throw()
 {
-    XCommandInfo_impl* p = new XCommandInfo_impl( this,aUnqPath );
+    XCommandInfo_impl* p = new XCommandInfo_impl( this );
     return uno::Reference< XCommandInfo >( p );
 }
 
@@ -852,8 +850,7 @@ shell::info_c(
 // Info for the properties
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
-shell::info_p( sal_Int32 CommandId,
-               const rtl::OUString& aUnqPath )
+shell::info_p( const rtl::OUString& aUnqPath )
     throw()
 {
     vos::OGuard aGuard( m_aMutex );
@@ -875,8 +872,7 @@ shell::info_p( sal_Int32 CommandId,
 
 
 uno::Sequence< uno::Any > SAL_CALL
-shell::setv( sal_Int32 CommandId,
-             const rtl::OUString& aUnqPath,
+shell::setv( const rtl::OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
     throw()
 {
@@ -1673,10 +1669,9 @@ shell::remove( sal_Int32 CommandId,
                 recurse = +1;
 
             name = aStatus.getFileURL();
-            if( ! ( whileSuccess = remove( CommandId,
-                                           name,
-                                           recurse,
-                                           MustExist ) ) )
+            whileSuccess = remove(
+                CommandId, name, recurse, MustExist );
+            if( !whileSuccess )
                 break;
 
             nError = aDirectory.getNextItem( aItem );
@@ -1953,7 +1948,7 @@ shell::write( sal_Int32 CommandId,
 
             nTotalNumberOfBytes += nWrittenBytes;
         }
-    } while( sal_uInt64( nReadBytes ) == nRequestedBytes );
+    } while( nReadBytes == nRequestedBytes );
 
     err = aFile.setSize( nTotalNumberOfBytes );
     if( err != osl::FileBase::E_None  )
@@ -2088,14 +2083,14 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
 
             while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
             {
-                sal_Bool IsDocument = false;
+                sal_Bool IsDoc = false;
                 osl::FileStatus aFileStatus( n_Mask );
                 aDirItem.getFileStatus( aFileStatus );
                 if( aFileStatus.isValid( FileStatusMask_Type ) )
-                    IsDocument = aFileStatus.getFileType() == osl::FileStatus::Regular;
+                    IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
                 // Getting the information for the next recursive copy
-                sal_Int32 newTypeToCopy = IsDocument ? -1 : +1;
+                sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
 
                 rtl::OUString newSrcUnqPath;
                 if( aFileStatus.isValid( FileStatusMask_FileURL ) )
@@ -2526,7 +2521,6 @@ shell::commit( const shell::ContentMap::iterator& it,
 
 uno::Reference< sdbc::XRow > SAL_CALL
 shell::getv(
-    sal_Int32 CommandId,
     Notifier* pNotifier,
     const uno::Sequence< beans::Property >& properties,
     osl::DirectoryItem& aDirItem,
@@ -2577,7 +2571,6 @@ shell::getv(
     insertDefaultProperties( aUnqPath );
     {
         vos::OGuard aGuard( m_aMutex );
-        sal_Bool changer = false;
 
         shell::ContentMap::iterator it = m_aContent.find( aUnqPath );
         commit( it,aFileStatus );
