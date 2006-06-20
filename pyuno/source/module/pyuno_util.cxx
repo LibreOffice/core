@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_util.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:52:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include "pyuno_impl.hxx"
+
 #include <time.h>
 #include <osl/thread.h>
 
@@ -42,9 +45,6 @@
 #include <osl/time.h>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-
-#include "pyuno_impl.hxx"
-
 
 using rtl::OUStringToOString;
 using rtl::OUString;
@@ -167,15 +167,26 @@ void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
     }
 }
 
+namespace {
+
+void appendPointer(rtl::OUStringBuffer & buffer, void * pointer) {
+    buffer.append(
+        sal::static_int_cast< sal_Int64 >(
+            reinterpret_cast< sal_IntPtr >(pointer)),
+        16);
+}
+
+}
+
 void logException( RuntimeCargo *cargo, const char *intro,
-                   sal_Int64 ptr, const rtl::OUString &aFunctionName,
+                   void * ptr, const rtl::OUString &aFunctionName,
                    const void * data, const com::sun::star::uno::Type & type )
 {
     if( isLog( cargo, LogLevel::CALL ) )
     {
         rtl::OUStringBuffer buf( 128 );
         buf.appendAscii( intro );
-        buf.append( ptr , 16);
+        appendPointer(buf, ptr);
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
         buf.append( aFunctionName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
@@ -189,14 +200,14 @@ void logException( RuntimeCargo *cargo, const char *intro,
 void logReply(
     RuntimeCargo *cargo,
     const char *intro,
-    sal_Int64 ptr,
+    void * ptr,
     const rtl::OUString & aFunctionName,
     const Any &returnValue,
     const Sequence< Any > & aParams )
 {
     rtl::OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
-    buf.append( (sal_Int64) ptr, 16);
+    appendPointer(buf, ptr);
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
     buf.append( aFunctionName );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("()=") );
@@ -216,11 +227,12 @@ void logReply(
 }
 
 void logCall( RuntimeCargo *cargo, const char *intro,
-          sal_Int64 ptr, const rtl::OUString & aFunctionName, const Sequence< Any > & aParams )
+              void * ptr, const rtl::OUString & aFunctionName,
+              const Sequence< Any > & aParams )
 {
     rtl::OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
-    buf.append( (sal_Int64) ptr, 16);
+    appendPointer(buf, ptr);
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
     buf.append( aFunctionName );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("(") );
