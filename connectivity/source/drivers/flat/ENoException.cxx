@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ENoException.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:00:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:28:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,6 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
     // ----------------------------------------------------------
     // Positionierung vorbereiten:
 
-    sal_uInt32 nTempPos = m_nFilePos;
     m_nFilePos = nCurPos;
 
     switch(eCursorPosition)
