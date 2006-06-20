@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_callable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:49:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ void PyUNO_callable_del (PyObject* self)
     return;
 }
 
-PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
+PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
 {
     PyUNO_callable* me;
 
@@ -89,9 +89,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     Sequence<Type> aParamTypes;
     Any any_params;
     Any out_params;
-    PyObject* python_params;
     Any ret_value;
-    int num_params_in;
     RuntimeCargo *cargo = 0;
     me = (PyUNO_callable*) self;
 
@@ -118,7 +116,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
             // do some logging if desired ...
             if( isLog( cargo, LogLevel::CALL ) )
             {
-                logCall( cargo, "try     py->uno[0x", (sal_Int64) me->members->xInvocation.get(),
+                logCall( cargo, "try     py->uno[0x", me->members->xInvocation.get(),
                          me->members->methodName, aParams );
             }
 
@@ -129,7 +127,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
             // log the reply, if desired
             if( isLog( cargo, LogLevel::CALL ) )
             {
-                logReply( cargo, "success py->uno[0x", (sal_Int64) me->members->xInvocation.get(),
+                logReply( cargo, "success py->uno[0x", me->members->xInvocation.get(),
                           me->members->methodName, ret_value, aOutParam);
             }
         }
@@ -166,7 +164,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
 
         if( isLog( cargo, LogLevel::CALL ) )
         {
-            logException( cargo, "except  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+            logException( cargo, "except  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, e.TargetException.getValue(), e.TargetException.getValueTypeRef());
         }
         raisePyExceptionWithAny( e.TargetException );
@@ -175,7 +173,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
-            logException( cargo, "error  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+            logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, getCppuType(&e).getTypeLibType());
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
@@ -184,7 +182,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
-            logException( cargo, "error  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+            logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, getCppuType(&e).getTypeLibType());
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
@@ -193,7 +191,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     {
         if( cargo && isLog( cargo, LogLevel::CALL ) )
         {
-            logException( cargo, "error  py->uno[0x", (sal_Int64) me->members->xInvocation.get() ,
+            logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, getCppuType(&e).getTypeLibType());
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
@@ -207,7 +205,7 @@ static PyTypeObject PyUNO_callable_Type =
 {
     PyObject_HEAD_INIT (&PyType_Type)
     0,
-    "PyUNO_callable",
+    const_cast< char * >("PyUNO_callable"),
     sizeof (PyUNO_callable),
     0,
     (destructor) ::pyuno::PyUNO_callable_del,
@@ -222,6 +220,36 @@ static PyTypeObject PyUNO_callable_Type =
     (hashfunc) 0,
     (ternaryfunc) ::pyuno::PyUNO_callable_call,
     (reprfunc) 0,
+        (getattrofunc)0,
+    (setattrofunc)0,
+    NULL,
+    0,
+    NULL,
+    (traverseproc)0,
+    (inquiry)0,
+    (richcmpfunc)0,
+    0,
+    (getiterfunc)0,
+    (iternextfunc)0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (descrgetfunc)0,
+    (descrsetfunc)0,
+    0,
+    (initproc)0,
+    (allocfunc)0,
+    (newfunc)0,
+    (freefunc)0,
+    (inquiry)0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (destructor)0
 };
 
 PyRef PyUNO_callable_new (
