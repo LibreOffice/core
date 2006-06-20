@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ class TypeManager
 {
 public:
     TypeManager();
-    ~TypeManager();
+    virtual ~TypeManager();
 
     TypeManager( const TypeManager& value )
         : m_pImpl( value.m_pImpl )
@@ -91,22 +91,22 @@ public:
         return *this;
     }
 
-    virtual sal_Bool init(sal_Bool bMerge, const StringVector& regFiles)
+    virtual sal_Bool init(sal_Bool /*bMerge*/, const StringVector& /*regFiles*/)
         { return sal_False; }
-    virtual sal_Bool init(const ::rtl::OString& registryName)
-        { return sal_False; }
-
-    virtual sal_Bool isValidType(const ::rtl::OString& name)
+    virtual sal_Bool init(const ::rtl::OString& /*registryName*/)
         { return sal_False; }
 
-    virtual RegistryKey getTypeKey(const ::rtl::OString& name)
+    virtual sal_Bool isValidType(const ::rtl::OString& /*name*/)
+        { return sal_False; }
+
+    virtual RegistryKey getTypeKey(const ::rtl::OString& /*name*/)
         { return RegistryKey(); }
-    virtual TypeReader getTypeReader(const ::rtl::OString& name)
+    virtual TypeReader getTypeReader(const ::rtl::OString& /*name*/)
         { return TypeReader(); }
-    virtual RTTypeClass getTypeClass(const ::rtl::OString& name)
+    virtual RTTypeClass getTypeClass(const ::rtl::OString& /*name*/)
         { return RT_TYPE_INVALID; }
 
-    virtual void setBase(const ::rtl::OString& base) {}
+    virtual void setBase(const ::rtl::OString& /*base*/) {}
     virtual ::rtl::OString getBase() { return ::rtl::OString(); }
 
     virtual sal_Int32 getSize() { return 0; }
@@ -123,8 +123,8 @@ struct RegistryTypeManagerImpl
 {
     RegistryTypeManagerImpl()
         : m_pMergedRegistry(NULL)
-        , m_isMerged(sal_False)
         , m_base("/")
+        , m_isMerged(sal_False)
         {}
 
     T2TypeClassMap  m_t2TypeClass;
@@ -138,7 +138,7 @@ class RegistryTypeManager : public TypeManager
 {
 public:
     RegistryTypeManager();
-    ~RegistryTypeManager();
+    virtual ~RegistryTypeManager();
 
     RegistryTypeManager( const RegistryTypeManager& value )
         : TypeManager(value)
@@ -155,6 +155,7 @@ public:
         return *this;
     }
 */
+    using TypeManager::init;
     sal_Bool init(sal_Bool bMerge, const StringVector& regFiles);
 
     sal_Bool    isValidType(const ::rtl::OString& name)
