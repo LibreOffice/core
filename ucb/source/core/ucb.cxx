@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:15:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,7 @@ sal_Int32 SAL_CALL UniversalContentBroker::createCommandIdentifier()
 // virtual
 Any SAL_CALL UniversalContentBroker::execute(
                           const Command& aCommand,
-                          sal_Int32 CommandId,
+                          sal_Int32,
                           const Reference< XCommandEnvironment >& Environment )
     throw( Exception, CommandAbortedException, RuntimeException )
 {
@@ -528,7 +528,7 @@ Any SAL_CALL UniversalContentBroker::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL UniversalContentBroker::abort( sal_Int32 CommandId )
+void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
     throw( RuntimeException )
 {
     // @@@ Not implemeted ( yet).
