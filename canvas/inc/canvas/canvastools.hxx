@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:40:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ namespace canvas
                                      const ::com::sun::star::rendering::ViewState&          viewState,
                                      const ::com::sun::star::rendering::RenderState&        renderState,
                                      const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XCanvas >                 xCanvas );
+                                         ::com::sun::star::rendering::XCanvas >&            xCanvas );
 
         void setDeviceColor( ::com::sun::star::rendering::RenderState&  o_renderState,
                              const double&                              rColor0,
@@ -601,9 +601,9 @@ namespace canvas
                                         "ValueMap::ValueMap(): Map is not sorted" );
                         }
 
-                        const ::rtl::OString aStr( pMap[1].maKey );
+                        const ::rtl::OString aStr2( pMap[1].maKey );
                         if( !mbCaseSensitive &&
-                            aStr != aStr.toAsciiLowerCase() )
+                            aStr2 != aStr2.toAsciiLowerCase() )
                         {
                             OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
                                       pMap[1].maKey);
