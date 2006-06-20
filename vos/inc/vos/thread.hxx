@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:40:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 11:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,14 +56,11 @@
 #include <osl/time.h>
 #endif
 
-extern void SAL_CALL _OThread_WorkerFunction(void* pthis);
-
 namespace vos
 {
 
-#if defined ( UNX )
-void SAL_CALL _cpp_OThread_WorkerFunction(void* pthis);
-#endif
+extern "C" typedef void ThreadWorkerFunction_impl(void *);
+ThreadWorkerFunction_impl threadWorkerFunction_impl;
 
 /** OThread is an objectoriented interface for threads.
     This class should be the base class for all objects using threads. The
@@ -223,13 +220,7 @@ protected:
     oslThread m_hThread;
     sal_Bool   m_bTerminating;
 
-#if defined ( WNT ) && !defined(GCC)
-    friend static void ::_OThread_WorkerFunction(void* pthis);
-#else
-    friend void _cpp_OThread_WorkerFunction(void* pthis);
-#endif
-
-
+    friend void threadWorkerFunction_impl(void *);
 };
 
 class OThreadData : public NAMESPACE_VOS(OObject)
