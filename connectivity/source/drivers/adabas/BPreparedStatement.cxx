@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BPreparedStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:23:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace connectivity;
 using namespace connectivity::adabas;
@@ -66,17 +69,20 @@ OResultSet* OAdabasPreparedStatement::createResulSet()
     return new OAdabasResultSet(m_aStatementHandle,this,m_aSelectColumns);
 }
 // -----------------------------------------------------------------------------
-void OAdabasPreparedStatement::setUsingBookmarks(sal_Bool _bUseBookmark)
+void OAdabasPreparedStatement::setUsingBookmarks(sal_Bool /*_bUseBookmark*/)
 {
+    ::dbtools::throwFeatureNotImplementedException( "bookmarks", *this );
     // adabas doesn't support bookmarks
 }
 // -----------------------------------------------------------------------------
-void OAdabasPreparedStatement::setResultSetConcurrency(sal_Int32 _par0)
+void OAdabasPreparedStatement::setResultSetConcurrency(sal_Int32 /*_par0*/)
 {
+    ::dbtools::throwFeatureNotImplementedException( "non-standard result set concurrencies: ", *this );
 }
 // -----------------------------------------------------------------------------
-void OAdabasPreparedStatement::setResultSetType(sal_Int32 _par0)
+void OAdabasPreparedStatement::setResultSetType(sal_Int32 /*_par0*/)
 {
+    ::dbtools::throwFeatureNotImplementedException( "non-standard result set types: ", *this );
 }
 // -----------------------------------------------------------------------------
 
