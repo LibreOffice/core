@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:04:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ namespace dbaui
 
         void implSetCurrentType( const DATASOURCE_TYPE _eType );
 
-        void switchMessage(sal_Bool _bDeleted,const DATASOURCE_TYPE _eType);
+        void switchMessage(const DATASOURCE_TYPE _eType);
 
         /// sets the the title of the parent dialog
         void setParentTitle(DATASOURCE_TYPE _eSelectedType);
