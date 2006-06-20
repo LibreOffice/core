@@ -12,6 +12,10 @@
 #define _ATL_APARTMENT_THREADED
 // #define _ATL_STATIC_REGISTRY
 
+#pragma warning(push)
+#pragma warning(push, 1)
+#pragma warning(disable: 4548)
+#pragma warning(disable: 4505)
 #include <atlbase.h>
 //You may derive a class from CComModule and use it if you want to override
 //something, but do not change the name of _Module
@@ -21,6 +25,9 @@ extern CComModule _Module;
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+
+#pragma warning(pop)
+#pragma warning(pop)
 
 #endif
 
