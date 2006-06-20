@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filinl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:24:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,6 @@ inline const sal_Bool& SAL_CALL shell::MyProperty::IsNative() const
 {
     return isNative;
 }
-inline const rtl::OUString& SAL_CALL shell::MyProperty::getPropertyName() const
-{
-    return PropertyName;
-}
 inline const sal_Int32& SAL_CALL shell::MyProperty::getHandle() const
 {
     return Handle;
@@ -51,7 +47,6 @@ inline const com::sun::star::uno::Type& SAL_CALL shell::MyProperty::getType() co
 {
     return Typ;
 }
-
 inline const com::sun::star::uno::Any& SAL_CALL shell::MyProperty::getValue() const
 {
     return Value;
