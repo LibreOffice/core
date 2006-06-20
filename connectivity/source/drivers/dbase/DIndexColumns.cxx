@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:38:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace ::comphelper;
@@ -107,8 +110,9 @@ sdbcx::ObjectType ODbaseIndexColumns::cloneObject(const Reference< XPropertySet 
     return xProp;
 }
 // -------------------------------------------------------------------------
-void ODbaseIndexColumns::appendObject( const Reference< XPropertySet >& descriptor )
+void ODbaseIndexColumns::appendObject( const Reference< XPropertySet >& /*descriptor*/ )
 {
+    ::dbtools::throwFeatureNotImplementedException( "XAppend::appendByDescriptor", static_cast< XAppend* >( this ) );
 }
 // -----------------------------------------------------------------------------
 
