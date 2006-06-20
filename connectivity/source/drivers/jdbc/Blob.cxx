@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Blob.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:07:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _INC_MEMORY
 //#include <memory.h>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace connectivity;
@@ -91,8 +94,8 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()J";
-        static char * cMethodName = "length";
+        static const char * cSignature = "()J";
+        static const char * cMethodName = "length";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -105,21 +108,21 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     } //t.pEnv
     return (sal_Int64)out;
 }
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL java_sql_Blob::getBytes( sal_Int64 pos, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL java_sql_Blob::getBytes( sal_Int64 pos, sal_Int32 count ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(JI)[B";
-        static char * cMethodName = "getBytes";
+        static const char * cSignature = "(JI)[B";
+        static const char * cMethodName = "getBytes";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,length);
+            jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,count);
             ThrowSQLException(t.pEnv,*this);
             if(out)
             {
@@ -141,8 +144,8 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/io/InputStream;";
-        static char * cMethodName = "getBinaryStream";
+        static const char * cSignature = "()Ljava/io/InputStream;";
+        static const char * cMethodName = "getBinaryStream";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -163,8 +166,8 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "([BI)J";
-        static char * cMethodName = "position";
+        static const char * cSignature = "([BI)J";
+        static const char * cMethodName = "position";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -182,25 +185,14 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
     return (sal_Int64)out;
 }
 
-sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& pattern, sal_Int64 start ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*pattern*/, sal_Int64 /*start*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    jlong out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
-    {
-        // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/sql/Blob;I)J";
-        static char * cMethodName = "positionOfBlob";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallLongMethod( object, mID,0,start );
-            ThrowSQLException(t.pEnv,*this);
-            // und aufraeumen
-        } //mID
-    } //t.pEnv
-    return (sal_Int64)out;
+    ::dbtools::throwFeatureNotImplementedException( "XBlob::positionOfBlob", *this );
+    // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore
+    // the pattern parameter. Since the effort for proper implementation is rather high - we would need
+    // to translated patter into a byte[] -, we defer this functionality for the moment (hey, it was
+    // unusable, anyway)
+    // 2005-11-15 / #i57457# / frank.schoenheit@sun.com
+    return 0;
 }
 
