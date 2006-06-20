@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:42:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@ namespace dbaui
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
         void SetReadOnly(sal_Bool _bRo=sal_True) { m_bReadOnly = _bRo; }
         virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+
+    private:
+        using OMarkableTreeListBox::Select;
     };
 
     // ========================================================
