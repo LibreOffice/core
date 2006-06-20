@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filinpstr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:24:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@ using namespace com::sun::star::ucb;
 
 XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
     : m_pMyShell( pMyShell ),
-      m_aFile( aUncPath ),
       m_xProvider( pMyShell->m_pProvider ),
+      m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
@@ -104,44 +104,12 @@ sal_Int32 SAL_CALL XInputStream_impl::getMinorError()
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//  XServiceInfo
-//////////////////////////////////////////////////////////////////////////////////////////
-
-rtl::OUString SAL_CALL
-XInputStream_impl::getImplementationName()
-    throw(uno::RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.io.comp.XInputStream");
-}
-
-
-
-sal_Bool SAL_CALL
-XInputStream_impl::supportsService( const rtl::OUString& ServiceName )
-    throw(uno::RuntimeException)
-{
-    return false;
-}
-
-
-
-uno::Sequence< rtl::OUString > SAL_CALL
-XInputStream_impl::getSupportedServiceNames()
-    throw( uno::RuntimeException )
-{
-    uno::Sequence< rtl::OUString > ret( 0 );
-    return ret;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 //  XTypeProvider
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-XTYPEPROVIDER_IMPL_4( XInputStream_impl,
+XTYPEPROVIDER_IMPL_3( XInputStream_impl,
                       lang::XTypeProvider,
-                      lang::XServiceInfo,
                       io::XSeekable,
                       io::XInputStream )
 
@@ -155,7 +123,6 @@ XInputStream_impl::queryInterface(
     uno::Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( io::XInputStream*,this ),
                                           SAL_STATIC_CAST( lang::XTypeProvider*,this ),
-                                          SAL_STATIC_CAST( lang::XServiceInfo*,this ),
                                           SAL_STATIC_CAST( io::XSeekable*,this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -203,7 +170,7 @@ XInputStream_impl::readBytes(
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
     // if any code relies on this, so be conservative---SB):
-    if (nrc != nBytesToRead)
+    if (sal::static_int_cast<sal_Int32>(nrc) != nBytesToRead)
         aData.realloc(sal_Int32(nrc));
     return ( sal_Int32 ) nrc;
 }
