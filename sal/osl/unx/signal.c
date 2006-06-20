@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:25:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,16 +178,16 @@ static void getExecutableName_Impl (rtl_String ** ppstrProgName)
 
 static sal_Bool is_soffice_Impl (void)
 {
-    sal_Int32    index       = -1;
+    sal_Int32    idx       = -1;
     rtl_String * strProgName = 0;
 
     getExecutableName_Impl (&strProgName);
     if (strProgName)
     {
-        index = rtl_str_indexOfStr (rtl_string_getStr (strProgName), "soffice");
+        idx = rtl_str_indexOfStr (rtl_string_getStr (strProgName), "soffice");
         rtl_string_release (strProgName);
     }
-    return (index != -1);
+    return (idx != -1);
 }
 
 static sal_Bool InitSignal()
@@ -388,12 +388,12 @@ static int ReportCrash( int Signal )
     static sal_Bool bCrashReporterExecuted = sal_False;
     sal_Bool        bAutoCrashReport = sal_False;
 
-    if ( !bErrorReportingEnabled )
-        return -1;
-
     sal_uInt32  argi;
     sal_uInt32  argc;
     rtl_uString *ustrCommandArg = NULL;
+
+    if ( !bErrorReportingEnabled )
+        return -1;
 
     argc = osl_getCommandArgCount();
 
@@ -518,7 +518,7 @@ static int ReportCrash( int Signal )
                         if ( dladdr( stackframes[iFrame], &dl_info) )
                         {
                             const char *dli_fname = NULL;
-                            const char *dli_fdir = NULL;
+                            char *dli_fdir = NULL;
                             char szDirectory[PATH_MAX];
                             char szCanonicDirectory[PATH_MAX];
 
@@ -548,12 +548,14 @@ static int ReportCrash( int Signal )
                                     dl_info.dli_fname, checksum, sizeof(checksum) );
                                 if ( nBytesProcessed )
                                 {
-                                    int i;
+                                    int j;
 
                                     fprintf( checksumout, "<errormail:Checksum sum=\"0x" );
-                                    for ( i = 0; i < 16; fprintf( checksumout, "%02X", checksum[i++] ) );
-                                    fprintf( checksumout, "\" bytes=\"%d\" file=\"%s\"/>\n",
-                                        nBytesProcessed,
+                                    for ( j = 0; j < 16; fprintf( checksumout, "%02X", checksum[j++] ) );
+                                    fprintf( checksumout,
+                                        "\" bytes=\"%lu\" file=\"%s\"/>\n",
+                                        SAL_INT_CAST(
+                                            unsigned long, nBytesProcessed),
                                         dli_fname );
                                 }
                             }
