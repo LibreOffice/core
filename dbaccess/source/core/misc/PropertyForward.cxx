@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyForward.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 11:55:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,9 @@ OPropertyForward::OPropertyForward(const Reference< XPropertySet>& _xSource
                                 ,const Reference< XNameAccess>& _xDestContainer
                                 ,const ::rtl::OUString& _sName
                                 ,const ::std::vector< ::rtl::OUString>& _aPropertyList)
-                                : m_xDestContainer(_xDestContainer)
+                                : m_xSource(_xSource)
+                                , m_xDestContainer(_xDestContainer)
                                 , m_sName(_sName)
-                                , m_xSource(_xSource)
                                 , m_bInInsert(sal_False)
 {
     DBG_CTOR(OPropertyForward,NULL);
@@ -137,7 +137,7 @@ void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt )
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPropertyForward::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (RuntimeException)
+void SAL_CALL OPropertyForward::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_xSource.is() )

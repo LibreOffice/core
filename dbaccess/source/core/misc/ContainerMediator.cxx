@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContainerMediator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:55:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ DBG_NAME(OContainerMediator)
 OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer
                                        ,const Reference< XNameAccess >& _xSettings
                                        ,sal_Bool _bTables)
-    : m_xContainer(_xContainer)
-    , m_xSettings(_xSettings)
+    : m_xSettings(_xSettings)
+    , m_xContainer(_xContainer)
     , m_bTables(_bTables)
 {
     DBG_CTOR(OContainerMediator,NULL);
@@ -127,7 +127,7 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
 {
 
 }
