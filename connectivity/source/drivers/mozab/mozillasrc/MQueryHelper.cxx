@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:19:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,19 +162,13 @@ MQueryHelperResultEntry::setValue( const rtl::OUString &key, const rtl::OUString
 // MIME-types.
 static char PreferMailFormatTypes[2][11] = {"text/plain",
                         "text/html"};
-// This is what mozilla returns.
-static char mozPreferMailFormatTypes[3][11] = {"unknown",
-                                               "plaintext",
-                                               "html"};
-
-
 MQueryHelper::MQueryHelper()
-    : mRefCnt( 0 ) // NSISUPPORTS - Initialize RefCnt to 0
-    , m_nIndex( 0 )
-    , m_bHasMore( sal_True )
-    , m_bQueryComplete( sal_False )
-    , m_bAtEnd( sal_False )
-    , m_bErrorCondition( sal_False )
+    :m_nIndex( 0 )
+    ,m_bHasMore( sal_True )
+    ,m_bAtEnd( sal_False )
+    ,m_bErrorCondition( sal_False )
+    ,m_bQueryComplete( sal_False )
+    ,mRefCnt( 0 ) // NSISUPPORTS - Initialize RefCnt to 0
 {
     m_aResults.clear();
 #if OSL_DEBUG_LEVEL > 0
@@ -293,7 +287,7 @@ MQueryHelper::next( )
 }
 
 MQueryHelperResultEntry*
-MQueryHelper::getByIndex( sal_Int32 nRow )
+MQueryHelper::getByIndex( sal_uInt32 nRow )
 {
     // Row numbers are from 1 to N, need to ensure this, and then
     // substract 1
@@ -327,11 +321,6 @@ MQueryHelper::getByIndex( sal_Int32 nRow )
             return( m_aResults[ nRow -1 ] );
         }
     } while ( sal_True );
-
-    OSL_TRACE("!!!!! Shouldn't have reached this!!!!\n");
-
-    return( NULL );
-
 }
 
 sal_Bool
@@ -393,7 +382,7 @@ MQueryHelper::waitForRow( sal_Int32 rowNum )
             return( sal_False );
         m_aMutex.acquire();
     }
-    while ( !m_bQueryComplete && m_aResults.size() < rowNum );
+    while ( !m_bQueryComplete && m_aResults.size() < (size_t)rowNum );
 
     m_aMutex.release();
     return( sal_True );
@@ -453,19 +442,16 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         m_bErrorCondition = sal_True;
         notifyResultOrComplete();
         return NS_OK;
-        break;
     case nsIAbDirectoryQueryResult::queryResultStopped:
         OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultStopped\n");
         m_bQueryComplete = sal_True;
         notifyResultOrComplete();
         return NS_OK;
-        break;
     case nsIAbDirectoryQueryResult::queryResultComplete:
         OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultComplete\n");
         m_bQueryComplete = sal_True;
         notifyResultOrComplete();
         return NS_OK;
-        break;
     case nsIAbDirectoryQueryResult::queryResultMatch:
         OSL_TRACE("IN MQueryHelper::OnQueryItem --> queryResultMatch\n");
         // Don't return, continues onto rest of method.
@@ -474,7 +460,6 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         OSL_TRACE("\t******** Unexpected : resultType\n");
         m_bQueryComplete = sal_True;
         return NS_OK;
-        break;
     }
 
     // Initialise an array that holds the resultset of the query.
@@ -998,7 +983,7 @@ sal_Bool MQueryHelper::resyncRow(sal_Int32 rowIndex)
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();
-    nsIAbCard *aNewCard = getUpdatedCard(card);
+    card = getUpdatedCard(card);
     getCardValues(card,rowIndex);
     return sal_True;
 }
