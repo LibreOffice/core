@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSInit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:24:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,14 @@
 
 #include <sal/types.h>
 
-sal_Bool MNS_Init(sal_Bool& aProfileExists,sal_Int32 nProduct);
+sal_Bool MNS_Init(sal_Bool& aProfileExists);
 sal_Bool MNS_Term(sal_Bool aForce=sal_False);
 
-sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists,sal_Int32 nProduct);
+sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists);
 typedef struct UI_Thread_ARGS
 {
     sal_Bool* bProfileExists;
-    sal_Int32 nProduct;
 }UI_Thread_ARGS;
-static void MNS_Mozilla_UI_Thread( void *arg );
 void MNS_XPCOM_EventLoop();
 
 #endif // _CONNECTIVITY_MAB_NS_INIT_HXX_ 1
