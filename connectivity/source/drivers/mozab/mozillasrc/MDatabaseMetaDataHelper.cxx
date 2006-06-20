@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:18:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:50:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ namespace connectivity
     }
 }
 
-extern sal_Bool MNS_Init(sal_Bool& aProfileExists,sal_Int32 nProduct);
+extern sal_Bool MNS_Init(sal_Bool& aProfileExists);
 
 // -------------------------------------------------------------------------
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
@@ -303,8 +303,6 @@ static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array)
 }
 
 // Case where we get a factory uri and need to have it build the directories.
-static const char *kPropertyName = "uri" ;
-
 static nsresult getSubsFromFactory(const rtl::OString& aFactory, nsIEnumerator **aSubs)
 {
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
@@ -658,9 +656,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;
 
-    const ::rtl::OUString* pTArray = types.getConstArray();
-
-    for ( sal_Int32 i = 0; i < tables.size(); i++ ) {
+    for ( size_t i = 0; i < tables.size(); i++ ) {
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
         ::rtl::OUString aTableName  = tables[i];
@@ -704,7 +700,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     rtl::OUString   sAbPassword;
     sal_Bool      useSSL    = _pCon->getUseSSL();
 
-    nsresult       rv;
+    nsresult       rv(0);
 
     sAbURI = OUStringToOString( _pCon->getMozURI(), RTL_TEXTENCODING_ASCII_US );
     sAbBindDN   = _pCon->getBindDN();
@@ -755,7 +751,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
         rv = xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()); //release resource
         }
-    return rv;
+    return NS_SUCCEEDED( rv );
 }
 
 sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl::OUString & aTableName)
