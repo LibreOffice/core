@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:23:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,9 @@ sal_Bool SAL_CALL OAdabasResultSet::first(  ) throw(SQLException, RuntimeExcepti
     }
 
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    if(bRet = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO))
+
+    bRet = ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO );
+    if ( bRet )
         m_nRowPos = 1;
     return bRet;
 }
