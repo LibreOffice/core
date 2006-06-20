@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ManifestImport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:03:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@ using namespace rtl;
 using namespace std;
 
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
-: rManVector ( rNewManVector )
-, nNumProperty (0)
+: nNumProperty (0)
 , bIgnoreEncryptData    ( sal_False )
+, rManVector ( rNewManVector )
 
 , sFileEntryElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) )
 , sManifestElement      ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) )
@@ -75,8 +75,8 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sIterationCountAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) )
 , sAlgorithmNameAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) )
 , sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) )
-, sChecksumTypeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) )
 , sChecksumAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM ) )
+, sChecksumTypeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) )
 
 , sFullPathProperty             ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) )
 , sMediaTypeProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) )
@@ -183,7 +183,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         }
     }
 }
-void SAL_CALL ManifestImport::endElement( const OUString& aName )
+void SAL_CALL ManifestImport::endElement( const OUString& /*aName*/ )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
     if ( !aStack.empty() )
@@ -198,19 +198,19 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
         aStack.pop();
     }
 }
-void SAL_CALL ManifestImport::characters( const OUString& aChars )
+void SAL_CALL ManifestImport::characters( const OUString& /*aChars*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& aWhitespaces )
+void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL ManifestImport::processingInstruction( const OUString& aTarget, const OUString& aData )
+void SAL_CALL ManifestImport::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator )
+void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
