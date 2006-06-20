@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:42:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -854,10 +854,9 @@ typedef void (* handleUnoTypeRegistryEntityFunction)(
     typereg::Reader const & reader, Dependencies * dependencies);
 
 void handleEnumType(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    TypeManager const &, JavaOptions /*TODO const*/ & options,
+    typereg::Reader const & reader, Dependencies *)
 {
-    OSL_ASSERT(dependencies != 0);
     sal_uInt16 fields = reader.getFieldCount();
     if (fields == 0 || reader.getSuperTypeCount() != 0
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
@@ -1737,7 +1736,7 @@ sal_uInt16 addLoadLocal(
                 RTL_CONSTASCII_STRINGPARAM(
                     "Too many local variables for Java class file format")));
     }
-    *index += size;
+    *index = *index + size;
     return stack;
 }
 
@@ -2006,7 +2005,7 @@ void handleAggregatingType(
         code->instrInvokespecial(
             superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;)V")));
-        sal_uInt16 stack = 0;
+        stack = 0;
         for (sal_uInt16 i = firstField; i < fields; ++i) {
             stack = std::max(
                 stack,
@@ -2224,16 +2223,16 @@ void handleInterfaceType(
                 manager, dependencies,
                 rtl::OString(RTL_CONSTASCII_STRINGPARAM("void")), 0, 0);
             sdesc.addParameter(fieldType, false, true, 0);
-            std::vector< rtl::OString > exc;
+            std::vector< rtl::OString > exc2;
             if (setter != SAL_MAX_UINT16) {
                 createExceptionsAttribute(
-                    manager, reader, setter, dependencies, &exc, 0);
+                    manager, reader, setter, dependencies, &exc2, 0);
             }
             cf->addMethod(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
                 rtl::OString(RTL_CONSTASCII_STRINGPARAM("set")) + attrName,
-                sdesc.getDescriptor(), 0, exc, sdesc.getSignature());
+                sdesc.getDescriptor(), 0, exc2, sdesc.getSignature());
         }
         typeInfo.push_back(
             TypeInfo(
@@ -2312,13 +2311,13 @@ void handleInterfaceType(
                                 polymorphicUnoType));
                     }
                 }
-                std::vector< rtl::OString > exc;
+                std::vector< rtl::OString > exc2;
                 createExceptionsAttribute(
-                    manager, reader, i, dependencies, &exc, 0);
+                    manager, reader, i, dependencies, &exc2, 0);
                 cf->addMethod(
                     static_cast< ClassFile::AccessFlags >(
                         ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                    methodName, desc.getDescriptor(), 0, exc,
+                    methodName, desc.getDescriptor(), 0, exc2,
                     desc.getSignature());
                 break;
             }
@@ -2351,7 +2350,7 @@ void handleInterfaceType(
 }
 
 void handleTypedef(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
+    TypeManager const & manager, JavaOptions /*TODO const*/ &,
     typereg::Reader const & reader, Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
