@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:32:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,8 @@ const USHORT COL_ALTER      = 6;
 const USHORT COL_REF        = 7;
 const USHORT COL_DROP       = 8;
 
-DBG_NAME(OTableGrantControl);
+DBG_NAME(OTableGrantControl)
+
 //================================================================================
 // OTableGrantControl
 //================================================================================
@@ -88,8 +89,9 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     :EditBrowseBox( pParent,_RsId, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE )
     ,m_pCheckCell( NULL )
     ,m_pEdit( NULL )
-    ,m_nDeActivateEvent(0)
+    ,m_nDataPos( 0 )
     ,m_bEnable(TRUE)
+    ,m_nDeactivateEvent(0)
 {
     DBG_CTOR(OTableGrantControl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -113,10 +115,10 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
 OTableGrantControl::~OTableGrantControl()
 {
     DBG_DTOR(OTableGrantControl,NULL);
-    if (m_nDeActivateEvent)
+    if (m_nDeactivateEvent)
     {
-        Application::RemoveUserEvent(m_nDeActivateEvent);
-        m_nDeActivateEvent = 0;
+        Application::RemoveUserEvent(m_nDeactivateEvent);
+        m_nDeactivateEvent = 0;
     }
 
     delete m_pCheckCell;
@@ -197,15 +199,15 @@ long OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)
         if (!HasChildPathFocus())
         {
-            if (m_nDeActivateEvent)
-                Application::RemoveUserEvent(m_nDeActivateEvent);
-            m_nDeActivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate));
+            if (m_nDeactivateEvent)
+                Application::RemoveUserEvent(m_nDeactivateEvent);
+            m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate));
         }
     if (rNEvt.GetType() == EVENT_GETFOCUS)
     {
-        if (m_nDeActivateEvent)
-            Application::RemoveUserEvent(m_nDeActivateEvent);
-        m_nDeActivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate));
+        if (m_nDeactivateEvent)
+            Application::RemoveUserEvent(m_nDeactivateEvent);
+        m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate));
     }
     return EditBrowseBox::PreNotify(rNEvt);
 }
@@ -213,7 +215,7 @@ long OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 //------------------------------------------------------------------------------
 IMPL_LINK(OTableGrantControl, AsynchActivate, void*, EMPTYARG)
 {
-    m_nDeActivateEvent = 0;
+    m_nDeactivateEvent = 0;
     ActivateCell();
     return 0L;
 }
@@ -221,7 +223,7 @@ IMPL_LINK(OTableGrantControl, AsynchActivate, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 IMPL_LINK(OTableGrantControl, AsynchDeactivate, void*, EMPTYARG)
 {
-    m_nDeActivateEvent = 0;
+    m_nDeactivateEvent = 0;
     DeactivateCell();
     return 0L;
 }
@@ -324,7 +326,7 @@ String OTableGrantControl::GetCellText( long nRow, USHORT nColId ) const
 }
 
 //------------------------------------------------------------------------------
-void OTableGrantControl::InitController( CellControllerRef& rController, long nRow, USHORT nColumnId )
+void OTableGrantControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     String sTablename = m_aTableNames[nRow];
