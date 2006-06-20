@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dumputils.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:14:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,19 +39,16 @@
 
 namespace rtl { class OString; }
 class FileStream;
-class TypeManager;
 
 namespace codemaker { namespace cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, TypeManager const & manager,
-    rtl::OString const & registryType, bool fullModuleType);
+    FileStream & out, rtl::OString const & registryType, bool fullModuleType);
 
 bool dumpNamespaceClose(
     FileStream & out, rtl::OString const & registryType, bool fullModuleType);
 
-void dumpTypeIdentifier(FileStream & out, TypeManager const & manager,
-                        rtl::OString const & registryType);
+void dumpTypeIdentifier(FileStream & out, rtl::OString const & registryType);
 
 } }
 
