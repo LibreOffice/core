@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:03:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,15 +274,15 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
