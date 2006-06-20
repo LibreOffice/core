@@ -1,10 +1,12 @@
 #ifndef INCLUDED_MSIHELPER_HXX
 #define INCLUDED_MSIHELPER_HXX
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <string>
 
 /**
