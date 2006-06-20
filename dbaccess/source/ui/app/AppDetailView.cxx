@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:19:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,6 @@ Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
 
     // try to let the focus rect start before the bitmap item - this looks better
     SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP );
-    USHORT nTabPos = 0;
     SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : NULL;
     SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
     DBG_ASSERT( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
@@ -185,7 +184,7 @@ Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
     return aRect;
 }
 // -----------------------------------------------------------------------------
-void OCreationList::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+void OCreationList::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     // don't give this to the base class, it does a ReleaseMouse as very first action
     // Though I think this is a bug (it should ReleaseMouse only if it is going to do
@@ -439,7 +438,7 @@ void OTasksWindow::setHelpText(USHORT _nId)
         m_aHelpText.SetText(String());
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, _pTreeBox)
+IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     SvLBoxEntry* pEntry = m_aCreation.GetHdlEntry();
