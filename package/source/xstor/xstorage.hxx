@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:13:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@
 namespace cppu
 {
     class OTypeCollection;
-};
+}
 
 //================================================
 // a common implementation for an entry
