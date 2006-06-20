@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:20:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,14 +95,33 @@ OString convertToAbsoluteSystemPath(const OString& fileName)
     OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
     if ( isFileUrl(fileName) )
     {
-        OSL_VERIFY(FileBase::getSystemPathFromFileURL(uFileName, uSysFileName) == FileBase::E_None);
+        if (FileBase::getSystemPathFromFileURL(uFileName, uSysFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
         OUString uWorkingDir, uUrlFileName, uTmp;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uTmp) == FileBase::E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uTmp, uUrlFileName) == FileBase::E_None );
-        OSL_VERIFY( FileBase::getSystemPathFromFileURL(uUrlFileName, uSysFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getFileURLFromSystemPath(uFileName, uTmp)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, uTmp, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getSystemPathFromFileURL(uUrlFileName, uSysFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return OUStringToOString(uSysFileName, osl_getThreadTextEncoding());
@@ -115,15 +134,18 @@ OString convertToFileUrl(const OString& fileName)
         OString tmp = convertToAbsoluteSystemPath(fileName);
         OUString uFileName(tmp.getStr(), tmp.getLength(), osl_getThreadTextEncoding());
         OUString uUrlFileName;
-        OSL_VERIFY(FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None);
+        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
         return OUStringToOString(uUrlFileName, osl_getThreadTextEncoding());
     }
 
     return fileName;
 }
 
-// prefix must be specified, postfix could be empty string
-OString makeTempName(const OString& prefix, const OString& postfix)
+OString makeTempName(const OString& prefix)
 {
     OUString uTmpPath;
     OString tmpPath;
@@ -170,12 +192,6 @@ OString makeTempName(const OString& prefix, const OString& postfix)
 #else
     (void) mktemp(tmpFilePattern);
 #endif
-    /** DBO (08/22/2002):
-        since mkstemp() creates the file, it won't be removed anywhere later appending a postfix.
-        Is the postfix necessarry?
-    */
-//      if ( postfix.getLength() )
-//          strncat(tmpFilePattern, postfix.getStr(), sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
 #endif
 
 #ifdef __OS2__
@@ -235,8 +251,8 @@ sal_Bool copyFile(const OString* source, const OString& target)
 sal_Int32 compileFile(const OString * pathname)
 {
     // preprocess input file
-    OString tmpFile = makeTempName(OString("idli_"), OString(".idl"));
-    OString preprocFile = makeTempName(OString("idlf_"), OString(".idl"));
+    OString tmpFile = makeTempName(OString("idli_"));
+    OString preprocFile = makeTempName(OString("idlf_"));
 
     OString fileName;
     if (pathname == 0) {
@@ -294,7 +310,7 @@ sal_Int32 compileFile(const OString * pathname)
     cppArgs.append(preprocFile);
     cppArgs.append("\"");
 
-    OString cmdFileName = makeTempName(OString("idlc_"), OString());
+    OString cmdFileName = makeTempName(OString("idlc_"));
     FILE* pCmdFile = fopen(cmdFileName, "w");
 
     if ( !pCmdFile )
@@ -311,7 +327,9 @@ sal_Int32 compileFile(const OString * pathname)
 
     OUString cpp;
     OUString startDir;
-    OSL_VERIFY(osl_getExecutableFile(&cpp.pData) == osl_Process_E_None);
+    if (osl_getExecutableFile(&cpp.pData) != osl_Process_E_None) {
+        OSL_ASSERT(false);
+    }
 
     sal_Int32 idx= cpp.lastIndexOf(OUString( RTL_CONSTASCII_USTRINGPARAM("idlc")) );
      cpp = cpp.copy(0, idx);
@@ -330,7 +348,11 @@ sal_Int32 compileFile(const OString * pathname)
 
     oslProcessInfo hInfo;
     hInfo.Size = (sal_uInt32)(sizeof(oslProcessInfo));
-    OSL_VERIFY( osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &hInfo) == osl_Process_E_None );
+    if (osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &hInfo)
+        != osl_Process_E_None)
+    {
+        OSL_ASSERT(false);
+    }
 
     if ( procError || (hInfo.Code != 0) )
     {
