@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:31:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,10 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     &nInfo, &nConverted);
                 if (nInfo == 0)
                 {
-                    OSL_ASSERT(nConverted == aBuf.getLength());
+                    OSL_ASSERT(
+                        nConverted
+                        == sal::static_int_cast< sal_uInt32 >(
+                            aBuf.getLength()));
                     rtl_destroyTextToUnicodeConverter(aConverter);
                     *pBegin = p;
                     *pType = EscapeChar;
@@ -571,8 +574,11 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
          0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
        }};
-    OSL_ENSURE(eCharClass < sizeof aCharClass / sizeof aCharClass[0],
-               "bad eCharClass");
+    OSL_ENSURE(
+        (eCharClass >= 0
+         && (sal::static_int_cast< std::size_t >(eCharClass)
+             < sizeof aCharClass / sizeof aCharClass[0])),
+        "bad eCharClass");
     return aCharClass[eCharClass];
 }
 
