@@ -4,9 +4,9 @@
  *
  *  $RCSfile: converter.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,18 +43,6 @@
 #if defined __cplusplus
 extern "C" {
 #endif /* __cpluscplus */
-
-sal_Bool ImplIsNoncharacter(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_Bool ImplIsControlOrFormat(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_Bool ImplIsPrivateUse(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_Bool ImplIsHighSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_Bool ImplIsLowSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_Bool ImplIsZeroWidth(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
 typedef enum
 {
