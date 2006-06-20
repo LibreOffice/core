@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:25:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,11 +68,11 @@ const sal_Int32 nBytesCount = 32000;
 
 // --------------------------------------------------------------------------------
 OLESimpleStorage::OLESimpleStorage( uno::Reference< lang::XMultiServiceFactory > xFactory )
-: m_xFactory( xFactory )
-, m_bDisposed( sal_False )
+: m_bDisposed( sal_False )
 , m_pStream( NULL )
 , m_pStorage( NULL )
 , m_pListenersContainer( NULL )
+, m_xFactory( xFactory )
 , m_bNoTemporaryCopy( sal_False )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided on creation!\n" );
@@ -787,8 +787,8 @@ uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
     return ::rtl::OUString();
 }
 
-void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& aClassID,
-                            const ::rtl::OUString& sClassName )
+void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /*aClassID*/,
+                            const ::rtl::OUString& /*sClassName*/ )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
