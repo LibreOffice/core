@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-14 12:11:21 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:43:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@ PRJ=..
 
 PRJNAME=np_sdk
 TARGET=npsdk
+
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Settings -----------------------------------------------------
 
