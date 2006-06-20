@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:33:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,11 +225,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                     ;
                 if( *pEqual )
                 {
-                    const ByteString    aPath( pEqual + 1 );
-                    DirEntry            aDir( String( aPath, RTL_TEXTENCODING_ASCII_US ) );
+                    const ByteString    aSPath( pEqual + 1 );
+                    DirEntry            aSDir( String( aSPath, RTL_TEXTENCODING_ASCII_US ) );
 
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
-                                                                              ByteString( aDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) ) );
+                                                                              ByteString( aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) ) );
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
@@ -1223,7 +1223,11 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
                 while( ( aReplIter != rContext.pCmdLine->m_aReplacements.end() ) && !bFound )
                 {
-                    if( ByteString( aRelPathStr ).ToLowerAscii().Search( ByteString( aReplIter->second ).ToLowerAscii() ) == 0 )
+                    ByteString aSearch( aReplIter->second );
+                    aSearch.ToLowerAscii();
+                    ByteString aSearchIn( aRelPathStr );
+                    aSearchIn.ToLowerAscii();
+                    if( aSearchIn.Search( aSearch ) == 0 )
                     {
                         sal_Int32       nCopyPos = aReplIter->second.getLength(), nLength = aRelPathStr.getLength();
                         const sal_Char* pChars = aRelPathStr.getStr();
