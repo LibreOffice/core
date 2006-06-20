@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:29:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ namespace dbaui
         // alle TabWins verstecken (NICHT loeschen, sie werden in eine Undo-Action gepackt)
         virtual void    HideTabWins();
 
-        virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
+        virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) = 0;
 
         /** RemoveConnection allows to remove connections from join table view, it implies that the same as addConnection
 
@@ -184,12 +184,12 @@ namespace dbaui
         */
         void addConnection(OTableConnection* _pConnection,sal_Bool _bAddData = sal_True);
 
-        BOOL            Scroll( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
+        BOOL            ScrollPane( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
         ULONG           GetTabWinCount();
         Point           GetScrollOffset() const { return m_aScrollOffset; }
 
         OJoinDesignView*            getDesignView() const { return m_pView; }
-        OTableWindow*               GetWindow( const String& rName );
+        OTableWindow*               GetTabWindow( const String& rName );
 
         OTableConnection*           GetSelectedConn() { return m_pSelectedConn; }
         void                        DeselectConn(OTableConnection* pConn);  // NULL ist ausdruecklich zugelassen, dann passiert nichts
@@ -319,6 +319,9 @@ namespace dbaui
             @param  _pAction a possible undo action to add at the controller
         */
         void invalidateAndModify(SfxUndoAction *_pAction=NULL);
+
+    private:
+        using Window::Scroll;
     };
 }
 #endif // DBAUI_JOINTABLEVIEW_HXX
