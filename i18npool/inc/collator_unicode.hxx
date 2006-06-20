@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,17 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/module.h>
+
+// External unicode includes (from icu) cause warning C4668 on Windows.
+// We want to minimize the patches to external headers, so the warnings are
+// disabled here instead of in the header file itself.
+#ifdef _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <unicode/tblcoll.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 //      ----------------------------------------------------
 //      class Collator_Unicode
@@ -66,13 +76,13 @@ public:
 
 
     // following 4 methods are implemented in collatorImpl.
-    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale& rLocale,  sal_Int32 collatorOptions)
+    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale&,  sal_Int32)
         throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}
-    void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const rtl::OUString& impl, const lang::Locale& rLocale,
-        const com::sun::star::uno::Sequence< sal_Int32 >& collatorOptions) throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL listCollatorAlgorithms( const lang::Locale& rLocale )
+    void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const rtl::OUString&, const lang::Locale&,
+        const com::sun::star::uno::Sequence< sal_Int32 >&) throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}
+    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL listCollatorAlgorithms( const lang::Locale&)
         throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}
-    com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const rtl::OUString& collatorAlgorithmName )
+    com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const rtl::OUString& )
         throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}
 
     //XServiceInfo
