@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:41:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
     const ImplDBCSToUniLeadTab* pLeadTab = pConvertData->mpToUniLeadTab;
     sal_Unicode*                pEndDestBuf;
     const sal_Char*             pEndSrcBuf;
+
+    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -256,6 +258,8 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
            EUC-KR, which uses the MS-949 tables, but does not support the full
            range of MS-949 */
 
+    (void) pContext; /* unused */
+
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
     pEndSrcBuf  = pSrcBuf+nSrcChars;
@@ -416,6 +420,8 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
     const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
     const sal_Char*             pEndSrcBuf;
+
+    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -579,6 +585,8 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
     const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
     sal_Char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
+
+    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
