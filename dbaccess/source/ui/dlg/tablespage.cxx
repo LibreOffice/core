@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:32:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ DBG_NAME(OTableSubscriptionPage)
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
         ,OContainerListener( m_aNotifierMutex )
         ,m_aTables              (this, ResId(FL_SEPARATOR1))
-        ,m_aTablesList          (this, NULL,ResId(CTL_TABLESUBSCRIPTION),sal_False)
+        ,m_aTablesList          (this, NULL,ResId(CTL_TABLESUBSCRIPTION),sal_True)
         ,m_aExplanation         (this, ResId(FT_FILTER_EXPLANATION))
         ,m_bCheckedAll          ( sal_False )
         ,m_bCatalogAtStart      ( sal_True )
@@ -1010,7 +1010,7 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    void OTableSubscriptionPage::_elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    void OTableSubscriptionPage::_elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
         DBG_ERROR( "OTableSubscriptionPage::_elementReplaced: not implemented!" );
     }
@@ -1038,7 +1038,7 @@ DBG_NAME(OTableSubscriptionPage)
         // not interested in
     }
     // -----------------------------------------------------------------------
-    void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
     // -----------------------------------------------------------------------
