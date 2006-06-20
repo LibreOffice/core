@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsctop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -981,7 +981,7 @@ void RscTop::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
 void RscTop::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {
