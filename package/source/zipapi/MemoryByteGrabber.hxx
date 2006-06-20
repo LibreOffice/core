@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MemoryByteGrabber.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:12:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@ protected:
 public:
     MemoryByteGrabber ( const com::sun::star::uno::Sequence < sal_Int8 > & rBuffer )
     : maBuffer ( rBuffer )
-    , mnCurrent ( 0 )
     , mpBuffer ( rBuffer.getConstArray() )
+    , mnCurrent ( 0 )
     , mnEnd ( rBuffer.getLength() )
     {
     }
