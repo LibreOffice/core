@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:44:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,9 @@ namespace dbaui
         virtual void GetFocus();
         virtual void resizeDocumentView(Rectangle& rRect);
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+
+    private:
+        using ODataView::Construct;
     };
 
     class BrowserViewStatusDisplay
