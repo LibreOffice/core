@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FTables.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:57:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ using namespace ::com::sun::star::container;
 namespace starutil      = ::com::sun::star::util;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& /*_rName*/)
 {
     return sdbcx::ObjectType();
 }
