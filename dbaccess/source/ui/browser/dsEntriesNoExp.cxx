@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:28:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry*
             return etTable;
         case etQueryContainer:
             return etQuery;
+        default:
+            break;
     }
     return etUnknown;
 }
@@ -202,8 +204,6 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
         {
             m_bHiContrast = bHiContrast;
             // change all bitmap entries
-            DBTreeListBox* pListBox = m_pTreeView->getListBox();
-
             SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
             while ( pEntryLoop )
             {
@@ -218,8 +218,8 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
                         SvLBoxItem* pItem = pEntryLoop->GetItem(i);
                         if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
                         {
-                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1(pEntryLoop,aImage);
-                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2(pEntryLoop,aImage);
+                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1( aImage );
+                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2( aImage );
                             break;
                         }
                     }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:26:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,11 @@ namespace dbaui
                 return _bHiContrast ? QUERYFOLDER_TREE_ICON_SCH : QUERYFOLDER_TREE_ICON;
             case SbaTableQueryBrowser::etTableContainer:
                 return _bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON;
+            case SbaTableQueryBrowser::etUnknown:
+                break;
         }
         OSL_ENSURE(sal_False, "DBTreeListModel::getImageResId: invalid entry type!");
         return 0;
     }
 
-};
-
-
+}
