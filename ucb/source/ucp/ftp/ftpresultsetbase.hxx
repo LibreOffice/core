@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpresultsetbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:38:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0<= m_nRow && m_nRow < m_aItems.size() )
+            if( 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 m_nWasNull = m_aItems[m_nRow]->wasNull();
             else
                 m_nWasNull = true;
@@ -161,7 +161,7 @@ namespace ftp {
                    com::sun::star::uno::RuntimeException)
         {
             rtl::OUString ret;
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 ret = m_aItems[m_nRow]->getString( columnIndex );
 
             return ret;
@@ -173,7 +173,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBoolean( columnIndex );
             else
                 return false;
@@ -185,7 +185,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getByte( columnIndex );
             else
                 return sal_Int8( 0 );
@@ -198,7 +198,7 @@ namespace ftp {
                 com::sun::star::sdbc::SQLException,
                 com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getShort( columnIndex );
             else
                 return sal_Int16( 0 );
@@ -210,7 +210,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getInt( columnIndex );
             else
                 return sal_Int32( 0 );
@@ -222,7 +222,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getLong( columnIndex );
             else
                 return sal_Int64( 0 );
@@ -234,7 +234,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getFloat( columnIndex );
             else
                 return float( 0 );
@@ -246,7 +246,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDouble( columnIndex );
             else
                 return double( 0 );
@@ -258,7 +258,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
             else
                 return com::sun::star::uno::Sequence< sal_Int8 >();
@@ -270,7 +270,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDate( columnIndex );
             else
                 return com::sun::star::util::Date();
@@ -282,7 +282,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTime( columnIndex );
             else
                 return com::sun::star::util::Time();
@@ -294,7 +294,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTimestamp( columnIndex );
             else
                 return com::sun::star::util::DateTime();
@@ -308,7 +308,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
             else
                 return com::sun::star::uno::Reference<
@@ -322,7 +322,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
             else
                 return com::sun::star::uno::Reference<
@@ -337,7 +337,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
             else
                 return com::sun::star::uno::Any();
@@ -350,7 +350,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getRef( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XRef >();
@@ -363,7 +363,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob >();
@@ -376,7 +376,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getClob( columnIndex );
             else
                 return com::sun::star::uno::Reference<
@@ -390,7 +390,7 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getArray( columnIndex );
             else
                 return com::sun::star::uno::Reference<
@@ -609,7 +609,7 @@ namespace ftp {
         com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider >  m_xProvider;
-        sal_uInt32                          m_nRow;
+        sal_Int32                           m_nRow;
         sal_Bool                            m_nWasNull;
         sal_Int32                           m_nOpenMode;
         sal_Bool                            m_bRowCountFinal;
