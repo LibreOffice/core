@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 11:20:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,8 +192,9 @@ bool RegistryKeyImpl::HasSubKey(const std::wstring& Name) const
 */
 void RegistryKeyImpl::Close()
 {
-    LONG rc = RegCloseKey(m_hSubKey);
-    assert(ERROR_SUCCESS == rc);
+    if (RegCloseKey(m_hSubKey) != ERROR_SUCCESS) {
+        assert(false);
+    }
 
     m_hSubKey = 0;
     m_IsWriteable = false;
