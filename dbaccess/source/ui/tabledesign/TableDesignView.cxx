@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:50:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,6 @@ void OTableBorderWindow::Resize()
 
     //////////////////////////////////////////////////////////////////////
     // Fenster setzen
-    long nEditCrtl_X = long(0.3 * nOutputWidth);
-
     m_pEditorCtrl->SetPosSizePixel( Point(0, 0), Size(nOutputWidth , nSplitPos) );
 
     m_pFieldDescWin->SetPosSizePixel(   Point(0, nSplitPos+nSplitterHeight),
@@ -162,11 +160,8 @@ void OTableBorderWindow::Resize()
 //------------------------------------------------------------------------------
 IMPL_LINK( OTableBorderWindow, SplitHdl, Splitter*, pSplit )
 {
-    long nSplitPos = pSplit->GetSplitPosPixel();
-
     if(pSplit == &m_aHorzSplitter)
     {
-        long nTest = m_aHorzSplitter.GetPosPixel().Y();
         m_aHorzSplitter.SetPosPixel( Point( m_aHorzSplitter.GetPosPixel().X(),m_aHorzSplitter.GetSplitPosPixel() ) );
         Resize();
     }
@@ -290,7 +285,7 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
+IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, /*pAcc*/ )
 {
     if( getController()->isReadOnly() )
         return 0;
@@ -341,6 +336,8 @@ IClipboardTest* OTableDesignView::getActiveChild() const
             break;
         case EDITOR:
             pTest = GetEditorCtrl();
+            break;
+        case NONE:
             break;
     }
     return pTest;
