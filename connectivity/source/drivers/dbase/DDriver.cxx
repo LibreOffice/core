@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:37:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url ) throw(SQLExc
     return !url.compareTo(::rtl::OUString::createFromAscii("sdbc:dbase:"),11);
 }
 // -----------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
     {
