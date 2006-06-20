@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 17:10:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,11 +271,22 @@ OUString convertToFileUrl(const OString& fileName)
     if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
-        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
+        {
+            OSL_ASSERT(false);
+        }
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     } else
     {
-        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
+            != FileBase::E_None)
+        {
+            OSL_ASSERT(false);
+        }
     }
 
     return uUrlFileName;
@@ -295,14 +306,13 @@ FileStream::FileStream(const OString& name, FileAccessMode mode)
 {
     if ( name.getLength() > 0 )
     {
+        OUString sUrl(convertToFileUrl(name));
+#ifdef SAL_UNX
         sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
                            osl_File_Attribute_OwnRead |
                            osl_File_Attribute_GrpWrite |
                            osl_File_Attribute_GrpRead |
                            osl_File_Attribute_OthRead;
-
-        OUString sUrl(convertToFileUrl(name));
-#ifdef SAL_UNX
         if (osl_openFile(sUrl.pData, &m_file, checkAccessMode(mode)) == osl_File_E_None &&
             osl_setFileAttributes(sUrl.pData, uAttr) == osl_File_E_None)
 #else
@@ -339,14 +349,13 @@ void FileStream::createTempFile(const OString& sPath)
 
     sTmpPath = convertToFileUrl(sTmp);
 
-    sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
-                       osl_File_Attribute_OwnRead |
-                       osl_File_Attribute_GrpWrite |
-                       osl_File_Attribute_GrpRead |
-                       osl_File_Attribute_OthRead;
-
     if (osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData) == osl_File_E_None) {
 #ifdef SAL_UNX
+        sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
+                           osl_File_Attribute_OwnRead |
+                           osl_File_Attribute_GrpWrite |
+                           osl_File_Attribute_GrpRead |
+                           osl_File_Attribute_OthRead;
         if (osl_setFileAttributes(sTmpName.pData, uAttr) != osl_File_E_None) {
             m_file = NULL;
             return;
@@ -416,29 +425,30 @@ FileStream &operator<<(FileStream& o, sal_uInt32 i) {
     osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
-FileStream &operator<<(FileStream& o, sal_Char* s) {
+FileStream &operator<<(FileStream& o, char const * s) {
     sal_uInt64 writtenBytes;
-    oslFileError ret = osl_writeFile(o.m_file, s, strlen(s) * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s, strlen(s), &writtenBytes);
     return o;
 }
 FileStream &operator<<(FileStream& o, ::rtl::OString* s) {
     sal_uInt64 writtenBytes;
-    oslFileError ret = osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
 FileStream &operator<<(FileStream& o, const ::rtl::OString& s) {
     sal_uInt64 writtenBytes;
-    oslFileError ret = osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 
 }
 FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer* s) {
     sal_uInt64 writtenBytes;
-    oslFileError ret = osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
 FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s) {
     sal_uInt64 writtenBytes;
-    oslFileError ret = osl_writeFile(o.m_file, s.getStr(), ((::rtl::OStringBuffer)s).getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(
+        o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
