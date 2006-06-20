@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:58:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,9 +246,7 @@ void InitCpp1()
     /* BP */
 }
 
-int MAIN(argc, argv)
-int             argc;
-char            *argv[];
+int MAIN(int argc, char** argv)
 {
         register int    i;
         char **useargv, **pfargv;
@@ -563,8 +561,7 @@ end_line:   if (c == '\n') {                    /* Compiling at EOL?    */
 #endif
 }
 
-void output(c)
-int             c;
+void output(int c)
 /*
  * Output one character to stdout -- output() is passed as an
  * argument to scanstring()
