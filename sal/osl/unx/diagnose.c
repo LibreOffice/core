@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:35:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 
 #endif  /* HAVE_DLFCN_H */
 
+#ifndef _OSL_THREAD_H_
+#include "osl/thread.h"
+#endif
 
 #ifndef INCLUDED_PTHREAD_H
 #include <pthread.h>
@@ -183,12 +186,12 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
     fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
 
     for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
-        fp = fp->fr_savfp;
+        fp = (struct frame *) fp->fr_savfp;
 
     for (i = 0; fp && fp->fr_savpc; i++)
     {
         osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
-        fp = fp->fr_savfp;
+        fp = (struct frame *) fp->fr_savfp;
     }
 }
 
@@ -209,6 +212,9 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     sal_Int32       nLine,
     const sal_Char* pszMessage)
 {
+    oslDebugMessageFunc f = g_pDebugMessageFunc;
+    char                szMessage[1024];
+
     /* If there's a callback for detailed messages, use it */
     if ( g_pDetailedDebugMessageFunc != NULL )
     {
@@ -219,9 +225,6 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     /* if SAL assertions are disabled in general, stop here */
     if ( getenv("DISABLE_SAL_DBGBOX") )
         return sal_False;
-
-    oslDebugMessageFunc f = g_pDebugMessageFunc;
-    char                szMessage[1024];
 
     /* format message into buffer */
     if (pszMessage != 0)
@@ -266,6 +269,7 @@ sal_Int32 SAL_CALL osl_reportError (
     sal_uInt32      nType,
     const sal_Char* pszMessage)
 {
+    (void) nType; /* unused */
     fputs(pszMessage, stderr);
     return 0;
 }
@@ -287,7 +291,7 @@ oslDebugMessageFunc SAL_CALL osl_setDebugMessageFunc (
 pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc (
     pfunc_osl_printDetailedDebugMessage pNewFunc)
 {
-    oslDetailedDebugMessageFunc pOldFunc = g_pDebugMessageFunc;
+    oslDetailedDebugMessageFunc pOldFunc = g_pDetailedDebugMessageFunc;
     g_pDetailedDebugMessageFunc = pNewFunc;
     return pOldFunc;
 }
@@ -306,7 +310,9 @@ void SAL_CALL osl_trace (
     fprintf(stderr, "Time: %06lu : ", osl_getGlobalTimer() );
 #else
 #if defined(OSL_TRACE_THREAD)
-    fprintf(stderr,"Thread: %6d :",osl_getThreadIdentifier(NULL));
+    fprintf(
+        stderr, "Thread: %6lu :",
+        SAL_INT_CAST(unsigned long, osl_getThreadIdentifier(NULL)));
 #else
     fprintf(stderr, "Trace Message: ");
 #endif
