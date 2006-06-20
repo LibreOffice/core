@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:54:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 
 using namespace dbaccess;
 ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
-: m_pCache(_rRH.m_pCache)
-, m_aIter(_rRH.m_aIter)
+: m_aIter(_rRH.m_aIter)
+, m_pCache(_rRH.m_pCache)
 ,m_pRowSet(_rRH.m_pRowSet)
 {
 }
