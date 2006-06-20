@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:56:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,11 @@
 #endif
 
 // Includes fuer ADO
+#include "ado_pre_sys_include.h"
 #include <oledb.h>
-//#include <objbase.h>
-//#include <initguid.h>
-//#include <mapinls.h>
 #include <ocidl.h>
-
-#ifndef _ADOINT_H_
 #include <adoint.h>
-#endif
+#include "ado_post_sys_include.h"
 
 
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
