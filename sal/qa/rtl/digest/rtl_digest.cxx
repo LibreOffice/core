@@ -741,7 +741,7 @@ rtl::OString getMD5Sum(rtl::OString const& _aMsg )
     const sal_uInt8 *pData = (const sal_uInt8*)_aMsg.getStr();
     sal_uInt32       nSize = ( _aMsg.getLength() );
 
-    rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
+    rtl_digest_init(handle, pData, nSize);
     rtl_digest_update( handle, pData, nSize );
 
     sal_uInt32     nMD5KeyLen = rtl_digest_queryLength( handle );
@@ -1185,7 +1185,6 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_updateMD2(aHandle, NULL, 0);
             CPPUNIT_ASSERT_MESSAGE("handle parameter 'pData' wrong", aError == rtl_Digest_E_Argument );
@@ -1225,7 +1224,6 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_updateMD5(aHandle, NULL, 0);
             CPPUNIT_ASSERT_MESSAGE("handle parameter 'pData' wrong", aError == rtl_Digest_E_Argument );
