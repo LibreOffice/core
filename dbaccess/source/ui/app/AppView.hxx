@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:18:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@
 #include "AppElementType.hxx"
 #endif
 
-namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } };
-namespace com{ namespace sun { namespace star { namespace frame    { class XController; } } } };
+namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } }
+namespace com{ namespace sun { namespace star { namespace frame    { class XController; } } } }
 class Control;
 class SvLBoxEntry;
 
