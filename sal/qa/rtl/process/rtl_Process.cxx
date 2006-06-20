@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_Process.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:49:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,8 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
 inline ::rtl::OUString getModulePath( void )
 {
     ::rtl::OUString suDirPath;
-    ::osl::Module::getUrlFromAddress( ( void* ) &getModulePath, suDirPath );
+    ::osl::Module::getUrlFromAddress(
+        reinterpret_cast< oslGenericFunction >(getModulePath), suDirPath );
 
     printUString(suDirPath, "modulePath:");
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
@@ -253,7 +254,6 @@ public:
     const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id");
 #endif
         sal_uInt8 pTargetUUID1[16];
-        sal_uInt8 pTargetUUID2[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
         printUuid( pTargetUUID1 );
         sal_Char pUUID1[32];
