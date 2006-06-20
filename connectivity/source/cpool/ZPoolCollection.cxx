@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:17:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:07:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -485,7 +488,7 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     }
     catch(NoSuchElementException& e)
     {
-        e;  // make compiler happy
+        OSL_UNUSED( e );    // make compiler happy
         OSL_ENSURE(sal_False,
             ::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
         +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
@@ -494,11 +497,11 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPoolCollection::queryTermination( const EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, RuntimeException)
+void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ ) throw (::com::sun::star::frame::TerminationVetoException, RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPoolCollection::notifyTermination( const EventObject& Event ) throw (RuntimeException)
+void SAL_CALL OPoolCollection::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
 {
     clearDesktop();
 }
