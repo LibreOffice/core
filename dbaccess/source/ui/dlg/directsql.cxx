@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:30:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,21 +156,20 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
     {
+        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        OSL_ENSURE(Reference< XConnection >(_rSource.Source, UNO_QUERY).get() == m_xConnection.get(),
+            "DirectSQLDialog::_disposing: where does this come from?");
+        (void)_rSource;
+
         {
-            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-            ::osl::MutexGuard aGuard(m_aMutex);
-
-            OSL_ENSURE(Reference< XConnection >(_rSource.Source, UNO_QUERY).get() == m_xConnection.get(),
-                "DirectSQLDialog::_disposing: where does this come from?");
-
-            {
-                String sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
-                ErrorBox aError(this, WB_OK, sMessage);
-                aError.Execute();
-            }
-
-            PostUserEvent(LINK(this, DirectSQLDialog, OnClose));
+            String sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
+            ErrorBox aError(this, WB_OK, sMessage);
+            aError.Execute();
         }
+
+        PostUserEvent(LINK(this, DirectSQLDialog, OnClose));
     }
 
     //--------------------------------------------------------------------
@@ -351,28 +350,28 @@ DBG_NAME(DirectSQLDialog)
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( DirectSQLDialog, OnStatementModified, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DirectSQLDialog, OnStatementModified, void*, /*NOTINTERESTEDIN*/ )
     {
         m_aExecute.Enable(0 != m_aSQL.GetText().Len());
         return 0L;
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( DirectSQLDialog, OnClose, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DirectSQLDialog, OnClose, void*, /*NOTINTERESTEDIN*/ )
     {
         EndDialog( RET_OK );
         return 0L;
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( DirectSQLDialog, OnExecute, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DirectSQLDialog, OnExecute, void*, /*NOTINTERESTEDIN*/ )
     {
         executeCurrent();
         return 0L;
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( DirectSQLDialog, OnListEntrySelected, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DirectSQLDialog, OnListEntrySelected, void*, /*NOTINTERESTEDIN*/ )
     {
         if (!m_pSQLHistory->IsTravelSelect())
         {
