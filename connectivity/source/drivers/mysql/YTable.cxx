@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:31:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,12 +152,9 @@ void OMySQLTable::construct()
         registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OMySQLTable::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OMySQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OMySQLTable::getInfoHelper()
@@ -202,10 +199,8 @@ Sequence< sal_Int8 > OMySQLTable::getUnoTunnelImplementationId()
 sal_Int64 OMySQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OTable_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OTable_TYPEDEF::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 // XAlterTable
@@ -304,7 +299,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
         if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) )
         {
-            ::rtl::OUString sSql = getAlterTableColumnPart(colName);
+            ::rtl::OUString sSql = getAlterTableColumnPart();
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
@@ -327,7 +322,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
 // -----------------------------------------------------------------------------
 void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
-    ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
+    ::rtl::OUString sSql = getAlterTableColumnPart();
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
@@ -344,7 +339,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
 // -----------------------------------------------------------------------------
 void OMySQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
-    ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
+    ::rtl::OUString sSql = getAlterTableColumnPart();
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER "));
 
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -357,7 +352,7 @@ void OMySQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::
 // -----------------------------------------------------------------------------
 void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 {
-    ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
+    ::rtl::OUString sSql = getAlterTableColumnPart();
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER "));
 
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -367,7 +362,7 @@ void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OMySQLTable::getAlterTableColumnPart(const ::rtl::OUString& _rsColumnName )
+::rtl::OUString OMySQLTable::getAlterTableColumnPart()
 {
     ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
