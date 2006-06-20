@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:38:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,9 @@ class OEnvironment
 public:
 
     OEnvironment();
-    OEnvironment( sal_uInt32 nVars, const ::rtl::OUString* aVariable1, ... );
+    OEnvironment( sal_Int32 nVars, const ::rtl::OUString* aVariable1, ... );
     // switched argument list to avoid ambiguity with previous constructor.
-    OEnvironment( const ::rtl::OUString aVariableList[], sal_uInt32 nVars );
+    OEnvironment( const ::rtl::OUString aVariableList[], sal_Int32 nVars );
 
     OEnvironment( const OEnvironment& rOther );
 
@@ -277,7 +277,8 @@ public:
     */
     TStartupError SAL_CALL getCommandArg(sal_uInt32 nArg, ::rtl::OUString& strCommandArg);
 
-    TStartupError SAL_CALL getExecutableFile(::rtl::OUString& strImageName);
+    TStartupError SAL_CALL getExecutableFile(::rtl::OUString& strImageName)
+        const;
 
     /** Get the value of one enviroment variable.
         @param Name [in] denotes the name of the variable to get.
