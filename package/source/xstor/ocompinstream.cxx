@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ocompinstream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
                                     const uno::Sequence< beans::PropertyValue >& aProps )
 : m_pImpl( &aImpl )
 , m_rMutexRef( m_pImpl->m_rMutexRef )
-, m_pInterfaceContainer( NULL )
 , m_xStream( xStream )
+, m_pInterfaceContainer( NULL )
 , m_aProperties( aProps )
 , m_bDisposed( sal_False )
 {
@@ -91,8 +91,8 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps )
 : m_pImpl( NULL )
 , m_rMutexRef( new SotMutexHolder )
-, m_pInterfaceContainer( NULL )
 , m_xStream( xStream )
+, m_pInterfaceContainer( NULL )
 , m_aProperties( aProps )
 , m_bDisposed( sal_False )
 {
@@ -305,7 +305,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ )
         throw ( beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
@@ -356,16 +356,13 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
         throw lang::WrappedTargetException(); // TODO: PropertyVetoException
 
     throw beans::UnknownPropertyException();
-
-    // not reachable
-    return uno::Any();
 }
 
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::addPropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const ::rtl::OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -381,8 +378,8 @@ void SAL_CALL OInputCompStream::addPropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::removePropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const ::rtl::OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -398,8 +395,8 @@ void SAL_CALL OInputCompStream::removePropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::addVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const ::rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -415,8 +412,8 @@ void SAL_CALL OInputCompStream::addVetoableChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::removeVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const ::rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
