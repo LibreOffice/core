@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:31:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,19 +78,19 @@ const long LISTBOX_SCROLLING_AREA = 6;
 //==================================================================
 // class OTableWindowListBox
 //==================================================================
-DBG_NAME(OTableWindowListBox);
+DBG_NAME(OTableWindowListBox)
 //------------------------------------------------------------------------------
-OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& rDatabaseName, const String& rTableName ) :
-     SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
-    ,m_pTabWin( pParent )
+OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
+    :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
     ,m_aMousePos( Point(0,0) )
+    ,m_pTabWin( pParent )
+    ,m_nDropEvent(0)
     ,m_bReallyScrolled( sal_False )
     ,m_bDragSource( sal_False )
-    ,m_nDropEvent(0)
 {
     DBG_CTOR(OTableWindowListBox,NULL);
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
-    SetDoubleClickHdl( LINK(this, OTableWindowListBox, DoubleClickHdl) );
+    SetDoubleClickHdl( LINK(this, OTableWindowListBox, OnDoubleClick) );
 
     SetSelectionMode(SINGLE_SELECTION);
 
@@ -206,7 +206,7 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, pBox )
+IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 {
     SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
@@ -224,7 +224,7 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, pBox )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, pBox )
+IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 {
     SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
@@ -242,7 +242,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, pBox )
 }
 
 //------------------------------------------------------------------------------
-void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->isConnected())
@@ -328,10 +328,10 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 // -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableWindowListBox, DropHdl, void *, EMPTY_ARG)
+IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
 {
     // create the connection
-    m_nDropEvent = NULL;
+    m_nDropEvent = 0;
     OSL_ENSURE(m_pTabWin,"No TableWindow!");
     try
     {
@@ -394,11 +394,11 @@ void OTableWindowListBox::GetFocus()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableWindowListBox, DoubleClickHdl, SvTreeListBox *, pBox )
+IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
     // meinem Elter Bescheid sagen
     Window* pParent = Window::GetParent();
-    DBG_ASSERT(pParent != NULL, "OTableWindowListBox::DoubleClickHdl : habe kein Parent !");
+    DBG_ASSERT(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 
