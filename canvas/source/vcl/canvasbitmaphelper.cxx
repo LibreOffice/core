@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:58:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ namespace vclcanvas
             new CanvasBitmap( aRes, mpDevice ) );
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      bitmapLayout,
+    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      ,
                                                            const geometry::IntegerRectangle2D&  rect )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getData()" );
@@ -198,7 +198,7 @@ namespace vclcanvas
     }
 
     void CanvasBitmapHelper::setData( const uno::Sequence< sal_Int8 >&      data,
-                                      const rendering::IntegerBitmapLayout& bitmapLayout,
+                                      const rendering::IntegerBitmapLayout& ,
                                       const geometry::IntegerRectangle2D&   rect )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setData()" );
@@ -424,7 +424,7 @@ namespace vclcanvas
     }
 
     void CanvasBitmapHelper::setPixel( const uno::Sequence< sal_Int8 >&         color,
-                                       const rendering::IntegerBitmapLayout&    bitmapLayout,
+                                       const rendering::IntegerBitmapLayout&    ,
                                        const geometry::IntegerPoint2D&          pos )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setPixel()" );
@@ -482,7 +482,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& bitmapLayout,
+    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& ,
                                                             const geometry::IntegerPoint2D& pos )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getPixel()" );

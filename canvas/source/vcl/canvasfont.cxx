@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasfont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:59:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
+                            const uno::Sequence< beans::PropertyValue >&    ,
                             const geometry::Matrix2D&                       rFontMatrix,
                             const DeviceRef&                                rDevice ) :
         CanvasFont_Base( m_aMutex ),
