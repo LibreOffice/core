@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:35:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace ::comphelper;
@@ -138,13 +141,12 @@ sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OCalcResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
+sal_Int32 SAL_CALL OCalcResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    return (first == second) ? 0 : 2;
+    return (lhs == rhs) ? 0 : 2;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OCalcResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
@@ -162,16 +164,16 @@ sal_Int32 SAL_CALL OCalcResultSet::hashBookmark( const  Any& bookmark ) throw( S
 }
 // -------------------------------------------------------------------------
 // XDeleteRows
-Sequence< sal_Int32 > SAL_CALL OCalcResultSet::deleteRows( const  Sequence<  Any >& rows ) throw( SQLException,  RuntimeException)
+Sequence< sal_Int32 > SAL_CALL OCalcResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
+    ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 }
 // -------------------------------------------------------------------------
-sal_Bool OCalcResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
+sal_Bool OCalcResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*_xIndex*/)
 {
     //  Calc table has no index
     return sal_False;
