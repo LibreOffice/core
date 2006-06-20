@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_canvashelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:48:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,112 +86,112 @@ namespace nullcanvas
         mbHaveAlpha = bHasAlpha;
     }
 
-    void CanvasHelper::drawPoint( const rendering::XCanvas*     pCanvas,
-                                  const geometry::RealPoint2D&  aPoint,
-                                  const rendering::ViewState&   viewState,
-                                  const rendering::RenderState& renderState )
+    void CanvasHelper::drawPoint( const rendering::XCanvas*     /*pCanvas*/,
+                                  const geometry::RealPoint2D&  /*aPoint*/,
+                                  const rendering::ViewState&   /*viewState*/,
+                                  const rendering::RenderState& /*renderState*/ )
     {
     }
 
-    void CanvasHelper::drawLine( const rendering::XCanvas*      pCanvas,
-                                 const geometry::RealPoint2D&   aStartPoint,
-                                 const geometry::RealPoint2D&   aEndPoint,
-                                 const rendering::ViewState&    viewState,
-                                 const rendering::RenderState&  renderState )
+    void CanvasHelper::drawLine( const rendering::XCanvas*      /*pCanvas*/,
+                                 const geometry::RealPoint2D&   /*aPoint1*/,
+                                 const geometry::RealPoint2D&   /*aPoint2*/,
+                                 const rendering::ViewState&    /*viewState*/,
+                                 const rendering::RenderState&  /*renderState*/ )
     {
     }
 
-    void CanvasHelper::drawBezier( const rendering::XCanvas*            pCanvas,
-                                   const geometry::RealBezierSegment2D& aBezierSegment,
-                                   const geometry::RealPoint2D&         aEndPoint,
-                                   const rendering::ViewState&          viewState,
-                                   const rendering::RenderState&        renderState )
+    void CanvasHelper::drawBezier( const rendering::XCanvas*            /*pCanvas*/,
+                                   const geometry::RealBezierSegment2D& /*aBezierSegment*/,
+                                   const geometry::RealPoint2D&         /*aEndPoint*/,
+                                   const rendering::ViewState&          /*viewState*/,
+                                   const rendering::RenderState&        /*renderState*/ )
     {
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          pCanvas,
-                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                 const rendering::ViewState&                        viewState,
-                                                                                 const rendering::RenderState&                      renderState )
-    {
-        // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            pCanvas,
-                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                   const rendering::ViewState&                          viewState,
-                                                                                   const rendering::RenderState&                        renderState,
-                                                                                   const rendering::StrokeAttributes&                   strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
+                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& /*xPolyPolygon*/,
+                                                                                 const rendering::ViewState&                        /*viewState*/,
+                                                                                 const rendering::RenderState&                      /*renderState*/ )
     {
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            pCanvas,
-                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                           const rendering::ViewState&                          viewState,
-                                                                                           const rendering::RenderState&                        renderState,
-                                                                                           const uno::Sequence< rendering::Texture >&           textures,
-                                                                                           const rendering::StrokeAttributes&                   strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
+                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
+                                                                                   const rendering::ViewState&                          /*viewState*/,
+                                                                                   const rendering::RenderState&                        /*renderState*/,
+                                                                                   const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
+    {
+        // TODO(P1): Provide caching here.
+        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+    }
+
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
+                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
+                                                                                           const rendering::ViewState&                          /*viewState*/,
+                                                                                           const rendering::RenderState&                        /*renderState*/,
+                                                                                           const uno::Sequence< rendering::Texture >&           /*textures*/,
+                                                                                           const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           pCanvas,
-                                                                                                const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                                                                                const rendering::ViewState&                         viewState,
-                                                                                                const rendering::RenderState&                       renderState,
-                                                                                                const uno::Sequence< rendering::Texture >&          textures,
-                                                                                                const uno::Reference< geometry::XMapping2D >&       xMapping,
-                                                                                                const rendering::StrokeAttributes&                  strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           /*pCanvas*/,
+                                                                                                const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
+                                                                                                const rendering::ViewState&                         /*viewState*/,
+                                                                                                const rendering::RenderState&                       /*renderState*/,
+                                                                                                const uno::Sequence< rendering::Texture >&          /*textures*/,
+                                                                                                const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
+                                                                                                const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
         // TODO
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            pCanvas,
-                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                   const rendering::ViewState&                          viewState,
-                                                                                   const rendering::RenderState&                        renderState,
-                                                                                   const rendering::StrokeAttributes&                   strokeAttributes )
+    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            /*pCanvas*/,
+                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
+                                                                                   const rendering::ViewState&                          /*viewState*/,
+                                                                                   const rendering::RenderState&                        /*renderState*/,
+                                                                                   const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          pCanvas,
-                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                 const rendering::ViewState&                        viewState,
-                                                                                 const rendering::RenderState&                      renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
+                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& /*xPolyPolygon*/,
+                                                                                 const rendering::ViewState&                        /*viewState*/,
+                                                                                 const rendering::RenderState&                      /*renderState*/ )
     {
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          pCanvas,
-                                                                                         const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                         const rendering::ViewState&                        viewState,
-                                                                                         const rendering::RenderState&                      renderState,
-                                                                                         const uno::Sequence< rendering::Texture >&         textures )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
+                                                                                         const uno::Reference< rendering::XPolyPolygon2D >& /*xPolyPolygon*/,
+                                                                                         const rendering::ViewState&                        /*viewState*/,
+                                                                                         const rendering::RenderState&                      /*renderState*/,
+                                                                                         const uno::Sequence< rendering::Texture >&         /*textures*/ )
     {
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             pCanvas,
-                                                                                              const uno::Reference< rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                                                                              const rendering::ViewState&                           viewState,
-                                                                                              const rendering::RenderState&                         renderState,
-                                                                                              const uno::Sequence< rendering::Texture >&            textures,
-                                                                                              const uno::Reference< geometry::XMapping2D >&         xMapping )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             /*pCanvas*/,
+                                                                                              const uno::Reference< rendering::XPolyPolygon2D >&    /*xPolyPolygon*/,
+                                                                                              const rendering::ViewState&                           /*viewState*/,
+                                                                                              const rendering::RenderState&                         /*renderState*/,
+                                                                                              const uno::Sequence< rendering::Texture >&            /*textures*/,
+                                                                                              const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
         // TODO
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    pCanvas,
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    /*pCanvas*/,
                                                                        const rendering::FontRequest&                fontRequest,
                                                                        const uno::Sequence< beans::PropertyValue >& extraFontProperties,
                                                                        const geometry::Matrix2D&                    fontMatrix )
@@ -200,25 +200,25 @@ namespace nullcanvas
             new CanvasFont(fontRequest, extraFontProperties, fontMatrix ) );
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       pCanvas,
-                                                                            const rendering::FontInfo&                      aFilter,
-                                                                            const uno::Sequence< beans::PropertyValue >&    aFontProperties )
+    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       /*pCanvas*/,
+                                                                            const rendering::FontInfo&                      /*aFilter*/,
+                                                                            const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
         // TODO
         return uno::Sequence< rendering::FontInfo >();
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         pCanvas,
-                                                                          const rendering::StringContext&                   text,
-                                                                          const uno::Reference< rendering::XCanvasFont >&   xFont,
-                                                                          const rendering::ViewState&                       viewState,
-                                                                          const rendering::RenderState&                     renderState,
-                                                                          sal_Int8                                          textDirection )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         /*pCanvas*/,
+                                                                          const rendering::StringContext&                   /*text*/,
+                                                                          const uno::Reference< rendering::XCanvasFont >&   /*xFont*/,
+                                                                          const rendering::ViewState&                       /*viewState*/,
+                                                                          const rendering::RenderState&                     /*renderState*/,
+                                                                          sal_Int8                                          /*textDirection*/ )
     {
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
                                                                                 const uno::Reference< rendering::XTextLayout >& xLayoutetText,
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
@@ -239,19 +239,19 @@ namespace nullcanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   pCanvas,
-                                                                            const uno::Reference< rendering::XBitmap >& xBitmap,
-                                                                            const rendering::ViewState&                 viewState,
-                                                                            const rendering::RenderState&               renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   /*pCanvas*/,
+                                                                            const uno::Reference< rendering::XBitmap >& /*xBitmap*/,
+                                                                            const rendering::ViewState&                 /*viewState*/,
+                                                                            const rendering::RenderState&               /*renderState*/ )
     {
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      pCanvas,
-                                                                                     const uno::Reference< rendering::XBitmap >&    xBitmap,
-                                                                                     const rendering::ViewState&                    viewState,
-                                                                                     const rendering::RenderState&                  renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      /*pCanvas*/,
+                                                                                     const uno::Reference< rendering::XBitmap >&    /*xBitmap*/,
+                                                                                     const rendering::ViewState&                    /*viewState*/,
+                                                                                     const rendering::RenderState&                  /*renderState*/ )
     {
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -262,14 +262,14 @@ namespace nullcanvas
         return uno::Reference< rendering::XGraphicDevice >(mpDevice);
     }
 
-    void CanvasHelper::copyRect( const rendering::XCanvas*                          pCanvas,
-                                 const uno::Reference< rendering::XBitmapCanvas >&  sourceCanvas,
-                                 const geometry::RealRectangle2D&                   sourceRect,
-                                 const rendering::ViewState&                        sourceViewState,
-                                 const rendering::RenderState&                      sourceRenderState,
-                                 const geometry::RealRectangle2D&                   destRect,
-                                 const rendering::ViewState&                        destViewState,
-                                 const rendering::RenderState&                      destRenderState )
+    void CanvasHelper::copyRect( const rendering::XCanvas*                          /*pCanvas*/,
+                                 const uno::Reference< rendering::XBitmapCanvas >&  /*sourceCanvas*/,
+                                 const geometry::RealRectangle2D&                   /*sourceRect*/,
+                                 const rendering::ViewState&                        /*sourceViewState*/,
+                                 const rendering::RenderState&                      /*sourceRenderState*/,
+                                 const geometry::RealRectangle2D&                   /*destRect*/,
+                                 const rendering::ViewState&                        /*destViewState*/,
+                                 const rendering::RenderState&                      /*destRenderState*/ )
     {
         // TODO(F2): copyRect NYI
     }
@@ -282,34 +282,34 @@ namespace nullcanvas
         return ::basegfx::unotools::integerSize2DFromB2ISize( maSize );
     }
 
-    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                        sal_Bool                    beFast )
+    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
+                                                                        sal_Bool                    /*beFast*/ )
     {
         // TODO(F1):
         return uno::Reference< rendering::XBitmap >();
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                     const geometry::IntegerRectangle2D& rect )
+    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
+                                                     const geometry::IntegerRectangle2D& /*rect*/ )
     {
         // TODO
         return uno::Sequence< sal_Int8 >();
     }
 
-    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        data,
-                                const rendering::IntegerBitmapLayout&   bitmapLayout,
-                                const geometry::IntegerRectangle2D&     rect )
+    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        /*data*/,
+                                const rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+                                const geometry::IntegerRectangle2D&     /*rect*/ )
     {
     }
 
-    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       color,
-                                 const rendering::IntegerBitmapLayout&  bitmapLayout,
-                                 const geometry::IntegerPoint2D&        pos )
+    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       /*color*/,
+                                 const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
+                                 const geometry::IntegerPoint2D&        /*pos*/ )
     {
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
-                                                      const geometry::IntegerPoint2D&   pos )
+    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+                                                      const geometry::IntegerPoint2D&   /*pos*/ )
     {
         return uno::Sequence< sal_Int8 >();
     }
