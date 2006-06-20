@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:29:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,11 @@
 
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
-    return nEncoding > RTL_TEXTENCODING_DONTKNOW
-           && nEncoding <= RTL_TEXTENCODING_PT154
-               /* always update this! */
-           && nEncoding != 9; /* RTL_TEXTENCODING_SYSTEM */
+    return (sal_Bool)
+        (nEncoding > RTL_TEXTENCODING_DONTKNOW
+         && nEncoding <= RTL_TEXTENCODING_PT154
+             /* always update this! */
+         && nEncoding != 9); /* RTL_TEXTENCODING_SYSTEM */
 }
 
 /* ======================================================================= */
