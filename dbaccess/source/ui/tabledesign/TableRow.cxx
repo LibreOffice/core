@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:30:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:33:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::beans;
 //========================================================================
 // class OTableRow
 //========================================================================
-DBG_NAME(OTableRow);
+DBG_NAME(OTableRow)
 //------------------------------------------------------------------------------
 OTableRow::OTableRow()
     :m_pActFieldDescr( NULL )
@@ -73,10 +73,10 @@ OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     m_pActFieldDescr = new OFieldDescription(xAffectedCol);
 }
 //------------------------------------------------------------------------------
-OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
-    m_nPos( nPosition )
+OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
+    :m_pActFieldDescr(NULL)
+    ,m_nPos( nPosition )
     ,m_bReadOnly(rRow.IsReadOnly())
-    ,m_pActFieldDescr(NULL)
     ,m_bOwnsDescriptions(false)
 {
     DBG_CTOR(OTableRow,NULL);
@@ -187,7 +187,6 @@ namespace dbaui
             _rStr.ReadByteString(sValue);
             pFieldDesc->SetDescription(sValue);
 
-            sal_Int32 nValue;
             _rStr >> nValue;
             Any aControlDefault;
             switch ( nValue )
