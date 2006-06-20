@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:31:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,8 @@ Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
 sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OUser_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OUser_TYPEDEF::getSomething(rId);
 }
 
 // -------------------------------------------------------------------------
