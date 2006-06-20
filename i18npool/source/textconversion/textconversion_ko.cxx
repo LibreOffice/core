@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:48:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,8 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {
         ch = aText[nStartPos];
         const Hangul_Index *Hangul_ko = getHangul2HanjaIndex();
-        sal_Int16 top =  getHangul2HanjaIndexCount() - 1;
+        sal_Int16 top =  getHangul2HanjaIndexCount();
+        --top;
         sal_Int16 bottom = 0;
 
         while (bottom <= top) {
@@ -327,7 +328,7 @@ TextConversion_ko::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
 }
 
 sal_Bool SAL_CALL
-TextConversion_ko::interactiveConversion( const Locale& aLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
+TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
     return sal_True;
