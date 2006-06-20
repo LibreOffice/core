@@ -4,9 +4,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:13:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,12 @@
 #undef UNICODE
 #undef _UNICODE
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <malloc.h>
 #include <assert.h>
 
@@ -81,7 +84,7 @@ namespace
         MsiSetProperty(handle, sProperty.c_str(), NULL);
     }
 
-    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty, const string& sValue)
+    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty, const string&)
     {
         MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
     }
