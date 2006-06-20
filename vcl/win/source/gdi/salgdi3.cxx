@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:00:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 12:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -795,7 +795,7 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC )
     // even if the font works some fonts have problems with the glyph API
     // => the heuristic below tries to figure out which fonts have the problem
     TEXTMETRICA aTextMetric;
-    if( GetTextMetricsA( hDC, &aTextMetric ) )
+    if( ::GetTextMetricsA( hDC, &aTextMetric ) )
         if( !(aTextMetric.tmPitchAndFamily & TMPF_TRUETYPE)
         ||   (aTextMetric.tmPitchAndFamily & TMPF_DEVICE) )
             mbDisableGlyphApi = true;
@@ -1188,12 +1188,17 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     // return early if there is no new font
     if( !pFont )
     {
-    for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
-    {
-            if( mhFonts[ i ] )
-                DeleteFont( mhFonts[ i ] );
-            mhFonts[ i ] = 0;
-    }
+        // deselect still active font
+        if( mhDefFont )
+            ::SelectFont( mhDC, mhDefFont );
+        // release no longer referenced font handles
+        for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
+        {
+                if( mhFonts[i] )
+                    ::DeleteFont( mhFonts[i] );
+                mhFonts[ i ] = 0;
+        }
+        mhDefFont = 0;
         return 0;
     }
 
@@ -1237,7 +1242,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             aLogFont.lfWidth = static_cast<int>( aLogFont.lfWidth / mfFontScale );
         }
 
-        hNewFont = CreateFontIndirectW( &aLogFont );
+        hNewFont = ::CreateFontIndirectW( &aLogFont );
         if( hdcScreen )
         {
             // select font into screen hdc first to get an antialiased font
@@ -1245,10 +1250,10 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
             SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
         }
-        hOldFont = SelectFont( mhDC, hNewFont );
+        hOldFont = ::SelectFont( mhDC, hNewFont );
 
         TEXTMETRICW aTextMetricW;
-        if( !GetTextMetricsW( mhDC, &aTextMetricW ) )
+        if( !::GetTextMetricsW( mhDC, &aTextMetricW ) )
         {
             // the selected font doesn't work => try a replacement
             // TODO: use its font fallback instead
@@ -1292,19 +1297,19 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             aLogFont.lfWidth = static_cast<int>( aLogFont.lfWidth / mfFontScale );
         }
 
-        hNewFont = CreateFontIndirectA( &aLogFont );
+        hNewFont = ::CreateFontIndirectA( &aLogFont );
         if( hdcScreen )
         {
             // select font into screen hdc first to get an antialiased font
             // see knowledge base article 305290:
             // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
-            SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
+            ::SelectFont( hdcScreen, ::SelectFont( hdcScreen , hNewFont ) );
         }
-        hOldFont = SelectFont( mhDC, hNewFont );
+        hOldFont = ::SelectFont( mhDC, hNewFont );
 
         TEXTMETRICA aTextMetricA;
         // when the font doesn't work try a replacement
-        if ( !GetTextMetricsA( mhDC, &aTextMetricA ) )
+        if ( !::GetTextMetricsA( mhDC, &aTextMetricA ) )
         {
             // the selected font doesn't work => try a replacement
             // TODO: use its font fallback instead
@@ -1312,14 +1317,14 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             strncpy( aTempLogFont.lfFaceName, "Courier New", 11 );
             aTempLogFont.lfPitchAndFamily = FIXED_PITCH;
             HFONT hNewFont2 = CreateFontIndirectA( &aTempLogFont );
-            SelectFont( mhDC, hNewFont2 );
-            DeleteFont( hNewFont );
+            ::SelectFont( mhDC, hNewFont2 );
+            ::DeleteFont( hNewFont );
             hNewFont = hNewFont2;
         }
     }
 
     if( hdcScreen )
-        ReleaseDC( NULL, hdcScreen );
+        ::ReleaseDC( NULL, hdcScreen );
 
     if( !mhDefFont )
     {
@@ -1328,12 +1333,12 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     }
     else
     {
-        // dereference unused fonts
+        // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
             if( mhFonts[i] )
             {
-                DeleteFont( mhFonts[i] );
+                ::DeleteFont( mhFonts[i] );
                 mhFonts[i] = 0;
             }
         }
