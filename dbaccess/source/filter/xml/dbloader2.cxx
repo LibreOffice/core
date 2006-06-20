@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:39:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,7 +653,7 @@ void DBContentLoader::cancel(void) throw()
 {
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, NOTINTERESTEDIN )
+IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
 {
     m_nStartWizard = 0;
     try
