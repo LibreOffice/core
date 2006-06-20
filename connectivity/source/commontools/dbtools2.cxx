@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:47:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:06:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,23 +468,21 @@ namespace
                     {
                         try
                         {
-                            Reference< XResultSet > xResult = xMetaData->getPrimaryKeys(_aCatalog, _aSchema, _aTable);
-                            Reference< XRow > xRow(xResult,UNO_QUERY);
-                            if ( xRow.is() )
+                            Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
+                            Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
+                            while( xPKeys->next() ) // there can be only one primary key
                             {
-                                while( xResult->next() ) // there can be only one primary key
+                                ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
+                                if ( aMixCompare(_rName,sKeyColumn) )
                                 {
-                                    ::rtl::OUString sKeyColumn = xRow->getString(4);
-                                    if ( aMixCompare(_rName,sKeyColumn) )
-                                    {
-                                        nField11 = ColumnValue::NO_NULLS;
-                                        break;
-                                    }
+                                    nField11 = ColumnValue::NO_NULLS;
+                                    break;
                                 }
                             }
                         }
                         catch(SQLException&)
                         {
+                            OSL_ENSURE( false, "lcl_createSDBCXColumn: caught an exception!" );
                         }
                     }
 
