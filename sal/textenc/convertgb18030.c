@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convertgb18030.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:31:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,8 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
                 nCode = nCode * 10 + (nChar - 0x30);
                 eState = IMPL_GB_18030_TO_UNICODE_STATE_2;
             }
-            else if (nChar >= 0x40 && nChar <= 0x7E
-                     || nChar >= 0x80 && nChar <= 0xFE)
+            else if ((nChar >= 0x40 && nChar <= 0x7E)
+                     || (nChar >= 0x80 && nChar <= 0xFE))
             {
                 nCode = nCode * 190 + (nChar <= 0x7E ? nChar - 0x40 :
                                                        nChar - 0x80 + 63);
@@ -273,6 +273,7 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
                          | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
@@ -289,6 +290,7 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext)
     {
@@ -455,6 +457,7 @@ sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
         && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR
                          | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
@@ -477,6 +480,7 @@ sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
                 nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext)
         ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate
