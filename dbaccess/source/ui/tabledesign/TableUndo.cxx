@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:51:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,13 +128,13 @@ void OTableDesignUndoAct::Redo()
 DBG_NAME(OTableDesignCellUndoAct);
 OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, USHORT nColumn ) :
      OTableDesignUndoAct( pOwner ,STR_TABED_UNDO_CELLMODIFIED)
-    ,m_nRow( nRowID )
     ,m_nCol( nColumn )
+    ,m_nRow( nRowID )
 {
     DBG_CTOR(OTableDesignCellUndoAct,NULL);
     //////////////////////////////////////////////////////////////////////
     // Text an der Position (m_nRow, m_nCol) auslesen
-    m_sOldText = m_pTabDgnCtrl->GetData( m_nRow, m_nCol );
+    m_sOldText = m_pTabDgnCtrl->GetCellData( m_nRow, m_nCol );
 }
 
 //-------------------------------------------------------------------------
@@ -149,8 +149,8 @@ void OTableDesignCellUndoAct::Undo()
     //////////////////////////////////////////////////////////////////////
     // Neuen Text der alten Zelle speichern und alten wieder einsetzen
     m_pTabDgnCtrl->ActivateCell( m_nRow, m_nCol );
-    m_sNewText = m_pTabDgnCtrl->GetData( m_nRow, m_nCol );
-    m_pTabDgnCtrl->SetData( m_nRow, m_nCol, m_sOldText );
+    m_sNewText = m_pTabDgnCtrl->GetCellData( m_nRow, m_nCol );
+    m_pTabDgnCtrl->SetCellData( m_nRow, m_nCol, m_sOldText );
     //////////////////////////////////////////////////////////////////////
     // Wenn erstes Undo zurueckgenommen wurde, ist Zelle nicht mehr modifiziert
     if (m_pTabDgnCtrl->GetCurUndoActId() == 1)
@@ -171,7 +171,7 @@ void OTableDesignCellUndoAct::Redo()
     //////////////////////////////////////////////////////////////////////
     // Neuen Text wieder einseten
     m_pTabDgnCtrl->ActivateCell( m_nRow, m_nCol );
-    m_pTabDgnCtrl->SetData( m_nRow, m_nCol, m_sNewText );
+    m_pTabDgnCtrl->SetCellData( m_nRow, m_nCol, m_sNewText );
 
     OTableDesignUndoAct::Redo();
 }
@@ -197,10 +197,10 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 // class OTableEditorTypeSelUndoAct
 //==============================================================================
 DBG_NAME(OTableEditorTypeSelUndoAct);
-OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType ) :
-     OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
-    ,m_nRow( nRowID )
+OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType )
+    :OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nCol( nColumn )
+    ,m_nRow( nRowID )
     ,m_pOldType( _pOldType )
 {
     DBG_CTOR(OTableEditorTypeSelUndoAct,NULL);
@@ -224,7 +224,7 @@ void OTableEditorTypeSelUndoAct::Undo()
         m_pNewType = pFieldDesc->getTypeInfo();
     else
         m_pNewType = TOTypeInfoSP();
-    pTabEdCtrl->SetData(m_nRow,m_nCol,m_pOldType);
+    pTabEdCtrl->SetCellData(m_nRow,m_nCol,m_pOldType);
     pTabEdCtrl->SwitchType( m_pOldType );
 
     OTableEditorUndoAct::Undo();
@@ -237,7 +237,7 @@ void OTableEditorTypeSelUndoAct::Redo()
     // Neuen Typ
     pTabEdCtrl->GoToRow( m_nRow );
     pTabEdCtrl->GoToColumnId( m_nCol );
-    pTabEdCtrl->SetData(m_nRow,m_nCol,m_pNewType);
+    pTabEdCtrl->SetCellData(m_nRow,m_nCol,m_pNewType);
 
     OTableEditorUndoAct::Redo();
 }
@@ -324,8 +324,8 @@ OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                                long nInsertPosition ,
                                                const ::std::vector<  ::boost::shared_ptr<OTableRow> >& _vInsertedRows)
     :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
-    ,m_nInsPos( nInsertPosition )
     ,m_vInsertedRows(_vInsertedRows)
+    ,m_nInsPos( nInsertPosition )
 {
     DBG_CTOR(OTableEditorInsUndoAct,NULL);
 }
@@ -458,7 +458,7 @@ void OPrimKeyUndoAct::Undo()
 
     //////////////////////////////////////////////////////////////////////
     // Die eingefuegten Keys loeschen
-    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
@@ -467,7 +467,7 @@ void OPrimKeyUndoAct::Undo()
 
     //////////////////////////////////////////////////////////////////////
     // Die geloeschten Keys herstellen
-    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
@@ -486,12 +486,12 @@ void OPrimKeyUndoAct::Redo()
 
     //////////////////////////////////////////////////////////////////////
     // Die geloeschten Keys loeschen
-    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
         (*pRowList)[nIndex]->SetPrimaryKey( FALSE );
 
     //////////////////////////////////////////////////////////////////////
     // Die eingefuegten Keys herstellen
-    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
         (*pRowList)[nIndex]->SetPrimaryKey( TRUE );
 
     m_pEditorCtrl->InvalidateHandleColumn();
