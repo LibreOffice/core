@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:16:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #ifndef CONNECTIVITY_HSQLDB_CATALOG_HXX
 #include "hsqldb/HCatalog.hxx"
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -91,6 +94,9 @@
 #endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 //........................................................................
 namespace connectivity
@@ -329,13 +335,12 @@ namespace connectivity
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
     {
         sal_Bool bEnabled = sal_False;
-        javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
-        OSL_ENSURE( JFW_E_NONE == eErr,"error in jfw_getEnabled" );
+        OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
         return bEnabled  && url.compareToAscii("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")) == 0;
     }
 
     //--------------------------------------------------------------------
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, RuntimeException)
     {
         if ( !acceptsURL(url) )
             return Sequence< DriverPropertyInfo >();
@@ -449,8 +454,9 @@ namespace connectivity
         return getSupportedServiceNames_Static();
     }
     //------------------------------------------------------------------
-    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& info ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException)
+    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException)
     {
+        ::dbtools::throwFeatureNotImplementedException( "XCreateCatalog::createCatalog", *this );
     }
     //------------------------------------------------------------------
     void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
@@ -579,15 +585,15 @@ namespace connectivity
         }
     }
     //------------------------------------------------------------------
-    void SAL_CALL ODriverDelegator::commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL ODriverDelegator::commited( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
     //------------------------------------------------------------------
-    void SAL_CALL ODriverDelegator::preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    void SAL_CALL ODriverDelegator::preRevert( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
     {
     }
     //------------------------------------------------------------------
-    void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
     //------------------------------------------------------------------
@@ -810,7 +816,7 @@ namespace connectivity
                 xStatement->execute( aStatement.makeStringAndClear() );
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
             OSL_ENSURE( sal_False, "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
         }
