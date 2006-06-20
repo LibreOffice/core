@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:33:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,9 @@ sal_Int32 ADOS::mapAdoType2Object(ObjectTypeEnum objType)
             break;
         case adPermObjColumn:
             nType = PrivilegeObject::COLUMN;
+            break;
+        default:
+            OSL_ENSURE( false, "ADOS::mapAdoType2Object: privilege type cannot be translated!" );
             break;
     }
     return nType;
