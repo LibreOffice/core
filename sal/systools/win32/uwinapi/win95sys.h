@@ -49,7 +49,7 @@
 #define fWasOemNowAnsi          0x00000200
 #define fOKToSetThreadOem       0x00000400
 
-
+#pragma warning(disable:4103)
 #pragma pack(1)
 
 
