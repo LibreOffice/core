@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygonrasterconverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:58:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ namespace basegfx
         private:
 
             bool resize( sal_uInt32 nNumElements );
-            void reset_indices( void );
+            inline void reset_indices( void );
             bool prepareCounters( const float *pInput, sal_uInt32 nNumElements, sal_uInt32 dwStride );
     };
 
@@ -614,8 +614,8 @@ namespace basegfx
                     case FillRule_EVEN_ODD:
                         // process each span in current scanline, with
                         // even-odd fill rule
-                        for( ::std::size_t i(0), nLen(aActiveVertices.size());
-                             i+1 < nLen;
+                        for( ::std::size_t i(0), nLength(aActiveVertices.size());
+                             i+1 < nLength;
                              ++i )
                         {
                             sal_uInt32 nIndex = sorted[i];
@@ -644,8 +644,8 @@ namespace basegfx
                         // process each span in current scanline, with
                         // non-zero winding numbe fill rule
                         sal_Int32 nWindingNumber(0);
-                        for( ::std::size_t i(0), nLen(aActiveVertices.size());
-                             i+1 < nLen;
+                        for( ::std::size_t i(0), nLength(aActiveVertices.size());
+                             i+1 < nLength;
                              ++i )
                         {
                             sal_uInt32 nIndex = sorted[i];
