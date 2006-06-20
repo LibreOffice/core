@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:03:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,13 @@ using namespace ::com::sun::star::lang;
 using namespace ::osl;
 
 // -------------------------------------------------------------------------
-void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
+void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
 {
     _rRow = *m_aSetIter;
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XRowLocate
-Any SAL_CALL OStaticSet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
+Any SAL_CALL OStaticSet::getBookmark() throw(SQLException, RuntimeException)
 {
     return makeAny(getRow());
 }
@@ -97,11 +97,11 @@ sal_Bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     return absolute(::comphelper::getINT32(bookmark)+rows);
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nFirst,nSecond;
-    first >>= nFirst;
-    second >>= nSecond;
+    _first >>= nFirst;
+    _second >>= nSecond;
     return (nFirst < nSecond) ? CompareBookmark::LESS : ((nFirst > nSecond) ? CompareBookmark::GREATER : CompareBookmark::EQUAL);
 }
 // -------------------------------------------------------------------------
@@ -324,7 +324,7 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     {
         m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); // we don't know where the new row is so we append it to the current rows
         m_aSetIter = m_aSet.end() - 1;
-        (*(*m_aSetIter))[0] = (*_rInsertRow)[0] = getBookmark(_rInsertRow);
+        (*(*m_aSetIter))[0] = (*_rInsertRow)[0] = getBookmark();
         m_bEnd = sal_False;
     }
 }
