@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:30:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,14 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
         OLEVariant vOptional;
         vOptional.setNoArg();
 
-        KeyTypeEnum eKey = OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
+#if OSL_DEBUG_LEVEL > 0
+        KeyTypeEnum eKey =
+#endif
+            OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
+#if OSL_DEBUG_LEVEL > 0
+        (void)eKey;
+#endif
+
         WpADOKey aKey = pKey->getImpl();
         ::rtl::OUString sName = aKey.get_Name();
         if(!sName.getLength())
@@ -120,7 +127,7 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OKeys::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     if(!m_aCollection.Delete(OLEVariant(_sElementName)))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
