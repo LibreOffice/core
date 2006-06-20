@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppTitleWindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:16:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,11 +64,9 @@ OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL
     SetBorderStyle(WINDOW_BORDER_MONO);
     ImplInitSettings( sal_True, sal_True, sal_True );
 
-    Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
-    for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
-    {
+    Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
+    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         pWindows[i]->Show();
-    }
 }
 // -----------------------------------------------------------------------------
 OTitleWindow::~OTitleWindow()
@@ -178,7 +176,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
-    for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
         Font aFont = pWindows[i]->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
