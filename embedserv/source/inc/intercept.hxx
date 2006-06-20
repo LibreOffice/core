@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:57:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ private:
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static ::com::sun::star::uno::Sequence<::rtl::OUString>
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
     m_aInterceptedURL;
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
