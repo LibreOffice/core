@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelControliFace.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:31:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:12:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ namespace dbaui
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables
         */
-        virtual void notifyConnectionChange(OTableConnectionData* _pConnectionData) = 0;
+        virtual void notifyConnectionChange() = 0;
     };
 }
 #endif // DBAUI_RELCONTROLIFACE_HXX
