@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:54:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,11 +163,15 @@ namespace dbaccess
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetRow& _rOldRow);
-        virtual void fireRowcount() { }                             // fire if rowcount changed
-        virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard) {return sal_True; }       // notify row changed
 
-        virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard) { }            // notify cursor moved
-        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard) { }                       // notify all that rowset changed
+        // fire if rowcount changed
+        virtual void fireRowcount();
+        // notify row changed
+        virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
+        // notify cursor moved
+        virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
+        // notify all that rowset changed
+        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
 
         // cancel the insertion, if necessary (means if we're on the insert row)
         virtual void        doCancelModification( ) = 0;
@@ -369,6 +373,7 @@ namespace dbaccess
         {
             fireProperty( _nProperty, _bNew, _bOld );
         }
+        using ::comphelper::OPropertyStateContainer::getFastPropertyValue;
 
         ::osl::Mutex*   getMutex() const { return m_pMutex; }
     };
