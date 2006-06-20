@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:04:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@ extern ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const O
 
 namespace
 {
+    // -----------------------------------------------------------------------------
     sal_Bool lcl_saveConvertToNumber(const Reference< XNumberFormatter > & _xFormatter,sal_Int32 _nKey,const ::rtl::OUString& _sValue,double& _nrValue)
     {
         sal_Bool bRet = sal_False;
@@ -153,26 +154,63 @@ namespace
         }
         return bRet;
     }
+    // -----------------------------------------------------------------------------
+    void replaceAndReset(OSQLParseNode*& _pResetNode,OSQLParseNode* _pNewNode)
+    {
+        _pResetNode->getParent()->replace(_pResetNode, _pNewNode);
+        delete _pResetNode;
+        _pResetNode = _pNewNode;
+    }
+    // -----------------------------------------------------------------------------
+    /** quotes a string and search for quotes inside the string and replace them with the new quote
+        @param  rValue
+            The value to be quoted.
+        @param  rQuot
+            The quote
+        @param  rQuotToReplace
+            The quote to replace with
+        @return
+            The quoted string.
+    */
+    ::rtl::OUString SetQuotation(const ::rtl::OUString& rValue, const ::rtl::OUString& rQuot, const ::rtl::OUString& rQuotToReplace)
+    {
+        ::rtl::OUString rNewValue = rQuot;
+        rNewValue += rValue;
+        sal_Int32 nIndex = (sal_Int32)-1;   // Quotes durch zweifache Quotes ersetzen, sonst kriegt der Parser Probleme
+
+        if (rQuot.getLength())
+        {
+            do
+            {
+                nIndex += 2;
+                nIndex = rNewValue.indexOf(rQuot,nIndex);
+                if(nIndex != -1)
+                    rNewValue = rNewValue.replaceAt(nIndex,rQuot.getLength(),rQuotToReplace);
+            } while (nIndex != -1);
+        }
+
+        rNewValue += rQuot;
+        return rNewValue;
+    }
 }
 //------------------------------------------------------------------
 OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
                                                             const Reference< XNumberFormatter > & _xFormatter, const Reference< XPropertySet > & _xField, const ::com::sun::star::lang::Locale& _rLocale,
         const IParseContext* _pContext, sal_Bool _bIntl,  sal_Bool _bQuote, sal_Char _cDecSep,
         sal_Bool _bPredicate)
-    :aIdentifierQuote(_rIdentifierQuote)
+    :rLocale(_rLocale)
+    ,aIdentifierQuote(_rIdentifierQuote)
     ,aCatalogSeparator(_rCatalogSep)
-    ,rLocale(_rLocale)
-    ,m_pContext(_pContext ? _pContext : &OSQLParser::s_aDefaultContext)
-    ,bInternational(_bIntl)
-    ,bQuote(_bQuote)
-    ,cDecSep(_cDecSep)
-    ,xField(_xField)
     ,xFormatter(_xFormatter)
+    ,xField(_xField)
+    ,m_pContext(_pContext ? _pContext : &OSQLParser::s_aDefaultContext)
+    ,cDecSep(_cDecSep)
+    ,bQuote(_bQuote)
+    ,bInternational(_bIntl)
     ,bPredicate(_bPredicate)
 {
 }
 
-::rtl::OUString SetQuotation(const ::rtl::OUString& rValue, const ::rtl::OUString& rQuot, const ::rtl::OUString& rQuotToReplace);
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
@@ -704,6 +742,9 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_REAL_COMPARE);
                     }
                     break;
+                default:
+                    OSL_ENSURE( false, "OSQLParser::buildComparsionRule: unexpected node type!" );
+                    break;
             }
         }
         if (!nErg)
@@ -1149,5 +1190,973 @@ sal_Int16 OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLPar
         m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
 
     return nErg;
+}
+// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+OSQLParseNode::OSQLParseNode(const sal_Char * pNewValue,
+                             SQLNodeType eNewNodeType,
+                             sal_uInt32 nNewNodeID)
+        :m_pParent(NULL)
+        ,m_aNodeValue(pNewValue,strlen(pNewValue),RTL_TEXTENCODING_UTF8)
+        ,m_eNodeType(eNewNodeType)
+        ,m_nNodeID(nNewNodeID)
+{
+
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
+                             SQLNodeType eNewNodeType,
+                             sal_uInt32 nNewNodeID)
+        :m_pParent(NULL)
+        ,m_aNodeValue(_rNewValue,_rNewValue.getLength(),RTL_TEXTENCODING_UTF8)
+        ,m_eNodeType(eNewNodeType)
+        ,m_nNodeID(nNewNodeID)
+{
+
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
+                                 SQLNodeType eNewNodeType,
+                                 sal_uInt32 nNewNodeID)
+        :m_pParent(NULL)
+        ,m_aNodeValue(pNewValue)
+        ,m_eNodeType(eNewNodeType)
+        ,m_nNodeID(nNewNodeID)
+{
+
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
+                                 SQLNodeType eNewNodeType,
+                                 sal_uInt32 nNewNodeID)
+        :m_pParent(NULL)
+        ,m_aNodeValue(_rNewValue)
+        ,m_eNodeType(eNewNodeType)
+        ,m_nNodeID(nNewNodeID)
+{
+
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
+{
+
+    // klemm den getParent auf NULL
+    m_pParent = NULL;
+
+    // kopiere die member
+    m_aNodeValue = rParseNode.m_aNodeValue;
+    m_eNodeType  = rParseNode.m_eNodeType;
+    m_nNodeID    = rParseNode.m_nNodeID;
+
+
+    // denk dran, dass von Container abgeleitet wurde, laut SV-Help erzeugt
+    // copy-Constructor des Containers einen neuen Container mit den gleichen
+    // Zeigern als Inhalt -> d.h. nach dem Kopieren des Container wird fuer
+    // alle Zeiger ungleich NULL eine Kopie hergestellt und anstelle des alten
+    // Zeigers wieder eingehangen.
+
+    // wenn kein Blatt, dann SubTrees bearbeiten
+    for (OSQLParseNodes::const_iterator i = rParseNode.m_aChilds.begin();
+         i != rParseNode.m_aChilds.end(); i++)
+        append(new OSQLParseNode(**i));
+}
+// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
+{
+    if (this != &rParseNode)
+    {
+        // kopiere die member - pParent bleibt der alte
+        m_aNodeValue = rParseNode.m_aNodeValue;
+        m_eNodeType  = rParseNode.m_eNodeType;
+        m_nNodeID    = rParseNode.m_nNodeID;
+
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
+            i != m_aChilds.end(); i++)
+            delete *i;
+
+        m_aChilds.clear();
+
+        for (OSQLParseNodes::const_iterator j = rParseNode.m_aChilds.begin();
+             j != rParseNode.m_aChilds.end(); j++)
+            append(new OSQLParseNode(**j));
+    }
+    return *this;
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
+{
+    // die member muessen gleich sein
+    sal_Bool bResult = (m_nNodeID  == rParseNode.m_nNodeID) &&
+                   (m_eNodeType == rParseNode.m_eNodeType) &&
+                   (m_aNodeValue == rParseNode.m_aNodeValue) &&
+                    count() == rParseNode.count();
+
+    // Parameters are not equal!
+    bResult = bResult && !SQL_ISRULE(this, parameter);
+
+    // compare childs
+    for (sal_uInt32 i=0; bResult && i < count(); i++)
+        bResult = *getChild(i) == *rParseNode.getChild(i);
+
+    return bResult;
+}
+
+//-----------------------------------------------------------------------------
+OSQLParseNode::~OSQLParseNode()
+{
+    for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
+         i != m_aChilds.end(); i++)
+        delete *i;
+    m_aChilds.clear();
+}
+
+//-----------------------------------------------------------------------------
+void OSQLParseNode::append(OSQLParseNode* pNewNode)
+{
+
+    OSL_ENSURE(pNewNode != NULL, "OSQLParseNode: ungueltiger NewSubTree");
+    OSL_ENSURE(pNewNode->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewNode) == m_aChilds.end(),
+            "OSQLParseNode::append() Node already element of parent");
+
+    // stelle Verbindung zum getParent her:
+    pNewNode->setParent( this );
+    // und haenge den SubTree hinten an
+    m_aChilds.push_back(pNewNode);
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+{
+    // special display for date/time values
+    if (rParam.bPredicate && SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChilds[0],"{"))
+    {
+        const OSQLParseNode* pODBCNode = m_aChilds[1];
+        const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChilds[0];
+
+        if (pODBCNodeChild->getNodeType() == SQL_NODE_KEYWORD && (
+            SQL_ISTOKEN(pODBCNodeChild, D) ||
+            SQL_ISTOKEN(pODBCNodeChild, T) ||
+            SQL_ISTOKEN(pODBCNodeChild, TS) ))
+        {
+            if (rString.getLength())
+                rString += ::rtl::OUString::createFromAscii(" ");
+            rString += ::rtl::OUString::createFromAscii("#");
+            if (SQL_ISTOKEN(pODBCNodeChild, D))
+                rString += convertDateString(rParam, pODBCNode->m_aChilds[1]->getTokenValue());
+            else if (SQL_ISTOKEN(pODBCNodeChild, T))
+                rString += convertTimeString(rParam, pODBCNode->m_aChilds[1]->getTokenValue());
+            else
+                rString += convertDateTimeString(rParam, pODBCNode->m_aChilds[1]->getTokenValue());
+
+            rString += ::rtl::OUString::createFromAscii("#");
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+void OSQLParseNode::replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::rtl::OUString& rColumnName)
+{
+    for (sal_uInt32 i=0;i<count();++i)
+    {
+        if (SQL_ISRULE(this,column_ref) && count() == 1 && getChild(0)->getTokenValue() == rColumnName)
+        {
+            OSQLParseNode * pCol = removeAt((sal_uInt32)0);
+            append(new OSQLParseNode(rTableAlias,SQL_NODE_NAME));
+            append(new OSQLParseNode(::rtl::OUString::createFromAscii("."),SQL_NODE_PUNCTUATION));
+            append(pCol);
+        }
+        else
+            getChild(i)->replaceNodeValue(rTableAlias,rColumnName);
+    }
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
+{
+    OSQLParseNode* pRetNode = 0;
+    if (isRule() && OSQLParser::RuleID(eRule) == getRuleID())
+        pRetNode = (OSQLParseNode*)this;
+    else
+    {
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
+            !pRetNode && i != m_aChilds.end(); i++)
+            pRetNode = (*i)->getByRule(eRule);
+    }
+    return pRetNode;
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode* MakeANDNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
+{
+    OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_term));
+    pNewNode->append(pLeftLeaf);
+    pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("AND"),SQL_NODE_KEYWORD,SQL_TOKEN_AND));
+    pNewNode->append(pRightLeaf);
+    return pNewNode;
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode* MakeORNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
+{
+    OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::search_condition));
+    pNewNode->append(pLeftLeaf);
+    pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("OR"),SQL_NODE_KEYWORD,SQL_TOKEN_OR));
+    pNewNode->append(pRightLeaf);
+    return pNewNode;
+}
+//-----------------------------------------------------------------------------
+void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
+{
+    if(!pSearchCondition) // no where condition at entry point
+        return;
+
+    OSQLParseNode::absorptions(pSearchCondition);
+    // '(' search_condition ')'
+    if (SQL_ISRULE(pSearchCondition,boolean_primary))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(1);
+        disjunctiveNormalForm(pLeft);
+    }
+    // search_condition SQL_TOKEN_OR boolean_term
+    else if (SQL_ISRULE(pSearchCondition,search_condition))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0);
+        disjunctiveNormalForm(pLeft);
+
+        OSQLParseNode* pRight = pSearchCondition->getChild(2);
+        disjunctiveNormalForm(pRight);
+    }
+    // boolean_term SQL_TOKEN_AND boolean_factor
+    else if (SQL_ISRULE(pSearchCondition,boolean_term))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0);
+        disjunctiveNormalForm(pLeft);
+
+        OSQLParseNode* pRight = pSearchCondition->getChild(2);
+        disjunctiveNormalForm(pRight);
+
+        OSQLParseNode* pNewNode = NULL;
+        // '(' search_condition ')'
+        if(pLeft->count() == 3 && SQL_ISRULE(pLeft,boolean_primary) && SQL_ISRULE(pLeft->getChild(1),search_condition))
+        {
+            // and-or tree  on left side
+            OSQLParseNode* pOr = pLeft->getChild(1);
+            OSQLParseNode* pNewLeft = NULL;
+            OSQLParseNode* pNewRight = NULL;
+
+            // cut right from parent
+            pSearchCondition->removeAt(2);
+
+            pNewRight   = MakeANDNode(pOr->removeAt(2)      ,pRight);
+            pNewLeft    = MakeANDNode(pOr->removeAt((sal_uInt32)0)  ,new OSQLParseNode(*pRight));
+            pNewNode    = MakeORNode(pNewLeft,pNewRight);
+            // and append new Node
+            replaceAndReset(pSearchCondition,pNewNode);
+
+            disjunctiveNormalForm(pSearchCondition);
+        }
+        else if(pRight->count() == 3 && SQL_ISRULE(pRight,boolean_primary) && SQL_ISRULE(pRight->getChild(1),search_condition))
+        {
+            // and-or tree  on right side
+            OSQLParseNode* pOr = pRight->getChild(1);
+            OSQLParseNode* pNewLeft = NULL;
+            OSQLParseNode* pNewRight = NULL;
+
+            // cut left from parent
+            pSearchCondition->removeAt((sal_uInt32)0);
+
+            pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
+            pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt((sal_uInt32)0));
+            pNewNode    = MakeORNode(pNewLeft,pNewRight);
+
+            // and append new Node
+            replaceAndReset(pSearchCondition,pNewNode);
+            disjunctiveNormalForm(pSearchCondition);
+        }
+        else if(SQL_ISRULE(pLeft,boolean_primary) && (!SQL_ISRULE(pLeft->getChild(1),search_condition) || !SQL_ISRULE(pLeft->getChild(1),boolean_term)))
+            pSearchCondition->replace(pLeft, pLeft->removeAt(1));
+        else if(SQL_ISRULE(pRight,boolean_primary) && (!SQL_ISRULE(pRight->getChild(1),search_condition) || !SQL_ISRULE(pRight->getChild(1),boolean_term)))
+            pSearchCondition->replace(pRight, pRight->removeAt(1));
+    }
+}
+//-----------------------------------------------------------------------------
+void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_Bool bNegate)
+{
+    if(!pSearchCondition) // no where condition at entry point
+        return;
+    // '(' search_condition ')'
+    if (pSearchCondition->count() == 3 && SQL_ISRULE(pSearchCondition,boolean_primary))
+    {
+        OSQLParseNode* pRight = pSearchCondition->getChild(1);
+        negateSearchCondition(pRight,bNegate);
+    }
+    // search_condition SQL_TOKEN_OR boolean_term
+    else if (SQL_ISRULE(pSearchCondition,search_condition))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0);
+        OSQLParseNode* pRight = pSearchCondition->getChild(2);
+        if(bNegate)
+        {
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_term));
+            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)0));
+            pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("AND"),SQL_NODE_KEYWORD,SQL_TOKEN_AND));
+            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)1));
+            replaceAndReset(pSearchCondition,pNewNode);
+
+            pLeft   = pNewNode->getChild(0);
+            pRight  = pNewNode->getChild(2);
+        }
+
+        negateSearchCondition(pLeft,bNegate);
+        negateSearchCondition(pRight,bNegate);
+    }
+    // boolean_term SQL_TOKEN_AND boolean_factor
+    else if (SQL_ISRULE(pSearchCondition,boolean_term))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0);
+        OSQLParseNode* pRight = pSearchCondition->getChild(2);
+        if(bNegate)
+        {
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::search_condition));
+            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)0));
+            pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("OR"),SQL_NODE_KEYWORD,SQL_TOKEN_OR));
+            pNewNode->append(pSearchCondition->removeAt((sal_uInt32)1));
+            replaceAndReset(pSearchCondition,pNewNode);
+
+            pLeft   = pNewNode->getChild(0);
+            pRight  = pNewNode->getChild(2);
+        }
+
+        negateSearchCondition(pLeft,bNegate);
+        negateSearchCondition(pRight,bNegate);
+    }
+    // SQL_TOKEN_NOT ( boolean_test )
+    else if (SQL_ISRULE(pSearchCondition,boolean_factor))
+    {
+        OSQLParseNode *pNot = pSearchCondition->removeAt((sal_uInt32)0);
+        delete pNot;
+        OSQLParseNode *pBooleanTest = pSearchCondition->removeAt((sal_uInt32)1);
+        pBooleanTest->setParent(NULL);
+        replaceAndReset(pSearchCondition,pBooleanTest);
+
+        if (!bNegate)
+            negateSearchCondition(pSearchCondition,sal_True);   //  negate all deeper values
+    }
+    // row_value_constructor comparison row_value_constructor
+    // row_value_constructor comparison any_all_some subquery
+    else if(bNegate  && SQL_ISRULE(pSearchCondition,comparison_predicate) || SQL_ISRULE(pSearchCondition,all_or_any_predicate))
+    {
+        OSQLParseNode* pComparison = pSearchCondition->getChild(1);
+        OSQLParseNode* pNewComparison = NULL;
+        switch(pComparison->getNodeType())
+        {
+            case SQL_NODE_EQUAL:
+                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("<>"),SQL_NODE_NOTEQUAL,SQL_NOTEQUAL);
+                break;
+            case SQL_NODE_LESS:
+                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii(">="),SQL_NODE_GREATEQ,SQL_GREATEQ);
+                break;
+            case SQL_NODE_GREAT:
+                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("<="),SQL_NODE_LESSEQ,SQL_LESSEQ);
+                break;
+            case SQL_NODE_LESSEQ:
+                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii(">"),SQL_NODE_GREAT,SQL_GREAT);
+                break;
+            case SQL_NODE_GREATEQ:
+                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("<"),SQL_NODE_LESS,SQL_LESS);
+                break;
+            case SQL_NODE_NOTEQUAL:
+                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("="),SQL_NODE_EQUAL,SQL_EQUAL);
+                break;
+            default:
+                OSL_ENSURE( false, "OSQLParseNode::negateSearchCondition: unexpected node type!" );
+                break;
+        }
+        pSearchCondition->replace(pComparison, pNewComparison);
+        delete pComparison;
+    }
+
+    else if(bNegate && (SQL_ISRULE(pSearchCondition,test_for_null) || SQL_ISRULE(pSearchCondition,in_predicate) ||
+                        SQL_ISRULE(pSearchCondition,like_predicate) || SQL_ISRULE(pSearchCondition,between_predicate) ||
+                        SQL_ISRULE(pSearchCondition,boolean_test) ))
+    {
+        sal_uInt32 nNotPos = 0;
+        // row_value_constructor not SQL_TOKEN_IN in_predicate_value
+        // row_value_constructor not SQL_TOKEN_LIKE num_value_exp opt_escape
+        // row_value_constructor not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
+        if(SQL_ISRULE(pSearchCondition,in_predicate) || SQL_ISRULE(pSearchCondition,like_predicate) ||
+           SQL_ISRULE(pSearchCondition,between_predicate))
+            nNotPos = 1;
+        // row_value_constructor SQL_TOKEN_IS not SQL_TOKEN_NULL
+        // boolean_primary SQL_TOKEN_IS not truth_value
+        else if(SQL_ISRULE(pSearchCondition,test_for_null) || SQL_ISRULE(pSearchCondition,boolean_test))
+            nNotPos = 2;
+
+        OSQLParseNode* pNot = pSearchCondition->getChild(nNotPos);
+        OSQLParseNode* pNotNot = NULL;
+        if(pNot->isRule())
+            pNotNot = new OSQLParseNode(::rtl::OUString::createFromAscii("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
+        else
+            pNotNot = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
+        pSearchCondition->replace(pNot, pNotNot);
+        delete pNot;
+    }
+}
+//-----------------------------------------------------------------------------
+void OSQLParseNode::eraseBraces(OSQLParseNode*& pSearchCondition)
+{
+    if (pSearchCondition && (SQL_ISRULE(pSearchCondition,boolean_primary) || (pSearchCondition->count() == 3 && SQL_ISPUNCTUATION(pSearchCondition->getChild(0),"(") &&
+         SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")"))))
+    {
+        OSQLParseNode* pRight = pSearchCondition->getChild(1);
+        absorptions(pRight);
+        // if child is not a or or and tree then delete () around child
+        if(!(SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || SQL_ISRULE(pSearchCondition->getChild(1),search_condition)) ||
+            SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || // and can always stand without ()
+            (SQL_ISRULE(pSearchCondition->getChild(1),search_condition) && SQL_ISRULE(pSearchCondition->getParent(),search_condition)))
+        {
+            OSQLParseNode* pNode = pSearchCondition->removeAt(1);
+            replaceAndReset(pSearchCondition,pNode);
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
+{
+    if(!pSearchCondition) // no where condition at entry point
+        return;
+
+    eraseBraces(pSearchCondition);
+
+    if(SQL_ISRULE(pSearchCondition,boolean_term) || SQL_ISRULE(pSearchCondition,search_condition))
+    {
+        OSQLParseNode* pLeft = pSearchCondition->getChild(0);
+        absorptions(pLeft);
+        OSQLParseNode* pRight = pSearchCondition->getChild(2);
+        absorptions(pRight);
+    }
+
+    sal_uInt32 nPos = 0;
+    // a and a || a or a
+    OSQLParseNode* pNewNode = NULL;
+    if(( SQL_ISRULE(pSearchCondition,boolean_term) || SQL_ISRULE(pSearchCondition,search_condition))
+        && *pSearchCondition->getChild(0) == *pSearchCondition->getChild(2))
+    {
+        pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+        replaceAndReset(pSearchCondition,pNewNode);
+    }
+    // (a or b) and a || ( b or c ) and a
+    // a and ( a or b) || a and ( b or c )
+    else if (   SQL_ISRULE(pSearchCondition,boolean_term)
+            &&  (
+                    (       SQL_ISRULE(pSearchCondition->getChild(nPos = 0),boolean_primary)
+                        ||  SQL_ISRULE(pSearchCondition->getChild(nPos),search_condition)
+                    )
+                ||  (       SQL_ISRULE(pSearchCondition->getChild(nPos = 2),boolean_primary)
+                        ||  SQL_ISRULE(pSearchCondition->getChild(nPos),search_condition)
+                    )
+                )
+            )
+    {
+        OSQLParseNode* p2ndSearch = pSearchCondition->getChild(nPos);
+        if ( SQL_ISRULE(p2ndSearch,boolean_primary) )
+            p2ndSearch = p2ndSearch->getChild(1);
+
+        if ( *p2ndSearch->getChild(0) == *pSearchCondition->getChild(2-nPos) )
+        {
+            pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+            replaceAndReset(pSearchCondition,pNewNode);
+
+        }
+        else if ( *p2ndSearch->getChild(2) == *pSearchCondition->getChild(2-nPos) )
+        {
+            pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
+            replaceAndReset(pSearchCondition,pNewNode);
+        }
+        else
+        {
+            // a and ( b or c ) -> ( a and b ) or ( a and c )
+            // ( b or c ) and a -> ( a and b ) or ( a and c )
+            OSQLParseNode* pC = p2ndSearch->removeAt((sal_uInt32)2);
+            OSQLParseNode* pB = p2ndSearch->removeAt((sal_uInt32)0);
+            OSQLParseNode* pA = pSearchCondition->removeAt((sal_uInt32)2-nPos);
+
+            OSQLParseNode* p1stAnd = MakeANDNode(pA,pB);
+            OSQLParseNode* p2ndAnd = MakeANDNode(new OSQLParseNode(*pA),pC);
+            pNewNode = MakeORNode(p1stAnd,p2ndAnd);
+            replaceAndReset(pSearchCondition,pNewNode);
+        }
+    }
+    // a or a and b || a or b and a
+    else if(SQL_ISRULE(pSearchCondition,search_condition) && SQL_ISRULE(pSearchCondition->getChild(2),boolean_term))
+    {
+        if(*pSearchCondition->getChild(2)->getChild(0) == *pSearchCondition->getChild(0))
+        {
+            pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+            replaceAndReset(pSearchCondition,pNewNode);
+        }
+        else if(*pSearchCondition->getChild(2)->getChild(2) == *pSearchCondition->getChild(0))
+        {
+            pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
+            replaceAndReset(pSearchCondition,pNewNode);
+        }
+    }
+    // a and b or a || b and a or a
+    else if(SQL_ISRULE(pSearchCondition,search_condition) && SQL_ISRULE(pSearchCondition->getChild(0),boolean_term))
+    {
+        if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2))
+        {
+            pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
+            replaceAndReset(pSearchCondition,pNewNode);
+        }
+        else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2))
+        {
+            pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
+            replaceAndReset(pSearchCondition,pNewNode);
+        }
+    }
+    eraseBraces(pSearchCondition);
+}
+//-----------------------------------------------------------------------------
+void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
+{
+    if(!pSearchCondition) // no where condition at entry point
+        return;
+
+    OSQLParseNode::eraseBraces(pSearchCondition);
+
+    if(SQL_ISRULE(pSearchCondition,boolean_term) || SQL_ISRULE(pSearchCondition,search_condition))
+    {
+        OSQLParseNode* pLeft = pSearchCondition->getChild(0);
+        compress(pLeft);
+
+        OSQLParseNode* pRight = pSearchCondition->getChild(2);
+        compress(pRight);
+    }
+    else if( SQL_ISRULE(pSearchCondition,boolean_primary) || (pSearchCondition->count() == 3 && SQL_ISPUNCTUATION(pSearchCondition->getChild(0),"(") &&
+             SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")")))
+    {
+        OSQLParseNode* pRight = pSearchCondition->getChild(1);
+        compress(pRight);
+        // if child is not a or or and tree then delete () around child
+        if(!(SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || SQL_ISRULE(pSearchCondition->getChild(1),search_condition)) ||
+            (SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) && SQL_ISRULE(pSearchCondition->getParent(),boolean_term)) ||
+            (SQL_ISRULE(pSearchCondition->getChild(1),search_condition) && SQL_ISRULE(pSearchCondition->getParent(),search_condition)))
+        {
+            OSQLParseNode* pNode = pSearchCondition->removeAt(1);
+            replaceAndReset(pSearchCondition,pNode);
+        }
+    }
+
+    // or with two and trees where one element of the and trees are equal
+    if(SQL_ISRULE(pSearchCondition,search_condition) && SQL_ISRULE(pSearchCondition->getChild(0),boolean_term) && SQL_ISRULE(pSearchCondition->getChild(2),boolean_term))
+    {
+        if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(0))
+        {
+            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
+            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
+            OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
+
+            OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(pNode);
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+
+            OSQLParseNode::eraseBraces(pLeft);
+            OSQLParseNode::eraseBraces(pRight);
+
+            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt((sal_uInt32)0),pNewRule);
+            replaceAndReset(pSearchCondition,pNode);
+        }
+        else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(0))
+        {
+            OSQLParseNode* pLeft = pSearchCondition->getChild(0)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
+            OSQLParseNode* pNode = MakeORNode(pLeft,pRight);
+
+            OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(pNode);
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+
+            OSQLParseNode::eraseBraces(pLeft);
+            OSQLParseNode::eraseBraces(pRight);
+
+            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(1),pNewRule);
+            replaceAndReset(pSearchCondition,pNode);
+        }
+        else if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(2))
+        {
+            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
+            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
+
+            OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(pNode);
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+
+            OSQLParseNode::eraseBraces(pLeft);
+            OSQLParseNode::eraseBraces(pRight);
+
+            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt((sal_uInt32)0),pNewRule);
+            replaceAndReset(pSearchCondition,pNode);
+        }
+        else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(2))
+        {
+            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt((sal_uInt32)0);
+            OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
+
+            OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(pNode);
+            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+
+            OSQLParseNode::eraseBraces(pLeft);
+            OSQLParseNode::eraseBraces(pRight);
+
+            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(1),pNewRule);
+            replaceAndReset(pSearchCondition,pNode);
+        }
+    }
+}
+#if OSL_DEBUG_LEVEL > 1
+// -----------------------------------------------------------------------------
+void OSQLParseNode::showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel)
+{
+
+    if (!isToken())
+    {
+        for (sal_uInt32 j=0; j<nLevel; j++) {rString+= ::rtl::OUString::createFromAscii("\t");};
+        // Regelnamen als rule: ...
+        rString+= ::rtl::OUString::createFromAscii("RULE_ID:\t ");
+        rString += ::rtl::OUString::valueOf( (sal_Int32)getRuleID());
+        rString+= ::rtl::OUString::createFromAscii("(");
+        rString += OSQLParser::RuleIDToStr(getRuleID());
+        rString+= ::rtl::OUString::createFromAscii(")");
+        rString+= ::rtl::OUString::createFromAscii("\n");
+
+        // hol dir den ersten Subtree
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
+            i != m_aChilds.end(); i++)
+            (*i)->showParseTree(rString, nLevel+1);
+    }
+    else
+    {
+        // ein Token gefunden
+        // tabs fuer das Einruecken entsprechend nLevel
+        for (sal_uInt32 j=0; j<nLevel; j++) {rString+= ::rtl::OUString::createFromAscii("\t");};
+
+        switch (m_eNodeType) {
+
+        case SQL_NODE_KEYWORD:
+            {rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:\t");
+            ::rtl::OString sT = OSQLParser::TokenIDToStr(getTokenID());
+            rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
+            rString+= ::rtl::OUString::createFromAscii("\n");
+            break;}
+
+        case SQL_NODE_COMPARISON:
+            {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:\t");
+            rString += m_aNodeValue;    // haenge Nodevalue an
+            rString+= ::rtl::OUString::createFromAscii("\n");       // und beginne neu Zeile
+            break;}
+
+        case SQL_NODE_NAME:
+            {rString+= ::rtl::OUString::createFromAscii("SQL_NAME:\t");
+             rString+= ::rtl::OUString::createFromAscii("\"");
+             rString += m_aNodeValue;
+             rString+= ::rtl::OUString::createFromAscii("\"");
+             rString+= ::rtl::OUString::createFromAscii("\n");
+             break;}
+
+        case SQL_NODE_STRING:
+            {rString += ::rtl::OUString::createFromAscii("SQL_STRING:\t'");
+             rString += m_aNodeValue;
+             rString += ::rtl::OUString::createFromAscii("'\n");
+             break;}
+
+        case SQL_NODE_INTNUM:
+            {rString += ::rtl::OUString::createFromAscii("SQL_INTNUM:\t");
+             rString += m_aNodeValue;
+             rString += ::rtl::OUString::createFromAscii("\n");
+             break;}
+
+        case SQL_NODE_APPROXNUM:
+            {rString += ::rtl::OUString::createFromAscii("SQL_APPROXNUM:\t");
+             rString += m_aNodeValue;
+             rString += ::rtl::OUString::createFromAscii("\n");
+             break;}
+
+        case SQL_NODE_PUNCTUATION:
+            {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:\t");
+            rString += m_aNodeValue;    // haenge Nodevalue an
+            rString += ::rtl::OUString::createFromAscii("\n");      // und beginne neu Zeile
+            break;}
+
+        case SQL_NODE_AMMSC:
+            {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:\t");
+            rString += m_aNodeValue;    // haenge Nodevalue an
+            rString += ::rtl::OUString::createFromAscii("\n");      // und beginne neu Zeile
+            break;}
+
+        default:
+            OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+        }
+    }
+}
+#endif // OSL_DEBUG_LEVEL > 0
+// -----------------------------------------------------------------------------
+// Insert-Methoden
+//-----------------------------------------------------------------------------
+void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
+{
+    OSL_ENSURE(pNewSubTree != NULL, "OSQLParseNode: ungueltiger NewSubTree");
+    OSL_ENSURE(pNewSubTree->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
+
+    // stelle Verbindung zum getParent her:
+    pNewSubTree->setParent( this );
+    m_aChilds.insert(m_aChilds.begin() + nPos, 0);
+}
+
+// removeAt-Methoden
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
+{
+    OSL_ENSURE(nPos < m_aChilds.size(),"Illegal position for removeAt");
+    OSQLParseNodes::iterator aPos(m_aChilds.begin() + nPos);
+    OSQLParseNode* pNode = *aPos;
+
+    // setze den getParent des removeten auf NULL
+    pNode->setParent( NULL );
+
+    m_aChilds.erase(aPos);
+    return pNode;
+}
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
+{
+    OSL_ENSURE(pSubTree != NULL, "OSQLParseNode: ungueltiger SubTree");
+    OSQLParseNodes::iterator aPos = ::std::find(m_aChilds.begin(), m_aChilds.end(), pSubTree);
+    if (aPos != m_aChilds.end())
+    {
+        // setze den getParent des removeten auf NULL
+        pSubTree->setParent( NULL );
+        m_aChilds.erase(aPos);
+        return pSubTree;
+    }
+    else
+        return NULL;
+}
+
+// Replace-Methoden
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParseNode::replaceAt(sal_uInt32 nPos, OSQLParseNode* pNewSubNode)
+{
+    OSL_ENSURE(pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
+    OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
+    OSL_ENSURE(nPos < m_aChilds.size(), "OSQLParseNode: invalid position");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
+            "OSQLParseNode::Replace() Node already element of parent");
+
+    OSQLParseNode* pOldSubNode = m_aChilds[nPos];
+
+    // stelle Verbindung zum getParent her:
+    pNewSubNode->setParent( this );
+    pOldSubNode->setParent( NULL );
+
+    m_aChilds[nPos] = pNewSubNode;
+    return pOldSubNode;
+}
+
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
+{
+    OSL_ENSURE(pOldSubNode != NULL && pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
+    OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pOldSubNode) != m_aChilds.end(),
+            "OSQLParseNode::Replace() Node not element of parent");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
+            "OSQLParseNode::Replace() Node already element of parent");
+
+    pOldSubNode->setParent( NULL );
+    pNewSubNode->setParent( this );
+    ::std::replace(m_aChilds.begin(), m_aChilds.end(), pOldSubNode, pNewSubNode);
+    return pOldSubNode;
+}
+// -----------------------------------------------------------------------------
+void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParameter& rParam) const
+{
+    // ein Blatt ist gefunden
+    // Inhalt dem Ausgabestring anfuegen
+    switch (m_eNodeType)
+    {
+        case SQL_NODE_KEYWORD:
+        {
+            if (rString.getLength())
+                rString += ::rtl::OUString::createFromAscii(" ");
+
+            ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, rParam.m_pContext);
+            rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
+        }   break;
+        case SQL_NODE_STRING:
+            if (rString.getLength())
+                rString += ::rtl::OUString::createFromAscii(" ");
+            rString += SetQuotation(m_aNodeValue,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'"));
+            break;
+        case SQL_NODE_NAME:
+            if (rString.getLength())
+            {
+                switch(rString.getStr()[rString.getLength()-1] )
+                {
+                    case ' ' :
+                    case '.' : break;
+                    default  :
+                        if (!rParam.aCatalogSeparator.getLength() || rString.getStr()[rString.getLength()-1] != rParam.aCatalogSeparator.toChar())
+                            rString += ::rtl::OUString::createFromAscii(" "); break;
+                }
+            }
+            if (rParam.bQuote)
+            {
+                if (rParam.bPredicate)
+                {
+                    rString+= ::rtl::OUString::createFromAscii("[");
+                    rString += m_aNodeValue;
+                    rString+= ::rtl::OUString::createFromAscii("]");
+                }
+                else
+                    rString += SetQuotation(m_aNodeValue, rParam.aIdentifierQuote, rParam.aIdentifierQuote);
+            }
+            else
+                rString += m_aNodeValue;
+            break;
+        case SQL_NODE_ACCESS_DATE:
+            if (rString.getLength())
+                rString += ::rtl::OUString::createFromAscii(" ");
+            rString += ::rtl::OUString::createFromAscii("#");
+            rString += m_aNodeValue;
+            rString += ::rtl::OUString::createFromAscii("#");
+            break;
+        case SQL_NODE_INTNUM:
+        case SQL_NODE_APPROXNUM:
+            {
+                ::rtl::OUString aTmp = m_aNodeValue;
+                if (rParam.bInternational && rParam.bPredicate && rParam.cDecSep != '.')
+                    aTmp = aTmp.replace('.', rParam.cDecSep);
+
+                if (rString.getLength())
+                    rString += ::rtl::OUString::createFromAscii(" ");
+                rString += aTmp;
+
+            }   break;
+            // fall through
+        default:
+            if (rString.getLength() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
+            {
+                switch( rString.getStr()[rString.getLength()-1] )
+                {
+                    case ' ' :
+                    case '.' : break;
+                    default  :
+                        if (!rParam.aCatalogSeparator.getLength() || rString.getStr()[rString.getLength()-1] != rParam.aCatalogSeparator.toChar())
+                            rString += ::rtl::OUString::createFromAscii(" "); break;
+                }
+            }
+            rString += m_aNodeValue;
+    }
+}
+
+// -----------------------------------------------------------------------------
+sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext)
+{
+    sal_Int32 nType = DataType::VARCHAR;
+    ::rtl::OString sFunctionName(_sFunctionName,_sFunctionName.getLength(),RTL_TEXTENCODING_UTF8);
+
+    if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ASCII,pContext)))                     nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_BIT_LENGTH,pContext)))           nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CHAR,pContext)))                 nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CHAR_LENGTH,pContext)))          nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CHARACTER_LENGTH,pContext)))     nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CONCAT,pContext)))               nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DIFFERENCE,pContext)))           nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_INSERT,pContext)))               nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LCASE,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LEFT,pContext)))                 nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LENGTH,pContext)))               nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LOCATE,pContext)))               nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LOCATE_2,pContext)))             nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LTRIM,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_OCTET_LENGTH,pContext)))         nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_POSITION,pContext)))             nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_REPEAT,pContext)))               nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_REPLACE,pContext)))              nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_RIGHT,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_RTRIM,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SOUNDEX,pContext)))              nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SPACE,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SUBSTRING,pContext)))            nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_UCASE,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CURRENT_DATE,pContext)))         nType = DataType::DATE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CURRENT_TIME,pContext)))         nType = DataType::TIME;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CURRENT_TIMESTAMP,pContext)))    nType = DataType::TIMESTAMP;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CURDATE,pContext)))              nType = DataType::DATE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DATEVALUE,pContext)))            nType = DataType::DATE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CURTIME,pContext)))              nType = DataType::TIME;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DAYNAME,pContext)))              nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DAYOFMONTH,pContext)))           nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DAYOFWEEK,pContext)))            nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DAYOFYEAR,pContext)))            nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_EXTRACT,pContext)))              nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_HOUR,pContext)))                 nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_MINUTE,pContext)))               nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_MONTH,pContext)))                nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_MONTHNAME,pContext)))            nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_NOW,pContext)))                  nType = DataType::TIMESTAMP;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_QUARTER,pContext)))              nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SECOND,pContext)))               nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_TIMESTAMPADD,pContext)))         nType = DataType::TIMESTAMP;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_TIMESTAMPDIFF,pContext)))        nType = DataType::TIMESTAMP;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_TIMEVALUE,pContext)))            nType = DataType::TIMESTAMP;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_WEEK,pContext)))                 nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_YEAR,pContext)))                 nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ABS,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ACOS,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ASIN,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ATAN,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ATAN2,pContext)))                nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CEILING,pContext)))              nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_COS,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_COT,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DEGREES,pContext)))              nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_EXP,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_FLOOR,pContext)))                nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LOGF,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LOG10,pContext)))                nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LN,pContext)))                   nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_MOD,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_PI,pContext)))                   nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_POWER,pContext)))                nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_RADIANS,pContext)))              nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_RAND,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ROUND,pContext)))                nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SIGN,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SIN,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SQRT,pContext)))                 nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_TAN,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_TRUNCATE,pContext)))             nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_COUNT,pContext)))                nType = DataType::INTEGER;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_MAX,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_MIN,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_AVG,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SUM,pContext)))                  nType = DataType::DOUBLE;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LOWER,pContext)))                nType = DataType::VARCHAR;
+    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_UPPER,pContext)))                nType = DataType::VARCHAR;
+
+    return nType;
 }
 // -----------------------------------------------------------------------------
