@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 13:40:45 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:14:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..
 
-PRJNAME=canvas
+PRJNAME=cppcanvas
 TARGET=metafilerenderer
 ENABLE_EXCEPTIONS=TRUE
 
