@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtutf7.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:44:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,8 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
     sal_uInt32                  nBufferBits;
     sal_Unicode*                pEndDestBuf;
     const sal_Char*             pEndSrcBuf;
+
+    (void) pData; /* unused */
 
 /* !!! Implementation not finnished !!!
     if ( pContextData )
@@ -468,6 +470,9 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
     sal_uInt32                  nBufferBits;
     sal_Char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
+
+    (void) pData; /* unused */
+    (void) nFlags; /* unused */
 
 /* !!! Implementation not finnished !!!
     if ( pContextData )
