@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:46:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@ End
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Abp, abp)
 STD_RES_FILE_PATCH( gid_File_Res_Abp, abp)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbp, dbp)
-STD_RES_FILE( gid_File_Res_Dbp, dbp)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbp, dbp)
+STD_RES_FILE_PATCH( gid_File_Res_Dbp, dbp)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbu, dbu )
 STD_RES_FILE_PATCH( gid_File_Res_Dbu, dbu)
