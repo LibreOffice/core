@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:36:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,10 @@
 #ifndef _REGISTRY_HXX_
 #define _REGISTRY_HXX_
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
+
 #include <memory>
 #include <vector>
 #include <string>
