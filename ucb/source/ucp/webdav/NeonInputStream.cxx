@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:11:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ NeonInputStream::~NeonInputStream( void )
 // -------------------------------------------------------------------
 void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 {
-    mInputBuffer.realloc( mLen + inLen );
+    mInputBuffer.realloc( sal::static_int_cast<sal_Int32>(mLen) + inLen );
     rtl_copyMemory( mInputBuffer.getArray() + mLen, inBuf, inLen );
     mLen += inLen;
 }
@@ -97,7 +97,7 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
 {
     // Work out how much we're actually going to write
     sal_Int32 theBytes2Read = nBytesToRead;
-    sal_Int32 theBytesLeft  = mLen - mPos;
+    sal_Int32 theBytesLeft  = sal::static_int_cast<sal_Int32>(mLen - mPos);
     if ( theBytes2Read > theBytesLeft )
         theBytes2Read = theBytesLeft;
 
@@ -152,7 +152,7 @@ sal_Int32 SAL_CALL NeonInputStream::available(  )
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException )
 {
-    return mLen - mPos;
+    return sal::static_int_cast<sal_Int32>(mLen - mPos);
 }
 
 // -------------------------------------------------------------------
