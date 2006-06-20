@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:17:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,6 +300,11 @@ namespace basegfx
                         mbChanged = true;
                         break;
                     }
+                    case COMMON_IS_PARALLEL:
+                    case COMMON_IS_PARALLEL_OPPOSITE:
+                    case COMMON_IS_TOUCH:
+                    case COMMON_IS_DEADEND:
+                        break;
                 }
             }
 
@@ -451,11 +456,11 @@ namespace basegfx
             // bitfield
             unsigned                                    mbChanged : 1;
 
-            void impHandleLeaving(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB, bool bOpposite, bool bSideOfLeave)
+            void impHandleLeaving(impPolyPolygonPointNode& rCandidateA, impPolyPolygonPointNode& rCandidateB, bool bOpposite, bool bSideOfLeave)
             {
                 // go back on A and look for node entering B
-                sal_uInt32 nIndexA(rCandA.mnSelf);
-                sal_uInt32 nIndexB(rCandB.mnSelf);
+                sal_uInt32 nIndexA(rCandidateA.mnSelf);
+                sal_uInt32 nIndexB(rCandidateB.mnSelf);
                 bool bOnCommonEdge(true);
 
                 // go along common edge as long as we are on common edge, backward on
@@ -511,12 +516,12 @@ namespace basegfx
                         // switch at enter and leave, make the common edge(s) an own neutral
                         // polygon
                         impSwitchNext(rEnterCandA, rEnterCandB, maPointNodes);
-                        impSwitchNext(rCandA, rCandB, maPointNodes);
+                        impSwitchNext(rCandidateA, rCandidateB, maPointNodes);
                     }
                     else
                     {
                         // switch at leave
-                        impSwitchNext(rCandA, rCandB, maPointNodes);
+                        impSwitchNext(rCandidateA, rCandidateB, maPointNodes);
                     }
 
                     // set changed flag
@@ -595,6 +600,13 @@ namespace basegfx
                         mbChanged = true;
                         break;
                     }
+                    case COMMON_IS_PARALLEL:
+                    case COMMON_IS_PARALLEL_OPPOSITE:
+                    case COMMON_IS_ENTER:
+                    case COMMON_IS_ENTER_OPPOSITE:
+                    case COMMON_IS_TOUCH:
+                    case COMMON_IS_DEADEND:
+                        break;
                 }
             }
 
@@ -854,7 +866,6 @@ namespace basegfx
                             impStripHelper& rHelperB = aHelpers[b];
                             const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && tools::isInside(aCandB, aCandA, true));
                             const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && tools::isInside(aCandA, aCandB, true));
-                            bool bForceDelete(false);
 
                             if(bAInB && bBInA)
                             {
