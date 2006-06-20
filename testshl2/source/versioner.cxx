@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versioner.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:08:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,12 @@
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int, char* argv[] )
 #else
-int _cdecl main( int argc, char* argv[] )
+int _cdecl main( int, char* argv[] )
 #endif
 {
-    static char* optionSet[] = {
+    static char const * optionSet[] = {
         "-time,      display time only",
         "-date,      display date only",
         "-upd,       display UPD only",
