@@ -473,9 +473,9 @@ namespace agg
 
     //------------------------------------------------------------------------
     template<unsigned XScale, unsigned AA_Shift>
-    void rasterizer_scanline_aa<XScale, AA_Shift>::filling_rule(filling_rule_e filling_rule)
+    void rasterizer_scanline_aa<XScale, AA_Shift>::filling_rule(filling_rule_e _filling_rule)
     {
-        m_filling_rule = filling_rule;
+        m_filling_rule = _filling_rule;
     }
 
     //------------------------------------------------------------------------

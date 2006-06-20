@@ -125,10 +125,10 @@ namespace agg
         }
 
         //-------------------------------------------- Backward-adjusted line
-        dda2_line_interpolator(int y, int count) :
+        dda2_line_interpolator(int _y, int count) :
             m_cnt(count <= 0 ? 1 : count),
-            m_lft(y / m_cnt),
-            m_rem(y % m_cnt),
+            m_lft(_y / m_cnt),
+            m_rem(_y % m_cnt),
             m_mod(m_rem),
             m_y(0)
         {
@@ -228,17 +228,17 @@ namespace agg
         static int line_lr(int v) { return v >> subpixel_shift; }
 
         //--------------------------------------------------------------------
-        line_bresenham_interpolator(int x1, int y1, int x2, int y2) :
-            m_x1_lr(line_lr(x1)),
-            m_y1_lr(line_lr(y1)),
-            m_x2_lr(line_lr(x2)),
-            m_y2_lr(line_lr(y2)),
+        line_bresenham_interpolator(int _x1, int _y1, int _x2, int _y2) :
+            m_x1_lr(line_lr(_x1)),
+            m_y1_lr(line_lr(_y1)),
+            m_x2_lr(line_lr(_x2)),
+            m_y2_lr(line_lr(_y2)),
             m_ver(abs(m_x2_lr - m_x1_lr) < abs(m_y2_lr - m_y1_lr)),
             m_len(m_ver ? abs(m_y2_lr - m_y1_lr) :
                           abs(m_x2_lr - m_x1_lr)),
-            m_inc(m_ver ? ((y2 > y1) ? 1 : -1) : ((x2 > x1) ? 1 : -1)),
-            m_interpolator(m_ver ? x1 : y1,
-                           m_ver ? x2 : y2,
+            m_inc(m_ver ? ((_y2 > _y1) ? 1 : -1) : ((_x2 > _x1) ? 1 : -1)),
+            m_interpolator(m_ver ? _x1 : _y1,
+                           m_ver ? _x2 : _y2,
                            m_len)
         {
         }

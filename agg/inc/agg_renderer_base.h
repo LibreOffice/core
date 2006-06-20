@@ -34,9 +34,9 @@ namespace agg
         typedef typename pixfmt_type::color_type color_type;
 
         //--------------------------------------------------------------------
-        renderer_base(pixfmt_type& ren) :
-            m_ren(&ren),
-            m_clip_box(0, 0, ren.width() - 1, ren.height() - 1)
+        renderer_base(pixfmt_type& _ren) :
+            m_ren(&_ren),
+            m_clip_box(0, 0, _ren.width() - 1, _ren.height() - 1)
         {
         }
 

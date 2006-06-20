@@ -42,13 +42,13 @@ namespace agg
     //------------------------------------------------------------------line_mr
     inline int line_mr(int x)
     {
-        return x >> (line_subpixel_shift - line_mr_subpixel_shift);
+        return x >> ((int)line_subpixel_shift - (int)line_mr_subpixel_shift);
     }
 
     //-------------------------------------------------------------------line_hr
     inline int line_hr(int x)
     {
-        return x << (line_subpixel_shift - line_mr_subpixel_shift);
+        return x << ((int)line_subpixel_shift - (int)line_mr_subpixel_shift);
     }
 
     //---------------------------------------------------------------line_dbl_hr
