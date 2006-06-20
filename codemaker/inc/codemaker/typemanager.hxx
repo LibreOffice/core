@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:11:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ class TypeManager
 {
 public:
     TypeManager();
-    ~TypeManager();
+    virtual ~TypeManager();
 
     TypeManager( const TypeManager& value )
         : m_pImpl( value.m_pImpl )
@@ -105,26 +105,25 @@ public:
         return *this;
     }
 
-    virtual sal_Bool isValidType(const ::rtl::OString& name) const
+    virtual sal_Bool isValidType(const ::rtl::OString&) const
         { return sal_False; }
 
-    virtual ::rtl::OString getTypeName(RegistryKey& rTypeKey) const
+    virtual ::rtl::OString getTypeName(RegistryKey&) const
         { return ::rtl::OString(); }
 
-    virtual RegistryKey getTypeKey(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
+    virtual RegistryKey getTypeKey(const ::rtl::OString&, sal_Bool * = 0 ) const
         { return RegistryKey(); }
-    virtual RegistryKeyList getTypeKeys(const ::rtl::OString& name) const
+    virtual RegistryKeyList getTypeKeys(const ::rtl::OString&) const
         { return RegistryKeyList(); }
     virtual typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const = 0;
     virtual typereg::Reader getTypeReader(RegistryKey& rTypeKey) const = 0;
-    virtual RTTypeClass getTypeClass(const ::rtl::OString& name) const
+    virtual RTTypeClass getTypeClass(const ::rtl::OString&) const
         { return RT_TYPE_INVALID; }
-    virtual RTTypeClass getTypeClass(RegistryKey& rTypeKey) const
+    virtual RTTypeClass getTypeClass(RegistryKey&) const
         { return RT_TYPE_INVALID; }
 
-    virtual void setBase(const ::rtl::OString& base) {}
+    virtual void setBase(const ::rtl::OString&) {}
     virtual ::rtl::OString getBase() const { return ::rtl::OString(); }
 
     virtual sal_Int32 getSize() const { return 0; }
@@ -154,7 +153,7 @@ class RegistryTypeManager : public TypeManager
 {
 public:
     RegistryTypeManager();
-    ~RegistryTypeManager();
+    virtual ~RegistryTypeManager();
 
     RegistryTypeManager( const RegistryTypeManager& value )
         : TypeManager(value)
