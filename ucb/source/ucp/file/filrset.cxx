@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:27:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,17 +89,17 @@ XResultSet_impl::XResultSet_impl( shell* pMyShell,
                                   const Sequence< NumberedSortingInfo >& seqSort )
     : m_pMyShell( pMyShell ),
       m_xProvider( pMyShell->m_pProvider ),
-      m_sProperty( seq ),
-      m_sSortingInfo( seqSort ),
+      m_nRow( -1 ),
+      m_nOpenMode( OpenMode ),
+      m_bRowCountFinal( false ),
       m_aBaseDirectory( aUnqPath ),
       m_aFolder( aUnqPath ),
+      m_sProperty( seq ),
+      m_sSortingInfo( seqSort ),
       m_pDisposeEventListeners( 0 ),
       m_pRowCountListeners( 0 ),
       m_pIsFinalListeners( 0 ),
-      m_nRow( -1 ),
       m_bStatic( false ),
-      m_bRowCountFinal( false ),
-      m_nOpenMode( OpenMode ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
@@ -186,7 +186,7 @@ XResultSet_impl::queryInterface(
 
 
 void SAL_CALL
-XResultSet_impl::disposing( const lang::EventObject& Source )
+XResultSet_impl::disposing( const lang::EventObject& )
     throw( RuntimeException )
 {
     // To do, but what
@@ -337,7 +337,7 @@ XResultSet_impl::OneMore(
         }
         else if( err == osl::FileBase::E_None )
         {
-            aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
+            aRow = m_pMyShell->getv( this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
 
             if( m_nOpenMode == OpenMode::DOCUMENTS && IsRegular )
             {
@@ -379,7 +379,6 @@ XResultSet_impl::OneMore(
         else  // error fetching anything
         {
             throw sdbc::SQLException();
-            return false;
         }
     }
 }
@@ -395,7 +394,7 @@ XResultSet_impl::next(
            RuntimeException )
 {
     sal_Bool test;
-    if( ++m_nRow < m_aItems.size() ) test = true;
+    if( ++m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) ) test = true;
     else test = OneMore();
     return test;
 }
@@ -417,7 +416,7 @@ XResultSet_impl::isAfterLast(
     throw( sdbc::SQLException,
            RuntimeException )
 {
-    return m_nRow >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
+    return m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size());   // Cannot happen, if m_aFolder.isOpen()
 }
 
 
@@ -437,7 +436,7 @@ XResultSet_impl::isLast(
     throw( sdbc::SQLException,
            RuntimeException)
 {
-    if( m_nRow ==  m_aItems.size() - 1 )
+    if( m_nRow ==  sal::static_int_cast<sal_Int32>(m_aItems.size()) - 1 )
         return ! OneMore();
     else
         return false;
@@ -460,7 +459,7 @@ XResultSet_impl::afterLast(
     throw( sdbc::SQLException,
            RuntimeException )
 {
-    m_nRow = m_aItems.size();
+    m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size());
     while( OneMore() )
         ++m_nRow;
 }
@@ -483,7 +482,7 @@ XResultSet_impl::last(
     throw( sdbc::SQLException,
            RuntimeException )
 {
-    m_nRow = m_aItems.size() - 1;
+    m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size()) - 1;
     while( OneMore() )
         ++m_nRow;
     return true;
@@ -497,7 +496,7 @@ XResultSet_impl::getRow(
            RuntimeException)
 {
     // Test, whether behind last row
-    if( -1 == m_nRow || m_nRow >= m_aItems.size() )
+    if( -1 == m_nRow || m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return 0;
     else
         return m_nRow+1;
@@ -511,7 +510,7 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
     if( row >= 0 )
     {
         m_nRow = row - 1;
-        if( row >= m_aItems.size() )
+        if( row >= sal::static_int_cast<sal_Int32>(m_aItems.size()) )
             while( row-- && OneMore() )
                 ;
     }
@@ -523,7 +522,7 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
             m_nRow = -1;
     }
 
-    return 0<= m_nRow && m_nRow < m_aItems.size();
+    return 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
 
@@ -542,7 +541,7 @@ XResultSet_impl::relative(
     else if( row < 0 )
         while( row++ && m_nRow > - 1 ) previous();
 
-    return 0 <= m_nRow && m_nRow < m_aItems.size();
+    return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
 
@@ -553,11 +552,11 @@ XResultSet_impl::previous(
     throw( sdbc::SQLException,
            RuntimeException)
 {
-    if( m_nRow > m_aItems.size() )
-        m_nRow = m_aItems.size();  // Correct Handling of afterLast
+    if( m_nRow > sal::static_int_cast<sal_Int32>(m_aItems.size()) )
+        m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size());  // Correct Handling of afterLast
     if( 0 <= m_nRow ) -- m_nRow;
 
-    return 0 <= m_nRow && m_nRow < m_aItems.size();
+    return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
 
@@ -649,7 +648,7 @@ XResultSet_impl::queryContentIdentifier(
     void )
     throw( RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
     {
         if( ! m_aIdents[m_nRow].is() )
         {
@@ -667,7 +666,7 @@ XResultSet_impl::queryContent(
     void )
     throw( RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return m_pMyShell->m_pProvider->queryContent( queryContentIdentifier() );
     else
         return Reference< XContent >();
@@ -843,7 +842,7 @@ XResultSet_impl::getPropertySetInfo()
 
 
 void SAL_CALL XResultSet_impl::setPropertyValue(
-    const rtl::OUString& aPropertyName, const Any& aValue )
+    const rtl::OUString& aPropertyName, const Any& )
     throw( beans::UnknownPropertyException,
            beans::PropertyVetoException,
            lang::IllegalArgumentException,
@@ -872,7 +871,7 @@ Any SAL_CALL XResultSet_impl::getPropertyValue(
     else if ( PropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
     {
         Any aAny;
-        sal_Int32 count = m_aItems.size();
+        sal_Int32 count = sal::static_int_cast<sal_Int32>(m_aItems.size());
         aAny <<= count;
         return aAny;
     }
@@ -935,8 +934,8 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
 }
 
 void SAL_CALL XResultSet_impl::addVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener >& aListener )
+    const rtl::OUString&,
+    const Reference< beans::XVetoableChangeListener >& )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            RuntimeException)
@@ -945,8 +944,8 @@ void SAL_CALL XResultSet_impl::addVetoableChangeListener(
 
 
 void SAL_CALL XResultSet_impl::removeVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener >& aListener )
+    const rtl::OUString&,
+    const Reference< beans::XVetoableChangeListener >& )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            RuntimeException)
