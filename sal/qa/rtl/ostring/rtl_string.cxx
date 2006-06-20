@@ -9,7 +9,7 @@ namespace rtl_string
 
         void getLength_000()
             {
-                sal_Int32 nValue = rtl_string_getLength( NULL );
+                rtl_string_getLength( NULL );
                 // should not GPF
             }
 
@@ -19,7 +19,11 @@ namespace rtl_string
                 sal_Int32 nValue = rtl_string_getLength( aStr.pData );
 
                 CPPUNIT_ASSERT_MESSAGE("Length must equal getLength()", aStr.getLength() == nValue);
-                CPPUNIT_ASSERT_MESSAGE("Length must equal strlen()", strlen(aStr.getStr()) == nValue);
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Length must equal strlen()",
+                    nValue >= 0
+                    && (strlen(aStr.getStr())
+                        == sal::static_int_cast< sal_uInt32 >(nValue)));
             }
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
