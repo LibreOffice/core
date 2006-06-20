@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PathFindExtensionW.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:22:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,10 @@
  ************************************************************************/
 
 #include "macros.h"
+
+#define _SHLWAPI_
 #include <shlwapi.h>
+
 #include <tchar.h>
 #include <mbstring.h>
 
