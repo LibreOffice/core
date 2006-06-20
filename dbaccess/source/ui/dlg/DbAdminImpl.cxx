@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:20:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,8 +197,8 @@ namespace
     //========================================================================
 ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XMultiServiceFactory >& _xORB,Window* _pParent,IItemSetHelper* _pItemSetHelper)
         : m_xORB(_xORB)
-        , m_pItemSetHelper(_pItemSetHelper)
         , m_pParent(_pParent)
+        , m_pItemSetHelper(_pItemSetHelper)
 {
     /// initialize the property translation map
     // direct properties of a data source
@@ -617,8 +617,6 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
 {
     ::rtl::OUString sNewConnectURL, sName, sUid, sPwd;
     Sequence< ::rtl::OUString > aTableFitler;
-    sal_Bool bPasswordRequired = sal_False;
-    sal_Bool bReadOnly = sal_True;
 
     if (_rxSource.is())
     {
@@ -938,9 +936,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
     }
     else
     {
-        MapInt2String::const_iterator aPos = m_aIndirectPropTranslator.find( _nId );
-        if ( m_aIndirectPropTranslator.end() != aPos )
-            aString = aPos->second;
+        MapInt2String::const_iterator indirectPos = m_aIndirectPropTranslator.find( _nId );
+        if ( m_aIndirectPropTranslator.end() != indirectPos )
+            aString = indirectPos->second;
     }
 
     ::rtl::OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -1083,6 +1081,8 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
             break;
         case DST_LDAP:
             nPortNumberId = DSID_CONN_LDAP_PORTNUMBER;
+            break;
+        default:
             break;
     }
 
