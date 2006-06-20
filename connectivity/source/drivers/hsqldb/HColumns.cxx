@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HColumns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:02:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,12 +77,9 @@ void OHSQLColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OHSQLColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OHSQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL OHSQLColumn::getInfoHelper()
