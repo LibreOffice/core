@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:17:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@ using namespace connectivity::kab;
 // --------------------------------------------------------------------------------
 KabImplModule::KabImplModule( const Reference< XMultiServiceFactory >& _rxFactory )
     :m_xORB(_rxFactory)
-    ,m_hConnectorModule(NULL)
     ,m_bAttemptedLoadModule(false)
     ,m_bAttemptedInitialize(false)
+    ,m_hConnectorModule(NULL)
     ,m_pConnectionFactoryFunc(NULL)
     ,m_pApplicationInitFunc(NULL)
     ,m_pApplicationShutdownFunc(NULL)
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:address:kab:"), 16));
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
@@ -453,17 +453,17 @@ sal_Int32 SAL_CALL KabDriver::getMinorVersion(  ) throw(RuntimeException)
     return 1;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabDriver::queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException)
+void SAL_CALL KabDriver::queryTermination( const EventObject& ) throw (TerminationVetoException, RuntimeException)
 {
     // nothing to do, nothing to veto
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabDriver::notifyTermination( const EventObject& Event ) throw (RuntimeException)
+void SAL_CALL KabDriver::notifyTermination( const EventObject& ) throw (RuntimeException)
 {
     m_aImplModule.shutdown();
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabDriver::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL KabDriver::disposing( const EventObject& ) throw (RuntimeException)
 {
     // not interested in (this is the disposing of the desktop, if any)
 }
