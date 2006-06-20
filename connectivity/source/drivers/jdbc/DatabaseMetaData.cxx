@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:09:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #include <comphelper/types.hxx>
 #endif
 #include "TPrivilegesResultSet.hxx"
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 
 using namespace ::comphelper;
 
@@ -94,8 +97,8 @@ jclass java_sql_DatabaseMetaData::getMyClass()
 }
 // -----------------------------------------------------------------------------
 java_sql_DatabaseMetaData::java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pConnection )
-    :java_lang_Object( pEnv, myObj )
-    ,ODatabaseMetaDataBase(_pConnection)
+    :ODatabaseMetaDataBase(_pConnection)
+    ,java_lang_Object( pEnv, myObj )
     ,m_pConnection(_pConnection)
 {
     SDBThreadAttach::addRef();
@@ -118,8 +121,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTypeInfo(  ) thro
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/sql/ResultSet;";
-        static char * cMethodName = "getTypeInfo";
+        static const char * cSignature = "()Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getTypeInfo";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -141,8 +144,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) thro
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/sql/ResultSet;";
-        static char * cMethodName = "getCatalogs";
+        static const char * cSignature = "()Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getCatalogs";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -164,8 +167,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) thro
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getCatalogSeparator";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getCatalogSeparator";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -186,8 +189,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getSchemas(  ) throw
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
-        static char * cSignature = "()Ljava/sql/ResultSet;";
-        static char * cMethodName = "getSchemas";
+        static const char * cSignature = "()Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getSchemas";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -209,8 +212,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumnPrivileges(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getColumnPrivileges";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getColumnPrivileges";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -248,8 +251,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getColumns";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getColumns";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -288,13 +291,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
     if( t.pEnv ){
 
 
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getTables";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getTables";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        sal_Bool bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+        OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
         if( mID )
         {
             jvalue args[4];
@@ -302,7 +305,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             if(len)
             {
                 jobjectArray pObjArray = static_cast<jobjectArray>(t.pEnv->NewObjectArray((jsize) len, java_lang_String::getMyClass(), 0));
-                sal_Bool bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+                OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
 
                 const ::rtl::OUString* pBegin = types.getConstArray();
                 for(sal_Int32 i=0;i<len;i++,++pBegin)
@@ -310,7 +313,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                     jstring aT = convertwchar_tToJavaString(t.pEnv,*pBegin);
                     //jstring aT = t.pEnv->NewStringUTF(_par3.GetToken(i));
                     t.pEnv->SetObjectArrayElement(pObjArray,(jsize)i,aT);
-                    sal_Bool bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+                    OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
 
                 }
                 args[3].l = pObjArray;
@@ -377,8 +380,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedureColumns(
     {
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getProcedureColumns";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getProcedureColumns";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -417,8 +420,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedures( const
     {
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getProcedures";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getProcedures";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -454,8 +457,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getVersionColumns(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getVersionColumns";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getVersionColumns";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -488,8 +491,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxBinaryLiteralLength(  ) thro
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxBinaryLiteralLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxBinaryLiteralLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -510,8 +513,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxRowSize(  ) throw(SQLExcepti
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxRowSize";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxRowSize";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -532,8 +535,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCatalogNameLength(  ) throw(
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxCatalogNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxCatalogNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -554,8 +557,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCharLiteralLength(  ) throw(
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxCharLiteralLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxCharLiteralLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -576,8 +579,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnNameLength(  ) throw(S
 
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxColumnNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxColumnNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -597,8 +600,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxColumnsInIndex";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxColumnsInIndex";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -618,8 +621,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCursorNameLength(  ) throw(S
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxCursorNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxCursorNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -639,8 +642,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxConnections(  ) throw(SQLExc
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxConnections";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxConnections";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -660,8 +663,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInTable(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxColumnsInTable";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxColumnsInTable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -681,8 +684,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatementLength(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxStatementLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxStatementLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -702,8 +705,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTableNameLength(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxTableNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxTableNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -723,8 +726,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTablesInSelect(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxTablesInSelect";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxTablesInSelect";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -745,8 +748,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getExportedKeys(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getExportedKeys";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getExportedKeys";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -781,8 +784,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getImportedKeys(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getImportedKeys";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getImportedKeys";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -817,8 +820,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getPrimaryKeys(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getPrimaryKeys";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getPrimaryKeys";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -854,8 +857,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getIndexInfo";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getIndexInfo";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -892,8 +895,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getBestRowIdentifier";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getBestRowIdentifier";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -933,8 +936,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
 
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getTablePrivileges";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getTablePrivileges";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -986,7 +989,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 for (sal_Int32 i = 1 ; i <= nCount ; ++i)
                 {
                     sColumnName = xMeta->getColumnName(i);
-                    for (sal_Int32 j = 0 ; j < sizeof(sPrivs)/sizeof(sPrivs[0]); ++j)
+                    for (sal_uInt32 j = 0 ; j < sizeof(sPrivs)/sizeof(sPrivs[0]); ++j)
                     {
                         if ( sPrivs[j] == sColumnName )
                         {
@@ -1038,8 +1041,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getCrossReference";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getCrossReference";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1082,8 +1085,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "doesMaxRowSizeIncludeBlobs";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "doesMaxRowSizeIncludeBlobs";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1103,8 +1106,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseQuotedIdentifiers(  
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "storesLowerCaseQuotedIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "storesLowerCaseQuotedIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1124,8 +1127,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseIdentifiers(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "storesLowerCaseIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "storesLowerCaseIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1145,8 +1148,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "storesMixedCaseQuotedIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "storesMixedCaseQuotedIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1166,8 +1169,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseIdentifiers(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "storesMixedCaseIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "storesMixedCaseIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1187,8 +1190,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseQuotedIdentifiers(  
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "storesUpperCaseQuotedIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "storesUpperCaseQuotedIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1208,8 +1211,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseIdentifiers(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "storesUpperCaseIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "storesUpperCaseIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1229,8 +1232,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithAddColumn(  )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsAlterTableWithAddColumn";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsAlterTableWithAddColumn";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1250,8 +1253,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithDropColumn(  
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsAlterTableWithDropColumn";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsAlterTableWithDropColumn";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1271,8 +1274,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxIndexLength(  ) throw(SQLExc
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxIndexLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxIndexLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1292,8 +1295,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsNonNullableColumns";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsNonNullableColumns";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1313,8 +1316,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getCatalogTerm";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getCatalogTerm";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1336,8 +1339,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getIdentifierQuoteString";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getIdentifierQuoteString";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1359,8 +1362,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getExtraNameCharacters";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getExtraNameCharacters";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1382,8 +1385,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDifferentTableCorrelationNa
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsDifferentTableCorrelationNames";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsDifferentTableCorrelationNames";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1403,8 +1406,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::isCatalogAtStart(  ) throw(SQLExcep
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "isCatalogAtStart";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "isCatalogAtStart";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1424,8 +1427,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::dataDefinitionIgnoredInTransactions
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "dataDefinitionIgnoredInTransactions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "dataDefinitionIgnoredInTransactions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1445,8 +1448,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::dataDefinitionCausesTransactionComm
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "dataDefinitionCausesTransactionCommit";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "dataDefinitionCausesTransactionCommit";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1466,8 +1469,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDataManipulationTransaction
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsDataManipulationTransactionsOnly";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsDataManipulationTransactionsOnly";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1487,8 +1490,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDataDefinitionAndDataManipu
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsDataDefinitionAndDataManipulationTransactions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsDataDefinitionAndDataManipulationTransactions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1508,8 +1511,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsPositionedDelete(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsPositionedDelete";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsPositionedDelete";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1529,8 +1532,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsPositionedUpdate(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsPositionedUpdate";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsPositionedUpdate";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1550,8 +1553,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenStatementsAcrossRollbac
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsOpenStatementsAcrossRollback";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsOpenStatementsAcrossRollback";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1571,8 +1574,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenStatementsAcrossCommit(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsOpenStatementsAcrossCommit";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsOpenStatementsAcrossCommit";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1592,8 +1595,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsOpenCursorsAcrossCommit";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsOpenCursorsAcrossCommit";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1613,8 +1616,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenCursorsAcrossRollback( 
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsOpenCursorsAcrossRollback";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsOpenCursorsAcrossRollback";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1634,8 +1637,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactionIsolationLevel( 
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "supportsTransactionIsolationLevel";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "supportsTransactionIsolationLevel";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1656,8 +1659,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInDataManipulation( 
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSchemasInDataManipulation";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSchemasInDataManipulation";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1677,8 +1680,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsANSI92FullSQL";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsANSI92FullSQL";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1698,8 +1701,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) thr
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsANSI92EntryLevelSQL";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsANSI92EntryLevelSQL";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1719,8 +1722,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsIntegrityEnhancementFacilit
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsIntegrityEnhancementFacility";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsIntegrityEnhancementFacility";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1740,8 +1743,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInIndexDefinitions( 
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSchemasInIndexDefinitions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSchemasInIndexDefinitions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1761,8 +1764,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInTableDefinitions( 
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSchemasInTableDefinitions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSchemasInTableDefinitions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1782,8 +1785,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInTableDefinitions(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCatalogsInTableDefinitions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCatalogsInTableDefinitions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1803,8 +1806,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInIndexDefinitions(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCatalogsInIndexDefinitions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCatalogsInIndexDefinitions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1824,8 +1827,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInDataManipulation(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCatalogsInDataManipulation";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCatalogsInDataManipulation";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1845,8 +1848,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOuterJoins(  ) throw(SQLExc
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsOuterJoins";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsOuterJoins";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1866,8 +1869,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTableTypes(  ) th
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/sql/ResultSet;";
-        static char * cMethodName = "getTableTypes";
+        static const char * cSignature = "()Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getTableTypes";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1888,8 +1891,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatements(  ) throw(SQLExce
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxStatements";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxStatements";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1909,8 +1912,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxProcedureNameLength(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxProcedureNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxProcedureNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1930,8 +1933,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxSchemaNameLength(  ) throw(S
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxSchemaNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxSchemaNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1951,8 +1954,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactions(  ) throw(SQLE
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsTransactions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsTransactions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1972,8 +1975,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::allProceduresAreCallable(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "allProceduresAreCallable";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "allProceduresAreCallable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1993,8 +1996,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsStoredProcedures(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsStoredProcedures";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsStoredProcedures";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2014,8 +2017,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSelectForUpdate(  ) throw(S
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSelectForUpdate";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSelectForUpdate";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2035,8 +2038,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::allTablesAreSelectable(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "allTablesAreSelectable";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "allTablesAreSelectable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2056,8 +2059,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::isReadOnly(  ) throw(SQLException, 
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "isReadOnly";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "isReadOnly";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2077,8 +2080,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::usesLocalFiles(  ) throw(SQLExcepti
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "usesLocalFiles";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "usesLocalFiles";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2098,8 +2101,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::usesLocalFilePerTable(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "usesLocalFilePerTable";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "usesLocalFilePerTable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2119,8 +2122,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTypeConversion(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsTypeConversion";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsTypeConversion";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2140,8 +2143,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "nullPlusNonNullIsNull";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "nullPlusNonNullIsNull";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2161,8 +2164,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsColumnAliasing(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsColumnAliasing";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsColumnAliasing";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2182,8 +2185,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTableCorrelationNames(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsTableCorrelationNames";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsTableCorrelationNames";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2202,8 +2205,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(II)Z";
-        static char * cMethodName = "supportsConvert";
+        static const char * cSignature = "(II)Z";
+        static const char * cMethodName = "supportsConvert";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2224,8 +2227,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsExpressionsInOrderBy(  ) th
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsExpressionsInOrderBy";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsExpressionsInOrderBy";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2245,8 +2248,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupBy(  ) throw(SQLExcept
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsGroupBy";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsGroupBy";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2266,8 +2269,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupByBeyondSelect(  ) thr
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsGroupByBeyondSelect";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsGroupByBeyondSelect";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2287,8 +2290,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupByUnrelated(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsGroupByUnrelated";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsGroupByUnrelated";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2308,8 +2311,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMultipleTransactions(  ) th
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsMultipleTransactions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsMultipleTransactions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2329,8 +2332,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMultipleResultSets(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsMultipleResultSets";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsMultipleResultSets";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2350,8 +2353,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLikeEscapeClause(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsLikeEscapeClause";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsLikeEscapeClause";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2371,8 +2374,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOrderByUnrelated(  ) throw(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsOrderByUnrelated";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsOrderByUnrelated";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2392,8 +2395,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsUnion(  ) throw(SQLExceptio
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsUnion";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsUnion";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2413,8 +2416,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsUnionAll(  ) throw(SQLExcep
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsUnionAll";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsUnionAll";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2434,8 +2437,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseIdentifiers(  ) th
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsMixedCaseIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsMixedCaseIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2455,8 +2458,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsMixedCaseQuotedIdentifiers";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsMixedCaseQuotedIdentifiers";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2476,8 +2479,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLEx
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "nullsAreSortedAtEnd";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "nullsAreSortedAtEnd";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2497,8 +2500,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "nullsAreSortedAtStart";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "nullsAreSortedAtStart";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2518,8 +2521,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLExc
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "nullsAreSortedHigh";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "nullsAreSortedHigh";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2539,8 +2542,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedLow(  ) throw(SQLExce
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "nullsAreSortedLow";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "nullsAreSortedLow";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2560,8 +2563,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInProcedureCalls(  )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSchemasInProcedureCalls";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSchemasInProcedureCalls";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2581,8 +2584,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInPrivilegeDefinitio
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSchemasInPrivilegeDefinitions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSchemasInPrivilegeDefinitions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2602,8 +2605,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInProcedureCalls(  
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCatalogsInProcedureCalls";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCatalogsInProcedureCalls";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2623,8 +2626,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInPrivilegeDefiniti
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCatalogsInPrivilegeDefinitions";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCatalogsInPrivilegeDefinitions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2644,8 +2647,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCorrelatedSubqueries(  ) th
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCorrelatedSubqueries";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCorrelatedSubqueries";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2665,8 +2668,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInComparisons(  )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSubqueriesInComparisons";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSubqueriesInComparisons";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2686,8 +2689,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInExists(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSubqueriesInExists";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSubqueriesInExists";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2707,8 +2710,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInIns(  ) throw(S
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSubqueriesInIns";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSubqueriesInIns";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2728,8 +2731,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInQuantifieds(  )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsSubqueriesInQuantifieds";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsSubqueriesInQuantifieds";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2749,8 +2752,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsANSI92IntermediateSQL";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsANSI92IntermediateSQL";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2772,8 +2775,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
         if( t.pEnv ){
 
             // temporaere Variable initialisieren
-            static char * cSignature = "()Ljava/lang/String;";
-            static char * cMethodName = "getURL";
+            static const char * cSignature = "()Ljava/lang/String;";
+            static const char * cMethodName = "getURL";
             // Java-Call absetzen
             static jmethodID mID = NULL;
             if ( !mID  )
@@ -2796,8 +2799,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getUserName";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getUserName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2819,8 +2822,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getDriverName";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getDriverName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2842,8 +2845,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getDriverVersion";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getDriverVersion";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2865,8 +2868,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getDatabaseProductVersion";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getDatabaseProductVersion";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2888,8 +2891,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getDatabaseProductName";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getDatabaseProductName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2911,8 +2914,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getProcedureTerm";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getProcedureTerm";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2934,8 +2937,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getSchemaTerm";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getSchemaTerm";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2957,8 +2960,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMajorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getDriverMajorVersion";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getDriverMajorVersion";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2978,8 +2981,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDefaultTransactionIsolation(  )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getDefaultTransactionIsolation";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getDefaultTransactionIsolation";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -2999,8 +3002,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getDriverMinorVersion";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getDriverMinorVersion";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3020,8 +3023,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getSQLKeywords";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getSQLKeywords";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3043,8 +3046,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getSearchStringEscape";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getSearchStringEscape";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3066,8 +3069,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getStringFunctions";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getStringFunctions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3089,8 +3092,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getTimeDateFunctions";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getTimeDateFunctions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3112,8 +3115,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getSystemFunctions";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getSystemFunctions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3135,8 +3138,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getNumericFunctions";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getNumericFunctions";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3158,8 +3161,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsExtendedSQLGrammar(  ) thro
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsExtendedSQLGrammar";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsExtendedSQLGrammar";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3179,8 +3182,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsCoreSQLGrammar";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsCoreSQLGrammar";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3200,8 +3203,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsMinimumSQLGrammar";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsMinimumSQLGrammar";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3221,8 +3224,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsFullOuterJoins(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsFullOuterJoins";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsFullOuterJoins";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3242,8 +3245,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLimitedOuterJoins(  ) throw
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsLimitedOuterJoins";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsLimitedOuterJoins";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3263,8 +3266,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(S
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxColumnsInGroupBy";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxColumnsInGroupBy";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3284,8 +3287,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(S
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxColumnsInOrderBy";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxColumnsInOrderBy";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3305,8 +3308,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQ
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxColumnsInSelect";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxColumnsInSelect";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3326,8 +3329,8 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxUserNameLength(  ) throw(SQL
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getMaxUserNameLength";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getMaxUserNameLength";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3347,8 +3350,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetType( sal_Int32 se
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "supportsResultSetType";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "supportsResultSetType";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3368,8 +3371,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(II)Z";
-        static char * cMethodName = "supportsResultSetConcurrency";
+        static const char * cSignature = "(II)Z";
+        static const char * cMethodName = "supportsResultSetConcurrency";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3389,8 +3392,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 set
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "ownUpdatesAreVisible";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "ownUpdatesAreVisible";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3410,8 +3413,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownDeletesAreVisible( sal_Int32 set
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "ownDeletesAreVisible";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "ownDeletesAreVisible";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3431,8 +3434,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownInsertsAreVisible( sal_Int32 set
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "ownInsertsAreVisible";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "ownInsertsAreVisible";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3452,8 +3455,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "othersUpdatesAreVisible";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "othersUpdatesAreVisible";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3473,8 +3476,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersDeletesAreVisible( sal_Int32 
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "othersDeletesAreVisible";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "othersDeletesAreVisible";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3494,8 +3497,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersInsertsAreVisible( sal_Int32 
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "othersInsertsAreVisible";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "othersInsertsAreVisible";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3515,8 +3518,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::updatesAreDetected( sal_Int32 setTy
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "updatesAreDetected";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "updatesAreDetected";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3536,8 +3539,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::deletesAreDetected( sal_Int32 setTy
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "deletesAreDetected";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "deletesAreDetected";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3557,8 +3560,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::insertsAreDetected( sal_Int32 setTy
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "insertsAreDetected";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "insertsAreDetected";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3578,8 +3581,8 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsBatchUpdates(  ) throw(SQLE
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Z";
-        static char * cMethodName = "supportsBatchUpdates";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "supportsBatchUpdates";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -3601,8 +3604,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
     if( t.pEnv ){
 
 
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getUDTs";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getUDTs";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
