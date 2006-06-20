@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:50:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet)
     m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
-Any SAL_CALL OBookmarkSet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
+Any SAL_CALL OBookmarkSet::getBookmark() throw(SQLException, RuntimeException)
 {
     return m_xRowLocate->getBookmark();
 }
@@ -79,9 +79,9 @@ sal_Bool SAL_CALL OBookmarkSet::moveRelativeToBookmark( const Any& bookmark, sal
     return m_xRowLocate->moveRelativeToBookmark(bookmark,rows);
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OBookmarkSet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OBookmarkSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
-    return m_xRowLocate->compareBookmarks(first,second);
+    return m_xRowLocate->compareBookmarks(_first,_second);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OBookmarkSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
@@ -95,7 +95,7 @@ sal_Int32 SAL_CALL OBookmarkSet::hashBookmark( const Any& bookmark ) throw(SQLEx
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
-Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& _xTable) throw(SQLException, RuntimeException)
+Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
     Reference< ::com::sun::star::sdbcx::XDeleteRows> xDeleteRow(m_xRowLocate,UNO_QUERY);
     if(xDeleteRow.is())
@@ -105,7 +105,7 @@ Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& 
     return Sequence< sal_Int32 >();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
+void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
@@ -128,7 +128,7 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XRESULTSETUPDATE),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     //  OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
@@ -151,7 +151,7 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XRESULTSETUPDATE),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
 
