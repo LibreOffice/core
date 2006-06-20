@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTableFilterList.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:10:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,7 @@ namespace dbaxml
     public:
 
         OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
-                    sal_Bool _bNameFilter);
+                    const ::rtl::OUString& rLName);
 
         virtual ~OXMLTableFilterList();
 
