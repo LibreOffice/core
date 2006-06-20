@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:14:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,9 +234,9 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_xPackageStream( xPackageStream )
 , m_xFactory( xFactory )
 , m_pParent( pParent )
-, m_bHasCachedPassword( sal_False )
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonPass( sal_False )
+, m_bHasCachedPassword( sal_False )
 , m_xPackage( xPackage )
 , m_bHasInsertedStreamOptimization( sal_False )
 {
@@ -336,11 +336,6 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     }
     else
         return bToBeEncr;
-
-    OSL_ENSURE( sal_False, "Can't read encryption related properties!\n" );
-    throw io::IOException(); // TODO
-
-    return sal_False; // not reachable
 }
 
 //-----------------------------------------------
@@ -1105,9 +1100,6 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     }
 
     throw lang::IllegalArgumentException(); // TODO
-
-    // not reachable
-    return uno::Reference< io::XStream >();
 }
 
 //-----------------------------------------------
@@ -1161,7 +1153,7 @@ void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
 }
 
 //-----------------------------------------------
-void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, sal_Bool bUseCommonKey, uno::Reference< io::XStream >& xTargetStream )
+void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, sal_Bool, uno::Reference< io::XStream >& xTargetStream )
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
@@ -2001,16 +1993,13 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
     }
 
     throw beans::UnknownPropertyException(); // TODO
-
-    // not reachable
-    return uno::Any();
 }
 
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::addPropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const ::rtl::OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -2026,8 +2015,8 @@ void SAL_CALL OWriteStream::addPropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::removePropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const ::rtl::OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -2043,8 +2032,8 @@ void SAL_CALL OWriteStream::removePropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::addVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const ::rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -2060,8 +2049,8 @@ void SAL_CALL OWriteStream::addVetoableChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::removeVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const ::rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
