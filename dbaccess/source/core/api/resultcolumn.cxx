@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultcolumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:14:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
@@ -79,15 +82,15 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace dbaccess;
 
-DBG_NAME(OResultColumn);
+DBG_NAME(OResultColumn)
 //--------------------------------------------------------------------------
 OResultColumn::OResultColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
                          sal_Int32 _nPos,
                          const Reference< XDatabaseMetaData >& _rxDBMeta )
                      :m_xMetaData(_xMetaData)
-                     ,m_nPos(_nPos)
                      ,m_xDBMetaData(_rxDBMeta)
+                     ,m_nPos(_nPos)
 {
     DBG_CTOR(OResultColumn,NULL);
 }
@@ -125,19 +128,9 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
             }
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-    #if OSL_DEBUG_LEVEL > 0
-        Any caught( ::cppu::getCaughtException() );
-        ::rtl::OString sMessage( "impl_determineIsRowVersion_nothrow: caught an exception!" );
-        sMessage += "\ntype: ";
-        sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
-        sMessage += "\nmessage: ";
-        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-        OSL_ENSURE( false, sMessage );
-    #else
-        e; // make compiler happy
-    #endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
