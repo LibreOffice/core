@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:42:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,9 @@ namespace dbaccess
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
+
+    protected:
+        using ODataColumn::getFastPropertyValue;
     };
     // -------------------------------------------------------------------------
 //  typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >
