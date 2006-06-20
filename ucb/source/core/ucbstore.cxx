@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:17:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,6 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
-#if SUPD<638
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
-#include <com/sun/star/util/XStringEscape.hpp>
-#endif
-#endif
 
 #ifndef _UCBSTORE_HXX
 #include "ucbstore.hxx"
@@ -91,9 +86,6 @@ using namespace rtl;
 //=========================================================================
 rtl::OUString makeHierarchalNameSegment( const rtl::OUString & rIn  )
 {
-#if SUPD<638
-    return rtl::OUString( rIn );
-#else
     rtl::OUStringBuffer aBuffer;
     aBuffer.appendAscii( "['" );
 
@@ -131,7 +123,6 @@ rtl::OUString makeHierarchalNameSegment( const rtl::OUString & rIn  )
 
     aBuffer.appendAscii( "']" );
     return rtl::OUString( aBuffer.makeStringAndClear() );
-#endif
 }
 
 //=========================================================================
@@ -300,11 +291,11 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbStore );
 
 // virtual
 Reference< XPropertySetRegistry > SAL_CALL
-UcbStore::createPropertySetRegistry( const OUString& URL )
+UcbStore::createPropertySetRegistry( const OUString& )
     throw( RuntimeException )
 {
-    // URL is ignored by this interface implementation. It always uses
-    // the configuration server as storage medium.
+    // The URL parameter is ignored by this interface implementation. It always
+    // uses the configuration server as storage medium.
 
     if ( !m_pImpl->m_xTheRegistry.is() )
     {
@@ -335,7 +326,7 @@ void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
 //
 //=========================================================================
 
-void UcbStore::removeRegistry( const OUString& URL )
+void UcbStore::removeRegistry()
 {
     if ( m_pImpl->m_xTheRegistry.is() )
     {
@@ -378,7 +369,7 @@ struct PropertySetRegistry_Impl
 
     ~PropertySetRegistry_Impl()
     {
-        m_pCreator->removeRegistry( OUString() );
+        m_pCreator->removeRegistry();
         m_pCreator->release();
     }
 };
@@ -471,47 +462,12 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
         else
         {
             // Create new instance.
-
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-
             Reference< XNameAccess > xRootNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
             if ( xRootNameAccess.is() )
             {
-#if SUPD<638
-                Reference< XStringEscape > xEsc( xRootNameAccess, UNO_QUERY );
-
-                OSL_ENSURE( xEsc.is(),
-                            "PropertySetRegistry::openPropertySet - "
-                            "No string escape!" );
-
-                OUString aEscapedKey;
-                if ( xEsc.is() )
-                {
-                    try
-                    {
-                        aEscapedKey = xEsc->escapeString( key );
-                    }
-                    catch ( IllegalArgumentException& )
-                    {
-                        // escapeString
-
-                        OSL_ENSURE( xEsc.is(),
-                                    "PropertySetRegistry::openPropertySet - "
-                                    "caught IllegalArgumentException!" );
-
-                        aEscapedKey = key;
-                    }
-                }
-                else
-                    aEscapedKey = key;
-
-                // Propertyset in registry?
-                if ( xRootNameAccess->hasByName( aEscapedKey ) )
-#else
                 // Propertyset in registry?
                 if ( xRootNameAccess->hasByName( key ) )
-#endif
                 {
                     // Yep!
                     return Reference< XPersistentPropertySet >(
@@ -557,13 +513,8 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 //                                      makeAny( ... ) );
 
                                 // Insert new item.
-#if SUPD<638
-                                xContainer->insertByName(
-                                        aEscapedKey, makeAny( xNameReplace ) );
-#else
                                 xContainer->insertByName(
                                         key, makeAny( xNameReplace ) );
-#endif
                                 // Commit changes.
                                 xBatch->commitChanges();
 
@@ -641,42 +592,9 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootNameAccess.is() )
     {
-#if SUPD<638
-        Reference< XStringEscape > xEsc( xRootNameAccess, UNO_QUERY );
-
-        OSL_ENSURE( xEsc.is(),
-                    "PropertySetRegistry::removePropertySet - "
-                    "No string escape!" );
-
-        OUString aEscapedKey;
-        if ( xEsc.is() )
-        {
-            try
-            {
-                aEscapedKey = xEsc->escapeString( key );
-            }
-            catch ( IllegalArgumentException& )
-            {
-                // escapeString
-
-                OSL_ENSURE( xEsc.is(),
-                            "PropertySetRegistry::removePropertySet - "
-                            "caught IllegalArgumentException!" );
-
-                aEscapedKey = key;
-            }
-        }
-        else
-            aEscapedKey = key;
-
-        // Propertyset in registry?
-        if ( !xRootNameAccess->hasByName( aEscapedKey ) )
-            return;
-#else
         // Propertyset in registry?
         if ( !xRootNameAccess->hasByName( key ) )
             return;
-#endif
         Reference< XChangesBatch > xBatch(
                             getConfigWriteAccess( OUString() ), UNO_QUERY );
         Reference< XNameContainer > xContainer( xBatch, UNO_QUERY );
@@ -694,11 +612,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
             try
             {
                 // Remove item.
-#if SUPD<638
-                xContainer->removeByName( aEscapedKey );
-#else
                 xContainer->removeByName( key );
-#endif
                 // Commit changes.
                 xBatch->commitChanges();
 
@@ -775,35 +689,10 @@ Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-#if SUPD<638
-        Reference< XStringEscape > xEscaper( xNameAccess, UNO_QUERY );
-
-        OSL_ENSURE( xEscaper.is(),
-                    "PropertySetRegistry::getByName - No string escaper!" );
-
-        OUString aRealName( aName );
-
-        if ( xEscaper.is() )
-        {
-            try
-            {
-                aRealName = xEscaper->escapeString( aName );
-            }
-            catch ( IllegalArgumentException& )
-            {
-                // escapeString
-                aRealName = aName;
-            }
-        }
-#endif
 
         try
         {
-#if SUPD<638
-            return xNameAccess->getByName( aRealName );
-#else
             return xNameAccess->getByName( aName );
-#endif
         }
         catch ( NoSuchElementException& )
         {
@@ -829,38 +718,7 @@ Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-#if SUPD<638
-        Reference< XStringEscape > xEscaper( xNameAccess, UNO_QUERY );
-
-        OSL_ENSURE( xEscaper.is(),
-                "PropertySetRegistry::getElementNames - No string escaper!" );
-
-        if ( !xEscaper.is() )
-            return xNameAccess->getElementNames();
-
-        // Decode names...
-        Sequence< OUString > aEncodedNames = xNameAccess->getElementNames();
-
-        sal_Int32 nCount = aEncodedNames.getLength();
-        Sequence< OUString > aNames( nCount );
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
-        {
-            try
-            {
-                aNames[ n ] = xEscaper->unescapeString( aEncodedNames[ n ] );
-            }
-            catch ( IllegalArgumentException& )
-            {
-                // unescapeString
-                aNames[ n ] = aEncodedNames[ n ];
-            }
-        }
-
-        return aNames;
-#else
         return xNameAccess->getElementNames();
-#endif
     }
     return Sequence< OUString >( 0 );
 }
@@ -876,31 +734,7 @@ sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-#if SUPD<638
-        Reference< XStringEscape > xEscaper( xNameAccess, UNO_QUERY );
-
-        OSL_ENSURE( xEscaper.is(),
-                    "PropertySetRegistry::hasByName - No string escaper!" );
-
-        OUString aRealName( aName );
-
-        if ( xEscaper.is() )
-        {
-            try
-            {
-                aRealName = xEscaper->escapeString( aName );
-            }
-            catch ( IllegalArgumentException& )
-            {
-                // escapeString
-                aRealName = aName;
-            }
-        }
-
-         return xNameAccess->hasByName( aRealName );
-#else
         return xNameAccess->hasByName( aName );
-#endif
     }
 
     return sal_False;
@@ -949,50 +783,6 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             getConfigWriteAccess( OUString() ), UNO_QUERY );
     if ( xRootNameAccess.is() )
     {
-#if SUPD<638
-        Reference< XStringEscape > xEscaper( xRootNameAccess, UNO_QUERY );
-
-        OSL_ENSURE( xEscaper.is(),
-                    "PropertySetRegistry::renamePropertySet - "
-                    "No string escaper!" );
-
-        if ( !xEscaper.is() )
-            return;
-
-        OUString aOldKey;
-        try
-        {
-            aOldKey = xEscaper->escapeString( rOldKey );
-        }
-        catch ( IllegalArgumentException& )
-        {
-            // escapeString
-            aOldKey = rOldKey;
-        }
-
-        OUString aNewKey;
-        try
-        {
-            aNewKey = xEscaper->escapeString( rNewKey );
-        }
-        catch ( IllegalArgumentException& )
-        {
-            // escapeString
-            aNewKey = rNewKey;
-        }
-
-        // Old key present?
-        if ( xRootNameAccess->hasByName( aOldKey ) )
-        {
-            // New key not present?
-            if ( xRootNameAccess->hasByName( aNewKey ) )
-            {
-                OSL_ENSURE( sal_False,
-                            "PropertySetRegistry::renamePropertySet - "
-                            "New key exists!" );
-                return;
-            }
-#else
         // Old key present?
         if ( xRootNameAccess->hasByName( rOldKey ) )
         {
@@ -1004,7 +794,6 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             "New key exists!" );
                 return;
             }
-#endif
             Reference< XSingleServiceFactory > xFac(
                                                 xRootNameAccess, UNO_QUERY );
             Reference< XChangesBatch >  xBatch( xFac, UNO_QUERY );
@@ -1036,13 +825,8 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     if ( xNameReplace.is() )
                     {
                         // Insert new item.
-#if SUPD<638
-                        xContainer->insertByName(
-                                    aNewKey, makeAny( xNameReplace ) );
-#else
                         xContainer->insertByName(
                                     rNewKey, makeAny( xNameReplace ) );
-#endif
                         // Commit changes.
                         xBatch->commitChanges();
                     }
@@ -1297,11 +1081,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 try
                 {
                     // Remove item.
-#if SUPD<638
-                    xContainer->removeByName( aOldKey );
-#else
                     xContainer->removeByName( rOldKey );
-#endif
                     // Commit changes.
                     xBatch->commitChanges();
 
@@ -1775,7 +1555,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( getFullKey( xRootHierNameAccess ) );
+        OUString aFullPropName( getFullKey() );
         aFullPropName += OUString::createFromAscii( "/" );
         aFullPropName += makeHierarchalNameSegment( aPropertyName );
 
@@ -1879,7 +1659,7 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-        OUString aFullPropName( getFullKey( xNameAccess ) );
+        OUString aFullPropName( getFullKey() );
         aFullPropName += OUString::createFromAscii( "/" );
         aFullPropName += makeHierarchalNameSegment( PropertyName );
         aFullPropName += OUString::createFromAscii( "/Value" );
@@ -1936,8 +1716,8 @@ void SAL_CALL PersistentPropertySet::removePropertyChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL PersistentPropertySet::addVetoableChangeListener(
-                    const OUString& PropertyName,
-                    const Reference< XVetoableChangeListener >& aListener )
+                    const OUString&,
+                    const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -1950,8 +1730,8 @@ void SAL_CALL PersistentPropertySet::addVetoableChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
-                    const OUString& PropertyName,
-                    const Reference< XVetoableChangeListener >& aListener )
+                    const OUString&,
+                    const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -2039,7 +1819,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        aFullValuesName = getFullKey( xRootHierNameAccess );
+        aFullValuesName = getFullKey();
         OUString aFullPropName = aFullValuesName;
         aFullPropName += OUString::createFromAscii( "/" );
         aFullPropName += makeHierarchalNameSegment( Name );
@@ -2193,7 +1973,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        aFullValuesName = getFullKey( xRootHierNameAccess );
+        aFullValuesName = getFullKey();
         aFullPropName   = aFullValuesName;
         aFullPropName   += OUString::createFromAscii( "/" );
         aFullPropName   += makeHierarchalNameSegment( Name );
@@ -2378,8 +2158,8 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
         try
         {
             Reference< XNameAccess > xNameAccess;
-            xRootHierNameAccess->getByHierarchicalName(
-                    getFullKey( xRootHierNameAccess ) ) >>= xNameAccess;
+            xRootHierNameAccess->getByHierarchicalName(getFullKey())
+                >>= xNameAccess;
             if ( xNameAccess.is() )
             {
                 // Obtain property names.
@@ -2529,7 +2309,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         typedef std::list< PropertyChangeEvent > Events;
         Events aEvents;
 
-        OUString aFullPropNamePrefix( getFullKey( xRootHierNameAccess ) );
+        OUString aFullPropNamePrefix( getFullKey() );
         aFullPropNamePrefix += OUString::createFromAscii( "/" );
 
         // Iterate over given property value sequence.
@@ -2694,38 +2474,15 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
 }
 
 //=========================================================================
-const OUString& PersistentPropertySet::getFullKey(
-                                const Reference< XInterface >& xEscaper )
+const OUString& PersistentPropertySet::getFullKey()
 {
     if ( !m_pImpl->m_aFullKey.getLength() )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_aFullKey.getLength() )
         {
-#if SUPD<638
-            Reference< XStringEscape > xEsc( xEscaper, UNO_QUERY );
-
-            OSL_ENSURE( xEsc.is(),
-                "PersistentPropertySet::getFullKey - No string escaper!" );
-
-            if ( xEsc.is() )
-            {
-                try
-                {
-                    m_pImpl->m_aFullKey = xEsc->escapeString( m_pImpl->m_aKey );
-                }
-                catch ( IllegalArgumentException& )
-                {
-                    // escapeString
-                    m_pImpl->m_aFullKey = m_pImpl->m_aKey;
-                }
-            }
-            else
-                m_pImpl->m_aFullKey = m_pImpl->m_aKey;
-#else
             m_pImpl->m_aFullKey
                 = makeHierarchalNameSegment( m_pImpl->m_aKey );
-#endif
             m_pImpl->m_aFullKey
                 += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Values" ) );
         }
@@ -2807,7 +2564,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
             {
                 Reference< XNameAccess > xNameAccess;
                 xRootHierNameAccess->getByHierarchicalName(
-                            m_pOwner->getFullKey( xRootHierNameAccess ) )
+                            m_pOwner->getFullKey() )
                     >>= xNameAccess;
                 if ( xNameAccess.is() )
                 {
@@ -2957,7 +2714,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( m_pOwner->getFullKey( xRootHierNameAccess ) );
+        OUString aFullPropName( m_pOwner->getFullKey() );
         aFullPropName += OUString::createFromAscii( "/" );
         aFullPropName += makeHierarchalNameSegment( aName );
 
@@ -3045,7 +2802,7 @@ sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
             UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( m_pOwner->getFullKey( xRootHierNameAccess ) );
+        OUString aFullPropName( m_pOwner->getFullKey() );
         aFullPropName += OUString::createFromAscii( "/" );
         aFullPropName += makeHierarchalNameSegment( Name );
 
