@@ -57,7 +57,7 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        row_ptr_cache(T* buf, unsigned width, unsigned height, int stride) :
+        row_ptr_cache(T* _buf, unsigned _width, unsigned _height, int _stride) :
             m_buf(0),
             m_rows(0),
             m_width(0),
@@ -65,35 +65,35 @@ namespace agg
             m_stride(0),
             m_max_height(0)
         {
-            attach(buf, width, height, stride);
+            attach(_buf, _width, _height, _stride);
         }
 
         //--------------------------------------------------------------------
-        void attach(T* buf, unsigned width, unsigned height, int stride)
+        void attach(T* _buf, unsigned _width, unsigned _height, int _stride)
         {
-            m_buf = buf;
-            m_width = width;
-            m_height = height;
-            m_stride = stride;
-            if(height > m_max_height)
+            m_buf = _buf;
+            m_width = _width;
+            m_height = _height;
+            m_stride = _stride;
+            if(_height > m_max_height)
             {
                 delete [] m_rows;
-                m_rows = new T* [m_max_height = height];
+                m_rows = new T* [m_max_height = _height];
             }
 
             T* row_ptr = m_buf;
 
-            if(stride < 0)
+            if(_stride < 0)
             {
-                row_ptr = m_buf - int(height - 1) * stride;
+                row_ptr = m_buf - int(_height - 1) * _stride;
             }
 
-            T** rows = m_rows;
+            T** _rows = m_rows;
 
-            while(height--)
+            while(_height--)
             {
-                *rows++ = row_ptr;
-                row_ptr += stride;
+                *_rows++ = row_ptr;
+                row_ptr += _stride;
             }
         }
 

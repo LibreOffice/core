@@ -49,35 +49,35 @@ namespace agg
         void dec_y() { m_dist += m_dx; }
 
         //---------------------------------------------------------------------
-        void inc_x(int dy)
+        void inc_x(int _dy)
         {
             m_dist += m_dy;
-            if(dy > 0) m_dist -= m_dx;
-            if(dy < 0) m_dist += m_dx;
+            if(_dy > 0) m_dist -= m_dx;
+            if(_dy < 0) m_dist += m_dx;
         }
 
         //---------------------------------------------------------------------
-        void dec_x(int dy)
+        void dec_x(int _dy)
         {
             m_dist -= m_dy;
-            if(dy > 0) m_dist -= m_dx;
-            if(dy < 0) m_dist += m_dx;
+            if(_dy > 0) m_dist -= m_dx;
+            if(_dy < 0) m_dist += m_dx;
         }
 
         //---------------------------------------------------------------------
-        void inc_y(int dx)
+        void inc_y(int _dx)
         {
             m_dist -= m_dx;
-            if(dx > 0) m_dist += m_dy;
-            if(dx < 0) m_dist -= m_dy;
+            if(_dx > 0) m_dist += m_dy;
+            if(_dx < 0) m_dist -= m_dy;
         }
 
-        void dec_y(int dx)
+        void dec_y(int _dx)
         //---------------------------------------------------------------------
         {
             m_dist += m_dx;
-            if(dx > 0) m_dist += m_dy;
-            if(dx < 0) m_dist -= m_dy;
+            if(_dx > 0) m_dist += m_dy;
+            if(_dx < 0) m_dist -= m_dy;
         }
 
         //---------------------------------------------------------------------
@@ -117,35 +117,35 @@ namespace agg
         void dec_y() { m_dist += m_dx; }
 
         //---------------------------------------------------------------------
-        void inc_x(int dy)
+        void inc_x(int _dy)
         {
             m_dist += m_dy;
-            if(dy > 0) m_dist -= m_dx;
-            if(dy < 0) m_dist += m_dx;
+            if(_dy > 0) m_dist -= m_dx;
+            if(_dy < 0) m_dist += m_dx;
         }
 
         //---------------------------------------------------------------------
-        void dec_x(int dy)
+        void dec_x(int _dy)
         {
             m_dist -= m_dy;
-            if(dy > 0) m_dist -= m_dx;
-            if(dy < 0) m_dist += m_dx;
+            if(_dy > 0) m_dist -= m_dx;
+            if(_dy < 0) m_dist += m_dx;
         }
 
         //---------------------------------------------------------------------
-        void inc_y(int dx)
+        void inc_y(int _dx)
         {
             m_dist -= m_dx;
-            if(dx > 0) m_dist += m_dy;
-            if(dx < 0) m_dist -= m_dy;
+            if(_dx > 0) m_dist += m_dy;
+            if(_dx < 0) m_dist -= m_dy;
         }
 
-        void dec_y(int dx)
+        void dec_y(int _dx)
         //---------------------------------------------------------------------
         {
             m_dist += m_dx;
-            if(dx > 0) m_dist += m_dy;
-            if(dx < 0) m_dist -= m_dy;
+            if(_dx > 0) m_dist += m_dy;
+            if(_dx < 0) m_dist -= m_dy;
         }
 
         //---------------------------------------------------------------------
@@ -216,16 +216,16 @@ namespace agg
         void dec_y() { m_dist += m_dx; m_dist_start += m_dx_start; }
 
         //---------------------------------------------------------------------
-        void inc_x(int dy)
+        void inc_x(int _dy)
         {
             m_dist       += m_dy;
             m_dist_start += m_dy_start;
-            if(dy > 0)
+            if(_dy > 0)
             {
                 m_dist       -= m_dx;
                 m_dist_start -= m_dx_start;
             }
-            if(dy < 0)
+            if(_dy < 0)
             {
                 m_dist       += m_dx;
                 m_dist_start += m_dx_start;
@@ -233,16 +233,16 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void dec_x(int dy)
+        void dec_x(int _dy)
         {
             m_dist       -= m_dy;
             m_dist_start -= m_dy_start;
-            if(dy > 0)
+            if(_dy > 0)
             {
                 m_dist       -= m_dx;
                 m_dist_start -= m_dx_start;
             }
-            if(dy < 0)
+            if(_dy < 0)
             {
                 m_dist       += m_dx;
                 m_dist_start += m_dx_start;
@@ -250,16 +250,16 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void inc_y(int dx)
+        void inc_y(int _dx)
         {
             m_dist       -= m_dx;
             m_dist_start -= m_dx_start;
-            if(dx > 0)
+            if(_dx > 0)
             {
                 m_dist       += m_dy;
                 m_dist_start += m_dy_start;
             }
-            if(dx < 0)
+            if(_dx < 0)
             {
                 m_dist       -= m_dy;
                 m_dist_start -= m_dy_start;
@@ -267,16 +267,16 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void dec_y(int dx)
+        void dec_y(int _dx)
         {
             m_dist       += m_dx;
             m_dist_start += m_dx_start;
-            if(dx > 0)
+            if(_dx > 0)
             {
                 m_dist       += m_dy;
                 m_dist_start += m_dy_start;
             }
-            if(dx < 0)
+            if(_dx < 0)
             {
                 m_dist       -= m_dy;
                 m_dist_start -= m_dy_start;
@@ -351,18 +351,18 @@ namespace agg
         void dec_y() { m_dist += m_dx; m_dist_start += m_dx_start; m_dist_end += m_dx_end; }
 
         //---------------------------------------------------------------------
-        void inc_x(int dy)
+        void inc_x(int _dy)
         {
             m_dist       += m_dy;
             m_dist_start += m_dy_start;
             m_dist_end   += m_dy_end;
-            if(dy > 0)
+            if(_dy > 0)
             {
                 m_dist       -= m_dx;
                 m_dist_start -= m_dx_start;
                 m_dist_end   -= m_dx_end;
             }
-            if(dy < 0)
+            if(_dy < 0)
             {
                 m_dist       += m_dx;
                 m_dist_start += m_dx_start;
@@ -371,18 +371,18 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void dec_x(int dy)
+        void dec_x(int _dy)
         {
             m_dist       -= m_dy;
             m_dist_start -= m_dy_start;
             m_dist_end   -= m_dy_end;
-            if(dy > 0)
+            if(_dy > 0)
             {
                 m_dist       -= m_dx;
                 m_dist_start -= m_dx_start;
                 m_dist_end   -= m_dx_end;
             }
-            if(dy < 0)
+            if(_dy < 0)
             {
                 m_dist       += m_dx;
                 m_dist_start += m_dx_start;
@@ -391,18 +391,18 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void inc_y(int dx)
+        void inc_y(int _dx)
         {
             m_dist       -= m_dx;
             m_dist_start -= m_dx_start;
             m_dist_end   -= m_dx_end;
-            if(dx > 0)
+            if(_dx > 0)
             {
                 m_dist       += m_dy;
                 m_dist_start += m_dy_start;
                 m_dist_end   += m_dy_end;
             }
-            if(dx < 0)
+            if(_dx < 0)
             {
                 m_dist       -= m_dy;
                 m_dist_start -= m_dy_start;
@@ -411,18 +411,18 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void dec_y(int dx)
+        void dec_y(int _dx)
         {
             m_dist       += m_dx;
             m_dist_start += m_dx_start;
             m_dist_end   += m_dx_end;
-            if(dx > 0)
+            if(_dx > 0)
             {
                 m_dist       += m_dy;
                 m_dist_start += m_dy_start;
                 m_dist_end   += m_dy_end;
             }
-            if(dx < 0)
+            if(_dx < 0)
             {
                 m_dist       -= m_dy;
                 m_dist_start -= m_dy_start;
