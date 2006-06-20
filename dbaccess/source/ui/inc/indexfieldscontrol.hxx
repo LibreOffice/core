@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:56:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@ namespace dbaui
         sal_Bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
 
         DECL_LINK( OnListEntrySelected, ListBox* );
+
+    private:
+        using ::svt::EditBrowseBox::Init;
     };
 
 //......................................................................
