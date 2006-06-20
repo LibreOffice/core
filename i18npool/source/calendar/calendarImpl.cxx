@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:03:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ CalendarImpl::CalendarImpl(const Reference< XMultiServiceFactory > &rxMSF) : xMS
 CalendarImpl::~CalendarImpl()
 {
     // Clear lookuptable
-    for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+    for (size_t l = 0; l < lookupTable.size(); l++)
         delete lookupTable[l];
     lookupTable.clear();
 }
@@ -76,7 +76,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
     Reference < XExtendedCalendar > xOldCalendar( xCalendar );  // backup
     sal_Int32 i;
 
-    for (i = 0; i < lookupTable.size(); i++) {
+    for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
         lookupTableItem *listItem = lookupTable[i];
         if (uniqueID == listItem->uniqueID) {
             xCalendar = listItem->xCalendar;
@@ -84,7 +84,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
         }
     }
 
-    if (i >= lookupTable.size()) {
+    if (i >= sal::static_int_cast<sal_Int32>(lookupTable.size())) {
         Reference < XInterface > xI = xMSF->createInstance(
                 OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
 
@@ -118,7 +118,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
     {
         xCalendar->loadCalendar(uniqueID, rLocale);
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {   // restore previous calendar and re-throw
         xCalendar = xOldCalendar;
         throw;
