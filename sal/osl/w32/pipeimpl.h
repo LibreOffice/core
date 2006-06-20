@@ -2,7 +2,9 @@
 #define _PIPEIMPL_H_
 
 #ifndef _WINDOWS_
+#   pragma warning(push,1) /* disable warnings within system headers */
 #   include <windows.h>
+#   pragma warning(pop)
 #endif
 
 #ifndef _INC_MALLOC
