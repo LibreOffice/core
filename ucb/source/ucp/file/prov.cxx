@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:04:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,14 +125,13 @@ static sal_Bool writeInfo( void * pRegistryKey,
 
 //=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //=========================================================================
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
 {
     return pRegistryKey &&
 
@@ -147,7 +146,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
 //=========================================================================
 extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
 
@@ -604,7 +603,7 @@ FileProvider::getPropertySetInfo(  )
 
 void SAL_CALL
 FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
-                                const Any& aValue )
+                                const Any& )
     throw( UnknownPropertyException,
            PropertyVetoException,
            IllegalArgumentException,
@@ -654,8 +653,8 @@ FileProvider::getPropertyValue(
 
 void SAL_CALL
 FileProvider::addPropertyChangeListener(
-    const rtl::OUString& aPropertyName,
-    const Reference< XPropertyChangeListener >& xListener )
+    const rtl::OUString&,
+    const Reference< XPropertyChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException)
@@ -666,8 +665,8 @@ FileProvider::addPropertyChangeListener(
 
 void SAL_CALL
 FileProvider::removePropertyChangeListener(
-    const rtl::OUString& aPropertyName,
-    const Reference< XPropertyChangeListener >& aListener )
+    const rtl::OUString&,
+    const Reference< XPropertyChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -677,8 +676,8 @@ FileProvider::removePropertyChangeListener(
 
 void SAL_CALL
 FileProvider::addVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const Reference< XVetoableChangeListener >& aListener )
+    const rtl::OUString&,
+    const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -689,8 +688,8 @@ FileProvider::addVetoableChangeListener(
 
 void SAL_CALL
 FileProvider::removeVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const Reference< XVetoableChangeListener >& aListener )
+    const rtl::OUString&,
+    const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException)
@@ -718,7 +717,7 @@ FileProvider::getFileProviderLocality( const rtl::OUString& BaseURL )
                10 : -1;
 }
 
-rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUString& BaseURL,
+rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUString&,
                                                                const rtl::OUString& SystemPath )
     throw( RuntimeException )
 {
