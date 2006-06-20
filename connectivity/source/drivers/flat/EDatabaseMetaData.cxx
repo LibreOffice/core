@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:00:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,8 +194,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTypeInfo(  ) throw(SQ
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumnPrivileges(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-        const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -207,15 +207,14 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumnPrivileges(
 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
-    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-
-        Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
+    Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
     if(!xTables.is())
-                throw SQLException();
+        throw SQLException();
 
     Reference< XNameAccess> xNames = xTables->getTables();
     if(!xNames.is())
@@ -298,7 +297,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getVersionColumns(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -309,7 +308,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getVersionColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getExportedKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -320,7 +319,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getExportedKeys(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getImportedKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -331,7 +330,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getImportedKeys(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getPrimaryKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -342,8 +341,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getPrimaryKeys(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getIndexInfo(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-        sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+        sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -354,8 +353,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getIndexInfo(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
-        sal_Bool nullable ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
+        sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -366,9 +365,9 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getBestRowIdentifier(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getCrossReference(
-    const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
-    const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
-        const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
+    const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
+    const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
+        const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
