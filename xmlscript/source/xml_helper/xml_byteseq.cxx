@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml_byteseq.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:11:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ sal_Int32 BSeqInputStream::readSomeBytes(
 }
 //__________________________________________________________________________________________________
 void BSeqInputStream::skipBytes(
-    sal_Int32 nBytesToSkip )
+    sal_Int32 /*nBytesToSkip*/ )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException)
 {
 }
@@ -175,4 +175,4 @@ Reference< io::XOutputStream > SAL_CALL createOutputStream( ByteSequence * pOutD
     return new BSeqOutputStream( pOutData );
 }
 
-};
+}
