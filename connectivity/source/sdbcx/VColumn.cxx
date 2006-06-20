@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:42:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,15 +87,16 @@ sal_Bool SAL_CALL OColumn::supportsService( const ::rtl::OUString& _rServiceName
     return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
-OColumn::OColumn(sal_Bool _bCase)  :    OColumnDescriptor_BASE(m_aMutex)
-                    ,   ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase,sal_True)
-                    ,   m_Precision(0)
-                    ,   m_Type(0)
-                    ,   m_Scale(0)
-                    ,   m_IsNullable(ColumnValue::NULLABLE)
-                    ,   m_IsAutoIncrement(sal_False)
-                    ,   m_IsRowVersion(sal_False)
-                    ,   m_IsCurrency(sal_False)
+OColumn::OColumn(sal_Bool _bCase)
+    :OColumnDescriptor_BASE(m_aMutex)
+    ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase,sal_True)
+    ,m_IsNullable(ColumnValue::NULLABLE)
+    ,m_Precision(0)
+    ,m_Scale(0)
+    ,m_Type(0)
+    ,m_IsAutoIncrement(sal_False)
+    ,m_IsRowVersion(sal_False)
+    ,m_IsCurrency(sal_False)
 {
     construct();
 }
@@ -111,17 +112,17 @@ OColumn::OColumn(   const ::rtl::OUString& _Name,
                     sal_Bool        _IsRowVersion,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase)
-            :   OColumnDescriptor_BASE(m_aMutex)
-            ,   ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
-            ,   m_TypeName(_TypeName)
-            ,   m_DefaultValue(_DefaultValue)
-            ,   m_Precision(_Precision)
-            ,   m_Type(_Type)
-            ,   m_Scale(_Scale)
-            ,   m_IsNullable(_IsNullable)
-            ,   m_IsAutoIncrement(_IsAutoIncrement)
-            ,   m_IsRowVersion(_IsRowVersion)
-            ,   m_IsCurrency(_IsCurrency)
+    :OColumnDescriptor_BASE(m_aMutex)
+    ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
+    ,m_TypeName(_TypeName)
+    ,m_DefaultValue(_DefaultValue)
+    ,m_IsNullable(_IsNullable)
+    ,m_Precision(_Precision)
+    ,m_Scale(_Scale)
+    ,m_Type(_Type)
+    ,m_IsAutoIncrement(_IsAutoIncrement)
+    ,m_IsRowVersion(_IsRowVersion)
+    ,m_IsCurrency(_IsCurrency)
 {
     m_Name = _Name;
 
@@ -132,12 +133,9 @@ OColumn::~OColumn()
 {
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& SAL_CALL OColumn::getInfoHelper()
