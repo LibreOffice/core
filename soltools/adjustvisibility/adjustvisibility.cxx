@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adjustvisibility.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:22:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include <utime.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <limits>
 
 // Note: There is no GELF_ST_VISIBILITY macro in gelf.h, we roll our own.
 #define GELF_ST_VISIBILITY(o)   ((o)&0x3) // See "Linker and Libraries Guide".
@@ -165,8 +166,12 @@ void adjustVisibility( const std::string& rFile, int fd, bool bVerbose)
                 throw ElfError(rFile, "elf_getdata() failed");
             }
             // Iterate over symbol table.
-            unsigned int nSymbols = aShdr.sh_size / aShdr.sh_entsize;
-            for ( unsigned int nIndex = 0; nIndex < nSymbols; ++nIndex) {
+            GElf_Xword nSymbols = aShdr.sh_size / aShdr.sh_entsize;
+            if ( nSymbols > std::numeric_limits< int >::max() )
+            {
+                throw ElfError(rFile, "too many symbols");
+            }
+            for ( int nIndex = 0; nIndex < nSymbols; ++nIndex) {
                 // Get symbol.
                 GElf_Sym aSymbol;
                 if ( gelf_getsym(pSymbolData, nIndex, &aSymbol) == NULL )
