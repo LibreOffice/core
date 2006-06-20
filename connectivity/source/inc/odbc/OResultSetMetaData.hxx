@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:37:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,22 +76,22 @@ namespace connectivity
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt )
-                : m_pConnection(_pConnection)
-                ,m_aStatementHandle( _pStmt )
+                :m_aStatementHandle( _pStmt )
+                ,m_pConnection(_pConnection)
                 ,m_nColCount(-1)
                 ,m_bUseODBC2Types(sal_False)
             {}
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
-                    : m_pConnection(_pConnection)
+                    :m_vMapping(_vMapping)
                     ,m_aStatementHandle( _pStmt )
-                    ,m_vMapping(_vMapping)
+                    ,m_pConnection(_pConnection)
                     ,m_nColCount(_vMapping.size()-1)
                     ,m_bUseODBC2Types(sal_False)
             {}
             virtual ~OResultSetMetaData();
 
 
-            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }
