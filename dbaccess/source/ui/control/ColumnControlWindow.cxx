@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnControlWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:22:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,14 +73,8 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
 {
     DBG_CTOR(OColumnControlWindow,NULL);
 
-    m_bRight = sal_True;
-    try
-    {
-        m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
-    }
-    catch(Exception&)
-    {
-    }
+    setRightAligned();
+    m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
 }
 // -----------------------------------------------------------------------------
 OColumnControlWindow::~OColumnControlWindow()
@@ -116,14 +110,10 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
             OFieldDescControl::DeactivateAggregate( eType );
     }
 }
-// -----------------------------------------------------------------------
-void OColumnControlWindow::SetModified(sal_Bool bModified)
-{
-}
 // -----------------------------------------------------------------------------
-void OColumnControlWindow::CellModified(long nRow, USHORT nColId )
+void OColumnControlWindow::CellModified(long /*nRow*/, USHORT /*nColId*/ )
 {
-    SaveData(pActFieldDescr);
+    saveCurrentFieldDescData();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::lang::Locale  OColumnControlWindow::GetLocale() const
