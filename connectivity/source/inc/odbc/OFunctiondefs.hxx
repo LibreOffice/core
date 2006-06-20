@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:36:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 
 #if defined(WIN) || defined(WNT)
 
+#pragma warning(push)
+#pragma warning(disable:4005)
+
 // just to go with calling convention of windows
 #define SQL_API __stdcall
 #ifndef __SQLEXT_H
@@ -47,6 +50,7 @@
 #undef SQL_API
 #define SQL_API __stdcall
 
+#pragma warning(pop)
 
 #ifndef SQL_C_BOOKMARK
 #define SQL_C_BOOKMARK   SQL_C_ULONG                     /* BOOKMARK         */
@@ -125,15 +129,6 @@
 
 #ifdef UNX
 
-#ifdef ODBCIMP
-// Stub-Version: dynamische Bindung an die shared library zur Laufzeit.
-// odbcstub definiert die in den Quellen benutzten NSQL...-Methoden
-// als indirekte Funktionsaufrufe.
-// odbcimp zieht sich selbst preos2, odbc und postos2 an.
-//  #include "odbc3imp.hxx"
-
-#else
-
 // Zur Zeit verwenden wir die ODBC-shared library von Q+E direkt (ueber die
 // mitgelieferte Lib).
 
@@ -150,10 +145,6 @@
 #undef sal_Bool // Ist in qeodbc.h definiert, wird aber von solar.h noch einmal
             // definiert.
 
-//  #include "odbc3defs.hxx"
-
-#endif // ODBCIMP
-
 #define SDB_ODBC_CHAR UCHAR
 #define SQL_WCHAR           (-8)
 #define SQL_WVARCHAR        (-9)
@@ -162,6 +153,8 @@
 
 
 #endif // UNX
+
+//--------------------------------------------------------------------------
 
 #ifndef SQL_WCHAR
 #define SQL_WCHAR           (-8)
