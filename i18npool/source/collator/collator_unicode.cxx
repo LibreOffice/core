@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:41:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,10 +88,10 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 if (rLocale.Language.equalsAscii("zh")) {
                     OUString func_base = aBuf.makeStringAndClear();
                     if (OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0)
-                        func=(const sal_uInt8* (*)()) osl_getSymbol(hModule,
+                        func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule,
                                     (func_base + OUString::createFromAscii("TW_") + rAlgorithm).pData);
                     if (!func)
-                        func=(const sal_uInt8* (*)()) osl_getSymbol(hModule, (func_base + rAlgorithm).pData);
+                        func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, (func_base + rAlgorithm).pData);
                 } else {
                     if (rLocale.Language.equalsAscii("ja")) {
                         // replace algrithm name to implementation name.
@@ -104,7 +104,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     } else {
                         aBuf.append(rAlgorithm);
                     }
-                    func=(const sal_uInt8* (*)()) osl_getSymbol(hModule, aBuf.makeStringAndClear().pData);
+                    func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, aBuf.makeStringAndClear().pData);
                 }
                 if (func) {
                     const sal_uInt8* ruleImage=func();
