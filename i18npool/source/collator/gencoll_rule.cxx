@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,17 @@
 #include <sal/main.h>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
+
+// External unicode includes (from icu) cause warning C4668 on Windows.
+// We want to minimize the patches to external headers, so the warnings are
+// disabled here instead of in the header file itself.
+#ifdef _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <unicode/tblcoll.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 using namespace ::rtl;
 
@@ -140,6 +150,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (coll)
         delete coll;
 
-    exit(U_SUCCESS(status) ? 0 : 1);
-    return 0;
+    return U_SUCCESS(status) ? 0 : 1;
 }   // End of main
