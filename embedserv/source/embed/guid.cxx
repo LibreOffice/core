@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:52:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,8 +189,8 @@
 
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.document.FilterFactory" ) );
     uno::Reference < container::XNameAccess > xFilters = uno::Reference < io::XOutputStream > (
-                                                            xFactory->createInstance ( aServiceName ),
-                                                            uno::UNO_QUERY );
+    xFactory->createInstance ( aServiceName ),
+    uno::UNO_QUERY );
 
     if ( xFilters.is() )
     {
@@ -202,17 +202,22 @@
             if ( aAnyProp >>= aProperties ) )
             {
                 for ( sal_Int32 nInd = 0; nInd < aProperties.getLength; nInd++ )
-                    if ( aProperties[nInd].Name.equalsAscii( "UIName" )
-                    {
-                        aProperties[nInd].Value >>= aResult;
-                        break;
-                    }
+                if ( aProperties[nInd].Name.equalsAscii( "UIName" )
+                {
+                    aProperties[nInd].Value >>= aResult;
+                    break;
+                }
             }
-        }
+    }
     }
 
     return aResult;
 }
 */
 
-
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
