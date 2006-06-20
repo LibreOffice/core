@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_cache.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:11:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,9 +284,11 @@ rtl_cache_hash_remove (
 /** rtl_cache_slab_constructor()
  */
 static int
-rtl_cache_slab_constructor (void * obj, void * arg /* UNUSED */)
+rtl_cache_slab_constructor (void * obj, void * arg)
 {
     rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
+
+    (void) arg; /* unused */
 
     QUEUE_START_NAMED(slab, slab_);
     slab->m_ntypes = 0;
@@ -298,9 +300,11 @@ rtl_cache_slab_constructor (void * obj, void * arg /* UNUSED */)
 /** rtl_cache_slab_destructor()
  */
 static void
-rtl_cache_slab_destructor (void * obj, void * arg /* UNUSED */)
+rtl_cache_slab_destructor (void * obj, void * arg)
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL == 0
+    (void) obj; /* unused */
+#else /* OSL_DEBUG_LEVEL */
     rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
 
     /* assure removed from queue(s) */
@@ -309,6 +313,8 @@ rtl_cache_slab_destructor (void * obj, void * arg /* UNUSED */)
     /* assure no longer referenced */
     OSL_ASSERT(slab->m_ntypes == 0);
 #endif /* OSL_DEBUG_LEVEL */
+
+    (void) arg; /* unused */
 }
 
 
@@ -603,6 +609,8 @@ rtl_cache_magazine_constructor (void * obj, void * arg)
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
     /* @@@ sal_Size size = (sal_Size)(arg); @@@ */
 
+    (void) arg; /* unused */
+
     mag->m_mag_next = 0;
     mag->m_mag_size = RTL_CACHE_MAGAZINE_SIZE;
     mag->m_mag_used = 0;
@@ -616,7 +624,9 @@ rtl_cache_magazine_constructor (void * obj, void * arg)
 static void
 rtl_cache_magazine_destructor (void * obj, void * arg)
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL == 0
+    (void) obj; /* unused */
+#else /* OSL_DEBUG_LEVEL */
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
 
     /* assure removed from queue(s) */
@@ -625,6 +635,8 @@ rtl_cache_magazine_destructor (void * obj, void * arg)
     /* assure no longer referenced */
     OSL_ASSERT(mag->m_mag_used == 0);
 #endif /* OSL_DEBUG_LEVEL */
+
+    (void) arg; /* unused */
 }
 
 
@@ -803,7 +815,7 @@ rtl_cache_depot_populate (
 /** rtl_cache_constructor()
  */
 static int
-rtl_cache_constructor (void * obj, void * arg /* UNUSED */)
+rtl_cache_constructor (void * obj)
 {
     rtl_cache_type * cache = (rtl_cache_type*)(obj);
 
@@ -831,7 +843,7 @@ rtl_cache_constructor (void * obj, void * arg /* UNUSED */)
 /** rtl_cache_destructor()
  */
 static void
-rtl_cache_destructor (void * obj, void * arg /* UNUSED */)
+rtl_cache_destructor (void * obj)
 {
     rtl_cache_type * cache = (rtl_cache_type*)(obj);
 
@@ -1127,7 +1139,7 @@ try_alloc:
     if (result != 0)
     {
         rtl_cache_type * cache = result;
-        (void) rtl_cache_constructor (cache, 0);
+        (void) rtl_cache_constructor (cache);
 
         if (!source)
         {
@@ -1153,7 +1165,7 @@ try_alloc:
         {
             /* activation failed */
             rtl_cache_deactivate (cache);
-            rtl_cache_destructor (cache, 0);
+            rtl_cache_destructor (cache);
             rtl_arena_free (gp_cache_arena, cache, size);
         }
     }
@@ -1177,7 +1189,7 @@ void SAL_CALL rtl_cache_destroy (
     if (cache != 0)
     {
         rtl_cache_deactivate (cache);
-        rtl_cache_destructor (cache, 0);
+        rtl_cache_destructor (cache);
         rtl_arena_free (gp_cache_arena, cache, sizeof(rtl_cache_type));
     }
 }
@@ -1364,8 +1376,6 @@ rtl_cache_wsupdate_all (void * arg);
 static void
 rtl_cache_wsupdate_init (void)
 {
-    int result;
-
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 0;
     (void) pthread_cond_init (&(g_cache_list.m_update_cond), NULL);
@@ -1565,7 +1575,7 @@ rtl_cache_once_init (void)
     {
         /* list of caches */
         RTL_MEMORY_LOCK_INIT(&(g_cache_list.m_lock));
-        (void) rtl_cache_constructor (&(g_cache_list.m_cache_head), 0);
+        (void) rtl_cache_constructor (&(g_cache_list.m_cache_head));
     }
     {
         /* cache: internal arena */
@@ -1590,7 +1600,7 @@ rtl_cache_once_init (void)
         static rtl_cache_type g_cache_magazine_cache;
 
         OSL_ASSERT(gp_cache_magazine_cache == 0);
-        (void) rtl_cache_constructor (&g_cache_magazine_cache, 0);
+        (void) rtl_cache_constructor (&g_cache_magazine_cache);
 
         gp_cache_magazine_cache = rtl_cache_activate (
             &g_cache_magazine_cache,
@@ -1614,7 +1624,7 @@ rtl_cache_once_init (void)
         static rtl_cache_type g_cache_slab_cache;
 
         OSL_ASSERT(gp_cache_slab_cache == 0);
-        (void) rtl_cache_constructor (&g_cache_slab_cache, 0);
+        (void) rtl_cache_constructor (&g_cache_slab_cache);
 
         gp_cache_slab_cache = rtl_cache_activate (
             &g_cache_slab_cache,
@@ -1635,7 +1645,7 @@ rtl_cache_once_init (void)
         static rtl_cache_type g_cache_bufctl_cache;
 
         OSL_ASSERT(gp_cache_bufctl_cache == 0);
-        (void) rtl_cache_constructor (&g_cache_bufctl_cache, 0);
+        (void) rtl_cache_constructor (&g_cache_bufctl_cache);
 
         gp_cache_bufctl_cache = rtl_cache_activate (
             &g_cache_bufctl_cache,
@@ -1685,19 +1695,19 @@ rtl_cache_fini (void)
         {
             cache = gp_cache_bufctl_cache, gp_cache_bufctl_cache = 0;
             rtl_cache_deactivate (cache);
-            rtl_cache_destructor (cache, 0);
+            rtl_cache_destructor (cache);
         }
         if (gp_cache_slab_cache != 0)
         {
             cache = gp_cache_slab_cache, gp_cache_slab_cache = 0;
             rtl_cache_deactivate (cache);
-            rtl_cache_destructor (cache, 0);
+            rtl_cache_destructor (cache);
         }
         if (gp_cache_magazine_cache != 0)
         {
             cache = gp_cache_magazine_cache, gp_cache_magazine_cache = 0;
             rtl_cache_deactivate (cache);
-            rtl_cache_destructor (cache, 0);
+            rtl_cache_destructor (cache);
         }
         if (gp_cache_arena != 0)
         {
