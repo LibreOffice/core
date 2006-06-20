@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 11:16:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,46 +58,8 @@
 
 #include "image.hxx"
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// includes from antigrain [i would love to write this stuff by myself]
-//////////////////////////////////////////////////////////////////////////////////
-
-#include <agg2/agg_rendering_buffer.h>
-#include <agg2/agg_pixfmt_rgb.h>
-#include <agg2/agg_pixfmt_rgba.h>
-#include <agg2/agg_renderer_base.h>
-#include <agg2/agg_color_rgba.h>
-#include <agg2/agg_rasterizer_outline_aa.h>
-#include <agg2/agg_rasterizer_scanline_aa.h>
-#include <agg2/agg_scanline_p.h>
-#include <agg2/agg_scanline_u.h>
-#include <agg2/agg_renderer_scanline.h>
-#include <agg2/agg_renderer_outline_aa.h>
-#include <agg2/agg_renderer_primitives.h>
-#include <agg2/agg_path_storage.h>
-#include <agg2/agg_span_pattern.h>
-#include <agg2/agg_span_pattern_rgba.h>
-#include <agg2/agg_span_pattern_resample_rgb.h>
-#include <agg2/agg_span_pattern_resample_rgba.h>
-#include <agg2/agg_span_interpolator_linear.h>
-#include <agg2/agg_span_gradient.h>
-#include <agg2/agg_span_image_resample_rgb.h>
-#include <agg2/agg_span_image_resample_rgba.h>
-#include <agg2/agg_image_filters.h>
-#include <agg2/agg_dda_line.h>
-#include <agg2/agg_scanline_storage_aa.h>
-#include <agg2/agg_scanline_storage_bin.h>
-#include <agg2/agg_scanline_bin.h>
-#include <agg2/agg_path_storage_integer.h>
-#include <agg2/agg_conv_contour.h>
-#include <agg2/agg_conv_curve.h>
-#include <agg2/agg_conv_stroke.h>
-#include <agg2/agg_conv_transform.h>
-#include <agg2/agg_trans_affine.h>
-#include <agg2/agg_font_cache_manager.h>
-#include <agg2/agg_bitset_iterator.h>
-#include <agg2/agg_path_storage.h>
+#define CANVAS_IMAGE_CXX
+#include "image_sysprereq.h"
 
 //////////////////////////////////////////////////////////////////////////////////
 // platform-dependend includes [wrapped into their own namepsaces]
@@ -967,12 +929,12 @@ namespace canvas { namespace
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format>
-void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPoly,
+void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPolyPolygon,
                                      double                             fStrokeWidth,
                                      const rendering::ViewState&        viewState,
                                      const rendering::RenderState&      renderState )
 {
-    ::basegfx::B2DPolyPolygon aPolyPolygon( rPoly );
+    ::basegfx::B2DPolyPolygon aPolyPolygon( rPolyPolygon );
     ARGB                      aRenderColor;
 
     setupPolyPolygon( aPolyPolygon, false, aRenderColor, viewState, renderState );
@@ -1036,12 +998,12 @@ void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPoly,
                          rPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(nVertex));
+                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
 
                 // specify first cp, second cp, next vertex
                 path.curve4( aCtrlA.getX(),aCtrlA.getY(),
                              aCtrlB.getX(),aCtrlB.getY(),
-                             rPoint.getX(),rPoint.getY() );
+                             rVertexPoint.getX(),rVertexPoint.getY() );
 
                 aCtrlA = rPoly.getControlPointA(nVertex);
                 aCtrlB = rPoly.getControlPointB(nVertex);
@@ -1060,9 +1022,9 @@ void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPoly,
                           rPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(nVertex));
-                ras.line_to_d(rPoint.getX(),
-                              rPoint.getY());
+                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
+                ras.line_to_d(rVertexPoint.getX(),
+                              rVertexPoint.getY());
             }
 
             ras.render(rPoly.isClosed());
@@ -1219,7 +1181,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
                                      const ::basegfx::B2DPolyPolygon& rPolyPolygon,
                                      const ::basegfx::B2DHomMatrix&   rOverallTransform,
                                      const ::basegfx::B2DHomMatrix&   rViewTransform,
-                                     const rendering::Texture&        texture )
+                                     const rendering::Texture&         )
 {
     // calculate final overall transform.
     ::basegfx::B2DHomMatrix aOverallTransform(rOverallTransform);
@@ -1362,12 +1324,12 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
             path.move_to(aPoint.getX(),aPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint aPoint(rPoly.getB2DPoint(nVertex));
+                const ::basegfx::B2DPoint aVertexPoint(rPoly.getB2DPoint(nVertex));
 
                 // specify first cp, second cp, next vertex
                 path.curve4( aPointA.getX(),aPointA.getY(),
                                 aPointB.getX(),aPointB.getY(),
-                                aPoint.getX(),aPoint.getY() );
+                                aVertexPoint.getX(),aVertexPoint.getY() );
 
                 aPointA = rPoly.getControlPointA(nVertex);
                 aPointB = rPoly.getControlPointB(nVertex);
@@ -1385,8 +1347,8 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
             pPrimitive->ras.move_to_d(rPoint.getX(),rPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(nVertex));
-                pPrimitive->ras.line_to_d(rPoint.getX(),rPoint.getY());
+                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
+                pPrimitive->ras.line_to_d(rVertexPoint.getX(),rVertexPoint.getY());
             }
             if(rPoly.isClosed())
                 pPrimitive->ras.close_polygon();
@@ -1484,7 +1446,7 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
                               const uno::Sequence< double >&       rUnoColor2,
                               const ::basegfx::B2DPolyPolygon&     rPolyPolygon,
                               const ::basegfx::B2DHomMatrix&       rOverallTransform,
-                              const rendering::Texture&            texture )
+                              const rendering::Texture&             )
 {
     const ARGB aColor1(0xFFFFFFFF,
                        rUnoColor1);
@@ -1615,12 +1577,12 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
             path.move_to(aPoint.getX(),aPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint aPoint(rPoly.getB2DPoint(nVertex));
+                const ::basegfx::B2DPoint aVertexPoint(rPoly.getB2DPoint(nVertex));
 
                 // specify first cp, second cp, next vertex
                 path.curve4( aPointA.getX(),aPointA.getY(),
                                 aPointB.getX(),aPointB.getY(),
-                                aPoint.getX(),aPoint.getY() );
+                                aVertexPoint.getX(),aVertexPoint.getY() );
 
                 aPointA = rPoly.getControlPointA(nVertex);
                 aPointB = rPoly.getControlPointB(nVertex);
@@ -1639,9 +1601,9 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
                         rPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(nVertex));
-                ras.line_to_d(rPoint.getX(),
-                            rPoint.getY());
+                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
+                ras.line_to_d(rVertexPoint.getX(),
+                            rVertexPoint.getY());
             }
             if(rPoly.isClosed())
                 ras.close_polygon();
@@ -1922,9 +1884,9 @@ IColorBuffer::Format Image::getFormat() const
 // Image::drawPoint
 //////////////////////////////////////////////////////////////////////////////////
 
-void Image::drawPoint( const geometry::RealPoint2D&     aPoint,
-                       const rendering::ViewState&      viewState,
-                       const rendering::RenderState&    renderState )
+void Image::drawPoint( const geometry::RealPoint2D&     /*aPoint*/,
+                       const rendering::ViewState&      /*viewState*/,
+                       const rendering::RenderState&    /*renderState*/ )
 {
     OSL_ENSURE(false,
                "Image::drawPoint(): NYI" );
@@ -2030,12 +1992,12 @@ ImageCachedPrimitiveSharedPtr Image::strokePolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::strokeTexturedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-    const rendering::ViewState&                         viewState,
-    const rendering::RenderState&                       renderState,
-    const uno::Sequence< rendering::Texture >&          textures,
-    const ::std::vector< ::boost::shared_ptr<Image> >&  textureAnnotations,
-    const rendering::StrokeAttributes&                  strokeAttributes )
+    const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
+    const rendering::ViewState&                         /*viewState*/,
+    const rendering::RenderState&                       /*renderState*/,
+    const uno::Sequence< rendering::Texture >&          /*textures*/,
+    const ::std::vector< ::boost::shared_ptr<Image> >&  /*textureAnnotations*/,
+    const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
 {
     OSL_ENSURE(false,
                "Image::strokeTexturedPolyPolygon(): NYI" );
@@ -2049,13 +2011,13 @@ ImageCachedPrimitiveSharedPtr Image::strokeTexturedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::strokeTextureMappedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-    const rendering::ViewState&                         viewState,
-    const rendering::RenderState&                       renderState,
-    const uno::Sequence< rendering::Texture >&          textures,
-    const ::std::vector< ::boost::shared_ptr<Image> >&  textureAnnotations,
-    const uno::Reference< geometry::XMapping2D >&       xMapping,
-    const rendering::StrokeAttributes&                  strokeAttributes )
+    const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
+    const rendering::ViewState&                         /*viewState*/,
+    const rendering::RenderState&                       /*renderState*/,
+    const uno::Sequence< rendering::Texture >&          /*textures*/,
+    const ::std::vector< ::boost::shared_ptr<Image> >&  /*textureAnnotations*/,
+    const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
+    const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
 {
     OSL_ENSURE(false,
                "Image::strokeTextureMappedPolyPolygon(): NYI" );
@@ -2114,12 +2076,12 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
             path.move_to(aPoint.getX(),aPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint aPoint(rPoly.getB2DPoint(nVertex));
+                const ::basegfx::B2DPoint aVertexPoint(rPoly.getB2DPoint(nVertex));
 
                 // specify first cp, second cp, next vertex
                 path.curve4( aPointA.getX(),aPointA.getY(),
                                 aPointB.getX(),aPointB.getY(),
-                                aPoint.getX(),aPoint.getY() );
+                                aVertexPoint.getX(),aVertexPoint.getY() );
 
                 aPointA = rPoly.getControlPointA(nVertex);
                 aPointB = rPoly.getControlPointB(nVertex);
@@ -2138,9 +2100,9 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
                         rPoint.getY());
             for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
             {
-                const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(nVertex));
-                ras.line_to_d(rPoint.getX(),
-                            rPoint.getY());
+                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
+                ras.line_to_d(rVertexPoint.getX(),
+                            rVertexPoint.getY());
             }
             if(rPoly.isClosed())
                 ras.close_polygon();
@@ -2283,12 +2245,12 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::fillTextureMappedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-    const rendering::ViewState&                         viewState,
-    const rendering::RenderState&                       renderState,
-    const uno::Sequence< rendering::Texture >&          textures,
-    const ::std::vector< ::boost::shared_ptr<Image> >&  textureAnnotations,
-    const uno::Reference< geometry::XMapping2D >&       xMapping )
+    const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
+    const rendering::ViewState&                         /*viewState*/,
+    const rendering::RenderState&                       /*renderState*/,
+    const uno::Sequence< rendering::Texture >&          /*textures*/,
+    const ::std::vector< ::boost::shared_ptr<Image> >&  /*textureAnnotations*/,
+    const uno::Reference< geometry::XMapping2D >&       /*xMapping*/ )
 {
     OSL_ENSURE(false,
                "Image::fillTextureMappedPolyPolygon(): NYI" );
