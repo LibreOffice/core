@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OColumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:37:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _CONNECTIVITY_COLUMN_HXX_
 #define _CONNECTIVITY_COLUMN_HXX_
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -120,11 +120,11 @@ namespace connectivity
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t ,void* _pHint ) SAL_THROW( () )
             { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
             {  }
 
         sal_Bool isAutoIncrement()              const { return m_AutoIncrement; }
