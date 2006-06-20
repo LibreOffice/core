@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 15:00:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,11 +219,10 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 //==============================================================================
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart, NODES_INCLUDED _eMask)
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart)
     :m_pCurrent(NULL)
     ,m_eCurrentType(SQLExceptionInfo::UNDEFINED)
         // no other chance without RTTI
-    ,m_eMask(_eMask)
 {
     if (_rStart.isValid())
     {
@@ -233,39 +232,27 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const SQLExceptionInfo& _
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart, NODES_INCLUDED _eMask)
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart)
             :m_pCurrent(_pStart)
             ,m_eCurrentType(SQLExceptionInfo::SQL_EXCEPTION)
                 // no other chance without RTTI
-            ,m_eMask(_eMask)
 {
-    // initially check the start of the chain against the include mask
-    if (m_pCurrent && (m_eMask > NI_EXCEPTIONS))
-        next();
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart, NODES_INCLUDED _eMask)
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart)
             :m_pCurrent(_pStart)
             ,m_eCurrentType(SQLExceptionInfo::SQL_WARNING)
                 // no other chance without RTTI
-            ,m_eMask(_eMask)
 {
-    // initially check the start of the chain against the include mask
-    if (m_pCurrent && (m_eMask > NI_WARNINGS))
-        next();
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart, NODES_INCLUDED _eMask)
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart)
             :m_pCurrent(_pStart)
             ,m_eCurrentType(SQLExceptionInfo::SQL_CONTEXT)
                 // no other chance without RTTI
-            ,m_eMask(_eMask)
 {
-    // initially check the start of the chain against the include mask
-    if (m_pCurrent && (m_eMask > NI_CONTEXTINFOS))
-        next();
 }
 
 //------------------------------------------------------------------------------
@@ -298,20 +285,21 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
     if (m_pCurrent)
     {   // check for the next element within the chain
         const staruno::Type& aSqlExceptionCompare = ::getCppuType(reinterpret_cast< ::com::sun::star::sdbc::SQLException*>(NULL));
-        const staruno::Type& aSqlWarningCompare = ::getCppuType(reinterpret_cast< ::com::sun::star::sdbc::SQLWarning*>(NULL));
-        const staruno::Type& aSqlContextCompare = ::getCppuType(reinterpret_cast< ::com::sun::star::sdb::SQLContext*>(NULL));
 
         const ::com::sun::star::sdbc::SQLException* pSearch         = m_pCurrent;
         SQLExceptionInfo::TYPE eSearchType  = m_eCurrentType;
 
-        sal_Bool bIncludeThis = sal_False;
-        while (pSearch && !bIncludeThis)
+        do
         {
+            if ( !pSearch )
+                break;
+
             if (!pSearch->NextException.hasValue())
             {   // last chain element
                 pSearch = NULL;
                 break;
             }
+
             staruno::Type aNextElementType = pSearch->NextException.getValueType();
             if (!isAssignableFrom(aSqlExceptionCompare, aNextElementType))
             {
@@ -328,25 +316,22 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
             {
                 case SQLExceptionInfo::SQL_CONTEXT:
                     pSearch = reinterpret_cast<const ::com::sun::star::sdb::SQLContext*>(pSearch->NextException.getValue());
-                    bIncludeThis = eSearchType >= NI_CONTEXTINFOS;
                     break;
 
                 case SQLExceptionInfo::SQL_WARNING:
                     pSearch = reinterpret_cast<const ::com::sun::star::sdbc::SQLWarning*>(pSearch->NextException.getValue());
-                    bIncludeThis = eSearchType >= NI_WARNINGS;
                     break;
 
                 case SQLExceptionInfo::SQL_EXCEPTION:
                     pSearch = reinterpret_cast<const ::com::sun::star::sdbc::SQLException*>(pSearch->NextException.getValue());
-                    bIncludeThis = eSearchType >= NI_EXCEPTIONS;
                     break;
 
                 default:
                     pSearch = NULL;
-                    bIncludeThis = sal_False;
                     break;
             }
         }
+        while ( false );
 
         m_pCurrent = pSearch;
         m_eCurrentType = eSearchType;
