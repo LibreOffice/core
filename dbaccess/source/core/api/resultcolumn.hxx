@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultcolumn.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:15:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@ namespace dbaccess
 
     private:
         void    impl_determineIsRowVersion_nothrow();
+
+    protected:
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 }
 #endif // _DBACORE_RESULTCOLUMN_HXX_
