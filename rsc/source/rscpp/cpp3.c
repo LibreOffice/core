@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:17:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,7 @@ void InitCpp3()
 
 
 int
-openfile(filename)
-char            *filename;
+openfile(char* filename)
 /*
  * Open a file, add it to the linked list of open files.
  * This is called only from openfile() above.
@@ -85,9 +84,7 @@ char            *filename;
         return (TRUE);
 }
 
-void addfile(fp, filename)
-FILE            *fp;                    /* Open file pointer            */
-char            *filename;              /* Name of the file             */
+void addfile(FILE* fp, char* filename)
 /*
  * Initialize tables for this open file.  This is called from openfile()
  * above (for #include files), and from the entry to cpp to open the main
@@ -203,8 +200,7 @@ void setincdirs()
  * von Kommandos gilt.
  */
 
-int AddInclude( pIncStr )
-                char *pIncStr;
+int AddInclude( char* pIncStr )
 {
     char     *pIncEnv    = NULL;    /* Kopie des INCLUDE     */
     char     *pIncPos;              /* wandert zum naechsten */
@@ -226,9 +222,7 @@ int AddInclude( pIncStr )
 
 
 int
-dooptions(argc, argv)
-int             argc;
-char            *argv[];
+dooptions(int argc, char** argv)
 /*
  * dooptions is called to process command line arguments (-Detc).
  * It is called only at cpp startup.
@@ -296,7 +290,7 @@ char            *argv[];
 
                 case 'S':
                     sizp = size_table;
-                    if ((isdatum = (*ap != '*'))) /* If it's just -S,     */
+                    if (0 != (isdatum = (*ap != '*'))) /* If it's just -S,     */
                         endtest = T_FPTR;       /* Stop here            */
                     else {                      /* But if it's -S*      */
                         ap++;                   /* Step over '*'        */
@@ -410,14 +404,14 @@ readoptions(char* filename, char*** pfargv)
             c=fgetc(fp);
             if ( c != ' ' && c != CR && c != NL && c != HT && c != EOF)
             {
-                *poptbuff++=c;
+                *poptbuff++=(char)c;
                 if( c == '"' )
                     bInQuotes = ~bInQuotes;
             }
             else
             {
                 if( c != EOF && bInQuotes )
-                    *poptbuff++=c;
+                    *poptbuff++=(char)c;
                 else
                 {
                     *poptbuff=EOS;
@@ -444,8 +438,7 @@ readoptions(char* filename, char*** pfargv)
 
 #if HOST != SYS_UNIX
 FILE_LOCAL void
-zap_uc(ap)
-register char   *ap;
+zap_uc(char* ap)
 /*
  * Dec operating systems mangle upper-lower case in command lines.
  * This routine forces the -D and -U arguments to uppercase.
@@ -457,7 +450,7 @@ register char   *ap;
              * Don't use islower() here so it works with Multinational
              */
             if (*ap >= 'a' && *ap <= 'z')
-                *ap = toupper(*ap);
+                *ap = (char)toupper(*ap);
             ap++;
         }
 }
