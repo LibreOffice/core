@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:12:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,8 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/sql/Exception;";
-        static char * cMethodName = "getNextException";
+        static const char * cSignature = "()Ljava/sql/Exception;";
+        static const char * cMethodName = "getNextException";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -132,8 +132,8 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getSQLState";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getSQLState";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -154,8 +154,8 @@ sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getErrorCode";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getErrorCode";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
