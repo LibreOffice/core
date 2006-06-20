@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clipboardmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:11:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:00:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,8 @@ namespace dtrans
         const ::rtl::OUString m_aDefaultName;
 
         virtual ~ClipboardManager();
-
+    protected:
+        using WeakComponentImplHelperBase::disposing;
     public:
 
         ClipboardManager();
@@ -128,7 +129,7 @@ namespace dtrans
 
     };
 
-};
+}
 
 // ------------------------------------------------------------------------
 
