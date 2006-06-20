@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:10:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
+#pragma warning(push,1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
 #include <tlhelp32.h>
 #include <systools/win32/uwinapi.h>
 #include <winsock.h>
@@ -303,6 +305,8 @@ static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
 
 BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
+    (void)hinstDLL; /* avoid warning */
+    (void)lpvReserved; /* avoid warning */
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
