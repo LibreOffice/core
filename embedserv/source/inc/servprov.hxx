@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #ifndef _SERVPROV_HXX
 #define _SERVPROV_HXX
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #undef _DEBUG
 #endif
@@ -66,8 +67,8 @@ class EmbedProviderFactory_Impl;
 class EmbedServer_Impl : public ::cppu::OWeakObject, ::com::sun::star::lang::XTypeProvider
 {
 public:
-    EmbedServer_Impl( const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> &xFactory );
-    ~EmbedServer_Impl();
+    EmbedServer_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &xFactory );
+    virtual ~EmbedServer_Impl();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
@@ -84,15 +85,15 @@ public:
 protected:
 
     CComPtr< EmbedProviderFactory_Impl > m_pOLEFactories[ SUPPORTED_FACTORIES_NUM ];
-    ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 };
 
 class EmbedProviderFactory_Impl : public IClassFactory
 {
 public:
 
-    EmbedProviderFactory_Impl( const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& xFactory, const GUID* pGuid);
-    ~EmbedProviderFactory_Impl();
+    EmbedProviderFactory_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory, const GUID* pGuid);
+    virtual ~EmbedProviderFactory_Impl();
 
     sal_Bool registerClass();
     sal_Bool deregisterClass();
@@ -112,8 +113,7 @@ protected:
     GUID                m_guid;
     DWORD               m_factoryHandle;
 
-    ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 };
 
 #endif
-
