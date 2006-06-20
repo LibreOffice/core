@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InputStream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:10:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::c
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        static char * cSignature = "(I)I";
-        static char * cMethodName = "skip";
+        static const char * cSignature = "(I)I";
+        static const char * cMethodName = "skip";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -108,8 +108,8 @@ sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        static char * cSignature = "()Z";
-        static char * cMethodName = "available";
+        static const char * cSignature = "()Z";
+        static const char * cMethodName = "available";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -127,8 +127,8 @@ void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::No
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        static char * cSignature = "()V";
-        static char * cMethodName = "close";
+        static const char * cSignature = "()V";
+        static const char * cMethodName = "close";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -150,15 +150,16 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
     if( t.pEnv )
     {
         jbyteArray pByteArray = t.pEnv->NewByteArray(nBytesToRead);
-        static char * cSignature = "([BII)I";
-        static char * cMethodName = "read";
+        static const char * cSignature = "([BII)I";
+        static const char * cMethodName = "read";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
-            while(!(out = t.pEnv->CallIntMethod( object, mID,pByteArray,0,nBytesToRead)))
+            out = t.pEnv->CallIntMethod( object, mID, pByteArray, 0, nBytesToRead );
+            if ( !out )
                 ThrowSQLException(t.pEnv,*this);
             if(out > 0)
             {
@@ -170,5 +171,4 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
     } //t.pEnv
     return out;
 }
-
 
