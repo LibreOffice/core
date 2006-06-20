@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:38:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 #include <algorithm>
@@ -260,7 +263,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
         catch( const Exception& e)
         {
-            e;  // make compiler happy
+            OSL_UNUSED( e );
             OSL_ENSURE( sal_False, "lcl_getDriverPrecedence: caught an exception!" );
         }
 
@@ -573,7 +576,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
-    return aSearch->second;
+    return aSearch->second.get();
 }
 
 //--------------------------------------------------------------------------
