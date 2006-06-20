@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:29:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::disposing(
-        const lang::EventObject& Source )
+        const lang::EventObject& /*Source*/ )
     throw ( uno::RuntimeException )
 {
 }
