@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hashtbl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:28:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ public:
         double  dGrowFactor = HashTable::m_defDefGrowFactor /* 2.0 */
     );
 
-    ~HashTable();
+    virtual ~HashTable();
 
     bool  IsFull() const;
     unsigned long GetSize() const { return m_lSize; }
@@ -101,6 +101,8 @@ class HashTableIterator
     unsigned long    m_lAt;
     HashTable const& m_aTable;
 
+    void operator =(HashTableIterator &); // not defined
+
     void* FindValidObject(bool bForward);
 
 protected:
@@ -112,86 +114,6 @@ protected:
 public:
     HashTableIterator(HashTable const&);
 };
-
-// typsichere Makros ---------------------------------------------------
-
-#define DECLARE_HASHTABLE_INTERN(ClassName,Owner,KeyType,ObjType)    \
-    class ClassName : public HashTable                               \
-    {                                                                \
-    public:                                                          \
-        ClassName                                                    \
-        (                                                            \
-            unsigned long lSize,                                     \
-            double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,  \
-            double  dGrowFactor = HashTable::m_defDefGrowFactor      \
-        )                                                            \
-        : HashTable(lSize,Owner,dMaxLoadFactor,dGrowFactor) {}       \
-                                                                     \
-        ObjType  Find (KeyType const& Key) const                     \
-        { return (ObjType) HashTable::Find((char *) Key); }          \
-                                                                     \
-        bool Insert (KeyType const& Key, ObjType Object)             \
-        { return HashTable::Insert((char *) Key, (void*) Object); }  \
-                                                                     \
-        ObjType  Delete (KeyType const&Key)                          \
-        { return (ObjType) HashTable::Delete ((char *) Key); }       \
-    };
-
-// HashTable OHNE Owner-Verhalten
-#define DECLARE_HASHTABLE(ClassName,KeyType,ObjType)                 \
-    DECLARE_HASHTABLE_INTERN(ClassName,false,KeyType,ObjType)
-
-// HashTable MIT Owner-Verhalten
-#define DECLARE_HASHTABLE_OWNER(ClassName,KeyType,ObjType)           \
-    DECLARE_HASHTABLE_INTERN(ClassName##2,true,KeyType,ObjType)      \
-    class ClassName : public ClassName##2                            \
-    {                                                                \
-    protected:                                                       \
-        virtual void OnDeleteObject(void* pObject);                  \
-    public:                                                          \
-        ClassName                                                    \
-        (                                                            \
-            unsigned long   lSize,                                   \
-            double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,  \
-            double  dGrowFactor = HashTable::m_defDefGrowFactor      \
-        )                                                            \
-        : ClassName##2(lSize,dMaxLoadFactor,dGrowFactor) {}          \
-        ~ClassName();                                                \
-    };
-
-#define IMPLEMENT_HASHTABLE_OWNER(ClassName,KeyType,ObjType)         \
-    void ClassName::OnDeleteObject(void* pObject)                    \
-    { delete (ObjType) pObject; }                                    \
-                                                                     \
-    ClassName::~ClassName()                                          \
-    {                                                                \
-        for (unsigned long i=0; i<GetSize(); i++)                    \
-        {                                                            \
-            void *pObject = GetObjectAt(i);                          \
-            if (pObject != NULL)                                     \
-                OnDeleteObject(pObject);                             \
-        }                                                            \
-    }
-
-// Iterator-Makros --------------------------------------------------
-
-#define DECLARE_HASHTABLE_ITERATOR(ClassName,ObjType)               \
-    class ClassName : public HashTableIterator                      \
-    {                                                               \
-    public:                                                         \
-        ClassName(HashTable const& aTable)                          \
-        : HashTableIterator(aTable) {}                              \
-                                                                    \
-        ObjType GetFirst()                                          \
-            { return (ObjType)HashTableIterator::GetFirst(); }      \
-        ObjType GetNext()                                           \
-            { return (ObjType)HashTableIterator::GetNext();  }      \
-        ObjType GetLast()                                           \
-            { return (ObjType)HashTableIterator::GetLast();  }      \
-        ObjType GetPrev()                                           \
-            { return (ObjType)HashTableIterator::GetPrev();  }      \
-    };
-
 
 #endif // _HASHTBL_HXX
 
