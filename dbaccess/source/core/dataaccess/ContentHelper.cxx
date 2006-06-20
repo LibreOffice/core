@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:14:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,10 +115,10 @@ OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
     : OContentHelper_COMPBASE(m_aMutex)
     ,m_aContentListeners(m_aMutex)
     ,m_aPropertyChangeListeners(m_aMutex)
-    ,m_nCommandId(0)
-    ,m_pImpl(_pImpl)
-    ,m_xORB(_xORB)
     ,m_xParentContainer(_xParentContainer)
+    ,m_xORB(_xORB)
+    ,m_pImpl(_pImpl)
+    ,m_nCommandId(0)
 {
 }
 //--------------------------------------------------------------------------
@@ -188,7 +188,7 @@ sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeExc
     return ++m_nCommandId;
 }
 // -----------------------------------------------------------------------------
-Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
+Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
     if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
@@ -274,7 +274,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 Command
     return aRet;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OContentHelper::abort( sal_Int32 CommandId ) throw (RuntimeException)
+void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ ) throw (RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
@@ -326,12 +326,14 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
 // -----------------------------------------------------------------------------
 
 // XPropertyContainer
-void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& Name, sal_Int16 Attributes, const Any& DefaultValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
+    DBG_ERROR( "OContentHelper::addProperty: not implemented!" );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& Name ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
+    DBG_ERROR( "OContentHelper::removeProperty: not implemented!" );
 }
 // -----------------------------------------------------------------------------
 // XInitialization
@@ -358,7 +360,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
     }
 }
 // -----------------------------------------------------------------------------
-Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue >& rValues,const Reference< XCommandEnvironment >& xEnv )
+Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue >& rValues,const Reference< XCommandEnvironment >& /*xEnv*/ )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -369,10 +371,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
 
     const PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -410,7 +409,6 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             rtl::OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
             {
-                osl::Guard< osl::Mutex > aGuard( m_aMutex );
                 if ( aNewValue != m_pImpl->m_aProps.aTitle )
                 {
                     aEvent.PropertyName = rValue.Name;
@@ -583,11 +581,11 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         PropertiesEventListenerMap aListeners;
 
 
-        const PropertyChangeEvent* pEvents = evt.getConstArray();
+        const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
 
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( sal_Int32 n = 0; n < nCount; ++n, ++propertyChangeEvent )
         {
-            const PropertyChangeEvent& rEvent = pEvents[ n ];
+            const PropertyChangeEvent& rEvent = *propertyChangeEvent;
             const ::rtl::OUString& rName = rEvent.PropertyName;
 
             OInterfaceContainerHelper* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
@@ -596,21 +594,21 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
                 OInterfaceIteratorHelper aIter( *pPropsContainer );
                 while ( aIter.hasMoreElements() )
                 {
-                    PropertyEventSequence* pEvents = NULL;
+                    PropertyEventSequence* propertyEvents = NULL;
 
                     XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
                     PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
                     if ( it == aListeners.end() )
                     {
                         // Not in map - create and insert new entry.
-                        pEvents = new PropertyEventSequence( nCount );
-                        aListeners[ pListener ] = pEvents;
+                        propertyEvents = new PropertyEventSequence( nCount );
+                        aListeners[ pListener ] = propertyEvents;
                     }
                     else
-                        pEvents = (*it).second;
+                        propertyEvents = (*it).second;
 
-                    if ( pEvents )
-                        (*pEvents)[n] = rEvent;
+                    if ( propertyEvents )
+                        (*propertyEvents)[n] = rEvent;
                 }
             }
         }

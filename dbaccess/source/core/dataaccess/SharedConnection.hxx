@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SharedConnection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:33:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,23 +133,23 @@ namespace dbaccess
         }
 
         // XConnection
-        virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL setAutoCommit( sal_Bool /*autoCommit*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             throw ::com::sun::star::sdbc::SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This call is not allowed when sharing connections.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S10000")),0,::com::sun::star::uno::Any());
         }
-        virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL setReadOnly( sal_Bool /*readOnly*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             throw ::com::sun::star::sdbc::SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This call is not allowed when sharing connections.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S10000")),0,::com::sun::star::uno::Any());
         }
-        virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             throw ::com::sun::star::sdbc::SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This call is not allowed when sharing connections.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S10000")),0,::com::sun::star::uno::Any());
         }
-        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL setTransactionIsolation( sal_Int32 /*level*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             throw ::com::sun::star::sdbc::SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This call is not allowed when sharing connections.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S10000")),0,::com::sun::star::uno::Any());
         }
-        virtual void SAL_CALL setTypeMap( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL setTypeMap( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             throw ::com::sun::star::sdbc::SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This call is not allowed when sharing connections.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S10000")),0,::com::sun::star::uno::Any());
         }
