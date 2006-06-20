@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:43:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _r
     return new OCommandDefinition(*this, _rName,m_xORB,pItem->m_aDocumentMap.find(_rName)->second);
 }
 // -----------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
 {
     return createInstance( );
 }
