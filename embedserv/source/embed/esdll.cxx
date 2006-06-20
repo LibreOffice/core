@@ -4,9 +4,9 @@
  *
  *  $RCSfile: esdll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:52:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:40:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,13 @@
 #undef _DEBUG
 #endif
 
+#include "stdafx.h"
+
 #include <atlbase.h>
+#pragma warning( push )
+#pragma warning( disable: 4710 )
 CComModule _Module;
+#pragma warning( pop )
 #include <atlcom.h>
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -76,3 +81,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     return TRUE;    // ok
 }
 
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
