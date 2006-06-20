@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:39:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,19 +113,19 @@ void ODbaseIndexes::appendObject( const Reference< XPropertySet >& descriptor )
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
+        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
         if(!pIndex || !pIndex->CreateImpl())
             throw SQLException();
     }
 }
 // -------------------------------------------------------------------------
 // XDrop
-void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
 {
     Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     if ( xTunnel.is() )
     {
-        ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
+        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
         if ( pIndex )
             pIndex->DropImpl();
     }
