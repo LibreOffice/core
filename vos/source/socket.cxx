@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:44:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ OSocketAddr::OSocketAddr(oslSocketAddr Addr)
 /*****************************************************************************/
 // OSocketAddr()
 /*****************************************************************************/
-OSocketAddr::OSocketAddr(const OSocketAddr& Addr)
+OSocketAddr::OSocketAddr(const OSocketAddr& Addr) :
+ISocketAddr(), OObject()
 {
     m_SockAddr= osl_copySocketAddr((oslSocketAddr)Addr);
 }
@@ -381,9 +382,9 @@ OIpxSocketAddr::OIpxSocketAddr(oslSocketAddr Addr) :
 /*****************************************************************************/
 // OIpxSocketAddr()
 /*****************************************************************************/
-OIpxSocketAddr::OIpxSocketAddr(const rtl::OUString& NetNumber,
-                               const rtl::OUString& NodeNumber,
-                               sal_uInt32 SocketNumber)
+OIpxSocketAddr::OIpxSocketAddr(const rtl::OUString&,
+                               const rtl::OUString&,
+                               sal_uInt32 )
 {
     // jbu : functionality removed from vos
 }
@@ -461,7 +462,7 @@ OIpxSocketAddr& OIpxSocketAddr::operator=(const OSocketAddr& Addr)
 /*****************************************************************************/
 // getNetNumber()
 /*****************************************************************************/
-OSocketAddr::TResult OIpxSocketAddr::getNetNumber(TIpxNetNumber& NetNumber) const
+OSocketAddr::TResult OIpxSocketAddr::getNetNumber(TIpxNetNumber&) const
 {
     // jbu : functionality removed from vos
     return (TResult)0;
@@ -470,7 +471,7 @@ OSocketAddr::TResult OIpxSocketAddr::getNetNumber(TIpxNetNumber& NetNumber) cons
 /*****************************************************************************/
 // getNodeNumber()
 /*****************************************************************************/
-OSocketAddr::TResult OIpxSocketAddr::getNodeNumber(TIpxNodeNumber& NodeNumber) const
+OSocketAddr::TResult OIpxSocketAddr::getNodeNumber(TIpxNodeNumber& ) const
 {
     // jbu : functionality removed from vos
     return (TResult)0;
@@ -490,7 +491,7 @@ sal_uInt32 OIpxSocketAddr::getSocketNumber() const
 // getAddressString()
 /*****************************************************************************/
 //void OIpxSocketAddr::getAddressString(sal_Char* Buffer, sal_uInt32 Len) const
-void OIpxSocketAddr::getAddressString( rtl::OUString& Buffer ) const
+void OIpxSocketAddr::getAddressString( rtl::OUString& ) const
 {
     // jbu : functionality removed from vos
 }
@@ -538,7 +539,8 @@ OSocket::OSocket(TSocketType Type,
 /*****************************************************************************/
 // OSocket()
 /*****************************************************************************/
-OSocket::OSocket(const OSocket& sock)
+OSocket::OSocket(const OSocket& sock) :
+ISocketTypes(), OReference(), OObject()
 {
     m_pRecvTimeout = 0;
     m_pSendTimeout = 0;
@@ -1341,7 +1343,7 @@ OStreamSocket::OStreamSocket(oslSocket Socket) :
 // copy constructor
 /*****************************************************************************/
 OStreamSocket::OStreamSocket(const OStreamSocket& sock) :
-    OSocket(sock)
+    OSocket(sock), IStream()
 {
 }
 
