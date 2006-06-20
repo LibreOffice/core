@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:17:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ DBG_NAME(OTextConnectionPageSetup)
     {
         DBG_CTOR(OTextConnectionPageSetup,NULL);
 
-        m_pTextConnectionHelper = new OTextConnectionHelper(this, PAGE_DBWIZARD_TEXT, sal_True);
+        m_pTextConnectionHelper = new OTextConnectionHelper(this, sal_True);
         m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
 
         m_pTextConnectionHelper->m_aDecimalSeparator.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aDecimalSeparator.GetPosPixel(), 0, -14 ) );
@@ -192,9 +192,8 @@ DBG_NAME(OTextConnectionPageSetup)
         DBG_DTOR(OTextConnectionPageSetup,NULL);
     }
 
-    IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, _pTextConnectionHelper)
+    IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, /*_pTextConnectionHelper*/)
     {
-        sal_Bool bRoadmapState = GetRoadmapStateValue();
         SetRoadmapStateValue((m_pTextConnectionHelper->GetExtension().Len() > 0) && OConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
         return sal_True;
@@ -349,7 +348,7 @@ DBG_NAME(OTextConnectionPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OLDAPConnectionPageSetup, OnEditModified, Edit*, _pEdit)
+    IMPL_LINK(OLDAPConnectionPageSetup, OnEditModified, Edit*, /*_pEdit*/)
     {
         sal_Bool bRoadmapState = ((m_aETHostServer.GetText().Len() != 0 ) && ( m_aETBaseDN.GetText().Len() != 0 ) && (m_aFTPortNumber.GetText().Len() != 0 ));
         SetRoadmapStateValue(bRoadmapState);
@@ -368,11 +367,11 @@ DBG_NAME(OMySQLIntroPageSetup)
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
             :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_MYSQL_INTRO), _rCoreAttrs)
-            , m_aFT_Headertext(this, ResId(FT_MYSQL_HEADERTEXT))
-            , m_aFT_Helptext(this, ResId(FT_MYSQL_HELPTEXT))
-            , m_aFT_ConnectionMode(this, ResId(FT_MYSQLCONNECTIONMODE))
-            , m_aRB_ODBCDatabase(this, ResId(RB_CONNECTVIAODBC))
-            , m_aRB_JDBCDatabase(this, ResId(RB_CONNECTVIAJDBC))
+            ,m_aRB_ODBCDatabase(this, ResId(RB_CONNECTVIAODBC))
+            ,m_aRB_JDBCDatabase(this, ResId(RB_CONNECTVIAJDBC))
+            ,m_aFT_ConnectionMode(this, ResId(FT_MYSQLCONNECTIONMODE))
+            ,m_aFT_Helptext(this, ResId(FT_MYSQL_HELPTEXT))
+            ,m_aFT_Headertext(this, ResId(FT_MYSQL_HEADERTEXT))
     {
         DBG_CTOR(OMySQLIntroPageSetup,NULL);
 
@@ -382,7 +381,8 @@ DBG_NAME(OMySQLIntroPageSetup)
         FreeResource();
     }
 
-    IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, _pBox){
+    IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, /*_pBox*/)
+    {
         maClickHdl.Call( this );
         return true;
     }
@@ -396,24 +396,25 @@ DBG_NAME(OMySQLIntroPageSetup)
 
 
     // -----------------------------------------------------------------------
-    void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, sal_Bool /*_bSaveValue*/)
     {
 
     }
 
 
     // -----------------------------------------------------------------------
-    void OMySQLIntroPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OMySQLIntroPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
 
     // -----------------------------------------------------------------------
-    void OMySQLIntroPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OMySQLIntroPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
 
 
-    BOOL OMySQLIntroPageSetup::FillItemSet(SfxItemSet& _rSet)
+    // -----------------------------------------------------------------------
+    BOOL OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
     {
         OSL_ENSURE(sal_False,"Who called me?! Please ask oj for more information.");
         return sal_True;
@@ -462,7 +463,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     //========================================================================
     //= OMySQLJDBCConnectionPageSetup
     //========================================================================
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, char* _pDriverName, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, const sal_Char* _pDriverName, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
         :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
         ,m_pFTHeaderText        (NULL)
         ,m_aFTHelpText          (this, ResId(FT_AUTOWIZARDHELPTEXT))
@@ -471,15 +472,14 @@ DBG_NAME(OMySQLIntroPageSetup)
         ,m_aFTHostname          (this, ResId(FT_AUTOHOSTNAME))
         ,m_aETHostname          (this, ResId(ET_AUTOHOSTNAME))
         ,m_aFTPortNumber        (this, ResId(FT_AUTOPORTNUMBER))
+        ,m_aFTDefaultPortNumber (this, ResId(FT_AUTOPORTNUMBERDEFAULT))
         ,m_aNFPortNumber        (this, ResId(NF_AUTOPORTNUMBER))
         ,m_aFTDriverClass       (this, ResId(FT_AUTOJDBCDRIVERCLASS))
         ,m_aETDriverClass       (this, ResId(ET_AUTOJDBCDRIVERCLASS))
         ,m_aPBTestJavaDriver    (this, ResId(PB_AUTOTESTDRIVERCLASS))
-        ,m_aFTDefaultPortNumber (this, ResId(FT_AUTOPORTNUMBERDEFAULT))
         ,m_nPortId(_nPortId)
     {
-        if (_nDriverClassId != -1)
-            m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
+        m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
         m_aFTDefaultPortNumber.SetText(String(ModuleRes(_nDefaultPortResId)));
         String sHelpText = String(ModuleRes(_nHelpTextResId));
         m_aFTHelpText.SetText(sHelpText);
@@ -567,7 +567,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, _pButton)
+    IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
@@ -607,14 +607,14 @@ DBG_NAME(OMySQLIntroPageSetup)
     // -----------------------------------------------------------------------
     OGenericAdministrationPage* OJDBCConnectionPageSetup::CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OJDBCConnectionPageSetup( pParent, PAGE_DBWIZARD_JDBC, _rAttrSet));
+        return ( new OJDBCConnectionPageSetup( pParent, _rAttrSet));
     }
 
 
     //========================================================================
     //= OMySQLJDBCConnectionPageSetup
     //========================================================================
-    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( Window* pParent, USHORT _nResId, const SfxItemSet& _rCoreAttrs)
+    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_JDBC, _rCoreAttrs, STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
         ,m_aFTDriverClass       (this, ResId(FT_AUTOJDBCDRIVERCLASS))
         ,m_aETDriverClass       (this, ResId(ET_AUTOJDBCDRIVERCLASS))
@@ -678,7 +678,7 @@ DBG_NAME(OMySQLIntroPageSetup)
 
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, _pButton)
+    IMPL_LINK(OJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
@@ -742,7 +742,7 @@ DBG_NAME(OSpreadSheetConnectionPageSetup)
     }
 
 
-    void OSpreadSheetConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OSpreadSheetConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
 
@@ -777,8 +777,8 @@ DBG_NAME(OAuthentificationPageSetup)
 
     OAuthentificationPageSetup::OAuthentificationPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_AUTHENTIFICATION), _rCoreAttrs )
-        , m_aFTHeaderText           (this, ResId(FT_AUTHENTIFICATIONHEADERTEXT))
         , m_aFTHelpText             (this, ResId(FT_AUTHENTIFICATIONHELPTEXT))
+        , m_aFTHeaderText           (this, ResId(FT_AUTHENTIFICATIONHEADERTEXT))
         , m_aFTUserName             (this, ResId(FT_GENERALUSERNAME))
         , m_aETUserName             (this, ResId(ET_GENERALUSERNAME))
         , m_aCBPasswordRequired     (this, ResId(CB_GENERALPASSWORDREQUIRED))
@@ -817,7 +817,7 @@ DBG_NAME(OAuthentificationPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
@@ -917,7 +917,7 @@ DBG_NAME(OFinalDBPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    void OFinalDBPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OFinalDBPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, sal_Bool /*_bSaveValue*/)
     {
         m_aCBOpenAfterwards.Check();
     }
@@ -928,10 +928,9 @@ DBG_NAME(OFinalDBPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    sal_Bool OFinalDBPageSetup::FillItemSet( SfxItemSet& _rSet )
+    sal_Bool OFinalDBPageSetup::FillItemSet( SfxItemSet& /*_rSet*/ )
     {
-        sal_Bool bChangedSomething = sal_True;
-        return bChangedSomething;
+        return sal_True;
     }
     // -----------------------------------------------------------------------------
     IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, CheckBox*, _pBox)
