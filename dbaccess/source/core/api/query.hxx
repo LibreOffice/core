@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:07:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,11 +91,9 @@ public:
 
 protected:
 //  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        m_xCommandDefinition;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                        m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > m_xCommandPropInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xCommandDefinition;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xCommandPropInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
     OContainerMediator* m_pMediator;
     IWarningsContainer* m_pWarnings;
