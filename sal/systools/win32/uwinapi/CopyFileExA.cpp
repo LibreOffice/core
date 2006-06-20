@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CopyFileExA.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:10:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, CopyFileExA, ( LPCSTR lpExisti
             while ( fSuccess && PROGRESS_CONTINUE == dwProgressResult )
             {
                 BYTE    buffer[BUFSIZE];
-                DWORD   dwBytesRead, dwBytesWritten;
+                DWORD   dwBytesRead, dwBytesWritten = 0;
 
                 fSuccess = ReadFile( hSourceFile, buffer, BUFSIZE, &dwBytesRead, NULL );
 
