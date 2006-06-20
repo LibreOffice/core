@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:14:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace ::comphelper;
@@ -250,7 +253,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     Reference< XResultSet > xRef;
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
@@ -381,8 +384,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
-    sal_Bool nullable ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
+    sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
 {
     Reference< XResultSet > xRef;
 
@@ -758,7 +761,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQL
     return isCapable(DBLITERAL_CORRELATION_NAME);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ ) throw(SQLException, RuntimeException)
 {
     return getBoolProperty(::rtl::OUString::createFromAscii("Rowset Conversions on Command"));
 }
@@ -1077,12 +1080,12 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLExceptio
     return getMaxSize(DBLITERAL_USER_NAME);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 /*setType*/, sal_Int32 /*concurrency*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
@@ -1137,13 +1140,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
     return sal_True;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(NULL);
-    xRef = pResult;
-    return xRef;
+    ::dbtools::throwFeatureNotImplementedException( "XDatabaseMetaData::getUDTs", *this );
+    return Reference< XResultSet >();
 }
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
