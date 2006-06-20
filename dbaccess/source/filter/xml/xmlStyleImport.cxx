@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlStyleImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:12:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:51:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,13 +113,13 @@ DBG_NAME(OTableStyleContext)
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
-    sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
-    pStyles(&rStyles),
-    m_nNumberFormat(-1),
-    bParentSet(sal_False),
-    bConditionalFormatCreated(sal_False)
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle )
+    :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
+    ,sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")))
+    ,pStyles(&rStyles)
+    ,m_nNumberFormat(-1)
+    ,bConditionalFormatCreated(sal_False)
+    ,bParentSet(sal_False)
 {
     DBG_CTOR(OTableStyleContext,NULL);
 

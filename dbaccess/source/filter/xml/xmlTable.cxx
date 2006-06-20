@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:12:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,12 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ,const ::rtl::OUString& _sServiceName
-                ) :
-    SvXMLImportContext( _rImport, nPrfx, _sLocalName )
+                )
+    :SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     ,m_xParentContainer(_xParentContainer)
+    ,m_sServiceName(_sServiceName)
     ,m_bApplyFilter(sal_False)
     ,m_bApplyOrder(sal_False)
-    ,m_sServiceName(_sServiceName)
 {
     DBG_CTOR(OXMLTable,NULL);
 
@@ -103,7 +103,6 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     const SvXMLTokenMap& rTokenMap = GetOwnImport().GetQueryElemTokenMap();
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    sal_Bool bAutoEnabled = sal_False;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         OUString sLocalName;
@@ -258,8 +257,8 @@ void OXMLTable::EndElement()
 
 }
 // -----------------------------------------------------------------------------
-void OXMLTable::fillAttributes(sal_uInt16 nPrfx
-                                ,const ::rtl::OUString& _sLocalName
+void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
+                                ,const ::rtl::OUString& /*_sLocalName*/
                                 ,const Reference< XAttributeList > & _xAttrList
                                 , ::rtl::OUString& _rsCommand
                                 ,::rtl::OUString& _rsTableName
