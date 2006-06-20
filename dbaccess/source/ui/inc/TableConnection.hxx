@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:34:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ namespace dbaui
         void        Deselect();
         BOOL        IsSelected() const { return m_bSelected; }
         BOOL        CheckHit( const Point& rMousePos ) const;
-        bool        Invalidate();
+        bool        InvalidateConnection();
         void        UpdateLineList();
 
         OTableWindow* GetSourceWin() const;
@@ -122,6 +122,7 @@ namespace dbaui
         const ::std::vector<OConnectionLine*>* GetConnLineList() const { return &m_vConnLine; }
         OJoinTableView*                 GetParent() const { return m_pParent; }
         virtual void                    Draw( const Rectangle& rRect );
+        using Window::Draw;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     };
 }
