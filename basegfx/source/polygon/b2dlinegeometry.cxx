@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dlinegeometry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:45:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ namespace basegfx
             double fHalfLineWidth,
             tools::B2DLineJoin eJoin,
             double fDegreeStepWidth,
-            double fMiterMinimumAngle)
+            double /*fMiterMinimumAngle*/)
         {
             OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
             OSL_ENSURE(fDegreeStepWidth > 0.0, "createAreaGeometryForJoin: DegreeStepWidth too small (!)");
@@ -288,6 +288,11 @@ namespace basegfx
 
                         break;
                     }
+                    case tools::B2DLINEJOIN_NONE:
+                        break; // nothing to add to aRetVal
+                    default:
+                        OSL_ENSURE(false,
+                                   "createAreaGeometryForJoin(): unexpected case.");
                 }
             }
 
