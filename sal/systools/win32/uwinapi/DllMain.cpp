@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DllMain.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:12:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,9 @@
  ************************************************************************/
 
 #define WIN32_LEAN_AND_MEAN
+#pragma warning(push,1) // disable warnings within system headers
 #include <windows.h>
+#pragma warning(pop)
 #include <malloc.h>
 #define _MBCS
 #include <tchar.h>
@@ -126,7 +128,7 @@ static HMODULE WINAPI LoadUnicowsLibrary(VOID)
 
 extern "C" FARPROC _PfnLoadUnicows = (FARPROC)LoadUnicowsLibrary;
 
-extern "C" BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, LPVOID lpReserved )
+extern "C" BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, LPVOID )
 {
     switch ( dwReason )
     {
