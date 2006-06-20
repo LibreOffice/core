@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 11:58:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
         sal_Int16 j;
         for (j = 0; j < key_count; j++) {
             if (keys[j].key > 0 && (i == keys[j].key || index->compare(i, keys[j].key) == 0)) {
-                table[i-start] = j;
+                table[i-start] = sal::static_int_cast<sal_uInt8>(j);
                 break;
             }
         }
@@ -133,7 +133,7 @@ Index::~Index()
 
 sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)
 {
-    return collator->compareString(OUString(&c1, 1), OUString(&c2, 1));
+    return sal::static_int_cast<sal_Int16>( collator->compareString(OUString(&c1, 1), OUString(&c2, 1)) );
 }
 
 sal_Int16 Index::getIndexWeight(const OUString& rIndexEntry)
@@ -185,7 +185,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             throw RuntimeException();
     }
 
-    sal_Int16 len = keyStr.getLength();
+    sal_Int16 len = sal::static_int_cast<sal_Int16>( keyStr.getLength() );
     mkey_count=key_count=0;
     skipping_chars=OUString();
     sal_Int16 i, j;
@@ -271,7 +271,7 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (
             throw RuntimeException();
     }
 
-    table_count = scriptList.getLength();
+    table_count = sal::static_int_cast<sal_Int16>( scriptList.getLength() );
     if (table_count > MAX_TABLES)
         throw RuntimeException();
 
