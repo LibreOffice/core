@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:39:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 #include "stgole.hxx"
-#pragma hdrstop
 
 static long nTmpCount = 0;
 
@@ -76,10 +75,10 @@ TYPEINIT1( BaseStorageStream, StorageBase );
 TYPEINIT1( BaseStorage, StorageBase );
 
 StorageBase::StorageBase()
-    : bAutoCommit( FALSE )
+    : m_bAutoCommit( FALSE )
 {
-    nMode  = STREAM_READ;
-    nError = SVSTREAM_OK;
+    m_nMode  = STREAM_READ;
+    m_nError = SVSTREAM_OK;
 }
 
 StorageBase::~StorageBase()
@@ -91,20 +90,20 @@ StorageBase::~StorageBase()
 
 ULONG StorageBase::GetError() const
 {
-    ULONG n = nError;
-    ((StorageBase*) this)->nError = SVSTREAM_OK;
+    ULONG n = m_nError;
+    ((StorageBase*) this)->m_nError = SVSTREAM_OK;
     return n;
 }
 
 void StorageBase::SetError( ULONG n ) const
 {
-    if( !nError )
-        ((StorageBase*) this)->nError = n;
+    if( !m_nError )
+        ((StorageBase*) this)->m_nError = n;
 }
 
 void StorageBase::ResetError() const
 {
-    ((StorageBase*) this)->nError = SVSTREAM_OK;
+    ((StorageBase*) this)->m_nError = SVSTREAM_OK;
 }
 
 // Retrieve the underlying SvStream for info purposes
@@ -115,7 +114,7 @@ const SvStream* OLEStorageBase::GetSvStream_Impl() const
 }
 
 OLEStorageBase::OLEStorageBase( StgIo* p, StgDirEntry* pe, StreamMode& nMode )
-    : pIo( p ), pEntry( pe ), nStreamMode( nMode )
+    : nStreamMode( nMode ), pIo( p ), pEntry( pe )
 {
     p->IncRef();
     if( pe )
@@ -184,7 +183,7 @@ BOOL OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
 TYPEINIT1( StorageStream, BaseStorageStream );
 
 StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
-             : OLEStorageBase( p, q, nMode ), nPos( 0L )
+             : OLEStorageBase( p, q, m_nMode ), nPos( 0L )
 {
     // The dir entry may be 0; this means that the stream is invalid.
     if( q )
@@ -197,15 +196,15 @@ StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
     }
     else
         m &= ~STREAM_READWRITE;
-    nMode = m;
+    m_nMode = m;
 }
 
 StorageStream::~StorageStream()
 {
     // Do an auto-commit if the entry is open in direct mode
-    if( bAutoCommit )
+    if( m_bAutoCommit )
         Commit();
-    if( pEntry && pEntry->nRefCnt && pEntry->bDirect && (nMode & STREAM_WRITE) )
+    if( pEntry && pEntry->nRefCnt && pEntry->bDirect && (m_nMode & STREAM_WRITE) )
         pEntry->Commit();
 }
 
@@ -273,7 +272,7 @@ BOOL StorageStream::Commit()
 {
     if( !Validate() )
         return FALSE;
-    if( !( nMode & STREAM_WRITE ) )
+    if( !( m_nMode & STREAM_WRITE ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
         return FALSE;
@@ -372,7 +371,7 @@ BOOL Storage::IsStorageFile( SvStream* pStream )
 TYPEINIT1( Storage, BaseStorage );
 
 Storage::Storage( const String& rFile, StreamMode m, BOOL bDirect )
-       : OLEStorageBase( new StgIo, NULL, nMode ), aName( rFile ), bIsRoot( FALSE )
+       : OLEStorageBase( new StgIo, NULL, m_nMode ), aName( rFile ), bIsRoot( FALSE )
 {
     BOOL bTemp = FALSE;
     if( !aName.Len() )
@@ -382,7 +381,7 @@ Storage::Storage( const String& rFile, StreamMode m, BOOL bDirect )
         bTemp = TRUE;
     }
     // the root storage creates the I/O system
-    nMode = m;
+    m_nMode = m;
     if( pIo->Open( aName, m ) )
     {
         Init( BOOL( ( m & ( STREAM_TRUNC | STREAM_NOCREATE ) ) == STREAM_TRUNC ) );
@@ -403,11 +402,11 @@ Storage::Storage( const String& rFile, StreamMode m, BOOL bDirect )
 // Create a storage on a given stream.
 
 Storage::Storage( SvStream& r, BOOL bDirect )
-       : OLEStorageBase( new StgIo, NULL, nMode ), bIsRoot( FALSE )
+       : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( FALSE )
 {
-    nMode = STREAM_READ;
+    m_nMode = STREAM_READ;
     if( r.IsWritable() )
-        nMode = STREAM_READ | STREAM_WRITE;
+        m_nMode = STREAM_READ | STREAM_WRITE;
     if( r.GetError() == SVSTREAM_OK )
     {
         pIo->SetStrm( &r, FALSE );
@@ -418,7 +417,7 @@ Storage::Storage( SvStream& r, BOOL bDirect )
         if( pEntry )
         {
             pEntry->bDirect = bDirect;
-            pEntry->nMode = nMode;
+            pEntry->nMode = m_nMode;
         }
         pIo->MoveError( *this );
     }
@@ -431,9 +430,9 @@ Storage::Storage( SvStream& r, BOOL bDirect )
 
 
 Storage::Storage( UCBStorageStream& rStrm, BOOL bDirect )
-       : OLEStorageBase( new StgIo, NULL, nMode ), bIsRoot( FALSE )
+       : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( FALSE )
 {
-    nMode = STREAM_READ;
+    m_nMode = STREAM_READ;
 
     if ( rStrm.GetError() != SVSTREAM_OK )
     {
@@ -452,7 +451,7 @@ Storage::Storage( UCBStorageStream& rStrm, BOOL bDirect )
     }
 
     if( pStream->IsWritable() )
-        nMode = STREAM_READ | STREAM_WRITE;
+        m_nMode = STREAM_READ | STREAM_WRITE;
 
     pIo->SetStrm( &rStrm );
 
@@ -463,7 +462,7 @@ Storage::Storage( UCBStorageStream& rStrm, BOOL bDirect )
     if( pEntry )
     {
         pEntry->bDirect = bDirect;
-        pEntry->nMode = nMode;
+        pEntry->nMode = m_nMode;
     }
 
     pIo->MoveError( *this );
@@ -508,13 +507,13 @@ void Storage::Init( BOOL bCreate )
 // Internal ctor
 
 Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
-       : OLEStorageBase( p, q, nMode ), bIsRoot( FALSE )
+       : OLEStorageBase( p, q, m_nMode ), bIsRoot( FALSE )
 {
     if( q )
         q->aEntry.GetName( aName );
     else
         m &= ~STREAM_READWRITE;
-    nMode   = m;
+    m_nMode   = m;
     if( q && q->nRefCnt == 1 )
         q->nMode = m;
 }
@@ -522,12 +521,12 @@ Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
 Storage::~Storage()
 {
     // Invalidate all open substorages
-    if( bAutoCommit )
+    if( m_bAutoCommit )
         Commit();
     if( pEntry )
     {
         // Do an auto-commit if the entry is open in direct mode
-        if( pEntry->nRefCnt && pEntry->bDirect && (nMode & STREAM_WRITE) )
+        if( pEntry->nRefCnt && pEntry->bDirect && (m_nMode & STREAM_WRITE) )
             Commit();
         if( pEntry->nRefCnt == 1 )
             pEntry->Invalidate();
@@ -638,13 +637,18 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, BOOL bDire
     }
     Storage* pStg = new Storage( pIo, p, m );
     pIo->MoveError( *pStg );
-    if( m & STREAM_WRITE ) pStg->bAutoCommit = TRUE;
+    if( m & STREAM_WRITE ) pStg->m_bAutoCommit = TRUE;
     return pStg;
 }
 
 // Open a stream
 
-BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, BOOL, const ByteString* pB )
+BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, BOOL,
+const ByteString*
+#ifdef DBG_UTIL
+pB
+#endif
+)
 {
     DBG_ASSERT(!pB, "Encryption not supported");
 
@@ -828,9 +832,9 @@ BOOL Storage::CopyTo( BaseStorage* pDest ) const
 
 // Move one element
 
-BOOL Storage::MoveTo( const String& rElem, BaseStorage* pDest, const String& rNew )
+BOOL Storage::MoveTo( const String& rElem, BaseStorage* pODest, const String& rNew )
 {
-    if( !Validate() || !pDest || !pDest->Validate( TRUE ) || Equals( *pDest ) )
+    if( !Validate() || !pODest || !pODest->Validate( TRUE ) || Equals( *pODest ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
         return FALSE;
@@ -841,10 +845,10 @@ BOOL Storage::MoveTo( const String& rElem, BaseStorage* pDest, const String& rNe
     {
         // Simplest case: both storages share the same file
         BOOL bRes;
-        Storage *pOther = PTR_CAST( Storage, pDest );
+        Storage *pOther = PTR_CAST( Storage, pODest );
         if( pOther && pIo == pOther->pIo && rElem == rNew )
         {
-            Storage *p = (Storage*) pDest;
+            Storage *p = (Storage*) pODest;
             Storage *pDest = p;
             // both storages are conventional storages, use implementation dependent code
             if( !pElem->IsContained( pDest->pEntry ) )
@@ -867,7 +871,7 @@ BOOL Storage::MoveTo( const String& rElem, BaseStorage* pDest, const String& rNe
         }
         else
         {
-            bRes = CopyTo( rElem, pDest, rNew );
+            bRes = CopyTo( rElem, pODest, rNew );
             if( bRes )
                 bRes = Remove( rElem );
         }
@@ -917,7 +921,7 @@ BOOL Storage::Commit()
     BOOL bRes = TRUE;
     if( !Validate() )
         return FALSE;
-    if( !( nMode & STREAM_WRITE ) )
+    if( !( m_nMode & STREAM_WRITE ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
         return FALSE;
