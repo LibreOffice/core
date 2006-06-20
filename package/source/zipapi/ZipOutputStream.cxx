@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:21:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 #ifndef _ZIP_OUTPUT_STREAM_HXX
 #include <ZipOutputStream.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
@@ -46,9 +43,6 @@
 #endif
 #ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
-#endif
-#ifndef _IMPL_VALID_CHARACTERS_HXX_
-#include <ImplValidCharacters.hxx>
 #endif
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
@@ -62,7 +56,9 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-
+#if OSL_DEBUG_LEVEL > 0
+#include <ImplValidCharacters.hxx>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::io;
@@ -75,13 +71,15 @@ using namespace com::sun::star::packages::zip::ZipConstants;
  */
 ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream )
 : xStream(xOStream)
-, aChucker(xOStream)
-, nMethod(DEFLATED)
-, pCurrentEntry(NULL)
-, bFinished(sal_False)
-, bEncryptCurrentEntry(sal_False)
 , aBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
+, aChucker(xOStream)
+, pCurrentEntry(NULL)
+, nMethod(DEFLATED)
+, bFinished(sal_False)
+, bEncryptCurrentEntry(sal_False)
+
+
 {
 }
 
@@ -170,7 +168,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 {
                     if (pEntry->nSize != aDeflater.getTotalIn())
                     {
-                        VOS_DEBUG_ONLY("Invalid entry size");
+                        OSL_ENSURE(false,"Invalid entry size");
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
@@ -181,7 +179,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     }
                     if (pEntry->nCrc != aCRC.getValue())
                     {
-                        VOS_DEBUG_ONLY("Invalid entry CRC-32");
+                        OSL_ENSURE(false,"Invalid entry CRC-32");
                     }
                 }
                 else
@@ -198,10 +196,10 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 break;
             case STORED:
                 if (!((pEntry->nFlag & 8) == 0))
-                    VOS_ENSURE ( 0, "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
+                    OSL_ENSURE ( false, "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
                 break;
             default:
-                VOS_DEBUG_ONLY("Invalid compression method");
+                OSL_ENSURE(false,"Invalid compression method");
                 break;
         }
 
@@ -246,7 +244,7 @@ void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_I
     }
 }
 
-void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewOffset*/, sal_Int32 nNewLength )
     throw(IOException, RuntimeException)
 {
     Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
@@ -271,7 +269,7 @@ void SAL_CALL ZipOutputStream::finish(  )
         closeEntry();
 
     if (aZipList.size() < 1)
-        VOS_DEBUG_ONLY("Zip file must have at least one entry!\n");
+        OSL_ENSURE(false,"Zip file must have at least one entry!\n");
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.getPosition());
     for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
@@ -299,7 +297,7 @@ void ZipOutputStream::doDeflate()
             {
                 sal_Int16 nEat = static_cast < sal_Int16 > ( nDiff > nLength ? nLength : nDiff );
                 aDigestResult = rtl_digest_updateSHA1 ( aDigest, pTmpBuffer, nEat );
-                mnDigested += nEat;
+                mnDigested = mnDigested + nEat;
             }
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
 
@@ -367,7 +365,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     Sequence < sal_Int8 > aSequence (nNameLength);
     sal_Int8 *pArray = aSequence.getArray();
 
-    VOS_ENSURE ( Impl_IsValidChar ( pChar, nNameLength, sal_True ), "Non US ASCII character in zipentry name!");
+    OSL_ENSURE ( Impl_IsValidChar ( pChar, nNameLength, sal_True ), "Non US ASCII character in zipentry name!");
     for ( sal_Int16 i = 0; i < nNameLength; i++)
         pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
 
@@ -423,7 +421,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     aChucker << static_cast < sal_Int16 > (0);
 
     const sal_Unicode *pChar = rEntry.sName.getStr();
-    VOS_ENSURE ( Impl_IsValidChar ( pChar, nNameLength, sal_True ), "Non US ASCII character in zipentry name!");
+    OSL_ENSURE ( Impl_IsValidChar ( pChar, nNameLength, sal_True ), "Non US ASCII character in zipentry name!");
     for ( sal_Int16 i = 0; i < nNameLength; i++)
         pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
     aChucker.writeBytes( aSequence, nNameLength, pArray );
