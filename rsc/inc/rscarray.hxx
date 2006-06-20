@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscarray.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:29:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ class RscEnum;
 class RscInstNode : public IdNode
 {
     sal_uInt32  nTypeId;
+protected:
+    using NameNode::Search;
 public:
     RSCINST aInst;
     RscInstNode( sal_uInt32 nId );
