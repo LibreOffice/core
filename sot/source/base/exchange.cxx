@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:10:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ static List& InitFormats_Impl()
 {
     SotData_Impl * pSotData = SOTDATA();
     if( !pSotData->pDataFlavorList )
-        List* pL = pSotData->pDataFlavorList = new List();
+        pSotData->pDataFlavorList = new List();
     return *pSotData->pDataFlavorList;
 }
 
