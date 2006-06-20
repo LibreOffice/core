@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:29:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
         }
     }
 
+    (void)_bMustExist;
     DBG_ASSERT(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
     return aReturn;
 }
@@ -236,7 +237,7 @@ void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTabl
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, pButton )
+IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 {
     // let all tables write their INF file
 
@@ -251,7 +252,7 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, pButton )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, pButton )
+IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 {
     String aSelection = aLB_FreeIndexes.GetSelectEntry();
     String aTableName = aCB_Tables.GetText();
@@ -263,7 +264,7 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, pButton )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, pButton )
+IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 {
     String aSelection = aLB_TableIndexes.GetSelectEntry();
     String aTableName = aCB_Tables.GetText();
@@ -275,7 +276,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, pButton )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, pButton )
+IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_FreeIndexes.GetEntryCount();
     String aTableName = aCB_Tables.GetText();
@@ -289,7 +290,7 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, pButton )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, pButton )
+IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_TableIndexes.GetEntryCount();
     String aTableName = aCB_Tables.GetText();
@@ -303,7 +304,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, pButton )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, NOTINTERESTEDIN )
+IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, /*NOTINTERESTEDIN*/ )
 {
     checkButtons();
     return 0;
@@ -390,10 +391,9 @@ void ODbaseIndexDialog::Init()
     String aExt;
     const ::rtl::OUString *pBegin = aFolderContent.getConstArray();
     const ::rtl::OUString *pEnd   = pBegin + aFolderContent.getLength();
+    aURL.SetSmartProtocol(INET_PROT_FILE);
     for(;pBegin != pEnd;++pBegin)
     {
-        INetURLObject aURL;
-        aURL.SetSmartProtocol(INET_PROT_FILE);
         String aName;
         ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
         aURL.SetSmartURL(aName);
@@ -574,9 +574,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         }
         catch (const Exception& e )
         {
-            e;  // make compiler happy
+            (void)e;  // make compiler happy
             // simply silent this. The strange algorithm here does a lot of things even if no files at all were
-            // created or access, so it's possible that the file we're trying to delete does not even exist,
+            // created or accessed, so it's possible that the file we're trying to delete does not even exist,
             // and this is a valid condition.
             // 2003-05-15 - #109677# - fs@openoffice.org
         }
