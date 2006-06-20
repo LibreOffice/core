@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:35:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,13 @@ namespace dbaui
     class OLinkedDocumentsAccess
     {
     protected:
-        Window*     m_pDialogParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                     m_xDocumentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     m_xConnection;
+        Window*     m_pDialogParent;
         String      m_sCurrentlyEditing;
         ::rtl::OUString
                     m_sDataSourceName;
