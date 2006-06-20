@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml_impctx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:11:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,12 +129,12 @@ class DocumentHandlerImpl :
     OUString m_sXMLNS_PREFIX_UNKNOWN;
     OUString m_sXMLNS;
 
-    OUString m_aLastURI_lookup;
     sal_Int32 m_nLastURI_lookup;
+    OUString m_aLastURI_lookup;
 
     t_OUString2PrefixMap m_prefixes;
-    OUString m_aLastPrefix_lookup;
     sal_Int32 m_nLastPrefix_lookup;
+    OUString m_aLastPrefix_lookup;
 
     t_ElementVector m_elements;
     sal_Int32 m_nSkipElements;
@@ -706,6 +706,7 @@ void DocumentHandlerImpl::endElement(
             OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### received endElement() for \"%s\".", aQName.getStr() );
 #endif
+        static_cast<void>(rQElementName);
         return;
     }
 
@@ -821,6 +822,7 @@ OUString ExtendedAttributes::getQNameByIndex( sal_Int32 nIndex )
 OUString ExtendedAttributes::getTypeByIndex( sal_Int32 nIndex )
     throw (RuntimeException)
 {
+    static_cast<void>(nIndex);
     OSL_ASSERT( nIndex < m_nAttributes );
     return OUString(); // unsupported
 }
