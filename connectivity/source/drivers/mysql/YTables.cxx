@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:32:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,14 +187,8 @@ void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
-    sal_Bool bIsNew = sal_False;
-    if(xTunnel.is())
-    {
-        connectivity::sdbcx::ODescriptor* pTable = (connectivity::sdbcx::ODescriptor*)xTunnel->getSomething(connectivity::sdbcx::ODescriptor::getUnoTunnelImplementationId());
-        if(pTable)
-            bIsNew = pTable->isNew();
-    }
+    Reference< XInterface > xObject( getObject( _nPos ) );
+    sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
         Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
@@ -205,7 +199,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
 
-        Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
+        Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
         if(bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW"))) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
