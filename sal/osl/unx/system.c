@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:47:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -600,6 +600,9 @@ int macxp_resolveAlias(char *path, int buflen)
    thread subprocess and not of the main process. So we save the main
    pid at startup
 */
+
+// Directly from libc.so.6, obviously missing from some unistd.h:
+extern __pid_t __getpid(void);
 
 static pid_t pid = -1;
 
