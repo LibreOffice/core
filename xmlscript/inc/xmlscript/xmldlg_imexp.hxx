@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:09:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,6 @@ void SAL_CALL importDialogModel(
     ::com::sun::star::uno::XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
-};
+}
 
 #endif
