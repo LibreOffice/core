@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YColumns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:31:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,12 +77,9 @@ void OMySQLColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OMySQLColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OMySQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL OMySQLColumn::getInfoHelper()
