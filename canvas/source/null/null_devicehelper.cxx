@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_devicehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:49:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ namespace nullcanvas
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&              rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&              /*rDevice*/,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         // disposed?
@@ -100,7 +100,7 @@ namespace nullcanvas
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&                      rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&                      /*rDevice*/,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         // disposed?
@@ -113,7 +113,7 @@ namespace nullcanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      size )
     {
         // disposed?
@@ -128,14 +128,14 @@ namespace nullcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      size )
     {
         // disposed?
@@ -150,8 +150,8 @@ namespace nullcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
@@ -162,13 +162,13 @@ namespace nullcanvas
         return false;
     }
 
-    sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool bEnter )
+    sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool /*bEnter*/ )
     {
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
 
-    ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 nBuffers )
+    ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 /*nBuffers*/ )
     {
         // TODO(F3): implement XBufferStrategy interface. For now, we
         // _always_ will have exactly one backbuffer
@@ -206,7 +206,7 @@ namespace nullcanvas
         return uno::Any();
     }
 
-    void DeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
+    void DeviceHelper::notifySizeUpdate( const awt::Rectangle& /*rBounds*/ )
     {
         // TODO
     }
