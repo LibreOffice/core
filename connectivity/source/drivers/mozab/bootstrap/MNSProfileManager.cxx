@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfileManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:26:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,46 +35,6 @@
 
 #include "MNSProfileManager.hxx"
 #include "MNSProfile.hxx"
-
-#include "pratom.h"
-#include "prmem.h"
-#include "plstr.h"
-#include "prenv.h"
-
-#include "nsIEnumerator.h"
-#include "prprf.h"
-#include "nsCOMPtr.h"
-#include "nsIComponentManager.h"
-#include "nsEscape.h"
-#include "nsDirectoryServiceDefs.h"
-#include "nsAppDirectoryServiceDefs.h"
-#include "nsILocalFile.h"
-#include "nsReadableUtils.h"
-
-
-#if defined(XP_MAC) || defined(XP_MACOSX)
-#include <Processes.h>
-#include <CFBundle.h>
-#include "nsILocalFileMac.h"
-#endif
-
-
-#ifdef XP_UNIX
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <signal.h>
-#include "prnetdb.h"
-#include "prsystem.h"
-#endif
-
-#ifdef VMS
-#include <rmsdef.h>
-#endif
-
-#include "nsIPlatformCharset.h"
-#include <MNSInit.hxx>
-
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024
