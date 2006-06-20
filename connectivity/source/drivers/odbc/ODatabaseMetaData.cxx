@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:14:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #endif
 #include "stdio.h"
 #include "TPrivilegesResultSet.hxx"
-
+#include <connectivity/dbexception.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -1652,7 +1652,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor;
+    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -1663,6 +1663,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
+            break;
+        default:
+            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1683,7 +1686,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor;
+    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -1694,6 +1697,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) t
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
+            break;
+        default:
+            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1704,7 +1710,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) t
 sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor;
+    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -1715,6 +1721,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) t
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
+            break;
+        default:
+            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1725,7 +1734,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) t
 sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor;
+    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -1736,6 +1745,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) t
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
+            break;
+        default:
+            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1758,17 +1770,17 @@ sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType 
     return ownInsertsAreVisible(setType);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -1778,7 +1790,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
     return sal_False;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
