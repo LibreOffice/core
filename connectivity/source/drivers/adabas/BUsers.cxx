@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:24:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     {
         // first we have to check if this user is live relevaant for the database
