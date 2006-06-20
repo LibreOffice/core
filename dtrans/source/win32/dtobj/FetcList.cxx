@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:24:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,6 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
 {
     Sequence< DataFlavor > aFlavorList = aXTransferable->getTransferDataFlavors( );
     sal_Int32  nFlavors                = aFlavorList.getLength( );
-    sal_Bool   bSuccess                = sal_False;
     sal_Bool   bUnicodeRegistered      = sal_False;
     DataFlavor aFlavor;
 
@@ -445,7 +444,7 @@ sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
 {
     m_TxtLocale = 0;
     EnumSystemLocalesA( CFormatRegistrar::EnumLocalesProc, LCID_INSTALLED );
-    return ( IsValidLocale( m_TxtLocale, LCID_INSTALLED ) );
+    return ( IsValidLocale( m_TxtLocale, LCID_INSTALLED ) ) ? sal_True : sal_False;
 }
 
 //------------------------------------------------------------------------
