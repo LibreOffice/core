@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:33:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:13:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline SocketAddr::SocketAddr(oslSocketAddr Addr, __osl_socket_NoCopy nocopy )
+    inline SocketAddr::SocketAddr(oslSocketAddr Addr, __osl_socket_NoCopy )
         : m_handle( Addr )
     {
     }
@@ -123,7 +123,8 @@ namespace osl
     //______________________________________________________________________________
     inline sal_Bool SAL_CALL SocketAddr::setAddr( const ::rtl::ByteSequence & address )
     {
-        return osl_setAddrOfSocketAddr( m_handle, address.getHandle() );
+        return osl_setAddrOfSocketAddr( m_handle, address.getHandle() )
+            == osl_Socket_Ok;
     }
 
     inline ::rtl::ByteSequence SAL_CALL SocketAddr::getAddr( oslSocketResult *pResult ) const
@@ -152,7 +153,7 @@ namespace osl
         return *this;
     }
 
-    inline SocketAddr & SAL_CALL SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy )
+    inline SocketAddr & SAL_CALL SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy )
     {
         if( m_handle )
             osl_destroySocketAddr( m_handle );
@@ -210,7 +211,7 @@ namespace osl
     {}
 
     //______________________________________________________________________________
-    inline Socket::Socket( oslSocket socketHandle, __sal_NoAcquire noacquire )
+    inline Socket::Socket( oslSocket socketHandle, __sal_NoAcquire )
         : m_handle( socketHandle )
     {}
 
