@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLineData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:18:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 
 using namespace dbaui;
-DBG_NAME(OConnectionLineData);
+DBG_NAME(OConnectionLineData)
 //==================================================================
 //class OConnectionLineData
 //==================================================================
@@ -61,6 +61,7 @@ OConnectionLineData::OConnectionLineData( const ::rtl::OUString& rSourceFieldNam
 
 //------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineData )
+    : ::vos::OReference()
 {
     DBG_CTOR(OConnectionLineData,NULL);
     *this = rConnLineData;
