@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:31:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,9 +156,9 @@ void OOdbcLibWrapper::unload()
 }
 
 //-------------------------------------------------------------------------
-void* OOdbcLibWrapper::loadSymbol(const sal_Char* _pFunctionName)
+oslGenericFunction OOdbcLibWrapper::loadSymbol(const sal_Char* _pFunctionName)
 {
-    return osl_getSymbol(m_pOdbcLib, ::rtl::OUString::createFromAscii(_pFunctionName).pData);
+    return osl_getFunctionSymbol(m_pOdbcLib, ::rtl::OUString::createFromAscii(_pFunctionName).pData);
 }
 
 //-------------------------------------------------------------------------
