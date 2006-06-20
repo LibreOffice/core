@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:15:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,10 +100,10 @@ using namespace com::sun::star::packages::zip::ZipConstants;
  */
 ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise )
     throw(IOException, ZipException, RuntimeException)
-: xStream(xInput)
-, xSeek(xInput, UNO_QUERY)
-, aGrabber(xInput)
+: aGrabber(xInput)
 , aInflater (sal_True)
+, xStream(xInput)
+, xSeek(xInput, UNO_QUERY)
 , xFactory ( xNewFactory )
 , bRecoveryMode( sal_False )
 {
@@ -121,10 +121,10 @@ ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiSe
 
 ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise, sal_Bool bForceRecovery, Reference < XProgressHandler > xProgress )
     throw(IOException, ZipException, RuntimeException)
-: xStream(xInput)
-, xSeek(xInput, UNO_QUERY)
-, aGrabber(xInput)
+: aGrabber(xInput)
 , aInflater (sal_True)
+, xStream(xInput)
+, xSeek(xInput, UNO_QUERY)
 , xFactory ( xNewFactory )
 , xProgressHandler( xProgress )
 , bRecoveryMode( bForceRecovery )
@@ -204,32 +204,32 @@ void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData,
 
     // Then the iteration Count
     sal_Int32 nIterationCount = rData->nIterationCount;
-    *(pHeader++) = ( nIterationCount >> 0 ) & 0xFF;
-    *(pHeader++) = ( nIterationCount >> 8 ) & 0xFF;
-    *(pHeader++) = ( nIterationCount >> 16 ) & 0xFF;
-    *(pHeader++) = ( nIterationCount >> 24 ) & 0xFF;
+    *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 8 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 16 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 24 ) & 0xFF);
 
     // Then the size
-    *(pHeader++) = ( nSize >> 0 ) & 0xFF;
-    *(pHeader++) = ( nSize >> 8 ) & 0xFF;
-    *(pHeader++) = ( nSize >> 16 ) & 0xFF;
-    *(pHeader++) = ( nSize >> 24 ) & 0xFF;
+    *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 8 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 16 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 24 ) & 0xFF);
 
     // Then the salt length
-    *(pHeader++) = ( nSaltLength >> 0 ) & 0xFF;
-    *(pHeader++) = ( nSaltLength >> 8 ) & 0xFF;
+    *(pHeader++) = static_cast< sal_Int8 >(( nSaltLength >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nSaltLength >> 8 ) & 0xFF);
 
     // Then the IV length
-    *(pHeader++) = ( nIVLength >> 0 ) & 0xFF;
-    *(pHeader++) = ( nIVLength >> 8 ) & 0xFF;
+    *(pHeader++) = static_cast< sal_Int8 >(( nIVLength >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nIVLength >> 8 ) & 0xFF);
 
     // Then the digest length
-    *(pHeader++) = ( nDigestLength >> 0 ) & 0xFF;
-    *(pHeader++) = ( nDigestLength >> 8 ) & 0xFF;
+    *(pHeader++) = static_cast< sal_Int8 >(( nDigestLength >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nDigestLength >> 8 ) & 0xFF);
 
     // Then the mediatype length
-    *(pHeader++) = ( nMediaTypeLength >> 0 ) & 0xFF;
-    *(pHeader++) = ( nMediaTypeLength >> 8 ) & 0xFF;
+    *(pHeader++) = static_cast< sal_Int8 >(( nMediaTypeLength >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nMediaTypeLength >> 8 ) & 0xFF);
 
     // Then the salt content
     memcpy ( pHeader, rData->aSalt.getConstArray(), nSaltLength );
@@ -334,7 +334,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
     OSL_ENSURE( rData->aDigest.getLength(), "Can't detect password correctness without digest!\n" );
     if ( rData->aDigest.getLength() )
     {
-        sal_Int32 nSize = xSeek->getLength();
+            sal_Int32 nSize = sal::static_int_cast< sal_Int32 >( xSeek->getLength() );
         nSize = nSize > n_ConstDigestLength ? n_ConstDigestLength : nSize;
 
         // skip header
@@ -374,7 +374,9 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
                                   nSize,
                                   reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
                                   nSize);
-    OSL_ASSERT (aResult == rtl_Cipher_E_None);
+    if(aResult != rtl_Cipher_E_None ) {
+        OSL_ASSERT ( aResult == rtl_Cipher_E_None);
+    }
 
     aDigestResult = rtl_digest_updateSHA1 ( aDigest,
                                             static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nSize );
@@ -818,7 +820,6 @@ sal_Int32 ZipFile::recover()
     sal_Int32 nLength;
     Sequence < sal_Int8 > aBuffer;
     Sequence < sal_Int32 > aHeaderOffsets;
-    sal_Int32 nNumOfHeaders = 0;
 
     try
     {
@@ -886,7 +887,7 @@ sal_Int32 ZipFile::recover()
                                     aEntry.sName = OUString ( (sal_Char *) aFileName.getArray(),
                                                                 aFileName.getLength(),
                                                                 RTL_TEXTENCODING_ASCII_US);
-                                    aEntry.nNameLen = aFileName.getLength();
+                                    aEntry.nNameLen = static_cast< sal_Int16 >(aFileName.getLength());
                                 }
 
                                 aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nNameLen + aEntry.nExtraLen;
@@ -920,7 +921,6 @@ sal_Int32 ZipFile::recover()
                         if( (*aIter).second.nMethod == DEFLATED && (*aIter).second.nFlag & 8 )
                         {
                             sal_Int32 nStreamOffset = nGenPos + nPos - nCompressedSize;
-                            sal_Int32 nTmp1 = (*aIter).second.nOffset;
                             if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
                             {
                                 sal_Int32 nRealSize = 0, nRealCRC = 0;
@@ -969,8 +969,6 @@ sal_Int32 ZipFile::recover()
     {
         throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
     }
-    throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
-
 }
 
 sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
@@ -1006,22 +1004,22 @@ void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_I
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
     sal_Int32 nRealSize = 0;
-    Inflater aInflater( sal_True );
+    Inflater aInflaterLocal( sal_True );
     sal_Int32 nBlockSize = ::std::min( nCompressedSize, static_cast< sal_Int32 >( 32000 ) );
 
     aGrabber.seek( nOffset );
     for ( int ind = 0;
-          !aInflater.finished() && aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nCompressedSize;
+          !aInflaterLocal.finished() && aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nCompressedSize;
           ind++ )
     {
         Sequence < sal_Int8 > aData( nBlockSize );
         sal_Int32 nLastInflated = 0;
         sal_Int32 nInBlock = 0;
 
-        aInflater.setInput( aBuffer );
+        aInflaterLocal.setInput( aBuffer );
         do
         {
-            nLastInflated = aInflater.doInflateSegment( aData, 0, nBlockSize );
+            nLastInflated = aInflaterLocal.doInflateSegment( aData, 0, nBlockSize );
             aCRC.updateSegment( aData, 0, nLastInflated );
             nInBlock += nLastInflated;
         } while( !aInflater.finished() && nLastInflated );
@@ -1029,12 +1027,11 @@ void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_I
         nRealSize += nInBlock;
     }
 
-    if( aInflater.finished() )
+    if( aInflaterLocal.finished() )
     {
         *nSize = nRealSize;
         *nCRC = aCRC.getValue();
     }
     else
         *nSize = *nCRC = 0;
-
 }
