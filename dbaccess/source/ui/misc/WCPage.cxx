@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ using namespace ::com::sun::star::sdbcx;
 //========================================================================
 // Klasse OCopyTable
 //========================================================================
-DBG_NAME(OCopyTable);
+DBG_NAME(OCopyTable)
 //------------------------------------------------------------------------
 OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, OCopyTableWizard::Wizard_Create_Style nLastAction )
     : OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) ),
@@ -215,7 +215,7 @@ OCopyTable::~OCopyTable()
     DBG_DTOR(OCopyTable,NULL);
 }
 //------------------------------------------------------------------------
-IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, pButton )
+IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
@@ -247,7 +247,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
     return 0;
 }
 //------------------------------------------------------------------------
-IMPL_LINK( OCopyTable, KeyClickHdl, Button*, pButton )
+IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_edKeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
@@ -325,21 +325,10 @@ sal_Bool OCopyTable::LeavePage()
     }
     else
     { // table exist and is not new or doesn't exist and so on
-        switch(m_pParent->getCreateStyle())
+        if ( OCopyTableWizard::WIZARD_APPEND_DATA == m_pParent->getCreateStyle() )
         {
-            case OCopyTableWizard::WIZARD_APPEND_DATA:
-            {
-                if(!checkAppendData())
-                    return sal_False;
-                break;
-            }
-            case OCopyTableWizard::WIZARD_DEF_DATA:
-            case OCopyTableWizard::WIZARD_DEF:
-            {
-                //////////////////////////////////////////////////////////////////////////
-                // Immer neue Tabelle erzeugen
-
-            }
+            if( !checkAppendData() )
+                return sal_False;
         }
     }
     m_pParent->m_sName = m_edTableName.GetText();
