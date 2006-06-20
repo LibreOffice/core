@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:39:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _SFXINTITEM_HXX
@@ -661,7 +664,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
 }
 
 //---------------------------------------------------------------------------------------
-IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, NOTINTERESTEDIN )
+IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
 {
     SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
     if ( pGrid )    // if this fails, we were disposing before arriving here
@@ -787,6 +790,9 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
                 pGrid->SetColWidth(nColId);
             }
             break;
+
+            case dtUnknown:
+                break;
         }
 
         // notify any status listeners that the dialog vanished
@@ -847,7 +853,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
 sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
 
     return FmXGridPeer::getSomething(rId);
 }
@@ -1042,12 +1048,12 @@ DBG_NAME(SbaGridControl );
 SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
                                Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
-    ,m_nLastColId(-1)
-    ,m_nLastRowId(-1)
-    ,m_nCurrentActionColId(-1)
     ,m_pMasterListener(NULL)
-    ,m_bActivatingForDrop(sal_False)
     ,m_nAsyncDropEvent(0)
+    ,m_nLastColId((USHORT)-1)
+    ,m_nLastRowId(-1)
+    ,m_nCurrentActionColId((USHORT)-1)
+    ,m_bActivatingForDrop(sal_False)
 {
     DBG_CTOR(SbaGridControl ,NULL);
 }
@@ -1069,9 +1075,8 @@ BrowserHeader* SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 //---------------------------------------------------------------------------------------
 CellController* SbaGridControl::GetController(long nRow, sal_uInt16 nCol)
 {
-    CellControllerRef aController;
-    if (m_bActivatingForDrop)
-        return &aController;
+    if ( m_bActivatingForDrop )
+        return NULL;
 
     return FmGridControl::GetController(nRow, nCol);
 }
@@ -1101,10 +1106,8 @@ SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), sal_True,getServiceManager());
 
-    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-    SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-
-    if (!pSupplierImpl)
+    SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+    if ( !pSupplierImpl )
         return NULL;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
@@ -1624,7 +1627,6 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
                     return true;
-                    break;
             }
             return false;
         }
@@ -1685,7 +1687,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         }
         catch (const Exception& e )
         {
-            e; // make compiler happy
+            (void)e; // make compiler happy
             // assume RO
             break;
         }
@@ -1710,8 +1712,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         }
         catch( const Exception& e )
         {
-            e; // make compiler happy
-            DBG_ERROR( "SbaGridControl::AcceptDrop: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
     } while (sal_False);
@@ -1836,7 +1837,7 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     return xReturn;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
+IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
 {
     m_nAsyncDropEvent = 0;
 
@@ -1883,7 +1884,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
     return 0L;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SbaGridControl::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
+::rtl::OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
 {
     ::rtl::OUString sRet;
     if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
@@ -1892,7 +1893,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
         sRet = String(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
     }
     else
-        sRet = FmGridControl::GetAccessibleDescription( eObjType,_nPosition);
+        sRet = FmGridControl::GetAccessibleObjectDescription( eObjType,_nPosition);
     return sRet;
 }
 // -----------------------------------------------------------------------------
