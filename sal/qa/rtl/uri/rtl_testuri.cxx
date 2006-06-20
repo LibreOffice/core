@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_testuri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:53:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 
 #include "cppunit/simpleheader.hxx"
 
+#include <cstddef>
 #include <stdio.h>
 
 namespace {
@@ -361,7 +362,8 @@ void Test::test_Uri() {
             { "http!://a/b/c/d;p?q", "g", 0 },
             { "http:b/c/d;p?q", "g:h", "g:h" },
             { "http:b/c/d;p?q", "g", 0 } };
-    for (int i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i) {
+    for (std::size_t i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i)
+    {
         rtl::OUString aAbs;
         bool bMalformed = false;
         try {
