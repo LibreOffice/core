@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 10:43:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:12:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #include <external/zlib/zlib.h>
 #endif
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
@@ -61,14 +58,14 @@ Deflater::~Deflater(void)
 {
     end();
 }
-void Deflater::init (sal_Int32 nLevel, sal_Int32 nStrategy, sal_Bool bNowrap)
+void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, sal_Bool bNowrap)
 {
     pStream = new z_stream;
     /* Memset it to 0...sets zalloc/zfree/opaque to NULL */
     memset (pStream, 0, sizeof(*pStream));
 
-    switch (deflateInit2(pStream, nLevel, Z_DEFLATED, bNowrap? -MAX_WBITS : MAX_WBITS,
-                DEF_MEM_LEVEL, nStrategy))
+    switch (deflateInit2(pStream, nLevelArg, Z_DEFLATED, bNowrap? -MAX_WBITS : MAX_WBITS,
+                DEF_MEM_LEVEL, nStrategyArg))
     {
         case Z_OK:
             break;
@@ -82,12 +79,13 @@ void Deflater::init (sal_Int32 nLevel, sal_Int32 nStrategy, sal_Bool bNowrap)
              break;
     }
 }
+
 Deflater::Deflater()
-: nLevel(DEFAULT_COMPRESSION)
-, nStrategy(DEFAULT_STRATEGY)
-, bFinish(sal_False)
+: bFinish(sal_False)
 , bFinished(sal_False)
 , bSetParams(sal_False)
+, nLevel(DEFAULT_COMPRESSION)
+, nStrategy(DEFAULT_STRATEGY)
 , nOffset(0)
 , nLength(0)
 {
@@ -95,11 +93,11 @@ Deflater::Deflater()
 }
 
 Deflater::Deflater(sal_Int32 nSetLevel)
-: nLevel(nSetLevel)
-, nStrategy(DEFAULT_STRATEGY)
-, bFinish(sal_False)
+: bFinish(sal_False)
 , bFinished(sal_False)
 , bSetParams(sal_False)
+, nLevel(nSetLevel)
+, nStrategy(DEFAULT_STRATEGY)
 , nOffset(0)
 , nLength(0)
 {
@@ -107,11 +105,11 @@ Deflater::Deflater(sal_Int32 nSetLevel)
 }
 
 Deflater::Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap)
-: nLevel(nSetLevel)
-, nStrategy(DEFAULT_STRATEGY)
-, bFinish(sal_False)
+: bFinish(sal_False)
 , bFinished(sal_False)
 , bSetParams(sal_False)
+, nLevel(nSetLevel)
+, nStrategy(DEFAULT_STRATEGY)
 , nOffset(0)
 , nLength(0)
 {
@@ -142,10 +140,8 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
                 return nNewLength - pStream->avail_out;
             case Z_BUF_ERROR:
                 bSetParams = sal_False;
-                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
             default:
-                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
         }
     }
@@ -171,10 +167,8 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
                 return nNewLength - pStream->avail_out;
             case Z_BUF_ERROR:
                 bSetParams = sal_False;
-                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
             default:
-                VOS_DEBUG_ONLY( pStream->msg );
                 return 0;
         }
     }
@@ -182,8 +176,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
 
 void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
-    if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
-        VOS_DEBUG_ONLY("Invalid parameters to Deflater::setInputSegment!");
+    OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
 
     sInBuffer = rBuffer;
     nOffset = nNewOffset;
@@ -200,16 +193,15 @@ void SAL_CALL Deflater::setDictionarySegment( const uno::Sequence< sal_Int8 >& r
     if (pStream == NULL)
     {
         // do error handling
-        VOS_DEBUG_ONLY("No stream!");
     }
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
     {
         // do error handling
     }
 #ifdef SYSTEM_ZLIB
-    sal_Int32 nResult = deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
+    deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
 #else
-    sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
+    z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
 #endif
 }
 void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer )
@@ -217,13 +209,11 @@ void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer 
     if (pStream == NULL)
     {
         // do error handling
-        VOS_DEBUG_ONLY("No stream!");
-
     }
 #ifdef SYSTEM_ZLIB
-    sal_Int32 nResult = deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
+    deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
 #else
-    sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
+    z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
 #endif
 }
 void SAL_CALL Deflater::setStrategy( sal_Int32 nNewStrategy )
@@ -266,8 +256,7 @@ sal_Bool SAL_CALL Deflater::finished(  )
 }
 sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
-    if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
-        VOS_DEBUG_ONLY("Invalid Offset or Length passed to doDeflateSegment");
+    OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
 }
 sal_Int32 SAL_CALL Deflater::doDeflate( uno::Sequence< sal_Int8 >& rBuffer )
