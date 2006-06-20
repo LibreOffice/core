@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:46:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ using namespace ::rtl;
 #define YYERROR_VERBOSE 1
 
 extern int yylex(void);
-void yyerror(char *);
+void yyerror(char const *);
 
 void checkIdentifier(::rtl::OString* id)
 {
@@ -287,6 +287,15 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
     return false;
 }
 
+// Suppress any warnings from generated code:
+#if defined __GNUC__
+#pragma GCC system_header
+#elif defined __SUNPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4701 4706)
+#endif
 %}
 /*
  * Declare the type of values in the grammar
@@ -306,6 +315,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 	sal_Char* 			strval;	/* sal_Char* value */
 	sal_Bool				bval;		/* sal_Boolean* value */
 	sal_Int64				ival;		/* sal_Int64 value */
+    sal_uInt64 uval; /* sal_uInt64 value */
 	sal_uInt32			ulval;		/* sal_uInt32 value */
 	double					dval;		/* double value */
 	float					fval;		/* float value */
@@ -386,6 +396,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 %token <strval> 	IDL_SCOPESEPARATOR
 
 %token <ival>		IDL_INTEGER_LITERAL
+%token <uval> IDL_INTEGER_ULITERAL
 %token <dval>		IDL_FLOATING_PT_LITERAL
 
 /*
@@ -1016,7 +1027,6 @@ operation :
 		AstInterface * pScope = static_cast< AstInterface * >(
             idlc()->scopes()->top());
 		AstOperation* 	pOp = NULL;
-		AstType*		pType = NULL;
 
 		/*
 		 * Create a node representing an operation on an interface
@@ -1141,7 +1151,6 @@ parameter :
         AstOperation * pScope = static_cast< AstOperation * >(
             idlc()->scopes()->top());
 		AstParameter* 	pParam = NULL;
-		AstType*		pType = NULL;
 
 		/*
 		 * Create a node representing an argument to an operation
@@ -1347,7 +1356,6 @@ const_dcl :
 
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstConstant*	pConstant = NULL;
-		AstDeclaration*	pExists = NULL;
 
 		if ( $9 && pScope )
 		{
@@ -1517,6 +1525,10 @@ literal :
 	{
 		$$ = new AstExpression($1);
 	}
+    | IDL_INTEGER_ULITERAL
+    {
+        $$ = new AstExpression($1);
+    }
 	| IDL_FLOATING_PT_LITERAL
 	{
 		$$ = new AstExpression($1);
@@ -1553,7 +1565,6 @@ const_type :
 	| scoped_name
 	{
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
-		AstBaseType*	pBaseType = NULL;
         AstDeclaration const * type = 0;
 		
 		/*
@@ -2855,7 +2866,6 @@ enum_type :
 
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstEnum*		pEnum = NULL;
-		AstDeclaration*	pDecl = NULL;
 
 		/*
 		 * Create a node representing an enum and add it to its
@@ -3005,7 +3015,6 @@ union_type :
 
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstUnion*		pUnion = NULL;
-		AstDeclaration* pDecl = NULL;
 
 		/*
 		 * Create a node representing a union. Add it to its enclosing
@@ -3287,7 +3296,7 @@ identifier:
 /*
  * Report an error situation discovered in a production
  */
-void yyerror(char *errmsg)
+void yyerror(char const *errmsg)
 {
 	idlc()->error()->syntaxError(idlc()->getParseState(), idlc()->getLineNumber(), errmsg);
 	idlc()->setParseState(PS_NoState);
