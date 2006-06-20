@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:21:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,10 +157,8 @@ Sequence< sal_Int8 > OTable::getUnoTunnelImplementationId()
 sal_Int64 OTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OTable_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OTable_TYPEDEF::getSomething(rId);
 }
 // -----------------------------------------------------------------------------
 
