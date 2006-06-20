@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:46:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,7 @@ using namespace ::comphelper;
 
 namespace
 {
-    void ensureToolbars( OQueryController* _pController, OQueryContainerWindow* _pWindow, sal_Bool _bDesign )
+    void ensureToolbars( OQueryController* _pController, sal_Bool _bDesign )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
         if ( xLayoutManager.is() )
@@ -338,7 +338,7 @@ namespace
         }
         else
         {
-            ensureToolbars( _pController, _pWindow, _rbDesign );
+            ensureToolbars( _pController, _rbDesign );
         }
     }
 }
@@ -374,16 +374,16 @@ Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMulti
 DBG_NAME(OQueryController);
 // -----------------------------------------------------------------------------
 OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
-        : OJoinController(_rM)
+    :OJoinController(_rM)
+    ,m_pSqlIterator(NULL)
+    ,m_nVisibleRows(0x400)
+    ,m_nSplitPos(-1)
     ,m_bDesign(sal_False)
     ,m_bDistinct(sal_False)
     ,m_bViewAlias(sal_False)
     ,m_bViewTable(sal_False)
     ,m_bViewFunction(sal_False)
     ,m_bEsacpeProcessing(sal_True)
-    ,m_pSqlIterator(NULL)
-    ,m_nSplitPos(-1)
-    ,m_nVisibleRows(0x400)
     ,m_bCreateView(sal_False)
     ,m_bIndependent( sal_False )
 {
@@ -888,9 +888,9 @@ void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
 }
 
 // -----------------------------------------------------------------------------
-void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& /*_xLayoutManager*/)
 {
-    ensureToolbars( this, getContainer(), m_bDesign );
+    ensureToolbars( this, m_bDesign );
 }
 
 // -----------------------------------------------------------------------------
@@ -1683,7 +1683,7 @@ void OQueryController::setStatement_fireEvent( const ::rtl::OUString& _rNewState
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( OQueryController, OnExecuteAddTable, void*, pNotInterestedIn )
+IMPL_LINK( OQueryController, OnExecuteAddTable, void*, /*pNotInterestedIn*/ )
 {
     Execute( ID_BROWSER_ADDTABLE,Sequence<PropertyValue>() );
     return 0L;
