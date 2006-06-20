@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:36:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ protected:
         @param  _pItem
             The database settings, can be <br>this</br>
     */
-    void registerProperties(ODataSettings_Base* _pItem);
+    void registerPropertiesFor(ODataSettings_Base* _pItem);
 };
 
 //........................................................................
