@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:14:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,15 +237,15 @@ public:
 
 class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 {
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >&, sal_Int32 )
             throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
         { return 0; }
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >&, sal_Int32 )
             throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
         { return 0; }
 
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    virtual void SAL_CALL skipBytes( sal_Int32 )
             throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
         {}
 
@@ -261,16 +261,16 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 //===========================================================================
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
-: pZipFile( NULL )
-, pRootFolder( NULL )
-, xFactory( xNewFactory )
-, bHasEncryptedEntries ( sal_False )
+: bHasEncryptedEntries ( sal_False )
 , bUseManifest ( sal_True )
+, bForceRecovery ( sal_False )
 , m_bMediaTypeFallbackUsed ( sal_False )
 , m_bPackageFormat( sal_True )
 , m_bAllowRemoveOnInsert( sal_True )
-, bForceRecovery ( sal_False )
 , eMode ( e_IMode_None )
+, xFactory( xNewFactory )
+, pRootFolder( NULL )
+, pZipFile( NULL )
 {
     xRootFolder = pRootFolder = new ZipPackageFolder( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
 }
@@ -417,25 +417,25 @@ void ZipPackage::getZipFileContents()
                                 }
                                 if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
                                 {
-                                    Any aAny = getByHierarchicalName( sPath );
-                                    Reference < XUnoTunnel > xTunnel;
-                                    aAny >>= xTunnel;
+                                    aAny = getByHierarchicalName( sPath );
+                                    Reference < XUnoTunnel > xUnoTunnel;
+                                    aAny >>= xUnoTunnel;
                                     sal_Int64 nTest=0;
-                                    if ((nTest = xTunnel->getSomething(ZipPackageFolder::static_getImplementationId())) != 0)
+                                    if ((nTest = xUnoTunnel->getSomething(ZipPackageFolder::static_getImplementationId())) != 0)
                                     {
                                         pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
                                         pFolder->SetMediaType ( sMediaType );
                                     }
                                     else
                                     {
-                                        pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::static_getImplementationId()));
+                                        pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething(ZipPackageStream::static_getImplementationId()));
                                         pStream->SetMediaType ( sMediaType );
 
                                         if (pSalt && pVector && pCount && pSize)
                                         {
                                             Sequence < sal_uInt8 > aSequence;
                                             sal_Int32 nCount, nSize;
-                                            pStream->SetToBeEncrypted ( sal_True );
+                                                                           pStream->SetToBeEncrypted ( sal_True );
 
                                             *pSalt >>= aSequence;
                                             pStream->setSalt ( aSequence );
@@ -1499,19 +1499,19 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     }
     throw UnknownPropertyException();
 }
-void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
