@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:39:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,12 +152,9 @@ void OHSQLTable::construct()
         registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OHSQLTable::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OHSQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OHSQLTable::getInfoHelper()
@@ -202,10 +199,8 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OTable_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OTable_TYPEDEF::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 // XAlterTable
@@ -319,8 +314,10 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
 void OHSQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
+
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
-    const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+    sSql += ::dbtools::quoteName( getMetaData()->getIdentifierQuoteString(), _rColName );
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
 
     OHSQLColumn* pColumn = new OHSQLColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
