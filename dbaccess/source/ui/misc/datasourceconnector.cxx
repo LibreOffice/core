@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:12:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,8 @@ namespace dbaui
     //=====================================================================
     //---------------------------------------------------------------------
     ODatasourceConnector::ODatasourceConnector(const Reference< XMultiServiceFactory >& _rxORB, Window* _pMessageParent)
-        :m_xORB(_rxORB)
-        ,m_pErrorMessageParent(_pMessageParent)
+        :m_pErrorMessageParent(_pMessageParent)
+        ,m_xORB(_rxORB)
     {
         implConstruct();
     }
@@ -114,8 +114,8 @@ namespace dbaui
     //---------------------------------------------------------------------
     ODatasourceConnector::ODatasourceConnector( const Reference< XMultiServiceFactory >& _rxORB, Window* _pMessageParent,
         const ::rtl::OUString& _rContextInformation, const ::rtl::OUString& _rContextDetails )
-        :m_xORB(_rxORB)
-        ,m_pErrorMessageParent(_pMessageParent)
+        :m_pErrorMessageParent(_pMessageParent)
+        ,m_xORB(_rxORB)
         ,m_sContextInformation( _rContextInformation )
         ,m_sContextDetails( _rContextDetails )
     {
