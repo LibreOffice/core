@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:30:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #endif
 
-#include <kabc/stdaddressbook.h>
+#include "kabc_stdaddressbook.hxx"
 
 using namespace connectivity::kab;
 using namespace com::sun::star::uno;
@@ -69,11 +69,11 @@ using namespace com::sun::star::sdbcx;
 IMPLEMENT_SERVICE_INFO(KabConnection, "com.sun.star.sdbc.drivers.KabConnection", "com.sun.star.sdbc.Connection")
 //-----------------------------------------------------------------------------
 KabConnection::KabConnection(KabDriver* _pDriver)
-         : OSubComponent<KabConnection, KabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-         OMetaConnection_BASE(m_aMutex),
+         : OMetaConnection_BASE(m_aMutex),
+         OSubComponent<KabConnection, KabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
+         m_xMetaData(NULL),
          m_pAddressBook(NULL),
-         m_pDriver(_pDriver),
-         m_xMetaData(NULL)
+         m_pDriver(_pDriver)
 {
     m_pDriver->acquire();
 }
@@ -92,7 +92,7 @@ void SAL_CALL KabConnection::release() throw()
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-void KabConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info) throw(SQLException)
+void KabConnection::construct(const ::rtl::OUString&, const Sequence< PropertyValue >&) throw(SQLException)
 {
     osl_incrementInterlockedCount( &m_refCount );
 
@@ -130,7 +130,7 @@ Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const 
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -147,7 +147,7 @@ Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const ::rtl
     return _sSql;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
+void SAL_CALL KabConnection::setAutoCommit( sal_Bool ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -205,7 +205,7 @@ Reference< XDatabaseMetaData > SAL_CALL KabConnection::getMetaData(  ) throw(SQL
     return xMetaData;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
+void SAL_CALL KabConnection::setReadOnly( sal_Bool ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL KabConnection::isReadOnly(  ) throw(SQLException, RuntimeExcep
     return sal_False;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL KabConnection::setCatalog( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -240,7 +240,7 @@ void SAL_CALL KabConnection::setCatalog( const ::rtl::OUString& catalog ) throw(
     return ::rtl::OUString();
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
+void SAL_CALL KabConnection::setTransactionIsolation( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -269,7 +269,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL KabConnection::ge
     return NULL;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+void SAL_CALL KabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& ) throw(SQLException, RuntimeException)
 {
     // the other way around
 }
