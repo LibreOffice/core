@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:00:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,8 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
 
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
-        const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions,
+        const lang::Locale& /*rLocale*/, sal_Int32 /*nMinBreakPos*/,
+        const LineBreakHyphenationOptions& /*hOptions*/,
         const LineBreakUserOptions& bOptions ) throw(RuntimeException)
 {
         LineBreakResults lbr;
