@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:04:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,15 +127,15 @@ ODBTableDecorator::ODBTableDecorator(
         ) throw(SQLException)
     :OTableDescriptor_BASE(m_aMutex)
     ,ODataSettings(OTableDescriptor_BASE::rBHelper)
-    ,m_nPrivileges(-1)
-    ,m_xMetaData(_rxMetaData)
     ,m_xTable(_rxNewTable)
-    ,m_xNumberFormats( _rxNumberFormats )
     ,m_xColumnDefinitions(_xColumnDefinitions)
+    ,m_xMetaData(_rxMetaData)
+    ,m_xNumberFormats( _rxNumberFormats )
+    ,m_nPrivileges(-1)
     ,m_pColumns(NULL)
 {
     DBG_CTOR(ODBTableDecorator, NULL);
-    ODataSettings::registerProperties(this);
+    ODataSettings::registerPropertiesFor(this);
 }
 // -------------------------------------------------------------------------
 ODBTableDecorator::~ODBTableDecorator()
@@ -392,7 +392,7 @@ void ODBTableDecorator::construct()
                         &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper(sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper(sal_Int32 /*_nId*/) const
 {
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
@@ -431,9 +431,19 @@ void ODBTableDecorator::setTable(const ::com::sun::star::uno::Reference< ::com::
 ::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper()
 {
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-    Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
 
-    return *ODBTableDecorator_PROP::getArrayHelper((xInfo->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY ? 1 : 0);
+    Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
+    bool bIsDescriptor = (xInfo->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) == 0;
+
+    return *ODBTableDecorator_PROP::getArrayHelper( bIsDescriptor ? 0 : 1 );
+
+    // TODO: this is a HACK, and prone to errors
+    // The OIdPropertyArrayUsageHelper is intended for classes where there exists a known, limited
+    // number of different property set infos (distinguished by the ID), all implemented by this very
+    // same class.
+    // However, in this case here we have an unknown, potentially unlimited number of different
+    // property set infos: Depending on the table for which we act as decorator, different property
+    // sets might exist.
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
@@ -601,7 +611,7 @@ void ODBTableDecorator::fillPrivileges() const
     }
     catch(const SQLException& e)
     {
-        UNUSED(e);
+        (void)e;
         DBG_ERROR("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
     }
 }
@@ -698,6 +708,12 @@ void ODBTableDecorator::columnDropped(const ::rtl::OUString& _sName)
         xDrop->dropByName(_sName);
     }
 }
+
+// -----------------------------------------------------------------------------
+void ODBTableDecorator::columnCloned(const Reference< XPropertySet >& /*_xClone*/)
+{
+}
+
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODBTableDecorator::createEmptyObject()
 {
@@ -721,8 +737,9 @@ void SAL_CALL ODBTableDecorator::release() throw()
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODBTableDecorator::setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODBTableDecorator::setName( const ::rtl::OUString& /*aName*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
+    throwFunctionNotSupportedException( "XNamed::setName", *this );
 }
 
 // -----------------------------------------------------------------------------
