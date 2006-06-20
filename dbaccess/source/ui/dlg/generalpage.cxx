@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:42:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,29 +109,30 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode)
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_GENERAL), _rItems)
-        ,m_aTypePreLabel                (this, ResId(FT_DATASOURCETYPE_PRE))
-        ,m_aTypePostLabel               (this, ResId(FT_DATASOURCETYPE_POST))
-        ,m_aSpecialMessage              (this, ResId(FT_SPECIAL_MESSAGE))
-        ,m_aDatasourceTypeLabel         (this, ResId(FT_DATATYPE))
-        ,m_pDatasourceType              ( new ListBox(this, ResId(LB_DATATYPE)))
-        ,m_aFT_DatasourceTypeHeader     (this, ResId(FT_DATASOURCEHEADER))
-        ,m_aRB_CreateDatabase           (this, ResId(RB_CREATEDBDATABASE))
-        ,m_aRB_GetExistingDatabase      (this, ResId(RB_GETEXISTINGDATABASE))
-        ,m_aRB_OpenDocument             (this, ResId(RB_OPENEXISTINGDOC))
         ,m_aFTHeaderText                (this, ResId(FT_GENERALHEADERTEXT))
         ,m_aFTHelpText                  (this, ResId(FT_GENERALHELPTEXT))
-        ,m_aFTDataSourceAppendix        (this, ResId(FT_DATATYPEAPPENDIX))
-        ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId( LB_DOCUMENTLIST ) ) )
+        ,m_aFT_DatasourceTypeHeader     (this, ResId(FT_DATASOURCEHEADER))
+        ,m_aRB_CreateDatabase           (this, ResId(RB_CREATEDBDATABASE))
+        ,m_aRB_OpenDocument             (this, ResId(RB_OPENEXISTINGDOC))
+        ,m_aRB_GetExistingDatabase      (this, ResId(RB_GETEXISTINGDATABASE))
         ,m_aFT_DocListLabel             (this, ResId(FT_DOCLISTLABEL))
+        ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId( LB_DOCUMENTLIST ) ) )
         ,m_aPB_OpenDocument             (this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId(PB_OPENDOCUMENT))
+        ,m_aTypePreLabel                (this, ResId(FT_DATASOURCETYPE_PRE))
+        ,m_aDatasourceTypeLabel         (this, ResId(FT_DATATYPE))
+        ,m_pDatasourceType              ( new ListBox(this, ResId(LB_DATATYPE)))
+        ,m_aFTDataSourceAppendix        (this, ResId(FT_DATATYPEAPPENDIX))
+        ,m_aTypePostLabel               (this, ResId(FT_DATASOURCETYPE_POST))
+        ,m_aSpecialMessage              (this, ResId(FT_SPECIAL_MESSAGE))
+        ,m_DBWizardMode                 (_bDBWizardMode)
         ,m_sMySQLEntry                  (ResId(STR_MYSQLENTRY))
+        ,m_eOriginalCreationMode        (eCreateNew)
         ,m_pCollection                  (NULL)
         ,m_eCurrentSelection            (DST_UNKNOWN)
         ,m_eNotSupportedKnownType       (DST_UNKNOWN)
+        ,m_eLastMessage                 (smNone)
         ,m_bDisplayingInvalid           (sal_False)
         ,m_bUserGrabFocus               (sal_True)
-        ,m_eLastMessage                 (smNone)
-        ,m_DBWizardMode                 (_bDBWizardMode)
     {
         // fill the listbox with the UI descriptions for the possible types
         // and remember the respective DSN prefixes
@@ -263,7 +264,6 @@ namespace dbaui
         if (!m_DBWizardMode)
         {
             String sName = m_pCollection->getTypeDisplayName(_eSelectedType);
-            Dialog* pDialog = reinterpret_cast<Dialog*>(m_pAdminDialog);
             if ( m_pAdminDialog )
             {
                 LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
@@ -295,7 +295,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::switchMessage(sal_Bool _bDeleted,const DATASOURCE_TYPE _eType)
+    void OGeneralPage::switchMessage(const DATASOURCE_TYPE _eType)
     {
         SPECIAL_MESSAGE eMessage = smNone;
         if ( _eType == m_eNotSupportedKnownType )
@@ -307,10 +307,8 @@ namespace dbaui
         if ( eMessage != m_eLastMessage )
         {
             sal_uInt16 nResId = 0;
-            switch (eMessage)
-            {
-                case smUnsupportedType:     nResId = STR_UNSUPPORTED_DATASOURCE_TYPE; break;
-            }
+            if ( smUnsupportedType == eMessage )
+                nResId = STR_UNSUPPORTED_DATASOURCE_TYPE;
             String sMessage;
             if ( nResId )
             {
@@ -329,7 +327,7 @@ namespace dbaui
         // the the new URL text as indicated by the selection history
         implSetCurrentType( _eType );
 
-        switchMessage(sal_False,_eType);
+        switchMessage(_eType);
 
         if ( m_aTypeSelectHandler.IsSet() )
             m_aTypeSelectHandler.Call(this);
@@ -391,7 +389,6 @@ namespace dbaui
         }
         // if the selection is invalid, disable evrything
         String sName,sConnectURL;
-        sal_Bool bDeleted = sal_False;
         m_bDisplayingInvalid = !bValid;
         if ( bValid )
         {
@@ -442,7 +439,7 @@ namespace dbaui
         }
 
         // a special message for the current page state
-        switchMessage(bDeleted,m_eCurrentSelection);
+        switchMessage(m_eCurrentSelection);
 
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
@@ -599,7 +596,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK(OGeneralPage, OnSetupModeSelected, RadioButton*, _pBox)
+    IMPL_LINK(OGeneralPage, OnSetupModeSelected, RadioButton*, /*_pBox*/)
     {
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call(this);
@@ -607,14 +604,14 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK(OGeneralPage, OnDocumentSelected, ListBox*, _pBox)
+    IMPL_LINK(OGeneralPage, OnDocumentSelected, ListBox*, /*_pBox*/)
     {
         m_aDocumentSelectionHandler.Call( this );
         return 0L;
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK(OGeneralPage, OnOpenDocument, PushButton*, _pBox)
+    IMPL_LINK(OGeneralPage, OnOpenDocument, PushButton*, /*_pBox*/)
     {
         ::sfx2::FileDialogHelper aFileDlg( WB_OPEN, ::String::CreateFromAscii("sdatabase") );
         if ( aFileDlg.Execute() == ERRCODE_NONE )
