@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ namespace dbaui
         OTableListBoxControl*               m_pTableControl;
         OJoinTableView::OTableWindowMap*    m_pTableMap;
 
-        EJoinType               eJoinType;
+        EJoinType                   eJoinType;
         OQueryTableConnectionData*  m_pConnData; // enth"alt linke und rechte Tabelle
         OQueryTableConnectionData*  m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
@@ -116,7 +116,7 @@ namespace dbaui
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables
         */
-        virtual void notifyConnectionChange(OTableConnectionData* _pConnectionData);
+        virtual void notifyConnectionChange();
     };
 }
 #endif // DBAUI_QUERYDLG_HXX
