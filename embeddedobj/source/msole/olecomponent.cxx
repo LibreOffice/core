@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:07:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 12:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1222,7 +1222,21 @@ void OleComponent::StoreOwnTmpIfNecessary()
     {
         hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
         if ( FAILED( hr ) )
-            throw io::IOException(); // TODO
+        {
+            // Till now was required only for AcrobatReader7.0.8
+            GUID aCLSID;
+            hr = m_pNativeImpl->m_pOleObject->GetUserClassID( &aCLSID );
+            if ( FAILED( hr ) )
+                throw io::IOException(); // TODO
+
+            hr = WriteClassStg( m_pNativeImpl->m_pIStorage, aCLSID );
+            if ( FAILED( hr ) )
+                throw io::IOException(); // TODO
+
+            // the result of the followin call is not checked because some objects, for example AcrobatReader7.0.8
+            // return error even in case the saving was done correctly
+            hr = pPersistStorage->Save( m_pNativeImpl->m_pIStorage, TRUE );
+        }
 
         // it is possible that the object decided not to store, then it might return S_FALSE that in no failure
         hr = pPersistStorage->SaveCompleted( NULL );
