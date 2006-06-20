@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convertiso2022cn.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:32:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,23 +406,25 @@ sal_Size ImplConvertIso2022CnToUnicode(ImplTextConverterData const * pData,
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
                          | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
-    else
-        switch (ImplHandleBadInputTextToUnicodeConversion(
-                    sal_False, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
-                    &nInfo))
-        {
-        case IMPL_BAD_INPUT_STOP:
-        case IMPL_BAD_INPUT_CONTINUE:
-            eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII;
-            b116431 = sal_False;
-            break;
+        else
+            switch (ImplHandleBadInputTextToUnicodeConversion(
+                        sal_False, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                        &nInfo))
+            {
+            case IMPL_BAD_INPUT_STOP:
+            case IMPL_BAD_INPUT_CONTINUE:
+                eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII;
+                b116431 = sal_False;
+                break;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
-            nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
-            break;
-        }
+            case IMPL_BAD_INPUT_NO_OUTPUT:
+                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                break;
+            }
+    }
 
     if (pContext)
     {
@@ -469,7 +471,6 @@ static sal_uInt32 ImplIso2022CnTranslateTo2312(ImplUniToDBCSHighTab const *
                                                    pGb2312Data,
                                                sal_uInt32 nChar)
 {
-    sal_uInt16 nBytes = 0;
     sal_uInt32 nIndex1 = nChar >> 8;
     if (nIndex1 < 0x100)
     {
@@ -583,6 +584,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
         if (nChar == 0x0A || nChar == 0x0D) /* LF, CR */
         {
             if (bSo)
+            {
                 if (pDestBufPtr != pDestBufEnd)
                 {
                     *pDestBufPtr++ = 0x0F; /* SI */
@@ -593,6 +595,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                 }
                 else
                     goto no_output;
+            }
             if (pDestBufPtr != pDestBufEnd)
                 *pDestBufPtr++ = (sal_Char) nChar;
             else
@@ -603,6 +606,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
         else if (nChar < 0x80)
         {
             if (bSo)
+            {
                 if (pDestBufPtr != pDestBufEnd)
                 {
                     *pDestBufPtr++ = 0x0F; /* SI */
@@ -610,6 +614,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                 }
                 else
                     goto no_output;
+            }
             if (pDestBufPtr != pDestBufEnd)
                 *pDestBufPtr++ = (sal_Char) nChar;
             else
@@ -691,6 +696,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                         != IMPL_UNICODE_TO_ISO_2022_CN_DESIGNATOR_NONE)
                 {
                     if (bSo)
+                    {
                         if (pDestBufPtr != pDestBufEnd)
                         {
                             *pDestBufPtr++ = 0x0F; /* SI */
@@ -698,6 +704,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                         }
                         else
                             goto no_output;
+                    }
                     if (pDestBufEnd - pDestBufPtr >= 4)
                     {
                         *pDestBufPtr++ = 0x1B; /* ESC */
@@ -713,6 +720,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                         goto no_output;
                 }
                 if (!bSo)
+                {
                     if (pDestBufPtr != pDestBufEnd)
                     {
                         *pDestBufPtr++ = 0x0E; /* SO */
@@ -720,6 +728,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                     }
                     else
                         goto no_output;
+                }
                 if (pDestBufEnd - pDestBufPtr >= 4)
                 {
                     *pDestBufPtr++ = (sal_Char) (nBytes >> 8);
@@ -751,6 +760,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                 if (nPlane != 2)
                     goto bad_input;
                 if (!b116432Designator)
+                {
                     if (pDestBufEnd - pDestBufPtr >= 4)
                     {
                         *pDestBufPtr++ = 0x1B; /* ESC */
@@ -761,6 +771,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                     }
                     else
                         goto no_output;
+                }
                 if (pDestBufEnd - pDestBufPtr >= 4)
                 {
                     *pDestBufPtr++ = 0x1B; /* ESC */
@@ -815,6 +826,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
     {
         sal_Bool bFlush = sal_True;
         if (nHighSurrogate != 0)
+        {
             if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
                 nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
             else
@@ -844,6 +856,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
                     nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }
+        }
         if (bFlush && bSo && (nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
         {
             if (pDestBufPtr != pDestBufEnd)
