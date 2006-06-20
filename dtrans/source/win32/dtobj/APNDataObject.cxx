@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APNDataObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,10 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
         {
             OSL_ENSURE(sal_False, "marshalling failed");
 
-            HGLOBAL hGlobal = GlobalFree(m_hGlobal);
+            #if OSL_DEBUG_LEVEL > 0
+            HGLOBAL hGlobal =
+            #endif
+                GlobalFree(m_hGlobal);
             OSL_ENSURE(NULL == hGlobal, "GlobalFree failed");
             m_hGlobal = NULL;
         }
