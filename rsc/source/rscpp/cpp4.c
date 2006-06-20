@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp4.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:59:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,9 +245,7 @@ bad_define:
         inmacro = FALSE;                        /* Stop <newline> hack  */
 }
 
-void checkparm(c, dp)
-register int    c;
-DEFBUF          *dp;
+void checkparm(int c, DEFBUF* dp)
 /*
  * Replace this param if it's defined.  Note that the macro name is a
  * possible replacement token.  We stuff DEF_MAGIC in front of the token
@@ -313,8 +311,7 @@ register DEFBUF *dp;
         save(c);
 }
 #else
-void stparmscan(delim)
-int             delim;
+void stparmscan(int delim)
 /*
  * Normal string parameter scan.
  */
@@ -332,7 +329,7 @@ int             delim;
 #ifdef SOLAR
                 *wp++ = DEL;
                 *wp++ = MAC_PARM + PAR_MAC;     /* Stuff a magic marker */
-                *wp++ = (i + MAC_PARM);         /* Make a formal marker */
+                *wp++ = (char)(i + MAC_PARM);   /* Make a formal marker */
                 *wp = wp[-4];                   /* Add on closing quote */
                 workp = wp + 1;                 /* Reset string end     */
 #else
@@ -368,8 +365,7 @@ void doundef()
         }
 }
 
-void textput(text)
-char            *text;
+void textput(char* text)
 /*
  * Put the string in the parm[] buffer.
  */
@@ -385,8 +381,7 @@ char            *text;
         }
 }
 
-void charput(c)
-register int    c;
+void charput(int c)
 /*
  * Put the byte in the parm[] buffer.
  */
@@ -394,7 +389,7 @@ register int    c;
         if (parmp >= &parm[NPARMWORK])
             cfatal("Macro work area overflow", NULLST);
         else {
-            *parmp++ = c;
+            *parmp++ = (char)c;
         }
 }
 
@@ -404,8 +399,7 @@ register int    c;
 
 static DEFBUF   *macro;         /* Catches start of infinite macro      */
 
-void expand(tokenp)
-register DEFBUF *tokenp;
+void expand(DEFBUF* tokenp)
 /*
  * Expand a macro.  Called from the cpp mainline routine (via subroutine
  * macroid()) when a token is found in the symbol table.  It calls
@@ -564,8 +558,7 @@ expcollect()
 }
 
 FILE_LOCAL
-void expstuff(tokenp)
-DEFBUF          *tokenp;                /* Current macro being expanded */
+void expstuff(DEFBUF* tokenp)
 /*
  * Stuff the macro body, replacing formal parameters by actual parameters.
  */
@@ -621,7 +614,7 @@ nospace:            cfatal("Out of space in macro \"%s\" arg expansion",
                         tokenp->name);
                 }
                 else {
-                    *defp++ = c;
+                    *defp++ = (char)c;
                 }
             }
         }
