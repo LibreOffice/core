@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:42:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ using namespace dbaui;
 //==================================================================
 // class OTableFieldDescWin
 //==================================================================
-DBG_NAME(OTableFieldDescWin);
+DBG_NAME(OTableFieldDescWin)
 //------------------------------------------------------------------------------
 OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     :TabPage(pParent, WB_3DLOOK)
@@ -159,7 +159,7 @@ void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 }
 
 //------------------------------------------------------------------------------
-void OTableFieldDescWin::Paint( const Rectangle& rRect )
+void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
     //////////////////////////////////////////////////////////////////////
