@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:38:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #endif
 #ifndef _CONNECTIVITY_PCOLUMN_HXX_
 #include "connectivity/PColumn.hxx"
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -299,13 +302,13 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    throwInvalidIndexException(*this);
+    throwFeatureNotImplementedException( "XParameters::setLong", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkAndResizeParameters(parameterIndex);
@@ -317,27 +320,27 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    throwInvalidIndexException(*this);
+    throwFeatureNotImplementedException( "XParameters::setClob", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    throwInvalidIndexException(*this);
+    throwFeatureNotImplementedException( "XParameters::setBlob", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    throwInvalidIndexException(*this);
+    throwFeatureNotImplementedException( "XParameters::setArray", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    throwInvalidIndexException(*this);
+    throwFeatureNotImplementedException( "XParameters::setRef", *this );
 }
 // -------------------------------------------------------------------------
 
@@ -347,18 +350,18 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     setNull(parameterIndex,sqlType);
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObject( sal_Int32 /*parameterIndex*/, const Any& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    throwInvalidIndexException(*this);
+    throwFeatureNotImplementedException( "XParameters::setObject", *this );
     //  setObject (parameterIndex, x, sqlType, 0);
 }
 // -------------------------------------------------------------------------
@@ -466,9 +469,13 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
 // -----------------------------------------------------------------------------
 UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
+    OSL_UNUSED( pParameter );
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
+#if OSL_DEBUG_LEVEL > 0
     OSQLParseNode * pMark = pParameter->getChild(0);
+    OSL_UNUSED( pMark );
+#endif
 
     ::rtl::OUString sParameterName;
     // Parameter-Column aufsetzen:
@@ -556,8 +563,8 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
         USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
 
         // Nach zu substituierenden Parametern suchen:
-        UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig fuer die Kriterien
-        for (UINT16 j = 1; j < nCount; j++)
+        size_t nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig fuer die Kriterien
+        for (size_t j = 1; j < nCount; j++)
         {
             UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
             if (nParameter == SQL_NO_PARAMETER)
@@ -572,9 +579,9 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
         if (m_aParameterRow.isValid() &&  (m_xParamColumns->size()+1) != m_aParameterRow->size() )
         {
             sal_Int32 i = m_aParameterRow->size();
-            sal_Int32 nCount = m_xParamColumns->size()+1;
-            m_aParameterRow->resize(nCount);
-            for ( ;i <= nCount; ++i )
+            sal_Int32 nParamColumns = m_xParamColumns->size()+1;
+            m_aParameterRow->resize(nParamColumns);
+            for ( ;i <= nParamColumns; ++i )
             {
                 if ( !(*m_aParameterRow)[i].isValid() )
                     (*m_aParameterRow)[i] = new ORowSetValueDecorator;
