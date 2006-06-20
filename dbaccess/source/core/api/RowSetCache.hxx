@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:54:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,6 @@ namespace dbaccess
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,
-                     const ORowSetValueVector& _rParameterRow,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew);
