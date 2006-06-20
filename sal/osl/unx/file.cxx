@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:46:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
  *   - check size/use of oslFileHandle
  ***********************************************************************/
 
+#include <algorithm>
+#include <limits>
 
 #ifndef __OSL_SYSTEM_H__
 #include "system.h"
@@ -1111,7 +1113,12 @@ oslFileError osl_readFile(oslFileHandle Handle, void* pBuffer, sal_uInt64 uBytes
     if ((0 == pHandleImpl) || (pHandleImpl->fd < 0) || (0 == pBuffer) || (0 == pBytesRead))
         return osl_File_E_INVAL;
 
-    nBytes = read(pHandleImpl->fd, pBuffer, uBytesRequested);
+    nBytes = read(
+        pHandleImpl->fd, pBuffer,
+        ((uBytesRequested
+          <= static_cast< size_t >(std::numeric_limits< ssize_t >::max()))
+         ? static_cast< size_t >(uBytesRequested)
+         : static_cast< size_t >(std::numeric_limits< ssize_t >::max())));
 
     if (-1 == nBytes)
         return oslTranslateFileError(OSL_FET_ERROR, errno);
@@ -1141,7 +1148,12 @@ oslFileError osl_writeFile(oslFileHandle Handle, const void* pBuffer, sal_uInt64
     if (pHandleImpl->fd < 0)
         return osl_File_E_INVAL;
 
-    nBytes = write(pHandleImpl->fd, pBuffer, uBytesToWrite);
+    nBytes = write(
+        pHandleImpl->fd, pBuffer,
+        ((uBytesToWrite
+          <= static_cast< size_t >(std::numeric_limits< ssize_t >::max()))
+         ? static_cast< size_t >(uBytesToWrite)
+         : static_cast< size_t >(std::numeric_limits< ssize_t >::max())));
 
     if (-1 == nBytes)
         return oslTranslateFileError(OSL_FET_ERROR, errno);
@@ -2097,7 +2109,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
              we have to fail of course; because it's not exactly specified if 'write'
             sets errno if less than requested byte could be written we set nRet
            explicitly to ENOSPC */
-    if ((nRet < 0) || (nRet != nSourceSize))
+    if ((nRet < 0) || (nRet != sal::static_int_cast< int >(nSourceSize)))
     {
         if (nRet < 0)
             nRet = errno;
