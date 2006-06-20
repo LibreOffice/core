@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:53:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-//#include <rtl/unload.h>
-//#include <osl/time.h>
 #include "servprov.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
@@ -50,19 +48,20 @@
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
 #endif
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
 
+
 using namespace ::com::sun::star;
 
 
 uno::Reference<uno::XInterface> SAL_CALL EmbedServer_createInstance(
-                                                const uno::Reference<lang::XMultiServiceFactory> & xSMgr)
-                            throw (uno::Exception)
+    const uno::Reference<lang::XMultiServiceFactory> & xSMgr)
+throw (uno::Exception)
 {
     uno::Reference<uno::XInterface > xService = *new EmbedServer_Impl( xSMgr );
     return xService;
@@ -83,12 +82,12 @@ uno::Sequence< ::rtl::OUString > SAL_CALL EmbedServer_getSupportedServiceNames()
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
@@ -112,7 +111,7 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     return pRet;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -126,19 +125,25 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                                         EmbedServer_getImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
 
-            uno::Sequence< ::rtl::OUString > &rServices = EmbedServer_getSupportedServiceNames();
+            uno::Sequence< ::rtl::OUString > rServices = EmbedServer_getSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
             return sal_True;
         }
         catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+                {
+                    OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+                }
         }
-    }
-    return sal_False;
+        return sal_False;
 }
 
 } // extern "C"
 
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
