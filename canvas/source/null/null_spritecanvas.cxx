@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_spritecanvas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:49:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,11 +124,6 @@ namespace nullcanvas
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
             mbSurfaceDirty );
-
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::updateScreen( bUpdateAll );
     }
 
     void SAL_CALL SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments ) throw( uno::Exception,
@@ -210,7 +205,7 @@ namespace
 extern "C"
 {
     void SAL_CALL component_getImplementationEnvironment( const sal_Char**  ppEnvTypeName,
-                                                          uno_Environment** ppEnv )
+                                                          uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
