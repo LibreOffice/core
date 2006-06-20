@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:14:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,7 @@ using namespace com::sun::star::sdbcx;
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.star.sdbc.Connection");
 // --------------------------------------------------------------------------------
-OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyValue >& info,
-                         ODriver*   _pDriver) throw(SQLException, RuntimeException)
+OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeException)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_bClosed(sal_False),
                          m_xMetaData(NULL),
@@ -327,7 +326,8 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    m_pAdoConnection->put_Mode(adModeRead);
+
+    m_pAdoConnection->put_Mode(readOnly ? adModeRead : adModeReadWrite);
     ADOS::ThrowException(*m_pAdoConnection,*this);
 }
 // --------------------------------------------------------------------------------
@@ -429,8 +429,9 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
     return NULL;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
 // --------------------------------------------------------------------------------
 // XCloseable
@@ -481,7 +482,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
                 aInfo->eType                        = (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value();
                 if ( aInfo->eType == adWChar && aInfo->aSimpleType.aTypeName == s_sVarChar )
                     aInfo->eType = adVarWChar;
-                aInfo->aSimpleType.nType            = ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
+                aInfo->aSimpleType.nType            = (sal_Int16)ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
                 aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value();
@@ -514,7 +515,10 @@ void OConnection::disposing()
 
     //  m_aTables.disposing();
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-        ::comphelper::disposeComponent(i->get());
+    {
+        Reference< XInterface > xStatement( i->get() );
+        ::comphelper::disposeComponent( xStatement );
+    }
     m_aStatements.clear();
 
     m_bClosed   = sal_True;
@@ -541,7 +545,7 @@ sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Seque
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ?
-            (sal_Int64)this
+            reinterpret_cast< sal_Int64 >( this )
                 :
             OConnection_BASE::getSomething(rId);
 }
@@ -581,9 +585,9 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
             OExtendedTypeInfo* pInfo = aIter->second;
     #ifdef DBG_UTIL
             ::rtl::OUString sDBTypeName = pInfo->aSimpleType.aTypeName;
-            sal_Int32       nDBTypePrecision = pInfo->aSimpleType.nPrecision;
-            sal_Int32       nDBTypeScale = pInfo->aSimpleType.nMaximumScale;
-            sal_Int32       nAdoType = pInfo->eType;
+            sal_Int32       nDBTypePrecision = pInfo->aSimpleType.nPrecision;   (void)nDBTypePrecision;
+            sal_Int32       nDBTypeScale = pInfo->aSimpleType.nMaximumScale;    (void)nDBTypeScale;
+            sal_Int32       nAdoType = pInfo->eType;                            (void)nAdoType;
     #endif
             if  (   (   !_sTypeName.getLength()
                     ||  (pInfo->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
