@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charsets.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:45:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,10 @@ namespace dbaui
 
         OCharsetDisplay();
 
-        struct IANA     { };
-        struct Display  { };
-
         // various find operations
-        const_iterator find(const rtl_TextEncoding _eEncoding) const;
-        const_iterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
-        const_iterator find(const ::rtl::OUString& _rDisplayName, const Display&) const;
+        const_iterator findEncoding(const rtl_TextEncoding _eEncoding) const;
+        const_iterator findIanaName(const ::rtl::OUString& _rIanaName) const;
+        const_iterator findDisplayName(const ::rtl::OUString& _rDisplayName) const;
 
         /// get access to the first element of the charset collection
         const_iterator  begin() const;
@@ -91,6 +88,9 @@ namespace dbaui
 
     protected:
         virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
+
+    private:
+        using OCharsetDisplay_Base::find;
     };
 
     //-------------------------------------------------------------------------
