@@ -4,9 +4,9 @@
  *
  *  $RCSfile: converteuctw.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:30:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
                          | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
@@ -296,6 +297,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext)
     {
@@ -396,7 +398,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                 goto no_output;
             if (nPlane != 1)
             {
-                *pDestBufPtr++ = (sal_Char) 0x8E;
+                *pDestBufPtr++ = (sal_Char) (unsigned char) 0x8E;
                 *pDestBufPtr++ = (sal_Char) (0xA0 + nPlane);
             }
             *pDestBufPtr++ = (sal_Char) (0xA0 + pCns116431992Data[nOffset++]);
@@ -439,6 +441,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
         && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR
                          | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
@@ -461,6 +464,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                 nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext)
         ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate
