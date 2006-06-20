@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -67,31 +64,6 @@ using namespace ::rtl;
 using namespace ::osl;
 
 StringList* pCreatedDirectories = NULL;
-
-static OUString getWorkingDir()
-{
-    OUString workingDir;
-    if ( osl_getProcessWorkingDir(&workingDir.pData) != osl_Process_E_None )
-        return OUString();
-
-    return workingDir;
-}
-
-static OString getTempDir()
-{
-    sal_Char* pTemp = NULL;
-    if ( !(pTemp = getenv("TEMP")) )
-    {
-        if ( !(pTemp = getenv("TMP")) )
-            return OString();
-    }
-
-    OString tempDir(pTemp);
-    if ( pTemp[strlen(pTemp)-1] != SEPARATOR )
-        tempDir += OString::valueOf(SEPARATOR);
-
-    return tempDir;
-}
 
 static sal_Bool checkOutputPath(const OString& completeName)
 {
