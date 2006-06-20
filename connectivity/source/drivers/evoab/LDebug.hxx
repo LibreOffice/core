@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LDebug.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:44:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 
     #define EVO_TRACE_STRING( pFormat, rAsciiString )   evo_traceStringMessage( pFormat, rAsciiString )
 #else
-    #define EVO_TRACE_STRING( pFormat, rAsciiString )   (0)
+    #define EVO_TRACE_STRING( pFormat, rAsciiString )   (void)(0)
 #endif
 
 
