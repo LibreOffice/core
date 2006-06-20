@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTerminateListener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:04:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,39 +50,19 @@ namespace connectivity
     using namespace ::com::sun::star::lang;
     using namespace ::rtl;
 
-// XServiceInfo
-OUString SAL_CALL OConnectionController::getImplementationName()
-throw ( RuntimeException )
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.OConnectionController" ));
-}
-
-sal_Bool SAL_CALL OConnectionController::supportsService( const OUString& ServiceName )
-throw ( RuntimeException )
-{
-    return sal_False;
-}
-
-Sequence< OUString > SAL_CALL OConnectionController::getSupportedServiceNames()
-throw ( RuntimeException )
-{
-    Sequence< OUString > aSeq( 0 );
-    return aSeq;
-}
-
 // XEventListener
-void SAL_CALL OConnectionController::disposing( const EventObject& Source )
+void SAL_CALL OConnectionController::disposing( const EventObject& /*Source*/ )
 throw( RuntimeException )
 {
 }
 
 // XTerminateListener
-void SAL_CALL OConnectionController::queryTermination( const EventObject& aEvent )
+void SAL_CALL OConnectionController::queryTermination( const EventObject& /*aEvent*/ )
 throw( TerminationVetoException, RuntimeException )
 {
 }
 
-void SAL_CALL OConnectionController::notifyTermination( const EventObject& aEvent )
+void SAL_CALL OConnectionController::notifyTermination( const EventObject& /*aEvent*/ )
 throw( RuntimeException )
 {
     m_pDriver->shutdownConnections();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTerminateListener.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:05:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,10 @@
 #ifndef CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 #define CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #endif
 
@@ -53,8 +50,7 @@ namespace connectivity
     namespace hsqldb
     {
         class ODriverDelegator;
-        class OConnectionController : public ::cppu::WeakImplHelper2<
-                                                    ::com::sun::star::lang::XServiceInfo,
+        class OConnectionController : public ::cppu::WeakImplHelper1<
                                                     ::com::sun::star::frame::XTerminateListener >
         {
             ODriverDelegator* m_pDriver;
@@ -62,14 +58,6 @@ namespace connectivity
                 virtual ~OConnectionController() {m_pDriver = NULL;}
             public:
                 OConnectionController(ODriverDelegator* _pDriver) : m_pDriver(_pDriver){}
-
-                // XServiceInfo
-                virtual ::rtl::OUString SAL_CALL getImplementationName()
-                    throw ( ::com::sun::star::uno::RuntimeException );
-                virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-                    throw ( ::com::sun::star::uno::RuntimeException );
-                virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-                    throw ( ::com::sun::star::uno::RuntimeException );
 
                 // XEventListener
                 virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
