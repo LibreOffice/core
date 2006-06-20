@@ -4,9 +4,9 @@
  *
  *  $RCSfile: devicehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:00:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&              rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&              ,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         if( !mpOutputWindow )
@@ -109,7 +109,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&                      rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&                      ,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         if( !mpOutputWindow )
@@ -121,7 +121,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&  ,
         const geometry::IntegerSize2D&                      size )
     {
         if( !mpSpriteCanvas )
@@ -134,14 +134,14 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const geometry::IntegerSize2D&                       )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&  ,
         const geometry::IntegerSize2D&                      size )
     {
         if( !mpSpriteCanvas )
@@ -153,8 +153,8 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const geometry::IntegerSize2D&                       )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
@@ -167,12 +167,16 @@ namespace vclcanvas
 
     sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool bEnter )
     {
+        (void)bEnter;
+
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
 
     ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 nBuffers )
     {
+        (void)nBuffers;
+
         // TODO(F3): implement XBufferStrategy interface. For now, we
         // _always_ will have exactly one backbuffer
         return 1;
@@ -259,7 +263,6 @@ namespace vclcanvas
 
                 SvFileStream aStream2( aFilename2, STREAM_STD_READWRITE );
 
-                const ::Point aEmptyPoint;
                 mpBackBuffer->getOutDev().EnableMapMode( FALSE );
                 aStream2 << mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint,
                                                                 mpBackBuffer->getOutDev().GetOutputSizePixel());
