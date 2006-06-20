@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:28:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ const LocaleNode* LocaleNode::getRoot() const
 {
     const LocaleNode* pRoot = 0;
     const LocaleNode* pParent = this;
-    while (pParent = pParent->getParent())
+    while ( (pParent = pParent->getParent()) != 0 )
         pRoot = pParent;
     return pRoot;
 }
@@ -254,9 +254,9 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
         const char* pParameterName, const LocaleNode* pNode,
         sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
 {
-    OUString aValue;
+    OUString aVal;
     if (pNode)
-        aValue = pNode->getValue();
+        aVal = pNode->getValue();
     else
     {
         ++nError;
@@ -264,23 +264,23 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
                 pParameterName);
     }
     // write empty data if error
-    of.writeParameter( pParameterName, aValue);
-    sal_Int32 nLen = aValue.getLength();
+    of.writeParameter( pParameterName, aVal);
+    sal_Int32 nLen = aVal.getLength();
     if (nLen < nMinLen)
     {
         ++nError;
         fprintf( stderr, "Error: less than %d character%s (%d) in %s '%s'.\n",
                 nMinLen, (nMinLen > 1 ? "s" : ""), nLen,
                 (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
-                OUStringToOString( aValue, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
     }
     else if (nLen > nMaxLen && nMaxLen >= 0)
         fprintf( stderr,
                 "Warning: more than %d character%s (%d) in %s %s not supported by application.\n",
                 nMaxLen, (nMaxLen > 1 ? "s" : ""), nLen,
                 (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
-                OUStringToOString( aValue, RTL_TEXTENCODING_UTF8).getStr());
-    return aValue;
+                OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
+    return aVal;
 }
 
 
@@ -288,18 +288,18 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
         const char* pNodeName, const char* pParameterName,
         sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
 {
-    OUString aValue;
+    OUString aVal;
     const LocaleNode * pNode = findNode( pNodeName);
     if (pNode)
-        aValue = writeParameterCheckLen( of, pParameterName, pNode, nMinLen, nMaxLen);
+        aVal = writeParameterCheckLen( of, pParameterName, pNode, nMinLen, nMaxLen);
     else
     {
         ++nError;
         fprintf( stderr, "Error: node %s not found.\n", pNodeName);
         // write empty data if error
-        of.writeParameter( pParameterName, aValue);
+        of.writeParameter( pParameterName, aVal);
     }
-    return aValue;
+    return aVal;
 }
 
 void LocaleNode::incError( const char* pStr ) const
@@ -473,7 +473,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         of.writeRefFunction("getAllFormats_", useLocale, "replaceTo");
         return;
     }
-    sal_Int32 formatCount = 0;
+    sal_Int16 formatCount = 0;
     sal_Int16 i;
     NameSet aMsgId;
     ValueSet aFormatIndex;
@@ -721,17 +721,17 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     }
     sal_Int16 nbOfCollations = 0;
     sal_Int16 nbOfCollationOptions = 0;
-    sal_Int16 i;
+    sal_Int16 j;
 
-    for ( i = 0; i < getNumberOfChildren(); i++ ) {
-        LocaleNode * currNode = getChildAt (i);
+    for ( j = 0; j < getNumberOfChildren(); j++ ) {
+        LocaleNode * currNode = getChildAt (j);
         if( currNode->getName().compareToAscii("Collator") == 0 )
         {
             ::rtl::OUString str;
             str = currNode->getAttr() -> getValueByName("unoid");
-            of.writeParameter("CollatorID", str, i);
+            of.writeParameter("CollatorID", str, j);
             str = currNode -> getAttr() -> getValueByName("default");
-            of.writeDefaultParameter("Collator", str, i);
+            of.writeDefaultParameter("Collator", str, j);
             of.writeAsciiString("\n");
 
             nbOfCollations++;
@@ -739,8 +739,8 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
         if( currNode->getName().compareToAscii("CollationOptions") == 0 )
         {
             LocaleNode* pCollationOptions = currNode;
-            nbOfCollationOptions = pCollationOptions->getNumberOfChildren();
-            for( sal_Int32 i=0; i<nbOfCollationOptions; i++ )
+            nbOfCollationOptions = sal::static_int_cast<sal_Int16>( pCollationOptions->getNumberOfChildren() );
+            for( sal_Int16 i=0; i<nbOfCollationOptions; i++ )
             {
                 of.writeParameter("collationOption", pCollationOptions->getChildAt( i )->getValue(), i );
             }
@@ -755,22 +755,22 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("\nstatic const sal_Unicode* LCCollatorArray[] = {\n");
-    for(i = 0; i < nbOfCollations; i++) {
+    for(j = 0; j < nbOfCollations; j++) {
         of.writeAsciiString("\tCollatorID");
-        of.writeInt(i);
+        of.writeInt(j);
         of.writeAsciiString(",\n");
 
         of.writeAsciiString("\tdefaultCollator");
-        of.writeInt(i);
+        of.writeInt(j);
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
 
     of.writeAsciiString("static const sal_Unicode* collationOptions[] = {");
-    for( i=0; i<nbOfCollationOptions; i++ )
+    for( j=0; j<nbOfCollationOptions; j++ )
     {
         of.writeAsciiString( "collationOption" );
-        of.writeInt( i );
+        of.writeInt( j );
         of.writeAsciiString( ", " );
     }
     of.writeAsciiString("NULL };\n");
@@ -796,18 +796,18 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
     sal_Int32   nSearchOptions = pSearchOptions->getNumberOfChildren();
     for( i=0; i<nSearchOptions; i++ )
     {
-        of.writeParameter("searchOption", pSearchOptions->getChildAt( i )->getValue(), i );
+        of.writeParameter("searchOption", pSearchOptions->getChildAt( i )->getValue(), sal::static_int_cast<sal_Int16>(i) );
     }
 
     of.writeAsciiString("static const sal_Int16 nbOfSearchOptions = ");
-    of.writeInt( nSearchOptions );
+    of.writeInt( sal::static_int_cast<sal_Int16>( nSearchOptions ) );
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("static const sal_Unicode* searchOptions[] = {");
     for( i=0; i<nSearchOptions; i++ )
     {
         of.writeAsciiString( "searchOption" );
-        of.writeInt( i );
+        of.writeInt( sal::static_int_cast<sal_Int16>(i) );
         of.writeAsciiString( ", " );
     }
     of.writeAsciiString("NULL };\n");
@@ -923,7 +923,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         of.writeRefFunction("getAllCalendars_", useLocale);
         return;
     }
-    sal_Int16 nbOfCalendars = getNumberOfChildren();
+    sal_Int16 nbOfCalendars = sal::static_int_cast<sal_Int16>( getNumberOfChildren() );
     ::rtl::OUString str;
     sal_Int16 * nbOfDays = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfMonths = new sal_Int16[nbOfCalendars];
@@ -961,7 +961,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             if (daysNode == NULL)
                 daysNode = calNode -> getChildAt(0);
-            nbOfDays[i] = daysNode->getNumberOfChildren();
+            nbOfDays[i] = sal::static_int_cast<sal_Int16>( daysNode->getNumberOfChildren() );
             if (bGregorian && nbOfDays[i] != 7)
                 incErrorInt( "A Gregorian calendar must have 7 days per week, this one has %d", nbOfDays[i]);
             elementTag = "day";
@@ -993,7 +993,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             if (monthsNode == NULL)
                 monthsNode = calNode -> getChildAt(1);
-            nbOfMonths[i] = monthsNode->getNumberOfChildren();
+            nbOfMonths[i] = sal::static_int_cast<sal_Int16>( monthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfMonths[i] != 12)
                 incErrorInt( "A Gregorian calendar must have 12 months, this one has %d", nbOfMonths[i]);
             elementTag = "month";
@@ -1025,7 +1025,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             if (erasNode == NULL)
                 erasNode = calNode -> getChildAt(2);
-            nbOfEras[i] = erasNode->getNumberOfChildren();
+            nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
             if (bGregorian && nbOfEras[i] != 2)
                 incErrorInt( "A Gregorian calendar must have 2 eras, this one has %d", nbOfEras[i]);
             elementTag = "era";
@@ -1057,7 +1057,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         }
         of.writeParameter("startDayOfWeek", str, i);
         str = calNode ->getChildAt(4)-> getValue();
-        sal_Int16 nDays = str.toInt32();
+        sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );
         if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
             incErrorInt( "Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week",  nDays);
         of.writeIntParameter("minimalDaysInFirstWeek", i, nDays);
@@ -1111,7 +1111,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             of.writeAsciiString("\tdayRefName");
             of.writeInt(i); of.writeAsciiString(",\n");
         } else {
-            for(sal_Int16 j = 0; j < nbOfDays[i]; j++) {
+            for(j = 0; j < nbOfDays[i]; j++) {
                 of.writeAsciiString("\tdayID");
                 of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
                 of.writeAsciiString("\tdayDefaultAbbrvName");
@@ -1375,13 +1375,13 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
           {
                const char* name = attr[j];
                OUString   value = q->getValueByName( name );
-               of.writeParameter("continuous", name, value, i );
+               of.writeParameter("continuous", name, value, sal::static_int_cast<sal_Int16>(i) );
           }
      }
 
      // record number of styles and attributes.
      of.writeAsciiString("static const sal_Int16 continuousNbOfStyles = ");
-     of.writeInt( nStyles );
+     of.writeInt( sal::static_int_cast<sal_Int16>( nStyles ) );
      of.writeAsciiString(";\n\n");
      of.writeAsciiString("static const sal_Int16 continuousNbOfAttributesPerStyle = ");
      of.writeInt( nAttributes );
@@ -1391,14 +1391,14 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
      for( i=0; i<nStyles; i++ )
      {
           of.writeAsciiString("\nstatic const sal_Unicode* continuousStyle" );
-          of.writeInt( i );
+          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
           of.writeAsciiString("[] = {\n");
           for( sal_Int32 j=0; j<nAttributes; j++)
           {
                of.writeAsciiString("\t");
                of.writeAsciiString( "continuous" );
                of.writeAsciiString( attr[j] );
-               of.writeInt(i);
+               of.writeInt(sal::static_int_cast<sal_Int16>(i));
                of.writeAsciiString(",\n");
           }
           of.writeAsciiString("\t0\n};\n\n");
@@ -1411,7 +1411,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
      {
           of.writeAsciiString( "\t" );
           of.writeAsciiString( "continuousStyle" );
-          of.writeInt( i );
+          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
           of.writeAsciiString( ",\n");
      }
      of.writeAsciiString("\t0\n};\n\n");
@@ -1461,7 +1461,9 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
                {
                     const char* name = attr[k];
                     OUString   value = q->getValueByName( name );
-                    of.writeParameter("outline", name, value, i, j );
+                    of.writeParameter("outline", name, value,
+                                        sal::static_int_cast<sal_Int16>(i),
+                                        sal::static_int_cast<sal_Int16>(j) );
                }
           }
      }
@@ -1477,10 +1479,10 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 
      // record number of attributes, levels, and styles.
      of.writeAsciiString("static const sal_Int16 outlineNbOfStyles = ");
-     of.writeInt( nStyles );
+     of.writeInt( sal::static_int_cast<sal_Int16>( nStyles ) );
      of.writeAsciiString(";\n\n");
      of.writeAsciiString("static const sal_Int16 outlineNbOfLevelsPerStyle = ");
-     of.writeInt( nLevels.back() );
+     of.writeInt( sal::static_int_cast<sal_Int16>( nLevels.back() ) );
      of.writeAsciiString(";\n\n");
      of.writeAsciiString("static const sal_Int16 outlineNbOfAttributesPerLevel = ");
      of.writeInt( nAttributes );
@@ -1502,17 +1504,17 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
           {
                of.writeAsciiString("static const sal_Unicode* outline");
                of.writeAsciiString("Style");
-               of.writeInt( i );
+               of.writeInt( sal::static_int_cast<sal_Int16>(i) );
                of.writeAsciiString("Level");
-               of.writeInt( j );
+               of.writeInt( sal::static_int_cast<sal_Int16>(j) );
                of.writeAsciiString("[] = { ");
 
                for( sal_Int32 k=0; k<nAttributes; k++ )
                {
                     of.writeAsciiString( "outline" );
                     of.writeAsciiString( attr[k] );
-                    of.writeInt( i );
-                    of.writeInt( j );
+                    of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+                    of.writeInt( sal::static_int_cast<sal_Int16>(j) );
                     of.writeAsciiString(", ");
                }
                of.writeAsciiString("NULL };\n");
@@ -1526,15 +1528,15 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      {
           of.writeAsciiString("static const sal_Unicode** outline");
           of.writeAsciiString( "Style" );
-          of.writeInt( i );
+          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
           of.writeAsciiString("[] = { ");
 
           for( sal_Int32 j=0; j<nLevels.back(); j++ )
           {
                of.writeAsciiString("outlineStyle");
-               of.writeInt( i );
+               of.writeInt( sal::static_int_cast<sal_Int16>(i) );
                of.writeAsciiString("Level");
-               of.writeInt( j );
+               of.writeInt( sal::static_int_cast<sal_Int16>(j) );
                of.writeAsciiString(", ");
           }
           of.writeAsciiString("NULL };\n");
@@ -1546,7 +1548,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      {
           of.writeAsciiString( "\t" );
           of.writeAsciiString( "outlineStyle" );
-          of.writeInt( i );
+          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
           of.writeAsciiString(",\n");
      }
      of.writeAsciiString("\tNULL\n};\n\n");
@@ -1555,10 +1557,10 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 }
 
 Attr::Attr (const Reference< XAttributeList > & attr) {
-    sal_Int32 len = attr->getLength();
+    sal_Int16 len = attr->getLength();
     name.realloc (len);
     value.realloc (len);
-    for (sal_Int32 i =0; i< len;i++) {
+    for (sal_Int16 i =0; i< len;i++) {
         name[i] = attr->getNameByIndex(i);
         value[i] = attr -> getValueByIndex(i);
     }
