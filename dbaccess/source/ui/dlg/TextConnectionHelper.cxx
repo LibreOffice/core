@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextConnectionHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:40:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,8 +163,9 @@ namespace dbaui
     //========================================================================
 DBG_NAME(OTextConnectionHelper)
 //------------------------------------------------------------------------
-    OTextConnectionHelper::OTextConnectionHelper( Window* pParent, USHORT nResId, sal_Bool _bWizardMode )
+    OTextConnectionHelper::OTextConnectionHelper( Window* pParent, sal_Bool _bWizardMode )
         :Control(pParent)
+           ,m_aHeader                   (pParent, ResId(CB_AUTOHEADER))
         ,m_aLineFormat              (pParent, ResId(FL_AUTOSEPARATOR2))
         ,m_aFTExtensionHeader       (pParent, ResId(FT_AUTOEXTENSIONHEADER))
         ,m_aRBAccessTextFiles       (pParent, ResId(RB_AUTOACCESSCTEXTFILES))
@@ -172,7 +173,6 @@ DBG_NAME(OTextConnectionHelper)
         ,m_aRBAccessOtherFiles      (pParent, ResId(RB_AUTOACCESSOTHERS))
         ,m_aETOwnExtension          (pParent, ResId(ET_AUTOOWNEXTENSION))
         ,m_aFTExtensionExample      (pParent, ResId(FT_AUTOOWNEXTENSIONAPPENDIX))
-           ,m_aHeader                   (pParent, ResId(CB_AUTOHEADER))
         ,m_aFieldSeparatorLabel     (pParent, ResId(FT_AUTOFIELDSEPARATOR))
         ,m_aFieldSeparator          (pParent, ResId(CM_AUTOFIELDSEPARATOR))
         ,m_aTextSeparatorLabel      (pParent, ResId(FT_AUTOTEXTSEPARATOR))
@@ -226,21 +226,21 @@ DBG_NAME(OTextConnectionHelper)
 
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*, EMPTYARG)
+    IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*, /*EMPTYARG*/)
     {
         callModifiedHdl();
         return 0L;
     }
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OTextConnectionHelper, OnEditModified, Edit*, _pEdit)
+    IMPL_LINK(OTextConnectionHelper, OnEditModified, Edit*, /*_pEdit*/)
     {
         m_aGetExtensionHandler.Call(this);
         return 0L;
     }
 
 
-    IMPL_LINK(OTextConnectionHelper, OnSetExtensionHdl, RadioButton*, _pRadioButton)
+    IMPL_LINK(OTextConnectionHelper, OnSetExtensionHdl, RadioButton*, /*_pRadioButton*/)
     {
         sal_Bool bDoEnable = m_aRBAccessOtherFiles.IsChecked();
         m_aETOwnExtension.Enable(bDoEnable);
@@ -269,7 +269,7 @@ DBG_NAME(OTextConnectionHelper)
     }
 
     // -----------------------------------------------------------------------
-    void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue, sal_Bool _bValid)
+    void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/, sal_Bool _bValid)
     {
         m_aHeader.Show(!m_bWizardMode);
 
@@ -458,7 +458,6 @@ DBG_NAME(OTextConnectionHelper)
     String OTextConnectionHelper::GetSeparator( const ComboBox& rBox, const String& rList )
     {
         sal_Unicode nTok = '\t';
-        sal_Int32   nRet(0);
         xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
 
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
