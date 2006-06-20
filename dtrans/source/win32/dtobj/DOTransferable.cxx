@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,7 +415,7 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
     ByteSequence_t aTextSequence;
     CFormatEtc     fetc;
     LCID           lcid = getLocaleFromClipboard( );
-    sal_uInt32     cpForTxtCnvt;
+    sal_uInt32     cpForTxtCnvt = 0;
 
     if ( CF_TEXT == m_TxtFormatOnClipboard )
     {
@@ -439,12 +439,11 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
     CStgTransferHelper stgTransferHelper;
 
     // convert the text
-    sal_Int32 lStr = MultiByteToWideCharEx(
-                        cpForTxtCnvt,
-                        reinterpret_cast<char*>( aTextSequence.getArray( ) ),
-                        -1,
-                        stgTransferHelper,
-                        sal_False);
+    MultiByteToWideCharEx( cpForTxtCnvt,
+                           reinterpret_cast<char*>( aTextSequence.getArray( ) ),
+                           sal::static_int_cast<sal_uInt32>(-1), // Huh ?
+                           stgTransferHelper,
+                           sal_False);
 
     CRawHGlobalPtr  ptrHGlob(stgTransferHelper);
     sal_Unicode*    pWChar = reinterpret_cast<sal_Unicode*>(ptrHGlob.GetMemPtr());
