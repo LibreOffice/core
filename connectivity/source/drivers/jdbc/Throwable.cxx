@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Throwable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:13:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getMessage";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getMessage";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -102,8 +102,8 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getLocalizedMessage";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getLocalizedMessage";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -125,8 +125,8 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "toString";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "toString";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
