@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_String_Utils.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:16:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,7 @@ sal_Bool AStringIsValid( const sal_Char  *pAStr )
         sal_uInt32 nLen  = AStringLen( pAStr );
         sal_uChar  uChar = 0;
 
-        while ( ( nLen >= 0 ) && ( *pAStr ) )
+        while ( *pAStr )
         {
             uChar = (unsigned char)*pAStr;
 
@@ -348,7 +348,7 @@ sal_Bool AStringNIsValid( const sal_Char   *pAStr,
     sal_uInt32 nLen  = nStrLen;
     sal_uChar  uChar = 0;
 
-    while ( ( nLen >= 0 ) && ( *pAStr ) )
+    while ( *pAStr )
     {
         uChar = (unsigned char)*pAStr;
 
@@ -535,7 +535,7 @@ sal_Bool AStringToUStringCopy( sal_Unicode     *pDest,
          && ( AStringNIsValid( pSrc, nLen ) )
        )
     {
-        while ( nCount >= 0 )
+        for (;;)
         {
             *pDest = (unsigned char)*pSrc;
 
@@ -581,7 +581,7 @@ sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
          && ( AStringNIsValid( pSrc, nLen ) )
        )
     {
-        while ( nCount >= 0 )
+        for (;;)
         {
             *pDest = (unsigned char)*pSrc;
 
