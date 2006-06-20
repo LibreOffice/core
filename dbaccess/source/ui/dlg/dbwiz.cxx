@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:41:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,6 @@
 namespace dbaui
 {
 //.........................................................................
-using namespace dbtools;
 using namespace svt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
@@ -135,10 +134,10 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
     :OWizardMachine(_pParent, ModuleRes(DLG_DATABASE_TYPE_CHANGE), WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP, sal_True)
+    ,m_pOutSet(NULL)
     ,m_bResetting(sal_False)
     ,m_bApplied(sal_False)
     ,m_bUIEnabled( sal_True )
-    ,m_pOutSet(NULL)
 {
     DBG_CTOR(ODbTypeWizDialog,NULL);
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
