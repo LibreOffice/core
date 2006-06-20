@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:56:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-// Includes fuer ADO
-//#include <oledb.h>
-//#include <objbase.h>
-//#include <initguid.h>
-//#include <mapinls.h>
-//#include <ocidl.h>
-
 #ifndef __User_FWD_DEFINED__
 #define __User_FWD_DEFINED__
 typedef struct _ADOUser User;
@@ -77,9 +70,11 @@ typedef struct _ADOKey Key;
 typedef struct _ADOTable Table;
 #endif  /* __Table_FWD_DEFINED__ */
 
-#include <adoint.h>
 
+#include "ado_pre_sys_include.h"
+#include <adoint.h>
 #include <ado/ADOCTINT.H>
+#include "ado_post_sys_include.h"
 
 
 #ifndef _CONNECTIVITY_ADO_AOLEWRAP_HXX_
