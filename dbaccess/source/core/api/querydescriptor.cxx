@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:14:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:40:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,12 +82,12 @@ namespace dbaccess
 DBG_NAME(OQueryDescriptor)
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
-    : ODataSettings(m_aBHelper,sal_True)
-    ,OQueryDescriptor_Base(m_aMutex,*this)
+    :OQueryDescriptor_Base(m_aMutex,*this)
+    ,ODataSettings(m_aBHelper,sal_True)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
-    ODataSettings::registerProperties(this);
+    ODataSettings::registerPropertiesFor(this);
 }
 
 //--------------------------------------------------------------------------
@@ -97,7 +97,7 @@ OQueryDescriptor::OQueryDescriptor(const Reference< XPropertySet >& _rxCommandDe
 {
     DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
-    ODataSettings::registerProperties(this);
+    ODataSettings::registerPropertiesFor(this);
 
     osl_incrementInterlockedCount(&m_refCount);
 
@@ -120,7 +120,7 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
-    ODataSettings::registerProperties(this);
+    ODataSettings::registerPropertiesFor(this);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_TYPEPROVIDER2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
@@ -291,7 +291,18 @@ void OQueryDescriptor_Base::disposeColumns()
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OQueryDescriptor_Base::createEmptyObject()
 {
+    DBG_ERROR( "OQueryDescriptor_Base::createEmptyObject: never to be called!" );
     return NULL;
+}
+
+// -----------------------------------------------------------------------------
+void OQueryDescriptor_Base::columnDropped(const ::rtl::OUString& /*_sName*/)
+{
+}
+
+// -----------------------------------------------------------------------------
+void OQueryDescriptor_Base::columnCloned(const Reference< XPropertySet >& /*_xClone*/)
+{
 }
 
 // -----------------------------------------------------------------------------
