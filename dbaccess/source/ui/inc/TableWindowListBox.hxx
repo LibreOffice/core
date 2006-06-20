@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowListBox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:38:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ namespace dbaui
             :public SvTreeListBox
             ,public IDragTransferableListener
     {
-        DECL_LINK( DoubleClickHdl, SvTreeListBox* );
+        DECL_LINK( OnDoubleClick, SvTreeListBox* );
         DECL_LINK( ScrollUpHdl, SvTreeListBox* );
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
         DECL_LINK( DropHdl, void* );
@@ -96,7 +96,7 @@ namespace dbaui
 
 
     public:
-        OTableWindowListBox(OTableWindow* pParent, const String& rDatabaseName, const String& rTableName);
+        OTableWindowListBox(OTableWindow* pParent);
         virtual ~OTableWindowListBox();
 
         // DnD stuff
@@ -110,7 +110,8 @@ namespace dbaui
         OTableWindow* GetTabWin(){ return m_pTabWin; }
         SvLBoxEntry* GetEntryFromText( const String& rEntryText );
 
-
+    private:
+        using SvTreeListBox::ExecuteDrop;
     };
 }
 #endif // DBAUI_TABLEWINDOWLISTBOX_HXX
