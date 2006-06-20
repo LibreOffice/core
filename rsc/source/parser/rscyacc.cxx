@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscyacc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:51:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -75,7 +73,7 @@ sal_uInt32                      nCurMask;
 char                            szErrBuf[ 100 ];
 
 /************** H i l f s F u n k t i o n e n ****************************/
-RSCINST GetVarInst( const RSCINST & rInst, char * pVarName )
+RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
 {
     RSCINST aInst;
 
@@ -88,7 +86,7 @@ RSCINST GetVarInst( const RSCINST & rInst, char * pVarName )
     return( aInst );
 }
 
-void SetNumber( const RSCINST & rInst, char * pVarName, INT32 lValue )
+void SetNumber( const RSCINST & rInst, const char * pVarName, INT32 lValue )
 {
     RSCINST aInst;
 
@@ -103,7 +101,7 @@ void SetNumber( const RSCINST & rInst, char * pVarName, INT32 lValue )
     }
 }
 
-void SetConst( const RSCINST & rInst, char * pVarName,
+void SetConst( const RSCINST & rInst, const char * pVarName,
                Atom nValueId, INT32 nVal )
 {
     RSCINST aInst;
@@ -119,7 +117,7 @@ void SetConst( const RSCINST & rInst, char * pVarName,
     }
 }
 
-void SetString( const RSCINST & rInst, char * pVarName, char * pStr )
+void SetString( const RSCINST & rInst, const char * pVarName, const char * pStr )
 {
     RSCINST aInst;
 
@@ -285,5 +283,12 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #endif
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable:4129 4701)
+#endif
 #include "yyrscyacc.cxx"
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
