@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:19:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,27 +436,27 @@ sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
     const char * uri;
     retCode=rdfResource->GetValueConst(&uri);
     if (NS_FAILED(retCode)) { return SDBCAddress::Unknown; }
-    const sal_Char *sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_LDAP;
+    const sal_Char *sUriPrefix = ::connectivity::mozab::getSchemeURI( ::connectivity::mozab::SCHEME_LDAP );
     if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
         return SDBCAddress::LDAP;
     }
-    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_MOZILLA;
+    sUriPrefix = ::connectivity::mozab::getSchemeURI( ::connectivity::mozab::SCHEME_MOZILLA );
     if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
         return SDBCAddress::Mozilla;
     }
-    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_MOZILLA_MDB;
+    sUriPrefix = ::connectivity::mozab::getSchemeURI( ::connectivity::mozab::SCHEME_MOZILLA_MDB );
     if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
         return SDBCAddress::Mozilla;
     }
-    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_OUTLOOK_EXPRESS;
+    sUriPrefix = ::connectivity::mozab::getSchemeURI( ::connectivity::mozab::SCHEME_OUTLOOK_EXPRESS );
     if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
         return SDBCAddress::OutlookExp;
     }
-    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_OUTLOOK_MAPI;
+    sUriPrefix = ::connectivity::mozab::getSchemeURI( ::connectivity::mozab::SCHEME_OUTLOOK_MAPI );
     if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
         return SDBCAddress::Outlook;
@@ -837,7 +837,7 @@ MQuery::resyncRow(sal_Int32 nDBRow)
     args.arg2 = (void*)&nDBRow;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     setError( m_aQueryHelper->getErrorResourceId() );
-    return rv;
+    return NS_SUCCEEDED( rv );
 }
 
 sal_Int32
@@ -888,6 +888,6 @@ isWritable(OConnection* _pCon)
     rv = directory->GetOperations (&isWriteable);
     if (NS_FAILED(rv))
         return sal_False;
-    sal_Bool bWritable = isWriteable & nsIAbDirectory::opWrite;
+    sal_Bool bWritable = ( isWriteable & nsIAbDirectory::opWrite ) == nsIAbDirectory::opWrite;
     return  bWritable;
 }
