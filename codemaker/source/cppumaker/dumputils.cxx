@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dumputils.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:14:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #include "dumputils.hxx"
 
 #include "codemaker/global.hxx"
-#include "codemaker/typemanager.hxx"
 #include "codemaker/commoncpp.hxx"
 
 #include "rtl/ustring.hxx"
@@ -46,30 +45,18 @@
 namespace codemaker { namespace cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, TypeManager const & manager,
-    rtl::OString const & registryType, bool fullModuleType)
+    FileStream & out, rtl::OString const & registryType, bool fullModuleType)
 {
     bool output = false;
     if (registryType != "/") {
         bool first = true;
         for (sal_Int32 i = 0; i >= 0;) {
             rtl::OString id(registryType.getToken(0, '/', i));
-//             rtl::OString fulltypepart;
-//          if (i > 1) {
-//              fulltypepart = registryType.copy(0, i-1);
-//          } else {
-//              fulltypepart = registryType;
-//          }
             if (fullModuleType || i >= 0) {
                 if (!first) {
                     out << " ";
                 }
-
-//                 rtl::OString tmp = codemaker::cpp::typeToPrefix(manager, fulltypepart);
                 out << "namespace " << id << " {";
-//                     << codemaker::cpp::translateUnoToCppIdentifier(
-//                         id, codemaker::cpp::typeToPrefix(manager, fulltypepart),
-//                         codemaker::cpp::ITM_KEYWORDSONLY, NULL).getStr() << " {";
                 first = false;
                 output = true;
             }
@@ -102,12 +89,7 @@ bool dumpNamespaceClose(
     return output;
 }
 
-void dumpTypeIdentifier(FileStream & out,  TypeManager const & manager,
-                        rtl::OString const & registryType) {
-//     out << codemaker::cpp::translateUnoToCppIdentifier(
-//         registryType.copy(registryType.lastIndexOf('/') + 1),
-//         codemaker::cpp::typeToPrefix(manager, registryType),
-//         codemaker::cpp::ITM_KEYWORDSONLY, NULL).getStr();
+void dumpTypeIdentifier(FileStream & out, rtl::OString const & registryType) {
     out << registryType.copy(registryType.lastIndexOf('/') + 1);
 }
 
