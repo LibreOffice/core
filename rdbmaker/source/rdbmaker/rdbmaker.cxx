@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:05:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,6 @@ void initFilterTypes(RdbOptions* pOptions)
     if (pOptions->isValid("-FT"))
     {
         OString fOption(pOptions->getOption("-FT"));
-        sal_Bool ret = sal_False;
         sal_Int32 nIndex = 0;
         do
         {
@@ -268,10 +267,10 @@ sal_Bool produceAllTypes(const OString& typeName,
                          sal_Bool bFullScope,
                          FileStream& o,
                          RegistryKey& regKey,
-                         StringSet& filterTypes)
+                         StringSet& filterTypes2)
     throw( CannotDumpException )
 {
-    if (!produceType(typeName, typeMgr, typeDependencies, pOptions, o, regKey, filterTypes))
+    if (!produceType(typeName, typeMgr, typeDependencies, pOptions, o, regKey, filterTypes2))
     {
         fprintf(stderr, "%s ERROR: %s\n",
                 pOptions->getProgramName().getStr(),
@@ -299,11 +298,11 @@ sal_Bool produceAllTypes(const OString& typeName,
         if (bFullScope)
         {
             if (!produceAllTypes(tmpName, typeMgr, typeDependencies, pOptions, sal_True,
-                                 o, regKey, filterTypes))
+                                 o, regKey, filterTypes2))
                 return sal_False;
         } else
         {
-            if (!produceType(tmpName, typeMgr, typeDependencies, pOptions, o, regKey, filterTypes))
+            if (!produceType(tmpName, typeMgr, typeDependencies, pOptions, o, regKey, filterTypes2))
                 return sal_False;
         }
     }
