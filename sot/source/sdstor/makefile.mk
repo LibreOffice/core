@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:04:21 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:53:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ PRJNAME=sot
 TARGET=sdstor
 
 # --- Settings -----------------------------------------------------
+
+ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
