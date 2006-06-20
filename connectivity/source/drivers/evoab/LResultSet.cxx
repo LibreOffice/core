@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:46:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,9 +163,9 @@ sal_Bool SAL_CALL OEvoabResultSet::moveRelativeToBookmark( const  Any& bookmark,
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSet::compareBookmarks( const Any& lhs, const Any& rhs ) throw( SQLException,  RuntimeException)
 {
-    return (first == second) ? 0 : 2;
+    return (lhs == rhs) ? 0 : 2;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
