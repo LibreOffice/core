@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TColumnsHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:10:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:03:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,8 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
                                 ,const TStringVector &_rVector
                                 ,sal_Bool _bUseHardRef
             ) : OCollection(_rParent,_bCase,_rMutex,_rVector,sal_False,_bUseHardRef)
-    ,m_pTable(NULL)
     ,m_pImpl(NULL)
+    ,m_pTable(NULL)
 {
 }
 // -----------------------------------------------------------------------------
@@ -206,7 +206,7 @@ void OColumnsHelper::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OColumnsHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
     if ( m_pTable && !m_pTable->isNew() )
