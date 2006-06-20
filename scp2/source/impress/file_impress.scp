@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:47:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 File gid_File_Lib_Placeware
     Name = LIBSHORTNAME(placeware);
-    PACKED_UNO_LIB_FILE_BODY;
+    PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
 File gid_File_Lib_Animcore
