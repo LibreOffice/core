@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:34:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
 ODBCDriver::ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    : ODriver_BASE(m_aMutex)
-    ,m_pDriverHandle(SQL_NULL_HANDLE)
+    :ODriver_BASE(m_aMutex)
     ,m_xORB(_rxFactory)
+    ,m_pDriverHandle(SQL_NULL_HANDLE)
 {
 }
 // --------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ sal_Bool SAL_CALL ODBCDriver::acceptsURL( const ::rtl::OUString& url )
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:odbc:"),10));
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
     {
