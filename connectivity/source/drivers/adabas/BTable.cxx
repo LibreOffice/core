@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:24:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,10 +159,8 @@ Sequence< sal_Int8 > OAdabasTable::getUnoTunnelImplementationId()
 sal_Int64 OAdabasTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OTable_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OTable_TYPEDEF::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 // XAlterTable
@@ -205,7 +203,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
 
             if(nOldType != nNewType || nOldPrec != nNewPrec || nOldScale != nNewScale)
-                alterColumnType(nNewType,colName,descriptor);
+                alterColumnType(colName,descriptor);
 
             // second: check the "is nullable" value
             sal_Int32 nOldNullable = 0,nNewNullable = 0;
@@ -282,7 +280,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
     return sName;
 }
 // -----------------------------------------------------------------------------
-void OAdabasTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
+void OAdabasTable::alterColumnType(const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
     sSql += ::rtl::OUString::createFromAscii(" ");
