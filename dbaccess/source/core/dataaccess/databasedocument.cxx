@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:37:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -687,15 +687,18 @@ void SAL_CALL ODatabaseDocument::notifyEvent( const css::document::EventObject& 
 // ::com::sun::star::view::XPrintable
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getPrinter(  ) throw (RuntimeException)
 {
+    DBG_ERROR( "ODatabaseDocument::getPrinter: not supported!" );
     return Sequence< PropertyValue >();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::setPrinter( const Sequence< PropertyValue >& aPrinter ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL ODatabaseDocument::setPrinter( const Sequence< PropertyValue >& /*aPrinter*/ ) throw (IllegalArgumentException, RuntimeException)
 {
+    DBG_ERROR( "ODatabaseDocument::setPrinter: not supported!" );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& xOptions ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& /*xOptions*/ ) throw (IllegalArgumentException, RuntimeException)
 {
+    DBG_ERROR( "ODatabaseDocument::print: not supported!" );
 }
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::impl_reparent_nothrow( const WeakReference< XNameAccess >& _rxContainer )
@@ -855,17 +858,15 @@ sal_Bool ODatabaseDocument::WriteThroughComponent(
 
     if( bPlainStream )
     {
-        ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
         sal_Bool bFalse = sal_False;
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
-        xStreamProp->setPropertyValue( aPropName, aAny );
+        xStreamProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Compressed") ), aAny );
     }
     else
     {
-        ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
         sal_Bool bTrue = sal_True;
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xStreamProp->setPropertyValue( aPropName, aAny );
+        xStreamProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny );
     }
 
 
