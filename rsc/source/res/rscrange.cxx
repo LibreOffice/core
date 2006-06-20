@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscrange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 17:55:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:48:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 void RscRange::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {
@@ -452,7 +452,7 @@ ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 void RscLongRange::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {
@@ -477,7 +477,7 @@ RscLongEnumRange::RscLongEnumRange( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    Beschreibung
 *************************************************************************/
-ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom nConst,
+ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom /*nConst*/,
                                     INT32 nValue )
 {
     return SetNumber( rInst, nValue );
@@ -704,7 +704,7 @@ ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 void RscIdRange::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {
@@ -790,7 +790,7 @@ void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 void RscBool::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {
