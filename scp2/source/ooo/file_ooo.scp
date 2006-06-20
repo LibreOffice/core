@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 11:31:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ End
 File gid_File_Bin_Pagein
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "pagein";
 End
 
@@ -245,7 +245,7 @@ End
 File gid_File_Bin_Configimport
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
   #ifdef UNX
     Name = "configimport.bin";
   #else
@@ -267,7 +267,7 @@ End
 File gid_File_Bin_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
   #ifdef UNX
     Name = "gengal.bin";
   #else
@@ -354,7 +354,7 @@ File gid_File_Bin_Gnome_Open_Url_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "gnome-open-url.bin";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Bin_Kde_Open_Url
@@ -400,7 +400,7 @@ End
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "spadmin.bin";
 End
 
@@ -515,49 +515,49 @@ File gid_File_Dtd_Toolbar
     Name = "toolbar.dtd";
 End
 
-STD_FILTER_FILE( gid_File_Filter_Eme, eme)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Eme, eme)
 
 STD_FILTER_FILE_PATCH( gid_File_Filter_Emp, emp)
 
-STD_FILTER_FILE( gid_File_Filter_Icg, icg)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Icg, icg)
 
-STD_FILTER_FILE( gid_File_Filter_Egi, egi)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Egi, egi)
 
-STD_FILTER_FILE( gid_File_Filter_Epb, epb)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Epb, epb)
 
-STD_FILTER_FILE( gid_File_Filter_Epg, epg)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Epg, epg)
 
-STD_FILTER_FILE( gid_File_Filter_Epp, epp)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Epp, epp)
 
 STD_FILTER_FILE_PATCH( gid_File_Filter_Eps, eps)
 
-STD_FILTER_FILE( gid_File_Filter_Ept, ept)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ept, ept)
 
-STD_FILTER_FILE( gid_File_Filter_Era, era)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Era, era)
 
-STD_FILTER_FILE( gid_File_Filter_Eti, eti)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Eti, eti)
 
-STD_FILTER_FILE( gid_File_Filter_Exp, exp)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Exp, exp)
 
-STD_FILTER_FILE( gid_File_Filter_Icd, icd)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Icd, icd)
 
 STD_FILTER_FILE_PATCH( gid_File_Filter_Idx, idx)
 
-STD_FILTER_FILE( gid_File_Filter_Ime, ime)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ime, ime)
 
-STD_FILTER_FILE( gid_File_Filter_Ipb, ipb)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ipb, ipb)
 
-STD_FILTER_FILE( gid_File_Filter_Ipd, ipd)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ipd, ipd)
 
-STD_FILTER_FILE( gid_File_Filter_Ips, ips)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ips, ips)
 
-STD_FILTER_FILE( gid_File_Filter_Ipt, ipt)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ipt, ipt)
 
-STD_FILTER_FILE( gid_File_Filter_Ipx, ipx)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ipx, ipx)
 
-STD_FILTER_FILE( gid_File_Filter_Ira, ira)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Ira, ira)
 
-STD_FILTER_FILE( gid_File_Filter_Itg, itg)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Itg, itg)
 
 STD_FILTER_FILE_PATCH( gid_File_Filter_Iti, iti)
 
