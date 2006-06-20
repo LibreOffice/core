@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:14:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,8 +380,8 @@ namespace dbaui
         void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving = ::rtl::OUString());
         void        applyParserOrder(const ::rtl::OUString& _rOldOrder);
 
-        sal_uInt16  getCurrentColumnPosition();
-        void        setCurrentColumnPosition(sal_uInt16 _nPos);
+        sal_Int16   getCurrentColumnPosition();
+        void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        deleteView();
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
