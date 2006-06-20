@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdef.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:31:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,8 @@ protected:
     void    SetName( const ByteString & rNewName ){ aName = rNewName; }
     void    ChangeMacro( RscExpression * pExpression );
     void    ChangeMacro( INT32 lIdentifier );
+
+    using StringNode::Search;
 public:
     RscDefine * Search( const char * );
     ULONG       GetFileKey() const { return lFileKey; }

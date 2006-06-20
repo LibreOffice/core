@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsctools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:34:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:45:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,8 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 ByteString GetTmpFileName();
 BOOL Append( ByteString aDestFile, ByteString aSourceFile );
 BOOL Append( FILE * fDest, ByteString aSourceFile );
-ByteString InputFile ( char * pInput, char * pExt );
-ByteString OutputFile( ByteString aInput, char * ext );
+ByteString InputFile ( const char * pInput, const char * pExt );
+ByteString OutputFile( ByteString aInput, const char * ext );
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      sal_uInt32 nArgc );
 void RscExit( sal_uInt32 nExit );
