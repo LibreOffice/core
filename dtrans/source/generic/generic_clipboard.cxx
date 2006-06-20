@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generic_clipboard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:12:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ using ::dtrans::GenericClipboard;
 using ::rtl::OUString;
 
 GenericClipboard::GenericClipboard() :
-    m_aMutex(),
     WeakComponentImplHelper4< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
     m_bInitialized(sal_False)
 {
@@ -63,7 +62,6 @@ GenericClipboard::GenericClipboard() :
 // ------------------------------------------------------------------------
 
 GenericClipboard::GenericClipboard(const ::rtl::OUString& rName) :
-    m_aMutex(),
     WeakComponentImplHelper4< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
     m_aName(rName),
     m_bInitialized(sal_True)
@@ -221,7 +219,7 @@ Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 // ------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
-    const Reference< XMultiServiceFactory > & xMultiServiceFactory)
+    const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
     return Reference < XInterface >( ( OWeakObject * ) new GenericClipboard());
 }
