@@ -4,9 +4,9 @@
  *
  *  $RCSfile: istream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:36:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef _VOS_ISTREAM_HXX_
 #define _VOS_ISTREAM_HXX_
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 #ifndef _VOS_TYPES_HXX_
 #   include <vos/types.hxx>
