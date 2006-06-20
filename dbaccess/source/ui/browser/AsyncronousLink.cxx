@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AsyncronousLink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:18:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ OAsyncronousLink::~OAsyncronousLink()
 
 
 //------------------------------------------------------------------
-void OAsyncronousLink::Call(void* _pArgument)
+void OAsyncronousLink::Call(void* /*_pArgument*/)
 {
     ::vos::OGuard aEventGuard(*m_pEventSafety);
     if (m_nEventId)
