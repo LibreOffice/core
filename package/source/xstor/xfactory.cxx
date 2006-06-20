@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,8 +274,6 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
 
     throw uno::Exception(); // general error during creation
-    // not reachable
-    return uno::Reference< uno::XInterface >();
 }
 
 //-------------------------------------------------------------------------
