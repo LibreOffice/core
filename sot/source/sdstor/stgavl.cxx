@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgavl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:39:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 
 #include "stgavl.hxx"
-#pragma hdrstop
 
 StgAvlNode::StgAvlNode()
 {
@@ -129,7 +128,7 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
             pCur = pCur->pLeft;
         }
     }
-    nBalance += nDelta;
+    nBalance = nBalance + nDelta;
     return nDelta;
 }
 
@@ -223,7 +222,7 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, BOOL bPtrs )
     if( *p )
     {
         StgAvlNode* pCur = *p;
-        short nRes = bPtrs ? ( pCur == pDel ) : pCur->Compare( pDel );
+        short nRes = bPtrs ? short( pCur == pDel ) : short(pCur->Compare( pDel ));
         if( !nRes )
         {
             // Element found: remove
@@ -272,15 +271,15 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, BOOL bPtrs )
 
 // Enumerate the tree for later iteration
 
-void StgAvlNode::Enum( short& n )
+void StgAvlNode::StgEnum( short& n )
 {
     if( this )
     {
         if( pLeft )
-            pLeft->Enum( n );
+            pLeft->StgEnum( n );
         nId = n++;
         if( pRight )
-            pRight->Enum( n );
+            pRight->StgEnum( n );
     }
 }
 
@@ -386,7 +385,7 @@ StgAvlIterator::StgAvlIterator( StgAvlNode* p )
     pRoot = p;
     nCount = 0;
     if( p )
-        p->Enum( nCount );
+        p->StgEnum( nCount );
 }
 
 StgAvlNode* StgAvlIterator::Find( short n )
