@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:58:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
 
-#ifndef _ADOCTINT_H_
+#include "ado_pre_sys_include.h"
 #include <ado/ADOCTINT.H>
-#endif
+#include "ado_post_sys_include.h"
 
 struct ADOConnection;
 enum DataTypeEnum;
