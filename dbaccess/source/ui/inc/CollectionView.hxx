@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:15:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ namespace dbaui
         CancelButton    m_aPB_CANCEL;
         HelpButton      m_aPB_HELP;
         String          m_sPath;
-        String          m_aIniKey;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
         Size            m_aDlgSize;
