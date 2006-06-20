@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:32:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,6 @@
  *
  ************************************************************************/
 /****************** I N C L U D E S **************************************/
-
-#pragma hdrstop
-
 // C and C++ Includes.
 #include <ctype.h>      // isdigit(), isalpha()
 #include <stdlib.h>
@@ -791,13 +788,13 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 |*
 *************************************************************************/
 void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
-                             CharSet nCharSet, BOOL bName )
+                             CharSet /*nCharSet*/, BOOL bName )
 {
     RscFile     *   pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
-    char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
-    fwrite( aUTF8BOM, sizeof(char), sizeof(aUTF8BOM)/sizeof(aUTF8BOM[0]), fOutput );
+    unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
+    fwrite( aUTF8BOM, sizeof(unsigned char), sizeof(aUTF8BOM)/sizeof(aUTF8BOM[0]), fOutput );
     if( bName )
     {
         WriteInc( fOutput, nFileKey );
