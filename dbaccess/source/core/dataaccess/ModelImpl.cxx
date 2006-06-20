@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:32:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ Sequence< ::rtl::OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStorag
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& aEvent ) throw (Exception, RuntimeException)
+void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ ) throw (Exception, RuntimeException)
 {
     // not interested in
 }
@@ -346,13 +346,13 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL DocumentStorageAccess::preRevert( const css::lang::EventObject& aEvent ) throw (Exception, RuntimeException)
+void SAL_CALL DocumentStorageAccess::preRevert( const css::lang::EventObject& /*aEvent*/ ) throw (Exception, RuntimeException)
 {
     // not interested in
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL DocumentStorageAccess::reverted( const css::lang::EventObject& aEvent ) throw (RuntimeException)
+void SAL_CALL DocumentStorageAccess::reverted( const css::lang::EventObject& /*aEvent*/ ) throw (RuntimeException)
 {
     // not interested in
 }
@@ -382,22 +382,22 @@ DBG_NAME(ODatabaseModelImpl)
 //--------------------------------------------------------------------------
 ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& _rxFactory
                                        , const Reference< XModel>& _xModel)
-            :m_xServiceFactory(_rxFactory)
+            :m_xModel(_xModel)
+            ,m_pStorageAccess( NULL )
+            ,m_xMutex( new SharedMutex )
+            ,m_xServiceFactory(_rxFactory)
+            ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False) // we're created as service and have to allow the setting of properties
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
-            ,m_pSharedConnectionManager(NULL)
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
             ,m_bDisposingSubStorages( sal_False )
             ,m_pDBContext(NULL)
+            ,m_pSharedConnectionManager(NULL)
+            ,m_refCount(0)
             ,m_nControllerLockCount(0)
             ,m_bOwnStorage(sal_False)
-            ,m_xModel(_xModel)
-            ,m_nLoginTimeout(0)
-            ,m_refCount(0)
-            ,m_pStorageAccess( NULL )
-            ,m_xMutex( new SharedMutex )
 {
     // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
@@ -413,22 +413,22 @@ ODatabaseModelImpl::ODatabaseModelImpl(
                     const Reference< XMultiServiceFactory >& _rxFactory,
                     ODatabaseContext* _pDBContext
                     )
-            :m_sName(_rRegistrationName)
+            :m_pStorageAccess( NULL )
+            ,m_xMutex( new SharedMutex )
             ,m_xServiceFactory(_rxFactory)
+            ,m_sName(_rRegistrationName)
+            ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_True)      // assume readonly for the moment, adjusted below
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
-            ,m_pSharedConnectionManager(NULL)
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
             ,m_bDisposingSubStorages( sal_False )
             ,m_pDBContext(_pDBContext)
+            ,m_pSharedConnectionManager(NULL)
+            ,m_refCount(0)
             ,m_nControllerLockCount(0)
             ,m_bOwnStorage(sal_False)
-            ,m_nLoginTimeout(0)
-            ,m_refCount(0)
-            ,m_pStorageAccess( NULL )
-            ,m_xMutex( new SharedMutex )
 {
     DBG_CTOR(ODatabaseModelImpl,NULL);
     // adjust our readonly flag
