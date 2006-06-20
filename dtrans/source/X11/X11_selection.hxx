@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:31:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,10 +446,16 @@ namespace x11 {
         bool sendData( SelectionAdaptor* pAdaptor, Window requestor, Atom target, Atom property, Atom selection );
 
         // thread dispatch loop
+        public:
+        // public for extern "C" stub
         static void run( void* );
+        private:
         void dispatchEvent( int millisec );
         // drag thread dispatch
+        public:
+        // public for extern "C" stub
         static void runDragExecute( void* );
+        private:
         void dragDoDispatch();
         bool handleXEvent( XEvent& rEvent );
 
