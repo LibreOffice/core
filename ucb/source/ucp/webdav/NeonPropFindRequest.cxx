@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:12:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,8 +194,8 @@ extern "C" void NPFR_propfind_results( void* userdata,
 // -------------------------------------------------------------------
 extern "C" int NPFR_propnames_iter( void* userdata,
                                     const NeonPropName* pname,
-                                    const char* value,
-                                    const HttpStatus* status )
+                                    const char* /*value*/,
+                                    const HttpStatus* /*status*/ )
 {
     OUString aFullName;
     DAVProperties::createUCBPropName( pname->nspace,
