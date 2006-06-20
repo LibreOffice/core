@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:24:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,14 +202,8 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
 // XDrop
 void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
-    sal_Bool bIsNew = sal_False;
-    if(xTunnel.is())
-    {
-        connectivity::sdbcx::ODescriptor* pTable = (connectivity::sdbcx::ODescriptor*)xTunnel->getSomething(connectivity::sdbcx::ODescriptor::getUnoTunnelImplementationId());
-        if(pTable)
-            bIsNew = pTable->isNew();
-    }
+    Reference< XInterface > xObject( getObject( _nPos ) );
+    sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
         OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
@@ -222,7 +216,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
+        Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
         if(bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW"))) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
@@ -294,9 +288,9 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     if(xKeys.is())
     {
         sal_Bool bPKey = sal_False;
-        for(sal_Int32 i=0;i<xKeys->getCount();++i)
+        for( sal_Int32 key=0; key<xKeys->getCount(); ++key )
         {
-            if(::cppu::extractInterface(xColProp,xKeys->getByIndex(i)) && xColProp.is())
+            if(::cppu::extractInterface(xColProp,xKeys->getByIndex(key)) && xColProp.is())
             {
 
                 sal_Int32 nKeyType      = getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
@@ -313,9 +307,9 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                         throw SQLException();
 
                     aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
-                    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+                    for( sal_Int32 column=0; column<xColumns->getCount(); ++column )
                     {
-                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         +   ::rtl::OUString::createFromAscii(",");
                     }
@@ -330,9 +324,9 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                         throw SQLException();
 
                     aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
-                    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+                    for( sal_Int32 column=0; column<xColumns->getCount(); ++column )
                     {
-                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
@@ -358,9 +352,9 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                                 + aQuote + aName + aQuote
                                 + ::rtl::OUString::createFromAscii(" (");
 
-                    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+                    for ( sal_Int32 column=0; column<xColumns->getCount(); ++column )
                     {
-                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
