@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:56:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ protected:
 public:
     EmbedDocument_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& smgr,
                         const GUID* guid );
-    ~EmbedDocument_Impl();
+    virtual ~EmbedDocument_Impl();
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
