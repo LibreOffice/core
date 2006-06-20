@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:41:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
 
         // move the buttons
         PushButton* pButtons[] = { &m_aOk, &m_aCancel, &m_aHelp ,&m_aCreateAdabasDB};
-        for (sal_Int32 i=0; i<sizeof(pButtons)/sizeof(pButtons[0]); ++i)
+        for (size_t i=0; i<sizeof(pButtons)/sizeof(pButtons[0]); ++i)
         {
             Point aOldPos = pButtons[i]->GetPosPixel();
             pButtons[i]->SetPosPixel(Point(aOldPos.X() - nLostPixels, aOldPos.Y()));
@@ -193,7 +193,7 @@ IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
     return 0;
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, pButton )
+IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
 {
     try
     {
