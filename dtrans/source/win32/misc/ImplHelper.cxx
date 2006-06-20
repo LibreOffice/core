@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:28:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,13 @@
 #endif
 
 #include <memory>
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //------------------------------------------------------------------------
 // defines
@@ -92,8 +98,8 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
         sal_uInt32 winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
 
         CHARSETINFO chrsInf;
-        sal_Bool bRet = TranslateCharsetInfo(
-            (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET );
+        sal_Bool bRet = TranslateCharsetInfo( (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET ) ?
+                        sal_True : sal_False;
 
         // if one of the above functions fails
         // we will return the current ANSI codepage
