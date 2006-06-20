@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:41:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,10 +129,10 @@ DBG_NAME(OGenericAdministrationPage)
 //-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
+        ,m_abEnableRoadmap(sal_False)
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
         ,m_pFT_HeaderText(NULL)
-        ,m_abEnableRoadmap(sal_False)
     {
         DBG_CTOR(OGenericAdministrationPage,NULL);
 
@@ -186,13 +186,13 @@ DBG_NAME(OGenericAdministrationPage)
     }
 
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::fillViewSettings(OPageSettings* _rSettings)
+    void OGenericAdministrationPage::fillViewSettings(OPageSettings* /*_rSettings*/)
     {
         // nothing to do
     }
 
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::restoreViewSettings(const OPageSettings* _pPageState)
+    void OGenericAdministrationPage::restoreViewSettings(const OPageSettings* /*_pPageState*/)
     {
         // nothing to do
     }
@@ -265,7 +265,7 @@ DBG_NAME(OGenericAdministrationPage)
         aControlList.clear();
     }
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess )
+    void OGenericAdministrationPage::enableHeader( const Bitmap& /*_rBitmap*/, sal_Int32 /*_nPixelHeight*/, GrantAccess )
     {
     }
     // -----------------------------------------------------------------------
@@ -276,7 +276,7 @@ DBG_NAME(OGenericAdministrationPage)
             Reset(*m_pItemSetHelper->getOutputSet());
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OGenericAdministrationPage::commitPage(COMMIT_REASON /*_eReason*/)
     {
         return sal_True;
     }
@@ -316,7 +316,7 @@ DBG_NAME(OGenericAdministrationPage)
     }
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, _pButton)
+    IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
@@ -372,7 +372,7 @@ DBG_NAME(OGenericAdministrationPage)
     }
 
 
-    Point OGenericAdministrationPage::MovePoint(Point _aPixelBasePoint, sal_uInt32 _XShift, sal_uInt32 _YShift)
+    Point OGenericAdministrationPage::MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift)
     {
         Point rLogicPoint = PixelToLogic( _aPixelBasePoint, MAP_APPFONT );
         sal_uInt32 XPos = rLogicPoint.X() + _XShift;
