@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Security.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:35:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::loginUserOnFileServer, "osl_
       get current user name, .
 */
 
-void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
+void RegisterAdditionalFunctions(FktRegFuncPtr)
 {
     /// start message
     t_print("#Initializing ...\n" );
